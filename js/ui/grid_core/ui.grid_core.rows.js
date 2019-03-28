@@ -251,6 +251,85 @@ module.exports = {
             * @action
             */
             /**
+            * @name dxDataGridOptions.onRowDblClick
+            * @type function(e)|string
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 data:object
+            * @type_function_param1_field7 key:any
+            * @type_function_param1_field8 values:Array<Object>
+            * @type_function_param1_field9 columns:Array<Object>
+            * @type_function_param1_field10 rowIndex:number
+            * @type_function_param1_field11 rowType:string
+            * @type_function_param1_field12 isSelected:boolean
+            * @type_function_param1_field13 isExpanded:boolean
+            * @type_function_param1_field14 groupIndex:number
+            * @type_function_param1_field15 rowElement:dxElement
+            * @type_function_param1_field16 handled:boolean
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxTreeListOptions.onRowDblClick
+            * @type function(e)|string
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 data:object
+            * @type_function_param1_field7 key:any
+            * @type_function_param1_field8 values:Array<Object>
+            * @type_function_param1_field9 columns:Array<Object>
+            * @type_function_param1_field10 rowIndex:number
+            * @type_function_param1_field11 rowType:string
+            * @type_function_param1_field12 isSelected:boolean
+            * @type_function_param1_field13 isExpanded:boolean
+            * @type_function_param1_field14 rowElement:dxElement
+            * @type_function_param1_field15 handled:boolean
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxDataGridOptions.onCellDblClick
+            * @type function(e)|string
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 data:object
+            * @type_function_param1_field7 key:any
+            * @type_function_param1_field8 value:any
+            * @type_function_param1_field9 displayValue:any
+            * @type_function_param1_field10 text:string
+            * @type_function_param1_field11 columnIndex:number
+            * @type_function_param1_field12 column:object
+            * @type_function_param1_field13 rowIndex:number
+            * @type_function_param1_field14 rowType:string
+            * @type_function_param1_field15 cellElement:dxElement
+            * @type_function_param1_field16 row:dxDataGridRowObject
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxTreeListOptions.onCellDblClick
+            * @type function(e)|string
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 data:object
+            * @type_function_param1_field7 key:any
+            * @type_function_param1_field8 value:any
+            * @type_function_param1_field9 displayValue:any
+            * @type_function_param1_field10 text:string
+            * @type_function_param1_field11 columnIndex:number
+            * @type_function_param1_field12 column:object
+            * @type_function_param1_field13 rowIndex:number
+            * @type_function_param1_field14 rowType:string
+            * @type_function_param1_field15 cellElement:dxElement
+            * @type_function_param1_field16 row:dxTreeListRowObject
+            * @extends Action
+            * @action
+            */
+            /**
              * @name dxDataGridOptions.rowTemplate
              * @type template|function
              * @type_function_param1 rowElement:dxElement
@@ -780,6 +859,15 @@ module.exports = {
                 _rowClick: function(e) {
                     var item = this._dataController.items()[e.rowIndex] || {};
                     this.executeAction("onRowClick", extend({
+                        evaluate: function(expr) {
+                            var getter = compileGetter(expr);
+                            return getter(item.data);
+                        } }, e, item));
+                },
+
+                _rowDblClick: function(e) {
+                    var item = this._dataController.items()[e.rowIndex] || {};
+                    this.executeAction("onRowDblClick", extend({
                         evaluate: function(expr) {
                             var getter = compileGetter(expr);
                             return getter(item.data);
