@@ -299,8 +299,8 @@ class FileManagerUploadProgressPanel extends Widget {
 
     addProgressBox(title, onCancel) {
         const progressBox = this._createComponent($("<div>"), FileManagerUploadProgressBox, {
-            title: title,
-            onCancel: onCancel
+            title,
+            onCancel
         });
         this._$container.append(progressBox.$element());
 

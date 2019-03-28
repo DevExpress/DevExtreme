@@ -21,6 +21,10 @@ class OneDriveFileProvider extends FileProvider {
         this._accessTokenPromise = null;
     }
 
+    get _authorizationString() {
+        return `Bearer ${this._accessToken}`;
+    }
+
     getItems(path, itemType) {
         return this._getItems(path, itemType);
     }
@@ -38,9 +42,8 @@ class OneDriveFileProvider extends FileProvider {
             });
     }
 
-    uploadFileChunk(uploadInfo, chunk) {
-        return this._uploadFileChunk(uploadInfo.customData.uploadUrl, chunk.blob, chunk.size,
-            uploadInfo.uploadedBytesCount, uploadInfo.file.size);
+    uploadFileChunk({ customData, uploadedBytesCount, file }, { blob, size }) {
+        return this._uploadFileChunk(customData.uploadUrl, blob, size, uploadedBytesCount, file.size);
     }
 
     abortFileUpload(uploadInfo) {
@@ -67,8 +70,8 @@ class OneDriveFileProvider extends FileProvider {
             ajax.sendRequest({
                 url: this._getAccessTokenUrl,
                 dataType: "json"
-            }).done(response => {
-                this._accessToken = response.token;
+            }).done(({ token }) => {
+                this._accessToken = token;
                 this._accessTokenPromise = null;
                 deferred.resolve();
             });
@@ -80,13 +83,13 @@ class OneDriveFileProvider extends FileProvider {
 
     _getEntriesByPath(path) {
         const itemPath = this._prepareItemRelativePath(path);
-        const queryString = "?$select=" + REQUIRED_ITEM_FIELDS + "&$expand=children($select=" + REQUIRED_ITEM_FIELDS + ")";
+        const queryString = `?$select=${REQUIRED_ITEM_FIELDS}&$expand=children($select=${REQUIRED_ITEM_FIELDS})`;
         const url = APP_ROOT_URL + itemPath + queryString;
         return ajax.sendRequest({
             url: url,
             dataType: "json",
             cache: false,
-            headers: { "Authorization": "Bearer " + this._accessToken }
+            headers: { "Authorization": this._authorizationString }
         });
     }
 
@@ -105,7 +108,7 @@ class OneDriveFileProvider extends FileProvider {
             },
             cache: false,
             headers: {
-                "Authorization": "Bearer " + this._accessToken,
+                "Authorization": this._authorizationString,
                 "Content-Range": contentRange
             }
         });
@@ -118,13 +121,13 @@ class OneDriveFileProvider extends FileProvider {
             method: "POST",
             dataType: "json",
             cache: false,
-            headers: { "Authorization": "Bearer " + this._accessToken }
+            headers: { "Authorization": this._authorizationString }
         });
     }
 
     _createFile(folderPath, objectName) {
         const itemPath = this._prepareItemRelativePath(folderPath);
-        const queryString = "?$select=" + REQUIRED_ITEM_FIELDS;
+        const queryString = `?$select=${REQUIRED_ITEM_FIELDS}`;
         const url = APP_ROOT_URL + itemPath + "/children" + queryString;
 
         const params = {
@@ -141,7 +144,7 @@ class OneDriveFileProvider extends FileProvider {
             data: data,
             cache: false,
             headers: {
-                "Authorization": "Bearer " + this._accessToken,
+                "Authorization": this._authorizationString,
                 "Content-Type": "application/json"
             }
         });
@@ -154,7 +157,7 @@ class OneDriveFileProvider extends FileProvider {
             dataType: "json",
             cache: false,
             headers: {
-                "Authorization": "Bearer " + this._accessToken
+                "Authorization": this._authorizationString
             }
         });
     }

@@ -1,3 +1,4 @@
+import { ensureDefined } from "../../../core/utils/common";
 import { each } from "../../../core/utils/iterator";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
@@ -19,7 +20,7 @@ class ArrayFileProvider extends FileProvider {
 
     createFolder(parentFolder, name) {
         const newItem = {
-            name: name,
+            name,
             isFolder: true
         };
         const array = this._getChildrenArray(parentFolder.dataItem);
@@ -46,14 +47,14 @@ class ArrayFileProvider extends FileProvider {
         });
     }
 
-    _createCopy(dataItem) {
+    _createCopy({ name, children, isFolder }) {
         const result = {
-            name: dataItem.name,
-            isFolder: dataItem.isFolder
+            name,
+            isFolder
         };
-        if(dataItem.children) {
+        if(children) {
             result.children = [];
-            each(dataItem.children, (_, childItem) => {
+            each(children, (_, childItem) => {
                 const childCopy = this._createCopy(childItem);
                 result.children.push(childCopy);
             });
@@ -61,13 +62,13 @@ class ArrayFileProvider extends FileProvider {
         return result;
     }
 
-    _deleteItem(item) {
+    _deleteItem({ parentPath, dataItem }) {
         let array = this._data;
-        if(item.parentPath !== "") {
-            const entry = this._findItem(item.parentPath);
-            array = entry.children;
+        if(parentPath !== "") {
+            const { children } = this._findItem(parentPath);
+            array = children;
         }
-        const index = array.indexOf(item.dataItem);
+        const index = array.indexOf(dataItem);
         array.splice(index, 1);
     }
 
@@ -76,10 +77,7 @@ class ArrayFileProvider extends FileProvider {
         if(!dataItem) {
             array = this._data;
         } else {
-            if(!dataItem.children) {
-                dataItem.children = [];
-            }
-            array = dataItem.children;
+            array = dataItem.children = ensureDefined(dataItem.children, []);
         }
         return array;
     }
