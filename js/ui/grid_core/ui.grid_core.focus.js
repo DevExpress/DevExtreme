@@ -438,38 +438,49 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var dataSource = this._dataSource,
-                        operationTypes,
-                        focusController;
+                    var isPartialUpdateWithDeleting;
 
-                    if(this.option("focusedRowEnabled") && dataSource) {
-                        operationTypes = dataSource.operationTypes();
-                        focusController = this.getController("focus");
+                    if(this.option("focusedRowEnabled") && this._dataSource) {
+                        let isPartialUpdate = e.changeType === "update" && e.repaintChangesOnly;
 
-                        if(e.changeType === "refresh") {
-                            var prevPageIndex = this._prevPageIndex,
-                                reload = operationTypes && operationTypes.reload,
-                                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
-                                paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
+                        isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf("remove") >= 0;
 
-                            this._prevPageIndex = this.pageIndex();
-                            if(reload && this.option("focusedRowKey") !== undefined) {
-                                focusController.navigateToRow(this.option("focusedRowKey")).done(function(pageIndex) {
-                                    if(pageIndex < 0) {
-                                        focusController._focusRowByIndex();
-                                    }
-                                });
-                            } else if(paging) {
-                                if(!isVirtualScrolling) {
-                                    focusController._focusRowByIndex();
-                                }
-                            } else {
-                                focusController._focusRowByKeyOrIndex();
-                            }
+                        if(isPartialUpdateWithDeleting) {
+                            this.callBase(e);
+                        }
+
+                        if(e.changeType === "refresh" || isPartialUpdateWithDeleting) {
+                            this.processUpdateFocusedRow();
                         }
                     }
 
-                    this.callBase(e);
+                    if(!isPartialUpdateWithDeleting) {
+                        this.callBase(e);
+                    }
+                },
+                processUpdateFocusedRow: function() {
+                    var prevPageIndex = this._prevPageIndex,
+                        operationTypes = this._dataSource.operationTypes(),
+                        focusController = this.getController("focus"),
+                        reload = operationTypes && operationTypes.reload,
+                        isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
+                        focusedRowKey = this.option("focusedRowKey"),
+                        paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
+
+                    this._prevPageIndex = this.pageIndex();
+                    if(reload && focusedRowKey !== undefined) {
+                        focusController.navigateToRow(focusedRowKey).done(function(pageIndex) {
+                            if(pageIndex < 0) {
+                                focusController._focusRowByIndex();
+                            }
+                        });
+                    } else if(paging) {
+                        if(!isVirtualScrolling) {
+                            focusController._focusRowByIndex();
+                        }
+                    } else {
+                        focusController._focusRowByKeyOrIndex();
+                    }
                 },
 
                 getPageIndexByKey: function(key) {

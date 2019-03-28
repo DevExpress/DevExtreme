@@ -1418,6 +1418,7 @@ QUnit.testInActiveWindow("Focused row index should preserve after paging operati
     };
 
     this.setupModule();
+    addOptionChangedHandlers(this);
 
     this.gridView.render($("#container"));
     this.clock.tick();
@@ -4573,6 +4574,32 @@ QUnit.testInActiveWindow("DataGrid should restore focused row by index after row
         keyExpr: "name",
         focusedRowEnabled: true,
         focusedRowKey: "Alex",
+        editing: {
+            allowDeleting: true,
+            texts: { confirmDeleteMessage: "" }
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.removeRow(0);
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey was changed to the next row");
+});
+
+QUnit.testInActiveWindow("DataGrid should restore focused row by index after row removed if repaintChangesOnly is true (T720083)", function(assert) {
+    this.$element = () => $("#container");
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Alex",
+        repaintChangesOnly: true,
         editing: {
             allowDeleting: true,
             texts: { confirmDeleteMessage: "" }
