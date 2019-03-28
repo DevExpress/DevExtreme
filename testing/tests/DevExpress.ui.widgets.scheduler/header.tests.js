@@ -69,7 +69,7 @@ QUnit.test("Header should contain a navigator", function(assert) {
 
 QUnit.test("Scheduler, tabs switcher, render navbuttons", function(assert) {
     if(devices.real().deviceType !== "desktop") {
-        assert.ok(true, "It doesn't make sense on mobile devices");
+        assert.ok(true, "This behavior is designed for desktop only");
         return;
     }
 
@@ -83,7 +83,7 @@ QUnit.test("Scheduler, tabs switcher, render navbuttons", function(assert) {
 
 QUnit.test("Scheduler, tabs switcher, does not render navbuttons", function(assert) {
     if(devices.real().deviceType !== "desktop") {
-        assert.ok(true, "It doesn't make sense on mobile devices");
+        assert.ok(true, "This behavior is designed for desktop only");
         return;
     }
 

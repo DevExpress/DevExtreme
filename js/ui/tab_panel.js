@@ -369,7 +369,6 @@ var TabPanel = MultiView.inherit({
 
     repaint: function() {
         this.callBase();
-
         this._tabs.repaint();
     },
 
