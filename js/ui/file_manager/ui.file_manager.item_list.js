@@ -13,6 +13,8 @@ const FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE = "dxFileManager_open";
 class FileManagerItemListBase extends Widget {
 
     _initMarkup() {
+        this._initActions();
+
         this.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
 
         const dblClickEventName = addNamespace(dblClickName, FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE);
@@ -43,44 +45,64 @@ class FileManagerItemListBase extends Widget {
         });
     }
 
+    _initActions() {
+        this._actions = {
+            onError: this._createActionByOption("onError"),
+            onSelectedItemOpened: this._createActionByOption("onSelectedItemOpened"),
+            onContextMenuItemClick: this._createActionByOption("onContextMenuItemClick")
+        };
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             selectionMode: "single",
-            onGetItems: null,
+            getItems: null,
+            getItemThumbnail: null,
             onError: null,
             onSelectedItemOpened: null,
-            onContextMenuItemClick: null,
-            getItemThumbnail: null
+            onContextMenuItemClick: null
         });
     }
 
+    _optionChanged(args) {
+        const name = args.name;
+
+        switch(name) {
+            case "selectionMode":
+            case "getItems":
+            case "getItemThumbnail":
+                this.repaint();
+                break;
+            case "onError":
+            case "onSelectedItemOpened":
+            case "onContextMenuItemClick":
+                this._actions[name] = this._createActionByOption(name);
+                break;
+            default:
+                super._optionChanged(args);
+        }
+    }
+
     _getItems() {
-        const getItemsMethod = this.option("onGetItems");
-        return getItemsMethod();
+        const itemsGetter = this.option("getItems");
+        return itemsGetter ? itemsGetter() : [];
     }
 
     _raiseOnError(error) {
-        this._raiseEvent("Error", error);
+        this._actions.onError({ error });
     }
 
     _raiseSelectedItemOpened(item) {
-        this._raiseEvent("SelectedItemOpened", item);
+        this._actions.onSelectedItemOpened({ item });
     }
 
-    _raiseOnContextMenuItemClick(e) {
-        const handler = this.option("onContextMenuItemClick");
-        handler && handler(e.itemData.name, e.itemData.fileItem);
-    }
-
-    _raiseEvent(eventName, arg) {
-        const fullEventName = "on" + eventName;
-        const handler = this.option(fullEventName);
-        handler(arg);
+    _raiseOnContextMenuItemClick({ itemData: { name, fileItem } }) {
+        this._actions.onContextMenuItemClick({ name, fileItem });
     }
 
     _getItemThumbnail(item) {
-        const getItemThumbnailFunction = this.option("getItemThumbnail");
-        return getItemThumbnailFunction(item);
+        const itemThumbnailGetter = this.option("getItemThumbnail");
+        return itemThumbnailGetter ? itemThumbnailGetter(item) : "";
     }
 
     _getItemSelector() {

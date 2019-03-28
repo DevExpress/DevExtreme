@@ -21,6 +21,8 @@ const FILE_MANAGER_PROGRESS_BOX_CANCEL_BUTTON = FILE_MANAGER_PROGRESS_BOX + "-ca
 class FileManagerFileUploader extends Widget {
 
     _initMarkup() {
+        this._initActions();
+
         this._progressPanel = this._createComponent($("<div>"), FileManagerUploadProgressPanel, {});
 
         this.$element()
@@ -77,7 +79,7 @@ class FileManagerFileUploader extends Widget {
         const progressBoxTitle = `Uploading ${files.length} files`;
         const progressBox = this._progressPanel.addProgressBox(progressBoxTitle, null);
 
-        const controllerGetter = this.option("onGetController");
+        const controllerGetter = this.option("getController");
         const session = new FileManagerUploadSession({
             controller: controllerGetter(),
             onProgress: value => progressBox.updateProgress(value * 100),
@@ -103,31 +105,42 @@ class FileManagerFileUploader extends Widget {
     }
 
     _onFilesUploaded() {
-        this._raiseOnFilesUploaded();
+        this._actions.onFilesUploaded();
     }
 
     _raiseOnErrorOccurred(args) {
-        this._raiseEvent("ErrorOccurred", args);
+        this._actions.onErrorOccurred({ info: args });
     }
 
-    _raiseOnFilesUploaded() {
-        this._raiseEvent("FilesUploaded");
-    }
-
-    _raiseEvent(eventName, argument) {
-        const optionName = "on" + eventName;
-        const handler = this.option(optionName);
-        if(handler) {
-            handler.call(this, argument);
-        }
+    _initActions() {
+        this._actions = {
+            onFilesUploaded: this._createActionByOption("onFilesUploaded"),
+            onErrorOccurred: this._createActionByOption("onErrorOccurred")
+        };
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            onGetController: null,
+            getController: null,
             onFilesUploaded: null,
             onErrorOccurred: null
         });
+    }
+
+    _optionChanged(args) {
+        const name = args.name;
+
+        switch(name) {
+            case "getController":
+                this.repaint();
+                break;
+            case "onFilesUploaded":
+            case "onErrorOccurred":
+                this._actions[name] = this._createActionByOption(name);
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
 
 }
@@ -286,8 +299,8 @@ class FileManagerUploadProgressPanel extends Widget {
 
     addProgressBox(title, onCancel) {
         const progressBox = this._createComponent($("<div>"), FileManagerUploadProgressBox, {
-            title: title,
-            onCancel: onCancel
+            title,
+            onCancel
         });
         this._$container.append(progressBox.$element());
 
@@ -321,6 +334,8 @@ class FileManagerUploadProgressPanel extends Widget {
 class FileManagerUploadProgressBox extends Widget {
 
     _initMarkup() {
+        this._createOnCancelAction();
+
         const titleText = this.option("title");
         const $title = $("<span>").text(titleText).addClass(FILE_MANAGER_PROGRESS_BOX_TITLE);
 
@@ -358,14 +373,11 @@ class FileManagerUploadProgressBox extends Widget {
             text: "Canceling..."
         });
 
-        this._raiseCancel();
+        this._onCancelAction();
     }
 
-    _raiseCancel() {
-        const handler = this.option("onCancel");
-        if(handler) {
-            handler();
-        }
+    _createOnCancelAction() {
+        this._onCancelAction = this._createActionByOption("onCancel");
     }
 
     _getDefaultOptions() {
@@ -373,6 +385,21 @@ class FileManagerUploadProgressBox extends Widget {
             title: "",
             onCancel: null
         });
+    }
+
+    _optionChanged(args) {
+        const name = args.name;
+
+        switch(name) {
+            case "title":
+                this.repaint();
+                break;
+            case "onCancel":
+                this._createOnCancelAction();
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
 
 }

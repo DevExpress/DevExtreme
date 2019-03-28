@@ -21,7 +21,7 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
     }
 
     _getDialogOptions() {
-        return extend(super._getDefaultOptions(), {
+        return extend(super._getDialogOptions(), {
             width: 340,
             height: 180,
             title: this.option("title"),

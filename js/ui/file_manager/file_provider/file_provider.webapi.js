@@ -1,12 +1,12 @@
-import ajax from "../core/utils/ajax";
-import { noop } from "../core/utils/common";
-import Guid from "../core/guid";
-import windowUtils from "../core/utils/window";
-import { each } from "../core/utils/iterator";
+import ajax from "../../../core/utils/ajax";
+import { noop } from "../../../core/utils/common";
+import Guid from "../../../core/guid";
+import { getWindow } from "../../../core/utils/window";
+import { each } from "../../../core/utils/iterator";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
 
-const window = windowUtils.getWindow();
+const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
 const FILE_CHUNK_META_DATA_NAME = "chunkMetadata";
 
@@ -74,7 +74,7 @@ class WebAPIFileProvider extends FileProvider {
         }));
 
         return ajax.sendRequest({
-            url: url,
+            url,
             method: "POST",
             dataType: "text",
             data: formData,

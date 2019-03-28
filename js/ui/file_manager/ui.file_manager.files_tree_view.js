@@ -6,12 +6,13 @@ import Widget from "../widget/ui.widget";
 import { extend } from "../../core/utils/extend";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
-import { FileManagerItem } from "../../file_provider/file_provider";
+import { FileManagerItem } from "./file_provider/file_provider";
 import { getPathParts, pathCombine } from "./ui.file_manager.utils";
 
 class FileManagerFilesTreeView extends Widget {
 
     _initMarkup() {
+        this._initActions();
         this._initCurrentPathState();
 
         this._filesTreeView = this._createComponent(this.$element(), TreeViewSearch, {
@@ -57,18 +58,11 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     _raiseCurrentFolderChanged() {
-        this._raiseEvent("CurrentFolderChanged");
+        this._actions.onCurrentFolderChanged();
     }
 
     _raiseClick() {
-        this._raiseEvent("Click");
-    }
-
-    _raiseEvent(eventName) {
-        const handler = this.option("on" + eventName);
-        if(handler) {
-            handler();
-        }
+        this._actions.onClick();
     }
 
     _initCurrentPathState() {
@@ -128,12 +122,35 @@ class FileManagerFilesTreeView extends Widget {
         }
     }
 
+    _initActions() {
+        this._actions = {
+            onCurrentFolderChanged: this._createActionByOption("onCurrentFolderChanged"),
+            onClick: this._createActionByOption("onClick")
+        };
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             getItems: null,
             onCurrentFolderChanged: null,
             onClick: null
         });
+    }
+
+    _optionChanged(args) {
+        const name = args.name;
+
+        switch(name) {
+            case "getItems":
+                this.repaint();
+                break;
+            case "onCurrentFolderChanged":
+            case "onClick":
+                this._actions[name] = this._createActionByOption(name);
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
 
     refreshData() {

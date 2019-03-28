@@ -9,6 +9,8 @@ const FILE_MANAGER_DIALOG_CONTENT = "dx-filemanager-dialog";
 class FileManagerDialogBase extends Widget {
 
     _initMarkup() {
+        this._createOnClosedAction();
+
         const options = this._getDialogOptions();
 
         this._popup = this._createComponent(this.$element(), Popup, {
@@ -76,16 +78,29 @@ class FileManagerDialogBase extends Widget {
     }
 
     _onPopupHidden() {
-        const closedHandler = this.option("onClosed");
-        if(closedHandler) {
-            closedHandler(this._dialogResult);
-        }
+        this._onClosedAction({ dialogResult: this._dialogResult });
+    }
+
+    _createOnClosedAction() {
+        this._onClosedAction = this._createActionByOption("onClosed");
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             onClosed: null
         });
+    }
+
+    _optionChanged(args) {
+        const name = args.name;
+
+        switch(name) {
+            case "onClosed":
+                this._createOnPathChangedAction();
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
 
 }

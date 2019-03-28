@@ -16,6 +16,7 @@ class FileManagerEditingControl extends Widget {
 
         this._model = this.option("model");
         this._provider = this._model.provider;
+        this._initActions();
 
         this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
         this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
@@ -37,11 +38,11 @@ class FileManagerEditingControl extends Widget {
 
     _createFileUploader() {
         return this._createComponent($("<div>"), FileManagerFileUploader, {
-            onGetController: this._getFileUploaderController.bind(this),
+            getController: this._getFileUploaderController.bind(this),
             onFilesUploaded: result => this._raiseOnSuccess("Files uploaded", true),
-            onErrorOccurred: e => {
-                const title = `Upload failed for the '${e.fileName}' file`;
-                this._raiseOnError(title, e.error);
+            onErrorOccurred: ({ info }) => {
+                const title = `Upload failed for the '${info.fileName}' file`;
+                this._raiseOnError(title, info.error);
             }
         });
     }
@@ -83,7 +84,7 @@ class FileManagerEditingControl extends Widget {
         return { // TODO implement this dialog
             show: () => {
                 setTimeout(() => {
-                    this._onDialogClosed({});
+                    this._onDialogClosed({ dialogResult: {} });
                 });
             }
         };
@@ -101,8 +102,7 @@ class FileManagerEditingControl extends Widget {
 
     tryCreate() {
         const item = this._model.getCurrentFolder();
-        const onCreatingHandler = this.option("onCreating");
-        onCreatingHandler();
+        this._actions.onCreating();
 
         this._tryEditAction(
             this._createFolderDialog,
@@ -171,12 +171,21 @@ class FileManagerEditingControl extends Widget {
         return this._dialogDeferred.promise();
     }
 
-    _onDialogClosed(result) {
+    _onDialogClosed(e) {
+        const result = e.dialogResult;
         if(result) {
             this._dialogDeferred.resolve(result);
         } else {
             this._dialogDeferred.reject();
         }
+    }
+
+    _initActions() {
+        this._actions = {
+            onSuccess: this._createActionByOption("onSuccess"),
+            onError: this._createActionByOption("onError"),
+            onCreating: this._createActionByOption("onCreating"),
+        };
     }
 
     _getDefaultOptions() {
@@ -194,14 +203,32 @@ class FileManagerEditingControl extends Widget {
         });
     }
 
-    _raiseOnSuccess(message) {
-        const handler = this.option("onSuccess");
-        handler(message);
+    _optionChanged(args) {
+        const name = args.name;
+
+        switch(name) {
+            case "model":
+                this.repaint();
+                break;
+            case "onSuccess":
+            case "onError":
+            case "onCreating":
+                this._actions[name] = this._createActionByOption(name);
+                break;
+            default:
+                super._optionChanged(args);
+        }
+    }
+
+    _raiseOnSuccess(message, updatedOnlyFiles) {
+        this._actions.onSuccess({ message, updatedOnlyFiles });
     }
 
     _raiseOnError(errorTitle, errorDetails) {
-        const handler = this.option("onError");
-        handler(errorTitle, errorDetails);
+        this._actions.onError({
+            title: errorTitle,
+            details: errorDetails
+        });
     }
 
 }

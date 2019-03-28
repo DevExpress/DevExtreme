@@ -1,4 +1,4 @@
-import { pathCombine, getFileExtension } from "../ui/file_manager/ui.file_manager.utils";
+import { pathCombine, getFileExtension } from "../ui.file_manager.utils";
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
