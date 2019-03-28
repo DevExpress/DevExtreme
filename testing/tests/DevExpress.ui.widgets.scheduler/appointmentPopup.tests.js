@@ -333,7 +333,7 @@ QUnit.test("Popup should contain recurrence editor", function(assert) {
         recurrenceEditor = form.getEditor("recurrenceRule"),
         freqEditor = recurrenceEditor._freqEditor;
 
-    assert.equal(freqEditor.option("value"), "NEVER", "value is right");
+    assert.equal(freqEditor.option("value"), "never", "value is right");
 });
 
 QUnit.test("Recurrence Editor should have right freq editor value if recurrence rule was set on init", function(assert) {
@@ -345,7 +345,7 @@ QUnit.test("Recurrence Editor should have right freq editor value if recurrence 
         recurrenceEditor = form.getEditor("recurrenceRule"),
         freqEditor = recurrenceEditor._freqEditor;
 
-    assert.equal(freqEditor.option("value"), "WEEKLY", "value is right");
+    assert.equal(freqEditor.option("value"), "weekly", "value is right");
 });
 
 QUnit.test("Freq editor should change value if recurrence rule was changed", function(assert) {
@@ -356,9 +356,9 @@ QUnit.test("Freq editor should change value if recurrence rule was changed", fun
         recurrenceEditor = form.getEditor("recurrenceRule"),
         freqEditor = recurrenceEditor._freqEditor;
 
-    assert.equal(freqEditor.option("value"), "WEEKLY", "value is right");
+    assert.equal(freqEditor.option("value"), "weekly", "value is right");
 
-    freqEditor.option("value", "DAILY");
+    freqEditor.option("value", "daily");
     recurrenceEditor.option("value", "FREQ=DAILY");
 });
 
@@ -382,11 +382,11 @@ QUnit.test("Recurrence editor container should be visible after changing freq ed
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    freqEditor.option("value", "DAILY");
+    freqEditor.option("value", "daily");
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
 
-    freqEditor.option("value", "NEVER");
+    freqEditor.option("value", "never");
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 });
@@ -403,7 +403,7 @@ QUnit.test("Recurrence editor container should be visible after changing freq ed
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    freqEditor.option("value", "DAILY");
+    freqEditor.option("value", "daily");
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
 });
@@ -422,7 +422,7 @@ QUnit.test("Recurrence editor container should be visible after value option cha
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
 });
 
-QUnit.test("Popup should contain recurrence editor", function(assert) {
+QUnit.test("Popup should contain recurrence editor with right config", function(assert) {
     var startDate = new Date(2015, 1, 1, 1);
 
     this.instance.option("recurrenceEditMode", "series");
@@ -451,11 +451,11 @@ QUnit.test("Recurrence editor should have default value if freq editor value cha
         recurrenceEditor = form.getEditor("recurrenceRule"),
         freqEditor = recurrenceEditor._freqEditor;
 
-    freqEditor.option("value", "DAILY");
+    freqEditor.option("value", "daily");
 
     assert.equal(recurrenceEditor.option("value"), "FREQ=DAILY", "recEditor has right value");
 
-    freqEditor.option("value", "NEVER");
+    freqEditor.option("value", "never");
 
     assert.equal(recurrenceEditor.option("value"), "", "recEditor has right value");
 });
