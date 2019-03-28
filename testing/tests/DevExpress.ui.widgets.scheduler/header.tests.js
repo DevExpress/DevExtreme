@@ -72,9 +72,7 @@ QUnit.test("Scheduler, tabs switcher, render navbuttons", (assert) => {
         width: 740
     }).dxScheduler("instance");
 
-    var $element = instance.$element();
-
-    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2);
+    assert.equal(instance.$element().find("." + TABS_NAV_BUTTON_CLASS).length, 2);
 });
 
 QUnit.test("Scheduler, tabs switcher, does not render navbuttons", (assert) => {
