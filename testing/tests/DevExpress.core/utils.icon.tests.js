@@ -50,11 +50,45 @@ module("icon utils", {
         {// 12
             source: "<svg></svg>",
             result: "svg"
+        },
+        {// 13
+            source: `<svg>
+                <path />
+            </svg>`,
+            result: "svg"
+        },
+        {// 14
+            source: `<svg>
+                <path />
+            </svg>
+            <html>`,
+            result: false
+        },
+        {// 15
+            source: `test
+            <svg>
+            <path />
+            </svg>`,
+            result: false
+        },
+        {// 16
+            source: `  <svg>
+            <path />
+            </svg>`,
+            result: "svg"
+        },
+        {// 17
+            source: "http://test.test/image.jpg",
+            result: "image"
+        },
+        {// 18
+            source: "image.png",
+            result: "image"
         }];
     }
 }, () => {
     test("getImageSourceType", (assert) => {
-        assert.expect(12);
+        assert.expect(18);
 
         this.sourceArray.forEach(({ source, result }) => {
             assert.strictEqual(getImageSourceType(source), result);
@@ -84,6 +118,9 @@ module("icon utils", {
                     assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
                     assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
                     assert.strictEqual($iconElement.children().get(0).tagName.toUpperCase(), "SVG", `correct for ${result}`);
+                    break;
+                case false:
+                    assert.strictEqual($iconElement, null, "element isn't created");
                     break;
                 default:
                     break;

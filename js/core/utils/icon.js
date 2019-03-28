@@ -11,7 +11,7 @@ const getImageSourceType = (source) => {
         return "svg";
     }
 
-    if(/data:.*base64|\.|\//.test(source)) {
+    if(/data:.*base64|\.|[^<\s]\//.test(source)) {
         return "image";
     }
 
@@ -19,7 +19,11 @@ const getImageSourceType = (source) => {
         return "dxIcon";
     }
 
-    return "fontIcon";
+    if(/^([\w-_]\s?)+$/.test(source)) {
+        return "fontIcon";
+    }
+
+    return false;
 };
 
 const getImageContainer = (source) => {
