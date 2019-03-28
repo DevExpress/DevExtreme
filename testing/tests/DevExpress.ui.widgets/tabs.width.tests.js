@@ -156,7 +156,7 @@ class TabsWidthTestHelper {
     });
 });
 
-QUnit.test("Scheduler, does not render navbuttons", (assert) => {
+QUnit.test("Does not render navbuttons in certain scenario", (assert) => {
     var styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
 
     $("#qunit-fixture").html(styles);
@@ -184,7 +184,7 @@ QUnit.test("Scheduler, does not render navbuttons", (assert) => {
     $("#qunit-fixture").html("");
 });
 
-QUnit.test("Scheduler, render navbuttons", (assert) => {
+QUnit.test("Render navbuttons in certain scenario", (assert) => {
     var styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
 
     $("#qunit-fixture").html(styles);
