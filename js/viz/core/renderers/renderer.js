@@ -995,8 +995,8 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
                 if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
                     setNewText(text, i, ELLIPSIS);
                     break;
-                } else {
-                    (i === 1) && setNewText(text, 0, ELLIPSIS);
+                } else if(i === 1) {
+                    setNewText(text, 0, ELLIPSIS);
                 }
             }
         }
