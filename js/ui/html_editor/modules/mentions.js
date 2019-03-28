@@ -16,8 +16,23 @@ const KEY_CODES = {
     ARROW_RIGHT: 39,
     ENTER: 13,
     ESCAPE: 27,
-    SPACE: 32
+    SPACE: 32,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36
 };
+
+const NAVIGATION_KEYS = [
+    KEY_CODES.ARROW_LEFT,
+    KEY_CODES.ARROW_RIGHT,
+    KEY_CODES.PAGE_UP,
+    KEY_CODES.PAGE_DOWN,
+    KEY_CODES.END,
+    KEY_CODES.HOME
+];
+
+const ALLOWED_PREFIX_CHARS = [" ", "\n"];
 
 const DISABLED_STATE_CLASS = "dx-state-disabled";
 
@@ -78,14 +93,6 @@ class MentionModule extends PopupModule {
         }, this._selectItemHandler.bind(this));
 
         this.quill.keyboard.addBinding({
-            key: KEY_CODES.ARROW_LEFT
-        }, this._ignoreKeyHandler.bind(this));
-
-        this.quill.keyboard.addBinding({
-            key: KEY_CODES.ARROW_RIGHT
-        }, this._ignoreKeyHandler.bind(this));
-
-        this.quill.keyboard.addBinding({
             key: KEY_CODES.ARROW_LEFT,
             shiftKey: true
         }, this._ignoreKeyHandler.bind(this));
@@ -94,6 +101,12 @@ class MentionModule extends PopupModule {
             key: KEY_CODES.ARROW_RIGHT,
             shiftKey: true
         }, this._ignoreKeyHandler.bind(this));
+
+        NAVIGATION_KEYS.forEach((key) => {
+            this.quill.keyboard.addBinding({
+                key
+            }, this._ignoreKeyHandler.bind(this));
+        });
     }
 
     _arrowUpKeyHandler() {
@@ -159,12 +172,16 @@ class MentionModule extends PopupModule {
         const baseConfig = super._getListConfig(options);
 
         return extend(baseConfig, {
-            itemTemplate: this.options.itemTemplate
+            itemTemplate: this.options.itemTemplate,
+            onContentReady: () => {
+                this._focusFirstElement();
+            }
         });
     }
 
     insertEmbedContent() {
         const markerLength = this._activeMentionConfig.marker.length;
+        const textLength = markerLength + this._searchValue.length;
         const caretPosition = this.getPosition();
         const startIndex = Math.max(0, caretPosition - markerLength);
         const selectedItem = this._list.option("selectedItem");
@@ -176,7 +193,7 @@ class MentionModule extends PopupModule {
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, markerLength, "silent");
+            this.quill.deleteText(startIndex, textLength, "silent");
             this.quill.insertEmbed(startIndex, "mention", value);
             this.quill.setSelection(startIndex + 1);
         }.bind(this));
@@ -184,10 +201,10 @@ class MentionModule extends PopupModule {
 
     onTextChange(newDelta, oldDelta, source) {
         if(source === USER_ACTION) {
-            // if(!this._activeMentionConfig) {
             const lastOperation = newDelta.ops[newDelta.ops.length - 1];
+
             if(!this._isMentionActive) {
-                this.checkMentionRequest(lastOperation);
+                this.checkMentionRequest(lastOperation, newDelta.ops);
             } else {
                 const operation = lastOperation;
                 const isInsertOperation = "insert" in operation;
@@ -207,15 +224,14 @@ class MentionModule extends PopupModule {
         }
     }
 
-    checkMentionRequest(operation) {
-        const insertOperation = operation.insert;
+    checkMentionRequest({ insert }, ops) {
         const caret = this.quill.getSelection();
 
-        if(!insertOperation || !isString(insertOperation) || !caret) {
+        if(!insert || !isString(insert) || !caret || this._isMarkerPartOfText(ops[0].retain)) {
             return;
         }
 
-        this._activeMentionConfig = this._mentions[insertOperation];
+        this._activeMentionConfig = this._mentions[insert];
 
         if(this._activeMentionConfig) {
             this._updateList(this._activeMentionConfig);
@@ -224,6 +240,18 @@ class MentionModule extends PopupModule {
             this._searchValue = "";
             this._popup.show();
         }
+    }
+
+    _isMarkerPartOfText(retain) {
+        if(!retain || ALLOWED_PREFIX_CHARS.indexOf(this._getChar(retain - 1)) !== -1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    _getChar(index) {
+        return this.quill.getContents(index, 1).ops[0].insert;
     }
 
     _updateList({ dataSource, displayExpr, valueExpr, itemTemplate, searchExpr }) {
@@ -269,6 +297,16 @@ class MentionModule extends PopupModule {
         this._list.option("searchValue", searchValue);
     }
 
+    _focusFirstElement() {
+        if(!this._list) {
+            return;
+        }
+
+        const $firstItem = this._activeListItems.first();
+        this._list.option("focusedElement", getPublicElement($firstItem));
+        this._list.scrollToItem($firstItem);
+    }
+
     get _popupPosition() {
         const position = this.getPosition();
         const mentionBounds = this.quill.getBounds(position ? position - 1 : position);
@@ -291,9 +329,6 @@ class MentionModule extends PopupModule {
     _getPopupConfig() {
         return extend(super._getPopupConfig(), {
             onShown: () => {
-                const $firstItem = this._activeListItems.first();
-                this._list.option("focusedElement", getPublicElement($firstItem));
-                this._list.scrollToItem($firstItem);
                 this._isMentionActive = true;
             },
             onHidden: () => {

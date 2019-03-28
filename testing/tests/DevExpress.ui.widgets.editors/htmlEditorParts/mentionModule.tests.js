@@ -1,5 +1,4 @@
 import $ from "jquery";
-import fx from "animation/fx";
 
 import MentionFormat from "ui/html_editor/formats/mention";
 import Mentions from "ui/html_editor/modules/mentions";
@@ -17,6 +16,8 @@ const KEY_CODES = {
     SPACE: 32
 };
 
+const POPUP_HIDING_TIMEOUT = 500;
+
 const APPLY_VALUE_KEYS = [{ key: "Enter", code: KEY_CODES.ENTER }, { key: "Space", code: KEY_CODES.SPACE }];
 
 const INSERT_DEFAULT_MENTION_DELTA = { ops: [{ insert: "@" }] };
@@ -30,7 +31,6 @@ const moduleConfig = {
         this.$element = $("#htmlEditor");
 
         this.log = [];
-        fx.off = true;
 
         this.$element.on("keydown", ({ which }) => {
             const handlers = this.quillMock.keyboard.bindings[which];
@@ -45,6 +45,7 @@ const moduleConfig = {
             insertEmbed: (position, format, value) => {
                 this.log.push({ position, format, value });
             },
+            getContents: () => { return { ops: [{ insert: " " }] }; },
             getLength: () => 0,
             getBounds: () => { return { left: 0, bottom: 0 }; },
             root: this.$element.get(0),
@@ -112,7 +113,6 @@ const moduleConfig = {
     },
     afterEach: () => {
         this.clock.reset();
-        fx.off = false;
     }
 };
 
@@ -159,7 +159,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
 
         $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger("dxclick");
 
-        this.clock.tick();
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.deepEqual(this.log[1], {
             format: "mention",
@@ -179,7 +179,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
         $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger("dxclick");
 
-        this.clock.tick();
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.deepEqual(this.log[1], {
             format: "mention",
@@ -198,7 +198,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         mention.savePosition(2);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
         $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger("dxclick");
-        this.clock.tick();
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.deepEqual(this.log, [{
             index: 0, // go to start of typing and remove the marker
@@ -278,7 +278,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.strictEqual($items.length, usersCount, "List of users");
 
         $items.first().trigger("dxclick");
-        this.clock.tick();
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.deepEqual(this.log[1], {
             format: "mention",
@@ -297,7 +297,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.strictEqual($items.length, issueCount, "List of issues");
 
         $items.first().trigger("dxclick");
-        this.clock.tick();
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.deepEqual(this.log[4], {
             format: "mention",
@@ -395,8 +395,38 @@ QUnit.module("Mentions module", moduleConfig, () => {
         const $list = $(`.${SUGGESTION_LIST_CLASS}`);
 
         this.$element.trigger($.Event("keydown", { key: "Escape", which: KEY_CODES.ESCAPE }));
-        this.clock.tick(500);
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.notOk($list.is(":visible"));
+    });
+
+    test("mention char shouldn't be a part of string (e.g. e-mail)", (assert) => {
+        let content = "d";
+
+        this.quillMock.getContents = (index, length) => {
+            this.log.push({ operation: "getContents", index, length });
+            return { ops: [{ insert: content }] };
+        };
+        const mention = new Mentions(this.quillMock, this.options);
+        const $list = $(`.${SUGGESTION_LIST_CLASS}`);
+
+        mention.savePosition(0);
+
+        mention.onTextChange({ ops: [{ insert: "@", retain: 2 }] }, {}, "user");
+        assert.notOk($list.is(":visible"));
+        assert.deepEqual(this.log[0], { operation: "getContents", index: 1, length: 1 });
+
+        content = "\n";
+        mention.onTextChange({ ops: [{ insert: "@", retain: 50 }] }, {}, "user");
+        assert.ok($list.is(":visible"));
+        assert.deepEqual(this.log[1], { operation: "getContents", index: 49, length: 1 });
+
+        mention._popup.hide();
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+        content = " ";
+        mention.onTextChange({ ops: [{ insert: "@", retain: 1 }] }, {}, "user");
+        assert.ok($list.is(":visible"));
+        assert.deepEqual(this.log[2], { operation: "getContents", index: 0, length: 1 });
     });
 });
