@@ -58,8 +58,6 @@ class TabsWidthTestHelper {
         this._initializeInstanceTabs(400);
         this.checkFixedTabs();
     }
-  
-    
 
     checkFixedTabs() {
         this.assert.equal(this.instance.option("width"), !this.optionApproach() ? undefined : 400);
