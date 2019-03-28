@@ -11,8 +11,7 @@ require("./timezones/ui.scheduler.timezone_editor");
 require("../text_area");
 require("../tag_box");
 
-var RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item",
-    RECURRENCE_SWITCH_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-switch-item";
+var RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
 
 var SchedulerAppointmentForm = {
 
@@ -199,32 +198,6 @@ var SchedulerAppointmentForm = {
                 itemType: "empty",
                 colSpan: 2
             },
-
-            {
-                name: "repeatOnOff",
-                editorType: "dxSwitch",
-                colSpan: 2,
-                label: {
-                    text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
-                },
-                editorOptions: {
-                    observer: schedulerInst,
-                    onInitialized: function(args) {
-                        var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
-
-                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
-                        args.component.option("value", value);
-                    },
-                    onValueChanged: function(args) {
-                        var value = args.value,
-                            recEditor = that._appointmentForm.getEditor(dataExprs.recurrenceRuleExpr);
-
-                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
-                        recEditor.option("visible", value);
-                    }
-                },
-                cssClass: RECURRENCE_SWITCH_EDITOR_ITEM_CLASS
-            },
             {
                 dataField: dataExprs.recurrenceRuleExpr,
                 editorType: "dxRecurrenceEditor",
@@ -234,7 +207,7 @@ var SchedulerAppointmentForm = {
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
                     onValueChanged: function(args) {
                         var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
-                        args.component.option("visible", value);
+                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
                     },
                     onContentReady: function(args) {
                         var $editorField = $(args.element).closest(".dx-field-item"),
@@ -248,8 +221,8 @@ var SchedulerAppointmentForm = {
                 },
                 cssClass: RECURRENCE_EDITOR_ITEM_CLASS,
                 label: {
-                    visible: false
-                }
+                    text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
+                },
             }
         ];
 
