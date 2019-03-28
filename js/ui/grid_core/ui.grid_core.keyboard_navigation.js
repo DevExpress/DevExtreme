@@ -26,7 +26,6 @@ var ROWS_VIEW_CLASS = "rowsview",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    COMMAND_CELL_CLASS = ".dx-command-edit",
     DATEBOX_WIDGET_NAME = "dxDateBox",
 
     FAST_EDITING_DELETE_KEY = "delete",
@@ -61,10 +60,6 @@ function isNotFocusedRow($row) {
 
 function isCellElement($element) {
     return $element.length && $element[0].tagName === "TD";
-}
-
-function isCommandCellElement($element) {
-    return isCellElement($element) && $element.is(COMMAND_CELL_CLASS);
 }
 
 var KeyboardNavigationController = core.ViewController.inherit({
@@ -494,7 +489,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
             rowIndex = this.getVisibleRowIndex(),
-            allowAdvancedNavigation = this._allowAdvancedNavigation(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
         if((this.option("grouping.allowCollapsing") && isGroupRow($row)) ||
@@ -506,18 +500,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(key !== undefined && item && item.data && !item.data.isContinuation) {
                 this._dataController.changeRowExpand(key);
             }
-        } else if(allowAdvancedNavigation && isCommandCellElement($cell)) {
-            this._processEnterKeyForCommandCell($cell);
         } else {
             this._processEnterKeyForDataCell(eventArgs, isEditing);
-        }
-    },
-
-    _processEnterKeyForCommandCell: function($cell) {
-        var isFocusActiveElement = $cell.find(".dx-link:focus").length;
-        if(!isFocusActiveElement) {
-            let $activeElement = $cell.find(".dx-link").first();
-            $activeElement.focus();
         }
     },
 
