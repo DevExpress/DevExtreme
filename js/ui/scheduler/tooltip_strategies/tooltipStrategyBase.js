@@ -5,7 +5,7 @@ import $ from "../../../core/renderer";
 import List from "../../list/ui.list.edit";
 import { extendFromObject } from "../../../core/utils/extend";
 
-const TOOLTIP_APPOINTMENT_ITEM = "tooltip-appointment-item",
+const TOOLTIP_APPOINTMENT_ITEM = "dx-tooltip-appointment-item",
     TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + "-content",
     TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT = TOOLTIP_APPOINTMENT_ITEM + "-content-subject",
     TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE = TOOLTIP_APPOINTMENT_ITEM + "-content-date",
@@ -83,6 +83,7 @@ export class TooltipStrategyBase {
         const mappedData = this.scheduler.fire("mapAppointmentFields", e),
             result = extendFromObject(mappedData, e, false);
         this.showEditAppointmentPopupAction(result);
+        this.hide();
     }
 
     _onDeleteButtonClick() {
@@ -110,7 +111,7 @@ export class TooltipStrategyBase {
         $itemElement.append(this._createItemListInfo(text, this._formatDate(startDate, endDate, isAllDay)));
 
         if(editing && editing.allowDeleting === true || editing === true) {
-            $itemElement.append(this._createDeleteButton(data));
+            $itemElement.append(this._createDeleteButton(data, currentData));
         }
 
         return $itemElement;
@@ -134,7 +135,7 @@ export class TooltipStrategyBase {
         return result.append($title).append($date);
     }
 
-    _createDeleteButton(data) {
+    _createDeleteButton(data, currentData) {
         const $container = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER),
             $deleteButton = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
@@ -143,8 +144,10 @@ export class TooltipStrategyBase {
             icon: "trash",
             onClick: e => {
                 this._onDeleteButtonClick();
+                this.scheduler._checkRecurringAppointment(data, currentData,
+                    this.scheduler._getStartDate(currentData, true), () => this.scheduler.deleteAppointment(data), true);
+
                 e.event.stopPropagation();
-                this.scheduler.deleteAppointment(data);
             }
         });
 
