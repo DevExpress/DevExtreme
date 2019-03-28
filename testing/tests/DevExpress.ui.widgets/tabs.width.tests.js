@@ -45,7 +45,7 @@ class TabsWidthTestHelper {
     }
 
     setContainerWidth(width) {
-        this.$tabs[0].setAttribute("style", `width:${width}px`);
+        this.$container[0].setAttribute("style", `width:${width}px`);
     }
 
     _getTabItem(index) {

@@ -44,7 +44,7 @@ class TabPanelWidthTestHelper {
     }
 
     setContainerWidth(width) {
-        this.$tabPanel[0].setAttribute("style", `width:${width}px`);
+        this.$container[0].setAttribute("style", `width:${width}px`);
     }
 
     createTabPanel(options) {

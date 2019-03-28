@@ -78,7 +78,7 @@ QUnit.test("Scheduler, tabs switcher, render navbuttons", function(assert) {
         width: 740
     });
 
-    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, " ");
+    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2);
 });
 
 QUnit.test("Scheduler, tabs switcher, does not render navbuttons", function(assert) {
@@ -92,7 +92,7 @@ QUnit.test("Scheduler, tabs switcher, does not render navbuttons", function(asse
         width: 770
     });
 
-    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, " ");
+    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0);
 });
 
 QUnit.module("Header Options", {
