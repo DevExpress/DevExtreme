@@ -1795,6 +1795,7 @@ Axis.prototype = {
             that._axisConstantLineGroups.under.outside2.append(that._constantLinesGroup.under);
         }
 
+        that._measureTitle();
         measureLabels(that._majorTicks);
         let textWidth;
         if(that._isHorizontal) {
@@ -1816,7 +1817,6 @@ Axis.prototype = {
             }
         }
 
-        that._measureTitle();
         measureLabels(that._outsideConstantLines);
         measureLabels(that._insideConstantLines);
         measureLabels(that._strips);
