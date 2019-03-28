@@ -6985,6 +6985,88 @@ QUnit.test("scrolling after ungrouping should works correctly with large amount 
     clock.restore();
 });
 
+// T716207
+QUnit.test("Filtering should works correctly if groupPaging is enabled and group is expanded", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var arrayStore = new ArrayStore([
+        { id: 1, group: "group", type: 1 },
+        { id: 2, group: "group", type: 1 },
+        { id: 3, group: "group", type: 1 },
+        { id: 4, group: "group", type: 2 }
+    ]);
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                var d = $.Deferred();
+                setTimeout(function() {
+                    var result = {};
+                    arrayStore.load(options).done(function(data) {
+                        result.data = data;
+
+                        if(options.group) {
+                            data.forEach(item => {
+                                item.count = item.items.length;
+                                item.items = null;
+                            });
+                        }
+                    });
+                    if(options.requireGroupCount) {
+                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                            result.groupCount = groupedData.length;
+                        });
+                    }
+                    if(options.requireTotalCount) {
+                        arrayStore.totalCount(options).done(function(totalCount) {
+                            result.totalCount = totalCount;
+                        });
+                    }
+
+                    d.resolve(result);
+                }, 10);
+
+                return d;
+            }
+        },
+        remoteOperations: { groupPaging: true },
+        height: 400,
+        filterSyncEnabled: true,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual"
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        paging: {
+            pageSize: 2
+        },
+        columns: [{
+            dataField: "group",
+            groupIndex: 0
+        }, {
+            dataField: "id"
+        }, {
+            dataField: "type"
+        }]
+    }).dxDataGrid("instance");
+    clock.tick(100);
+
+    dataGrid.expandRow(["group"]);
+    clock.tick(100);
+
+    // act
+    dataGrid.columnOption("type", "filterValue", 1);
+    clock.tick(100);
+
+    // assert
+    assert.notOk(dataGrid.getDataSource().isLoading(), "not loading");
+    assert.equal(dataGrid.getVisibleRows().length, 4, "visible row count is correct");
+
+    clock.restore();
+});
+
 // T641931
 QUnit.test("Infinite scrolling should works correctly", function(assert) {
     // arrange, act
@@ -11040,6 +11122,28 @@ QUnit.test("Column hiding should work if the last not fixed column was hiden wit
     assert.equal(columns[0].visibleWidth + adaptiveColumnWidth, 200, "width of the 1st and last columns");
     assert.equal(columns[1].visibleWidth, "adaptiveHidden", "2nd column is hidden");
     assert.equal(columns[2].visibleWidth, "adaptiveHidden", "3rd column is hidden");
+});
+
+// T726366
+QUnit.test("Column hiding should works correctly if all columns have width", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        width: 300,
+        columnWidth: 100,
+        loadingTimeout: undefined,
+        columnHidingEnabled: true,
+        dataSource: [{}],
+        columns: ["field1", "field2", "field3", "field4"]
+    });
+
+    // assert
+    var visibleWidths = dataGrid.getVisibleColumns().map(column => column.visibleWidth);
+
+    assert.deepEqual(visibleWidths.length, 5, "column count");
+    assert.deepEqual(visibleWidths[0], 100, "column 1 has full width");
+    assert.deepEqual(visibleWidths[1], "auto", "column 2 has auto width");
+    assert.deepEqual(visibleWidths[2], "adaptiveHidden", "column 3 is hidden");
+    assert.deepEqual(visibleWidths[3], "adaptiveHidden", "column 4 is hidden");
 });
 
 QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editing", function(assert) {

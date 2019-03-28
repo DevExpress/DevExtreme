@@ -98,7 +98,7 @@ QUnit.performanceTest("layout navigation performance test", function(assert) {
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 7);
+    assert.measureStyleRecalculation(measureFunction, 9);
 });
 
 QUnit.performanceTest("change command visibility performance test", function(assert) {
@@ -148,7 +148,7 @@ QUnit.performanceTest("layout recreate navigation performance test", function(as
         layoutController.renderNavigation(newNavigation);
     };
 
-    assert.measureStyleRecalculation(measureFunction, 10);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest("show view", function(assert) {

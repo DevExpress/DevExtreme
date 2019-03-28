@@ -7,6 +7,7 @@ import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import browser from "../../core/utils/browser";
+import translator from "../../animation/translator";
 
 var CONTENT_CLASS = "content",
     CONTENT_FIXED_CLASS = "content-fixed",
@@ -804,8 +805,39 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
     },
 
+    _getElasticScrollTop: function(e) {
+        let maxScrollTop,
+            scrollableContent,
+            scrollableContainer,
+            elasticScrollTop = 0;
+
+        if(e.scrollOffset.top < 0) {
+            elasticScrollTop = -e.scrollOffset.top;
+        } else if(e.reachedBottom) {
+            scrollableContent = e.component.$content();
+            scrollableContainer = e.component._container();
+            maxScrollTop = scrollableContent.height() - scrollableContainer.height();
+            elasticScrollTop = maxScrollTop - e.scrollOffset.top;
+        }
+
+        return elasticScrollTop;
+    },
+
+    _applyElasticScrolling: function(e) {
+        if(this._fixedTableElement) {
+            let elasticScrollTop = this._getElasticScrollTop(e);
+
+            if(Math.ceil(elasticScrollTop) !== 0) {
+                translator.move(this._fixedTableElement, { top: elasticScrollTop });
+            } else {
+                this._fixedTableElement.css("transform", "");
+            }
+        }
+    },
+
     _handleScroll: function(e) {
         this._updateFixedTablePosition(e.scrollOffset.top, true);
+        this._applyElasticScrolling(e);
         this.callBase(e);
     },
 
