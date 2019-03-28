@@ -109,7 +109,7 @@ QUnit.test("Recurrence editor should correctly process values of the freq radioG
     this.createInstance({ value: "FREQ=WEEKLY", startDate: new Date(2015, 2, 10) });
 
     var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
-    freqEditor.option("value", "yarly");
+    freqEditor.option("value", "yearly");
 
     assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3", "Recurrence editor has right value");
 });
