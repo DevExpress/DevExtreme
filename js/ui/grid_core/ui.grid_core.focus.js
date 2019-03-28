@@ -345,7 +345,10 @@ module.exports = {
                 setFocusedRowIndex: function(rowIndex) {
                     this.callBase(rowIndex);
 
-                    this.option("focusedRowIndex", rowIndex);
+                    let visibleRow = this.getController("data").getVisibleRows()[rowIndex];
+                    if(!visibleRow || !visibleRow.inserted) {
+                        this.option("focusedRowIndex", rowIndex);
+                    }
                 },
 
                 setFocusedColumnIndex: function(columnIndex) {
