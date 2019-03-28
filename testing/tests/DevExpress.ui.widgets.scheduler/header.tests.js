@@ -66,7 +66,7 @@ QUnit.test("Header should contain a navigator", function(assert) {
     assert.equal($element.find(".dx-scheduler-navigator").length, 1);
 });
 
-QUnit.test("Scheduler, tabs switcher, render navbuttons", (assert) => {
+QUnit.test("option('width', 740)", (assert) => {
     var instance = $("#scheduler").dxScheduler({
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
         width: 740
@@ -75,7 +75,7 @@ QUnit.test("Scheduler, tabs switcher, render navbuttons", (assert) => {
     assert.equal(instance.$element().find("." + TABS_NAV_BUTTON_CLASS).length, 2);
 });
 
-QUnit.test("Scheduler, tabs switcher, does not render navbuttons", (assert) => {
+QUnit.test("option('width', 770)", (assert) => {
     var instance = $("#scheduler").dxScheduler({
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
         width: 770
