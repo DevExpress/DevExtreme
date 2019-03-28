@@ -6,6 +6,14 @@
     }
 }
 
+.dx-editor-content-wrapper() {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    align-items: baseline;
+}
+
 /*B231111*/
 .dx-placeholder {
     position: absolute;
@@ -51,11 +59,7 @@
 }
 
 .dx-texteditor-input-container {
-    display: flex;
-    flex-grow: 1;
-    position: relative;
-    height: 100%;
-    align-items: baseline;
+    .dx-editor-content-wrapper();
 }
 
 .dx-texteditor-input {
