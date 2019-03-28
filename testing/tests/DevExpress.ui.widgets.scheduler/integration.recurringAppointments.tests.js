@@ -814,7 +814,7 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    freqEditor.option("value", "DAILY");
+    freqEditor.option("value", "daily");
     $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
@@ -838,9 +838,9 @@ QUnit.test("Recurrence editor should work correctly after toggling repeat and re
         freqEditor = recurrenceEditor._freqEditor,
         repeatTypeEditor = recurrenceEditor._repeatTypeEditor;
 
-    freqEditor.option("value", "DAILY");
+    freqEditor.option("value", "daily");
     repeatTypeEditor.option("value", 'count');
-    freqEditor.option("value", 'NEVER');
+    freqEditor.option("value", 'never');
 
     assert.ok(true, "recurrence editor works correctly");
 });
@@ -869,7 +869,7 @@ QUnit.test("Recurrence editor should work correctly after turn off the recurrenc
         recurrenceEditor = form.getEditor("recurrenceRule"),
         freqEditor = recurrenceEditor._freqEditor;
 
-    freqEditor.option("value", "NEVER");
+    freqEditor.option("value", "never");
 
     assert.ok(true, "recurrence editor works correctly");
 });

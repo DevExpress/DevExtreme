@@ -53,7 +53,7 @@ QUnit.test("Recurrence editor should correctly process null value and reset inne
 
     var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
-    assert.equal(freqEditor.option("value"), "NEVER", "freq editor default value was set");
+    assert.equal(freqEditor.option("value"), "never", "freq editor default value was set");
 });
 
 QUnit.module("Recurrence editor - freq editor", {
@@ -76,7 +76,7 @@ QUnit.test("Recurrence editor should has right items", function(assert) {
     var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
     var items = freqEditor.option("items");
-    var itemValues = [{ text: "Never", value: "NEVER" }, { text: "Daily", value: "DAILY" }, { text: "Weekly", value: "WEEKLY" }, { text: "Monthly", value: "MONTHLY" }, { text: "Yearly", value: "YEARLY" }];
+    var itemValues = [{ text: "Never", value: "never" }, { text: "Daily", value: "daily" }, { text: "Weekly", value: "weekly" }, { text: "Monthly", value: "monthly" }, { text: "Yearly", value: "yearly" }];
 
     for(var i = 0, len = items.length; i < len; i++) {
         assert.equal(itemValues[i].text, items[i].text(), "item text is right");
@@ -92,7 +92,7 @@ QUnit.test("Recurrence editor should correctly process values of the freq select
 
     assert.equal(this.instance.option("value"), null, "Recurrence editor has right value");
 
-    freqEditor.option("value", "WEEKLY");
+    freqEditor.option("value", "weekly");
     assert.equal(this.instance.option("value"), "FREQ=WEEKLY;BYDAY=TH", "Recurrence editor has right value");
 });
 
@@ -100,7 +100,7 @@ QUnit.test("Recurrence editor should correctly process values of the freq radioG
     this.createInstance({ value: "FREQ=WEEKLY", startDate: new Date(2015, 2, 10) });
 
     var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
-    freqEditor.option("value", "MONTHLY");
+    freqEditor.option("value", "monthly");
 
     assert.equal(this.instance.option("value"), "FREQ=MONTHLY;BYMONTHDAY=10", "Recurrence editor has right value");
 });
@@ -109,7 +109,7 @@ QUnit.test("Recurrence editor should correctly process values of the freq radioG
     this.createInstance({ value: "FREQ=WEEKLY", startDate: new Date(2015, 2, 10) });
 
     var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
-    freqEditor.option("value", "YEARLY");
+    freqEditor.option("value", "yearly");
 
     assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3", "Recurrence editor has right value");
 });
@@ -125,7 +125,7 @@ QUnit.test("Recurrence editor onValueChanged should be fired after change value"
 
     var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
-    freqEditor.option("value", "WEEKLY");
+    freqEditor.option("value", "weekly");
 
     assert.equal(fired, 1, "Recurrence editor onValueChanged is fired");
 });
@@ -135,10 +135,10 @@ QUnit.test("Recurrence editor should correctly process values to the freq radioG
 
     var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
-    assert.equal(freqEditor.option("value"), "WEEKLY", "Freq editor has right value");
+    assert.equal(freqEditor.option("value"), "weekly", "Freq editor has right value");
 
     this.instance.option("value", "FREQ=MONTHLY");
-    assert.equal(freqEditor.option("value"), "MONTHLY", "Freq editor has right value");
+    assert.equal(freqEditor.option("value"), "monthly", "Freq editor has right value");
 });
 
 
@@ -648,17 +648,17 @@ QUnit.test("Recurrence editor should process values from repeat-on-editor correc
         freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
     monthEditor.option("value", "10");
-    freqEditor.option("value", "DAILY");
+    freqEditor.option("value", "daily");
 
     assert.equal(this.instance.option("value"), "FREQ=DAILY", "recurrence editor value is correct");
 
-    freqEditor.option("value", "MONTHLY");
+    freqEditor.option("value", "monthly");
 
     var $dayOfMonth = this.instance.$element().find("." + DAY_OF_MONTH),
         dayEditor = $dayOfMonth.dxNumberBox("instance");
 
     dayEditor.option("value", 5);
-    freqEditor.option("value", "YEARLY");
+    freqEditor.option("value", "yearly");
 
     assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=5;BYMONTH=3", "recurrence editor value is correct");
 });
