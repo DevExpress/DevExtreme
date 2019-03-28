@@ -5,7 +5,7 @@ export const tooltipHelper = {
     getItemElement: (index = 0) => $(tooltipHelper.getContentElement().find('.dx-list-item').get(index)),
     getTitleElement: (index = 0) => tooltipHelper.getItemElement(index).find('.dx-tooltip-appointment-item-content-subject'),
     getDateElement: (index = 0) => tooltipHelper.getItemElement(index).find('.dx-tooltip-appointment-item-content-date'),
-    getDeleteButton: (index = 0) => tooltipHelper.getContentElement(index).find('.dx-tooltip-appointment-item-delete-button'),
+    getDeleteButton: (index = 0) => tooltipHelper.getItemElement(index).find('.dx-tooltip-appointment-item-delete-button'),
 
     getDateText: (index = 0) => tooltipHelper.getDateElement(index).text(),
     getTitleText: (index = 0) => tooltipHelper.getTitleElement(index).text(),
@@ -19,6 +19,9 @@ export const tooltipHelper = {
 };
 
 export const appointmentsHelper = {
+    getCompactAppointmentButton: (index = 0) => $($(".dx-scheduler-dropdown-appointments").get(index)),
     getAppointmentElement: (index = 0) => $(".dx-scheduler-appointment").eq(index),
-    click: (index = 0) => appointmentsHelper.getAppointmentElement(index).trigger("dxclick")
+
+    click: (index = 0) => appointmentsHelper.getAppointmentElement(index).trigger("dxclick"),
+    clickOnCompactAppointment: (index = 0) => appointmentsHelper.getCompactAppointmentButton(index).trigger("dxclick")
 };
