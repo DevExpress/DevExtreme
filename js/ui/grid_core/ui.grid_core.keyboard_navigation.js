@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import domAdapter from "../../core/dom_adapter";
 import eventsEngine from "../../events/core/events_engine";
 import core from "./ui.grid_core.modules";
+import { focusAndSelectElement } from "./ui.grid_core.utils";
 import { isDefined } from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { focused } from "../widget/selectors";
@@ -96,7 +97,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._testInteractiveElement = $focusedElement;
         ///#ENDDEBUG
 
-        eventsEngine.trigger($focusedElement, "focus");
+        focusAndSelectElement(this, $focusedElement);
     },
 
     _updateFocus: function(editingCanceled, fireFocusChangingCanceled) {
@@ -1835,28 +1836,33 @@ module.exports = {
                 },
 
                 _editCellPrepared: function($cell) {
-                    var keyboardController = this.getController("keyboardNavigation"),
-                        isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted(),
-                        editorInstance = isEditingNavigationMode && this._getEditorInstance($cell);
+                    var editorInstance = this._getEditorInstance($cell),
+                        keyboardController = this.getController("keyboardNavigation"),
+                        isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
 
-                    if(editorInstance) {
-                        ["downArrow", "upArrow"].forEach(function(keyName) {
-                            let originalKeyHandler = editorInstance._supportedKeys()[keyName];
-                            editorInstance.registerKeyHandler(keyName, e => {
-                                let isDropDownOpened = editorInstance._input().attr("aria-expanded") === "true";
-                                if(isDropDownOpened) {
-                                    return originalKeyHandler && originalKeyHandler.call(editorInstance, e);
-                                }
-                            });
+                    if(editorInstance && isEditingNavigationMode) {
+                        this._handleEditingNavigationMode(editorInstance);
+                    }
+
+                    this.callBase.apply(this, arguments);
+                },
+                _handleEditingNavigationMode: function(editorInstance) {
+                    ["downArrow", "upArrow"].forEach(function(keyName) {
+                        let originalKeyHandler = editorInstance._supportedKeys()[keyName];
+                        editorInstance.registerKeyHandler(keyName, e => {
+                            let isDropDownOpened = editorInstance._input().attr("aria-expanded") === "true";
+                            if(isDropDownOpened) {
+                                return originalKeyHandler && originalKeyHandler.call(editorInstance, e);
+                            }
                         });
+                    });
 
-                        editorInstance.registerKeyHandler("leftArrow", noop);
-                        editorInstance.registerKeyHandler("rightArrow", noop);
+                    editorInstance.registerKeyHandler("leftArrow", noop);
+                    editorInstance.registerKeyHandler("rightArrow", noop);
 
-                        let isDateBoxWithMask = editorInstance.NAME === DATEBOX_WIDGET_NAME && editorInstance.option("useMaskBehavior");
-                        if(isDateBoxWithMask) {
-                            editorInstance.registerKeyHandler("enter", noop);
-                        }
+                    let isDateBoxWithMask = editorInstance.NAME === DATEBOX_WIDGET_NAME && editorInstance.option("useMaskBehavior");
+                    if(isDateBoxWithMask) {
+                        editorInstance.registerKeyHandler("enter", noop);
                     }
                 },
                 _getEditorInstance: function($cell) {
@@ -1872,17 +1878,18 @@ module.exports = {
             editing: {
                 editCell: function(rowIndex, columnIndex) {
                     var isCellEditing = this.callBase(rowIndex, columnIndex),
-                        keyboardNavigationController = this.getController("keyboardNavigation");
+                        keyboardController = this.getController("keyboardNavigation");
 
                     if(isCellEditing) {
-                        keyboardNavigationController.setupFocusedView();
+                        keyboardController.setupFocusedView();
                     }
 
                     return isCellEditing;
                 },
                 editRow: function(rowIndex) {
+                    let keyboardController = this.getController("keyboardNavigation");
                     if(this.option("editing.mode") === EDIT_MODE_FORM) {
-                        this._keyboardNavigationController._resetFocusedCell();
+                        keyboardController._resetFocusedCell();
                     }
                     this.callBase(rowIndex);
                 },

@@ -4913,6 +4913,8 @@ declare module DevExpress.ui {
         popup?: dxPopupOptions;
         /** @name GridBase.Options.editing.refreshMode */
         refreshMode?: 'full' | 'reshape' | 'repaint';
+        /** @name GridBase.Options.editing.selectTextOnEditStart */
+        selectTextOnEditStart?: boolean;
         /** @name GridBase.Options.editing.texts */
         texts?: GridBaseEditingTexts;
         /** @name GridBase.Options.editing.useIcons */

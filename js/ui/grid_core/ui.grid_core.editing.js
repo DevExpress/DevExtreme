@@ -8,7 +8,7 @@ import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import modules from "./ui.grid_core.modules";
 import clickEvent from "../../events/click";
-import { getIndexByKey, createObjectWithChanges, setEmptyText, getSelectionRange, setSelectionRange } from "./ui.grid_core.utils";
+import { getIndexByKey, createObjectWithChanges, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from "./ui.grid_core.utils";
 import { addNamespace } from "../../events/utils";
 import dialog from "../dialog";
 import messageLocalization from "../../localization/message";
@@ -1072,7 +1072,11 @@ var EditingController = modules.ViewController.inherit((function() {
                     beforeFocusCallback();
                 }
 
-                $cell && eventsEngine.trigger($cell.find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
+                if($cell) {
+                    let $focusableElement = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first();
+                    focusAndSelectElement(that, $focusableElement);
+                }
+
                 that._beforeFocusCallback = null;
             }
 
@@ -2213,6 +2217,12 @@ module.exports = {
                  * @default false
                  */
                 useIcons: false,
+                /**
+                 * @name GridBaseOptions.editing.selectTextOnEditStart
+                 * @type boolean
+                 * @default false
+                 */
+                selectTextOnEditStart: false,
                 /**
                  * @name dxDataGridOptions.editing.texts
                  * @type object
