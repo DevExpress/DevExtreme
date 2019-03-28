@@ -4,22 +4,32 @@ import domUtils from "core/utils/dom";
 import "ui/tabs";
 import "common.css!";
 
-const TABS_ITEM_CLASS = "dx-tab",
-    TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button";
+const TABS_ITEM_CLASS = "dx-tab";
+const TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button";
+
+QUnit.testStart(() => {
+    const markup =
+        '<div id="container">\
+            <div id="element">\
+            </div>\
+        </div>';
+
+    $("#qunit-fixture").html(markup);
+});
 
 QUnit.module("Width");
 
 class TabsWidthTestHelper {
     constructor(assert, scrollingEnabled, setWidthApproach) {
-        this.$container = $("<div id='container'>");
-        this.$element = $("<div>");
+        this.$container = $("#container");
+        this.$element = $("#element");
         this.assert = assert;
         this.scrollingEnabled = scrollingEnabled;
         this.setWidthApproach = setWidthApproach;
     }
 
     _initializeInstanceTabs(width) {
-        if(!this.optionApproach()) {
+        if(!this.isOptionApproach()) {
             this.$container.width(width);
         }
 
@@ -30,7 +40,7 @@ class TabsWidthTestHelper {
             ],
             scrollingEnabled: this.scrollingEnabled,
             showNavButtons: true,
-            width: !this.optionApproach() ? undefined : width
+            width: this.isOptionApproach() ? width : undefined
         });
         this.$container.appendTo("#qunit-fixture");
 
@@ -38,7 +48,7 @@ class TabsWidthTestHelper {
         this.instance = this.$element.dxTabs("instance");
     }
 
-    optionApproach() {
+    isOptionApproach() {
         return this.setWidthApproach === "option";
     }
 
@@ -46,11 +56,7 @@ class TabsWidthTestHelper {
         document.getElementById("container").setAttribute("style", `width:${width}px`);
     }
 
-    remove() {
-        this.$container.remove();
-    }
-
-    getTabItems(index) {
+    getTabItem(index) {
         return this.$element.find(`.${TABS_ITEM_CLASS}`).eq(index);
     }
 
@@ -60,11 +66,11 @@ class TabsWidthTestHelper {
     }
 
     checkFixedTabs() {
-        this.assert.equal(this.instance.option("width"), !this.optionApproach() ? undefined : 400);
+        this.assert.equal(this.instance.option("width"), this.isOptionApproach() ? 400 : undefined);
 
         this.assert.equal(this.$element.outerWidth(), 400);
-        this.assert.ok(this.getTabItems(0).width() > 190, this.getTabItems(0).width() + " > 190");
-        this.assert.ok(this.getTabItems(1).width() > 190, this.getTabItems(1).width() + " > 190");
+        this.assert.ok(this.getTabItem(0).width() > 190, this.getTabItem(0).width() + " > 190");
+        this.assert.ok(this.getTabItem(1).width() > 190, this.getTabItem(1).width() + " > 190");
         this.assert.equal(this.$element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, "nav buttons aren't rendered");
     }
 
@@ -74,11 +80,11 @@ class TabsWidthTestHelper {
     }
 
     checkStretchedTabs() {
-        this.assert.equal(this.instance.option("width"), !this.optionApproach() ? undefined : 200);
+        this.assert.equal(this.instance.option("width"), this.isOptionApproach() ? 200 : undefined);
 
         this.assert.equal(this.$element.outerWidth(), 200);
-        this.assert.ok(this.getTabItems(0).width() < 70, this.getTabItems(0).width() + " < 70");
-        this.assert.ok(this.getTabItems(1).width() > 130, this.getTabItems(1).width() + " > 130");
+        this.assert.ok(this.getTabItem(0).width() < 70, this.getTabItem(0).width() + " < 70");
+        this.assert.ok(this.getTabItem(1).width() > 130, this.getTabItem(1).width() + " > 130");
         this.assert.equal(this.$element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, "nav buttons aren't rendered");
     }
 
@@ -88,17 +94,17 @@ class TabsWidthTestHelper {
     }
 
     checkNavigationButtonsTabs() {
-        this.assert.equal(this.instance.option("width"), !this.optionApproach() ? undefined : 100);
+        this.assert.equal(this.instance.option("width"), this.isOptionApproach() ? 100 : undefined);
 
         this.assert.equal(this.$element.outerWidth(), 100);
 
         if(this.scrollingEnabled) {
-            this.assert.ok(this.getTabItems(0).width() < 70, this.getTabItems().width() + " < 70");
-            this.assert.ok(this.getTabItems(1).width() > 100, this.getTabItems().width() + " > 100");
+            this.assert.ok(this.getTabItem(0).width() < 70, this.getTabItem().width() + " < 70");
+            this.assert.ok(this.getTabItem(1).width() > 100, this.getTabItem().width() + " > 100");
             this.assert.equal(this.$element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, "nav buttons aren't rendered");
         } else {
-            this.assert.ok(this.getTabItems(0).width() < 55, this.getTabItems(0).width() + " < 55");
-            this.assert.ok(this.getTabItems(1).width() < 55, this.getTabItems(1).width() + " < 55");
+            this.assert.ok(this.getTabItem(0).width() < 55, this.getTabItem(0).width() + " < 55");
+            this.assert.ok(this.getTabItem(1).width() < 55, this.getTabItem(1).width() + " < 55");
             this.assert.equal(this.$element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, "nav buttons aren't rendered");
         }
     }
@@ -129,7 +135,6 @@ class TabsWidthTestHelper {
             helper.createFixedTabs(400);
             helper.setWidth(200);
             helper.checkStretchedTabs();
-            helper.remove();
         });
 
         QUnit.test("Show fixed tabs, resize to show navigation buttons" + config, function(assert) {
@@ -137,7 +142,6 @@ class TabsWidthTestHelper {
             helper.createFixedTabs(400);
             helper.setWidth(100);
             helper.checkNavigationButtonsTabs();
-            helper.remove();
         });
 
         QUnit.test("Show stretched tabs, resize to show navigation buttons" + config, function(assert) {
@@ -145,7 +149,6 @@ class TabsWidthTestHelper {
             helper.createStretchedTabs();
             helper.setWidth(100);
             helper.checkNavigationButtonsTabs();
-            helper.remove();
         });
 
         QUnit.test("Show stretched tabs, resize to show fixed tabs" + config, function(assert) {
@@ -153,7 +156,6 @@ class TabsWidthTestHelper {
             helper.createStretchedTabs();
             helper.setWidth(400);
             helper.checkFixedTabs();
-            helper.remove();
         });
 
         QUnit.test("Show navigation buttons, resize to show stretched tabs" + config, function(assert) {
@@ -161,7 +163,6 @@ class TabsWidthTestHelper {
             helper.createNavigationButtonsTabs();
             helper.setWidth(200);
             helper.checkStretchedTabs();
-            helper.remove();
         });
 
         QUnit.test("Show navigation buttons, resize to show fixed tabs" + config, function(assert) {
@@ -169,12 +170,11 @@ class TabsWidthTestHelper {
             helper.createFixedTabs();
             helper.setWidth(400);
             helper.checkFixedTabs();
-            helper.remove();
         });
     });
 });
 
-QUnit.test("Does not render navbuttons in certain scenario", (assert) => {
+QUnit.test("Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }", (assert) => {
     var styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
 
     $("#qunit-fixture").html(styles);
@@ -202,7 +202,7 @@ QUnit.test("Does not render navbuttons in certain scenario", (assert) => {
     $("#qunit-fixture").html("");
 });
 
-QUnit.test("Render navbuttons in certain scenario", (assert) => {
+QUnit.test("Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }", (assert) => {
     var styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
 
     $("#qunit-fixture").html(styles);
