@@ -167,6 +167,12 @@ var EditingController = modules.ViewController.inherit((function() {
 
     var getButtonName = (button) => typeUtils.isObject(button) ? button.name : button;
 
+    var getEditorType = (item) => {
+        let column = item.column;
+
+        return item.isCustomEditorType ? item.editorType : column.formItem && column.formItem.editorType;
+    };
+
     return {
         init: function() {
             var that = this;
@@ -1746,6 +1752,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 $container = $(container),
                 column = item.column,
+                editorType = getEditorType(item),
                 rowData = detailCellOptions.row && detailCellOptions.row.data,
                 cellOptions = extend({}, detailCellOptions, {
                     data: rowData,
@@ -1753,7 +1760,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     isOnForm: true,
                     item: item,
                     value: column.calculateCellValue(rowData),
-                    column: extend({}, column, { editorOptions: item.editorOptions }),
+                    column: extend({}, column, { editorType: editorType, editorOptions: item.editorOptions }),
                     id: form.getItemID(item.name || item.dataField),
                     columnIndex: column.index,
                     setValue: !isReadOnly && column.allowEditing && function(value) {
@@ -1778,11 +1785,13 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this;
 
             return function($container, detailOptions, renderFormOnly) {
-                var editFormOptions = that.option("editing.form"),
+                var itemId,
+                    editFormOptions = that.option("editing.form"),
                     items = that.option("editing.form.items"),
                     userCustomizeItem = that.option("editing.form.customizeItem"),
                     editData = that._editData[getIndexByKey(detailOptions.key, that._editData)],
-                    editFormItemClass = that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS);
+                    editFormItemClass = that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS),
+                    isCustomEditorType = {};
 
                 if(!items) {
                     var columns = that.getController("columns").getColumns();
@@ -1796,6 +1805,14 @@ var EditingController = modules.ViewController.inherit((function() {
                             });
                         }
                     });
+                } else {
+                    items.forEach((item) => {
+                        itemId = item && (item.name || item.dataField);
+
+                        if(itemId) {
+                            isCustomEditorType[itemId] = !!item.editorType;
+                        }
+                    });
                 }
 
                 that._firstFormItem = undefined;
@@ -1806,7 +1823,10 @@ var EditingController = modules.ViewController.inherit((function() {
                     validationGroup: editData,
                     customizeItem: function(item) {
                         var column;
-                        if(item.column || item.dataField || item.name) {
+
+                        itemId = item.name || item.dataField;
+
+                        if(item.column || itemId) {
                             column = item.column || that._columnsController.columnOption(item.name ? "name:" + item.name : "dataField:" + item.dataField);
                         }
                         if(column) {
@@ -1814,6 +1834,7 @@ var EditingController = modules.ViewController.inherit((function() {
                             item.label.text = item.label.text || column.caption;
                             item.template = item.template || that.getFormEditorTemplate(detailOptions, item);
                             item.column = column;
+                            item.isCustomEditorType = isCustomEditorType[itemId];
                             if(column.formItem) {
                                 extend(item, column.formItem);
                             }
