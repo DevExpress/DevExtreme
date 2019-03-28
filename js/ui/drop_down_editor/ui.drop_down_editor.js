@@ -28,7 +28,7 @@ var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
     DROP_DOWN_EDITOR_OVERLAY_FLIPPED = "dx-dropdowneditor-overlay-flipped",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
     DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable",
-    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS = "dx-editor-content-container";
+    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS = "dx-dropdowneditor-field-template-wrapper";
 
 /**
 * @name dxDropDownEditor

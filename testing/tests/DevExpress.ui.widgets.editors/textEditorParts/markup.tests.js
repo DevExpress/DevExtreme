@@ -8,7 +8,7 @@ const INPUT_CLASS = "dx-texteditor-input";
 const CONTAINER_CLASS = "dx-texteditor-container";
 const PLACEHOLDER_CLASS = "dx-placeholder";
 const STATE_INVISIBLE_CLASS = "dx-state-invisible";
-const TEXTEDITOR_CONTENT_CONTAINER_CLASS = "dx-editor-content-container";
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container";
 
 const { test, module } = QUnit;
 
@@ -27,7 +27,7 @@ module("Basic markup", () => {
             placeholder: "enter value"
         });
 
-        const $inputContainer = element.find(`.${TEXTEDITOR_CONTENT_CONTAINER_CLASS}`);
+        const $inputContainer = element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
         assert.strictEqual($inputContainer.length, 1, "input container is rendered");
 
         const placeholder = $inputContainer.find(`.${PLACEHOLDER_CLASS}`);
