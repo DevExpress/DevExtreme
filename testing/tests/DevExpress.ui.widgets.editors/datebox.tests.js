@@ -1229,17 +1229,21 @@ QUnit.test("B251997 - date picker is shown in spite of 'readOnly' is true", func
     };
 
     try {
+        this.instance.close();
+
         this.instance.option({
             readOnly: true,
             pickerType: "rollers"
         });
 
-        assert.equal($(".dx-dateview").length, 0, "simulated picker is not created");
+        var $wrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
+        $wrapper.trigger("dxclick");
+        assert.notOk(this.popup().option("visible"), "popup is hidden");
 
         this.instance.option({ readOnly: false });
-        this.instance.open();
+        $wrapper.trigger("dxclick");
 
-        assert.equal($(".dx-dateview").length, 1, "simulated picker is created");
+        assert.ok(this.popup().option("visible"), "popup is shown");
         assert.ok(this.popup().$content().find(".dx-dateview").is(":visible"), "picker is shown");
     } finally {
         support.inputType = originalSupportInputType;
@@ -1412,6 +1416,23 @@ QUnit.test("wrong value in input should mark datebox as invalid", function(asser
     var validationError = dateBox.option("validationError");
     assert.ok(validationError, "Validation error should be specified");
     assert.ok(validationError.editorSpecific, "editorSpecific flag should be added");
+});
+
+QUnit.test("datebox should not be revalidated when readOnly option changed", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        readOnly: false
+    }).dxValidator({
+        validationRules: [{
+            type: "required",
+            message: "Date of birth is required"
+        }]
+    }).dxDateBox("instance");
+
+    dateBox.option("readOnly", true);
+    dateBox.option("readOnly", false);
+
+    assert.ok(dateBox.option("isValid"), "dateBox is valid");
+    assert.notOk($("#dateBox").hasClass("dx-invalid"), "dateBox is not marked as invalid");
 });
 
 QUnit.test("wrong value in input should mark time datebox as invalid", function(assert) {

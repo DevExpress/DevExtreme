@@ -784,7 +784,6 @@ var DateBox = DropDownEditor.inherit({
                 this._invalidate();
                 break;
             case "dateSerializationFormat":
-            case "readOnly":
             case "interval":
             case "disabledDates":
             case "calendarOptions":
