@@ -14,15 +14,15 @@ QUnit.module("Width");
 
 class TabsWidthTestHelper {
     constructor(assert, scrollingEnabled, setWidthApproach) {
-        this.$container = $("<div>");
+        this.$container = $("<div id='container'>");
         this.$element = $("<div>");
         this.assert = assert;
         this.scrollingEnabled = scrollingEnabled;
-        this.changeContainerWidth = (setWidthApproach === "container");
+        this.setWidthApproach = setWidthApproach;
     }
 
     _initializeInstanceTabs(width) {
-        if(this.changeContainerWidth) {
+        if(!this.optionApproach()) {
             this.$container.width(width);
         }
 
@@ -33,12 +33,20 @@ class TabsWidthTestHelper {
             ],
             scrollingEnabled: this.scrollingEnabled,
             showNavButtons: true,
-            width: this.changeContainerWidth ? undefined : width
+            width: !this.optionApproach() ? undefined : width
         });
         this.$container.appendTo("#qunit-fixture");
 
         domUtils.triggerShownEvent(this.$container);
         this.instance = this.$element.dxTabs("instance");
+    }
+
+    optionApproach() {
+        return this.setWidthApproach === "option";
+    }
+
+    setContainerWidth(width) {
+        document.getElementById("container").setAttribute("style", `width:${width}px`);
     }
 
     remove() {
@@ -53,7 +61,7 @@ class TabsWidthTestHelper {
     checkFixedTabs() {
         let tabItems = this.$element.find(toSelector(TABS_ITEM_CLASS));
 
-        this.assert.equal(this.instance.option("width"), this.changeContainerWidth ? undefined : 400);
+        this.assert.equal(this.instance.option("width"), !this.optionApproach() ? undefined : 400);
         this.assert.equal(this.$element.outerWidth(), 400);
         this.assert.ok(tabItems.eq(0).width() > 190, tabItems.eq(0).width() + " > 190");
         this.assert.ok(tabItems.eq(1).width() > 190, tabItems.eq(1).width() + " > 190");
@@ -68,7 +76,7 @@ class TabsWidthTestHelper {
     checkStretchedTabs() {
         let tabItems = this.$element.find(toSelector(TABS_ITEM_CLASS));
 
-        this.assert.equal(this.instance.option("width"), this.changeContainerWidth ? undefined : 200);
+        this.assert.equal(this.instance.option("width"), !this.optionApproach() ? undefined : 200);
         this.assert.equal(this.$element.outerWidth(), 200);
         this.assert.ok(tabItems.eq(0).width() < 70, tabItems.eq(0).width() + " < 70");
         this.assert.ok(tabItems.eq(1).width() > 130, tabItems.eq(1).width() + " > 130");
@@ -83,7 +91,7 @@ class TabsWidthTestHelper {
     checkNavigationButtonsTabs() {
         let tabItems = this.$element.find(toSelector(TABS_ITEM_CLASS));
 
-        this.assert.equal(this.instance.option("width"), this.changeContainerWidth ? undefined : 100);
+        this.assert.equal(this.instance.option("width"), !this.optionApproach() ? undefined : 100);
         this.assert.equal(this.$element.outerWidth(), 100);
 
         if(this.scrollingEnabled) {
@@ -98,17 +106,24 @@ class TabsWidthTestHelper {
     }
 
     setWidth(width) {
-        if(this.changeContainerWidth) {
-            this.$container.width(width);
-            domUtils.triggerResizeEvent(this.$element);
-        } else {
-            this.instance.option("width", width);
+        switch(this.setWidthApproach) {
+            case "option":
+                this.instance.option("width", width);
+                break;
+            case "container":
+                this.setContainerWidth(width);
+                this.instance.repaint();
+                break;
+            case "resizeBrowser":
+                this.setContainerWidth(width);
+                domUtils.triggerResizeEvent(this.$container);
+                break;
         }
     }
 }
 
 [true, false, undefined].forEach((scrollingEnabled) => {
-    ["container", "option"].forEach((setWidthApproach) => {
+    ["resizeBrowser", "container", "option"].forEach((setWidthApproach) => {
         const config = ", scrollingEnabled=" + scrollingEnabled + ", change " + setWidthApproach + ".width";
 
         QUnit.test("Show fixed tabs, resize to show stretched tabs" + config, function(assert) {

@@ -25,12 +25,12 @@ class TabPanelWidthTestHelper {
         this.$container = $("#container");
         this.$element = $("#element");
         this.assert = assert;
-        this.changeContainerWidth = (setWidthApproach === "container");
+        this.setWidthApproach = setWidthApproach;
     }
 
     _initializeInstanceTabPanel(width) {
-        if(this.changeContainerWidth) {
-            this.$container.width(width);
+        if(!this.optionApproach()) {
+            this.setContainerWidth(width);
         }
 
         this.$element.appendTo(this.$container).dxTabPanel({
@@ -40,7 +40,7 @@ class TabPanelWidthTestHelper {
             ],
             showNavButtons: true,
             scrollingEnabled: true,
-            width: this.changeContainerWidth ? undefined : width
+            width: (!this.optionApproach()) ? undefined : width
         });
 
         domUtils.triggerShownEvent(this.$container);
@@ -48,6 +48,14 @@ class TabPanelWidthTestHelper {
         this.$tabs = this.$element.find(`.${TABS_CLASS}`);
         this.tabsWidgetInstance = this.$tabs.dxTabs("instance");
         this.tabPanelWidgetInstance = this.$element.dxTabPanel("instance");
+    }
+
+    optionApproach() {
+        return this.setWidthApproach === "option";
+    }
+
+    setContainerWidth(width) {
+        document.getElementById("container").setAttribute("style", `width:${width}px`);
     }
 
     remove() {
@@ -60,7 +68,7 @@ class TabPanelWidthTestHelper {
     }
 
     checkTabPanelWithTabs(width, isNavButtons) {
-        this.assert.equal(this.tabPanelWidgetInstance.option("width"), this.changeContainerWidth ? undefined : width);
+        this.assert.equal(this.tabPanelWidgetInstance.option("width"), !this.optionApproach() ? undefined : width);
         this.assert.equal(this.tabsWidgetInstance.option("width"), undefined);
         this.assert.equal(this.$tabs.outerWidth(), width);
         this.assert.equal(this.$element.outerWidth(), width);
@@ -68,32 +76,38 @@ class TabPanelWidthTestHelper {
         this.assert.equal(this.$element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, isNavButtons ? 2 : 0, `${isNavButtons ? 2 : 0} navigation buttons should be rendered`);
     }
 
-    getTabItems() {
-        return this.$element.find(`.${TABS_ITEM_CLASS}`);
+    getTabItems(index) {
+        return this.$element.find(`.${TABS_ITEM_CLASS}`).eq(index);
     }
 
     checkSizeFixedTabs() {
-        this.assert.ok(this.getTabItems().eq(0).width() > 190, this.getTabItems().eq(0).width() + " > 190");
-        this.assert.ok(this.getTabItems().eq(1).width() > 190, this.getTabItems().eq(1).width() + " > 190");
+        this.assert.ok(this.getTabItems(0).width() > 190, this.getTabItems(0).width() + " > 190");
+        this.assert.ok(this.getTabItems(1).width() > 190, this.getTabItems(1).width() + " > 190");
     }
 
     checkSizeTabs() {
-        this.assert.ok(this.getTabItems().eq(0).width() < 70, this.getTabItems().eq(0).width() + " < 70");
-        this.assert.ok(this.getTabItems().eq(1).width() > 100, this.getTabItems().eq(1).width() + " > 100");
+        this.assert.ok(this.getTabItems(0).width() < 70, this.getTabItems(0).width() + " < 70");
+        this.assert.ok(this.getTabItems(1).width() > 100, this.getTabItems(1).width() + " > 100");
     }
 
     setWidth(width) {
-        if(this.changeContainerWidth) {
-            this.$container.width(width);
-        } else {
-            this.tabPanelWidgetInstance.option("width", width);
+        switch(this.setWidthApproach) {
+            case "option":
+                this.tabPanelWidgetInstance.option("width", width);
+                break;
+            case "container":
+                this.setContainerWidth(width);
+                this.tabPanelWidgetInstance.repaint();
+                break;
+            case "resizeBrowser":
+                this.setContainerWidth(width);
+                domUtils.triggerResizeEvent(this.$container);
+                break;
         }
-
-        domUtils.triggerResizeEvent(this.$container);
     }
 }
 
-["container", "option"].forEach((setWidthApproach) => {
+["resizeBrowser", "container", "option"].forEach((setWidthApproach) => {
     const config = `, change ${setWidthApproach}.width`;
 
     QUnit.test(`Tabpanel with fixed tabs, resize to show navigation button tabs${config}`, (assert) => {
