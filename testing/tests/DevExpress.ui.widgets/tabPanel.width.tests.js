@@ -12,15 +12,15 @@ QUnit.module("Tabs width");
 class TabPanelWidthTestHelper {
     constructor(assert, setWidthApproach) {
         this.$container = $("<div id='container'>");
-        this.$element = $("<div>");
+        this.$tabPanel = $("<div>");
         this.assert = assert;
         this.setWidthApproach = setWidthApproach;
     }
 
-    _initializeInstanceTabPanel(width) {
-        this.$element.appendTo(this.$container);
+    _initializeTabPanel(width) {
+        this.$tabPanel.appendTo(this.$container);
 
-        this.tabPanelWidgetInstance = this.$element.dxTabPanel({
+        this.tabPanel = this.$tabPanel.dxTabPanel({
             items: [
                 { title: "title" },
                 { title: "long title example" }
@@ -44,21 +44,21 @@ class TabPanelWidthTestHelper {
     }
 
     setContainerWidth(width) {
-        document.getElementById("container").setAttribute("style", `width:${width}px`);
+        this.$tabPanel[0].setAttribute("style", `width:${width}px`);
     }
 
     createTabPanel(options) {
-        this._initializeInstanceTabPanel(options.width);
+        this._initializeTabPanel(options.width);
         this.checkTabPanel(options);
     }
 
     checkTabPanel(options) {
-        let tabsWidgetInstance = this.tabPanelWidgetInstance._tabs;
+        let tabs = this.tabPanel._tabs;
 
-        this.assert.equal(this.tabPanelWidgetInstance.option("width"), this._isOptionApproach() ? options.width : undefined);
-        this.assert.equal(tabsWidgetInstance.option("width"), undefined);
-        this.assert.equal(tabsWidgetInstance.$element().outerWidth(), options.width);
-        this.assert.equal(this.$element.outerWidth(), options.width);
+        this.assert.equal(this.tabPanel.option("width"), this._isOptionApproach() ? options.width : undefined);
+        this.assert.equal(tabs.option("width"), undefined);
+        this.assert.equal(tabs.$element().outerWidth(), options.width);
+        this.assert.equal(this.$tabPanel.outerWidth(), options.width);
 
         if(options.width > 250) {
             this.assert.ok(this._getTabItem(0).width() > 190, this._getTabItem(0).width() + " > 190");
@@ -68,21 +68,21 @@ class TabPanelWidthTestHelper {
             this.assert.ok(this._getTabItem(1).width() > 100, this._getTabItem(1).width() + " > 100");
         }
 
-        this.assert.equal(this.$element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, options.expectNavButtons, `${options.expectNavButtons} navigation buttons should be rendered`);
+        this.assert.equal(this.$tabPanel.find(`.${TABS_NAV_BUTTON_CLASS}`).length, options.expectNavButtons, `${options.expectNavButtons} navigation buttons should be rendered`);
     }
 
     _getTabItem(index) {
-        return this.$element.find(`.${TABS_ITEM_CLASS}`).eq(index);
+        return this.$tabPanel.find(`.${TABS_ITEM_CLASS}`).eq(index);
     }
 
     setWidth(width) {
         switch(this.setWidthApproach) {
             case "option":
-                this.tabPanelWidgetInstance.option("width", width);
+                this.tabPanel.option("width", width);
                 break;
             case "container":
                 this.setContainerWidth(width);
-                this.tabPanelWidgetInstance.repaint();
+                this.tabPanel.repaint();
                 break;
             case "resizeBrowser":
                 this.setContainerWidth(width);
