@@ -47,11 +47,11 @@ var RECURRENCE_EDITOR = "dx-recurrence-editor",
     FIELD_VALUE_CLASS = "dx-field-value",
 
     frequencies = [
-        { text: function() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "NEVER" },
-        { text: function() { return messageLocalization.format("dxScheduler-recurrenceDaily"); }, value: "DAILY" },
-        { text: function() { return messageLocalization.format("dxScheduler-recurrenceWeekly"); }, value: "WEEKLY" },
-        { text: function() { return messageLocalization.format("dxScheduler-recurrenceMonthly"); }, value: "MONTHLY" },
-        { text: function() { return messageLocalization.format("dxScheduler-recurrenceYearly"); }, value: "YEARLY" }
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "never" },
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceDaily"); }, value: "daily" },
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceWeekly"); }, value: "weekly" },
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceMonthly"); }, value: "monthly" },
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceYearly"); }, value: "yearly" }
     ],
 
     repeatEndTypes = [
@@ -203,7 +203,7 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _handleDefaults: function() {
-        this._recurrenceRule.makeRule("freq", "DAILY");
+        this._recurrenceRule.makeRule("freq", "daily");
         this._changeEditorValue();
     },
 
@@ -221,7 +221,7 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _renderFreqEditor: function() {
-        var freq = this._recurrenceRule.rules().freq || "NEVER";
+        var freq = (this._recurrenceRule.rules().freq || "never").toLowerCase();
 
         var $freqEditor = $("<div>")
             .addClass(FREQUENCY_EDITOR)
@@ -245,7 +245,7 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _renderIntervalEditor: function() {
-        var freq = this._recurrenceRule.rules().freq || "DAILY";
+        var freq = this._recurrenceRule.rules().freq || "daily";
 
         var $intervalEditor = $("<div>")
             .addClass(INTERVAL_EDITOR)
@@ -282,7 +282,7 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _renderRepeatOnEditor: function() {
-        var freq = this._recurrenceRule.rules().freq;
+        var freq = (this._recurrenceRule.rules().freq || "").toLowerCase();
 
         if(!isDefined(this._$repeatOnEditor)) {
             this._$repeatOnEditor = $("<div>")
@@ -291,7 +291,7 @@ var RecurrenceEditor = Editor.inherit({
                 .appendTo(this._$container);
         }
 
-        if(!freq || freq === "DAILY") {
+        if(!freq || freq === "daily") {
             this._clearRepeatOnEditor();
             this._clearRepeatOnLabel();
             return;
@@ -301,17 +301,17 @@ var RecurrenceEditor = Editor.inherit({
             this._renderRepeatOnLabel(this._$repeatOnEditor);
         }
 
-        if(freq === "WEEKLY" && !this._$repeatOnWeek) {
+        if(freq === "weekly" && !this._$repeatOnWeek) {
             this._renderRepeatOnWeekEditor();
             return;
         }
 
-        if(freq === "MONTHLY" && !this._$repeatOnMonth) {
+        if(freq === "monthly" && !this._$repeatOnMonth) {
             this._renderRepeatOnMonthEditor();
             return;
         }
 
-        if(freq === "YEARLY" && !this._$repeatOnYear) {
+        if(freq === "yearly" && !this._$repeatOnYear) {
             this._renderRepeatOnYearEditor();
             return;
         }
@@ -731,7 +731,7 @@ var RecurrenceEditor = Editor.inherit({
             field = args.component.option("field"),
             visible = true;
 
-        if(field === "freq" && value === "NEVER") {
+        if(field === "freq" && value === "never") {
             visible = false;
             this.option("value", "");
         } else {
@@ -749,24 +749,24 @@ var RecurrenceEditor = Editor.inherit({
             return;
         }
 
-        if(value === "DAILY") {
+        if(value === "daily") {
             this._recurrenceRule.makeRule("byday", "");
             this._recurrenceRule.makeRule("bymonth", "");
             this._recurrenceRule.makeRule("bymonthday", "");
         }
-        if(value === "WEEKLY") {
+        if(value === "weekly") {
             this._recurrenceRule.makeRule("byday", this._daysOfWeekByRules());
             this._recurrenceRule.makeRule("bymonth", "");
             this._recurrenceRule.makeRule("bymonthday", "");
         }
 
-        if(value === "MONTHLY") {
+        if(value === "monthly") {
             this._recurrenceRule.makeRule("bymonthday", this._dayOfMonthByRules());
             this._recurrenceRule.makeRule("bymonth", "");
             this._recurrenceRule.makeRule("byday", "");
         }
 
-        if(value === "YEARLY") {
+        if(value === "yearly") {
             this._recurrenceRule.makeRule("bymonthday", this._dayOfMonthByRules());
             this._recurrenceRule.makeRule("bymonth", this._monthOfYearByRules());
             this._recurrenceRule.makeRule("byday", "");
@@ -816,7 +816,7 @@ var RecurrenceEditor = Editor.inherit({
     _changeEditorsValues: function(rules) {
         this._changeCheckBoxesValue(!!rules["byday"]);
 
-        this._freqEditor.option("value", rules.freq || "NEVER");
+        this._freqEditor.option("value", (rules.freq || "never").toLowerCase());
         this._changeRepeatTypeLabel();
         this._intervalEditor.option("value", rules.interval);
 
@@ -834,7 +834,7 @@ var RecurrenceEditor = Editor.inherit({
             return;
         }
 
-        var freq = this._recurrenceRule.rules().freq || "DAILY";
+        var freq = this._recurrenceRule.rules().freq || "daily";
 
         each($labels, function(_, $label) {
             $($label).text(messageLocalization.format("dxScheduler-recurrenceRepeat" + freq.charAt(0).toUpperCase() + freq.substr(1).toLowerCase()));
