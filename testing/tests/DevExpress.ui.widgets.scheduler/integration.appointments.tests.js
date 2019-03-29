@@ -517,8 +517,8 @@ QUnit.test("Short tasks should have a right height (T725948)", function(assert) 
     this.createInstance({
         dataSource: [
             {
-                endDate: "2019-03-20T16:06:41.000Z",
-                startDate: "2019-03-20T16:06:40.000Z"
+                endDate: "2019-03-20T12:06:41.000Z",
+                startDate: "2019-03-20T12:06:40.000Z"
             }
         ],
         currentView: "day",
