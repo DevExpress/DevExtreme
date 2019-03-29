@@ -1315,7 +1315,9 @@ registerTheme({
                     offsetY: 1,
                     blur: 1,
                     color: "#000000"
-                }
+                },
+                wordWrap: "normal",
+                overflow: "ellipsis"
             }
         },
         group: {
@@ -1351,7 +1353,8 @@ registerTheme({
                 font: {
                     color: SECONDARY_TITLE_COLOR,
                     weight: 600
-                }
+                },
+                overflow: "ellipsis"
             }
         },
 

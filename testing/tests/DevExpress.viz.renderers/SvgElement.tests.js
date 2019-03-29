@@ -5799,7 +5799,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "normal",
-                overflow: "clip"
+                textOverflow: "clip"
             });
 
             assert.strictEqual(result, true);
@@ -5828,14 +5828,14 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.ok(text.getBBox().width <= 110);
         });
 
-        QUnit.test("Single line. wordWrap normal. overflow clip", function(assert) {
+        QUnit.test("Single line. wordWrap normal. text overflow clip", function(assert) {
             var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>long longlonglonglonglonglong long<b>" }),
                 result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "normal",
-                overflow: "clip"
+                textOverflow: "clip"
             });
 
             assert.strictEqual(result, true);
@@ -5851,14 +5851,14 @@ function checkDashStyle(assert, elem, result, style, value) {
             // TO-DO clip rect
         });
 
-        QUnit.test("wordWrap normal. overflow ellipsis", function(assert) {
+        QUnit.test("wordWrap normal. text overflow ellipsis", function(assert) {
             var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>long longlonglonglonglonglong long<b>" }),
                 result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "normal",
-                overflow: "ellipsis"
+                textOverflow: "ellipsis"
             });
 
             assert.strictEqual(result, true);
@@ -5868,14 +5868,14 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.ok(text.getBBox().width <= 110);
         });
 
-        QUnit.test("wordWrap normal. overflow hide", function(assert) {
+        QUnit.test("wordWrap normal. text overflow hide", function(assert) {
             var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>long longlonglonglonglonglong long<b>" }),
                 result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "normal",
-                overflow: "hide"
+                textOverflow: "hide"
             });
 
             assert.strictEqual(result, true);
@@ -5910,7 +5910,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "none",
-                overflow: "ellipsis"
+                textOverflow: "ellipsis"
             });
 
             assert.strictEqual(result, true);
@@ -5928,7 +5928,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "normal",
-                overflow: "ellipsis"
+                textOverflow: "ellipsis"
             });
 
             assert.strictEqual(result, true);
@@ -5950,14 +5950,14 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.equal(text.element.childNodes[5].style.fontWeight, "");
         });
 
-        QUnit.test("Complex text. wordWrap: none, overflow: ellipsis - remove test next to ellipsis", function(assert) {
+        QUnit.test("Complex text. wordWrap: none, text overflow: ellipsis - remove test next to ellipsis", function(assert) {
             var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "longlonglonglonglong <b>longlonglonglonglong</b>" }),
                 result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "none",
-                overflow: "ellipsis"
+                textOverflow: "ellipsis"
             });
 
             assert.strictEqual(result, true);
@@ -5965,19 +5965,61 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.equal(text.element.childNodes.length, 1);
         });
 
-        QUnit.test("Complex text. wordWrap: normal, overflow: ellipsis - wrap word", function(assert) {
+        QUnit.test("Complex text. wordWrap: normal, text overflow: ellipsis - wrap word", function(assert) {
             var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "longlonglonglonglong <b>longlonglonglonglong</b>" }),
                 result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxWidth(110, {
                 wordWrap: "normal",
-                overflow: "ellipsis"
+                textOverflow: "ellipsis"
             });
 
             assert.strictEqual(result, true);
 
             assert.equal(text.element.childNodes.length, 2);
+        });
+
+        QUnit.test("WordWrap stroked text", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                    x: 35, y: 100, fill: "black", stroke: "black", "stroke-width": 3,
+                    text: "There is test text for checking ellipsis with single line"
+                }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "There is test text" },
+                { x: 35, dy: 12, text: "for checking" },
+                { x: 35, dy: 12, text: "ellipsis with" },
+                { x: 35, dy: 12, text: "single line" }
+            ], { x: 35, y: 100 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 1 });
+        });
+
+        QUnit.test("WordWrap long text. Keep visible ellipsis when width is too small", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                    x: 35, y: 100, fill: "black", stroke: "black",
+                    text: "There is"
+                }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(1, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "..." }
+            ], { x: 35, y: 100 });
         });
     }
 })();
