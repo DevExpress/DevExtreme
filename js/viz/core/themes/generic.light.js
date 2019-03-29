@@ -1317,7 +1317,7 @@ registerTheme({
                     color: "#000000"
                 },
                 wordWrap: "normal",
-                overflow: "ellipsis"
+                textOverflow: "ellipsis"
             }
         },
         group: {
@@ -1354,7 +1354,7 @@ registerTheme({
                     color: SECONDARY_TITLE_COLOR,
                     weight: 600
                 },
-                overflow: "ellipsis"
+                textOverflow: "ellipsis"
             }
         },
 
