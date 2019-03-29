@@ -9,8 +9,8 @@ themeModule.registerTheme({
     backgroundColor: "#ffffff",
     primaryTitleColor: "#232323",
     secondaryTitleColor: SECONDARY_TEXT_COLOR,
-    axisColor: "#d3d3d3",
-    axisLabelColor: SECONDARY_TEXT_COLOR,
+    gridColor: "#d3d3d3",
+    axisColor: SECONDARY_TEXT_COLOR,
     tooltip: {
         color: BORDER_COLOR,
         font: {
