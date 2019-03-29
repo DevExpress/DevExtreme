@@ -82,6 +82,7 @@ export class TooltipStrategyBase {
     _onListItemClick(e) {
         const mappedData = this.scheduler.fire("mapAppointmentFields", e),
             result = extendFromObject(mappedData, e, false);
+
         this.showEditAppointmentPopupAction(result);
         this.hide();
     }
@@ -159,7 +160,7 @@ export class TooltipStrategyBase {
             afterExecute: e => {
                 const config = e.args[0];
                 config.event.stopPropagation();
-                this.scheduler.fire("showEditAppointmentPopup", { data: config.appointmentData.data });
+                this.scheduler.fire("showEditAppointmentPopup", { data: config.appointmentData });
             }
         });
     }

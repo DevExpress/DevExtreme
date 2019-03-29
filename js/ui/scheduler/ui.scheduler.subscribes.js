@@ -463,12 +463,12 @@ const subscribes = {
 
     mapAppointmentFields: function(config) {
         let result = {
-            appointmentData: config.itemData,
+            appointmentData: config.itemData.data || config.itemData,
             appointmentElement: config.itemElement
         };
 
         if(config.itemData) {
-            result.targetedAppointmentData = this.fire("getTargetedAppointmentData", config.itemData, config.itemElement);
+            result.targetedAppointmentData = this.fire("getTargetedAppointmentData", config.itemData.data || config.itemData, config.itemElement);
         }
 
         return result;
