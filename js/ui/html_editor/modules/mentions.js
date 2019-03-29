@@ -212,25 +212,29 @@ class MentionModule extends PopupModule {
         if(source === USER_ACTION) {
             const lastOperation = newDelta.ops[newDelta.ops.length - 1];
 
-            if(!this._isMentionActive) {
-                this.checkMentionRequest(lastOperation, newDelta.ops);
+            if(this._isMentionActive) {
+                this._processSearchValue(lastOperation) && this._filterList(this._searchValue);
             } else {
-                const operation = lastOperation;
-                const isInsertOperation = "insert" in operation;
-
-                if(isInsertOperation) {
-                    this._searchValue += operation.insert;
-                } else {
-                    if(!this._searchValue.length) {
-                        this._popup.hide();
-                        return;
-                    } else {
-                        this._searchValue = this._searchValue.slice(0, -1);
-                    }
-                }
-                this._filterList(this._searchValue);
+                this.checkMentionRequest(lastOperation, newDelta.ops);
             }
         }
+    }
+
+    _processSearchValue(operation) {
+        const isInsertOperation = "insert" in operation;
+
+        if(isInsertOperation) {
+            this._searchValue += operation.insert;
+        } else {
+            if(!this._searchValue.length) {
+                this._popup.hide();
+                return false;
+            } else {
+                this._searchValue = this._searchValue.slice(0, -1);
+            }
+        }
+
+        return true;
     }
 
     checkMentionRequest({ insert }, ops) {
