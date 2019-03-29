@@ -199,7 +199,7 @@ var dxTreeMap = {
             * @type Enums.VizTextOverflow
             * @default "ellipsis"
             */
-            overflow: "ellipsis"
+           textOverflow: "ellipsis"
         }
     },
     /**
@@ -326,7 +326,7 @@ var dxTreeMap = {
             * @type Enums.VizTextOverflow
             * @default "ellipsis"
             */
-            overflow: "ellipsis"
+           textOverflow: "ellipsis"
         },
         /**
         * @name dxTreeMapOptions.group.hoverEnabled
