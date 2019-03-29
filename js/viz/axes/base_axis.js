@@ -1799,14 +1799,16 @@ Axis.prototype = {
         measureLabels(that._majorTicks);
         let textWidth;
         if(that._isHorizontal) {
-            textWidth = that.getTranslator().getInterval(that._calculateRangeInterval());
+            if(isDefined(that._tickInterval)) {
+                textWidth = that.getTranslator().getInterval(options.dataType === "datetime" ? dateToMilliseconds(that._tickInterval) : that._tickInterval);
+            }
         } else {
             textWidth = options.placeholderSize;
         }
 
         const displayMode = that._validateDisplayMode(options.label.displayMode);
         const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
-        const wordWrapMode = options.label.wordWrap;
+        const wordWrapMode = options.label.wordWrap || "none";
 
         if(wordWrapMode !== "none" && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
             if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {

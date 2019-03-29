@@ -2373,6 +2373,67 @@ QUnit.test("Horizontal top. Labels are wider than tick interval - apply word wra
     assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 60 - 6 - 10 / 2, translateY: 30 - 10 - 16 - 4 }, "Text args");
 });
 
+QUnit.test("Horizontal top. Labels are wider than tick interval (datetime) - apply word wrap", function(assert) {
+    // arrange
+    var date0 = new Date(2011, 5, 25, 0, 0, 0),
+        date1 = new Date(2011, 5, 26, 0, 0, 0);
+
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        argumentType: "datetime",
+        position: "top",
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            wordWrap: "normal",
+            overflow: "none"
+        }
+    });
+
+    this.generatedTicks = [date0, date1];
+    this.generatedTickInterval = "hour";
+    this.translator.stub("getInterval").withArgs(60 * 60 * 1000).returns(10);
+    this.translator.stub("translate").withArgs(date0).returns(40);
+    this.translator.stub("translate").withArgs(date1).returns(60);
+
+    this.renderer.bBoxTemplate = (function() {
+        var idx = 0;
+        return function() {
+            return [
+                { x: 1, y: 2, width: 12, height: 6 },
+                { x: 3, y: 4, width: 14, height: 8 },
+                { x: 3, y: 2, width: 10, height: 12 },
+                { x: 6, y: 4, width: 10, height: 16 }
+            ][idx++];
+        };
+    })();
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(renderer.text.callCount, 2, "Text call count");
+
+    let text1 = renderer.text.getCall(0).returnValue;
+    let text2 = renderer.text.getCall(1).returnValue;
+
+    assert.deepEqual(text1.attr.getCall(1).args[0], { x: 40, y: 30 });
+    assert.deepEqual(text2.attr.getCall(1).args[0], { x: 60, y: 30 });
+
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[0], 10);
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].overflow, "none");
+
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[0], 10);
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].overflow, "none");
+
+    assert.deepEqual(text1.attr.getCall(2).args[0], { translateX: 40 - 3 - 10 / 2, translateY: 30 - 10 - 12 - 2 }, "Text args");
+    assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 60 - 6 - 10 / 2, translateY: 30 - 10 - 16 - 4 }, "Text args");
+});
+
 QUnit.test("Horizontal top. Labels are narrower than tick interval - do not apply word wrap", function(assert) {
     // arrange
     var renderer = this.renderer;
@@ -2425,7 +2486,7 @@ QUnit.test("Horizontal top. Labels are narrower than tick interval - do not appl
     assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 60 - 3 - 14 / 2, translateY: 30 - 10 - 8 - 4 }, "Text args");
 });
 
-QUnit.test("Horizontal top. WordWrap = none - do not apply word wrap", function(assert) {
+QUnit.test("Horizontal top. No wordWrap option - do not apply word wrap", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2434,7 +2495,7 @@ QUnit.test("Horizontal top. WordWrap = none - do not apply word wrap", function(
         position: "top",
         label: {
             visible: true,
-            wordWrap: "none"
+            wordWrap: null
         }
     });
 
