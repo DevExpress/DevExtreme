@@ -6078,7 +6078,7 @@ QUnit.test("Filtering should works correctly if groupPaging is enabled and group
                         result.data = data;
 
                         if(options.group) {
-                            data.forEach(item => {
+                            data.forEach(function(item) {
                                 item.count = item.items.length;
                                 item.items = null;
                             });
