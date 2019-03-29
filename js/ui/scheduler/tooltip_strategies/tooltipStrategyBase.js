@@ -3,7 +3,6 @@ import dateUtils from "../../../core/utils/date";
 import FunctionTemplate from "../../widget/function_template";
 import $ from "../../../core/renderer";
 import List from "../../list/ui.list.edit";
-import { extendFromObject } from "../../../core/utils/extend";
 
 const TOOLTIP_APPOINTMENT_ITEM = "dx-tooltip-appointment-item",
     TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + "-content",
@@ -19,7 +18,6 @@ const TOOLTIP_APPOINTMENT_ITEM = "dx-tooltip-appointment-item",
 export class TooltipStrategyBase {
     constructor(scheduler) {
         this.scheduler = scheduler;
-        this.showEditAppointmentPopupAction = this._createAppointmentClickAction();
     }
 
     show(target, dataList) {
@@ -80,10 +78,6 @@ export class TooltipStrategyBase {
     }
 
     _onListItemClick(e) {
-        const mappedData = this.scheduler.fire("mapAppointmentFields", e),
-            result = extendFromObject(mappedData, e, false);
-
-        this.showEditAppointmentPopupAction(result);
         this.hide();
     }
 
@@ -153,16 +147,6 @@ export class TooltipStrategyBase {
         });
 
         return $container;
-    }
-
-    _createAppointmentClickAction() {
-        return this.scheduler._createActionByOption("onAppointmentClick", {
-            afterExecute: e => {
-                const config = e.args[0];
-                config.event.stopPropagation();
-                this.scheduler.fire("showEditAppointmentPopup", { data: config.appointmentData });
-            }
-        });
     }
 
     _formatDate(startDate, endDate, isAllDay) {

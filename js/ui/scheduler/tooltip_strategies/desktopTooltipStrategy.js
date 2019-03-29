@@ -5,6 +5,7 @@ import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
 import eventsEngine from "../../../events/core/events_engine";
 import FunctionTemplate from "../../widget/function_template";
+import { extendFromObject } from "../../../core/utils/extend";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 
@@ -25,6 +26,9 @@ class TooltipBehaviorBase {
     }
 
     onListItemRendered(e) {
+    }
+
+    onListItemClick(e) {
     }
 
     getItemListTemplateName() {
@@ -57,6 +61,10 @@ class TooltipSingleAppointmentBehavior extends TooltipBehaviorBase {
         return this._isAppointmentInAllDayPanel(dataList[0].data) ? this.scheduler.$element() : this.scheduler.getWorkSpaceScrollableContainer();
     }
 
+    onListItemClick(e) {
+        this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
+    }
+
     _isAppointmentInAllDayPanel(appointmentData) {
         const workSpace = this.scheduler._workSpace,
             itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
@@ -74,6 +82,27 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             eventsEngine.on(e.itemElement, dragEvents.move, (e) => this._onAppointmentDragMove(e, appData.allDay));
             eventsEngine.on(e.itemElement, dragEvents.end, () => this._onAppointmentDragEnd(appData));
         }
+    }
+
+    onListItemClick(e) {
+        const config = {
+            itemData: e.itemData.data,
+            itemElement: e.itemElement
+        };
+        const result = extendFromObject(this.scheduler.fire("mapAppointmentFields", config), e, false);
+        const showEditAppointmentPopupAction = this.createAppointmentClickAction();
+
+        showEditAppointmentPopupAction(result);
+    }
+
+    createAppointmentClickAction() {
+        return this.scheduler._createActionByOption("onAppointmentClick", {
+            afterExecute: e => {
+                const config = e.args[0];
+                config.event.stopPropagation();
+                this.scheduler.fire("showEditAppointmentPopup", { data: config.appointmentData });
+            }
+        });
     }
 
     createFunctionTemplate(template, data, targetData, index) {
@@ -178,8 +207,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
     show(target, dataList, isSingleBehavior) {
         if(this._canShowTooltip(target, dataList)) {
-            this.behavior = isSingleBehavior ? new TooltipSingleAppointmentBehavior(this.scheduler, target)
-                : new TooltipManyAppointmentsBehavior(this.scheduler, target);
+            this.behavior = this._createBehavior(isSingleBehavior, target);
             this.hide();
 
             if(!this.tooltip) {
@@ -194,6 +222,11 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             this.list.focus();
             this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
         }
+    }
+
+    _createBehavior(isSingleBehavior, target) {
+        return isSingleBehavior ? new TooltipSingleAppointmentBehavior(this.scheduler, target)
+            : new TooltipManyAppointmentsBehavior(this.scheduler, target);
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
@@ -236,6 +269,10 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _onDeleteButtonClick() {
         this.hide();
+    }
+    _onListItemClick(e) {
+        super._onListItemClick(e);
+        this.behavior.onListItemClick(e);
     }
 
     hide() {

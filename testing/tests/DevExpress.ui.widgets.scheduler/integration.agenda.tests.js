@@ -1,4 +1,19 @@
-var $ = require("jquery");
+import $ from "jquery";
+import devices from "core/devices";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import dblclickEvent from "events/dblclick";
+import fx from "animation/fx";
+import Color from "color";
+import AgendaAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.agenda";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dataUtils from "core/element_data";
+import { appointmentsHelper, tooltipHelper } from "./helpers";
+
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -6,23 +21,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-
-var devices = require("core/devices"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    dblclickEvent = require("events/dblclick"),
-    fx = require("animation/fx"),
-    Color = require("color"),
-    AgendaAppointmentsStrategy = require("ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.agenda"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dataUtils = require("core/element_data");
-
-require("ui/scheduler/ui.scheduler");
 
 function getDeltaTz(schedulerTz) {
     var defaultTz = -10800000;
@@ -904,11 +902,9 @@ QUnit.test("Tooltip should appear by appointment click", function(assert) {
         ]
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").trigger("dxclick");
-
+    appointmentsHelper.click();
     this.clock.tick(300);
-
-    assert.equal($(".dx-scheduler-appointment-tooltip").length, 1, "Tooltip is rendered");
+    assert.ok(tooltipHelper.isVisible(), "Tooltip is rendered");
 });
 
 QUnit.test("Agenda should be rerendered when data source is changed", function(assert) {
