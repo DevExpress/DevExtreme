@@ -98,8 +98,9 @@ export const run = function() {
 
             assert.equal(this.items().length, 9);
             assert.equal(loadingSpy.callCount, 1);
-            assert.equal(loadingSpy.getCall(0).args[0].skip, 0);
-            assert.equal(loadingSpy.getCall(0).args[0].take, 20);
+            const { skip, take } = loadingSpy.getCall(0).args[0];
+            assert.equal(skip, 0);
+            assert.equal(take, 20);
         });
 
         QUnit.test("fire deleting event after push 'remove'", function(assert) {
