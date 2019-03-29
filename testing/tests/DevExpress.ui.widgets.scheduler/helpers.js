@@ -25,8 +25,13 @@ export const tooltipHelper = {
 };
 
 export const appointmentsHelper = {
-    getCompactAppointmentButton: (index = 0) => $($(".dx-scheduler-dropdown-appointments").get(index)),
+    getCompactAppointmentButtons: () => $(".dx-scheduler-dropdown-appointments"),
+    getCompactAppointmentButton: (index = 0) => $(appointmentsHelper.getCompactAppointmentButtons().get(index)),
+    getCompactAppointmentButtonCount: () => appointmentsHelper.getCompactAppointmentButtons().length,
+
     getAppointmentElement: (index = 0) => $(".dx-scheduler-appointment").eq(index),
+
+    getCompactAppointmentButtonText: (index = 0) => appointmentsHelper.getCompactAppointmentButton(index).find("span").text(),
 
     click: (index = 0) => appointmentsHelper.getAppointmentElement(index).trigger("dxclick"),
     clickOnCompactAppointment: (index = 0) => appointmentsHelper.getCompactAppointmentButton(index).trigger("dxclick")
