@@ -3,13 +3,15 @@
     @MATERIAL_CHECKBOX_RIPPLE_SIZE: 40px;
     @MATERIAL_CHECKBOX_ARROW_ICON_SIZE: 16px;
     @MATERIAL_CHECKBOX_INTERMIDIATE_ICON_SIZE: 20px;
+    @MATERIAL_CHECKBOX_BORDER_RADIUS: @checkbox-icon-border-radius;
 }
 
 .dx-size-compact() {
-    @MATERIAL_CHECKBOX_SIZE: 18px;
-    @MATERIAL_CHECKBOX_RIPPLE_SIZE: 40px;
-    @MATERIAL_CHECKBOX_ARROW_ICON_SIZE: 16px;
-    @MATERIAL_CHECKBOX_INTERMIDIATE_ICON_SIZE: 20px;
+    @MATERIAL_CHECKBOX_SIZE: 16px;
+    @MATERIAL_CHECKBOX_RIPPLE_SIZE: 30px;
+    @MATERIAL_CHECKBOX_ARROW_ICON_SIZE: 14px;
+    @MATERIAL_CHECKBOX_INTERMIDIATE_ICON_SIZE: 18px;
+    @MATERIAL_CHECKBOX_BORDER_RADIUS: 2px;
 }
 
 @MATERIAL_CHECKBOX_RIPPLE_TRANSITION: all .4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -68,7 +70,7 @@
     width: @MATERIAL_CHECKBOX_SIZE;
     height: @MATERIAL_CHECKBOX_SIZE;
     border: 2px solid @checkbox-border-color;
-    border-radius: @checkbox-icon-border-radius;
+    border-radius: @MATERIAL_CHECKBOX_BORDER_RADIUS;
 
     &:after {
         content: "";

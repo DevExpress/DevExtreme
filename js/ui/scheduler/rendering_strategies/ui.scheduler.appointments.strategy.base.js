@@ -724,7 +724,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _isCompactTheme: function() {
-        return (themes.current() || "").split(".")[2] === "compact";
+        return (themes.current() || "").split(".").pop() === "compact";
     },
 
     _getAppointmentDefaultOffset: function() {

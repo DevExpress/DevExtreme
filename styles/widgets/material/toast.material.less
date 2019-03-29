@@ -1,8 +1,12 @@
 .dx-size-default() {
     @MATERIAL_TOAST_CONTENT_PADDING: 0 16px;
+    @MATERIAL_TOAST_HEIGHT: 48px;
+    @MATERIAL_TOAST_SHADOW_COLOR: 0.25;
 }
 .dx-size-compact() {
-    @MATERIAL_TOAST_CONTENT_PADDING: 0 16px;
+    @MATERIAL_TOAST_CONTENT_PADDING: 0 12px;
+    @MATERIAL_TOAST_HEIGHT: 36px;
+    @MATERIAL_TOAST_SHADOW_COLOR: 0.15;
 }
 
 .dx-toast-content {
@@ -11,9 +15,9 @@
     font-weight: 400;
     padding: @MATERIAL_TOAST_CONTENT_PADDING;
     border-radius: @toast-border-radius;
-    box-shadow: 0 2px 3px rgba(0, 0 ,0 ,0.25);
+    box-shadow: 0 2px 3px rgba(0, 0 ,0, @MATERIAL_TOAST_SHADOW_COLOR);
 
-    min-height: 48px;
+    min-height: @MATERIAL_TOAST_HEIGHT;
     display: flex;
     align-items: center;
 }

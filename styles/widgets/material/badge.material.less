@@ -1,16 +1,18 @@
 .dx-size-default() {
-    @MATERIAL_BADGE_HORIZONTAL_PADDING: 9px;
+    @MATERIAL_BADGE_PADDING: 3px 9px;
+    @MATERIAL_BADGE_FONT_SIZE: 12px;
 }
 .dx-size-compact() {
-    @MATERIAL_BADGE_HORIZONTAL_PADDING: 9px;
+    @MATERIAL_BADGE_PADDING: 2px 7px;
+    @MATERIAL_BADGE_FONT_SIZE: 11px;
 }
 
 
 .dx-badge {
     background-color: @badge-bg;
     color: @badge-color;
-    font-size: 12px;
-    padding: 3px @MATERIAL_BADGE_HORIZONTAL_PADDING;
+    font-size: @MATERIAL_BADGE_FONT_SIZE;
+    padding: @MATERIAL_BADGE_PADDING;
     margin-left: 4px;
     line-height: normal;
     margin-top: 1px;
