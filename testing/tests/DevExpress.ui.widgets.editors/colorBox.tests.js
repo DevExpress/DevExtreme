@@ -396,7 +396,7 @@ QUnit.test("In 'instantly' mode popup should not disappear if value was changed"
         top: 80
     });
 
-    assert.equal($overlay.css("display"), "block");
+    assert.equal($overlay.css("display"), "flex");
 });
 
 QUnit.test("'instantly' mode should work for alpha channel", function(assert) {
