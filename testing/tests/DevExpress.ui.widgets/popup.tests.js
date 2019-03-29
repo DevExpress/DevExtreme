@@ -5,13 +5,10 @@ import { value as viewPort } from "core/utils/view_port";
 import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import { isRenderer } from "core/utils/type";
-import browser from "core/utils/browser";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "common.css!";
 import "ui/popup";
-
-const isIE11 = (browser.msie && parseInt(browser.version) === 11);
 
 QUnit.testStart(function() {
     var markup =
@@ -424,9 +421,8 @@ QUnit.test("dimensions should be shrunk correctly with height = auto specified",
     var popupContentHeight = $content.height();
     var addedContent = $("<div>").width(200).height(200);
     $content.append(addedContent);
-    var expectedHeight = isIE11 ? popupContentHeight : popupContentHeight + addedContent.height();
 
-    assert.equal($content.height(), expectedHeight);
+    assert.equal($content.height(), popupContentHeight + addedContent.height());
 });
 
 QUnit.test("dxPopup should render custom template with render function that returns dom node", function(assert) {
@@ -570,11 +566,6 @@ QUnit.test("width/height", function(assert) {
 });
 
 QUnit.test("popup height can be changed according to the content if height = auto", assert => {
-    if(isIE11) {
-        assert.expect(0);
-        return;
-    }
-
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -604,11 +595,6 @@ QUnit.test("popup height can be changed according to the content if height = aut
 });
 
 QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
-    if(isIE11) {
-        assert.expect(0);
-        return;
-    }
-
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -643,11 +629,6 @@ QUnit.test("popup height should support top and bottom toolbars if height = auto
 });
 
 QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", assert => {
-    if(isIE11) {
-        assert.expect(0);
-        return;
-    }
-
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
