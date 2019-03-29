@@ -1,18 +1,18 @@
 import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
-import messageLocalization from "../../localization/message";
+import { isElementNode } from "../../core/dom_adapter";
+import { on, off } from "../../events/core/events_engine";
+import { format as formatMessage } from "../../localization/message";
 import clickEvent from "../../events/click";
-import commonUtils from "../../core/utils/common";
-import windowUtils from "../../core/utils/window";
-import typeUtils from "../../core/utils/type";
+import { normalizeKey, denormalizeKey, noop, asyncNoop } from "../../core/utils/common";
+import { hasWindow } from "../../core/utils/window";
+import { isDefined, isPrimitive, isFunction } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import { getPublicElement } from "../../core/utils/dom";
 import CheckBox from "../check_box";
 import HierarchicalCollectionWidget from "../hierarchical_collection/ui.hierarchical_collection_widget";
-import eventUtils from "../../events/utils";
-import pointerEvents from "../../events/pointer";
+import { addNamespace } from "../../events/utils";
+import { down as PointerDown } from "../../events/pointer";
 import dblclickEvent from "../../events/double_click";
 import fx from "../../animation/fx";
 import Scrollable from "../scroll_view/ui.scrollable";
@@ -53,7 +53,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._itemClickHandler(e, $itemElement.children("." + ITEM_CLASS));
 
             const expandEventName = this._getEventNameByOption(this.option("expandEvent")),
-                expandByClick = expandEventName === eventUtils.addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
+                expandByClick = expandEventName === addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
 
             if(expandByClick) {
                 this._expandEventHandler(e);
@@ -112,7 +112,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getNodeElement: function(node, cache) {
-        const normalizedKey = commonUtils.normalizeKey(node.internalFields.key);
+        const normalizedKey = normalizeKey(node.internalFields.key);
         if(cache) {
             if(!cache.$nodeByKey) {
                 cache.$nodeByKey = {};
@@ -196,7 +196,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
              * @type string
              * @default "Select All"
              */
-            selectAllText: messageLocalization.format("dxList-selectAll"),
+            selectAllText: formatMessage("dxList-selectAll"),
 
             /**
             * @name dxTreeViewOptions.onItemSelectionChanged
@@ -438,8 +438,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     // TODO: implement these functions
-    _initSelectedItems: commonUtils.noop,
-    _syncSelectionOptions: commonUtils.asyncNoop,
+    _initSelectedItems: noop,
+    _syncSelectionOptions: asyncNoop,
 
     _fireSelectionChanged: function() {
         const selectionChangePromise = this._selectionChangePromise;
@@ -493,9 +493,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        const name = args.name,
-            value = args.value,
-            previousValue = args.previousValue;
+        const { name, value, previousValue } = args;
 
         switch(name) {
             case "selectAllText":
@@ -552,11 +550,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _initDataSource: function() {
         if(this._useCustomChildrenLoader()) {
-            this._loadChildrenByCustomLoader(null).done(function(newItems) {
+            this._loadChildrenByCustomLoader(null).done(newItems => {
                 if(newItems && newItems.length) {
                     this.option("items", newItems);
                 }
-            }.bind(this));
+            });
         } else {
             this.callBase();
             this._isVirtualMode() && this._initVirtualMode();
@@ -576,7 +574,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _useCustomChildrenLoader: function() {
-        return typeUtils.isFunction(this.option("createChildren")) && this._isDataStructurePlain();
+        return isFunction(this.option("createChildren")) && this._isDataStructurePlain();
     },
 
     _loadChildrenByCustomLoader: function(parentNode) {
@@ -586,7 +584,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return new Deferred().resolve(invocationResult).promise();
         }
 
-        if(invocationResult && typeUtils.isFunction(invocationResult.then)) {
+        if(invocationResult && isFunction(invocationResult.then)) {
             return fromPromise(invocationResult);
         }
 
@@ -798,7 +796,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this.callBase();
         }
 
-        if(this._scrollableContainer && windowUtils.hasWindow()) {
+        if(this._scrollableContainer && hasWindow()) {
             this._scrollableContainer.update();
         }
     },
@@ -830,7 +828,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _createDOMElement: function($nodeContainer, node) {
         const $node = $("<li>")
             .addClass(NODE_CLASS)
-            .attr(DATA_ITEM_ID, commonUtils.normalizeKey(node.internalFields.key))
+            .attr(DATA_ITEM_ID, normalizeKey(node.internalFields.key))
             .prependTo($nodeContainer);
 
         this.setAria({
@@ -972,17 +970,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $itemsContainer = this._itemContainer();
         const itemSelector = this._itemSelector();
 
-        eventsEngine.off($itemsContainer, "." + EXPAND_EVENT_NAMESPACE, itemSelector);
-        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
+        off($itemsContainer, "." + EXPAND_EVENT_NAMESPACE, itemSelector);
+        on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
     },
 
     _getEventNameByOption: function(name) {
         const event = name === "click" ? clickEvent : dblclickEvent;
-        return eventUtils.addNamespace(event.name, EXPAND_EVENT_NAMESPACE);
+        return addNamespace(event.name, EXPAND_EVENT_NAMESPACE);
     },
 
     _getNode: function(identifier) {
-        if(!typeUtils.isDefined(identifier)) {
+        if(!isDefined(identifier)) {
             return null;
         }
 
@@ -990,7 +988,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return identifier;
         }
 
-        if(typeUtils.isPrimitive(identifier)) {
+        if(isPrimitive(identifier)) {
             return this._dataAdapter.getNodeByKey(identifier);
         }
 
@@ -999,7 +997,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return null;
         }
 
-        if(domAdapter.isElementNode(itemElement)) {
+        if(isElementNode(itemElement)) {
             return this._getNodeByElement(itemElement);
         }
 
@@ -1008,7 +1006,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getNodeByElement: function(itemElement) {
         const $node = $(itemElement).closest("." + NODE_CLASS);
-        const key = commonUtils.denormalizeKey($node.attr(DATA_ITEM_ID));
+        const key = denormalizeKey($node.attr(DATA_ITEM_ID));
 
         return this._dataAdapter.getNodeByKey(key);
     },
@@ -1021,7 +1019,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        if(!typeUtils.isDefined(state)) {
+        if(!isDefined(state)) {
             state = !currentState;
         }
 
@@ -1066,10 +1064,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEvent.name, this.NAME);
 
-        eventsEngine.off($icon, eventName);
-        eventsEngine.on($icon, eventName, e => {
+        off($icon, eventName);
+        on($icon, eventName, e => {
             this._toggleExpandedState(node.internalFields.key, undefined, e);
         });
     },
@@ -1199,7 +1197,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         const optionName = isExpanded ? "onItemExpanded" : "onItemCollapsed";
-        if(typeUtils.isDefined(e)) {
+        if(isDefined(e)) {
             this._itemDXEventHandler(e, optionName, { node: this._dataAdapter.getPublicNode(node) });
         } else {
             const target = this._getNodeElement(node);
@@ -1472,18 +1470,18 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _attachClickEvent: function() {
         const clickSelector = "." + this._itemClass();
         const pointerDownSelector = "." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS;
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        const pointerDownEvent = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const pointerDownEvent = addNamespace(PointerDown, this.NAME);
         const $itemContainer = this._itemContainer();
 
-        eventsEngine.off($itemContainer, eventName, clickSelector);
-        eventsEngine.off($itemContainer, pointerDownEvent, pointerDownSelector);
+        off($itemContainer, eventName, clickSelector);
+        off($itemContainer, pointerDownEvent, pointerDownSelector);
 
         const that = this;
-        eventsEngine.on($itemContainer, eventName, clickSelector, function(e) {
+        on($itemContainer, eventName, clickSelector, function(e) {
             that._itemClickHandler(e, $(this));
         });
-        eventsEngine.on($itemContainer, pointerDownEvent, pointerDownSelector, e => {
+        on($itemContainer, pointerDownEvent, pointerDownSelector, e => {
             this._itemPointerDownHandler(e);
         });
     },
