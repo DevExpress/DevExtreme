@@ -4,6 +4,7 @@ var $ = require("../../../core/renderer"),
     stringFormat = require("../../../core/utils/string").format,
     errors = require("../../../data/errors").errors,
     noop = require("../../../core/utils/common").noop,
+    extend = require("../../../core/utils/extend").extend,
     typeUtils = require("../../../core/utils/type"),
     iteratorUtils = require("../../../core/utils/iterator"),
     inArray = require("../../../core/utils/array").inArray,
@@ -858,7 +859,6 @@ exports.XmlaStore = Class.inherit((function() {
             data.rowCount = cells[0][0][0] - 1;
             data.columnCount = cells[1][0][0] - 1;
         }
-
         if(data.rowCount !== undefined) {
             data.rows = [...Array(options.rowSkip)].concat(data.rows);
             data.rows.length = data.rowCount;
@@ -968,7 +968,7 @@ exports.XmlaStore = Class.inherit((function() {
 
             let rowCountMdx;
             if(options.rowSkip || options.rowTake || options.columnTake || options.columnSkip) {
-                rowCountMdx = generateMDX(Object.assign({}, options, {
+                rowCountMdx = generateMDX(extend({}, options, {
                     totalsOnly: true,
                     rowSkip: null,
                     rowTake: null,
