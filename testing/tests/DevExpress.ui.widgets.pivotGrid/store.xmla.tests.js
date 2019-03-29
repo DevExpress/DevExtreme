@@ -3949,6 +3949,10 @@ define(function(require) {
 
     QUnit.module("Subset", testEnvironment);
 
+    function getHeaderItemValue(headerItem) {
+        return headerItem.value;
+    }
+
     QUnit.test("Skip and take rows", function(assert) {
         var done = assert.async();
         this.store.load({
@@ -3965,7 +3969,7 @@ define(function(require) {
             rowSkip: 2,
             rowTake: 2
         }).done(function(data) {
-            assert.deepEqual(data.rows.map(r => r.value), [undefined, undefined, "Caps", "Cleaners"]);
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, undefined, "Caps", "Cleaners"]);
         }).fail(getFailCallBack(assert))
             .always(done);
     });
@@ -3980,7 +3984,7 @@ define(function(require) {
             columnSkip: 2,
             columnTake: 2
         }).done(function(data) {
-            assert.deepEqual(data.columns.map(r => r.value), [undefined, undefined, 2003, 2004]);
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [undefined, undefined, 2003, 2004]);
         }).fail(getFailCallBack(assert))
             .always(done);
     });
@@ -4005,8 +4009,8 @@ define(function(require) {
             rowSkip: 1,
             rowTake: 1
         }).done(function(data) {
-            assert.deepEqual(data.columns.map(r => r.value), [undefined, undefined, "Bottles and Cages", "Caps", undefined]);
-            assert.deepEqual(data.rows.map(r => r.value), [undefined, "Clothing"]);
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [undefined, undefined, "Bottles and Cages", "Caps", undefined]);
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, "Clothing"]);
         }).fail(getFailCallBack(assert))
             .always(done);
     });
@@ -4023,8 +4027,8 @@ define(function(require) {
             rowSkip: 1,
             rowTake: 1
         }).done(function(data) {
-            assert.deepEqual(data.columns.map(r => r.value), []);
-            assert.deepEqual(data.rows.map(r => r.value), []);
+            assert.deepEqual(data.columns.map(getHeaderItemValue), []);
+            assert.deepEqual(data.rows.map(getHeaderItemValue), []);
         }).fail(getFailCallBack(assert))
             .always(done);
     });
