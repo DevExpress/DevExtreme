@@ -636,6 +636,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(!isUpArrow || !args.cancel) {
             that.setFocusedCellPosition(rowIndex, columnIndex);
         }
+
+        isUpArrow && that._updateFocus();
     },
 
     _pageUpDownKeyHandler: function(eventArgs) {
