@@ -1,4 +1,5 @@
 import $ from "jquery";
+import browser from "core/utils/browser";
 
 import "ui/html_editor";
 
@@ -13,6 +14,8 @@ const HTML_EDITOR_CONTENT = "dx-htmleditor-content";
 const FOCUSED_STATE_CLASS = "dx-state-focused";
 
 const POPUP_TIMEOUT = 500;
+
+const IS_IE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const KEY_CODES = {
     ARROW_UP: 38,
@@ -52,6 +55,14 @@ module("Mentions integration", {
             this.instance = this.$element
                 .dxHtmlEditor(this.options)
                 .dxHtmlEditor("instance");
+        };
+
+        this.addText = (element, text, prevText) => {
+            if(IS_IE11) {
+                element.innerText = `${prevText}${text}\n`;
+            } else {
+                element.innerText += text;
+            }
         };
 
         this.getItems = () => $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
@@ -359,12 +370,16 @@ module("Mentions integration", {
     test("list should show relevant items on typing text", (assert) => {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(({ component }) => {
+
             if(valueChangeSpy.calledOnce) {
-                this.$element.find("p").get(0).innerText += "F";
+                const element = this.$element.find("p").get(0);
+
+                this.addText(element, "F", "@");
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
                 const $items = this.getItems();
+
                 assert.strictEqual(component.option("value"), "@F", "correct value");
                 assert.strictEqual($items.length, 1, "there is one relevant item");
                 assert.strictEqual($items.text(), "Freddy", "correct item");
@@ -383,7 +398,9 @@ module("Mentions integration", {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             if(valueChangeSpy.calledOnce) {
-                this.$element.find("p").get(0).innerText += "F";
+                const element = this.$element.find("p").get(0);
+
+                this.addText(element, "F", "@");
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
@@ -406,9 +423,11 @@ module("Mentions integration", {
         const done = assert.async();
         const expectedMention = `<span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="Freddy"><span contenteditable="false"><span>@</span>Freddy</span></span>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
+            const element = this.$element.find("p").get(0);
+
             switch(valueChangeSpy.callCount) {
                 case 1:
-                    this.$element.find("p").get(0).innerText += "F";
+                    this.addText(element, "F", "@");
                     this.clock.tick();
                     break;
                 case 2:
@@ -436,7 +455,9 @@ module("Mentions integration", {
         const valueChangeSpy = sinon.spy(({ value }) => {
             let $items;
             if(valueChangeSpy.calledOnce) {
-                this.$element.find("p").get(0).innerText += "F";
+                const element = this.$element.find("p").get(0);
+
+                this.addText(element, "F", "@");
                 this.clock.tick();
                 assert.strictEqual(this.getItems().length, 4, "dataSource isn't filtered");
             } else {
@@ -464,11 +485,11 @@ module("Mentions integration", {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find("p").get(0);
 
-                element.innerText += "F";
+                this.addText(element, "F", "@");
                 this.clock.tick();
                 let $items = this.getItems();
                 assert.strictEqual($items.length, 4, "dataSource isn't filtered");
-                element.innerText += "r";
+                this.addText(element, "r", "@F");
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
                 $items = this.getItems();
@@ -492,7 +513,9 @@ module("Mentions integration", {
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
             if(valueChangeSpy.calledOnce) {
-                this.$element.find("p").get(0).innerText += "A";
+                const element = this.$element.find("p").get(0);
+
+                this.addText(element, "A", "@");
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
