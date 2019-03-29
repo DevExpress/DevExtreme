@@ -1,58 +1,63 @@
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
-    translator = require("../../animation/translator"),
-    errors = require("../widget/ui.errors"),
-    windowUtils = require("../../core/utils/window"),
-    dialog = require("../dialog"),
-    recurrenceUtils = require("./utils.recurrence"),
-    domUtils = require("../../core/utils/dom"),
-    dateUtils = require("../../core/utils/date"),
-    objectUtils = require("../../core/utils/object"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    devices = require("../../core/devices"),
-    config = require("../../core/config"),
-    registerComponent = require("../../core/component_registrator"),
-    messageLocalization = require("../../localization/message"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    Widget = require("../widget/ui.widget"),
-    subscribes = require("./ui.scheduler.subscribes"),
-    FunctionTemplate = require("../widget/function_template"),
-    appointmentTooltip = require("./ui.scheduler.appointment_tooltip"),
-    SchedulerHeader = require("./ui.scheduler.header"),
-    SchedulerWorkSpaceDay = require("./workspaces/ui.scheduler.work_space_day"),
-    SchedulerWorkSpaceWeek = require("./workspaces/ui.scheduler.work_space_week"),
-    SchedulerWorkSpaceWorkWeek = require("./workspaces/ui.scheduler.work_space_work_week"),
-    SchedulerWorkSpaceMonth = require("./workspaces/ui.scheduler.work_space_month"),
-    SchedulerTimelineDay = require("./workspaces/ui.scheduler.timeline_day"),
-    SchedulerTimelineWeek = require("./workspaces/ui.scheduler.timeline_week"),
-    SchedulerTimelineWorkWeek = require("./workspaces/ui.scheduler.timeline_work_week"),
-    SchedulerTimelineMonth = require("./workspaces/ui.scheduler.timeline_month"),
-    SchedulerAgenda = require("./workspaces/ui.scheduler.agenda"),
-    SchedulerResourceManager = require("./ui.scheduler.resource_manager"),
-    SchedulerAppointmentModel = require("./ui.scheduler.appointment_model"),
-    SchedulerAppointments = require("./ui.scheduler.appointments"),
-    SchedulerLayoutManager = require("./ui.scheduler.appointments.layout_manager"),
-    DropDownAppointments = require("./ui.scheduler.appointments.drop_down"),
-    SchedulerTimezones = require("./timezones/ui.scheduler.timezones"),
-    AsyncTemplateMixin = require("../shared/async_template_mixin"),
-    DataHelperMixin = require("../../data_helper"),
-    loading = require("./ui.loading"),
-    AppointmentForm = require("./ui.scheduler.appointment_form"),
-    Popup = require("../popup"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    EmptyTemplate = require("../widget/empty_template"),
-    BindableTemplate = require("../widget/bindable_template"),
-    themes = require("../themes");
+import $ from "../../core/renderer";
+import Callbacks from "../../core/utils/callbacks";
+import translator from "../../animation/translator";
+import errors from "../widget/ui.errors";
+import windowUtils from "../../core/utils/window";
+import dialog from "../dialog";
+import recurrenceUtils from "./utils.recurrence";
+import domUtils from "../../core/utils/dom";
+import dateUtils from "../../core/utils/date";
+import objectUtils from "../../core/utils/object";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import { noop } from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import devices from "../../core/devices";
+import config from "../../core/config";
+import registerComponent from "../../core/component_registrator";
+import messageLocalization from "../../localization/message";
+import dateSerialization from "../../core/utils/date_serialization";
+import Widget from "../widget/ui.widget";
+import subscribes from "./ui.scheduler.subscribes";
+import FunctionTemplate from "../widget/function_template";
 
-var toMs = dateUtils.dateToMilliseconds;
+import { DesktopTooltipStrategy } from "./tooltip_strategies/desktopTooltipStrategy";
+import { MobileTooltipStrategy } from "./tooltip_strategies/mobileTooltipStrategy";
 
-var WIDGET_CLASS = "dx-scheduler",
+import SchedulerHeader from "./ui.scheduler.header";
+import SchedulerWorkSpaceDay from "./workspaces/ui.scheduler.work_space_day";
+import SchedulerWorkSpaceWeek from "./workspaces/ui.scheduler.work_space_week";
+import SchedulerWorkSpaceWorkWeek from "./workspaces/ui.scheduler.work_space_work_week";
+import SchedulerWorkSpaceMonth from "./workspaces/ui.scheduler.work_space_month";
+import SchedulerTimelineDay from "./workspaces/ui.scheduler.timeline_day";
+import SchedulerTimelineWeek from "./workspaces/ui.scheduler.timeline_week";
+import SchedulerTimelineWorkWeek from "./workspaces/ui.scheduler.timeline_work_week";
+import SchedulerTimelineMonth from "./workspaces/ui.scheduler.timeline_month";
+import SchedulerAgenda from "./workspaces/ui.scheduler.agenda";
+import SchedulerResourceManager from "./ui.scheduler.resource_manager";
+import SchedulerAppointmentModel from "./ui.scheduler.appointment_model";
+import SchedulerAppointments from "./ui.scheduler.appointments";
+import SchedulerLayoutManager from "./ui.scheduler.appointments.layout_manager";
+import { CompactAppointmentsDesktopStrategy } from "./compact_strategies/compactAppointmentsDesktopStrategy";
+import { CompactAppointmentsMobileStrategy } from "./compact_strategies/compactAppointmentsMobileStrategy";
+import SchedulerTimezones from "./timezones/ui.scheduler.timezones";
+import AsyncTemplateMixin from "../shared/async_template_mixin";
+import DataHelperMixin from "../../data_helper";
+import loading from "./ui.loading";
+import AppointmentForm from "./ui.scheduler.appointment_form";
+import Popup from "../popup";
+import deferredUtils from "../../core/utils/deferred";
+import EmptyTemplate from "../widget/empty_template";
+import BindableTemplate from "../widget/bindable_template";
+import themes from "../themes";
+
+const when = deferredUtils.when;
+const Deferred = deferredUtils.Deferred;
+
+const toMs = dateUtils.dateToMilliseconds;
+
+const WIDGET_CLASS = "dx-scheduler",
     WIDGET_SMALL_CLASS = "dx-scheduler-small",
     WIDGET_READONLY_CLASS = "dx-scheduler-readonly",
     APPOINTMENT_POPUP_CLASS = "dx-scheduler-appointment-popup",
@@ -103,7 +108,7 @@ var VIEWS_CONFIG = {
     }
 };
 
-var Scheduler = Widget.inherit({
+const Scheduler = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -890,6 +895,13 @@ var Scheduler = Widget.inherit({
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
+            /**
+            * @name dxSchedulerOptions.adaptivityEnabled
+            * @type boolean
+            * @default false
+            */
+            adaptivityEnabled: false,
+
             allowMultipleCellSelection: true,
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
@@ -1137,6 +1149,9 @@ var Scheduler = Widget.inherit({
             name = args.name;
 
         switch(args.name) {
+            case "adaptivityEnabled":
+                this._initAppointmentStrategies();
+                break;
             case "customizeDateNavigatorText":
                 this._updateOption("header", name, value);
                 break;
@@ -1581,8 +1596,14 @@ var Scheduler = Widget.inherit({
 
         this._initActions();
 
-        this._dropDownAppointments = new DropDownAppointments();
+        this._initAppointmentStrategies();
+
         this._subscribes = subscribes;
+    },
+
+    _initAppointmentStrategies: function() {
+        this._dropDownAppointments = this.option("adaptivityEnabled") ? new CompactAppointmentsMobileStrategy() : new CompactAppointmentsDesktopStrategy();
+        this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
     },
 
     _initTemplates: function() {
@@ -1794,7 +1815,7 @@ var Scheduler = Widget.inherit({
 
     _getAppointmentRenderedAction: function() {
         return this._createActionByOption("onAppointmentRendered", {
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
@@ -2234,6 +2255,7 @@ var Scheduler = Widget.inherit({
 
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
+            height: 'auto',
             onHiding: (function() {
                 this.focus();
             }).bind(this),
@@ -3005,8 +3027,11 @@ var Scheduler = Widget.inherit({
         if(!appointmentData) {
             return;
         }
-        currentAppointmentData = currentAppointmentData || appointmentData;
-        appointmentTooltip.show(appointmentData, currentAppointmentData, target, this);
+        this._appointmentTooltip.show([{
+            data: appointmentData,
+            currentData: currentAppointmentData || appointmentData,
+            $appointment: target
+        }]);
     },
 
     /**
@@ -3014,7 +3039,7 @@ var Scheduler = Widget.inherit({
         * @publicName hideAppointmentTooltip()
         */
     hideAppointmentTooltip: function() {
-        appointmentTooltip.hide();
+        this._appointmentTooltip.hide();
     },
 
     /**

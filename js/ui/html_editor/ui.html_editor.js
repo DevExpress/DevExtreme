@@ -89,6 +89,7 @@ const HtmlEditor = Editor.inherit({
             * @default null
             */
             resizing: null,
+            mentions: null,
 
             formDialogOptions: null
 
@@ -305,6 +306,7 @@ const HtmlEditor = Editor.inherit({
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption("resizing"),
+            mentions: this._getModuleConfigByOption("mentions"),
             clipboard: {
                 matchVisual: false,
                 matchers: [
@@ -319,13 +321,20 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModuleConfigByOption: function(userOptionName) {
-        let userConfig = this.option(userOptionName);
+        const optionValue = this.option(userOptionName);
+        let config = {};
 
-        if(!isDefined(userConfig)) {
+        if(!isDefined(optionValue)) {
             return undefined;
         }
 
-        return extend(this._getBaseModuleConfig(), userConfig);
+        if(Array.isArray(optionValue)) {
+            config[userOptionName] = optionValue;
+        } else {
+            config = optionValue;
+        }
+
+        return extend(this._getBaseModuleConfig(), config);
     },
 
     _getBaseModuleConfig: function() {
@@ -414,6 +423,7 @@ const HtmlEditor = Editor.inherit({
             case "placeholder":
             case "variables":
             case "toolbar":
+            case "mentions":
                 this._invalidate();
                 break;
             case "valueType": {

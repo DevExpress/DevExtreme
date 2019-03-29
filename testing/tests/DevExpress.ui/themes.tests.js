@@ -104,10 +104,6 @@ require("style-compiler-test-server/known-css-files");
     QUnit.module("Selector check");
 
     $.each(window.knownCssFiles, function(i, cssFileName) {
-        if(cssFileName === "dx.spa.css") {
-            // SPA styles can contain anything
-            return;
-        }
 
         var cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
 

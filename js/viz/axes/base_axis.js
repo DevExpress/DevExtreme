@@ -523,6 +523,8 @@ Axis.prototype = {
             box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0),
             position = options.position,
             textAlign = tick.labelAlignment || options.label.alignment,
+            isDiscrete = that._options.type === "discrete",
+            isFlatLabel = tick.labelRotationAngle % 90 === 0,
             indentFromAxis = options.label.indentFromAxis,
             axisPosition = that._axisPosition,
             labelCoords = tick.labelCoords,
@@ -538,9 +540,9 @@ Axis.prototype = {
             }
 
             if(textAlign === RIGHT) {
-                translateX = labelX - box.x - box.width;
+                translateX = isDiscrete && isFlatLabel ? tick.coords.x - (box.x + box.width) : labelX - box.x - box.width;
             } else if(textAlign === LEFT) {
-                translateX = labelX - box.x;
+                translateX = isDiscrete && isFlatLabel ? labelX - box.x - (tick.coords.x - labelX) : labelX - box.x;
             } else {
                 translateX = labelX - box.x - box.width / 2;
             }
@@ -1139,7 +1141,7 @@ Axis.prototype = {
         return center;
     },
 
-    setBusinessRange(range, categoriesOrder, oppositeVisualRangeUpdateMode, axisReinitialized) {
+    setBusinessRange(range, axisReinitialized, oppositeVisualRangeUpdateMode) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
@@ -1177,14 +1179,10 @@ Axis.prototype = {
         that._seriesData.minVisible = that._seriesData.minVisible === undefined ? that._seriesData.min : that._seriesData.minVisible;
         that._seriesData.maxVisible = that._seriesData.maxVisible === undefined ? that._seriesData.max : that._seriesData.maxVisible;
 
-        if(that.isArgumentAxis) {
-            that._seriesData.sortCategories(categoriesOrder);
-        } else {
-            if(options.showZero) {
-                that._seriesData.correctValueZeroLevel();
-            }
-            that._seriesData.sortCategories(that.getCategoriesSorter());
+        if(!that.isArgumentAxis && options.showZero) {
+            that._seriesData.correctValueZeroLevel();
         }
+        that._seriesData.sortCategories(that.getCategoriesSorter());
 
         that._seriesData.breaks =
             that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
@@ -1799,6 +1797,26 @@ Axis.prototype = {
 
         that._measureTitle();
         measureLabels(that._majorTicks);
+        let textWidth;
+        if(that._isHorizontal) {
+            textWidth = that.getTranslator().getInterval(that._calculateRangeInterval());
+        } else {
+            textWidth = options.placeholderSize;
+        }
+
+        const displayMode = that._validateDisplayMode(options.label.displayMode);
+        const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
+        const wordWrapMode = options.label.wordWrap;
+
+        if(wordWrapMode !== "none" && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
+            if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
+                that._majorTicks.forEach(tick => {
+                    tick.label.setMaxWidth(textWidth, options.label);
+                });
+                measureLabels(that._majorTicks);
+            }
+        }
+
         measureLabels(that._outsideConstantLines);
         measureLabels(that._insideConstantLines);
         measureLabels(that._strips);

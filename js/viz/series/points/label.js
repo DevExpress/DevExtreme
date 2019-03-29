@@ -31,6 +31,12 @@ function getClosestCoord(point, coords) {
     return [_floor(closestCoord[0]), _floor(closestCoord[1])];
 }
 
+function getCrossCoord(rect, coord, indexOffset) {
+    return (coord - rect[0 + indexOffset]) / (rect[2 + indexOffset] - rect[0 + indexOffset]) *
+        (rect[3 - indexOffset] - rect[1 - indexOffset]) +
+        rect[1 - indexOffset];
+}
+
 // We could always conside center of label as label point (with appropriate connector path clipping). In that case we do not depend neither on background nor on rotation.
 
 var barPointStrategy = {
@@ -40,24 +46,45 @@ var barPointStrategy = {
         return figure.x <= xc && xc <= figure.x + figure.width && figure.y <= yc && yc <= figure.y + figure.height;
     },
 
-    prepareLabelPoints: function(bBox, rotatedBBox, isHorizontal, angle) {
+    prepareLabelPoints: function(bBox, rotatedBBox, isHorizontal, angle, figureCenter) {
         var x1 = rotatedBBox.x,
             xc = x1 + rotatedBBox.width / 2,
             x2 = x1 + rotatedBBox.width - 1,
             y1 = rotatedBBox.y,
             yc = y1 + rotatedBBox.height / 2,
-            y2 = y1 + rotatedBBox.height - 1;
+            y2 = y1 + rotatedBBox.height - 1,
+            labelPoints,
+            isRectangular = (_abs(angle) % 90) === 0;
 
-        return (_abs(angle) % 90) === 0 ? [
-            [x1, y1],
-            [isHorizontal ? x1 : xc, isHorizontal ? yc : y1],
-            [x2, y1],
+        if(figureCenter[0] > x1 && figureCenter[0] < x2) {
+            if(isRectangular) {
+                labelPoints = [[figureCenter[0], _abs(figureCenter[1] - y1) < _abs(figureCenter[1] - y2) ? y1 : y2]];
+            } else {
+                labelPoints = [[figureCenter[0], getCrossCoord([x1, y1, x2, y2], figureCenter[0], 0)]];
+            }
+        } else if(figureCenter[1] > y1 && figureCenter[1] < y2) {
+            if(isRectangular) {
+                labelPoints = [[_abs(figureCenter[0] - x1) < _abs(figureCenter[0] - x2) ? x1 : x2, figureCenter[1]]];
+            } else {
+                labelPoints = [[getCrossCoord([x1, y1, x2, y2], figureCenter[1], 1), figureCenter[1]]];
+            }
+        } else {
+            if(isRectangular) {
+                labelPoints = [
+                    [x1, y1],
+                    [isHorizontal ? x1 : xc, isHorizontal ? yc : y1],
+                    [x2, y1],
 
-            [x1, y2],
-            [isHorizontal ? x2 : xc, isHorizontal ? yc : y2],
-            [x2, y2]
-        ] :
-            [[xc, yc]];
+                    [x1, y2],
+                    [isHorizontal ? x2 : xc, isHorizontal ? yc : y2],
+                    [x2, y2]
+                ];
+            } else {
+                labelPoints = [[xc, yc]];
+            }
+        }
+
+        return labelPoints;
     },
 
     isHorizontal: function(bBox, figure) {
@@ -414,8 +441,9 @@ Label.prototype = {
 
         if(!strategy.isLabelInside(bBox, figure, options.position !== "inside")) {
             isHorizontal = strategy.isHorizontal(bBox, figure);
-            points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0);
-            labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
+            var figureCenter = strategy.getFigureCenter(figure);
+            points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0, figureCenter);
+            labelPoint = getClosestCoord(figureCenter, points);
             points = strategy.findFigurePoint(figure, labelPoint, isHorizontal);
             points = points.concat(labelPoint);
         }

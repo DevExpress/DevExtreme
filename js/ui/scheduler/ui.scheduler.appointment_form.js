@@ -11,8 +11,7 @@ require("./timezones/ui.scheduler.timezone_editor");
 require("../text_area");
 require("../tag_box");
 
-var RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item",
-    RECURRENCE_SWITCH_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-switch-item";
+var RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
 
 var SchedulerAppointmentForm = {
 
@@ -43,7 +42,8 @@ var SchedulerAppointmentForm = {
             readOnly: isReadOnly,
             showValidationSummary: true,
             scrollingEnabled: true,
-            formData: formData
+            formData: formData,
+            colCount: 2
         });
 
         return this._appointmentForm;
@@ -56,45 +56,9 @@ var SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.textExpr,
                 editorType: "dxTextBox",
+                colSpan: 2,
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelTitle")
-                }
-            },
-            {
-                itemType: "empty"
-            },
-            {
-                dataField: dataExprs.allDayExpr,
-                editorType: "dxSwitch",
-                label: {
-                    text: messageLocalization.format("dxScheduler-allDay")
-                },
-                editorOptions: {
-                    onValueChanged: function(args) {
-                        var value = args.value,
-                            startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
-                            endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
-
-                        if(startDateEditor && endDateEditor) {
-                            startDateEditor.option("type", value ? "date" : "datetime");
-                            endDateEditor.option("type", value ? "date" : "datetime");
-
-                            if(!startDateEditor.option("value")) {
-                                return;
-                            }
-
-                            var startDate = dateSerialization.deserializeDate(startDateEditor.option("value"));
-
-                            if(value) {
-                                startDateEditor.option("value", that._getAllDayStartDate(startDate));
-                                endDateEditor.option("value", that._getAllDayEndDate(startDate));
-                            } else {
-                                startDate.setHours(schedulerInst.option("startDayHour"));
-                                startDateEditor.option("value", startDate);
-                                endDateEditor.option("value", schedulerInst._workSpace.calculateEndDate(dateSerialization.deserializeDate(startDateEditor.option("value"))));
-                            }
-                        }
-                    }
                 }
             },
             {
@@ -130,6 +94,7 @@ var SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.startDateTimeZoneExpr,
                 editorType: "dxSchedulerTimezoneEditor",
+                colSpan: 2,
                 label: {
                     text: " ",
                     showColon: false
@@ -172,6 +137,7 @@ var SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.endDateTimeZoneExpr,
                 editorType: "dxSchedulerTimezoneEditor",
+                colSpan: 2,
                 label: {
                     text: " ",
                     showColon: false
@@ -182,48 +148,66 @@ var SchedulerAppointmentForm = {
                 visible: false
             },
             {
-                itemType: "empty"
+                dataField: dataExprs.allDayExpr,
+                editorType: "dxSwitch",
+                colSpan: 2,
+                label: {
+                    text: messageLocalization.format("dxScheduler-allDay")
+                },
+                editorOptions: {
+                    onValueChanged: function(args) {
+                        var value = args.value,
+                            startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
+                            endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
+
+                        if(startDateEditor && endDateEditor) {
+                            startDateEditor.option("type", value ? "date" : "datetime");
+                            endDateEditor.option("type", value ? "date" : "datetime");
+
+                            if(!startDateEditor.option("value")) {
+                                return;
+                            }
+
+                            var startDate = dateSerialization.deserializeDate(startDateEditor.option("value"));
+
+                            if(value) {
+                                startDateEditor.option("value", that._getAllDayStartDate(startDate));
+                                endDateEditor.option("value", that._getAllDayEndDate(startDate));
+                            } else {
+                                startDate.setHours(schedulerInst.option("startDayHour"));
+                                startDateEditor.option("value", startDate);
+                                endDateEditor.option("value", schedulerInst._workSpace.calculateEndDate(dateSerialization.deserializeDate(startDateEditor.option("value"))));
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                itemType: "empty",
+                colSpan: 2,
             },
             {
                 dataField: dataExprs.descriptionExpr,
                 editorType: "dxTextArea",
+                colSpan: 2,
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelDescription")
                 }
             },
             {
-                name: "repeatOnOff",
-                editorType: "dxSwitch",
-                label: {
-                    text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
-                },
-                editorOptions: {
-                    observer: schedulerInst,
-                    onInitialized: function(args) {
-                        var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
-
-                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
-                        args.component.option("value", value);
-                    },
-                    onValueChanged: function(args) {
-                        var value = args.value,
-                            recEditor = that._appointmentForm.getEditor(dataExprs.recurrenceRuleExpr);
-
-                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
-                        recEditor.option("visible", value);
-                    }
-                },
-                cssClass: RECURRENCE_SWITCH_EDITOR_ITEM_CLASS
+                itemType: "empty",
+                colSpan: 2
             },
             {
                 dataField: dataExprs.recurrenceRuleExpr,
                 editorType: "dxRecurrenceEditor",
+                colSpan: 2,
                 editorOptions: {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
                     onValueChanged: function(args) {
                         var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
-                        args.component.option("visible", value);
+                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
                     },
                     onContentReady: function(args) {
                         var $editorField = $(args.element).closest(".dx-field-item"),
@@ -237,8 +221,8 @@ var SchedulerAppointmentForm = {
                 },
                 cssClass: RECURRENCE_EDITOR_ITEM_CLASS,
                 label: {
-                    visible: false
-                }
+                    text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
+                },
             }
         ];
 

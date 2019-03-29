@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
     pointerEvents = require("../events/pointer"),
+    iteratorUtils = require("../core/utils/iterator"),
     TabsItem = require("./tabs/item"),
     themes = require("./themes"),
     holdEvent = require("../events/hold"),
@@ -19,6 +20,7 @@ var $ = require("../core/renderer"),
 var TABS_CLASS = "dx-tabs",
     TABS_WRAPPER_CLASS = "dx-tabs-wrapper",
     TABS_EXPANDED_CLASS = "dx-tabs-expanded",
+    TABS_STRETCHED_CLASS = "dx-tabs-stretched",
     TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable",
     TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
 
@@ -265,10 +267,10 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _renderScrolling: function() {
-        this.$element().removeClass(TABS_EXPANDED_CLASS);
-        this.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
+        var removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
+        this.$element().removeClass(removeClasses.join(" "));
 
-        if(this._allowScrolling()) {
+        if(this.option("scrollingEnabled") && this._isItemsWidthExceeded()) {
             if(!this._scrollable) {
                 this._renderScrollable();
                 this._renderNavButtons();
@@ -283,13 +285,38 @@ var Tabs = CollectionWidget.inherit({
             this._scrollToItem(this.option("selectedItem"));
         }
 
-        if(!this._allowScrolling()) {
+        if(!(this.option("scrollingEnabled") && this._isItemsWidthExceeded())) {
             this._cleanScrolling();
+
+            if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
+                this.$element().addClass(TABS_STRETCHED_CLASS);
+            }
 
             this.$element()
                 .removeClass(TABS_NAV_BUTTONS_CLASS)
                 .addClass(TABS_EXPANDED_CLASS);
         }
+    },
+
+    _isItemsWidthExceeded: function() {
+        var tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+
+        // NOTE: "-1" is a hack fix for IE (T190044)
+        return tabItemsWidth - 1 > this.$element().width();
+    },
+
+    _needStretchItems: function() {
+        var $visibleItems = this._getVisibleItems(),
+            elementWidth = this.$element().width(),
+            itemsWidth = [];
+
+        iteratorUtils.each($visibleItems, (_, item) => {
+            itemsWidth.push($(item).outerWidth(true));
+        });
+
+        var maxTabWidth = Math.max.apply(null, itemsWidth);
+
+        return maxTabWidth > elementWidth / $visibleItems.length;
     },
 
     _cleanNavButtons: function() {
@@ -372,17 +399,6 @@ var Tabs = CollectionWidget.inherit({
         this._scrollable.scrollToElement($item);
     },
 
-    _allowScrolling: function() {
-        if(!this.option("scrollingEnabled")) {
-            return false;
-        }
-
-        var tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
-
-        // NOTE: "-1" is a hack fix for IE (T190044)
-        return tabItemsWidth - 1 > this.$element().width();
-    },
-
     _renderNavButtons: function() {
         this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option("showNavButtons"));
 
@@ -462,9 +478,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this.option("scrollingEnabled")) {
-            this._renderScrolling();
-        }
+        this._renderScrolling();
     },
 
     _itemSelectHandler: function(e) {
@@ -489,6 +503,10 @@ var Tabs = CollectionWidget.inherit({
                 break;
             case "scrollByContent":
                 this._scrollable && this._scrollable.option(args.name, args.value);
+                break;
+            case "width":
+                this.callBase(args);
+                this._dimensionChanged();
                 break;
             case "selectionMode":
                 this._renderMultiple();

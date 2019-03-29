@@ -35,33 +35,38 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         _focusRowByIndex: function(index) {
-            var that = this,
-                dataController,
-                isVirtualScrolling,
-                focusedRowKey,
-                isLocalIndex,
-                pageIndex;
-
-            if(!this.option("focusedRowEnabled")) return;
+            if(!this.option("focusedRowEnabled")) {
+                return;
+            }
 
             index = index !== undefined ? index : this.option("focusedRowIndex");
 
             if(index < 0) {
                 this._resetFocusedRow();
             } else {
-                dataController = this.getController("data");
-                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling();
-                pageIndex = Math.floor(index / dataController.pageSize());
-                isLocalIndex = !isVirtualScrolling || dataController.pageIndex() === pageIndex;
-
-                (!isLocalIndex ? dataController.pageIndex(pageIndex) : new Deferred().resolve()).done(function(_) {
-                    if(that._isValidFocusedRowIndex(index)) {
-                        focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
-                        if(focusedRowKey !== undefined && !that.isRowFocused(focusedRowKey)) {
-                            that.option("focusedRowKey", focusedRowKey);
+                this._focusRowByIndexCore(index);
+            }
+        },
+        _focusRowByIndexCore: function(index) {
+            let dataController = this.getController("data"),
+                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
+                pageIndex = Math.floor(index / dataController.pageSize()),
+                visibleRowsCount = dataController.getVisibleRows().length + dataController.getRowIndexOffset(),
+                visiblePagesCount = Math.ceil(visibleRowsCount / dataController.pageSize()),
+                isLocalIndex = !isVirtualScrolling || visiblePagesCount > pageIndex,
+                setKeyByIndex = () => {
+                    if(this._isValidFocusedRowIndex(index)) {
+                        let focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
+                        if(focusedRowKey !== undefined && !this.isRowFocused(focusedRowKey)) {
+                            this.option("focusedRowKey", focusedRowKey);
                         }
                     }
-                });
+                };
+
+            if(!isLocalIndex) {
+                dataController.pageIndex(pageIndex).done(() => setKeyByIndex());
+            } else {
+                setKeyByIndex();
             }
         },
 
@@ -340,7 +345,10 @@ module.exports = {
                 setFocusedRowIndex: function(rowIndex) {
                     this.callBase(rowIndex);
 
-                    this.option("focusedRowIndex", rowIndex);
+                    let visibleRow = this.getController("data").getVisibleRows()[rowIndex];
+                    if(!visibleRow || !visibleRow.inserted) {
+                        this.option("focusedRowIndex", rowIndex);
+                    }
                 },
 
                 setFocusedColumnIndex: function(columnIndex) {
@@ -433,38 +441,49 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var dataSource = this._dataSource,
-                        operationTypes,
-                        focusController;
+                    var isPartialUpdateWithDeleting;
 
-                    if(this.option("focusedRowEnabled") && dataSource) {
-                        operationTypes = dataSource.operationTypes();
-                        focusController = this.getController("focus");
+                    if(this.option("focusedRowEnabled") && this._dataSource) {
+                        let isPartialUpdate = e.changeType === "update" && e.repaintChangesOnly;
 
-                        if(e.changeType === "refresh") {
-                            var prevPageIndex = this._prevPageIndex,
-                                reload = operationTypes && operationTypes.reload,
-                                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
-                                paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
+                        isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf("remove") >= 0;
 
-                            this._prevPageIndex = this.pageIndex();
-                            if(reload && this.option("focusedRowKey") !== undefined) {
-                                focusController.navigateToRow(this.option("focusedRowKey")).done(function(pageIndex) {
-                                    if(pageIndex < 0) {
-                                        focusController._focusRowByIndex();
-                                    }
-                                });
-                            } else if(paging) {
-                                if(!isVirtualScrolling) {
-                                    focusController._focusRowByIndex();
-                                }
-                            } else {
-                                focusController._focusRowByKeyOrIndex();
-                            }
+                        if(isPartialUpdateWithDeleting) {
+                            this.callBase(e);
+                        }
+
+                        if(e.changeType === "refresh" || isPartialUpdateWithDeleting) {
+                            this.processUpdateFocusedRow();
                         }
                     }
 
-                    this.callBase(e);
+                    if(!isPartialUpdateWithDeleting) {
+                        this.callBase(e);
+                    }
+                },
+                processUpdateFocusedRow: function() {
+                    var prevPageIndex = this._prevPageIndex,
+                        operationTypes = this._dataSource.operationTypes(),
+                        focusController = this.getController("focus"),
+                        reload = operationTypes && operationTypes.reload,
+                        isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
+                        focusedRowKey = this.option("focusedRowKey"),
+                        paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
+
+                    this._prevPageIndex = this.pageIndex();
+                    if(reload && focusedRowKey !== undefined) {
+                        focusController.navigateToRow(focusedRowKey).done(function(pageIndex) {
+                            if(pageIndex < 0) {
+                                focusController._focusRowByIndex();
+                            }
+                        });
+                    } else if(paging) {
+                        if(!isVirtualScrolling) {
+                            focusController._focusRowByIndex();
+                        }
+                    } else {
+                        focusController._focusRowByKeyOrIndex();
+                    }
                 },
 
                 getPageIndexByKey: function(key) {
@@ -612,7 +631,7 @@ module.exports = {
                     }
                 },
 
-                _updateFocusElementTabIndex: function($cellElements) {
+                updateFocusElementTabIndex: function($cellElements) {
                     if(this.option("focusedRowEnabled")) {
                         this._setFocusedRowElementTabIndex();
                     } else {

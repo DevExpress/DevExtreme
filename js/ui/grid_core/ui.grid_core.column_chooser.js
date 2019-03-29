@@ -104,13 +104,22 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         return !!devices.real().win;
     },
 
-    _updateList: function(allowUpdate) {
+    _updateList: function(change) {
         var items,
             $popupContent = this._popupContainer.$content(),
             isSelectMode = this.option("columnChooser.mode") === "select",
+            columnChooserList = this._columnChooserList,
             chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
 
-        if(!isSelectMode || !this._columnChooserList || allowUpdate) {
+        // T726413
+        if(isSelectMode && columnChooserList && change && change.changeType === "selection") {
+            items = processItems(this, chooserColumns);
+            for(var i = 0; i < items.length; i++) {
+                if(items[i].id === change.columnIndex) {
+                    columnChooserList.option("items[" + i + "].selected", items[i].selected);
+                }
+            }
+        } else if(!isSelectMode || !columnChooserList || change === "full") {
             this._popupContainer._wrapper()
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
@@ -168,9 +177,9 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         }
     },
 
-    _renderCore: function(allowUpdate) {
+    _renderCore: function(change) {
         if(this._popupContainer) {
-            this._updateList(allowUpdate);
+            this._updateList(change);
         }
     },
 
@@ -277,8 +286,13 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         this.callBase(e);
 
         if(isSelectMode) {
-            if(optionNames.showInColumnChooser || optionNames.visible || changeTypes.columns && optionNames.all) {
-                this.render(null, true);
+            if(optionNames.visible && optionNames.length === 1 && e.columnIndex !== undefined) {
+                this.render(null, {
+                    changeType: "selection",
+                    columnIndex: e.columnIndex
+                });
+            } else if(optionNames.showInColumnChooser || optionNames.visible || changeTypes.columns && optionNames.all) {
+                this.render(null, "full");
             }
         }
     },
@@ -287,7 +301,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         switch(args.name) {
             case "columnChooser":
                 this._initializePopupContainer();
-                this.render(null, true);
+                this.render(null, "full");
                 break;
             default:
                 this.callBase(args);

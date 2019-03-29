@@ -158,6 +158,14 @@ QUnit.test("Get row field", function(assert) {
     assert.strictEqual(new this.Cell([this.data.columns[0], this.grandTotalColumn], [this.data.rows[0], this.grandTotalRow], this.data, this.descriptions, 0).field("row"), this.descriptions.rows[0]);
 });
 
+QUnit.test("Get data field", function(assert) {
+    this.descriptions.values.push({ area: "data", caption: "summaryField2", summaryDisplayMode: "summaryDisplayType", index: 1 });
+
+    var cell = new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 1);
+
+    assert.strictEqual(cell.field("data"), this.descriptions.values[1]);
+});
+
 QUnit.test("Get cell value when there are several data fields", function(assert) {
     this.data.values[0][0] = [1, 2, 3];
 

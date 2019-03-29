@@ -296,7 +296,7 @@ var DropDownEditor = TextBox.inherit({
 
     _initPopupInitializedAction: function() {
         this._popupInitializedAction = this._createActionByOption("onPopupInitialized", {
-            excludeValidators: ["disabled", "readOnly", "designMode"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 

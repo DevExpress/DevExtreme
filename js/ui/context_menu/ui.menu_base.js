@@ -710,10 +710,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     _syncSelectionOptions: commonUtils.asyncNoop,
 
     _optionChanged: function(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "showSubmenuMode":
                 break;

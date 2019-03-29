@@ -121,7 +121,9 @@ module.exports = Class.inherit((function() {
         if(headerItems) {
             for(i = 0; i < headerItems.length; i++) {
                 headerItem = headerItems[i];
-                lastIndex = Math.max(lastIndex, headerItem.index);
+                if(headerItem.index !== undefined) {
+                    lastIndex = Math.max(lastIndex, headerItem.index);
+                }
                 if(headerItem.children) {
                     lastIndex = Math.max(lastIndex, getHeaderItemsLastIndex(headerItem.children));
                 } else if(headerItem.collapsedChildren) {
@@ -684,7 +686,6 @@ module.exports = Class.inherit((function() {
             */
             /**
             * @name PivotGridDataSourceOptions.fields
-            * @namespace DevExpress.data
             * @type Array<Object>
             * @default undefined
             */
@@ -1298,15 +1299,24 @@ module.exports = Class.inherit((function() {
                     that.endLoading();
                 });
 
-                that.fireEvent("customizeStoreLoadOptions", [options]);
+                let storeLoadOptions = [options];
+                that.fireEvent("customizeStoreLoadOptions", [storeLoadOptions]);
 
-                when(store.load(options)).done(function(data) {
-                    if(options.path) {
-                        that.applyPartialDataSource(options.area, options.path, data, deferred);
-                    } else {
-                        extend(that._data, data);
-                        that._lastLoadOptions = options;
-                        that._update(deferred);
+                let results = storeLoadOptions.map(options => store.load(options));
+                when.apply(null, results).done(function() {
+                    let results = arguments;
+                    for(let i = 0; i < results.length; i++) {
+                        var options = storeLoadOptions[i],
+                            data = results[i],
+                            isLast = i === results.length - 1;
+
+                        if(options.path) {
+                            that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false);
+                        } else {
+                            extend(that._data, data);
+                            that._lastLoadOptions = options;
+                            that._update(isLast ? deferred : false);
+                        }
                     }
                 }).fail(deferred.reject);
             } else {
@@ -1350,7 +1360,7 @@ module.exports = Class.inherit((function() {
                 !that.isEmpty() && isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
-                when(deferred).done(function() {
+                deferred !== false && when(deferred).done(function() {
                     that.fireEvent("changed");
                     if(isDefined(that._data.grandTotalRowIndex)) {
                         loadedData.grandTotalRowIndex = that._data.grandTotalRowIndex;
@@ -1392,6 +1402,9 @@ module.exports = Class.inherit((function() {
                 headerItem.collapsedChildren = headerItem.children;
                 delete headerItem.children;
                 that._update();
+                if(that.paginate()) {
+                    that.load();
+                }
                 return true;
             }
             return false;

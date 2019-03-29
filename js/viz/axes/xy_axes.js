@@ -370,15 +370,20 @@ module.exports = {
 
         _getTitleCoords: function() {
             var that = this,
+                horizontal = that._isHorizontal,
                 x = that._axisPosition,
                 y = that._axisPosition,
+                align = that._options.title.alignment,
                 canvas = that._getCanvasStartEnd(),
-                center = canvas.start + (canvas.end - canvas.start) / 2;
+                fromStartToEnd = horizontal || that._options.position === LEFT,
+                canvasStart = fromStartToEnd ? canvas.start : canvas.end,
+                canvasEnd = fromStartToEnd ? canvas.end : canvas.start,
+                coord = align === LEFT ? canvasStart : align === RIGHT ? canvasEnd : (canvas.start + (canvas.end - canvas.start) / 2);
 
-            if(that._isHorizontal) {
-                x = center;
+            if(horizontal) {
+                x = coord;
             } else {
-                y = center;
+                y = coord;
             }
             return { x: x, y: y };
         },
@@ -386,7 +391,7 @@ module.exports = {
         _drawTitleText: function(group, coords) {
             var options = this._options,
                 titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: "center" };
+                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment };
 
             if(!titleOptions.text || !group) {
                 return;
@@ -994,6 +999,10 @@ module.exports = {
                 minVisible: seriesData.minVisible,
                 maxVisible: seriesData.maxVisible
             }, that._series, that.isArgumentAxis);
+        },
+
+        getAxisPosition() {
+            return this._axisPosition;
         },
 
         _getStick: function() {

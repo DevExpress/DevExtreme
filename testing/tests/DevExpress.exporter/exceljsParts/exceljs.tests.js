@@ -1,0 +1,336 @@
+import $ from "jquery";
+import ExcelJS from "exceljs";
+import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
+import browser from "core/utils/browser";
+
+import "ui/data_grid/ui.data_grid";
+
+import "common.css!";
+import "generic_light.css!";
+
+QUnit.testStart(() => {
+    let markup = '<div id="dataGrid"></div>';
+
+    $("#qunit-fixture").html(markup);
+});
+
+const moduleConfig = {
+    beforeEach: () => {
+        this.exportDataGrid = exportDataGrid;
+
+        this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
+    },
+    afterEach: () => {
+    }
+};
+
+QUnit.module("API", moduleConfig, () => {
+    if(browser.msie && parseInt(browser.version) <= 11) {
+        return;
+    }
+
+    QUnit.test("Empty grid", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualRowCount, 0);
+    });
+
+    QUnit.test("Header - 1 column", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 'f1');
+    });
+
+    QUnit.test("Header - 1 column, showColumnHeaders: false", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }],
+            showColumnHeaders: false
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 0);
+        assert.equal(this.worksheet.actualRowCount, 0);
+    });
+
+    QUnit.test("Header - 2 column", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }, { caption: "f2" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 2);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 'f1');
+        assert.equal(this.worksheet.getCell("B1").value, 'f2');
+    });
+
+    QUnit.test("Header - column.visible, { caption: f1, visible: false }", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [ { caption: "f1", visible: false }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 0);
+        assert.equal(this.worksheet.actualRowCount, 0);
+    });
+
+    QUnit.test("Header - column.visible, { caption: f1 }, { caption: f2, visible: false }", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [ { caption: "f1" }, { caption: "f2", visible: false }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 'f1');
+    });
+
+    QUnit.test("Header - column.visible, { caption: f1, visible: false }, { caption: f2 }", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [ { caption: "f1", visible: false }, { caption: "f2" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 'f2');
+    });
+
+    QUnit.test("Header - column.visibleIndex", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [
+                { caption: 'f1', visibleIndex: 2 },
+                { caption: 'f2', visibleIndex: 0 },
+                { caption: 'f3', visibleIndex: 1 }
+            ]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 3);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, "f2");
+        assert.equal(this.worksheet.getCell("B1").value, "f3");
+        assert.equal(this.worksheet.getCell("C1").value, "f1");
+    });
+
+    QUnit.test("Header - column.visibleIndex, { caption: f1, visible: false }", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [
+                { caption: 'f1', visibleIndex: 2, visible: false },
+                { caption: 'f2', visibleIndex: 0 },
+                { caption: 'f3', visibleIndex: 1 }
+            ]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 2);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, "f2");
+        assert.equal(this.worksheet.getCell("B1").value, "f3");
+    });
+
+    QUnit.test("Header - column.visibleIndex, { caption: f2, visible: false }", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [
+                { caption: 'f1', visibleIndex: 2 },
+                { caption: 'f2', visibleIndex: 0, visible: false },
+                { caption: 'f3', visibleIndex: 1 }
+            ]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 2);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, "f3");
+        assert.equal(this.worksheet.getCell("B1").value, "f1");
+    });
+
+    QUnit.test("Header - column.visibleIndex, { caption: f3, visible: false }", (assert) => {
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [
+                { caption: 'f1', visibleIndex: 2 },
+                { caption: 'f2', visibleIndex: 0 },
+                { caption: 'f3', visibleIndex: 1, visible: false }
+            ]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
+
+        assert.equal(this.worksheet.actualColumnCount, 2);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, "f2");
+        assert.equal(this.worksheet.getCell("B1").value, "f1");
+    });
+
+    QUnit.test("Header - excelFilterEnabled: true'", (assert) => {
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }, { caption: "f2" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, excelFilterEnabled: true });
+
+        assert.equal(this.worksheet.actualColumnCount, 2);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 'f1');
+        assert.equal(this.worksheet.getCell("B1").value, 'f2');
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.from), JSON.stringify({ row: 1, column: 1 }));
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.to), JSON.stringify({ row: 1, column: 2 }));
+        assert.equal(JSON.stringify(this.worksheet.views), JSON.stringify([ { state: 'frozen', ySplit: 1 } ]));
+    });
+
+    QUnit.test("Header - excelFilterEnabled: true', { f1, visible: false }", (assert) => {
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1", visible: false }, { caption: "f2" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, excelFilterEnabled: true });
+
+        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 'f2');
+
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.from), JSON.stringify({ row: 1, column: 1 }));
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.to), JSON.stringify({ row: 1, column: 1 }));
+        assert.equal(JSON.stringify(this.worksheet.views), JSON.stringify([ { state: 'frozen', ySplit: 1 } ]));
+    });
+
+    QUnit.test("Data - 2 column & 2 rows", (assert) => {
+        const done = assert.async();
+
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ f1: "1", f2: "2" }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 2);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, "1");
+            assert.deepEqual(this.worksheet.getCell("B2").value, "2");
+            done();
+        });
+    });
+
+    QUnit.test("Data - columns.dataType: string", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "string"
+            }],
+            dataSource: [{ f1: "1" }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, "1");
+            assert.equal(typeof this.worksheet.getCell("A2").value, "string");
+            done();
+        });
+    });
+
+    QUnit.test("Data - columns.dataType: number", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "number"
+            }],
+            dataSource: [{ f1: 1 }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, 1);
+            assert.equal(typeof this.worksheet.getCell("A2").value, "number");
+            done();
+        });
+    });
+
+    QUnit.test("Data - columns.dataType: boolean", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "boolean"
+            }],
+            dataSource: [{ f1: true }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, true);
+            assert.equal(typeof this.worksheet.getCell("A2").value, "boolean");
+            done();
+        });
+    });
+
+    QUnit.test("Data - columns.dataType: date", (assert) => {
+        const done = assert.async();
+        const date = new Date(2019, 3, 12);
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "date"
+            }],
+            dataSource: [{ f1: date }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, date);
+            assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
+            done();
+        });
+    });
+
+    QUnit.test("Data - columns.dataType: dateTime", (assert) => {
+        const done = assert.async();
+        const dateTime = new Date(2019, 3, 12, 12, 15);
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "datetime"
+            }],
+            dataSource: [{ f1: dateTime }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, dateTime);
+            assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
+            done();
+        });
+    });
+});

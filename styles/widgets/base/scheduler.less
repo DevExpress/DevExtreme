@@ -30,8 +30,6 @@
 @SCHEDULER_MONTH_DATE_TEXT_SIZE: 16px;
 @SCHEDULER_MONTH_DATE_TEXT_PADDING: 6px;
 
-@SCHEDULER_RECURRENCE_LINE_TOP_POSITION: 70px;
-
 @SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 250px;
 @SCHEDULER_APPOINTMENT_TOOLTIP_BUTTONS_GAP: 10px;
 @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 16px;
@@ -69,7 +67,6 @@
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 7px;
 @SCHEDULER_REDUCED_ICON_OFFSET: 5px;
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 20px;
-@SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET: 20px;
 
 @SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE: 16px;
 
@@ -87,6 +84,9 @@
 @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE: 2px;
 
 @SCHEDULER_TIMELINE_MIN_HEIGHT: 100px;
+
+@SCHEDULER_RECURRENCE_LINE_TOP_POSITION: 70px;
+@SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET: 20px;
 
 .dx-scheduler-group-mixin(@padding) {
     .dx-scrollable {
@@ -2045,11 +2045,16 @@
             }
         }
 
-        .dx-form {
-            padding: 0 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET 0 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-        }
-
         .dx-scheduler-recurrence-rule-item {
+            .dx-field-value,
+            .dx-field-label {
+                float: none;
+
+                 .dx-recurrence-numberbox-repeat-count {
+                    float: left;
+                }
+            }
+
             position: relative;
             padding-right: 0;
 
@@ -2061,27 +2066,12 @@
                 }
             }
 
-            .dx-field-value,
-            .dx-field-label {
-                float: none;
-
-                .dx-recurrence-numberbox-repeat-count {
-                    float: left;
-                }
-            }
-
             .dx-field-value {
                 display: inline-block;
             }
 
             .dx-field-label {
                 padding: 3px 0;
-            }
-
-            &.dx-scheduler-recurrence-rule-item-opened {
-                &:before {
-                    display: block;
-                }
             }
 
             &:before {

@@ -1,0 +1,35 @@
+.dx-filemanager {
+    .dx-filemanager-view-separator {
+        background-color: @datagrid-border-color;
+    }
+
+    .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
+        background-color: lighten(@treeview-focused-bg, 33%);
+    }
+
+    .dx-filemanager-thumbnails {
+        &.dx-filemanager-inactive-area .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item.dx-filemanager-item-selected {
+            color: @base-text-color;
+            background-color: @base-bg;
+        }
+
+        .dx-filemanager-thumbnails-item {
+            
+            &.dx-filemanager-item-selected {
+                background-color: @base-accent;
+                color: @base-bg;
+            }
+
+            &.dx-filemanager-item-focused {
+                border-color: @base-text-color;
+            }
+
+            .dx-filemanager-thumbnails-item-thumbnail {
+
+                &.dx-icon-image {
+                    color: @base-border-color;
+                }
+            }
+        }
+    }
+}

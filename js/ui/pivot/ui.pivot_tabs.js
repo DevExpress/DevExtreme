@@ -8,7 +8,6 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    config = require("../../core/config"),
     BindableTemplate = require("../widget/bindable_template");
 
 
@@ -418,7 +417,7 @@ var PivotTabs = CollectionWidget.inherit({
         e.maxLeftOffset = 1;
         e.maxRightOffset = 1;
 
-        if(config().designMode || this.option("disabled") || !this.option("swipeEnabled") || this._indexBoundary() <= 1) {
+        if(this.option("disabled") || !this.option("swipeEnabled") || this._indexBoundary() <= 1) {
             e.cancel = true;
         } else {
             this._swipeGestureRunning = true;

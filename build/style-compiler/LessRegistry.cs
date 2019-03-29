@@ -13,15 +13,13 @@ namespace StyleCompiler
             PUBLIC_NAME_DEFAULT = "DevExtreme";
 
         public const string
-            MODULE_FRAMEWORK = "framework",
             MODULE_WIDGETS_BASE = "widgets-base";
 
         public const string
             EULA_DEVEXTREME = "https://js.devexpress.com/Licensing/";
 
         public const string
-            CSS_DISTRIBUTION_DEFAULT = "",
-            CSS_DISTRIBUTION_SPA = "spa";
+            CSS_DISTRIBUTION_DEFAULT = "";
 
         public const string
             THEME_GENERIC = "generic",
@@ -73,14 +71,6 @@ namespace StyleCompiler
                         { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } },
                         { THEME_MATERIAL, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } }
                     }
-                }
-            },
-            {
-                CSS_DISTRIBUTION_SPA,
-                new CssDistributionInfo {
-                    LicenseInfo = EULA_DEVEXTREME,
-                    Modules = new[] { MODULE_FRAMEWORK },
-                    UseCommonPostfix = false
                 }
             }
         };
@@ -211,7 +201,8 @@ namespace StyleCompiler
                 "recurrenceEditor",
                 "drawer",
                 "card",
-                "htmlEditor"
+                "htmlEditor",
+                "fileManager"
             });
 
             // Non-themeable components that have only common styles
@@ -233,19 +224,6 @@ namespace StyleCompiler
         }
 
         static readonly Dictionary<string, ModuleInfo> Modules = new Dictionary<string, ModuleInfo> {
-            {
-                MODULE_FRAMEWORK,
-                new ModuleInfo {
-                    PublicName = PUBLIC_NAME_DEFAULT + " (Single Page App Framework)",
-                    LicenseInfo = EULA_DEVEXTREME,
-                    StyleInfo = new ModuleStyleInfo {
-                        LessRoot = "framework",
-                        CommonLessFiles = new[] {
-                            "framework.less"
-                        }
-                    }
-                }
-            },
             {
                 MODULE_WIDGETS_BASE,
                 new ModuleInfo {

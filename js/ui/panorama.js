@@ -13,7 +13,6 @@ var $ = require("../core/renderer"),
     PanoramaItem = require("./panorama/item"),
     swipeEvents = require("../events/swipe"),
     eventUtils = require("../events/utils"),
-    config = require("../core/config"),
     CollectionWidget = require("./collection/ui.collection_widget.edit");
 
 var PANORAMA_CLASS = "dx-panorama",
@@ -912,7 +911,7 @@ var Panorama = CollectionWidget.inherit({
         e.maxLeftOffset = 1;
         e.maxRightOffset = 1;
 
-        if(config().designMode || this.option("disabled") || this._indexBoundary() <= 1) {
+        if(this.option("disabled") || this._indexBoundary() <= 1) {
             e.cancel = true;
         }
     },

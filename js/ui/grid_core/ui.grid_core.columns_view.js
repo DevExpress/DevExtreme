@@ -748,9 +748,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         that.createAction("onCellClick");
         that.createAction("onRowClick");
         that.createAction("onCellHoverChanged", { excludeValidators: ["disabled", "readOnly"] });
-        that.createAction("onCellPrepared", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
+        that.createAction("onCellPrepared", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
         that.createAction("onRowPrepared", {
-            excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering", afterExecute: function(e) {
+            excludeValidators: ["disabled", "readOnly"], category: "rendering", afterExecute: function(e) {
                 that._afterRowPrepared(e);
             } });
 

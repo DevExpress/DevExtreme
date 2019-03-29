@@ -634,13 +634,16 @@ registerTheme({
             label: {
                 displayMode: "standard",
                 overlappingBehavior: "hide",
-                indentFromAxis: 10
+                indentFromAxis: 10,
+                wordWrap: "normal",
+                overflow: "none"
             },
             title: {
                 font: {
                     size: 16
                 },
-                margin: 6
+                margin: 6,
+                alignment: CENTER
             },
             constantLineStyle: {
                 paddingLeftRight: 10,
@@ -1058,7 +1061,7 @@ registerTheme({
             showCustomBoundaryTicks: true,
             label: {
                 overlappingBehavior: "hide",
-                alignment: "center",
+                alignment: CENTER,
                 visible: true,
                 topIndent: 7,
                 font: {
@@ -1602,7 +1605,7 @@ registerTheme({
         targetField: 'target',
         weightField: 'weight',
         hoverEnabled: true,
-        alignment: "center",
+        alignment: CENTER,
         adaptiveLayout: {
             width: 80,
             height: 80,

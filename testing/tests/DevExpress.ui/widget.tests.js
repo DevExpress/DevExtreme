@@ -11,6 +11,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import dataUtils from "core/element_data";
+import { deferUpdate } from "core/utils/common";
 
 import "common.css!";
 
@@ -26,54 +27,59 @@ const DxWidget = Widget.inherit({});
 registerComponent("dxWidget", DxWidget);
 
 QUnit.testStart(() => {
-    const markup = '\
-<div id="widget"></div>\
-<div id="another"></div>\
-<div id="parentWrapper">\
-<div id="wrappedWidget"></div>\
-</div>\
-<div id="widthRootStyle" style="width: 300px;"></div>\
-<div id="widthRootStylePercent" style="width: 50%;"></div>\
-\
-<div id="container">\
-<div data-options="dxTemplate: { name: \'item\' }">item template content</div>\
-<div data-options="dxTemplate: { name: \'group\' }">group template content</div>\
-<table data-options="dxTemplate: { name: \'rowItem\' }"><tr><td>item template content</td></tr></table>\
-</div>\
-\
-<div id="container2">\
-<div data-options="dxTemplate: { name: \'item\' }">item template content</div>\
-<div data-options="dxTemplate: { name: \'group\' }">group template content</div>\
-</div>\
-\
-<div id="externalContainer">\
-<div data-options="dxTemplate: { name: \'item1\' }">template content</div>\
-<div data-options="dxTemplate: { name: \'group2\' }">template content</div>\
-</div>\
-\
-<div id="jQueryContainerWidget">\
-<div id="innerWidget"></div>\
-</div>\
-\
-<div id="platformSpecificContainer">\
-<div data-options="dxTemplate: { name: \'item\', platform: \'generic\' }">generic</div>\
-<div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios</div>\
-<div data-options="dxTemplate: { name: \'item\' }">common</div>\
-</div>\
-\
-<div id="platformSpecificContainer2">\
-<div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios</div>\
-<div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios2</div>\
-</div>\
-\
-<script type="text/html" id="scriptTemplate">\
-<div class="myTemplate"></div>\
-</script>\
-\
-<div id="widgetWithScriptInTemplate">\
-Text\
-<script></script>\
-</div>';
+    const markup = `
+    <div id="widget"></div>
+    <div id="another"></div>
+    <div id="parentWrapper">
+        <div id="wrappedWidget"></div>
+    </div>
+    <div id="widthRootStyle" style="width: 300px;"></div>
+    <div id="widthRootStylePercent" style="width: 50%;"></div>
+
+    <div id="container">
+        <div data-options="dxTemplate: { name: 'item' }">item template content</div>
+        <div data-options="dxTemplate: { name: 'group' }">group template content</div>
+        <table data-options="dxTemplate: { name: 'rowItem' }"><tr><td>item template content</td></tr></table>
+    </div>
+
+    <div id="container2">
+        <div data-options="dxTemplate: { name: 'item' }">item template content</div>
+        <div data-options="dxTemplate: { name: 'group' }">group template content</div>
+    </div>
+
+    <div id="container-custom-config">
+        <div data-options='{ "dxTemplate": { "name": "item" } }'>item template content</div>
+        <div data-options='{ "dxTemplate": { "name": "group" } }'>group template content</div>
+    </div>
+
+    <div id="externalContainer">
+        <div data-options="dxTemplate: { name: 'item1' }">template content</div>
+        <div data-options="dxTemplate: { name: 'group2' }">template content</div>
+    </div>
+
+    <div id="jQueryContainerWidget">
+        <div id="innerWidget"></div>
+    </div>
+
+    <div id="platformSpecificContainer">
+        <div data-options="dxTemplate: { name: 'item', platform: 'generic' }">generic</div>
+        <div data-options="dxTemplate: { name: 'item', platform: 'ios' }">ios</div>
+        <div data-options="dxTemplate: { name: 'item' }">common</div>
+    </div>
+
+    <div id="platformSpecificContainer2">
+        <div data-options="dxTemplate: { name: 'item', platform: 'ios' }">ios</div>
+        <div data-options="dxTemplate: { name: 'item', platform: 'ios' }">ios2</div>
+    </div>
+
+    <script type="text/html" id="scriptTemplate">
+        <div class="myTemplate"></div>
+    </script>
+
+    <div id="widgetWithScriptInTemplate">
+        Text
+        <script></script>
+    </div>`;
 
     $("#qunit-fixture").html(markup);
 });
@@ -599,34 +605,6 @@ QUnit.module("ui feedback", {
         this.clock.tick(FEEDBACK_HIDE_TIMEOUT);
     });
 
-    QUnit.test("feedback should be disabled in design mode", (assert) => {
-        config({ designMode: true });
-
-        try {
-            const el = this.element.dxWidget({
-                activeStateEnabled: true
-            });
-
-            const instance = el.dxWidget("instance");
-
-            this.mouse.active();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            this.mouse.inactive();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            instance.option("activeStateEnabled", false);
-
-            this.mouse.active();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            this.mouse.inactive();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-        } finally {
-            config({ designMode: false });
-        }
-    });
-
     QUnit.test("set disabled of one widget doesn't turn off the feedback of another active element", (assert) => {
         const activeEl = this.element.dxWidget({ activeStateEnabled: true });
 
@@ -1077,6 +1055,22 @@ QUnit.module("templates support", {}, () => {
             assert.equal(template.render().data("key"), "value", "data was not removed");
         });
     });
+
+    QUnit.test("custom config parser", (assert) => {
+        const originalParser = config().optionsParser;
+        config({ optionsParser: JSON.parse });
+
+        let testContainer;
+        try {
+            testContainer = new TestContainer("#container-custom-config", {});
+        } finally {
+            config({ optionsParser: originalParser });
+        }
+        const templateCollection = testContainer.option("integrationOptions.templates");
+
+        assert.ok(templateCollection["item"] instanceof Template);
+        assert.ok(templateCollection["group"] instanceof Template);
+    });
 });
 
 QUnit.module("templates caching", {
@@ -1390,6 +1384,15 @@ QUnit.module("isReady", {}, () => {
         assert.equal($widget.dxWidget("isReady"), true, "widget is ready after render");
 
     });
+
+    QUnit.test("widget doesn't throw if disposed before rendering (T717968)", (assert) => {
+
+        deferUpdate(() => {
+            new DxWidget("#widget").dispose();
+        });
+
+        assert.ok(true);
+    });
 });
 
 QUnit.module("dataHelperMixin", {}, () => {
@@ -1513,8 +1516,7 @@ QUnit.module("inner options cache", {}, () => {
         _optionChanged(args) {
             switch(args.name) {
                 case "innerComponentOptions":
-                    this.innerComponent.option(args.value);
-                    this._cacheInnerOptions("innerComponentOptions", args.value);
+                    this._innerOptionChanged(this.innerComponent, args);
                     break;
                 default:
                     this.callBase(args);
@@ -1559,5 +1561,20 @@ QUnit.module("inner options cache", {}, () => {
 
         assert.strictEqual(widget.innerComponent.option("someOption"), "Test", "option has been passed");
         assert.strictEqual(widget.innerComponent.option("defaultOption"), "New", "default option has been redefined");
+    });
+
+    QUnit.test("the exception should not be shown when the inner component is not exist yet", (assert) => {
+        const widget = new TestWidget("#widget", {
+            innerComponentOptions: {
+                someOption: "Test",
+                defaultOption: "New"
+            }
+        });
+
+        delete widget.innerComponent;
+        widget.option("innerComponentOptions.someOption", "Test2");
+        widget.repaint();
+
+        assert.strictEqual(widget.innerComponent.option("someOption"), "Test2", "option is correct");
     });
 });
