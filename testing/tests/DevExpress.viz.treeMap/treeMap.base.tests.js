@@ -993,7 +993,7 @@ QUnit.test("Passing 'wordWrap' and 'overflow' options to texts for tiles", funct
         tile: {
             label: {
                 wordWrap: "wordWrap_1",
-                overflow: "overflow_1"
+                textOverflow: "overflow_1"
             }
         },
         size: {
@@ -1003,7 +1003,7 @@ QUnit.test("Passing 'wordWrap' and 'overflow' options to texts for tiles", funct
     });
 
     assert.ok(this.renderer.text.lastCall.returnValue.setMaxWidth.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxWidth.lastCall.args, [20, { wordWrap: "wordWrap_1", overflow: "overflow_1" }]);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxWidth.lastCall.args, [20, { wordWrap: "wordWrap_1", textOverflow: "overflow_1" }]);
 });
 
 QUnit.test("Passing 'overflow' option to texts for group", function(assert) {
@@ -1014,14 +1014,14 @@ QUnit.test("Passing 'overflow' option to texts for group", function(assert) {
         },
         group: {
             label: {
-                overflow: "overflow_1"
+                textOverflow: "overflow_1"
             }
         },
         dataSource: [{ name: "groupName", items: [{ name: "Label", value: 10 }] }]
     });
 
     assert.ok(this.renderer.text.getCall(1).returnValue.setMaxWidth.calledOnce);
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.setMaxWidth.lastCall.args, [12, { overflow: "overflow_1", wordWrap: "none" }]);
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.setMaxWidth.lastCall.args, [12, { textOverflow: "overflow_1", wordWrap: "none" }]);
 });
 
 QUnit.test("Do not hide label if it width is equal to allowed width", function(assert) {

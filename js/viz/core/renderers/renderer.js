@@ -990,7 +990,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     }
 
     if(text.value.length) {
-        if(options.overflow === "ellipsis" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+        if(options.textOverflow === "ellipsis" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
             for(let i = text.value.length - 1; i >= 1; i--) {
                 if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
                     setNewText(text, i, ELLIPSIS);
@@ -1001,7 +1001,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
             }
         }
 
-        if(options.overflow === "hide" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+        if(options.textOverflow === "hide" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
             return [];
         }
     } else {
@@ -1037,7 +1037,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
             lines.push({ commonLength: text.value.length, parts: [text] });
         } else {
             text.startBox = startBox;
-            if(startBox > ellipsisMaxWidth && options.wordWrap === "none" && options.overflow === "ellipsis") {
+            if(startBox > ellipsisMaxWidth && options.wordWrap === "none" && options.textOverflow === "ellipsis") {
                 text.tspan.parentNode.removeChild(text.tspan);
                 return [lines, startBox, endBox, stop, lineNumber];
             }

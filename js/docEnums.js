@@ -76,7 +76,7 @@
  */
 
 /**
-  * @typedef {string} Enums.VizOverflow
+  * @typedef {string} Enums.VizTextOverflow
   * @enum {'ellipsis'|'hide'|'none'}
   */
 

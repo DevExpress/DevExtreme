@@ -55,7 +55,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         _extend(this._deprecatedOptions, {
             "resolveLabelOverflow": {
                 since: "19.1",
-                message: "Use the 'tile.label.overflow' and 'group.label.overflow' option instead"
+                message: "Use the 'tile.label.overflow' and 'group.label.textOverflow' option instead"
             }
         });
     },
@@ -325,8 +325,8 @@ var dxTreeMap = require("../core/base_widget").inherit({
             paddingLeftRight: paddingLeftRight,
             resolveLabelOverflow: this._getOption("resolveLabelOverflow", true),
             tileLabelWordWrap: tileLabelOptions.wordWrap,
-            tileLabelOverflow: tileLabelOptions.overflow,
-            groupLabelOverflow: groupLabelOptions.overflow
+            tileLabelOverflow: tileLabelOptions.textOverflow,
+            groupLabelOverflow: groupLabelOptions.textOverflow
         };
         this._resumeDeprecatedWarnings();
     },
@@ -612,8 +612,8 @@ function layoutTextNode(node, params) {
         }
     } else {
         fitByWidth = true;
-        text.setMaxWidth(effectiveWidth, node.isNode() ? { overflow: groupLabelOverflow, wordWrap: "none" } :
-            { overflow: tileLabelOverflow, wordWrap: tileLabelWordWrap });
+        text.setMaxWidth(effectiveWidth, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: "none" } :
+            { textOverflow: tileLabelOverflow, wordWrap: tileLabelWordWrap });
     }
 
     text.attr({

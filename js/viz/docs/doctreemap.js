@@ -72,7 +72,7 @@ var dxTreeMap = {
      * @name dxTreeMapOptions.resolveLabelOverflow
      * @type Enums.TreeMapResolveLabelOverflow
      * @default 'hide'
-     * @deprecated dxTreeMapOptions.tile.label.overflow
+     * @deprecated dxTreeMapOptions.tile.label.textOverflow
      */
     resolveLabelOverflow: 'hide',
     /**
@@ -195,8 +195,8 @@ var dxTreeMap = {
             */
             wordWrap: "normal",
             /**
-            * @name dxTreeMapOptions.tile.label.overflow
-            * @type Enums.VizOverflow
+            * @name dxTreeMapOptions.tile.label.textOverflow
+            * @type Enums.VizTextOverflow
             * @default "ellipsis"
             */
             overflow: "ellipsis"
@@ -322,8 +322,8 @@ var dxTreeMap = {
                 weight: undefined
             },
             /**
-            * @name dxTreeMapOptions.group.label.overflow
-            * @type Enums.VizOverflow
+            * @name dxTreeMapOptions.group.label.textOverflow
+            * @type Enums.VizTextOverflow
             * @default "ellipsis"
             */
             overflow: "ellipsis"
