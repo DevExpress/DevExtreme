@@ -1,7 +1,8 @@
 var $ = require("jquery"),
     SchedulerHeader = require("ui/scheduler/ui.scheduler.header"),
     Tabs = require("ui/tabs"),
-    DropDownMenu = require("ui/drop_down_menu");
+    DropDownMenu = require("ui/drop_down_menu"),
+    devices = require("core/devices");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -66,22 +67,32 @@ QUnit.test("Header should contain a navigator", function(assert) {
     assert.equal($element.find(".dx-scheduler-navigator").length, 1);
 });
 
-QUnit.test("Scheduler, tabs switcher, render navbuttons", (assert) => {
-    var instance = $("#scheduler").dxScheduler({
+QUnit.test("Scheduler, tabs switcher, render navbuttons", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "This behavior is designed for desktop only");
+        return;
+    }
+
+    var $element = $("#scheduler").dxScheduler({
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
         width: 740
-    }).dxScheduler("instance");
+    });
 
-    assert.equal(instance.$element().find("." + TABS_NAV_BUTTON_CLASS).length, 2);
+    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2);
 });
 
-QUnit.test("Scheduler, tabs switcher, does not render navbuttons", (assert) => {
-    var instance = $("#scheduler").dxScheduler({
+QUnit.test("Scheduler, tabs switcher, does not render navbuttons", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "This behavior is designed for desktop only");
+        return;
+    }
+
+    var $element = $("#scheduler").dxScheduler({
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
         width: 770
-    }).dxScheduler("instance");
+    });
 
-    assert.equal(instance.$element().find("." + TABS_NAV_BUTTON_CLASS).length, 0);
+    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0);
 });
 
 QUnit.module("Header Options", {
