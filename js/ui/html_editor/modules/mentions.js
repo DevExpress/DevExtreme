@@ -2,9 +2,9 @@ import $ from "../../../core/renderer";
 import { compileGetter } from "../../../core/utils/data";
 import { isString } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
+import { getPublicElement } from "../../../core/utils/dom";
 
 import PopupModule from "./popup";
-import { getPublicElement } from "../../../core/utils/dom";
 
 const USER_ACTION = "user";
 const DEFAULT_MARKER = "@";
@@ -54,7 +54,6 @@ class MentionModule extends PopupModule {
 
     constructor(quill, options) {
         super(quill, options);
-
         this._mentions = {};
 
         options.mentions.forEach((item) => {
@@ -66,7 +65,6 @@ class MentionModule extends PopupModule {
         });
 
         this._attachKeyboardHandlers();
-
         this.quill.on("text-change", this.onTextChange.bind(this));
     }
 
@@ -82,7 +80,9 @@ class MentionModule extends PopupModule {
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ENTER
         }, this._selectItemHandler.bind(this));
-        this.quill.keyboard.bindings[13].unshift(this.quill.keyboard.bindings[13].pop());
+
+        const enterBindings = this.quill.keyboard.bindings[KEY_CODES.ENTER];
+        enterBindings.unshift(enterBindings.pop());
 
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ESCAPE
@@ -113,8 +113,8 @@ class MentionModule extends PopupModule {
         if(this._isMentionActive) {
             const $focusedItem = $(this._list.option("focusedElement"));
             let $prevItem = $focusedItem.prev();
-            $prevItem = $prevItem.length ? $prevItem : this._activeListItems.last();
 
+            $prevItem = $prevItem.length ? $prevItem : this._activeListItems.last();
             this._list.option("focusedElement", getPublicElement($prevItem));
             this._list.scrollToItem($prevItem);
         }
@@ -125,8 +125,8 @@ class MentionModule extends PopupModule {
         if(this._isMentionActive) {
             const $focusedItem = $(this._list.option("focusedElement"));
             let $nextItem = $focusedItem.next();
-            $nextItem = $nextItem.length ? $nextItem : this._activeListItems.first();
 
+            $nextItem = $nextItem.length ? $nextItem : this._activeListItems.first();
             this._list.option("focusedElement", getPublicElement($nextItem));
             this._list.scrollToItem($nextItem);
         }
@@ -138,8 +138,14 @@ class MentionModule extends PopupModule {
     }
 
     _fitIntoRange(value, start, end) {
-        if(value > end) return start;
-        if(value < start) return end;
+        if(value > end) {
+            return start;
+        }
+
+        if(value < start) {
+            return end;
+        }
+
         return value;
     }
 
@@ -163,9 +169,9 @@ class MentionModule extends PopupModule {
         super.renderList($container, options);
     }
 
-    compileGetters(options) {
-        this._valueGetter = compileGetter(options.displayExpr);
-        this._idGetter = compileGetter(options.valueExpr);
+    compileGetters({ displayExpr, valueExpr }) {
+        this._valueGetter = compileGetter(displayExpr);
+        this._idGetter = compileGetter(valueExpr);
     }
 
     _getListConfig(options) {
@@ -174,7 +180,10 @@ class MentionModule extends PopupModule {
         return extend(baseConfig, {
             itemTemplate: this.options.itemTemplate,
             onContentReady: () => {
-                this._focusFirstElement();
+                if(this._hasSearch) {
+                    this._focusFirstElement();
+                    this._hasSearch = false;
+                }
             }
         });
     }
@@ -243,14 +252,14 @@ class MentionModule extends PopupModule {
     }
 
     _isMarkerPartOfText(retain) {
-        if(!retain || ALLOWED_PREFIX_CHARS.indexOf(this._getChar(retain - 1)) !== -1) {
+        if(!retain || ALLOWED_PREFIX_CHARS.indexOf(this._getCharByIndex(retain - 1)) !== -1) {
             return false;
         }
 
         return true;
     }
 
-    _getChar(index) {
+    _getCharByIndex(index) {
         return this.quill.getContents(index, 1).ops[0].insert;
     }
 
@@ -289,11 +298,11 @@ class MentionModule extends PopupModule {
 
     _resetFilter() {
         clearTimeout(this._searchTimer);
-
-        this._list.option("searchValue", null);
+        this._search(null);
     }
 
     _search(searchValue) {
+        this._hasSearch = true;
         this._list.option("searchValue", searchValue);
     }
 
@@ -330,6 +339,8 @@ class MentionModule extends PopupModule {
         return extend(super._getPopupConfig(), {
             onShown: () => {
                 this._isMentionActive = true;
+                this._hasSearch = false;
+                this._focusFirstElement();
             },
             onHidden: () => {
                 this._list.unselectAll();

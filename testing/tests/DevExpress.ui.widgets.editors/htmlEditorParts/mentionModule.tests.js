@@ -343,6 +343,37 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(isSecondListItemFocused);
     });
 
+    test("list should load next page on reach end of current page", (assert) => {
+        const items = [];
+        for(let i = 0; i < 60; i++) {
+            items.push(i);
+        }
+
+        this.options.mentions = [{
+            dataSource: {
+                store: items,
+                pageSize: 50,
+                paginate: true
+            },
+        }];
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+
+        this.clock.tick();
+
+        let $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+        assert.strictEqual($items.length, 50);
+
+        this.$element.trigger($.Event("keydown", { key: "ArrowUp", which: KEY_CODES.ARROW_UP }));
+        $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+        const isLastItemOnPageFocused = $items.eq(49).hasClass(FOCUSED_STATE_CLASS);
+
+        assert.ok(isLastItemOnPageFocused);
+        assert.strictEqual($items.length, 60, "next page has loaded");
+    });
+
     test("trigger 'arrow up' should focus previous list item", (assert) => {
         const mention = new Mentions(this.quillMock, this.options);
 
