@@ -178,7 +178,7 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(this.worksheet.getCell("B1").value, "f1");
     });
 
-    QUnit.test("Header - excelFilterEnabled: true'", (assert) => {
+    QUnit.test("Header - excelFilterEnabled: true", (assert) => {
         var dataGrid = $("#dataGrid").dxDataGrid({
             columns: [{ caption: "f1" }, { caption: "f2" }]
         }).dxDataGrid("instance");
@@ -194,7 +194,7 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(JSON.stringify(this.worksheet.views), JSON.stringify([ { state: 'frozen', ySplit: 1 } ]));
     });
 
-    QUnit.test("Header - excelFilterEnabled: true', { f1, visible: false }", (assert) => {
+    QUnit.test("Header - excelFilterEnabled: true, { f1, visible: false }", (assert) => {
         var dataGrid = $("#dataGrid").dxDataGrid({
             columns: [{ caption: "f1", visible: false }, { caption: "f2" }]
         }).dxDataGrid("instance");
@@ -208,6 +208,22 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(JSON.stringify(this.worksheet.autoFilter.from), JSON.stringify({ row: 1, column: 1 }));
         assert.equal(JSON.stringify(this.worksheet.autoFilter.to), JSON.stringify({ row: 1, column: 1 }));
         assert.equal(JSON.stringify(this.worksheet.views), JSON.stringify([ { state: 'frozen', ySplit: 1 } ]));
+    });
+
+    QUnit.test("Header - excelFilterEnabled: true, topLeftCell: { row: 2, column: 2 }", (assert) => {
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }, { caption: "f2" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, excelFilterEnabled: true, topLeftCell: { row: 2, column: 2 } });
+
+        assert.equal(this.worksheet.columnCount, 3);
+        assert.equal(this.worksheet.rowCount, 2);
+        assert.equal(this.worksheet.getCell("B2").value, 'f1');
+        assert.equal(this.worksheet.getCell("C2").value, 'f2');
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.from), JSON.stringify({ row: 2, column: 2 }));
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.to), JSON.stringify({ row: 2, column: 3 }));
+        assert.equal(JSON.stringify(this.worksheet.views), JSON.stringify([ { state: 'frozen', ySplit: 2 } ]));
     });
 
     QUnit.test("Data - 2 column & 2 rows", (assert) => {
@@ -333,4 +349,161 @@ QUnit.module("API", moduleConfig, () => {
             done();
         });
     });
+
+    QUnit.test("Arguments - topLeftCell default value: { row: 1, column: 1 }", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid().dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then((result) => {
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 1, column: 1 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 1, column: 1 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 1 column, topLeftCell: { row: 1, column: 1 }", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then((result) => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 1);
+            assert.equal(this.worksheet.getCell("A1").value, 'f1');
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 1, column: 1 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 1, column: 1 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 2 column, topLeftCell: { row: 1, column: 1 }", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }, { caption: "f2" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then((result) => {
+            assert.equal(this.worksheet.actualColumnCount, 2);
+            assert.equal(this.worksheet.actualRowCount, 1);
+            assert.equal(this.worksheet.getCell("A1").value, 'f1');
+            assert.equal(this.worksheet.getCell("B1").value, 'f2');
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 1, column: 1 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 1, column: 2 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 1 column & 2 rows, topLeftCell: { row: 1, column: 1 }", (assert) => {
+        const done = assert.async();
+
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ f1: "1" }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then((result) => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, "1");
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 1, column: 1 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 2, column: 1 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 2 column & 2 rows, topLeftCell: { row: 1, column: 1 }", (assert) => {
+        const done = assert.async();
+
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ f1: "1", f2: "2" }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then((result) => {
+            assert.equal(this.worksheet.actualColumnCount, 2);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, "1");
+            assert.deepEqual(this.worksheet.getCell("B2").value, "2");
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 1, column: 1 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 2, column: 2 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 1 column, topLeftCell: { row: 2, column: 2 }", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, topLeftCell: { row: 2, column: 2 } }).then((result) => {
+            assert.equal(this.worksheet.columnCount, 2);
+            assert.equal(this.worksheet.rowCount, 2);
+            assert.equal(this.worksheet.getCell("B2").value, 'f1');
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 2, column: 2 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 2, column: 2 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 2 column, topLeftCell: { row: 2, column: 2 }", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{ caption: "f1" }, { caption: "f2" }]
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, topLeftCell: { row: 2, column: 2 } }).then((result) => {
+            assert.equal(this.worksheet.columnCount, 3);
+            assert.equal(this.worksheet.rowCount, 2);
+            assert.equal(this.worksheet.getCell("B2").value, 'f1');
+            assert.equal(this.worksheet.getCell("C2").value, 'f2');
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 2, column: 2 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 2, column: 3 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 1 column & 2 rows, topLeftCell: { row: 2, column: 2 }", (assert) => {
+        const done = assert.async();
+
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ f1: "1" }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, topLeftCell: { row: 2, column: 2 } }).then((result) => {
+            assert.equal(this.worksheet.columnCount, 2);
+            assert.equal(this.worksheet.rowCount, 3);
+            assert.deepEqual(this.worksheet.getCell("B3").value, "1");
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 2, column: 2 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 3, column: 2 }));
+            done();
+        });
+    });
+
+    QUnit.test("Export result - 2 column & 2 rows, topLeftCell: { row: 2, column: 2 }", (assert) => {
+        const done = assert.async();
+
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ f1: "1", f2: "2" }],
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, topLeftCell: { row: 2, column: 2 } }).then((result) => {
+            assert.equal(this.worksheet.columnCount, 3);
+            assert.equal(this.worksheet.rowCount, 3);
+            assert.deepEqual(this.worksheet.getCell("B3").value, "1");
+            assert.deepEqual(this.worksheet.getCell("C3").value, "2");
+            assert.equal(JSON.stringify(result.from), JSON.stringify({ row: 2, column: 2 }));
+            assert.equal(JSON.stringify(result.to), JSON.stringify({ row: 3, column: 3 }));
+            done();
+        });
+    });
+
 });
