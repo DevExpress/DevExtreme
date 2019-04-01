@@ -5046,6 +5046,18 @@ QUnit.module("regression", {
         clock.restore();
     });
 
+    QUnit.test("should render function item template that returns default template's name (T726777)", (assert) => {
+        const tagBox = $("#tagBox").dxTagBox({
+            items: [{ text: "item1" }, { text: "item2" }],
+            itemTemplate: () => "item",
+            opened: true
+        }).dxTagBox("instance");
+        const listItems = tagBox._$list.find(".dx-list-item");
+
+        assert.strictEqual(listItems.eq(0).text(), "item1");
+        assert.strictEqual(listItems.eq(1).text(), "item2");
+    });
+
     QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", (assert) => {
         const data = [1, 2, 3, 4, 5];
         const timeToWait = 500;
