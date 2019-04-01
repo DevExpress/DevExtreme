@@ -683,6 +683,10 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _formatUntilDate(date) {
+        if(this._recurrenceRule.rules().until && dateUtils.sameDate(this._recurrenceRule.rules().until, date)) {
+            return date;
+        }
+
         const result = dateUtils.trimTime(date);
 
         result.setDate(result.getDate() + 1);

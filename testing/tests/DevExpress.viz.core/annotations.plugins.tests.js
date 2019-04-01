@@ -56,19 +56,19 @@ QUnit.module("Coordinates calculation", function() {
     QUnit.test("Check coords. argument, value - translate", function(assert) {
         const coords = this.chart()._getAnnotationCoords({ argument: 50, value: 110 });
 
-        assert.deepEqual(coords, { x: 50, y: 90 });
+        assert.deepEqual(coords, { x: 50, y: 89 });
     });
 
     QUnit.test("Check coords. argument, value of named axis - translate using correct axes", function(assert) {
         const coords = this.chart()._getAnnotationCoords({ argument: 50, value: 210, axis: "a2" });
 
-        assert.deepEqual(coords, { x: 50, y: 90 });
+        assert.deepEqual(coords, { x: 50, y: 89 });
     });
 
     QUnit.test("Check coords. x, argument, value - translate value and use x directly", function(assert) {
         const coords = this.chart()._getAnnotationCoords({ x: 10, argument: 50, value: 110 });
 
-        assert.deepEqual(coords, { x: 10, y: 90 });
+        assert.deepEqual(coords, { x: 10, y: 89 });
     });
 
     QUnit.test("Check coords. y, argument, value - translate arument and use y directly", function(assert) {
@@ -99,7 +99,7 @@ QUnit.module("Coordinates calculation", function() {
         testCase({ argument: 40 }, { x: 40, y: 100 }, "Can't find by argument");
         testCase({ x: 30, value: 20 }, { x: 30, y: 180 }, "Can't find by x and value");
         testCase({ argument: 50, value: 150 }, { x: 50, y: 50 }, "Can't find by argument and value");
-        testCase({ argument: 10, axis: "a2" }, { x: 10, y: 210 }, "Can't find by argument and axis");
+        testCase({ argument: 10, axis: "a2" }, { x: 10, y: 209 }, "Can't find by argument and axis");
         testCase({ x: 0, value: 250, axis: "a2" }, { x: 0, y: 160 }, "Can't find by x, value and axis");
     });
 
@@ -124,7 +124,7 @@ QUnit.module("Coordinates calculation", function() {
         testCase({ y: 50 }, { x: 0, y: 50 }, "Can't find by y");
         testCase({ value: 150 }, { x: 0, y: 50 }, "Can't find by value");
         testCase({ argument: 50, y: 50 }, { x: 50, y: 50 }, "Can't find by x and argument");
-        testCase({ value: 250, axis: "a2" }, { x: 100, y: 160 }, "Can't find by value and axis");
+        testCase({ value: 250, axis: "a2" }, { x: 99, y: 160 }, "Can't find by value and axis");
         testCase({ argument: 50, value: 270, axis: "a2" }, { x: 50, y: 140 }, "Can't find by value, argument and axis");
     });
 
@@ -172,8 +172,8 @@ QUnit.module("Coordinates calculation", function() {
 
         // line, x
         testCase({}, { x: 30, series: "s1" }, 50, "line", false, "Line. Can't find by x");
-        testCase({}, { x: 70, series: "s1" }, 50, "line", true, "Line. Can't find by x (inverted)");
-        testCase({ rotated: true }, { x: 50, series: "s1" }, 70, "line", false, "Line. Can't find by x (rotated)");
+        testCase({}, { x: 70, series: "s1" }, 49, "line", true, "Line. Can't find by x (inverted)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 69, "line", false, "Line. Can't find by x (rotated)");
         testCase({ rotated: true }, { x: 50, series: "s1" }, 70, "line", true, "Line. Can't find by x (inverted, rotated)");
 
         // line, argument
@@ -182,7 +182,7 @@ QUnit.module("Coordinates calculation", function() {
 
         // area, x
         testCase({}, { x: 30, series: "s1" }, 40, "area", false, "Area. Can't find by x");
-        testCase({}, { x: 70, series: "s1" }, 60, "area", true, "Area. Can't find by x (inverted)");
+        testCase({}, { x: 70, series: "s1" }, 59, "area", true, "Area. Can't find by x (inverted)");
         testCase({ rotated: true }, { x: 50, series: "s1" }, 75, "area", false, "Area. Can't find by x (rotated)");
         testCase({ rotated: true }, { x: 50, series: "s1" }, 75, "area", true, "Area. Can't find by x (inverted, rotated)");
 
@@ -192,13 +192,13 @@ QUnit.module("Coordinates calculation", function() {
 
         // stepline, x
         testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 25, "stepline", false, "Stepline. Can't find by x");
-        testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 75, "stepline", true, "Stepline. Can't find by x (inverted)");
-        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 90, "stepline", false, "Stepline. Can't find by x (rotated)");
-        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 90, "stepline", true, "Stepline. Can't find by x (inverted, rotated)");
+        testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 74, "stepline", true, "Stepline. Can't find by x (inverted)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 89, "stepline", false, "Stepline. Can't find by x (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 89, "stepline", true, "Stepline. Can't find by x (inverted, rotated)");
 
         // stepline, argument
-        testCase({ dataSource: otherSource }, { argument: 25, series: "s1" }, 50, "stepline", false, "Stepline. Can't find by argument");
-        testCase({ dataSource: otherSource }, { argument: 75, series: "s1" }, 75, "stepline", true, "Stepline. Can't find by argument (inverted)");
+        testCase({ dataSource: otherSource }, { argument: 25, series: "s1" }, 49, "stepline", false, "Stepline. Can't find by argument");
+        testCase({ dataSource: otherSource }, { argument: 75, series: "s1" }, 74, "stepline", true, "Stepline. Can't find by argument (inverted)");
 
         // steparea, x
         testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 0, "steparea", false, "Steparea. Can't find by x");
@@ -222,12 +222,12 @@ QUnit.module("Coordinates calculation", function() {
 
         // steparea, argument
         testCase({ dataSource: otherSource }, { argument: 25, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by argument");
-        testCase({ dataSource: otherSource }, { argument: 75, series: "s1" }, 100, "steparea", true, "Steparea. Can't find by argument (inverted)");
+        testCase({ dataSource: otherSource }, { argument: 75, series: "s1" }, 99, "steparea", true, "Steparea. Can't find by argument (inverted)");
 
         // spline, x
         testCase({}, { x: 75, series: "s1" }, 46, "spline", false, "Spline. Can't find by x");
         testCase({}, { x: 25, series: "s1" }, 54, "spline", true, "Spline. Can't find by x (inverted)");
-        testCase({ rotated: true }, { x: 50, series: "s1" }, 77.5, "spline", false, "Spline. Can't find by x (rotated)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 76.5, "spline", false, "Spline. Can't find by x (rotated)");
         testCase({ rotated: true }, { x: 50, series: "s1" }, 77.5, "spline", true, "Spline. Can't find by x (inverted, rotated)");
 
         // spline, argument
@@ -248,11 +248,11 @@ QUnit.module("Coordinates calculation", function() {
         testCase({ dataSource: otherSource }, { x: 75, series: "s1" }, 50, "bar", false, "Bar. Can't find by x");
         testCase({ dataSource: otherSource }, { x: 25, series: "s1" }, 50, "bar", true, "Bar. Can't find by x (inverted)");
         testCase({ dataSource: otherSource, rotated: true }, { x: 75, series: "s1" }, 50, "bar", false, "Bar. Can't find by x (rotated)");
-        testCase({ dataSource: otherSource, rotated: true }, { x: 75, series: "s1" }, 82.5, "bar", true, "Bar. Can't find by x (inverted, rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 75, series: "s1" }, 81.5, "bar", true, "Bar. Can't find by x (inverted, rotated)");
 
         // bar, argument
         testCase({ dataSource: otherSource }, { argument: 10, series: "s1" }, 50, "bar", false, "Bar. Can't find by argument");
-        testCase({ dataSource: otherSource }, { argument: 50, series: "s1" }, 100, "bar", true, "Bar. Can't find by argument (inverted)");
+        testCase({ dataSource: otherSource }, { argument: 50, series: "s1" }, 99, "bar", true, "Bar. Can't find by argument (inverted)");
 
         // side-by-side bar, x
         testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { x: 75, series: "s1" }, 20, null, false, "Side-by-side Bar. Can't find by x");
@@ -261,37 +261,37 @@ QUnit.module("Coordinates calculation", function() {
         testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { x: 55, series: "s1" }, 25, null, true, "Side-by-side Bar. Can't find by x (inverted, rotated)");
 
         // side-by-side bar, argument
-        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { argument: 0, series: "s2" }, 70, null, false, "Side-by-side Bar. Can't find by argument");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { argument: 0, series: "s2" }, 69, null, false, "Side-by-side Bar. Can't find by argument");
         testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { argument: 60, series: "s3" }, 50, null, true, "Side-by-side Bar. Can't find by argument (inverted)");
 
         // scatter
-        testCase({ dataSource: otherSource }, { x: 90, series: "s1" }, 50, "scatter", false, "Scatter. Can't find by x");
-        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 90, "scatter", false, "Scatter. Can't find by x (rotated)");
+        testCase({ dataSource: otherSource }, { x: 90, series: "s1" }, 49, "scatter", false, "Scatter. Can't find by x");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 89, "scatter", false, "Scatter. Can't find by x (rotated)");
         testCase({ dataSource: otherSource }, { argument: 50, series: "s1" }, 25, "scatter", false, "Scatter. Can't find by argument");
 
         // bubble
-        testCase({ dataSource: bubbleSource }, { x: 92, series: "s1" }, 50, "bubble", false, "Bubble. Can't find by x");
-        testCase({ dataSource: bubbleSource, rotated: true }, { x: 50, series: "s1" }, 90, "bubble", false, "Bubble. Can't find by x (rotated)");
+        testCase({ dataSource: bubbleSource }, { x: 92, series: "s1" }, 49, "bubble", false, "Bubble. Can't find by x");
+        testCase({ dataSource: bubbleSource, rotated: true }, { x: 50, series: "s1" }, 89, "bubble", false, "Bubble. Can't find by x (rotated)");
         testCase({ dataSource: bubbleSource }, { argument: 48, series: "s1" }, 25, "bubble", false, "Bubble. Can't find by argument");
 
         // financial, x
-        testCase({ dataSource: financialSource }, { x: 50, series: "s1" }, 40, "candlestick", false, "Candlestick. Can't find by x");
-        testCase({ dataSource: financialSource }, { x: 20, series: "s1" }, 50, "candlestick", true, "Candlestick. Can't find by x (inverted)");
-        testCase({ dataSource: financialSource, rotated: true }, { x: 50, series: "s1" }, 85, "candlestick", false, "Candlestick. Can't find by x (rotated)");
+        testCase({ dataSource: financialSource }, { x: 50, series: "s1" }, 39, "candlestick", false, "Candlestick. Can't find by x");
+        testCase({ dataSource: financialSource }, { x: 20, series: "s1" }, 49, "candlestick", true, "Candlestick. Can't find by x (inverted)");
+        testCase({ dataSource: financialSource, rotated: true }, { x: 50, series: "s1" }, 84, "candlestick", false, "Candlestick. Can't find by x (rotated)");
         testCase({ dataSource: financialSource, rotated: true }, { x: 65, series: "s1" }, 15, "candlestick", true, "Candlestick. Can't find by x (inverted, rotated)");
 
         // financial, argument
-        testCase({ dataSource: financialSource }, { argument: 10, series: "s1" }, 50, "stock", false, "Stock. Can't find by argument");
-        testCase({ dataSource: financialSource }, { argument: 90, series: "s1" }, 40, "stock", true, "Stok. Can't find by argument (inverted)");
+        testCase({ dataSource: financialSource }, { argument: 10, series: "s1" }, 49, "stock", false, "Stock. Can't find by argument");
+        testCase({ dataSource: financialSource }, { argument: 90, series: "s1" }, 39, "stock", true, "Stok. Can't find by argument (inverted)");
 
         // range, x
         testCase({ dataSource: someSeriesSource }, { x: 50, series: "s1" }, 30, "rangeArea", false, "RangeArea. Can't find by x");
         testCase({ dataSource: someSeriesSource }, { x: 20, series: "s1" }, 46, "rangeArea", true, "RangeArea. Can't find by x (inverted)");
-        testCase({ dataSource: someSeriesSource, rotated: true }, { x: 50, series: "s1" }, 75, "rangeArea", false, "RangeArea. Can't find by x (rotated)");
+        testCase({ dataSource: someSeriesSource, rotated: true }, { x: 50, series: "s1" }, 74, "rangeArea", false, "RangeArea. Can't find by x (rotated)");
         testCase({ dataSource: someSeriesSource, rotated: true }, { x: 40, series: "s1" }, 62.5, "rangeArea", true, "RangeArea. Can't find by x (inverted, rotated)");
 
         // range, argument
-        testCase({ dataSource: someSeriesSource }, { argument: 10, series: "s1" }, 70, "rangeBar", false, "RangeBar. Can't find by argument");
+        testCase({ dataSource: someSeriesSource }, { argument: 10, series: "s1" }, 69, "rangeBar", false, "RangeBar. Can't find by argument");
         testCase({ dataSource: someSeriesSource }, { argument: 10, series: "s1" }, 30, "rangeBar", true, "RangeBar. Can't find by argument (inverted)");
 
     });
@@ -341,7 +341,7 @@ QUnit.module("Coordinates calculation", function() {
         // line, y
         testCase({}, { y: 30, series: "s1" }, 46, "line", false, "Line. Can't find by y");
         testCase({}, { y: 70, series: "s1" }, 46, "line", true, "Line. Can't find by y (inverted)");
-        testCase({ rotated: true }, { y: 50, series: "s1" }, 67, "line", false, "Line. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 66, "line", false, "Line. Can't find by y (rotated)");
         testCase({ rotated: true }, { y: 50, series: "s1" }, 33, "line", true, "Line. Can't find by y (inverted, rotated)");
 
         // line, value
@@ -351,7 +351,7 @@ QUnit.module("Coordinates calculation", function() {
         // area, y
         testCase({}, { y: 30, series: "s1" }, 35, "area", false, "Area. Can't find by y");
         testCase({}, { y: 70, series: "s1" }, 35, "area", true, "Area. Can't find by y (inverted)");
-        testCase({ rotated: true }, { y: 50, series: "s1" }, 100, "area", false, "Area. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 99, "area", false, "Area. Can't find by y (rotated)");
         testCase({ rotated: true }, { y: 50, series: "s1" }, 0, "area", true, "Area. Can't find by y (inverted, rotated)");
 
         // area, value
@@ -361,7 +361,7 @@ QUnit.module("Coordinates calculation", function() {
         // stepline, y
         testCase({ dataSource: otherSource }, { y: 30, series: "s1" }, 50, "stepline", false, "Stepline. Can't find by y");
         testCase({ dataSource: otherSource }, { y: 70, series: "s1" }, 50, "stepline", true, "Stepline. Can't find by y (inverted)");
-        testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 67, "stepline", false, "Stepline. Can't find by y (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 66, "stepline", false, "Stepline. Can't find by y (rotated)");
         testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 33, "stepline", true, "Stepline. Can't find by y (inverted, rotated)");
 
         // stepline, value
@@ -395,7 +395,7 @@ QUnit.module("Coordinates calculation", function() {
         // spline, y
         testCase({}, { y: 25, series: "s1" }, 50, "spline", false, "Spline. Can't find by y");
         testCase({}, { y: 50, series: "s1" }, 22.5, "spline", true, "Spline. Can't find by y (inverted)");
-        testCase({ rotated: true }, { y: 50, series: "s1" }, 67, "spline", false, "Spline. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 66, "spline", false, "Spline. Can't find by y (rotated)");
         testCase({ rotated: true }, { y: 50, series: "s1" }, 33, "spline", true, "Spline. Can't find by y (inverted, rotated)");
 
         // spline, value
@@ -405,7 +405,7 @@ QUnit.module("Coordinates calculation", function() {
         // splineArea, y
         testCase({}, { y: 30, series: "s1" }, 24, "splineArea", false, "SplineArea. Can't find by y");
         testCase({}, { y: 70, series: "s1" }, 24, "splineArea", true, "SplineArea. Can't find by y (inverted)");
-        testCase({ rotated: true }, { y: 71, series: "s1" }, 80, "splineArea", false, "SplineArea. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 71, series: "s1" }, 79, "splineArea", false, "SplineArea. Can't find by y (rotated)");
         testCase({ rotated: true }, { y: 29, series: "s1" }, 20, "splineArea", true, "SplineArea. Can't find by y (inverted, rotated)");
 
         // splineArea, value
@@ -426,20 +426,20 @@ QUnit.module("Coordinates calculation", function() {
         testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { y: 75, series: "s1" }, 42, null, false, "Side-by-side Bar. Can't find by y");
         testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { y: 25, series: "s2" }, 16.5, null, true, "Side-by-side Bar. Can't find by y (inverted)");
         testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { y: 75, series: "s3" }, 20, null, false, "Side-by-side Bar. Can't find by y (rotated)");
-        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { y: 55, series: "s1" }, 60, null, true, "Side-by-side Bar. Can't find by y (inverted, rotated)");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { y: 55, series: "s1" }, 59, null, true, "Side-by-side Bar. Can't find by y (inverted, rotated)");
 
         // side-by-side bar, value
         testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { value: 120, series: "s2" }, 16.5, null, false, "Side-by-side Bar. Can't find by value");
-        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { value: 160, series: "s3" }, 91, null, true, "Side-by-side Bar. Can't find by value (inverted)");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { value: 160, series: "s3" }, 90, null, true, "Side-by-side Bar. Can't find by value (inverted)");
 
         // scatter
         testCase({ dataSource: otherSource }, { y: 50, series: "s1" }, 10, "scatter", false, "Scatter. Can't find by y");
-        testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 67, "scatter", false, "Scatter. Can't find by y (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 66, "scatter", false, "Scatter. Can't find by y (rotated)");
         testCase({ dataSource: otherSource }, { value: 150, series: "s1" }, 10, "scatter", false, "Scatter. Can't find by value");
 
         // bubble
         testCase({ dataSource: bubbleSource }, { y: 52, series: "s1" }, 10, "bubble", false, "Bubble. Can't find by y");
-        testCase({ dataSource: bubbleSource, rotated: true }, { y: 50, series: "s1" }, 67, "bubble", false, "Bubble. Can't find by y (rotated)");
+        testCase({ dataSource: bubbleSource, rotated: true }, { y: 50, series: "s1" }, 66, "bubble", false, "Bubble. Can't find by y (rotated)");
         testCase({ dataSource: bubbleSource }, { value: 148, series: "s1" }, 10, "bubble", false, "Bubble. Can't find by value");
 
         // financial, y
@@ -454,8 +454,8 @@ QUnit.module("Coordinates calculation", function() {
 
         // range, y
         testCase({ dataSource: someSeriesSource }, { y: 50, series: "s1" }, 25, "rangeArea", false, "RangeArea. Can't find by y");
-        testCase({ dataSource: someSeriesSource }, { y: 70, series: "s1" }, 50, "rangeArea", true, "RangeArea. Can't find by y (inverted)");
-        testCase({ dataSource: someSeriesSource, rotated: true }, { y: 50, series: "s1" }, 70, "rangeArea", false, "RangeArea. Can't find by y (rotated)");
+        testCase({ dataSource: someSeriesSource }, { y: 70, series: "s1" }, 51.5, "rangeArea", true, "RangeArea. Can't find by y (inverted)");
+        testCase({ dataSource: someSeriesSource, rotated: true }, { y: 50, series: "s1" }, 69, "rangeArea", false, "RangeArea. Can't find by y (rotated)");
         testCase({ dataSource: someSeriesSource, rotated: true }, { y: 40, series: "s1" }, 24, "rangeArea", true, "RangeArea. Can't find by y (inverted, rotated)");
 
         // range, value
