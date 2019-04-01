@@ -92,7 +92,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
             columns: this.columns,
             dataSource: this.data,
             keyboardNavigation: {
-                dataCellsOnly: true
+                useLegacy: true
             }
         }, this.options);
 

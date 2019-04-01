@@ -404,7 +404,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
-                    if(!this._isDataCellsOnlyNavigation() && column.command !== "selection") {
+                    if(!this._isLegacyNavigation() && column.command !== "selection") {
                         return true;
                     }
                     return !isEditing && column.command === "expand";
@@ -485,8 +485,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return this.option("keyboardNavigation.enterKeyAction") === "startEdit";
     },
 
-    _isDataCellsOnlyNavigation: function() {
-        return this.option("keyboardNavigation.dataCellsOnly");
+    _isLegacyNavigation: function() {
+        return this.option("keyboardNavigation.useLegacy");
     },
 
     _enterKeyHandler: function(eventArgs, isEditing) {
@@ -1619,11 +1619,11 @@ module.exports = {
              */
             keyboardNavigation: {
                 /**
-                 * @name GridBaseOptions.keyboardNavigation.dataCellsOnly
+                 * @name GridBaseOptions.keyboardNavigation.useLegacy
                  * @type boolean
-                 * @default true
+                 * @default false
                  */
-                dataCellsOnly: true,
+                useLegacy: false,
                 /**
                  * @name GridBaseOptions.keyboardNavigation.enterKeyAction
                  * @type Enums.GridEnterKeyAction

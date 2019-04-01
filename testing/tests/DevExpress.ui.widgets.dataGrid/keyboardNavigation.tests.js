@@ -196,7 +196,7 @@ QUnit.module("Keyboard navigation", {
             editing: {
             },
             keyboardNavigation: {
-                dataCellsOnly: true
+                useLegacy: true
             }
         };
 
@@ -818,7 +818,7 @@ QUnit.testInActiveWindow("Down key is not worked when cell has position accordin
     navigationController._focus = function() {
         isFocused = true;
     };
-    navigationController._isDataCellsOnlyNavigation = () => true;
+    navigationController._isLegacyNavigation = () => true;
 
     // act
     navigationController._keyDownHandler({
@@ -853,7 +853,7 @@ QUnit.testInActiveWindow("Up key is not worked when cell has position according 
     navigationController._focus = function() {
         isFocused = true;
     };
-    navigationController._isDataCellsOnlyNavigation = () => true;
+    navigationController._isLegacyNavigation = () => true;
 
     // act
     navigationController._keyDownHandler({
@@ -2126,7 +2126,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
             paginate: true
         },
         keyboardNavigation: {
-            dataCellsOnly: true
+            useLegacy: true
         }
     };
 
@@ -3215,7 +3215,7 @@ QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation f
             allowUpdating: true
         },
         keyboardNavigation: {
-            dataCellsOnly: true
+            useLegacy: true
         }
     };
 
@@ -3919,7 +3919,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.dataCellsOnly = true;
+    this.options.keyboardNavigation.useLegacy = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3948,7 +3948,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.dataCellsOnly = true;
+    this.options.keyboardNavigation.useLegacy = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3976,7 +3976,7 @@ QUnit.testInActiveWindow("Move to previous cell via tab key when edit command co
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.dataCellsOnly = true;
+    this.options.keyboardNavigation.useLegacy = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -4037,7 +4037,7 @@ QUnit.testInActiveWindow("Try move to next cell via tab key when focus on last c
         columnIndex: 1
     };
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.dataCellsOnly = true;
+    this.options.keyboardNavigation.useLegacy = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -4699,7 +4699,7 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
         },
         masterDetail: { enabled: true },
         keyboardNavigation: {
-            dataCellsOnly: true
+            useLegacy: true
         }
     };
     setupModules(this);
@@ -4962,7 +4962,7 @@ QUnit.module("Rows view", {
                 useKeyboard: true,
                 tabIndex: 0,
                 keyboardNavigation: {
-                    dataCellsOnly: true
+                    useLegacy: true
                 }
             };
             this.selectionOptions = {};
@@ -8609,7 +8609,7 @@ QUnit.module("Keyboard navigation accessibility", {
         this.options = $.extend(true, {
             useKeyboard: true,
             keyboardNavigation: {
-                dataCellsOnly: false
+                useLegacy: false
             },
             commonColumnSettings: {
                 allowEditing: true
