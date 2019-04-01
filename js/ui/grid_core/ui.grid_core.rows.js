@@ -252,80 +252,76 @@ module.exports = {
             */
             /**
             * @name dxDataGridOptions.onRowDblClick
-            * @type function(e)|string
+            * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 data:object
-            * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 values:Array<Object>
-            * @type_function_param1_field9 columns:Array<Object>
-            * @type_function_param1_field10 rowIndex:number
-            * @type_function_param1_field11 rowType:string
-            * @type_function_param1_field12 isSelected:boolean
-            * @type_function_param1_field13 isExpanded:boolean
-            * @type_function_param1_field14 groupIndex:number
-            * @type_function_param1_field15 rowElement:dxElement
-            * @type_function_param1_field16 handled:boolean
-            * @extends Action
-            * @action
-            */
-            /**
-            * @name dxTreeListOptions.onRowDblClick
-            * @type function(e)|string
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 data:object
-            * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 values:Array<Object>
-            * @type_function_param1_field9 columns:Array<Object>
-            * @type_function_param1_field10 rowIndex:number
-            * @type_function_param1_field11 rowType:string
-            * @type_function_param1_field12 isSelected:boolean
-            * @type_function_param1_field13 isExpanded:boolean
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 values:Array<Object>
+            * @type_function_param1_field8 columns:Array<dxDataGridColumn>
+            * @type_function_param1_field9 rowIndex:number
+            * @type_function_param1_field10 rowType:string
+            * @type_function_param1_field11 isSelected:boolean
+            * @type_function_param1_field12 isExpanded:boolean
+            * @type_function_param1_field13 groupIndex:number
             * @type_function_param1_field14 rowElement:dxElement
             * @type_function_param1_field15 handled:boolean
             * @extends Action
             * @action
             */
             /**
-            * @name dxDataGridOptions.onCellDblClick
-            * @type function(e)|string
+            * @name dxTreeListOptions.onRowDblClick
+            * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 data:object
-            * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 value:any
-            * @type_function_param1_field9 displayValue:any
-            * @type_function_param1_field10 text:string
-            * @type_function_param1_field11 columnIndex:number
-            * @type_function_param1_field12 column:object
-            * @type_function_param1_field13 rowIndex:number
-            * @type_function_param1_field14 rowType:string
-            * @type_function_param1_field15 cellElement:dxElement
-            * @type_function_param1_field16 row:dxDataGridRowObject
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 values:Array<Object>
+            * @type_function_param1_field8 columns:Array<dxTreeListColumn>
+            * @type_function_param1_field9 rowIndex:number
+            * @type_function_param1_field10 rowType:string
+            * @type_function_param1_field11 isSelected:boolean
+            * @type_function_param1_field12 isExpanded:boolean
+            * @type_function_param1_field13 rowElement:dxElement
+            * @type_function_param1_field14 handled:boolean
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxDataGridOptions.onCellDblClick
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 value:any
+            * @type_function_param1_field8 displayValue:any
+            * @type_function_param1_field9 text:string
+            * @type_function_param1_field10 columnIndex:number
+            * @type_function_param1_field11 column:dxDataGridColumn
+            * @type_function_param1_field12 rowIndex:number
+            * @type_function_param1_field13 rowType:string
+            * @type_function_param1_field14 cellElement:dxElement
+            * @type_function_param1_field15 row:dxDataGridRowObject
             * @extends Action
             * @action
             */
             /**
             * @name dxTreeListOptions.onCellDblClick
-            * @type function(e)|string
+            * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 data:object
-            * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 value:any
-            * @type_function_param1_field9 displayValue:any
-            * @type_function_param1_field10 text:string
-            * @type_function_param1_field11 columnIndex:number
-            * @type_function_param1_field12 column:object
-            * @type_function_param1_field13 rowIndex:number
-            * @type_function_param1_field14 rowType:string
-            * @type_function_param1_field15 cellElement:dxElement
-            * @type_function_param1_field16 row:dxTreeListRowObject
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 value:any
+            * @type_function_param1_field8 displayValue:any
+            * @type_function_param1_field9 text:string
+            * @type_function_param1_field10 columnIndex:number
+            * @type_function_param1_field11 column:dxTreeListColumn
+            * @type_function_param1_field12 rowIndex:number
+            * @type_function_param1_field13 rowType:string
+            * @type_function_param1_field14 cellElement:dxElement
+            * @type_function_param1_field15 row:dxTreeListRowObject
             * @extends Action
             * @action
             */
