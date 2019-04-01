@@ -2282,8 +2282,12 @@ declare module DevExpress.viz {
         rotationAngle?: number;
         /** @name dxChart.Options.commonAxisSettings.label.staggeringSpacing */
         staggeringSpacing?: number;
+        /** @name dxChart.Options.commonAxisSettings.label.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name dxChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
+        /** @name dxChart.Options.commonAxisSettings.label.wordWrap */
+        wordWrap?: 'normal' | 'break-word' | 'none';
     }
     /** @name dxChart.Options.commonAxisSettings.stripStyle */
     export interface dxChartCommonAxisSettingsStripStyle {

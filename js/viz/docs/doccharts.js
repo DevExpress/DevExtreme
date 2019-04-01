@@ -924,7 +924,19 @@ var dxChart = {
                 color: '#767676',
                 size: 12,
                 opacity: undefined
-            }
+            },
+            /**
+            * @name dxChartOptions.commonAxisSettings.label.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+             * @name dxChartOptions.commonAxisSettings.label.textOverflow
+             * @type Enums.VizTextOverflow
+             * @default "none"
+             */
+            textOverflow: "none"
         },
         /**
         * @name dxChartOptions.commonAxisSettings.grid

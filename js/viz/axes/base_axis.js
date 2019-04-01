@@ -1810,8 +1810,9 @@ Axis.prototype = {
         const displayMode = that._validateDisplayMode(options.label.displayMode);
         const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
         const wordWrapMode = options.label.wordWrap || "none";
+        const overflowMode = options.label.textOverflow || "none";
 
-        if(wordWrapMode !== "none" && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
+        if((wordWrapMode !== "none" || overflowMode !== "none") && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
             if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
                 that._majorTicks.forEach(tick => {
                     tick.label.setMaxWidth(textWidth, options.label);
