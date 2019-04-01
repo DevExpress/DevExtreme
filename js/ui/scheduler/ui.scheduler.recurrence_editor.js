@@ -1,25 +1,26 @@
 require("../switch");
 
-const $ = require("../../core/renderer");
-const Class = require("../../core/class");
-const Guid = require("../../core/guid");
-const registerComponent = require("../../core/component_registrator");
-const recurrenceUtils = require("./utils.recurrence");
-const domUtils = require("../../core/utils/dom");
-const isDefined = require("../../core/utils/type").isDefined;
-const extend = require("../../core/utils/extend").extend;
-const inArray = require("../../core/utils/array").inArray;
-const each = require("../../core/utils/iterator").each;
-const Editor = require("../editor/editor");
-const CheckBox = require("../check_box");
-const RadioGroup = require("../radio_group");
-const NumberBox = require("../number_box");
-const SelectBox = require("../select_box");
-const DateBox = require("../date_box");
-const messageLocalization = require("../../localization/message");
-const dateLocalization = require("../../localization/date");
-const dateUtils = require("../../core/utils/date");
-const publisherMixin = require("./ui.scheduler.publisher_mixin");
+import $ from "../../core/renderer";
+import Class from "../../core/class";
+import Guid from "../../core/guid";
+import registerComponent from "../../core/component_registrator";
+import recurrenceUtils from "./utils.recurrence";
+import domUtils from "../../core/utils/dom";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import { each } from "../../core/utils/iterator";
+import Editor from "../editor/editor";
+import CheckBox from "../check_box";
+import RadioGroup from "../radio_group";
+import NumberBox from "../number_box";
+import SelectBox from "../select_box";
+import DateBox from "../date_box";
+import messageLocalization from "../../localization/message";
+import dateLocalization from "../../localization/date";
+import dateUtils from "../../core/utils/date";
+import publisherMixin from "./ui.scheduler.publisher_mixin";
+
 const RECURRENCE_EDITOR = "dx-recurrence-editor";
 const LABEL_POSTFIX = "-label";
 const WRAPPER_POSTFIX = "-wrapper";
@@ -913,4 +914,4 @@ const RecurrenceEditor = Editor.inherit({
 
 registerComponent("dxRecurrenceEditor", RecurrenceEditor);
 
-module.exports = RecurrenceEditor;
+export default RecurrenceEditor;
