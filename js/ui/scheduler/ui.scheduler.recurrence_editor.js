@@ -402,7 +402,7 @@ const RecurrenceEditor = Editor.inherit({
     _repeatByDayValueChangeHandler() {
         let byDayRule = "";
 
-        each(this._daysOfWeek, function(index, day) {
+        each(this._daysOfWeek, (index, day) => {
             if(day.option("value")) {
                 const dayName = days[index];
 
@@ -842,7 +842,7 @@ const RecurrenceEditor = Editor.inherit({
 
         const freq = this._recurrenceRule.rules().freq || "daily";
 
-        each($labels, function(_, $label) {
+        each($labels, (_, $label) => {
             $($label).text(messageLocalization.format("dxScheduler-recurrenceRepeat" + freq.charAt(0).toUpperCase() + freq.substr(1).toLowerCase()));
         });
     },
@@ -875,7 +875,7 @@ const RecurrenceEditor = Editor.inherit({
 
         const daysByRule = this._daysOfWeekByRules();
 
-        each(this._daysOfWeek, function(index, day) {
+        each(this._daysOfWeek, (index, day) => {
             const dayName = days[index];
 
             day.option("value", inArray(dayName, daysByRule) > -1);
