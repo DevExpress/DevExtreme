@@ -863,11 +863,7 @@ module.exports = {
 
                 _rowDblClick: function(e) {
                     var item = this._dataController.items()[e.rowIndex] || {};
-                    this.executeAction("onRowDblClick", extend({
-                        evaluate: function(expr) {
-                            var getter = compileGetter(expr);
-                            return getter(item.data);
-                        } }, e, item));
+                    this.executeAction("onRowDblClick", extend({}, e, item));
                 },
 
                 _getColumnsCountBeforeGroups: function(columns) {
