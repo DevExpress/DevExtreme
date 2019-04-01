@@ -549,6 +549,20 @@ QUnit.test("change valueAxis option", function(assert) {
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
 });
 
+QUnit.test("Change valueAxis.title", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries());
+
+    var chart = this.createChart({
+        series: [
+            { type: "line" }
+        ]
+    });
+    // Act
+    chart.option("valueAxis.title", "new title");
+    // Assert
+    assert.equal(chart.series[0].getValueAxis().getOptions().title, "new title", "series axis");
+});
+
 QUnit.test("change panes option only. no additional panes created", function(assert) {
     var chart = this.createChart({
         title: {

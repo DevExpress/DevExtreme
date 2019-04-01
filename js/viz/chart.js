@@ -1254,7 +1254,7 @@ var dxChart = AdvancedChart.inherit({
     }
 });
 
-dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
+dxChart.prototype._partialOptionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 dxChart.addPlugin(require("./chart_components/zoom_and_pan"));

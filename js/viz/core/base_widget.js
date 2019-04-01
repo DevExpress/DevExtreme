@@ -523,7 +523,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             partialChange = arg.fullName.slice(arg.fullName.indexOf(".") + 1, arg.fullName.length);
         }
 
-        const change = that._optionChangesMap[partialChange] || that._optionChangesMap[arg.name];
+        const change = that._partialOptionChangesMap[partialChange] || that._optionChangesMap[arg.name];
 
         if(that._eventTrigger.change(arg.name)) {
             that._change(["EVENTS"]);
@@ -546,6 +546,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         elementAttr: "ELEMENT_ATTR",
         disabled: "DISABLED"
     },
+
+    _partialOptionChangesMap: { },
 
     _visibilityChanged: function() {
         this.render();
