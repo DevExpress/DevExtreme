@@ -193,7 +193,7 @@
         "dxScheduler-recurrenceMonthly": "Maandelijks",
         "dxScheduler-recurrenceYearly": "Jaarlijks",
 
-        "dxScheduler-recurrenceEvery": "Elke",
+        "dxScheduler-recurrenceRepeatEvery": "Elke",
         "dxScheduler-recurrenceEnd": "Einde herhaling",
         "dxScheduler-recurrenceAfter": "Na",
         "dxScheduler-recurrenceOn": "Op",

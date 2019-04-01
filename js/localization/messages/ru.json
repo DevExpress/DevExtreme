@@ -175,7 +175,7 @@
         "dxScheduler-recurrenceWeekly": "Еженедельно",
         "dxScheduler-recurrenceMonthly": "Ежемесячно",
         "dxScheduler-recurrenceYearly": "Ежегодно",
-        "dxScheduler-recurrenceEvery": "Интервал",
+        "dxScheduler-recurrenceRepeatEvery": "Интервал",
         "dxScheduler-recurrenceEnd": "Завершить повторение",
         "dxScheduler-recurrenceAfter": "После",
         "dxScheduler-recurrenceOn": "Повторять до",
