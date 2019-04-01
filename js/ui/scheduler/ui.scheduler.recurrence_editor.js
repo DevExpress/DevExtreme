@@ -256,7 +256,7 @@ var RecurrenceEditor = Editor.inherit({
             .addClass(FIELD_VALUE_CLASS);
 
         var $intervalEditorLabel = $("<div>")
-            .text(messageLocalization.format("dxScheduler-recurrenceEvery") + ":")
+            .text(messageLocalization.format("dxScheduler-recurrenceEvery"))
             .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
             .addClass(FIELD_LABEL_CLASS);
 
@@ -323,7 +323,7 @@ var RecurrenceEditor = Editor.inherit({
 
     _renderRepeatOnLabel: function($element) {
         this._$repeatOnLabel = $("<div>")
-            .text(messageLocalization.format("dxScheduler-recurrenceOn") + ":")
+            .text(messageLocalization.format("dxScheduler-recurrenceOn"))
             .addClass(REPEAT_ON_EDITOR + LABEL_POSTFIX)
             .addClass(FIELD_LABEL_CLASS);
 
@@ -556,6 +556,12 @@ var RecurrenceEditor = Editor.inherit({
         if(!rule) rule = "count";
 
         if(!isDefined(this._$repeatEndEditor)) {
+            $("<div>")
+                .text(messageLocalization.format("dxScheduler-recurrenceEnd"))
+                .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
+                .addClass(FIELD_LABEL_CLASS)
+                .appendTo(this._$container);
+
             this._$repeatEndEditor = $("<div>")
                 .addClass(REPEAT_END_EDITOR_CONTAINER)
                 .addClass(FIELD_CLASS)
@@ -647,7 +653,7 @@ var RecurrenceEditor = Editor.inherit({
             $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
         $("<div>")
-            .text(messageLocalization.format("dxScheduler-recurrenceAfter") + ":")
+            .text(messageLocalization.format("dxScheduler-recurrenceAfter"))
             .addClass(REPEAT_END_EDITOR + LABEL_POSTFIX)
             .appendTo($editorTemplate);
 
@@ -699,7 +705,7 @@ var RecurrenceEditor = Editor.inherit({
             $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
         $("<div>")
-            .text(messageLocalization.format("dxScheduler-recurrenceOn") + ":")
+            .text(messageLocalization.format("dxScheduler-recurrenceOn"))
             .addClass(REPEAT_END_EDITOR + LABEL_POSTFIX)
             .appendTo($editorTemplate);
 
