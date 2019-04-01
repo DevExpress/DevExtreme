@@ -1045,11 +1045,15 @@ module.exports = {
             var pos1 = this._translator.translate(value, offset, this._options.type === "semidiscrete" && this._options.tickInterval),
                 pos2 = this._axisPosition,
                 isHorizontal = this._isHorizontal,
-                centerCorrection = this._options.width % 2 === 1 ? 0.5 : 0;
+                centerCorrection = this._getAxisPositionCorrection();
             return {
                 x: isHorizontal ? pos1 : pos2 + centerCorrection,
                 y: isHorizontal ? pos2 + centerCorrection : pos1
             };
+        },
+
+        _getAxisPositionCorrection() {
+            return this._options.width % 2 === 1 ? 0.5 : 0;
         },
 
         areCoordsOutsideAxis: function(coords) {
