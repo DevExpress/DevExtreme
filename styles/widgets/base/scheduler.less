@@ -85,9 +85,6 @@
 
 @SCHEDULER_TIMELINE_MIN_HEIGHT: 100px;
 
-@SCHEDULER_RECURRENCE_LINE_TOP_POSITION: 70px;
-@SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET: 20px;
-
 .dx-scheduler-group-mixin(@padding) {
     .dx-scrollable {
         &.dx-scheduler-date-table-scrollable,
@@ -2037,11 +2034,6 @@
     }
 
     .dx-scheduler-appointment-popup {
-
-        /*.dx-overlay-content {
-            transition: transform 1s linear;
-        }*/
-
         .dx-layout-manager .dx-label-h-align .dx-field-item-content {
             .dx-switch,
             .dx-checkbox {
@@ -2087,26 +2079,8 @@
                 top: 20px;
             }
 
-            .dx-field-item-label {
-                &.dx-field-item-label-location-right {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-
             .dx-field-value {
                 display: inline-block;
-            }
-
-            &.dx-label-v-align {
-                &:before {
-                    top: @SCHEDULER_RECURRENCE_LINE_TOP_POSITION;
-                }
-            }
-
-            .dx-field-item-content-location-left {
-                .dx-recurrence-editor {
-                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
             }
         }
 
@@ -2824,31 +2798,6 @@
                     }
 
                     margin-left: 0;
-                }
-            }
-        }
-
-        .dx-scheduler-recurrence-rule-item {
-            .dx-field-item-label {
-                &.dx-field-item-label-location-left,
-                &.dx-field-item-label-location-top {
-                    padding-left: 10px;
-                }
-
-                &.dx-field-item-label-location-right {
-                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-
-            &.dx-label-v-align {
-                .dx-recurrence-editor {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-
-            .dx-field-item-content-location-left {
-                .dx-recurrence-editor {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
                 }
             }
         }
