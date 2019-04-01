@@ -21,46 +21,33 @@ const ListEdit = ListBase.inherit({
             }
         };
 
-        const moveFocusedItemUp = function(e) {
-            const focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+        const moveFocusedItem = (e, moveUp) => {
+            const moveDown = !moveUp;
+            const editStrategy = this._editStrategy;
+            const focusedElement = this.option("focusedElement");
+            const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
 
             if(e.shiftKey && that.option("allowItemReordering")) {
+                const nextItemIndex = focusedItemIndex + moveUp ? -1 : 1;
+                const $nextItem = editStrategy.getItemElement(nextItemIndex);
+
+                this.reorderItem(focusedElement, $nextItem);
+                this.scrollToItem(focusedElement);
                 e.preventDefault();
-
-                const $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
-
-                that.reorderItem(that.option("focusedElement"), $prevItem);
-                that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(focusedItemIndex === 0 && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
-                    return;
-                } else {
-                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
+                const isLastItemFocused = focusedItemIndex === this._getLastItemIndex();
+                const isSelectAllCheckBoxFocused = focusedItemIndex === -1;
+                const editProvider = this._editProvider;
+
+                editProvider.handleKeyboardEvents(focusedItemIndex, moveUp);
+
+                if(moveUp && focusedItemIndex > 0) {
+                    parent.upArrow(e);
                 }
-                parent.upArrow(e);
-            }
-        };
 
-        const moveFocusedItemDown = function(e) {
-            const focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
-            const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
-            if(isLastIndexFocused && this._isDataSourceLoading()) {
-                return;
-            }
-            if(e.shiftKey && that.option("allowItemReordering")) {
-                e.preventDefault();
-
-                const $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
-
-                that.reorderItem(that.option("focusedElement"), $nextItem);
-                that.scrollToItem(that.option("focusedElement"));
-            } else {
-                if(isLastIndexFocused && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
-                    return;
-                } else {
-                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
+                if(moveDown && !isLastItemFocused && !isSelectAllCheckBoxFocused) {
+                    parent.downArrow(e);
                 }
-                parent.downArrow(e);
             }
         };
 
@@ -78,8 +65,8 @@ const ListEdit = ListBase.inherit({
 
         return extend({}, parent, {
             del: deleteFocusedItem,
-            upArrow: moveFocusedItemUp,
-            downArrow: moveFocusedItemDown,
+            upArrow: (e) => moveFocusedItem(e, true),
+            downArrow: moveFocusedItem,
             enter,
             space
         });
