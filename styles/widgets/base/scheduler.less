@@ -2068,11 +2068,17 @@
             }
 
             .dx-recurrence-numberbox-interval-label,
-            .dx-recurrence-repeat-on-label {
+            .dx-recurrence-repeat-on-label,
+            .dx-recurrence-repeat-end-container-label {
                 position: absolute;
                 left: -82px;
                 padding-right: 10px;
                 padding-top: 3px;
+            }
+
+            .dx-recurrence-repeat-end-container-label,
+            .dx-recurrence-repeat-end-container {
+                padding-top: 20px;
             }
 
             .dx-recurrence-radiogroup-repeat-type {
@@ -2080,13 +2086,8 @@
                 left: -80px;
                 top: 20px;
             }
-/*
-            position: relative;
-            padding-right: 0;*/
 
             .dx-field-item-label {
-                // vertical-align: top;
-
                 &.dx-field-item-label-location-right {
                     padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
                 }
@@ -2095,11 +2096,6 @@
             .dx-field-value {
                 display: inline-block;
             }
-
-            .dx-field-label {
-                padding: 3px 0;
-            }
-
 
             &.dx-label-v-align {
                 &:before {
