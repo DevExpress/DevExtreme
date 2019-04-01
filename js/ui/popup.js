@@ -28,7 +28,7 @@ var POPUP_CLASS = "dx-popup",
     POPUP_NORMAL_CLASS = "dx-popup-normal",
     POPUP_CONTENT_CLASS = "dx-popup-content",
 
-    POPUP_AUTO_RESIZEBLE_CLASS = "dx-popup-auto-resizeble",
+    POPUP_AUTO_RESIZEBLE_CLASS = "dx-popup-auto-resizable",
 
     POPUP_DRAGGABLE_CLASS = "dx-popup-draggable",
 
