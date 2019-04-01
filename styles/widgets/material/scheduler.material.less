@@ -55,8 +55,6 @@
 @MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT: @MATERIAL_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 0.5;
 @MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT: 56px;
 
-@MATERIAL_SCHEDULER_RECURRENCE_EDITOR_BORDER: 1px solid @scheduler-recurence-editor-border-color;
-
 @MATERIAL_SCHEDULER_MONTH_DATE_TEXT_SIZE: 14px;
 @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 20px;
 
@@ -675,11 +673,6 @@
 }
 
 .dx-scheduler-appointment-popup {
-
-    .dx-fieldset {
-        margin: 0 15px 15px 10px;
-    }
-
     .dx-form {
         padding: 0 10px 0 10px;
         .dx-layout-manager {
@@ -713,9 +706,6 @@
         margin-top: 6px;
     }
 
-    .dx-scheduler-appointment-popup-recurrence-field {
-        margin-bottom: 13px;
-    }
 
     .dx-recurrence-radiogroup-repeat-type-label,
     .dx-recurrence-repeat-end-label {
@@ -723,20 +713,9 @@
     }
 
     .dx-scheduler-recurrence-rule-item {
-        &:before {
-            background-color: @scheduler-recurence-editor-bg;
-        }
-
         &.dx-label-v-align {
             &:before {
                 top: @MATERIAL_SCHEDULER_RECURRENCE_LINE_TOP_POSITION;
-            }
-        }
-
-        &.dx-scheduler-recurrence-rule-item-opened {
-            &:before {
-                border-top: @MATERIAL_SCHEDULER_RECURRENCE_EDITOR_BORDER;
-                border-bottom: @MATERIAL_SCHEDULER_RECURRENCE_EDITOR_BORDER;
             }
         }
     }
