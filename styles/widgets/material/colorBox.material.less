@@ -1,20 +1,25 @@
 .dx-size-default() {
     @MATERIAL_COLORBOX_OVERLAY_PADDING: 20px;
+    @MATERIAL_COLORBOX_PREVIEW_LEFT: 13px;
 }
 .dx-size-compact() {
-    @MATERIAL_COLORBOX_OVERLAY_PADDING: 10px;
+    @MATERIAL_COLORBOX_OVERLAY_PADDING: 16px;
+    @MATERIAL_COLORBOX_PREVIEW_LEFT: 8px;
 }
 
 
 .dx-colorbox {
     .dx-colorbox-input-container {
         .dx-colorbox-input {
-            padding-left: 40px;
+            padding-left: @MATERIAL_COLORBOX_PREVIEW_LEFT + 27px;
         }
         &.dx-colorbox-color-is-not-defined {
             .dx-colorbox-color-result-preview {
                 background: @colorbox-preview-empty-bg no-repeat 0 0;
             }
+        }
+        &:after {
+            left: @MATERIAL_COLORBOX_PREVIEW_LEFT + 1;
         }
     }
 
@@ -27,6 +32,7 @@
 
 .dx-colorbox-color-result-preview {
     border-color: @colorview-border-color;
+    left: @MATERIAL_COLORBOX_PREVIEW_LEFT;
 }
 
 .dx-colorbox-overlay {
@@ -44,7 +50,7 @@
 .dx-rtl {
     &.dx-colorbox, .dx-colorbox {
         &.dx-state-focused .dx-colorbox-input {
-            padding-right: 40px;
+            padding-right: @MATERIAL_COLORBOX_PREVIEW_LEFT + 27px;
         }
     }
 
