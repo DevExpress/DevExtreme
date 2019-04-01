@@ -498,6 +498,7 @@ Axis.prototype = {
     _adjustLabels: function(offset) {
         var that = this,
             maxSize = that._majorTicks.reduce(function(size, tick) {
+                if(!tick.label) return size;
                 var bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
                 return {
                     width: _max(size.width || 0, bBox.width),
