@@ -175,7 +175,7 @@
         "dxScheduler-recurrenceWeekly": "Semanalmente",
         "dxScheduler-recurrenceMonthly": "Mensalmente",
         "dxScheduler-recurrenceYearly": "Anualmente",
-        "dxScheduler-recurrenceEvery": "Todos",
+        "dxScheduler-recurrenceRepeatEvery": "Todos",
         "dxScheduler-recurrenceEnd": "Fim da repetição",
         "dxScheduler-recurrenceAfter": "Depois de",
         "dxScheduler-recurrenceOn": "A",

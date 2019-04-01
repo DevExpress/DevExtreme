@@ -256,7 +256,7 @@ var RecurrenceEditor = Editor.inherit({
             .addClass(FIELD_VALUE_CLASS);
 
         var $intervalEditorLabel = $("<div>")
-            .text(messageLocalization.format("dxScheduler-recurrenceEvery"))
+            .text(messageLocalization.format("dxScheduler-recurrenceRepeatEvery"))
             .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
             .addClass(FIELD_LABEL_CLASS);
 
