@@ -194,6 +194,7 @@
         "dxScheduler-recurrenceYearly": "Jaarlijks",
 
         "dxScheduler-recurrenceRepeatEvery": "Elke",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "Einde herhaling",
         "dxScheduler-recurrenceAfter": "Na",
         "dxScheduler-recurrenceOn": "Op",

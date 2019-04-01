@@ -323,7 +323,7 @@ var RecurrenceEditor = Editor.inherit({
 
     _renderRepeatOnLabel: function($element) {
         this._$repeatOnLabel = $("<div>")
-            .text(messageLocalization.format("dxScheduler-recurrenceOn"))
+            .text(messageLocalization.format("dxScheduler-recurrenceRepeatOn"))
             .addClass(REPEAT_ON_EDITOR + LABEL_POSTFIX)
             .addClass(FIELD_LABEL_CLASS);
 

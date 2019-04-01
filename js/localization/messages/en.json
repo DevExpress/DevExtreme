@@ -193,7 +193,8 @@
         "dxScheduler-recurrenceMonthly": "Monthly",
         "dxScheduler-recurrenceYearly": "Yearly",
 
-        "dxScheduler-recurrenceRepeatEvery": "Every",
+        "dxScheduler-recurrenceRepeatEvery": "Repeat Every",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "End repeat",
         "dxScheduler-recurrenceAfter": "After",
         "dxScheduler-recurrenceOn": "On",

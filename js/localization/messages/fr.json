@@ -194,6 +194,7 @@
         "dxScheduler-recurrenceYearly": "Annuel",
 
         "dxScheduler-recurrenceRepeatEvery": "Chaque",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "Jusqu'à",
         "dxScheduler-recurrenceAfter": "Après",
         "dxScheduler-recurrenceOn": "Le",

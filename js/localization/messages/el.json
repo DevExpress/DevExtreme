@@ -194,6 +194,7 @@
         "dxScheduler-recurrenceYearly": "Ετήσια",
 
         "dxScheduler-recurrenceRepeatEvery": "Κάθε",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "Τερματισμός επανάληψης",
         "dxScheduler-recurrenceAfter": "Μετά",
         "dxScheduler-recurrenceOn": "On",
