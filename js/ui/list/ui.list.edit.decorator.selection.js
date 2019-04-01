@@ -95,20 +95,23 @@ registerDecorator(
             }
         },
 
-        handleKeyboardEvents: function(itemIndex, focusOnList) {
-            if(this._$selectAll && this._needMoveFocus(itemIndex, focusOnList)) {
-                this._list.option("focusedElement", undefined);
-                this._selectAllCheckBox.$element().addClass(FOCUSED_STATE_CLASS);
-                return true;
-            } else {
-                this._$selectAll && this._selectAllCheckBox.$element().removeClass(FOCUSED_STATE_CLASS);
-                this._list.focusListItem(itemIndex);
-                return false;
-            }
-        },
+        handleKeyboardEvents: function(currentFocusedIndex, moveFocusUp) {
+            const moveFocusDown = !moveFocusUp;
+            const list = this._list;
+            const lastItemIndex = list._getLastItemIndex();
+            const isFocusOutOfList = moveFocusUp && currentFocusedIndex === 0 || moveFocusDown && currentFocusedIndex === lastItemIndex;
 
-        _needMoveFocus: function(itemIndex, focusOnList) {
-            return !focusOnList && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex());
+            if(this._selectAllCheckBox && isFocusOutOfList) {
+                list.option("focusedElement", this._selectAllCheckBox.$element());
+
+                return true;
+            }
+
+            const isIndexCorrect = currentFocusedIndex !== -1 && currentFocusedIndex <= lastItemIndex;
+
+            if(isIndexCorrect) {
+                list.focusListItem(currentFocusedIndex);
+            }
         },
 
         handleEnterPressing: function() {
@@ -123,7 +126,7 @@ registerDecorator(
 
             this._selectAllCheckBox = this._list._createComponent($("<div>")
                 .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
-                .appendTo($selectAll), CheckBox);
+                .appendTo($selectAll), CheckBox, { focusStateEnabled: false });
 
             $("<div>").addClass(SELECT_DECORATOR_SELECT_ALL_LABEL_CLASS)
                 .text(this._list.option("selectAllText"))

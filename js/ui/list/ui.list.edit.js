@@ -21,43 +21,25 @@ var ListEdit = ListBase.inherit({
             }
         };
 
-        var moveFocusedItemUp = function(e) {
-            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+        var moveFocusedItem = function(e, moveUp) {
+            var editStrategy = that._editStrategy;
+            var editProvider = that._editProvider;
+            var focusedItemIndex = editStrategy.getNormalizedIndex(that.option("focusedElement"));
 
             if(e.shiftKey && that.option("allowItemReordering")) {
-                e.preventDefault();
+                var newFocusedIndex = moveUp ? focusedItemIndex - 1 : focusedItemIndex + 1;
+                var $newFocusedItem = that._editStrategy.getItemElement(newFocusedIndex);
 
-                var $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
-
-                that.reorderItem(that.option("focusedElement"), $prevItem);
+                that.reorderItem(that.option("focusedElement"), $newFocusedItem);
                 that.scrollToItem(that.option("focusedElement"));
-            } else {
-                if(focusedItemIndex === 0 && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
-                    return;
-                } else {
-                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
-                }
-                parent.upArrow(e);
-            }
-        };
 
-        var moveFocusedItemDown = function(e) {
-            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
-
-            if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
-
-                var $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
-
-                that.reorderItem(that.option("focusedElement"), $nextItem);
-                that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(focusedItemIndex === this._getLastItemIndex() && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
-                    return;
-                } else {
-                    this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
+                var isFocusOutOfList = editProvider.handleKeyboardEvents(focusedItemIndex, moveUp);
+
+                if(!isFocusOutOfList) {
+                    moveUp ? parent.upArrow(e) : parent.downArrow(e);
                 }
-                parent.downArrow(e);
             }
         };
 
@@ -75,8 +57,8 @@ var ListEdit = ListBase.inherit({
 
         return extend({}, parent, {
             del: deleteFocusedItem,
-            upArrow: moveFocusedItemUp,
-            downArrow: moveFocusedItemDown,
+            upArrow: (e) => moveFocusedItem(e, true),
+            downArrow: (e) => moveFocusedItem(e, false),
             enter: enter,
             space: space
         });
