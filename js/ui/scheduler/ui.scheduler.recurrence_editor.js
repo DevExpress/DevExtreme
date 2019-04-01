@@ -558,7 +558,7 @@ var RecurrenceEditor = Editor.inherit({
         if(!isDefined(this._$repeatEndEditor)) {
             $("<div>")
                 .text(messageLocalization.format("dxScheduler-recurrenceEnd"))
-                .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
+                .addClass(REPEAT_END_EDITOR_CONTAINER + LABEL_POSTFIX)
                 .addClass(FIELD_LABEL_CLASS)
                 .appendTo(this._$container);
 

@@ -172,7 +172,7 @@ QUnit.test("Recurrence interval numberbox should be rendered with right defaults
         interval = $interval.dxNumberBox("instance");
 
     assert.equal($interval.length, 1, "numberBox for setting recurrence interval was rendered");
-    assert.equal($intervalLabel.length, 2, "labels was rendered");
+    assert.equal($intervalLabel.length, 1, "labels was rendered");
     assert.equal(interval.option("showSpinButtons"), true, "numberBox have right showSpinButtons");
     assert.equal(interval.option("useLargeSpinButtons"), false, "numberBox have right useLargeSpinButtons");
     assert.equal(interval.option("min"), 1, "numberBox have right min value");
