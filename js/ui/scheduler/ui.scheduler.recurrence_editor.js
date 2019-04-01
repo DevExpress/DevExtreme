@@ -44,34 +44,34 @@ const FIELD_LABEL_CLASS = "dx-field-label";
 const FIELD_VALUE_CLASS = "dx-field-value";
 
 const frequencies = [
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "never" },
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceDaily"); }, value: "daily" },
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceWeekly"); }, value: "weekly" },
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceMonthly"); }, value: "monthly" },
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceYearly"); }, value: "yearly" }
+    { text() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "never" },
+    { text() { return messageLocalization.format("dxScheduler-recurrenceDaily"); }, value: "daily" },
+    { text() { return messageLocalization.format("dxScheduler-recurrenceWeekly"); }, value: "weekly" },
+    { text() { return messageLocalization.format("dxScheduler-recurrenceMonthly"); }, value: "monthly" },
+    { text() { return messageLocalization.format("dxScheduler-recurrenceYearly"); }, value: "yearly" }
 ];
 
 const repeatEndTypes = [
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "never" },
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceRepeatOnDate"); }, value: "until" },
-    { text: function() { return messageLocalization.format("dxScheduler-recurrenceRepeatCount"); }, value: "count" }
+    { text() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "never" },
+    { text() { return messageLocalization.format("dxScheduler-recurrenceRepeatOnDate"); }, value: "until" },
+    { text() { return messageLocalization.format("dxScheduler-recurrenceRepeatCount"); }, value: "count" }
 ];
 
 const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
 const RecurrenceRule = Class.inherit({
 
-    ctor: function(recurrence) {
+    ctor(recurrence) {
         this._recurrenceRule = recurrenceUtils.getRecurrenceRule(recurrence).rule;
     },
 
-    makeRules: function(string) {
+    makeRules(string) {
         const that = this;
 
         that._recurrenceRule = recurrenceUtils.getRecurrenceRule(string).rule;
     },
 
-    makeRule: function(field, value) {
+    makeRule(field, value) {
         if(!value) {
             delete this._recurrenceRule[field];
             return;
@@ -90,7 +90,7 @@ const RecurrenceRule = Class.inherit({
         }
     },
 
-    repeatableRule: function() {
+    repeatableRule() {
         const rules = this._recurrenceRule;
 
         if("count" in rules) {
@@ -104,21 +104,21 @@ const RecurrenceRule = Class.inherit({
         return null;
     },
 
-    recurrenceString: function() {
+    recurrenceString() {
         return recurrenceUtils.getRecurrenceString(this._recurrenceRule);
     },
 
-    rules: function() {
+    rules() {
         return this._recurrenceRule;
     },
 
-    daysFromByDayRule: function() {
+    daysFromByDayRule() {
         return recurrenceUtils.daysFromByDayRule(this._recurrenceRule);
     }
 });
 
 const RecurrenceEditor = Editor.inherit({
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
             * @name dxRecurrenceEditorOptions.value
@@ -146,11 +146,11 @@ const RecurrenceEditor = Editor.inherit({
         });
     },
 
-    _getFirstDayOfWeek: function() {
+    _getFirstDayOfWeek() {
         return isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
     },
 
-    _createComponent: function(element, name, config) {
+    _createComponent(element, name, config) {
         config = config || {};
         this._extendConfig(config, {
             readOnly: this.option("readOnly")
@@ -158,12 +158,12 @@ const RecurrenceEditor = Editor.inherit({
         return this.callBase(element, name, config);
     },
 
-    _init: function() {
+    _init() {
         this.callBase();
         this._recurrenceRule = new RecurrenceRule(this.option("value"));
     },
 
-    _render: function() {
+    _render() {
         this.callBase();
 
         this.$element().addClass(RECURRENCE_EDITOR);
@@ -177,7 +177,7 @@ const RecurrenceEditor = Editor.inherit({
         this._renderContainerVisibility(this.option("value"));
     },
 
-    _renderContainerVisibility: function(value) {
+    _renderContainerVisibility(value) {
         if(value) {
             this._$container.show();
             domUtils.triggerShownEvent(this._$container);
@@ -186,7 +186,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _changeValueByVisibility: function(value) {
+    _changeValueByVisibility(value) {
         this._renderContainerVisibility(value);
 
         if(value) {
@@ -199,16 +199,16 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _handleDefaults: function() {
+    _handleDefaults() {
         this._recurrenceRule.makeRule("freq", "daily");
         this._changeEditorValue();
     },
 
-    _changeEditorValue: function() {
+    _changeEditorValue() {
         this.option("value", this._recurrenceRule.recurrenceString() || "");
     },
 
-    _renderEditors: function() {
+    _renderEditors() {
         this._renderFreqEditor();
         this._renderIntervalEditor();
 
@@ -217,7 +217,7 @@ const RecurrenceEditor = Editor.inherit({
         this._renderRepeatEndEditor();
     },
 
-    _renderFreqEditor: function() {
+    _renderFreqEditor() {
         const freq = (this._recurrenceRule.rules().freq || "never").toLowerCase();
 
         const $freqEditor = $("<div>")
@@ -244,7 +244,7 @@ const RecurrenceEditor = Editor.inherit({
         this.$element().prepend($field);
     },
 
-    _renderIntervalEditor: function() {
+    _renderIntervalEditor() {
         const freq = this._recurrenceRule.rules().freq || "daily";
 
         const $intervalEditor = $("<div>")
@@ -281,7 +281,7 @@ const RecurrenceEditor = Editor.inherit({
         this._setAriaDescribedBy(this._intervalEditor, $intervalEditorLabel);
     },
 
-    _renderRepeatOnEditor: function() {
+    _renderRepeatOnEditor() {
         const freq = (this._recurrenceRule.rules().freq || "").toLowerCase();
 
         if(!isDefined(this._$repeatOnEditor)) {
@@ -317,7 +317,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _renderRepeatOnLabel: function($element) {
+    _renderRepeatOnLabel($element) {
         this._$repeatOnLabel = $("<div>")
             .text(messageLocalization.format("dxScheduler-recurrenceRepeatOn"))
             .addClass(REPEAT_ON_EDITOR + LABEL_POSTFIX)
@@ -326,7 +326,7 @@ const RecurrenceEditor = Editor.inherit({
         $element.append(this._$repeatOnLabel);
     },
 
-    _clearRepeatOnEditor: function() {
+    _clearRepeatOnEditor() {
         if(isDefined(this._$repeatOnWeek)) {
             this._$repeatOnWeek.detach();
             this._$repeatOnWeek.remove();
@@ -349,7 +349,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _clearRepeatOnLabel: function() {
+    _clearRepeatOnLabel() {
         if(isDefined(this._$repeatOnLabel)) {
             this._$repeatOnLabel.detach();
             this._$repeatOnLabel.remove();
@@ -358,7 +358,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _renderRepeatOnWeekEditor: function() {
+    _renderRepeatOnWeekEditor() {
         this._clearRepeatOnEditor();
 
         this._$repeatOnWeek = $("<div>")
@@ -389,7 +389,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _daysOfWeekByRules: function() {
+    _daysOfWeekByRules() {
         let daysByRule = this._recurrenceRule.daysFromByDayRule();
 
         if(!daysByRule.length) {
@@ -399,7 +399,7 @@ const RecurrenceEditor = Editor.inherit({
         return daysByRule;
     },
 
-    _repeatByDayValueChangeHandler: function() {
+    _repeatByDayValueChangeHandler() {
         let byDayRule = "";
 
         each(this._daysOfWeek, function(index, day) {
@@ -418,7 +418,7 @@ const RecurrenceEditor = Editor.inherit({
         this._changeEditorValue();
     },
 
-    _renderRepeatOnMonthEditor: function() {
+    _renderRepeatOnMonthEditor() {
         this._clearRepeatOnEditor();
 
         this._$repeatOnMonth = $("<div>")
@@ -429,7 +429,7 @@ const RecurrenceEditor = Editor.inherit({
         this._renderDayOfMonthEditor(this._$repeatOnMonth);
     },
 
-    _renderRepeatOnYearEditor: function() {
+    _renderRepeatOnYearEditor() {
         this._clearRepeatOnEditor();
 
         this._$repeatOnYear = $("<div>")
@@ -474,7 +474,7 @@ const RecurrenceEditor = Editor.inherit({
         this._renderDayOfMonthEditor(this._$repeatOnYear);
     },
 
-    _monthOfYearByRules: function() {
+    _monthOfYearByRules() {
         let monthByRule = this._recurrenceRule.rules()["bymonth"];
 
         if(!monthByRule) {
@@ -484,7 +484,7 @@ const RecurrenceEditor = Editor.inherit({
         return monthByRule;
     },
 
-    _renderDayOfMonthEditor: function($element) {
+    _renderDayOfMonthEditor($element) {
         const byMonthDay = this._dayOfMonthByRules();
 
         const $dayEditor = $("<div>").addClass(DAY_OF_MONTH);
@@ -501,7 +501,7 @@ const RecurrenceEditor = Editor.inherit({
         $element.append($dayEditor);
     },
 
-    _dayOfMonthByRules: function() {
+    _dayOfMonthByRules() {
         let dayByRule = this._recurrenceRule.rules()["bymonthday"];
 
         if(!dayByRule) {
@@ -511,14 +511,14 @@ const RecurrenceEditor = Editor.inherit({
         return dayByRule;
     },
 
-    _setAriaDescribedBy: function(editor, $label) {
+    _setAriaDescribedBy(editor, $label) {
         const labelId = "label-" + new Guid();
 
         editor.setAria("describedby", labelId);
         editor.setAria("id", labelId, $label);
     },
 
-    _repeatEndSwitchValueChangeHandler: function(args) {
+    _repeatEndSwitchValueChangeHandler(args) {
         const value = args.value;
 
         this._renderRepeatEndVisibility(value);
@@ -532,7 +532,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _renderRepeatEndVisibility: function(value) {
+    _renderRepeatEndVisibility(value) {
         if(!value) {
             this._$repeatEndEditor.hide();
         } else {
@@ -540,13 +540,13 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _handleRepeatEndDefaults: function() {
+    _handleRepeatEndDefaults() {
         this._recurrenceRule.makeRule("count", 1);
 
         this._changeEditorValue();
     },
 
-    _renderRepeatEndEditor: function(rule) {
+    _renderRepeatEndEditor(rule) {
         rule = isDefined(rule) ? rule : this._recurrenceRule.repeatableRule();
 
         if(!rule) rule = "count";
@@ -567,7 +567,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _renderRepeatEndTypeEditor: function() {
+    _renderRepeatEndTypeEditor() {
         const repeatType = this._recurrenceRule.repeatableRule() || "never";
         const that = this;
 
@@ -581,7 +581,7 @@ const RecurrenceEditor = Editor.inherit({
             value: repeatType,
             displayExpr: "text",
             valueExpr: "value",
-            itemTemplate: function(itemData) {
+            itemTemplate(itemData) {
                 if(itemData.value === "count") {
                     return that._renderRepeatCountEditor();
                 }
@@ -599,7 +599,7 @@ const RecurrenceEditor = Editor.inherit({
         this._disableRepeatEndParts(repeatType);
     },
 
-    _renderDefaultRepeatEnd: function() {
+    _renderDefaultRepeatEnd() {
         const $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
         $("<div>")
@@ -610,7 +610,7 @@ const RecurrenceEditor = Editor.inherit({
         return $editorTemplate;
     },
 
-    _repeatTypeValueChangedHandler: function(args) {
+    _repeatTypeValueChangedHandler(args) {
         const value = args.value;
 
         this._disableRepeatEndParts(value);
@@ -629,7 +629,7 @@ const RecurrenceEditor = Editor.inherit({
         this._changeEditorValue();
     },
 
-    _disableRepeatEndParts: function(value) {
+    _disableRepeatEndParts(value) {
         if(value === "until") {
             this._repeatCountEditor.option("disabled", true);
             this._repeatUntilDate.option("disabled", false);
@@ -644,7 +644,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _renderRepeatCountEditor: function() {
+    _renderRepeatCountEditor() {
         const repeatCount = this._recurrenceRule.rules().count || 1;
         const $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
@@ -675,7 +675,7 @@ const RecurrenceEditor = Editor.inherit({
         return $editorTemplate;
     },
 
-    _repeatCountValueChangeHandler: function(args) {
+    _repeatCountValueChangeHandler(args) {
         if(this._recurrenceRule.repeatableRule() !== "count") {
             return;
         }
@@ -685,14 +685,14 @@ const RecurrenceEditor = Editor.inherit({
         this._changeEditorValue();
     },
 
-    _formatUntilDate: function(date) {
+    _formatUntilDate(date) {
         const result = dateUtils.trimTime(date);
 
         result.setDate(result.getDate() + 1);
         return new Date(result.getTime() - 1);
     },
 
-    _renderRepeatUntilEditor: function() {
+    _renderRepeatUntilEditor() {
         const repeatUntil = this._recurrenceRule.rules().until || this._formatUntilDate(new Date());
         const $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
@@ -719,7 +719,7 @@ const RecurrenceEditor = Editor.inherit({
         return $editorTemplate;
     },
 
-    _repeatUntilValueChangeHandler: function(args) {
+    _repeatUntilValueChangeHandler(args) {
         if(this._recurrenceRule.repeatableRule() !== "until") {
             return;
         }
@@ -732,7 +732,7 @@ const RecurrenceEditor = Editor.inherit({
         this._changeEditorValue();
     },
 
-    _valueChangedHandler: function(args) {
+    _valueChangedHandler(args) {
         const value = args.component.option("value");
         const field = args.component.option("field");
         let visible = true;
@@ -750,7 +750,7 @@ const RecurrenceEditor = Editor.inherit({
         this._renderContainerVisibility(visible);
     },
 
-    _makeRepeatOnRule: function(field, value) {
+    _makeRepeatOnRule(field, value) {
         if(field !== "freq") {
             return;
         }
@@ -779,7 +779,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "value":
                 this._recurrenceRule.makeRules(args.value);
@@ -819,7 +819,7 @@ const RecurrenceEditor = Editor.inherit({
         }
     },
 
-    _changeEditorsValues: function(rules) {
+    _changeEditorsValues(rules) {
         this._changeCheckBoxesValue(!!rules["byday"]);
 
         this._freqEditor.option("value", (rules.freq || "never").toLowerCase());
@@ -833,7 +833,7 @@ const RecurrenceEditor = Editor.inherit({
         this._changeMonthOfYearValue();
     },
 
-    _changeRepeatTypeLabel: function() {
+    _changeRepeatTypeLabel() {
         const $labels = this.$element().find("." + REPEAT_TYPE_EDITOR + LABEL_POSTFIX);
 
         if(!$labels.length) {
@@ -847,7 +847,7 @@ const RecurrenceEditor = Editor.inherit({
         });
     },
 
-    _changeRepeatCountValue: function() {
+    _changeRepeatCountValue() {
         if(!this._$repeatCountEditor) {
             return;
         }
@@ -856,7 +856,7 @@ const RecurrenceEditor = Editor.inherit({
         this._repeatCountEditor.option("value", count);
     },
 
-    _changeRepeatUntilValue: function() {
+    _changeRepeatUntilValue() {
         if(!this._$repeatDateEditor) {
             return;
         }
@@ -864,11 +864,11 @@ const RecurrenceEditor = Editor.inherit({
         this._repeatUntilDate.option("value", this._getUntilValue());
     },
 
-    _getUntilValue: function() {
+    _getUntilValue() {
         return this._recurrenceRule.rules().until || this._formatUntilDate(new Date());
     },
 
-    _changeCheckBoxesValue: function(byDayChanged) {
+    _changeCheckBoxesValue(byDayChanged) {
         if(!this._$repeatOnWeek || !byDayChanged) {
             return;
         }
@@ -882,7 +882,7 @@ const RecurrenceEditor = Editor.inherit({
         });
     },
 
-    _changeDayOfMonthValue: function() {
+    _changeDayOfMonthValue() {
         if(!this._$repeatOnMonth && !this._$repeatOnYear) {
             return;
         }
@@ -891,7 +891,7 @@ const RecurrenceEditor = Editor.inherit({
         this._dayEditor.option("value", day);
     },
 
-    _changeMonthOfYearValue: function() {
+    _changeMonthOfYearValue() {
         if(!this._$repeatOnYear) {
             return;
         }
@@ -900,13 +900,13 @@ const RecurrenceEditor = Editor.inherit({
         this._monthEditor.option("value", month);
     },
 
-    toggle: function() {
+    toggle() {
         this._freqEditor.focus();
     },
 
-    setAria: function() {
+    setAria(...args) {
         if(this._switchEditor) {
-            this._switchEditor.setAria(arguments[0], arguments[1]);
+            this._switchEditor.setAria(args[0], args[1]);
         }
     }
 }).include(publisherMixin);
