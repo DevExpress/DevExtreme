@@ -176,6 +176,7 @@
         "dxScheduler-recurrenceMonthly": "Monatlich",
         "dxScheduler-recurrenceYearly": "Jährlich",
         "dxScheduler-recurrenceRepeatEvery": "Alle",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "Wiederholungsende",
         "dxScheduler-recurrenceAfter": "Nach",
         "dxScheduler-recurrenceOn": "Am",
