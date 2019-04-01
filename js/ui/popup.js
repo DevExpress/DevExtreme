@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     inArray = require("../core/utils/array").inArray,
     extend = require("../core/utils/extend").extend,
+    browser = require("../core/utils/browser"),
     messageLocalization = require("../localization/message"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
@@ -28,8 +29,6 @@ var POPUP_CLASS = "dx-popup",
     POPUP_NORMAL_CLASS = "dx-popup-normal",
     POPUP_CONTENT_CLASS = "dx-popup-content",
 
-    POPUP_AUTO_RESIZEBLE_CLASS = "dx-popup-auto-resizeble",
-
     POPUP_DRAGGABLE_CLASS = "dx-popup-draggable",
 
     POPUP_TITLE_CLASS = "dx-popup-title",
@@ -45,6 +44,8 @@ var POPUP_CLASS = "dx-popup",
     BUTTON_NORMAL_TYPE = "normal",
     BUTTON_TEXT_MODE = "text",
     BUTTON_CONTAINED_MODE = "contained";
+
+var isIE11 = (browser.msie && parseInt(browser.version) === 11);
 
 var getButtonPlace = function(name) {
 
@@ -674,12 +675,7 @@ var Popup = Overlay.inherit({
             overlayContent = this.overlayContent().get(0),
             cssStyles = {};
 
-        $(overlayContent).removeClass(POPUP_AUTO_RESIZEBLE_CLASS);
-
-        if(this.option("autoResizeEnabled") && this._isAutoHeight()) {
-
-            $(overlayContent).addClass(POPUP_AUTO_RESIZEBLE_CLASS);
-
+        if(this.option("autoResizeEnabled") && this._isAutoHeight() && !isIE11) {
             var container = $(this._getContainer()).get(0),
                 contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
                 contentMinHeight = this._getOptionValue("minHeight", overlayContent),
