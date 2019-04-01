@@ -745,10 +745,10 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 }
     ]);
 
-    appointmentsHelper.clickOnCompactAppointment();
+    appointmentsHelper.compact.click();
     assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts in 1st group");
 
-    appointmentsHelper.clickOnCompactAppointment(1);
+    appointmentsHelper.compact.click(1);
     assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts in 2d group");
 });
 

@@ -1368,7 +1368,7 @@ QUnit.test("DropDown appointment should be rendered correctly when timezone is s
             textExpr: "schedule"
         });
 
-        appointmentsHelper.clickOnCompactAppointment();
+        appointmentsHelper.compact.click();
         assert.equal(tooltipHelper.getDateText(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
     } finally {
         tzOffsetStub.restore();

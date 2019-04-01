@@ -50,11 +50,11 @@ QUnit.module("Integration: Dragging from Tooltip", {
     },
 
     getCompactAppointmentButton: function() {
-        return appointmentsHelper.getCompactAppointmentButton();
+        return appointmentsHelper.compact.getButton();
     },
 
     showTooltip: function() {
-        appointmentsHelper.clickOnCompactAppointment();
+        appointmentsHelper.compact.click();
     },
 
     getTooltipListItem: function() {
