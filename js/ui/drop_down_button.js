@@ -78,11 +78,11 @@ let DropDownButton = Widget.inherit({
             noDataText: formatMessage("dxCollectionWidget-noDataText"),
 
             /**
-             * @name dxDropDownButtonOptions.showSelectedItem
+             * @name dxDropDownButtonOptions.updateButtonOnSelection
              * @type boolean
              * @default true
              */
-            showSelectedItem: true,
+            updateButtonOnSelection: true,
 
             /**
              * @name dxDropDownButtonOptions.showToggleButton
@@ -183,7 +183,7 @@ let DropDownButton = Widget.inherit({
         this._renderButtonGroup();
         this._loadSelectedItem().done((selectedItem) => {
             this._setOptionSilent("selectedItem", selectedItem);
-            this._showSelectedItem();
+            this._updateButtonOnSelection();
         });
         if(!this.option("deferRendering")) {
             this._renderPopup();
@@ -390,8 +390,8 @@ let DropDownButton = Widget.inherit({
         this._list && this._list.option(name, value);
     },
 
-    _showSelectedItem() {
-        if(this.option("showSelectedItem")) {
+    _updateButtonOnSelection() {
+        if(this.option("updateButtonOnSelection")) {
             this._buttonGroup.option("items[0]", this._actionButtonConfig());
         }
     },
@@ -404,7 +404,7 @@ let DropDownButton = Widget.inherit({
     _optionChanged(args) {
         const { name, value } = args;
         switch(args.name) {
-            case "showSelectedItem":
+            case "updateButtonOnSelection":
                 break;
             case "showToggleButton":
                 this._renderButtonGroup();
@@ -445,7 +445,7 @@ let DropDownButton = Widget.inherit({
                 this._loadSelectedItem().done((selectedItem) => {
                     this._setOptionSilent("selectedItem", selectedItem);
                     if(this._displayGetter(args.previousValue) !== this._displayGetter(selectedItem)) {
-                        this._showSelectedItem();
+                        this._updateButtonOnSelection();
                         this._fireSelectionChangedAction(args);
                     }
                 });
