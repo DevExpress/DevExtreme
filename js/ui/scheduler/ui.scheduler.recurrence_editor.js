@@ -151,8 +151,7 @@ const RecurrenceEditor = Editor.inherit({
         return isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
     },
 
-    _createComponent(element, name, config) {
-        config = config || {};
+    _createComponent(element, name, config = {}) {
         this._extendConfig(config, {
             readOnly: this.option("readOnly")
         });
