@@ -194,6 +194,7 @@
         "dxScheduler-recurrenceYearly": "Ročně",
 
         "dxScheduler-recurrenceRepeatEvery": "Každý",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "Konec opakování",
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Zap",

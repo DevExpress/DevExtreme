@@ -194,6 +194,7 @@
     "dxScheduler-recurrenceYearly": "每年",
 
     "dxScheduler-recurrenceRepeatEvery": "一切",
+    "dxScheduler-recurrenceRepeatOn": "Repeat On",
     "dxScheduler-recurrenceEnd": "结束重复",
     "dxScheduler-recurrenceAfter": "之后",
     "dxScheduler-recurrenceOn": "在",
