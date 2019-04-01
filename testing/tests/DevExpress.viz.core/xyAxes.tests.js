@@ -998,7 +998,7 @@ QUnit.test("alignment of labels after rotate", function(assert) {
 
     texts = this.renderer.text;
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -597.5);
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -598);
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 0);
 });
 
@@ -1021,8 +1021,8 @@ QUnit.test("alignment of labels after rotate, angle less than 0", function(asser
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -40, overlappingBehavior: "rotate", indentFromAxis: 0 } });
 
     texts = this.renderer.text;
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, 374);
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 467);
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, 375);
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 466);
 });
 
 QUnit.test("custom alignment for labels", function(assert) { // TODO: remove userAlingment and this test
