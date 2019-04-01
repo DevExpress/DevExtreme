@@ -569,11 +569,6 @@ QUnit.test("width/height", function(assert) {
 });
 
 QUnit.test("popup height can be changed according to the content if height = auto", assert => {
-    if(isIE11) {
-        assert.expect(0);
-        return;
-    }
-
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -585,16 +580,26 @@ QUnit.test("popup height can be changed according to the content if height = aut
             minHeight: 50
         }).dxPopup("instance");
 
-    const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0),
-        popupHeight = $popup.height();
+    const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+    const popupHeight = $popup.height();
 
     $("<div>").height(50).appendTo($content);
-    assert.strictEqual($popup.height(), popupHeight + 50, "popup height has been changed");
+    assert.strictEqual($popup.height(), (isIE11 ? popupHeight : popupHeight + 50), "popup height has been changed (except IE11)");
+    if(isIE11) {
+        popup.repaint();
+        assert.strictEqual($popup.height(), popupHeight + 50, "popup height has been changed for IE11 after repaint");
+    }
 
     $("<div>").height(450).appendTo($content);
+    if(isIE11) {
+        popup.repaint();
+    }
     assert.strictEqual($popup.height(), 400, "popup height has been changed, it is equal to the maxHeight");
 
     $content.empty();
+    if(isIE11) {
+        popup.repaint();
+    }
     assert.strictEqual($popup.height(), 50, "popup height has been changed, it is equal to the minHeight");
 
     popup.option("autoResizeEnabled", false);
@@ -603,11 +608,6 @@ QUnit.test("popup height can be changed according to the content if height = aut
 });
 
 QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
-    if(isIE11) {
-        assert.expect(0);
-        return;
-    }
-
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -630,6 +630,10 @@ QUnit.test("popup height should support top and bottom toolbars if height = auto
 
     assert.strictEqual($popup.innerHeight(), 150, "popup has max height");
     assert.strictEqual(popupContentHeight, 150 - topToolbarHeight - bottomToolbarHeight, "popup has minimum content height");
+
+    if(isIE11) {
+        return;
+    }
 
     $("<div>").height(150).appendTo($content);
     popupContentHeight = $popupContent.innerHeight();
