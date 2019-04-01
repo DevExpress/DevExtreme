@@ -958,6 +958,33 @@ QUnit.test("There is not real overlap of the labels. Alignment value is right", 
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
+QUnit.test("Check title offset after olerlap resolving", function(assert) {
+    var markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 10 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    this.renderer.text = spyRendererText.call(this, markersBBoxes);
+
+    this.drawAxisWithOptions({
+        min: 1,
+        max: 10,
+        title: {
+            text: "Title",
+            margin: 0
+        },
+        label: {
+            overlappingBehavior: "hide",
+            indentFromAxis: 0
+        }
+    });
+
+    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"]);
+    assert.equal(this.renderer.text.getCall(0).returnValue.attr.lastCall.args[0].translateY, 605, "title offset");
+});
+
 QUnit.module("Label overlapping, 'rotate' mode", overlappingEnvironment);
 
 QUnit.test("horizontal axis, labels overlap, rotationAngle is 90", function(assert) {
@@ -998,7 +1025,7 @@ QUnit.test("alignment of labels after rotate", function(assert) {
 
     texts = this.renderer.text;
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -597.5);
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -598);
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 0);
 });
 
@@ -1021,8 +1048,8 @@ QUnit.test("alignment of labels after rotate, angle less than 0", function(asser
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -40, overlappingBehavior: "rotate", indentFromAxis: 0 } });
 
     texts = this.renderer.text;
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, 374);
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 467);
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, 375);
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 466);
 });
 
 QUnit.test("custom alignment for labels", function(assert) { // TODO: remove userAlingment and this test

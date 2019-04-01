@@ -13,8 +13,8 @@ registerTheme({
     backgroundColor: BLACK,
     primaryTitleColor: WHITE,
     secondaryTitleColor: "#d8d8d8",
-    axisColor: "#4c4c4c",
-    axisLabelColor: WHITE,
+    gridColor: "#4c4c4c",
+    axisColor: WHITE,
     title: {
         font: {
             color: WHITE
@@ -43,7 +43,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: '#454545'
+                color: WHITE
             }
         }
     },
@@ -78,8 +78,8 @@ registerTheme({
     backgroundColor: WHITE,
     primaryTitleColor: BLACK,
     secondaryTitleColor: "#767676",
-    axisColor: "#ececec",
-    axisLabelColor: BLACK,
+    gridColor: "#ececec",
+    axisColor: BLACK,
     title: {
         font: {
             color: BLACK
@@ -93,6 +93,13 @@ registerTheme({
     tooltip: {
         font: {
             color: BLACK
+        }
+    },
+    chart: {
+        commonPaneSettings: {
+            border: {
+                color: BLACK
+            }
         }
     },
     rangeSelector: {
