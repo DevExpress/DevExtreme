@@ -78,7 +78,25 @@ module.exports = {
                         }
                     }));
 
+                    eventsEngine.on($table, "keydown", this.createAction(e => this._processKeyDown(e.event)));
+
                     return $table;
+                },
+
+                _processKeyDown(event) {
+                    var args = {
+                        handled: false,
+                        event: event
+                    };
+
+                    this.getController("keyboardNavigation").executeAction("onKeyDown", args);
+                    if(args.handled) {
+                        event.preventDefault();
+                    }
+
+                    if(event.key === "Enter" || event.key === " ") {
+                        $(event.target).trigger("dxclick");
+                    }
                 },
 
                 _getDefaultTemplate: function(column) {
@@ -140,6 +158,7 @@ module.exports = {
 
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+                        $cell.attr("tabindex", this.option("tabindex") || 0);
                     }
 
                     return $cell;
