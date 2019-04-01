@@ -194,6 +194,9 @@ QUnit.module("Keyboard navigation", {
         that.options = {
             useKeyboard: true,
             editing: {
+            },
+            keyboardNavigation: {
+                dataCellsOnly: true
             }
         };
 
@@ -815,6 +818,7 @@ QUnit.testInActiveWindow("Down key is not worked when cell has position accordin
     navigationController._focus = function() {
         isFocused = true;
     };
+    navigationController._isDataCellsOnlyNavigation = () => true;
 
     // act
     navigationController._keyDownHandler({
@@ -849,6 +853,7 @@ QUnit.testInActiveWindow("Up key is not worked when cell has position according 
     navigationController._focus = function() {
         isFocused = true;
     };
+    navigationController._isDataCellsOnlyNavigation = () => true;
 
     // act
     navigationController._keyDownHandler({
@@ -2119,6 +2124,9 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
                 { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
             ],
             paginate: true
+        },
+        keyboardNavigation: {
+            dataCellsOnly: true
         }
     };
 
@@ -3205,6 +3213,9 @@ QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation f
         editing: {
             mode: "cell",
             allowUpdating: true
+        },
+        keyboardNavigation: {
+            dataCellsOnly: true
         }
     };
 
@@ -3908,6 +3919,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
+    this.options.keyboardNavigation.dataCellsOnly = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3936,6 +3948,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
+    this.options.keyboardNavigation.dataCellsOnly = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3963,6 +3976,7 @@ QUnit.testInActiveWindow("Move to previous cell via tab key when edit command co
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
+    this.options.keyboardNavigation.dataCellsOnly = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -4023,6 +4037,7 @@ QUnit.testInActiveWindow("Try move to next cell via tab key when focus on last c
         columnIndex: 1
     };
     this.options.editing = { allowUpdating: true, mode: "batch" };
+    this.options.keyboardNavigation.dataCellsOnly = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -4682,7 +4697,10 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
             allowUpdating: true,
             mode: "batch"
         },
-        masterDetail: { enabled: true }
+        masterDetail: { enabled: true },
+        keyboardNavigation: {
+            dataCellsOnly: true
+        }
     };
     setupModules(this);
 
@@ -4942,7 +4960,10 @@ QUnit.module("Rows view", {
             this.options = {
                 disabled: false,
                 useKeyboard: true,
-                tabIndex: 0
+                tabIndex: 0,
+                keyboardNavigation: {
+                    dataCellsOnly: true
+                }
             };
             this.selectionOptions = {};
 
@@ -8555,5 +8576,103 @@ QUnit.module("Customize keyboard navigation", {
         // assert
         assert.ok(input, "Editor input");
         assert.equal(getTextSelection(input), input.value, "Selection");
+    });
+});
+
+QUnit.module("Keyboard navigation accessibility", {
+    setupModule: function() {
+        this.$element = () => $("#container");
+        this.renderGridView = () => this.gridView.render($("#container"));
+        this.triggerKeyDown = triggerKeyDown;
+        this.focusCell = focusCell;
+        this.focusFirstCell = () => this.focusCell(0, 0);
+
+        this.data = this.data || [
+            { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 },
+            { name: "Dan1", date: "04/05/2006", room: 1, phone: 666666 },
+            { name: "Dan2", date: "07/08/2009", room: 2, phone: 777777 },
+            { name: "Dan3", date: "10/11/2012", room: 3, phone: 888888 }
+        ];
+        this.columns = this.columns || [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date" },
+            {
+                type: "buttons",
+                buttons: [
+                    { text: "test0" },
+                    { text: "test1" }
+                ]
+            },
+            { dataField: "room", dataType: "number" },
+            { dataField: "phone", dataType: "number" }
+        ];
+        this.options = $.extend(true, {
+            useKeyboard: true,
+            keyboardNavigation: {
+                dataCellsOnly: false
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: this.data,
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                allowAdding: true,
+                allowDeleting: true
+            }
+        }, this.options);
+
+        setupDataGridModules(this,
+            ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
+            { initViews: true }
+        );
+    },
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    testInDesktop("Click by command cell", function(assert) {
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(2, 1);
+        this.clock.tick();
+
+        // assert
+        assert.ok(this.columnsController.getColumns()[2].type, "buttons", "Column type");
+        assert.ok($(this.getCellElement(1, 2)).hasClass("dx-cell-focus-disabled"), "focus disabled class");
+    });
+
+    testInDesktop("Focus command cell", function(assert) {
+        // arrange
+        this.options = {
+            onKeyDown: e => {
+                if(e.event.key === "Tab") {
+                    assert.notOk(e.event.isDefaultPrevented(), "tab not prevented");
+                    assert.ok($(e.event.target).is("td.dx-command-edit.dx-focused"), "command cell target");
+                }
+            }
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("ArrowRight");
+        this.clock.tick();
+
+        // assert
+        assert.ok(this.columnsController.getColumns()[2].type, "buttons", "Column type");
+        assert.ok($(this.getCellElement(1, 2)).hasClass("dx-focused"), "cell focused");
+
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 2)));
+        this.clock.tick();
     });
 });

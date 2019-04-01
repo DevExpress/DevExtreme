@@ -404,7 +404,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
-                    return this._allowAdvancedNavigation() || !isEditing && column.command === "expand";
+                    if(!this._isDataCellsOnlyNavigation() && column.command !== "selection") {
+                        return true;
+                    }
+                    return !isEditing && column.command === "expand";
                 }
 
                 if(isCellEditing && row && row.rowType !== "data") {
@@ -482,8 +485,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return this.option("keyboardNavigation.enterKeyAction") === "startEdit";
     },
 
-    _allowAdvancedNavigation: function() {
-        return this.option("keyboardNavigation.advanced");
+    _isDataCellsOnlyNavigation: function() {
+        return this.option("keyboardNavigation.dataCellsOnly");
     },
 
     _enterKeyHandler: function(eventArgs, isEditing) {
@@ -1616,11 +1619,11 @@ module.exports = {
              */
             keyboardNavigation: {
                 /**
-                 * @name GridBaseOptions.keyboardNavigation.advanced
+                 * @name GridBaseOptions.keyboardNavigation.dataCellsOnly
                  * @type boolean
-                 * @default false
+                 * @default true
                  */
-                advanced: false,
+                dataCellsOnly: true,
                 /**
                  * @name GridBaseOptions.keyboardNavigation.enterKeyAction
                  * @type Enums.GridEnterKeyAction
