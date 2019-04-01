@@ -2631,8 +2631,9 @@ QUnit.test("DropDown appointment buttons should have correct quantity with multi
 });
 
 QUnit.test("DropDown appointment should raise the onAppointmentClick event", function(assert) {
-    var spy = sinon.spy();
-    var appointments = [
+    let tooltipItemElement = null;
+    const spy = sinon.spy();
+    const appointments = [
         { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
         { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
         { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
@@ -2652,7 +2653,7 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
             assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
             assert.deepEqual(args.appointmentData, appointments[4], "Appointment data is OK");
 
-            assert.equal($(args.appointmentElement).get(0), tooltipHelper.getItemElement(2).get(0), "Appointment element is OK");
+            assert.equal($(args.appointmentElement).get(0), tooltipItemElement, "Appointment element is OK");
             assert.ok(args.event instanceof $.Event, "Event is OK");
 
             assert.notOk(args.hasOwnProperty('itemData'));
@@ -2670,6 +2671,7 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
 
         instance.option("dataSource", appointments);
         appointmentsHelper.clickOnCompactAppointment();
+        tooltipItemElement = tooltipHelper.getItemElement(2).get(0);
         tooltipHelper.clickOnItem(2);
 
     } finally {

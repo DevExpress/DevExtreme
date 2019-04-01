@@ -84,15 +84,13 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         }
     }
 
-    onListItemClick(e) {
+    onListItemClick(listItemClickArg) {
         const config = {
-            itemData: e.itemData.data,
-            itemElement: e.itemElement
+            itemData: listItemClickArg.itemData.data,
+            itemElement: listItemClickArg.itemElement
         };
-        const result = extendFromObject(this.scheduler.fire("mapAppointmentFields", config), e, false);
         const showEditAppointmentPopupAction = this.createAppointmentClickAction();
-
-        showEditAppointmentPopupAction(result);
+        showEditAppointmentPopupAction(this.createClickEventArgument(config, listItemClickArg));
     }
 
     createAppointmentClickAction() {
@@ -103,6 +101,18 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
                 this.scheduler.fire("showEditAppointmentPopup", { data: config.appointmentData });
             }
         });
+    }
+
+    createClickEventArgument(config, listItemClickArg) {
+        const result = extendFromObject(this.scheduler.fire("mapAppointmentFields", config), listItemClickArg, false);
+        return this.trimClickEventArgument(result);
+    }
+
+    trimClickEventArgument(e) {
+        delete e.itemData;
+        delete e.itemIndex;
+        delete e.itemElement;
+        return e;
     }
 
     createFunctionTemplate(template, data, targetData, index) {
