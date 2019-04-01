@@ -576,7 +576,7 @@ var DropDownList = DropDownEditor.inherit({
             noDataText: this.option("noDataText"),
             grouped: this.option("grouped"),
             onContentReady: this._listContentReadyHandler.bind(this),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            itemTemplate: this.option("itemTemplate"),
             indicateLoading: false,
             keyExpr: this._getCollectionKeyExpr(),
             displayExpr: this._displayGetterExpr(),
