@@ -2897,6 +2897,10 @@ const Scheduler = Widget.inherit({
         }
     },
 
+    resizePopup: function() {
+        domUtils.triggerResizeEvent(this._popup.$element());
+    },
+
     dayHasAppointment: function(day, appointment, trimTime) {
         var startDate = new Date(this.fire("getField", "startDate", appointment)),
             endDate = new Date(this.fire("getField", "endDate", appointment)),

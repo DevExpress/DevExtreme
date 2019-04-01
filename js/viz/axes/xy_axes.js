@@ -1044,10 +1044,11 @@ module.exports = {
         _getTranslatedValue: function(value, offset) {
             var pos1 = this._translator.translate(value, offset, this._options.type === "semidiscrete" && this._options.tickInterval),
                 pos2 = this._axisPosition,
-                isHorizontal = this._isHorizontal;
+                isHorizontal = this._isHorizontal,
+                centerCorrection = this._options.width % 2 === 1 ? 0.5 : 0;
             return {
-                x: isHorizontal ? pos1 : pos2,
-                y: isHorizontal ? pos2 : pos1
+                x: isHorizontal ? pos1 : pos2 + centerCorrection,
+                y: isHorizontal ? pos2 + centerCorrection : pos1
             };
         },
 
