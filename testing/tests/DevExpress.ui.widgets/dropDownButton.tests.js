@@ -89,7 +89,7 @@ QUnit.module("button group integration", {}, () => {
         assert.strictEqual(buttonGroupItems.length, 2, "2 buttons are rendered");
         assert.strictEqual(buttonGroupItems[0].icon, undefined, "empty icon is correct");
         assert.strictEqual(buttonGroupItems[1].icon, "spindown", "dropdown icon is correct");
-        assert.strictEqual(buttonGroupItems[1].width, 26, "button content should be 24px without borders");
+        assert.strictEqual(buttonGroupItems[1].width, 24, "button width match the design");
     });
 
     QUnit.test("toggle button should toggle the widget", (assert) => {

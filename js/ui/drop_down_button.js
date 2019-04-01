@@ -272,7 +272,7 @@ let DropDownButton = Widget.inherit({
         if(this.option("showToggleButton")) {
             items.push({
                 icon: "spindown",
-                width: 24,
+                width: 26,
                 elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS },
                 onClick: this.toggle.bind(this, undefined)
             });
@@ -290,6 +290,7 @@ let DropDownButton = Widget.inherit({
 
     _popupOptions() {
         return extend({
+            dragEnabled: false,
             deferRendering: this.option("deferRendering"),
             minWidth: 130,
             closeOnOutsideClick: true,
