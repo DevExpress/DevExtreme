@@ -67,9 +67,7 @@ const RecurrenceRule = Class.inherit({
     },
 
     makeRules(string) {
-        const that = this;
-
-        that._recurrenceRule = recurrenceUtils.getRecurrenceRule(string).rule;
+        this._recurrenceRule = recurrenceUtils.getRecurrenceRule(string).rule;
     },
 
     makeRule(field, value) {
@@ -569,7 +567,6 @@ const RecurrenceEditor = Editor.inherit({
 
     _renderRepeatEndTypeEditor() {
         const repeatType = this._recurrenceRule.repeatableRule() || "never";
-        const that = this;
 
         this._$repeatTypeEditor = $("<div>")
             .addClass(REPEAT_TYPE_EDITOR)
@@ -581,15 +578,15 @@ const RecurrenceEditor = Editor.inherit({
             value: repeatType,
             displayExpr: "text",
             valueExpr: "value",
-            itemTemplate(itemData) {
+            itemTemplate: (itemData) => {
                 if(itemData.value === "count") {
-                    return that._renderRepeatCountEditor();
+                    return this._renderRepeatCountEditor();
                 }
                 if(itemData.value === "until") {
-                    return that._renderRepeatUntilEditor();
+                    return this._renderRepeatUntilEditor();
                 }
 
-                return that._renderDefaultRepeatEnd();
+                return this._renderDefaultRepeatEnd();
 
             },
             layout: "vertical",
