@@ -258,7 +258,7 @@ const RecurrenceEditor = Editor.inherit({
             .addClass(FIELD_LABEL_CLASS);
 
         this._$intervalTypeLabel = $("<div>")
-            .text(messageLocalization.format("dxScheduler-recurrenceRepeat" + freq.charAt(0).toUpperCase() + freq.substr(1).toLowerCase()))
+            .text(messageLocalization.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`))
             .addClass(REPEAT_TYPE_EDITOR + LABEL_POSTFIX);
 
         const interval = this._recurrenceRule.rules().interval || 1;
@@ -410,7 +410,7 @@ const RecurrenceEditor = Editor.inherit({
                 if(!byDayRule) {
                     byDayRule = dayName;
                 } else {
-                    byDayRule = byDayRule + "," + dayName;
+                    byDayRule = `${byDayRule},${dayName}`;
                 }
             }
         });
@@ -513,7 +513,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _setAriaDescribedBy(editor, $label) {
-        const labelId = "label-" + new Guid();
+        const labelId = `label-${new Guid()}`;
 
         editor.setAria("describedby", labelId);
         editor.setAria("id", labelId, $label);
@@ -835,7 +835,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeRepeatTypeLabel() {
-        const $labels = this.$element().find("." + REPEAT_TYPE_EDITOR + LABEL_POSTFIX);
+        const $labels = this.$element().find(`.${REPEAT_TYPE_EDITOR}${LABEL_POSTFIX}`);
 
         if(!$labels.length) {
             return;
@@ -844,7 +844,7 @@ const RecurrenceEditor = Editor.inherit({
         const freq = this._recurrenceRule.rules().freq || "daily";
 
         each($labels, (_, $label) => {
-            $($label).text(messageLocalization.format("dxScheduler-recurrenceRepeat" + freq.charAt(0).toUpperCase() + freq.substr(1).toLowerCase()));
+            $($label).text(messageLocalization.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`));
         });
     },
 
