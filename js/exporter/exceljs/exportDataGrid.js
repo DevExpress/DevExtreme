@@ -11,7 +11,7 @@ function exportDataGrid(options) {
     let columns = dataGrid.getVisibleColumns().filter(item => item.allowExporting);
     let currentColumnIndex = result.from.column;
 
-    if(dataGrid.option("showColumnHeaders") !== false) {
+    if(dataGrid.option("showColumnHeaders") && columns.length > 0) {
         let headerRow = worksheet.getRow(result.to.row);
 
         for(let i = 0; i < columns.length; i++) {
@@ -19,25 +19,26 @@ function exportDataGrid(options) {
             currentColumnIndex++;
         }
 
-        result.to.row++;
         if(columns.length > 0) {
             result.to.column += columns.length - 1;
         }
+
+        if(options.excelFilterEnabled === true) {
+            worksheet.autoFilter = {
+                from: {
+                    row: result.from.row,
+                    column: result.from.column,
+                },
+                to: {
+                    row: result.to.row,
+                    column: result.to.column
+                }
+            };
+            worksheet.views = [{ state: 'frozen', ySplit: result.to.row }];
+        }
     }
 
-    if(options.excelFilterEnabled === true) {
-        worksheet.autoFilter = {
-            from: {
-                row: result.from.row,
-                column: result.from.column,
-            },
-            to: {
-                row: result.from.row,
-                column: result.to.column
-            }
-        };
-        worksheet.views = [{ state: 'frozen', ySplit: result.from.row }];
-    }
+    result.to.row++;
 
     return new Promise((resolve) => {
         dataGrid.getController("data").loadAll().then((items) => {
