@@ -130,6 +130,20 @@ QUnit.test("Recurrence editor onValueChanged should be fired after change value"
     assert.equal(fired, 1, "Recurrence editor onValueChanged is fired");
 });
 
+QUnit.test("'resizePopup' observer should be fired after changing freq", function(assert) {
+    this.createInstance({
+        value: "FREQ=MONTHLY"
+    });
+
+    var stub = sinon.stub(this.instance, "invoke").withArgs("resizePopup");
+
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
+
+    freqEditor.option("value", "weekly");
+
+    assert.ok(stub.calledOnce, "Observer is notified");
+});
+
 QUnit.test("Recurrence editor should correctly process values to the freq radioGroup", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
