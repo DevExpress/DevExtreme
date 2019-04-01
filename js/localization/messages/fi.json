@@ -193,7 +193,7 @@
         "dxScheduler-recurrenceMonthly": "Kuukausittain",
         "dxScheduler-recurrenceYearly": "Vuosittain",
 
-        "dxScheduler-recurrenceEvery": "Joka",
+        "dxScheduler-recurrenceRepeatEvery": "Joka",
         "dxScheduler-recurrenceEnd": "Loppu",
         "dxScheduler-recurrenceAfter": "Jälkeen",
         "dxScheduler-recurrenceOn": "Aika",

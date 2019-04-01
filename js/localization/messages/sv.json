@@ -193,7 +193,7 @@
         "dxScheduler-recurrenceMonthly": "Varje månad",
         "dxScheduler-recurrenceYearly": "Varje år",
 
-        "dxScheduler-recurrenceEvery": "Varje",
+        "dxScheduler-recurrenceRepeatEvery": "Varje",
         "dxScheduler-recurrenceEnd": "Upprepning slutar",
         "dxScheduler-recurrenceAfter": "Efter",
         "dxScheduler-recurrenceOn": "På",
