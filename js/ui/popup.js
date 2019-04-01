@@ -673,19 +673,22 @@ var Popup = Overlay.inherit({
                 + popupHeightParts.contentVerticalOffsets
                 + popupHeightParts.popupVerticalOffsets,
             overlayContent = this.overlayContent().get(0),
-            cssStyles = {};
+            cssStyles = {},
+            contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
+            contentMinHeight = this._getOptionValue("minHeight", overlayContent),
+            isAutoResizable = !isIE11 || (!contentMaxHeight && !contentMinHeight);
 
-        if(this.option("autoResizeEnabled") && this._isAutoHeight() && !isIE11) {
-            var container = $(this._getContainer()).get(0),
-                contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
-                contentMinHeight = this._getOptionValue("minHeight", overlayContent),
-                maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
-                minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
+        if(this.option("autoResizeEnabled") && this._isAutoHeight() && isAutoResizable) {
+            if(!isIE11) {
+                var container = $(this._getContainer()).get(0),
+                    maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
+                    minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
-            cssStyles = extend(cssStyles, {
-                minHeight: minHeightValue,
-                maxHeight: maxHeightValue
-            });
+                cssStyles = extend(cssStyles, {
+                    minHeight: minHeightValue,
+                    maxHeight: maxHeightValue
+                });
+            }
         } else {
             var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
             cssStyles = { height: Math.max(0, contentHeight) };

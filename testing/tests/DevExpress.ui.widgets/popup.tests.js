@@ -424,9 +424,8 @@ QUnit.test("dimensions should be shrunk correctly with height = auto specified",
     var popupContentHeight = $content.height();
     var addedContent = $("<div>").width(200).height(200);
     $content.append(addedContent);
-    var expectedHeight = isIE11 ? popupContentHeight : popupContentHeight + addedContent.height();
 
-    assert.equal($content.height(), expectedHeight);
+    assert.equal($content.height(), popupContentHeight + addedContent.height());
 });
 
 QUnit.test("dxPopup should render custom template with render function that returns dom node", function(assert) {
