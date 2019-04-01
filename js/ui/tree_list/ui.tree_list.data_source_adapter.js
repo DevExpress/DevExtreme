@@ -273,11 +273,11 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _handleDataLoading: function(options) {
-            var combinedParentIdFilter,
+            var expandedRowKeys,
+                combinedParentIdFilter,
                 parentIdsToLoad,
                 rootValue = this.option("rootValue"),
                 parentIdExpr = this.option("parentIdExpr"),
-                expandedRowKeys = this.option("expandedRowKeys"),
                 filterMode = this.option("filterMode"),
                 parentIds = options.storeLoadOptions.parentIds;
 
@@ -289,6 +289,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
             if(options.remoteOperations.filtering && !options.isCustomLoading) {
                 if(filterMode === "standard" || !options.storeLoadOptions.filter) {
+                    expandedRowKeys = options.collapseVisibleNodes ? [] : this.option("expandedRowKeys");
                     parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds || []);
                     parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 

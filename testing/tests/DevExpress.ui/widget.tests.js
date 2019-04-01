@@ -11,6 +11,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import dataUtils from "core/element_data";
+import commonUtils from "core/utils/common";
 
 import "common.css!";
 
@@ -1410,6 +1411,15 @@ QUnit.module("isReady", {}, () => {
         assert.equal(isReadyOnInit, false, "widget is not ready on init");
         assert.equal($widget.dxWidget("isReady"), true, "widget is ready after render");
 
+    });
+
+    QUnit.test("widget doesn't throw if disposed before rendering (T717968)", (assert) => {
+
+        commonUtils.deferUpdate(() => {
+            new DxWidget("#widget").dispose();
+        });
+
+        assert.ok(true);
     });
 });
 

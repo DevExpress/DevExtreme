@@ -465,11 +465,17 @@ module.exports = (function() {
             } catch(e) {}
         },
 
-        getLastResizableColumnIndex: function(columns) {
-            var lastColumnIndex = columns.length - 1;
+        getLastResizableColumnIndex: function(columns, resultWidths) {
             var hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
-            while(lastColumnIndex >= 0 && columns[lastColumnIndex] && (columns[lastColumnIndex].command || columns[lastColumnIndex] === "adaptiveHidden" || columns[lastColumnIndex].fixed || (hasResizableColumns && columns[lastColumnIndex].allowResizing === false))) {
-                lastColumnIndex--;
+
+            for(var lastColumnIndex = columns.length - 1; columns[lastColumnIndex]; lastColumnIndex--) {
+                var column = columns[lastColumnIndex],
+                    width = resultWidths && resultWidths[lastColumnIndex],
+                    allowResizing = !hasResizableColumns || column.allowResizing !== false;
+
+                if(!column.command && !column.fixed && width !== "adaptiveHidden" && allowResizing) {
+                    break;
+                }
             }
 
             return lastColumnIndex;

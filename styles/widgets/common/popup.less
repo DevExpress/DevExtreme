@@ -25,6 +25,21 @@
     .dx-popup-content {
         box-sizing: content-box;
     }
+
+    &.dx-popup-auto-resizeble {
+        display: flex;
+        flex-wrap: wrap;
+
+        .dx-popup-title,
+        .dx-popup-bottom {
+            width: 100%;
+        }
+
+        .dx-popup-content {
+            height: auto;
+            flex: 1;
+        }
+    }
 }
 
 .dx-popup-content {
@@ -33,19 +48,6 @@
 
     &.dx-dialog-content {
         padding: 0;
-    }
-
-    > .dx-treeview,
-    > .dx-scrollable,
-    > .dx-treeview > .dx-scrollable {
-        max-height: inherit;
-        min-height: inherit;
-
-        > .dx-scrollable-wrapper,
-        > .dx-scrollable-wrapper > .dx-scrollable-container {
-            max-height: inherit;
-            min-height: inherit;
-        }
     }
 }
 

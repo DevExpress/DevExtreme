@@ -51,7 +51,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             let dataController = this.getController("data"),
                 isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
                 pageIndex = Math.floor(index / dataController.pageSize()),
-                visibleRowsCount = dataController.getVisibleRows().length,
+                visibleRowsCount = dataController.getVisibleRows().length + dataController.getRowIndexOffset(),
                 visiblePagesCount = Math.ceil(visibleRowsCount / dataController.pageSize()),
                 isLocalIndex = !isVirtualScrolling || visiblePagesCount > pageIndex,
                 setKeyByIndex = () => {
@@ -345,7 +345,10 @@ module.exports = {
                 setFocusedRowIndex: function(rowIndex) {
                     this.callBase(rowIndex);
 
-                    this.option("focusedRowIndex", rowIndex);
+                    let visibleRow = this.getController("data").getVisibleRows()[rowIndex];
+                    if(!visibleRow || !visibleRow.inserted) {
+                        this.option("focusedRowIndex", rowIndex);
+                    }
                 },
 
                 setFocusedColumnIndex: function(columnIndex) {

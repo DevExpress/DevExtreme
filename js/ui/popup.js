@@ -28,6 +28,8 @@ var POPUP_CLASS = "dx-popup",
     POPUP_NORMAL_CLASS = "dx-popup-normal",
     POPUP_CONTENT_CLASS = "dx-popup-content",
 
+    POPUP_AUTO_RESIZEBLE_CLASS = "dx-popup-auto-resizeble",
+
     POPUP_DRAGGABLE_CLASS = "dx-popup-draggable",
 
     POPUP_TITLE_CLASS = "dx-popup-title",
@@ -672,7 +674,12 @@ var Popup = Overlay.inherit({
             overlayContent = this.overlayContent().get(0),
             cssStyles = {};
 
+        $(overlayContent).removeClass(POPUP_AUTO_RESIZEBLE_CLASS);
+
         if(this.option("autoResizeEnabled") && this._isAutoHeight()) {
+
+            $(overlayContent).addClass(POPUP_AUTO_RESIZEBLE_CLASS);
+
             var container = $(this._getContainer()).get(0),
                 contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
                 contentMinHeight = this._getOptionValue("minHeight", overlayContent),
