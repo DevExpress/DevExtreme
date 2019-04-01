@@ -13,6 +13,8 @@ function run_lint {
 }
 
 function run_ts {
+    echo "V1"
+    exit 1
     npm i
     npx gulp ts-check npm-dts-check
 }
