@@ -1,6 +1,9 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { Deferred, when } from "../../core/utils/deferred";
+import { isFunction } from "../../core/utils/type";
+import { noop } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
 
 import Widget from "../widget/ui.widget";
 
@@ -34,6 +37,8 @@ class FileManagerEditingControl extends Widget {
             .append(this._createFolderDialog.$element())
             .append(this._chooseFolderDialog.$element())
             .append(this._fileUploader.$element());
+
+        this._createEditActions();
     }
 
     _createFileUploader() {
@@ -90,78 +95,94 @@ class FileManagerEditingControl extends Widget {
         };
     }
 
-    tryRename(fileItem) {
-        fileItem && this._tryEditAction(
-            this._renameItemDialog,
-            result => this._provider.renameItem(fileItem, result.name),
-            "Item renamed",
-            () => `Rename operation failed for the ${fileItem.name} item`,
-            fileItem.name
-        );
+    _createEditActions() {
+        this._editActions = {
+
+            create: {
+                useCurrentFolder: true,
+                affectsAllItems: true,
+                dialog: this._createFolderDialog,
+                action: (items, arg) => this._provider.createFolder(items[0], arg.name),
+                getSuccessMessage: items => "Folder created",
+                getErrorMessage: (items, info) => `Create folder operation failed for the ${items[0].name} parent folder`
+            },
+
+            rename: {
+                dialog: this._renameItemDialog,
+                getDialogArgument: items => items[0].name,
+                action: (items, arg) => this._provider.renameItem(items[0], arg.name),
+                getSuccessMessage: items => "Items deleted",
+                getErrorMessage: (items, info) => `Rename operation failed for the ${items[0].name} item`,
+            },
+
+            delete: {
+                dialog: this._confirmationDialog,
+                getDialogArgument: items => items[0].name,
+                action: (items, arg) => this._provider.deleteItems(items),
+                getSuccessMessage: items => "Item renamed",
+                getErrorMessage: (items, info) => `Delete operation failed for the ${items[info.index].name} item`
+            },
+
+            move: {
+                dialog: this._chooseFolderDialog,
+                action: (items, arg) => this._provider.moveItems(items, arg.folder),
+                getSuccessMessage: items => "Items moved",
+                getErrorMessage: (items, info) => `Move operation failed for the ${items[info.index].name} item`
+            },
+
+            copy: {
+                dialog: this._chooseFolderDialog,
+                action: (items, arg) => this._provider.copyItems(items, arg.folder),
+                getSuccessMessage: items => "Items copied",
+                getErrorMessage: (items, info) => `Copy operation failed for the ${items[info.index].name} item`
+            },
+
+            upload: this._tryUpload.bind(this),
+
+            download: () => { } // TODO implement this action
+        };
     }
 
-    tryCreate() {
-        const item = this._model.getCurrentFolder();
-        this._actions.onCreating();
+    getCommandActions() {
+        const result = {};
 
-        this._tryEditAction(
-            this._createFolderDialog,
-            result => this._provider.createFolder(item, result.name),
-            "Folder created",
-            info => `Create folder operation failed for the ${item.name} parent folder`
-        );
+        each(this._editActions, (name, action) => {
+            if(this._editActions.hasOwnProperty(name)) {
+                result[name] = () => this._executeAction(name);
+            }
+        });
+
+        return result;
     }
 
-    tryDelete(fileItems) {
-        if(fileItems.length === 0) {
+    _executeAction(actionName) {
+        const action = this._editActions[actionName];
+        if(!action) {
             return;
         }
 
-        this._tryEditAction(
-            this._confirmationDialog,
-            result => this._provider.deleteItems(fileItems),
-            "Items deleted",
-            info => `Delete operation failed for the ${fileItems[info.index].name} item`
-        );
-    }
-
-    tryMove(fileItems) {
-        if(!fileItems || fileItems.length === 0) {
-            return;
+        if(isFunction(action)) {
+            action();
+        } else {
+            this._tryEditAction(action);
         }
-
-        this._tryEditAction(
-            this._chooseFolderDialog,
-            result => this._provider.moveItems(fileItems, result.folder),
-            "Items moved",
-            info => `Move operation failed for the ${fileItems[info.index].name} item`
-        );
     }
 
-    tryCopy(fileItems) {
-        if(fileItems.length === 0) {
-            return;
-        }
+    _tryEditAction(action) {
+        const items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
+        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isFolder);
+        const dialogArgumentGetter = action.getDialogArgument || noop;
 
-        this._tryEditAction(
-            this._chooseFolderDialog,
-            result => this._provider.copyItems(fileItems, result.folder),
-            "Items copied",
-            info => `Copy operation failed for the ${fileItems[info.index].name} item`
-        );
-    }
-
-    _tryEditAction(dialog, editAction, successMessage, errorMessageAction, dialogArgument) {
-        this._showDialog(dialog, dialogArgument)
-            .then(editAction.bind(this))
+        this._showDialog(action.dialog, dialogArgumentGetter(items))
+            .then(dialogResult => action.action(items, dialogResult))
             .then(result => {
                 whenSome(result,
-                    () => this._raiseOnSuccess(successMessage),
-                    info => this._raiseOnError(errorMessageAction(info), info.error));
+                    () => this._raiseOnSuccess(action.getSuccessMessage(items), onlyFiles),
+                    info => this._raiseOnError(action.getErrorMessage(items, info), info.error));
             });
     }
 
-    tryUpload() {
+    _tryUpload() {
         this._fileUploader.tryUpload();
     }
 
@@ -194,7 +215,6 @@ class FileManagerEditingControl extends Widget {
                 provider: null,
                 getFolders: null,
                 getCurrentFolder: null,
-                getSingleSelectedItem: null,
                 getMultipleSelectedItems: null
             },
             onSuccess: null,

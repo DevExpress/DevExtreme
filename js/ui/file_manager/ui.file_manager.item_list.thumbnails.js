@@ -3,6 +3,8 @@ import { extend } from "../../core/utils/extend";
 import { when } from "../../core/utils/deferred";
 import iconUtils from "../../core/utils/icon";
 import eventsEngine from "../../events/core/events_engine";
+import { addNamespace } from "../../events/utils";
+import { name as contextMenuEventName } from "../../events/contextmenu";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
 
@@ -16,6 +18,8 @@ const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = "dx-filemanager-thumbnails-ite
 const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = "dx-filemanager-thumbnails-item-name";
 const FILE_MANAGER_ITEM_SELECTED_CLASS = "dx-filemanager-item-selected";
 const FILE_MANAGER_ITEM_FOCUSED_CLASS = "dx-filemanager-item-focused";
+
+const FILE_MANAGER_THUMBNAILS_CONTEXT_MENU_EVENT = "dxFileManager_contextmenu";
 
 class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
@@ -40,6 +44,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
 
+        const eventName = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_CONTEXT_MENU_EVENT);
+        eventsEngine.on(this.$element(), eventName, this._onContextMenu.bind(this));
         eventsEngine.on(this.$element(), "click", this._getItemSelector(), this._onClick.bind(this));
 
         this._loadItems();
@@ -147,6 +153,24 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _onClick(e) {
         const $item = $(e.currentTarget);
+        this._selectItemByItemElement($item, e);
+    }
+
+    _onContextMenu(e) {
+        const $item = $(e.target).closest(this._getItemSelector());
+        if($item.length > 0) {
+            this._selectItemByItemElement($item, e);
+        } else {
+            this._selectionController.clearSelection();
+        }
+
+        this._ensureContextMenu();
+        const item = this._getFocusedItem();
+        this._contextMenu.option("dataSource", this._createContextMenuItems(item));
+        this._displayContextMenu(e.target, e.offsetX, e.offsetY);
+    }
+
+    _selectItemByItemElement($item, e) {
         const index = $item.data("index");
         this._selectItemByIndex(index, false, e);
     }
@@ -376,6 +400,10 @@ class SingleSelectionController {
 
     selectAll() {
 
+    }
+
+    clearSelection() {
+        this._setAllItemsSelectedState(false);
     }
 
     selectItem(item, eventArgs) {
