@@ -85,6 +85,9 @@
 
 @SCHEDULER_TIMELINE_MIN_HEIGHT: 100px;
 
+@SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET: 20px;
+@SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -80px;
+
 .dx-scheduler-group-mixin(@padding) {
     .dx-scrollable {
         &.dx-scheduler-date-table-scrollable,
@@ -2041,8 +2044,8 @@
             }
         }
 
-        .dx-scheduler-recurrence-rule-item {
-            padding-top: 20px;
+        .dx-scheduler-recurrence-rule-item.dx-field-item {
+            padding-top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
 
             &.dx-label-h-align.dx-flex-layout {
                 -webkit-align-items: start;
@@ -2063,20 +2066,20 @@
             .dx-recurrence-repeat-on-label,
             .dx-recurrence-repeat-end-container-label {
                 position: absolute;
-                left: -82px;
+                left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET - 2px;
                 padding-right: 10px;
                 padding-top: 3px;
             }
 
             .dx-recurrence-repeat-end-container-label,
             .dx-recurrence-repeat-end-container {
-                padding-top: 20px;
+                padding-top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
             }
 
             .dx-recurrence-radiogroup-repeat-type {
                 position: relative;
-                left: -80px;
-                top: 20px;
+                left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET;
+                top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
             }
 
             .dx-field-value {
