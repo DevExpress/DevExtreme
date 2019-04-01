@@ -5052,15 +5052,16 @@ QUnit.module("regression", {
             itemTemplate: () => "item",
             opened: true
         }).dxTagBox("instance");
-        const checkItemsRender = (texts) => {
+        const checkItemsRender = () => {
+            const texts = ["item1", "item2"];
             const listItems = tagBox._$list.find(".dx-list-item");
 
             texts.forEach((text, index) => assert.strictEqual(listItems.eq(index).text(), text));
         };
 
-        checkItemsRender(["item1", "item2"]);
-        tagBox.option("items", [{ text: "item3" }, { text: "item4" }]);
-        checkItemsRender(["item3", "item4"]);
+        checkItemsRender();
+        tagBox.option("itemTemplate", () => "item");
+        checkItemsRender();
     });
 
     QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", (assert) => {
