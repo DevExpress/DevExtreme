@@ -10,17 +10,11 @@ const MENTION_CLASS = "dx-mention";
 class Mention extends Embed {
     static create(data) {
         const node = super.create();
-        const $marker = $("<span>");
-        const $node = $(node);
 
-        $marker.text(data.marker);
-        $node
-            .attr("spellcheck", false)
-            .append($marker)
-            .append(data.value);
-
+        node.setAttribute("spellcheck", false);
         node.dataset.marker = data.marker;
         node.dataset.mentionValue = data.value;
+        this.renderContent(node, data);
 
         return node;
     }
@@ -31,8 +25,29 @@ class Mention extends Embed {
             value: node.dataset.mentionValue
         };
     }
+
+    static renderContent(node, data) {
+        this._renderContentImpl(node, data);
+    }
+
+    static baseContentRender(node, data) {
+        const $marker = $("<span>").text(data.marker);
+
+        $(node)
+            .append($marker)
+            .append(data.value);
+    }
+
+    static restoreContentRender() {
+        this._renderContentImpl = this.baseContentRender;
+    }
+
+    static setContentRender(renderer) {
+        this._renderContentImpl = renderer;
+    }
 }
 
+Mention._renderContentImpl = Mention.baseContentRender;
 Mention.blotName = "mention";
 Mention.tagName = "span";
 Mention.className = MENTION_CLASS;

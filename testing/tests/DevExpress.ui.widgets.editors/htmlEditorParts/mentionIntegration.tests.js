@@ -275,4 +275,28 @@ module("Mentions integration", {
         this.$element.find("p").first().text("#");
         this.clock.tick();
     });
+
+    test("template", (assert) => {
+        const done = assert.async();
+        const expectedMention = `<span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John"><span contenteditable="false">John!</span></span>`;
+        const valueChangeSpy = sinon.spy(({ value }) => {
+            if(valueChangeSpy.calledOnce) {
+                $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger("dxclick");
+                this.clock.tick();
+            } else {
+                assert.strictEqual(value.replace(/\uFEFF/g, ""), expectedMention, "mention has been added");
+                done();
+            }
+        });
+
+        this.options.onValueChanged = valueChangeSpy;
+        this.options.mentions[0].template = (data, container) => {
+            $(container).text(`${data.value}!`);
+        };
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
+    });
 });

@@ -3,6 +3,7 @@ import { isString } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 
 import PopupModule from "./popup";
+import Mention from "../formats/mention";
 
 const USER_ACTION = "user";
 const DEFAULT_MARKER = "@";
@@ -16,7 +17,8 @@ class MentionModule extends PopupModule {
                 return this._valueGetter(itemData);
             },
             valueExpr: "this",
-            displayExpr: "this"
+            displayExpr: "this",
+            template: null
         });
     }
 
@@ -90,10 +92,30 @@ class MentionModule extends PopupModule {
         this._activeMarker = this._mentions[insertOperation];
 
         if(this._activeMarker) {
+            this._updateMentionTemplate(this._activeMarker);
             this._updateList(this._activeMarker);
             this.savePosition(caret.index);
             this._popup.option("position", this._popupPosition);
             this._popup.show();
+        }
+    }
+
+    _updateMentionTemplate({ template }) {
+        let preparedTemplate;
+
+        if(template) {
+            preparedTemplate = this.options.editorInstance._getTemplate(template);
+        }
+
+        if(preparedTemplate) {
+            Mention.setContentRender(function(node, data) {
+                preparedTemplate.render({
+                    model: data,
+                    container: node
+                });
+            });
+        } else {
+            Mention.restoreContentRender();
         }
     }
 
