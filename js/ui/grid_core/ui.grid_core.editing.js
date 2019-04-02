@@ -2326,7 +2326,14 @@ module.exports = {
                  * @name GridBaseOptions.editing.popup
                  * @type dxPopupOptions
                  */
-                popup: {}
+                popup: {},
+
+                /**
+                 * @name GridBaseOptions.editing.startEditAction
+                 * @type Enums.GridStartEditAction
+                 * @default "onClick"
+                 */
+                startEditAction: "onClick"
             }
         };
     },
@@ -2571,7 +2578,7 @@ module.exports = {
 
                     return this.getCellIndex($targetElement);
                 },
-                _rowClick: function(e) {
+                _editCellByClick: function(e, callBack, editAction) {
                     var that = this,
                         editingController = that._editingController,
                         $targetElement = $(e.event.target),
@@ -2579,13 +2586,24 @@ module.exports = {
                         row = that._dataController.items()[e.rowIndex],
                         allowUpdating = editingController.allowUpdating({ row: row }) || row && row.inserted,
                         column = that._columnsController.getVisibleColumns()[columnIndex],
-                        allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex));
+                        allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex)),
+                        startEditAction = that.option("editing.startEditAction") || "onClick";
 
                     if($targetElement.closest("." + ROW_CLASS + "> td").hasClass(POINTER_EVENTS_NONE_CLASS)) return;
 
-                    if(!(allowUpdating && allowEditing && editingController.editCell(e.rowIndex, columnIndex)) && !editingController.isEditRow(e.rowIndex)) {
-                        that.callBase(e);
+                    if(editAction === "onClick" && startEditAction === "onDblClick") {
+                        editingController.closeEditCell();
                     }
+
+                    if(!(editAction === startEditAction && allowUpdating && allowEditing && editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex))) {
+                        callBack.call(that, e);
+                    }
+                },
+                _rowClick: function(e) {
+                    this._editCellByClick(e, this.callBase, "onClick");
+                },
+                _rowDblClick: function(e) {
+                    this._editCellByClick(e, this.callBase, "onDblClick");
                 },
                 _cellPrepared: function($cell, parameters) {
                     var columnIndex = parameters.columnIndex,
