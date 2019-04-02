@@ -1,7 +1,4 @@
-require("../switch");
-
 import $ from "../../core/renderer";
-import Class from "../../core/class";
 import Guid from "../../core/guid";
 import registerComponent from "../../core/component_registrator";
 import recurrenceUtils from "./utils.recurrence";
@@ -60,15 +57,15 @@ const repeatEndTypes = [
 
 const days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
-const RecurrenceRule = Class.inherit({
+class RecurrenceRule {
 
-    ctor(recurrence) {
+    constructor(recurrence) {
         this._recurrenceRule = recurrenceUtils.getRecurrenceRule(recurrence).rule;
-    },
+    }
 
     makeRules(string) {
         this._recurrenceRule = recurrenceUtils.getRecurrenceRule(string).rule;
-    },
+    }
 
     makeRule(field, value) {
         if(!value) {
@@ -87,7 +84,7 @@ const RecurrenceRule = Class.inherit({
 
             this._recurrenceRule[field] = value;
         }
-    },
+    }
 
     repeatableRule() {
         const rules = this._recurrenceRule;
@@ -101,20 +98,20 @@ const RecurrenceRule = Class.inherit({
         }
 
         return null;
-    },
+    }
 
     recurrenceString() {
         return recurrenceUtils.getRecurrenceString(this._recurrenceRule);
-    },
+    }
 
     rules() {
         return this._recurrenceRule;
-    },
+    }
 
     daysFromByDayRule() {
         return recurrenceUtils.daysFromByDayRule(this._recurrenceRule);
     }
-});
+}
 
 const RecurrenceEditor = Editor.inherit({
     _getDefaultOptions() {
