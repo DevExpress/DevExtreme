@@ -2337,17 +2337,7 @@ QUnit.test("Horizontal top. WordWrap != none, textOverflow = none. First label i
     this.translator.stub("translate").withArgs(1).returns(40);
     this.translator.stub("translate").withArgs(2).returns(60);
 
-    this.renderer.bBoxTemplate = (function() {
-        var idx = 0;
-        return function() {
-            return [
-                { x: 1, y: 2, width: 12, height: 6 },
-                { x: 3, y: 4, width: 14, height: 8 },
-                { x: 3, y: 2, width: 10, height: 12 },
-                { x: 6, y: 4, width: 10, height: 16 }
-            ][idx++];
-        };
-    })();
+    this.renderer.bBoxTemplate = { x: 1, y: 2, width: 12, height: 6 };
 
     // act
     this.axis.draw(this.canvas);
