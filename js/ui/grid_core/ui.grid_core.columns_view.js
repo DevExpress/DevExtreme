@@ -4,6 +4,7 @@ import { getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 import dataUtils from "../../core/element_data";
 import clickEvent from "../../events/click";
+import dblclickEvent from "../../events/double_click";
 import browser from "../../core/utils/browser";
 import { noop } from "../../core/utils/common";
 import styleUtils from "../../core/utils/style";
@@ -41,7 +42,7 @@ var appendElementTemplate = {
     }
 };
 
-var subscribeToRowClick = function(that, $table) {
+var subscribeToEvent = function(that, $table, event) {
     var touchTarget,
         touchCurrentTarget,
         timeoutId;
@@ -63,7 +64,7 @@ var subscribeToRowClick = function(that, $table) {
         }
     });
 
-    eventsEngine.on($table, "dxclick", ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
+    eventsEngine.on($table, event.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
         var dxEvent = e.event;
 
         if(touchTarget) {
@@ -77,10 +78,23 @@ var subscribeToRowClick = function(that, $table) {
             if(e.rowIndex >= 0) {
                 e.rowElement = getPublicElement($(dxEvent.currentTarget));
                 e.columns = that.getColumns();
-                that._rowClick(e);
+
+                if(event.name === "dxclick") {
+                    that._rowClick(e);
+                } else {
+                    that._rowDblClick(e);
+                }
             }
         }
     }));
+};
+
+var subscribeToRowClick = function(that, $table) {
+    subscribeToEvent(that, $table, clickEvent);
+};
+
+var subscribeToRowDblClick = function(that, $table) {
+    subscribeToEvent(that, $table, dblclickEvent);
 };
 
 var getWidthStyle = function(width) {
@@ -295,7 +309,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             options && that.executeAction("onCellClick", options);
         });
 
+        eventsEngine.on($table, dblclickEvent.name, ".dx-row > td", function(e) {
+            var options = getOptions(e);
+            options && that.executeAction("onCellDblClick", options);
+        });
+
         subscribeToRowClick(that, $table);
+        subscribeToRowDblClick(that, $table);
 
         return $table;
     },
@@ -303,6 +323,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _isNativeClick: noop,
 
     _rowClick: noop,
+
+    _rowDblClick: noop,
 
     _createColGroup: function(columns) {
         var i, j,
@@ -747,6 +769,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         that._templatesCache = {};
         that.createAction("onCellClick");
         that.createAction("onRowClick");
+        that.createAction("onCellDblClick");
+        that.createAction("onRowDblClick");
         that.createAction("onCellHoverChanged", { excludeValidators: ["disabled", "readOnly"] });
         that.createAction("onCellPrepared", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
         that.createAction("onRowPrepared", {

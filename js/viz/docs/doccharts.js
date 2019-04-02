@@ -815,9 +815,9 @@ var dxChart = {
         /**
         * @name dxChartOptions.commonAxisSettings.visible
         * @type boolean
-        * @default false
+        * @default true
         */
-        visible: false,
+        visible: true,
         /**
         * @name dxChartOptions.commonAxisSettings.color
         * @type string
@@ -924,7 +924,19 @@ var dxChart = {
                 color: '#767676',
                 size: 12,
                 opacity: undefined
-            }
+            },
+            /**
+            * @name dxChartOptions.commonAxisSettings.label.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+             * @name dxChartOptions.commonAxisSettings.label.textOverflow
+             * @type Enums.VizTextOverflow
+             * @default "none"
+             */
+            textOverflow: "none"
         },
         /**
         * @name dxChartOptions.commonAxisSettings.grid
@@ -994,15 +1006,15 @@ var dxChart = {
             /**
             * @name dxChartOptions.commonAxisSettings.tick.visible
             * @type boolean
-            * @default false
+            * @default true
             */
-            visible: false,
+            visible: true,
             /**
             * @name dxChartOptions.commonAxisSettings.tick.color
             * @type string
-            * @default '#d3d3d3'
+            * @default '#767676'
             */
-            color: '#d3d3d3',
+            color: '#767676',
             /**
             * @name dxChartOptions.commonAxisSettings.tick.opacity
             * @type number
@@ -1018,15 +1030,15 @@ var dxChart = {
             /**
             * @name dxChartOptions.commonAxisSettings.tick.length
             * @type number
-            * @default 8
+            * @default 7
             */
-            length: 8,
+            length: 7,
             /**
             * @name dxChartOptions.commonAxisSettings.tick.shift
             * @type number
-            * @default 0
+            * @default 3
             */
-            shift: 0
+            shift: 3
         },
         /**
        * @name dxChartOptions.commonAxisSettings.minorTick
@@ -1042,15 +1054,15 @@ var dxChart = {
             /**
             * @name dxChartOptions.commonAxisSettings.minorTick.color
             * @type string
-            * @default '#d3d3d3'
+            * @default '#767676'
             */
-            color: '#d3d3d3',
+            color: '#767676',
             /**
             * @name dxChartOptions.commonAxisSettings.minorTick.opacity
             * @type number
-            * @default undefined
+            * @default 0.3
             */
-            opacity: undefined,
+            opacity: 0.3,
             /**
             * @name dxChartOptions.commonAxisSettings.minorTick.width
             * @type number
@@ -1060,15 +1072,15 @@ var dxChart = {
             /**
             * @name dxChartOptions.commonAxisSettings.minorTick.length
             * @type number
-            * @default 8
+            * @default 7
             */
-            length: 8,
+            length: 7,
             /**
             * @name dxChartOptions.commonAxisSettings.minorTick.shift
             * @type number
-            * @default 0
+            * @default 3
             */
-            shift: 0
+            shift: 3
         },
         /**
         * @name dxChartOptions.commonAxisSettings.title
@@ -2524,9 +2536,9 @@ var dxPolarChart = {
             /**
             * @name dxPolarChartOptions.commonAxisSettings.tick.color
             * @type string
-            * @default '#d3d3d3'
+            * @default '#767676'
             */
-            color: '#d3d3d3',
+            color: '#767676',
             /**
             * @name dxPolarChartOptions.commonAxisSettings.tick.opacity
             * @type number
@@ -2542,9 +2554,9 @@ var dxPolarChart = {
             /**
             * @name dxPolarChartOptions.commonAxisSettings.tick.length
             * @type number
-            * @default 8
+            * @default 7
             */
-            length: 8
+            length: 7
         },
         /**
        * @name dxPolarChartOptions.commonAxisSettings.minorTick
@@ -2560,15 +2572,15 @@ var dxPolarChart = {
             /**
             * @name dxPolarChartOptions.commonAxisSettings.minorTick.color
             * @type string
-            * @default '#d3d3d3'
+            * @default '#767676'
             */
-            color: '#d3d3d3',
+            color: '#767676',
             /**
             * @name dxPolarChartOptions.commonAxisSettings.minorTick.opacity
             * @type number
-            * @default undefined
+            * @default 0.3
             */
-            opacity: undefined,
+            opacity: 0.3,
             /**
             * @name dxPolarChartOptions.commonAxisSettings.minorTick.width
             * @type number
@@ -2578,9 +2590,9 @@ var dxPolarChart = {
             /**
             * @name dxPolarChartOptions.commonAxisSettings.minorTick.length
             * @type number
-            * @default 8
+            * @default 7
             */
-            length: 8
+            length: 7
         },
         /**
         * @name dxPolarChartOptions.commonAxisSettings.stripStyle

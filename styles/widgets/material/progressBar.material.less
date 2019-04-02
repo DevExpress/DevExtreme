@@ -1,3 +1,11 @@
+.dx-size-default() {
+    @MATERIAL_PROGRESSBAR_STATUS_PADDING: 8px;
+}
+
+.dx-size-compact() {
+    @MATERIAL_PROGRESSBAR_STATUS_PADDING: 4px;
+}
+
 @MATERIAL_BAR_HEIGHT: 4px;
 @MATERIAL_BACKGROUND_WIDTH: 90%;
 @MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT: -90deg, transparent 5%, @progressbar-range-indeterminate-color, transparent 95%;
@@ -37,7 +45,7 @@
 }
 
 .dx-progressbar-status {
-    padding-top: 8px;
+    padding-top: @MATERIAL_PROGRESSBAR_STATUS_PADDING;
     color: @progressbar-label-color;
 
     .dx-progressbar .dx-position-right & {

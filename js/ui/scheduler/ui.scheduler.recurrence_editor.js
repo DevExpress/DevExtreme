@@ -18,7 +18,8 @@ var $ = require("../../core/renderer"),
     DateBox = require("../date_box"),
     messageLocalization = require("../../localization/message"),
     dateLocalization = require("../../localization/date"),
-    dateUtils = require("../../core/utils/date");
+    dateUtils = require("../../core/utils/date"),
+    publisherMixin = require("./ui.scheduler.publisher_mixin");
 
 var RECURRENCE_EDITOR = "dx-recurrence-editor",
     LABEL_POSTFIX = "-label",
@@ -234,7 +235,10 @@ var RecurrenceEditor = Editor.inherit({
             valueExpr: "value",
             displayExpr: "text",
             layout: "horizontal",
-            onValueChanged: this._valueChangedHandler.bind(this)
+            onValueChanged: (args)=> {
+                this._valueChangedHandler(args);
+                this.invoke("resizePopup");
+            }
         });
 
         var $field = $("<div>")
@@ -680,6 +684,10 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _formatUntilDate: function(date) {
+        if(this._recurrenceRule.rules().until && dateUtils.sameDate(this._recurrenceRule.rules().until, date)) {
+            return date;
+        }
+
         var result = dateUtils.trimTime(date);
 
         result.setDate(result.getDate() + 1);
@@ -903,7 +911,7 @@ var RecurrenceEditor = Editor.inherit({
             this._switchEditor.setAria(arguments[0], arguments[1]);
         }
     }
-});
+}).include(publisherMixin);
 
 registerComponent("dxRecurrenceEditor", RecurrenceEditor);
 

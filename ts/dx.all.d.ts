@@ -2282,8 +2282,12 @@ declare module DevExpress.viz {
         rotationAngle?: number;
         /** @name dxChart.Options.commonAxisSettings.label.staggeringSpacing */
         staggeringSpacing?: number;
+        /** @name dxChart.Options.commonAxisSettings.label.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name dxChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
+        /** @name dxChart.Options.commonAxisSettings.label.wordWrap */
+        wordWrap?: 'normal' | 'break-word' | 'none';
     }
     /** @name dxChart.Options.commonAxisSettings.stripStyle */
     export interface dxChartCommonAxisSettingsStripStyle {
@@ -4387,7 +4391,7 @@ declare module DevExpress.viz {
         /** @name dxTreeMap.Options.dataSource */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /** @name dxTreeMap.Options.group */
-        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /** @name dxTreeMap.Options.hoverEnabled */
         hoverEnabled?: boolean;
         /** @name dxTreeMap.Options.idField */
@@ -4416,12 +4420,13 @@ declare module DevExpress.viz {
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /** @name dxTreeMap.Options.parentField */
         parentField?: string;
+        /** @deprecated */
         /** @name dxTreeMap.Options.resolveLabelOverflow */
         resolveLabelOverflow?: 'ellipsis' | 'hide';
         /** @name dxTreeMap.Options.selectionMode */
         selectionMode?: 'multiple' | 'none' | 'single';
         /** @name dxTreeMap.Options.tile */
-        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'break-word' | 'none' }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /** @name dxTreeMap.Options.tooltip */
         tooltip?: dxTreeMapTooltip;
         /** @name dxTreeMap.Options.valueField */
