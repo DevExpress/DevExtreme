@@ -9,10 +9,10 @@ function exportDataGrid(options) {
     };
 
     let columns = dataGrid.getVisibleColumns().filter(item => item.allowExporting);
-    let currentColumnIndex = result.from.column;
 
     if(dataGrid.option("showColumnHeaders") && columns.length > 0) {
         let headerRow = worksheet.getRow(result.to.row);
+        let currentColumnIndex = result.from.column;
 
         for(let i = 0; i < columns.length; i++) {
             headerRow.getCell(currentColumnIndex).value = columns[i].caption;
@@ -43,8 +43,9 @@ function exportDataGrid(options) {
     return new Promise((resolve) => {
         dataGrid.getController("data").loadAll().then((items) => {
             for(let i = 0; i < items.length; i++) {
-                var dataRow = worksheet.getRow(result.to.row);
-                currentColumnIndex = result.from.column;
+                let dataRow = worksheet.getRow(result.to.row);
+                let currentColumnIndex = result.from.column;
+
                 for(let j = 0; j < items[i].values.length; j++) {
                     dataRow.getCell(currentColumnIndex).value = items[i].values[j];
                     currentColumnIndex++;
