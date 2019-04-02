@@ -1353,6 +1353,7 @@ module.exports = Class.inherit((function() {
                 store = this._store,
                 descriptions = this._descriptions,
                 reload = options.reload || (this.paginate() && that._isFieldsModified),
+                paginate = this.paginate(),
                 headerName = DESCRIPTION_NAME_BY_AREA[options.area];
 
             options = options || {};
@@ -1361,7 +1362,10 @@ module.exports = Class.inherit((function() {
                 extend(options, descriptions);
                 options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns", that._lastLoadOptions);
                 options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows", that._lastLoadOptions);
-                options.pageSize = this._pageSize;
+
+                if(paginate) {
+                    options.pageSize = this._pageSize;
+                }
 
                 if(headerName) {
                     options.headerName = headerName;
@@ -1397,7 +1401,7 @@ module.exports = Class.inherit((function() {
 
                         if(options.path) {
                             that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false);
-                        } else if(that.paginate() && !reload && isDataExists(that._data)) {
+                        } else if(paginate && !reload && isDataExists(that._data)) {
                             that.mergePartialDataSource(data, isLast ? deferred : false);
                         } else {
                             extend(that._data, data);
