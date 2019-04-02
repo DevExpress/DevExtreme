@@ -5958,6 +5958,7 @@ QUnit.module("Remote paging", {
                     rowCount: 10,
                     columnCount: 10
                 }),
+                pageSize: 4,
                 fields: Array.apply(null, Array(rowFieldCount)).map(function() { return { area: "row" }; })
                     .concat(
                         Array.apply(null, Array(columnFieldCount)).map(function() { return { area: "column" }; })
@@ -5967,18 +5968,18 @@ QUnit.module("Remote paging", {
             };
         };
 
-        this.setup = function(dataSourceOptions, pageSize) {
+        this.setup = function(dataSourceOptions) {
             var dataController = new DataController(this.getOptions({
                 dataSource: dataSourceOptions || this.createDataSource(),
                 texts: texts
             }));
 
-            dataController.columnPageSize(pageSize || 2);
-            dataController.rowPageSize(pageSize || 2);
+            dataController.columnPageSize(2);
+            dataController.rowPageSize(2);
 
             this.loadArgs = [];
 
-            dataController.load();
+            dataController.getDataSource().reload();
 
             return dataController;
         };
@@ -6032,19 +6033,13 @@ QUnit.test("load after scroll", function(assert) {
 
     dataController.setViewportPosition(0, 4 * 20);
 
-    assert.strictEqual(this.loadArgs.length, 4, "one load");
+    assert.strictEqual(this.loadArgs.length, 1, "one load");
     assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
     assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
     assert.strictEqual(this.loadArgs[0].rowSkip, 4, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
-
-    assert.strictEqual(this.loadArgs[3].rowSkip, 4, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[3].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[3].rowTake, 4, "load args rowTake");
-    assert.strictEqual(this.loadArgs[3].columnTake, 4, "load args columnTake");
-
+    assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 2, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].columnTake, 0, "load args columnTake");
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6054,10 +6049,10 @@ QUnit.test("load after scroll", function(assert) {
     ]]);
 
     assert.deepEqual(dataController.getRowsInfo(), [
-        [{ dataSourceIndex: 5, text: 'row 5', path: ['row 5'], type: 'D', isLast: true }],
-        [{ dataSourceIndex: 6, text: 'row 6', path: ['row 6'], type: 'D', isLast: true }],
-        [{ dataSourceIndex: 7, text: 'row 7', path: ['row 7'], type: 'D', isLast: true }],
-        [{ dataSourceIndex: 8, text: 'row 8', path: ['row 8'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 3, text: 'row 5', path: ['row 5'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 4, text: 'row 6', path: ['row 6'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 5, text: 'row 7', path: ['row 7'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 6, text: 'row 8', path: ['row 8'], type: 'D', isLast: true }],
     ]);
 });
 
@@ -6102,8 +6097,39 @@ QUnit.test("expand row", function(assert) {
     assert.strictEqual(this.loadArgs[0].columns.length, 0, "load args columns");
     assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
     assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+    assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [
+            { dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', expanded: true, rowspan: 2 },
+            { dataSourceIndex: 4, text: 'row 1', path: ['row 1', 'row 1'], type: 'D', isLast: true }
+        ],
+        [{ dataSourceIndex: 5, text: 'row 2', path: ['row 1', 'row 2'], type: 'D', isLast: true }]
+    ]);
+});
+
+QUnit.test("reload after expand row", function(assert) {
+    var dataController = this.setup(this.createDataSource(2, 1));
+
+    dataController.expandHeaderItem('row', ['row 1']);
+
+    this.loadArgs = [];
+    dataController.getDataSource().reload();
+
+    assert.deepEqual(this.loadArgs.map(function(options) {
+        return {
+            path: options.path,
+            area: options.area,
+            rowSkip: options.rowSkip,
+            rowTake: options.rowTake,
+            columnSkip: options.columnSkip,
+            columnTake: options.columnTake
+        };
+    }), [
+        { path: undefined, area: undefined, rowSkip: 0, rowTake: 2, columnSkip: 0, columnTake: 2 },
+        { path: ["row 1"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: undefined, columnTake: undefined }
+    ], "load options");
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
@@ -6127,9 +6153,9 @@ QUnit.test("expand column", function(assert) {
     assert.strictEqual(this.loadArgs[0].rows.length, 0, "load args rows");
     assert.strictEqual(this.loadArgs[0].columns.length, 2, "load args columns");
     assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
     assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
 
     assert.deepEqual(dataController.getColumnsInfo(), [
         [{ dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', expanded: true, colspan: 2 }],
@@ -6148,11 +6174,7 @@ QUnit.test("collapse row", function(assert) {
     this.loadArgs = [];
     dataController.collapseHeaderItem('row', ['row 1']);
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
-    assert.strictEqual(this.loadArgs[0].rows.length, 2, "load args rows");
-    assert.strictEqual(this.loadArgs[0].columns.length, 0, "load args columns");
-    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
+    assert.strictEqual(this.loadArgs.length, 0, "no load");
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true, expanded: false }],
@@ -6177,14 +6199,7 @@ QUnit.test("scroll after expand row", function(assert) {
             rowSkip: options.rowSkip,
             rowTake: options.rowTake
         };
-    }), [
-        { path: undefined, rowSkip: 1, rowTake: 1 },
-        { path: ["row 2"], rowSkip: 3, rowTake: 2 },
-        { path: undefined, rowSkip: 1, rowTake: 1 },
-        { path: ["row 2"], rowSkip: 3, rowTake: 4 },
-        { path: undefined, rowSkip: 1, rowTake: 1 },
-        { path: ["row 2"], rowSkip: 3, rowTake: 4 }
-    ], "load options");
+    }), [{ path: ["row 2"], rowSkip: 4, rowTake: 4 }], "load options");
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
@@ -6217,22 +6232,18 @@ QUnit.test("scroll to end of expanded row", function(assert) {
             rowTake: options.rowTake
         };
     }), [
-        { path: undefined, rowSkip: 1, rowTake: 1 },
-        { path: ["row 2"], rowSkip: 9, rowTake: 1 },
-        { path: undefined, rowSkip: 1, rowTake: 3 },
-        { path: ["row 2"], rowSkip: 9, rowTake: 1 },
-        { path: undefined, rowSkip: 1, rowTake: 3 },
-        { path: ["row 2"], rowSkip: 9, rowTake: 1 }
+        { path: ["row 2"], rowSkip: 8, rowTake: 4 },
+        { path: undefined, rowSkip: 0, rowTake: 4 }
     ], "load options");
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             { dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', expanded: true, rowspan: 1 },
-            { dataSourceIndex: 15, text: 'row 10', path: ['row 2', 'row 10'], type: 'D', isLast: true }
+            { dataSourceIndex: 9, text: 'row 10', path: ['row 2', 'row 10'], type: 'D', isLast: true }
         ],
         [{ dataSourceIndex: 2, text: 'row 2 Total', path: ['row 2'], type: 'T', isLast: true, colspan: 2 }],
-        [{ dataSourceIndex: 3, text: 'row 3', path: ['row 3'], type: 'D', isLast: true, colspan: 2, expanded: false }],
-        [{ dataSourceIndex: 4, text: 'row 4', path: ['row 4'], type: 'D', isLast: true, colspan: 2, expanded: false }]
+        [{ dataSourceIndex: 10, text: 'row 3', path: ['row 3'], type: 'D', isLast: true, colspan: 2, expanded: false }],
+        [{ dataSourceIndex: 11, text: 'row 4', path: ['row 4'], type: 'D', isLast: true, colspan: 2, expanded: false }]
     ], "rows info");
 
     assert.strictEqual(changedSpy.callCount, 3, "changed call count");
