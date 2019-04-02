@@ -11,6 +11,7 @@ clone:
     image: alpine/git
     commands:
       - git init
+      - git config user.email "devextreme-ci@devexpress.com"      
       - git remote add origin "https://github.com/$DRONE_REPO.git"
       - git fetch origin "$DRONE_BRANCH"
       - git fetch origin "+refs/pull/$DRONE_PULL_REQUEST/head:"
