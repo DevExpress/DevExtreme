@@ -26,8 +26,14 @@ function isUndefined(value) {
     return value === undefined || value === null;
 }
 
-function assignHelper() {
+function initializeObjectAssign() {
     if(!Object.assign) {
+        Object.defineProperty(Object, 'isInitializeObjectAssign', {
+            value: true,
+            writable: true,
+            configurable: true
+        });
+
         Object.defineProperty(Object, 'assign', {
             enumerable: false,
             configurable: true,
@@ -37,4 +43,11 @@ function assignHelper() {
     }
 }
 
-export { assignHelper };
+function clearObjectAssign() {
+    if(Object.assign && Object.isInitializeObjectAssign === true) {
+        Object.assign = undefined;
+        Object.isInitializeObjectAssign = false;
+    }
+}
+
+export { initializeObjectAssign, clearObjectAssign };
