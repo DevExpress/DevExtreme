@@ -1,7 +1,7 @@
 import $ from "jquery";
 import ExcelJS from "exceljs";
 import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
-import browser from "core/utils/browser";
+import { assignHelper } from "./assignHelper.js";
 
 import "ui/data_grid/ui.data_grid";
 
@@ -25,9 +25,7 @@ const moduleConfig = {
 };
 
 QUnit.module("API", moduleConfig, () => {
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        return;
-    }
+    assignHelper();
 
     QUnit.test("Empty grid", (assert) => {
         let dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance");
