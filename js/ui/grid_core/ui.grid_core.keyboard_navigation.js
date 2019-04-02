@@ -486,7 +486,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _isLegacyNavigation: function() {
-        return this.option("keyboardNavigation.useLegacy");
+        return this.option("useLegacyKeyboardNavigation");
     },
 
     _enterKeyHandler: function(eventArgs, isEditing) {
@@ -1614,16 +1614,17 @@ module.exports = {
             useKeyboard: true,
 
             /**
+             * @name GridBaseOptions.useLegacyKeyboardNavigation
+             * @type boolean
+             * @default false
+             */
+            useLegacyKeyboardNavigation: false,
+
+            /**
              * @name GridBaseOptions.keyboardNavigation
              * @type object
              */
             keyboardNavigation: {
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.useLegacy
-                 * @type boolean
-                 * @default false
-                 */
-                useLegacy: false,
                 /**
                  * @name GridBaseOptions.keyboardNavigation.enterKeyAction
                  * @type Enums.GridEnterKeyAction

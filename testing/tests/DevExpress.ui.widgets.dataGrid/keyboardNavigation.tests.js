@@ -193,10 +193,8 @@ QUnit.module("Keyboard navigation", {
 
         that.options = {
             useKeyboard: true,
+            useLegacyKeyboardNavigation: true,
             editing: {
-            },
-            keyboardNavigation: {
-                useLegacy: true
             }
         };
 
@@ -2125,9 +2123,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
             ],
             paginate: true
         },
-        keyboardNavigation: {
-            useLegacy: true
-        }
+        useLegacyKeyboardNavigation: true
     };
 
     setupModules(this, { initViews: true });
@@ -3214,9 +3210,7 @@ QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation f
             mode: "cell",
             allowUpdating: true
         },
-        keyboardNavigation: {
-            useLegacy: true
-        }
+        useLegacyKeyboardNavigation: true
     };
 
     setupModules(this);
@@ -3919,7 +3913,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.useLegacy = true;
+    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3948,7 +3942,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.useLegacy = true;
+    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3976,7 +3970,7 @@ QUnit.testInActiveWindow("Move to previous cell via tab key when edit command co
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.useLegacy = true;
+    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -4037,7 +4031,7 @@ QUnit.testInActiveWindow("Try move to next cell via tab key when focus on last c
         columnIndex: 1
     };
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.keyboardNavigation.useLegacy = true;
+    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -4698,9 +4692,7 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
             mode: "batch"
         },
         masterDetail: { enabled: true },
-        keyboardNavigation: {
-            useLegacy: true
-        }
+        useLegacyKeyboardNavigation: true
     };
     setupModules(this);
 
@@ -4961,9 +4953,7 @@ QUnit.module("Rows view", {
                 disabled: false,
                 useKeyboard: true,
                 tabIndex: 0,
-                keyboardNavigation: {
-                    useLegacy: true
-                }
+                useLegacyKeyboardNavigation: true
             };
             this.selectionOptions = {};
 
@@ -8608,9 +8598,6 @@ QUnit.module("Keyboard navigation accessibility", {
         ];
         this.options = $.extend(true, {
             useKeyboard: true,
-            keyboardNavigation: {
-                useLegacy: false
-            },
             commonColumnSettings: {
                 allowEditing: true
             },
