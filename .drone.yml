@@ -10,6 +10,7 @@ clone:
   git-pr:
     image: alpine/git
     commands:
+      - "echo \"PR $DRONE_PULL_REQUEST: $DRONE_REPO#$DRONE_BRANCH \u2190 $DRONE_COMMIT_SHA\""
       - git init
       - git config user.email "devextreme-ci@devexpress.com"      
       - git remote add origin "https://github.com/$DRONE_REPO.git"
