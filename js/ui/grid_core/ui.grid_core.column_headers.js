@@ -79,10 +79,17 @@ module.exports = {
                         }
                     }));
 
-                    eventsEngine.on($table, "keydown", this.createAction(e => this._processKeyDown(e.event)));
+                    if(!this._isLegacyKeyboardNavigation()) {
+                        eventsEngine.on($table, "keydown", this.createAction(e => this._processKeyDown(e.event)));
+                    }
 
                     return $table;
                 },
+
+                _isLegacyKeyboardNavigation() {
+                    return this.option("useLegacyKeyboardNavigation");
+                },
+
                 _processKeyDown(event) {
                     var args = {
                             handled: false,
@@ -175,7 +182,9 @@ module.exports = {
 
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
-                        $cell.attr("tabindex", this.option("tabindex") || 0);
+                        if(!this._isLegacyKeyboardNavigation()) {
+                            $cell.attr("tabindex", this.option("tabindex") || 0);
+                        }
                     }
 
                     return $cell;
@@ -227,7 +236,9 @@ module.exports = {
 
                     that.callBase.apply(that, arguments);
 
-                    that._restoreLastFocusedElement();
+                    if(!that._isLegacyKeyboardNavigation()) {
+                        that._restoreLastFocusedElement();
+                    }
                 },
 
                 _restoreLastFocusedElement: function() {
