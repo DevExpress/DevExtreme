@@ -11,7 +11,7 @@
     "Back": "返回",
     "OK": "确定",
 
-    "dxCollectionWidget-noDataText": "没有可显示的数据",
+    "dxCollectionWidget-noDataText": "没有要显示的数据",
 
     "validation-required": "必需",
     "validation-required-formatted": "{0} 是必需的",
