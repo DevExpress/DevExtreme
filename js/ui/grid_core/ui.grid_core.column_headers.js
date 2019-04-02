@@ -100,9 +100,10 @@ module.exports = {
                         blurHandler = e => {
                             this.lastActionElement = e.relatedTarget;
                             eventsEngine.off($target, "blur", blurHandler);
-                        };
+                        },
+                        keyboardController = this.getController("keyboardNavigation");
 
-                    this.getController("keyboardNavigation").executeAction("onKeyDown", args);
+                    keyboardController && keyboardController.executeAction("onKeyDown", args);
                     if(args.handled) {
                         event.preventDefault();
                     }

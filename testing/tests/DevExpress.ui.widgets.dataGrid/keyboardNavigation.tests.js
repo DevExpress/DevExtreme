@@ -1032,6 +1032,7 @@ function setupModules(that, modulesOptions) {
         },
         editing: { },
         showColumnHeaders: true,
+        useLegacyKeyboardNavigation: false
     });
 
     that.$element = function() {
@@ -2905,7 +2906,7 @@ if(device.deviceType === "desktop") {
 
         // assert
         assert.ok(isRepaintCalled, "repaint called");
-        assert.equal($("td[tabIndex]").length, 1, "cells count with tabIndex");
+        assert.equal($(".dx-datagrid-rowsview td[tabIndex]").length, 1, "cells count with tabIndex");
         assert.equal($("td.dx-focused").length, 0, "no cells with focus");
         assert.ok(!e.isPropagationStopped(), "propagation is not stopped");
     });
@@ -4357,7 +4358,7 @@ QUnit.testInActiveWindow("Group row after render should have tabIndex", function
     this.gridView.render($("#container"));
 
     // assert
-    assert.equal($("#container [tabIndex]").length, 1, "only one element has tabIndex");
+    assert.equal($("#container .dx-datagrid-rowsview [tabIndex]").length, 1, "only one element has tabIndex");
     assert.equal($("#container .dx-group-row").first().attr("tabIndex"), "0", "first group row has tabIndex");
 });
 
