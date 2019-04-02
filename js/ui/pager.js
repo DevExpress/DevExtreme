@@ -264,7 +264,7 @@ var Pager = Widget.inherit({
     _updatePagesTabIndices: function() {
         var $selectedPage = this.selectedPage._$page,
             updatePageIndices = () => {
-                let buttons = this.element().find("[role=button]:not(.dx-button-disable)");
+                let buttons = $(this.element()).find("[role=button]:not(.dx-button-disable)");
                 each(buttons, (_, element) => $(element).attr("tabindex", 0));
                 eventsEngine.off($selectedPage, "focus", updatePageIndices);
             };

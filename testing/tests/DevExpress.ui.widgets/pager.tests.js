@@ -635,6 +635,17 @@ QUnit.test("Next page index via navigate button", function(assert) {
     assert.equal(instance.selectedPage.value(), "10", "page index");
 });
 
+QUnit.test("Focus selected page", function(assert) {
+    var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
+
+    $pager.find(".dx-pages .dx-selection").trigger("focus");
+
+    let $pages = $pager.find(".dx-page");
+    for(let i = 0; i < $pages.length; ++i) {
+        assert.equal($($pages[i]).attr("tabindex"), 0, "page tabindex");
+    }
+});
+
 QUnit.test("Back page index via navigate button", function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }),
         instance = $pager.dxPager("instance");
