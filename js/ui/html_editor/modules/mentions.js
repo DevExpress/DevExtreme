@@ -47,7 +47,7 @@ class MentionModule extends PopupModule {
             },
             valueExpr: "this",
             displayExpr: "this",
-            template: null
+            template: null,
             searchExpr: null,
             searchTimeout: 500,
             minSearchLength: 0
