@@ -45,8 +45,8 @@ function initializeObjectAssign() {
 
 function clearObjectAssign() {
     if(Object.assign && Object.isInitializeObjectAssign === true) {
-        Object.assign = undefined;
-        Object.isInitializeObjectAssign = false;
+        delete Object.assign;
+        delete Object.isInitializeObjectAssign;
     }
 }
 
