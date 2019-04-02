@@ -1,7 +1,7 @@
 import $ from "../../../core/renderer";
 
 export default class ActionButton {
-    constructor(name, editor, options) {
+    constructor(name, editor, options = { location: "after" }) {
         this.instance = null;
 
         this.$container = null;

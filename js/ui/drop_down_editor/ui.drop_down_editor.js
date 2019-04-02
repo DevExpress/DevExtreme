@@ -22,13 +22,13 @@ var $ = require("../../core/renderer"),
     Popup = require("../popup");
 
 var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
-    DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS = "dx-dropdowneditor-input-wrapper",
+    DROP_DOWN_EDITOR_INPUT_WRAPPER = "dx-dropdowneditor-input-wrapper",
     DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
     DROP_DOWN_EDITOR_OVERLAY_FLIPPED = "dx-dropdowneditor-overlay-flipped",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
     DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable",
-    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS = "dx-dropdowneditor-field-template-wrapper";
+    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-template-wrapper";
 
 /**
 * @name dxDropDownEditor
@@ -275,7 +275,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS);
+        return this.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER);
     },
 
     _init: function() {
@@ -325,7 +325,7 @@ var DropDownEditor = TextBox.inherit({
     _renderInput: function() {
         this.callBase();
 
-        this.$element().wrapInner($("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS));
+        this.$element().wrapInner($("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
         this._$container = this.$element().children().eq(0);
 
         this.setAria({
@@ -382,7 +382,7 @@ var DropDownEditor = TextBox.inherit({
 
         $container.empty();
 
-        var $templateWrapper = $("<div>").addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS).appendTo($container);
+        var $templateWrapper = $("<div>").addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
 
         fieldTemplate.render({
             model: data,

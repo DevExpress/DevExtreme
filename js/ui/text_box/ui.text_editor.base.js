@@ -95,7 +95,7 @@ var TextEditorBase = Editor.inherit({
             /**
             * @name dxActionButton.location
             * @type Enums.ActionButtonLocation
-            * @default 'after'
+            * @default "after"
             */
             /**
             * @name dxActionButton.options
@@ -376,9 +376,10 @@ var TextEditorBase = Editor.inherit({
 
     _renderStylingMode: function() {
         const optionName = "stylingMode";
+        const optionValue = this.option(optionName);
         ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
 
-        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + this.option(optionName);
+        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + optionValue;
 
         if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
             const defaultOptionValue = this._getDefaultOptions()[optionName];
@@ -387,14 +388,16 @@ var TextEditorBase = Editor.inherit({
         }
 
         this.$element().addClass(stylingModeClass);
+
+        this._updateButtonsStyling(optionValue);
     },
 
     _initMarkup: function() {
         this.$element()
             .addClass(TEXTEDITOR_CLASS);
-        this._renderStylingMode();
 
         this._renderInput();
+        this._renderStylingMode();
         this._renderInputType();
         this._renderPlaceholder();
 
@@ -428,7 +431,6 @@ var TextEditorBase = Editor.inherit({
             .appendTo($textEditorContainer);
         this._$textEditorInputContainer.append(this._createInput());
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $textEditorContainer);
-        this._updateButtonsStyling();
     },
 
     _clean() {
@@ -462,10 +464,6 @@ var TextEditorBase = Editor.inherit({
 
     _updateButtonsStyling: function(editorStylingMode) {
         var that = this;
-
-        if(!editorStylingMode) {
-            editorStylingMode = this.option("stylingMode");
-        }
 
         each(this.option("buttons"), function(_, buttonOptions) {
             if(buttonOptions.options && !buttonOptions.options.stylingMode) {
@@ -803,7 +801,6 @@ var TextEditorBase = Editor.inherit({
                 break;
             case "stylingMode":
                 this._renderStylingMode();
-                this._updateButtonsStyling(args.value);
                 break;
             case "buttons":
                 if(args.fullName === args.name) {

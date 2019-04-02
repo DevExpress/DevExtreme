@@ -366,7 +366,7 @@ module("rendering", () => {
         });
 
         test("buttons is rendered with fieldTemplate", (assert) => {
-            const $selectBox = $("<div>").dxSelectBox({
+            const $selectBox = $("<div>").appendTo("#qunit-fixture").dxSelectBox({
                 showClearButton: true,
                 items: ["1", "2"],
                 value: "1",
@@ -764,7 +764,7 @@ module("collection updating", () => {
                 showClearButton: false,
                 stylingMode: "underlined",
                 value: "text",
-                buttons: [{
+                buttons: ["clear", {
                     name: "custom",
                     location: "after",
                     options: {

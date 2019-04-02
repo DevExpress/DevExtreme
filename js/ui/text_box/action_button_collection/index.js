@@ -4,8 +4,6 @@ import { extend } from "../../../core/utils/extend";
 import { find } from "../../../core/utils/array";
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
-const TEXTEDITOR_BEFORE_BUTTONS_CONTAINER_CLASS = "dx-texteditor-before-buttons-container";
-const TEXTEDITOR_AFTER_BUTTONS_CONTAINER_CLASS = "dx-texteditor-after-buttons-container";
 
 function checkButtonInfo(buttonInfo) {
     const checkButtonType = () => {
@@ -101,17 +99,12 @@ export default class ActionButtonCollection {
         return button;
     }
 
-    _getLocation(buttonInfo) {
-        return buttonInfo.Ctor.location;
-    }
-
     _renderButtons(buttons, $container, targetLocation) {
         let $buttonsContainer = null;
         const buttonsInfo = buttons ? this._compileButtonInfo(buttons) : this.defaultButtonsInfo;
         const getButtonsContainer = () => {
             $buttonsContainer = $buttonsContainer || $("<div>")
                 .addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS)
-                .addClass(targetLocation === "after" ? TEXTEDITOR_AFTER_BUTTONS_CONTAINER_CLASS : TEXTEDITOR_BEFORE_BUTTONS_CONTAINER_CLASS)
                 .appendTo($container);
 
             return $buttonsContainer;

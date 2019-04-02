@@ -226,7 +226,7 @@
 
 .dx-editor-outlined, .dx-editor-filled {
     .dx-texteditor-buttons-container {
-        &.dx-texteditor-before-buttons-container {
+        &:first-child {
             > .dx-button {
                 &:last-child {
                     margin-right: 0;
@@ -234,7 +234,7 @@
             }
         }
 
-        &.dx-texteditor-after-buttons-container {
+        &:last-child {
             > .dx-button {
                 &:first-child {
                     margin-left: 0;
@@ -243,7 +243,7 @@
         }
 
         .dx-rtl& {
-            &.dx-texteditor-before-buttons-container {
+            &:first-child {
                 > .dx-button {
                     &:first-child {
                         margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
@@ -262,7 +262,7 @@
                 }
             }
 
-            &.dx-texteditor-after-buttons-container {
+            &:last-child {
                 > .dx-button {
                     &:first-child {
                         margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
@@ -281,37 +281,31 @@
 
 .dx-editor-underlined {
     .dx-texteditor-buttons-container {
-        &.dx-texteditor-before-buttons-container,
-        &.dx-texteditor-after-buttons-container {
-            > .dx-button {
-                &:first-child {
-                    margin-left: 0;
-                }
+        > .dx-button {
+            &:first-child {
+                margin-left: 0;
+            }
 
-                &:last-child {
-                    margin-right: 0;
-                }
+            &:last-child {
+                margin-right: 0;
             }
         }
 
         .dx-rtl& {
-            &.dx-texteditor-before-buttons-container,
-            &.dx-texteditor-after-buttons-container {
-                > .dx-button {
-                    &:first-child {
-                        margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: 0;
-                    }
+            > .dx-button {
+                &:first-child {
+                    margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    margin-right: 0;
+                }
 
-                    &:last-child {
-                        margin-left: 0;
-                        margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
+                &:last-child {
+                    margin-left: 0;
+                    margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                }
 
-                    &:first-child:last-child {
-                        margin-left: 0;
-                        margin-right: 0;
-                    }
+                &:first-child:last-child {
+                    margin-left: 0;
+                    margin-right: 0;
                 }
             }
         }

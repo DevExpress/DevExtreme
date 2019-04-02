@@ -16,10 +16,10 @@ testStart(function() {
 });
 
 const DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor";
-const DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS = "dx-dropdowneditor-input-wrapper";
+const DROP_DOWN_EDITOR_INPUT_WRAPPER = "dx-dropdowneditor-input-wrapper";
 const DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button";
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
-const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS = "dx-dropdowneditor-field-template-wrapper";
+const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-template-wrapper";
 
 module("DropDownEditor markup", {
     beforeEach: () => {
@@ -46,12 +46,12 @@ module("DropDownEditor markup", {
     test("input wrapper must be upper than button", (assert) => {
         const $inputWrapper = this.rootElement.children();
 
-        assert.strictEqual(this.rootElement.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS}`)[0], $inputWrapper[0]);
+        assert.strictEqual(this.rootElement.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`)[0], $inputWrapper[0]);
         assert.strictEqual(this.rootElement.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`)[0], $inputWrapper.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`)[0]);
     });
 
     test("input must be wrapped for proper event handling", (assert) => {
-        assert.ok(this.dropDownEditor._input().parents().find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS}`).hasClass(DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS));
+        assert.ok(this.dropDownEditor._input().parents().find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).hasClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
     });
 
     test("DROP_DOWN_EDITOR_BUTTON_VISIBLE class should depend on drop down button visibility", (assert) => {
@@ -85,7 +85,7 @@ module("DropDownEditor markup", {
             value: "test"
         });
 
-        assert.strictEqual($dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS}`).length, 1);
+        assert.strictEqual($dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).length, 1);
         assert.equal($.trim($dropDownEditor.text()), "testtest", "field rendered");
     });
 
