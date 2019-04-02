@@ -231,6 +231,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
                 break;
             case "displayExpr":
                 this._compileDisplayGetter();
+                this._initDynamicTemplates();
                 this._setCollectionWidgetOption("displayExpr");
                 break;
         }
