@@ -55,7 +55,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
-                    assert.equal(this.worksheet.autoFilter, undefined);
+                    checkAutoFilter(assert, this.worksheet, false);
                     assert.deepEqual(result.from, expectedTopLeftCell);
                     assert.deepEqual(result.to, expectedTopLeftCell);
                     done();
@@ -89,7 +89,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
-                    assert.equal(this.worksheet.autoFilter, undefined);
+                    checkAutoFilter(assert, this.worksheet, false);
                     assert.deepEqual(result.from, expectedTopLeftCell);
                     assert.deepEqual(result.to, expectedTopLeftCell);
                     done();
@@ -123,7 +123,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
-                    assert.equal(this.worksheet.autoFilter, undefined);
+                    checkAutoFilter(assert, this.worksheet, false);
                     assert.deepEqual(result.from, expectedTopLeftCell);
                     assert.deepEqual(result.to, expectedTopLeftCell);
                     done();
