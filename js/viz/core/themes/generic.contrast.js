@@ -17,8 +17,8 @@ registerTheme({
     backgroundColor: BLACK,
     primaryTitleColor: WHITE,
     secondaryTitleColor: WHITE,
+    gridColor: WHITE,
     axisColor: WHITE,
-    axisLabelColor: WHITE,
     "export": {
         backgroundColor: BLACK,
         font: {

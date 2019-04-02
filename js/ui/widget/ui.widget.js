@@ -36,7 +36,6 @@ var UI_FEEDBACK = "UIFeedback",
     FOCUS_NAMESPACE = "Focus",
     ANONYMOUS_TEMPLATE_NAME = "template",
     TEXT_NODE = 3,
-    COMMENT_NODE = 8,
     TEMPLATE_SELECTOR = "[data-options*='dxTemplate']",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 
@@ -52,7 +51,11 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
             errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
         }
 
-        widgetElement[widgetName](widgetOptions);
+        if(options.parent) {
+            options.parent._createComponent(widgetElement, widgetName, widgetOptions);
+        } else {
+            widgetElement[widgetName](widgetOptions);
+        }
 
         return widgetElement;
     }
@@ -334,16 +337,15 @@ var Widget = DOMComponent.inherit({
     },
 
     _extractAnonymousTemplate: function() {
-        const templates = this.option("integrationOptions.templates"),
+        var templates = this.option("integrationOptions.templates"),
             anonymousTemplateName = this._getAnonymousTemplateName(),
             $anonymousTemplate = this.$element().contents().detach();
 
-        const $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
-                const isCommentNode = element.nodeType === COMMENT_NODE,
-                    isTextNode = element.nodeType === TEXT_NODE,
+        var $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
+                var isTextNode = element.nodeType === TEXT_NODE,
                     isEmptyText = $(element).text().trim().length < 1;
 
-                return !(isTextNode && isEmptyText) && !isCommentNode;
+                return !(isTextNode && isEmptyText);
             }),
             onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
@@ -492,7 +494,7 @@ var Widget = DOMComponent.inherit({
 
     _initContentReadyAction: function() {
         this._contentReadyAction = this._createActionByOption("onContentReady", {
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
@@ -526,8 +528,14 @@ var Widget = DOMComponent.inherit({
 
     _renderContent: function() {
         commonUtils.deferRender(() => {
+            if(this._disposed) {
+                return;
+            }
             return this._renderContentImpl();
         }).done(() => {
+            if(this._disposed) {
+                return;
+            }
             this._fireContentReadyAction();
         });
     },

@@ -1,3 +1,15 @@
+.dx-size-default() {
+    @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_MARGIN: 6px;
+    @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING: 19px;
+    @MATERIAL_FORM_TOP_LABEL_PADDING: 16px 0 3px;
+}
+
+.dx-size-compact() {
+    @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_MARGIN: 4px;
+    @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING: 10px;
+    @MATERIAL_FORM_TOP_LABEL_PADDING: 4px 0 2px;
+}
+
 .dx-form-group-with-caption {
     & > .dx-form-group-content {
         border-top: 1px solid @form-group-border-color;
@@ -11,6 +23,8 @@
 .dx-form-group-with-caption {
     .dx-form-group-content {
         padding-bottom: @MATERIAL_FORM_GROUP_CONTENT_PADDING_BOTTOM;
+        padding-top: @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING;
+        margin-top: @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_MARGIN;
     }
 }
 
@@ -55,7 +69,7 @@
 }
 
 .dx-field-item-label-location-top {
-    padding: 16px 0 3px;
+    padding: @MATERIAL_FORM_TOP_LABEL_PADDING;
 }
 
 .dx-field-item-label-text {

@@ -14,8 +14,8 @@ registerTheme({
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
     secondaryTitleColor: SUBTITLE_COLOR,
-    axisColor: BORDER_COLOR,
-    axisLabelColor: TEXT_COLOR,
+    gridColor: BORDER_COLOR,
+    axisColor: TEXT_COLOR,
     "export": {
         backgroundColor: BACKGROUND_COLOR,
         font: {
@@ -70,7 +70,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: BORDER_COLOR
+                color: TEXT_COLOR
             }
         },
         commonAxisSettings: {

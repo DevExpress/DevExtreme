@@ -20,7 +20,7 @@ QUnit.performanceTest("dxTabs should force minimum relayout count on creation", 
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 5);
+    assert.measureStyleRecalculation(measureFunction, 6);
 });
 
 QUnit.performanceTest("dxTabs without scrolling should not force relayout on dxshown event", function(assert) {
@@ -33,7 +33,7 @@ QUnit.performanceTest("dxTabs without scrolling should not force relayout on dxs
         resizeCallbacks.fire();
     };
 
-    assert.measureStyleRecalculation(measureFunction, 0);
+    assert.measureStyleRecalculation(measureFunction, 2);
 });
 
 QUnit.performanceTest("Accordion should force minimum relayout count on creation", function(assert) {

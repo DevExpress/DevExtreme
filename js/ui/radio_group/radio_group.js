@@ -1,6 +1,5 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
 import devices from "../../core/devices";
 import inkRipple from "../widget/utils.ink_ripple";
 import registerComponent from "../../core/component_registrator";
@@ -202,10 +201,6 @@ class RadioGroup extends Editor {
         return this._valueGetter ? this._valueGetter(item) : item.text;
     }
 
-    _getSelectedItemKeys(value = this.option("value")) {
-        return isDefined(value) ? [value] : [];
-    }
-
     _getSubmitElement() {
         return this._$submitElement;
     }
@@ -267,7 +262,7 @@ class RadioGroup extends Editor {
                 this._setCollectionWidgetOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "value":
-                this._setCollectionWidgetOption("selectedItemKeys", this._getSelectedItemKeys(value));
+                this._setCollectionWidgetOption("selectedItemKeys", [value]);
                 this._setSubmitValue(value);
                 super._optionChanged(args);
                 break;
@@ -325,7 +320,7 @@ class RadioGroup extends Editor {
             scrollingEnabled: false,
             selectionByClick: false,
             selectionMode: "single",
-            selectedItemKeys: this._getSelectedItemKeys(),
+            selectedItemKeys: [this.option("value")],
             tabIndex: this.option("tabIndex")
         });
     }

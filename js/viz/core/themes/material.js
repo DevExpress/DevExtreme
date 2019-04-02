@@ -68,6 +68,9 @@ registerTheme({
 
     chart: {
         commonAxisSettings: {
+            minorTick: {
+                opacity: 0.5
+            },
             label: {
                 font: {
                     size: 11
@@ -86,6 +89,11 @@ registerTheme({
     },
 
     polar: {
+        commonAxisSettings: {
+            minorTick: {
+                opacity: 0.5
+            }
+        },
         title: {
             horizontalAlignment: "center",
             subtitle: {
@@ -140,8 +148,8 @@ registerTheme({
 
 registerTheme({
     name: "material.light",
-    axisColor: "#e0e0e0",
-    axisLabelColor: LIGHT_LABEL_COLOR,
+    gridColor: "#e0e0e0",
+    axisColor: LIGHT_LABEL_COLOR,
     primaryTitleColor: LIGHT_TITLE_COLOR,
 
     legend: {
@@ -151,6 +159,11 @@ registerTheme({
     },
 
     chart: {
+        commonPaneSettings: {
+            border: {
+                color: LIGHT_LABEL_COLOR
+            }
+        },
         scrollBar: {
             color: "#bfbfbf",
             opacity: 0.7
@@ -170,9 +183,9 @@ registerTheme({
 
 registerTheme({
     name: "material.dark",
-    axisColor: "#515159",
+    gridColor: "#515159",
     backgroundColor: DARK_BACKGROUND_COLOR,
-    axisLabelColor: DARK_LABEL_COLOR,
+    axisColor: DARK_LABEL_COLOR,
     font: {
         color: DARK_LABEL_COLOR
     },
@@ -233,7 +246,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: LABEL_BORDER_COLOR
+                color: DARK_LABEL_COLOR
             }
         },
         commonAxisSettings: {

@@ -170,18 +170,6 @@ QUnit.test("changing the readonly option changing button state", function(assert
     assert.ok(!this.dropDownEditor.option("opened"));
 });
 
-QUnit.test("in design mode, it should not be possible to show the drop down by clicking the drop down button", function(assert) {
-    config({ designMode: true });
-    try {
-        this.reinitFixture();
-        var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
-        pointerMock($dropDownButton).click();
-        assert.ok(!this.dropDownEditor._popup);
-    } finally {
-        config({ designMode: false });
-    }
-});
-
 QUnit.test("correct buttons order after option change", function(assert) {
     this.dropDownEditor.option("showClearButton", true);
 

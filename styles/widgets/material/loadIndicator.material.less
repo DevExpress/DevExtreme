@@ -42,8 +42,6 @@
 }
 
 .dx-loadindicator-segment2, .dx-loadindicator-segment0 {
-    display: inline-block;
-    position: relative;
     width: 50%;
     height: 100%;
     overflow: hidden;
@@ -54,6 +52,7 @@
 }
 
 .dx-loadindicator-segment2 {
+    left: 0;
     .dx-loadindicator-segment-inner {
         border-right-color: transparent;
         transform: rotate(-129deg);
@@ -62,6 +61,7 @@
 }
 
 .dx-loadindicator-segment0 {
+    right: 0;
     .dx-loadindicator-segment-inner {
         left: -100%;
         border-left-color: transparent;

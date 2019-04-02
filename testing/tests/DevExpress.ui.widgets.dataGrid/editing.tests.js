@@ -3396,7 +3396,7 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
         countCallOnRowInserted++;
 
         // assert
-        assert.deepEqual(params.data, {}, "parameter data");
+        assert.deepEqual(params.data, { fieldTest: "testKey" }, "parameter data"); // T726008
         assert.strictEqual(params.key, "testKey", "parameter key");
     };
 
@@ -3410,6 +3410,50 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
 
     // assert
     assert.strictEqual(countCallOnRowInserted, 1, "count call onRowInserted");
+});
+
+QUnit.test("onRowUpdated - Check data after update row when custom store", function(assert) {
+    // arrange
+    var that = this,
+        countCallOnRowUpdated = 0,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true
+    };
+    that.options.dataSource = {
+        load: function() {
+            var d = $.Deferred();
+
+            d.resolve(that.array);
+
+            return d.promise();
+        },
+        update: function(key, values) {
+            var d = $.Deferred();
+            return d.resolve({ id: 2, name: "Updated", fromServer: true }).promise();
+        }
+    };
+
+    that.options.onRowUpdated = function(params) {
+        countCallOnRowUpdated++;
+
+        // assert
+        assert.deepEqual(params.data, { id: 2, name: "Updated", fromServer: true }, "parameter data"); // T726008
+        assert.strictEqual(params.key, that.array[1], "parameter key");
+    };
+
+    that.dataController.init();
+    rowsView.render($testElement);
+    that.editingController.optionChanged({ name: "onRowUpdated" });
+
+    // act
+    that.cellValue(1, "name", "Updated");
+    that.saveEditData();
+
+    // assert
+    assert.strictEqual(countCallOnRowUpdated, 1, "count call onRowUpdated");
 });
 
 // T147816
@@ -13074,6 +13118,101 @@ QUnit.test("Edit row when row as tbody", function(assert) {
     $rowElements = $testElement.find("tbody.dx-row");
     assert.strictEqual($rowElements.length, 8, "row count");
     assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-datagrid-edit-form"), "detail form row");
+});
+
+QUnit.test("Edit form when form items are specified with editorType", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ dataField: "name", editorType: "dxAutocomplete" }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when formItem is specified with editorType in the column", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.columns[0].formItem = { editorType: "dxAutocomplete" };
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when formItem is specified with editorType in the column and the editorName is overridden on the onEditorPreparing event", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.onEditorPreparing = (e) => {
+        if(e.dataField === "name") {
+            e.editorName = "dxAutocomplete";
+        }
+    };
+    this.columns[0].formItem = { editorType: "dxColorBox" };
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when the editorType is specified in the column.formItem and editing.form.items", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ dataField: "name", editorType: "dxColorBox" }]
+    };
+    this.columns[0].formItem = { editorType: "dxAutocomplete" };
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
 });
 
 

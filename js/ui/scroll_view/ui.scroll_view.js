@@ -12,7 +12,6 @@ var $ = require("../../core/renderer"),
     SimulatedStrategy = require("./ui.scroll_view.simulated"),
     Scrollable = require("./ui.scrollable"),
     LoadIndicator = require("../load_indicator"),
-    config = require("../../core/config"),
     themes = require("./../themes"),
     LoadPanel = require("../load_panel");
 
@@ -242,8 +241,8 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _refreshPocketState: function() {
-        this._pullDownEnable(this.hasActionSubscription("onPullDown") && !config().designMode);
-        this._reachBottomEnable(this.hasActionSubscription("onReachBottom") && !config().designMode);
+        this._pullDownEnable(this.hasActionSubscription("onPullDown"));
+        this._reachBottomEnable(this.hasActionSubscription("onReachBottom"));
     },
 
     on: function(eventName) {
