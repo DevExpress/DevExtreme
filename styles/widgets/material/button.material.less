@@ -373,31 +373,43 @@
             }
         }
 
-        > .dx-button {
-            &:first-child {
-                margin-left: 0;
+        &:first-child {
+            > .dx-button {
+                &:first-child {
+                    margin-left:0;
+                }
             }
+        }
 
-            &:last-child {
-                margin-right: 0;
+        &:last-child {
+            > .dx-button {
+                &:last-child {
+                    margin-right: 0;
+                }
             }
         }
 
         .dx-rtl& {
-            > .dx-button {
-                &:first-child {
-                    margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    margin-right: 0;
+            &:first-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
                 }
+            }
 
-                &:last-child {
-                    margin-left: 0;
-                    margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                }
+            &:last-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
 
-                &:first-child:last-child {
-                    margin-left: 0;
-                    margin-right: 0;
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
                 }
             }
         }
