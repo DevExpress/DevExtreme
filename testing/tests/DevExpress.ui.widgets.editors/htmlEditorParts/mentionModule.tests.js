@@ -2,7 +2,9 @@ import $ from "jquery";
 
 import MentionFormat from "ui/html_editor/formats/mention";
 import Mentions from "ui/html_editor/modules/mentions";
+
 import { noop } from "core/utils/common";
+import devices from "core/devices";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
@@ -364,10 +366,20 @@ QUnit.module("Mentions module", moduleConfig, () => {
     });
 
     test("list should load next page on reach end of current page", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "desktop specific test");
+            return;
+        }
+
         const items = [];
         for(let i = 0; i < 60; i++) {
             items.push(i);
         }
+
+        this.$element.css({
+            fontSize: "14px",
+            lineHeight: 1.35715
+        });
 
         this.options.mentions = [{
             dataSource: {
@@ -376,8 +388,10 @@ QUnit.module("Mentions module", moduleConfig, () => {
                 paginate: true
             },
         }];
+
         const mention = new Mentions(this.quillMock, this.options);
 
+        mention._popup.option("container", this.$element);
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
