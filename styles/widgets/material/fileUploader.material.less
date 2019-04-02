@@ -1,8 +1,16 @@
 .dx-size-default() {
     @MATERIAL_FILEUPLOADER_VERTICAL_PADDING: 7px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_PADDING: 5px 8px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN: 15px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN: 5px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE: 36px;
 }
 .dx-size-compact() {
-    @MATERIAL_FILEUPLOADER_VERTICAL_PADDING: 2px;
+    @MATERIAL_FILEUPLOADER_VERTICAL_PADDING: 7px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_PADDING: 2px 4px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN: 6px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN: 2px;
+    @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE: 28px;
 }
 @MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 
@@ -91,27 +99,27 @@
 
     .dx-fileuploader-file-container {
         box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
-        padding: 5px 8px;
+        padding: @MATERIAL_FILEUPLOADER_FILE_CONTAINER_PADDING;
         margin-bottom: 4px;
 
         .dx-fileuploader-button-container + .dx-fileuploader-button-container {
             .dx-button {
-                margin-right: 15px;
+                margin-right: @MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN;
 
                 .dx-rtl & {
-                    margin-left: 15px;
+                    margin-left: @MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN;
                     margin-right: 0;
                 }
             }
         }
 
         .dx-button {
-            height: 36px;
-            width: 36px;
-            margin-right: 5px;
+            height: @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE;
+            width: @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE;
+            margin-right: @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN;
 
             .dx-rtl & {
-                margin-left: 5px;
+                margin-left: @MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN;
                 margin-right: 0;
             }
         }

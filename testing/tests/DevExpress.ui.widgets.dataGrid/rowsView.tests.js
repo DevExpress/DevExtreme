@@ -1942,6 +1942,67 @@ QUnit.test('onCellClick event handling', function(assert) {
     assert.strictEqual(cellClickArgs.rowIndex, 0, 'rowIndex');
 });
 
+QUnit.test("onRowDblClick event handling", function(assert) {
+    var $rowElement,
+        dataController = new MockDataController({ items: this.items }),
+        rowsView = this.createRowsView(this.items, dataController),
+        $testElement = $('#container'),
+        rowDoubleClickArgs;
+
+    this.options.onRowDblClick = function(data) {
+        rowDoubleClickArgs = data;
+    };
+
+    rowsView.optionChanged({ name: 'onRowDblClick' });
+    rowsView.render($testElement);
+    $rowElement = $(rowsView.getRowElement(1));
+
+    // act
+    $rowElement.trigger("dxdblclick");
+
+    // assert
+    assert.equal(typeUtils.isRenderer(rowDoubleClickArgs.rowElement), !!config().useJQuery, "row element");
+    assert.deepEqual($(rowDoubleClickArgs.rowElement)[0], $rowElement[0], "row element");
+    assert.deepEqual(rowDoubleClickArgs.data, { name: 'test2', id: 2, date: new Date(2002, 1, 2) });
+    assert.equal(rowDoubleClickArgs.columns.length, 3, "count columns");
+    assert.equal(rowDoubleClickArgs.dataIndex, 1, "dataIndex");
+    assert.equal(rowDoubleClickArgs.rowIndex, 1, "rowIndex");
+    assert.strictEqual(rowDoubleClickArgs.rowType, "data", "rowType");
+    assert.deepEqual(rowDoubleClickArgs.values, ["test2", 2, "2/02/2002"], "values");
+    assert.strictEqual(rowDoubleClickArgs.event.type, "dxdblclick", "Event type");
+});
+
+QUnit.test("onCellDblClick event handling", function(assert) {
+    var $cellElement,
+        dataController = new MockDataController({ items: this.items }),
+        rowsView = this.createRowsView(this.items, dataController),
+        $testElement = $('#container'),
+        cellDoubleClickArgs;
+
+    this.options.onCellDblClick = function(options) {
+        cellDoubleClickArgs = options;
+    };
+
+    rowsView.optionChanged({ name: 'onCellDblClick' });
+    rowsView.render($testElement);
+    $cellElement = $(rowsView.getCellElement(0, 0));
+
+    // act
+    $cellElement.trigger("dxdblclick");
+
+    // assert
+    assert.equal(typeUtils.isRenderer(cellDoubleClickArgs.cellElement), !!config().useJQuery, "cellElement is correct");
+    assert.deepEqual($(cellDoubleClickArgs.cellElement)[0], $cellElement[0], 'Container');
+    assert.ok(cellDoubleClickArgs.event, 'event');
+    assert.deepEqual(cellDoubleClickArgs.event.target, $cellElement[0], 'event.target');
+    assert.strictEqual(cellDoubleClickArgs.value, 'test1', 'value');
+    assert.strictEqual(cellDoubleClickArgs.text, 'test1', 'text');
+    assert.strictEqual(cellDoubleClickArgs.isEditing, false, 'isEditing');
+    assert.strictEqual(cellDoubleClickArgs.columnIndex, 0, 'columnIndex');
+    assert.strictEqual(cellDoubleClickArgs.rowIndex, 0, 'rowIndex');
+    assert.strictEqual(cellDoubleClickArgs.event.type, "dxdblclick", "Event type");
+});
+
 // T182190
 QUnit.test('Horizontal scroll when no data', function(assert) {
     // arrange
