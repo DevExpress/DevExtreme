@@ -126,9 +126,9 @@ QUnit.module("Mention format", () => {
         };
         const element = MentionFormat.create(data);
 
-        assert.equal(element.dataset.marker, "@", "correct marker");
-        assert.equal(element.dataset.mentionValue, "John Smith", "correct value");
-        assert.equal(element.innerText, "@John Smith", "correct inner text");
+        assert.strictEqual(element.dataset.marker, "@", "correct marker");
+        assert.strictEqual(element.dataset.mentionValue, "John Smith", "correct value");
+        assert.strictEqual(element.innerText, "@John Smith", "correct inner text");
     });
 
     test("Get data from element", (assert) => {
@@ -146,7 +146,27 @@ QUnit.module("Mention format", () => {
         };
 
         const element = MentionFormat.create(data);
-        assert.equal(element.innerText, "#John Smith", "correct inner text");
+        assert.strictEqual(element.innerText, "#John Smith", "correct inner text");
+    });
+
+    test("Change default content renderer", (assert) => {
+        const data = {
+            value: "John Smith",
+            marker: "@"
+        };
+
+        MentionFormat.setContentRender((node, mentionData) => {
+            node.innerText = "test";
+            assert.deepEqual(mentionData, data);
+        });
+        let element = MentionFormat.create(data);
+
+        assert.strictEqual(element.innerText, "test");
+
+        MentionFormat.restoreContentRender();
+        element = MentionFormat.create(data);
+
+        assert.strictEqual(element.innerText, "@John Smith");
     });
 });
 

@@ -5,6 +5,7 @@ import { extend } from "../../../core/utils/extend";
 import { getPublicElement } from "../../../core/utils/dom";
 
 import PopupModule from "./popup";
+import Mention from "../formats/mention";
 
 const USER_ACTION = "user";
 const DEFAULT_MARKER = "@";
@@ -46,6 +47,7 @@ class MentionModule extends PopupModule {
             },
             valueExpr: "this",
             displayExpr: "this",
+            template: null,
             searchExpr: null,
             searchTimeout: 500,
             minSearchLength: 0
@@ -247,11 +249,31 @@ class MentionModule extends PopupModule {
         this._activeMentionConfig = this._mentions[insert];
 
         if(this._activeMentionConfig) {
+            this._updateMentionTemplate(this._activeMentionConfig);
             this._updateList(this._activeMentionConfig);
             this.savePosition(caret.index);
             this._popup.option("position", this._popupPosition);
             this._searchValue = "";
             this._popup.show();
+        }
+    }
+
+    _updateMentionTemplate({ template }) {
+        let preparedTemplate;
+
+        if(template) {
+            preparedTemplate = this.options.editorInstance._getTemplate(template);
+        }
+
+        if(preparedTemplate) {
+            Mention.setContentRender(function(node, data) {
+                preparedTemplate.render({
+                    model: data,
+                    container: node
+                });
+            });
+        } else {
+            Mention.restoreContentRender();
         }
     }
 
