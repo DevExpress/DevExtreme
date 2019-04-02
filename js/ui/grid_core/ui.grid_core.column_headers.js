@@ -5,6 +5,7 @@ import messageLocalization from "../../localization/message";
 import { isDefined } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
+import { normalizeKeyName } from "../../events/utils";
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
@@ -82,20 +83,36 @@ module.exports = {
 
                     return $table;
                 },
-
                 _processKeyDown(event) {
                     var args = {
-                        handled: false,
-                        event: event
-                    };
+                            handled: false,
+                            event: event
+                        },
+                        $target = $(event.target),
+                        keyName = normalizeKeyName(event),
+                        blurHandler = e => {
+                            this.lastActionElement = e.relatedTarget;
+                            eventsEngine.off($target, "blur", blurHandler);
+                        };
 
                     this.getController("keyboardNavigation").executeAction("onKeyDown", args);
                     if(args.handled) {
                         event.preventDefault();
                     }
 
-                    if(event.key === "Enter" || event.key === " ") {
-                        $(event.target).trigger("dxclick");
+                    switch(keyName) {
+                        case "enter":
+                        case "space":
+                            this.lastActionElement = event.target;
+                            $target.trigger("dxclick");
+                            break;
+
+                        case "tab":
+                            eventsEngine.on($target, "blur", blurHandler);
+                            break;
+
+                        default:
+                            break;
                     }
                 },
 
@@ -209,6 +226,20 @@ module.exports = {
                     }
 
                     that.callBase.apply(that, arguments);
+
+                    that._restoreLastFocusedElement();
+                },
+
+                _restoreLastFocusedElement: function() {
+                    var $table = this.element(),
+                        $firstCell = $table.find(`tr.${HEADER_ROW_CLASS} > td`).first();
+
+                    eventsEngine.on($firstCell, "focus", e => {
+                        if(this.lastActionElement && e.currentTarget !== this.lastActionElement) {
+                            $(this.lastActionElement).trigger("focus");
+                            this.lastActionElement = null;
+                        }
+                    });
                 },
 
                 _renderRows: function() {
