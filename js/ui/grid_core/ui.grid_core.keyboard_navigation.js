@@ -923,7 +923,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             eventTarget = $event.target,
             $cell = this._getCellElementFromTarget(eventTarget),
             $lastInteractiveElement = this._getInteractiveElement($cell, !eventArgs.shift),
-            isOriginalHandlerRequired = false,
+            isOriginalHandlerRequired = !this.option("useLegacyKeyboardNavigation"),
             elementType;
 
         if($lastInteractiveElement.length && eventTarget !== $lastInteractiveElement.get(0)) {
@@ -944,12 +944,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             $cell = this._getNextCellByTabKey($event, direction, elementType);
             if(!$cell) {
-                return false;
+                return isOriginalHandlerRequired;
             }
 
             $cell = this._checkNewLineTransition($event, $cell);
             if(!$cell) {
-                return false;
+                return isOriginalHandlerRequired;
             }
 
             this._focusCell($cell);
@@ -960,10 +960,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
     _getNextCellByTabKey: function($event, direction, elementType) {
         var $cell = this._getNextCell(direction, elementType),
-            args = this._fireFocusedCellChanging($event, $cell, true);
-        if(args.cancel) {
+            args = $cell && this._fireFocusedCellChanging($event, $cell, true);
+
+        if(!args || args.cancel) {
             return;
         }
+
         if(args.$newCellElement) {
             $cell = args.$newCellElement;
         }

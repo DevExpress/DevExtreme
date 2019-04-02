@@ -32,7 +32,9 @@ var PAGES_LIMITER = 4,
     PAGER_NEXT_BUTTON_CLASS = "dx-next-button",
     PAGER_INFO_CLASS = "dx-info",
     PAGER_INFO_TEXT_CLASS = "dx-info-text",
-    PAGER_BUTTON_DISABLE_CLASS = "dx-button-disable";
+    PAGER_BUTTON_DISABLE_CLASS = "dx-button-disable",
+
+    isLegacyKeyboardNavigation = false;
 
 var Page = Class.inherit({
     ctor: function(value, index) {
@@ -64,6 +66,9 @@ var Page = Class.inherit({
 
     select: function(value) {
         this._$page.toggleClass(PAGER_SELECTION_CLASS, value);
+        if(!isLegacyKeyboardNavigation) {
+            this._$page.attr("tabindex", 0);
+        }
     },
 
     render: function(rootElement, rtlEnabled) {
@@ -73,6 +78,7 @@ var Page = Class.inherit({
 
 var Pager = Widget.inherit({
     _getDefaultOptions: function() {
+        isLegacyKeyboardNavigation = this.option("useLegacyKeyboardNavigation");
         return extend(this.callBase(), {
             visible: true,
             pagesNavigatorVisible: "auto",
@@ -208,6 +214,10 @@ var Pager = Widget.inherit({
         page.select(true);
         that.selectedPage = page;
 
+        if(!isLegacyKeyboardNavigation) {
+            that._updatePagesTabIndices.apply(that);
+        }
+
         if(nextPage && nextPage.value() - value > 1) {
             if(page.index !== 0) {
                 prevPage.value(value + 1);
@@ -249,6 +259,16 @@ var Pager = Widget.inherit({
         if(morePage) {
             pages.push(morePage);
         }
+    },
+
+    _updatePagesTabIndices: function() {
+        var $selectedPage = this.selectedPage._$page,
+            updatePageIndices = () => {
+                let buttons = this.element().find("[role=button]:not(.dx-button-disable)");
+                each(buttons, (_, element) => $(element).attr("tabindex", 0));
+                eventsEngine.off($selectedPage, "focus", updatePageIndices);
+            };
+        eventsEngine.on($selectedPage, "focus", updatePageIndices);
     },
 
     _nextPage: function(direction) {
@@ -376,6 +396,10 @@ var Pager = Widget.inherit({
 
         that._$pagesChooser = $('<div>').addClass(PAGER_PAGES_CLASS).appendTo($element);
 
+        if(!isLegacyKeyboardNavigation) {
+            eventsEngine.on(that.element(), "keydown", that._processKeyDown.bind(that));
+        }
+
         if(pagesNavigatorVisible === "auto") {
             that._$pagesChooser.css("visibility", that.option("pageCount") === 1 ? "hidden" : "");
         }
@@ -395,6 +419,15 @@ var Pager = Widget.inherit({
         that._renderNavigateButton("next");
 
         that._updatePagesChooserWidth();
+    },
+
+    _processKeyDown: function(event) {
+        var $target = $(event.target),
+            keyName = eventUtils.normalizeKeyName(event);
+
+        if(keyName === "enter" || keyName === "space") {
+            $target.trigger("dxclick");
+        }
     },
 
     _renderPageSizes: function() {

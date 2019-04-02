@@ -78,7 +78,10 @@ QUnit.test("Markup init", function(assert) {
     assert.equal($pager.find(".dx-page-size").length, 2, "page size elements");
 
     assert.equal($pager.find(".dx-pages" + " ." + "dx-selection").length, 1, "page selection");
+    assert.equal($pager.find(".dx-pages" + " ." + "dx-selection").attr("tabindex"), 0, "page selection tabindex");
     assert.equal($pager.find(".dx-page-sizes" + " ." + "dx-selection").length, 1, "page size selection");
+
+    assert.notOk($pager.find(".dx-page[role=button]:not([tabindex])").hasClass("dx-selection"), "Not selected buttons has no tabindex");
 
     assert.equal($pageSizeButton.attr("role"), "button", "Page size element has correct role");
     assert.equal($pageNumberButton.attr("role"), "button", "Page number element has correct role");
