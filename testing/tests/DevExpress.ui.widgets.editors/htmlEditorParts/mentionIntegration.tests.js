@@ -535,7 +535,7 @@ module("Mentions integration", {
             searchExpr: "name",
             displayExpr: "city"
         }];
-      
+
         this.createWidget();
         this.instance.focus();
         this.$element.find("p").first().text("@");
@@ -543,27 +543,27 @@ module("Mentions integration", {
     });
 
     test("template", (assert) => {
-      const done = assert.async();
-      const expectedMention = `<span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John"><span contenteditable="false">John!</span></span>`;
-      const valueChangeSpy = sinon.spy(({ value }) => {
-          if(valueChangeSpy.calledOnce) {
-              $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger("dxclick");
+        const done = assert.async();
+        const expectedMention = `<span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John"><span contenteditable="false">John!</span></span>`;
+        const valueChangeSpy = sinon.spy(({ value }) => {
+            if(valueChangeSpy.calledOnce) {
+                $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger("dxclick");
 
-              this.clock.tick();
-          } else {
-              assert.strictEqual(value.replace(/\uFEFF/g, ""), expectedMention, "mention has been added");
-              done();
-          }
-      });
-      this.options.mentions[0].template = (data, container) => {
-          $(container).text(`${data.value}!`);
-      };
+                this.clock.tick();
+            } else {
+                assert.strictEqual(value.replace(/\uFEFF/g, ""), expectedMention, "mention has been added");
+                done();
+            }
+        });
+        this.options.mentions[0].template = (data, container) => {
+            $(container).text(`${data.value}!`);
+        };
 
-      this.options.onValueChanged = valueChangeSpy;
+        this.options.onValueChanged = valueChangeSpy;
 
-      this.createWidget();
-      this.instance.focus();
-      this.$element.find("p").first().text("@");
-      this.clock.tick();
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
     });
 });
