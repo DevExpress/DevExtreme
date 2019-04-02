@@ -19,7 +19,7 @@ const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = "dx-filemanager-thumbnails-item-
 const FILE_MANAGER_ITEM_SELECTED_CLASS = "dx-filemanager-item-selected";
 const FILE_MANAGER_ITEM_FOCUSED_CLASS = "dx-filemanager-item-focused";
 
-const FILE_MANAGER_THUMBNAILS_CONTEXT_MENU_EVENT = "dxFileManager_contextmenu";
+const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = "dxFileManager_thumbnails";
 
 class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
@@ -44,9 +44,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
 
-        const eventName = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_CONTEXT_MENU_EVENT);
-        eventsEngine.on(this.$element(), eventName, this._onContextMenu.bind(this));
-        eventsEngine.on(this.$element(), "click", this._getItemSelector(), this._onClick.bind(this));
+        const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
+        const clickEvent = addNamespace("click", FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
+        eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
+        eventsEngine.on(this.$element(), clickEvent, this._getItemSelector(), this._onClick.bind(this));
 
         this._loadItems();
     }

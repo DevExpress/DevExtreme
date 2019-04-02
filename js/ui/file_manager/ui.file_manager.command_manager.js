@@ -82,7 +82,7 @@ class FileManagerCommandManager {
 
     isCommandAvailable(commandName, items) {
         const { noFileItemRequired, isSingleFileItemCommand } = this._commandMap[commandName];
-        return command.noFileItemRequired || items.length > 0 && (!command.isSingleFileItemCommand || items.length === 1);
+        return noFileItemRequired || items.length > 0 && (!isSingleFileItemCommand || items.length === 1);
     }
 
 }

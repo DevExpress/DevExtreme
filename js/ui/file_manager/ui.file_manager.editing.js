@@ -104,20 +104,20 @@ class FileManagerEditingControl extends Widget {
                 dialog: this._createFolderDialog,
                 action: ([item], { name }) => this._provider.createFolder(item, name),
                 getSuccessMessage: items => "Folder created",
-                getErrorMessage: (items, info) => `Create folder operation failed for the ${items[0].name} parent folder`
+                getErrorMessage: ([{ name }], info) => `Create folder operation failed for the ${name} parent folder`
             },
 
             rename: {
                 dialog: this._renameItemDialog,
-                getDialogArgument: [{ name }] => name,
+                getDialogArgument: ([{ name }]) => name,
                 action: ([item], { name }) => this._provider.renameItem(item, name),
                 getSuccessMessage: items => "Items deleted",
-                getErrorMessage: (items, info) => `Rename operation failed for the ${items[0].name} item`,
+                getErrorMessage: ([{ name }], info) => `Rename operation failed for the ${name} item`,
             },
 
             delete: {
                 dialog: this._confirmationDialog,
-                getDialogArgument: [{ name }]=> name,
+                getDialogArgument: ([{ name }]) => name,
                 action: (items, arg) => this._provider.deleteItems(items),
                 getSuccessMessage: items => "Item renamed",
                 getErrorMessage: (items, { index }) => `Delete operation failed for the ${items[index].name} item`
