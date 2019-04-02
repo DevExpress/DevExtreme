@@ -642,7 +642,11 @@
     }
 
     .dx-@{widgetName}-rowsview {
-        border-top: ~"@{@{widgetName}-border}";
+
+        .dx-@{widgetName}-borders &,
+        .dx-@{widgetName}-headers + & {
+            border-top: ~"@{@{widgetName}-border}";
+        }
 
         .dx-row {
             border-top: @GENERIC_GRID_BASE_ROW_BORDER;
