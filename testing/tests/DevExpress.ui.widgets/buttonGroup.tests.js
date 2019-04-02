@@ -2,6 +2,7 @@ import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
 import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
@@ -185,6 +186,70 @@ QUnit.module("option changed", {
         assert.equal(buttons[1].option("stylingMode"), "text", "second button");
     });
 });
+
+
+QUnit.module("Events", () => {
+    function checkAsserts(assert, handler, buttonGroup, $item, checkedEventName) {
+        const e = handler.getCall(0).args[0];
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(Object.keys(e).length, 6, "event has 6 properties");
+        assert.strictEqual(e.component, buttonGroup, "component is correct");
+        assert.strictEqual(e.element, buttonGroup.element(), "element is correct");
+        assert.strictEqual(e.event.type, checkedEventName, "event is correct");
+        assert.deepEqual(e.itemData, { text: "item2" }, "itemData is correct");
+        assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
+        assert.strictEqual($(e.itemElement).get(1), $item.get(1), "itemElement is correct");
+    }
+
+    ["click", "space", "enter"].forEach((eventName) => {
+        let config = ` ${eventName}`;
+
+        QUnit.test("onItemClick fired on" + config, (assert) => {
+            const handler = sinon.spy();
+            const buttonGroup = $("#widget").dxButtonGroup({
+                items: [{ text: "item1" }, { text: "item2" }],
+                onItemClick: handler
+            }).dxButtonGroup("instance");
+
+            const $item = buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(1);
+            if(eventName === "click") {
+                eventsEngine.trigger($item, "dxclick");
+
+                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
+            } else {
+                let keyboard = keyboardMock(buttonGroup.$element());
+                keyboard.press("right");
+                keyboard.press(eventName);
+
+                checkAsserts(assert, handler, buttonGroup, $item, "keydown");
+            }
+        });
+
+        QUnit.test("onItemClick event changed fired on" + config, (assert) => {
+            const handler = sinon.spy();
+            const buttonGroup = $("#widget").dxButtonGroup({
+                items: [{ text: "item1" }, { text: "item2" }],
+            }).dxButtonGroup("instance");
+
+            buttonGroup.option("onItemClick", handler);
+
+            const $item = buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(1);
+            if(eventName === "click") {
+                eventsEngine.trigger($item, "dxclick");
+
+                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
+            } else {
+                let keyboard = keyboardMock(buttonGroup.$element());
+                keyboard.press("right");
+                keyboard.press(eventName);
+
+                checkAsserts(assert, handler, buttonGroup, $item, "keydown");
+            }
+        });
+    });
+});
+
 
 QUnit.module("selection", () => {
     QUnit.test("change selection in the single by click", function(assert) {
