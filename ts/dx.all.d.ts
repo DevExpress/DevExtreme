@@ -4921,7 +4921,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.editing.selectTextOnEditStart */
         selectTextOnEditStart?: boolean;
         /** @name GridBase.Options.editing.startEditAction */
-        startEditAction?: 'onClick' | 'onDblClick';
+        startEditAction?: 'click' | 'dblClick';
         /** @name GridBase.Options.editing.texts */
         texts?: GridBaseEditingTexts;
         /** @name GridBase.Options.editing.useIcons */

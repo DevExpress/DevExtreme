@@ -142,18 +142,26 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
 var originalRowClick = editingModule.extenders.views.rowsView._rowClick,
     originalRowDblClick = editingModule.extenders.views.rowsView._rowDblClick;
 
-var rowClickCore = function(e, callBase, origCallBase) {
-    var $targetElement = $(e.event.target);
+var validateClick = function(e) {
+    var $targetElement = $(e.event.target),
+        originalClickHandler = e.event.type === "dxdblclick" ? originalRowDblClick : originalRowClick;
 
     if($targetElement.closest("." + SELECT_CHECKBOX_CLASS).length) {
-        return;
+        return false;
     }
 
-    if($targetElement.closest("." + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length) {
-        callBase.call(this, e);
-    } else {
-        origCallBase.call(this, e);
+    return !needToCallOriginalClickHandler.call(this, e, originalClickHandler);
+};
+
+var needToCallOriginalClickHandler = function(e, originalClickHandler) {
+    var $targetElement = $(e.event.target);
+
+    if(!$targetElement.closest("." + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length) {
+        originalClickHandler.call(this, e);
+        return true;
     }
+
+    return false;
 };
 
 var RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
@@ -170,11 +178,15 @@ var RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
     },
 
     _rowClick: function(e) {
-        rowClickCore.call(this, e, this.callBase, originalRowClick);
+        if(validateClick.call(this, e)) {
+            this.callBase.apply(this, arguments);
+        }
     },
 
     _rowDblClick: function(e) {
-        rowClickCore.call(this, e, this.callBase, originalRowDblClick);
+        if(validateClick.call(this, e)) {
+            this.callBase.apply(this, arguments);
+        }
     }
 });
 

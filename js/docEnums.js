@@ -992,5 +992,5 @@
 
 /**
  * @typedef {string} Enums.GridStartEditAction
- * @enum {'onClick'|'onDblClick'}
+ * @enum {'click'|'dblClick'}
  */

@@ -2573,7 +2573,7 @@ QUnit.test("Set editor mode via editorOptions", function(assert) {
     assert.strictEqual(textEditor.option("mode"), "password", "editor mode");
 });
 
-QUnit.test("Batch mode - Edit cell on click (startEditAction is 'onClick')", function(assert) {
+QUnit.test("Batch mode - Edit cell on click (startEditAction is 'click')", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
@@ -2582,7 +2582,7 @@ QUnit.test("Batch mode - Edit cell on click (startEditAction is 'onClick')", fun
     that.options.editing = {
         allowUpdating: true,
         mode: "batch",
-        startEditAction: "onClick"
+        startEditAction: "click"
     };
     sinon.spy(that.editingController, "editCell");
 
@@ -2597,7 +2597,7 @@ QUnit.test("Batch mode - Edit cell on click (startEditAction is 'onClick')", fun
     assert.strictEqual($testElement.find("td").first().find("input").length, 1);
 });
 
-QUnit.test("Batch mode - Edit Cell on double click (startEditAction is 'onDblClick')", function(assert) {
+QUnit.test("Batch mode - Edit Cell on double click (startEditAction is 'dblClick')", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
@@ -2606,7 +2606,7 @@ QUnit.test("Batch mode - Edit Cell on double click (startEditAction is 'onDblCli
     that.options.editing = {
         allowUpdating: true,
         mode: "batch",
-        startEditAction: "onDblClick"
+        startEditAction: "dblClick"
     };
     sinon.spy(that.editingController, "editCell");
 
@@ -2621,7 +2621,7 @@ QUnit.test("Batch mode - Edit Cell on double click (startEditAction is 'onDblCli
     assert.strictEqual($testElement.find("td").first().find("input").length, 1);
 });
 
-QUnit.test("Batch mode - Closing edited cell should work on click when startEditAction is 'onDblClick'", function(assert) {
+QUnit.test("Batch mode - Closing edited cell should work on click when startEditAction is 'dblClick'", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
@@ -2630,7 +2630,7 @@ QUnit.test("Batch mode - Closing edited cell should work on click when startEdit
     that.options.editing = {
         allowUpdating: true,
         mode: "batch",
-        startEditAction: "onDblClick"
+        startEditAction: "dblClick"
     };
     sinon.spy(that.editingController, "editCell");
 

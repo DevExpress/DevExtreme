@@ -834,14 +834,14 @@ QUnit.test("Selection should be updated correctly after deleting a nested node",
     assert.strictEqual(this.isRowSelected(1), false, "first node is not selected");
 });
 
-QUnit.test("Batch mode - Editing should not work when double-clicking on the select checkbox (startEditAction is onDblClick)", function(assert) {
+QUnit.test("Batch mode - Editing should not work when double-clicking on the select checkbox (startEditAction is dblClick)", function(assert) {
     // arrange
     var $testElement = $('#treeList');
 
     this.options.editing = {
         mode: "batch",
         allowUpdating: true,
-        startEditAction: "onDblClick"
+        startEditAction: "dblClick"
     };
     this.options.selection = {
         mode: "multiple",
