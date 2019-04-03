@@ -1142,9 +1142,6 @@ const Scheduler = Widget.inherit({
             name = args.name;
 
         switch(args.name) {
-            case "adaptivityEnabled":
-                this._initAppointmentStrategies();
-                break;
             case "customizeDateNavigatorText":
                 this._updateOption("header", name, value);
                 break;
@@ -1335,6 +1332,7 @@ const Scheduler = Widget.inherit({
                 this._updateOption("workSpace", name, value);
                 this.repaint();
                 break;
+            case "adaptivityEnabled":
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
             case "recurrenceEditMode":
