@@ -1133,12 +1133,6 @@ module.exports = {
                     }
                 },
 
-                getCellIndex: function($cell) {
-                    var cellIndex = $cell.length ? $cell[0].cellIndex : -1;
-
-                    return cellIndex;
-                },
-
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
                         itemCount = that._dataController.items().length,

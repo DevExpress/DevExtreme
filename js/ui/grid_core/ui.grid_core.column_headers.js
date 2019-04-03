@@ -103,7 +103,7 @@ module.exports = {
 
                     keyboardController && keyboardController.executeAction("onKeyDown", args);
                     if(args.handled) {
-                        event.preventDefault();
+                        return;
                     }
 
                     switch(keyName) {
@@ -127,22 +127,18 @@ module.exports = {
                     this.lastActionElement = event.target;
 
                     if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-                        let $column = $target.closest("td"),
-                            columnIndex = this._getColumnIndexByElement($column);
+                        let headerFilterController = this.getController("headerFilter"),
+                            $column = $target.closest("td"),
+                            columnIndex = this.getCellIndex($column);
                         if(columnIndex >= 0) {
-                            this.getController("headerFilter").showHeaderFilterMenu(columnIndex, false);
+                            headerFilterController.showHeaderFilterMenu(columnIndex, false);
                         }
                     } else {
                         let $row = $target.closest(ROW_CLASS_SELECTOR);
                         this._processHeaderAction(event, $row);
                     }
 
-                    event.stopPropagation();
-                },
-
-                _getColumnIndexByElement($column) {
-                    var index = parseInt($column.attr("id").replace("dx-col-", ""));
-                    return index >= 0 ? index : -1;
+                    event.preventDefault();
                 },
 
                 _getDefaultTemplate: function(column) {
@@ -430,6 +426,15 @@ module.exports = {
                             return that.getCellElements(index || 0);
                         }
                     }
+                },
+
+                getCellIndex: function($cell) {
+                    let cellIndex = this.callBase($cell),
+                        $row = $cell.closest(".dx-row"),
+                        rowIndex = $row[0].rowIndex,
+                        column = this.getColumns(rowIndex)[cellIndex];
+
+                    return column ? this._columnsController.getVisibleIndex(column.index) : -1;
                 },
 
                 getVisibleColumnIndex: function(columnIndex, rowIndex) {

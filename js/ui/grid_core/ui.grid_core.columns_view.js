@@ -734,6 +734,12 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
+    getCellIndex: function($cell) {
+        var cellIndex = $cell.length ? $cell[0].cellIndex : -1;
+
+        return cellIndex;
+    },
+
     getTableElements: function() {
         return this._tableElement || $();
     },
