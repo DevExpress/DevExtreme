@@ -1,10 +1,85 @@
 .dx-filemanager {
+    border-color: @datagrid-border-color;
+    
+    .dx-filemanager-toolbar {
+
+        &.dx-filemanager-file-toolbar,
+        &.dx-filemanager-file-toolbar .dx-toolbar {
+            background-color: darken(@base-bg, 3%);
+        }
+        
+        .dx-filemanager-toolbar-separator-item {
+            background-color: @datagrid-border-color;
+        }
+
+        .dx-texteditor.dx-editor-filled {
+            background-color: transparent;
+
+            &.dx-state-hover,
+            &.dx-state-active,
+            &.dx-state-focused {
+                background-color: fade(@base-text-color, 10%);    
+            }
+
+            &.dx-dropdowneditor {
+                border-color: transparent;
+
+                .dx-dropdowneditor-icon {
+                    background-color: transparent;
+                }
+
+                &.dx-state-hover .dx-dropdowneditor-icon,
+                &.dx-state-active .dx-dropdowneditor-icon {
+                    background-color: transparent;
+                    border-color: transparent;
+                }
+            }
+        }
+
+    }
+
     .dx-filemanager-view-separator {
         background-color: @datagrid-border-color;
     }
 
+    .dx-filemanager-container {
+        border-top-color: @datagrid-border-color;
+    }
+
+    .dx-filemanager-dirs-tree {
+        .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
+            background-color: darken(@base-bg, 8%);
+            
+            & * {
+                color: @base-text-color;
+            }
+        }
+    }
+    
     .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
         background-color: lighten(@treeview-focused-bg, 33%);
+    }
+
+    .dx-filemanager-breadcrumbs {
+        border-bottom-color: @datagrid-border-color;
+
+        .dx-menu-item {
+            &.dx-state-focused {
+                background-color: @button-normal-border-color;
+                color: @button-normal-color;
+            }
+        }
+        
+        .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
+            background-color: @datagrid-border-color;
+        }
+
+        .dx-filemanager-breadcrumbs-separator-item,
+        .dx-filemanager-breadcrumbs-path-separator-item {
+            &.dx-state-hover {
+                background-color: transparent;
+            }
+        }
     }
 
     .dx-filemanager-thumbnails {
