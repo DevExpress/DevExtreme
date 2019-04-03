@@ -30,7 +30,7 @@ class WebAPIFileProvider extends FileProvider {
     createFolder(parentFolder, name) {
         return this._executeRequest("CreateFolder", {
             parentId: parentFolder.relativeName,
-            name: name
+            name
         });
     }
 
