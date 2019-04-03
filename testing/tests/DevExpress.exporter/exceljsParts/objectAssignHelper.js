@@ -1,32 +1,31 @@
 import typeUtils from "core/utils/type";
 
-function assign(target, firstSource) {
+function assign(target) {
     if(!typeUtils.isDefined(target)) {
         throw new TypeError('Cannot convert first argument to object');
     }
 
-    var to = Object(target);
-    for(var i = 1; i < arguments.length; i++) {
-        var nextSource = arguments[i];
-        if(!typeUtils.isDefined(nextSource)) {
+    let clone = Object(target);
+    for(let currentIndex = 1; currentIndex < arguments.length; currentIndex++) {
+        let source = arguments[currentIndex];
+        if(!typeUtils.isDefined(source)) {
             continue;
         }
 
-        var keysArray = Object.keys(Object(nextSource));
-        for(var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-            var nextKey = keysArray[nextIndex];
-            var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-            if(desc !== undefined && desc.enumerable) {
-                to[nextKey] = nextSource[nextKey];
+        let keysArray = Object.keys(Object(source));
+        keysArray.forEach((key) => {
+            let descriptor = Object.getOwnPropertyDescriptor(source, key);
+            if(typeUtils.isDefined(descriptor) && descriptor.enumerable) {
+                clone[key] = source[key];
             }
-        }
+        });
     }
-    return to;
+    return clone;
 }
 
-function initializeObjectAssign() {
+function initializeDxObjectAssign() {
     if(!Object.assign) {
-        Object.defineProperty(Object, 'isInitializeObjectAssign', {
+        Object.defineProperty(Object, 'isAssignFromDxObjectAssignHelper', {
             value: true,
             writable: true,
             configurable: true
@@ -41,11 +40,11 @@ function initializeObjectAssign() {
     }
 }
 
-function clearObjectAssign() {
-    if(Object.assign && Object.isInitializeObjectAssign === true) {
+function clearDxObjectAssign() {
+    if(Object.assign && Object.isAssignFromDxObjectAssignHelper === true) {
         delete Object.assign;
-        delete Object.isInitializeObjectAssign;
+        delete Object.isAssignFromDxObjectAssignHelper;
     }
 }
 
-export { initializeObjectAssign, clearObjectAssign };
+export { initializeDxObjectAssign, clearDxObjectAssign };

@@ -1,7 +1,7 @@
 import $ from "jquery";
 import ExcelJS from "exceljs";
 import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
-import { initializeObjectAssign, clearObjectAssign } from "./objectAssignHelper.js";
+import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
 
 import "ui/data_grid/ui.data_grid";
 
@@ -16,14 +16,14 @@ QUnit.testStart(() => {
 
 const moduleConfig = {
     before: () => {
-        initializeObjectAssign();
+        initializeDxObjectAssign();
     },
     beforeEach: () => {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
 
     },
     after: () => {
-        clearObjectAssign();
+        clearDxObjectAssign();
     }
 };
 
