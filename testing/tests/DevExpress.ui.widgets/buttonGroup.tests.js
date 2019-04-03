@@ -3,6 +3,7 @@ import "ui/button";
 import "ui/button_group";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
@@ -202,7 +203,7 @@ QUnit.module("Events", () => {
         assert.strictEqual($(e.itemElement).get(1), $item.get(1), "itemElement is correct");
     }
 
-    ["click", "space", "enter"].forEach((eventName) => {
+    ["click", "touch", "space", "enter"].forEach((eventName) => {
         let config = ` ${eventName}`;
 
         QUnit.test("onItemClick fired on" + config, (assert) => {
@@ -213,14 +214,20 @@ QUnit.module("Events", () => {
             }).dxButtonGroup("instance");
 
             const $item = buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(1);
+
             if(eventName === "click") {
                 eventsEngine.trigger($item, "dxclick");
-
+                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
+            } else if(eventName === "touch") {
+                pointerMock($item)
+                    .start("touch")
+                    .down()
+                    .up();
                 checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
             } else {
-                let keyboard = keyboardMock(buttonGroup.$element());
-                keyboard.press("right");
-                keyboard.press(eventName);
+                keyboardMock(buttonGroup.$element())
+                    .press("right")
+                    .press(eventName);
 
                 checkAsserts(assert, handler, buttonGroup, $item, "keydown");
             }
@@ -235,14 +242,21 @@ QUnit.module("Events", () => {
             buttonGroup.option("onItemClick", handler);
 
             const $item = buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(1);
+
             if(eventName === "click") {
                 eventsEngine.trigger($item, "dxclick");
+                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
+            } else if(eventName === "touch") {
+                pointerMock($item)
+                    .start("touch")
+                    .down()
+                    .up();
 
                 checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
             } else {
-                let keyboard = keyboardMock(buttonGroup.$element());
-                keyboard.press("right");
-                keyboard.press(eventName);
+                keyboardMock(buttonGroup.$element())
+                    .press("right")
+                    .press(eventName);
 
                 checkAsserts(assert, handler, buttonGroup, $item, "keydown");
             }
