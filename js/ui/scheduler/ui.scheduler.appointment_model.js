@@ -283,12 +283,14 @@ var AppointmentModel = Class.inherit({
         }]];
     },
 
-    ctor: function(dataSource, dataAccessors) {
+    ctor: function(dataSource, dataAccessors, baseAppointmentDuration) {
         this.setDataAccessors(dataAccessors);
         this.setDataSource(dataSource);
         this._updatedAppointmentKeys = [];
 
         this._filterMaker = new FilterMaker(dataAccessors);
+
+        this._baseAppointmentDuration = baseAppointmentDuration;
     },
 
     setDataSource: function(dataSource) {
@@ -482,8 +484,11 @@ var AppointmentModel = Class.inherit({
             appointment = extend(true, {}, appointment);
 
             var startDate = this._dataAccessors.getter.startDate(appointment),
-                endDate = this._dataAccessors.getter.endDate(appointment),
-                startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment),
+                endDate = this._dataAccessors.getter.endDate(appointment);
+
+            endDate = this._checkWrongEndDate(appointment, startDate, endDate);
+
+            var startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment),
                 endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);
 
             var comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone),
@@ -494,6 +499,27 @@ var AppointmentModel = Class.inherit({
 
             return query([appointment]).filter(currentFilter).toArray().length > 0;
         }).bind(this);
+    },
+
+    _checkWrongEndDate: function(appointment, startDate, endDate) {
+        if(!endDate || startDate.getTime() >= endDate.getTime()) {
+
+            if(this._dataAccessors.getter.allDay(appointment)) {
+                endDate = new Date(startDate);
+
+                endDate = dateUtils.trimTime(endDate);
+
+                endDate.setDate(startDate.getDate() + 1);
+                endDate = new Date(endDate.getTime() - 1);
+            } else {
+                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * 60000);
+            }
+
+            this._dataAccessors.setter.endDate(appointment, endDate);
+            // this.instance.fire("setField", "endDate", appointment, endDate);
+        }
+
+        return endDate;
     },
 
     add: function(data, tz) {
