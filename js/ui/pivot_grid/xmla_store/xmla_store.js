@@ -99,7 +99,15 @@ exports.XmlaStore = Class.inherit((function() {
     }
 
     function getAllMembers(field) {
-        return field.dataField + ".allMembers";
+        var result = field.dataField + ".allMembers",
+            searchValue = field.searchValue;
+
+        if(searchValue) {
+            searchValue = searchValue.replace(/'/g, "''");
+            result = "Filter(" + result + ", instr(" + field.dataField + ".currentmember.member_caption,'" + searchValue + "') > 0)";
+        }
+
+        return result;
     }
 
     function crossJoinElements(elements) {
@@ -249,7 +257,7 @@ exports.XmlaStore = Class.inherit((function() {
                 expression = stringFormat(mdxSubset, expression, options.rowSkip > 0 ? options.rowSkip + 1 : 0, options.rowSkip > 0 ? options.rowTake : options.rowTake + 1);
             }
             if(axisName === "columns" && options.columnTake) {
-                expression = stringFormat(mdxSubset, expression, options.columnSkip > 0 ? options.columnSkip + 1 : 0, options.columnTake > 0 ? options.columnTake : options.columnTake + 1);
+                expression = stringFormat(mdxSubset, expression, options.columnSkip > 0 ? options.columnSkip + 1 : 0, options.columnSkip > 0 ? options.columnTake : options.columnTake + 1);
             }
 
             const axisSet = `[DX_${axisName}]`;
@@ -849,15 +857,15 @@ exports.XmlaStore = Class.inherit((function() {
         }
         const cells = parseCells(totalCountXml, [[{}], [{}, {}]], 1);
         if(!columnOptions.length && rowOptions.length) {
-            data.rowCount = cells[0][0][0] - 1;
+            data.rowCount = Math.max(cells[0][0][0] - 1, 0);
         }
         if(!rowOptions.length && columnOptions.length) {
-            data.columnCount = cells[0][0][0] - 1;
+            data.columnCount = Math.max(cells[0][0][0] - 1, 0);
         }
 
         if(rowOptions.length && columnOptions.length) {
-            data.rowCount = cells[0][0][0] - 1;
-            data.columnCount = cells[1][0][0] - 1;
+            data.rowCount = Math.max(cells[0][0][0] - 1, 0);
+            data.columnCount = Math.max(cells[1][0][0] - 1, 0);
         }
         if(data.rowCount !== undefined && options.rowTake) {
             data.rows = [...Array(options.rowSkip)].concat(data.rows);
