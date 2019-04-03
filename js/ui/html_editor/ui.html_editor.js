@@ -182,7 +182,7 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorMentions.searchTimeout
             * @type number
-            * @default 300
+            * @default 500
             */
             /**
             * @name dxHtmlEditorMentions.itemTemplate
