@@ -206,7 +206,7 @@ var trimTime = function(date) {
     return dateUtils.correctDateWithUnitBeginning(date, "day");
 };
 
-var someFunction = function(date) {
+var setToDayEnd = function(date) {
     let result = dateUtils.trimTime(date);
 
     result.setDate(result.getDate() + 1);
@@ -633,7 +633,7 @@ var dateUtils = {
     getDatesDifferences: getDatesDifferences,
     correctDateWithUnitBeginning: correctDateWithUnitBeginning,
     trimTime: trimTime,
-    someFunction: someFunction,
+    setToDayEnd: setToDayEnd,
     roundDateByStartDayHour: roundDateByStartDayHour,
     dateTimeFromDecimal: dateTimeFromDecimal,
 
