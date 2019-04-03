@@ -505,16 +505,13 @@ var AppointmentModel = Class.inherit({
 
     fixWrongEndDate: function(appointment, startDate, endDate) {
         if(this._isEndDateWrong(appointment, startDate, endDate)) {
-
             if(this._dataAccessors.getter.allDay(appointment)) {
                 endDate = dateUtils.setToDayEnd(new Date(startDate));
             } else {
                 endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * toMs("minute"));
             }
-
             this._dataAccessors.setter.endDate(appointment, endDate);
         }
-
         return endDate;
     },
 
