@@ -2116,8 +2116,8 @@ declare module DevExpress.ui {
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
         selectedItemKey?: string | number;
-        /** @name dxDropDownButton.Options.showArrow */
-        showArrow?: boolean;
+        /** @name dxDropDownButton.Options.showArrowIcon */
+        showArrowIcon?: boolean;
         /** @name dxDropDownButton.Options.splitButton */
         splitButton?: boolean;
         /** @name dxDropDownButton.Options.stylingMode */

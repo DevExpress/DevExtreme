@@ -113,11 +113,11 @@ let DropDownButton = Widget.inherit({
             splitButton: false,
 
             /**
-             * @name dxDropDownButtonOptions.showArrow
+             * @name dxDropDownButtonOptions.showArrowIcon
              * @type boolean
              * @default true
              */
-            showArrow: true,
+            showArrowIcon: true,
 
             /**
              * @name dxDropDownButtonOptions.text
@@ -481,7 +481,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderAdditionalIcon() {
-        if(this.option("splitButton") || !this.option("showArrow")) {
+        if(this.option("splitButton") || !this.option("showArrowIcon")) {
             return;
         }
 
@@ -639,7 +639,7 @@ let DropDownButton = Widget.inherit({
                 }));
                 this._renderAdditionalIcon();
                 break;
-            case "showArrow":
+            case "showArrowIcon":
                 if(!value) {
                     this._buttonGroup.$element().find(`.${DX_ICON_RIGHT_CLASS}`).remove();
                 }
