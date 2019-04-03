@@ -23,7 +23,7 @@ class WebAPIFileProvider extends FileProvider {
     renameItem(item, name) {
         return this._executeRequest("Rename", {
             id: item.relativeName,
-            name: name
+            name
         });
     }
 
