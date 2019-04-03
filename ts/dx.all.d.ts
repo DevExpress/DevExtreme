@@ -6652,8 +6652,8 @@ declare module DevExpress.ui {
         getFormat(index: number, length: number): any;
         /** @name dxHtmlEditor.getLength() */
         getLength(): number;
-        /** @name dxHtmlEditor.getModule(modulePath) */
-        getModule(modulePath: string): any;
+        /** @name dxHtmlEditor.get(modulePath) */
+        get(modulePath: string): any;
         /** @name dxHtmlEditor.getQuillInstance() */
         getQuillInstance(): any;
         /** @name dxHtmlEditor.getSelection() */
@@ -6664,8 +6664,8 @@ declare module DevExpress.ui {
         insertText(index: number, text: string, formats: any): void;
         /** @name dxHtmlEditor.redo() */
         redo(): void;
-        /** @name dxHtmlEditor.registerModules(modules) */
-        registerModules(modules: any): void;
+        /** @name dxHtmlEditor.register(modules) */
+        register(modules: any): void;
         /** @name dxHtmlEditor.removeFormat(index, length) */
         removeFormat(index: number, length: number): void;
         /** @name dxHtmlEditor.setSelection(index, length) */

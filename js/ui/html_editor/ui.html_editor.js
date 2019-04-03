@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isFunction } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import { executeAsync } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
@@ -90,6 +90,12 @@ const HtmlEditor = Editor.inherit({
             */
             resizing: null,
             mentions: null,
+            /**
+             * @name dxHtmlEditorOptions.customize
+             * @type function
+             * @type_function_param1 any
+             */
+            customize: null,
 
             formDialogOptions: null
 
@@ -275,7 +281,12 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderHtmlEditor: function() {
+        const customizeModules = this.option("customize");
         const modulesConfig = this._getModulesConfig();
+
+        if(isFunction(customizeModules)) {
+            customizeModules(modulesConfig);
+        }
 
         this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
@@ -494,23 +505,23 @@ const HtmlEditor = Editor.inherit({
     },
 
     /**
-    * @name dxHtmlEditorMethods.registerModules
-    * @publicName registerModules(modules)
+    * @name dxHtmlEditorMethods.register
+    * @publicName register(modules)
     * @param1 modules:Object
     */
-    registerModules: function(modules) {
+    register: function(modules) {
         this._quillRegistrator.registerModules(modules);
 
         this.repaint();
     },
 
     /**
-    * @name dxHtmlEditorMethods.getModule
-    * @publicName getModule(modulePath)
+    * @name dxHtmlEditorMethods.get
+    * @publicName get(modulePath)
     * @param1 modulePath:string
     * @return Object
     */
-    getModule: function(modulePath) {
+    get: function(modulePath) {
         return this._quillRegistrator.getQuill().import(modulePath);
     },
 
