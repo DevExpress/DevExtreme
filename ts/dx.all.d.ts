@@ -6624,7 +6624,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.Options.resizing */
         resizing?: dxHtmlEditorResizing;
         /** @name dxHtmlEditor.Options.mentions */
-        mentions?: dxHtmlEditorMentions;
+        mentions?: Array<dxHtmlEditorMentions>;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
