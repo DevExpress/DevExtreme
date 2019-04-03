@@ -2985,10 +2985,8 @@ QUnit.test("Virtual scrolling if height is not defined", function(assert) {
         }, assert),
         done = assert.async();
 
-    pivotGrid._dataController.scrollChanged.fire({
-        left: 5,
-        top: 7
-    });
+    pivotGrid._scrollLeft = 5;
+    pivotGrid._scrollTop = 7;
 
     var scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance'),
         setViewportPosition = sinon.spy(pivotGrid._dataController, "setViewportPosition"),
@@ -3720,31 +3718,6 @@ QUnit.test("Set dataSource instance two times", function(assert) {
     assert.ok(!dataSourceInstance.load.called);
 });
 
-QUnit.test("DataController - scrollChanged event", function(assert) {
-    var widget = createPivotGrid({
-            dataSource: this.testOptions.dataSource,
-            width: 200,
-            height: 300,
-            scrolling: {
-                useNative: false
-            }
-        }, assert),
-        dataController = widget._dataController,
-        dataAreaScrollable = widget._dataArea.groupElement().dxScrollable("instance");
-
-    dataController.scrollChanged.fire({
-        left: 15,
-        top: 10
-    });
-
-    widget.updateDimensions();
-
-    this.clock.tick();
-
-    assert.strictEqual(dataAreaScrollable.scrollTop(), 10);
-    assert.strictEqual(dataAreaScrollable.scrollLeft(), 15);
-});
-
 // T518378
 QUnit.test("Column area should be visible after change scrolling.mode to virtual", function(assert) {
     var widget = createPivotGrid({
@@ -4422,11 +4395,13 @@ QUnit.test("Virtual Scrolling", function(assert) {
 
     assert.deepEqual(this.dataController.calculateVirtualContentParams.lastCall.args[0], {
         columnCount: 4,
-        contentHeight: 71,
-        contentWidth: 200,
+        itemHeights: [43, 28],
+        itemWidths: [20, 40, 60, 20],
         rowCount: 2,
         viewportHeight: 71,
-        viewportWidth: 899
+        viewportWidth: 899,
+        virtualColumnWidth: 100,
+        virtualRowHeight: 50
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
@@ -4483,11 +4458,13 @@ QUnit.test("Virtual Scrolling. Widget height is not defined", function(assert) {
 
     assert.deepEqual(this.dataController.calculateVirtualContentParams.lastCall.args[0], {
         columnCount: 4,
-        contentHeight: 71,
-        contentWidth: 200,
+        itemHeights: [43, 28],
+        itemWidths: [20, 40, 60, 20],
         rowCount: 2,
         viewportHeight: $(window).outerHeight(),
-        viewportWidth: 899
+        viewportWidth: 899,
+        virtualColumnWidth: 100,
+        virtualRowHeight: 50
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));

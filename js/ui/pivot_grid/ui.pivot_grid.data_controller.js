@@ -724,7 +724,6 @@ exports.DataController = Class.inherit((function() {
             that.expandValueChanging = Callbacks();
             that.loadingChanged = Callbacks();
             that.progressChanged = Callbacks();
-            that.scrollChanged = Callbacks();
 
             that.load();
             that._update();
@@ -872,40 +871,20 @@ exports.DataController = Class.inherit((function() {
         calculateVirtualContentParams: function(contentParams) {
             var that = this,
                 rowsScrollController = that._rowsScrollController,
-                columnsScrollController = that._columnsScrollController,
-                rowViewportItemSize = contentParams.contentHeight / contentParams.rowCount,
-                columnViewportItemSize = contentParams.contentWidth / contentParams.columnCount,
-                oldColumnViewportItemSize,
-                oldRowViewportItemSize,
-                newLeftPosition,
-                newTopPosition;
+                columnsScrollController = that._columnsScrollController;
 
             if(rowsScrollController && columnsScrollController) {
-                oldColumnViewportItemSize = columnsScrollController.viewportItemSize();
-                oldRowViewportItemSize = rowsScrollController.viewportItemSize();
-
-                rowsScrollController.viewportItemSize(rowViewportItemSize);
-                columnsScrollController.viewportItemSize(columnViewportItemSize);
-
+                rowsScrollController.viewportItemSize(contentParams.virtualRowHeight);
                 rowsScrollController.viewportSize(contentParams.viewportHeight / rowsScrollController.viewportItemSize());
-                rowsScrollController.setContentSize(contentParams.contentHeight);
+                rowsScrollController.setContentSize(contentParams.itemHeights);
 
+                columnsScrollController.viewportItemSize(contentParams.virtualColumnWidth);
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
-                columnsScrollController.setContentSize(contentParams.contentWidth);
+                columnsScrollController.setContentSize(contentParams.itemWidths);
 
                 commonUtils.deferUpdate(function() {
                     columnsScrollController.loadIfNeed();
                     rowsScrollController.loadIfNeed();
-                });
-
-                newLeftPosition = columnsScrollController.getViewportPosition() * columnViewportItemSize / oldColumnViewportItemSize;
-                newTopPosition = rowsScrollController.getViewportPosition() * rowViewportItemSize / oldRowViewportItemSize;
-
-                that.setViewportPosition(newLeftPosition, newTopPosition);
-
-                that.scrollChanged.fire({
-                    left: newLeftPosition,
-                    top: newTopPosition
                 });
 
                 return {
@@ -1227,7 +1206,6 @@ exports.DataController = Class.inherit((function() {
             that.changed.empty();
             that.loadingChanged.empty();
             that.progressChanged.empty();
-            that.scrollChanged.empty();
             that.dataSourceChanged.empty();
         }
     };

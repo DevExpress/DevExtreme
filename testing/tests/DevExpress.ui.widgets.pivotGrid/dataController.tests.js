@@ -106,26 +106,6 @@ QUnit.test("Empty dataSource when showRowGrandTotals/showColumnGrandTotals disab
     assert.deepEqual(dataController.getCellsInfo(), [], "Cells Info");
 });
 
-QUnit.test("dataSource by options disposing", function(assert) {
-    var dataController = new DataController({
-            dataSource: {}
-        }),
-        onScrollChanged = sinon.stub();
-
-    var dataSource = dataController.getDataSource();
-    dataController.scrollChanged.add(onScrollChanged);
-
-    // act
-    dataController.dispose();
-
-    dataController.scrollChanged.fire();
-
-    // assert
-    assert.ok(dataSource, "dataSource created");
-    assert.ok(dataSource.isDisposed(), "dataSource disposed");
-    assert.ok(!onScrollChanged.called, "onScrollChanged");
-});
-
 QUnit.test("dataSource by instance disposing", function(assert) {
     var dataSource = new PivotGridDataSource({});
     var dataController = new DataController({
@@ -4363,10 +4343,7 @@ QUnit.test("create dataController with virtual scrollController when scrolling i
 QUnit.test("Calculate virtual content params", function(assert) {
     var dataController = new DataController(this.getOptions({})),
         rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue,
-        scrollChanged = sinon.stub();
-
-    dataController.scrollChanged.add(scrollChanged);
+        columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
 
     rowsScrollController.getContentOffset.returns(100);
     columnsScrollController.getContentOffset.returns(150);
@@ -4379,10 +4356,14 @@ QUnit.test("Calculate virtual content params", function(assert) {
     columnsScrollController.getViewportPosition.returns(400);
     rowsScrollController.getViewportPosition.returns(500);
 
+    var itemWidths = [100, 100, 100, 100, 100, 100];
+    var itemHeights = [100, 100, 100, 100, 100, 100, 100, 100];
     // act
     var result = dataController.calculateVirtualContentParams({
-        contentWidth: 600,
-        contentHeight: 800,
+        virtualRowHeight: 40,
+        virtualColumnWidth: 15,
+        itemWidths: itemWidths,
+        itemHeights: itemHeights,
         rowCount: 20,
         columnCount: 40,
         viewportWidth: 300,
@@ -4390,16 +4371,16 @@ QUnit.test("Calculate virtual content params", function(assert) {
     });
 
     // assert
-    assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 3);
-    assert.strictEqual(rowsScrollController.viewportItemSize.secondCall.args[0], 40);
-    assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 3);
-    assert.strictEqual(columnsScrollController.viewportItemSize.secondCall.args[0], 15);
+    assert.strictEqual(rowsScrollController.viewportItemSize.callCount, 2);
+    assert.strictEqual(rowsScrollController.viewportItemSize.firstCall.args[0], 40);
+    assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 2);
+    assert.strictEqual(columnsScrollController.viewportItemSize.firstCall.args[0], 15);
 
     assert.strictEqual(columnsScrollController.viewportSize.lastCall.args[0], 15);
-    assert.strictEqual(columnsScrollController.setContentSize.lastCall.args[0], 600);
+    assert.strictEqual(columnsScrollController.setContentSize.lastCall.args[0], itemWidths);
 
     assert.strictEqual(rowsScrollController.viewportSize.lastCall.args[0], 10);
-    assert.strictEqual(rowsScrollController.setContentSize.lastCall.args[0], 800);
+    assert.strictEqual(rowsScrollController.setContentSize.lastCall.args[0], itemHeights);
 
     assert.strictEqual(rowsScrollController.loadIfNeed.callCount, 1);
     assert.strictEqual(columnsScrollController.loadIfNeed.callCount, 1);
@@ -4413,15 +4394,6 @@ QUnit.test("Calculate virtual content params", function(assert) {
         height: 1000,
         width: 1500
     });
-
-    assert.ok(scrollChanged.calledOnce);
-    assert.deepEqual(scrollChanged.lastCall.args[0], {
-        left: 300,
-        top: 1000
-    });
-
-    assert.strictEqual(columnsScrollController.setViewportPosition.lastCall.args[0], 300);
-    assert.strictEqual(rowsScrollController.setViewportPosition.lastCall.args[0], 1000);
 });
 
 QUnit.test("setViewPortPosition", function(assert) {

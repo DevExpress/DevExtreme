@@ -332,7 +332,6 @@ QUnit.test("Not redraw chart during virtual scrolling", function(assert) {
 
     pivotGrid.bindChart(chart);
     chart.on("done", chartReady);
-    pivotGrid._dataController.scrollChanged.empty();
     // act
     pivotGrid._dataController.setViewportPosition(0, 2000);
 
