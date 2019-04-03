@@ -1,12 +1,14 @@
+import typeUtils from "core/utils/type";
+
 function assign(target, firstSource) {
-    if(isUndefined(target)) {
+    if(!typeUtils.isDefined(target)) {
         throw new TypeError('Cannot convert first argument to object');
     }
 
     var to = Object(target);
     for(var i = 1; i < arguments.length; i++) {
         var nextSource = arguments[i];
-        if(isUndefined(nextSource)) {
+        if(!typeUtils.isDefined(nextSource)) {
             continue;
         }
 
@@ -20,10 +22,6 @@ function assign(target, firstSource) {
         }
     }
     return to;
-}
-
-function isUndefined(value) {
-    return value === undefined || value === null;
 }
 
 function initializeObjectAssign() {
