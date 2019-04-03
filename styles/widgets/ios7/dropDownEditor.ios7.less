@@ -1,17 +1,19 @@
 @DROPDOWNEDITOR_BUTTON_WIDTH: 25px;
 @DROPDOWNEDITOR_INVALID_BADGE_OFFSET: @DROPDOWNEDITOR_BUTTON_WIDTH;
 
-.dx-dropdowneditor-button-visible .dx-texteditor-input {
-    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
-}
-
-.dx-dropdowneditor-button-visible.dx-show-clear-button .dx-texteditor-input {
-    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
-}
-
 .dx-dropdowneditor-button {
     width: @DROPDOWNEDITOR_BUTTON_WIDTH;
 }
+
+.dx-dropdowneditor-input-wrapper {
+    border: @TEXTEDITOR_BORDER;
+    border-radius: @TEXTEDITOR_BORDER_RADIUS;
+
+    .dx-texteditor-container {
+        border: 0;
+    }
+}
+
 
 .dx-dropdowneditor-button-visible {
     .dx-texteditor-input {
@@ -58,21 +60,21 @@
 .invalid-dropdowneditor-input-padding() {
     &.dx-dropdowneditor-button-visible {
         .dx-texteditor-input {
-            padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
+            padding-right: 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
         }
 
         &.dx-rtl .dx-texteditor-input {
-            padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
+            padding-left: 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
             padding-right: @TEXTEDITOR_INPUT_PADDING;
         }
 
         &.dx-show-clear-button {
             .dx-texteditor-input {
-                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+                padding-right: 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
             }
 
             &.dx-rtl .dx-texteditor-input {
-                padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+                padding-left: 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
                 padding-right: @TEXTEDITOR_INPUT_PADDING;
             }
         }
@@ -84,18 +86,6 @@
 }
 
 .dx-rtl {
-    &.dx-dropdowneditor-button-visible,
-    .dx-dropdowneditor-button-visible {
-        .dx-texteditor-input {
-            padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH;
-        }
-    }
-
-    &.dx-dropdowneditor-button-visible.dx-show-clear-button .dx-texteditor-input {
-        padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
-        padding-right: @TEXTEDITOR_INPUT_PADDING;
-    }
-
     &.dx-dropdowneditor .dx-icon-clear {
         left: 0;
         right: auto;

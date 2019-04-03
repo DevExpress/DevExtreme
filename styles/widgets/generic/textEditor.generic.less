@@ -23,24 +23,24 @@
     .dx-icon-sizing(@GENERIC_TEXTEDITOR_ICON_SIZE, @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }
 
-.validation-icon-position(@padding: 0) {
+.validation-icon-position() {
     &.dx-invalid {
         .dx-texteditor-input {
-            padding-right: @padding + @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+            padding-right: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
         }
 
         &.dx-rtl .dx-texteditor-input {
             padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-            padding-left: @padding + @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+            padding-left: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
         }
 
-        .dx-texteditor-container {
+        .dx-texteditor-input-container {
             &:after {
-                right: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING + @padding;
+                right: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
                 .dx-rtl &,
                 .dx-rtl& {
-                    left: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING + @padding;
+                    left: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
                     right: auto;
                 }
             }
@@ -111,15 +111,6 @@
 }
 
 .dx-show-clear-button {
-    .dx-texteditor-input {
-        padding-right: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        .dx-rtl &,
-        .dx-rtl& {
-            padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-            padding-left: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        }
-    }
-
     .dx-clear-button-area {
         width: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
         right: 0;
@@ -129,10 +120,6 @@
         color: @texteditor-button-clear-icon-color;
         .dx-texteditor-icon();
         .dx-icon-sizing(@GENERIC_TEXTEDITOR_CLEAR_ICON_SIZE - @GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE, @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
-    }
-
-    &:not(.dx-texteditor-empty) {
-        .validation-icon-position(@GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
     }
 }
 
@@ -169,6 +156,32 @@
     }
 }
 
+.dx-editor-underlined {
+    .dx-texteditor-buttons-container {
+        + .dx-texteditor-input-container {
+            .dx-texteditor-input {
+                padding-left: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+
+                .dx-rtl& {
+                    padding-left: 0;
+                    padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+                }
+            }
+
+            .dx-placeholder {
+                left: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+            }
+
+            .dx-rtl& {
+                .dx-placeholder {
+                    left: 0;
+                    right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+                }
+            }
+        }
+    }
+}
+
 .dx-invalid.dx-texteditor {
     border-color: @texteditor-invalid-faded-border-color;
     &.dx-editor-filled, &.dx-editor-underlined, &.dx-editor-outlined {
@@ -176,7 +189,7 @@
             border-color: @texteditor-invalid-focused-border-color;
         }
 
-        .dx-texteditor-container {
+        .dx-texteditor-input-container {
             &:after {
                 .dx-invalid-generic-badge();
             }

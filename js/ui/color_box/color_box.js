@@ -348,7 +348,7 @@ var ColorBox = DropDownEditor.inherit({
 
         this._$colorResultPreview = $("<div>")
             .addClass(COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS)
-            .appendTo(this._$colorBoxInputContainer);
+            .appendTo(this._$textEditorInputContainer);
 
         if(!this.option("value")) {
             this._$colorBoxInputContainer.addClass(COLOR_BOX_COLOR_IS_NOT_DEFINED);

@@ -2315,6 +2315,37 @@ QUnit.test("Labels are outside canvas (on zoom) - do not draw outside labels", f
 
 QUnit.module("XY linear axis. Draw. Check tick labels. WordWrap and textOverflow", environment);
 
+QUnit.test("Horizontal top. WordWrap != none, textOverflow = none. First label is not exists", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            wordWrap: "normal",
+            textOverflow: "none"
+        }
+    });
+
+    this.generatedTicks = ["   ", 2];
+    this.generatedTickInterval = 1;
+    this.translator.stub("getInterval").withArgs(1).returns(10);
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(2).returns(60);
+
+    this.renderer.bBoxTemplate = { x: 1, y: 2, width: 12, height: 6 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(renderer.text.callCount, 1, "Text call count");
+});
+
 QUnit.test("Horizontal top. WordWrap != none, textOverflow = none. Labels are wider than tick interval - set max width", function(assert) {
     // arrange
     var renderer = this.renderer;

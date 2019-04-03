@@ -1815,7 +1815,7 @@ Axis.prototype = {
         if((wordWrapMode !== "none" || overflowMode !== "none") && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
             if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
                 that._majorTicks.forEach(tick => {
-                    tick.label.setMaxWidth(textWidth, options.label);
+                    tick.label && tick.label.setMaxWidth(textWidth, options.label);
                 });
                 measureLabels(that._majorTicks);
             }

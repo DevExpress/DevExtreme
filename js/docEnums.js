@@ -831,6 +831,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ActionButtonLocation
+ * @enum {'after'|'before'}
+ */
+
+/**
  * @typedef {string} Enums.SmallValuesGroupingMode
  * @enum {'none'|'smallValueThreshold'|'topN'}
  */
