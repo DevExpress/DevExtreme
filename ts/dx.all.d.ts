@@ -6623,6 +6623,8 @@ declare module DevExpress.ui {
         placeholder?: string;
         /** @name dxHtmlEditor.Options.resizing */
         resizing?: dxHtmlEditorResizing;
+        /** @name dxHtmlEditor.Options.mentions */
+        mentions?: dxHtmlEditorMentions;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
@@ -6679,6 +6681,23 @@ declare module DevExpress.ui {
         allowedTargets?: Array<string>;
         /** @name dxHtmlEditorResizing.enabled */
         enabled?: boolean;
+    }
+    /** @name dxHtmlEditorMentions */
+    export interface dxHtmlEditorMentions {
+        /** @name dxHtmlEditorMentions.dataSource */
+        dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxHtmlEditorMentions.marker */
+        marker?: string;
+        /** @name dxHtmlEditorMentions.minSearchLength */
+        minSearchLength?: number;
+        /** @name dxHtmlEditorMentions.searchTimeout */
+        searchTimeout?: number;
+        /** @name dxHtmlEditorMentions.itemTemplate */
+        itemTemplate?: template | Function;
+        /** @name dxHtmlEditorMentions.searchExpr */
+        searchExpr?: string | Function | Array<string | Function>;
+        /** @name dxHtmlEditorMentions.valueExpr */
+        valueExpr?: string | Function;
     }
     /** @name dxHtmlEditorToolbar */
     export interface dxHtmlEditorToolbar {
