@@ -100,14 +100,14 @@ let DropDownButton = Widget.inherit({
             splitButton: true,
 
             /**
-             * @name dxDropDownButtonOptions.splitButton
+             * @name dxDropDownButtonOptions.text
              * @type string
              * @default ""
              */
             text: "",
 
             /**
-             * @name dxDropDownButtonOptions.splitButton
+             * @name dxDropDownButtonOptions.icon
              * @type string
              * @default undefined
              */

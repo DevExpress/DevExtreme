@@ -373,7 +373,7 @@ testComponentDefaults(DropDownButton, {}, {
     text: "",
     keyExpr: "this",
     displayExpr: "this",
-    useSelectMode: true,
+    useSelectMode: false,
     splitButton: true,
     selectedItemKey: null,
     selectedItem: null,
