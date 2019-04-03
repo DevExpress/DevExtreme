@@ -81,6 +81,47 @@ const config = {
     */
     useLegacyVisibleIndex: false,
 
+    /**
+    * @name globalConfig.actionButtonConfig
+    * @type object
+    */
+    actionButtonConfig: {
+        /**
+        * @name globalConfig.actionButtonConfig.icon
+        * @type string
+        * @default "preferences"
+        */
+        icon: "preferences",
+
+        /**
+        * @name globalConfig.actionButtonConfig.closeIcon
+        * @type string
+        * @default "close"
+        */
+        closeIcon: "close",
+
+        /**
+        * @name globalConfig.actionButtonConfig.position
+        * @type Enums.PositionAlignment|positionConfig|function
+        * @default "right bottom"
+        */
+        position: {
+            at: "right bottom",
+            my: "right bottom",
+            offset: {
+                x: -16,
+                y: -16
+            }
+        },
+
+        /**
+        * @name globalConfig.actionButtonConfig.maxActionButtonCount
+        * @type number
+        * @default 6
+        */
+        maxActionButtonCount: 6
+    },
+
     optionsParser: (optionsString) => {
         if(optionsString.trim().charAt(0) !== "{") {
             optionsString = "{" + optionsString + "}";

@@ -741,6 +741,17 @@ declare module DevExpress {
         useLegacyStoreResult?: boolean;
         /** @name globalConfig.useLegacyVisibleIndex */
         useLegacyVisibleIndex?: boolean;
+        /** @name globalConfig.actionButtonConfig */
+        actionButtonConfig: {
+            /** @name globalConfig.actionButtonConfig.icon */
+            icon: string;
+            /** @name globalConfig.actionButtonConfig.closeIcon */
+            closeIcon: string;
+            /** @name globalConfig.actionButtonConfig.position */
+            position: positionConfig;
+            /** @name globalConfig.actionButtonConfig.maxActionButtonCount */
+            maxActionButtonCount: number;
+        }
     }
     /** @name config() */
     export function config(): globalConfig;

@@ -1,77 +1,135 @@
-var $ = require("../../core/renderer"),
-    Guid = require("../../core/guid"),
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    iconUtils = require("../../core/utils/icon"),
-    // inkRipple = require("../widget/utils.ink_ripple"),
-    Overlay = require("../overlay"),
-    ActionButtonMain = require("./action_button_base"),
-    ACTION_BUTTON_CLASS = "dx-actionbutton",
-    ACTION_BUTTON_ICON_CLASS = "dx-actionbutton-icon";
-    // ACTION_BUTTON_WRAPPER_CLASS = "dx-action-button-wrapper";
+import registerComponent from "../../core/component_registrator";
+import { extend } from "../../core/utils/extend";
+import Guid from "../../core/guid";
+import Widget from "../widget/ui.widget";
+import themes from "../themes";
+import { init, dispose } from "./action_button_base";
 
-var ActionButton = Overlay.inherit({
+var ActionButton = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
             * @name dxActionButtonOptions.icon
-            * @hidden
-            * @inheritdoc
+            * @type string
+            * @default ""
             */
-            icon: null,
+            icon: "",
 
             /**
             * @name dxActionButtonOptions.label
-            * @hidden
-            * @inheritdoc
+            * @type string
+            * @default ""
             */
-            closeIcon: null,
+            label: "",
 
             /**
-            * @name dxButtonOptions.onClick
+            * @name dxActionButtonOptions.onClick
             * @type function(e)
             * @extends Action
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 event:event
+            * @type_function_param1_field2 component:this
+            * @type_function_param1_field3 element:dxElement
+            * @action
             */
 
             onClick: null,
 
-            visible: true,
-            position: "right bottom",
-            width: 56,
-            height: 56,
-            shading: false,
-            propagateOutsideClick: true
+            useInkRipple: false,
+
+            /**
+            * @name dxActionButtonOptions.visible
+            * @hidden
+            * @inheritdoc
+            */
+            visible: false,
+
+            /**
+            * @name dxActionButtonOptions.width
+            * @hidden
+            * @inheritdoc
+            */
+            width: "auto",
+
+            /**
+            * @name dxActionButtonOptions.height
+            * @hidden
+            * @inheritdoc
+            */
+            height: "auto",
+
+            /**
+            * @name dxActionButtonOptions.disabled
+            * @hidden
+            * @inheritdoc
+            */
+            disabled: false,
+
+            activeStateEnabled: true,
+            hoverStateEnabled: true,
+            animation: {
+                show: {
+                    type: "pop",
+                    duration: 150,
+                    easing: "linear",
+                    from: {
+                        scale: 0.3,
+                        opacity: 0
+                    },
+                    to: {
+                        scale: 1,
+                        opacity: 1
+                    }
+                },
+                hide: {
+                    type: "pop",
+                    duration: 100,
+                    easing: "linear",
+                    from: {
+                        scale: 1
+                    },
+                    to: {
+                        scale: 0
+                    }
+                }
+            },
+            id: new Guid()
         });
     },
 
-    _render: function() {
-        this.$element().addClass(ACTION_BUTTON_CLASS);
-        // this._wrapper().addClass(ACTION_BUTTON_WRAPPER_CLASS);
-        this.callBase();
-        this._renderIcon();
+    _defaultOptionsRules() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useInkRipple: true
+                }
+            }
+        ]);
     },
 
-    _renderContent: function() {
-        this.callBase();
-
-        this._contentId = "dx-" + new Guid();
-
-        this._$content.attr({
-            "id": this._contentId,
-            "role": "action-button"
-        });
+    _optionChanged(args) {
+        switch(args.name) {
+            case "onClick":
+                init(this);
+                break;
+            case "icon":
+                init(this);
+                break;
+            case "label":
+            default:
+                this.callBase(args);
+        }
     },
 
-    _renderIcon: function() {
-        this._$icon = $("<div>").addClass(ACTION_BUTTON_ICON_CLASS);
-        var $iconElement = iconUtils.getImageContainer(this._options.icon);
-
-        this._$icon.append($iconElement);
-        this._$content.append(this._$icon);
+    _render() {
+        init(this);
     },
 
-    _renderMainActionButton() {
-        ActionButtonMain._render();
+    _dispose() {
+        dispose(this._options.id);
     }
 });
 
