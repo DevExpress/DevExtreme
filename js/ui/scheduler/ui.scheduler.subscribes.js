@@ -824,6 +824,10 @@ const subscribes = {
         options.callback(result);
     },
 
+    checkWrongEndDate: function(appointment, startDate, endDate) {
+        return this._appointmentModel.checkWrongEndDate(appointment, startDate, endDate);
+    },
+
     getEndDayHour: function() {
         return this.option("endDayHour");
     },

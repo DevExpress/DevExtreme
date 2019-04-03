@@ -481,12 +481,12 @@ var AppointmentModel = Class.inherit({
         var currentFilter = extend(true, [], dateFilter);
 
         return (function(appointment) {
-            appointment = extend(true, {}, appointment);
-
             var startDate = this._dataAccessors.getter.startDate(appointment),
                 endDate = this._dataAccessors.getter.endDate(appointment);
 
-            endDate = this._checkWrongEndDate(appointment, new Date(startDate), new Date(endDate));
+            endDate = this.checkWrongEndDate(appointment, new Date(startDate), new Date(endDate));
+
+            appointment = extend(true, {}, appointment);
 
             var startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment),
                 endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);
@@ -501,8 +501,8 @@ var AppointmentModel = Class.inherit({
         }).bind(this);
     },
 
-    _checkWrongEndDate: function(appointment, startDate, endDate) {
-        if(!endDate || startDate.getTime() >= endDate.getTime()) {
+    checkWrongEndDate: function(appointment, startDate, endDate) {
+        if(!endDate || isNaN(endDate.getTime()) || startDate.getTime() >= endDate.getTime()) {
 
             if(this._dataAccessors.getter.allDay(appointment)) {
                 endDate = new Date(startDate);
