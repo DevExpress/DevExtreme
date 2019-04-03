@@ -6072,10 +6072,10 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | any;
-        /** @name dxDropDownButton.Options.updateButtonOnSelection */
-        updateButtonOnSelection?: boolean;
-        /** @name dxDropDownButton.Options.showToggleButton */
-        showToggleButton?: boolean;
+        /** @name dxDropDownButton.Options.useSelectMode */
+        useSelectMode?: boolean;
+        /** @name dxDropDownButton.Options.splitButton */
+        splitButton?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {

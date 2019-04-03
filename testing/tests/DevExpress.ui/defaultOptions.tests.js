@@ -372,7 +372,7 @@ testComponentDefaults(DropDownButton, {}, {
     deferRendering: true,
     keyExpr: "this",
     displayExpr: "this",
-    updateButtonOnSelection: true,
+    useSelectMode: true,
     grouped: false,
     itemTemplate: "item",
     groupTemplate: "group",

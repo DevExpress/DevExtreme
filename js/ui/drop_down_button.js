@@ -78,18 +78,18 @@ let DropDownButton = Widget.inherit({
             noDataText: formatMessage("dxCollectionWidget-noDataText"),
 
             /**
-             * @name dxDropDownButtonOptions.updateButtonOnSelection
+             * @name dxDropDownButtonOptions.useSelectMode
              * @type boolean
              * @default true
              */
-            updateButtonOnSelection: true,
+            useSelectMode: true,
 
             /**
-             * @name dxDropDownButtonOptions.showToggleButton
+             * @name dxDropDownButtonOptions.splitButton
              * @type boolean
              * @default true
              */
-            showToggleButton: true,
+            splitButton: true,
 
             /**
              * @name dxDropDownButtonOptions.onActionButtonClick
@@ -183,7 +183,7 @@ let DropDownButton = Widget.inherit({
         this._renderButtonGroup();
         this._loadSelectedItem().done((selectedItem) => {
             this._setOptionSilent("selectedItem", selectedItem);
-            this._updateButtonOnSelection();
+            this._updateActionButton();
         });
         if(!this.option("deferRendering")) {
             this._renderPopup();
@@ -236,10 +236,10 @@ let DropDownButton = Widget.inherit({
     },
 
     _actionButtonConfig() {
-        const showToggleButton = this.option("showToggleButton");
+        const splitButton = this.option("splitButton");
         const defaultConfig = {
             onClick: ({ event }) => {
-                if(showToggleButton) {
+                if(splitButton) {
                     this._actionClickAction({
                         event,
                         selectedItem: this.option("selectedItem")
@@ -248,8 +248,8 @@ let DropDownButton = Widget.inherit({
                     this.toggle();
                 }
             },
-            icon: showToggleButton ? undefined : "spindown",
-            iconPosition: showToggleButton ? "left" : "right",
+            icon: splitButton ? undefined : "spindown",
+            iconPosition: splitButton ? "left" : "right",
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
 
@@ -269,7 +269,7 @@ let DropDownButton = Widget.inherit({
     _getButtonGroupItems() {
         const items = [];
         items.push(this._actionButtonConfig());
-        if(this.option("showToggleButton")) {
+        if(this.option("splitButton")) {
             items.push({
                 icon: "spindown",
                 width: 26,
@@ -391,8 +391,8 @@ let DropDownButton = Widget.inherit({
         this._list && this._list.option(name, value);
     },
 
-    _updateButtonOnSelection() {
-        if(this.option("updateButtonOnSelection")) {
+    _updateActionButton() {
+        if(this.option("useSelectMode")) {
             this._buttonGroup.option("items[0]", this._actionButtonConfig());
         }
     },
@@ -405,9 +405,9 @@ let DropDownButton = Widget.inherit({
     _optionChanged(args) {
         const { name, value } = args;
         switch(args.name) {
-            case "updateButtonOnSelection":
+            case "useSelectMode":
                 break;
-            case "showToggleButton":
+            case "splitButton":
                 this._renderButtonGroup();
                 break;
             case "displayExpr":
@@ -446,7 +446,7 @@ let DropDownButton = Widget.inherit({
                 this._loadSelectedItem().done((selectedItem) => {
                     this._setOptionSilent("selectedItem", selectedItem);
                     if(this._displayGetter(args.previousValue) !== this._displayGetter(selectedItem)) {
-                        this._updateButtonOnSelection();
+                        this._updateActionButton();
                         this._fireSelectionChangedAction(args);
                     }
                 });

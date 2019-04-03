@@ -112,7 +112,7 @@ QUnit.module("button group integration", {}, () => {
 
     QUnit.test("a user can redefine buttonGroupOptions", (assert) => {
         const instance = new DropDownButton("#dropDownButton", {
-            updateButtonOnSelection: false,
+            useSelectMode: false,
             buttonGroupOptions: {
                 items: [{ text: "Test" }],
                 someOption: "Test"
@@ -237,7 +237,7 @@ QUnit.module("list integration", {}, () => {
             deferRendering: false,
             grouped: true,
             noDataText: "No data",
-            updateButtonOnSelection: false
+            useSelectMode: false
         });
 
         const list = getList(dropDownButton);
@@ -268,7 +268,7 @@ QUnit.module("common use cases", {
     beforeEach: () => {
         this.itemClickHandler = sinon.spy();
         this.dropDownButton = new DropDownButton("#dropDownButton", {
-            updateButtonOnSelection: false,
+            useSelectMode: false,
             deferRendering: false,
             keyExpr: "id",
             displayExpr: "name",
@@ -294,8 +294,8 @@ QUnit.module("common use cases", {
         assert.notOk(getPopup(this.dropDownButton).option("visible"), "popup is hidden");
     });
 
-    QUnit.test("custom item should be redefined after selection if updateButtonOnSelection is true", (assert) => {
-        this.dropDownButton.option("updateButtonOnSelection", true);
+    QUnit.test("custom item should be redefined after selection if useSelectMode is true", (assert) => {
+        this.dropDownButton.option("useSelectMode", true);
         eventsEngine.trigger(this.listItems.eq(0), "dxclick");
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for Visual Studio", "action button has been changed");
     });
@@ -311,14 +311,14 @@ QUnit.module("common use cases", {
     });
 
     QUnit.test("the user can hide the toggle button", (assert) => {
-        this.dropDownButton.option("showToggleButton", false);
+        this.dropDownButton.option("splitButton", false);
         assert.strictEqual(getToggleButton(this.dropDownButton).length, 0, "there is no toggle button");
 
         eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
         assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "action button opens the dropdown");
 
         this.dropDownButton.close();
-        this.dropDownButton.option("showToggleButton", true);
+        this.dropDownButton.option("splitButton", true);
         assert.strictEqual(getToggleButton(this.dropDownButton).length, 1, "the toggle button is visible");
 
         eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
@@ -383,7 +383,7 @@ QUnit.module("data expressions", {
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
             keyExpr: "id",
-            updateButtonOnSelection: true,
+            useSelectMode: true,
             deferRendering: false
         });
     }
@@ -485,7 +485,7 @@ QUnit.module("items changing", {
 
     QUnit.test("changing of dataSource should load new selected item", (assert) => {
         this.dropDownButton.option({
-            updateButtonOnSelection: true,
+            useSelectMode: true,
             selectedItem: { id: 2 }
         });
 
@@ -504,7 +504,7 @@ QUnit.module("items changing", {
                 load: loadHandler,
                 byKey: byKeyHandler
             },
-            updateButtonOnSelection: true,
+            useSelectMode: true,
             selectedItem: { id: 1 }
         });
 
@@ -513,8 +513,8 @@ QUnit.module("items changing", {
         this.dropDownButton.option("deferRendering", false);
         assert.strictEqual(loadHandler.callCount, 1, "list was loaded");
 
-        this.dropDownButton.option("showToggleButton", false);
-        this.dropDownButton.option("showToggleButton", true);
+        this.dropDownButton.option("splitButton", false);
+        this.dropDownButton.option("splitButton", true);
         assert.strictEqual(byKeyHandler.callCount, 1, "byKey called once");
         assert.strictEqual(loadHandler.callCount, 1, "load should not be called again");
     });
