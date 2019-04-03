@@ -1585,14 +1585,9 @@ const Scheduler = Widget.inherit({
 
         this._initActions();
 
-        this._initAppointmentStrategies();
+        this._compactAppointmentsHelper = new CompactAppointmentsHelper(this);
 
         this._subscribes = subscribes;
-    },
-
-    _initAppointmentStrategies: function() {
-        this._compactAppointmentsHelper = new CompactAppointmentsHelper(this);
-        this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
     },
 
     _initTemplates: function() {
@@ -1820,6 +1815,8 @@ const Scheduler = Widget.inherit({
 
         this._appointments = this._createComponent("<div>", SchedulerAppointments, this._appointmentsConfig());
         this._appointments.option("itemTemplate", this._getAppointmentTemplate("appointmentTemplate"));
+
+        this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
 
         this._loadResources().done((function(resources) {
             this._readyToRenderAppointments = windowUtils.hasWindow();

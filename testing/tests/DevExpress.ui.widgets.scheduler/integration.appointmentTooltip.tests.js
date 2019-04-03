@@ -9,7 +9,7 @@ import messageLocalization from "localization/message";
 import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import dataUtils from "core/element_data";
-import { tooltipHelper, appointmentsHelper } from './helpers.js';
+import { tooltipHelper, appointmentsHelper, appointmentPopupHelper } from './helpers.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -22,10 +22,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-function getDeltaTz(schedulerTz, date) {
-    var defaultTz = date.getTimezoneOffset() * 60000;
-    return schedulerTz * 3600000 + defaultTz;
-}
+const getDeltaTz = (schedulerTz, date) => schedulerTz * 3600000 + date.getTimezoneOffset() * 60000;
 
 QUnit.module("Integration: Appointment tooltip", {
     beforeEach: function() {
@@ -48,11 +45,13 @@ QUnit.module("Integration: Appointment tooltip", {
             }
         ];
     },
+
     afterEach: function() {
         fx.off = false;
         tooltip.hide();
         this.clock.restore();
     },
+
     checkAppointmentDataInTooltipTemplate: function(assert, dataSource, currentDate) {
         this.createInstance({
             dataSource: dataSource,
@@ -60,7 +59,7 @@ QUnit.module("Integration: Appointment tooltip", {
             currentDate: currentDate,
             currentView: "month",
             views: ["month"],
-            appointmentTooltipTemplate: function(appointmentData) {
+            appointmentTooltipTemplate: appointmentData => {
                 assert.equal(dataSource.indexOf(appointmentData), 0, "appointment data contains in the data source");
             }
         });
@@ -68,6 +67,51 @@ QUnit.module("Integration: Appointment tooltip", {
         appointmentsHelper.click(0);
         this.clock.tick(300);
     }
+});
+
+QUnit.test("There is no need to check recurring appointment if editing.allowUpdating is false", function(assert) {
+    this.createInstance({
+        editing: {
+            allowUpdating: false
+        },
+        currentDate: new Date(2015, 5, 15),
+        firstDayOfWeek: 1,
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 5, 15, 10),
+            endDate: new Date(2015, 5, 15, 10, 30),
+            recurrenceRule: "FREQ=MONTHLY"
+        }]
+    });
+
+    const $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
+        itemData = dataUtils.data($appointment[0], "dxItemData");
+
+    this.instance.showAppointmentTooltip(itemData, $appointment);
+
+    tooltipHelper.clickOnItem();
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered instead of recurrence tooltip");
+});
+
+QUnit.test("Delete button should not exist if editing.allowUpdating is false", function(assert) {
+    this.createInstance({
+        editing: {
+            allowDeleting: false
+        },
+        currentDate: new Date(2015, 5, 15),
+        firstDayOfWeek: 1,
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 5, 15, 10),
+            endDate: new Date(2015, 5, 15, 10, 30)
+        }]
+    });
+
+    const $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
+        itemData = dataUtils.data($appointment[0], "dxItemData");
+
+    this.instance.showAppointmentTooltip(itemData, $appointment);
+    assert.notOk(tooltipHelper.hasDeleteButton(), "Delete button should not exist");
 });
 
 QUnit.test("Click on appointment should call scheduler.showAppointmentTooltip", function(assert) {
@@ -810,4 +854,279 @@ QUnit.test("The appointmentData argument of the appointment tooltip template is 
     }];
 
     this.checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
+});
+
+
+const moduleConfig = {
+    beforeEach: function() {
+        fx.off = true;
+        this.data = [
+            {
+                text: "Website Re-Design Plan",
+                startDate: new Date(2017, 4, 22, 9, 30),
+                endDate: new Date(2017, 4, 22, 11, 30)
+            }, {
+                text: "Book Flights to San Fran for Sales Trip",
+                startDate: new Date(2017, 4, 22, 12, 0),
+                endDate: new Date(2017, 4, 22, 13, 0),
+                allDay: true
+            }, {
+                text: "Install New Router in Dev Room",
+                startDate: new Date(2017, 4, 22, 14, 30),
+                endDate: new Date(2017, 4, 22, 15, 30)
+            }, {
+                text: "Approve Personal Computer Upgrade Plan",
+                startDate: new Date(2017, 4, 23, 10, 0),
+                endDate: new Date(2017, 4, 23, 11, 0)
+            }, {
+                text: "Final Budget Review",
+                startDate: new Date(2017, 4, 23, 12, 0),
+                endDate: new Date(2017, 4, 23, 13, 35)
+            }, {
+                text: "New Brochures",
+                startDate: new Date(2017, 4, 23, 14, 30),
+                endDate: new Date(2017, 4, 23, 15, 45)
+            }, {
+                text: "Install New Database",
+                startDate: new Date(2017, 4, 24, 9, 45),
+                endDate: new Date(2017, 4, 24, 11, 15)
+            }, {
+                text: "Approve New Online Marketing Strategy",
+                startDate: new Date(2017, 4, 24, 12, 0),
+                endDate: new Date(2017, 4, 24, 14, 0)
+            }, {
+                text: "Upgrade Personal Computers",
+                startDate: new Date(2017, 4, 24, 15, 15),
+                endDate: new Date(2017, 4, 24, 16, 30)
+            }, {
+                text: "Customer Workshop",
+                startDate: new Date(2017, 4, 25, 11, 0),
+                endDate: new Date(2017, 4, 25, 12, 0),
+                allDay: true
+            }, {
+                text: "Prepare 2015 Marketing Plan",
+                startDate: new Date(2017, 4, 25, 11, 0),
+                endDate: new Date(2017, 4, 25, 13, 30)
+            }, {
+                text: "Brochure Design Review",
+                startDate: new Date(2017, 4, 25, 14, 0),
+                endDate: new Date(2017, 4, 25, 15, 30)
+            }, {
+                text: "Create Icons for Website",
+                startDate: new Date(2017, 4, 26, 10, 0),
+                endDate: new Date(2017, 4, 26, 11, 30)
+            }, {
+                text: "Upgrade Server Hardware",
+                startDate: new Date(2017, 4, 26, 14, 30),
+                endDate: new Date(2017, 4, 26, 16, 0)
+            }, {
+                text: "Submit New Website Design",
+                startDate: new Date(2017, 4, 26, 16, 30),
+                endDate: new Date(2017, 4, 26, 18, 0)
+            }, {
+                text: "Launch New Website",
+                startDate: new Date(2017, 4, 26, 12, 20),
+                endDate: new Date(2017, 4, 26, 14, 0)
+            }
+        ];
+
+        this.createInstance = function(options) {
+            const defaultOption = {
+                dataSource: this.data,
+                views: ["agenda", "day", "week", "workWeek", "month"],
+                currentView: "month",
+                currentDate: new Date(2017, 4, 25),
+                startDayHour: 9,
+                height: 600,
+            };
+            this.instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
+        };
+
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    },
+};
+
+QUnit.module("New common tooltip for compact and cell appointments", moduleConfig, function() {
+    QUnit.test("Title in tooltip should equals title of cell appointments in month view", function(assert) {
+        this.createInstance();
+        assert.notOk(tooltipHelper.isVisible(), "On page load tooltip should be invisible");
+
+        for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
+            appointmentsHelper.click(i);
+            assert.equal(tooltipHelper.getTitleText(), appointmentsHelper.getTitleText(i), "Title in tooltip should be equal with appointment");
+        }
+
+        const compactAppointmentSample = [
+            ["Install New Router in Dev Room"],
+            ["New Brochures"],
+            ["Upgrade Personal Computers"],
+            ["Brochure Design Review"],
+            ["Upgrade Server Hardware", "Submit New Website Design"]
+        ];
+
+        for(let i = 0; i < appointmentsHelper.compact.getButtonCount(); i++) {
+            const compactAppointmentSampleItem = compactAppointmentSample[i];
+            appointmentsHelper.compact.click(i);
+
+            assert.equal(appointmentsHelper.compact.getButtonText(i), `${compactAppointmentSampleItem.length} more`, "Count of compact appointments in button is match of count real appointments");
+
+            compactAppointmentSampleItem.forEach((sampleTitle, index) => {
+                assert.equal(tooltipHelper.getTitleText(index), sampleTitle, "Title in tooltip should be equal with sample data");
+            });
+        }
+    });
+
+    QUnit.test("Title in tooltip should equals title of cell appointments in other views", function(assert) {
+        this.createInstance();
+        assert.notOk(tooltipHelper.isVisible(), "On page load tooltip should be invisible");
+
+        const views = ["week", "day", "workWeek", "agenda"];
+        const testTitles = () => {
+            for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
+                appointmentsHelper.click(i);
+                assert.equal(tooltipHelper.getTitleText(), appointmentsHelper.getTitleText(i), "Title in tooltip should be equal with appointment");
+            }
+        };
+
+        views.forEach(viewValue => {
+            this.instance.option("currentView", viewValue);
+            testTitles();
+        });
+    });
+
+    QUnit.test("Delete button in tooltip shouldn't render if editing = false", function(assert) {
+        this.createInstance({
+            editing: false
+        });
+
+        for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
+            appointmentsHelper.click(i);
+            assert.notOk(tooltipHelper.hasDeleteButton(), "Delete button shouldn't render");
+        }
+
+        for(let i = 0; i < appointmentsHelper.compact.getButtonCount(); i++) {
+            appointmentsHelper.compact.click(i);
+            assert.notOk(tooltipHelper.hasDeleteButton(), "Delete button shouldn't render for compact appointments");
+        }
+
+        this.instance.option("editing", true);
+
+        for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
+            appointmentsHelper.click(i);
+            assert.ok(tooltipHelper.hasDeleteButton(), "Delete button should be render");
+        }
+    });
+
+    QUnit.test("Compact button should hide or show after change in data source", function(assert) {
+        this.createInstance();
+
+        assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "Value on init should be correct");
+        assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
+
+        this.instance.deleteAppointment(this.data[0]);
+        assert.equal(appointmentsHelper.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
+
+        this.instance.addAppointment({
+            text: "Temp appointment",
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        });
+        assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "Count of compact buttons should be increase after add appointment");
+        assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons should be increase after add appointment");
+
+        this.instance.addAppointment({
+            text: "Temp appointment 2",
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        });
+        assert.equal(appointmentsHelper.compact.getButtonText(), "2 more", "Count of compact buttons should be increase after add appointment");
+        assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons shouldn't change");
+    });
+
+    QUnit.test("Tooltip should hide after perform action", function(assert) {
+        this.createInstance();
+
+        appointmentsHelper.click();
+        assert.ok(tooltipHelper.isVisible(), "Tooltip should visible");
+
+        tooltipHelper.clickOnItem();
+        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+
+        appointmentPopupHelper.hide();
+
+        appointmentsHelper.compact.click(appointmentsHelper.compact.getButtonCount() - 1);
+        assert.ok(tooltipHelper.isVisible(), "Tooltip should visible");
+
+        tooltipHelper.clickOnItem(1);
+        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+
+        appointmentPopupHelper.hide();
+
+        appointmentsHelper.compact.click(appointmentsHelper.compact.getButtonCount() - 1);
+        assert.equal(tooltipHelper.getItemCount(), 2, "Count of items in tooltip should be equal 2");
+
+        tooltipHelper.clickOnDeleteButton(1);
+        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+
+        appointmentsHelper.compact.click(appointmentsHelper.compact.getButtonCount() - 1);
+        assert.equal(tooltipHelper.getItemCount(), 1, "Count of items in tooltip should be equal 1");
+
+        tooltipHelper.clickOnDeleteButton();
+        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+    });
+
+    QUnit.test("Tooltip should work correct in week view", function(assert) {
+        const DEFAULT_TEXT = "Temp appointment";
+        this.createInstance({
+            currentView: "week",
+            width: 600
+        });
+
+        assert.equal(appointmentsHelper.compact.getButtonCount(), 0, "Compact button shouldn't render on init");
+
+        this.instance.addAppointment({
+            text: DEFAULT_TEXT,
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        });
+
+        assert.equal(appointmentsHelper.compact.getButtonCount(), 1, "Compact button should render");
+        appointmentsHelper.compact.click();
+        assert.equal(tooltipHelper.getTitleText(), DEFAULT_TEXT, "Title in tooltip should equal text in appointment cell");
+
+        tooltipHelper.clickOnDeleteButton();
+        assert.equal(appointmentsHelper.compact.getButtonCount(), 0, "Compact button shouldn't render after click delete button");
+    });
+
+    QUnit.test("Templates", function(assert) {
+        const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = "appointment-tooltip-template-marker";
+        const DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME = "drop-down-appointment-template";
+
+        const hasElementInTooltipItem = (className) => {
+            return tooltipHelper.getItemElement().html().indexOf(`<div class="${className}">`) !== -1;
+        };
+
+        this.createInstance({
+            appointmentTooltipTemplate: () => $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME)
+        });
+
+        appointmentsHelper.click();
+        assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), "'appointmentTooltipTemplate' should render for cell appointment");
+
+        appointmentsHelper.compact.click();
+        assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), "'appointmentTooltipTemplate' should render for compact appointment");
+
+        this.instance.option("dropDownAppointmentTemplate", () => $('<div />').addClass(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME));
+
+        appointmentsHelper.click();
+        assert.notOk(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' shouldn't render for cell appointment");
+
+        appointmentsHelper.compact.click();
+        assert.ok(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' should render for compact appointment");
+    });
 });

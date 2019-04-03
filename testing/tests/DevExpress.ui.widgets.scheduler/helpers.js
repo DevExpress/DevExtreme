@@ -25,14 +25,28 @@ export const tooltipHelper = {
 };
 
 export const appointmentsHelper = {
-    getAppointmentElement: (index = 0) => $(".dx-scheduler-appointment").eq(index),
-    click: (index = 0) => appointmentsHelper.getAppointmentElement(index).trigger("dxclick"),
+    getAppointments: () => $(".dx-scheduler-appointment"),
+    getAppointmentCount: () => appointmentsHelper.getAppointments().length,
+    getAppointment: (index = 0) => appointmentsHelper.getAppointments().eq(index),
+    getTitleText: (index = 0) => appointmentsHelper.getAppointment(index).find(".dx-scheduler-appointment-title").text(),
+
+    click: (index = 0) => {
+        this.clock = sinon.useFakeTimers();
+        appointmentsHelper.getAppointment(index).trigger("dxclick");
+        this.clock.tick(300);
+        this.clock.restore();
+    },
 
     compact: {
         getButtons: () => $(".dx-scheduler-dropdown-appointments"),
-        getButton: (index = 0) => $(appointmentsHelper.compact.getButtons().get(index)),
         getButtonCount: () => appointmentsHelper.compact.getButtons().length,
+        getButton: (index = 0) => $(appointmentsHelper.compact.getButtons().get(index)),
         getButtonText: (index = 0) => appointmentsHelper.compact.getButton(index).find("span").text(),
         click: (index = 0) => appointmentsHelper.compact.getButton(index).trigger("dxclick"),
     }
+};
+
+export const appointmentPopupHelper = {
+    getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
+    hide: () => appointmentPopupHelper.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick")
 };
