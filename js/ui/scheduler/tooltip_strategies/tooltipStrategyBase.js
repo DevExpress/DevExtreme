@@ -38,8 +38,6 @@ export class TooltipStrategyBase {
         const $list = $("<div>");
         return this.scheduler._createComponent($list, List, {
             dataSource: dataList,
-            focusStateEnabled: this.scheduler.option("focusStateEnabled"),
-            selectedItems: null,
             onItemRendered: e => this._onListItemRendered(e),
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) => this._renderTemplate(target, item.data, item.currentData || item.data, index, item.color)

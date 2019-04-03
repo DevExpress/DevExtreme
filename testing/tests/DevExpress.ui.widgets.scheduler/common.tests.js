@@ -1,30 +1,31 @@
-var pointerMock = require("../../helpers/pointerMock.js");
+import pointerMock from "../../helpers/pointerMock.js";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    isRenderer = require("core/utils/type").isRenderer,
-    translator = require("animation/translator"),
-    devices = require("core/devices"),
-    domUtils = require("core/utils/dom"),
-    errors = require("ui/widget/ui.errors"),
-    Color = require("color"),
-    fx = require("animation/fx"),
-    config = require("core/config"),
-    dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment_model"),
-    dxSchedulerWorkSpace = require("ui/scheduler/workspaces/ui.scheduler.work_space"),
-    dxSchedulerWorkSpaceDay = require("ui/scheduler/workspaces/ui.scheduler.work_space_day"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    SchedulerTimezones = require("ui/scheduler/timezones/ui.scheduler.timezones"),
-    dataUtils = require("core/element_data"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    themes = require("ui/themes");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { isRenderer } from "core/utils/type";
+import translator from "animation/translator";
+import devices from "core/devices";
+import domUtils from "core/utils/dom";
+import errors from "ui/widget/ui.errors";
+import Color from "color";
+import fx from "animation/fx";
+import config from "core/config";
+import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
+import dxSchedulerWorkSpace from "ui/scheduler/workspaces/ui.scheduler.work_space";
+import dxSchedulerWorkSpaceDay from "ui/scheduler/workspaces/ui.scheduler.work_space_day";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import SchedulerTimezones from "ui/scheduler/timezones/ui.scheduler.timezones";
+import dataUtils from "core/element_data";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import themes from "ui/themes";
+import { appointmentsHelper } from "./helpers.js";
 
-require("ui/scheduler/ui.scheduler");
-require("common.css!");
-require("generic_light.css!");
+import "ui/scheduler/ui.scheduler";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
@@ -3410,37 +3411,39 @@ QUnit.testStart(function() {
 
     });
 
-    // QUnit.test("focusedStateEnabled option value should be passed to ddAppointments", function(assert) {
-    //     this.createInstance({
-    //         dataSource: [{
-    //             startDate: new Date(2015, 4, 24, 9, 10),
-    //             endDate: new Date(2015, 4, 24, 11, 1),
-    //             allDay: true,
-    //             text: "Task 1"
-    //         }, {
-    //             startDate: new Date(2015, 4, 24, 9, 10),
-    //             endDate: new Date(2015, 4, 24, 11, 1),
-    //             allDay: true,
-    //             text: "Task 2"
-    //         }, {
-    //             startDate: new Date(2015, 4, 24, 9, 10),
-    //             endDate: new Date(2015, 4, 24, 11, 1),
-    //             allDay: true,
-    //             text: "Task 3"
-    //         }],
-    //         currentDate: new Date(2015, 4, 24),
-    //         views: ["month"],
-    //         currentView: "month",
-    //         focusStateEnabled: false
-    //     });
+    QUnit.test("focusedStateEnabled option value should be passed to ddAppointments", function(assert) {
+        this.createInstance({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 1"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 2"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 3"
+            }],
+            currentDate: new Date(2015, 4, 24),
+            views: ["month"],
+            currentView: "month",
+            focusStateEnabled: false
+        });
 
-    //     var ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
-    //     assert.notOk(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+        appointmentsHelper.compact.click();
+        assert.notOk(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
 
-    //     this.instance.option("focusStateEnabled", true);
-    //     ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
-    //     assert.ok(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
-    // });
+        this.instance._appointmentTooltip.hide();
+
+        this.instance.option("focusStateEnabled", true);
+        appointmentsHelper.compact.click();
+        assert.ok(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+    });
 
     QUnit.test("Workspace navigation by arrows should work correctly with opened dropDown appointments", function(assert) {
         this.createInstance({

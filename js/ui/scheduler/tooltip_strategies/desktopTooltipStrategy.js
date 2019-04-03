@@ -230,6 +230,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             }
 
             this.list.focus();
+            this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
             this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
         }
     }
