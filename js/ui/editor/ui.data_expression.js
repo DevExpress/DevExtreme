@@ -204,7 +204,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 
     _setCollectionWidgetItemTemplate: function() {
         this._initDynamicTemplates();
-        this._setCollectionWidgetOption("itemTemplate", this._getTemplateByOption("itemTemplate"));
+        this._setCollectionWidgetOption("itemTemplate", this.option("itemTemplate"));
     },
 
     _getCollectionKeyExpr: function() {
@@ -231,7 +231,8 @@ var DataExpressionMixin = extend(DataHelperMixin, {
                 break;
             case "displayExpr":
                 this._compileDisplayGetter();
-                this._setCollectionWidgetItemTemplate();
+                this._initDynamicTemplates();
+                this._setCollectionWidgetOption("displayExpr");
                 break;
         }
     }
