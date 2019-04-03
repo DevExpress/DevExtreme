@@ -507,12 +507,7 @@ var AppointmentModel = Class.inherit({
         if(this._isEndDateWrong(appointment, startDate, endDate)) {
 
             if(this._dataAccessors.getter.allDay(appointment)) {
-                endDate = new Date(startDate);
-
-                endDate = dateUtils.trimTime(endDate);
-
-                endDate.setDate(startDate.getDate() + 1);
-                endDate = new Date(endDate.getTime() - 1);
+                endDate = dateUtils.someFunction(new Date(startDate));
             } else {
                 endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * 60000);
             }
