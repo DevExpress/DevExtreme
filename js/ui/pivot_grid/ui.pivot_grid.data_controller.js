@@ -788,14 +788,16 @@ exports.DataController = Class.inherit((function() {
             }
         },
 
-        _processPagingForExpandedPaths: function(options, storeLoadOptions) {
+        _processPagingForExpandedPaths: function(options, storeLoadOptions, reload) {
             var rowExpandedPaths = options.rowExpandedPaths,
                 rowExpandedSkips = rowExpandedPaths.map(() => 0),
-                rowExpandedTakes = rowExpandedPaths.map(() => 0),
+                rowExpandedTakes = rowExpandedPaths.map(() => reload ? options.pageSize : 0),
                 skips = [],
                 takes = [];
 
-            this._calculatePagingForExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes);
+            if(!reload) {
+                this._calculatePagingForExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes);
+            }
             this._savePagingForExpandedPaths(options, storeLoadOptions, skips[0], takes[0], rowExpandedSkips, rowExpandedTakes);
         },
 
@@ -819,7 +821,7 @@ exports.DataController = Class.inherit((function() {
             }
         },
 
-        _handleCustomizeStoreLoadOptions: function(storeLoadOptions) {
+        _handleCustomizeStoreLoadOptions: function(storeLoadOptions, reload) {
             var options = storeLoadOptions[0];
             var rowsScrollController = this._rowsScrollController;
 
@@ -832,8 +834,7 @@ exports.DataController = Class.inherit((function() {
                 } else {
                     options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
                     options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
-
-                    this._processPagingForExpandedPaths(options, storeLoadOptions);
+                    this._processPagingForExpandedPaths(options, storeLoadOptions, reload);
                 }
             }
 

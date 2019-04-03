@@ -859,7 +859,7 @@ exports.XmlaStore = Class.inherit((function() {
             data.rowCount = cells[0][0][0] - 1;
             data.columnCount = cells[1][0][0] - 1;
         }
-        if(data.rowCount !== undefined) {
+        if(data.rowCount !== undefined && options.rowTake) {
             data.rows = [...Array(options.rowSkip)].concat(data.rows);
             data.rows.length = data.rowCount;
 
@@ -868,7 +868,7 @@ exports.XmlaStore = Class.inherit((function() {
             }
         }
 
-        if(data.columnCount !== undefined) {
+        if(data.columnCount !== undefined && options.columnTake) {
             data.columns = [...Array(options.columnSkip)].concat(data.columns);
             data.columns.length = data.columnCount;
 
