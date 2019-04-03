@@ -10,6 +10,7 @@ import { normalizeKeyName } from "../../events/utils";
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
     NOWRAP_CLASS = "nowrap",
+    ROW_CLASS_SELECTOR = ".dx-row",
     HEADER_ROW_CLASS = "dx-header-row",
     COLUMN_LINES_CLASS = "dx-column-lines",
     CONTEXT_MENU_SORT_ASC_ICON = "context-menu-sort-asc",
@@ -19,6 +20,7 @@ var CELL_CONTENT_CLASS = "text-content",
     VISIBILITY_HIDDEN_CLASS = "dx-visibility-hidden",
     TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX = "dx-text-content-alignment-",
     SORT_INDICATOR_CLASS = "dx-sort-indicator",
+    HEADER_FILTER_CLASS_SELECTOR = ".dx-header-filter",
     HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator",
     MULTI_ROW_HEADER_CLASS = "dx-header-multi-row";
 
@@ -79,10 +81,6 @@ module.exports = {
                         }
                     }));
 
-                    if(!this._isLegacyKeyboardNavigation()) {
-                        eventsEngine.on($table, "keydown", this.createAction(e => this._processKeyDown(e.event)));
-                    }
-
                     return $table;
                 },
 
@@ -90,7 +88,7 @@ module.exports = {
                     return this.option("useLegacyKeyboardNavigation");
                 },
 
-                _processKeyDown(event) {
+                _processKeyDown: function(event) {
                     var args = {
                             handled: false,
                             event: event
@@ -111,8 +109,7 @@ module.exports = {
                     switch(keyName) {
                         case "enter":
                         case "space":
-                            this.lastActionElement = event.target;
-                            $target.trigger("dxclick");
+                            this._handleActionKeyDown(event);
                             break;
 
                         case "tab":
@@ -122,6 +119,30 @@ module.exports = {
                         default:
                             break;
                     }
+                },
+
+                _handleActionKeyDown: function(event) {
+                    var $target = $(event.target);
+
+                    this.lastActionElement = event.target;
+
+                    if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+                        let $column = $target.closest("td"),
+                            columnIndex = this._getColumnIndexByElement($column);
+                        if(columnIndex >= 0) {
+                            this.getController("headerFilter").showHeaderFilterMenu(columnIndex, false);
+                        }
+                    } else {
+                        let $row = $target.closest(ROW_CLASS_SELECTOR);
+                        this._processHeaderAction(event, $row);
+                    }
+
+                    event.stopPropagation();
+                },
+
+                _getColumnIndexByElement($column) {
+                    var index = parseInt($column.attr("id").replace("dx-col-", ""));
+                    return index >= 0 ? index : -1;
                 },
 
                 _getDefaultTemplate: function(column) {
@@ -209,6 +230,9 @@ module.exports = {
 
                     if(row.rowType === "header") {
                         $row.addClass(HEADER_ROW_CLASS);
+                        if(!this._isLegacyKeyboardNavigation()) {
+                            eventsEngine.on($row, "keydown", "td", this.createAction(e => this._processKeyDown(e.event)));
+                        }
                     }
 
                     return $row;
