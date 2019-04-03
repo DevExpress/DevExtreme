@@ -1492,6 +1492,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         switch(args.name) {
             case "useKeyboard":
             case "keyboardNavigation":
+            case "useLegacyKeyboardNavigation":
                 args.handled = true;
                 break;
             default:
