@@ -106,6 +106,26 @@ QUnit.test("Empty dataSource when showRowGrandTotals/showColumnGrandTotals disab
     assert.deepEqual(dataController.getCellsInfo(), [], "Cells Info");
 });
 
+QUnit.test("dataSource by options disposing", function(assert) {
+    var dataController = new DataController({
+            dataSource: {}
+        }),
+        onScrollChanged = sinon.stub();
+
+    var dataSource = dataController.getDataSource();
+    dataController.scrollChanged.add(onScrollChanged);
+
+    // act
+    dataController.dispose();
+
+    dataController.scrollChanged.fire();
+
+    // assert
+    assert.ok(dataSource, "dataSource created");
+    assert.ok(dataSource.isDisposed(), "dataSource disposed");
+    assert.ok(!onScrollChanged.called, "onScrollChanged");
+});
+
 QUnit.test("dataSource by instance disposing", function(assert) {
     var dataSource = new PivotGridDataSource({});
     var dataController = new DataController({
@@ -4343,7 +4363,10 @@ QUnit.test("create dataController with virtual scrollController when scrolling i
 QUnit.test("Calculate virtual content params", function(assert) {
     var dataController = new DataController(this.getOptions({})),
         rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+        columnsScrollController = this.VirtualScrollController.secondCall.returnValue,
+        scrollChanged = sinon.stub();
+
+    dataController.scrollChanged.add(scrollChanged);
 
     rowsScrollController.getContentOffset.returns(100);
     columnsScrollController.getContentOffset.returns(150);
@@ -4393,6 +4416,12 @@ QUnit.test("Calculate virtual content params", function(assert) {
         contentTop: 100,
         height: 1000,
         width: 1500
+    });
+
+    assert.ok(scrollChanged.calledOnce);
+    assert.deepEqual(scrollChanged.lastCall.args[0], {
+        left: 400,
+        top: 500
     });
 });
 

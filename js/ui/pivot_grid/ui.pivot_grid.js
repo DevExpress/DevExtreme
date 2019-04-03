@@ -835,6 +835,11 @@ var PivotGrid = Widget.inherit({
             });
         }
 
+        that._dataController.scrollChanged.add(function(options) {
+            that._scrollLeft = options.left;
+            that._scrollTop = options.top;
+        });
+
         that._dataController.loadingChanged.add(function(isLoading) {
             that._updateLoading();
         });

@@ -724,6 +724,7 @@ exports.DataController = Class.inherit((function() {
             that.expandValueChanging = Callbacks();
             that.loadingChanged = Callbacks();
             that.progressChanged = Callbacks();
+            that.scrollChanged = Callbacks();
 
             that.load();
             that._update();
@@ -885,6 +886,11 @@ exports.DataController = Class.inherit((function() {
                 commonUtils.deferUpdate(function() {
                     columnsScrollController.loadIfNeed();
                     rowsScrollController.loadIfNeed();
+                });
+
+                that.scrollChanged.fire({
+                    left: columnsScrollController.getViewportPosition(),
+                    top: rowsScrollController.getViewportPosition()
                 });
 
                 return {
@@ -1206,6 +1212,7 @@ exports.DataController = Class.inherit((function() {
             that.changed.empty();
             that.loadingChanged.empty();
             that.progressChanged.empty();
+            that.scrollChanged.empty();
             that.dataSourceChanged.empty();
         }
     };

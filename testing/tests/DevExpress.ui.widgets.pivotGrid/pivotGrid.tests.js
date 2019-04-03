@@ -2985,8 +2985,10 @@ QUnit.test("Virtual scrolling if height is not defined", function(assert) {
         }, assert),
         done = assert.async();
 
-    pivotGrid._scrollLeft = 5;
-    pivotGrid._scrollTop = 7;
+    pivotGrid._dataController.scrollChanged.fire({
+        left: 5,
+        top: 7
+    });
 
     var scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance'),
         setViewportPosition = sinon.spy(pivotGrid._dataController, "setViewportPosition"),
@@ -3716,6 +3718,31 @@ QUnit.test("Set dataSource instance two times", function(assert) {
     pivot.option("dataSource", dataSourceInstance);
     // assert
     assert.ok(!dataSourceInstance.load.called);
+});
+
+QUnit.test("DataController - scrollChanged event", function(assert) {
+    var widget = createPivotGrid({
+            dataSource: this.testOptions.dataSource,
+            width: 200,
+            height: 300,
+            scrolling: {
+                useNative: false
+            }
+        }, assert),
+        dataController = widget._dataController,
+        dataAreaScrollable = widget._dataArea.groupElement().dxScrollable("instance");
+
+    dataController.scrollChanged.fire({
+        left: 15,
+        top: 10
+    });
+
+    widget.updateDimensions();
+
+    this.clock.tick();
+
+    assert.strictEqual(dataAreaScrollable.scrollTop(), 10);
+    assert.strictEqual(dataAreaScrollable.scrollLeft(), 15);
 });
 
 // T518378
