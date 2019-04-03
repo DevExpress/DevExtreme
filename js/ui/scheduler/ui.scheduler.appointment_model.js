@@ -481,10 +481,11 @@ var AppointmentModel = Class.inherit({
         var currentFilter = extend(true, [], dateFilter);
 
         return (function(appointment) {
-            var startDate = this._dataAccessors.getter.startDate(appointment),
-                endDate = this._dataAccessors.getter.endDate(appointment);
+            var startDate = new Date(this._dataAccessors.getter.startDate(appointment)),
+                endDate = new Date(this._dataAccessors.getter.endDate(appointment));
 
-            endDate = this.checkWrongEndDate(appointment, new Date(startDate), new Date(endDate));
+
+            endDate = this.checkWrongEndDate(appointment, startDate, endDate);
 
             appointment = extend(true, {}, appointment);
 
@@ -502,7 +503,7 @@ var AppointmentModel = Class.inherit({
     },
 
     checkWrongEndDate: function(appointment, startDate, endDate) {
-        if(!endDate || isNaN(endDate.getTime()) || startDate.getTime() >= endDate.getTime()) {
+        if(this._isEndDateWrong(appointment, startDate, endDate)) {
 
             if(this._dataAccessors.getter.allDay(appointment)) {
                 endDate = new Date(startDate);
@@ -516,10 +517,13 @@ var AppointmentModel = Class.inherit({
             }
 
             this._dataAccessors.setter.endDate(appointment, endDate);
-            // this.instance.fire("setField", "endDate", appointment, endDate);
         }
 
         return endDate;
+    },
+
+    _isEndDateWrong: function(appointment, startDate, endDate) {
+        return !endDate || isNaN(endDate.getTime()) || startDate.getTime() >= endDate.getTime();
     },
 
     add: function(data, tz) {
