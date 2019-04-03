@@ -71,7 +71,7 @@ class DiagramToolbar extends Widget {
         }
     }
     _getButtons() {
-        return DiagramCommands;
+        return DiagramCommands.load();
     }
     _onButtonClick(itemName) {
         this.bar._raiseBarCommandExecuted(itemName);
@@ -109,7 +109,7 @@ class DiagramBar {
 
     /* implementation of IBar */
     getCommandKeys() {
-        return DiagramCommands.map(c => c.name);
+        return DiagramCommands.load().map(c => c.name);
     }
     setItemValue(key, value) {
         this._widget._setItemValue(key, value);

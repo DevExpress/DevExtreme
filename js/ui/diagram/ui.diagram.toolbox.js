@@ -23,7 +23,7 @@ class DiagramToolbox extends Widget {
             multiple: true,
             collapsible: true,
             displayExpr: "title",
-            dataSource: ShapeCategories,
+            dataSource: ShapeCategories.load(),
             itemTemplate: (data, index, $element) => this._onShapeCategoryRenderedAction({ category: data.category, $element })
         });
     }
