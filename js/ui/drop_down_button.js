@@ -88,7 +88,7 @@ let DropDownButton = Widget.inherit({
             /**
              * @name dxDropDownButtonOptions.useSelectMode
              * @type boolean
-             * @default true
+             * @default false
              */
             useSelectMode: false,
 
