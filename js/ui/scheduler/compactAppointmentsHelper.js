@@ -4,7 +4,6 @@ import translator from "../../animation/translator";
 import messageLocalization from "../../localization/message";
 import FunctionTemplate from "../widget/function_template";
 import deferredUtils from "../../core/utils/deferred";
-const when = deferredUtils.when;
 
 const DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     COMPACT_DROPDOWN_APPOINTMENTS_CLASS = DROPDOWN_APPOINTMENTS_CLASS + "-compact",
@@ -63,7 +62,7 @@ export class CompactAppointmentsHelper {
     }
 
     _makeBackgroundColor($button, colors, color) {
-        when.apply(null, colors).done(function() {
+        deferredUtils.when.apply(null, colors).done(function() {
             this._makeBackgroundColorCore($button, color, arguments);
         }.bind(this));
     }
