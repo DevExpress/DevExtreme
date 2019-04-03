@@ -6068,8 +6068,8 @@ declare module DevExpress.ui {
         noDataText?: string;
         /** @name dxDropDownButton.Options.onActionButtonClick */
         onActionButtonClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
-        /** @name dxDropDownButton.Options.onSelectionChanged */
-        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.onSelectedItemChanged */
+        onSelectedItemChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | any;
         /** @name dxDropDownButton.Options.useSelectMode */

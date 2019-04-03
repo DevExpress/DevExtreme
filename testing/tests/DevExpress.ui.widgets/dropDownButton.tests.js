@@ -669,12 +669,12 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(handler.callCount, 1, "handler was called");
     });
 
-    QUnit.test("onSelectionChanged event", (assert) => {
+    QUnit.test("onSelectedItemChanged event", (assert) => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
             selectedItem: 2,
-            onSelectionChanged: handler
+            onSelectedItemChanged: handler
         });
 
         dropDownButton.open();
@@ -691,7 +691,7 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.selectedItem, 1, "selectedItem is correct");
     });
 
-    QUnit.test("onSelectionChanged event with data expressions", (assert) => {
+    QUnit.test("onSelectedItemChanged event with data expressions", (assert) => {
         const handler = sinon.spy();
         const items = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }];
         const dropDownButton = new DropDownButton("#dropDownButton2", {
@@ -699,7 +699,7 @@ QUnit.module("events", {}, () => {
             keyExpr: "id",
             displayExpr: "text",
             selectedItem: { id: 2 },
-            onSelectionChanged: handler
+            onSelectedItemChanged: handler
         });
 
         dropDownButton.open();

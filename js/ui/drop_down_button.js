@@ -103,7 +103,7 @@ let DropDownButton = Widget.inherit({
             onActionButtonClick: null,
 
             /**
-             * @name dxDropDownButtonOptions.onSelectionChanged
+             * @name dxDropDownButtonOptions.onSelectedItemChanged
              * @type function(e)|string
              * @extends Action
              * @type_function_param1 e:object
@@ -111,7 +111,7 @@ let DropDownButton = Widget.inherit({
              * @type_function_param1_field5 selectedItem:object
              * @action
              */
-            onSelectionChanged: null,
+            onSelectedItemChanged: null,
 
             /**
              * @name dxDropDownButtonOptions.items
@@ -213,7 +213,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _createSelectionChangedAction() {
-        this._selectionChangedAction = this._createActionByOption("onSelectionChanged");
+        this._selectionChangedAction = this._createActionByOption("onSelectedItemChanged");
     },
 
     _createItemClickAction() {
@@ -457,7 +457,7 @@ let DropDownButton = Widget.inherit({
             case "onActionButtonClick":
                 this._createActionClickAction();
                 break;
-            case "onSelectionChanged":
+            case "onSelectedItemChanged":
                 this._createSelectionChangedAction();
                 break;
             case "deferRendering":
