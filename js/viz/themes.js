@@ -115,7 +115,7 @@ function patchTheme(theme) {
     mergeScalar(theme.title.font, "color", null, theme.primaryTitleColor);
     mergeObject(theme.title, "subtitle", null, theme.title);
     mergeScalar(theme.legend.font, "color", null, theme.secondaryTitleColor);
-    mergeScalar(theme.legend.border, "color", null, theme.axisColor);
+    mergeScalar(theme.legend.border, "color", null, theme.gridColor);
     patchAxes(theme);
     _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector", "sparkline", "bullet", "sankey"], function(_, section) {
         mergeScalar(theme[section], "redrawOnResize", theme);
@@ -139,7 +139,7 @@ function patchTheme(theme) {
     mergeObject(theme.rangeSelector.chart, "commonSeriesSettings", theme.chart);
     mergeObject(theme.rangeSelector.chart, "dataPrepareSettings", theme.chart);
 
-    mergeScalar(theme.treeMap.group.border, "color", null, theme.axisColor);
+    mergeScalar(theme.treeMap.group.border, "color", null, theme.gridColor);
     mergeScalar(theme.treeMap.tile.selectionStyle.border, "color", null, theme.primaryTitleColor);
     mergeScalar(theme.treeMap.group.selectionStyle.border, "color", null, theme.primaryTitleColor);
 
@@ -152,15 +152,17 @@ function patchTheme(theme) {
 function patchAxes(theme) {
     var commonAxisSettings = theme["chart:common:axis"],
         colorFieldName = "color";
-    _each([commonAxisSettings, commonAxisSettings.grid, commonAxisSettings.minorGrid, commonAxisSettings.tick, commonAxisSettings.minorTick], function(_, obj) {
+    _each([commonAxisSettings.grid, commonAxisSettings.minorGrid], function(_, obj) {
+        mergeScalar(obj, colorFieldName, null, theme.gridColor);
+    });
+    _each([commonAxisSettings, commonAxisSettings.tick, commonAxisSettings.minorTick, commonAxisSettings.label.font], function(_, obj) {
         mergeScalar(obj, colorFieldName, null, theme.axisColor);
     });
     mergeScalar(commonAxisSettings.title.font, colorFieldName, null, theme.secondaryTitleColor);
-    mergeScalar(commonAxisSettings.label.font, colorFieldName, null, theme.axisLabelColor);
-    mergeScalar(theme.gauge.scale.label.font, colorFieldName, null, theme.axisLabelColor);
+    mergeScalar(theme.gauge.scale.label.font, colorFieldName, null, theme.axisColor);
     mergeScalar(theme.gauge.scale.tick, colorFieldName, null, theme.backgroundColor);
     mergeScalar(theme.gauge.scale.minorTick, colorFieldName, null, theme.backgroundColor);
-    mergeScalar(theme.rangeSelector.scale.label.font, colorFieldName, null, theme.axisLabelColor);
+    mergeScalar(theme.rangeSelector.scale.label.font, colorFieldName, null, theme.axisColor);
 }
 
 function patchMapLayers(theme) {

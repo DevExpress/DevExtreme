@@ -39,13 +39,7 @@ const moduleConfig = {
 
     beforeEach: () => {
         this.options = {
-            loadUrl: "/api/get",
-            createFolderUrl: "/api/createfolder",
-            renameUrl: "/api/rename",
-            deleteUrl: "/api/delete",
-            moveUrl: "/api/move",
-            copyUrl: "/api/copy",
-            downloadUrl: "/api/download"
+            loadUrl: "/api/endpoint"
         };
 
         this.provider = new WebAPIFileProvider(this.options);
@@ -63,7 +57,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?parentId=Root%2FFiles",
+            url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: itemData
         });
 
@@ -78,7 +72,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?parentId=Root%2FFiles",
+            url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: itemData
         });
 
@@ -93,7 +87,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.createFolderUrl + "?parentId=Root%2FFiles%2FDocuments&name=Test%201",
+            url: this.options.loadUrl + "?command=CreateFolder&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: ""
         });
 
@@ -109,7 +103,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.renameUrl + "?id=Root%2FFiles%2FDocuments&newName=Test%201",
+            url: this.options.loadUrl + "?command=Rename&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: ""
         });
 
@@ -125,7 +119,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.deleteUrl + "?id=Root%2FFiles%2FDocuments",
+            url: this.options.loadUrl + "?command=Remove&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%7D",
             responseText: ""
         });
 
@@ -142,7 +136,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.moveUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages%2FDocuments",
+            url: this.options.loadUrl + "?command=Move&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
             responseText: ""
         });
 
@@ -160,7 +154,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.copyUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages",
+            url: this.options.loadUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%22%7D",
             responseText: ""
         });
 

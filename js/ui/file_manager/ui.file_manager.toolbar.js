@@ -1,19 +1,22 @@
 import $ from "../../core/renderer";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
 
-import { FileManagerFileCommands } from "./ui.file_manager.commands";
 import Widget from "../widget/ui.widget";
 import Button from "../button";
-import { extend } from "../../core/utils/extend";
 
 class FileManagerToolbar extends Widget {
 
     _initMarkup() {
         this._createOnItemClickAction();
 
-        for(let i = 0; i < FileManagerFileCommands.length; i++) {
-            const itemButton = this._createButton(FileManagerFileCommands[i].text, FileManagerFileCommands[i].name);
+        this._commandManager = this.option("commandManager");
+
+        const commands = this._commandManager.getCommands(true);
+        each(commands, (_, command) => {
+            const itemButton = this._createButton(command.text, command.name);
             this.$element().append(itemButton.$element());
-        }
+        });
     }
 
     _createOnItemClickAction() {
@@ -22,6 +25,7 @@ class FileManagerToolbar extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            commandManager: null,
             onItemClick: null
         });
     }
@@ -32,6 +36,9 @@ class FileManagerToolbar extends Widget {
         switch(name) {
             case "onItemClick":
                 this._createOnItemClickAction();
+                break;
+            case "commandManager":
+                this.repaint();
                 break;
             default:
                 super._optionChanged(args);

@@ -71,6 +71,16 @@
  */
 
 /**
+ * @typedef {string} Enums.VizWordWrap
+ * @enum {'normal'|'break-word'|'none'}
+ */
+
+/**
+  * @typedef {string} Enums.VizTextOverflow
+  * @enum {'ellipsis'|'hide'|'none'}
+  */
+
+/**
  * @typedef {string} Enums.VizPaletteExtensionMode
  * @enum {'alternate'|'blend'|'extrapolate'}
  */
@@ -818,6 +828,11 @@
 /**
  * @typedef {string} Enums.FilterBuilderFieldDataType
  * @enum {'string'|'number'|'date'|'boolean'|'object'|'datetime'}
+ */
+
+/**
+ * @typedef {string} Enums.ActionButtonLocation
+ * @enum {'after'|'before'}
  */
 
 /**

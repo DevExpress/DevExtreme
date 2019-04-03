@@ -130,6 +130,20 @@ QUnit.test("Recurrence editor onValueChanged should be fired after change value"
     assert.equal(fired, 1, "Recurrence editor onValueChanged is fired");
 });
 
+QUnit.test("'resizePopup' observer should be fired after changing freq", function(assert) {
+    this.createInstance({
+        value: "FREQ=MONTHLY"
+    });
+
+    var stub = sinon.stub(this.instance, "invoke").withArgs("resizePopup");
+
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
+
+    freqEditor.option("value", "weekly");
+
+    assert.ok(stub.calledOnce, "Observer is notified");
+});
+
 QUnit.test("Recurrence editor should correctly process values to the freq radioGroup", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
@@ -345,7 +359,7 @@ QUnit.test("Recurrence editor should correctly process values from repeat-count 
     assert.equal(this.instance.option("value"), "FREQ=WEEKLY;COUNT=9", "Recurrence editor has right value");
 });
 
-QUnit.test("Recurrence until-date editor should process rules correctly", function(assert) {
+QUnit.test("Recurrence until-date editor should not process rules if it was set in recurrence string(T726894)", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY;UNTIL=20151007" });
 
     var $untilDate = this.instance.$element().find("." + REPEAT_DATE_EDITOR),
@@ -355,7 +369,7 @@ QUnit.test("Recurrence until-date editor should process rules correctly", functi
 
     this.instance.option("value", "FREQ=WEEKLY;UNTIL=20151107");
 
-    assert.equal(untilDate.option("value").toString(), new Date(2015, 10, 7, 23, 59, 59).toString(), "value of until-date editor is correct");
+    assert.equal(untilDate.option("value").toString(), recurrenceUtils.getDateByAsciiString("20151107"), "value of until-date editor is correct");
 });
 
 QUnit.test("Recurrence editor should correctly process values from until-date editor", function(assert) {

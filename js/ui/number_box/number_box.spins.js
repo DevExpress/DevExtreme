@@ -11,10 +11,6 @@ const SPIN_CONTAINER_CLASS = "dx-numberbox-spin-container";
 const SPIN_TOUCH_FRIENDLY_CLASS = "dx-numberbox-spin-touch-friendly";
 
 export default class SpinButtons extends ActionButton {
-    constructor(editor, options) {
-        super("spins", editor, options);
-    }
-
     _attachEvents(instance, $spinContainer) {
         const { editor } = this;
         const eventName = addNamespace(pointerDown, editor.NAME);

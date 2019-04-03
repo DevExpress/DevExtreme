@@ -498,6 +498,7 @@ Axis.prototype = {
     _adjustLabels: function(offset) {
         var that = this,
             maxSize = that._majorTicks.reduce(function(size, tick) {
+                if(!tick.label) return size;
                 var bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
                 return {
                     width: _max(size.width || 0, bBox.width),
@@ -1799,19 +1800,22 @@ Axis.prototype = {
         measureLabels(that._majorTicks);
         let textWidth;
         if(that._isHorizontal) {
-            textWidth = that.getTranslator().getInterval(that._calculateRangeInterval());
+            if(isDefined(that._tickInterval)) {
+                textWidth = that.getTranslator().getInterval(options.dataType === "datetime" ? dateToMilliseconds(that._tickInterval) : that._tickInterval);
+            }
         } else {
             textWidth = options.placeholderSize;
         }
 
         const displayMode = that._validateDisplayMode(options.label.displayMode);
         const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
-        const wordWrapMode = options.label.wordWrap;
+        const wordWrapMode = options.label.wordWrap || "none";
+        const overflowMode = options.label.textOverflow || "none";
 
-        if(wordWrapMode !== "none" && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
+        if((wordWrapMode !== "none" || overflowMode !== "none") && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
             if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
                 that._majorTicks.forEach(tick => {
-                    tick.label.setMaxWidth(textWidth, options.label);
+                    tick.label && tick.label.setMaxWidth(textWidth, options.label);
                 });
                 measureLabels(that._majorTicks);
             }

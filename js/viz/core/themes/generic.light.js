@@ -34,8 +34,8 @@ registerTheme({
     backgroundColor: WHITE,
     primaryTitleColor: PRIMARY_TITLE_COLOR,
     secondaryTitleColor: SECONDARY_TITLE_COLOR,
-    axisColor: LIGHT_GREY,
-    axisLabelColor: SECONDARY_TITLE_COLOR,
+    gridColor: LIGHT_GREY,
+    axisColor: SECONDARY_TITLE_COLOR,
     title: {
         backgroundColor: WHITE,
         font: {
@@ -245,7 +245,7 @@ registerTheme({
         resolveLabelOverlapping: NONE
     },
     "chart:common:axis": {
-        visible: false,
+        visible: true,
         valueMarginsEnabled: true,
         placeholderSize: null,
         logarithmBase: 10,
@@ -264,17 +264,17 @@ registerTheme({
             opacity: 0.3
         },
         tick: {
-            visible: false,
+            visible: true,
             width: 1,
-            length: 8,
-            shift: 0
+            length: 7,
+            shift: 3
         },
         minorTick: {
             visible: false,
             width: 1,
             opacity: 0.3,
-            length: 8,
-            shift: 0
+            length: 7,
+            shift: 3
         },
         stripStyle: {
             paddingLeftRight: 10,
@@ -714,7 +714,7 @@ registerTheme({
         commonPaneSettings: {
             backgroundColor: NONE,
             border: {
-                color: LIGHT_GREY,
+                color: SECONDARY_TITLE_COLOR,
                 width: 1,
                 visible: false,
                 top: true,
@@ -1315,7 +1315,9 @@ registerTheme({
                     offsetY: 1,
                     blur: 1,
                     color: "#000000"
-                }
+                },
+                wordWrap: "normal",
+                textOverflow: "ellipsis"
             }
         },
         group: {
@@ -1351,7 +1353,8 @@ registerTheme({
                 font: {
                     color: SECONDARY_TITLE_COLOR,
                     weight: 600
-                }
+                },
+                textOverflow: "ellipsis"
             }
         },
 

@@ -2289,8 +2289,12 @@ declare module DevExpress.viz {
         rotationAngle?: number;
         /** @name dxChart.Options.commonAxisSettings.label.staggeringSpacing */
         staggeringSpacing?: number;
+        /** @name dxChart.Options.commonAxisSettings.label.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name dxChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
+        /** @name dxChart.Options.commonAxisSettings.label.wordWrap */
+        wordWrap?: 'normal' | 'break-word' | 'none';
     }
     /** @name dxChart.Options.commonAxisSettings.stripStyle */
     export interface dxChartCommonAxisSettingsStripStyle {
@@ -4394,7 +4398,7 @@ declare module DevExpress.viz {
         /** @name dxTreeMap.Options.dataSource */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /** @name dxTreeMap.Options.group */
-        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /** @name dxTreeMap.Options.hoverEnabled */
         hoverEnabled?: boolean;
         /** @name dxTreeMap.Options.idField */
@@ -4423,12 +4427,13 @@ declare module DevExpress.viz {
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /** @name dxTreeMap.Options.parentField */
         parentField?: string;
+        /** @deprecated */
         /** @name dxTreeMap.Options.resolveLabelOverflow */
         resolveLabelOverflow?: 'ellipsis' | 'hide';
         /** @name dxTreeMap.Options.selectionMode */
         selectionMode?: 'multiple' | 'none' | 'single';
         /** @name dxTreeMap.Options.tile */
-        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'break-word' | 'none' }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /** @name dxTreeMap.Options.tooltip */
         tooltip?: dxTreeMapTooltip;
         /** @name dxTreeMap.Options.valueField */
@@ -5738,6 +5743,8 @@ declare module DevExpress.ui {
         masterDetail?: { autoExpandAll?: boolean, enabled?: boolean, template?: template | ((detailElement: DevExpress.core.dxElement, detailInfo: { key?: any, data?: any, watch?: Function }) => any) };
         /** @name dxDataGrid.Options.onCellClick */
         onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any) | string;
+        /** @name dxDataGrid.Options.onCellDblClick */
+        onCellDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /** @name dxDataGrid.Options.onCellHoverChanged */
         onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /** @name dxDataGrid.Options.onCellPrepared */
@@ -5766,6 +5773,8 @@ declare module DevExpress.ui {
         onFocusedRowChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, cancel?: boolean }) => any);
         /** @name dxDataGrid.Options.onRowClick */
         onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
+        /** @name dxDataGrid.Options.onRowDblClick */
+        onRowDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any);
         /** @name dxDataGrid.Options.onRowPrepared */
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDataGrid.Options.remoteOperations */
@@ -6078,8 +6087,8 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | any;
-        /** @name dxDropDownButton.Options.showSelectedItem */
-        showSelectedItem?: boolean;
+        /** @name dxDropDownButton.Options.updateButtonOnSelection */
+        updateButtonOnSelection?: boolean;
         /** @name dxDropDownButton.Options.showToggleButton */
         showToggleButton?: boolean;
     }
@@ -8538,6 +8547,8 @@ declare module DevExpress.ui {
         keyExpr?: string | Function;
         /** @name dxTreeList.Options.onCellClick */
         onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any) | string;
+        /** @name dxTreeList.Options.onCellDblClick */
+        onCellDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /** @name dxTreeList.Options.onCellHoverChanged */
         onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /** @name dxTreeList.Options.onCellPrepared */
@@ -8562,6 +8573,8 @@ declare module DevExpress.ui {
         onNodesInitialized?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeListNode }) => any);
         /** @name dxTreeList.Options.onRowClick */
         onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
+        /** @name dxTreeList.Options.onRowDblClick */
+        onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any);
         /** @name dxTreeList.Options.onRowPrepared */
         onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxTreeList.Options.paging */
