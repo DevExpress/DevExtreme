@@ -2385,6 +2385,16 @@ QUnit.module("keyboard navigation", {
         this.clock.restore();
     }
 }, () => {
+    QUnit.test("'select all' checkbox should not be focusable by 'tab' key (T718398)", assert => {
+        const $list = $("#list").dxList({
+            items: [1, 2, 3],
+            showSelectionControls: true,
+            selectionMode: "all"
+        });
+
+        assert.strictEqual($list.find("tabIndex").length, 0);
+    });
+
     QUnit.test("list scroll to focused item after press up/down arrows", assert => {
         assert.expect(2);
 
