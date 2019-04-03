@@ -6693,7 +6693,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorMentions.searchTimeout */
         searchTimeout?: number;
         /** @name dxHtmlEditorMentions.itemTemplate */
-        itemTemplate?: template | Function;
+        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxHtmlEditorMentions.searchExpr */
         searchExpr?: string | Function | Array<string | Function>;
         /** @name dxHtmlEditorMentions.valueExpr */
