@@ -4,6 +4,7 @@ var Class = require("../../core/class"),
     dateSerialization = require("../../core/utils/date_serialization"),
     recurrenceUtils = require("./utils.recurrence"),
     dateUtils = require("../../core/utils/date"),
+    toMs = dateUtils.dateToMilliseconds,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
@@ -508,7 +509,7 @@ var AppointmentModel = Class.inherit({
             if(this._dataAccessors.getter.allDay(appointment)) {
                 endDate = dateUtils.setToDayEnd(new Date(startDate));
             } else {
-                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * 60000);
+                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * toMs("minute"));
             }
         }
 
