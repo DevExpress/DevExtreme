@@ -451,6 +451,22 @@ QUnit.test("Appointment duration should be equal to 30 minutes if end date equal
     assert.deepEqual(this.instance.option("dataSource")[1].endDate, new Date(2015, 1, 9, 8, 30), "End date is correct");
 });
 
+QUnit.test("AllDay appointment without endDate shoud be rendered correctly", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        dataSource: [
+            { text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), AllDay: true }
+        ],
+        currentView: "week",
+        allDayExpr: "AllDay",
+        views: ["week"]
+    });
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+
+    assert.equal($appointment.length, 1, "AllDay appointment was rendered");
+});
+
 QUnit.test("Appointment should have right default height", function(assert) {
     this.createInstance(
         {
