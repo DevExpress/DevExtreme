@@ -9,7 +9,6 @@
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
     @GRID_BASE_CHECKBOX_ICON_SIZE: 20px;
     @GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
-    @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING: 1.5 * @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
 
     .dx-@{widgetName}-checkbox-size {
         .dx-checkbox-icon {
@@ -138,14 +137,6 @@
                     background: ~"@{@{widgetName}-editor-background}";
                 }
 
-                &.dx-numberbox-spin .dx-texteditor-input {
-                    padding-right: @SPIN_BUTTON_AREA_WIDTH;
-                }
-
-                &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-                    padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
-                }
-
                 &.dx-searchbox {
                     .dx-texteditor-input,
                     .dx-placeholder:before {
@@ -243,35 +234,27 @@
 
         .dx-dropdowneditor-button-visible {
             &.dx-show-clear-button  {
-                .dx-texteditor-input {
-                    padding-right: @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                }
-
                 &.dx-invalid {
                     .dx-texteditor-input {
-                        padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+                        padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH;
                     }
 
                     &.dx-rtl .dx-texteditor-input {
                         padding: @GRID_BASE_CELL_PADDING;
-                        padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+                        padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH;
                     }
                 }
             }
 
             &.dx-invalid {
                 .dx-texteditor-input {
-                    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
+                    padding-right:@TEXTEDITOR_INVALID_BADGE_WIDTH;
                 }
 
                 &.dx-rtl .dx-texteditor-input {
                     padding: @GRID_BASE_CELL_PADDING;
-                    padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
+                    padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH;
                 }
-            }
-
-            &:not(.dx-invalid) .dx-texteditor-input {
-                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
             }
         }
     }

@@ -2,7 +2,10 @@ import $ from "jquery";
 
 import MentionFormat from "ui/html_editor/formats/mention";
 import Mentions from "ui/html_editor/modules/mentions";
+
 import { noop } from "core/utils/common";
+import devices from "core/devices";
+import browser from "core/utils/browser";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
@@ -17,6 +20,7 @@ const KEY_CODES = {
 };
 
 const POPUP_HIDING_TIMEOUT = 500;
+const IS_EDGE_BROWSER = browser.msie && parseInt(browser.version) > 11;
 
 const APPLY_VALUE_KEYS = [{ key: "Enter", code: KEY_CODES.ENTER }, { key: "Space", code: KEY_CODES.SPACE }];
 
@@ -126,9 +130,9 @@ QUnit.module("Mention format", () => {
         };
         const element = MentionFormat.create(data);
 
-        assert.equal(element.dataset.marker, "@", "correct marker");
-        assert.equal(element.dataset.mentionValue, "John Smith", "correct value");
-        assert.equal(element.innerText, "@John Smith", "correct inner text");
+        assert.strictEqual(element.dataset.marker, "@", "correct marker");
+        assert.strictEqual(element.dataset.mentionValue, "John Smith", "correct value");
+        assert.strictEqual(element.innerText, "@John Smith", "correct inner text");
     });
 
     test("Get data from element", (assert) => {
@@ -146,7 +150,27 @@ QUnit.module("Mention format", () => {
         };
 
         const element = MentionFormat.create(data);
-        assert.equal(element.innerText, "#John Smith", "correct inner text");
+        assert.strictEqual(element.innerText, "#John Smith", "correct inner text");
+    });
+
+    test("Change default content renderer", (assert) => {
+        const data = {
+            value: "John Smith",
+            marker: "@"
+        };
+
+        MentionFormat.setContentRender((node, mentionData) => {
+            node.innerText = "test";
+            assert.deepEqual(mentionData, data);
+        });
+        let element = MentionFormat.create(data);
+
+        assert.strictEqual(element.innerText, "test");
+
+        MentionFormat.restoreContentRender();
+        element = MentionFormat.create(data);
+
+        assert.strictEqual(element.innerText, "@John Smith");
     });
 });
 
@@ -344,9 +368,25 @@ QUnit.module("Mentions module", moduleConfig, () => {
     });
 
     test("list should load next page on reach end of current page", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "desktop specific test");
+            return;
+        }
+
         const items = [];
         for(let i = 0; i < 60; i++) {
             items.push(i);
+        }
+
+        if(IS_EDGE_BROWSER) {
+            this.$element.css({
+                fontSize: "14px"
+            });
+        } else {
+            this.$element.css({
+                fontSize: "14px",
+                lineHeight: 1.35715
+            });
         }
 
         this.options.mentions = [{
@@ -356,8 +396,10 @@ QUnit.module("Mentions module", moduleConfig, () => {
                 paginate: true
             },
         }];
+
         const mention = new Mentions(this.quillMock, this.options);
 
+        mention._popup.option("container", this.$element);
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 

@@ -43,7 +43,8 @@ var SchedulerAppointmentForm = {
             showValidationSummary: true,
             scrollingEnabled: true,
             formData: formData,
-            colCount: 2
+            colCount: 2,
+            showColonAfterLabel: false
         });
 
         return this._appointmentForm;
@@ -222,7 +223,7 @@ var SchedulerAppointmentForm = {
                 cssClass: RECURRENCE_EDITOR_ITEM_CLASS,
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
-                },
+                }
             }
         ];
 
