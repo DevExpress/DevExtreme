@@ -486,7 +486,7 @@ var AppointmentModel = Class.inherit({
             var startDate = this._dataAccessors.getter.startDate(appointment),
                 endDate = this._dataAccessors.getter.endDate(appointment);
 
-            endDate = this._checkWrongEndDate(appointment, startDate, endDate);
+            endDate = this._checkWrongEndDate(appointment, new Date(startDate), new Date(endDate));
 
             var startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment),
                 endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);
