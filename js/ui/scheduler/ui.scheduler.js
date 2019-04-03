@@ -1815,7 +1815,7 @@ const Scheduler = Widget.inherit({
 
     _getAppointmentRenderedAction: function() {
         return this._createActionByOption("onAppointmentRendered", {
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
@@ -2255,6 +2255,7 @@ const Scheduler = Widget.inherit({
 
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
+            height: 'auto',
             onHiding: (function() {
                 this.focus();
             }).bind(this),
@@ -2894,6 +2895,10 @@ const Scheduler = Widget.inherit({
                 .find("." + RECURRENCE_EDITOR_ITEM_CLASS)
                 .toggleClass(RECURRENCE_EDITOR_OPENED_ITEM_CLASS, visible);
         }
+    },
+
+    resizePopup: function() {
+        domUtils.triggerResizeEvent(this._popup.$element());
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

@@ -31,7 +31,6 @@ QUnit.module("Subscribes", {
     }
 });
 
-
 QUnit.test("'getTargetedAppointmentData' should return correct data for recurrence appointments (T660901)", function(assert) {
     var appointmentData = {
         startDate: new Date(2015, 1, 1, 5, 11),
@@ -496,6 +495,27 @@ QUnit.test("'showAddAppointmentPopup' should update appointment data if there is
         End: new Date(2015, 1, 1, 1),
         AllDay: true
     }, "Appointment data is OK");
+});
+
+QUnit.test("'resizePopup' should trigger dxresize event for appointment popup", function(assert) {
+    var resizeHandler = sinon.spy();
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: []
+    });
+
+    this.instance.fire("showAddAppointmentPopup", {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    });
+
+    $(this.instance._popup.$element()).on("dxresize", resizeHandler);
+    this.instance.fire("resizePopup");
+
+    assert.ok(resizeHandler.called, "event has been triggered");
 });
 
 QUnit.test("'appointmentFocused' should fire restoreScrollTop", function(assert) {

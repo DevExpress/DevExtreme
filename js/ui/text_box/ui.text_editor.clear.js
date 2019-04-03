@@ -12,10 +12,6 @@ const TEXTEDITOR_ICON_CLASS = "dx-icon";
 const TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS = "dx-show-clear-button";
 
 export default class ClearButton extends ActionButton {
-    constructor(editor, options) {
-        super("clear", editor, options);
-    }
-
     _create() {
         const $element = $("<span>")
             .addClass(TEXTEDITOR_CLEAR_BUTTON_CLASS)

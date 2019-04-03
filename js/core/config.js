@@ -30,7 +30,6 @@ const config = {
     * @type boolean
     */
     oDataFilterToLower: true,
-    designMode: false,
     /**
     * @name globalConfig.serverDecimalSeparator
     * @type string

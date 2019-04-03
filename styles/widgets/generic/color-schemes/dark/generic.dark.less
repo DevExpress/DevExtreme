@@ -639,6 +639,7 @@
 @htmleditor-variable-bg: fade(@base-accent, 15%);
 @htmleditor-resize-frame-border-color: @base-accent;
 @htmleditor-resize-handle-bg: @base-accent;
+@htmleditor-mention-bg: lighten(@base-bg, 13.5%);
 
 // List
 /**
@@ -1813,12 +1814,13 @@
 @scheduler-header-bg: @base-hover-color;
 @scheduler-alldaypanel-bg: @base-element-bg;
 
-@scheduler-recurence-editor-bg: @base-element-bg;
+@scheduler-appointment-form-separator-color: @base-border-color;
+
 @scheduler-tab-selected-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 @scheduler-tab-selected-before-bg: @scheduler-tab-selected-bg;
 
 @scheduler-tab-focused-border-color: @base-accent;
-@scheduler-recurence-editor-border-color: darken(@base-element-bg, 5%);
+
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(222, 222, 222, 0.07);

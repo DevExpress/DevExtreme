@@ -5,25 +5,25 @@ import Widget from "../widget/ui.widget";
 import themes from "../themes";
 import { init, dispose } from "./action_button_base";
 
-var ActionButton = Widget.inherit({
+var FloatingActionButton = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxActionButtonOptions.icon
+            * @name dxFloatingActionButtonOptions.icon
             * @type string
             * @default ""
             */
             icon: "",
 
             /**
-            * @name dxActionButtonOptions.label
+            * @name dxFloatingActionButtonOptions.label
             * @type string
             * @default ""
             */
             label: "",
 
             /**
-            * @name dxActionButtonOptions.onClick
+            * @name dxFloatingActionButtonOptions.onClick
             * @type function(e)
             * @extends Action
             * @type_function_param1 e:object
@@ -38,28 +38,28 @@ var ActionButton = Widget.inherit({
             useInkRipple: false,
 
             /**
-            * @name dxActionButtonOptions.visible
+            * @name dxFloatingActionButtonOptions.visible
             * @hidden
             * @inheritdoc
             */
             visible: false,
 
             /**
-            * @name dxActionButtonOptions.width
+            * @name dxFloatingActionButtonOptions.width
             * @hidden
             * @inheritdoc
             */
             width: "auto",
 
             /**
-            * @name dxActionButtonOptions.height
+            * @name dxFloatingActionButtonOptions.height
             * @hidden
             * @inheritdoc
             */
             height: "auto",
 
             /**
-            * @name dxActionButtonOptions.disabled
+            * @name dxFloatingActionButtonOptions.disabled
             * @hidden
             * @inheritdoc
             */
@@ -133,7 +133,7 @@ var ActionButton = Widget.inherit({
     }
 });
 
-registerComponent("dxActionButton", ActionButton);
+registerComponent("dxFloatingActionButton", FloatingActionButton);
 
-module.exports = ActionButton;
+module.exports = FloatingActionButton;
 

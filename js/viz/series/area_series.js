@@ -155,7 +155,9 @@ exports.chart["steparea"] = _extend({}, areaSeries, {
         var stepLineSeries = lineSeries.chart["stepline"];
         points = areaSeries._processSinglePointsAreaSegment(points, rotated);
         return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints(points));
-    }
+    },
+
+    getSeriesPairCoord: lineSeries.chart["stepline"].getSeriesPairCoord
 });
 
 exports.chart["splinearea"] = _extend({}, areaSeries, {
@@ -192,5 +194,11 @@ exports.chart["splinearea"] = _extend({}, areaSeries, {
         return this._renderer.path(points, "bezierarea").attr(settings);
     },
 
-    _createBorderElement: lineSeries.chart["spline"]._createMainElement
+    _createBorderElement: lineSeries.chart["spline"]._createMainElement,
+
+    getSeriesPairCoord: lineSeries.chart["spline"].getSeriesPairCoord,
+
+    getNearestPointsByCoord: lineSeries.chart["spline"].getNearestPointsByCoord,
+
+    obtainCubicBezierTCoef: lineSeries.chart["spline"].obtainCubicBezierTCoef
 });

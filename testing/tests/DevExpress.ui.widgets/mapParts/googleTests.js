@@ -588,10 +588,7 @@ QUnit.test("controls", function(assert) {
             provider: "google",
             controls: true,
             onReady: function() {
-                assert.equal(window.google.options.panControl, true, "controls specified correctly");
-                assert.equal(window.google.options.zoomControl, true, "controls specified correctly");
-                assert.equal(window.google.options.mapTypeControl, true, "controls specified correctly");
-                assert.equal(window.google.options.streetViewControl, true, "controls specified correctly");
+                assert.equal(window.google.options.disableDefaultUI, false, "controls specified correctly");
                 d.resolve();
             }
         }),
@@ -599,10 +596,7 @@ QUnit.test("controls", function(assert) {
 
     d.done(function() {
         map.option("onUpdated", function() {
-            assert.equal(window.google.assignedOptions.panControl, false, "controls specified correctly");
-            assert.equal(window.google.assignedOptions.zoomControl, false, "controls specified correctly");
-            assert.equal(window.google.assignedOptions.mapTypeControl, false, "controls specified correctly");
-            assert.equal(window.google.assignedOptions.streetViewControl, false, "controls specified correctly");
+            assert.equal(window.google.assignedOptions.disableDefaultUI, true, "controls specified correctly");
 
             done();
         });

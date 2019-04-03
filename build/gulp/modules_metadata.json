@@ -201,7 +201,7 @@
   {
     "name": "ui/action_button",
     "exports": {
-      "default": { "path": "ui.dxActionButton", "isWidget": true }
+      "default": { "path": "ui.dxFloatingActionButton", "isWidget": true }
     }
   },
   {
@@ -336,6 +336,12 @@
     "name": "ui/filter_builder",
     "exports": {
       "default": { "path": "ui.dxFilterBuilder", "isWidget": true }
+    }
+  },
+  {
+    "name": "ui/file_manager",
+    "exports": {
+      "default": { "path": "ui.dxFileManager", "isWidget": true }
     }
   },
   {

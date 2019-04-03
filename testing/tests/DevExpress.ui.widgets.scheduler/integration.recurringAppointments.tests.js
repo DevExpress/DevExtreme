@@ -808,17 +808,19 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
     var form = this.instance.getAppointmentDetailsForm(),
         recurrenceItemClass = "dx-scheduler-recurrence-rule-item",
         openedRecurrenceItemClass = "dx-scheduler-recurrence-rule-item-opened",
-        $recurrenceItem = form.$element().find("." + recurrenceItemClass);
+        $recurrenceItem = form.$element().find("." + recurrenceItemClass),
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    form.$element().find(".dx-switch").eq(1).dxSwitch("instance").option("value", true);
+    freqEditor.option("value", "daily");
     $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
 });
 
-QUnit.test("Recurrence editor should work correctly after toggling repeat and end-repeat switch", function(assert) {
+QUnit.test("Recurrence editor should work correctly after toggling repeat and repeat-type editor", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -832,17 +834,18 @@ QUnit.test("Recurrence editor should work correctly after toggling repeat and en
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
-        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor,
+        repeatTypeEditor = recurrenceEditor._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
-    repeatEndEditor.option("value", true);
-    repeatOnEditor.option("value", false);
+    freqEditor.option("value", "daily");
+    repeatTypeEditor.option("value", 'count');
+    freqEditor.option("value", 'never');
 
     assert.ok(true, "recurrence editor works correctly");
 });
 
-QUnit.test("Recurrence editor should work correctly after switch off the recurrence", function(assert) {
+QUnit.test("Recurrence editor should work correctly after turn off the recurrence", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
         dataSource: new DataSource({
@@ -863,9 +866,10 @@ QUnit.test("Recurrence editor should work correctly after switch off the recurre
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
-    repeatOnEditor.option("value", false);
+    freqEditor.option("value", "never");
 
     assert.ok(true, "recurrence editor works correctly");
 });

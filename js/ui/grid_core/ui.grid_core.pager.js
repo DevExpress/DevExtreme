@@ -20,6 +20,7 @@ var PagerView = modules.View.inherit({
                 if(pager) {
                     pager.option({
                         pageCount: dataController.pageCount(),
+                        totalCount: dataController.totalCount(),
                         hasKnownLastPage: dataController.hasKnownLastPage()
                     });
                 } else {

@@ -1,23 +1,31 @@
-.dx-colorbox-input-container {
-    &:after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 50%;
-        z-index: 1;
-        width: 15px;
-        height: 15px;
-        margin-top: -7.5px;
-        left: 14px;
-    }
-
+ .dx-colorbox-input-container {
     &.dx-colorbox-color-is-not-defined {
-        &:after {
-            background: none;
-        }
-
         .dx-colorbox-color-result-preview {
             border: none;
+        }
+    }
+}
+
+.dx-colorbox {
+    .dx-texteditor-input-container {
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            z-index: 1;
+            width: 15px;
+            height: 15px;
+            margin-top: -7.5px;
+            left: 14px;
+        }
+    }
+
+    .dx-colorbox-color-is-not-defined {
+        .dx-texteditor-input-container {
+            &:before {
+                background: none;
+            }
         }
     }
 }
@@ -78,7 +86,7 @@
                 right: 13px;
             }
 
-            .dx-colorbox-input-container:after {
+            .dx-colorbox-input-container:before {
                 left: auto;
                 right: 14px;
             }

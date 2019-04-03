@@ -20,7 +20,9 @@ const FAB_MAIN_CLASS = "dx-fa-button-main";
 QUnit.module("create one action");
 
 QUnit.test("check rendering", function(assert) {
-    this.instance = $("#fab-one").dxActionButton().dxActionButton("instance");
+    this.instance = $("#fab-one")
+        .dxFloatingActionButton()
+        .dxFloatingActionButton("instance");
 
     const $fabElement = $("." + FAB_CLASS);
     const $fabContent = $fabElement.find(".dx-overlay-content");
@@ -50,7 +52,10 @@ QUnit.test("check action buttons count", function(assert) {
     const fabInstances = [];
 
     for(let i = 0; i < 8; i++) {
-        fabInstances.push($("<div>").appendTo($container).dxActionButton({ icon: "favorites" }).dxActionButton("instance"));
+        fabInstances.push($("<div>")
+            .appendTo($container)
+            .dxFloatingActionButton({ icon: "favorites" })
+            .dxFloatingActionButton("instance"));
     }
 
     assert.equal($("." + FAB_MAIN_CLASS).length, 1, "one main fab is created");
@@ -59,10 +64,10 @@ QUnit.test("check action buttons count", function(assert) {
 
 QUnit.module("create multiple actions", {
     beforeEach: function() {
-        this.firstElement = $("#fab-one").dxActionButton({ icon: "arrowdown" });
-        this.secondElement = $("#fab-two").dxActionButton({ icon: "arrowup" });
-        this.firstInstance = this.firstElement.dxActionButton("instance");
-        this.secondInstance = this.secondElement.dxActionButton("instance");
+        this.firstElement = $("#fab-one").dxFloatingActionButton({ icon: "arrowdown" });
+        this.secondElement = $("#fab-two").dxFloatingActionButton({ icon: "arrowup" });
+        this.firstInstance = this.firstElement.dxFloatingActionButton("instance");
+        this.secondInstance = this.secondElement.dxFloatingActionButton("instance");
     }
 });
 
@@ -105,7 +110,7 @@ QUnit.test("check main fab changes", function(assert) {
         }
     });
 
-    $("#fab-one").dxActionButton();
+    $("#fab-one").dxFloatingActionButton();
 
     const $fabMainElement = $("." + FAB_MAIN_CLASS);
     const $fabMainContent = $fabMainElement.find(".dx-overlay-content");

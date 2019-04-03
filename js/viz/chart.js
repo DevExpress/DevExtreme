@@ -356,6 +356,10 @@ var dxChart = AdvancedChart.inherit({
         });
     },
 
+    _partialOptionChangesMap: {
+        visualRange: "VISUAL_RANGE"
+    },
+
     _initCore: function() {
         this.paneAxis = {};
         this._panesClipRects = {};
@@ -654,7 +658,7 @@ var dxChart = AdvancedChart.inherit({
 
         that._argumentAxes.forEach(function(axis) {
             axis.updateCanvas(that._canvas);
-            axis.setBusinessRange(viewport, undefined, undefined, that._axesReinitialized);
+            axis.setBusinessRange(viewport, that._axesReinitialized);
         });
 
         that.callBase();
@@ -1368,8 +1372,6 @@ var dxChart = AdvancedChart.inherit({
         });
     }
 });
-
-dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 dxChart.addPlugin(require("./chart_components/zoom_and_pan"));

@@ -80,6 +80,36 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         return true;
     },
 
+    checkSeriesViewportCoord(axis, coord) {
+        return true;
+    },
+
+    getShapePairCoord(coord, isArgument, getPointClearance) {
+        let oppositeCoord;
+        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
+        const coordName = !isOpposite ? "vx" : "vy";
+        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const points = this.getVisiblePoints();
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            const tmpCoord = Math.abs(p[coordName] - coord) <= getPointClearance(p) ? p[oppositeCoordName] : undefined;
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        return this.getShapePairCoord(coord, isArgument, (point) => {
+            return point.bubbleSize;
+        });
+    },
+
     getValueFields: function() {
         return [this._options.valueField || "val"];
     },

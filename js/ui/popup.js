@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     inArray = require("../core/utils/array").inArray,
     extend = require("../core/utils/extend").extend,
+    browser = require("../core/utils/browser"),
     messageLocalization = require("../localization/message"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
@@ -43,6 +44,8 @@ var POPUP_CLASS = "dx-popup",
     BUTTON_NORMAL_TYPE = "normal",
     BUTTON_TEXT_MODE = "text",
     BUTTON_CONTAINED_MODE = "contained";
+
+var isIE11 = (browser.msie && parseInt(browser.version) === 11);
 
 var getButtonPlace = function(name) {
 
@@ -496,7 +499,7 @@ var Popup = Overlay.inherit({
     _createTitleRenderAction: function() {
         return (this._titleRenderAction = this._createActionByOption("onTitleRendered", {
             element: this.element(),
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         }));
     },
 
@@ -674,19 +677,22 @@ var Popup = Overlay.inherit({
                 + popupHeightParts.contentVerticalOffsets
                 + popupHeightParts.popupVerticalOffsets,
             overlayContent = this.overlayContent().get(0),
-            cssStyles = {};
+            cssStyles = {},
+            contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
+            contentMinHeight = this._getOptionValue("minHeight", overlayContent),
+            isAutoResizable = !isIE11 || (!contentMaxHeight && !contentMinHeight);
 
-        if(this.option("autoResizeEnabled") && this._isAutoHeight()) {
-            var container = $(this._getContainer()).get(0),
-                contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
-                contentMinHeight = this._getOptionValue("minHeight", overlayContent),
-                maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
-                minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
+        if(this.option("autoResizeEnabled") && this._isAutoHeight() && isAutoResizable) {
+            if(!isIE11) {
+                var container = $(this._getContainer()).get(0),
+                    maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
+                    minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
-            cssStyles = extend(cssStyles, {
-                minHeight: minHeightValue,
-                maxHeight: maxHeightValue
-            });
+                cssStyles = extend(cssStyles, {
+                    minHeight: minHeightValue,
+                    maxHeight: maxHeightValue
+                });
+            }
         } else {
             var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
             cssStyles = { height: Math.max(0, contentHeight) };

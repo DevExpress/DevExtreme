@@ -2951,53 +2951,6 @@ QUnit.test("B250273 - dxList: showScrollbar option does not work on device.", fu
     assert.equal($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).length, 0);
 });
 
-QUnit.test("B252134 - Scrolling works in design mode", function(assert) {
-    config({ designMode: true });
-
-    try {
-        var startCalled = 0,
-            stopCalled = 0,
-            endCalled = 0,
-            updateCalled = 0,
-
-            $scrollable = $("#scrollable").dxScrollable({
-                useNative: false,
-
-                onStart: function() {
-                    startCalled++;
-                },
-
-                onStop: function() {
-                    stopCalled++;
-                },
-
-                onEnd: function() {
-                    endCalled++;
-                },
-
-                update: function() {
-                    updateCalled++;
-                }
-            }),
-            $container = $scrollable.find("." + SCROLLABLE_CONTENT_CLASS);
-
-        pointerMock($container)
-            .start()
-            .down()
-            .move(0, 500)
-            .up();
-
-        assert.equal(startCalled, 0);
-        assert.equal(stopCalled, 0);
-        assert.equal(endCalled, 0);
-        assert.equal(updateCalled, 0);
-
-        assert.equal(translator.locate($container).top, 0);
-    } finally {
-        config({ designMode: false });
-    }
-});
-
 QUnit.test("simulated scrollable should stop animators on disposing", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         useNative: false,

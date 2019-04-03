@@ -1,5 +1,5 @@
 /**
- * @name dxActionButton
+ * @name dxFloatingActionButton
  * @inherits dxOverlay
  * @hasTranscludedContent
  * @module ui/action_button
