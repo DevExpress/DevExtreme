@@ -5431,7 +5431,7 @@ declare module DevExpress.ui {
         /** @name dxActionButton.name */
         name?: string;
         /** @name dxActionButton.options */
-        options?: any;
+        options?: dxButtonOptions;
     }
     /** @name dxActionSheet.Options */
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
