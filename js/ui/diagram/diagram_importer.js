@@ -13,10 +13,10 @@ function getDiagram() {
 
 function requestDiagram() {
     const window = getWindow();
-    const diagram = window && window.DevExpress && window.DevExpress.diagram;
+    const diagram = window && window.DevExpress && window.DevExpress.diagram || require("devexpress-diagram");
 
     if(!diagram) {
-        throw Errors.Error("E1041", "Diagram");
+        throw Errors.Error("E1041", "devexpress-diagram");
     }
 
     return diagram;
