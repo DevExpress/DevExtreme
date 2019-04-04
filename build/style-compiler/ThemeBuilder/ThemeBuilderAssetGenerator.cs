@@ -38,9 +38,6 @@ namespace StyleCompiler.ThemeBuilder
             new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_TEAL_DARK),
 
             new ThemeId(LessRegistry.THEME_IOS7, LessRegistry.COLOR_SCHEME_DEFAULT),
-            new ThemeId(LessRegistry.THEME_ANDROID5, LessRegistry.COLOR_SCHEME_LIGHT),
-            new ThemeId(LessRegistry.THEME_WIN10, LessRegistry.COLOR_SCHEME_BLACK),
-            new ThemeId(LessRegistry.THEME_WIN10, LessRegistry.COLOR_SCHEME_WHITE)
         };
 
         readonly string
