@@ -190,76 +190,107 @@ QUnit.module("option changed", {
 
 
 QUnit.module("Events", () => {
-    function checkAsserts(assert, handler, buttonGroup, $item, checkedEventName) {
-        const e = handler.getCall(0).args[0];
 
-        assert.strictEqual(handler.callCount, 1, "handler was called");
-        assert.strictEqual(Object.keys(e).length, 6, "event has 6 properties");
-        assert.strictEqual(e.component, buttonGroup, "component is correct");
-        assert.strictEqual(e.element, buttonGroup.element(), "element is correct");
-        assert.strictEqual(e.event.type, checkedEventName, "event is correct");
-        assert.deepEqual(e.itemData, { text: "item2" }, "itemData is correct");
-        assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
-        assert.strictEqual($(e.itemElement).get(1), $item.get(1), "itemElement is correct");
+    class ButtonGroupEventsTestHelper {
+        constructor(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
+            this.assert = assert;
+            this.eventName = eventName;
+            this.isItemClickInInitialOption = isItemClickInInitialOption;
+            this.handler = sinon.spy();
+            this.isDisabled = isDisabled;
+            this.isItemDisabled = isItemDisabled;
+            this.isKeyboardEvent = this.eventName === "space" || this.eventName === "enter";
+        }
+
+        createButtonGroup() {
+            if(this.isItemClickInInitialOption) {
+                this.buttonGroup = $("#widget").dxButtonGroup({
+                    items: [{ text: "item1", disabled: this.isItemDisabled }, { text: "item2" }],
+                    disabled: this.isDisabled,
+                    onItemClick: this.handler
+                }).dxButtonGroup("instance");
+            } else {
+                this.buttonGroup = $("#widget").dxButtonGroup({
+                    items: [{ text: "item1", disabled: this.isItemDisabled }, { text: "item2" }],
+                    disabled: this.isDisabled
+                }).dxButtonGroup("instance");
+
+                this.buttonGroup.option("onItemClick", this.handler);
+            }
+        }
+
+        getButtonGroupItem(itemIndex) {
+            return this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(itemIndex);
+        }
+
+        performAction(itemIndex) {
+            if(this.isDisabled && this.isKeyboardEvent) this.eventName = "click";
+
+            if(this.eventName === "click") {
+                eventsEngine.trigger(this.getButtonGroupItem(itemIndex), "dxclick");
+            } else if(this.eventName === "touch") {
+                pointerMock(this.getButtonGroupItem(itemIndex))
+                    .start("touch")
+                    .down()
+                    .up();
+            } else {
+                let keyboard = keyboardMock(this.buttonGroup.$element());
+                keyboard.press("right");
+                itemIndex === 0 && keyboard.press("left");
+
+                keyboard.press(this.eventName);
+            }
+        }
+
+        checkAsserts(assert, checkedItemIndex) {
+            if(this.isDisabled) {
+                assert.equal(this.handler.getCall(0), null, "this.handler.getCall(0)");
+                return;
+            }
+
+            if(checkedItemIndex === 0 && this.isItemDisabled) {
+                if(!this.isKeyboardEvent) {
+                    assert.equal(this.handler.getCall(0), null, "this.handler.getCall(0)");
+                    return;
+                }
+
+                checkedItemIndex = 1;
+            }
+
+            const e = this.handler.getCall(0).args[0];
+
+            assert.strictEqual(this.handler.callCount, 1, "handler.callCount");
+            assert.strictEqual(Object.keys(e).length, 6, "Object.keys(e).length");
+            assert.strictEqual(e.component, this.buttonGroup, "e.component");
+            assert.strictEqual(e.element, this.buttonGroup.element(), "element is correct");
+            this.assert.strictEqual(e.event.type, this.isKeyboardEvent ? "keydown" : "dxclick", "e.event.type");
+            this.assert.deepEqual(e.itemData, checkedItemIndex === 0 ? { text: `item1`, disabled: this.isItemDisabled } : { text: `item2` }, "e.itemData");
+            this.assert.strictEqual(e.itemIndex, checkedItemIndex, "e.itemIndex");
+            this.assert.strictEqual($(e.itemElement).get(checkedItemIndex), this.getButtonGroupItem(checkedItemIndex).get(checkedItemIndex), `$(e.itemElement).get(${checkedItemIndex})`);
+        }
     }
 
-    ["click", "touch", "space", "enter"].forEach((eventName) => {
-        let config = ` ${eventName}`;
+    [true, false].forEach((isDisabled) => {
+        [true, false].forEach((isItemDisabled) => {
+            [true, false].forEach((isItemClickInInitialOption) => {
+                ["click", "touch", "space", "enter"].forEach((eventName) => {
+                    let config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ``}`;
 
-        QUnit.test("onItemClick fired on" + config, (assert) => {
-            const handler = sinon.spy();
-            const buttonGroup = $("#widget").dxButtonGroup({
-                items: [{ text: "item1" }, { text: "item2" }],
-                onItemClick: handler
-            }).dxButtonGroup("instance");
+                    QUnit.test("onItemClick fired on" + config, (assert) => {
+                        let helper = new ButtonGroupEventsTestHelper(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
+                        helper.createButtonGroup();
+                        helper.performAction(1);
+                        helper.checkAsserts(assert, 1);
+                    });
 
-            const $item = buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(1);
-
-            if(eventName === "click") {
-                eventsEngine.trigger($item, "dxclick");
-                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
-            } else if(eventName === "touch") {
-                pointerMock($item)
-                    .start("touch")
-                    .down()
-                    .up();
-                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
-            } else {
-                keyboardMock(buttonGroup.$element())
-                    .press("right")
-                    .press(eventName);
-
-                checkAsserts(assert, handler, buttonGroup, $item, "keydown");
-            }
-        });
-
-        QUnit.test("onItemClick event changed fired on" + config, (assert) => {
-            const handler = sinon.spy();
-            const buttonGroup = $("#widget").dxButtonGroup({
-                items: [{ text: "item1" }, { text: "item2" }],
-            }).dxButtonGroup("instance");
-
-            buttonGroup.option("onItemClick", handler);
-
-            const $item = buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(1);
-
-            if(eventName === "click") {
-                eventsEngine.trigger($item, "dxclick");
-                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
-            } else if(eventName === "touch") {
-                pointerMock($item)
-                    .start("touch")
-                    .down()
-                    .up();
-
-                checkAsserts(assert, handler, buttonGroup, $item, "dxclick");
-            } else {
-                keyboardMock(buttonGroup.$element())
-                    .press("right")
-                    .press(eventName);
-
-                checkAsserts(assert, handler, buttonGroup, $item, "keydown");
-            }
+                    QUnit.test("onItemClick fired on" + config, (assert) => {
+                        let helper = new ButtonGroupEventsTestHelper(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
+                        helper.createButtonGroup();
+                        helper.performAction(0);
+                        helper.checkAsserts(assert, 0);
+                    });
+                });
+            });
         });
     });
 });
