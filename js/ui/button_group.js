@@ -134,7 +134,7 @@ const ButtonGroup = Widget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 event:event
             * @action
             */
