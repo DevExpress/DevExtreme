@@ -30,10 +30,6 @@
 @SCHEDULER_MONTH_DATE_TEXT_SIZE: 16px;
 @SCHEDULER_MONTH_DATE_TEXT_PADDING: 6px;
 
-@SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 250px;
-@SCHEDULER_APPOINTMENT_TOOLTIP_BUTTONS_GAP: 10px;
-@SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 16px;
-
 @SCHEDULER_APPOINTMENT_MIN_SIZE: 4px;
 @SCHEDULER_APPOINTMENT_CONTENT_PADDING: 5px 7px;
 @SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 40px;
@@ -2008,34 +2004,6 @@
         .dx-overflow();
     }
 
-    .dx-scheduler-appointment-tooltip {
-        text-align: left;
-        width: @SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH;
-
-        .dx-button-content {
-            font-size: @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE / 1.2;
-
-            .dx-icon {
-                font-size: @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE;
-            }
-        }
-    }
-
-    .dx-scheduler-appointment-tooltip-date,
-    .dx-scheduler-appointment-tooltip-title {
-        .dx-overflow();
-    }
-
-    .dx-scheduler-appointment-tooltip-title {
-        font-size: @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE;
-        font-weight: bold;
-        width: 100%;
-    }
-
-    .dx-scheduler-appointment-tooltip-buttons {
-        margin-top: @SCHEDULER_APPOINTMENT_TOOLTIP_BUTTONS_GAP;
-    }
-
     .dx-scheduler-appointment-popup {
         .dx-layout-manager .dx-label-h-align .dx-field-item-content {
             .dx-switch,
@@ -2677,10 +2645,6 @@
             }
         }
 
-        .dx-scheduler-appointment-tooltip {
-            text-align: right;
-        }
-
         .dx-scheduler-appointment-recurrence-icon {
             left: @SCHEDULER_RECURRENCE_ICON_OFFSET;
             right: auto;
@@ -2698,11 +2662,6 @@
         .dx-scheduler-work-space-work-week .dx-scheduler-all-day-table-cell {
             border-right: @SCHEDULER_BASE_BORDER;
             border-left: none;
-        }
-
-        .dx-scheduler-dropdown-appointment {
-            border-left: none;
-            border-right: 3px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
         }
 
         &.dx-scheduler-work-space-both-scrollbar {

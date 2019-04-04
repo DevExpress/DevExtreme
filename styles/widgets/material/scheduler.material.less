@@ -79,13 +79,10 @@
 
 
 @MATERIAL_SCHEDULER_MONTH_DATE_TEXT_SIZE: 14px;
-@MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 20px;
 
 @MATERIAL_SCHEDULER_SWITCHER_LABEL_OFFSET: 10px;
 
 @SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
-
-@MATERIAL_SCHEDULER_TOOLTIP_TEXT_PADDING: 14px;
 
 .scheduler-mixin(65px);
 
@@ -285,7 +282,7 @@
         }
     }
 
-    
+
 }
 
 .dx-scheduler-dropdown-appointments {
@@ -298,7 +295,7 @@
 
 .dx-scheduler-work-space-day {
     .dx-scheduler-scrollable-offset-mixin(0, @MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
-    
+
     &:not(.dx-scheduler-work-space-grouped) {
         .dx-scheduler-all-day-title {
             top: @MATERIAL_SCHEDULER_HEADER_HEIGHT + 1;
@@ -386,69 +383,6 @@
 
     .dx-scheduler-date-table-current-date {
         color: @SCHEDULER_CURRENT_TIME_CELL_COLOR;
-    }
-}
-
-.dx-scheduler-appointment-tooltip-wrapper.dx-tooltip-wrapper {
-    .dx-popover-arrow {
-        display: none;
-    }
-    .dx-overlay-content {
-        border: none;
-        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.25);
-        background-color: @base-bg;
-        color: @base-text-color;
-
-        .dx-popup-content.dx-scheduler-appointment-tooltip {
-            width:  @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH;
-            padding: 0;
-    
-            .dx-scheduler-appointment-tooltip-buttons {
-                margin: 0;
-                padding: 6px 8px;
-                background-color: @scheduler-appointment-tooltip-bg;
-            }
-
-            .dx-button {
-                .dx-button-flat-color-styling(@scheduler-appointment-tooltip-icon-color);
-                .dx-button-content {
-                    .dx-icon {
-                        font-size: @MATERIAL_BASE_ICON_SIZE;
-                    }
-                }
-
-                &.dx-scheduler-appointment-tooltip-delete-button,
-                &.dx-scheduler-appointment-tooltip-close-button {
-                    float: right;
-                }
-            }
-
-            .dx-scheduler-appointment-tooltip-title {
-                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE;
-                background-color: @scheduler-appointment-tooltip-bg;
-                color: @scheduler-appointment-tooltip-text-color;
-                padding: @MATERIAL_SCHEDULER_TOOLTIP_TEXT_PADDING;
-                font-weight: normal;
-            }
-        
-            .dx-scheduler-appointment-tooltip-date {
-                padding: @MATERIAL_SCHEDULER_TOOLTIP_TEXT_PADDING;
-                font-size: 13px;
-                background-color: @base-bg;
-                color: @base-text-color;
-            }
-        }
-
-        &.dx-rtl {
-            .dx-popup-content.dx-scheduler-appointment-tooltip {
-                .dx-button {
-                    &.dx-scheduler-appointment-tooltip-delete-button,
-                    &.dx-scheduler-appointment-tooltip-close-button {
-                        float: left;
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -813,10 +747,6 @@
 
         border-radius: 2px;
     }
-}
-
-.dx-scheduler-dropdown-appointment {
-    border-bottom: 1px solid @SCHEDULER_BASE_BORDER_COLOR;
 }
 
 .dx-scheduler-dropdown-appointment-date {
