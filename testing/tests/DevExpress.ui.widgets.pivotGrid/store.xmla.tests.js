@@ -3989,6 +3989,56 @@ define(function(require) {
             .always(done);
     });
 
+    QUnit.test("take columns", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [{
+                dataField: "[Ship Date].[Calendar Year]"
+            }],
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            columnSkip: 0,
+            columnTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [2001, 2002, undefined, undefined]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("Skip and take columns with searchValue", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [{
+                dataField: "[Product].[Product]", searchValue: "Men's"
+            }],
+            columnSkip: 2,
+            columnTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [
+                undefined, undefined,
+                "Men's Sports Shorts, S", "Men's Sports Shorts, M",
+                undefined, undefined,
+                undefined, undefined,
+                undefined, undefined,
+                undefined
+            ]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("Skip and take columns with wrong searchValue", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [{
+                dataField: "[Product].[Product]", searchValue: "wrong"
+            }],
+            columnSkip: 2,
+            columnTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), []);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
     QUnit.test("Skip and take rows and columns", function(assert) {
         var done = assert.async();
         this.store.load({

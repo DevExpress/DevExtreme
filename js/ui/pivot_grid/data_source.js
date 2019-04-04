@@ -1054,7 +1054,7 @@ module.exports = Class.inherit((function() {
             return field;
         },
 
-        getFieldValues: function(index) {
+        getFieldValues: function(index, options) {
             var that = this,
                 field = this._fields && this._fields[index],
                 store = this.store(),
@@ -1066,16 +1066,31 @@ module.exports = Class.inherit((function() {
                     filters: [],
                     skipValues: true
                 },
+                searchValue,
                 d = new Deferred();
+
+            if(options) {
+                searchValue = options.searchValue;
+                loadOptions.columnSkip = options.skip;
+                loadOptions.columnTake = options.take;
+            }
 
             if(field && store) {
                 each(field.levels || [field], function() {
-                    loadFields.push(extend({}, this, { expanded: true, filterValues: null, sortOrder: 'asc', sortBySummaryField: null }));
+                    loadFields.push(extend({}, this, { expanded: true, filterValues: null, sortOrder: 'asc', sortBySummaryField: null, searchValue: searchValue }));
                 });
 
                 store.load(loadOptions).done(function(data) {
+                    if(loadOptions.columnSkip) {
+                        data.columns = data.columns.slice(loadOptions.columnSkip);
+                    }
+                    if(loadOptions.columnTake) {
+                        data.columns = data.columns.slice(0, loadOptions.columnTake);
+                    }
                     formatHeaders(loadOptions, data);
-                    that._sort(loadOptions, data);
+                    if(!loadOptions.columnTake) {
+                        that._sort(loadOptions, data);
+                    }
                     d.resolve(data.columns);
                 }).fail(d);
             } else {

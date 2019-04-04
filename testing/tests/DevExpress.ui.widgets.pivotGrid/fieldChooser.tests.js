@@ -37,6 +37,9 @@ var createMockDataSource = function(options) {
                 fields: options.fields
             };
         },
+        paginate: function() {
+            return false;
+        },
         load: sinon.stub(),
         on: sinon.stub(),
         off: sinon.stub(),
