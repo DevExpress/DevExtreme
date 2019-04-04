@@ -206,13 +206,13 @@ QUnit.module("Events", () => {
         createButtonGroup() {
             if(this.isItemClickInInitialOption) {
                 this.buttonGroup = $("#widget").dxButtonGroup({
-                    items: [{ text: "item1", disabled: this.isItemDisabled }, { text: "item2" }],
+                    items: [{ text: "item1" }, { text: "item2", disabled: this.isItemDisabled }],
                     disabled: this.isDisabled,
                     onItemClick: this.handler
                 }).dxButtonGroup("instance");
             } else {
                 this.buttonGroup = $("#widget").dxButtonGroup({
-                    items: [{ text: "item1", disabled: this.isItemDisabled }, { text: "item2" }],
+                    items: [{ text: "item1" }, { text: "item2", disabled: this.isItemDisabled }],
                     disabled: this.isDisabled
                 }).dxButtonGroup("instance");
 
@@ -220,24 +220,21 @@ QUnit.module("Events", () => {
             }
         }
 
-        getButtonGroupItem(itemIndex) {
+        _getButtonGroupItem(itemIndex) {
             return this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(itemIndex);
         }
 
         performAction(itemIndex) {
-            if(this.isDisabled && this.isKeyboardEvent) this.eventName = "click";
-
             if(this.eventName === "click") {
-                eventsEngine.trigger(this.getButtonGroupItem(itemIndex), "dxclick");
+                eventsEngine.trigger(this._getButtonGroupItem(itemIndex), "dxclick");
             } else if(this.eventName === "touch") {
-                pointerMock(this.getButtonGroupItem(itemIndex))
+                pointerMock(this._getButtonGroupItem(itemIndex))
                     .start("touch")
                     .down()
                     .up();
             } else {
                 let keyboard = keyboardMock(this.buttonGroup.$element());
-                keyboard.press("right");
-                itemIndex === 0 && keyboard.press("left");
+                if(itemIndex === 1) keyboard.press("right");
 
                 keyboard.press(this.eventName);
             }
@@ -249,13 +246,13 @@ QUnit.module("Events", () => {
                 return;
             }
 
-            if(checkedItemIndex === 0 && this.isItemDisabled) {
+            if(checkedItemIndex === 1 && this.isItemDisabled) {
                 if(!this.isKeyboardEvent) {
                     assert.equal(this.handler.getCall(0), null, "this.handler.getCall(0)");
                     return;
                 }
 
-                checkedItemIndex = 1;
+                checkedItemIndex = 0;
             }
 
             if(!typeUtils.isDefined(this.handler.getCall(0))) {
@@ -270,9 +267,9 @@ QUnit.module("Events", () => {
             assert.strictEqual(e.component, this.buttonGroup, "e.component");
             assert.strictEqual(e.element, this.buttonGroup.element(), "element is correct");
             this.assert.strictEqual(e.event.type, this.isKeyboardEvent ? "keydown" : "dxclick", "e.event.type");
-            this.assert.deepEqual(e.itemData, checkedItemIndex === 0 ? { text: `item1`, disabled: this.isItemDisabled } : { text: `item2` }, "e.itemData");
+            this.assert.deepEqual(e.itemData, checkedItemIndex === 0 ? { text: `item1` } : { text: `item2`, disabled: this.isItemDisabled }, "e.itemData");
             this.assert.strictEqual(e.itemIndex, checkedItemIndex, "e.itemIndex");
-            this.assert.strictEqual($(e.itemElement).get(checkedItemIndex), this.getButtonGroupItem(checkedItemIndex).get(checkedItemIndex), `$(e.itemElement).get(${checkedItemIndex})`);
+            this.assert.strictEqual($(e.itemElement).get(checkedItemIndex), this._getButtonGroupItem(checkedItemIndex).get(checkedItemIndex), `$(e.itemElement).get(${checkedItemIndex})`);
         }
     }
 
@@ -282,18 +279,23 @@ QUnit.module("Events", () => {
                 ["click", "touch", "space", "enter"].forEach((eventName) => {
                     let config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ``}`;
 
+                    if(isDisabled && (eventName === "space" || eventName === "enter")) {
+                        return;
+                    }
+
                     QUnit.test("onItemClick fired on" + config, (assert) => {
                         let helper = new ButtonGroupEventsTestHelper(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
+
                         helper.createButtonGroup();
-                        helper.performAction(1);
-                        helper.checkAsserts(assert, 1);
+                        helper.performAction(0);
+                        helper.checkAsserts(assert, 0);
                     });
 
                     QUnit.test("onItemClick fired on" + config, (assert) => {
                         let helper = new ButtonGroupEventsTestHelper(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
                         helper.createButtonGroup();
-                        helper.performAction(0);
-                        helper.checkAsserts(assert, 0);
+                        helper.performAction(1);
+                        helper.checkAsserts(assert, 1);
                     });
                 });
             });
