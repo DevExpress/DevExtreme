@@ -5568,6 +5568,8 @@ declare module DevExpress.ui {
         keyExpr?: string | Function;
         /** @name dxButtonGroup.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+        /** @name dxButtonGroup.Options.onItemClick */
+        onItemClick?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
         /** @name dxButtonGroup.Options.selectedItemKeys */
         selectedItemKeys?: Array<any>;
         /** @name dxButtonGroup.Options.selectedItems */
