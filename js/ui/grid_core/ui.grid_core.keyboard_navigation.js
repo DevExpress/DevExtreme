@@ -1614,11 +1614,6 @@ module.exports = {
         return {
             useKeyboard: true,
 
-            /**
-             * @name GridBaseOptions.useLegacyKeyboardNavigation
-             * @type boolean
-             * @default false
-             */
             useLegacyKeyboardNavigation: false,
 
             /**
