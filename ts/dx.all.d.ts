@@ -6395,7 +6395,7 @@ declare module DevExpress.ui {
         /** @name dxFloatingActionButton.Options.label */
         label?: string;
         /** @name dxFloatingActionButton.Options.onClick */
-        onClick?: ((e: { component?: dxFloatingActionButton, element?: DevExpress.core.dxElement, model?: any, event?: event, component?: dxFloatingActionButton, element?: DevExpress.core.dxElement }) => any);
+        onClick?: ((e: { event?: event, component?: dxFloatingActionButton, element?: DevExpress.core.dxElement }) => any);
     }
     /** @name dxFloatingActionButton */
     export class dxFloatingActionButton extends dxOverlay {
