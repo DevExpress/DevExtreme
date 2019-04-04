@@ -1045,7 +1045,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _change_DATA_INIT: function() {
-        if(!this.series || this.needToPopulateSeries) {
+        if((!this.series || this.needToPopulateSeries) && !this._changes.has("FORCE_DATA_INIT")) {
             this._dataInit();
         }
     },
