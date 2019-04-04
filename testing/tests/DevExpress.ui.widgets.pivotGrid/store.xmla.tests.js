@@ -4033,4 +4033,33 @@ define(function(require) {
             .always(done);
     });
 
+    QUnit.test("Skip and take rows with sortOrder desc", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            rows: [{
+                dataField: "[Ship Date].[Month of Year]", sortOrder: "desc"
+            }],
+            values: [],
+            rowSkip: 2,
+            rowTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, undefined, 10, 9, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("Skip and take rows with sortOrder desc amd sortBy displayText", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            rows: [{
+                dataField: "[Ship Date].[Month of Year]", sortOrder: "desc", sortBy: "displayText"
+            }],
+            values: [],
+            rowSkip: 2,
+            rowTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, undefined, 11, 5, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
 });
