@@ -62,6 +62,10 @@ function getFilterExpressionForFilterValue(field, filterValue) {
 function createFieldFilterExpressions(field, operation) {
     var fieldFilterExpressions = [];
 
+    if(field.searchValue) {
+        return [field.dataField, "contains", field.searchValue];
+    }
+
     if(field.filterType === "exclude") {
         operation = operation || "and";
     } else {
@@ -308,7 +312,7 @@ function parseResult(data, total, descriptions, result) {
 }
 
 function getFiltersForDimension(fields) {
-    return (fields || []).filter(f => f.filterValues && f.filterValues.length);
+    return (fields || []).filter(f => f.filterValues && f.filterValues.length || f.searchValue);
 }
 
 function getExpandedIndex(options, axis) {

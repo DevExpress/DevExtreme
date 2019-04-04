@@ -8,7 +8,6 @@ import { FileProvider, FileManagerItem } from "./file_provider";
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
-const FILE_CHUNK_META_DATA_NAME = "chunkMetadata";
 
 class WebAPIFileProvider extends FileProvider {
 
@@ -22,32 +21,32 @@ class WebAPIFileProvider extends FileProvider {
     }
 
     renameItem(item, name) {
-        return this._executeRequest(this._options.renameUrl, {
+        return this._executeRequest("Rename", {
             id: item.relativeName,
-            newName: name
+            name
         });
     }
 
     createFolder(parentFolder, name) {
-        return this._executeRequest(this._options.createFolderUrl, {
+        return this._executeRequest("CreateFolder", {
             parentId: parentFolder.relativeName,
-            name: name
+            name
         });
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest(this._options.deleteUrl, { id: item.relativeName }));
+        return items.map(item => this._executeRequest("Remove", { id: item.relativeName }));
     }
 
     moveItems(items, destinationFolder) {
-        return items.map(item => this._executeRequest(this._options.moveUrl, {
+        return items.map(item => this._executeRequest("Move", {
             sourceId: item.relativeName,
             destinationId: destinationFolder.relativeName + "/" + item.name
         }));
     }
 
     copyItems(items, destinationFolder) {
-        return items.map(item => this._executeRequest(this._options.copyUrl, {
+        return items.map(item => this._executeRequest("Copy", {
             sourceId: item.relativeName,
             destinationId: destinationFolder.relativeName
         }));
@@ -58,23 +57,24 @@ class WebAPIFileProvider extends FileProvider {
     }
 
     uploadFileChunk(uploadInfo, chunk) {
-        const params = {
-            destinationId: uploadInfo.destinationFolder.relativeName
+        const args = {
+            destinationId: uploadInfo.destinationFolder.relativeName,
+            chunkMetadata: JSON.stringify({
+                UploadId: uploadInfo.customData.uploadId,
+                FileName: uploadInfo.file.name,
+                Index: chunk.index,
+                TotalCount: uploadInfo.totalChunkCount,
+                FileSize: uploadInfo.file.size
+            })
         };
-        const url = this._options.uploadChunkUrl + "?" + this._getQueryString(params);
 
         const formData = new window.FormData();
         formData.append(FILE_CHUNK_BLOB_NAME, chunk.blob);
-        formData.append(FILE_CHUNK_META_DATA_NAME, JSON.stringify({
-            UploadId: uploadInfo.customData.uploadId,
-            FileName: uploadInfo.file.name,
-            Index: chunk.index,
-            TotalCount: uploadInfo.totalChunkCount,
-            FileSize: uploadInfo.file.size
-        }));
+        formData.append("arguments", JSON.stringify(args));
+        formData.append("command", "UploadChunk");
 
         return ajax.sendRequest({
-            url,
+            url: this._options.loadUrl,
             method: "POST",
             dataType: "text",
             data: formData,
@@ -88,7 +88,7 @@ class WebAPIFileProvider extends FileProvider {
     }
 
     abortFileUpload(uploadInfo) {
-        return this._executeRequest(this._options.abortUploadUrl, { uploadId: uploadInfo.customData.uploadId });
+        return this._executeRequest("AbortUpload", { uploadId: uploadInfo.customData.uploadId });
     }
 
     _getItems(path, itemType) {
@@ -101,12 +101,15 @@ class WebAPIFileProvider extends FileProvider {
     }
 
     _getEntriesByPath(path) {
-        return this._executeRequest(this._options.loadUrl, { parentId: path }, true);
+        return this._executeRequest("GetDirContent", { parentId: path }, true);
     }
 
-    _executeRequest(url, params, jsonResult) {
-        const queryString = this._getQueryString(params);
-        const finalUrl = url + "?" + queryString;
+    _executeRequest(command, args, jsonResult) {
+        const queryString = this._getQueryString({
+            command,
+            arguments: JSON.stringify(args)
+        });
+        const finalUrl = this._options.loadUrl + "?" + queryString;
         const dataType = jsonResult ? "json" : "text";
         return ajax.sendRequest({
             url: finalUrl,

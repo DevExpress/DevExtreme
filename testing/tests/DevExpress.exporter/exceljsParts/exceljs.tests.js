@@ -1,7 +1,7 @@
 import $ from "jquery";
 import ExcelJS from "exceljs";
 import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
-import browser from "core/utils/browser";
+import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
 
 import "ui/data_grid/ui.data_grid";
 
@@ -15,16 +15,19 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
+    before: () => {
+        initializeDxObjectAssign();
+    },
     beforeEach: () => {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
+
+    },
+    after: () => {
+        clearDxObjectAssign();
     }
 };
 
 QUnit.module("API", moduleConfig, () => {
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        return;
-    }
-
     [true, false].forEach((excelFilterEnabled) => {
         [undefined, { row: 1, column: 1 }, { row: 2, column: 3 }].forEach((topLeftCell) => {
             let expectedTopLeftCell = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
@@ -33,19 +36,19 @@ QUnit.module("API", moduleConfig, () => {
 
             function checkAutoFilter(assert, worksheet, excelFilterEnabled, from, to) {
                 if(excelFilterEnabled === true) {
-                    assert.deepEqual(worksheet.autoFilter.from, from);
-                    assert.deepEqual(worksheet.autoFilter.to, to);
-                    assert.deepEqual(worksheet.views, [ { state: 'frozen', ySplit: to.row } ]);
+                    assert.deepEqual(worksheet.autoFilter.from, from, "worksheet.autoFilter.from");
+                    assert.deepEqual(worksheet.autoFilter.to, to, "worksheet.autoFilter.to");
+                    assert.deepEqual(worksheet.views, [ { state: 'frozen', ySplit: to.row } ], "worksheet.views");
                 } else {
-                    assert.equal(worksheet.autoFilter, undefined);
+                    assert.equal(worksheet.autoFilter, undefined, "worksheet.autoFilter");
                 }
             }
 
             function checkRowAndColumnCount(assert, worksheet, total, actual) {
-                assert.equal(worksheet.rowCount, total.row);
-                assert.equal(worksheet.columnCount, total.column);
-                assert.equal(worksheet.actualRowCount, actual.row);
-                assert.equal(worksheet.actualColumnCount, actual.column);
+                assert.equal(worksheet.rowCount, total.row, "worksheet.rowCount");
+                assert.equal(worksheet.columnCount, total.column, "worksheet.columnCount");
+                assert.equal(worksheet.actualRowCount, actual.row, "worksheet.actualRowCount");
+                assert.equal(worksheet.actualColumnCount, actual.column, "worksheet.actualColumnCount");
             }
 
             QUnit.test("Empty grid" + options, (assert) => {
@@ -56,8 +59,8 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
                     checkAutoFilter(assert, this.worksheet, false);
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, expectedTopLeftCell);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, expectedTopLeftCell, "result.to");
                     done();
                 });
             });
@@ -72,9 +75,9 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, expectedTopLeftCell, { row: 1, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, expectedTopLeftCell);
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f1');
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, expectedTopLeftCell);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f1', `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, expectedTopLeftCell, "result.to");
                     done();
                 });
             });
@@ -90,8 +93,8 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
                     checkAutoFilter(assert, this.worksheet, false);
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, expectedTopLeftCell);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, expectedTopLeftCell, "result.to");
                     done();
                 });
             });
@@ -106,10 +109,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, { row: 1, column: 2 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f1');
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, 'f2');
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f1', `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, 'f2', `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column + 1}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, "result.to");
                     done();
                 });
             });
@@ -124,8 +127,8 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
                     checkAutoFilter(assert, this.worksheet, false);
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, expectedTopLeftCell);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, expectedTopLeftCell, "result.to");
                     done();
                 });
             });
@@ -140,9 +143,9 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, expectedTopLeftCell, { row: 1, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column });
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f1');
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column });
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f1', `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column }, "result.to");
                     done();
                 });
             });
@@ -157,9 +160,9 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, expectedTopLeftCell, { row: 1, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column });
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f2');
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column });
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, 'f2', `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column }, "result.to");
                     done();
                 });
             });
@@ -178,11 +181,11 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 2 }, { row: 1, column: 3 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 2 });
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f2");
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f3");
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 2).value, "f1");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 2 });
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f2", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f3", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column + 1}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 2).value, "f1", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column + 2}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 2 }, "result.to");
                     done();
                 });
             });
@@ -201,10 +204,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, { row: 1, column: 2 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f2");
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f3");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f2", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f3", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column + 1}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, "result.to");
                     done();
                 });
             });
@@ -223,10 +226,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, { row: 1, column: 2 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f3");
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f1");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f3", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f1", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column + 1}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, "result.to");
                     done();
                 });
             });
@@ -245,10 +248,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, { row: 1, column: 2 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f2");
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f1");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column).value, "f2", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row, expectedTopLeftCell.column + 1).value, "f1", `this.worksheet.getCell(${expectedTopLeftCell.row}, ${expectedTopLeftCell.column + 1}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 }, "result.to");
                     done();
                 });
             });
@@ -264,10 +267,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column + 1 }, { row: 2, column: 2 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, { row: expectedTopLeftCell.row, column: expectedTopLeftCell.column + 1 });
-                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "1");
-                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column + 1).value, "2");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column + 1 });
+                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "1", `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column + 1).value, "2", `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column + 1}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column + 1 }, "result.to");
                     done();
                 });
             });
@@ -287,10 +290,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, { row: 2, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, expectedTopLeftCell);
-                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "1");
-                    assert.equal(typeof this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "string");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column });
+                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "1", `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(typeof this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "string", `typeof this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, "result.to");
                     done();
                 });
             });
@@ -310,10 +313,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, { row: 2, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, expectedTopLeftCell);
-                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, 1);
-                    assert.equal(typeof this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "number");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column });
+                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, 1, `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(typeof this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "number", `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, "result.to");
                     done();
                 });
             });
@@ -333,10 +336,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, { row: 2, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, expectedTopLeftCell);
-                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, true);
-                    assert.equal(typeof this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "boolean");
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column });
+                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, true, `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(typeof this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, "boolean", `typeof this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, "result.to");
                     done();
                 });
             });
@@ -357,10 +360,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, { row: 2, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, expectedTopLeftCell);
-                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, date);
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).type, ExcelJS.ValueType.Date);
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column });
+                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, date, `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).type, ExcelJS.ValueType.Date, `typeof this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, "result.to");
                     done();
                 });
             });
@@ -381,10 +384,10 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getConfig(dataGrid)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, { row: 2, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, expectedTopLeftCell, expectedTopLeftCell);
-                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, dateTime);
-                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).type, ExcelJS.ValueType.Date);
-                    assert.deepEqual(result.from, expectedTopLeftCell);
-                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column });
+                    assert.deepEqual(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).value, dateTime, `this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.equal(this.worksheet.getCell(expectedTopLeftCell.row + 1, expectedTopLeftCell.column).type, ExcelJS.ValueType.Date, `typeof this.worksheet.getCell(${expectedTopLeftCell.row + 1}, ${expectedTopLeftCell.column}).value`);
+                    assert.deepEqual(result.from, expectedTopLeftCell, "result.from");
+                    assert.deepEqual(result.to, { row: expectedTopLeftCell.row + 1, column: expectedTopLeftCell.column }, "result.to");
                     done();
                 });
             });

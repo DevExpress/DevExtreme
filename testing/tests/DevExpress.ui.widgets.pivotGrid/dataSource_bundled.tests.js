@@ -436,7 +436,7 @@ QUnit.test("Load Field Values", function(assert) {
         },
         dataSource = createDataSource({
             fields: [
-                { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
+                { dataField: "[Product].[Category]", area: "filter", areaIndex: 0 },
                 { dataField: "[Ship Date].[Calendar Year]", area: "row", areaIndex: 0, customizeText: customizeFunction },
                 { dataField: "[Measures].[Customer Count]", caption: 'Count', area: "data", areaIndex: 0 }
             ],
@@ -485,6 +485,62 @@ QUnit.test("Load Field Values", function(assert) {
     assert.strictEqual(fieldValues[0].text, "customized2001");
     assert.strictEqual(fieldValues[1].text, "customized2002");
     assert.strictEqual(fieldValues[2].text, "customized2003");
+});
+
+QUnit.test("Load Field Values with paginate", function(assert) {
+    this.testStore.load.returns($.Deferred().reject());
+    // act
+    var dataSource = createDataSource({
+            fields: [
+                { dataField: "[Product].[Category]", area: "filter" }
+            ],
+            store: this.testStore
+
+        }),
+        loadResult = {
+            columns: [{}, { value: "cat2" }, { value: "cat3" }, {}, {}],
+            rows: [],
+            values: [],
+            grandTotalColumnIndex: 0,
+            grandTotalRowIndex: 0
+        };
+
+    this.testStore.load.returns($.Deferred().resolve(loadResult));
+
+
+    var fieldValues;
+
+    dataSource.getFieldValues(0, { skip: 1, take: 2, searchValue: "cat" }).done(function(data) {
+        fieldValues = data;
+    });
+
+    // assert
+    assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
+        columnSkip: 1,
+        columnTake: 2,
+        values: [],
+        columns: [
+            {
+                dataField: "[Product].[Category]",
+                area: "filter",
+                areaIndex: 0,
+                expanded: true,
+                filterValues: null,
+                sortBySummaryField: null,
+                sortOrder: "asc",
+                caption: "",
+                searchValue: "cat"
+            }
+        ],
+        rows: [],
+        filters: [],
+        skipValues: true
+    }], "load args");
+
+    assert.deepEqual(fieldValues, loadResult.columns);
+    assert.strictEqual(fieldValues.length, 2);
+    assert.strictEqual(fieldValues[0].text, "cat2");
+    assert.strictEqual(fieldValues[1].text, "cat3");
 });
 
 QUnit.test("Reload data", function(assert) {

@@ -2573,6 +2573,89 @@ QUnit.test("Set editor mode via editorOptions", function(assert) {
     assert.strictEqual(textEditor.option("mode"), "password", "editor mode");
 });
 
+QUnit.test("Batch mode - Edit cell on click (startEditAction is 'click')", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "click"
+    };
+    sinon.spy(that.editingController, "editCell");
+
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find("td").first().trigger("dxclick");
+
+    // assert
+    assert.strictEqual(that.editingController.editCell.callCount, 1, "count call editCell");
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+});
+
+QUnit.test("Batch mode - Edit Cell on double click (startEditAction is 'dblClick')", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    sinon.spy(that.editingController, "editCell");
+
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find("td").first().trigger("dxdblclick");
+
+    // assert
+    assert.strictEqual(that.editingController.editCell.callCount, 1, "count call editCell");
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+});
+
+QUnit.test("Batch mode - Closing edited cell should work on click when startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    sinon.spy(that.editingController, "editCell");
+
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find("td").first().trigger("dxdblclick");
+
+    // assert
+    assert.strictEqual(that.editingController.editCell.callCount, 1, "count call editCell");
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+
+    // arrange
+    sinon.spy(that.editingController, "closeEditCell");
+
+    // act
+    $testElement.find("td").eq(1).trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(that.editingController.closeEditCell.callCount, 1, "count call closeEditCell");
+    assert.strictEqual(getInputElements($testElement).length, 0, "hasn't input");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
