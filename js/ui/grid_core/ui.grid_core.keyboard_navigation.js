@@ -404,7 +404,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
-                    if(!this._isLegacyNavigation() && column.command !== "selection") {
+                    if(!this._isLegacyNavigation() && column.command !== "expand" && column.command !== "selection") {
                         return true;
                     }
                     return !isEditing && column.command === "expand";
