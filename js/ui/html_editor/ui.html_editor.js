@@ -484,6 +484,7 @@ const HtmlEditor = Editor.inherit({
             case "variables":
             case "toolbar":
             case "mentions":
+            case "customize":
                 this._invalidate();
                 break;
             case "valueType": {
@@ -505,7 +506,7 @@ const HtmlEditor = Editor.inherit({
             case "formDialogOptions":
                 this._renderFormDialog();
                 break;
-            case "resizing":
+            case "mediaResizing":
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
