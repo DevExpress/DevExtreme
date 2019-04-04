@@ -1577,7 +1577,7 @@ var Scheduler = Widget.inherit({
 
         var combinedDataAccessors = this._combineDataAccessors();
 
-        this._appointmentModel = new SchedulerAppointmentModel(this._dataSource, combinedDataAccessors);
+        this._appointmentModel = new SchedulerAppointmentModel(this._dataSource, combinedDataAccessors, this.getAppointmentDurationInMinutes());
 
         this._initActions();
 

@@ -31,6 +31,36 @@ QUnit.module("Subscribes", {
     }
 });
 
+QUnit.test("'fixWrongEndDate' should process endDate correctly", function(assert) {
+    this.createInstance({
+        currentView: "week"
+    });
+
+    var checkedDate = this.instance.fire("fixWrongEndDate",
+        {
+            startDate: new Date(2019, 4, 3, 12),
+            allDay: false
+        }, new Date(2019, 4, 3, 12), undefined);
+
+    assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), "checked date is ok when endDate is undefined");
+
+    checkedDate = this.instance.fire("fixWrongEndDate",
+        {
+            startDate: new Date(2019, 4, 3, 12),
+            allDay: false
+        }, new Date(2019, 4, 3, 12), new Date("string"));
+
+    assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), "checked date is ok when endDate is invalid");
+
+    checkedDate = this.instance.fire("fixWrongEndDate",
+        {
+            startDate: new Date(2019, 4, 3, 12),
+            allDay: true
+        }, new Date(2019, 4, 3, 12), undefined);
+
+    assert.equal(checkedDate.getHours(), 23, "checked date is ok when endDate is undefined, allDay appointment");
+    assert.equal(checkedDate.getMinutes(), 59, "checked date is ok when endDate is undefined, allDay appointment");
+});
 
 QUnit.test("'getTargetedAppointmentData' should return correct data for recurrence appointments (T660901)", function(assert) {
     var appointmentData = {
