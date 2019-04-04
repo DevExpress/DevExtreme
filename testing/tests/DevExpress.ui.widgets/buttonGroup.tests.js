@@ -2,7 +2,6 @@ import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
 import eventsEngine from "events/core/events_engine";
-import typeUtils from "core/utils/type";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import "common.css!";
