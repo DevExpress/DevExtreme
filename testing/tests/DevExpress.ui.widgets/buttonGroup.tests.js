@@ -192,8 +192,7 @@ QUnit.module("option changed", {
 QUnit.module("Events", () => {
 
     class ButtonGroupEventsTestHelper {
-        constructor(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
-            this.assert = assert;
+        constructor(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
             this.handler = sinon.spy();
             this.eventName = eventName;
             this.isItemClickInInitialOption = isItemClickInInitialOption;
@@ -246,10 +245,10 @@ QUnit.module("Events", () => {
                 assert.strictEqual(Object.keys(e).length, 6, "Object.keys(e).length");
                 assert.strictEqual(e.component, this.buttonGroup, "e.component");
                 assert.strictEqual(e.element, this.buttonGroup.element(), "element is correct");
-                this.assert.strictEqual(e.event.type, this.isKeyboardEvent ? "keydown" : "dxclick", "e.event.type");
-                this.assert.deepEqual(e.itemData, { text: `item1`, disabled: this.isItemDisabled, custom: 1 }, "e.itemData");
-                this.assert.strictEqual(e.itemIndex, 0, "e.itemIndex");
-                this.assert.strictEqual($(e.itemElement).get(0), this._getButtonGroupItem(0).get(0), `$(e.itemElement).get(0)`);
+                assert.strictEqual(e.event.type, this.isKeyboardEvent ? "keydown" : "dxclick", "e.event.type");
+                assert.deepEqual(e.itemData, { text: `item1`, disabled: this.isItemDisabled, custom: 1 }, "e.itemData");
+                assert.strictEqual(e.itemIndex, 0, "e.itemIndex");
+                assert.strictEqual($(e.itemElement).get(0), this._getButtonGroupItem(0).get(0), `$(e.itemElement).get(0)`);
             }
         }
     }
@@ -261,7 +260,7 @@ QUnit.module("Events", () => {
                     let config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ``}`;
 
                     QUnit.test("Check onItemClick for" + config, (assert) => {
-                        let helper = new ButtonGroupEventsTestHelper(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
+                        let helper = new ButtonGroupEventsTestHelper(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
                         helper.createButtonGroup();
                         helper.performAction();
                         helper.checkAsserts(assert);
