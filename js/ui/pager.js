@@ -34,9 +34,7 @@ var PAGES_LIMITER = 4,
     PAGER_NEXT_BUTTON_CLASS = "dx-next-button",
     PAGER_INFO_CLASS = "dx-info",
     PAGER_INFO_TEXT_CLASS = "dx-info-text",
-    PAGER_BUTTON_DISABLE_CLASS = "dx-button-disable",
-
-    isLegacyKeyboardNavigation = false;
+    PAGER_BUTTON_DISABLE_CLASS = "dx-button-disable";
 
 var Page = Class.inherit({
     ctor: function(value, index) {
@@ -68,9 +66,6 @@ var Page = Class.inherit({
 
     select: function(value) {
         this._$page.toggleClass(PAGER_SELECTION_CLASS, value);
-        if(!isLegacyKeyboardNavigation) {
-            this._$page.attr("tabindex", 0);
-        }
     },
 
     render: function(rootElement, rtlEnabled) {
@@ -80,7 +75,6 @@ var Page = Class.inherit({
 
 var Pager = Widget.inherit({
     _getDefaultOptions: function() {
-        isLegacyKeyboardNavigation = this.option("useLegacyKeyboardNavigation");
         return extend(this.callBase(), {
             visible: true,
             pagesNavigatorVisible: "auto",
@@ -216,7 +210,9 @@ var Pager = Widget.inherit({
         page.select(true);
         that.selectedPage = page;
 
-        if(!isLegacyKeyboardNavigation) {
+        if(!that.option("useLegacyKeyboardNavigation")) {
+            let tabIndex = that.option("tabindex") || 0;
+            that.selectedPage.element().attr("tabindex", tabIndex);
             that._updatePagesTabIndices.apply(that);
         }
 
