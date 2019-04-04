@@ -2,6 +2,7 @@ import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
 import eventsEngine from "events/core/events_engine";
+import typeUtils from "core/utils/type";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import "common.css!";
@@ -194,9 +195,9 @@ QUnit.module("Events", () => {
     class ButtonGroupEventsTestHelper {
         constructor(assert, eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
             this.assert = assert;
+            this.handler = sinon.spy();
             this.eventName = eventName;
             this.isItemClickInInitialOption = isItemClickInInitialOption;
-            this.handler = sinon.spy();
             this.isDisabled = isDisabled;
             this.isItemDisabled = isItemDisabled;
             this.isKeyboardEvent = this.eventName === "space" || this.eventName === "enter";
@@ -255,6 +256,11 @@ QUnit.module("Events", () => {
                 }
 
                 checkedItemIndex = 1;
+            }
+
+            if(!typeUtils.isDefined(this.handler.getCall(0))) {
+                assert.ok(false, "this.handler.getCall(0) is not defined");
+                return;
             }
 
             const e = this.handler.getCall(0).args[0];
