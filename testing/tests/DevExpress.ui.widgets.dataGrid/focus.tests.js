@@ -90,7 +90,8 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
                 allowEditing: true
             },
             columns: this.columns,
-            dataSource: this.data
+            dataSource: this.data,
+            useLegacyKeyboardNavigation: true
         }, this.options);
 
         setupDataGridModules(this, [

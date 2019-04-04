@@ -1,7 +1,7 @@
 import $ from "jquery";
 import ExcelJS from "exceljs";
 import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
-import browser from "core/utils/browser";
+import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
 
 import "ui/data_grid/ui.data_grid";
 
@@ -15,16 +15,19 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
+    before: () => {
+        initializeDxObjectAssign();
+    },
     beforeEach: () => {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
+
+    },
+    after: () => {
+        clearDxObjectAssign();
     }
 };
 
 QUnit.module("API", moduleConfig, () => {
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        return;
-    }
-
     [true, false].forEach((excelFilterEnabled) => {
         [undefined, { row: 1, column: 1 }, { row: 2, column: 3 }].forEach((topLeftCell) => {
             let expectedTopLeftCell = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
