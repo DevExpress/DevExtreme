@@ -17,7 +17,6 @@ ui.notify = require("../../../ui/notify");
 /* Base widgets (dx.module-widgets-base.js) */
 
 ui.dxActionSheet = require("../../../ui/action_sheet");
-ui.dxFloatingActionButton = require("../../../ui/action_button");
 ui.dxAutocomplete = require("../../../ui/autocomplete");
 ui.dxBox = require("../../../ui/box");
 ui.dxButton = require("../../../ui/button");
@@ -32,6 +31,7 @@ ui.dxDeferRendering = require("../../../ui/defer_rendering");
 ui.dxDropDownBox = require("../../../ui/drop_down_box");
 ui.dxDropDownMenu = require("../../../ui/drop_down_menu");
 ui.dxFileUploader = require("../../../ui/file_uploader");
+ui.dxFloatingActionButton = require("../../../ui/action_button");
 ui.dxForm = require("../../../ui/form");
 ui.dxGallery = require("../../../ui/gallery");
 ui.dxHtmlEditor = require("../../../ui/html_editor");
