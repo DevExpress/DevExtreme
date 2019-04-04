@@ -445,8 +445,12 @@ const subscribes = {
         options.callback(updatedEndDate);
     },
 
-    renderDropDownAppointments: function(options) {
-        this._dropDownAppointments.render(options, this);
+    renderCompactAppointments: function(options) {
+        this._compactAppointmentsHelper.render(options);
+    },
+
+    clearCompactAppointments: function() {
+        this._compactAppointmentsHelper.clear();
     },
 
     supportCompactDropDownAppointments: function() {

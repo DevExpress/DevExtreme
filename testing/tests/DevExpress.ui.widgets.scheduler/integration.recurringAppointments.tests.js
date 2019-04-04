@@ -1,4 +1,17 @@
-var $ = require("jquery");
+import $ from "jquery";
+import dblclickEvent from "events/dblclick";
+import Color from "color";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dateSerialization from "core/utils/date_serialization";
+import { appointmentsHelper, tooltipHelper } from './helpers.js';
+
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -6,20 +19,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-var dblclickEvent = require("events/dblclick"),
-    Color = require("color"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dateSerialization = require("core/utils/date_serialization");
-
-require("ui/scheduler/ui.scheduler");
 
 QUnit.module("Integration: Recurring Appointments", {
     beforeEach: function() {
@@ -456,10 +455,10 @@ QUnit.test("Recurrent Task deleting, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    appointmentsHelper.click(1);
     this.clock.tick(300);
 
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    tooltipHelper.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedRecurringItem = this.instance.option("dataSource").items()[0],
@@ -488,9 +487,9 @@ QUnit.test("Recurrent Task editing, confirmation tooltip should be shown after t
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    appointmentsHelper.click(2);
     this.clock.tick(300);
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
+    tooltipHelper.clickOnItem();
 
     assert.ok($(".dx-dialog.dx-overlay-modal").length, "Dialog was shown");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
@@ -523,9 +522,9 @@ QUnit.test("Recurrent Task editing, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    appointmentsHelper.click(2);
     this.clock.tick(300);
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
+    tooltipHelper.clickOnItem();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $title = $(".dx-textbox").eq(0),
@@ -1173,15 +1172,13 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone after 
         timeZone: "Australia/Sydney"
     });
 
-
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    appointmentsHelper.click();
     this.clock.tick(300);
 
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    tooltipHelper.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
-
     assert.notOk($appointment.length, "appt is deleted");
 });
 
@@ -1200,10 +1197,10 @@ QUnit.test("Recurrence exception should be adjusted by appointment timezone afte
         currentDate: new Date(2018, 3, 1)
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    appointmentsHelper.click();
     this.clock.tick(300);
 
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    tooltipHelper.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
