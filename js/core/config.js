@@ -81,26 +81,26 @@ const config = {
     useLegacyVisibleIndex: false,
 
     /**
-    * @name globalConfig.actionButtonConfig
+    * @name globalConfig.floatingActionButtonConfig
     * @type object
     */
-    actionButtonConfig: {
+    floatingActionButtonConfig: {
         /**
-        * @name globalConfig.actionButtonConfig.icon
+        * @name globalConfig.floatingActionButtonConfig.icon
         * @type string
         * @default "preferences"
         */
-        icon: "preferences",
+        icon: "add",
 
         /**
-        * @name globalConfig.actionButtonConfig.closeIcon
+        * @name globalConfig.floatingActionButtonConfig.closeIcon
         * @type string
         * @default "close"
         */
         closeIcon: "close",
 
         /**
-        * @name globalConfig.actionButtonConfig.position
+        * @name globalConfig.floatingActionButtonConfig.position
         * @type Enums.PositionAlignment|positionConfig|function
         * @default "right bottom"
         */
@@ -114,7 +114,7 @@ const config = {
         },
 
         /**
-        * @name globalConfig.actionButtonConfig.maxActionButtonCount
+        * @name globalConfig.floatingActionButtonConfig.maxActionButtonCount
         * @type number
         * @default 6
         */

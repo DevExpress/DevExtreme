@@ -3,10 +3,10 @@ import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
 import themes from "../themes";
-import { init, dispose } from "./action_button_base";
+import { initAction, disposeAction } from "./action_button_base";
 
-var FloatingActionButton = Widget.inherit({
-    _getDefaultOptions: function() {
+const FloatingActionButton = Widget.inherit({
+    _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
             * @name dxFloatingActionButtonOptions.icon
@@ -14,13 +14,6 @@ var FloatingActionButton = Widget.inherit({
             * @default ""
             */
             icon: "",
-
-            /**
-            * @name dxFloatingActionButtonOptions.label
-            * @type string
-            * @default ""
-            */
-            label: "",
 
             /**
             * @name dxFloatingActionButtonOptions.onClick
@@ -48,21 +41,18 @@ var FloatingActionButton = Widget.inherit({
             * @hidden
             * @inheritdoc
             */
-            width: "auto",
 
             /**
             * @name dxFloatingActionButtonOptions.height
             * @hidden
             * @inheritdoc
             */
-            height: "auto",
 
             /**
             * @name dxFloatingActionButtonOptions.disabled
             * @hidden
             * @inheritdoc
             */
-            disabled: false,
 
             activeStateEnabled: true,
             hoverStateEnabled: true,
@@ -99,7 +89,7 @@ var FloatingActionButton = Widget.inherit({
     _defaultOptionsRules() {
         return this.callBase().concat([
             {
-                device: function() {
+                device() {
                     return themes.isMaterial();
                 },
                 options: {
@@ -112,23 +102,26 @@ var FloatingActionButton = Widget.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "onClick":
-                init(this);
+                initAction(this);
                 break;
             case "icon":
-                init(this);
+                initAction(this);
                 break;
-            case "label":
+            case "useInkRipple":
+            case "animation":
+            case "id":
             default:
                 this.callBase(args);
         }
     },
 
     _render() {
-        init(this);
+        initAction(this);
     },
 
     _dispose() {
-        dispose(this._options.id);
+        disposeAction(this._options.id);
+        this.callBase();
     }
 });
 

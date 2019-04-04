@@ -1,6 +1,6 @@
 /**
  * @name dxFloatingActionButton
- * @inherits dxOverlay
+ * @inherits Widget
  * @hasTranscludedContent
  * @module ui/action_button
  * @export default

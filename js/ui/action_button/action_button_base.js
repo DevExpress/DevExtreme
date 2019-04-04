@@ -2,27 +2,34 @@ import $ from "../../core/renderer";
 import config from "../../core/config";
 import { extend } from "../../core/utils/extend";
 import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import { addNamespace } from "../../events/utils";
 import clickEvent from "../../events/click";
-import iconUtils from "../../core/utils/icon";
-import swatch from "../widget/swatch_container";
+import { getImageContainer } from "../../core/utils/icon";
+import { getSwatchContainer } from "../widget/swatch_container";
 import ActionButtonItem from "./action_button_item";
 import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
-const FAB_ICON_CLASS = "dx-fa-button-icon";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
 
 let actionButtonBase = null;
 
 const ActionButtonBase = ActionButtonItem.inherit({
+    _actionItems: [],
+
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            icon: config().actionButtonConfig.icon,
-            closeIcon: config().actionButtonConfig.closeIcon,
-            position: config().actionButtonConfig.position,
-            maxActionButtonCount: config().actionButtonConfig.maxActionButtonCount,
-            onClick: null,
+            icon: config().floatingActionButtonConfig.icon || "add",
+            closeIcon: config().floatingActionButtonConfig.closeIcon || "close",
+            position: config().floatingActionButtonConfig.position || {
+                at: "right bottom",
+                my: "right bottom",
+                offset: {
+                    x: -16,
+                    y: -16
+                }
+            },
+            maxActionButtonCount: config().floatingActionButtonConfig.maxActionButtonCount || 6,
             actions: [],
             visible: true,
             activeStateEnabled: true,
@@ -35,7 +42,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _defaultOptionsRules() {
         return this.callBase().concat([
             {
-                device: function() {
+                device() {
                     return themes.isMaterial();
                 },
                 options: {
@@ -47,7 +54,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
     },
 
     _render() {
-        this.element().addClass(FAB_MAIN_CLASS);
+        this.$element().addClass(FAB_MAIN_CLASS);
         this.callBase();
         this._renderIcon();
         this._renderCloseIcon();
@@ -55,34 +62,19 @@ const ActionButtonBase = ActionButtonItem.inherit({
         this._renderClick();
     },
 
-    _renderContent() {
-        this.callBase();
-    },
-
-    _renderIcon() {
-        !!this._$icon && this._$icon.remove();
-        this._$icon = $("<div>").addClass(FAB_ICON_CLASS);
-
-        const $iconElement = iconUtils.getImageContainer(this._options.icon);
-
-        this._$icon
-            .append($iconElement)
-            .appendTo(this.content());
-    },
-
     _renderCloseIcon() {
         !!this._$closeIcon && this._$closeIcon.remove();
         this._$closeIcon = $("<div>").addClass(FAB_CLOSE_ICON_CLASS);
 
-        const $closeIconElement = iconUtils.getImageContainer(this._options.closeIcon);
+        const $closeIconElement = getImageContainer(this._options.closeIcon);
 
         this._$closeIcon
             .append($closeIconElement)
-            .appendTo(this.content());
+            .appendTo(this.$content());
     },
 
     _renderClick() {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEvent.name, this.NAME);
 
         this._clickAction = this.option("actions").length === 1 ?
             this._createActionByOption("onClick") :
@@ -104,15 +96,13 @@ const ActionButtonBase = ActionButtonItem.inherit({
         this._$closeIcon.toggle();
     },
 
-    _actionItems: [],
-
     _renderActions() {
         const actions = this.option("actions");
         const lastActionIndex = actions.length - 1;
 
         if(actions.length >= this.option("maxActionButtonCount")) return;
 
-        if(this._actionItems) {
+        if(this._actionItems.length) {
             this._actionItems.forEach(actionItem => {
                 actionItem.dispose();
                 actionItem.element().remove();
@@ -124,7 +114,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
         for(let i = 0; i < actions.length; i++) {
             const action = actions[i];
             const $actionElement = $("<div>")
-                .appendTo(swatch.getSwatchContainer(action.$element()));
+                .appendTo(getSwatchContainer(action.$element()));
 
             eventsEngine.off($actionElement, "click");
             eventsEngine.on($actionElement, "click", () => {
@@ -134,7 +124,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             const actionOffsetY = this.option("indent") + this.option("childIndent") * i;
 
             action._options.position = {
-                of: this.content(),
+                of: this.$content(),
                 at: "center",
                 my: "center",
                 offset: {
@@ -153,16 +143,12 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "actions":
+                this._renderClick();
                 this._renderActions();
                 break;
             case "position":
-                this._renderActions();
-                break;
             case "maxActionButtonCount":
                 this._renderActions();
-                break;
-            case "icon":
-                this._renderIcon();
                 break;
             case "closeIcon":
                 this._renderCloseIcon();
@@ -173,13 +159,13 @@ const ActionButtonBase = ActionButtonItem.inherit({
     }
 });
 
-exports.init = function(newAction) {
+exports.initAction = function(newAction) {
     let isActionExist = false;
     if(!actionButtonBase) {
         const $fabMainElement = $("<div>")
-            .appendTo(swatch.getSwatchContainer(newAction.$element()));
+            .appendTo(getSwatchContainer(newAction.$element()));
         actionButtonBase = new ActionButtonBase($fabMainElement, {
-            icon: newAction._options.icon || config().actionButtonConfig.icon,
+            icon: newAction._options.icon || config().floatingActionButtonConfig.icon,
             onClick: newAction._options.onClick,
             actions: [ newAction ]
         });
@@ -196,8 +182,7 @@ exports.init = function(newAction) {
         if(!isActionExist) {
             savedActions.push(newAction);
             actionButtonBase.option("actions", savedActions);
-            actionButtonBase.option("icon", config().actionButtonConfig.icon);
-            actionButtonBase.option("onClick", null);
+            actionButtonBase.option("icon", config().floatingActionButtonConfig.icon);
         } else if(savedActions.length === 1) {
             actionButtonBase.option("icon", newAction._options.icon);
             actionButtonBase.option("onClick", newAction._options.onClick);
@@ -207,7 +192,9 @@ exports.init = function(newAction) {
     }
 };
 
-exports.dispose = function(actionId) {
+exports.disposeAction = function(actionId) {
+    if(!actionButtonBase) return;
+
     let savedActions = actionButtonBase.option("actions");
     if(savedActions.length === 1) {
         actionButtonBase.option("actions", []);

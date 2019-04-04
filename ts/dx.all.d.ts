@@ -6389,16 +6389,14 @@ declare module DevExpress.ui {
         trueText?: string;
     }
     /** @name dxFloatingActionButton.Options */
-    export interface dxFloatingActionButtonOptions extends dxOverlayOptions<dxFloatingActionButton> {
+    export interface dxFloatingActionButtonOptions extends WidgetOptions<dxFloatingActionButton> {
         /** @name dxFloatingActionButton.Options.icon */
         icon?: string;
-        /** @name dxFloatingActionButton.Options.label */
-        label?: string;
         /** @name dxFloatingActionButton.Options.onClick */
         onClick?: ((e: { event?: event, component?: dxFloatingActionButton, element?: DevExpress.core.dxElement }) => any);
     }
     /** @name dxFloatingActionButton */
-    export class dxFloatingActionButton extends dxOverlay {
+    export class dxFloatingActionButton extends Widget {
         constructor(element: Element, options?: dxFloatingActionButtonOptions)
         constructor(element: JQuery, options?: dxFloatingActionButtonOptions)
     }
@@ -9172,14 +9170,14 @@ declare module DevExpress {
     export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
     /** @name globalConfig */
     export interface globalConfig {
-        /** @name globalConfig.actionButtonConfig */
-        actionButtonConfig?: { closeIcon?: string, icon?: string, maxActionButtonCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
         /** @name globalConfig.decimalSeparator */
         decimalSeparator?: string;
         /** @name globalConfig.defaultCurrency */
         defaultCurrency?: string;
         /** @name globalConfig.editorStylingMode */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
+        /** @name globalConfig.floatingActionButtonConfig */
+        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxActionButtonCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
         /** @name globalConfig.forceIsoDateParsing */
         forceIsoDateParsing?: boolean;
         /** @name globalConfig.oDataFilterToLower */

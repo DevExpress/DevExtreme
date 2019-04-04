@@ -6,7 +6,7 @@ import "common.css!";
 import "generic_light.css!";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="fab-one"></div>\
         <div id="fab-two"></div>\
         <div id="fabs"></div>';
@@ -30,11 +30,11 @@ QUnit.test("check rendering", function(assert) {
 
     assert.ok($fabElement.length === 1, "one action button created");
     assert.ok($fabElement.hasClass(FAB_MAIN_CLASS), "it is main action button");
-    assert.equal($fabContent.find(".dx-icon-preferences").length, 1, "default icon created");
+    assert.equal($fabContent.find(".dx-icon-add").length, 1, "default icon created");
     assert.equal($fabContent.find(".dx-icon-close").length, 1, "default close icon created");
 
-    this.instance.option("icon", "add");
-    assert.equal($fabContent.find(".dx-icon-add").length, 1, "icon changed");
+    this.instance.option("icon", "preferences");
+    assert.equal($fabContent.find(".dx-icon-preferences").length, 1, "icon changed");
 
     this.instance.option("onClick", clickHandler);
     $fabContent.trigger("dxclick");
@@ -43,6 +43,8 @@ QUnit.test("check rendering", function(assert) {
     const params = clickHandler.getCall(0).args[0];
     assert.ok(params, "Event params should be passed");
     assert.ok(params.event, "Event should be passed");
+    assert.ok(params.element, "Element should be passed");
+    assert.ok(params.component, "Component should be passed");
 });
 
 QUnit.module("maxActionButtonCount option");
@@ -80,7 +82,7 @@ QUnit.test("check rendering", function(assert) {
     assert.ok($fabMainElement.length === 1, "create one main fab");
     assert.ok($fabElement.length === 3, "create two actions");
 
-    assert.equal($fabMainContent.find(".dx-icon-preferences").length, 1, "default icon is apllyed");
+    assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is apllyed");
     assert.equal($fabMainContent.find(".dx-icon-close").length, 1, "default close is apllyed");
 
     assert.equal($($fabContent[1]).find(".dx-icon-arrowdown").length, 1, "first action with arrowdown icon");
@@ -103,7 +105,7 @@ QUnit.module("modify global action button config");
 
 QUnit.test("check main fab changes", function(assert) {
     config({
-        actionButtonConfig: {
+        floatingActionButtonConfig: {
             icon: "favorites",
             closeIcon: "cancel",
             position: "left top"

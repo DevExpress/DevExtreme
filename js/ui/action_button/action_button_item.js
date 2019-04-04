@@ -1,9 +1,9 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import { addNamespace } from "../../events/utils";
 import clickEvent from "../../events/click";
-import iconUtils from "../../core/utils/icon";
+import { getImageContainer } from "../../core/utils/icon";
 import Overlay from "../overlay";
 import inkRipple from "../widget/utils.ink_ripple";
 
@@ -11,38 +11,33 @@ const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
 
 const ActionButtonItem = Overlay.inherit({
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return extend(this.callBase(), {
-            shading: false,
-            onClick: null
+            shading: false
         });
     },
 
-    _render: function() {
-        this.element().addClass(FAB_CLASS);
+    _render() {
+        this.$element().addClass(FAB_CLASS);
         this.callBase();
         this._renderIcon();
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
     },
 
-    _renderContent: function() {
-        this.callBase();
-    },
-
-    _renderIcon: function() {
+    _renderIcon() {
         !!this._$icon && this._$icon.remove();
 
         this._$icon = $("<div>").addClass(FAB_ICON_CLASS);
-        const $iconElement = iconUtils.getImageContainer(this._options.icon);
+        const $iconElement = getImageContainer(this._options.icon);
 
         this._$icon
             .append($iconElement)
-            .appendTo(this.content());
+            .appendTo(this.$content());
     },
 
-    _renderClick: function() {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+    _renderClick() {
+        const eventName = addNamespace(clickEvent.name, this.NAME);
 
         this._clickAction = this._createActionByOption("onClick");
 
@@ -52,11 +47,11 @@ const ActionButtonItem = Overlay.inherit({
         });
     },
 
-    _renderInkRipple: function() {
+    _renderInkRipple() {
         this._inkRipple = inkRipple.render();
     },
 
-    _toggleActiveState: function($element, value, e) {
+    _toggleActiveState($element, value, e) {
         this.callBase.apply(this, arguments);
 
         if(!this._inkRipple) {
@@ -75,7 +70,7 @@ const ActionButtonItem = Overlay.inherit({
         }
     },
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "icon":
                 this._renderIcon();
