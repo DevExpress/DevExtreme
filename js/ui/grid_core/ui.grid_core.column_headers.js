@@ -96,7 +96,7 @@ module.exports = {
                         $target = $(event.target),
                         keyName = normalizeKeyName(event),
                         blurHandler = e => {
-                            this.lastActionElement = e.relatedTarget;
+                            this._lastActionElement = e.relatedTarget;
                             eventsEngine.off($target, "blur", blurHandler);
                         },
                         keyboardController = this.getController("keyboardNavigation");
@@ -124,7 +124,7 @@ module.exports = {
                 _handleActionKeyDown: function(event) {
                     var $target = $(event.target);
 
-                    this.lastActionElement = event.target;
+                    this._lastActionElement = event.target;
 
                     if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
                         let headerFilterController = this.getController("headerFilter"),
@@ -267,9 +267,9 @@ module.exports = {
                         $firstCell = $table.find(`tr.${HEADER_ROW_CLASS} > td`).first();
 
                     eventsEngine.on($firstCell, "focus", e => {
-                        if(this.lastActionElement && e.currentTarget !== this.lastActionElement) {
-                            $(this.lastActionElement).trigger("focus");
-                            this.lastActionElement = null;
+                        if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
+                            $(this._lastActionElement).trigger("focus");
+                            this._lastActionElement = null;
                         }
                     });
                 },
