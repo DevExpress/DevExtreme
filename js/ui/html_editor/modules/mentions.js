@@ -42,9 +42,7 @@ class MentionModule extends PopupModule {
         const baseConfig = super._getDefaultOptions();
 
         return extend(baseConfig, {
-            itemTemplate: (itemData) => {
-                return this._valueGetter(itemData);
-            },
+            itemTemplate: "item",
             valueExpr: "this",
             displayExpr: "this",
             template: null,
