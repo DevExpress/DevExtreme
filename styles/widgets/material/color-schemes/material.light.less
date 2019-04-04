@@ -33,7 +33,7 @@
 * @type text
 * @group base.common
 */
-@base-border-radius: 4px;
+@base-border-radius: @MATERIAL_BASE_BORDER_RADIUS;
 
 @base-inverted-bg: darken(@base-bg, 100%);
 @base-element-bg: @base-bg;
@@ -710,8 +710,6 @@
 
 @list-icon-color: @base-icon-color;
 
-@list-group-header-default-padding-top: 14px;
-@list-group-header-compact-padding-top: 10px;
 @list-item-chevron-icon-color: @base-icon-color;
 
 // Overlay
@@ -1748,9 +1746,6 @@
 @scheduler-header-bg: @base-bg;
 @scheduler-alldaypanel-bg: @base-element-bg;
 
-@scheduler-recurence-editor-bg: @base-element-bg;
-
-@scheduler-recurence-editor-border-color: darken(@base-element-bg, 5%);
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(0, 0, 0, 0.03);

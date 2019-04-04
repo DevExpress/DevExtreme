@@ -3,16 +3,6 @@
 @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE:
     @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
 
-@MATERIAL_FILLED_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING:
-    @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
-    @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + 
-    @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-
-@MATERIAL_STANDARD_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING:
-    @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
-    @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + 
-    @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-
 @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET:
     @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
     @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
@@ -77,109 +67,29 @@
     width: @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
 }
 
-.dx-dropdowneditor-button-visible {
-    &.dx-editor-underlined {
-        &.dx-show-clear-button .dx-texteditor-input {
-            padding-right: @MATERIAL_STANDARD_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-    
-            .dx-rtl &,
-            .dx-rtl& {
-                padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                padding-left: @MATERIAL_STANDARD_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-            }
-    
-            .dx-rtl.dx-searchbox&,
-            .dx-rtl .dx-searchbox& {
-                padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-            }
-        }
-    
-        .dx-texteditor-input {
-            padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-    
-            .dx-rtl &,
-            .dx-rtl& {
-                padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-            }
-        }
-    }
-
-    &.dx-editor-filled, &.dx-editor-outlined {
-        &.dx-show-clear-button .dx-texteditor-input {
-            padding-right: @MATERIAL_FILLED_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-    
-            .dx-rtl &,
-            .dx-rtl& {
-                padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                padding-left: @MATERIAL_FILLED_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-            }
-    
-            .dx-rtl.dx-searchbox&,
-            .dx-rtl .dx-searchbox& {
-                padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-            }
-        }
-    
-        .dx-texteditor-input {
-            padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-    
-            .dx-rtl &,
-            .dx-rtl& {
-                padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-            }
-        }
-    }
-    
-}
-
 .invalid-dropdowneditor-input-padding() {
     &.dx-dropdowneditor-button-visible {
         &.dx-editor-underlined {
             .dx-texteditor-input {
-                padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
-    
+
             &.dx-rtl .dx-texteditor-input {
                 padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-            }
-    
-            &.dx-show-clear-button {
-                .dx-texteditor-input {
-                    padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                }
-    
-                &.dx-rtl .dx-texteditor-input {
-                    padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                    padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                }
+                padding-left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
 
         &.dx-editor-filled, &.dx-editor-outlined {
             .dx-texteditor-input {
-                padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
-    
+
             &.dx-rtl .dx-texteditor-input {
                 padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-            }
-    
-            &.dx-show-clear-button {
-                .dx-texteditor-input {
-                    padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                }
-    
-                &.dx-rtl .dx-texteditor-input {
-                    padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                    padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                }
+                padding-left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
-
     }
 }
 

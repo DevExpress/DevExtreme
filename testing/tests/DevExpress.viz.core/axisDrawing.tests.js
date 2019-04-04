@@ -2313,9 +2313,9 @@ QUnit.test("Labels are outside canvas (on zoom) - do not draw outside labels", f
     assert.equal(this.renderer.stub("text").callCount, 0);
 });
 
-QUnit.module("XY linear axis. Draw. Check tick labels. WordWrap", environment);
+QUnit.module("XY linear axis. Draw. Check tick labels. WordWrap and textOverflow", environment);
 
-QUnit.test("Horizontal top. Labels are wider than tick interval - apply word wrap", function(assert) {
+QUnit.test("Horizontal top. WordWrap != none, textOverflow = none. First label is not exists", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2326,7 +2326,38 @@ QUnit.test("Horizontal top. Labels are wider than tick interval - apply word wra
             visible: true,
             indentFromAxis: 10,
             wordWrap: "normal",
-            overflow: "none"
+            textOverflow: "none"
+        }
+    });
+
+    this.generatedTicks = ["   ", 2];
+    this.generatedTickInterval = 1;
+    this.translator.stub("getInterval").withArgs(1).returns(10);
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(2).returns(60);
+
+    this.renderer.bBoxTemplate = { x: 1, y: 2, width: 12, height: 6 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(renderer.text.callCount, 1, "Text call count");
+});
+
+QUnit.test("Horizontal top. WordWrap != none, textOverflow = none. Labels are wider than tick interval - set max width", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            wordWrap: "normal",
+            textOverflow: "none"
         }
     });
 
@@ -2363,17 +2394,75 @@ QUnit.test("Horizontal top. Labels are wider than tick interval - apply word wra
 
     assert.deepEqual(text1.setMaxWidth.getCall(0).args[0], 10);
     assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
-    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].overflow, "none");
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].textOverflow, "none");
 
     assert.deepEqual(text2.setMaxWidth.getCall(0).args[0], 10);
     assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
-    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].overflow, "none");
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].textOverflow, "none");
 
     assert.deepEqual(text1.attr.getCall(2).args[0], { translateX: 40 - 3 - 10 / 2, translateY: 30 - 10 - 12 - 2 }, "Text args");
     assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 60 - 6 - 10 / 2, translateY: 30 - 10 - 16 - 4 }, "Text args");
 });
 
-QUnit.test("Horizontal top. Labels are wider than tick interval (datetime) - apply word wrap", function(assert) {
+QUnit.test("Horizontal top. WordWrap = none, textOverflow != none. Labels are wider than tick interval - set max width", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            wordWrap: "none",
+            textOverflow: "ellipsis"
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+    this.generatedTickInterval = 1;
+    this.translator.stub("getInterval").withArgs(1).returns(10);
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(2).returns(60);
+
+    this.renderer.bBoxTemplate = (function() {
+        var idx = 0;
+        return function() {
+            return [
+                { x: 1, y: 2, width: 12, height: 6 },
+                { x: 3, y: 4, width: 14, height: 8 },
+                { x: 3, y: 2, width: 10, height: 12 },
+                { x: 6, y: 4, width: 10, height: 16 }
+            ][idx++];
+        };
+    })();
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(renderer.text.callCount, 2, "Text call count");
+
+    let text1 = renderer.text.getCall(0).returnValue;
+    let text2 = renderer.text.getCall(1).returnValue;
+
+    assert.deepEqual(text1.attr.getCall(1).args[0], { x: 40, y: 30 });
+    assert.deepEqual(text2.attr.getCall(1).args[0], { x: 60, y: 30 });
+
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[0], 10);
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].wordWrap, "none");
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].textOverflow, "ellipsis");
+
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[0], 10);
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].wordWrap, "none");
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].textOverflow, "ellipsis");
+
+    assert.deepEqual(text1.attr.getCall(2).args[0], { translateX: 40 - 3 - 10 / 2, translateY: 30 - 10 - 12 - 2 }, "Text args");
+    assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 60 - 6 - 10 / 2, translateY: 30 - 10 - 16 - 4 }, "Text args");
+});
+
+QUnit.test("Horizontal top. Labels are wider than tick interval (datetime) - set max width", function(assert) {
     // arrange
     var date0 = new Date(2011, 5, 25, 0, 0, 0),
         date1 = new Date(2011, 5, 26, 0, 0, 0);
@@ -2388,7 +2477,7 @@ QUnit.test("Horizontal top. Labels are wider than tick interval (datetime) - app
             visible: true,
             indentFromAxis: 10,
             wordWrap: "normal",
-            overflow: "none"
+            textOverflow: "none"
         }
     });
 
@@ -2424,17 +2513,17 @@ QUnit.test("Horizontal top. Labels are wider than tick interval (datetime) - app
 
     assert.deepEqual(text1.setMaxWidth.getCall(0).args[0], 10);
     assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
-    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].overflow, "none");
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].textOverflow, "none");
 
     assert.deepEqual(text2.setMaxWidth.getCall(0).args[0], 10);
     assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
-    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].overflow, "none");
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].textOverflow, "none");
 
     assert.deepEqual(text1.attr.getCall(2).args[0], { translateX: 40 - 3 - 10 / 2, translateY: 30 - 10 - 12 - 2 }, "Text args");
     assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 60 - 6 - 10 / 2, translateY: 30 - 10 - 16 - 4 }, "Text args");
 });
 
-QUnit.test("Horizontal top. Labels are narrower than tick interval - do not apply word wrap", function(assert) {
+QUnit.test("Horizontal top. Labels are narrower than tick interval - do not set max width", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2486,7 +2575,7 @@ QUnit.test("Horizontal top. Labels are narrower than tick interval - do not appl
     assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 60 - 3 - 14 / 2, translateY: 30 - 10 - 8 - 4 }, "Text args");
 });
 
-QUnit.test("Horizontal top. No wordWrap option - do not apply word wrap", function(assert) {
+QUnit.test("Horizontal top. No wordWrap option, no textOverflow option - do not set max width", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2495,7 +2584,8 @@ QUnit.test("Horizontal top. No wordWrap option - do not apply word wrap", functi
         position: "top",
         label: {
             visible: true,
-            wordWrap: null
+            wordWrap: null,
+            textOverflow: null
         }
     });
 
@@ -2526,7 +2616,7 @@ QUnit.test("Horizontal top. No wordWrap option - do not apply word wrap", functi
     assert.deepEqual(renderer.text.getCall(1).returnValue.stub("setMaxWidth").callCount, 0);
 });
 
-QUnit.test("Horizontal top. DisplayMode = rotate - do not apply word wrap", function(assert) {
+QUnit.test("Horizontal top. DisplayMode = rotate - do not set max width", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2567,7 +2657,7 @@ QUnit.test("Horizontal top. DisplayMode = rotate - do not apply word wrap", func
     assert.deepEqual(renderer.text.getCall(1).returnValue.stub("setMaxWidth").callCount, 0);
 });
 
-QUnit.test("Horizontal top. OverlappingBehavior = rotate - do not apply word wrap", function(assert) {
+QUnit.test("Horizontal top. OverlappingBehavior = rotate - do not set max width", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2608,7 +2698,7 @@ QUnit.test("Horizontal top. OverlappingBehavior = rotate - do not apply word wra
     assert.deepEqual(renderer.text.getCall(1).returnValue.stub("setMaxWidth").callCount, 0);
 });
 
-QUnit.test("Horizontal top. OverlappingBehavior = auto - do not apply word wrap", function(assert) {
+QUnit.test("Horizontal top. OverlappingBehavior = auto - do not set max width", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2649,7 +2739,7 @@ QUnit.test("Horizontal top. OverlappingBehavior = auto - do not apply word wrap"
     assert.deepEqual(renderer.text.getCall(1).returnValue.stub("setMaxWidth").callCount, 0);
 });
 
-QUnit.test("Vertical left. Labels are wider than placeholderSize less than - apply word wrap", function(assert) {
+QUnit.test("Vertical left. Labels are wider than placeholderSize less than - set max width", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2661,7 +2751,7 @@ QUnit.test("Vertical left. Labels are wider than placeholderSize less than - app
             visible: true,
             indentFromAxis: 10,
             wordWrap: "normal",
-            overflow: "none"
+            textOverflow: "none"
         }
     });
 
@@ -2696,17 +2786,17 @@ QUnit.test("Vertical left. Labels are wider than placeholderSize less than - app
 
     assert.deepEqual(text1.setMaxWidth.getCall(0).args[0], 10);
     assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
-    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].overflow, "none");
+    assert.deepEqual(text1.setMaxWidth.getCall(0).args[1].textOverflow, "none");
 
     assert.deepEqual(text2.setMaxWidth.getCall(0).args[0], 10);
     assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].wordWrap, "normal");
-    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].overflow, "none");
+    assert.deepEqual(text2.setMaxWidth.getCall(0).args[1].textOverflow, "none");
 
     assert.deepEqual(text1.attr.getCall(2).args[0], { translateX: 10 - 10 - (3 + 10), translateY: 40 - 2 - 12 / 2 }, "Text args");
     assert.deepEqual(text2.attr.getCall(2).args[0], { translateX: 10 - 10 - (6 + 10), translateY: 60 - 4 - 16 / 2 }, "Text args");
 });
 
-QUnit.test("Vertical left. Labels are shorter than placeholderSize - do not apply word wrap", function(assert) {
+QUnit.test("Vertical left. Labels are shorter than placeholderSize - do not set max width", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -2718,7 +2808,7 @@ QUnit.test("Vertical left. Labels are shorter than placeholderSize - do not appl
             visible: true,
             indentFromAxis: 10,
             wordWrap: "normal",
-            overflow: "none"
+            textOverflow: "none"
         }
     });
 

@@ -105,6 +105,10 @@ function isRunningTotalUsed(dataFields) {
     });
 }
 
+function isDataExists(data) {
+    return data.rows.length || data.columns.length || data.values.length;
+}
+
 module.exports = Class.inherit((function() {
 
     var findHeaderItem = function(headerItems, path) {
@@ -143,24 +147,38 @@ module.exports = Class.inherit((function() {
             emptyIndex = getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1,
             index,
             applyingItemIndexesToCurrent = [],
+            needIndexUpdate = false,
             d = new Deferred();
 
-        for(index = 0; index < applyingHeaderItemsCount; index++) {
-            applyingItemIndexesToCurrent[index] = emptyIndex++;
+        if(headerItem.children && headerItem.children.length === children.length) {
+            for(var i = 0; i < children.length; i++) {
+                var child = children[i];
+                if(child.index !== undefined && headerItem.children[i].index === undefined) {
+                    child.index = applyingItemIndexesToCurrent[child.index] = emptyIndex++;
+                    headerItem.children[i] = child;
+                }
+            }
+        } else {
+            needIndexUpdate = true;
+            for(index = 0; index < applyingHeaderItemsCount; index++) {
+                applyingItemIndexesToCurrent[index] = emptyIndex++;
+            }
+            headerItem.children = children;
         }
 
-        headerItem.children = children;
-
         when(foreachTreeAsync(headerItem.children, function(items) {
-            items[0].index = applyingItemIndexesToCurrent[items[0].index];
+            if(needIndexUpdate) {
+                items[0].index = applyingItemIndexesToCurrent[items[0].index];
+            }
         })).done(function() {
             d.resolve(applyingItemIndexesToCurrent);
         });
         return d;
     };
 
-    var updateHeaderItems = function(headerItems, newHeaderItems) {
-        var d = new Deferred();
+    var updateHeaderItems = function(headerItems, newHeaderItems, grandTotalIndex) {
+        var d = new Deferred(),
+            emptyIndex = grandTotalIndex >= 0 && getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1;
 
         var applyingItemIndexesToCurrent = [];
 
@@ -168,10 +186,20 @@ module.exports = Class.inherit((function() {
         when(foreachTreeAsync(headerItems, function(items) {
             delete items[0].collapsedChildren;
         })).done(function() {
-            when(foreachTreeAsync(newHeaderItems, function(items) {
-                var headerItem = findHeaderItem(headerItems, createPath(items));
-                if(headerItem) {
-                    applyingItemIndexesToCurrent[items[0].index] = headerItem.index;
+            when(foreachTreeAsync(newHeaderItems, function(newItems, index) {
+                var newItem = newItems[0];
+                if(newItem.index >= 0) {
+                    var headerItem = findHeaderItem(headerItems, createPath(newItems));
+                    if(headerItem && headerItem.index >= 0) {
+                        applyingItemIndexesToCurrent[newItem.index] = headerItem.index;
+                    } else if(emptyIndex) {
+                        headerItem = findHeaderItem(headerItems, createPath(newItems.slice(1)));
+
+                        var parentItems = headerItem && headerItem.children || headerItems;
+
+                        parentItems[index] = newItem;
+                        newItem.index = applyingItemIndexesToCurrent[newItem.index] = emptyIndex++;
+                    }
                 }
             })).done(function() {
                 d.resolve(applyingItemIndexesToCurrent);
@@ -625,8 +653,11 @@ module.exports = Class.inherit((function() {
             * @default false
             */
             that._paginate = !!options.paginate;
+            that._pageSize = options.pageSize || 40;
             that._data = { rows: [], columns: [], values: [] };
             that._loadingCount = 0;
+
+            that._isFieldsModified = false;
 
             /**
              * @name PivotGridDataSourceOptions.onChanged
@@ -1017,12 +1048,13 @@ module.exports = Class.inherit((function() {
                 updateCalculatedFieldProperties(field, CALCULATED_PROPERTIES);
 
                 that._descriptions = that._createDescriptions(field);
+                that._isFieldsModified = true;
                 that.fireEvent("fieldChanged", [field]);
             }
             return field;
         },
 
-        getFieldValues: function(index) {
+        getFieldValues: function(index, options) {
             var that = this,
                 field = this._fields && this._fields[index],
                 store = this.store(),
@@ -1034,16 +1066,31 @@ module.exports = Class.inherit((function() {
                     filters: [],
                     skipValues: true
                 },
+                searchValue,
                 d = new Deferred();
+
+            if(options) {
+                searchValue = options.searchValue;
+                loadOptions.columnSkip = options.skip;
+                loadOptions.columnTake = options.take;
+            }
 
             if(field && store) {
                 each(field.levels || [field], function() {
-                    loadFields.push(extend({}, this, { expanded: true, filterValues: null, sortOrder: 'asc', sortBySummaryField: null }));
+                    loadFields.push(extend({}, this, { expanded: true, filterValues: null, sortOrder: 'asc', sortBySummaryField: null, searchValue: searchValue }));
                 });
 
                 store.load(loadOptions).done(function(data) {
+                    if(loadOptions.columnSkip) {
+                        data.columns = data.columns.slice(loadOptions.columnSkip);
+                    }
+                    if(loadOptions.columnTake) {
+                        data.columns = data.columns.slice(0, loadOptions.columnTake);
+                    }
                     formatHeaders(loadOptions, data);
-                    that._sort(loadOptions, data);
+                    if(!loadOptions.columnTake) {
+                        that._sort(loadOptions, data);
+                    }
                     d.resolve(data.columns);
                 }).fail(d);
             } else {
@@ -1277,10 +1324,51 @@ module.exports = Class.inherit((function() {
             }
         },
 
+        _processPagingCacheByArea: function(options, pageSize, area) {
+            var takeField = area + "Take",
+                skipField = area + "Skip",
+                items = this._data[area + "s"];
+
+            if(options[takeField]) {
+                if(options.path) {
+                    var headerItem = findHeaderItem(items, options.path);
+                    items = headerItem && headerItem.children || [];
+                }
+                do {
+                    var item = items[options[skipField]];
+                    if(item && item.index !== undefined) {
+                        options[skipField]++;
+                        options[takeField]--;
+                    }
+                } while(item && item.index !== undefined && options[takeField]);
+
+                if(options[takeField]) {
+                    var start = Math.floor(options[skipField] / pageSize) * pageSize;
+                    var end = Math.ceil((options[skipField] + options[takeField]) / pageSize) * pageSize;
+
+                    options[skipField] = start;
+                    options[takeField] = end - start;
+                }
+            }
+        },
+
+        _processPagingCache: function(storeLoadOptions) {
+            var pageSize = this._pageSize;
+
+            if(pageSize < 0) return;
+
+            for(let i = 0; i < storeLoadOptions.length; i++) {
+                this._processPagingCacheByArea(storeLoadOptions[i], pageSize, "row");
+                this._processPagingCacheByArea(storeLoadOptions[i], pageSize, "column");
+            }
+        },
+
         _loadCore: function(options, deferred) {
             var that = this,
                 store = this._store,
                 descriptions = this._descriptions,
+                reload = options.reload || (this.paginate() && that._isFieldsModified),
+                paginate = this.paginate(),
                 headerName = DESCRIPTION_NAME_BY_AREA[options.area];
 
             options = options || {};
@@ -1289,6 +1377,10 @@ module.exports = Class.inherit((function() {
                 extend(options, descriptions);
                 options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns", that._lastLoadOptions);
                 options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows", that._lastLoadOptions);
+
+                if(paginate) {
+                    options.pageSize = this._pageSize;
+                }
 
                 if(headerName) {
                     options.headerName = headerName;
@@ -1300,7 +1392,19 @@ module.exports = Class.inherit((function() {
                 });
 
                 let storeLoadOptions = [options];
-                that.fireEvent("customizeStoreLoadOptions", [storeLoadOptions]);
+
+                that.fireEvent("customizeStoreLoadOptions", [storeLoadOptions, reload]);
+
+                if(!reload) {
+                    that._processPagingCache(storeLoadOptions);
+                }
+
+                storeLoadOptions = storeLoadOptions.filter(options => options.rowTake !== 0);
+
+                if(!storeLoadOptions.length) {
+                    that._update(deferred);
+                    return;
+                }
 
                 let results = storeLoadOptions.map(options => store.load(options));
                 when.apply(null, results).done(function() {
@@ -1312,6 +1416,8 @@ module.exports = Class.inherit((function() {
 
                         if(options.path) {
                             that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false);
+                        } else if(paginate && !reload && isDataExists(that._data)) {
+                            that.mergePartialDataSource(data, isLast ? deferred : false);
                         } else {
                             extend(that._data, data);
                             that._lastLoadOptions = options;
@@ -1361,6 +1467,7 @@ module.exports = Class.inherit((function() {
 
                 that._data = loadedData;
                 deferred !== false && when(deferred).done(function() {
+                    that._isFieldsModified = false;
                     that.fireEvent("changed");
                     if(isDefined(that._data.grandTotalRowIndex)) {
                         loadedData.grandTotalRowIndex = that._data.grandTotalRowIndex;
@@ -1495,6 +1602,28 @@ module.exports = Class.inherit((function() {
             return false;
         },
 
+        mergePartialDataSource: function(dataSource, deferred) {
+            var that = this,
+                loadedData = that._data,
+                newRowItemIndexesToCurrent,
+                newColumnItemIndexesToCurrent;
+
+            if(dataSource && dataSource.values) {
+                dataSource.rows = dataSource.rows || [];
+                dataSource.columns = dataSource.columns || [];
+
+                newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalColumnIndex);
+                newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
+
+                when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent).done(function(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
+                    if(newRowItemIndexesToCurrent.length || newColumnItemIndexesToCurrent.length) {
+                        updateDataSourceCells(loadedData, dataSource.values, newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent);
+                    }
+                    that._update(deferred);
+                });
+            }
+        },
+
         applyPartialDataSource: function(area, path, dataSource, deferred) {
             var that = this,
                 loadedData = that._data,
@@ -1510,10 +1639,10 @@ module.exports = Class.inherit((function() {
                 if(headerItem) {
                     if(area === 'column') {
                         newColumnItemIndexesToCurrent = updateHeaderItemChildren(headerItems, headerItem, dataSource.columns, loadedData.grandTotalColumnIndex);
-                        newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows);
+                        newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalRowIndex);
                     } else {
                         newRowItemIndexesToCurrent = updateHeaderItemChildren(headerItems, headerItem, dataSource.rows, loadedData.grandTotalRowIndex);
-                        newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns);
+                        newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
                     }
                     when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent).done(function(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
                         if(area === "row" && newRowItemIndexesToCurrent.length || area === "column" && newColumnItemIndexesToCurrent.length) {

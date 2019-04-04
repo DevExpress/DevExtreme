@@ -1047,6 +1047,9 @@ function AxisWrapper(params) {
         isArgumentAxis: true
     });
     this._updateSelectedRangeCallback = params.updateSelectedRange;
+    this._axis._getAxisPositionCorrection = () => {
+        return 0;
+    };
 }
 
 AxisWrapper.prototype = {

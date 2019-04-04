@@ -8,13 +8,13 @@ import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
 import notify from "../notify";
 
+import { FileManagerCommandManager } from "./ui.file_manager.command_manager";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerDetailsItemList from "./ui.file_manager.item_list.details";
 import FileManagerThumbnailsItemList from "./ui.file_manager.item_list.thumbnails";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
-import { FileManagerFileCommands } from "./ui.file_manager.commands";
 import { getName, getParentPath } from "./ui.file_manager.utils";
 
 import { FileProvider, FileManagerItem } from "./file_provider/file_provider";
@@ -43,7 +43,10 @@ class FileManager extends Widget {
         this._provider = this._getFileProvider();
         this._currentFolder = new FileManagerItem("", "", true);
 
+        this._commandManager = new FileManagerCommandManager();
+
         const toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
+            commandManager: this._commandManager,
             "onItemClick": ({ itemName }) => this._onToolbarItemClick(itemName)
         });
         toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
@@ -57,6 +60,7 @@ class FileManager extends Widget {
             .append(this._editing.$element())
             .addClass(FILE_MANAGER_CLASS);
 
+        this._initCommandManager();
         this._setItemsViewAreaActive(false);
     }
 
@@ -66,7 +70,6 @@ class FileManager extends Widget {
                 provider: this._provider,
                 getFolders: this._getFilesTreeViewItems.bind(this),
                 getCurrentFolder: this.getCurrentFolder.bind(this),
-                getSingleSelectedItem: this._getSingleSelectedItem.bind(this),
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
             onSuccess: ({ message, updatedOnlyFiles }) => {
@@ -118,6 +121,7 @@ class FileManager extends Widget {
         const selectionOptions = this.option("selection");
 
         const options = {
+            commandManager: this._commandManager,
             selectionMode: selectionOptions.mode,
             getItems: this._getItemListItems.bind(this),
             onError: ({ error }) => this._showError(error),
@@ -140,19 +144,24 @@ class FileManager extends Widget {
         });
     }
 
+    _initCommandManager() {
+        const actions = extend(this._editing.getCommandActions(), {
+            thumbnails: () => this._switchView("thumbnails"),
+            details: () => this._switchView("details")
+        });
+        this._commandManager.registerActions(actions);
+    }
+
     _onFilesTreeViewCurrentFolderChanged(e) {
         this.setCurrentFolder(this._filesTreeView.getCurrentFolder());
     }
 
     _onToolbarItemClick(name) {
-        const fileItem = this._getMultipleSelectedItems();
-        const command = FileManagerFileCommands.find(c => c.name === name);
-        command.handler(this, fileItem);
+        this.executeCommand(name);
     }
 
-    _onContextMenuItemClick(name, fileItem) {
-        const command = FileManagerFileCommands.find(c => c.name === name);
-        command && command.handler(this, fileItem);
+    _onContextMenuItemClick(name) {
+        this.executeCommand(name);
     }
 
     _setItemsViewAreaActive(active) {
@@ -203,18 +212,6 @@ class FileManager extends Widget {
         this._$itemsPanel.append(this._itemList.$element());
     }
 
-    _getSingleSelectedItem() {
-        if(this._itemsViewAreaActive) {
-            const items = this.getSelectedItems();
-            if(items.length === 1) {
-                return items[0];
-            }
-        } else {
-            return this.getCurrentFolder();
-        }
-        return null;
-    }
-
     _getMultipleSelectedItems() {
         return this._itemsViewAreaActive ? this.getSelectedItems() : [ this.getCurrentFolder() ];
     }
@@ -245,11 +242,10 @@ class FileManager extends Widget {
     }
 
     _refreshData(onlyItems) {
-        if(onlyItems || this._itemsViewAreaActive) {
-            this._loadItemListData();
-        } else {
+        if(!onlyItems) {
             this._filesTreeView.refreshData();
         }
+        this._loadItemListData();
     }
 
     _getFilesTreeViewItems(parent) {
@@ -410,6 +406,10 @@ class FileManager extends Widget {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    executeCommand(commandName) {
+        this._commandManager.executeCommand(commandName);
     }
 
     setCurrentFolderPath(path) {

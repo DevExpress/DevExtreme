@@ -6,7 +6,6 @@ import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
-import { FileManagerFileCommands } from "./ui.file_manager.commands";
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
@@ -68,23 +67,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._loadFilesViewData();
     }
 
-    _createContextMenuItems(fileItem) {
-        const isSingleRowSelected = this._filesView.getSelectedRowKeys().length <= 1;
-        return FileManagerFileCommands
-            .filter(c => {
-                if(c.displayInToolbarOnly) {
-                    return false;
-                }
-                return !c.isSingleFileItemCommand || c.isSingleFileItemCommand === isSingleRowSelected;
-            })
-            .map(({ text, name }) => ({
-                name,
-                text,
-                fileItem,
-                onItemClick: this._raiseOnContextMenuItemClick.bind(this)
-            }));
-    }
-
     _createFilesViewStore() {
         return new CustomStore({
             key: "relativeName",
@@ -103,10 +85,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         const $row = e.component.$element().closest(this._getItemSelector());
         const item = $row.data("item");
+        this._ensureItemSelected(item);
         this._contextMenu.option("dataSource", this._createContextMenuItems(item));
         this._displayContextMenu(e.element, e.event.offsetX, e.event.offsetY);
-
-        this._ensureItemSelected(item);
     }
 
     _getItemSelector() {
@@ -131,8 +112,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         const item = e.row.data;
-        e.items = this._createContextMenuItems(item);
         this._ensureItemSelected(item);
+        e.items = this._createContextMenuItems(item);
     }
 
     _createThumbnailColumnCell(container, cellInfo) {

@@ -404,6 +404,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
+                    if(!this._isLegacyNavigation() && column.command !== "selection") {
+                        return true;
+                    }
                     return !isEditing && column.command === "expand";
                 }
 
@@ -482,6 +485,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return this.option("keyboardNavigation.enterKeyAction") === "startEdit";
     },
 
+    _isLegacyNavigation: function() {
+        return this.option("useLegacyKeyboardNavigation");
+    },
+
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
             rowIndex = this.getVisibleRowIndex(),
@@ -496,7 +503,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(key !== undefined && item && item.data && !item.data.isContinuation) {
                 this._dataController.changeRowExpand(key);
             }
-
         } else {
             this._processEnterKeyForDataCell(eventArgs, isEditing);
         }
@@ -1486,6 +1492,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         switch(args.name) {
             case "useKeyboard":
             case "keyboardNavigation":
+            case "useLegacyKeyboardNavigation":
                 args.handled = true;
                 break;
             default:
@@ -1606,6 +1613,13 @@ module.exports = {
     defaultOptions: function() {
         return {
             useKeyboard: true,
+
+            /**
+             * @name GridBaseOptions.useLegacyKeyboardNavigation
+             * @type boolean
+             * @default false
+             */
+            useLegacyKeyboardNavigation: false,
 
             /**
              * @name GridBaseOptions.keyboardNavigation

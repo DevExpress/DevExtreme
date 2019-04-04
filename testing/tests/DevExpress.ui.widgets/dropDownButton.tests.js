@@ -89,7 +89,7 @@ QUnit.module("button group integration", {}, () => {
         assert.strictEqual(buttonGroupItems.length, 2, "2 buttons are rendered");
         assert.strictEqual(buttonGroupItems[0].icon, undefined, "empty icon is correct");
         assert.strictEqual(buttonGroupItems[1].icon, "spindown", "dropdown icon is correct");
-        assert.strictEqual(buttonGroupItems[1].width, 24, "button width match the design");
+        assert.strictEqual(buttonGroupItems[1].width, 26, "button content should be 24px without borders");
     });
 
     QUnit.test("toggle button should toggle the widget", (assert) => {
@@ -112,7 +112,7 @@ QUnit.module("button group integration", {}, () => {
 
     QUnit.test("a user can redefine buttonGroupOptions", (assert) => {
         const instance = new DropDownButton("#dropDownButton", {
-            showSelectedItem: false,
+            updateButtonOnSelection: false,
             buttonGroupOptions: {
                 items: [{ text: "Test" }],
                 someOption: "Test"
@@ -153,6 +153,7 @@ QUnit.module("popup integration", {
         const options = {
             deferRendering: this.instance.option("deferRendering"),
             minWidth: 130,
+            dragEnabled: false,
             closeOnOutsideClick: true,
             showTitle: false,
             animation: {
@@ -236,7 +237,7 @@ QUnit.module("list integration", {}, () => {
             deferRendering: false,
             grouped: true,
             noDataText: "No data",
-            showSelectedItem: false
+            updateButtonOnSelection: false
         });
 
         const list = getList(dropDownButton);
@@ -267,7 +268,7 @@ QUnit.module("common use cases", {
     beforeEach: () => {
         this.itemClickHandler = sinon.spy();
         this.dropDownButton = new DropDownButton("#dropDownButton", {
-            showSelectedItem: false,
+            updateButtonOnSelection: false,
             deferRendering: false,
             keyExpr: "id",
             displayExpr: "name",
@@ -293,8 +294,8 @@ QUnit.module("common use cases", {
         assert.notOk(getPopup(this.dropDownButton).option("visible"), "popup is hidden");
     });
 
-    QUnit.test("custom item should be redefined after selection if showSelectedItem is true", (assert) => {
-        this.dropDownButton.option("showSelectedItem", true);
+    QUnit.test("custom item should be redefined after selection if updateButtonOnSelection is true", (assert) => {
+        this.dropDownButton.option("updateButtonOnSelection", true);
         eventsEngine.trigger(this.listItems.eq(0), "dxclick");
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for Visual Studio", "action button has been changed");
     });
@@ -382,7 +383,7 @@ QUnit.module("data expressions", {
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
             keyExpr: "id",
-            showSelectedItem: true,
+            updateButtonOnSelection: true,
             deferRendering: false
         });
     }
@@ -484,7 +485,7 @@ QUnit.module("items changing", {
 
     QUnit.test("changing of dataSource should load new selected item", (assert) => {
         this.dropDownButton.option({
-            showSelectedItem: true,
+            updateButtonOnSelection: true,
             selectedItem: { id: 2 }
         });
 
@@ -503,7 +504,7 @@ QUnit.module("items changing", {
                 load: loadHandler,
                 byKey: byKeyHandler
             },
-            showSelectedItem: true,
+            updateButtonOnSelection: true,
             selectedItem: { id: 1 }
         });
 

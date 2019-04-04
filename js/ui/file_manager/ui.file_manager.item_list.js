@@ -45,6 +45,19 @@ class FileManagerItemListBase extends Widget {
         });
     }
 
+    _createContextMenuItems(fileItem) {
+        const commandManager = this.option("commandManager");
+        return commandManager.getCommands(false, this.getSelectedItems())
+            .map(({ name, text, icon }) => {
+                return {
+                    name,
+                    text,
+                    icon,
+                    onItemClick: this._raiseOnContextMenuItemClick.bind(this)
+                };
+            });
+    }
+
     _initActions() {
         this._actions = {
             onError: this._createActionByOption("onError"),
@@ -55,6 +68,7 @@ class FileManagerItemListBase extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            commandManager: null,
             selectionMode: "single",
             getItems: null,
             getItemThumbnail: null,
@@ -77,6 +91,8 @@ class FileManagerItemListBase extends Widget {
             case "onSelectedItemOpened":
             case "onContextMenuItemClick":
                 this._actions[name] = this._createActionByOption(name);
+                break;
+            case "commandManager":
                 break;
             default:
                 super._optionChanged(args);

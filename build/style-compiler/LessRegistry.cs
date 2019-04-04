@@ -66,7 +66,7 @@ namespace StyleCompiler
 
                     SupportedSizeSchemes = new Dictionary<string,string[]> {
                         { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } },
-                        { THEME_MATERIAL, new[] { SIZE_SCHEME_DEFAULT } }
+                        { THEME_MATERIAL, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } }
                     }
                 }
             }

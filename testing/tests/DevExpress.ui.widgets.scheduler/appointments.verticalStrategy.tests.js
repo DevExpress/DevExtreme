@@ -1,8 +1,6 @@
 import $ from "jquery";
-import { CompactAppointmentsDesktopStrategy } from "ui/scheduler/compact_strategies/compactAppointmentsDesktopStrategy";
 import dataCoreUtils from "core/utils/data";
 import typeUtils from "core/utils/type";
-import Widget from "ui/widget/ui.widget";
 import fx from "animation/fx";
 import "ui/scheduler/ui.scheduler";
 
@@ -58,27 +56,15 @@ var moduleOptions = {
             if(command === "getCellDimensions") {
                 options.callback(this.cellWidth, this.cellHeight, this.allDayHeight);
             }
-            if(command === "renderDropDownAppointments") {
 
-                var $menu = $("<div>").appendTo("#qunit-fixture #scheduler-appointments");
-
-                return new CompactAppointmentsDesktopStrategy().render({
-                    $container: $menu,
-                    coordinates: options.coordinates,
-                    items: options.items,
-                    color: options.color,
-                    itemTemplate: options.itemTemplate,
-                    buttonWidth: options.buttonWidth
-                }, new (Widget.inherit({
-                    fire: function() { }
-                }))($("<div>")));
-            }
             if(command === "getAppointmentColor") {
                 options.callback($.Deferred().resolve("red").promise());
             }
+
             if(command === "getResourceForPainting") {
                 options.callback({ field: "roomId" });
             }
+
             if(command === "getAppointmentDurationInMs") {
                 options.callback(options.endDate.getTime() - options.startDate.getTime());
             }
