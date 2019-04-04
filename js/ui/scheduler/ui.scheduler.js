@@ -2240,6 +2240,7 @@ const Scheduler = Widget.inherit({
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
             height: 'auto',
+            maxHeight: '100%',
             onHiding: (function() {
                 this.focus();
             }).bind(this),
