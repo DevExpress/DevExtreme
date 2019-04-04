@@ -4905,6 +4905,8 @@ declare module DevExpress.ui {
         stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((gridState: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
         /** @name GridBase.Options.twoWayBindingEnabled */
         twoWayBindingEnabled?: boolean;
+        /** @name GridBase.Options.useLegacyKeyboardNavigation */
+        useLegacyKeyboardNavigation?: boolean;
         /** @name GridBase.Options.wordWrapEnabled */
         wordWrapEnabled?: boolean;
     }
