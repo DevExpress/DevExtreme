@@ -362,7 +362,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _getTooltipText(item) {
-        return item.tooltipText || `${item.name}\r\nSize: ${item.length}\r\nDate modified: ${item.lastWriteTime.toLocaleString()}`;
+        return item.tooltipText || `${item.name}\r\nSize: ${item.length}\r\nDate modified: ${item.lastWriteTime}`;
     }
 
     _getUniqueId() {
