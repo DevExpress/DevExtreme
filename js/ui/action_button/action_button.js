@@ -86,8 +86,6 @@ const FloatingActionButton = Widget.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "onClick":
-                initAction(this);
-                break;
             case "icon":
                 initAction(this);
                 break;

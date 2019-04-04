@@ -168,7 +168,7 @@ exports.initAction = function(newAction) {
         const $fabMainElement = $("<div>")
             .appendTo(getSwatchContainer(newAction.$element()));
         actionButtonBase = new ActionButtonBase($fabMainElement, {
-            icon: newAction._options.icon || config().floatingActionButtonConfig.icon,
+            icon: newAction._options.icon,
             onClick: newAction._options.onClick,
             actions: [ newAction ]
         });
