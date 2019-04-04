@@ -692,10 +692,7 @@ var RecurrenceEditor = Editor.inherit({
             return date;
         }
 
-        var result = dateUtils.trimTime(date);
-
-        result.setDate(result.getDate() + 1);
-        return new Date(result.getTime() - 1);
+        return dateUtils.setToDayEnd(date);
     },
 
     _renderRepeatUntilEditor: function() {

@@ -431,26 +431,40 @@ QUnit.test("Exception should be thrown if appointment has a broken start date", 
 
 QUnit.test("Default appointment duration should be equal to 30 minutes", function(assert) {
     this.createInstance({
-        currentDate: new Date(2015, 1, 9)
+        currentDate: new Date(2015, 1, 9),
+        dataSource: [{ text: "Appointment 1", startDate: new Date(2015, 1, 9, 8) }]
     });
 
-    var layoutManager = this.instance.getLayoutManager(),
-        items = layoutManager.createAppointmentsMap([{ text: "Appointment 1", startDate: new Date(2015, 1, 9, 8) }]);
-
-    assert.deepEqual(items[0].itemData.endDate, new Date(2015, 1, 9, 8, 30), "End date of appointment is 30 minutes");
+    assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 8, 30), "End date of appointment is 30 minutes");
 });
 
 QUnit.test("Appointment duration should be equal to 30 minutes if end date equal or lower than start date", function(assert) {
-    this.createInstance();
-
-    var layoutManager = this.instance.getLayoutManager(),
-        items = layoutManager.createAppointmentsMap([
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        dataSource: [
             { text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 8) },
             { text: "Appointment 2", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 7) }
-        ]);
+        ]
+    });
 
-    assert.deepEqual(items[0].itemData.endDate, new Date(2015, 1, 9, 8, 30), "End date is correct");
-    assert.deepEqual(items[1].itemData.endDate, new Date(2015, 1, 9, 8, 30), "End date is correct");
+    assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 8, 30), "End date is correct");
+    assert.deepEqual(this.instance.option("dataSource")[1].endDate, new Date(2015, 1, 9, 8, 30), "End date is correct");
+});
+
+QUnit.test("AllDay appointment without endDate shoud be rendered correctly", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        dataSource: [
+            { text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), AllDay: true }
+        ],
+        currentView: "week",
+        allDayExpr: "AllDay",
+        views: ["week"]
+    });
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+
+    assert.equal($appointment.length, 1, "AllDay appointment was rendered");
 });
 
 QUnit.test("Appointment should have right default height", function(assert) {
