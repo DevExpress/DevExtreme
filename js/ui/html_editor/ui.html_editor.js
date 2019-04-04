@@ -199,6 +199,11 @@ const HtmlEditor = Editor.inherit({
             * @type string|function
             * @default "this"
             */
+            /**
+            * @name dxHtmlEditorMentions.template
+            * @type template|function
+            * @default null
+            */
         });
     },
 

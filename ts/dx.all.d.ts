@@ -6707,6 +6707,8 @@ declare module DevExpress.ui {
         searchExpr?: string | Function | Array<string | Function>;
         /** @name dxHtmlEditorMentions.valueExpr */
         valueExpr?: string | Function;
+        /** @name dxHtmlEditorMentions.template */
+        template?: template | ((data: any, container: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxHtmlEditorToolbar */
     export interface dxHtmlEditorToolbar {
