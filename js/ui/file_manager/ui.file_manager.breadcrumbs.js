@@ -116,18 +116,19 @@ class FileManagerBreadcrumbs extends Widget {
     }
 
     _onItemRendered({ itemElement, itemData }) {
-        let cssClass = "";
-
-        if(itemData.isParentItem) {
-            cssClass = FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS;
-        } else if(itemData.isSeparator) {
-            cssClass = FILE_MANAGER_BREADCRUMBS_SEPARATOR_ITEM_CLASS;
-        } else if(itemData.isPathSeparator) {
-            cssClass = FILE_MANAGER_BREADCRUMBS_PATH_SEPARATOR_ITEM_CLASS;
-        }
-
+        const cssClass = this._getItemCssClass(itemData);
         if(cssClass) {
             $(itemElement).addClass(cssClass);
+        }
+    }
+
+    _getItemCssClass({ isParentItem, isSeparator, isPathSeparator }) {
+        if(isParentItem) {
+            return FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS;
+        } else if(isSeparator) {
+            return FILE_MANAGER_BREADCRUMBS_SEPARATOR_ITEM_CLASS;
+        } else if(isPathSeparator) {
+            return FILE_MANAGER_BREADCRUMBS_PATH_SEPARATOR_ITEM_CLASS;
         }
     }
 
