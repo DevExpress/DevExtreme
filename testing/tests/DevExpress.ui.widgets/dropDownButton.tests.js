@@ -79,7 +79,7 @@ QUnit.module("markup", {
 
 QUnit.module("button group integration", {}, () => {
     QUnit.test("element should have buttonGroup inside", (assert) => {
-        const instance = new DropDownButton("#dropDownButton", {});
+        const instance = new DropDownButton("#dropDownButton", { selectionMode: true });
         const buttonGroup = getButtonGroup(instance);
         assert.strictEqual(buttonGroup.NAME, "dxButtonGroup", "buttonGroup rendered");
         assert.strictEqual(buttonGroup.option("selectionMode"), "none", "selection should be disabled");
@@ -474,6 +474,7 @@ QUnit.module("items changing", {
 }, () => {
     QUnit.test("changing of items should load new selected item", (assert) => {
         this.dropDownButton.option({
+            useSelectMode: true,
             selectedItem: { id: 2 }
         });
 
@@ -572,6 +573,7 @@ QUnit.module("deferred datasource", {
     QUnit.test("incomplete selected item should work", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             dataSource: this.dataSourceConfig,
+            useSelectMode: true,
             keyExpr: "id",
             displayExpr: "name",
             selectedItem: { id: 2 }
@@ -584,6 +586,7 @@ QUnit.module("deferred datasource", {
     QUnit.test("select an item via api", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             deferRendering: false,
+            useSelectMode: true,
             keyExpr: "id",
             displayExpr: "text",
             items: [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }]
@@ -669,12 +672,12 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(handler.callCount, 1, "handler was called");
     });
 
-    QUnit.test("onSelectedItemChanged event", (assert) => {
+    QUnit.test("onSelectionChanged event", (assert) => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
             selectedItem: 2,
-            onSelectedItemChanged: handler
+            onSelectionChanged: handler
         });
 
         dropDownButton.open();
@@ -691,7 +694,7 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.selectedItem, 1, "selectedItem is correct");
     });
 
-    QUnit.test("onSelectedItemChanged event with data expressions", (assert) => {
+    QUnit.test("onSelectionChanged event with data expressions", (assert) => {
         const handler = sinon.spy();
         const items = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }];
         const dropDownButton = new DropDownButton("#dropDownButton2", {
@@ -699,7 +702,7 @@ QUnit.module("events", {}, () => {
             keyExpr: "id",
             displayExpr: "text",
             selectedItem: { id: 2 },
-            onSelectedItemChanged: handler
+            onSelectionChanged: handler
         });
 
         dropDownButton.open();
