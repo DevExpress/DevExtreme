@@ -452,6 +452,16 @@ QUnit.test("setViewport position. Scroll to far page", function(assert) {
     }]);
 });
 
+QUnit.test("getVirtualContentSize after far scroll if itemSizes are not equal to virtual item size", function(assert) {
+    var realItemSize = 10;
+    var realItemSizes = Array.from({ length: 20 }, () => realItemSize);
+
+    this.scrollController.setContentSize(realItemSizes);
+    this.scrollController.setViewportPosition(1000);
+    this.scrollController.setContentSize(realItemSizes);
+
+    assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize() - realItemSizes.length) * this.scrollController.viewportItemSize() + 2 * realItemSizes.length * realItemSize);
+});
 
 QUnit.test("setViewport position. Scroll up", function(assert) {
     this.scrollController.setViewportPosition(this.contentSize * 8 + 220);
@@ -481,7 +491,7 @@ QUnit.test("setViewport position. DataSource with too many items", function(asse
 
     this.scrollController.setViewportPosition(CONTENT_HEIGHT_LIMIT / 2);
 
-    assert.roughEqual(this.scrollController.getVirtualContentSize(), CONTENT_HEIGHT_LIMIT + this.contentSize, 1);
+    assert.roughEqual(this.scrollController.getVirtualContentSize(), CONTENT_HEIGHT_LIMIT + this.contentSize, 1.1);
 
     assert.strictEqual(this.scrollController.beginPageIndex(), mockDataSource.pageCount() / 2);
     assert.strictEqual(this.scrollController.endPageIndex(), mockDataSource.pageCount() / 2 + 1);

@@ -5,7 +5,6 @@ import $ from "jquery";
 import VerticalAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical";
 import HorizontalMonthAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month";
 import SchedulerAppointments from "ui/scheduler/ui.scheduler.appointments";
-import { CompactAppointmentsDesktopStrategy } from "ui/scheduler/compact_strategies/compactAppointmentsDesktopStrategy";
 import eventsEngine from "events/core/events_engine";
 import dblclickEvent from "events/dblclick";
 import translator from "animation/translator";
@@ -17,7 +16,6 @@ import { isRenderer } from "core/utils/type";
 import config from "core/config";
 import Draggable from "ui/draggable";
 import Resizable from "ui/resizable";
-import Widget from "ui/widget/ui.widget";
 import fx from "animation/fx";
 import dragEvents from "events/drag";
 import { DataSource } from "data/data_source/data_source";
@@ -72,20 +70,6 @@ var moduleOptions = {
         var subscribes = {
             needCoordinates: function(options) {
                 options.callback(that.getCoordinates.apply(that));
-            },
-            renderDropDownAppointments: function(options) {
-                var $menu = $("<div>").appendTo("#qunit-fixture #scheduler-appointments");
-
-                return CompactAppointmentsDesktopStrategy().render({
-                    $container: $menu,
-                    coordinates: options.coordinates,
-                    items: options.items,
-                    color: options.color,
-                    itemTemplate: options.itemTemplate,
-                    buttonWidth: options.buttonWidth
-                }, new (Widget.inherit({
-                    fire: function() { }
-                }))($("<div>")));
             },
             getAppointmentColor: function(options) {
                 options.callback($.Deferred().resolve("red").promise());

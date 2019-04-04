@@ -307,19 +307,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _clearDropDownItemsElements: function() {
-        var $items = this._getDropDownAppointments();
-        if(!$items.length) {
-            return;
-        }
-
-        each($items, function(_, $item) {
-            $($item).detach();
-            $($item).remove();
-        });
-    },
-
-    _getDropDownAppointments: function() {
-        return this._itemContainer().find(".dx-scheduler-dropdown-appointments");
+        this.invoke("clearCompactAppointments");
     },
 
     _findItemElementByItem: function(item) {
@@ -913,7 +901,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 rtlOffset = buttonWidth;
             }
 
-            this.notifyObserver("renderDropDownAppointments", {
+            this.notifyObserver("renderCompactAppointments", {
                 $container: $container,
                 coordinates: {
                     top: virtualCoordinates.top,

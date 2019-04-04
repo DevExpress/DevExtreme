@@ -1,9 +1,7 @@
 import $ from "jquery";
 import dataCoreUtils from "core/utils/data";
 import typeUtils from "core/utils/type";
-import Widget from "ui/widget/ui.widget";
 import fx from "animation/fx";
-import { CompactAppointmentsDesktopStrategy } from "ui/scheduler/compact_strategies/compactAppointmentsDesktopStrategy";
 import "ui/scheduler/ui.scheduler";
 
 const compileGetter = dataCoreUtils.compileGetter;
@@ -25,7 +23,6 @@ var moduleOptions = {
         this.allDayHeight = 20;
         this.compactAppointmentOffset = 3;
         this.viewStartDate = undefined;
-        this.dropDownAppointments = new CompactAppointmentsDesktopStrategy();
         this.coordinates = [{ top: 0, left: 0 }];
         this.getCoordinates = function() {
             return this.coordinates;
@@ -49,29 +46,18 @@ var moduleOptions = {
                 options.callback(this.maxAppointmentWidth);
             }
 
-            if(command === "renderDropDownAppointments") {
-                var $menu = $("<div>").appendTo("#qunit-fixture #scheduler-appointments");
-
-                return this.dropDownAppointments.render({
-                    $container: $menu,
-                    coordinates: options.coordinates,
-                    items: options.items,
-                    buttonColor: options.buttonColor,
-                    itemTemplate: options.itemTemplate,
-                    buttonWidth: options.buttonWidth
-                }, new (Widget.inherit({
-                    fire: function() { }
-                }))($("<div>")));
-            }
             if(command === "getAppointmentColor") {
                 options.callback($.Deferred().resolve("red").promise());
             }
+
             if(command === "getResourceForPainting") {
                 options.callback({ field: "roomId" });
             }
+
             if(command === "updateAppointmentStartDate") {
                 this.viewStartDate && options.callback(this.viewStartDate);
             }
+
             if(command === "getAppointmentDurationInMs") {
                 options.callback(options.endDate.getTime() - options.startDate.getTime());
             }

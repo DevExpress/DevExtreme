@@ -4927,6 +4927,8 @@ declare module DevExpress.ui {
         refreshMode?: 'full' | 'reshape' | 'repaint';
         /** @name GridBase.Options.editing.selectTextOnEditStart */
         selectTextOnEditStart?: boolean;
+        /** @name GridBase.Options.editing.startEditAction */
+        startEditAction?: 'click' | 'dblClick';
         /** @name GridBase.Options.editing.texts */
         texts?: GridBaseEditingTexts;
         /** @name GridBase.Options.editing.useIcons */
@@ -5431,6 +5433,15 @@ declare module DevExpress.ui {
         /** @name dxAccordionItem.title */
         title?: string;
     }
+    /** @name dxActionButton */
+    export interface dxActionButton {
+        /** @name dxActionButton.location */
+        location?: 'after' | 'before';
+        /** @name dxActionButton.name */
+        name?: string;
+        /** @name dxActionButton.options */
+        options?: dxButtonOptions;
+    }
     /** @name dxActionSheet.Options */
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /** @name dxActionSheet.Options.cancelText */
@@ -5566,6 +5577,8 @@ declare module DevExpress.ui {
         keyExpr?: string | Function;
         /** @name dxButtonGroup.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+        /** @name dxButtonGroup.Options.onItemClick */
+        onItemClick?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
         /** @name dxButtonGroup.Options.selectedItemKeys */
         selectedItemKeys?: Array<any>;
         /** @name dxButtonGroup.Options.selectedItems */
@@ -6087,10 +6100,10 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | any;
-        /** @name dxDropDownButton.Options.updateButtonOnSelection */
-        updateButtonOnSelection?: boolean;
         /** @name dxDropDownButton.Options.showToggleButton */
         showToggleButton?: boolean;
+        /** @name dxDropDownButton.Options.updateButtonOnSelection */
+        updateButtonOnSelection?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
@@ -6638,6 +6651,8 @@ declare module DevExpress.ui {
         placeholder?: string;
         /** @name dxHtmlEditor.Options.resizing */
         resizing?: dxHtmlEditorResizing;
+        /** @name dxHtmlEditor.Options.mentions */
+        mentions?: Array<dxHtmlEditorMentions>;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
@@ -6694,6 +6709,25 @@ declare module DevExpress.ui {
         allowedTargets?: Array<string>;
         /** @name dxHtmlEditorResizing.enabled */
         enabled?: boolean;
+    }
+    /** @name dxHtmlEditorMentions */
+    export interface dxHtmlEditorMentions {
+        /** @name dxHtmlEditorMentions.dataSource */
+        dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxHtmlEditorMentions.marker */
+        marker?: string;
+        /** @name dxHtmlEditorMentions.minSearchLength */
+        minSearchLength?: number;
+        /** @name dxHtmlEditorMentions.searchTimeout */
+        searchTimeout?: number;
+        /** @name dxHtmlEditorMentions.itemTemplate */
+        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxHtmlEditorMentions.searchExpr */
+        searchExpr?: string | Function | Array<string | Function>;
+        /** @name dxHtmlEditorMentions.valueExpr */
+        valueExpr?: string | Function;
+        /** @name dxHtmlEditorMentions.template */
+        template?: template | ((data: any, container: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxHtmlEditorToolbar */
     export interface dxHtmlEditorToolbar {
@@ -8323,7 +8357,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<string>;
+        buttons?: Array<string | dxActionButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */
@@ -8389,6 +8423,8 @@ declare module DevExpress.ui {
         blur(): void;
         /** @name dxTextEditor.focus() */
         focus(): void;
+        /** @name dxTextEditor.getButton(name) */
+        getButton(name: string): any;
     }
     /** @name dxTileView.Options */
     export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
