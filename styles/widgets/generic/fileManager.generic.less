@@ -1,36 +1,36 @@
 .dx-filemanager {
-    border-color: @datagrid-border-color;
+    border-color: @filemanager-border-color;
     
     .dx-filemanager-toolbar {
 
         &.dx-filemanager-file-toolbar,
         &.dx-filemanager-file-toolbar .dx-toolbar {
-            background-color: darken(@base-bg, 3%);
+            background: @filemanager-file-toolbar-bg;
         }
         
         .dx-filemanager-toolbar-separator-item {
-            background-color: @datagrid-border-color;
+            background: @filemanager-border-color;
         }
 
         .dx-texteditor.dx-editor-filled {
-            background-color: transparent;
+            background: transparent;
 
             &.dx-state-hover,
             &.dx-state-active,
             &.dx-state-focused {
-                background-color: fade(@base-text-color, 10%);    
+                background: @filemanager-editor-active-bg;
             }
 
             &.dx-dropdowneditor {
                 border-color: transparent;
 
                 .dx-dropdowneditor-icon {
-                    background-color: transparent;
+                    background: transparent;
                 }
 
                 &.dx-state-hover .dx-dropdowneditor-icon,
                 &.dx-state-active .dx-dropdowneditor-icon {
-                    background-color: transparent;
+                    background: transparent;
                     border-color: transparent;
                 }
             }
@@ -39,45 +39,41 @@
     }
 
     .dx-filemanager-view-separator {
-        background-color: @datagrid-border-color;
+        background: @filemanager-border-color;
     }
 
     .dx-filemanager-container {
-        border-top-color: @datagrid-border-color;
+        border-top-color: @filemanager-border-color;
     }
 
     .dx-filemanager-dirs-tree {
         .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
-            background-color: darken(@base-bg, 8%);
+            background: @filemanager-dirs-tree-item-focus-bg;
             
             & * {
-                color: @base-text-color;
+                color: @filemanager-dirs-tree-item-focus-color;
             }
         }
     }
     
-    .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
-        background-color: lighten(@treeview-focused-bg, 33%);
-    }
-
     .dx-filemanager-breadcrumbs {
-        border-bottom-color: @datagrid-border-color;
+        border-bottom-color: @filemanager-border-color;
 
         .dx-menu-item {
             &.dx-state-focused {
-                background-color: @button-normal-border-color;
-                color: @button-normal-color;
+                background: @filemanager-breadcrumbs-item-focus-bg;
+                color: @filemanager-breadcrumbs-item-focus-color;
             }
         }
         
         .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
-            background-color: @datagrid-border-color;
+            background: @filemanager-border-color;
         }
 
         .dx-filemanager-breadcrumbs-separator-item,
         .dx-filemanager-breadcrumbs-path-separator-item {
             &.dx-state-hover {
-                background-color: transparent;
+                background: transparent;
             }
         }
     }
@@ -85,14 +81,14 @@
     .dx-filemanager-thumbnails {
         &.dx-filemanager-inactive-area .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item.dx-filemanager-item-selected {
             color: @base-text-color;
-            background-color: @base-bg;
+            background: @base-bg;
         }
 
         .dx-filemanager-thumbnails-item {
             
             &.dx-filemanager-item-selected {
-                background-color: @base-accent;
                 color: @base-bg;
+                background: @base-accent;
             }
 
             &.dx-filemanager-item-focused {
@@ -102,7 +98,7 @@
             .dx-filemanager-thumbnails-item-thumbnail {
 
                 &.dx-icon-image {
-                    color: @base-border-color;
+                    color: @filemanager-thumbnails-image-icon-color;
                 }
             }
         }
