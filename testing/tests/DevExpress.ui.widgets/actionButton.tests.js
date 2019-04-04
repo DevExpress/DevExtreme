@@ -30,7 +30,7 @@ QUnit.test("check rendering", function(assert) {
 
     assert.ok($fabElement.length === 1, "one action button created");
     assert.ok($fabElement.hasClass(FAB_MAIN_CLASS), "it is main action button");
-    assert.equal($fabContent.find(".dx-icon-add").length, 1, "default icon created");
+    assert.equal($fabContent.find(".dx-fa-button-icon").length, 1, "icon container created");
     assert.equal($fabContent.find(".dx-icon-close").length, 1, "default close icon created");
 
     this.instance.option("icon", "preferences");
@@ -82,8 +82,8 @@ QUnit.test("check rendering", function(assert) {
     assert.ok($fabMainElement.length === 1, "create one main fab");
     assert.ok($fabElement.length === 3, "create two actions");
 
-    assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is apllyed");
-    assert.equal($fabMainContent.find(".dx-icon-close").length, 1, "default close is apllyed");
+    assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is applied");
+    assert.equal($fabMainContent.find(".dx-icon-close").length, 1, "default close is applied");
 
     assert.equal($($fabContent[1]).find(".dx-icon-arrowdown").length, 1, "first action with arrowdown icon");
     assert.equal($($fabContent[2]).find(".dx-icon-arrowup").length, 1, "second action with arrowup icon");
@@ -113,6 +113,7 @@ QUnit.test("check main fab changes", function(assert) {
     });
 
     $("#fab-one").dxFloatingActionButton();
+    $("#fab-two").dxFloatingActionButton();
 
     const $fabMainElement = $("." + FAB_MAIN_CLASS);
     const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
