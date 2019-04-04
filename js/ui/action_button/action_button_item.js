@@ -6,6 +6,7 @@ import clickEvent from "../../events/click";
 import { getImageContainer } from "../../core/utils/icon";
 import Overlay from "../overlay";
 import inkRipple from "../widget/utils.ink_ripple";
+import themes from "../themes";
 
 const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
@@ -13,8 +14,22 @@ const FAB_ICON_CLASS = "dx-fa-button-icon";
 const ActionButtonItem = Overlay.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            shading: false
+            shading: false,
+            useInkRipple: false
         });
+    },
+
+    _defaultOptionsRules() {
+        return this.callBase().concat([
+            {
+                device() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useInkRipple: true
+                }
+            }
+        ]);
     },
 
     _render() {
@@ -77,6 +92,9 @@ const ActionButtonItem = Overlay.inherit({
                 break;
             case "onClick":
                 this._renderClick();
+                break;
+            case "useInkRipple":
+                this._render();
                 break;
             default:
                 this.callBase(args);

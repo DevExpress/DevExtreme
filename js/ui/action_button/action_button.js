@@ -2,7 +2,6 @@ import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
-import themes from "../themes";
 import { initAction, disposeAction } from "./action_button_base";
 
 const FloatingActionButton = Widget.inherit({
@@ -26,8 +25,6 @@ const FloatingActionButton = Widget.inherit({
             */
 
             onClick: null,
-
-            useInkRipple: false,
 
             /**
             * @name dxFloatingActionButtonOptions.visible
@@ -86,19 +83,6 @@ const FloatingActionButton = Widget.inherit({
         });
     },
 
-    _defaultOptionsRules() {
-        return this.callBase().concat([
-            {
-                device() {
-                    return themes.isMaterial();
-                },
-                options: {
-                    useInkRipple: true
-                }
-            }
-        ]);
-    },
-
     _optionChanged(args) {
         switch(args.name) {
             case "onClick":
@@ -107,9 +91,9 @@ const FloatingActionButton = Widget.inherit({
             case "icon":
                 initAction(this);
                 break;
-            case "useInkRipple":
             case "animation":
             case "id":
+                break;
             default:
                 this.callBase(args);
         }

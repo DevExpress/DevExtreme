@@ -18,10 +18,10 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _actionItems: [],
 
     _getDefaultOptions() {
-        return extend(this.callBase(), {
-            icon: config().floatingActionButtonConfig.icon || "add",
-            closeIcon: config().floatingActionButtonConfig.closeIcon || "close",
-            position: config().floatingActionButtonConfig.position || {
+        const defaultOptions = {
+            icon: "add",
+            closeIcon: "close",
+            position: {
                 at: "right bottom",
                 my: "right bottom",
                 offset: {
@@ -29,14 +29,19 @@ const ActionButtonBase = ActionButtonItem.inherit({
                     y: -16
                 }
             },
-            maxActionButtonCount: config().floatingActionButtonConfig.maxActionButtonCount || 6,
+            maxActionButtonCount: 6,
             actions: [],
             visible: true,
             activeStateEnabled: true,
             hoverStateEnabled: true,
             indent: 56,
             childIndent: 36
-        });
+        };
+
+        return extend(
+            this.callBase(),
+            extend(defaultOptions, config().floatingActionButtonConfig)
+        );
     },
 
     _defaultOptionsRules() {
@@ -56,16 +61,14 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _render() {
         this.$element().addClass(FAB_MAIN_CLASS);
         this.callBase();
-        this._renderIcon();
         this._renderCloseIcon();
-        this._renderInkRipple();
         this._renderClick();
     },
 
     _renderCloseIcon() {
         !!this._$closeIcon && this._$closeIcon.remove();
-        this._$closeIcon = $("<div>").addClass(FAB_CLOSE_ICON_CLASS);
 
+        this._$closeIcon = $("<div>").addClass(FAB_CLOSE_ICON_CLASS);
         const $closeIconElement = getImageContainer(this._options.closeIcon);
 
         this._$closeIcon
