@@ -42,9 +42,7 @@ var environment = {
     },
     setupAxes: function(axesStubs) {
         var axisIndex = 0,
-            originalAxis = axisModule.Axis,
-            originalLegend = legendModule.Legend,
-            originalTitle = titleModule.Title;
+            originalAxis = axisModule.Axis;
 
         this.axisStub = sinon.stub(axisModule, "Axis", function(renderingSettings) {
             var axis = new originalAxis(renderingSettings);
