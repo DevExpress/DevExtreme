@@ -1387,7 +1387,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             isHighlighted = isCellElement($(element));
 
         if(!element) {
-            activeElementSelector = focusedRowEnabled ? ".dx-row[tabindex]" : ".dx-row[tabIndex], .dx-row > td[tabindex]";
+            activeElementSelector = ".dx-datagrid-rowsview .dx-row[tabindex]";
+            if(!focusedRowEnabled) {
+                activeElementSelector += ", .dx-datagrid-rowsview .dx-row > td[tabindex]";
+            }
             element = this.component.$element().find(activeElementSelector).first();
         }
 

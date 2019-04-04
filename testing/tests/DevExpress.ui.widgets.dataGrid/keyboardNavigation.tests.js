@@ -1032,6 +1032,7 @@ function setupModules(that, modulesOptions) {
         },
         editing: { },
         showColumnHeaders: true,
+        useLegacyKeyboardNavigation: false
     });
 
     that.$element = function() {
@@ -2905,7 +2906,7 @@ if(device.deviceType === "desktop") {
 
         // assert
         assert.ok(isRepaintCalled, "repaint called");
-        assert.equal($("td[tabIndex]").length, 1, "cells count with tabIndex");
+        assert.equal($(".dx-datagrid-rowsview td[tabIndex]").length, 1, "cells count with tabIndex");
         assert.equal($("td.dx-focused").length, 0, "no cells with focus");
         assert.ok(!e.isPropagationStopped(), "propagation is not stopped");
     });
@@ -4357,7 +4358,7 @@ QUnit.testInActiveWindow("Group row after render should have tabIndex", function
     this.gridView.render($("#container"));
 
     // assert
-    assert.equal($("#container [tabIndex]").length, 1, "only one element has tabIndex");
+    assert.equal($("#container .dx-datagrid-rowsview [tabIndex]").length, 1, "only one element has tabIndex");
     assert.equal($("#container .dx-group-row").first().attr("tabIndex"), "0", "first group row has tabIndex");
 });
 
@@ -8584,7 +8585,7 @@ QUnit.module("Keyboard navigation accessibility", {
             { name: "Dan3", date: "10/11/2012", room: 3, phone: 888888 }
         ];
         this.columns = this.columns || [
-            { dataField: "name" },
+            { dataField: "name", allowSorting: true, allowFiltering: true },
             { dataField: "date", dataType: "date" },
             {
                 type: "buttons",
@@ -8598,6 +8599,9 @@ QUnit.module("Keyboard navigation accessibility", {
         ];
         this.options = $.extend(true, {
             useKeyboard: true,
+            keyboardNavigation: {
+                dataCellsOnly: false
+            },
             commonColumnSettings: {
                 allowEditing: true
             },
@@ -8608,11 +8612,15 @@ QUnit.module("Keyboard navigation accessibility", {
                 allowUpdating: true,
                 allowAdding: true,
                 allowDeleting: true
+            },
+            showColumnHeaders: true,
+            sorting: {
+                mode: "single"
             }
         }, this.options);
 
         setupDataGridModules(this,
-            ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
+            ["data", "columns", "columnHeaders", "sorting", "headerFilter", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
             { initViews: true }
         );
     },
@@ -8661,5 +8669,81 @@ QUnit.module("Keyboard navigation accessibility", {
 
         this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 2)));
         this.clock.tick();
+    });
+
+    testInDesktop("Enter, Space key down by header cell", function(assert) {
+        var keyDownFiresCount = 0;
+        // arrange
+        this.options = {
+            onKeyDown: () => ++keyDownFiresCount
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        var $firstCell = $(this.$element()).find(".dx-header-row td").eq(0);
+        $firstCell.focus();
+        this.clock.tick();
+
+        // assert
+        assert.notOk(this.getController("data").getDataSource().sort(), "Sorting");
+
+        // act
+        fireKeyDown($firstCell, "Enter");
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: false }], "Sorting");
+        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+
+        // act
+        fireKeyDown($firstCell, " ");
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: true }], "Sorting");
+        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    });
+
+    testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
+        var $firstCell,
+            $headerFilterCell,
+            keyDownFiresCount = 0,
+            headerFilterShownCount = 0;
+
+        // arrange
+        this.options = {
+            onKeyDown: () => ++keyDownFiresCount,
+            headerFilter: {
+                visible: true
+            }
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.getView("headerFilterView").showHeaderFilterMenu = ($columnElement, options) => {
+            assert.equal(options.column.dataField, "name");
+            ++headerFilterShownCount;
+        };
+
+        // arrange
+        $firstCell = $(this.$element()).find(".dx-header-row td").eq(0);
+        $headerFilterCell = $firstCell.find(".dx-header-filter");
+
+        // act
+        $headerFilterCell.focus();
+        fireKeyDown($headerFilterCell, "Enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(headerFilterShownCount, 1, "headerFilterShownCount");
+        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+
+        // act
+        fireKeyDown($headerFilterCell, " ");
+        this.clock.tick();
+
+        // assert
+        assert.equal(headerFilterShownCount, 2, "headerFilterShownCount");
+        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
     });
 });
