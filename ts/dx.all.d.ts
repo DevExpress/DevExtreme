@@ -6621,8 +6621,8 @@ declare module DevExpress.ui {
         onFocusOut?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name dxHtmlEditor.Options.placeholder */
         placeholder?: string;
-        /** @name dxHtmlEditor.Options.resizing */
-        resizing?: dxHtmlEditorResizing;
+        /** @name dxHtmlEditor.Options.mediaResizing */
+        mediaResizing?: dxHtmlEditorMediaResizing;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
@@ -6673,11 +6673,11 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.undo() */
         undo(): void;
     }
-    /** @name dxHtmlEditorResizing */
-    export interface dxHtmlEditorResizing {
-        /** @name dxHtmlEditorResizing.allowedTargets */
+    /** @name dxHtmlEditorMediaResizing */
+    export interface dxHtmlEditorMediaResizing {
+        /** @name dxHtmlEditorMediaResizing.allowedTargets */
         allowedTargets?: Array<string>;
-        /** @name dxHtmlEditorResizing.enabled */
+        /** @name dxHtmlEditorMediaResizing.enabled */
         enabled?: boolean;
     }
     /** @name dxHtmlEditorToolbar */

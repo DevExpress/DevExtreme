@@ -84,11 +84,11 @@ const HtmlEditor = Editor.inherit({
             variables: null,
 
             /**
-            * @name dxHtmlEditorOptions.resizing
-            * @type dxHtmlEditorResizing
+            * @name dxHtmlEditorOptions.mediaResizing
+            * @type dxHtmlEditorMediaResizing
             * @default null
             */
-            resizing: null,
+            mediaResizing: null,
             mentions: null,
             /**
              * @name dxHtmlEditorOptions.customize
@@ -146,16 +146,16 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxHtmlEditorResizing
+            * @name dxHtmlEditorMediaResizing
             * @type object
             */
             /**
-            * @name dxHtmlEditorResizing.enabled
+            * @name dxHtmlEditorMediaResizing.enabled
             * @type boolean
             * @default false
             */
             /**
-            * @name dxHtmlEditorResizing.allowedTargets
+            * @name dxHtmlEditorMediaResizing.allowedTargets
             * @type Array<string>
             * @default ["images"]
             */
