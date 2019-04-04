@@ -92,7 +92,7 @@ const HtmlEditor = Editor.inherit({
 
             /**
             * @name dxHtmlEditorOptions.mentions
-            * @type dxHtmlEditorMentions
+            * @type Array<dxHtmlEditorMentions>
             * @default null
             */
             mentions: null,
