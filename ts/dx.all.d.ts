@@ -4920,6 +4920,8 @@ declare module DevExpress.ui {
         refreshMode?: 'full' | 'reshape' | 'repaint';
         /** @name GridBase.Options.editing.selectTextOnEditStart */
         selectTextOnEditStart?: boolean;
+        /** @name GridBase.Options.editing.startEditAction */
+        startEditAction?: 'click' | 'dblClick';
         /** @name GridBase.Options.editing.texts */
         texts?: GridBaseEditingTexts;
         /** @name GridBase.Options.editing.useIcons */
