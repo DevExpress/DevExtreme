@@ -146,6 +146,7 @@
                     "odata",      // OData
                     "rtl",        // Right-to-Left
                     "scss",
+                    "semver",     // The semantic versioner for npm 
                     "sinon",      // JS library
                     "tspan",      // SVG element
                     "tspans",
@@ -294,6 +295,7 @@
                     "getters",
                     "gregorian",
                     "guid",
+                    "gte",
                     "hideable",
                     "historyless",
                     "hor",
