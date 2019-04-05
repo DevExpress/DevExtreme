@@ -5,8 +5,7 @@ var _Number = Number,
     parseHorizontalAlignment = require("./utils").enumParser(["left", "center", "right"]),
     parseVerticalAlignment = require("./utils").enumParser(["top", "bottom"]),
 
-    DEFAULT_MARGIN = 10,
-    DEFAULT_GAP = 4;
+    DEFAULT_MARGIN = 10;
 
 function hasText(text) {
     return !!(text && String(text).length > 0);
@@ -99,7 +98,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
         titleElement.attr({ text: testText, y: 0 }).css(_patchFontOptions(options.font));
         titleBox = titleElement.getBBox(); // for multiline text
-        that._titleTextY = titleBox.height + titleBox.y;
+        that._baseLineCorrection = titleBox.height + titleBox.y;
 
         titleElement.attr({ text: options.text });
         titleBox = titleElement.getBBox();
@@ -116,7 +115,9 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         const that = this;
         const titleBox = that._titleElement.getBBox();
         const element = that._subtitleElement;
-        element.move(0, titleBox.y + titleBox.height - element.getBBox().y - DEFAULT_GAP);
+        const offset = that._options.subtitle.offset;
+
+        element.move(0, titleBox.y + titleBox.height - element.getBBox().y - offset);
     },
 
     _updateBoundingRectAlignment: function() {
@@ -227,10 +228,10 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
         box = that._group.getBBox();
 
-        box.height += margin.top + margin.bottom - that._titleTextY;
+        box.height += margin.top + margin.bottom - that._baseLineCorrection;
         box.width += margin.left + margin.right;
         box.x -= margin.left;
-        box.y += that._titleTextY - margin.top;
+        box.y += that._baseLineCorrection - margin.top;
 
         if(options.placeholderSize > 0) {
             box.height = options.placeholderSize;
