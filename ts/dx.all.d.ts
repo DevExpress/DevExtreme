@@ -6641,7 +6641,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.Options.resizing */
         resizing?: dxHtmlEditorResizing;
         /** @name dxHtmlEditor.Options.mentions */
-        mentions?: Array<dxHtmlEditorMentions>;
+        mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
@@ -6699,21 +6699,21 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorResizing.enabled */
         enabled?: boolean;
     }
-    /** @name dxHtmlEditorMentions */
-    export interface dxHtmlEditorMentions {
-        /** @name dxHtmlEditorMentions.dataSource */
+    /** @name dxHtmlEditorMention */
+    export interface dxHtmlEditorMention {
+        /** @name dxHtmlEditorMention.dataSource */
         dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
-        /** @name dxHtmlEditorMentions.marker */
+        /** @name dxHtmlEditorMention.marker */
         marker?: string;
-        /** @name dxHtmlEditorMentions.minSearchLength */
+        /** @name dxHtmlEditorMention.minSearchLength */
         minSearchLength?: number;
-        /** @name dxHtmlEditorMentions.searchTimeout */
+        /** @name dxHtmlEditorMention.searchTimeout */
         searchTimeout?: number;
-        /** @name dxHtmlEditorMentions.itemTemplate */
+        /** @name dxHtmlEditorMention.itemTemplate */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxHtmlEditorMentions.searchExpr */
+        /** @name dxHtmlEditorMention.searchExpr */
         searchExpr?: string | Function | Array<string | Function>;
-        /** @name dxHtmlEditorMentions.valueExpr */
+        /** @name dxHtmlEditorMention.valueExpr */
         valueExpr?: string | Function;
         /** @name dxHtmlEditorMentions.template */
         template?: template | ((data: any, container: DevExpress.core.dxElement) => string | Element | JQuery);
