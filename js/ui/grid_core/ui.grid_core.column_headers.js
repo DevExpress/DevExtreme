@@ -22,7 +22,8 @@ var CELL_CONTENT_CLASS = "text-content",
     SORT_INDICATOR_CLASS = "dx-sort-indicator",
     HEADER_FILTER_CLASS_SELECTOR = ".dx-header-filter",
     HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator",
-    MULTI_ROW_HEADER_CLASS = "dx-header-multi-row";
+    MULTI_ROW_HEADER_CLASS = "dx-header-multi-row",
+    OUTLINE_CLASS = "dx-outline";
 
 module.exports = {
     defaultOptions: function() {
@@ -97,27 +98,27 @@ module.exports = {
                         keyName = normalizeKeyName(event),
                         blurHandler = e => {
                             this._lastActionElement = e.relatedTarget;
+                            $(e.relatedTarget).addClass(OUTLINE_CLASS);
+                            $target.removeClass(OUTLINE_CLASS);
                             eventsEngine.off($target, "blur", blurHandler);
                         },
                         keyboardController = this.getController("keyboardNavigation");
 
                     keyboardController && keyboardController.executeAction("onKeyDown", args);
-                    if(args.handled) {
-                        return;
-                    }
+                    if(!args.handled) {
+                        switch(keyName) {
+                            case "enter":
+                            case "space":
+                                this._handleActionKeyDown(event);
+                                break;
 
-                    switch(keyName) {
-                        case "enter":
-                        case "space":
-                            this._handleActionKeyDown(event);
-                            break;
+                            case "tab":
+                                eventsEngine.on($target, "blur", blurHandler);
+                                break;
 
-                        case "tab":
-                            eventsEngine.on($target, "blur", blurHandler);
-                            break;
-
-                        default:
-                            break;
+                            default:
+                                break;
+                        }
                     }
                 },
 
@@ -201,7 +202,9 @@ module.exports = {
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
                         if(!this._isLegacyKeyboardNavigation()) {
-                            $cell.attr("tabindex", this.option("tabindex") || 0);
+                            if(options.column && (!options.column.type || options.column.type === "selection")) {
+                                $cell.attr("tabindex", this.option("tabindex") || 0);
+                            }
                         }
                     }
 
@@ -272,8 +275,11 @@ module.exports = {
                             if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
                                 $(this._lastActionElement).trigger("focus");
                                 this._lastActionElement = null;
+                            } else {
+                                $(e.target).addClass(OUTLINE_CLASS);
                             }
                         });
+                        eventsEngine.on($firstCell, "blur", e => $(e.target).removeClass(OUTLINE_CLASS));
                     }
                 },
 
