@@ -711,9 +711,13 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        var cellHeight = this.instance.fire("getCellHeight");
+        if(this.instance.fire("isAdaptive")) {
+            return 0;
+        } else {
+            var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+            return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+        }
     },
 
     _getAppointmentMinCount: function() {
