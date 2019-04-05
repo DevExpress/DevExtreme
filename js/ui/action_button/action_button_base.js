@@ -2,9 +2,6 @@ import $ from "../../core/renderer";
 import config from "../../core/config";
 import { extend } from "../../core/utils/extend";
 import eventsEngine from "../../events/core/events_engine";
-import { addNamespace } from "../../events/utils";
-import clickEvent from "../../events/click";
-import { getImageContainer } from "../../core/utils/icon";
 import { getSwatchContainer } from "../widget/swatch_container";
 import ActionButtonItem from "./action_button_item";
 import themes from "../themes";
@@ -66,27 +63,18 @@ const ActionButtonBase = ActionButtonItem.inherit({
     },
 
     _renderCloseIcon() {
-        !!this._$closeIcon && this._$closeIcon.remove();
-
-        this._$closeIcon = $("<div>").addClass(FAB_CLOSE_ICON_CLASS);
-        const $closeIconElement = getImageContainer(this._options.closeIcon);
-
-        this._$closeIcon
-            .append($closeIconElement)
-            .appendTo(this.$content());
+        this._$closeIcon = this._renderButtonIcon(
+            this._$closeIcon,
+            this._options.closeIcon,
+            FAB_CLOSE_ICON_CLASS);
     },
 
     _renderClick() {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
-
         this._clickAction = this.option("actions").length === 1 ?
             this._createActionByOption("onClick") :
             this._createAction(this._clickHandler);
 
-        eventsEngine.off(this.$element().find(".dx-overlay-content"), eventName);
-        eventsEngine.on(this.$element().find(".dx-overlay-content"), eventName, (e) => {
-            this._clickAction({ event: e });
-        });
+        this._setClickAction();
     },
 
     _clickHandler() {
@@ -184,13 +172,17 @@ exports.initAction = function(newAction) {
 
         if(!isActionExist) {
             savedActions.push(newAction);
-            actionButtonBase.option("actions", savedActions);
-            actionButtonBase.option("icon", config().floatingActionButtonConfig.icon);
+            actionButtonBase.option({
+                actions: savedActions,
+                icon: actionButtonBase._getDefaultOptions().icon
+            });
         } else if(savedActions.length === 1) {
-            actionButtonBase.option("icon", newAction._options.icon);
-            actionButtonBase.option("onClick", newAction._options.onClick);
+            actionButtonBase.option({
+                onClick: newAction._options.onClick,
+                icon: newAction._options.icon
+            });
         } else {
-            actionButtonBase.option("actions", savedActions);
+            actionButtonBase.option({ actions: savedActions });
         }
     }
 };
@@ -208,6 +200,6 @@ exports.disposeAction = function(actionId) {
         savedActions = savedActions.filter(action => {
             return action._options.id !== actionId;
         });
-        actionButtonBase.option("actions", savedActions);
+        actionButtonBase.option({ actions: savedActions });
     }
 };

@@ -10,6 +10,7 @@ import themes from "../themes";
 
 const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
+const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
 const ActionButtonItem = Overlay.inherit({
     _getDefaultOptions() {
@@ -40,26 +41,39 @@ const ActionButtonItem = Overlay.inherit({
         this._renderClick();
     },
 
-    _renderIcon() {
-        !!this._$icon && this._$icon.remove();
+    _renderButtonIcon($element, icon, iconClass) {
+        !!$element && $element.remove();
 
-        this._$icon = $("<div>").addClass(FAB_ICON_CLASS);
-        const $iconElement = getImageContainer(this._options.icon);
+        $element = $("<div>").addClass(iconClass);
+        const $iconElement = getImageContainer(icon);
 
-        this._$icon
+        $element
             .append($iconElement)
             .appendTo(this.$content());
+
+        return $element;
+    },
+
+    _renderIcon() {
+        this._$icon = this._renderButtonIcon(
+            this._$icon,
+            this._options.icon,
+            FAB_ICON_CLASS);
+    },
+
+    _setClickAction() {
+        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const overlayContent = this.$element().find(OVERLAY_CONTENT_SELECTOR);
+
+        eventsEngine.off(overlayContent, eventName);
+        eventsEngine.on(overlayContent, eventName, (e) => {
+            this._clickAction({ event: e });
+        });
     },
 
     _renderClick() {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
-
         this._clickAction = this._createActionByOption("onClick");
-
-        eventsEngine.off(this.$element().find(".dx-overlay-content"), eventName);
-        eventsEngine.on(this.$element().find(".dx-overlay-content"), eventName, (e) => {
-            this._clickAction({ event: e });
-        });
+        this._setClickAction();
     },
 
     _renderInkRipple() {
