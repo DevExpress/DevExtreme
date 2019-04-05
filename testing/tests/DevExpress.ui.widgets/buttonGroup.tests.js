@@ -2,6 +2,8 @@ import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
 import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
@@ -185,6 +187,90 @@ QUnit.module("option changed", {
         assert.equal(buttons[1].option("stylingMode"), "text", "second button");
     });
 });
+
+
+QUnit.module("Events", () => {
+
+    class ButtonGroupEventsTestHelper {
+        constructor(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
+            this.handler = sinon.spy();
+            this.eventName = eventName;
+            this.isItemClickInInitialOption = isItemClickInInitialOption;
+            this.isDisabled = isDisabled;
+            this.isItemDisabled = isItemDisabled;
+            this.isKeyboardEvent = this.eventName === "space" || this.eventName === "enter";
+        }
+
+        createButtonGroup() {
+            if(this.isItemClickInInitialOption) {
+                this.buttonGroup = $("#widget").dxButtonGroup({
+                    items: [{ text: "item1", disabled: this.isItemDisabled, custom: 1 }],
+                    disabled: this.isDisabled,
+                    onItemClick: this.handler
+                }).dxButtonGroup("instance");
+            } else {
+                this.buttonGroup = $("#widget").dxButtonGroup({
+                    items: [{ text: "item1", disabled: this.isItemDisabled, custom: 1 }],
+                    disabled: this.isDisabled
+                }).dxButtonGroup("instance");
+
+                this.buttonGroup.option("onItemClick", this.handler);
+            }
+        }
+
+        _getButtonGroupItem() {
+            return this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(0);
+        }
+
+        performAction() {
+            if(this.eventName === "click") {
+                eventsEngine.trigger(this._getButtonGroupItem(0), "dxclick");
+            } else if(this.eventName === "touch") {
+                pointerMock(this._getButtonGroupItem(0))
+                    .start("touch")
+                    .down()
+                    .up();
+            } else {
+                if(!this.isDisabled) keyboardMock(this.buttonGroup.$element()).press(this.eventName);
+            }
+        }
+
+        checkAsserts(assert) {
+            if((this.isDisabled || this.isItemDisabled)) {
+                assert.equal(this.handler.callCount, 0, "handler.callCount");
+            } else {
+                assert.strictEqual(this.handler.callCount, 1, "handler.callCount");
+
+                const e = this.handler.getCall(0).args[0];
+                assert.strictEqual(Object.keys(e).length, 6, "Object.keys(e).length");
+                assert.strictEqual(e.component, this.buttonGroup, "e.component");
+                assert.strictEqual(e.element, this.buttonGroup.element(), "element is correct");
+                assert.strictEqual(e.event.type, this.isKeyboardEvent ? "keydown" : "dxclick", "e.event.type");
+                assert.deepEqual(e.itemData, { text: `item1`, disabled: this.isItemDisabled, custom: 1 }, "e.itemData");
+                assert.strictEqual(e.itemIndex, 0, "e.itemIndex");
+                assert.strictEqual($(e.itemElement).get(0), this._getButtonGroupItem(0).get(0), `$(e.itemElement).get(0)`);
+            }
+        }
+    }
+
+    [true, false].forEach((isDisabled) => {
+        [true, false].forEach((isItemDisabled) => {
+            [true, false].forEach((isItemClickInInitialOption) => {
+                ["click", "touch", "space", "enter"].forEach((eventName) => {
+                    let config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ``}`;
+
+                    QUnit.test("Check onItemClick for" + config, (assert) => {
+                        let helper = new ButtonGroupEventsTestHelper(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
+                        helper.createButtonGroup();
+                        helper.performAction();
+                        helper.checkAsserts(assert);
+                    });
+                });
+            });
+        });
+    });
+});
+
 
 QUnit.module("selection", () => {
     QUnit.test("change selection in the single by click", function(assert) {

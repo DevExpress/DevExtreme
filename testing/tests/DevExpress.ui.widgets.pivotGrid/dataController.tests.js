@@ -4379,10 +4379,14 @@ QUnit.test("Calculate virtual content params", function(assert) {
     columnsScrollController.getViewportPosition.returns(400);
     rowsScrollController.getViewportPosition.returns(500);
 
+    var itemWidths = [100, 100, 100, 100, 100, 100];
+    var itemHeights = [100, 100, 100, 100, 100, 100, 100, 100];
     // act
     var result = dataController.calculateVirtualContentParams({
-        contentWidth: 600,
-        contentHeight: 800,
+        virtualRowHeight: 40,
+        virtualColumnWidth: 15,
+        itemWidths: itemWidths,
+        itemHeights: itemHeights,
         rowCount: 20,
         columnCount: 40,
         viewportWidth: 300,
@@ -4390,16 +4394,16 @@ QUnit.test("Calculate virtual content params", function(assert) {
     });
 
     // assert
-    assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 3);
-    assert.strictEqual(rowsScrollController.viewportItemSize.secondCall.args[0], 40);
-    assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 3);
-    assert.strictEqual(columnsScrollController.viewportItemSize.secondCall.args[0], 15);
+    assert.strictEqual(rowsScrollController.viewportItemSize.callCount, 2);
+    assert.strictEqual(rowsScrollController.viewportItemSize.firstCall.args[0], 40);
+    assert.strictEqual(columnsScrollController.viewportItemSize.callCount, 2);
+    assert.strictEqual(columnsScrollController.viewportItemSize.firstCall.args[0], 15);
 
     assert.strictEqual(columnsScrollController.viewportSize.lastCall.args[0], 15);
-    assert.strictEqual(columnsScrollController.setContentSize.lastCall.args[0], 600);
+    assert.strictEqual(columnsScrollController.setContentSize.lastCall.args[0], itemWidths);
 
     assert.strictEqual(rowsScrollController.viewportSize.lastCall.args[0], 10);
-    assert.strictEqual(rowsScrollController.setContentSize.lastCall.args[0], 800);
+    assert.strictEqual(rowsScrollController.setContentSize.lastCall.args[0], itemHeights);
 
     assert.strictEqual(rowsScrollController.loadIfNeed.callCount, 1);
     assert.strictEqual(columnsScrollController.loadIfNeed.callCount, 1);
@@ -4416,12 +4420,9 @@ QUnit.test("Calculate virtual content params", function(assert) {
 
     assert.ok(scrollChanged.calledOnce);
     assert.deepEqual(scrollChanged.lastCall.args[0], {
-        left: 300,
-        top: 1000
+        left: 400,
+        top: 500
     });
-
-    assert.strictEqual(columnsScrollController.setViewportPosition.lastCall.args[0], 300);
-    assert.strictEqual(rowsScrollController.setViewportPosition.lastCall.args[0], 1000);
 });
 
 QUnit.test("setViewPortPosition", function(assert) {

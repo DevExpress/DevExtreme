@@ -21,6 +21,7 @@ exports.XmlaStore = Class.inherit((function() {
         mdx = "SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS",
         mdxFilterSelect = "(SELECT {0} FROM {1})",
         mdxSubset = "Subset({0}, {1}, {2})",
+        mdxOrder = "Order({0}, {1}, {2})",
         mdxWith = "{0} {1} as {2}",
         mdxSlice = "WHERE ({0})",
         mdxNonEmpty = "NonEmpty({0}, {1})",
@@ -99,7 +100,15 @@ exports.XmlaStore = Class.inherit((function() {
     }
 
     function getAllMembers(field) {
-        return field.dataField + ".allMembers";
+        var result = field.dataField + ".allMembers",
+            searchValue = field.searchValue;
+
+        if(searchValue) {
+            searchValue = searchValue.replace(/'/g, "''");
+            result = "Filter(" + result + ", instr(" + field.dataField + ".currentmember.member_caption,'" + searchValue + "') > 0)";
+        }
+
+        return result;
     }
 
     function crossJoinElements(elements) {
@@ -112,7 +121,7 @@ exports.XmlaStore = Class.inherit((function() {
         return elements.length > 1 ? "Union(" + elementsString + ")" : elementsString;
     }
 
-    function generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName) {
+    function generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName, take) {
         var crossJoinArgs = [],
             dimensions = options[axisName],
             dataField,
@@ -184,6 +193,10 @@ exports.XmlaStore = Class.inherit((function() {
             }
             if(arg) {
                 arg = stringFormat(mdxSet, arg);
+                if(take) {
+                    var sortBy = (field.hierarchyName || field.dataField) + (field.sortBy === "displayText" ? ".MEMBER_CAPTION" : ".MEMBER_VALUE");
+                    arg = stringFormat(mdxOrder, arg, sortBy, field.sortOrder === "desc" ? "DESC" : "ASC");
+                }
                 crossJoinArgs.push(arg);
             }
         }
@@ -191,7 +204,7 @@ exports.XmlaStore = Class.inherit((function() {
         return crossJoinElements(crossJoinArgs);
     }
 
-    function fillCrossJoins(crossJoins, path, expandLevel, expandIndex, slicePath, options, axisName, cellsString) {
+    function fillCrossJoins(crossJoins, path, expandLevel, expandIndex, slicePath, options, axisName, cellsString, take) {
         var expandAllCount = -1,
             dimensions = options[axisName],
             dimensionIndex;
@@ -199,7 +212,7 @@ exports.XmlaStore = Class.inherit((function() {
         do {
             expandAllCount++;
             dimensionIndex = path.length + expandAllCount + expandIndex;
-            crossJoins.push(stringFormat(mdxNonEmpty, generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName), cellsString));
+            crossJoins.push(stringFormat(mdxNonEmpty, generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName, take), cellsString));
         } while(dimensions[dimensionIndex] && dimensions[dimensionIndex + 1] && dimensions[dimensionIndex].expanded);
     }
 
@@ -230,7 +243,7 @@ exports.XmlaStore = Class.inherit((function() {
             }
             expandLevel = pivotGridUtils.getExpandedLevel(options, axisName);
 
-            fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString);
+            fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString, axisName === "rows" ? options.rowTake : options.columnTake);
             each(expandedPaths, function(_, expandedPath) {
                 fillCrossJoins(crossJoins, expandedPath, expandLevel, expandIndex, expandedPath, options, axisName, cellsString);
             });
@@ -249,7 +262,7 @@ exports.XmlaStore = Class.inherit((function() {
                 expression = stringFormat(mdxSubset, expression, options.rowSkip > 0 ? options.rowSkip + 1 : 0, options.rowSkip > 0 ? options.rowTake : options.rowTake + 1);
             }
             if(axisName === "columns" && options.columnTake) {
-                expression = stringFormat(mdxSubset, expression, options.columnSkip > 0 ? options.columnSkip + 1 : 0, options.columnTake > 0 ? options.columnTake : options.columnTake + 1);
+                expression = stringFormat(mdxSubset, expression, options.columnSkip > 0 ? options.columnSkip + 1 : 0, options.columnSkip > 0 ? options.columnTake : options.columnTake + 1);
             }
 
             const axisSet = `[DX_${axisName}]`;
@@ -849,15 +862,15 @@ exports.XmlaStore = Class.inherit((function() {
         }
         const cells = parseCells(totalCountXml, [[{}], [{}, {}]], 1);
         if(!columnOptions.length && rowOptions.length) {
-            data.rowCount = cells[0][0][0] - 1;
+            data.rowCount = Math.max(cells[0][0][0] - 1, 0);
         }
         if(!rowOptions.length && columnOptions.length) {
-            data.columnCount = cells[0][0][0] - 1;
+            data.columnCount = Math.max(cells[0][0][0] - 1, 0);
         }
 
         if(rowOptions.length && columnOptions.length) {
-            data.rowCount = cells[0][0][0] - 1;
-            data.columnCount = cells[1][0][0] - 1;
+            data.rowCount = Math.max(cells[0][0][0] - 1, 0);
+            data.columnCount = Math.max(cells[1][0][0] - 1, 0);
         }
         if(data.rowCount !== undefined && options.rowTake) {
             data.rows = [...Array(options.rowSkip)].concat(data.rows);

@@ -2,6 +2,17 @@
 @DROPDOWNEDITOR_INVALID_BADGE_OFFSET: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 3px;
 
 .dx-dropdowneditor {
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+            padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH;
+            padding-right: 0;
+        }
+    }
+
     &.dx-dropdowneditor-active,
     &.dx-state-disabled {
         .dx-dropdowneditor-icon {
