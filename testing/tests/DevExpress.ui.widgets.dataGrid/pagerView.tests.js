@@ -17,6 +17,7 @@ import "ui/data_grid/ui.data_grid";
 import $ from "jquery";
 import { setupDataGridModules, MockDataController } from "../../helpers/dataGridMocks.js";
 import dataUtils from "core/element_data";
+import eventUtils from "events/utils";
 
 import Pager from "ui/pager";
 
@@ -667,4 +668,59 @@ QUnit.test("Pager should be visible when set the pageSize equal to totalCount", 
     assert.ok(this.pagerView._isVisible, "pager visible");
     assert.strictEqual(this.pagerView._invalidate.callCount, 0, "render not execute");
     this.pagerView._invalidate.restore();
+});
+
+QUnit.test("Key down Enter, Space key by page index element", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        $pageElement;
+
+    this.options.pager.allowedPageSizes = [2, 4, 6];
+    this.dataControllerOptions = {
+        pageSize: 4,
+        pageCount: 2,
+        pageIndex: 0,
+        totalCount: 6
+    };
+    this.pagerView.render($testElement);
+
+    // act
+    $pageElement = $(this.pagerView.element().find(".dx-pages .dx-page").eq(2)).focus();
+    $pageElement.trigger(eventUtils.createEvent("keydown", { target: $pageElement.get(0), key: "Enter" }));
+
+    // assert
+    assert.equal(this.pagerView.element().dxPager("instance").selectedPage.index, 2, "Selected page index");
+
+    // act
+    $pageElement = $(this.pagerView.element().find(".dx-pages .dx-page").eq(3)).focus();
+    $pageElement.trigger(eventUtils.createEvent("keydown", { target: $pageElement.get(0), key: " " }));
+
+    // assert
+    assert.equal(this.pagerView.element().dxPager("instance").selectedPage.index, 3, "Selected page index");
+});
+
+QUnit.test("Key down Enter, Space key by page size element", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        $pageElement,
+        pager;
+
+    this.options.pager.allowedPageSizes = [2, 4, 6];
+    this.dataControllerOptions = {
+        pageSize: 4,
+        pageCount: 2,
+        pageIndex: 0,
+        totalCount: 6
+    };
+    this.pagerView.render($testElement);
+
+    pager = this.pagerView.element().dxPager("instance");
+    sinon.spy(pager, "_renderPageSizes");
+
+    // act
+    $pageElement = $(this.pagerView.element().find(".dx-page-sizes .dx-page-size").eq(1)).focus();
+    $pageElement.trigger(eventUtils.createEvent("keydown", { target: $pageElement.get(0), key: "Enter" }));
+
+    // assert
+    assert.equal(pager._renderPageSizes.callCount, 1, "Selected page index");
 });

@@ -92,7 +92,7 @@ const HtmlEditor = Editor.inherit({
 
             /**
             * @name dxHtmlEditorOptions.mentions
-            * @type dxHtmlEditorMentions
+            * @type Array<dxHtmlEditorMention>
             * @default null
             */
             mentions: null,
@@ -161,41 +161,41 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxHtmlEditorMentions
+            * @name dxHtmlEditorMention
             * @type object
             */
             /**
-            * @name dxHtmlEditorMentions.dataSource
+            * @name dxHtmlEditorMention.dataSource
             * @type Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**
-            * @name dxHtmlEditorMentions.marker
+            * @name dxHtmlEditorMention.marker
             * @type string
             * @default "@"
             */
             /**
-            * @name dxHtmlEditorMentions.minSearchLength
+            * @name dxHtmlEditorMention.minSearchLength
             * @type number
             * @default 0
             */
             /**
-            * @name dxHtmlEditorMentions.searchTimeout
+            * @name dxHtmlEditorMention.searchTimeout
             * @type number
             * @default 500
             */
             /**
-            * @name dxHtmlEditorMentions.itemTemplate
+            * @name dxHtmlEditorMention.itemTemplate
             * @type template|function
             * @default "item"
             */
             /**
-            * @name dxHtmlEditorMentions.searchExpr
+            * @name dxHtmlEditorMention.searchExpr
             * @type getter|Array<getter>
             * @default "this"
             */
             /**
-            * @name dxHtmlEditorMentions.valueExpr
+            * @name dxHtmlEditorMention.valueExpr
             * @type string|function
             * @default "this"
             */

@@ -12,6 +12,7 @@ class DiagramToolbox extends Widget {
         this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
     }
     _initMarkup() {
+        super._initMarkup();
         this.$element().addClass(DIAGRAM_TOOLBOX_CLASS);
         const $accordion = $("<div>")
             .appendTo(this.$element());

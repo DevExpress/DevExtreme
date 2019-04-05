@@ -57,6 +57,7 @@ const LIST_ITEM_SELECTOR = ".dx-list-item";
 const DATEBOX_ADAPTIVITY_MODE_CLASS = "dx-datebox-adaptivity-mode";
 const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 const STATE_FOCUSED_CLASS = "dx-state-focused";
+const BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
 const widgetName = "dxDateBox";
 
 const getShortDate = date => {
@@ -1361,6 +1362,22 @@ QUnit.module("widget sizing render", {}, () => {
         $parent.css("transform", "scale(1)");
 
         assert.equal(component.$element().outerWidth(), initialWidth, "component has correct width");
+    });
+
+    QUnit.test("component width calculation should consider buttons containers element", assert => {
+        const $parent = $("#parent-div");
+        $parent.css("width", 200);
+
+        const $element = $("#dateBox").appendTo($parent);
+        const component = $("#dateBox").dxDateBox({
+            width: undefined,
+            showDropDownButton: false
+        }).dxDateBox("instance");
+        const initialWidth = $element.outerWidth();
+        const instance = $element.dxDateBox("instance");
+
+        instance.option("showDropDownButton", true);
+        assert.strictEqual(component.$element().outerWidth(), initialWidth + $(`.${BUTTONS_CONTAINER_CLASS}`).width());
     });
 
     QUnit.test("change width", assert => {

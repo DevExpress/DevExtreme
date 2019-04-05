@@ -763,6 +763,12 @@ var PivotGrid = Widget.inherit({
                  */
                 allowSearch: false,
                 /**
+                 * @name dxPivotGridOptions.headerFilter.showRelevantValues
+                 * @type boolean
+                 * @default false
+                 */
+                showRelevantValues: false,
+                /**
                  * @name dxPivotGridOptions.headerFilter.searchTimeout
                  * @type number
                  * @default searchTimeout

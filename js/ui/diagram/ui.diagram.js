@@ -17,6 +17,7 @@ class Diagram extends Widget {
         this._initDiagram();
     }
     _initMarkup() {
+        super._initMarkup();
         this.$element().addClass(DIAGRAM_CLASS);
 
         const $toolbarWrapper = $("<div>")

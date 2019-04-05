@@ -16,6 +16,7 @@ class DiagramToolbar extends Widget {
         super._init();
     }
     _initMarkup() {
+        super._initMarkup();
         const $toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(this._$element);
