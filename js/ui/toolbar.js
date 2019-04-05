@@ -169,30 +169,6 @@ var Toolbar = ToolbarBase.inherit({
                 options: {
                     submenuType: "actionSheet"
                 }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    submenuType: "dropDownMenu"
-                }
-            },
-            {
-                device: function() {
-                    return themes.isWin8(themeName);
-                },
-                options: {
-                    submenuType: "listBottom"
-                }
-            },
-            {
-                device: function() {
-                    return themes.isWin10(themeName);
-                },
-                options: {
-                    submenuType: "listTop"
-                }
             }
         ]);
     },
