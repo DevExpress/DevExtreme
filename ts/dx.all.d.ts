@@ -6681,8 +6681,8 @@ declare module DevExpress.ui {
         insertText(index: number, text: string, formats: any): void;
         /** @name dxHtmlEditor.redo() */
         redo(): void;
-        /** @name dxHtmlEditor.register(modules) */
-        register(modules: any): void;
+        /** @name dxHtmlEditor.register(components) */
+        register(components: any): void;
         /** @name dxHtmlEditor.removeFormat(index, length) */
         removeFormat(index: number, length: number): void;
         /** @name dxHtmlEditor.setSelection(index, length) */

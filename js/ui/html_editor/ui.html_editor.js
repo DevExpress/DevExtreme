@@ -556,11 +556,11 @@ const HtmlEditor = Editor.inherit({
 
     /**
     * @name dxHtmlEditorMethods.register
-    * @publicName register(modules)
+    * @publicName register(components)
     * @param1 modules:Object
     */
-    register: function(modules) {
-        this._quillRegistrator.registerModules(modules);
+    register: function(components) {
+        this._quillRegistrator.registerModules(components);
 
         this.repaint();
     },
