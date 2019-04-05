@@ -6644,6 +6644,8 @@ declare module DevExpress.ui {
         valueType?: 'html' | 'markdown';
         /** @name dxHtmlEditor.Options.variables */
         variables?: dxHtmlEditorVariables;
+        /** @name dxHtmlEditor.Options.customize */
+        customize?: any;
     }
     /** @name dxHtmlEditor */
     export class dxHtmlEditor extends Editor {
