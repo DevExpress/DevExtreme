@@ -31,6 +31,19 @@ QUnit.module("Subscribes", {
     }
 });
 
+QUnit.test("'isAdaptive' subscribe should work correctly", function(assert) {
+    this.createInstance({
+        adaptivityEnabled: false,
+        views: ["month"]
+    });
+
+    assert.notOk(this.instance.fire("isAdaptive"), "Scheduler isn't adaptive");
+
+    this.instance.option("adaptivityEnabled", true);
+
+    assert.ok(this.instance.fire("isAdaptive"), "Scheduler is adaptive");
+});
+
 QUnit.test("'fixWrongEndDate' should process endDate correctly", function(assert) {
     this.createInstance({
         currentView: "week"
@@ -60,25 +73,6 @@ QUnit.test("'fixWrongEndDate' should process endDate correctly", function(assert
 
     assert.equal(checkedDate.getHours(), 23, "checked date is ok when endDate is undefined, allDay appointment");
     assert.equal(checkedDate.getMinutes(), 59, "checked date is ok when endDate is undefined, allDay appointment");
-});
-
-QUnit.test("'getTargetedAppointmentData' should return correct data for recurrence appointments (T660901)", function(assert) {
-    var appointmentData = {
-        startDate: new Date(2015, 1, 1, 5, 11),
-        endDate: new Date(2015, 1, 1, 6),
-        recurrenceRule: "FREQ=HOURLY;INTERVAL=2"
-    };
-    this.createInstance({
-        currentDate: new Date(2015, 1, 1),
-        currentView: "day",
-        dataSource: [appointmentData]
-    });
-
-    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
-    var targetedData = this.instance.fire("getTargetedAppointmentData", appointmentData, $appointments.eq(1));
-
-    assert.equal(targetedData.startDate.getTime(), appointmentData.startDate.getTime() + 2 * 3600000, "Targeted startDate is OK");
-    assert.equal(targetedData.endDate.getTime(), appointmentData.endDate.getTime() + 2 * 3600000, "Targeted endDate is OK");
 });
 
 QUnit.test("'setCellDataCacheAlias' should call workSpace method with right arguments", function(assert) {

@@ -838,6 +838,10 @@ const subscribes = {
 
     getStartDayHour: function() {
         return this.option("startDayHour");
+    },
+
+    isAdaptive: function() {
+        return this.option("adaptivityEnabled");
     }
 };
 module.exports = subscribes;
