@@ -47,6 +47,7 @@ registerTheme({
             font: {
                 size: 16
             },
+            offset: 0,
             wordWrap: "normal",
             textOverflow: "ellipsis"
         },
@@ -152,10 +153,15 @@ registerTheme({
                 weight: 200
             },
             subtitle: {
+                offset: 0,
                 font: {
                     size: 14
-                }
-            }
+                },
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            },
+            wordWrap: "none",
+            textOverflow: "ellipsis"
         }
     },
     "chart:common": {

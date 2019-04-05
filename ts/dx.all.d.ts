@@ -1390,7 +1390,7 @@ declare module DevExpress.viz {
         /** @name BaseLegend.rowItemSpacing */
         rowItemSpacing?: number;
         /** @name BaseLegend.title */
-        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
+        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
@@ -1511,7 +1511,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
+        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
         /** @name BaseWidget.Options.title.textOverflow */
