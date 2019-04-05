@@ -140,6 +140,7 @@ QUnit.test("popup should have right height", function(assert) {
     var popup = this.instance.getAppointmentPopup();
 
     assert.equal(popup.option("height"), 'auto', "popup has correct height");
+    assert.equal(popup.option("maxHeight"), '100%', "popup has correct max-height");
 });
 
 QUnit.test("showAppointmentPopup should render a popup content only once", function(assert) {

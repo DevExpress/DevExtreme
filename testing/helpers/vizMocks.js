@@ -55,6 +55,9 @@
         applyEllipsis: function(maxWidth) { // for text
             return maxWidth < 50;
         },
+        setMaxWidth: function(maxWidth) { // for text
+            return maxWidth < 50;
+        },
         stopAnimation: function() {
             return this;
         },
@@ -108,8 +111,7 @@
             $(this.element).trigger.apply($(this.element), arguments);
             return this;
         },
-        restoreText: function() { },
-        setMaxWidth: function() { }
+        restoreText: function() { }
     }, {
         $constructor: function() {
             this.children = [];

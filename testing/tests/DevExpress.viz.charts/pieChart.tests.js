@@ -1044,8 +1044,6 @@ var environment = {
         assert.equal(updateArgs[1]._incidentOccurred, chart._incidentOccurred, "incidentOccurred");
         assert.ok(updateArgs[1].legendThemeApplied, "Theme was applied by theme manager");
 
-        assert.ok(chart.layoutManager.layoutElements.called, "legend and title layouted");
-        assert.ok(chart.layoutManager.layoutElements.calledWith([commons.getTitleStub(), legend], chart._canvas), "layout");
         assert.ok(chart.layoutManager.applyPieChartSeriesLayout.calledOnce, "layout for pie is called once");
 
         assert.equal(updateArgs[0].length, 3);
@@ -1470,54 +1468,6 @@ var environment = {
         assert.strictEqual(action.getCall(0).args[0], "resetItem", "first item");
         assert.strictEqual(action.getCall(1).args[0], "applySelected", "second item");
     });
-
-    QUnit.module("Layout manager. Position", environment);
-
-    QUnit.test("Elements. Canvas", function(assert) {
-        this.createPieChart({ legend: { visible: true }, title: { text: "chartTitle" } });
-
-        assert.equal(this.layoutManager.layoutElements.callCount, 1, "layout count");
-        assert.equal(this.layoutManager.layoutElements.getCall(0).args[0][0], commons.getTitleStub(), "title");
-        assert.equal(this.layoutManager.layoutElements.getCall(0).args[0][1], commons.getLegendStub(), "legend");
-        assert.equal(this.layoutManager.layoutElements.getCall(0).args[0][2], undefined, "layout args");
-        assert.deepEqual(this.layoutManager.layoutElements.getCall(0).args[1], {
-            bottom: 0,
-            height: 400,
-            left: 0,
-            originalBottom: 0,
-            originalLeft: 0,
-            originalRight: 0,
-            originalTop: 0,
-            right: 0,
-            top: 0,
-            width: 1000
-        }, "layout canvas");
-    });
-
-    QUnit.test("getLayoutTargets", function(assert) {
-        this.createPieChart();
-
-        assert.deepEqual(this.layoutManager.layoutElements.getCall(0).args[3], [{
-            canvas: {
-                bottom: 0,
-                height: 400,
-                left: 0,
-                originalBottom: 0,
-                originalLeft: 0,
-                originalRight: 0,
-                originalTop: 0,
-                right: 0,
-                top: 0,
-                width: 1000
-            }
-        }]);
-    });
-
-    QUnit.test("isRotated", function(assert) {
-        this.createPieChart();
-
-        assert.ok(!this.layoutManager.layoutElements.getCall(0).args[4]);
-    });
 }());
 
 (function dynamicTests() {
@@ -1545,8 +1495,6 @@ var environment = {
         });
         // assert
         assert.ok(chart._renderer.resize.called, "Canvas should be resized");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, "layout count");
         assert.strictEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.callCount, 2, "check free space - call count");
         assert.deepEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.getCall(0).args, [[{ canvas: chart.DEBUG_canvas }], undefined], "check free space - 1");
@@ -1576,8 +1524,6 @@ var environment = {
         chart.refresh();
         // assert
         assert.ok(chart._renderer.resize.called, "Canvas should be resized");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, "layout count");
         assert.strictEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.callCount, 2, "check free space - call count");
         assert.deepEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.getCall(0).args, [[{ canvas: chart.DEBUG_canvas }], undefined], "check free space - 1");
@@ -1861,8 +1807,6 @@ var environment = {
         var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
         assert.deepEqual(businessRange1, [1, 5]);
 
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart._canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2);
         assert.ok(chart.series[0].wasDrawn, "Series was drawn");
         assert.ok(!chart._seriesGroup.stub("linkRemove").called, "Series group should be detached");
@@ -1900,8 +1844,6 @@ var environment = {
         var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
         assert.deepEqual(businessRange1, [1, 5]);
 
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart._canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, "apply layout count");
         assert.ok(chart.series[0].wasDrawn, "Series was drawn");
         assert.ok(!chart._seriesGroup.stub("linkRemove").called, "Series group should be detached");

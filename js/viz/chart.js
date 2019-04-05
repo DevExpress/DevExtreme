@@ -553,9 +553,7 @@ var dxChart = AdvancedChart.inherit({
     _createPanesBorderOptions: function() {
         var commonBorderOptions = this._themeManager.getOptions("commonPaneSettings").border,
             panesBorderOptions = {};
-        _each(this.panes, function(_, pane) {
-            panesBorderOptions[pane.name] = _extend(true, {}, commonBorderOptions, pane.border);
-        });
+        this.panes.forEach(pane => panesBorderOptions[pane.name] = _extend(true, {}, commonBorderOptions, pane.border));
         return panesBorderOptions;
     },
 
@@ -580,7 +578,6 @@ var dxChart = AdvancedChart.inherit({
         this._createPanesBackground();
         this._appendAxesGroups();
 
-        this._updatePanesCanvases(drawOptions);
         this._adjustViewport();
 
         return panesBorderOptions;
@@ -709,6 +706,10 @@ var dxChart = AdvancedChart.inherit({
                 undefined
             );
         }
+    },
+
+    _allowLegendInsidePosition() {
+        return true;
     },
 
     _applyExtraSettings: function(series) {

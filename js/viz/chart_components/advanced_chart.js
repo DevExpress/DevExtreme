@@ -266,7 +266,7 @@ var AdvancedChart = BaseChart.inherit({
         this._scrollBar && this._scrollBarGroup.linkAppend(); // TODO: Must be appended in the same place where removed (chart)
     },
     _getLegendTargets: function() {
-        return this.series.map(s => {
+        return (this.series || []).map(s => {
             const item = this._getLegendOptions(s);
             item.legendData.series = s;
             if(!s.getOptions().showInLegend) {
@@ -564,6 +564,22 @@ var AdvancedChart = BaseChart.inherit({
     refresh: function() {
         this._disposeAxes();
         this.callBase();
+    },
+
+    _layoutAxes(drawAxes) {
+        const that = this;
+        const cleanPanesCanvases = drawAxes();
+
+        const needSpace = that.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+
+        if(needSpace) {
+            const size = this._layout.backward(this._rect, this._rect, [needSpace.width, needSpace.height]);
+            needSpace.width = Math.max(0, size[0]);
+            needSpace.height = Math.max(0, size[1]);
+            this._canvas = this._createCanvasFromRect(this._rect);
+
+            drawAxes(needSpace, cleanPanesCanvases);
+        }
     }
 });
 

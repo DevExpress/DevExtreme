@@ -1275,6 +1275,21 @@ QUnit.test("Filter by dayOfWeek", function(assert) {
     });
 });
 
+QUnit.test("Search", function(assert) {
+    var store = new RemoteStore({
+        load: function(loadOptions) {
+            assert.deepEqual(loadOptions.filter, ["ShipCountry", "contains", "ru"]);
+            return $.Deferred();
+        }
+    });
+
+    store.load({
+        columns: [],
+        rows: [{ dataField: "ShipCountry", searchValue: "ru" }],
+        values: [{ summaryType: 'count' }],
+    });
+});
+
 QUnit.test("Include filter by Quarter", function(assert) {
     var store = new RemoteStore({
         load: function(loadOptions) {

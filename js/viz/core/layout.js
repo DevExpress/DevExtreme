@@ -25,6 +25,8 @@ var _normalizeEnum = require("./utils").normalizeEnum,
 
     slicersMap = {};
 
+const BBOX_CEIL_CORRECTION = 2;
+
 slicersMap[ALIGN_START] = function(a, b, size) {
     return [a, _min(b, a + size)];
 };
@@ -53,7 +55,8 @@ function normalizeLayoutOptions(options) {
         secondary: alignment[1 - side],
         weak: options.weak,
         priority: options.priority || 0,
-        header: options.header
+        header: options.header,
+        position: options.position
     };
 }
 
@@ -76,10 +79,13 @@ function getShrink(alignment, size) {
 function processForward(item, rect, minSize) {
     var side = item.side,
         size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]),
-        isValid = size[side] < rect[2 + side] - rect[side] - minSize[side];
+        minSide = item.position === "indside" ? 0 : minSize[side],
+        isValid = size[side] < rect[2 + side] - rect[side] - minSide;
 
     if(isValid) {
-        rect[item.primary + side] += getShrink(item.primary, size[side]);
+        if(item.position !== "inside") {
+            rect[item.primary + side] += getShrink(item.primary, size[side]);
+        }
         item.size = size;
     }
     return isValid;
@@ -91,19 +97,31 @@ function processRectBackward(item, rect, alignmentRect) {
         itemRect = [],
         secondary = getSlice(item.secondary, alignmentRect[secondarySide], alignmentRect[2 + secondarySide], item.size[secondarySide]);
 
-    itemRect[primarySide] = itemRect[2 + primarySide] = rect[item.primary + primarySide];
-    itemRect[item.primary + primarySide] = rect[item.primary + primarySide] -= getShrink(item.primary, item.size[primarySide]);
+    itemRect[primarySide] = itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === "inside" ? getShrink(item.primary, item.size[primarySide]) : 0);
+    itemRect[item.primary + primarySide] = rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]);
+
+    if(item.position !== "inside") {
+        rect[item.primary + primarySide] = itemRect[item.primary + primarySide];
+    }
+
     itemRect[secondarySide] = secondary[0];
     itemRect[2 + secondarySide] = secondary[1];
 
     return itemRect;
 }
 
-function processBackward(item, rect, alignmentRect) {
-    var rectCopy = rect.slice(),
-        itemRect = processRectBackward(item, rect, alignmentRect);
+function processBackward(item, rect, alignmentRect, fitRect, size, targetRect) {
+    const itemRect = processRectBackward(item, rect, alignmentRect);
+    const itemFitRect = processRectBackward(item, fitRect, fitRect);
 
-    item.element.move(itemRect, rectCopy);
+    if(size[item.side] > 0) {
+        size[item.side] -= item.size[item.side];
+        targetRect[item.primary + item.side] = itemRect[item.primary + item.side];
+        item.element.freeSpace();
+    } else {
+        item.element.move(itemRect, itemFitRect);
+    }
+
 }
 
 function Layout() {
@@ -143,8 +161,9 @@ Layout.prototype = {
         return rect;
     },
 
-    backward: function(targetRect, alignmentRect) {
+    backward: function(targetRect, alignmentRect, size = [0, 0]) {
         var backwardRect = targetRect.slice(),
+            fitRect = targetRect.slice(),
             targets = this._cache,
             targetSide = 0,
             target,
@@ -157,10 +176,11 @@ Layout.prototype = {
             if(target.side !== targetSide) {
                 backwardRect = targetRect.slice();
             }
-            processBackward(target, backwardRect, alignmentRect);
+            processBackward(target, backwardRect, alignmentRect, fitRect, size, targetRect);
             targetSide = target.side;
         }
-        this._cache = null;
+
+        return size;
     }
 };
 
@@ -180,7 +200,7 @@ function createTargets(targets) {
     }
 
     collection.sort(function(a, b) {
-        return a.side - b.side || a.priority - b.priority;
+        return b.side - a.side || a.priority - b.priority;
     });
 
     collection = processWeakItems(collection);
@@ -209,11 +229,20 @@ function processWeakItems(collection) {
     return collection;
 }
 
+function processBackwardHeaderRect(element, rect) {
+    const rectCopy = rect.slice();
+    const itemRect = processRectBackward(element, rectCopy, rectCopy);
+    itemRect[element.side] = rect[element.side];
+
+    itemRect[2 + element.side] = rect[2 + element.side];
+
+    return itemRect;
+}
+
 function makeHeader(header, weakElement) {
     var side = header.side,
         primary = header.primary,
-        secondary = header.secondary,
-        secondarySide = getConjugateSide(side);
+        secondary = header.secondary;
 
     return {
         side: side,
@@ -222,34 +251,41 @@ function makeHeader(header, weakElement) {
         priority: 0,
         element: {
             measure: function(targetSize) {
-                var headerSize = header.element.measure(targetSize.slice()),
-                    weakSize = weakElement.element.measure(targetSize.slice()),
-                    size = headerSize.slice();
-
-                size[side] = Math.max(headerSize[side], weakSize[side]);
-
-                weakSize[side] += (size[side] - weakSize[side]) / 2;
-                headerSize[side] += (size[side] - weakSize[side]) / 2;
+                const result = targetSize.slice();
+                const weakSize = weakElement.element.measure(targetSize.slice());
+                targetSize[primary] -= weakSize[primary];
+                const headerSize = header.element.measure(targetSize.slice());
+                result[side] = weakSize[side] = headerSize[side] = Math.max(headerSize[side], weakSize[side]);
 
                 weakElement.size = weakSize;
                 header.size = headerSize;
 
-                return size;
+
+                return result;
             },
 
-            move: function(alignRect, rect) {
-                var weakRect = processRectBackward(weakElement, rect, rect),
-                    intersection = alignRect[secondarySide + 2] - weakRect[secondarySide];
-                if(intersection > 0) {
-                    alignRect[secondarySide] -= intersection;
-                    alignRect[secondarySide + 2] -= intersection;
-                    if(alignRect[secondarySide] < 0) {
-                        alignRect[secondarySide] = 0;
-                    }
+            move: function(rect, fitRect) {
+                if(fitRect[2] - fitRect[0] < header.size[0] + weakElement.size[0] - BBOX_CEIL_CORRECTION) {
+                    this.freeSpace();
+                    return;
+                }
+
+                var weakRect = processBackwardHeaderRect(weakElement, fitRect, fitRect);
+                fitRect[2 + weakElement.primary] = weakRect[weakElement.primary];
+                const headerFitReact = processBackwardHeaderRect(header, fitRect, fitRect);
+
+                if(fitRect[2 + weakElement.primary] < rect[2 + weakElement.primary] && header.size[header.primary] > rect[2 + header.primary] - rect[header.primary]) {
+                    rect[2 + weakElement.primary] = fitRect[2 + weakElement.primary];
+                }
+
+                let headerRect = processBackwardHeaderRect(header, rect, rect);
+                if(headerRect[2 + weakElement.primary] > fitRect[2 + weakElement.primary]) {
+                    rect[2 + weakElement.primary] = fitRect[2 + weakElement.primary];
+                    headerRect = processBackwardHeaderRect(header, rect, rect);
                 }
 
                 weakElement.element.move(weakRect);
-                header.element.move(alignRect);
+                header.element.move(headerRect, headerFitReact);
             },
 
             freeSpace: function() {
