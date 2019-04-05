@@ -2,7 +2,7 @@ import { getDiagram } from "./diagram_importer";
 
 const DiagramCommands = {
     load: function() {
-        const DiagramCommand = getDiagram().DiagramCommand;
+        const { DiagramCommand } = getDiagram();
         return [
             {
                 name: DiagramCommand.Undo,

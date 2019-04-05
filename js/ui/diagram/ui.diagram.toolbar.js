@@ -44,12 +44,10 @@ class DiagramToolbar extends Widget {
     _onToolbarItemInitialized(widget, name) {
         this._toolbarWidgets[name] = widget;
     }
-    _createWidgetOptions(item) {
-        if(item.widget === "dxSelectBox") {
+    _createWidgetOptions({ widget, items }) {
+        if(widget === "dxSelectBox") {
             return {
-                options: {
-                    items: item.items
-                }
+                options: { items }
             };
         }
     }
@@ -127,4 +125,4 @@ class DiagramBar {
     }
 }
 
-module.exports = DiagramToolbar;
+export default DiagramToolbar;

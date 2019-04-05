@@ -48,10 +48,10 @@ class Diagram extends Widget {
         this._diagramInstance.createDocument($content[0]);
     }
     _initDiagram() {
-        const DiagramControl = getDiagram().DiagramControl;
+        const { DiagramControl } = getDiagram();
         this._diagramInstance = new DiagramControl();
     }
 }
 
 registerComponent("dxDiagram", Diagram);
-module.exports = Diagram;
+export default Diagram;
