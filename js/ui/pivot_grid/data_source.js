@@ -1054,7 +1054,7 @@ module.exports = Class.inherit((function() {
             return field;
         },
 
-        getFieldValues: function(index, options) {
+        getFieldValues: function(index, applyFilters, options) {
             var that = this,
                 field = this._fields && this._fields[index],
                 store = this.store(),
@@ -1063,7 +1063,7 @@ module.exports = Class.inherit((function() {
                     columns: loadFields,
                     rows: [],
                     values: this.getAreaFields("data"),
-                    filters: [],
+                    filters: applyFilters ? this._fields.filter(f => f !== field && f.area && f.filterValues && f.filterValues.length) : [],
                     skipValues: true
                 },
                 searchValue,

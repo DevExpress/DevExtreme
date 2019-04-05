@@ -52,7 +52,8 @@ var environment = {
                 return res;
             },
             itemGroupClass: this.itemGroupClass,
-            backgroundClass: this.backgroundClass
+            backgroundClass: this.backgroundClass,
+            allowInsidePosition: true,
         }, this.data, this.options);
     },
     createLegend: function(settings, data, options) {

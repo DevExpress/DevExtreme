@@ -48,6 +48,7 @@ describe("Builder - testing exported function", () => {
             command: commands.BUILD_THEME,
             reader: fileReader,
             lessCompiler: lessCompiler,
+            baseTheme: "material.blue.light.compact",
             items: [{ key: "@base-bg", value: "red" }]
         };
 

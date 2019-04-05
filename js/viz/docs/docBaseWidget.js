@@ -284,8 +284,32 @@ var BaseWidget = {
                 color: '#232323',
                 size: 16,
                 opacity: undefined
-            }
-        }
+            },
+            /**
+            * @name BaseWidgetOptions.title.subtitle.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+            * @name BaseWidgetOptions.title.subtitle.textOverflow
+            * @type Enums.VizTextOverflow
+            * @default "ellipsis"
+            */
+            textOverflow: "ellipsis"
+        },
+        /**
+        * @name BaseWidgetOptions.title.wordWrap
+        * @type Enums.VizWordWrap
+        * @default "normal"
+        */
+        wordWrap: "normal",
+        /**
+        * @name BaseWidgetOptions.title.textOverflow
+        * @type Enums.VizTextOverflow
+        * @default "ellipsis"
+        */
+        textOverflow: "ellipsis"
     },
     /**
     * @name BaseWidgetOptions.export

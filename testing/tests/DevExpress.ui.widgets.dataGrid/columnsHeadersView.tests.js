@@ -538,6 +538,42 @@ QUnit.test('filterRow accessibility structure', function(assert) {
     });
 });
 
+QUnit.test('Header columns accessibility structure', function(assert) {
+    // arrange
+    var testElement = $('#container');
+
+    $.extend(this.columns, [
+        { caption: 'Column 1', allowFiltering: true },
+        { caption: 'Column 2', allowFiltering: true }
+    ]);
+
+    this.options.headerFilter = { visible: true };
+    this.options.selection = { mode: "multiple" };
+
+    // act
+    this.columnHeadersView.render(testElement);
+    // assert
+    $(".dx-header-row > td").each((_, element) => {
+        assert.equal($(element).attr("tabindex"), 0, "header column element tabindex");
+    });
+    $(".dx-header-row .dx-header-filter").each((_, element) => {
+        assert.equal($(element).attr("tabindex"), 0, "headerFilter element tabindex");
+    });
+    assert.notOk($(".dx-header-row .dx-checkbox-container").attr("tabindex"), "SelectAll checkbox tabindex");
+
+    // arrange, act
+    this.options.useLegacyKeyboardNavigation = true;
+    this.columnHeadersView.render(testElement);
+    // assert
+    $(".dx-header-row > td").each((_, element) => {
+        assert.equal($(element).attr("tabindex"), undefined, "header column element tabindex");
+    });
+    $(".dx-header-row .dx-header-filter").each((_, element) => {
+        assert.equal($(element).attr("tabindex"), undefined, "headerFilter element tabindex");
+    });
+    assert.notOk($(".dx-header-row .dx-checkbox-container").attr("tabindex"), "SelectAll checkbox tabindex");
+});
+
 QUnit.test('Invalidate instead of render when filterRow and sorting option is changed', function(assert) {
     // arrange
     var testElement = $('#container'),
