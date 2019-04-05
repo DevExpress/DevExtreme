@@ -39,8 +39,7 @@ import SchedulerResourceManager from "./ui.scheduler.resource_manager";
 import SchedulerAppointmentModel from "./ui.scheduler.appointment_model";
 import SchedulerAppointments from "./ui.scheduler.appointments";
 import SchedulerLayoutManager from "./ui.scheduler.appointments.layout_manager";
-import { CompactAppointmentsDesktopStrategy } from "./compact_strategies/compactAppointmentsDesktopStrategy";
-import { CompactAppointmentsMobileStrategy } from "./compact_strategies/compactAppointmentsMobileStrategy";
+import {CompactAppointmentsHelper} from "./compactAppointmentsHelper";
 import SchedulerTimezones from "./timezones/ui.scheduler.timezones";
 import AsyncTemplateMixin from "../shared/async_template_mixin";
 import DataHelperMixin from "../../data_helper";
@@ -906,10 +905,7 @@ const Scheduler = Widget.inherit({
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
-            _appointmentTooltipCloseButton: false,
-            _useAppointmentColorForTooltip: false,
             _appointmentTooltipOpenButtonText: messageLocalization.format("dxScheduler-openAppointment"),
-            _appointmentTooltipOpenButtonIcon: "",
             _dropDownButtonIcon: "overflow",
             _appointmentCountPerCell: 2,
             _appointmentGroupButtonOffset: 0,
@@ -1095,10 +1091,7 @@ const Scheduler = Widget.inherit({
 
                     _appointmentTooltipOffset: { x: 0, y: 11 },
                     _appointmentTooltipButtonsPosition: "top",
-                    _appointmentTooltipCloseButton: true,
-                    _useAppointmentColorForTooltip: true,
                     _appointmentTooltipOpenButtonText: null,
-                    _appointmentTooltipOpenButtonIcon: "edit",
                     _dropDownButtonIcon: "chevrondown",
                     _appointmentCountPerCell: 1,
                     _appointmentGroupButtonOffset: 20,
@@ -1149,9 +1142,6 @@ const Scheduler = Widget.inherit({
             name = args.name;
 
         switch(args.name) {
-            case "adaptivityEnabled":
-                this._initAppointmentStrategies();
-                break;
             case "customizeDateNavigatorText":
                 this._updateOption("header", name, value);
                 break;
@@ -1342,6 +1332,7 @@ const Scheduler = Widget.inherit({
                 this._updateOption("workSpace", name, value);
                 this.repaint();
                 break;
+            case "adaptivityEnabled":
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
             case "recurrenceEditMode":
@@ -1351,10 +1342,7 @@ const Scheduler = Widget.inherit({
             case "appointmentCollectorTemplate":
             case "_appointmentTooltipOffset":
             case "_appointmentTooltipButtonsPosition":
-            case "_appointmentTooltipCloseButton":
-            case "_useAppointmentColorForTooltip":
             case "_appointmentTooltipOpenButtonText":
-            case "_appointmentTooltipOpenButtonIcon":
             case "_dropDownButtonIcon":
             case "_appointmentCountPerCell":
             case "_appointmentGroupButtonOffset":
@@ -1428,7 +1416,6 @@ const Scheduler = Widget.inherit({
         }
 
         this._appointments.option(editingConfig);
-        this._dropDownAppointments.repaintExisting(this.$element());
     },
 
     _isAgenda: function() {
@@ -1592,18 +1579,13 @@ const Scheduler = Widget.inherit({
 
         var combinedDataAccessors = this._combineDataAccessors();
 
-        this._appointmentModel = new SchedulerAppointmentModel(this._dataSource, combinedDataAccessors);
+        this._appointmentModel = new SchedulerAppointmentModel(this._dataSource, combinedDataAccessors, this.getAppointmentDurationInMinutes());
 
         this._initActions();
 
-        this._initAppointmentStrategies();
+        this._compactAppointmentsHelper = new CompactAppointmentsHelper(this);
 
         this._subscribes = subscribes;
-    },
-
-    _initAppointmentStrategies: function() {
-        this._dropDownAppointments = this.option("adaptivityEnabled") ? new CompactAppointmentsMobileStrategy() : new CompactAppointmentsDesktopStrategy();
-        this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
     },
 
     _initTemplates: function() {
@@ -1831,6 +1813,8 @@ const Scheduler = Widget.inherit({
 
         this._appointments = this._createComponent("<div>", SchedulerAppointments, this._appointmentsConfig());
         this._appointments.option("itemTemplate", this._getAppointmentTemplate("appointmentTemplate"));
+
+        this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
 
         this._loadResources().done((function(resources) {
             this._readyToRenderAppointments = windowUtils.hasWindow();
@@ -2256,6 +2240,7 @@ const Scheduler = Widget.inherit({
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
             height: 'auto',
+            maxHeight: '100%',
             onHiding: (function() {
                 this.focus();
             }).bind(this),
@@ -3031,11 +3016,14 @@ const Scheduler = Widget.inherit({
         if(!appointmentData) {
             return;
         }
-        this._appointmentTooltip.show([{
+        this.showAppointmentTooltipCore(target, [{
             data: appointmentData,
-            currentData: currentAppointmentData || appointmentData,
-            $appointment: target
-        }]);
+            currentData: currentAppointmentData,
+        }], true);
+    },
+
+    showAppointmentTooltipCore: function(target, data, isSingleBehavior) {
+        this._appointmentTooltip.show(target, data, isSingleBehavior);
     },
 
     /**

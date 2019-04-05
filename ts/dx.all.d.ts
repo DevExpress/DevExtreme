@@ -1390,7 +1390,7 @@ declare module DevExpress.viz {
         /** @name BaseLegend.rowItemSpacing */
         rowItemSpacing?: number;
         /** @name BaseLegend.title */
-        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
+        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
@@ -1511,11 +1511,15 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, text?: string } | string;
+        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
+        /** @name BaseWidget.Options.title.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name BaseWidget.Options.title.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
+        /** @name BaseWidget.Options.title.wordWrap */
+        wordWrap?: 'normal' | 'break-word' | 'none';
     }
     /** @name BaseWidget.Options.tooltip */
     interface BaseWidgetTooltip {
@@ -4920,6 +4924,8 @@ declare module DevExpress.ui {
         refreshMode?: 'full' | 'reshape' | 'repaint';
         /** @name GridBase.Options.editing.selectTextOnEditStart */
         selectTextOnEditStart?: boolean;
+        /** @name GridBase.Options.editing.startEditAction */
+        startEditAction?: 'click' | 'dblClick';
         /** @name GridBase.Options.editing.texts */
         texts?: GridBaseEditingTexts;
         /** @name GridBase.Options.editing.useIcons */
@@ -5424,6 +5430,16 @@ declare module DevExpress.ui {
         /** @name dxAccordionItem.title */
         title?: string;
     }
+
+    /** @name dxActionButton */
+    export interface dxActionButton {
+        /** @name dxActionButton.location */
+        location?: 'after' | 'before';
+        /** @name dxActionButton.name */
+        name?: string;
+        /** @name dxActionButton.options */
+        options?: dxButtonOptions;
+    }
     /** @name dxActionSheet.Options */
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /** @name dxActionSheet.Options.cancelText */
@@ -5557,6 +5573,8 @@ declare module DevExpress.ui {
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
         keyExpr?: string | Function;
+        /** @name dxButtonGroup.Options.onItemClick */
+        onItemClick?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
         /** @name dxButtonGroup.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /** @name dxButtonGroup.Options.selectedItemKeys */
@@ -6072,10 +6090,10 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | any;
-        /** @name dxDropDownButton.Options.useSelectMode */
-        useSelectMode?: boolean;
-        /** @name dxDropDownButton.Options.splitButton */
-        splitButton?: boolean;
+        /** @name dxDropDownButton.Options.showToggleButton */
+        showToggleButton?: boolean;
+        /** @name dxDropDownButton.Options.updateButtonOnSelection */
+        updateButtonOnSelection?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
@@ -6424,9 +6442,9 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxFormOptions)
         constructor(element: JQuery, options?: dxFormOptions)
         /** @name dxForm.getButton(name) */
-        getButton(name: string): any;
+        getButton(name: string): dxButton | undefined;
         /** @name dxForm.getEditor(dataField) */
-        getEditor(dataField: string): any;
+        getEditor(dataField: string): Editor | undefined;
         /** @name dxForm.itemOption(id) */
         itemOption(id: string): any;
         /** @name dxForm.itemOption(id, option, value) */
@@ -6613,6 +6631,8 @@ declare module DevExpress.ui {
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
         /** @name dxHtmlEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
+        /** @name dxHtmlEditor.Options.mentions */
+        mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.name */
         name?: string;
         /** @name dxHtmlEditor.Options.onFocusIn */
@@ -6672,6 +6692,28 @@ declare module DevExpress.ui {
         setSelection(index: number, length: number): void;
         /** @name dxHtmlEditor.undo() */
         undo(): void;
+    }
+
+    /** @name dxHtmlEditorMention */
+    export interface dxHtmlEditorMention {
+        /** @name dxHtmlEditorMention.dataSource */
+        dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxHtmlEditorMention.displayExpr */
+        displayExpr?: string | ((item: any) => string);
+        /** @name dxHtmlEditorMention.itemTemplate */
+        itemTemplate?: template | Function;
+        /** @name dxHtmlEditorMention.marker */
+        marker?: string;
+        /** @name dxHtmlEditorMention.minSearchLength */
+        minSearchLength?: number;
+        /** @name dxHtmlEditorMention.searchExpr */
+        searchExpr?: string | Function | Array<string | Function>;
+        /** @name dxHtmlEditorMention.searchTimeout */
+        searchTimeout?: number;
+        /** @name dxHtmlEditorMention.template */
+        template?: template | Function;
+        /** @name dxHtmlEditorMention.valueExpr */
+        valueExpr?: string | Function;
     }
     /** @name dxHtmlEditorResizing */
     export interface dxHtmlEditorResizing {
@@ -7322,7 +7364,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGrid.Options.fieldPanel */
         fieldPanel?: { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean };
         /** @name dxPivotGrid.Options.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /** @name dxPivotGrid.Options.hideEmptySummaryCells */
         hideEmptySummaryCells?: boolean;
         /** @name dxPivotGrid.Options.loadPanel */
@@ -7386,7 +7428,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGridFieldChooser.Options.dataSource */
         dataSource?: DevExpress.data.PivotGridDataSource;
         /** @name dxPivotGridFieldChooser.Options.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /** @name dxPivotGridFieldChooser.Options.height */
         height?: number | string | (() => number | string);
         /** @name dxPivotGridFieldChooser.Options.layout */
@@ -8308,7 +8350,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<string>;
+        buttons?: Array<string | dxActionButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */
@@ -8374,6 +8416,9 @@ declare module DevExpress.ui {
         blur(): void;
         /** @name dxTextEditor.focus() */
         focus(): void;
+
+        /** @name dxTextEditor.getButton(name) */
+        getButton(name: string): any;
     }
     /** @name dxTileView.Options */
     export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {

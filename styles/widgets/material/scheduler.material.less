@@ -285,7 +285,7 @@
         }
     }
 
-    
+
 }
 
 .dx-scheduler-dropdown-appointments {
@@ -298,7 +298,7 @@
 
 .dx-scheduler-work-space-day {
     .dx-scheduler-scrollable-offset-mixin(0, @MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
-    
+
     &:not(.dx-scheduler-work-space-grouped) {
         .dx-scheduler-all-day-title {
             top: @MATERIAL_SCHEDULER_HEADER_HEIGHT + 1;
@@ -402,7 +402,7 @@
         .dx-popup-content.dx-scheduler-appointment-tooltip {
             width:  @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH;
             padding: 0;
-    
+
             .dx-scheduler-appointment-tooltip-buttons {
                 margin: 0;
                 padding: 6px 8px;
@@ -430,7 +430,7 @@
                 padding: @MATERIAL_SCHEDULER_TOOLTIP_TEXT_PADDING;
                 font-weight: normal;
             }
-        
+
             .dx-scheduler-appointment-tooltip-date {
                 padding: @MATERIAL_SCHEDULER_TOOLTIP_TEXT_PADDING;
                 font-size: 13px;
@@ -725,18 +725,38 @@
         }
     }
 
-    .dx-recurrence-repeat-end-container {
-        margin: 0;
-    }
+    .dx-scheduler-recurrence-rule-item.dx-field-item {
 
-    .dx-recurrence-switch {
-        margin-top: 6px;
-    }
+        //NOTE: temporary solution
+        max-height: 400px;
 
+        .dx-recurrence-numberbox-interval-label,
+        .dx-recurrence-repeat-on-label,
+        .dx-recurrence-repeat-end-container-label {
+            position: relative;
+            left: 0px;
+        }
 
-    .dx-recurrence-radiogroup-repeat-type-label,
-    .dx-recurrence-repeat-end-label {
-        line-height: @MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
+        .dx-recurrence-repeat-end-container-label,
+        .dx-recurrence-repeat-end-container {
+            padding-top: 0px;
+        }
+
+        .dx-recurrence-radiogroup-repeat-type {
+            left: 0px;
+            top: 0px;
+        }
+
+        .dx-recurrence-repeat-end-container {
+            margin: 0;
+        }
+
+        .dx-recurrence-radiogroup-repeat-type-label,
+        .dx-recurrence-numberbox-interval-label,
+        .dx-recurrence-repeat-on-label,
+        .dx-recurrence-repeat-end-container-label {
+            line-height: @MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
+        }
     }
 }
 

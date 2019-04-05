@@ -672,9 +672,17 @@ QUnit.module("Tooltip", function(hooks) {
         const chart = createChart(annotationOptions);
 
         const tooltipFormatObject = { format: "tooltip for annotation" };
+        const customizeTooltip = () => {
+        };
         const point = {
             getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
-            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; })
+            getTooltipParams: sinon.spy(() => {
+                return { x: 1, y: 1 };
+            }),
+            _options: {
+                customizeTooltip,
+                tooltipEnabled: true
+            }
         };
 
         chart.hideTooltip = sinon.spy();
@@ -692,6 +700,39 @@ QUnit.module("Tooltip", function(hooks) {
         assert.equal(tooltip.show.firstCall.args[0], tooltipFormatObject);
         assert.deepEqual(tooltip.show.firstCall.args[1], { x: 4, y: 6 });
         assert.equal(tooltip.show.firstCall.args[2].target, point);
+        assert.equal(tooltip.show.firstCall.args[3], customizeTooltip);
+    });
+
+    QUnit.test("Do not show tooltip if it is disabled", assert => {
+        const annotationOptions = {
+            some: "options",
+            items: [
+                { x: 100, y: 200, },
+                { value: 1, argument: 2 }
+            ]
+        };
+
+        createChart(annotationOptions);
+
+        const tooltipFormatObject = { format: "tooltip for annotation" };
+        const customizeTooltip = () => {
+        };
+        const point = {
+            getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
+            getTooltipParams: sinon.spy(() => {
+                return { x: 1, y: 1 };
+            }),
+            _options: {
+                customizeTooltip,
+                tooltipEnabled: false
+            }
+        };
+
+        const tooltip = this.tooltip;
+        this.renderer.root.on.lastCall.args[1]({ target: { "annotation-data": point } });
+
+        assert.equal(tooltip.show.callCount, 0);
+
     });
 
     QUnit.test("Hide", assert => {

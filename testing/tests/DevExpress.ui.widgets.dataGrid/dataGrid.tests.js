@@ -11294,6 +11294,36 @@ QUnit.test("Cancel editing should works correctly if editing mode is form and ma
     assert.ok($(dataGrid.getRowElement(2)).hasClass("dx-data-row"), "row 2 is data row");
 });
 
+QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column (legacy)", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            width: 300,
+            columns: [{ dataField: "field1", width: 200 }, { dataField: "field2", width: 200 }, {
+                dataField: "field3",
+                width: 50,
+                fixed: true,
+                fixedPosition: "right"
+            }],
+            editing: {
+                allowUpdating: true,
+                mode: "row"
+            },
+            dataSource: {
+                store: [
+                    { field1: 1, field2: 2, field3: 3 },
+                    { field1: 7, field2: 8, field3: 9 }
+                ]
+            },
+            useLegacyKeyboardNavigation: true
+        }),
+        navigationController = dataGrid.getController("keyboardNavigation"),
+        $editCommandCell = $(".dx-command-edit").eq(5);
+
+    // assert
+    assert.ok(!navigationController._isCellValid($editCommandCell), "editCommand cell must be not valid");
+});
+
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
@@ -11315,7 +11345,7 @@ QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed '
         $editCommandCell = $(".dx-command-edit").eq(5);
 
     // assert
-    assert.ok(!navigationController._isCellValid($editCommandCell), "editCommand cell must be not valid");
+    assert.ok(navigationController._isCellValid($editCommandCell), "editCommand cell must be valid");
 });
 
 // T172125

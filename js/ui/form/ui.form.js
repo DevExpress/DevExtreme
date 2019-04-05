@@ -1622,7 +1622,7 @@ var Form = Widget.inherit({
      * @name dxFormMethods.getEditor
      * @publicName getEditor(dataField)
      * @param1 dataField:string
-     * @return any
+     * @return Editor | undefined
      */
     getEditor: function(dataField) {
         return this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField) || this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
@@ -1632,7 +1632,7 @@ var Form = Widget.inherit({
      * @name dxFormMethods.getButton
      * @publicName getButton(name)
      * @param1 name:string
-     * @return any
+     * @return dxButton | undefined
      */
     getButton: function(name) {
         return this._itemsRunTimeInfo.findWidgetInstanceByName(name);

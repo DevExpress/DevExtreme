@@ -994,3 +994,8 @@
  * @typedef {string} Enums.TreeListFilterMode
  * @enum {'fullBranch'|'withAncestors'}
  */
+
+/**
+ * @typedef {string} Enums.GridStartEditAction
+ * @enum {'click'|'dblClick'}
+ */

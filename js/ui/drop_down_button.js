@@ -58,18 +58,10 @@ let DropDownButton = Widget.inherit({
 
             /**
              * @name dxDropDownButtonOptions.selectedItem
-             * @type string|integer|object
+             * @type string|object
              * @default null
-             * @readonly
              */
             selectedItem: null,
-
-            /**
-             * @name dxDropDownButtonOptions.selectedItemKey
-             * @type string|integer
-             * @default null
-             */
-            selectedItemKey: null,
 
             /**
              * @name dxDropDownButtonOptions.deferRendering
@@ -86,32 +78,18 @@ let DropDownButton = Widget.inherit({
             noDataText: formatMessage("dxCollectionWidget-noDataText"),
 
             /**
-             * @name dxDropDownButtonOptions.useSelectMode
+             * @name dxDropDownButtonOptions.updateButtonOnSelection
              * @type boolean
              * @default true
              */
-            useSelectMode: false,
+            updateButtonOnSelection: true,
 
             /**
-             * @name dxDropDownButtonOptions.splitButton
+             * @name dxDropDownButtonOptions.showToggleButton
              * @type boolean
              * @default true
              */
-            splitButton: true,
-
-            /**
-             * @name dxDropDownButtonOptions.splitButton
-             * @type string
-             * @default ""
-             */
-            text: "",
-
-            /**
-             * @name dxDropDownButtonOptions.splitButton
-             * @type string
-             * @default undefined
-             */
-            icon: undefined,
+            showToggleButton: true,
 
             /**
              * @name dxDropDownButtonOptions.onActionButtonClick
@@ -203,7 +181,10 @@ let DropDownButton = Widget.inherit({
     _initMarkup() {
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
-        this._loadSelectedItem().done(this._updateActionButton.bind(this));
+        this._loadSelectedItem().done((selectedItem) => {
+            this._setOptionSilent("selectedItem", selectedItem);
+            this._updateButtonOnSelection();
+        });
         if(!this.option("deferRendering")) {
             this._renderPopup();
         }
@@ -216,11 +197,12 @@ let DropDownButton = Widget.inherit({
             return d.resolve(this._list.option("selectedItem"));
         }
 
-        const selectedItemKey = this.option("selectedItemKey");
+        const selectedItem = this.option("selectedItem");
+        const selectedItemKey = this._keyGetter(selectedItem);
         this._loadSingle(this.option("keyExpr"), selectedItemKey)
             .done(d.resolve)
             .fail(() => {
-                d.resolve(this.option("selectedItem"));
+                d.resolve(selectedItem);
             });
 
         return d.promise();
@@ -254,10 +236,10 @@ let DropDownButton = Widget.inherit({
     },
 
     _actionButtonConfig() {
-        const splitButton = this.option("splitButton");
-        return {
+        const showToggleButton = this.option("showToggleButton");
+        const defaultConfig = {
             onClick: ({ event }) => {
-                if(splitButton) {
+                if(showToggleButton) {
                     this._actionClickAction({
                         event,
                         selectedItem: this.option("selectedItem")
@@ -266,17 +248,28 @@ let DropDownButton = Widget.inherit({
                     this.toggle();
                 }
             },
-            text: this.option("text"),
-            icon: splitButton ? this.option("icon") : "spindown",
-            iconPosition: splitButton ? "left" : "right",
+            icon: showToggleButton ? undefined : "spindown",
+            iconPosition: showToggleButton ? "left" : "right",
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
+
+        let selectedItem = this.option("selectedItem");
+        if(isPlainObject(selectedItem)) {
+            const displayValue = this._displayGetter(selectedItem);
+            if(!isPlainObject(displayValue)) {
+                selectedItem.text = String(ensureDefined(displayValue, ""));
+            }
+        } else {
+            selectedItem = { text: String(ensureDefined(selectedItem, "")) };
+        }
+
+        return extend({}, selectedItem, defaultConfig);
     },
 
     _getButtonGroupItems() {
         const items = [];
         items.push(this._actionButtonConfig());
-        if(this.option("splitButton")) {
+        if(this.option("showToggleButton")) {
             items.push({
                 icon: "spindown",
                 width: 26,
@@ -328,10 +321,9 @@ let DropDownButton = Widget.inherit({
     },
 
     _listOptions() {
-        const selectedItemKey = this.option("selectedItemKey");
         return {
             selectionMode: "single",
-            selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
+            selectedItemKeys: [this._keyGetter(this.option("selectedItem"))],
             grouped: this.option("grouped"),
             keyExpr: this.option("keyExpr"),
             noDataText: this.option("noDataText"),
@@ -341,7 +333,7 @@ let DropDownButton = Widget.inherit({
             items: this.option("items"),
             dataSource: this._dataSource,
             onItemClick: (e) => {
-                this.option("selectedItemKey", this._keyGetter(e.itemData));
+                this.option("selectedItem", e.itemData);
                 const actionResult = this._fireItemClickAction(e);
                 if(actionResult !== false) {
                     this.toggle(false);
@@ -399,21 +391,10 @@ let DropDownButton = Widget.inherit({
         this._list && this._list.option(name, value);
     },
 
-    _getDisplayValue(item) {
-        const isPrimitiveItem = !isPlainObject(item);
-        const displayValue = isPrimitiveItem ? item : this._displayGetter(item);
-        return !isPlainObject(displayValue) ? String(ensureDefined(displayValue, "")) : "";
-    },
-
-    _updateActionButton(selectedItem) {
-        if(this.option("useSelectMode")) {
-            this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
-                text: this._getDisplayValue(selectedItem),
-                icon: isPlainObject(selectedItem) ? selectedItem.icon : undefined
-            }));
+    _updateButtonOnSelection() {
+        if(this.option("updateButtonOnSelection")) {
+            this._buttonGroup.option("items[0]", this._actionButtonConfig());
         }
-
-        this._setOptionSilent("selectedItem", selectedItem);
     },
 
     _clean() {
@@ -421,27 +402,12 @@ let DropDownButton = Widget.inherit({
         this._popup && this._popup.$element().remove();
     },
 
-    _selectedItemKeyChanged(value) {
-        this._setListOption("selectedItemKeys", value ? [value] : []);
-        const oldSelectedItem = this.option("selectedItem");
-        this._loadSelectedItem().done((selectedItem) => {
-            this._updateActionButton(selectedItem);
-
-            if(this._displayGetter(oldSelectedItem) !== this._displayGetter(selectedItem)) {
-                this._fireSelectionChangedAction({
-                    previousValue: oldSelectedItem,
-                    value: selectedItem
-                });
-            }
-        });
-    },
-
     _optionChanged(args) {
         const { name, value } = args;
         switch(args.name) {
-            case "useSelectMode":
+            case "updateButtonOnSelection":
                 break;
-            case "splitButton":
+            case "showToggleButton":
                 this._renderButtonGroup();
                 break;
             case "displayExpr":
@@ -461,23 +427,13 @@ let DropDownButton = Widget.inherit({
                 this._itemsToDataSource();
                 this._setListOption(name, value);
                 this._setListOption("selectedItemKeys", []);
-                this._loadSelectedItem().done(this._updateActionButton.bind(this));
+                this.option("selectedItem", this.option("selectedItem"));
                 break;
             case "dataSource":
                 this._initDataSource();
                 this._setListOption(name, value);
                 this._setListOption("selectedItemKeys", []);
-                this._loadSelectedItem().done(this._updateActionButton.bind(this));
-                break;
-            case "icon":
-                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
-                    icon: value
-                }));
-                break;
-            case "text":
-                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
-                    text: value
-                }));
+                this.option("selectedItem", this.option("selectedItem"));
                 break;
             case "itemTemplate":
             case "grouped":
@@ -485,10 +441,15 @@ let DropDownButton = Widget.inherit({
             case "groupTemplate":
                 this._setListOption(name, value);
                 break;
-            case "selectedItemKey":
-                this._selectedItemKeyChanged(value);
-                break;
             case "selectedItem":
+                this._setListOption("selectedItemKeys", [this._keyGetter(value)]);
+                this._loadSelectedItem().done((selectedItem) => {
+                    this._setOptionSilent("selectedItem", selectedItem);
+                    if(this._displayGetter(args.previousValue) !== this._displayGetter(selectedItem)) {
+                        this._updateButtonOnSelection();
+                        this._fireSelectionChangedAction(args);
+                    }
+                });
                 break;
             case "onItemClick":
                 this._createItemClickAction();

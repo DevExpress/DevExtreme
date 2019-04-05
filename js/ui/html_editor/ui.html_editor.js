@@ -89,6 +89,12 @@ const HtmlEditor = Editor.inherit({
             * @default null
             */
             resizing: null,
+
+            /**
+             * @name dxHtmlEditorOptions.mentions
+             * @type Array<dxHtmlEditorMention>
+             * @default null
+             */
             mentions: null,
 
             formDialogOptions: null
@@ -153,6 +159,58 @@ const HtmlEditor = Editor.inherit({
             * @type Array<string>
             * @default ["images"]
             */
+
+            /**
+             * @name dxHtmlEditorMention
+             * @type object
+             */
+            /**
+             * @name dxHtmlEditorMention.dataSource
+             * @type Array<string>|DataSource|DataSourceOptions
+             * @default null
+             */
+            /**
+             * @name dxHtmlEditorMention.marker
+             * @type string
+             * @default "@"
+             */
+            /**
+             * @name dxHtmlEditorMention.minSearchLength
+             * @type number
+             * @default 0
+             */
+            /**
+             * @name dxHtmlEditorMention.searchTimeout
+             * @type number
+             * @default 500
+             */
+            /**
+             * @name dxHtmlEditorMention.itemTemplate
+             * @type template|function
+             * @default "item"
+             */
+            /**
+             * @name dxHtmlEditorMention.displayExpr
+             * @type string|function(item)
+             * @default "this"
+             * @type_function_param1 item:object
+             * @type_function_return string
+             */
+            /**
+             * @name dxHtmlEditorMention.searchExpr
+             * @type getter|Array<getter>
+             * @default "this"
+             */
+            /**
+             * @name dxHtmlEditorMention.valueExpr
+             * @type string|function
+             * @default "this"
+             */
+            /**
+             * @name dxHtmlEditorMention.template
+             * @type template|function
+             * @default null
+             */
         });
     },
 

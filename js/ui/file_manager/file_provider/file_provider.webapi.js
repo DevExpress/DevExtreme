@@ -5,6 +5,7 @@ import { getWindow } from "../../../core/utils/window";
 import { each } from "../../../core/utils/iterator";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
+import {Deferred} from "../../../core/utils/deferred";
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
@@ -28,7 +29,7 @@ class WebAPIFileProvider extends FileProvider {
     }
 
     createFolder(parentFolder, name) {
-        return this._executeRequest("CreateFolder", {
+        return this._executeRequest("CreateDir", {
             parentId: parentFolder.relativeName,
             name
         });
@@ -73,10 +74,11 @@ class WebAPIFileProvider extends FileProvider {
         formData.append("arguments", JSON.stringify(args));
         formData.append("command", "UploadChunk");
 
-        return ajax.sendRequest({
+        const deferred = new Deferred();
+        ajax.sendRequest({
             url: this._options.loadUrl,
             method: "POST",
-            dataType: "text",
+            dataType: "json",
             data: formData,
             upload: {
                 onprogress: noop,
@@ -84,7 +86,11 @@ class WebAPIFileProvider extends FileProvider {
                 onabort: noop
             },
             cache: false
-        });
+        }).then(result => {
+                !result.success && deferred.reject(result) || deferred.resolve();
+            },
+            e => deferred.reject(e));
+        return deferred.promise();
     }
 
     abortFileUpload(uploadInfo) {
@@ -93,7 +99,7 @@ class WebAPIFileProvider extends FileProvider {
 
     _getItems(path, itemType) {
         return this._getEntriesByPath(path)
-            .then(entries => this._convertEntriesToItems(entries, path, itemType));
+            .then(result => this._convertEntriesToItems(result.result, path, itemType));
     }
 
     _getItemsIds(items) {
@@ -101,21 +107,25 @@ class WebAPIFileProvider extends FileProvider {
     }
 
     _getEntriesByPath(path) {
-        return this._executeRequest("GetDirContent", { parentId: path }, true);
+        return this._executeRequest("GetDirContent", { parentId: path });
     }
 
-    _executeRequest(command, args, jsonResult) {
+    _executeRequest(command, args) {
         const queryString = this._getQueryString({
             command,
             arguments: JSON.stringify(args)
         });
-        const finalUrl = this._options.loadUrl + "?" + queryString;
-        const dataType = jsonResult ? "json" : "text";
-        return ajax.sendRequest({
-            url: finalUrl,
-            dataType: dataType,
+
+        const deferred = new Deferred();
+        ajax.sendRequest({
+            url: this._options.loadUrl + "?" + queryString,
+            dataType: "json",
             cache: false
-        });
+        }).then(result => {
+                !result.success && deferred.reject(result) || deferred.resolve(result);
+            },
+            e => deferred.reject(e));
+        return deferred.promise();
     }
 
     _getQueryString(params) {

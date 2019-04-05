@@ -46,8 +46,13 @@ registerTheme({
         subtitle: {
             font: {
                 size: 16
-            }
-        }
+            },
+            offset: 0,
+            wordWrap: "normal",
+            textOverflow: "ellipsis"
+        },
+        wordWrap: "normal",
+        textOverflow: "ellipsis"
     },
     loadingIndicator: {
         text: "Loading..."
@@ -61,6 +66,12 @@ registerTheme({
             weight: 400
         },
         button: {
+            margin: {
+                top: 8,
+                left: 10,
+                right: 10,
+                bottom: 8
+            },
             "default": {
                 color: "#333",
                 borderColor: "#ddd",
@@ -142,10 +153,15 @@ registerTheme({
                 weight: 200
             },
             subtitle: {
+                offset: 0,
                 font: {
                     size: 14
-                }
-            }
+                },
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            },
+            wordWrap: "none",
+            textOverflow: "ellipsis"
         }
     },
     "chart:common": {

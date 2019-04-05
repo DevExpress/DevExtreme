@@ -99,7 +99,7 @@ var TextEditorBase = Editor.inherit({
             */
             /**
             * @name dxActionButton.options
-            * @type object
+             * @type dxButtonOptions
             * @default undefined
             */
 

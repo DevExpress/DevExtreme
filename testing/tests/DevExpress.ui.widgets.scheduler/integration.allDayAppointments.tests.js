@@ -1,4 +1,20 @@
-var $ = require("jquery");
+import $ from "jquery";
+import translator from "animation/translator";
+import dblclickEvent from "events/dblclick";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import dragEvents from "events/drag";
+import {DataSource} from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import Query from "data/query";
+import dataUtils from "core/element_data";
+import devices from "core/devices";
+import {appointmentsHelper, tooltipHelper} from "./helpers.js";
+
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -6,24 +22,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-
-var translator = require("animation/translator"),
-    dblclickEvent = require("events/dblclick"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    Query = require("data/query"),
-    dataUtils = require("core/element_data"),
-    devices = require("core/devices");
-
-require("ui/scheduler/ui.scheduler");
 
 var APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
@@ -747,18 +745,11 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 }
     ]);
 
-    var firstGroupDropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance"),
-        secondGroupDropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(1).dxDropDownMenu("instance");
+    appointmentsHelper.compact.click();
+    assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts in 1st group");
 
-    firstGroupDropDown.open();
-    var firstDdAppointments = firstGroupDropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(firstDdAppointments.length, 3, "There are 3 drop down appts in 1st group");
-
-    secondGroupDropDown.open();
-    var secondDdAppointments = secondGroupDropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(secondDdAppointments.length, 3, "There are 3 drop down appts in 2d group");
+    appointmentsHelper.compact.click(1);
+    assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts in 2d group");
 });
 
 QUnit.test("DropDown appointment should be removed correctly when needed", function(assert) {
