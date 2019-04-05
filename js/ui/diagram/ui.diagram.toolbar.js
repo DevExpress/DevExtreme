@@ -126,4 +126,4 @@ class DiagramBar {
     }
 }
 
-export default DiagramToolbar;
+module.exports = DiagramToolbar;

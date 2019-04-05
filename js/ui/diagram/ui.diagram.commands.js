@@ -96,4 +96,4 @@ const DiagramCommands = {
     }
 };
 
-export default DiagramCommands;
+module.exports = DiagramCommands;

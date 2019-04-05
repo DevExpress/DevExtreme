@@ -55,4 +55,4 @@ class Diagram extends Widget {
 }
 
 registerComponent("dxDiagram", Diagram);
-export default Diagram;
+module.exports = Diagram;
