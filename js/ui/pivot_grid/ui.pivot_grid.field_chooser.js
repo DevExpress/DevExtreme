@@ -204,6 +204,11 @@ var FieldChooser = BaseFieldChooser.inherit({
              * @default undefined
              */
             /**
+             * @name dxPivotGridFieldChooserOptions.headerFilter.showRelevantValues
+             * @type boolean
+             * @default false
+             */
+            /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.searchTimeout
              * @type number
              * @default 500
