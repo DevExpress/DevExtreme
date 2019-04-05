@@ -888,6 +888,10 @@ function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
     }
 }
 
+function getTextWidth(text) {
+    return text.value.length ? text.tspan.getSubStringLength(0, text.value.length) : 0;
+}
+
 function prepareLines(element, texts, maxWidth) {
     var lines = [],
         i,
@@ -914,7 +918,7 @@ function prepareLines(element, texts, maxWidth) {
     } else {
         text = { value: element.textContent, tspan: element };
         text.startBox = startBox = 0;
-        endBox = text.value.length ? startBox + text.tspan.getSubStringLength(0, text.value.length) : 0;
+        endBox = startBox + getTextWidth(text);
         text.endIndex = getIndexForEllipsis(text, maxWidth, startBox, endBox);
         lines = [{ commonLength: element.textContent.length, parts: [text] }];
     }
@@ -1045,7 +1049,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 
             line.commonLength += text.value.length;
         }
-        text.endBox = endBox = startBox + text.tspan.getSubStringLength(0, text.value.length);
+        text.endBox = endBox = startBox + getTextWidth(text);
 
         startBox = endBox;
 

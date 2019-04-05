@@ -6,14 +6,15 @@ var _Number = Number,
     parseVerticalAlignment = require("./utils").enumParser(["top", "bottom"]),
 
     DEFAULT_MARGIN = 10,
-    DEFAULT_GAP = 3;
+    DEFAULT_GAP = 4;
 
 function hasText(text) {
     return !!(text && String(text).length > 0);
 }
 
-function processTitleLength(elem, text, width) {
-    if(elem.attr({ text: text }).applyEllipsis(width)) {
+function processTitleLength(elem, text, width, options) {
+    const changed = elem.attr({ text: text }).setMaxWidth(width, options);
+    if(changed) {
         elem.setTitle(text);
     }
 }
@@ -38,6 +39,9 @@ function validateMargin(margin) {
     return result;
 }
 
+function checkRect(rect, boundingRect) {
+    return rect[2] - rect[0] < boundingRect.width || rect[3] - rect[1] < boundingRect.height;
+}
 function Title(params) {
     this._params = params;
     this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.root || params.renderer.root, { name: "title", after: "peripheral" });
@@ -104,11 +108,15 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         titleElement.attr({ y: y });
 
         if(hasText(subtitleOptions.text)) {
-            y += titleBox.height + titleBox.y;
             subtitleElement.attr({ text: subtitleOptions.text, y: 0 }).css(_patchFontOptions(subtitleOptions.font));
-            y += -subtitleElement.getBBox().y - that._titleTextY + DEFAULT_GAP;
-            subtitleElement.attr({ y: y });
         }
+    },
+
+    _shiftSubtitle() {
+        const that = this;
+        const titleBox = that._titleElement.getBBox();
+        const element = that._subtitleElement;
+        element.move(0, titleBox.y + titleBox.height - element.getBBox().y - DEFAULT_GAP);
     },
 
     _updateBoundingRectAlignment: function() {
@@ -171,13 +179,17 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     },
 
     _correctTitleLength: function(width) {
-        var that = this,
-            options = that._options,
-            margin = options.margin,
-            maxWidth = width - margin.left - margin.right;
+        const that = this;
+        const options = that._options;
+        const margin = options.margin;
+        const maxWidth = width - margin.left - margin.right;
 
-        processTitleLength(that._titleElement, options.text, maxWidth);
-        that._subtitleElement && processTitleLength(that._subtitleElement, options.subtitle.text, maxWidth);
+
+        processTitleLength(that._titleElement, options.text, maxWidth, options);
+        if(that._subtitleElement) {
+            processTitleLength(that._subtitleElement, options.subtitle.text, maxWidth, options.subtitle);
+            that._shiftSubtitle();
+        }
 
         that._updateBoundingRect();
     },
@@ -244,12 +256,13 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         return [this._boundingRect.width, this._boundingRect.height];
     },
 
-    move: function(rect) {
+    move: function(rect, fitRect) {
         var boundingRect = this._boundingRect;
-        if(rect[2] - rect[0] < boundingRect.width || rect[3] - rect[1] < boundingRect.height) {
-            this.draw(rect[2] - rect[0], rect[3] - rect[1]);
+        if(checkRect(rect, boundingRect)) {
+            this.shift(fitRect[0], fitRect[1]);
+        } else {
+            this.shift(Math.round(rect[0]), Math.round(rect[1]));
         }
-        this.shift(Math.round(rect[0]), Math.round(rect[1]));
     },
 
     freeSpace: function() {
