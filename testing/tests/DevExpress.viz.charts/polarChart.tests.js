@@ -18,6 +18,7 @@ var $ = require("jquery"),
     stubRange = sinon.createStubInstance(rangeModule.Range),
     stubSeriesFamily = createStubSeriesFamily(),
     stubThemeManager = createStubThemeManager(),
+    exportModule = require("viz/core/export"),
     stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager),
     stubPoints = [{ argument: 0, value: 1 }, { argument: 1, value: 2 }, { argument: 2, value: 3 }];
 
@@ -34,6 +35,17 @@ legendModule.Legend = sinon.spy(function(parameters) {
 trackerModule.ChartTracker = sinon.spy(function(parameters) {
     return new ChartTrackerStub(parameters);
 });
+
+function stubExport() {
+    var that = this;
+    that.export = new vizMocks.ExportMenu();
+    that.export.stub("measure").returns([0, 0]);
+    sinon.stub(exportModule, "ExportMenu", function() {
+        return that.export;
+    });
+}
+
+stubExport();
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
@@ -199,6 +211,7 @@ var stubSeries = [createSeries(), createSeries()],
 
             trackerModule.ChartTracker.reset();
             legendModule.Legend.reset();
+            exportModule.ExportMenu.reset();
 
             stubLayoutManager.layoutElements.reset();
         },
@@ -292,7 +305,7 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
 });
 
 QUnit.test("draw series with correct translators and animation options", function(assert) {
-    stubLayoutManager.needMoreSpaceForPanesCanvas.returns(true);
+    stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10, height: 10 });
     stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ keepLabels: false });
     var chart = this.createSimplePolarChart();
 
@@ -642,31 +655,4 @@ QUnit.test("Create Tracker.", function(assert) {
 QUnit.test("crosshair should not be enabled", function(assert) {
     stubThemeManager.getOptions.withArgs("crosshair").returns({ enabled: true });
     assert.ok(this.createSimplePolarChart(), "chart was successful created");
-});
-
-QUnit.module("LayoutManager. Position elements", environment);
-
-QUnit.test("getLayoutTargets", function(assert) {
-    this.createSimplePolarChart();
-
-    assert.deepEqual(this.layoutManagers[0].layoutElements.getCall(0).args[3], [{
-        canvas: {
-            bottom: 0,
-            height: 400,
-            left: 0,
-            originalBottom: 0,
-            originalLeft: 0,
-            originalRight: 0,
-            originalTop: 0,
-            right: 0,
-            top: 0,
-            width: 1000
-        }
-    }]);
-});
-
-QUnit.test("isRotated", function(assert) {
-    this.createSimplePolarChart();
-
-    assert.ok(!this.layoutManagers[0].layoutElements.getCall(0).args[4]);
 });

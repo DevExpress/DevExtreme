@@ -2120,15 +2120,15 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is not vis
 // T336349, T503616
 QUnit.module("Option changing in onDrawn after zooming", {
     beforeEach: function() {
-        this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, "shift");
-        this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, "shift");
+        this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, "move");
+        this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, "move");
         sinon.spy(rendererModule, "Renderer", function() {
             return new vizMocks.Renderer();
         });
     },
     afterEach: function() {
-        legendModule.Legend.prototype.shift.restore();
-        titleModule.Title.prototype.shift.restore();
+        legendModule.Legend.prototype.move.restore();
+        titleModule.Title.prototype.move.restore();
         rendererModule.Renderer.restore();
     }
 });
@@ -2140,6 +2140,10 @@ QUnit.test("Legend and title should have original place", function(assert) {
         series: [{
             type: "spline"
         }],
+        size: {
+            width: 1000,
+            height: 400
+        },
         title: "text",
         legend: {
             visible: true

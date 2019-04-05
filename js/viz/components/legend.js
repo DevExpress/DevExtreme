@@ -115,7 +115,7 @@ function applyMarkerState(id, idToIndexMap, items, stateName) {
     }
 }
 
-function parseOptions(options, textField) {
+function parseOptions(options, textField, allowInsidePosition) {
     if(!options) return null;
 
     ///#DEBUG
@@ -136,7 +136,7 @@ function parseOptions(options, textField) {
     options.verticalAlignment = parseVerticalAlignment(options.verticalAlignment, options.horizontalAlignment === CENTER ? BOTTOM : TOP);
     options.orientation = parseOrientation(options.orientation, options.horizontalAlignment === CENTER ? HORIZONTAL : VERTICAL);
     options.itemTextPosition = parseItemTextPosition(options.itemTextPosition, options.orientation === HORIZONTAL ? BOTTOM : RIGHT);
-    options.position = parsePosition(options.position, OUTSIDE);
+    options.position = allowInsidePosition ? parsePosition(options.position, OUTSIDE) : OUTSIDE;
     options.itemsAlignment = parseItemsAlignment(options.itemsAlignment, null);
     options.hoverMode = _normalizeEnum(options.hoverMode);
     options.customizeText = _isFunction(options.customizeText) ? options.customizeText : function() { return this[textField]; };
@@ -332,6 +332,7 @@ var _Legend = exports.Legend = function(settings) {
     that._textField = settings.textField;
     that._getCustomizeObject = settings.getFormatObject;
     that._titleGroupClass = settings.titleGroupClass;
+    that._allowInsidePosition = settings.allowInsidePosition;
 };
 
 var legendPrototype = _Legend.prototype = clone(LayoutElement.prototype);
@@ -345,7 +346,7 @@ extend(legendPrototype, {
 
     update: function(data, options, themeManagerTitleOptions) {
         const that = this;
-        options = that._options = parseOptions(options, that._textField) || {};
+        options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
         that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
         that._boundingRect = {
             width: 0,
@@ -946,7 +947,8 @@ extend(legendPrototype, {
             horizontalAlignment: this._options.horizontalAlignment,
             verticalAlignment: this._options.verticalAlignment,
             side: pos.cutSide,
-            priority: 1
+            priority: 1,
+            position: this.getPosition()
         };
     },
 

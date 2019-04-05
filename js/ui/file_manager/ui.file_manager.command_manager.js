@@ -1,7 +1,7 @@
-import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
+import { isString } from "../../core/utils/type";
 
-class FileManagerCommandManager {
+export class FileManagerCommandManager {
 
     constructor() {
         this._initCommands();
@@ -13,7 +13,7 @@ class FileManagerCommandManager {
         this._commands = [
             {
                 name: "create",
-                text: "Create folder",
+                text: "New folder",
                 icon: "plus",
                 noFileItemRequired: true
             },
@@ -42,8 +42,14 @@ class FileManagerCommandManager {
             },
             {
                 name: "upload",
-                text: "Upload file...",
+                text: "Upload files",
                 icon: "upload",
+                noFileItemRequired: true
+            },
+            {
+                name: "refresh",
+                text: "Refresh",
+                icon: "refresh",
                 noFileItemRequired: true
             },
             {
@@ -61,14 +67,15 @@ class FileManagerCommandManager {
         ];
 
         this._commandMap = {};
-        each(this._commands, (_, command) => { this._commandMap[command.name] = command; });
+        this._commands.forEach(command => { this._commandMap[command.name] = command; });
     }
 
     registerActions(actions) {
         this._actions = extend(this._actions, actions);
     }
 
-    executeCommand(commandName) {
+    executeCommand(command) {
+        const commandName = isString(command) ? command : command.name;
         const action = this._actions[commandName];
         if(action) {
             action();
@@ -80,11 +87,16 @@ class FileManagerCommandManager {
             .filter(c => (!c.displayInToolbarOnly || forToolbar) && (!items || this.isCommandAvailable(c.name, items)));
     }
 
+    getCommandByName(name) {
+        return this._commandMap[name];
+    }
+
     isCommandAvailable(commandName, items) {
-        const { noFileItemRequired, isSingleFileItemCommand } = this._commandMap[commandName];
-        return noFileItemRequired || items.length > 0 && (!isSingleFileItemCommand || items.length === 1);
+        const command = this.getCommandByName(commandName);
+        if(!command) {
+            return;
+        }
+        return command.noFileItemRequired || items.length > 0 && (!command.isSingleFileItemCommand || items.length === 1);
     }
 
 }
-
-module.exports.FileManagerCommandManager = FileManagerCommandManager;
