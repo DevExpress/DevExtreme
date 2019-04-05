@@ -6441,9 +6441,9 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxFormOptions)
         constructor(element: JQuery, options?: dxFormOptions)
         /** @name dxForm.getButton(name) */
-        getButton(name: string): any;
+        getButton(name: string): dxButton | undefined;
         /** @name dxForm.getEditor(dataField) */
-        getEditor(dataField: string): any;
+        getEditor(dataField: string): Editor | undefined;
         /** @name dxForm.itemOption(id) */
         itemOption(id: string): any;
         /** @name dxForm.itemOption(id, option, value) */
