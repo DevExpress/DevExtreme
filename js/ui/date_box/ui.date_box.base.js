@@ -818,6 +818,8 @@ var DateBox = DropDownEditor.inherit({
                 this._updateSize();
                 break;
             case "showDropDownButton":
+                this._updateSize();
+                break;
             case "invalidDateMessage":
             case "dateOutOfRangeMessage":
             case "adaptivityEnabled":
