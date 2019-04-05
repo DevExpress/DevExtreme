@@ -1903,6 +1903,214 @@ var dxChart = {
         location: 'center'
     },
     /**
+    * @name dxChartOptions.commonAnnotationSettings
+    * @type object
+    */
+    commonAnnotationSettings: {
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.type
+        * @type Enums.AnnotationType
+        * @default undefined
+        */
+        type: undefined,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.tooltipEnabled
+        * @type boolean
+        * @default true
+        */
+        tooltipEnabled: true,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.color
+        * @type string
+        * @default '#ffffff'
+        */
+        color: '#ffffff',
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.opacity
+        * @type number
+        * @default 0.9
+        */
+        opacity: 0.9,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.border
+        * @type object
+        */
+        border: {
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.border.width
+            * @default 1
+            * @type number
+            */
+            width: 1,
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.border.color
+            * @type string
+            * @default '#dddddd'
+            */
+            color: '#dddddd',
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.border.dashStyle
+            * @type Enums.DashStyle
+            * @default 'solid'
+            */
+            dashStyle: 'solid',
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.border.opacity
+            * @type number
+            * @default undefined
+            */
+            opacity: undefined,
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.border.visible
+            * @type boolean
+            * @default true
+            */
+            visible: true
+        },
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.font
+        * @type Font
+        * @default '#333333' @prop color
+        */
+        font: {
+            color: '#333333'
+        },
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.arrowLength
+        * @type number
+        * @default 14
+        */
+        arrowLength: 14,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.arrowWidth
+        * @type number
+        * @default 14
+        */
+        arrowWidth: 14,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.paddingLeftRight
+        * @type number
+        * @default 10
+        */
+        paddingLeftRight: 10,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.paddingTopBottom
+        * @type number
+        * @default 10
+        */
+        paddingTopBottom: 10,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.shadow
+        * @type object
+        */
+        shadow: {
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.shadow.opacity
+            * @type number
+            * @default 0.15
+            */
+            opacity: 0.15,
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.shadow.color
+            * @type string
+            * @default #000000
+            */
+            color: '#000000',
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.shadow.offsetX
+            * @type number
+            * @default 0
+            */
+            offsetX: 0,
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.shadow.offsetY
+            * @type number
+            * @default 1
+            */
+            offsetY: 1,
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.shadow.blur
+            * @type number
+            * @default 2
+            */
+            blur: 4
+        },
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.image
+        * @type string|object
+        */
+        image: {
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.image.url
+            * @type string
+            * @default undefined
+            */
+            url: undefined,
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.image.location
+            * @type Enums.BackgroundImageLocation
+            * @default 'full'
+            */
+            location: 'full',
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.image.width
+            * @type number
+            * @default undefined
+            */
+            width: undefined,
+            /**
+            * @name dxChartOptions.commonAnnotationSettings.image.height
+            * @type number
+            * @default undefined
+            */
+            height: undefined
+        },
+        // cornerRadius: 0,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.width
+        * @type number
+        * @default undefined
+        */
+        width: undefined,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.height
+        * @type number
+        * @default undefined
+        */
+        height: undefined,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.customizeTooltip
+        * @type function(annotationItem)
+        * @type_function_param1 annotationItem:object
+        * @type_function_return object
+        * @default undefined
+        * @notUsedInTheme
+        */
+        customizeTooltip: undefined,
+        /**
+        * @name dxChartOptions.commonAnnotationSettings.customizeAnnotation
+        * @type function(annotationItem)
+        * @type_function_param1 annotationItem:object
+        * @type_function_return dxChartOptions.commonAnnotationSettings
+        * @default undefined
+        * @notUsedInTheme
+        */
+        customizeAnnotation: undefined
+    },
+    /**
+    * @name dxChartOptions.annotations
+    * @type Array<Object>
+    * @inherits dxChartOptions.commonAnnotationSettings
+    */
+    annotations: [{
+        /**
+        * @name dxChartOptions.annotations.name
+        * @type string
+        * @default undefined
+        */
+        name: undefined
+    }],
+    /**
     * @name dxChartOptions.onSeriesHoverChanged
     * @extends Action
     * @type function(e)

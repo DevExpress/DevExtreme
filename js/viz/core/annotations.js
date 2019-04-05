@@ -56,10 +56,10 @@ function labelAnnotation(options) {
 }
 
 function imageAnnotation(options) {
-    const { width, height } = options.imageSize || {};
+    const { width, height, url, location } = options.image || {};
     return coreAnnotation(options, function(widget, group) {
         widget._renderer
-            .image(0, 0, width, height, options.imageUrl, options.imageLocation || "center")
+            .image(0, 0, width, height, url, location || "center")
             .data({ [ANNOTATION_DATA]: this })
             .append(group);
     });
@@ -69,9 +69,9 @@ function createAnnotation(item, commonOptions) {
     // Choose annotation type and merge common and individual options
     const options = extend(true, {}, commonOptions, item);
 
-    if(item.type === "image") {
+    if(options.type === "image") {
         return imageAnnotation(options);
-    } else if(item.type === "label") {
+    } else if(options.type === "label") {
         return labelAnnotation(options);
     }
 }

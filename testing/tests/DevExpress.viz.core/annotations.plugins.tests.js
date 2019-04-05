@@ -535,9 +535,11 @@ QUnit.module("Lifecycle", environment, function() {
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], items);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], {
             some: "options",
-            imageLocation: "full",
+            image: {
+                location: "full"
+            },
             font: {
-                color: "#767676",
+                color: "#333333",
                 cursor: "default",
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
                 size: 12,
