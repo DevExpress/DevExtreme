@@ -284,6 +284,19 @@ QUnit.module("common use cases", {
         this.listItems = this.list.itemElements();
     }
 }, () => {
+    QUnit.test("custom button is rendered", (assert) => {
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "Download DevExtreme Trial", "text is correct on init");
+        assert.ok(getActionButton(this.dropDownButton).find(".dx-icon").hasClass("dx-icon-group"), "icon is correct on init");
+
+        this.dropDownButton.option({
+            text: "New text",
+            icon: "box"
+        });
+
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "New text", "text is correct on change");
+        assert.ok(getActionButton(this.dropDownButton).find(".dx-icon").hasClass("dx-icon-box"), "icon is correct on change");
+    });
+
     QUnit.test("it should be possible to set non-datasource action button", (assert) => {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Download DevExtreme Trial", "initial text is correct");
 

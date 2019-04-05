@@ -469,6 +469,16 @@ let DropDownButton = Widget.inherit({
                 this._setListOption("selectedItemKeys", []);
                 this._loadSelectedItem().done(this._updateActionButton.bind(this));
                 break;
+            case "icon":
+                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
+                    icon: value
+                }));
+                break;
+            case "text":
+                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
+                    text: value
+                }));
+                break;
             case "itemTemplate":
             case "grouped":
             case "noDataText":
