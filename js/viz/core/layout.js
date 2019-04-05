@@ -1,6 +1,7 @@
 var _normalizeEnum = require("./utils").normalizeEnum,
     _min = Math.min,
     _max = Math.max,
+    _round = Math.round,
 
     ALIGN_START = 0,
     ALIGN_MIDDLE = 1,
@@ -97,15 +98,15 @@ function processRectBackward(item, rect, alignmentRect) {
         itemRect = [],
         secondary = getSlice(item.secondary, alignmentRect[secondarySide], alignmentRect[2 + secondarySide], item.size[secondarySide]);
 
-    itemRect[primarySide] = itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === "inside" ? getShrink(item.primary, item.size[primarySide]) : 0);
-    itemRect[item.primary + primarySide] = rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]);
+    itemRect[primarySide] = _round(itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === "inside" ? getShrink(item.primary, item.size[primarySide]) : 0));
+    itemRect[item.primary + primarySide] = _round(rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]));
 
     if(item.position !== "inside") {
         rect[item.primary + primarySide] = itemRect[item.primary + primarySide];
     }
 
-    itemRect[secondarySide] = secondary[0];
-    itemRect[2 + secondarySide] = secondary[1];
+    itemRect[secondarySide] = _round(secondary[0]);
+    itemRect[2 + secondarySide] = _round(secondary[1]);
 
     return itemRect;
 }
