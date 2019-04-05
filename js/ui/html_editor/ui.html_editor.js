@@ -200,7 +200,7 @@ const HtmlEditor = Editor.inherit({
             * @default "this"
             */
             /**
-            * @name dxHtmlEditorMentions.template
+            * @name dxHtmlEditorMention.template
             * @type template|function
             * @default null
             */
