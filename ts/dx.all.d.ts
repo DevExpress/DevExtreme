@@ -110,6 +110,13 @@ interface JQuery {
     dxDeferRendering(options: DevExpress.ui.dxDeferRenderingOptions): JQuery;
 }
 interface JQuery {
+    dxDiagram(): JQuery;
+    dxDiagram(options: "instance"): DevExpress.ui.dxDiagram;
+    dxDiagram(options: string): any;
+    dxDiagram(options: string, ...params: any[]): any;
+    dxDiagram(options: DevExpress.ui.dxDiagramOptions): JQuery;
+}
+interface JQuery {
     dxDrawer(): JQuery;
     dxDrawer(options: "instance"): DevExpress.ui.dxDrawer;
     dxDrawer(options: string): any;
@@ -6002,6 +6009,14 @@ declare module DevExpress.ui {
     export class dxDeferRendering extends Widget {
         constructor(element: Element, options?: dxDeferRenderingOptions)
         constructor(element: JQuery, options?: dxDeferRenderingOptions)
+    }
+    /** @name dxDiagram.Options */
+    export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
+    }
+    /** @name dxDiagram */
+    export class dxDiagram extends Widget {
+        constructor(element: Element, options?: dxDiagramOptions)
+        constructor(element: JQuery, options?: dxDiagramOptions)
     }
     /** @name dxDrawer.Options */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
