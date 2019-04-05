@@ -2091,7 +2091,7 @@ QUnit.testInActiveWindow("Editor has focus when edit form", function(assert) {
 });
 
 // T317001
-QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form editor", function(assert) {
+QUnit.skip("Focus previous cell after shift+tab on first form editor", function(assert) {
     // arrange
     this.options = {
         errorRowEnabled: true,
@@ -3183,7 +3183,7 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
     });
 });
 
-QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)", function(assert) {
+QUnit.skip("DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)", function(assert) {
     // arrange
     var $cell;
 
@@ -4673,7 +4673,7 @@ QUnit.testInActiveWindow("Add custom tabIndex to group row", function(assert) {
 });
 
 // T547660
-QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetail", function(assert) {
+QUnit.skip("Edit next cell after tab key when there is masterDetail", function(assert) {
     // arrange
     var $testElement = $("#container");
 
