@@ -193,7 +193,6 @@ QUnit.module("Keyboard navigation", {
 
         that.options = {
             useKeyboard: true,
-            useLegacyKeyboardNavigation: true,
             editing: {
             }
         };
@@ -1031,8 +1030,7 @@ function setupModules(that, modulesOptions) {
             editOnKeyPress: false
         },
         editing: { },
-        showColumnHeaders: true,
-        useLegacyKeyboardNavigation: false
+        showColumnHeaders: true
     });
 
     that.$element = function() {
@@ -3943,7 +3941,6 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3954,6 +3951,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
 
     // act
     this.triggerKeyDown("tab", false, false, $container);
+    this.triggerKeyDown("tab", false, false, this.getCellElement(0, 2));
 
     // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
@@ -3971,16 +3969,15 @@ QUnit.testInActiveWindow("Move to previous cell via tab key when edit command co
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
 
     this.focusFirstCell();
 
-    this.triggerKeyDown("tab", false, false, $container);
-
     // act
+    this.triggerKeyDown("tab", false, false, $container);
+    this.triggerKeyDown("tab", false, false, $container);
     this.triggerKeyDown("tab", false, false, $container);
 
     // assert
@@ -3988,7 +3985,7 @@ QUnit.testInActiveWindow("Move to previous cell via tab key when edit command co
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 
     this.triggerKeyDown("tab", false, true, $container);
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 2, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0, "rowIndex");
 });
 
@@ -4027,12 +4024,13 @@ QUnit.testInActiveWindow("Try move to next cell via tab key when focus on last c
 
     this.keyboardNavigationController._focusedView = this.rowsView;
 
+    this.keyboardNavigationController._isLegacyNavigation = () => true;
+
     this.keyboardNavigationController._focusedCellPosition = {
         rowIndex: 9,
         columnIndex: 1
     };
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -4044,8 +4042,6 @@ QUnit.testInActiveWindow("Try move to next cell via tab key when focus on last c
 
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 10, "rowIndex");
-
-
 });
 
 QUnit.testInActiveWindow("Edit next cell after tab key ('cell' edit mode)", function(assert) {
@@ -4952,8 +4948,7 @@ QUnit.module("Rows view", {
             this.options = {
                 disabled: false,
                 useKeyboard: true,
-                tabIndex: 0,
-                useLegacyKeyboardNavigation: true
+                tabIndex: 0
             };
             this.selectionOptions = {};
 
