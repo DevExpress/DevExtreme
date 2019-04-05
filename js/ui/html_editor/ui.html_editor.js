@@ -193,6 +193,8 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorMention.displayExpr
             * @type string|function(item)
             * @default "this"
+            * @type_function_param1 item:object
+            * @type_function_return string
             */
             /**
             * @name dxHtmlEditorMention.searchExpr

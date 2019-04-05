@@ -6697,7 +6697,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorMention.dataSource */
         dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxHtmlEditorMention.displayExpr */
-        displayExpr?: string | Function;
+        displayExpr?: string | ((item: any) => string);
         /** @name dxHtmlEditorMention.itemTemplate */
         itemTemplate?: template | Function;
         /** @name dxHtmlEditorMention.marker */
