@@ -76,23 +76,6 @@ QUnit.test("Title with export button", function(assert) {
     assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], "export rect");
 });
 
-QUnit.test("Do not shift title to negative are if container width too small", function(assert) {
-    this.export.stub("layoutOptions").returns({ horizontalAlignment: "right", verticalAlignment: "top", weak: true });
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
-    });
-
-    createSankey({
-        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-        size: {
-            width: 150
-        }
-    });
-    assert.deepEqual(this.title.move.lastCall.args[0], [0, 0, 100, 50], "title rect");
-    assert.deepEqual(this.export.move.lastCall.args[0], [100, 0, 150, 50], "export rect");
-});
-
 QUnit.module("Adaptive Layout", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);

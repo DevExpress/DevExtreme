@@ -960,10 +960,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
     _getNextCellByTabKey: function($event, direction, elementType) {
         var $cell = this._getNextCell(direction, elementType),
-            args = this._fireFocusedCellChanging($event, $cell, true);
-        if(args.cancel) {
+            args = $cell && this._fireFocusedCellChanging($event, $cell, true);
+
+        if(!args || args.cancel) {
             return;
         }
+
         if(args.$newCellElement) {
             $cell = args.$newCellElement;
         }

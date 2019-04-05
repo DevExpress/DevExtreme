@@ -12,7 +12,6 @@ var $ = require("jquery"),
     rendererModule = require("viz/core/renderers/renderer"),
     tooltipModule = require("viz/core/tooltip"),
     titleModule = require("viz/core/title"),
-    headerBlockModule = require("viz/chart_components/header_block"),
     crosshairModule = require("viz/chart_components/crosshair"),
     Crosshair = crosshairModule.Crosshair,
     chartThemeManagerModule = require("viz/components/chart_theme_manager"),
@@ -26,6 +25,7 @@ var $ = require("jquery"),
     chartMocks = require("../../../helpers/chartMocks.js"),
     insertMockFactory = chartMocks.insertMockFactory,
     resetMockFactory = chartMocks.resetMockFactory,
+    exportModule = require("viz/core/export"),
     restoreMockFactory = chartMocks.restoreMockFactory;
 
 exports.LabelCtor = LabelCtor;
@@ -36,11 +36,22 @@ var resetModules = exports.resetModules = function() {
     trackerModule.PieTracker.reset();
 
     legendModule.Legend.reset();
-    headerBlockModule.HeaderBlock.reset();
 
     rendererModule.Renderer.reset();
+    exportModule.ExportMenu.reset();
     titleModule.Title.reset();
 };
+
+function stubExport() {
+    var that = this;
+    that.export = new vizMocks.ExportMenu();
+    that.export.stub("measure").returns([0, 0]);
+    sinon.stub(exportModule, "ExportMenu", function() {
+        return that.export;
+    });
+}
+
+stubExport();
 
 vizMocks.Element.prototype.updateRectangle = sinon.spy(window.vizMocks.Element.prototype.updateRectangle);
 
@@ -59,12 +70,10 @@ rendererModule.Renderer = sinon.spy(function(parameters) {
 });
 
 titleModule.Title = sinon.spy(function(parameters) {
-    return new vizMocks.Title(parameters);
-});
-
-var HeaderBlock = vizMocks.stubClass(headerBlockModule.HeaderBlock);
-headerBlockModule.HeaderBlock = sinon.spy(function() {
-    return new HeaderBlock();
+    var title = new vizMocks.Title(parameters);
+    title.stub("layoutOptions").returns({ horizontalAlignment: "center", verticalAlignment: "top" });
+    title.stub("measure").returns([0, 0]);
+    return title;
 });
 
 legendModule.Legend = sinon.spy(function(parameters) {
@@ -88,12 +97,6 @@ function getTitleStub() {
     return titleModule.Title.lastCall.returnValue;
 }
 exports.getTitleStub = getTitleStub;
-
-function getHeaderBlockStub() {
-    return headerBlockModule.HeaderBlock.lastCall.returnValue;
-}
-exports.getHeaderBlockStub = getHeaderBlockStub;
-
 
 function getLegendStub() {
     return legendModule.Legend.lastCall.returnValue;

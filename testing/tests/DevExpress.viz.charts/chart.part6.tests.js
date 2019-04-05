@@ -602,16 +602,13 @@ QUnit.test("change some options check calls", function(assert) {
             },
         };
 
-    var renderOpts = [];
-    chart._doRender = function(opt) {
-        renderOpts.push(opt);
-    };
+    var spy = chart._doRender = sinon.spy();
     // Act
     this.validateData.reset();
     chart.option($.extend({}, newOptions));
     // assert
-    assert.equal(renderOpts.length, 2);
-    assert.deepEqual(renderOpts[1], { force: true });
+    assert.equal(spy.callCount, 1);
+    assert.deepEqual(spy.lastCall.args, [{ force: true }]);
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 

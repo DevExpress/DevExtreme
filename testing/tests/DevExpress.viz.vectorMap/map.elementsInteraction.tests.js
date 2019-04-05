@@ -146,10 +146,10 @@ QUnit.test("With top title with export menu", function(assert) {
     });
 
     this.checkSizes(assert, { left: 0, right: 0, top: 50, bottom: 0, width: 400, height: 250 });
-    assert.deepEqual(this.title.measure.lastCall.args, [[400, 300]], "title - measure");
-    assert.deepEqual(this.title.move.lastCall.args, [[0, 0, 200, 50]], "title - move");
+    assert.deepEqual(this.title.measure.lastCall.args, [[360, 300]], "title - measure");
+    assert.deepEqual(this.title.move.lastCall.args, [[0, 0, 200, 50], [0, 0, 200, 50]], "title - move");
     assert.deepEqual(this.exportMenu.measure.lastCall.args, [[400, 300]], "export menu - measure");
-    assert.deepEqual(this.exportMenu.move.lastCall.args, [[360, 5, 400, 50]], "export menu - move");
+    assert.deepEqual(this.exportMenu.move.lastCall.args, [[360, 0, 400, 50]], "export menu - move");
 });
 
 QUnit.test("With bottom title and exportMenu", function(assert) {

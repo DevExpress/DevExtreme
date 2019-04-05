@@ -143,7 +143,8 @@ const chartPlugin = {
         },
         _onMouseMove({ target }) {
             const annotation = target[ANNOTATION_DATA];
-            if(!annotation) {
+
+            if(!annotation || !annotation._options.tooltipEnabled) {
                 this._annotations.tooltip.hide();
                 return;
             }
@@ -156,8 +157,7 @@ const chartPlugin = {
                 rootOffset = this._renderer.getRootOffset();
             coords.x += rootOffset.left;
             coords.y += rootOffset.top;
-
-            this._annotations.tooltip.show(tooltipFormatObject, coords, { target: annotation });
+            this._annotations.tooltip.show(tooltipFormatObject, coords, { target: annotation }, annotation._options.customizeTooltip);
         }
     }
 };
@@ -198,11 +198,9 @@ const corePlugin = {
             });
 
             this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-            const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"), { enabled: false });
-            if(options.customizeTooltip) {
-                tooltipOptions.customizeTooltip = options.customizeTooltip;
-                tooltipOptions.enabled = true;
-            }
+            const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
+            tooltipOptions.customizeTooltip = options.customizeTooltip;
+
             this._annotations.tooltip.update(tooltipOptions);
 
             this._annotations.items = createAnnotations(options);

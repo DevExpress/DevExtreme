@@ -1511,11 +1511,15 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, text?: string } | string;
+        subtitle?: { font?: Font, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
+        /** @name BaseWidget.Options.title.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name BaseWidget.Options.title.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
+        /** @name BaseWidget.Options.title.wordWrap */
+        wordWrap?: 'normal' | 'break-word' | 'none';
     }
     /** @name BaseWidget.Options.tooltip */
     interface BaseWidgetTooltip {
@@ -6437,9 +6441,9 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxFormOptions)
         constructor(element: JQuery, options?: dxFormOptions)
         /** @name dxForm.getButton(name) */
-        getButton(name: string): any;
+        getButton(name: string): dxButton | undefined;
         /** @name dxForm.getEditor(dataField) */
-        getEditor(dataField: string): any;
+        getEditor(dataField: string): Editor | undefined;
         /** @name dxForm.itemOption(id) */
         itemOption(id: string): any;
         /** @name dxForm.itemOption(id, option, value) */
@@ -6637,7 +6641,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.Options.mediaResizing */
         mediaResizing?: dxHtmlEditorMediaResizing;
         /** @name dxHtmlEditor.Options.mentions */
-        mentions?: Array<dxHtmlEditorMentions>;
+        mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
@@ -6697,21 +6701,21 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorMediaResizing.enabled */
         enabled?: boolean;
     }
-    /** @name dxHtmlEditorMentions */
-    export interface dxHtmlEditorMentions {
-        /** @name dxHtmlEditorMentions.dataSource */
+    /** @name dxHtmlEditorMention */
+    export interface dxHtmlEditorMention {
+        /** @name dxHtmlEditorMention.dataSource */
         dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
-        /** @name dxHtmlEditorMentions.marker */
+        /** @name dxHtmlEditorMention.marker */
         marker?: string;
-        /** @name dxHtmlEditorMentions.minSearchLength */
+        /** @name dxHtmlEditorMention.minSearchLength */
         minSearchLength?: number;
-        /** @name dxHtmlEditorMentions.searchTimeout */
+        /** @name dxHtmlEditorMention.searchTimeout */
         searchTimeout?: number;
-        /** @name dxHtmlEditorMentions.itemTemplate */
+        /** @name dxHtmlEditorMention.itemTemplate */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxHtmlEditorMentions.searchExpr */
+        /** @name dxHtmlEditorMention.searchExpr */
         searchExpr?: string | Function | Array<string | Function>;
-        /** @name dxHtmlEditorMentions.valueExpr */
+        /** @name dxHtmlEditorMention.valueExpr */
         valueExpr?: string | Function;
         /** @name dxHtmlEditorMentions.template */
         template?: template | ((data: any, container: DevExpress.core.dxElement) => string | Element | JQuery);

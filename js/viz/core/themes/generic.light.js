@@ -46,8 +46,12 @@ registerTheme({
         subtitle: {
             font: {
                 size: 16
-            }
-        }
+            },
+            wordWrap: "normal",
+            textOverflow: "ellipsis"
+        },
+        wordWrap: "normal",
+        textOverflow: "ellipsis"
     },
     loadingIndicator: {
         text: "Loading..."
@@ -61,6 +65,12 @@ registerTheme({
             weight: 400
         },
         button: {
+            margin: {
+                top: 8,
+                left: 10,
+                right: 10,
+                bottom: 8
+            },
             "default": {
                 color: "#333",
                 borderColor: "#ddd",
