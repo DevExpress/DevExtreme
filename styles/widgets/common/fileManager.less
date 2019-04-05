@@ -1,18 +1,28 @@
 .dx-filemanager {
     display: flex;
     flex-direction: column;
+    border: 1px solid;
     
     .dx-filemanager-toolbar {
-        display: flex;
+        padding: 6px 10px;
+
+        .dx-filemanager-toolbar-separator-item {
+            width: 1px;
+            height: 36px;
+            margin-right: 5px;
+        }
     }
 
     .dx-filemanager-container {
         display: flex;
         height: 100%;
-    }
+        border-top: 1px solid;
+        box-sizing: border-box;
 
-    .dx-filemanager-dirs-tree {
-        min-width: 20%;
+        .dx-filemanager-dirs-tree {
+            min-width: 20%;
+            padding: 5px 10px;
+        }
     }
 
     .dx-filemanager-view-separator {
@@ -22,6 +32,41 @@
         cursor: col-resize;
     }
     
+    .dx-filemanager-breadcrumbs {
+        padding: 6px 11px;
+        border-bottom: 1px solid;
+        
+        .dx-menu-horizontal .dx-menu-item-wrapper {
+            vertical-align: middle;
+        }
+
+        .dx-menu-item-content {
+            padding: 5px 0 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-parent-folder-item .dx-menu-item-content {
+            padding: 5px 9px 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
+            width: 1px;
+            height: 36px;
+            padding: 0;
+            margin: 0 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-path-separator-item .dx-menu-item-content {
+            padding: 5px 1px 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-separator-item,
+        .dx-filemanager-breadcrumbs-path-separator-item {
+            &.dx-state-hover {
+                cursor: default;
+            }
+        }
+    }
+
     .dx-filemanager-editing-container {
         position: absolute;
         top: -5000px;
@@ -119,6 +164,7 @@
 
     .dx-filemanager-details {
         height: 100%;
+        overflow: hidden;
         user-select: none;
 
         & > div {
