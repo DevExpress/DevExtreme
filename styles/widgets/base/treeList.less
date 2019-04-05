@@ -49,6 +49,24 @@
         .dx-icon-sortdown;
     }
 
+    .dx-header-row {
+        & > .dx-cell-focus-disabled,
+        & > .dx-cell-focus-disabled .dx-header-filter {
+            outline: none;
+        }
+
+        td.dx-outline:focus,
+        td .dx-header-filter.dx-outline:focus {
+            outline: 2px solid @treelist-focused-border-color;
+        }
+        td.dx-outline:focus {
+            outline-offset: -2px;
+        }
+        td .dx-header-filter.dx-outline:focus {
+            outline-offset: 2px;
+        }
+    }
+
     .dx-header-filter {
         position: relative;
         color: @HEADER_FILTER_COLOR;

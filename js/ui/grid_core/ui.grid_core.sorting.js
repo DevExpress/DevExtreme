@@ -15,6 +15,7 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
 
         if(row.rowType === "header") {
             eventsEngine.on($row, addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", this.createAction(e => {
+                $(e.event.target).removeClass("dx-outline");
                 this._processHeaderAction(e.event, $row);
             }));
         }
