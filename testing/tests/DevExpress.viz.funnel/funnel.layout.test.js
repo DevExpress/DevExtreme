@@ -108,7 +108,7 @@ QUnit.test("Title with export button and legend", function(assert) {
     });
 
     assert.deepEqual(this.title.move.lastCall.args[0], [350, 0, 550, 50], "title rect");
-    assert.deepEqual(this.export.move.lastCall.args[0], [850, 0, 900, 50], "export rect");
+    assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], "export rect");
 });
 
 QUnit.test("Title, export button and labels", function(assert) {
@@ -141,7 +141,8 @@ QUnit.test("Title, export button, legend and labels", function(assert) {
     });
 
     assert.deepEqual(this.title.move.lastCall.args[0], [297.5, 0, 497.5, 50], "title rect");
-    assert.deepEqual(this.export.move.lastCall.args[0], [850, 0, 900, 50], "export rect");
+    assert.deepEqual(this.title.move.lastCall.args[1], [375, 0, 575, 50], "title fit rect");
+    assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], "export rect");
 });
 
 QUnit.test("Export button and legend", function(assert) {
@@ -174,27 +175,6 @@ QUnit.test("Shift title if title and export button have same position", function
     });
     assert.deepEqual(this.title.move.lastCall.args[0], [750, 0, 950, 50], "title rect");
     assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], "export rect");
-});
-
-QUnit.test("Do not shift title to negative are if container width too small", function(assert) {
-    this.export.stub("layoutOptions").returns({ horizontalAlignment: "right", verticalAlignment: "top", weak: true });
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
-    });
-    this.legend.layoutOptions.returns(undefined);
-
-    createFunnel({
-        dataSource: [{ value: 1 }],
-        label: {
-            visible: false
-        },
-        size: {
-            width: 150
-        }
-    });
-    assert.deepEqual(this.title.move.lastCall.args[0], [0, 0, 100, 50], "title rect");
-    assert.deepEqual(this.export.move.lastCall.args[0], [100, 0, 150, 50], "export rect");
 });
 
 QUnit.module("Adaptive Layout", $.extend({}, commonEnvironment, {
@@ -236,7 +216,8 @@ QUnit.test("hide legend. horizontal alignment", function(assert) {
         },
         dataSource: [{ value: 1 }],
         legend: {
-            visible: true
+            visible: true,
+            position: "inside" // not supported, should not raise to side effects
         },
         label: {
             visible: false
@@ -339,4 +320,37 @@ QUnit.test("hide pair elements: title and export", function(assert) {
     assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 800, 600]);
     assert.ok(this.export.freeSpace.called);
     assert.ok(this.title.freeSpace.called);
+});
+
+QUnit.test("Hide header if space is not enought for title end export", function(assert) {
+    this.title.stub("measure").returns([150, 120]);
+    this.export.stub("measure").returns([100, 150]);
+
+    this.title.stub("layoutOptions").returns({
+        horizontalAlignment: "right",
+        verticalAlignment: "top"
+    });
+    this.export.stub("layoutOptions").returns({
+        horizontalAlignment: "right",
+        verticalAlignment: "top",
+        weak: true
+    });
+
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        size: {
+            width: 247
+        },
+        export: {
+            enabled: true
+        },
+        title: "Title",
+        label: {
+            visible: false
+        }
+    });
+
+    assert.ok(this.title.freeSpace.called);
+    assert.ok(this.export.freeSpace.called);
 });

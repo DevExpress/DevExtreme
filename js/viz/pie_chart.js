@@ -143,7 +143,7 @@ var dxPieChart = BaseChart.inherit({
         const that = this;
         const itemsByArgument = {};
 
-        that.series.forEach(function(series) {
+        (that.series || []).forEach(function(series) {
             series.getPoints().forEach(function(point) {
                 var argument = point.argument.valueOf();
                 var index = series.getPointsByArg(argument).indexOf(point);
@@ -365,8 +365,6 @@ var dxPieChart = BaseChart.inherit({
     _legendDataField: "point",
 
     _legendItemTextField: "argument",
-
-    _updateLegendPosition: _noop,
 
     _applyPointMarkersAutoHiding: _noop,
 

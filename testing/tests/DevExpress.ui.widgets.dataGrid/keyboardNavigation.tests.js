@@ -2123,8 +2123,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
                 { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
             ],
             paginate: true
-        },
-        useLegacyKeyboardNavigation: true
+        }
     };
 
     setupModules(this, { initViews: true });
@@ -2147,7 +2146,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
 
-    var $prevCell = testElement.find(".dx-data-row").eq(0).children().eq(4);
+    var $prevCell = testElement.find(".dx-data-row").eq(0).children().eq(5);
 
     assert.equal($prevCell.attr("tabindex"), "0");
     assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex]").index($prevCell), "previous focusable element");
@@ -3210,11 +3209,12 @@ QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation f
         editing: {
             mode: "cell",
             allowUpdating: true
-        },
-        useLegacyKeyboardNavigation: true
+        }
     };
 
     setupModules(this);
+
+    this.keyboardNavigationController._isLegacyNavigation = () => true;
 
     // act
     this.gridView.render($("#container"));
@@ -3914,7 +3914,6 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
     setupModules(this);
 
     this.options.editing = { allowUpdating: true, mode: "batch" };
-    this.options.useLegacyKeyboardNavigation = true;
 
     var $container = $("#container");
     this.gridView.render($container);
@@ -3926,6 +3925,7 @@ QUnit.testInActiveWindow("Move to next cell via tab key when edit command column
 
     // act
     this.triggerKeyDown("tab", false, false, $container.find('input'));
+    this.triggerKeyDown("tab", false, false, this.getCellElement(0, 2));
 
     // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
@@ -4692,8 +4692,7 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
             allowUpdating: true,
             mode: "batch"
         },
-        masterDetail: { enabled: true },
-        useLegacyKeyboardNavigation: true
+        masterDetail: { enabled: true }
     };
     setupModules(this);
 

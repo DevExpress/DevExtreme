@@ -1518,11 +1518,15 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, text?: string } | string;
+        subtitle?: { font?: Font, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
+        /** @name BaseWidget.Options.title.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name BaseWidget.Options.title.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
+        /** @name BaseWidget.Options.title.wordWrap */
+        wordWrap?: 'normal' | 'break-word' | 'none';
     }
     /** @name BaseWidget.Options.tooltip */
     interface BaseWidgetTooltip {

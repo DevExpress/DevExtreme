@@ -4015,7 +4015,7 @@ define(function(require) {
         }).done(function(data) {
             assert.deepEqual(data.columns.map(getHeaderItemValue), [
                 undefined, undefined,
-                "Men's Sports Shorts, S", "Men's Sports Shorts, M",
+                "Men's Sports Shorts, L", "Men's Sports Shorts, M",
                 undefined, undefined,
                 undefined, undefined,
                 undefined, undefined,
