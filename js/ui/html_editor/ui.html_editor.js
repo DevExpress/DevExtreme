@@ -190,6 +190,11 @@ const HtmlEditor = Editor.inherit({
             * @default "item"
             */
             /**
+            * @name dxHtmlEditorMention.displayExpr
+            * @type string|function(item)
+            * @default "this"
+            */
+            /**
             * @name dxHtmlEditorMention.searchExpr
             * @type getter|Array<getter>
             * @default "this"
