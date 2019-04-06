@@ -1,7 +1,7 @@
 import $ from "jquery";
 import config from "core/config";
 
-import "ui/action_button";
+import "ui/floating_action_button";
 import "common.css!";
 import "generic_light.css!";
 

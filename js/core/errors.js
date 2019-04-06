@@ -236,5 +236,10 @@ module.exports = errorUtils({
     /**
     * @name ErrorsCore.W0016
     */
-    W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.'
+    W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.',
+
+    /**
+    * @name ErrorsCore.W0017
+    */
+    W0017: "The Floating Action Button exceeds the recommended action count. If you need to display more actions, increase the maxActionButtonCount option value in the global config.",
 });

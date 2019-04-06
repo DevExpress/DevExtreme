@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import config from "../../core/config";
 import { extend } from "../../core/utils/extend";
+import errors from "../../core/errors";
 import eventsEngine from "../../events/core/events_engine";
 import { getSwatchContainer } from "../widget/swatch_container";
 import ActionButtonItem from "./action_button_item";
@@ -26,7 +27,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                     y: -16
                 }
             },
-            maxActionButtonCount: 6,
+            maxActionButtonCount: 5,
             actions: [],
             visible: true,
             activeStateEnabled: true,
@@ -91,8 +92,6 @@ const ActionButtonBase = ActionButtonItem.inherit({
         const actions = this.option("actions");
         const lastActionIndex = actions.length - 1;
 
-        if(actions.length >= this.option("maxActionButtonCount")) return;
-
         if(this._actionItems.length) {
             this._actionItems.forEach(actionItem => {
                 actionItem.dispose();
@@ -100,7 +99,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             });
         }
 
-        if(!actions.length) return;
+        if(actions.length < 2) return;
 
         for(let i = 0; i < actions.length; i++) {
             const action = actions[i];
@@ -171,6 +170,10 @@ exports.initAction = function(newAction) {
         });
 
         if(!isActionExist) {
+            if(savedActions.length >= actionButtonBase.option("maxActionButtonCount")) {
+                errors.log("W0017");
+                return;
+            }
             savedActions.push(newAction);
             actionButtonBase.option({
                 actions: savedActions,

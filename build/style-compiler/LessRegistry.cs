@@ -202,7 +202,7 @@ namespace StyleCompiler
                 "drawer",
                 "card",
                 "htmlEditor",
-                "actionButton",
+                "floatingActionButton",
                 "fileManager"
             });
 

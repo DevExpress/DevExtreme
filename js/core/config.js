@@ -116,9 +116,9 @@ const config = {
         /**
         * @name globalConfig.floatingActionButtonConfig.maxActionButtonCount
         * @type number
-        * @default 6
+        * @default 5
         */
-        maxActionButtonCount: 6
+        maxActionButtonCount: 5
     },
 
     optionsParser: (optionsString) => {

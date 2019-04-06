@@ -16,15 +16,27 @@
                 display: none;
             }
             
-            .dx-icon {
+            .dx-fa-button-icon,
+            .dx-fa-button-icon-close  {
                 padding: (@GENERIC_MAIN_ACTION_BUTTON_SIZE - @GENERIC_ACTION_BUTTON_ICON_SIZE) / 2;
             }
         }
     }
 
-    .dx-icon {
-        font-size: @GENERIC_ACTION_BUTTON_ICON_SIZE;
+    .dx-fa-button-icon,
+    .dx-fa-button-icon-close {
         padding: (@GENERIC_ACTION_BUTTON_SIZE - @GENERIC_ACTION_BUTTON_ICON_SIZE) / 2;
+        width: @GENERIC_ACTION_BUTTON_ICON_SIZE;
+        box-sizing: content-box;
+
+        .dx-icon {
+            font-size: @GENERIC_ACTION_BUTTON_ICON_SIZE;
+        }
+    
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
     
     .dx-overlay-content {
