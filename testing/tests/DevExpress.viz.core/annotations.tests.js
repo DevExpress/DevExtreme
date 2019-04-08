@@ -18,7 +18,7 @@ QUnit.module("Image annotation", environment);
 QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     const testCase = (coords, message) => {
         this.widget._getAnnotationCoords.returns(coords);
-        const annotation = createAnnotations([{ type: "image", imageUrl: "some_url" }], {})[0];
+        const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {})[0];
 
         annotation.draw(this.widget, this.group);
 
@@ -32,7 +32,7 @@ QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
 });
 
 QUnit.test("Image params", function(assert) {
-    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", imageUrl: "some_url", imageSize: { width: 10, height: 10 }, imageLocation: "some_location" }])[0];
+    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10, height: 10, location: "some_location" } }])[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -40,7 +40,7 @@ QUnit.test("Image params", function(assert) {
 });
 
 QUnit.test("Merge common and partial options", function(assert) {
-    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", imageUrl: "some_url", imageSize: { width: 10 } }], { imageSize: { height: 10 } })[0];
+    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10 } }], { image: { height: 10 } })[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -48,7 +48,7 @@ QUnit.test("Merge common and partial options", function(assert) {
 });
 
 QUnit.test("Draw image inside a plaque with borders and arrow", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", imageUrl: "some_url", imageSize: { width: 20, height: 13 } }], {
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -122,7 +122,7 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
 });
 
 QUnit.test("Draw image inside a plaque without borders", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", imageUrl: "some_url", imageSize: { width: 20, height: 13 } }], {
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -182,7 +182,7 @@ QUnit.test("Merge common and partial options", function(assert) {
 QUnit.module("Tooltip", environment);
 
 QUnit.test("Get tooltip params", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", imageUrl: "some_url" }], {})[0];
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url" } }], {})[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -191,7 +191,7 @@ QUnit.test("Get tooltip params", function(assert) {
 });
 
 QUnit.test("Get tooltip format object", function(assert) {
-    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", imageUrl: "some_url" }];
+    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" } }];
     const annotation = createAnnotations(items, {})[0];
 
     annotation.draw(this.widget, this.group);
@@ -202,7 +202,7 @@ QUnit.test("Get tooltip format object", function(assert) {
 
 QUnit.test("customizeTooltip in item", function(assert) {
     const customizeTooltip = function() { return 2; };
-    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", imageUrl: "some_url", customizeTooltip }];
+    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" }, customizeTooltip }];
     const annotation = createAnnotations(items, { customizeTooltip: function() { return 1; } })[0];
 
     annotation.draw(this.widget, this.group);

@@ -709,10 +709,10 @@ registerTheme({
             constantLines: []
         },
         commonAnnotationSettings: {
-            imageLocation: "full",
-            font: {},
+            font: {
+                color: "#333333"
+            },
             tooltipEnabled: true,
-
             border: {
                 width: 1,
                 color: "#dddddd",
@@ -731,6 +731,9 @@ registerTheme({
                 offsetY: 1,
                 blur: 4,
                 color: BLACK
+            },
+            image: {
+                location: "full"
             }
         },
         argumentAxis: {
