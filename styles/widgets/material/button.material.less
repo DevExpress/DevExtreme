@@ -329,6 +329,10 @@
                     margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
                 }
             }
+
+            > .dx-dropdowneditor-button:last-child {
+                margin-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
         }
 
         .dx-rtl& {
@@ -362,6 +366,11 @@
                         margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
                         margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
                     }
+                }
+
+                > .dx-dropdowneditor-button:last-child {
+                    margin-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    margin-right: 0;
                 }
             }
         }

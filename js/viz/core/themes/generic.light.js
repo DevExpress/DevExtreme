@@ -47,6 +47,7 @@ registerTheme({
             font: {
                 size: 16
             },
+            offset: 0,
             wordWrap: "normal",
             textOverflow: "ellipsis"
         },
@@ -152,10 +153,15 @@ registerTheme({
                 weight: 200
             },
             subtitle: {
+                offset: 0,
                 font: {
                     size: 14
-                }
-            }
+                },
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            },
+            wordWrap: "none",
+            textOverflow: "ellipsis"
         }
     },
     "chart:common": {
@@ -702,12 +708,29 @@ registerTheme({
             },
             constantLines: []
         },
-        annotations: {
-            imageOptions: {
-                location: "full"
+        commonAnnotationSettings: {
+            imageLocation: "full",
+            font: {},
+            tooltipEnabled: true,
+
+            border: {
+                width: 1,
+                color: "#dddddd",
+                dashStyle: SOLID,
+                visible: true
             },
-            labelOptions: {
-                font: {}
+            color: WHITE,
+            opacity: 0.9,
+            arrowLength: 14,
+            arrowWidth: 14,
+            paddingLeftRight: 10,
+            paddingTopBottom: 10,
+            shadow: {
+                opacity: 0.15,
+                offsetX: 0,
+                offsetY: 1,
+                blur: 4,
+                color: BLACK
             }
         },
         argumentAxis: {

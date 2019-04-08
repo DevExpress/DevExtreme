@@ -46,6 +46,18 @@
                 padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
                 padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
+
+            .dx-texteditor-input-container {
+                &:after {
+                    right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + 1px;
+
+                    .dx-rtl &,
+                    .dx-rtl& {
+                        left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + 1px;
+                        right: auto;
+                    }
+                }
+            }
         }
 
         .dx-texteditor-input-container {

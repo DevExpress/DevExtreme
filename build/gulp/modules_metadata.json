@@ -285,6 +285,12 @@
     }
   },
   {
+    "name": "ui/diagram",
+    "exports": {
+      "default": { "path": "ui.dxDiagram", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/dialog",
     "exports": {
       "alert": { "path": "ui.dialog.alert" },

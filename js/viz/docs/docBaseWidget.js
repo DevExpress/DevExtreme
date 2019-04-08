@@ -296,7 +296,13 @@ var BaseWidget = {
             * @type Enums.VizTextOverflow
             * @default "ellipsis"
             */
-            textOverflow: "ellipsis"
+            textOverflow: "ellipsis",
+            /**
+            * @name BaseWidgetOptions.title.subtitle.offset
+            * @type number
+            * @default 0
+            */
+            offset: 0
         },
         /**
         * @name BaseWidgetOptions.title.wordWrap
@@ -965,7 +971,13 @@ var BaseLegend = {
                 color: '#232323',
                 size: 14,
                 opacity: undefined
-            }
+            },
+            /**
+            * @name BaseLegend.title.subtitle.offset
+            * @type number
+            * @default 0
+            */
+            offset: 0
         }
     }    
 };

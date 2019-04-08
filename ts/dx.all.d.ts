@@ -1390,7 +1390,7 @@ declare module DevExpress.viz {
         /** @name BaseLegend.rowItemSpacing */
         rowItemSpacing?: number;
         /** @name BaseLegend.title */
-        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
+        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
@@ -1511,7 +1511,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
+        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
         /** @name BaseWidget.Options.title.textOverflow */
@@ -5572,10 +5572,10 @@ declare module DevExpress.ui {
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
         keyExpr?: string | Function;
-        /** @name dxButtonGroup.Options.onSelectionChanged */
-        onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /** @name dxButtonGroup.Options.onItemClick */
         onItemClick?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
+        /** @name dxButtonGroup.Options.onSelectionChanged */
+        onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /** @name dxButtonGroup.Options.selectedItemKeys */
         selectedItemKeys?: Array<any>;
         /** @name dxButtonGroup.Options.selectedItems */
@@ -6628,8 +6628,14 @@ declare module DevExpress.ui {
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+        /** @name dxHtmlEditor.Options.customize */
+        customize?: ((modules: any) => any);
         /** @name dxHtmlEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
+        /** @name dxHtmlEditor.Options.mediaResizing */
+        mediaResizing?: dxHtmlEditorMediaResizing;
+        /** @name dxHtmlEditor.Options.mentions */
+        mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.name */
         name?: string;
         /** @name dxHtmlEditor.Options.onFocusIn */
@@ -6638,18 +6644,12 @@ declare module DevExpress.ui {
         onFocusOut?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name dxHtmlEditor.Options.placeholder */
         placeholder?: string;
-        /** @name dxHtmlEditor.Options.mediaResizing */
-        mediaResizing?: dxHtmlEditorMediaResizing;
-        /** @name dxHtmlEditor.Options.mentions */
-        mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
         valueType?: 'html' | 'markdown';
         /** @name dxHtmlEditor.Options.variables */
         variables?: dxHtmlEditorVariables;
-        /** @name dxHtmlEditor.Options.customize */
-        customize?: any;
     }
     /** @name dxHtmlEditor */
     export class dxHtmlEditor extends Editor {
@@ -6669,12 +6669,14 @@ declare module DevExpress.ui {
         formatText(index: number, length: number, formatName: string, formatValue: any): void;
         /** @name dxHtmlEditor.formatText(index, length, formats) */
         formatText(index: number, length: number, formats: any): void;
-        /** @name dxHtmlEditor.getFormat(index, length) */
-        getFormat(index: number, length: number): any;
-        /** @name dxHtmlEditor.getLength() */
-        getLength(): number;
         /** @name dxHtmlEditor.get(modulePath) */
         get(modulePath: string): any;
+        /** @name dxHtmlEditor.getFormat(index, length) */
+        getFormat(index: number, length: number): any;
+        /** @name DOMComponent.getInstance(element) */
+        static getInstance(element: Element | JQuery): DOMComponent;
+        /** @name dxHtmlEditor.getLength() */
+        getLength(): number;
         /** @name dxHtmlEditor.getQuillInstance() */
         getQuillInstance(): any;
         /** @name dxHtmlEditor.getSelection() */
@@ -6686,7 +6688,9 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.redo() */
         redo(): void;
         /** @name dxHtmlEditor.register(components) */
-        register(components: any): void;
+        register(modules: any): void;
+        /** @name Widget.registerKeyHandler(key, handler) */
+        registerKeyHandler(key: string, handler: Function): void;
         /** @name dxHtmlEditor.removeFormat(index, length) */
         removeFormat(index: number, length: number): void;
         /** @name dxHtmlEditor.setSelection(index, length) */
@@ -6705,20 +6709,22 @@ declare module DevExpress.ui {
     export interface dxHtmlEditorMention {
         /** @name dxHtmlEditorMention.dataSource */
         dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxHtmlEditorMention.displayExpr */
+        displayExpr?: string | ((item: any) => string);
+        /** @name dxHtmlEditorMention.itemTemplate */
+        itemTemplate?: template | Function;
         /** @name dxHtmlEditorMention.marker */
         marker?: string;
         /** @name dxHtmlEditorMention.minSearchLength */
         minSearchLength?: number;
-        /** @name dxHtmlEditorMention.searchTimeout */
-        searchTimeout?: number;
-        /** @name dxHtmlEditorMention.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxHtmlEditorMention.searchExpr */
         searchExpr?: string | Function | Array<string | Function>;
+        /** @name dxHtmlEditorMention.searchTimeout */
+        searchTimeout?: number;
+        /** @name dxHtmlEditorMention.template */
+        template?: template | Function;
         /** @name dxHtmlEditorMention.valueExpr */
         valueExpr?: string | Function;
-        /** @name dxHtmlEditorMentions.template */
-        template?: template | ((data: any, container: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxHtmlEditorToolbar */
     export interface dxHtmlEditorToolbar {
@@ -7362,7 +7368,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGrid.Options.fieldPanel */
         fieldPanel?: { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean };
         /** @name dxPivotGrid.Options.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /** @name dxPivotGrid.Options.hideEmptySummaryCells */
         hideEmptySummaryCells?: boolean;
         /** @name dxPivotGrid.Options.loadPanel */
@@ -7426,7 +7432,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGridFieldChooser.Options.dataSource */
         dataSource?: DevExpress.data.PivotGridDataSource;
         /** @name dxPivotGridFieldChooser.Options.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /** @name dxPivotGridFieldChooser.Options.height */
         height?: number | string | (() => number | string);
         /** @name dxPivotGridFieldChooser.Options.layout */
