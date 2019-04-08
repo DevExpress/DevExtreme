@@ -1262,6 +1262,22 @@ QUnit.test("'getDropDownAppointmentWidth' and 'getDropDownAppointmentHeight' sub
     assert.equal(width, 28, "Returned width is ok");
 });
 
+QUnit.test("'supportCompactDropDownAppointments' should return true if adaptivityEnabled = true", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        adaptivityEnabled: true,
+        views: ["motnh"],
+        currentView: "month"
+    });
+    this.clock.tick(300);
+
+    assert.ok(this.instance.fire("supportCompactDropDownAppointments"));
+
+    this.instance.option("adaptivityEnabled", false);
+
+    assert.notOk(this.instance.fire("supportCompactDropDownAppointments"));
+});
+
 QUnit.module("Agenda", {
     beforeEach: function() {
         this.createInstance = function(options) {
