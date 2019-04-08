@@ -309,7 +309,9 @@ let DropDownButton = Widget.inherit({
             focusStateEnabled: false,
             deferRendering: this.option("deferRendering"),
             minWidth: 130,
-            closeOnOutsideClick: true,
+            closeOnOutsideClick: function(e) {
+                return !e.target.closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
+            },
             showTitle: false,
             animation: {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },

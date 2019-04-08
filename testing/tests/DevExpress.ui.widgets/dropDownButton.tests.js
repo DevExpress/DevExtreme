@@ -201,6 +201,17 @@ QUnit.module("popup integration", {
         instance.repaint();
         assert.strictEqual(getPopup(instance).option("visible"), true, "options have been stored after the repaint");
     });
+
+    QUnit.test("click on toggle button should not be outside", (assert) => {
+        const $toggleButton = getToggleButton(this.instance);
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.ok(this.instance.option("dropDownOptions.visible"), "popup is visible");
+
+        eventsEngine.trigger($toggleButton, "dxpointerdown");
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.notOk(this.instance.option("dropDownOptions.visible"), "popup is hidden");
+
+    });
 });
 
 QUnit.module("list integration", {}, () => {
