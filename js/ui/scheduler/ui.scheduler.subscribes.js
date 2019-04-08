@@ -458,7 +458,7 @@ const subscribes = {
     },
 
     supportCompactDropDownAppointments: function() {
-        return this._workSpace._supportCompactDropDownAppointments();
+        return this.option("adaptivityEnabled") || this._workSpace._supportCompactDropDownAppointments();
     },
 
     getGroupCount: function() {
