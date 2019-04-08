@@ -21,6 +21,7 @@ QUnit.testStart(function() {
 
 QUnit.module("Subscribes", {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
         };
@@ -28,6 +29,7 @@ QUnit.module("Subscribes", {
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 });
 
@@ -1213,8 +1215,6 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
 });
 
 QUnit.test("'isAdaptive' subscribe should work correctly", function(assert) {
-    let clock = sinon.useFakeTimers();
-
     this.createInstance({
         dataSource: [],
         adaptivityEnabled: true
@@ -1224,10 +1224,22 @@ QUnit.test("'isAdaptive' subscribe should work correctly", function(assert) {
 
     this.instance.option("adaptivityEnabled", false);
 
-    clock.tick(300);
+    this.clock.tick(300);
     assert.notOk(this.instance.fire("isAdaptive"), "Scheduler isn't adaptive");
+});
 
-    clock.restore();
+QUnit.test("'getDropDownAppointmentWidth' and 'getDropDownAppointmentHeight' subscribes should work correctly", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        adaptivityEnabled: true
+    });
+    this.clock.tick(300);
+
+    let width = this.instance.fire("getDropDownAppointmentWidth");
+    let height = this.instance.fire("getDropDownAppointmentHeight");
+
+    assert.equal(height, 28, "Returned height is ok");
+    assert.equal(width, 28, "Returned width is ok");
 });
 
 QUnit.module("Agenda", {
