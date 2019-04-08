@@ -6075,6 +6075,8 @@ declare module DevExpress.ui {
         displayExpr?: string | ((itemData: any) => any);
         /** @name dxDropDownButton.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
+        /** @name dxDropDownButton.Options.icon */
+        icon?: string;
         /** @name dxDropDownButton.Options.itemTemplate */
         itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.items */
@@ -6088,11 +6090,15 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
-        selectedItem?: string | any;
-        /** @name dxDropDownButton.Options.showToggleButton */
-        showToggleButton?: boolean;
-        /** @name dxDropDownButton.Options.updateButtonOnSelection */
-        updateButtonOnSelection?: boolean;
+        selectedItem?: string | number | any;
+        /** @name dxDropDownButton.Options.selectedItemKey */
+        selectedItemKey?: string | number;
+        /** @name dxDropDownButton.Options.splitButton */
+        splitButton?: boolean;
+        /** @name dxDropDownButton.Options.text */
+        text?: string;
+        /** @name dxDropDownButton.Options.useSelectMode */
+        useSelectMode?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
