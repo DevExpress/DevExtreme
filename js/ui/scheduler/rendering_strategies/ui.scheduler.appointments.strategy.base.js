@@ -20,7 +20,9 @@ var APPOINTMENT_MIN_COUNT = 1,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
 
-    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24;
+    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
+
+    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
@@ -535,7 +537,7 @@ var BaseRenderingStrategy = Class.inherit({
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
         if(!overlappingMode) {
             var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentDefaultOffset();
-            return Math.floor(this.getCompactAppointmentGroupMaxWidth() / outerAppointmentWidth);
+            return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
         } else {
             return 0;
         }
@@ -563,13 +565,27 @@ var BaseRenderingStrategy = Class.inherit({
         }
     },
 
-    getCompactAppointmentGroupMaxWidth: function(intervalCount, isAllDay) {
-        if(isAllDay || !typeUtils.isDefined(isAllDay)) {
-            var widthInPercents = 75;
-            return widthInPercents * this.getDefaultCellWidth() / 100;
+    getDropDownAppointmentWidth: function(intervalCount, isAllDay) {
+        if(this.instance.fire("isAdaptive")) {
+            return this.getDropDownButtonAdaptiveSize();
         } else {
-            return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
+            if(isAllDay || !typeUtils.isDefined(isAllDay)) {
+                var widthInPercents = 75;
+                return widthInPercents * this.getDefaultCellWidth() / 100;
+            } else {
+                return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
+            }
         }
+    },
+
+    getDropDownAppointmentHeight: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return this.getDropDownButtonAdaptiveSize();
+        }
+    },
+
+    getDropDownButtonAdaptiveSize: function() {
+        return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
     },
 
     getDefaultCellWidth: function() {
@@ -581,6 +597,10 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     getCompactAppointmentDefaultOffset: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return this._defaultHeight - 50;
+        }
+
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
@@ -600,6 +620,11 @@ var BaseRenderingStrategy = Class.inherit({
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
             compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
             top = coordinates.top + compactAppointmentDefaultOffset;
+
+            if(this.instance.fire("isAdaptive")) {
+                coordinates.top = top;
+            }
+
             left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
             appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;

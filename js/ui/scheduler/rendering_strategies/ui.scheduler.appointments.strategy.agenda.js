@@ -137,7 +137,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _markAppointmentAsVirtual: noop,
 
-    getCompactAppointmentGroupMaxWidth: noop,
+    getDropDownAppointmentWidth: noop,
 
     getDefaultCellWidth: function() {
         return this._defaultWidth;
