@@ -861,11 +861,10 @@ QUnit.test("The appointmentData argument of the appointment tooltip template is 
 const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
-        this.data = simpleArrayData;
 
         this.createInstance = function(options) {
             const defaultOption = {
-                dataSource: this.data,
+                dataSource: [...simpleArrayData],
                 views: ["agenda", "day", "week", "workWeek", "month"],
                 currentView: "month",
                 currentDate: new Date(2017, 4, 25),
@@ -962,7 +961,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "Value on init should be correct");
         assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
 
-        this.instance.deleteAppointment(this.data[0]);
+        this.instance.deleteAppointment(simpleArrayData[0]);
         assert.equal(appointmentsHelper.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
 
         this.instance.addAppointment({
