@@ -9,7 +9,8 @@ import messageLocalization from "localization/message";
 import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import dataUtils from "core/element_data";
-import { tooltipHelper, appointmentsHelper, appointmentPopupHelper } from './helpers.js';
+import { SchedulerTestWrapper, tooltipHelper, appointmentsHelper, appointmentPopupHelper } from './helpers.js';
+import { simpleArrayData } from './data.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -860,75 +861,7 @@ QUnit.test("The appointmentData argument of the appointment tooltip template is 
 const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
-        this.data = [
-            {
-                text: "Website Re-Design Plan",
-                startDate: new Date(2017, 4, 22, 9, 30),
-                endDate: new Date(2017, 4, 22, 11, 30)
-            }, {
-                text: "Book Flights to San Fran for Sales Trip",
-                startDate: new Date(2017, 4, 22, 12, 0),
-                endDate: new Date(2017, 4, 22, 13, 0),
-                allDay: true
-            }, {
-                text: "Install New Router in Dev Room",
-                startDate: new Date(2017, 4, 22, 14, 30),
-                endDate: new Date(2017, 4, 22, 15, 30)
-            }, {
-                text: "Approve Personal Computer Upgrade Plan",
-                startDate: new Date(2017, 4, 23, 10, 0),
-                endDate: new Date(2017, 4, 23, 11, 0)
-            }, {
-                text: "Final Budget Review",
-                startDate: new Date(2017, 4, 23, 12, 0),
-                endDate: new Date(2017, 4, 23, 13, 35)
-            }, {
-                text: "New Brochures",
-                startDate: new Date(2017, 4, 23, 14, 30),
-                endDate: new Date(2017, 4, 23, 15, 45)
-            }, {
-                text: "Install New Database",
-                startDate: new Date(2017, 4, 24, 9, 45),
-                endDate: new Date(2017, 4, 24, 11, 15)
-            }, {
-                text: "Approve New Online Marketing Strategy",
-                startDate: new Date(2017, 4, 24, 12, 0),
-                endDate: new Date(2017, 4, 24, 14, 0)
-            }, {
-                text: "Upgrade Personal Computers",
-                startDate: new Date(2017, 4, 24, 15, 15),
-                endDate: new Date(2017, 4, 24, 16, 30)
-            }, {
-                text: "Customer Workshop",
-                startDate: new Date(2017, 4, 25, 11, 0),
-                endDate: new Date(2017, 4, 25, 12, 0),
-                allDay: true
-            }, {
-                text: "Prepare 2015 Marketing Plan",
-                startDate: new Date(2017, 4, 25, 11, 0),
-                endDate: new Date(2017, 4, 25, 13, 30)
-            }, {
-                text: "Brochure Design Review",
-                startDate: new Date(2017, 4, 25, 14, 0),
-                endDate: new Date(2017, 4, 25, 15, 30)
-            }, {
-                text: "Create Icons for Website",
-                startDate: new Date(2017, 4, 26, 10, 0),
-                endDate: new Date(2017, 4, 26, 11, 30)
-            }, {
-                text: "Upgrade Server Hardware",
-                startDate: new Date(2017, 4, 26, 14, 30),
-                endDate: new Date(2017, 4, 26, 16, 0)
-            }, {
-                text: "Submit New Website Design",
-                startDate: new Date(2017, 4, 26, 16, 30),
-                endDate: new Date(2017, 4, 26, 18, 0)
-            }, {
-                text: "Launch New Website",
-                startDate: new Date(2017, 4, 26, 12, 20),
-                endDate: new Date(2017, 4, 26, 14, 0)
-            }
-        ];
+        this.data = simpleArrayData;
 
         this.createInstance = function(options) {
             const defaultOption = {
@@ -940,6 +873,7 @@ const moduleConfig = {
                 height: 600,
             };
             this.instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
 
         this.clock = sinon.useFakeTimers();
@@ -1103,7 +1037,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.equal(appointmentsHelper.compact.getButtonCount(), 0, "Compact button shouldn't render after click delete button");
     });
 
-    QUnit.test("Templates", function(assert) {
+    QUnit.test("Templates should valid markup", function(assert) {
         const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = "appointment-tooltip-template-marker";
         const DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME = "drop-down-appointment-template";
 
@@ -1128,5 +1062,33 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
 
         appointmentsHelper.compact.click();
         assert.ok(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' should render for compact appointment");
+    });
+
+    QUnit.test("appointmentTooltipTemplate method should pass valid arguments", function(assert) {
+        let templateCallCount = 0;
+        const checkItemTemplateContent = (index) => {
+            assert.ok(this.scheduler.tooltip.checkItemElementHtml(index, `template item index - ${index}`), "Template should render valid content dependent on item index");
+        };
+
+        this.createInstance({
+            appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
+                assert.ok(contentElement.className.indexOf("dx-list-item-content") !== -1, "Content element should be list item");
+                assert.equal(targetedAppointmentData.text, appointmentData.text, "targetedAppointmentData should be not empty");
+                assert.equal(index, templateCallCount, "Index should be correct pass in template callback");
+
+                templateCallCount++;
+                return $('<div />').text(`template item index - ${index}`);
+            }
+        });
+
+        this.scheduler.appointments.click();
+        checkItemTemplateContent(0);
+        templateCallCount = 0;
+
+        const buttonCount = this.scheduler.appointments.compact.getButtonCount();
+        this.scheduler.appointments.compact.click(buttonCount - 1);
+
+        checkItemTemplateContent(0);
+        checkItemTemplateContent(1);
     });
 });

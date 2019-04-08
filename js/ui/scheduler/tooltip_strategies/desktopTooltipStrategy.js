@@ -1,5 +1,5 @@
 import $ from "../../../core/renderer";
-import { TooltipStrategyBase } from './tooltipStrategyBase';
+import { TooltipStrategyBase, createDefaultTooltipTemplate } from './tooltipStrategyBase';
 import Tooltip from "../../tooltip";
 import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
@@ -40,13 +40,7 @@ class TooltipBehaviorBase {
     }
 
     createFunctionTemplate(template, data, targetData, index) {
-        return new FunctionTemplate(options => {
-            return template.render({
-                model: data,
-                targetedAppointmentData: targetData,
-                container: options.container
-            });
-        });
+        return createDefaultTooltipTemplate(template, data, targetData, index);
     }
 }
 
@@ -116,6 +110,9 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     createFunctionTemplate(template, data, targetData, index) {
+        if(this._isEmptyDropDownAppointmentTemplate()) {
+            return super.createFunctionTemplate(template, data, targetData, index);
+        }
         return new FunctionTemplate((options) => {
             return template.render({
                 model: data,

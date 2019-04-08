@@ -3,7 +3,7 @@ import { TooltipStrategyBase } from './tooltipStrategyBase';
 import $ from "../../../core/renderer";
 import { getWindow } from "../../../core/utils/window";
 
-const SLIDE_PANEL_CLASS_NAME = "dx-scheduler-slide-panel";
+const SLIDE_PANEL_CLASS_NAME = "dx-scheduler-overlay-panel";
 
 const animationConfig = {
     show: {

@@ -14,6 +14,16 @@ const TOOLTIP_APPOINTMENT_ITEM = "dx-tooltip-appointment-item",
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + "-delete-button-container",
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + "-delete-button";
 
+export const createDefaultTooltipTemplate = (template, data, targetData, index) => {
+    return new FunctionTemplate(options => {
+        return template.render({
+            model: data,
+            targetedAppointmentData: targetData,
+            container: options.container,
+            currentIndex: index
+        });
+    });
+};
 
 export class TooltipStrategyBase {
     constructor(scheduler) {
@@ -86,13 +96,7 @@ export class TooltipStrategyBase {
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
-        return new FunctionTemplate(options => {
-            return template.render({
-                model: data,
-                targetedAppointmentData: targetData,
-                container: options.container
-            });
-        });
+        return createDefaultTooltipTemplate(template, data, targetData, index);
     }
 
     _getItemListTemplateName() {
