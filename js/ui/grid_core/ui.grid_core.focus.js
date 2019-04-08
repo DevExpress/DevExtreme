@@ -9,7 +9,8 @@ import { Deferred } from "../../core/utils/deferred";
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow";
+    UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow",
+    POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none";
 
 exports.FocusController = core.ViewController.inherit((function() {
     return {
@@ -213,7 +214,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
                 if(focusedRowIndex >= 0) {
                     $focusedRow = that._prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
-                    that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
+                    if(!$tableElement.hasClass(POINTER_EVENTS_NONE_CLASS)) {
+                        that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
+                    }
                 }
             });
         },
