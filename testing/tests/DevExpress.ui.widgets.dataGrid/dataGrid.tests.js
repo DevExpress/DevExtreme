@@ -6742,6 +6742,39 @@ QUnit.test("selection should works correctly if row rendering mode is virtual", 
     assert.ok($(dataGrid.getRowElement(6)).hasClass("dx-selection"), "dx-selection class is added");
 });
 
+// T726385
+QUnit.test("selectAll should works correctly if selectAllMode is page and row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 30; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        selection: {
+            mode: "multiple",
+            selectAllMode: "page"
+        },
+        scrolling: {
+            rowRenderingMode: "virtual"
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.selectAll();
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(dataGrid.getSelectedRowKeys().length, 20, "selected row key count equals pageSize");
+});
+
 // T644981
 QUnit.test("grouping should works correctly if row rendering mode is virtual and dataSource is remote", function(assert) {
     // arrange, act
