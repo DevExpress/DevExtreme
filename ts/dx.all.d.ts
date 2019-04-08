@@ -2000,7 +2000,7 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.adjustOnZoom */
         adjustOnZoom?: boolean;
         /** @name dxChart.Options.annotations */
-        annotations?: Array<dxChartAnnotations>;
+        annotations?: Array<dxChartAnnotationConfig | any>;
         /** @name dxChart.Options.argumentAxis */
         argumentAxis?: dxChartArgumentAxis;
         /** @name dxChart.Options.autoHidePointMarkers */
@@ -2013,7 +2013,7 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.barWidth */
         barWidth?: number;
         /** @name dxChart.Options.commonAnnotationSettings */
-        commonAnnotationSettings?: dxChartCommonAnnotationSettings;
+        commonAnnotationSettings?: dxChartCommonAnnotationConfig;
         /** @name dxChart.Options.commonAxisSettings */
         commonAxisSettings?: dxChartCommonAxisSettings;
         /** @name dxChart.Options.commonPaneSettings */
@@ -2086,11 +2086,6 @@ declare module DevExpress.viz {
         /** @deprecated */
         /** @name dxChart.Options.zoomingMode */
         zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
-    }
-    /** @name dxChart.Options.annotations */
-    export interface dxChartAnnotations extends dxChartCommonAnnotationSettings {
-        /** @name dxChart.Options.annotations.name */
-        name?: string;
     }
     /** @name dxChart.Options.argumentAxis */
     export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
@@ -2216,41 +2211,6 @@ declare module DevExpress.viz {
     export interface dxChartArgumentAxisTitle extends dxChartCommonAxisSettingsTitle {
         /** @name dxChart.Options.argumentAxis.title.text */
         text?: string;
-    }
-    /** @name dxChart.Options.commonAnnotationSettings */
-    export interface dxChartCommonAnnotationSettings {
-        /** @name dxChart.Options.commonAnnotationSettings.arrowLength */
-        arrowLength?: number;
-        /** @name dxChart.Options.commonAnnotationSettings.arrowWidth */
-        arrowWidth?: number;
-        /** @name dxChart.Options.commonAnnotationSettings.border */
-        border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
-        /** @name dxChart.Options.commonAnnotationSettings.color */
-        color?: string;
-        /** @name dxChart.Options.commonAnnotationSettings.customizeAnnotation */
-        customizeAnnotation?: ((annotationItem: any) => dxChartCommonAnnotationSettings);
-        /** @name dxChart.Options.commonAnnotationSettings.customizeTooltip */
-        customizeTooltip?: ((annotationItem: any) => any);
-        /** @name dxChart.Options.commonAnnotationSettings.font */
-        font?: Font;
-        /** @name dxChart.Options.commonAnnotationSettings.height */
-        height?: number;
-        /** @name dxChart.Options.commonAnnotationSettings.image */
-        image?: string | { height?: number, location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string, width?: number };
-        /** @name dxChart.Options.commonAnnotationSettings.opacity */
-        opacity?: number;
-        /** @name dxChart.Options.commonAnnotationSettings.paddingLeftRight */
-        paddingLeftRight?: number;
-        /** @name dxChart.Options.commonAnnotationSettings.paddingTopBottom */
-        paddingTopBottom?: number;
-        /** @name dxChart.Options.commonAnnotationSettings.shadow */
-        shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
-        /** @name dxChart.Options.commonAnnotationSettings.tooltipEnabled */
-        tooltipEnabled?: boolean;
-        /** @name dxChart.Options.commonAnnotationSettings.type */
-        type?: 'label' | 'image';
-        /** @name dxChart.Options.commonAnnotationSettings.width */
-        width?: number;
     }
     /** @name dxChart.Options.commonAxisSettings */
     export interface dxChartCommonAxisSettings {
@@ -2591,6 +2551,46 @@ declare module DevExpress.viz {
         resetVisualRange(): void;
         /** @name dxChart.zoomArgument(startValue,endValue) */
         zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
+    }
+    /** @name dxChartAnnotationConfig */
+    export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
+        /** @name dxChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxChartCommonAnnotationConfig */
+    export interface dxChartCommonAnnotationConfig {
+        /** @name dxChartCommonAnnotationConfig.arrowLength */
+        arrowLength?: number;
+        /** @name dxChartCommonAnnotationConfig.arrowWidth */
+        arrowWidth?: number;
+        /** @name dxChartCommonAnnotationConfig.border */
+        border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+        /** @name dxChartCommonAnnotationConfig.color */
+        color?: string;
+        /** @name dxChartCommonAnnotationConfig.customizeAnnotation */
+        customizeAnnotation?: ((annotationItem: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
+        /** @name dxChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.font */
+        font?: Font;
+        /** @name dxChartCommonAnnotationConfig.height */
+        height?: number;
+        /** @name dxChartCommonAnnotationConfig.image */
+        image?: string | { height?: number, location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string, width?: number };
+        /** @name dxChartCommonAnnotationConfig.opacity */
+        opacity?: number;
+        /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
+        paddingLeftRight?: number;
+        /** @name dxChartCommonAnnotationConfig.paddingTopBottom */
+        paddingTopBottom?: number;
+        /** @name dxChartCommonAnnotationConfig.shadow */
+        shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
+        tooltipEnabled?: boolean;
+        /** @name dxChartCommonAnnotationConfig.type */
+        type?: 'label' | 'image';
+        /** @name dxChartCommonAnnotationConfig.width */
+        width?: number;
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
