@@ -461,6 +461,10 @@ const subscribes = {
         return this.option("adaptivityEnabled") || this._workSpace._supportCompactDropDownAppointments();
     },
 
+    isVerticalDropDownAppointments: function() {
+        this._workSpace._supportCompactDropDownAppointments();
+    },
+
     getGroupCount: function() {
         return this._workSpace._getGroupCount();
     },
