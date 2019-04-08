@@ -22,7 +22,8 @@ var APPOINTMENT_MIN_COUNT = 1,
 
     DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
 
-    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
+    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28,
+    DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
@@ -536,7 +537,7 @@ var BaseRenderingStrategy = Class.inherit({
     _getMaxNeighborAppointmentCount: function() {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
         if(!overlappingMode) {
-            var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentDefaultOffset();
+            var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentLeftOffset();
             return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
         } else {
             return 0;
@@ -596,9 +597,17 @@ var BaseRenderingStrategy = Class.inherit({
         return COMPACT_APPOINTMENT_DEFAULT_SIZE;
     },
 
-    getCompactAppointmentDefaultOffset: function() {
+    getCompactAppointmentTopOffset: function() {
         if(this.instance.fire("isAdaptive")) {
-            return this._defaultHeight - 50;
+            return this._defaultHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
+        }
+
+        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+    },
+
+    getCompactAppointmentLeftOffset: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return (this._defaultWidth - DROP_DOWN_BUTTON_ADAPTIVE_SIZE) / 2;
         }
 
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
@@ -614,18 +623,22 @@ var BaseRenderingStrategy = Class.inherit({
             width = coordinates.width,
             left = coordinates.left,
             compactAppointmentDefaultSize,
-            compactAppointmentDefaultOffset;
+            compactAppointmentTopOffset,
+            compactAppointmentLeftOffset;
 
         if(coordinates.isCompact) {
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
+            compactAppointmentTopOffset = this.getCompactAppointmentTopOffset();
+            compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
+
+            top = coordinates.top + compactAppointmentTopOffset;
+            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
 
             if(this.instance.fire("isAdaptive")) {
                 coordinates.top = top;
+                coordinates.left = coordinates.left + compactAppointmentLeftOffset;
             }
 
-            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
             appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
 

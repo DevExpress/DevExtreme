@@ -189,7 +189,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
         if(coordinates.isCompact) {
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+            compactAppointmentDefaultOffset = this.getCompactAppointmentLeftOffset();
             top = coordinates.top + compactAppointmentDefaultOffset;
             appointmentLeft = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
             appointmentWidth = compactAppointmentDefaultSize;

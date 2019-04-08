@@ -145,7 +145,8 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     getCompactAppointmentDefaultSize: noop,
 
-    getCompactAppointmentDefaultOffset: noop,
+    getCompactAppointmentLeftOffset: noop,
+    getCompactAppointmentTopOffset: noop,
 
     calculateRows: function(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
