@@ -914,7 +914,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
                 buttonHeight: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
-                isCompact: !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments")
+                isCompact: !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments"),
+                isVertical: this.invoke("isVerticalDropDownAppointments")
             });
         }).bind(this));
     },
