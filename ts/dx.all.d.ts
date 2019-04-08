@@ -6669,8 +6669,8 @@ declare module DevExpress.ui {
         formatText(index: number, length: number, formatName: string, formatValue: any): void;
         /** @name dxHtmlEditor.formatText(index, length, formats) */
         formatText(index: number, length: number, formats: any): void;
-        /** @name dxHtmlEditor.get(modulePath) */
-        get(modulePath: string): any;
+        /** @name dxHtmlEditor.get(componentPath) */
+        get(componentPath: string): any;
         /** @name dxHtmlEditor.getFormat(index, length) */
         getFormat(index: number, length: number): any;
         /** @name DOMComponent.getInstance(element) */

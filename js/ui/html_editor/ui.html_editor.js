@@ -574,8 +574,8 @@ const HtmlEditor = Editor.inherit({
 
     /**
     * @name dxHtmlEditorMethods.get
-    * @publicName get(modulePath)
-    * @param1 modulePath:string
+    * @publicName get(componentPath)
+    * @param1 componentPath:string
     * @return Object
     */
     get: function(modulePath) {
