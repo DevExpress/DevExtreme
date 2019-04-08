@@ -122,7 +122,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return dataController.dataSource() && dataController.dataSource().load(options) || new Deferred().resolve([]);
                 },
                 plainItems: function() {
-                    return dataController.items();
+                    return dataController.items(true);
                 },
                 isItemSelected: function(item) {
                     return item.selected;
