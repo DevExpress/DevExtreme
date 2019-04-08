@@ -404,10 +404,16 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
-                    if(!this._isLegacyNavigation() && column.command !== "expand" && column.command !== "selection") {
-                        return true;
+                    if(this._isLegacyNavigation()) {
+                        return !isEditing && column.command === "expand";
                     }
-                    return !isEditing && column.command === "expand";
+                    if(isCellEditing) {
+                        return !column.command;
+                    }
+                    if(isRowEditingInCurrentRow) {
+                        return column.command !== "select";
+                    }
+                    return !isEditing;
                 }
 
                 if(isCellEditing && row && row.rowType !== "data") {
@@ -1903,8 +1909,11 @@ module.exports = {
                     return isCellEditing;
                 },
                 editRow: function(rowIndex) {
-                    let keyboardController = this.getController("keyboardNavigation");
-                    if(this.option("editing.mode") === EDIT_MODE_FORM) {
+                    var keyboardController = this.getController("keyboardNavigation"),
+                        columnIndex = this.option("focusedColumnIndex"),
+                        column = this._columnsController.getVisibleColumns()[columnIndex];
+
+                    if(column && column.type || this.option("editing.mode") === EDIT_MODE_FORM) {
                         keyboardController._resetFocusedCell();
                     }
                     this.callBase(rowIndex);

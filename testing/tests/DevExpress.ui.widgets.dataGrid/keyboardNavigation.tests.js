@@ -8614,7 +8614,7 @@ QUnit.module("Keyboard navigation accessibility", {
         }, this.options);
 
         setupDataGridModules(this,
-            ["data", "columns", "columnHeaders", "sorting", "headerFilter", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
+            ["data", "columns", "columnHeaders", "sorting", "headerFilter", "rows", "editorFactory", "gridView", "editing", "selection", "focus", "keyboardNavigation", "validating", "masterDetail"],
             { initViews: true }
         );
     },
@@ -8663,6 +8663,103 @@ QUnit.module("Keyboard navigation accessibility", {
 
         this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 2)));
         this.clock.tick();
+    });
+
+    testInDesktop("Command column should not focused if batch editing mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch",
+                allowDeleting: true
+            }
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.editCell(1, 1);
+        this.clock.tick();
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 1)));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getCellElement(1, 3)).hasClass("dx-focused"), "cell focused");
+
+        // act
+        this.editCell(1, 4);
+        this.clock.tick();
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 4)));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getCellElement(2, 0)).hasClass("dx-focused"), "cell focused");
+    });
+
+    testInDesktop("Command column should not focused if cell editing mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell",
+                allowDeleting: true
+            }
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.editCell(1, 1);
+        this.clock.tick();
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 1)));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getCellElement(1, 3)).hasClass("dx-focused"), "cell focused");
+
+        // act
+        this.editCell(1, 4);
+        this.clock.tick();
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 4)));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getCellElement(2, 0)).hasClass("dx-focused"), "cell focused");
+    });
+
+    testInDesktop("Selection column should not focused if row editing mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "row",
+                allowDeleting: true
+            },
+            selection: {
+                mode: "multiple"
+            }
+        };
+
+        this.columns = [
+            { type: "selection" },
+            { dataField: "name", allowSorting: true, allowFiltering: true },
+            { dataField: "date", dataType: "date" },
+            { dataField: "room", dataType: "number" },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        this.editRow(1);
+        this.clock.tick();
+        $(this.getCellElement(1, 1)).focus().trigger("dxclick");
+        this.clock.tick();
+        this.triggerKeyDown("tab", false, true, $(this.getCellElement(1, 1)));
+        this.clock.tick();
+
+        // assert
+        assert.ok(this.getController("editing").isEditing(), "Is editing");
+        assert.notOk($(this.getCellElement(1, 0)).hasClass("dx-focused"), "Cell focused");
     });
 
     testInDesktop("Enter, Space key down by header cell", function(assert) {
