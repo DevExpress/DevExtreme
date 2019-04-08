@@ -1,8 +1,8 @@
 import $ from "../../core/renderer";
 import config from "../../core/config";
 import { extend } from "../../core/utils/extend";
-import errors from "../../core/errors";
 import eventsEngine from "../../events/core/events_engine";
+import errors from "../widget/ui.errors";
 import { getSwatchContainer } from "../widget/swatch_container";
 import ActionButtonItem from "./action_button_item";
 import themes from "../themes";
@@ -90,6 +90,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
 
     _renderActions() {
         const actions = this.option("actions");
+        const minActionButtonCount = 2;
         const lastActionIndex = actions.length - 1;
 
         if(this._actionItems.length) {
@@ -99,7 +100,10 @@ const ActionButtonBase = ActionButtonItem.inherit({
             });
         }
 
-        if(actions.length < 2) return;
+        if(actions.length < minActionButtonCount) {
+            this._render();
+            return;
+        }
 
         for(let i = 0; i < actions.length; i++) {
             const action = actions[i];
@@ -171,7 +175,7 @@ exports.initAction = function(newAction) {
 
         if(!isActionExist) {
             if(savedActions.length >= actionButtonBase.option("maxActionButtonCount")) {
-                errors.log("W0017");
+                errors.log("W1014");
                 return;
             }
             savedActions.push(newAction);
@@ -194,15 +198,23 @@ exports.disposeAction = function(actionId) {
     if(!actionButtonBase) return;
 
     let savedActions = actionButtonBase.option("actions");
-    if(savedActions.length === 1) {
-        actionButtonBase.option("actions", []);
+
+    savedActions = savedActions.filter(action => {
+        return action._options.id !== actionId;
+    });
+
+    if(!savedActions.length) {
+        actionButtonBase.option({ actions: [] });
         actionButtonBase.dispose();
         actionButtonBase.element().remove();
         actionButtonBase = null;
-    } else {
-        savedActions = savedActions.filter(action => {
-            return action._options.id !== actionId;
+    } else if(savedActions.length === 1) {
+        actionButtonBase.option({
+            actions: savedActions,
+            icon: savedActions[0]._options.icon,
+            onClick: savedActions[0]._options.onClick
         });
+    } else {
         actionButtonBase.option({ actions: savedActions });
     }
 };

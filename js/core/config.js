@@ -88,7 +88,7 @@ const config = {
         /**
         * @name globalConfig.floatingActionButtonConfig.icon
         * @type string
-        * @default "preferences"
+        * @default "add"
         */
         icon: "add",
 
@@ -102,7 +102,7 @@ const config = {
         /**
         * @name globalConfig.floatingActionButtonConfig.position
         * @type Enums.PositionAlignment|positionConfig|function
-        * @default "right bottom"
+        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
         */
         position: {
             at: "right bottom",
