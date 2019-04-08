@@ -1397,7 +1397,7 @@ declare module DevExpress.viz {
         /** @name BaseLegend.rowItemSpacing */
         rowItemSpacing?: number;
         /** @name BaseLegend.title */
-        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
+        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
@@ -1518,7 +1518,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
+        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
         /** @name BaseWidget.Options.title.textOverflow */
@@ -1999,6 +1999,8 @@ declare module DevExpress.viz {
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
         /** @name dxChart.Options.adjustOnZoom */
         adjustOnZoom?: boolean;
+        /** @name dxChart.Options.annotations */
+        annotations?: Array<dxChartAnnotationConfig | any>;
         /** @name dxChart.Options.argumentAxis */
         argumentAxis?: dxChartArgumentAxis;
         /** @name dxChart.Options.autoHidePointMarkers */
@@ -2010,6 +2012,8 @@ declare module DevExpress.viz {
         /** @deprecated */
         /** @name dxChart.Options.barWidth */
         barWidth?: number;
+        /** @name dxChart.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxChartCommonAnnotationConfig;
         /** @name dxChart.Options.commonAxisSettings */
         commonAxisSettings?: dxChartCommonAxisSettings;
         /** @name dxChart.Options.commonPaneSettings */
@@ -2547,6 +2551,46 @@ declare module DevExpress.viz {
         resetVisualRange(): void;
         /** @name dxChart.zoomArgument(startValue,endValue) */
         zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
+    }
+    /** @name dxChartAnnotationConfig */
+    export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
+        /** @name dxChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxChartCommonAnnotationConfig */
+    export interface dxChartCommonAnnotationConfig {
+        /** @name dxChartCommonAnnotationConfig.arrowLength */
+        arrowLength?: number;
+        /** @name dxChartCommonAnnotationConfig.arrowWidth */
+        arrowWidth?: number;
+        /** @name dxChartCommonAnnotationConfig.border */
+        border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+        /** @name dxChartCommonAnnotationConfig.color */
+        color?: string;
+        /** @name dxChartCommonAnnotationConfig.customizeAnnotation */
+        customizeAnnotation?: ((annotationItem: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
+        /** @name dxChartCommonAnnotationConfig.customizeTooltip */
+        customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.font */
+        font?: Font;
+        /** @name dxChartCommonAnnotationConfig.height */
+        height?: number;
+        /** @name dxChartCommonAnnotationConfig.image */
+        image?: string | { height?: number, location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string, width?: number };
+        /** @name dxChartCommonAnnotationConfig.opacity */
+        opacity?: number;
+        /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
+        paddingLeftRight?: number;
+        /** @name dxChartCommonAnnotationConfig.paddingTopBottom */
+        paddingTopBottom?: number;
+        /** @name dxChartCommonAnnotationConfig.shadow */
+        shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
+        tooltipEnabled?: boolean;
+        /** @name dxChartCommonAnnotationConfig.type */
+        type?: 'label' | 'image';
+        /** @name dxChartCommonAnnotationConfig.width */
+        width?: number;
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
@@ -5579,10 +5623,10 @@ declare module DevExpress.ui {
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
         keyExpr?: string | Function;
-        /** @name dxButtonGroup.Options.onSelectionChanged */
-        onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /** @name dxButtonGroup.Options.onItemClick */
         onItemClick?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
+        /** @name dxButtonGroup.Options.onSelectionChanged */
+        onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /** @name dxButtonGroup.Options.selectedItemKeys */
         selectedItemKeys?: Array<any>;
         /** @name dxButtonGroup.Options.selectedItems */
@@ -6090,6 +6134,8 @@ declare module DevExpress.ui {
         displayExpr?: string | ((itemData: any) => any);
         /** @name dxDropDownButton.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
+        /** @name dxDropDownButton.Options.icon */
+        icon?: string;
         /** @name dxDropDownButton.Options.itemTemplate */
         itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.items */
@@ -6103,11 +6149,15 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
-        selectedItem?: string | any;
-        /** @name dxDropDownButton.Options.showToggleButton */
-        showToggleButton?: boolean;
-        /** @name dxDropDownButton.Options.updateButtonOnSelection */
-        updateButtonOnSelection?: boolean;
+        selectedItem?: string | number | any;
+        /** @name dxDropDownButton.Options.selectedItemKey */
+        selectedItemKey?: string | number;
+        /** @name dxDropDownButton.Options.splitButton */
+        splitButton?: boolean;
+        /** @name dxDropDownButton.Options.text */
+        text?: string;
+        /** @name dxDropDownButton.Options.useSelectMode */
+        useSelectMode?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
@@ -6645,6 +6695,8 @@ declare module DevExpress.ui {
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
         /** @name dxHtmlEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
+        /** @name dxHtmlEditor.Options.mentions */
+        mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.name */
         name?: string;
         /** @name dxHtmlEditor.Options.onFocusIn */
@@ -6655,8 +6707,6 @@ declare module DevExpress.ui {
         placeholder?: string;
         /** @name dxHtmlEditor.Options.resizing */
         resizing?: dxHtmlEditorResizing;
-        /** @name dxHtmlEditor.Options.mentions */
-        mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
@@ -6707,31 +6757,33 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.undo() */
         undo(): void;
     }
+    /** @name dxHtmlEditorMention */
+    export interface dxHtmlEditorMention {
+        /** @name dxHtmlEditorMention.dataSource */
+        dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxHtmlEditorMention.displayExpr */
+        displayExpr?: string | ((item: any) => string);
+        /** @name dxHtmlEditorMention.itemTemplate */
+        itemTemplate?: template | Function;
+        /** @name dxHtmlEditorMention.marker */
+        marker?: string;
+        /** @name dxHtmlEditorMention.minSearchLength */
+        minSearchLength?: number;
+        /** @name dxHtmlEditorMention.searchExpr */
+        searchExpr?: string | Function | Array<string | Function>;
+        /** @name dxHtmlEditorMention.searchTimeout */
+        searchTimeout?: number;
+        /** @name dxHtmlEditorMention.template */
+        template?: template | Function;
+        /** @name dxHtmlEditorMention.valueExpr */
+        valueExpr?: string | Function;
+    }
     /** @name dxHtmlEditorResizing */
     export interface dxHtmlEditorResizing {
         /** @name dxHtmlEditorResizing.allowedTargets */
         allowedTargets?: Array<string>;
         /** @name dxHtmlEditorResizing.enabled */
         enabled?: boolean;
-    }
-    /** @name dxHtmlEditorMention */
-    export interface dxHtmlEditorMention {
-        /** @name dxHtmlEditorMention.dataSource */
-        dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
-        /** @name dxHtmlEditorMention.marker */
-        marker?: string;
-        /** @name dxHtmlEditorMention.minSearchLength */
-        minSearchLength?: number;
-        /** @name dxHtmlEditorMention.searchTimeout */
-        searchTimeout?: number;
-        /** @name dxHtmlEditorMention.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxHtmlEditorMention.searchExpr */
-        searchExpr?: string | Function | Array<string | Function>;
-        /** @name dxHtmlEditorMention.valueExpr */
-        valueExpr?: string | Function;
-        /** @name dxHtmlEditorMentions.template */
-        template?: template | ((data: any, container: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxHtmlEditorToolbar */
     export interface dxHtmlEditorToolbar {
@@ -7375,7 +7427,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGrid.Options.fieldPanel */
         fieldPanel?: { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean };
         /** @name dxPivotGrid.Options.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /** @name dxPivotGrid.Options.hideEmptySummaryCells */
         hideEmptySummaryCells?: boolean;
         /** @name dxPivotGrid.Options.loadPanel */
@@ -7439,7 +7491,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGridFieldChooser.Options.dataSource */
         dataSource?: DevExpress.data.PivotGridDataSource;
         /** @name dxPivotGridFieldChooser.Options.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+        headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /** @name dxPivotGridFieldChooser.Options.height */
         height?: number | string | (() => number | string);
         /** @name dxPivotGridFieldChooser.Options.layout */
