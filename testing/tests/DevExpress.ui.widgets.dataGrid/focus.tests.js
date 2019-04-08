@@ -95,7 +95,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
 
         setupDataGridModules(this, [
             "data", "columns", "columnHeaders", "rows", "editorFactory", "grouping", "gridView", "editing", "focus", "selection",
-            "keyboardNavigation", "validating", "masterDetail", "virtualScrolling", "adaptivity"
+            "keyboardNavigation", "validating", "masterDetail", "virtualScrolling", "adaptivity", "columnFixing"
         ], {
             initViews: true
         });
@@ -2292,6 +2292,47 @@ QUnit.testInActiveWindow("onFocusedRowChanged event should fire if 'focusedRowKe
 
     // assert
     assert.equal(focusedRowChangedCount, 2, "onFocusedRowChanged fires count");
+});
+
+QUnit.testInActiveWindow("onFocusedRowChanged event should fire only once if row focused and fixed columns enabled (T729593)", function(assert) {
+    // arrange, act
+    var focusedRowChangedCount = 0;
+
+    this.$element = function() {
+        return $("#container");
+    };
+    this.data = [
+        { id: 0, name: "Smith" },
+        { id: 1, name: "Zeb" }
+    ];
+    this.columns = [
+        {
+            dataField: "id",
+            width: 100,
+            fixed: true
+        },
+        "name"
+    ];
+    this.options = {
+        loadingTimeout: 0,
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        columnFixing: {
+            enabled: true
+        },
+        onFocusedRowChanged: () => ++focusedRowChangedCount
+    };
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.option("focusedRowIndex", 1);
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
 });
 
 QUnit.testInActiveWindow("onFocusedCellChanged event", function(assert) {
