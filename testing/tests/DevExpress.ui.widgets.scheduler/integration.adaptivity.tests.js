@@ -20,7 +20,7 @@ const moduleConfig = {
 
         this.createInstance = function(options) {
             const defaultOption = {
-                dataSource: simpleArrayData,
+                dataSource: [...simpleArrayData],
                 views: ["agenda", "day", "week", "workWeek", "month"],
                 currentView: "month",
                 currentDate: new Date(2017, 4, 25),
