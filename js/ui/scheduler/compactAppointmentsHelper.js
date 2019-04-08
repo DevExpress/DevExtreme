@@ -18,9 +18,9 @@ export class CompactAppointmentsHelper {
     }
 
     render(options) {
-        const { $container, buttonWidth, items, isCompact, coordinates, buttonColor } = options;
+        const { $container, buttonWidth, buttonHeight, items, isCompact, coordinates, buttonColor } = options;
         const template = this._createTemplate(items.data.length, isCompact);
-        const button = this._createCompactButton($container, buttonWidth, template, items, isCompact, coordinates);
+        const button = this._createCompactButton($container, buttonWidth, buttonHeight, template, items, isCompact, coordinates);
         const $button = button.$element();
 
         this._makeBackgroundColor($button, items.colors, buttonColor);
@@ -95,12 +95,13 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButton($container, width, template, items, isCompact, coordinates) {
+    _createCompactButton($container, width, height, template, items, isCompact, coordinates) {
         const $button = this._createCompactButtonElement($container, width, isCompact, coordinates);
 
         return this.instance._createComponent($button, Button, {
             type: 'default',
             width: width,
+            height: height,
             onClick: (e) => this._onButtonClick(e),
             template: this._renderTemplate(template, items, isCompact)
         });
