@@ -208,12 +208,15 @@ exports.FocusController = core.ViewController.inherit((function() {
                 $focusedRow,
                 $tableElement;
 
-            each(rowsView.getTableElements(), function(_, element) {
+            each(rowsView.getTableElements(), function(index, element) {
                 $tableElement = $(element);
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
                 if(focusedRowIndex >= 0) {
+                    let isMainTable = index === 0;
                     $focusedRow = that._prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
-                    that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
+                    if(isMainTable) {
+                        that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
+                    }
                 }
             });
         },
