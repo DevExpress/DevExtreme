@@ -224,7 +224,11 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
         columns: ["field1", "field2"],
         dataSource: {
             store: [{ field1: "1", field2: "2" }]
-        }
+        },
+        filterPanel: {
+            visible: true
+        },
+        filterValue: ["field1", "=", "1"]
     });
 
     clock.tick();
@@ -255,6 +259,10 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
     assert.equal($(".dx-datagrid-rowsview .dx-freespace-row").attr("role"), "presentation");
 
     assert.equal($(".dx-context-menu").attr("role"), "presentation");
+
+    assert.equal($(".dx-datagrid-filter-panel .dx-icon-filter").attr("tabindex"), 0, "Filter panel icon tabindex");
+    assert.equal($(".dx-datagrid-filter-panel .dx-datagrid-filter-panel-text").attr("tabindex"), 0, "Filter panel text tabindex");
+    assert.equal($(".dx-datagrid-filter-panel .dx-datagrid-filter-panel-clear-filter").attr("tabindex"), 0, "Filter panel clear button tabindex");
 
     clock.restore();
 });
