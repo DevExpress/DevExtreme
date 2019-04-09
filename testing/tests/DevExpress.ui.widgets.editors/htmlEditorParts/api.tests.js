@@ -207,7 +207,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("customize module", (assert) => {
-        this.options.customize = function({ toolbar }) {
+        this.options.customizeModules = function({ toolbar }) {
             toolbar.items.push("italic");
         };
 
@@ -227,7 +227,7 @@ QUnit.module("API", moduleConfig, () => {
             }
         }
 
-        this.options.customize = function({ testWithOptions }) {
+        this.options.customizeModules = function({ testWithOptions }) {
             if(testWithOptions) {
                 testWithOptions.customOption = 3;
             }

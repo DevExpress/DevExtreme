@@ -95,11 +95,11 @@ const HtmlEditor = Editor.inherit({
             */
             mentions: null,
             /**
-             * @name dxHtmlEditorOptions.customize
+             * @name dxHtmlEditorOptions.customizeModules
              * @type function
-             * @type_function_param1 modules:object
+             * @type_function_param1 configs:object
              */
-            customize: null,
+            customizeModules: null,
 
             formDialogOptions: null
 
@@ -337,7 +337,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderHtmlEditor: function() {
-        const customizeModules = this.option("customize");
+        const customizeModules = this.option("customizeModules");
         const modulesConfig = this._getModulesConfig();
 
         if(isFunction(customizeModules)) {
@@ -491,7 +491,7 @@ const HtmlEditor = Editor.inherit({
             case "variables":
             case "toolbar":
             case "mentions":
-            case "customize":
+            case "customizeModules":
                 this._invalidate();
                 break;
             case "valueType": {

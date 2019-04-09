@@ -6650,7 +6650,7 @@ declare module DevExpress.ui {
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
         /** @name dxHtmlEditor.Options.customize */
-        customize?: ((modules: any) => any);
+        customizeModules?: ((configs: any) => any);
         /** @name dxHtmlEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxHtmlEditor.Options.mediaResizing */
