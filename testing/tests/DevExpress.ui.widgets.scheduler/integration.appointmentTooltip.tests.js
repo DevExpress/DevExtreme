@@ -1090,4 +1090,30 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         checkItemTemplateContent(0);
         checkItemTemplateContent(1);
     });
+
+    QUnit.test("Keyboard navigation in tooltip", function(assert) {
+        this.createInstance();
+        const ITEM_FOCUSED_STATE_CLASS_NAME = "dx-state-focused";
+
+        this.scheduler.appointments.click();
+        const itemElement = this.scheduler.tooltip.getItemElement();
+
+        assert.notOk(itemElement.hasClass(ITEM_FOCUSED_STATE_CLASS_NAME), "On first show tooltip, list item shouldn't focused");
+
+        const keyboard = keyboardMock(this.scheduler.tooltip.getContentElement());
+        keyboard.keyDown("down");
+
+        assert.ok(this.scheduler.tooltip.getItemElement().hasClass(ITEM_FOCUSED_STATE_CLASS_NAME), "After press key down, list item should focused");
+
+        const buttonCount = this.scheduler.appointments.compact.getButtonCount();
+        this.scheduler.appointments.compact.click(buttonCount - 1);
+
+        assert.notOk(itemElement.hasClass(ITEM_FOCUSED_STATE_CLASS_NAME), "After tooltip showed, list item shouldn't focused");
+
+        keyboard.keyDown("down");
+        assert.ok(this.scheduler.tooltip.getItemElement(0).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME), "After press key down, first list item should focused");
+
+        keyboard.keyDown("down");
+        assert.ok(this.scheduler.tooltip.getItemElement(1).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME), "After press key down, second list item should focused");
+    });
 });
