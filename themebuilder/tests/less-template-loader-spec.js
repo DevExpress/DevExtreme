@@ -616,4 +616,28 @@ describe("LessTemplateLoader", () => {
         });
     });
 
+    it("load - the result contains passed version", () => {
+        const version = "1.0.0";
+        const config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            reader: () => {
+                // data/less/theme-builder-generic-light.less
+                return new Promise(resolve => {
+                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;");
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config, version);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata,
+            []).then(data => {
+            assert.equal(data.version, version);
+        });
+    });
+
 });
