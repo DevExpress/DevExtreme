@@ -304,8 +304,15 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
+        let allDayAppointmentCount;
+
+        if(this.instance.fire("isAdaptive")) {
+            allDayAppointmentCount = 0;
+        } else {
+            allDayAppointmentCount = this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell");
+        }
         return {
-            allDay: this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell"),
+            allDay: allDayAppointmentCount,
             simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
         };
     },
