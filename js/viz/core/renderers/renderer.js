@@ -873,7 +873,7 @@ function setMaxWidth(maxWidth, options = {}) {
     ellipsis.remove();
     that._hasEllipsis = textChanged;
 
-    return { rowsCount: that._texts && that._texts.length || 1 };
+    return that._texts && that._texts.length || 1;
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {

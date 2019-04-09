@@ -458,7 +458,7 @@ Label.prototype = {
         const padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
         let rowsCountChanged = false;
         if(this._text) {
-            const rowsCount = this._text.setMaxWidth(maxWidth - padding, this._options).rowsCount;
+            const rowsCount = this._text.setMaxWidth(maxWidth - padding, this._options);
             if(rowsCount !== this._rowsCount) {
                 rowsCountChanged = true;
                 this._rowsCount = rowsCount;
