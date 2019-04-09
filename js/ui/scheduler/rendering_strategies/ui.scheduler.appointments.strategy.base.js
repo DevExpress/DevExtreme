@@ -623,12 +623,11 @@ var BaseRenderingStrategy = Class.inherit({
             width = coordinates.width,
             left = coordinates.left,
             compactAppointmentDefaultSize,
-            compactAppointmentTopOffset,
-            compactAppointmentLeftOffset;
+            compactAppointmentLeftOffset,
+            compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
 
         if(coordinates.isCompact) {
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentTopOffset = this.getCompactAppointmentTopOffset();
             compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
 
             top = coordinates.top + compactAppointmentTopOffset;
@@ -655,7 +654,7 @@ var BaseRenderingStrategy = Class.inherit({
             return {
                 height: appointmentHeight,
                 width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x * dateTableOffset / 100 + "px)",
-                top: top,
+                top: this.instance.fire("isAdaptive") ? top + compactAppointmentTopOffset : top,
                 left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
                 empty: this._isAppointmentEmpty(height, width)
             };
