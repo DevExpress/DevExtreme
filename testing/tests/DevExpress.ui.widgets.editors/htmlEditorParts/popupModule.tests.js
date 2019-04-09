@@ -4,6 +4,7 @@ import PopupModule from "ui/html_editor/modules/popup";
 
 const POPUP_CLASS = "dx-popup";
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
+const SUGGESTION_LIST_WRAPPER_CLASS = "dx-suggestion-list-wrapper";
 
 const moduleConfig = {
     beforeEach: () => {
@@ -35,11 +36,13 @@ QUnit.module("Popup module", moduleConfig, () => {
 
         const $popup = this.$element.children();
         const $suggestionList = $popup.find(`.${SUGGESTION_LIST_CLASS}`);
+        const $suggestionListWrapper = $suggestionList.closest(`.${SUGGESTION_LIST_WRAPPER_CLASS}`);
         const listDataSource = $suggestionList.dxList("option", "dataSource");
 
         assert.ok($popup.hasClass(POPUP_CLASS), "Popup rendered");
         assert.strictEqual($suggestionList.length, 1, "Popup contains one suggestion list");
         assert.deepEqual(listDataSource, this.options.dataSource, "List has a correct dataSource");
+        assert.strictEqual($suggestionListWrapper.length, 1, "Suggestion list is wrapped by element with specific class");
     });
 
     test("Show and hide popup on item selecting", (assert) => {
