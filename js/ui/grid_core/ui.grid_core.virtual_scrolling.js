@@ -975,8 +975,8 @@ module.exports = {
                                 break;
                         }
                     },
-                    items: function() {
-                        return this._visibleItems || this._items;
+                    items: function(allItems) {
+                        return allItems ? this._items : (this._visibleItems || this._items);
                     },
                     getRowIndexDelta: function() {
                         var visibleItems = this._visibleItems,
