@@ -6463,6 +6463,33 @@ QUnit.test("Horizontal scroll should not exist if master-detail contains the sim
     assert.equal($(scrollable.content()).width(), $(scrollable._container()).width(), "no scroll");
 });
 
+// T728069
+QUnit.test("Horizontal scroll should not exist if fixed column with custom buttons exists", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        width: 600,
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        columnAutoWidth: true,
+        columns: ["field1", "field2", {
+            type: "buttons",
+            fixed: true,
+            buttons: [
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" }
+            ]
+        }]
+    });
+
+    // assert
+    var scrollable = dataGrid.getScrollable();
+    assert.roughEqual($(scrollable.content()).width(), $(scrollable._container()).width(), 1.01, "no scroll");
+});
+
 if(browser.msie && parseInt(browser.version) <= 11) {
     QUnit.test("Update the scrollable for IE browsers when the adaptive column is hidden", function(assert) {
         // arrange
