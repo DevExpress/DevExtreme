@@ -220,7 +220,7 @@ const HtmlEditor = Editor.inherit({
             * @default null
             * @type_function_param1 mentionData:object
             * @type_function_param1_field1 marker:string
-            * @type_function_param1_field2 id:any
+            * @type_function_param1_field2 id:string|number
             * @type_function_param1_field3 value:any
             * @type_function_param2 contentElement:dxElement
             * @type_function_return string|Node|jQuery

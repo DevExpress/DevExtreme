@@ -6787,7 +6787,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorMention.searchTimeout */
         searchTimeout?: number;
         /** @name dxHtmlEditorMention.template */
-        template?: template | ((mentionData: { marker?: string, id?: any, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxHtmlEditorMention.valueExpr */
         valueExpr?: string | Function;
     }
