@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
+import { extend } from "../../core/utils/extend";
 import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramToolbox from "./ui.diagram.toolbox";
 import DiagramOptions from "./ui.diagram.options";
@@ -47,10 +48,80 @@ class Diagram extends Widget {
         this._createComponent($options, DiagramOptions);
 
         this._diagramInstance.createDocument($content[0]);
+        this._diagramInstance.onChanged = this._raiseValueChangeAction.bind(this);
     }
     _initDiagram() {
         const { DiagramControl } = getDiagram();
         this._diagramInstance = new DiagramControl();
+    }
+
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            /**
+            * @name dxDiagramOptions.onValueChanged
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 value:object
+            * @type_function_param1_field5 previousValue:object
+            * @action
+            */
+            onValueChanged: null,
+        });
+    }
+
+    /**
+    * @name dxDiagramMethods.getValue
+    * @publicName getValue()
+    * @return string
+    */
+    getValue() {
+        var value;
+        const { DiagramCommand } = getDiagram();
+        this._diagramInstance.commandManager.getCommand(DiagramCommand.Export).execute(function(data) { value = data; });
+        return value;
+    }
+    /**
+    * @name dxDiagramMethods.setValue
+    * @publicName setValue(value)
+    * @param1 value:string
+    */
+    setValue(value) {
+        const { DiagramCommand } = getDiagram();
+        this._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(value);
+        this._raiseValueChangeAction();
+    }
+
+    _createValueChangeAction() {
+        this._valueChangeAction = this._createActionByOption("onValueChanged");
+    }
+    _raiseValueChangeAction() {
+        if(!this.option("onValueChanged")) return;
+
+        if(!this._valueChangeAction) {
+            this._createValueChangeAction();
+        }
+        let value = this.getValue();
+        this._valueChangeAction(this._valueChangeArgs(value, this.previousValue));
+        this.previousValue = value;
+    }
+    _valueChangeArgs(value, previousValue) {
+        return {
+            value: value,
+            previousValue: previousValue
+        };
+    }
+
+    _optionChanged(args) {
+        const name = args.name;
+
+        switch(name) {
+            case "onValueChanged":
+                this._createValueChangeAction();
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
 }
 
