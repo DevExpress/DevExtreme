@@ -20,35 +20,34 @@ function exportDataGrid(options) {
 
     let columns = exportController._getColumns()[0];
 
-    if(dataGrid.option("showColumnHeaders") && columns.length > 0) {
-        let headerRow = worksheet.getRow(result.to.row);
-        let currentColumnIndex = result.from.column;
+    if(columns.length > 0) {
+        result.to.column += columns.length - 1;
 
-        for(let i = 0; i < columns.length; i++) {
-            headerRow.getCell(currentColumnIndex).value = columns[i].caption;
-            currentColumnIndex++;
-        }
+        if(dataGrid.option("showColumnHeaders")) {
+            let headerRow = worksheet.getRow(result.to.row);
+            let currentColumnIndex = result.from.column;
 
-        if(columns.length > 0) {
-            result.to.column += columns.length - 1;
-        }
+            for(let i = 0; i < columns.length; i++) {
+                headerRow.getCell(currentColumnIndex).value = columns[i].caption;
+                currentColumnIndex++;
+            }
 
-        if(options.excelFilterEnabled === true) {
-            worksheet.autoFilter = {
-                from: {
-                    row: result.from.row,
-                    column: result.from.column,
-                },
-                to: {
-                    row: result.to.row,
-                    column: result.to.column
-                }
-            };
-            worksheet.views = [{ state: 'frozen', ySplit: result.to.row }];
+            if(options.excelFilterEnabled === true) {
+                worksheet.autoFilter = {
+                    from: {
+                        row: result.from.row,
+                        column: result.from.column,
+                    },
+                    to: {
+                        row: result.to.row,
+                        column: result.from.column + columns.length - 1
+                    }
+                };
+                worksheet.views = [{ state: 'frozen', ySplit: result.to.row }];
+            }
+            result.to.row++;
         }
     }
-
-    result.to.row++;
 
     return new Promise((resolve) => {
         var items = exportController._getAllItems();
@@ -67,7 +66,9 @@ function exportDataGrid(options) {
                 }
                 result.to.row++;
             }
-            result.to.row--;
+
+            if(result.to.row > topLeftCell.row) result.to.row--;
+
             resolve(result);
         });
     });
@@ -102,7 +103,7 @@ function _getGroupSummaryCellValue(exportController, summaryItems) {
     if(Array.isArray(summaryItems)) {
         let value = "";
         for(let i = 0; i < summaryItems.length; i++) {
-            value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], exportController.option("summary.texts"));
+            value += (i > 0 ? "\n" : "") + dataGridCore.getSummaryText(summaryItems[i], exportController.option("summary.texts"));
         }
         return value;
     }
