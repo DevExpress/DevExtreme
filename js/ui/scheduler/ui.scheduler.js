@@ -2894,25 +2894,27 @@ const Scheduler = Widget.inherit({
 
     resizePopup: function() {
         domUtils.triggerResizeEvent(this._popup.$element());
+
+        // NOTE: WA because of T731123
         this._setPopupContentMaxHeight();
     },
 
     _setPopupContentMaxHeight: function() {
         let popupContent = this._popup.$content();
-        let scrollable = popupContent.find(".dx-scrollable-content");
+        let $scrollable = popupContent.find(".dx-scrollable-content");
 
-        scrollable.css("height", "initial");
+        $scrollable.css("height", "initial");
 
-        if(scrollable.height() > this._getMaxPopupContentHeight()) {
-            scrollable.height(popupContent.height());
+        if($scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
+            $scrollable.height(popupContent.height());
         }
     },
 
     _getMaxPopupContentHeight: function() {
         let $bottom = this._popup.bottomToolbar();
         let $top = this._popup.topToolbar();
-        let bottomHeight = $bottom && $bottom.length ? $bottom.outerHeight() : 0;
-        let topHeight = $top && $top.length ? $top.outerHeight() : 0;
+        let bottomHeight = $bottom && $bottom.length ? $bottom.get(0).getBoundingClientRect().height : 0;
+        let topHeight = $top && $top.length ? $top.get(0).getBoundingClientRect().height : 0;
 
         return this._popupMaxHeight() - bottomHeight - topHeight;
 
