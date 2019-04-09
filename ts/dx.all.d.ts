@@ -6063,6 +6063,10 @@ declare module DevExpress.ui {
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
         constructor(element: JQuery, options?: dxDiagramOptions)
+        /** @name dxDiagram.getValue() */
+        getValue(): string;
+        /** @name dxDiagram.setValue(value) */
+        setValue(value: string): void;
     }
     /** @name dxDrawer.Options */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
@@ -6695,7 +6699,7 @@ declare module DevExpress.ui {
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
-        /** @name dxHtmlEditor.Options.customize */
+        /** @name dxHtmlEditor.Options.customizeModules */
         customizeModules?: ((config: any) => any);
         /** @name dxHtmlEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
