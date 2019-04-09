@@ -2264,13 +2264,13 @@ const Scheduler = Widget.inherit({
     },
 
     _popupMaxHeight: function() {
-        let $window = $(windowUtils.getWindow());
+        let windowHeight = $(windowUtils.getWindow()).height();
 
         if(this._popup && this._popup.option("fullScreen")) {
-            return $window.height();
+            return windowHeight;
         }
 
-        return $(windowUtils.getWindow()).height() * 0.8;
+        return windowHeight * 0.8;
     },
 
     _getPopupToolbarItems: function() {
