@@ -77,7 +77,7 @@ QUnit.module("Mobile tooltip", moduleConfig, function() {
         assert.equal(this.scheduler.instance.option("dataSource").length, initialDataCount - 1, "Appointment should delete form dataSource after click on delete button in tooltip");
     });
 
-    QUnit.test("Templates", function(assert) {
+    QUnit.test("appointmentTooltipTemplate method should pass valid arguments and render valid html markup", function(assert) {
         let templateCallCount = 0;
         const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = "appointment-tooltip-template-marker";
 
