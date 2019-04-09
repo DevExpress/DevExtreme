@@ -6695,8 +6695,12 @@ declare module DevExpress.ui {
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+        /** @name dxHtmlEditor.Options.customize */
+        customizeModules?: ((config: any) => any);
         /** @name dxHtmlEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
+        /** @name dxHtmlEditor.Options.mediaResizing */
+        mediaResizing?: dxHtmlEditorMediaResizing;
         /** @name dxHtmlEditor.Options.mentions */
         mentions?: Array<dxHtmlEditorMention>;
         /** @name dxHtmlEditor.Options.name */
@@ -6707,8 +6711,6 @@ declare module DevExpress.ui {
         onFocusOut?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name dxHtmlEditor.Options.placeholder */
         placeholder?: string;
-        /** @name dxHtmlEditor.Options.resizing */
-        resizing?: dxHtmlEditorResizing;
         /** @name dxHtmlEditor.Options.toolbar */
         toolbar?: dxHtmlEditorToolbar;
         /** @name dxHtmlEditor.Options.valueType */
@@ -6734,12 +6736,14 @@ declare module DevExpress.ui {
         formatText(index: number, length: number, formatName: string, formatValue: any): void;
         /** @name dxHtmlEditor.formatText(index, length, formats) */
         formatText(index: number, length: number, formats: any): void;
+        /** @name dxHtmlEditor.get(componentPath) */
+        get(componentPath: string): any;
         /** @name dxHtmlEditor.getFormat(index, length) */
         getFormat(index: number, length: number): any;
+        /** @name DOMComponent.getInstance(element) */
+        static getInstance(element: Element | JQuery): DOMComponent;
         /** @name dxHtmlEditor.getLength() */
         getLength(): number;
-        /** @name dxHtmlEditor.getModule(modulePath) */
-        getModule(modulePath: string): any;
         /** @name dxHtmlEditor.getQuillInstance() */
         getQuillInstance(): any;
         /** @name dxHtmlEditor.getSelection() */
@@ -6750,14 +6754,23 @@ declare module DevExpress.ui {
         insertText(index: number, text: string, formats: any): void;
         /** @name dxHtmlEditor.redo() */
         redo(): void;
-        /** @name dxHtmlEditor.registerModules(modules) */
-        registerModules(modules: any): void;
+        /** @name dxHtmlEditor.register(components) */
+        register(modules: any): void;
+        /** @name Widget.registerKeyHandler(key, handler) */
+        registerKeyHandler(key: string, handler: Function): void;
         /** @name dxHtmlEditor.removeFormat(index, length) */
         removeFormat(index: number, length: number): void;
         /** @name dxHtmlEditor.setSelection(index, length) */
         setSelection(index: number, length: number): void;
         /** @name dxHtmlEditor.undo() */
         undo(): void;
+    }
+    /** @name dxHtmlEditorMediaResizing */
+    export interface dxHtmlEditorMediaResizing {
+        /** @name dxHtmlEditorMediaResizing.allowedTargets */
+        allowedTargets?: Array<string>;
+        /** @name dxHtmlEditorMediaResizing.enabled */
+        enabled?: boolean;
     }
     /** @name dxHtmlEditorMention */
     export interface dxHtmlEditorMention {
@@ -6779,13 +6792,6 @@ declare module DevExpress.ui {
         template?: template | Function;
         /** @name dxHtmlEditorMention.valueExpr */
         valueExpr?: string | Function;
-    }
-    /** @name dxHtmlEditorResizing */
-    export interface dxHtmlEditorResizing {
-        /** @name dxHtmlEditorResizing.allowedTargets */
-        allowedTargets?: Array<string>;
-        /** @name dxHtmlEditorResizing.enabled */
-        enabled?: boolean;
     }
     /** @name dxHtmlEditorToolbar */
     export interface dxHtmlEditorToolbar {
