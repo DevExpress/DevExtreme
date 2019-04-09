@@ -554,7 +554,9 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         isEditCell: function(rowIndex, columnIndex) {
-            return this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
+            var hasEditData = !!(Array.isArray(this._editData) && this._editData.length);
+
+            return hasEditData && this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
         },
 
         getPopupContent: function() {
