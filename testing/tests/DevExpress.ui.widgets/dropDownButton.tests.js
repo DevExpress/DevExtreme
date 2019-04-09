@@ -872,4 +872,29 @@ QUnit.module("keyboard navigation", {
         assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
         assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
     });
+
+    QUnit.testInActiveWindow("tab on button should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+
+        this.keyboard.press("tab");
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+    });
+
+    QUnit.testInActiveWindow("tab on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("tab");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+    });
 });

@@ -310,7 +310,7 @@ let DropDownButton = Widget.inherit({
             deferRendering: this.option("deferRendering"),
             minWidth: 130,
             closeOnOutsideClick: function(e) {
-                return !e.target.closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
+                return !($(e.target).closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`).length);
             },
             showTitle: false,
             animation: {
@@ -335,6 +335,7 @@ let DropDownButton = Widget.inherit({
                 this._list = this._createComponent($("<div>"), List, this._listOptions());
 
                 this._list.registerKeyHandler("escape", this._escHandler.bind(this));
+                this._list.registerKeyHandler("tab", this.close.bind(this));
                 this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
                 this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
 
@@ -395,6 +396,7 @@ let DropDownButton = Widget.inherit({
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
         this._buttonGroup.registerKeyHandler("downArrow", this._upDownKeyHandler.bind(this));
+        this._buttonGroup.registerKeyHandler("tab", this.close.bind(this));
         this._buttonGroup.registerKeyHandler("upArrow", this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler("escape", this._escHandler.bind(this));
 
