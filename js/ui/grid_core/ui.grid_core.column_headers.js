@@ -23,7 +23,7 @@ var CELL_CONTENT_CLASS = "text-content",
     HEADER_FILTER_CLASS_SELECTOR = ".dx-header-filter",
     HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator",
     MULTI_ROW_HEADER_CLASS = "dx-header-multi-row",
-    OUTLINE_CLASS = "dx-outline";
+    FOCUS_STATE_CLASS = "dx-state-focused";
 
 module.exports = {
     defaultOptions: function() {
@@ -96,12 +96,6 @@ module.exports = {
                         },
                         $target = $(event.target),
                         keyName = normalizeKeyName(event),
-                        blurHandler = e => {
-                            this._lastActionElement = e.relatedTarget;
-                            $(e.relatedTarget).addClass(OUTLINE_CLASS);
-                            $target.removeClass(OUTLINE_CLASS);
-                            eventsEngine.off($target, "blur", blurHandler);
-                        },
                         keyboardController = this.getController("keyboardNavigation");
 
                     keyboardController && keyboardController.executeAction("onKeyDown", args);
@@ -113,13 +107,16 @@ module.exports = {
                                 break;
 
                             case "tab":
-                                eventsEngine.on($target, "blur", blurHandler);
+                                this._setHeaderRowFocusState($target);
                                 break;
 
                             default:
                                 break;
                         }
                     }
+                },
+                _setHeaderRowFocusState: function($headerCell) {
+                    $headerCell.closest(`tr.${HEADER_ROW_CLASS}`).addClass(FOCUS_STATE_CLASS);
                 },
 
                 _handleActionKeyDown: function(event) {
@@ -272,14 +269,12 @@ module.exports = {
                     if($headerCells.length > 1) {
                         let $firstCell = $headerCells.first();
                         eventsEngine.on($firstCell, "focus", e => {
+                            this._setHeaderRowFocusState($(e.target));
                             if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
                                 $(this._lastActionElement).trigger("focus");
                                 this._lastActionElement = null;
-                            } else {
-                                $(e.target).addClass(OUTLINE_CLASS);
                             }
                         });
-                        eventsEngine.on($firstCell, "blur", e => $(e.target).removeClass(OUTLINE_CLASS));
                     }
                 },
 

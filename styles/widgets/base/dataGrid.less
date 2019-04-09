@@ -44,15 +44,17 @@
             outline: none;
         }
 
-        td.dx-outline:focus,
-        td .dx-header-filter.dx-outline:focus {
-            outline: 2px solid @datagrid-focused-border-color;
-        }
-        td.dx-outline:focus {
-            outline-offset: -2px;
-        }
-        td .dx-header-filter.dx-outline:focus {
-            outline-offset: 2px;
+        &.dx-state-focused {
+            td:focus,
+            td .dx-header-filter:focus {
+                outline: 2px solid @datagrid-focused-border-color;
+            }
+            td:focus {
+                outline-offset: -2px;
+            }
+            td .dx-header-filter:focus {
+                outline-offset: 2px;
+            }
         }
     }
 
@@ -92,6 +94,13 @@
             &.dx-last-cell {
                 border-right: none;
             }
+        }
+    }
+
+    .dx-datagrid-rowsview.dx-state-focused .dx-data-row {
+        & > td.dx-command-edit > a.dx-link:focus {
+            outline: 2px solid @datagrid-focused-border-color;
+            outline-offset: 2px;
         }
     }
 

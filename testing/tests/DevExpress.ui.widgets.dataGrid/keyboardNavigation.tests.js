@@ -8890,4 +8890,56 @@ QUnit.module("Keyboard navigation accessibility", {
         // assert
         assert.equal(this.options.filterValue, null, "filterValue");
     });
+
+    testInDesktop("Header row focus state", function(assert) {
+        var $headerRow;
+
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+        $headerRow = $("tr.dx-header-row");
+
+        // act
+        $headerRow.find("td").eq(1).focus();
+
+        // assert
+        assert.notOk($headerRow.hasClass("dx-state-focused"), "Header row focus state");
+
+        // act
+        fireKeyDown($(":focus"), "Tab");
+
+        // assert
+        assert.ok($headerRow.hasClass("dx-state-focused"), "Header row focus state");
+
+        // act
+        $(":focus").trigger(eventUtils.addNamespace("dxclick", "dxDataGridColumnHeadersView"));
+
+        // assert
+        assert.notOk($headerRow.hasClass("dx-state-focused"), "Header row focus state");
+    });
+
+    testInDesktop("Rows view focus state", function(assert) {
+        var $rowsView;
+
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.focusCell(1, 1);
+        $rowsView = this.keyboardNavigationController._focusedView.element();
+
+        // assert
+        assert.notOk($rowsView.hasClass("dx-state-focused"), "RowsView focus state");
+
+        // act
+        this.triggerKeyDown("Tab");
+
+        // assert
+        assert.ok($rowsView.hasClass("dx-state-focused"), "RowsView focus state");
+
+        // act
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
+
+        // assert
+        assert.notOk($rowsView.hasClass("dx-state-focused"), "RowsView focus state");
+    });
 });

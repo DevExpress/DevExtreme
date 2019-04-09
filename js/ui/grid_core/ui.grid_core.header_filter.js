@@ -23,7 +23,7 @@ var DATE_INTERVAL_FORMATS = {
             return dateLocalization.format(new Date(2000, value * 3 - 1), 'quarter');
         }
     },
-    OUTLINE_CLASS = "dx-outline";
+    FOCUS_STATE_CLASS = "dx-state-focused";
 
 var HeaderFilterController = modules.ViewController.inherit((function() {
     var getFormatOptions = function(value, column, currentLevel) {
@@ -332,7 +332,7 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
 
         if(indicatorName === "headerFilter") {
             eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
-                $indicator.removeClass(OUTLINE_CLASS);
+                $indicator.removeClass(FOCUS_STATE_CLASS);
                 e.event.stopPropagation();
                 that.getController("headerFilter").showHeaderFilterMenu(column.index, false);
             }));

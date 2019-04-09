@@ -7,7 +7,8 @@ import sortingMixin from "../grid_core/ui.grid_core.sorting_mixin";
 import messageLocalization from "../../localization/message";
 import { addNamespace } from "../../events/utils";
 
-const COLUMN_HEADERS_VIEW_NAMESPACE = "dxDataGridColumnHeadersView";
+var COLUMN_HEADERS_VIEW_NAMESPACE = "dxDataGridColumnHeadersView",
+    FOCUS_STATE_CLASS = "dx-state-focused";
 
 const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
     _createRow(row) {
@@ -15,7 +16,9 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
 
         if(row.rowType === "header") {
             eventsEngine.on($row, addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", this.createAction(e => {
-                $(e.event.target).removeClass("dx-outline");
+
+                $(e.event.target).closest("tr.dx-header-row").removeClass(FOCUS_STATE_CLASS);
+
                 this._processHeaderAction(e.event, $row);
             }));
         }
