@@ -584,5 +584,75 @@ QUnit.module("API", moduleConfig, () => {
                 done();
             });
         });
+
+        QUnit.test("Group summary - 2 columns" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "field1", dataType: "string", groupIndex: 0 },
+                    { dataField: "field2", dataType: "number" },
+                    { dataField: "field3", dataType: "number" },
+                ],
+                dataSource: [
+                    { field1: 'f1_1', field2: 10, field3: 30 },
+                    { field1: 'f1_2', field2: 20, field3: 40 }
+                ],
+                sortByGroupSummaryInfo: [{
+                    summaryItem: "count"
+                }],
+                summary: {
+                    groupItems: [ {
+                        column: "field2",
+                        summaryType: "max",
+                        displayFormat: "Max: {0}",
+                        valueFormat: "currency"
+                    },
+                    {
+                        column: "field3",
+                        summaryType: "min",
+                        displayFormat: "Min: {0}",
+                        valueFormat: "currency"
+                    } ],
+                    totalItems: [{
+                        column: "field3",
+                        summaryType: "sum",
+                        displayFormat: "Total Sum: {0}",
+                        valueFormat: "currency"
+                    }]
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid("instance");
+
+            exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, topLeftCell: topLeftCell }).then((result) => {
+                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 5, column: topLeft.column + 1 }, { row: 6, column: 2 });
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+
+                assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "Field 2", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column + 1).value, "Field 3", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column + 1}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row}).outlineLevel`);
+
+                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "Field 1: f1_1 (Max: $10, Min: $30)", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 1).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 1}).outlineLevel`);
+
+                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "10", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column + 1).value, "30", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column + 1}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 2).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 2}).outlineLevel`);
+
+                assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column).value, "Field 1: f1_2 (Max: $20, Min: $40)", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 3).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 3}).outlineLevel`);
+
+                assert.equal(this.worksheet.getRow(topLeft.row + 4).getCell(topLeft.column).value, "20", `this.worksheet.getRow(${topLeft.row + 4}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 4).getCell(topLeft.column + 1).value, "40", `this.worksheet.getRow(${topLeft.row + 4}).getCell(${topLeft.column + 1}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 4).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 4}).outlineLevel`);
+
+                assert.equal(this.worksheet.getRow(topLeft.row + 5).getCell(topLeft.column + 1).value, "Total Sum: $70", `this.worksheet.getRow(${topLeft.row + 5}).getCell(${topLeft.column + 1}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 5).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 5}).outlineLevel`);
+
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 5, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
     });
 });

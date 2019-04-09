@@ -58,7 +58,7 @@ function exportDataGrid(options) {
             for(let rowIndex = 0; rowIndex < items.length; rowIndex++) {
                 let dataRow = worksheet.getRow(result.to.row);
 
-                dataRow.outlineLevel = (rowIndex >= headerRowCount) ? typeUtils.isDefined(items[rowIndex].groupIndex) ? items[rowIndex].groupIndex : exportController._columnsController.getGroupColumns().length : 0;
+                dataRow.outlineLevel = _getOutlineLevel(exportController, items[rowIndex], rowIndex, headerRowCount);
 
                 let currentColumnIndex = result.from.column;
                 for(let cellIndex = 0; cellIndex < items[rowIndex].values.length; cellIndex++) {
@@ -95,6 +95,12 @@ function exportDataGrid(options) {
             resolve(result);
         });
     });
+}
+
+function _getOutlineLevel(exportController, item, rowIndex, headerRowCount) {
+    if(rowIndex < headerRowCount || item.rowType === "totalFooter") return 0;
+
+    return typeUtils.isDefined(item.groupIndex) ? item.groupIndex : exportController._columnsController.getGroupColumns().length;
 }
 
 function _getGroupValue(exportController, item) {
