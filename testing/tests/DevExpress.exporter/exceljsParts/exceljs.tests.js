@@ -533,7 +533,7 @@ QUnit.module("API", moduleConfig, () => {
                 ],
                 dataSource: [{ f1: 'f1_1', f2: 1 }],
                 summary: {
-                    groupItems: [{ column: 'f2', summaryType: 'sum', valueFormat: 'currency' }]
+                    groupItems: [{ column: 'f2', summaryType: 'count' }]
                 },
                 loadingTimeout: undefined
             }).dxDataGrid("instance");
@@ -545,7 +545,7 @@ QUnit.module("API", moduleConfig, () => {
                 assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "f2", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row}).outlineLevel`);
 
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "f1: f1_1 (Sum of f2 is $1)", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "f1: f1_1 (Count: 1)", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 1).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 1}).outlineLevel`);
 
                 assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "1", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
@@ -564,7 +564,7 @@ QUnit.module("API", moduleConfig, () => {
                 columns: [{ dataField: "f1", caption: "f1", dataType: "number" }],
                 dataSource: [{ f1: 1 }],
                 summary: {
-                    totalItems: [{ column: 'f1', summaryType: 'sum', valueFormat: 'currency' }]
+                    totalItems: [{ column: 'f1', summaryType: 'count' }]
                 },
                 loadingTimeout: undefined
             }).dxDataGrid("instance");
@@ -579,7 +579,7 @@ QUnit.module("API", moduleConfig, () => {
                 assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "1", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 1).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 1}).outlineLevel`);
 
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "Sum: $1", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "Count: 1", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 2).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 2}).outlineLevel`);
 
                 assert.deepEqual(result.from, topLeft, "result.from");
