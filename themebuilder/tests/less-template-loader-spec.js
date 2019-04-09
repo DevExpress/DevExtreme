@@ -635,7 +635,8 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata,
-            []).then(data => {
+            []
+        ).then(data => {
             assert.equal(data.version, version);
         });
     });
