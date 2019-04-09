@@ -402,7 +402,7 @@ QUnit.module("API", moduleConfig, () => {
                     { dataField: "field2", dataType: "string" },
                 ],
                 dataSource: [
-                    { field1: 'f1_1', field2: 'f1_2' }, 
+                    { field1: 'f1_1', field2: 'f1_2' },
                     { field1: 'f1_1', field2: 'f2_2' }
                 ],
                 loadingTimeout: undefined
@@ -440,7 +440,7 @@ QUnit.module("API", moduleConfig, () => {
                     { dataField: "field3", dataType: "string" },
                 ],
                 dataSource: [
-                    { field1: 'f1_1', field2: 'f1_2', field3: 'f3_1' }, 
+                    { field1: 'f1_1', field2: 'f1_2', field3: 'f3_1' },
                     { field1: 'f1_1', field2: 'f2_2', field3: 'f3_2' }],
                 loadingTimeout: undefined
             }).dxDataGrid("instance");
@@ -483,7 +483,7 @@ QUnit.module("API", moduleConfig, () => {
                     { dataField: "field3", dataType: "string" },
                 ],
                 dataSource: [
-                    { field1: 'f1_1', field2: 'f1_2', field3: 'f3_1' }, 
+                    { field1: 'f1_1', field2: 'f1_2', field3: 'f3_1' },
                     { field1: 'f1_2', field2: 'f2_2', field3: 'f3_2' }
                 ],
                 loadingTimeout: undefined
