@@ -1077,12 +1077,14 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         });
 
         this.scheduler.appointments.click();
+        this.clock.tick(300);
         assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index`);
 
         templateCallCount = 0;
 
         const buttonCount = this.scheduler.appointments.compact.getButtonCount();
         this.scheduler.appointments.compact.click(buttonCount - 1);
+        this.clock.tick(300);
 
         assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index. Compact appointments`);
         assert.ok(this.scheduler.tooltip.checkItemElementHtml(1, `template item index - ${1}`), `Template should render content contains ${1} item index. Compact appointments`);
