@@ -43,8 +43,9 @@ QUnit.module("markup", {
         this.instance = new DropDownButton("#dropDownButton", {});
     }
 }, () => {
-    QUnit.test("element should have dropDownButton class", (assert) => {
-        assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), "class is ok");
+    QUnit.test("element should have dropDownButton and widget class", (assert) => {
+        assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), "dropdownbutton class is ok");
+        assert.ok(this.instance.$element().hasClass("dx-widget"), "widget class is ok");
     });
 
     QUnit.test("popup and list should not be rendered if deferRendering is true", (assert) => {
