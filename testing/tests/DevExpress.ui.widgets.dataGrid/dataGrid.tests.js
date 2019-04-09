@@ -6487,7 +6487,7 @@ QUnit.test("Horizontal scroll should not exist if fixed column with custom butto
 
     // assert
     var scrollable = dataGrid.getScrollable();
-    assert.equal($(scrollable.content()).width(), $(scrollable._container()).width(), "no scroll");
+    assert.roughEqual($(scrollable.content()).width(), $(scrollable._container()).width(), 1.01, "no scroll");
 });
 
 if(browser.msie && parseInt(browser.version) <= 11) {
