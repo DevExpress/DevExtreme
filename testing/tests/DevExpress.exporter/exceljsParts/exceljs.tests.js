@@ -700,7 +700,7 @@ QUnit.module("API", moduleConfig, () => {
             });
         });
 
-        QUnit.test("Group summary - 2 columns, alignByColumn: true, column1.groupIndex: 0" + topLeftCellOption, (assert) => {
+        QUnit.test("Group summary - column node cell" + topLeftCellOption, (assert) => {
             const done = assert.async();
 
             let dataGrid = $("#dataGrid").dxDataGrid({
@@ -729,6 +729,12 @@ QUnit.module("API", moduleConfig, () => {
                         displayFormat: "Min: {0}",
                         valueFormat: "currency",
                         alignByColumn: true
+                    },
+                    {
+                        column: "field3",
+                        summaryType: "min",
+                        displayFormat: "Min: {0}",
+                        valueFormat: "currency"
                     } ],
                     totalItems: [{
                         column: "field3",
@@ -748,7 +754,7 @@ QUnit.module("API", moduleConfig, () => {
                 assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column + 1).value, "Field 3", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column + 1}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row}).outlineLevel`);
 
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "Field 1: f1_1 (Max: $10)", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "Field 1: f1_1 (Max: $10, Min: $30)", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column + 1).value, "Min: $30", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column + 1}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 1).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 1}).outlineLevel`);
 
@@ -756,7 +762,7 @@ QUnit.module("API", moduleConfig, () => {
                 assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column + 1).value, "30", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column + 1}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 2).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 2}).outlineLevel`);
 
-                assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column).value, "Field 1: f1_2 (Max: $20)", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column}).value`);
+                assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column).value, "Field 1: f1_2 (Max: $20, Min: $40)", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column + 1).value, "Min: $40", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column + 1}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row + 3).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 3}).outlineLevel`);
 
