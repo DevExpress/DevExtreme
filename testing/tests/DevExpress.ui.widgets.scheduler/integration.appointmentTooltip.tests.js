@@ -1065,10 +1065,6 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
 
     QUnit.test("appointmentTooltipTemplate method should pass valid arguments", function(assert) {
         let templateCallCount = 0;
-        const checkItemTemplateContent = (index) => {
-            assert.ok(this.scheduler.tooltip.checkItemElementHtml(index, `template item index - ${index}`), "Template should render valid content dependent on item index");
-        };
-
         this.createInstance({
             appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
                 assert.ok(contentElement.className.indexOf("dx-list-item-content") !== -1, "Content element should be list item");
@@ -1081,13 +1077,14 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         });
 
         this.scheduler.appointments.click();
-        checkItemTemplateContent(0);
+        assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index`);
+
         templateCallCount = 0;
 
         const buttonCount = this.scheduler.appointments.compact.getButtonCount();
         this.scheduler.appointments.compact.click(buttonCount - 1);
 
-        checkItemTemplateContent(0);
-        checkItemTemplateContent(1);
+        assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index. Compact appointments`);
+        assert.ok(this.scheduler.tooltip.checkItemElementHtml(1, `template item index - ${1}`), `Template should render content contains ${1} item index. Compact appointments`);
     });
 });
