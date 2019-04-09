@@ -72,7 +72,7 @@ class DiagramOptions extends Widget {
         }
     }
     _onDiagramOptionChanged(key, value) {
-        if(value !== undefined) {
+        if(!this._uiLocked && value !== undefined) {
             const valueConverter = this._valueConverters[key];
             if(valueConverter) {
                 value = valueConverter.getValue(value);
@@ -85,7 +85,9 @@ class DiagramOptions extends Widget {
         if(valueConverter) {
             value = valueConverter.setValue(value);
         }
+        this._uiLocked = true;
         this._formInstance.updateData(key.toString(), value);
+        this._uiLocked = false;
     }
     _setEnabled(enabled) {
         this._formInstance.option("disabled", !enabled);
