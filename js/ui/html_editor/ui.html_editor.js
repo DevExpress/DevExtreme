@@ -97,7 +97,7 @@ const HtmlEditor = Editor.inherit({
             /**
              * @name dxHtmlEditorOptions.customizeModules
              * @type function
-             * @type_function_param1 configs:object
+             * @type_function_param1 config:object
              */
             customizeModules: null,
 
