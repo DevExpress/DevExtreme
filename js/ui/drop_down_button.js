@@ -333,7 +333,11 @@ let DropDownButton = Widget.inherit({
                 const $content = $(content);
                 $content.addClass(DROP_DOWN_BUTTON_CONTENT);
                 this._list = this._createComponent($("<div>"), List, this._listOptions());
+
                 this._list.registerKeyHandler("escape", this._escHandler.bind(this));
+                this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
+                this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
+
                 $content.append(this._list.$element());
             }
         }, this._getInnerOptionsCache("dropDownOptions"));
@@ -356,6 +360,7 @@ let DropDownButton = Widget.inherit({
                 const actionResult = this._fireItemClickAction(e);
                 if(actionResult !== false) {
                     this.toggle(false);
+                    this._buttonGroup.focus();
                 }
             }
         };
@@ -364,6 +369,8 @@ let DropDownButton = Widget.inherit({
     _upDownKeyHandler() {
         if(this._popup && this._popup.option("visible") && this._list) {
             this._list.focus();
+        } else {
+            this.open();
         }
     },
 
@@ -386,9 +393,11 @@ let DropDownButton = Widget.inherit({
         }
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
+
         this._buttonGroup.registerKeyHandler("downArrow", this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler("upArrow", this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler("escape", this._escHandler.bind(this));
+
         this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
     },
 

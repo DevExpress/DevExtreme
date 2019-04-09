@@ -155,7 +155,6 @@ QUnit.module("popup integration", {
             deferRendering: this.instance.option("deferRendering"),
             minWidth: 130,
             dragEnabled: false,
-            closeOnOutsideClick: true,
             showTitle: false,
             animation: {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
@@ -823,4 +822,54 @@ QUnit.module("keyboard navigation", {
         assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
     });
 
+    QUnit.testInActiveWindow("left on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("left");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("right on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("right");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("down arrow on toggle button should open the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+    });
+
+    QUnit.testInActiveWindow("selection of the item should return focus to the button group", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("enter");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
 });
