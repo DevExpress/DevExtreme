@@ -18,7 +18,7 @@ function exportDataGrid(options) {
 
     let exportController = dataGrid.getController("export");
 
-    let headerRowCount = dataGrid.option("showColumnHeaders") ? exportController._getColumns().length - 1 : 0; // headerRow count may be more then 1?
+    let headerRowCount = dataGrid.option("showColumnHeaders") ? exportController._getColumns().length - 1 : 0;
     let columns = exportController._getColumns()[0];
 
     if(dataGrid.option("showColumnHeaders") && columns.length > 0) {
@@ -52,7 +52,7 @@ function exportDataGrid(options) {
     result.to.row++;
 
     return new Promise((resolve) => {
-        var items = exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems();
+        var items = exportController._getAllItems();
 
         items.done((items) => {
             for(let rowIndex = 0; rowIndex < items.length; rowIndex++) {
