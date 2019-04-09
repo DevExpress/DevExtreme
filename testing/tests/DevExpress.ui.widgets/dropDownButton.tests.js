@@ -2,6 +2,7 @@ import $ from "jquery";
 import DropDownButton from "ui/drop_down_button";
 import typeUtils from "core/utils/type";
 import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
 import "common.css!";
 
@@ -42,8 +43,9 @@ QUnit.module("markup", {
         this.instance = new DropDownButton("#dropDownButton", {});
     }
 }, () => {
-    QUnit.test("element should have dropDownButton class", (assert) => {
-        assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), "class is ok");
+    QUnit.test("element should have dropDownButton and widget class", (assert) => {
+        assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), "dropdownbutton class is ok");
+        assert.ok(this.instance.$element().hasClass("dx-widget"), "widget class is ok");
     });
 
     QUnit.test("popup and list should not be rendered if deferRendering is true", (assert) => {
@@ -66,7 +68,7 @@ QUnit.module("markup", {
             items: [{ icon: "box" }, { icon: "user" }],
             keyExpr: "icon",
             displayExpr: "",
-            selectedItem: { icon: "user" }
+            selectedItemKey: "user"
         });
 
         const $actionButtonText = getActionButton(dropDownButton).text();
@@ -79,7 +81,7 @@ QUnit.module("markup", {
 
 QUnit.module("button group integration", {}, () => {
     QUnit.test("element should have buttonGroup inside", (assert) => {
-        const instance = new DropDownButton("#dropDownButton", {});
+        const instance = new DropDownButton("#dropDownButton", { selectionMode: true });
         const buttonGroup = getButtonGroup(instance);
         assert.strictEqual(buttonGroup.NAME, "dxButtonGroup", "buttonGroup rendered");
         assert.strictEqual(buttonGroup.option("selectionMode"), "none", "selection should be disabled");
@@ -112,7 +114,7 @@ QUnit.module("button group integration", {}, () => {
 
     QUnit.test("a user can redefine buttonGroupOptions", (assert) => {
         const instance = new DropDownButton("#dropDownButton", {
-            updateButtonOnSelection: false,
+            useSelectMode: false,
             buttonGroupOptions: {
                 items: [{ text: "Test" }],
                 someOption: "Test"
@@ -154,7 +156,6 @@ QUnit.module("popup integration", {
             deferRendering: this.instance.option("deferRendering"),
             minWidth: 130,
             dragEnabled: false,
-            closeOnOutsideClick: true,
             showTitle: false,
             animation: {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
@@ -200,6 +201,17 @@ QUnit.module("popup integration", {
         instance.repaint();
         assert.strictEqual(getPopup(instance).option("visible"), true, "options have been stored after the repaint");
     });
+
+    QUnit.test("click on toggle button should not be outside", (assert) => {
+        const $toggleButton = getToggleButton(this.instance);
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.ok(this.instance.option("dropDownOptions.visible"), "popup is visible");
+
+        eventsEngine.trigger($toggleButton, "dxpointerdown");
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.notOk(this.instance.option("dropDownOptions.visible"), "popup is hidden");
+
+    });
 });
 
 QUnit.module("list integration", {}, () => {
@@ -237,7 +249,7 @@ QUnit.module("list integration", {}, () => {
             deferRendering: false,
             grouped: true,
             noDataText: "No data",
-            updateButtonOnSelection: false
+            useSelectMode: false
         });
 
         const list = getList(dropDownButton);
@@ -247,19 +259,19 @@ QUnit.module("list integration", {}, () => {
         assert.strictEqual(list.option("selectionMode"), "single", "selectionMode is always single. The widget uses selectedItems to prevent extra dataSource loads");
     });
 
-    QUnit.test("list selection should depend on selectedItem option", (assert) => {
+    QUnit.test("list selection should depend on selectedItemKey option", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1" }, { key: 2, name: "Item 2" }],
             deferRendering: false,
             keyExpr: "key",
             displayExpr: "name",
-            selectedItem: { key: 2 }
+            selectedItemKey: 2
         });
 
         const list = getList(dropDownButton);
         assert.deepEqual(list.option("selectedItemKeys"), [2], "selection is correct");
 
-        dropDownButton.option("selectedItem", { key: 1 });
+        dropDownButton.option("selectedItemKey", 1);
         assert.deepEqual(list.option("selectedItemKeys"), [1], "selection is correct");
     });
 });
@@ -268,7 +280,7 @@ QUnit.module("common use cases", {
     beforeEach: () => {
         this.itemClickHandler = sinon.spy();
         this.dropDownButton = new DropDownButton("#dropDownButton", {
-            updateButtonOnSelection: false,
+            useSelectMode: false,
             deferRendering: false,
             keyExpr: "id",
             displayExpr: "name",
@@ -277,12 +289,26 @@ QUnit.module("common use cases", {
                 { id: 1, file: "vs.exe", name: "Trial for Visual Studio", icon: "box" },
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
-            selectedItem: { file: "common.exe", name: "Download DevExtreme Trial", icon: "group" }
+            text: "Download DevExtreme Trial",
+            icon: "group"
         });
         this.list = getList(this.dropDownButton);
         this.listItems = this.list.itemElements();
     }
 }, () => {
+    QUnit.test("custom button is rendered", (assert) => {
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "Download DevExtreme Trial", "text is correct on init");
+        assert.ok(getActionButton(this.dropDownButton).find(".dx-icon").hasClass("dx-icon-group"), "icon is correct on init");
+
+        this.dropDownButton.option({
+            text: "New text",
+            icon: "box"
+        });
+
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "New text", "text is correct on change");
+        assert.ok(getActionButton(this.dropDownButton).find(".dx-icon").hasClass("dx-icon-box"), "icon is correct on change");
+    });
+
     QUnit.test("it should be possible to set non-datasource action button", (assert) => {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Download DevExtreme Trial", "initial text is correct");
 
@@ -294,8 +320,8 @@ QUnit.module("common use cases", {
         assert.notOk(getPopup(this.dropDownButton).option("visible"), "popup is hidden");
     });
 
-    QUnit.test("custom item should be redefined after selection if updateButtonOnSelection is true", (assert) => {
-        this.dropDownButton.option("updateButtonOnSelection", true);
+    QUnit.test("custom item should be redefined after selection if useSelectMode is true", (assert) => {
+        this.dropDownButton.option("useSelectMode", true);
         eventsEngine.trigger(this.listItems.eq(0), "dxclick");
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for Visual Studio", "action button has been changed");
     });
@@ -311,14 +337,14 @@ QUnit.module("common use cases", {
     });
 
     QUnit.test("the user can hide the toggle button", (assert) => {
-        this.dropDownButton.option("showToggleButton", false);
+        this.dropDownButton.option("splitButton", false);
         assert.strictEqual(getToggleButton(this.dropDownButton).length, 0, "there is no toggle button");
 
         eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
         assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "action button opens the dropdown");
 
         this.dropDownButton.close();
-        this.dropDownButton.option("showToggleButton", true);
+        this.dropDownButton.option("splitButton", true);
         assert.strictEqual(getToggleButton(this.dropDownButton).length, 1, "the toggle button is visible");
 
         eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
@@ -383,19 +409,14 @@ QUnit.module("data expressions", {
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
             keyExpr: "id",
-            updateButtonOnSelection: true,
+            useSelectMode: true,
             deferRendering: false
         });
     }
 }, () => {
     QUnit.test("displayExpr is required when items are objects", (assert) => {
         this.dropDownButton.option("displayExpr", undefined);
-        this.dropDownButton.option("selectedItem", {
-            id: 1,
-            file: "vs.exe",
-            name: "Trial for Visual Studio",
-            icon: "box"
-        });
+        this.dropDownButton.option("selectedItemKey", 1);
 
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "");
     });
@@ -405,19 +426,15 @@ QUnit.module("data expressions", {
             return (itemData && itemData.name + "!") || "";
         });
 
-        this.dropDownButton.option("selectedItem", {
-            id: 2,
-            file: "all.exe",
-            name: "Trial for all platforms",
-            icon: "user"
-        });
+        this.dropDownButton.option("selectedItemKey", 2);
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for all platforms!", "displayExpr works");
     });
 
     QUnit.test("null value should be displayed as an empty string", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: ["Item 1", "Item 2", "Item 3"],
-            selectedItem: null
+            useSelectMode: true,
+            selectedItemKey: null
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "", "value is correct");
@@ -426,7 +443,8 @@ QUnit.module("data expressions", {
     QUnit.test("undefined value should be displayed as an empty string", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: ["Item 1", "Item 2", "Item 3"],
-            selectedItem: undefined
+            useSelectMode: true,
+            selectedItemKey: undefined
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "", "value is correct");
@@ -435,7 +453,8 @@ QUnit.module("data expressions", {
     QUnit.test("primitive items can be used without data expressions", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: ["Item 1", "Item 2", "Item 3"],
-            selectedItem: "Item 1"
+            useSelectMode: true,
+            selectedItemKey: "Item 1"
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "Item 1", "value is correct");
@@ -444,7 +463,8 @@ QUnit.module("data expressions", {
     QUnit.test("numbers can be used without data expressions", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [0, 1, 2],
-            selectedItem: 0
+            useSelectMode: true,
+            selectedItemKey: 0
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "0", "value is correct");
@@ -453,7 +473,8 @@ QUnit.module("data expressions", {
     QUnit.test("booleans can be used without data expressions", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [true, false],
-            selectedItem: false
+            useSelectMode: true,
+            selectedItemKey: false
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "false", "value is correct");
@@ -462,11 +483,12 @@ QUnit.module("data expressions", {
 
 QUnit.module("items changing", {
     beforeEach: () => {
-        this.dropDownButton = new DropDownButton("#dropDownButton2", {
+        this.dropDownButton = new DropDownButton("#dropDownButton", {
             items: [
                 { id: 1, file: "vs.exe", name: "Trial for Visual Studio", icon: "box" },
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
+            useSelectMode: true,
             keyExpr: "id",
             displayExpr: "name"
         });
@@ -474,7 +496,7 @@ QUnit.module("items changing", {
 }, () => {
     QUnit.test("changing of items should load new selected item", (assert) => {
         this.dropDownButton.option({
-            selectedItem: { id: 2 }
+            selectedItemKey: 2
         });
 
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for all platforms", "item was selected");
@@ -485,8 +507,7 @@ QUnit.module("items changing", {
 
     QUnit.test("changing of dataSource should load new selected item", (assert) => {
         this.dropDownButton.option({
-            updateButtonOnSelection: true,
-            selectedItem: { id: 2 }
+            selectedItemKey: 2
         });
 
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for all platforms", "item was selected");
@@ -504,19 +525,18 @@ QUnit.module("items changing", {
                 load: loadHandler,
                 byKey: byKeyHandler
             },
-            updateButtonOnSelection: true,
-            selectedItem: { id: 1 }
+            deferRendering: false,
+            selectedItemKey: 1
         });
 
-        assert.strictEqual(byKeyHandler.callCount, 1, "byKey called once");
+        const loadCount = loadHandler.callCount;
+        const byKeyCount = byKeyHandler.callCount;
 
-        this.dropDownButton.option("deferRendering", false);
-        assert.strictEqual(loadHandler.callCount, 1, "list was loaded");
+        this.dropDownButton.option("splitButton", false);
+        this.dropDownButton.option("splitButton", true);
 
-        this.dropDownButton.option("showToggleButton", false);
-        this.dropDownButton.option("showToggleButton", true);
-        assert.strictEqual(byKeyHandler.callCount, 1, "byKey called once");
-        assert.strictEqual(loadHandler.callCount, 1, "load should not be called again");
+        assert.strictEqual(byKeyHandler.callCount, byKeyCount, "byKey was not called");
+        assert.strictEqual(loadHandler.callCount, loadCount, "load was not called");
     });
 });
 
@@ -569,26 +589,15 @@ QUnit.module("deferred datasource", {
         assert.strictEqual($item.text(), "Left", "text is correct");
     });
 
-    QUnit.test("incomplete selected item should work", (assert) => {
-        const dropDownButton = new DropDownButton("#dropDownButton2", {
-            dataSource: this.dataSourceConfig,
-            keyExpr: "id",
-            displayExpr: "name",
-            selectedItem: { id: 2 }
-        });
-
-        this.clock.tick(200);
-        assert.strictEqual(getActionButton(dropDownButton).text(), "Center", "value is correct");
-    });
-
     QUnit.test("select an item via api", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             deferRendering: false,
+            useSelectMode: true,
             keyExpr: "id",
             displayExpr: "text",
             items: [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }]
         });
-        dropDownButton.option("selectedItem", { id: 2 });
+        dropDownButton.option("selectedItemKey", 2);
         this.clock.tick();
         assert.strictEqual(getActionButton(dropDownButton).text(), "Item 2", "action button has been changed");
         assert.strictEqual(getList(dropDownButton).option("selectedItemKeys")[0], 2, "selectedItemKeys is correct");
@@ -637,7 +646,7 @@ QUnit.module("events", {}, () => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
-            selectedItem: 2,
+            selectedItemKey: 2,
             onActionButtonClick: handler
         });
 
@@ -658,7 +667,7 @@ QUnit.module("events", {}, () => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
-            selectedItem: 2
+            selectedItemKey: 2
         });
 
         dropDownButton.option("onActionButtonClick", handler);
@@ -673,7 +682,7 @@ QUnit.module("events", {}, () => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
-            selectedItem: 2,
+            selectedItemKey: 2,
             onSelectionChanged: handler
         });
 
@@ -698,7 +707,7 @@ QUnit.module("events", {}, () => {
             items: items,
             keyExpr: "id",
             displayExpr: "text",
-            selectedItem: { id: 2 },
+            selectedItemKey: 2,
             onSelectionChanged: handler
         });
 
@@ -714,5 +723,181 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.deepEqual(e.oldSelectedItem, items[1], "oldSelectedItem is correct");
         assert.deepEqual(e.selectedItem, items[0], "selectedItem is correct");
+    });
+});
+
+QUnit.module("keyboard navigation", {
+    beforeEach: () => {
+        this.$element = $("#dropDownButton");
+        this.dropDownButton = new DropDownButton(this.$element, {
+            items: [
+                { name: "Item 1", id: 1 },
+                { name: "Item 2", id: 2 },
+                { name: "Item 3", id: 3 }
+            ],
+            displayExpr: "name",
+            keyExpr: "id"
+        });
+        this.$actionButton = getActionButton(this.dropDownButton);
+        this.$toggleButton = getToggleButton(this.dropDownButton);
+        this.keyboard = keyboardMock(getButtonGroup(this.dropDownButton).element());
+        this.keyboard.press("right"); // TODO: Remove after T730639 fix
+    }
+}, () => {
+    QUnit.testInActiveWindow("arrow right and left should select a button", (assert) => {
+        this.keyboard.press("right");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+        assert.notOk(this.$actionButton.hasClass("dx-state-focused"), "action button lose focus");
+
+        this.keyboard.press("left");
+        assert.notOk(this.$toggleButton.hasClass("dx-state-focused"), "action button lose");
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("action button should be clicked on enter or space", (assert) => {
+        const handler = sinon.spy();
+        this.dropDownButton.option("onActionButtonClick", handler);
+
+        this.keyboard.press("enter");
+        assert.strictEqual(handler.callCount, 1, "action button pressed");
+
+        this.keyboard.press("space");
+        assert.strictEqual(handler.callCount, 2, "action button pressed twice");
+    });
+
+    QUnit.testInActiveWindow("toggle button should be clicked on enter or space", (assert) => {
+        this.keyboard.press("right").press("enter");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+
+        this.keyboard.press("space");
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("list should get first focused item when down arrow pressed after opening", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const $firstItem = getList(this.dropDownButton).itemElements().first();
+
+        assert.ok($firstItem.hasClass("dx-state-focused"), "first list item is focused");
+    });
+
+    QUnit.testInActiveWindow("list should get first focused item when up arrow pressed after opening", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("up");
+
+        const $firstItem = getList(this.dropDownButton).itemElements().first();
+
+        assert.ok($firstItem.hasClass("dx-state-focused"), "first list item is focused");
+    });
+
+    QUnit.testInActiveWindow("esc on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("esc");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("esc on button group should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("esc");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("left on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("left");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("right on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("right");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("down arrow on toggle button should open the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+    });
+
+    QUnit.testInActiveWindow("selection of the item should return focus to the button group", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("enter");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("tab on button should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+
+        this.keyboard.press("tab");
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+    });
+
+    QUnit.testInActiveWindow("tab on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const event = listKeyboard.press("tab").event;
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(getButtonGroup(this.dropDownButton).$element().hasClass("dx-state-focused"), "button group was focused");
+        assert.strictEqual(event.isDefaultPrevented(), false, "event was not prevented and native focus move next");
     });
 });

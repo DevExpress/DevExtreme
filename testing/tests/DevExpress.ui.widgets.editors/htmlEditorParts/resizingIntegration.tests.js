@@ -47,7 +47,7 @@ module("Resizing integration", {
     test("Click on an image after enable resizing via optionChange", (assert) => {
         this.createWidget();
 
-        this.instance.option("resizing.enabled", true);
+        this.instance.option("mediaResizing.enabled", true);
 
         this.$element
             .find("img")
@@ -60,7 +60,7 @@ module("Resizing integration", {
     });
 
     test("Click on an image with enabled resizing", (assert) => {
-        this.options.resizing = { enabled: true };
+        this.options.mediaResizing = { enabled: true };
         this.createWidget();
 
         this.$element
@@ -74,10 +74,10 @@ module("Resizing integration", {
     });
 
     test("Click on an image after disable resizing via optionChange", (assert) => {
-        this.options.resizing = { enabled: true };
+        this.options.mediaResizing = { enabled: true };
         this.createWidget();
 
-        this.instance.option("resizing.enabled", false);
+        this.instance.option("mediaResizing.enabled", false);
 
         this.$element
             .find("img")
@@ -91,7 +91,7 @@ module("Resizing integration", {
     test("Click on an image with enabled resizing but remove 'image' from allowed resizing targets", (assert) => {
         this.createWidget();
 
-        this.instance.option("resizing", {
+        this.instance.option("mediaResizing", {
             enabled: true,
             allowedTargets: []
         });
@@ -119,7 +119,7 @@ module("Resizing integration", {
             assert.strictEqual(parseInt($image.attr("width")), IMAGE_SIZE + hOffset, `Width + ${hOffset}`);
             done();
         };
-        this.options.resizing = { enabled: true };
+        this.options.mediaResizing = { enabled: true };
 
         this.createWidget();
         this.$element

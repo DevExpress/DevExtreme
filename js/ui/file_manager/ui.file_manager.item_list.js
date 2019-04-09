@@ -61,6 +61,7 @@ class FileManagerItemListBase extends Widget {
     _initActions() {
         this._actions = {
             onError: this._createActionByOption("onError"),
+            onSelectionChanged: this._createActionByOption("onSelectionChanged"),
             onSelectedItemOpened: this._createActionByOption("onSelectedItemOpened"),
             onContextMenuItemClick: this._createActionByOption("onContextMenuItemClick")
         };
@@ -73,6 +74,7 @@ class FileManagerItemListBase extends Widget {
             getItems: null,
             getItemThumbnail: null,
             onError: null,
+            onSelectionChanged: null,
             onSelectedItemOpened: null,
             onContextMenuItemClick: null
         });
@@ -89,6 +91,7 @@ class FileManagerItemListBase extends Widget {
                 break;
             case "onError":
             case "onSelectedItemOpened":
+            case "onSelectionChanged":
             case "onContextMenuItemClick":
                 this._actions[name] = this._createActionByOption(name);
                 break;
@@ -106,6 +109,10 @@ class FileManagerItemListBase extends Widget {
 
     _raiseOnError(error) {
         this._actions.onError({ error });
+    }
+
+    _raiseSelectionChanged() {
+        this._actions.onSelectionChanged();
     }
 
     _raiseSelectedItemOpened(item) {
@@ -134,6 +141,10 @@ class FileManagerItemListBase extends Widget {
     }
 
     getSelectedItems() {
+
+    }
+
+    clearSelection() {
 
     }
 

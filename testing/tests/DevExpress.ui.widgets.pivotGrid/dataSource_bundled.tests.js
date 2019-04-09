@@ -510,7 +510,7 @@ QUnit.test("Load Field Values with paginate", function(assert) {
 
     var fieldValues;
 
-    dataSource.getFieldValues(0, { skip: 1, take: 2, searchValue: "cat" }).done(function(data) {
+    dataSource.getFieldValues(0, false, { skip: 1, take: 2, searchValue: "cat" }).done(function(data) {
         fieldValues = data;
     });
 
@@ -541,6 +541,79 @@ QUnit.test("Load Field Values with paginate", function(assert) {
     assert.strictEqual(fieldValues.length, 2);
     assert.strictEqual(fieldValues[0].text, "cat2");
     assert.strictEqual(fieldValues[1].text, "cat3");
+});
+
+QUnit.test("Load Field Values with showRelevantValues", function(assert) {
+    this.testStore.load.returns($.Deferred().reject());
+    // act
+    var dataSource = createDataSource({
+            fields: [
+                { dataField: "[Ship Date].[Calendar Year]", area: "column", areaIndex: 0, filterValues: [2001] },
+                { dataField: "[Product].[Category]", area: "filter", areaIndex: 0, filterValues: ["Bikes"] },
+                { dataField: "[Product].[Subcategory]", area: "row", areaIndex: 0, filterValues: ["Bike 1"] }
+            ],
+            store: this.testStore
+
+        }),
+        loadResult = {
+            columns: [{ value: "Bike 1" }, { value: "Bike 2" }],
+            rows: [],
+            values: [],
+            grandTotalColumnIndex: 0,
+            grandTotalRowIndex: 0
+        };
+
+    this.testStore.load.returns($.Deferred().resolve(loadResult));
+
+
+    var fieldValues;
+    var showRelevantValues = true;
+
+    dataSource.getFieldValues(2, showRelevantValues).done(function(data) {
+        fieldValues = data;
+    });
+
+    // assert
+    assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
+        values: [],
+        columns: [
+            {
+                dataField: "[Product].[Subcategory]",
+                area: "row",
+                areaIndex: 0,
+                expanded: true,
+                filterValues: null,
+                sortBySummaryField: null,
+                sortOrder: "asc",
+                caption: ""
+            }
+        ],
+        rows: [],
+        filters: [
+            {
+                area: "column",
+                areaIndex: 0,
+                caption: "",
+                dataField: "[Ship Date].[Calendar Year]",
+                filterValues: [
+                    2001
+                ]
+            },
+            {
+                area: "filter",
+                areaIndex: 0,
+                caption: "",
+                dataField: "[Product].[Category]",
+                filterValues: ["Bikes"]
+            }
+        ],
+        skipValues: true
+    }], "load args");
+
+    assert.deepEqual(fieldValues, loadResult.columns);
+    assert.strictEqual(fieldValues.length, 2);
+    assert.strictEqual(fieldValues[0].text, "Bike 1");
+    assert.strictEqual(fieldValues[1].text, "Bike 2");
 });
 
 QUnit.test("Reload data", function(assert) {

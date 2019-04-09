@@ -65,7 +65,8 @@ var PagerView = modules.View.inherit({
                     setTimeout(function() {
                         dataController.pageSize(pageSize);
                     });
-                }
+                },
+                useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation")
             };
 
         if(isDefined(pagerOptions.infoText)) {

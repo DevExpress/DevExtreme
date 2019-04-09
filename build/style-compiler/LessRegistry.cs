@@ -202,7 +202,8 @@ namespace StyleCompiler
                 "drawer",
                 "card",
                 "htmlEditor",
-                "fileManager"
+                "fileManager",
+                "diagram"
             });
 
             // Non-themeable components that have only common styles

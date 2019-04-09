@@ -482,7 +482,7 @@ QUnit.module("Lifecycle", environment, function() {
         beforeEach() {
             this.onDrawn = sinon.spy();
         },
-        chart(annotations) {
+        chart(annotationSettings, annotationItems) {
             return $('<div>').appendTo("#qunit-fixture").dxChart({
                 size: {
                     width: 100,
@@ -504,7 +504,8 @@ QUnit.module("Lifecycle", environment, function() {
                     visualRange: [0, 100]
                 },
                 onDrawn: this.onDrawn,
-                annotations
+                commonAnnotationSettings: annotationSettings,
+                annotations: annotationItems
             }).dxChart("instance");
         },
         getAnnotationsGroup() {
@@ -515,41 +516,68 @@ QUnit.module("Lifecycle", environment, function() {
         }
     });
 
-    QUnit.test("Do not create annotation if no options or items passed", function(assert) {
-        const test = (annotationOptions, message) => {
-            this.chart(annotationOptions);
-
-            assert.equal(this.createAnnotationStub.callCount, 0, message);
-        };
-
-        test(undefined, "No options");
-        test({ some: "options" }, "No items");
+    QUnit.test("Do not create annotation if no items passed", function(assert) {
+        this.chart({ some: "options" });
+        assert.equal(this.createAnnotationStub.callCount, 0);
     });
 
     QUnit.test("Create annotation with given options", function(assert) {
         const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
+            some: "options"
         };
-        this.chart(annotationOptions);
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        this.chart(annotationOptions, items);
 
         assert.equal(this.createAnnotationStub.callCount, 1);
-        assert.strictEqual(this.createAnnotationStub.getCall(0).args[0].some, annotationOptions.some);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0].items, annotationOptions.items);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], items);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], {
+            some: "options",
+            image: {
+                location: "full"
+            },
+            font: {
+                color: "#333333",
+                cursor: "default",
+                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
+                size: 12,
+                weight: 400
+            },
+            tooltipEnabled: true,
+
+            border: {
+                width: 1,
+                color: "#dddddd",
+                dashStyle: "solid",
+                visible: true
+            },
+            color: "#ffffff",
+            opacity: 0.9,
+            arrowLength: 14,
+            arrowWidth: 14,
+            paddingLeftRight: 10,
+            paddingTopBottom: 10,
+            shadow: {
+                opacity: 0.15,
+                offsetX: 0,
+                offsetY: 1,
+                blur: 4,
+                color: '#000000'
+            }
+        });
     });
 
     QUnit.test("Pass widget instance and group to annotations.draw method", function(assert) {
         const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
+            some: "options"
         };
-        const chart = this.chart(annotationOptions);
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        const chart = this.chart(annotationOptions, items);
 
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
@@ -558,42 +586,69 @@ QUnit.module("Lifecycle", environment, function() {
 
     QUnit.test("Draw annotations before onDrawn event", function(assert) {
         const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
+            some: "options"
         };
-        this.chart(annotationOptions);
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        this.chart(annotationOptions, items);
 
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.ok(annotation.draw.lastCall.calledBefore(this.onDrawn.lastCall));
     });
 
-    QUnit.test("Change options - recreate annotations, clear group, draw new annotations", function(assert) {
+    QUnit.test("Change annotations option - recreate annotations, clear group, draw new annotations", function(assert) {
         const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
+            some: "options"
         };
-        const chart = this.chart(annotationOptions);
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        const chart = this.chart(annotationOptions, items);
+        this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
+        this.createAnnotationStub.reset();
+
+        const newItems = [
+            { some: "newItem" }
+        ];
+        chart.option({ annotations: newItems });
+
+        // assert
+        assert.equal(this.createAnnotationStub.callCount, 1);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], newItems);
+        assert.equal(this.createAnnotationStub.getCall(0).args[1].some, "options");
+
+        const annotationsGroup = this.getAnnotationsGroup();
+
+        const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
+        assert.equal(annotation.draw.callCount, 1);
+        assert.deepEqual(annotation.draw.getCall(0).args, [chart, annotationsGroup]);
+        assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
+    });
+
+    QUnit.test("Change commonAnnotationSettings option - recreate annotations, clear group, draw new annotations", function(assert) {
+        const annotationOptions = {
+            some: "options"
+        };
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        const chart = this.chart(annotationOptions, items);
         this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
         this.createAnnotationStub.reset();
 
         const newAnnotationOptions = {
-            some: "otherOptions",
-            items: [
-                { some: "newItem" }
-            ]
+            some: "otherOptions"
         };
-        chart.option({ annotations: newAnnotationOptions });
+        chart.option({ commonAnnotationSettings: newAnnotationOptions });
 
         // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
-        assert.strictEqual(this.createAnnotationStub.getCall(0).args[0].some, newAnnotationOptions.some);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0].items, newAnnotationOptions.items);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], items);
+        assert.equal(this.createAnnotationStub.getCall(0).args[1].some, "otherOptions");
 
         const annotationsGroup = this.getAnnotationsGroup();
 
@@ -619,7 +674,7 @@ QUnit.module("Tooltip", function(hooks) {
         environment.afterEach.apply(this, arguments);
     });
 
-    function createChart(annotations) {
+    function createChart(commonAnnotationSettings, annotations) {
         return $('<div>').appendTo("#qunit-fixture").dxChart({
             size: {
                 width: 100,
@@ -640,41 +695,41 @@ QUnit.module("Tooltip", function(hooks) {
             argumentAxis: {
                 visualRange: [0, 100]
             },
+            commonAnnotationSettings,
             annotations
         }).dxChart("instance");
     }
 
     QUnit.test("Create", assert => {
-        const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
-        };
+        createChart({
+            some: "options"
+        }, [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ]);
 
-        createChart(annotationOptions);
-
-        assert.equal(this.tooltip.ctorArgs[0].cssClass, "dxc-tooltip", "tooltip should be have right css class");
+        assert.equal(this.tooltip.ctorArgs[0].cssClass, "dxc-annotation-tooltip", "tooltip should be have right css class");
         assert.equal(this.tooltip.setRendererOptions.callCount, 1, "tooltip.setRendererOptions should be called");
         assert.equal(this.tooltip.update.callCount, 1, "tooltip.update should be called");
     });
 
     QUnit.test("Show", assert => {
-        const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
-        };
-
-        const chart = createChart(annotationOptions);
+        const chart = createChart({
+            some: "options"
+        }, [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ]);
 
         const tooltipFormatObject = { format: "tooltip for annotation" };
+        const customizeTooltip = () => { };
         const point = {
             getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
-            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; })
+            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; }),
+            options: {
+                customizeTooltip,
+                tooltipEnabled: true
+            }
         };
 
         chart.hideTooltip = sinon.spy();
@@ -692,18 +747,42 @@ QUnit.module("Tooltip", function(hooks) {
         assert.equal(tooltip.show.firstCall.args[0], tooltipFormatObject);
         assert.deepEqual(tooltip.show.firstCall.args[1], { x: 4, y: 6 });
         assert.equal(tooltip.show.firstCall.args[2].target, point);
+        assert.equal(tooltip.show.firstCall.args[3], customizeTooltip);
+    });
+
+    QUnit.test("Do not show tooltip if it is disabled", assert => {
+        createChart({
+            some: "options"
+        }, [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ]);
+
+        const tooltipFormatObject = { format: "tooltip for annotation" };
+        const customizeTooltip = () => { };
+        const point = {
+            getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
+            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; }),
+            options: {
+                customizeTooltip,
+                tooltipEnabled: false
+            }
+        };
+
+        const tooltip = this.tooltip;
+        this.renderer.root.on.lastCall.args[1]({ target: { "annotation-data": point } });
+
+        assert.equal(tooltip.show.callCount, 0);
+
     });
 
     QUnit.test("Hide", assert => {
-        const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
-        };
-
-        const chart = createChart(annotationOptions);
+        const chart = createChart({
+            some: "options"
+        }, [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ]);
 
         const tooltipFormatObject = { format: "tooltip for annotation" };
         const point = {
@@ -727,15 +806,12 @@ QUnit.module("Tooltip", function(hooks) {
     });
 
     QUnit.test("Dispose", assert => {
-        const annotationOptions = {
-            some: "options",
-            items: [
-                { x: 100, y: 200, },
-                { value: 1, argument: 2 }
-            ]
-        };
-
-        const chart = createChart(annotationOptions);
+        const chart = createChart({
+            some: "options"
+        }, [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ]);
         chart.dispose();
 
         assert.equal(this.tooltip.dispose.callCount, 1);

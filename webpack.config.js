@@ -20,6 +20,7 @@ module.exports = {
         'quill': 'window.Quill',
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown',
-        'exceljs': 'window.ExcelJS'
+        'exceljs': 'window.ExcelJS',
+        "devexpress-diagram": 'window.DevExpress.diagram'
     }
 };

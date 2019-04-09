@@ -1,74 +1,92 @@
-import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
+import { isString } from "../../core/utils/type";
 
-class FileManagerCommandManager {
+export class FileManagerCommandManager {
 
-    constructor() {
-        this._initCommands();
-
+    constructor(editingSettings) {
         this._actions = {};
+        this._editingSettings = editingSettings || {};
+
+        this._initCommands();
     }
 
     _initCommands() {
         this._commands = [
             {
                 name: "create",
-                text: "Create folder",
+                text: "New folder",
                 icon: "plus",
+                enabled: this._editingSettings.allowCreate,
                 noFileItemRequired: true
             },
             {
                 name: "rename",
                 text: "Rename",
+                enabled: this._editingSettings.allowRename,
                 isSingleFileItemCommand: true
             },
             {
                 name: "move",
-                text: "Move"
+                text: "Move",
+                enabled: this._editingSettings.allowMove
             },
             {
                 name: "copy",
-                text: "Copy"
+                text: "Copy",
+                enabled: this._editingSettings.allowCopy
             },
             {
                 name: "delete",
                 text: "Delete",
-                icon: "remove"
+                icon: "remove",
+                enabled: this._editingSettings.allowRemove,
             },
             {
                 name: "download",
                 text: "Download",
-                icon: "download"
+                icon: "download",
+                enabled: false
             },
             {
                 name: "upload",
-                text: "Upload file...",
+                text: "Upload files",
                 icon: "upload",
+                enabled: this._editingSettings.allowUpload,
+                noFileItemRequired: true
+            },
+            {
+                name: "refresh",
+                text: "Refresh",
+                icon: "refresh",
+                enabled: true,
                 noFileItemRequired: true
             },
             {
                 name: "thumbnails",
                 text: "Thumbnails View",
+                enabled: true,
                 displayInToolbarOnly: true,
                 noFileItemRequired: true
             },
             {
                 name: "details",
                 text: "Details View",
+                enabled: true,
                 displayInToolbarOnly: true,
                 noFileItemRequired: true
             }
         ];
 
         this._commandMap = {};
-        each(this._commands, (_, command) => { this._commandMap[command.name] = command; });
+        this._commands.forEach(command => { this._commandMap[command.name] = command; });
     }
 
     registerActions(actions) {
         this._actions = extend(this._actions, actions);
     }
 
-    executeCommand(commandName) {
+    executeCommand(command) {
+        const commandName = isString(command) ? command : command.name;
         const action = this._actions[commandName];
         if(action) {
             action();
@@ -80,11 +98,16 @@ class FileManagerCommandManager {
             .filter(c => (!c.displayInToolbarOnly || forToolbar) && (!items || this.isCommandAvailable(c.name, items)));
     }
 
+    getCommandByName(name) {
+        return this._commandMap[name];
+    }
+
     isCommandAvailable(commandName, items) {
-        const { noFileItemRequired, isSingleFileItemCommand } = this._commandMap[commandName];
-        return noFileItemRequired || items.length > 0 && (!isSingleFileItemCommand || items.length === 1);
+        const command = this.getCommandByName(commandName);
+        if(!command || !command.enabled) {
+            return false;
+        }
+        return command.noFileItemRequired || items.length > 0 && (!command.isSingleFileItemCommand || items.length === 1);
     }
 
 }
-
-module.exports.FileManagerCommandManager = FileManagerCommandManager;

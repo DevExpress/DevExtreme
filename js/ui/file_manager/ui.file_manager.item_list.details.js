@@ -57,7 +57,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 }
             ],
             onRowPrepared: this._onRowPrepared.bind(this),
-            onContextMenuPreparing: this._onContextMenuPreparing.bind(this)
+            onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
+            onSelectionChanged: this._raiseSelectionChanged.bind(this)
         });
 
         this.$element()
@@ -146,6 +147,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     refreshData() {
         this._loadFilesViewData();
+    }
+
+    clearSelection() {
+        this._filesView.clearSelection();
     }
 
     getSelectedItems() {

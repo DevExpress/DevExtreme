@@ -161,18 +161,16 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             renderSpy = sinon.spy(chart, "_doRender");
         chart._renderer.stopAllAnimations.reset();
 
-        // assert
-        assert.ok(chart.series);
-
-        assert.ok(chartMocks.seriesMockData.args[0][1].visibilityChanged, "Options passed");
         chartMocks.seriesMockData.args[0][1].visibilityChanged(chart.getAllSeries()[0]);
+
+        // assert
         assert.ok(processSeriesFamilySpy.calledOnce);
         assert.ok(populateBusinessRangeSpy.calledOnce);
-        assert.ok(renderSpy.calledOnce);
+        assert.equal(renderSpy.callCount, 1, "renderSpy");
         assert.deepEqual(renderSpy.lastCall.args[0], { force: true });
         assert.ok(renderSpy.calledAfter(populateBusinessRangeSpy));
         assert.ok(populateBusinessRangeSpy.calledAfter(processSeriesFamilySpy));
-        assert.ok(chart._renderer.stopAllAnimations.withArgs(true).calledTwice);
+        assert.equal(chart._renderer.stopAllAnimations.withArgs(true).callCount, 2);
     });
 
     QUnit.test("dxChart with single series request default type without category Axis", function(assert) {
