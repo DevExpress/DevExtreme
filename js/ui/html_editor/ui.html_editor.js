@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isFunction } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import { executeAsync } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
@@ -82,20 +82,24 @@ const HtmlEditor = Editor.inherit({
             * @default null
             */
             variables: null,
-
             /**
-            * @name dxHtmlEditorOptions.resizing
-            * @type dxHtmlEditorResizing
+            * @name dxHtmlEditorOptions.mediaResizing
+            * @type dxHtmlEditorMediaResizing
             * @default null
             */
-            resizing: null,
-
+            mediaResizing: null,
             /**
             * @name dxHtmlEditorOptions.mentions
             * @type Array<dxHtmlEditorMention>
             * @default null
             */
             mentions: null,
+            /**
+             * @name dxHtmlEditorOptions.customizeModules
+             * @type function
+             * @type_function_param1 config:object
+             */
+            customizeModules: null,
 
             formDialogOptions: null
 
@@ -146,16 +150,16 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxHtmlEditorResizing
+            * @name dxHtmlEditorMediaResizing
             * @type object
             */
             /**
-            * @name dxHtmlEditorResizing.enabled
+            * @name dxHtmlEditorMediaResizing.enabled
             * @type boolean
             * @default false
             */
             /**
-            * @name dxHtmlEditorResizing.allowedTargets
+            * @name dxHtmlEditorMediaResizing.allowedTargets
             * @type Array<string>
             * @default ["images"]
             */
@@ -188,6 +192,10 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorMention.itemTemplate
             * @type template|function
             * @default "item"
+            * @type_function_param1 itemData:object
+            * @type_function_param2 itemIndex:number
+            * @type_function_param3 itemElement:dxElement
+            * @type_function_return string|Node|jQuery
             */
             /**
             * @name dxHtmlEditorMention.displayExpr
@@ -210,6 +218,12 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorMention.template
             * @type template|function
             * @default null
+            * @type_function_param1 mentionData:object
+            * @type_function_param1_field1 marker:string
+            * @type_function_param1_field2 id:string|number
+            * @type_function_param1_field3 value:any
+            * @type_function_param2 contentElement:dxElement
+            * @type_function_return string|Node|jQuery
             */
         });
     },
@@ -333,7 +347,12 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderHtmlEditor: function() {
+        const customizeModules = this.option("customizeModules");
         const modulesConfig = this._getModulesConfig();
+
+        if(isFunction(customizeModules)) {
+            customizeModules(modulesConfig);
+        }
 
         this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
@@ -363,7 +382,7 @@ const HtmlEditor = Editor.inherit({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
-            resizing: this._getModuleConfigByOption("resizing"),
+            resizing: this._getModuleConfigByOption("mediaResizing"),
             mentions: this._getModuleConfigByOption("mentions"),
             clipboard: {
                 matchVisual: false,
@@ -482,6 +501,7 @@ const HtmlEditor = Editor.inherit({
             case "variables":
             case "toolbar":
             case "mentions":
+            case "customizeModules":
                 this._invalidate();
                 break;
             case "valueType": {
@@ -503,7 +523,7 @@ const HtmlEditor = Editor.inherit({
             case "formDialogOptions":
                 this._renderFormDialog();
                 break;
-            case "resizing":
+            case "mediaResizing":
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
@@ -552,23 +572,23 @@ const HtmlEditor = Editor.inherit({
     },
 
     /**
-    * @name dxHtmlEditorMethods.registerModules
-    * @publicName registerModules(modules)
+    * @name dxHtmlEditorMethods.register
+    * @publicName register(components)
     * @param1 modules:Object
     */
-    registerModules: function(modules) {
-        this._quillRegistrator.registerModules(modules);
+    register: function(components) {
+        this._quillRegistrator.registerModules(components);
 
         this.repaint();
     },
 
     /**
-    * @name dxHtmlEditorMethods.getModule
-    * @publicName getModule(modulePath)
-    * @param1 modulePath:string
+    * @name dxHtmlEditorMethods.get
+    * @publicName get(componentPath)
+    * @param1 componentPath:string
     * @return Object
     */
-    getModule: function(modulePath) {
+    get: function(modulePath) {
         return this._quillRegistrator.getQuill().import(modulePath);
     },
 

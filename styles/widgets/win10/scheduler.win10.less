@@ -1,6 +1,5 @@
 @WIN10_SCHEDULER_HEADER_HEIGHT: 42px;
 @WIN10_SCHEDULER_NAVIGATOR_HEIGHT: @WIN10_SCHEDULER_HEADER_HEIGHT * 0.8;
-@WIN10_SCHEDULER_TOOLTIP_WIDTH: 280px;
 
 @WIN10_NAVIGATOR_ICON_SIZE: 16px;
 @WIN10_SCHEDULER_SWITCHER_LABEL_OFFSET: 70px;
@@ -41,8 +40,7 @@
     }
 }
 
-.dx-scheduler-navigator,
-.dx-scheduler-appointment-tooltip {
+.dx-scheduler-navigator {
     .dx-button .dx-icon {
         width: @WIN10_NAVIGATOR_ICON_SIZE;
         height: @WIN10_NAVIGATOR_ICON_SIZE;
@@ -88,21 +86,6 @@
     .dx-rtl & {
         left: @WIN10_SCHEDULER_SWITCHER_LABEL_OFFSET;
         right: auto;
-    }
-}
-
-.dx-scheduler-appointment-tooltip {
-    margin-right: 0;
-    width: @WIN10_SCHEDULER_TOOLTIP_WIDTH;
-
-    .dx-button {
-        padding: 0;
-        margin-right: 20px;
-
-        .dx-rtl & {
-            margin-right: 0;
-            margin-left: 20px;
-        }
     }
 }
 

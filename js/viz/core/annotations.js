@@ -10,6 +10,7 @@ const ANNOTATION_DATA = "annotation-data";
 
 function coreAnnotation(options, draw) {
     return {
+        type: options.type,
         name: options.name,
         x: options.x,
         y: options.y,
@@ -66,8 +67,10 @@ function imageAnnotation(options) {
 }
 
 function createAnnotation(item, commonOptions) {
-    // Choose annotation type and merge common and individual options
-    const options = extend(true, {}, commonOptions, item);
+    let options = extend(true, {}, commonOptions, item);
+    if(options.customizeAnnotation && options.customizeAnnotation.call) {
+        options = extend(true, options, options.customizeAnnotation(item));
+    }
 
     if(options.type === "image") {
         return imageAnnotation(options);
@@ -77,7 +80,11 @@ function createAnnotation(item, commonOptions) {
 }
 
 export let createAnnotations = function(items, options) {
-    return items.map(item => createAnnotation(item, options));
+    return items.reduce((arr, item) => {
+        const annotation = createAnnotation(item, options);
+        annotation && arr.push(annotation);
+        return arr;
+    }, []);
 };
 
 ///#DEBUG
