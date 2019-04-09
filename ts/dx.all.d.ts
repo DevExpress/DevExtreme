@@ -6693,7 +6693,7 @@ declare module DevExpress.ui {
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
-        /** @name dxHtmlEditor.Options.customize */
+        /** @name dxHtmlEditor.Options.customizeModules */
         customizeModules?: ((config: any) => any);
         /** @name dxHtmlEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
@@ -6777,7 +6777,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorMention.displayExpr */
         displayExpr?: string | ((item: any) => string);
         /** @name dxHtmlEditorMention.itemTemplate */
-        itemTemplate?: template | Function;
+        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxHtmlEditorMention.marker */
         marker?: string;
         /** @name dxHtmlEditorMention.minSearchLength */
@@ -6787,7 +6787,7 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorMention.searchTimeout */
         searchTimeout?: number;
         /** @name dxHtmlEditorMention.template */
-        template?: template | Function;
+        template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxHtmlEditorMention.valueExpr */
         valueExpr?: string | Function;
     }
