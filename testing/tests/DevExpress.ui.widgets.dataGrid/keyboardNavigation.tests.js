@@ -8614,7 +8614,7 @@ QUnit.module("Keyboard navigation accessibility", {
         }, this.options);
 
         setupDataGridModules(this,
-            ["data", "columns", "columnHeaders", "sorting", "headerFilter", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
+            ["data", "columns", "columnHeaders", "sorting", "headerFilter", "filterSync", "filterPanel", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
             { initViews: true }
         );
     },
@@ -8739,5 +8739,58 @@ QUnit.module("Keyboard navigation accessibility", {
         // assert
         assert.equal(headerFilterShownCount, 2, "headerFilterShownCount");
         assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    });
+
+    testInDesktop("Enter, Space key down on filter panel elements", function(assert) {
+        var $cell,
+            filterBuilderShownCount = 0;
+
+        // arrange
+        this.options = {
+            filterPanel: {
+                visible: true
+            },
+            filterValue: ["name", "=", "Alex"]
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.getView("filterPanelView")._showFilterBuilder = () => ++filterBuilderShownCount;
+
+        // arrange
+        $cell = $(".dx-datagrid-filter-panel .dx-icon-filter");
+
+        // act
+        $cell.focus();
+        fireKeyDown($cell, "Enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(filterBuilderShownCount, 1, "filterBuilderShownCount");
+
+        // arrange
+        $cell = $(".dx-datagrid-filter-panel .dx-datagrid-filter-panel-text");
+
+        // act
+        $cell.focus();
+        fireKeyDown($cell, "Enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(filterBuilderShownCount, 2, "filterBuilderShownCount");
+
+        // arrange
+        $cell = $(".dx-datagrid-filter-panel .dx-datagrid-filter-panel-clear-filter");
+
+        // assert
+        assert.deepEqual(this.options.filterValue, ["name", "=", "Alex"], "filterValue");
+
+        // act
+        $cell.focus();
+        fireKeyDown($cell, "Enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.options.filterValue, null, "filterValue");
     });
 });

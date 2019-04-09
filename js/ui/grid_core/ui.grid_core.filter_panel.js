@@ -8,6 +8,7 @@ import CheckBox from "../check_box";
 import utils from "../filter_builder/utils";
 import { when, Deferred } from "../../core/utils/deferred";
 import inflector from "../../core/utils/inflector";
+import { normalizeKeyName } from "../../events/utils";
 
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
@@ -67,9 +68,14 @@ var FilterPanelView = modules.View.inherit({
     _getFilterElement: function() {
         var that = this,
             $element = $("<div>").addClass("dx-icon-filter");
-        eventsEngine.on($element, "click", function() {
-            that.option("filterBuilderPopup.visible", true);
-        });
+
+        eventsEngine.on($element, "click", that._showFilterBuilder.bind(that));
+        if(!this.option("useLegacyKeyboardNavigation")) {
+            eventsEngine.on($element, "keydown", e => that._processKeyDown(e, that._showFilterBuilder.bind(that)));
+        }
+
+        this._addTabIndexToElement($element);
+
         return $element;
     },
 
@@ -97,21 +103,50 @@ var FilterPanelView = modules.View.inherit({
             filterText = that.option("filterPanel.texts.createFilter");
             $textElement.text(filterText);
         }
-        eventsEngine.on($textElement, "click", function() {
-            that.option("filterBuilderPopup.visible", true);
-        });
+        eventsEngine.on($textElement, "click", that._showFilterBuilder.bind(that));
+        if(!this.option("useLegacyKeyboardNavigation")) {
+            eventsEngine.on($textElement, "keydown", e => that._processKeyDown(e, that._showFilterBuilder.bind(that)));
+        }
+
+        this._addTabIndexToElement($textElement);
+
         return $textElement;
+    },
+
+    _showFilterBuilder: function() {
+        this.option("filterBuilderPopup.visible", true);
     },
 
     _getRemoveButtonElement: function() {
         var that = this,
+            clearFilterValue = () => that.option("filterValue", null),
             $element = $("<div>")
-                .addClass(this.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-                .text(this.option("filterPanel.texts.clearFilter"));
-        eventsEngine.on($element, "click", function() {
-            that.option("filterValue", null);
-        });
+                .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
+                .text(that.option("filterPanel.texts.clearFilter"));
+
+        eventsEngine.on($element, "click", clearFilterValue);
+        if(!this.option("useLegacyKeyboardNavigation")) {
+            eventsEngine.on($element, "keydown", e => that._processKeyDown(e, clearFilterValue));
+        }
+
+        that._addTabIndexToElement($element);
+
         return $element;
+    },
+
+    _processKeyDown: function(event, action) {
+        var keyName = normalizeKeyName(event);
+
+        if(keyName === "enter" || keyName === "space") {
+            action();
+        }
+    },
+
+    _addTabIndexToElement: function($element) {
+        if(!this.option("useLegacyKeyboardNavigation")) {
+            let tabindex = this.option("tabindex") || 0;
+            $element.attr("tabindex", tabindex);
+        }
     },
 
     optionChanged: function(args) {
