@@ -18,7 +18,6 @@ function exportDataGrid(options) {
 
     let exportController = dataGrid.getController("export");
 
-    let headerRowCount = dataGrid.option("showColumnHeaders") ? exportController._getColumns().length - 1 : 0;
     let columns = exportController._getColumns()[0];
 
     if(dataGrid.option("showColumnHeaders") && columns.length > 0) {
@@ -58,33 +57,11 @@ function exportDataGrid(options) {
             for(let rowIndex = 0; rowIndex < items.length; rowIndex++) {
                 let dataRow = worksheet.getRow(result.to.row);
 
-                dataRow.outlineLevel = _getOutlineLevel(exportController, items[rowIndex], rowIndex, headerRowCount);
+                dataRow.outlineLevel = _getDataRowOutlineLevel(exportController, items[rowIndex]);
 
                 let currentColumnIndex = result.from.column;
                 for(let cellIndex = 0; cellIndex < items[rowIndex].values.length; cellIndex++) {
-                    switch(items[rowIndex].rowType) {
-                        case "group":
-                            if(cellIndex < 1) {
-                                dataRow.getCell(currentColumnIndex).value = _getGroupValue(exportController, items[rowIndex]);
-                            } else {
-                                dataRow.getCell(currentColumnIndex).value = _getSummaryValue(exportController, items[rowIndex].values[cellIndex]);
-                            }
-                            break;
-                        case "totalFooter":
-                        case "groupFooter":
-                            if(cellIndex < items[rowIndex].values.length) {
-                                let value = items[rowIndex].values[cellIndex];
-
-                                if(typeUtils.isDefined(value)) {
-                                    dataRow.getCell(currentColumnIndex).value = dataGridCore.getSummaryText(value, exportController.option("summary.texts"));
-                                } else {
-                                    dataRow.getCell(currentColumnIndex).value = null;
-                                }
-                            }
-                            break;
-                        default:
-                            dataRow.getCell(currentColumnIndex).value = items[rowIndex].values[cellIndex];
-                    }
+                    dataRow.getCell(currentColumnIndex).value = _getDataRowCellValue(exportController, items[rowIndex], cellIndex);
 
                     currentColumnIndex++;
                 }
@@ -96,7 +73,32 @@ function exportDataGrid(options) {
     });
 }
 
-function _getSummaryValue(exportController, summaryItems) {
+function _getDataRowCellValue(exportController, dataRow, cellIndex) {
+    switch(dataRow.rowType) {
+        case "group":
+            if(cellIndex === 0) {
+                return _getGroupCellValue(exportController, dataRow);
+            }
+
+            return _getGroupSummaryCellValue(exportController, dataRow.values[cellIndex]);
+        case "totalFooter":
+        case "groupFooter":
+            if(cellIndex < dataRow.values.length) {
+                let value = dataRow.values[cellIndex];
+
+                if(typeUtils.isDefined(value)) {
+                    return dataGridCore.getSummaryText(value, exportController.option("summary.texts"));
+                } else {
+                    return null;
+                }
+            }
+            break;
+        default:
+            return dataRow.values[cellIndex];
+    }
+}
+
+function _getGroupSummaryCellValue(exportController, summaryItems) {
     if(Array.isArray(summaryItems)) {
         let value = "";
         for(let i = 0; i < summaryItems.length; i++) {
@@ -107,13 +109,13 @@ function _getSummaryValue(exportController, summaryItems) {
     return null;
 }
 
-function _getOutlineLevel(exportController, item, rowIndex, headerRowCount) {
-    if(rowIndex < headerRowCount || item.rowType === "totalFooter") return 0;
+function _getDataRowOutlineLevel(exportController, item) {
+    if(item.rowType === "totalFooter") return 0;
 
     return typeUtils.isDefined(item.groupIndex) ? item.groupIndex : exportController._columnsController.getGroupColumns().length;
 }
 
-function _getGroupValue(exportController, item) {
+function _getGroupCellValue(exportController, item) {
     var groupColumn = exportController._columnsController.getGroupColumns()[item.groupIndex],
         value = dataGridCore.getDisplayValue(groupColumn, item.key[item.groupIndex], item.data, item.rowType),
         result = groupColumn.caption + ": " + dataGridCore.formatValue(value, groupColumn);
