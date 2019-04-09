@@ -207,6 +207,14 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         };
     },
 
+    getCompactAppointmentTopOffset: function(allDay) {
+        if(this.instance.fire("isAdaptive") && allDay) {
+            return (this._allDayHeight - this.getDropDownButtonAdaptiveSize()) / 2;
+        } else {
+            return this.callBase(allDay);
+        }
+    },
+
     _calculateVerticalGeometryConfig: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
             offsets = this._getOffsets(),
