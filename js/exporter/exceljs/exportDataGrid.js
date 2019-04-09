@@ -62,13 +62,12 @@ function exportDataGrid(options) {
 
                 let currentColumnIndex = result.from.column;
                 for(let cellIndex = 0; cellIndex < items[rowIndex].values.length; cellIndex++) {
-
                     switch(items[rowIndex].rowType) {
                         case "group":
                             if(cellIndex < 1) {
                                 dataRow.getCell(currentColumnIndex).value = _getGroupValue(exportController, items[rowIndex]);
                             } else {
-                                dataRow.getCell(currentColumnIndex).value = null;
+                                dataRow.getCell(currentColumnIndex).value = _getSummaryValue(exportController, items[rowIndex].values[cellIndex]);
                             }
                             break;
                         case "totalFooter":
@@ -95,6 +94,17 @@ function exportDataGrid(options) {
             resolve(result);
         });
     });
+}
+
+function _getSummaryValue(exportController, summaryItems) {
+    if(Array.isArray(summaryItems)) {
+        let value = "";
+        for(let i = 0; i < summaryItems.length; i++) {
+            value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], exportController.option("summary.texts"));
+        }
+        return value;
+    }
+    return null;
 }
 
 function _getOutlineLevel(exportController, item, rowIndex, headerRowCount) {
