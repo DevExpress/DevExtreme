@@ -8840,7 +8840,9 @@ QUnit.module("Keyboard navigation accessibility", {
 
     testInDesktop("Enter, Space key down on filter panel elements", function(assert) {
         var $cell,
-            filterBuilderShownCount = 0;
+            filterBuilderShownCount = 0,
+            processKeyDown,
+            filterPanelView;
 
         // arrange
         this.options = {
@@ -8852,7 +8854,12 @@ QUnit.module("Keyboard navigation accessibility", {
 
         this.setupModule();
         this.gridView.render($("#container"));
-        this.getView("filterPanelView")._showFilterBuilder = () => ++filterBuilderShownCount;
+        filterPanelView = this.getView("filterPanelView");
+        processKeyDown = filterPanelView._processKeyDown;
+        filterPanelView._processKeyDown = (event, action) => {
+            ++filterBuilderShownCount;
+            processKeyDown.bind(filterPanelView)(event, action);
+        };
 
         // arrange
         $cell = $(".dx-datagrid-filter-panel .dx-icon-filter");
@@ -8941,5 +8948,41 @@ QUnit.module("Keyboard navigation accessibility", {
 
         // assert
         assert.notOk($rowsView.hasClass("dx-state-focused"), "RowsView focus state");
+    });
+
+    testInDesktop("Filter panel focus state", function(assert) {
+        var $filterPanel;
+
+        this.options = {
+            filterPanel: {
+                visible: true
+            },
+            filterValue: ["name", "=", "Alex"]
+        };
+
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+        $filterPanel = $(".dx-datagrid-filter-panel");
+
+        // assert
+        assert.notOk($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+
+        // act
+        $filterPanel.find(".dx-icon-filter").trigger("focus");
+        // assert
+        assert.ok($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+        // act
+        fireKeyDown($(":focus"), "Tab");
+        // assert
+        assert.ok($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+        // act
+        $(":focus").trigger("mousedown");
+        // assert
+        assert.notOk($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+        // act
+        fireKeyDown($(":focus"), "Tab");
+        // assert
+        assert.ok($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
     });
 });

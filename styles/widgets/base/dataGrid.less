@@ -154,6 +154,18 @@
 .dx-datagrid-filter-panel {
     color: @datagrid-base-color;
     border-top: @datagrid-border;
+    .dx-icon-filter,
+    .dx-datagrid-filter-panel-text,
+    .dx-datagrid-filter-panel-clear-filter {
+        outline: none;
+    }
+    &.dx-state-focused {
+        .dx-icon-filter:focus,
+        .dx-datagrid-filter-panel-text:focus,
+        .dx-datagrid-filter-panel-clear-filter:focus {
+            outline: 2px solid @datagrid-focused-border-color;
+        }
+    }
 }
 
 .dx-datagrid-form-buttons-container {

@@ -14,7 +14,8 @@ var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
     FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + "-checkbox",
     FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + "-clear-filter",
-    FILTER_PANEL_LEFT_CONTAINER = FILTER_PANEL_CLASS + "-left";
+    FILTER_PANEL_LEFT_CONTAINER = FILTER_PANEL_CLASS + "-left",
+    FOCUS_STATE_CLASS = "dx-state-focused";
 
 var FILTER_PANEL_TARGET = "filterPanel";
 
@@ -69,12 +70,12 @@ var FilterPanelView = modules.View.inherit({
         var that = this,
             $element = $("<div>").addClass("dx-icon-filter");
 
-        eventsEngine.on($element, "click", that._showFilterBuilder.bind(that));
+        eventsEngine.on($element, "click", () => that._showFilterBuilder());
         if(!this.option("useLegacyKeyboardNavigation")) {
-            eventsEngine.on($element, "keydown", e => that._processKeyDown(e, that._showFilterBuilder.bind(that)));
+            that._registerKeyboardSupport($element, that._showFilterBuilder.bind(that));
         }
 
-        this._addTabIndexToElement($element);
+        that._addTabIndexToElement($element);
 
         return $element;
     },
@@ -103,9 +104,10 @@ var FilterPanelView = modules.View.inherit({
             filterText = that.option("filterPanel.texts.createFilter");
             $textElement.text(filterText);
         }
-        eventsEngine.on($textElement, "click", that._showFilterBuilder.bind(that));
+
+        eventsEngine.on($textElement, "click", () => that._showFilterBuilder());
         if(!this.option("useLegacyKeyboardNavigation")) {
-            eventsEngine.on($textElement, "keydown", e => that._processKeyDown(e, that._showFilterBuilder.bind(that)));
+            this._registerKeyboardSupport($textElement, this._showFilterBuilder.bind(this));
         }
 
         this._addTabIndexToElement($textElement);
@@ -126,7 +128,7 @@ var FilterPanelView = modules.View.inherit({
 
         eventsEngine.on($element, "click", clearFilterValue);
         if(!this.option("useLegacyKeyboardNavigation")) {
-            eventsEngine.on($element, "keydown", e => that._processKeyDown(e, clearFilterValue));
+            that._registerKeyboardSupport($element, clearFilterValue);
         }
 
         that._addTabIndexToElement($element);
@@ -134,11 +136,28 @@ var FilterPanelView = modules.View.inherit({
         return $element;
     },
 
+    _registerKeyboardSupport: function($element, action) {
+        var $mainElement = this.element();
+
+        eventsEngine.on($element, "keydown", e => this._processKeyDown(e, action));
+        eventsEngine.on($element, "mousedown", () => {
+            this._preventFocusState = true;
+            $mainElement.removeClass(FOCUS_STATE_CLASS);
+        });
+        eventsEngine.on($element, "focus", () => {
+            if(!this._preventFocusState) {
+                $mainElement.addClass(FOCUS_STATE_CLASS);
+            }
+            this._preventFocusState = false;
+        });
+    },
     _processKeyDown: function(event, action) {
         var keyName = normalizeKeyName(event);
 
         if(keyName === "enter" || keyName === "space") {
             action();
+        } else if(keyName === "tab") {
+            this.element().addClass(FOCUS_STATE_CLASS);
         }
     },
 
