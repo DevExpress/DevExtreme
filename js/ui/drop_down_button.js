@@ -336,7 +336,7 @@ let DropDownButton = Widget.inherit({
                 this._list = this._createComponent($("<div>"), List, this._listOptions());
 
                 this._list.registerKeyHandler("escape", this._escHandler.bind(this));
-                this._list.registerKeyHandler("tab", this.close.bind(this));
+                this._list.registerKeyHandler("tab", this._escHandler.bind(this));
                 this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
                 this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
 

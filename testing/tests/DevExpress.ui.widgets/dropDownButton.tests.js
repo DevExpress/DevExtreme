@@ -894,8 +894,10 @@ QUnit.module("keyboard navigation", {
         assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
 
         const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
-        listKeyboard.press("tab");
+        const event = listKeyboard.press("tab").event;
 
         assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(getButtonGroup(this.dropDownButton).$element().hasClass("dx-state-focused"), "button group was focused");
+        assert.strictEqual(event.isDefaultPrevented(), false, "event was not prevented and native focus move next");
     });
 });
