@@ -10336,6 +10336,7 @@ QUnit.test("update focus border on resize", function(assert) {
 });
 
 QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)'", function(assert) {
+    $("#qunit-fixture").css("position", "static");
     // arrange, act
     var dataGrid = createDataGrid({
         filterRow: { visible: true },
@@ -10372,6 +10373,32 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
     if(devices.real().deviceType === "desktop") {
         assert.deepEqual(selectionRangeArgs, [[$focusedInput.get(0), { selectionStart: 1, selectionEnd: 1 }]], "setSelectionRange args");
     }
+    $("#qunit-fixture").css("position", "");
+});
+
+QUnit.testInActiveWindow("DataGrid should lose focus in header after updateDimensions if focus is outside window", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        selection: {
+            mode: "multiple"
+        },
+        columns: [
+            { dataField: "field1" },
+            { dataField: "field2" }
+        ],
+        dataSource: [{ field1: 1, field2: 2 }]
+    });
+
+    this.clock.tick();
+
+    $(dataGrid.element()).find(".dx-checkbox").first().focus();
+
+    // assert
+    assert.ok($(":focus").length, "focus exists");
+
+    dataGrid.updateDimensions();
+
+    assert.notOk($(":focus").length, "focus is lost");
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {

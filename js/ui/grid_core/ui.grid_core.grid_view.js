@@ -214,6 +214,7 @@ var ResizingController = modules.ViewController.inherit({
             isColumnWidthsCorrected = false,
             resultWidths = [],
             focusedElement,
+            isFocusOutsideWindow,
             selectionRange,
             normalizeWidthsByExpandColumns = function() {
                 var expandColumnWidth;
@@ -249,6 +250,7 @@ var ResizingController = modules.ViewController.inherit({
 
         if(needBestFit) {
             focusedElement = domAdapter.getActiveElement();
+            isFocusOutsideWindow = focusedElement && focusedElement.getBoundingClientRect().bottom < 0;
             selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
@@ -280,7 +282,7 @@ var ResizingController = modules.ViewController.inherit({
             if(resetBestFitMode) {
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
-                if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
+                if(focusedElement && !isFocusOutsideWindow && focusedElement !== domAdapter.getActiveElement()) {
                     if(browser.msie) {
                         setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
                     } else {
