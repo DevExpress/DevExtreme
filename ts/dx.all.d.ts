@@ -1504,7 +1504,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
+        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'breakWord' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
         /** @name BaseWidget.Options.title.textOverflow */
@@ -1512,7 +1512,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseWidget.Options.title.wordWrap */
-        wordWrap?: 'normal' | 'break-word' | 'none';
+        wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /** @name BaseWidget.Options.tooltip */
     interface BaseWidgetTooltip {
@@ -2288,7 +2288,7 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
         /** @name dxChart.Options.commonAxisSettings.label.wordWrap */
-        wordWrap?: 'normal' | 'break-word' | 'none';
+        wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /** @name dxChart.Options.commonAxisSettings.stripStyle */
     export interface dxChartCommonAxisSettingsStripStyle {
@@ -3709,7 +3709,7 @@ declare module DevExpress.viz {
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle */
         hoverStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } };
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.label */
-        label?: { argumentFormat?: DevExpress.ui.format, backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), font?: Font, format?: DevExpress.ui.format, position?: 'columns' | 'inside' | 'outside', radialOffset?: number, rotationAngle?: number, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'break-word' | 'none' };
+        label?: { argumentFormat?: DevExpress.ui.format, backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), font?: Font, format?: DevExpress.ui.format, position?: 'columns' | 'inside' | 'outside', radialOffset?: number, rotationAngle?: number, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount */
         maxLabelCount?: number;
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize */
@@ -4467,7 +4467,7 @@ declare module DevExpress.viz {
         /** @name dxTreeMap.Options.selectionMode */
         selectionMode?: 'multiple' | 'none' | 'single';
         /** @name dxTreeMap.Options.tile */
-        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'break-word' | 'none' }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /** @name dxTreeMap.Options.tooltip */
         tooltip?: dxTreeMapTooltip;
         /** @name dxTreeMap.Options.valueField */
