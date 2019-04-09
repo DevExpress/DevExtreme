@@ -6280,6 +6280,8 @@ declare module DevExpress.ui {
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
         /** @name dxFileManager.Options.customThumbnail */
         customThumbnail?: ((fileItem: any) => string);
+        /** @name dxFileManager.Options.editing */
+        editing?: { allowCopy?: boolean, allowCreate?: boolean, allowMove?: boolean, allowRemove?: boolean, allowRename?: boolean, allowUpload?: boolean };
         /** @name dxFileManager.Options.fileSystemStore */
         fileSystemStore?: any;
         /** @name dxFileManager.Options.itemList */
