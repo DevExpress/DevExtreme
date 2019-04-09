@@ -2240,7 +2240,7 @@ const Scheduler = Widget.inherit({
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
             height: 'auto',
-            maxHeight: '100%',
+            maxHeight: this._popupMaxHeight(),
             onHiding: (function() {
                 this.focus();
             }).bind(this),
@@ -2261,6 +2261,16 @@ const Scheduler = Widget.inherit({
                 }
             ]
         };
+    },
+
+    _popupMaxHeight: function() {
+        let windowHeight = $(windowUtils.getWindow()).height();
+
+        if(this._popup && this._popup.option("fullScreen")) {
+            return windowHeight;
+        }
+
+        return windowHeight * 0.8;
     },
 
     _getPopupToolbarItems: function() {
@@ -2636,6 +2646,9 @@ const Scheduler = Widget.inherit({
         if("targetedAppointmentData" in options) {
             args.push(options.targetedAppointmentData);
         }
+        if("currentIndex" in options) {
+            args.push(options.currentIndex);
+        }
         return args;
     },
 
@@ -2884,6 +2897,30 @@ const Scheduler = Widget.inherit({
 
     resizePopup: function() {
         domUtils.triggerResizeEvent(this._popup.$element());
+
+        // NOTE: WA because of T731123
+        this._setPopupContentMaxHeight();
+    },
+
+    _setPopupContentMaxHeight: function() {
+        let popupContent = this._popup.$content();
+        let $scrollable = popupContent.find(".dx-scrollable-content");
+
+        $scrollable.css("height", "initial");
+
+        if($scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
+            $scrollable.height(popupContent.height());
+        }
+    },
+
+    _getMaxPopupContentHeight: function() {
+        let $bottom = this._popup.bottomToolbar();
+        let $top = this._popup.topToolbar();
+        let bottomHeight = $bottom && $bottom.length ? $bottom.get(0).getBoundingClientRect().height : 0;
+        let topHeight = $top && $top.length ? $top.get(0).getBoundingClientRect().height : 0;
+
+        return this._popupMaxHeight() - bottomHeight - topHeight;
+
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

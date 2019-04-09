@@ -1,0 +1,30 @@
+@TRANSPARENT_BORDER: 1px solid transparent;
+
+.dx-diagram {
+    border: @TRANSPARENT_BORDER;
+    display: flex;
+    flex-flow: column;
+    min-height: 400px;
+
+    .dx-diagram-toolbar-wrapper {
+        padding: 5px;
+        flex: 0;
+    }
+
+    .dx-diagram-content-wrapper {
+        display: flex;
+        flex: 1;
+        flex-basis: 0;
+    }
+
+    .dx-diagram-toolbox,
+    .dx-diagram-options {
+        flex: 300px 0;
+    }
+    .dx-diagram-content {
+        flex: 1;
+    }
+    .dx-diagram-toolbox {
+        overflow-y: auto;
+    }
+}

@@ -14,24 +14,62 @@ const TOOLTIP_APPOINTMENT_ITEM = "dx-tooltip-appointment-item",
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + "-delete-button-container",
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + "-delete-button";
 
+export const createDefaultTooltipTemplate = (template, data, targetData, index) => {
+    return new FunctionTemplate(options => {
+        return template.render({
+            model: data,
+            targetedAppointmentData: targetData,
+            container: options.container,
+            currentIndex: index
+        });
+    });
+};
 
 export class TooltipStrategyBase {
     constructor(scheduler) {
         this.scheduler = scheduler;
     }
 
-    show(target, dataList) {
+    show(target, dataList, isSingleItemBehavior) {
+        if(this._canShowTooltip(target, dataList)) {
+            this.hide();
+            this._showCore(target, dataList, isSingleItemBehavior);
+        }
+    }
+    _showCore(target, dataList, isSingleItemBehavior) {
+        if(!this.tooltip) {
+            this.list = this._createList(target, dataList);
+            this.tooltip = this._createTooltip(target, this.list);
+        } else {
+            this.list.option("dataSource", dataList);
+            if(this._shouldUseTarget()) {
+                this.tooltip.option("target", target);
+            }
+        }
+
+        this.list.focus();
+        this.tooltip.option("visible", true);
+        this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
     }
 
     hide() {
+        if(this.tooltip) {
+            this.tooltip.option("visible", false);
+        }
+    }
+
+    _shouldUseTarget() {
+        return true;
     }
 
     _createTooltip(target, list) {
-        return null;
     }
 
-    _createTooltipElement() {
-        return null;
+    _canShowTooltip(target, dataList) {
+        if(!dataList.length || this.tooltip && this.tooltip.option("visible") && $(this.tooltip.option("target")).get(0) === $(target).get(0)) {
+            return false;
+        }
+        return true;
     }
 
     _createList(target, dataList) {
@@ -58,13 +96,7 @@ export class TooltipStrategyBase {
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
-        return new FunctionTemplate(options => {
-            return template.render({
-                model: data,
-                targetedAppointmentData: targetData,
-                container: options.container
-            });
-        });
+        return createDefaultTooltipTemplate(template, data, targetData, index);
     }
 
     _getItemListTemplateName() {
@@ -80,6 +112,7 @@ export class TooltipStrategyBase {
     }
 
     _onDeleteButtonClick() {
+        this.hide();
     }
 
     _createTemplate(data, currentData, color) {

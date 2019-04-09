@@ -276,6 +276,21 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
         assert.equal(hideCalledCounter, 1, 'hide method is called');
     });
 
+    // T726895
+    QUnit.test("hide method should reset left position when transparent mode", function(assert) {
+        // arrange
+        var columnsSeparator = createColumnsSeparator(true);
+
+        columnsSeparator.show();
+        columnsSeparator.moveByX(100);
+
+        // act
+        columnsSeparator.hide();
+
+        // assert
+        assert.equal(columnsSeparator.element().position().left, $("#container").position().left, 'left position is reseted');
+    });
+
     QUnit.test("Initialize with transparent", function(assert) {
         // arrange, act
         var columnsSeparator = createColumnsSeparator(true);

@@ -206,6 +206,11 @@
  */
 
 /**
+ * @typedef {string} Enums.AnnotationType
+ * @enum {'label'|'image'}
+ */
+
+/**
  * @typedef {string} Enums.Position
  * @enum {'bottom'|'left'|'right'|'top'}
  */

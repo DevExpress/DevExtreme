@@ -20,7 +20,8 @@ var environment = {
             text: "test",
             placeholderSize: 5,
             subtitle: {
-                text: "subtitle"
+                text: "subtitle",
+                offset: 2
             }
         };
 
@@ -319,7 +320,7 @@ QUnit.test("Drawing with subtitle", function(assert) {
     const subtitleElement = this.renderer.text.getCall(1).returnValue;
     assert.deepEqual(subtitleElement.attr.getCall(0).args[0], { align: "center" });
     assert.deepEqual(subtitleElement.attr.getCall(1).args[0], { text: "subtitle", y: 0 });
-    assert.deepEqual(subtitleElement.move.lastCall.args, [0, 6]);
+    assert.deepEqual(subtitleElement.move.lastCall.args, [0, 8]);
 
     assert.ok(subtitleElement.move.lastCall.calledAfter(titleElement.setMaxWidth.lastCall));
 });

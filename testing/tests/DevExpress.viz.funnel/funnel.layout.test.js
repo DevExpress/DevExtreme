@@ -93,7 +93,7 @@ QUnit.test("Tilte with legend and labels", function(assert) {
         }
     });
 
-    assert.deepEqual(this.title.move.lastCall.args[0], [297.5, 0, 497.5, 50], "title rect");
+    assert.deepEqual(this.title.move.lastCall.args[0], [298, 0, 498, 50], "title rect");
     assert.deepEqual(this.legend.move.lastCall.args[0], [900, 50, 1000, 150], "legend rect");
 });
 
@@ -124,7 +124,7 @@ QUnit.test("Title, export button and labels", function(assert) {
         }
     });
 
-    assert.deepEqual(this.title.move.lastCall.args[0], [347.5, 0, 547.5, 50], "title rect");
+    assert.deepEqual(this.title.move.lastCall.args[0], [348, 0, 548, 50], "title rect");
     assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], "export rect");
 });
 
@@ -140,7 +140,7 @@ QUnit.test("Title, export button, legend and labels", function(assert) {
         }
     });
 
-    assert.deepEqual(this.title.move.lastCall.args[0], [297.5, 0, 497.5, 50], "title rect");
+    assert.deepEqual(this.title.move.lastCall.args[0], [298, 0, 498, 50], "title rect");
     assert.deepEqual(this.title.move.lastCall.args[1], [375, 0, 575, 50], "title fit rect");
     assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], "export rect");
 });

@@ -2914,7 +2914,7 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
         dataAreaScrollable.off("scroll", scrollAssert);
 
         // assert
-        assert.equal(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
+        assert.roughEqual(pivotGrid._scrollLeft, 10, 1, "_scrollLeft variable store inverted value");
         assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");

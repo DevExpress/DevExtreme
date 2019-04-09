@@ -58,7 +58,10 @@ QUnit.module("Web API Provider", moduleConfig, () => {
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
-            responseText: itemData
+            responseText: {
+                result: itemData,
+                success: true
+            }
         });
 
         this.provider.getFolders("Root/Files")
@@ -73,7 +76,10 @@ QUnit.module("Web API Provider", moduleConfig, () => {
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
-            responseText: itemData
+            responseText: {
+                success: true,
+                result: itemData
+            }
         });
 
         this.provider.getFiles("Root/Files")
@@ -87,14 +93,16 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=CreateFolder&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
-            responseText: ""
+            url: this.options.loadUrl + "?command=CreateDir&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
+            responseText: {
+                success: true
+            }
         });
 
         const parentFolder = new FileManagerItem("Root/Files", "Documents");
         this.provider.createFolder(parentFolder, "Test 1")
             .done(result => {
-                assert.notOk(result, "folder created");
+                assert.ok(result.success, "folder created");
                 done();
             });
     });
@@ -104,13 +112,15 @@ QUnit.module("Web API Provider", moduleConfig, () => {
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?command=Rename&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
-            responseText: ""
+            responseText: {
+                success: true
+            }
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
         this.provider.renameItem(item, "Test 1")
             .done(result => {
-                assert.notOk(result, "item renamed");
+                assert.ok(result.success, "item renamed");
                 done();
             });
     });
@@ -120,14 +130,16 @@ QUnit.module("Web API Provider", moduleConfig, () => {
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?command=Remove&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%7D",
-            responseText: ""
+            responseText: {
+                success: true
+            }
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
         const deferreds = this.provider.deleteItems([ item ]);
         when.apply(null, deferreds)
             .done(result => {
-                assert.notOk(result, "item deleted");
+                assert.ok(result.success, "item deleted");
                 done();
             });
     });
@@ -137,7 +149,9 @@ QUnit.module("Web API Provider", moduleConfig, () => {
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?command=Move&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
-            responseText: ""
+            responseText: {
+                success: true
+            }
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -145,7 +159,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const deferreds = this.provider.moveItems([ item ], destinationFolder);
         when.apply(null, deferreds)
             .done(result => {
-                assert.notOk(result, "item moved");
+                assert.ok(result.success, "item moved");
                 done();
             });
     });
@@ -155,7 +169,9 @@ QUnit.module("Web API Provider", moduleConfig, () => {
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%22%7D",
-            responseText: ""
+            responseText: {
+                success: true
+            }
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -163,7 +179,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const deferreds = this.provider.copyItems([ item ], destinationFolder);
         when.apply(null, deferreds)
             .done(result => {
-                assert.notOk(result, "item copied");
+                assert.ok(result.success, "item copied");
                 done();
             });
     });
