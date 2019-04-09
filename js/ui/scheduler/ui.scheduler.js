@@ -2636,6 +2636,9 @@ const Scheduler = Widget.inherit({
         if("targetedAppointmentData" in options) {
             args.push(options.targetedAppointmentData);
         }
+        if("currentIndex" in options) {
+            args.push(options.currentIndex);
+        }
         return args;
     },
 
