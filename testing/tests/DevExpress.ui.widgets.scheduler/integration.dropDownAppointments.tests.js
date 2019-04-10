@@ -19,7 +19,7 @@ const ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE = 28;
 const DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
 
 QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
-    beforeEach: function() {
+    beforeEach: () => {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
         this.tasks = [
@@ -30,7 +30,7 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
             { startDate: new Date(2019, 2, 4), text: "e", endDate: new Date(2019, 2, 4, 0, 30) },
             { startDate: new Date(2019, 2, 4), text: "f", endDate: new Date(2019, 2, 4, 0, 30) }
         ];
-        this.createInstance = function(options) {
+        this.createInstance = (options) => {
             this.instance = $("#scheduler").dxScheduler($.extend(options, {
                 height: 800,
                 dataSource: this.tasks,
@@ -46,41 +46,41 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
         this.cellWidth = 120;
         this.cellHeight = 115;
     },
-    afterEach: function() {
+    afterEach: () => {
         fx.off = false;
         this.clock.restore();
     }
-});
+}, () => {
+    QUnit.test("There are no ordinary appointments on adaptive month view", (assert) => {
+        this.createInstance();
 
-QUnit.test("There are no ordinary appointments on adaptive month view", function(assert) {
-    this.createInstance();
-
-    let $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
-    let $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
+        let $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
+        let $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
 
 
-    assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
-    assert.equal($appointments.length, 0, "Appointments are not rendered");
+        assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
+        assert.equal($appointments.length, 0, "Appointments are not rendered");
 
-    this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }]);
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }]);
 
-    $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
-    $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
+        $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
+        $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
 
-    assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
-    assert.equal($appointments.length, 0, "Appointments are not rendered");
-});
+        assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
+        assert.equal($appointments.length, 0, "Appointments are not rendered");
+    });
 
-QUnit.test("Adaptive dropDown appointment button should have correct coordinates", function(assert) {
-    this.createInstance();
+    QUnit.test("Adaptive dropDown appointment button should have correct coordinates", (assert) => {
+        this.createInstance();
 
-    let $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
+        let $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
 
-    let buttonCoordinates = translator.locate($dropDownButton);
-    let expectedCoordinates = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(8).position();
+        let buttonCoordinates = translator.locate($dropDownButton);
+        let expectedCoordinates = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(8).position();
 
-    assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.cellWidth - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE) / 2, 1.001, "Left coordinate is OK");
-    assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + this.cellHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET, 1.001, "Top coordinate is OK");
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.cellWidth - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE) / 2, 1.001, "Left coordinate is OK");
+        assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + this.cellHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET, 1.001, "Top coordinate is OK");
+    });
 });
 
 
