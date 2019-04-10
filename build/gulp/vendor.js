@@ -61,19 +61,23 @@ const VENDORS = [
 
 gulp.task('vendor', function() {
     return merge.apply(this, VENDORS.map(function(vendor) {
-        const destinationPath = vendor.path.endsWith(".css") ? DESTINATION_CSS_PATH : DESTINATION_JS_PATH;
+        const isScript = vendor.path.endsWith(".js");
+        const destinationPath = isScript ? DESTINATION_JS_PATH : DESTINATION_CSS_PATH;
         let sourceConfig = vendor.base ? { base: PACKAGES_SOURCE + vendor.base } : null;
         let stream = gulp.src(PACKAGES_SOURCE + vendor.path, sourceConfig).pipe(gulp.dest(destinationPath));
+        if(isScript) {
+            if(vendor.noUglyFile) {
+                return stream
+                    .pipe(compressionPipes.minify())
+                    .pipe(rename({ suffix: '.min' }))
+                    .pipe(gulp.dest(destinationPath));
+            }
 
-        if(vendor.noUglyFile) {
-            return stream
-                .pipe(compressionPipes.minify())
-                .pipe(rename({ suffix: '.min' }))
-                .pipe(gulp.dest(destinationPath));
+            let path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
+
+            return merge(stream, gulp.src(path, sourceConfig).pipe(gulp.dest(destinationPath)));
+        } else {
+            return stream;
         }
-
-        let path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
-
-        return merge(stream, gulp.src(path, sourceConfig).pipe(gulp.dest(destinationPath)));
     }));
 });
