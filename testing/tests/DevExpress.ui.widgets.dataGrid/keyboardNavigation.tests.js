@@ -8841,7 +8841,6 @@ QUnit.module("Keyboard navigation accessibility", {
     testInDesktop("Enter, Space key down on filter panel elements", function(assert) {
         var $cell,
             filterBuilderShownCount = 0,
-            processKeyDown,
             filterPanelView;
 
         // arrange
@@ -8855,10 +8854,8 @@ QUnit.module("Keyboard navigation accessibility", {
         this.setupModule();
         this.gridView.render($("#container"));
         filterPanelView = this.getView("filterPanelView");
-        processKeyDown = filterPanelView._processKeyDown;
-        filterPanelView._processKeyDown = (event, action) => {
+        filterPanelView._showFilterBuilder = () => {
             ++filterBuilderShownCount;
-            processKeyDown.bind(filterPanelView)(event, action);
         };
 
         // arrange
