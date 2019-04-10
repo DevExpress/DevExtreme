@@ -439,6 +439,37 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(0).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
+
+    test("RegisterKeyHandler", (assert) => {
+        const handler = sinon.spy();
+
+        let radioGroup = createRadioGroup({
+            focusStateEnabled: true,
+            items: [{ text: "text" }]
+        }).dxRadioGroup("instance");
+
+        radioGroup.registerKeyHandler("backspace", handler);
+
+        keyboardMock(radioGroup.element()).press("backspace");
+
+        assert.strictEqual(handler.callCount, 1, "registerKeyHandler was called");
+    });
+
+    test("RegisterKeyHandler - onInitialize", (assert) => {
+        const handler = sinon.spy();
+
+        let radioGroup = createRadioGroup({
+            focusStateEnabled: true,
+            items: [{ text: "text" }],
+            onInitialized: e => {
+                e.component.registerKeyHandler("backspace", handler);
+            }
+        }).dxRadioGroup("instance");
+
+        keyboardMock(radioGroup.element()).press("backspace");
+
+        assert.strictEqual(handler.callCount, 1, "registerKeyHandler was called");
+    });
 });
 
 module("focus policy", moduleConfig, () => {
