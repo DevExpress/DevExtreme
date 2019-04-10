@@ -1331,7 +1331,7 @@ QUnit.test("Label's fit. Count of rows changed", function(assert) {
     const label = this.createAndDrawLabel();
 
     this.renderer.text.lastCall.returnValue.setMaxWidth = function() {
-        return { rowsCount: 2 };
+        return { rowCount: 2 };
     };
     label.shift(-7, -2);
 
@@ -1343,10 +1343,21 @@ QUnit.test("Label's fit. Count of rows not changed", function(assert) {
     const label = this.createAndDrawLabel();
 
     this.renderer.text.lastCall.returnValue.setMaxWidth = function() {
-        return { rowsCount: 1 };
+        return { rowCount: 1 };
     };
     label.shift(-7, -2);
     label.fit(31);
+    assert.strictEqual(label.fit(31), false);
+});
+
+QUnit.test("Label's fit. rowCount = 0 ", function(assert) {
+    this.options.background = { fill: "red" };
+    const label = this.createAndDrawLabel();
+
+    this.renderer.text.lastCall.returnValue.setMaxWidth = function() {
+        return { rowCount: 0 };
+    };
+    label.shift(-7, -2);
     assert.strictEqual(label.fit(31), false);
 });
 
