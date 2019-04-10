@@ -100,7 +100,7 @@
     "webpack": "^3.10.0",
     "webpack-stream": "^3.2.0",
     "yargs": "^4.6.0",
-    "devexpress-diagram": "^0.0.1"
+    "devexpress-diagram": "^0.0.2"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",

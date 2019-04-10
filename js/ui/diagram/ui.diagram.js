@@ -50,76 +50,62 @@ class Diagram extends Widget {
         this._createComponent($options, DiagramOptions);
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
-        this._diagramInstance.onChanged = this._raiseValueChangeAction.bind(this);
+        this._diagramInstance.onChanged = this._raiseDataChangeAction.bind(this);
     }
     _initDiagram() {
         const { DiagramControl } = getDiagram();
         this._diagramInstance = new DiagramControl();
     }
 
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxDiagramOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @action
-            */
-            onValueChanged: null,
-        });
-    }
-
     /**
-    * @name dxDiagramMethods.getValue
-    * @publicName getValue()
+    * @name dxDiagramMethods.getData
+    * @publicName getData()
     * @return string
     */
-    getValue() {
-        var value;
+    getData() {
+        let value;
         const { DiagramCommand } = getDiagram();
         this._diagramInstance.commandManager.getCommand(DiagramCommand.Export).execute(function(data) { value = data; });
         return value;
     }
     /**
-    * @name dxDiagramMethods.setValue
-    * @publicName setValue(value)
-    * @param1 value:string
+    * @name dxDiagramMethods.setData
+    * @publicName setData(value)
+    * @param1 data:string
     */
-    setValue(value) {
+    setData(data) {
         const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(value);
-        this._raiseValueChangeAction();
+        this._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(data);
+        this._raiseDataChangeAction();
     }
 
-    _createValueChangeAction() {
-        this._valueChangeAction = this._createActionByOption("onValueChanged");
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            /**
+            * @name dxDiagramOptions.onDataChanged
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @action
+            */
+            onDataChanged: null,
+        });
     }
-    _raiseValueChangeAction() {
-        if(!this.option("onValueChanged")) return;
 
-        if(!this._valueChangeAction) {
-            this._createValueChangeAction();
+    _createDataChangeAction() {
+        this._dataChangeAction = this._createActionByOption("onDataChanged");
+    }
+    _raiseDataChangeAction() {
+        if(!this._dataChangeAction) {
+            this._createDataChangeAction();
         }
-        let value = this.getValue();
-        this._valueChangeAction(this._valueChangeArgs(value, this.previousValue));
-        this.previousValue = value;
-    }
-    _valueChangeArgs(value, previousValue) {
-        return {
-            value: value,
-            previousValue: previousValue
-        };
+        this._dataChangeAction({});
     }
 
     _optionChanged(args) {
-        const name = args.name;
-
-        switch(name) {
-            case "onValueChanged":
-                this._createValueChangeAction();
+        switch(args.name) {
+            case "onDataChanged":
+                this._createDataChangeAction();
                 break;
             default:
                 super._optionChanged(args);
