@@ -418,6 +418,34 @@ QUnit.testInActiveWindow("Tab key before grid should focus the first row (legacy
     assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "Row 0 has row focused class");
 });
 
+QUnit.testInActiveWindow("onSelectionChanged event should fire if focusedRowEnabled (T729611)", function(assert) {
+    var selectionChangedFiresCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        selection: {
+            mode: "single"
+        },
+        onSelectionChanged: () => ++selectionChangedFiresCount
+    };
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    $(this.getCellElement(1, 1)).focus().trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.equal(selectionChangedFiresCount, 1, "selectionChangedFiresCount");
+});
+
 QUnit.testInActiveWindow("Tab key before rows view should focus the first row", function(assert) {
     var that = this,
         rowsView;
