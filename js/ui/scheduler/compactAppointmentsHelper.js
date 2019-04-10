@@ -18,10 +18,10 @@ export class CompactAppointmentsHelper {
     }
 
     render(options) {
-        const { $container, buttonWidth, buttonHeight, items, isCompact, applyOffset, coordinates, buttonColor } = options;
+        const { $container, width, height, items, isCompact, applyOffset, coordinates, buttonColor } = options;
 
         const template = this._createTemplate(items.data.length, isCompact);
-        const button = this._createCompactButton($container, buttonWidth, buttonHeight, template, items, isCompact, applyOffset, coordinates);
+        const button = this._createCompactButton($container, width, height, template, items, isCompact, applyOffset, coordinates);
         const $button = button.$element();
 
         this._makeBackgroundColor($button, items.colors, buttonColor);
