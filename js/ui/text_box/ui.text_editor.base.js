@@ -105,7 +105,7 @@ var TextEditorBase = Editor.inherit({
 
             /**
             * @name dxTextEditorOptions.buttons
-            * @type Array<string,dxActionButton>
+            * @type Array<Enums.TextEditorButtonName,dxActionButton>
             * @default undefined
             */
             buttons: void 0,
