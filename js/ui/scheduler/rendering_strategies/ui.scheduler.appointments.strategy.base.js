@@ -583,9 +583,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     getDropDownAppointmentHeight: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return this.getDropDownButtonAdaptiveSize();
-        }
+        return this.getDropDownButtonAdaptiveSize();
     },
 
     getDropDownButtonAdaptiveSize: function() {
