@@ -2223,7 +2223,7 @@ QUnit.test("UpdateSize - scrollBar gets canvas", function(assert) {
     });
 
     // assert
-    assert.deepEqual(scrollBar.updateSize.lastCall.args, [{
+    assert.deepEqual(scrollBar.updateSize.getCall(0).args, [{
         left: 0,
         right: 0,
         top: 25,
@@ -2234,7 +2234,7 @@ QUnit.test("UpdateSize - scrollBar gets canvas", function(assert) {
         originalBottom: 0,
         width: 800,
         height: 600
-    }, true]);
+    }, true, undefined]);
 });
 
 QUnit.module("Adaptive layout rendering", environment);
@@ -2683,4 +2683,105 @@ QUnit.test("Pass animate false flag to the updateSize method if points limit is 
     // assert
     assert.deepEqual(argAxis.updateSize.lastCall.args[1], true);
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
+});
+
+QUnit.module("Wrap axis title", environment);
+
+QUnit.test("With a pane; Position is right", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+
+    valAxis.hasWrap = () => true;
+    valAxis.getTitle = sinon.stub();
+    valAxis.getTitle.onCall(0).returns({ bBox: { width: 10 } });
+    valAxis.getTitle.onCall(1).returns({ bBox: { width: 24 } });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false },
+        valueAxis: {
+            position: "right"
+        }
+    });
+
+    // assert
+    const axis = this.axisStub.getCall(1).returnValue;
+
+    assert.equal(axis.updateSizeArgs[0].right, 0);
+    assert.equal(axis.updateSizeArgs[1].right, 14);
+});
+
+QUnit.test("With a pane", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+
+    valAxis.hasWrap = () => true;
+    valAxis.getTitle = sinon.stub();
+    valAxis.getTitle.onCall(0).returns({ bBox: { width: 10 } });
+    valAxis.getTitle.onCall(1).returns({ bBox: { width: 24 } });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    const axis = this.axisStub.getCall(1).returnValue;
+    assert.equal(axis.updateSize.callCount, 2);
+
+    assert.equal(axis.updateSizeArgs[0].left, 0);
+    assert.equal(axis.updateSizeArgs[1].left, 14);
+
+    assert.equal(axis.updateSize.lastCall.args[1], false);
+    assert.equal(axis.updateSize.lastCall.args[2], false);
+
+    assert.equal(axis.getTitle.callCount, 3);
+});
+
+QUnit.test("With two panes", function(assert) {
+    var argAxis1 = createAxisStubs(),
+        argAxis2 = createAxisStubs(),
+        valAxis1 = createAxisStubs(),
+        valAxis2 = createAxisStubs();
+
+
+    valAxis1.hasWrap = valAxis2.hasWrap = () => true;
+    valAxis1.getTitle = sinon.stub();
+    valAxis2.getTitle = sinon.stub();
+
+    valAxis1.getTitle.onCall(0).returns({ bBox: { width: 10 } });
+    valAxis1.getTitle.onCall(1).returns({ bBox: { width: 24 } });
+
+    valAxis2.getTitle.onCall(0).returns({ bBox: { width: 16 } });
+    valAxis2.getTitle.onCall(1).returns({ bBox: { width: 32 } });
+    valAxis2.getTitle.onCall(2).returns({ bBox: { width: 44 } });
+
+    this.setupAxes([argAxis1, argAxis2, valAxis1, valAxis2]);
+
+    new dxChart(this.container, {
+        panes: [{ name: "pane1" }, { name: "pane2" }],
+        valueAxis: [{ name: "axis1" }, { name: "axis2" }],
+        series: [{ axis: "axis1", pane: "pane1" }, { axis: "axis2", pane: "pane2" }],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: true }
+    });
+
+    // assert
+    const axis = this.axisStub.getCall(1).returnValue;
+    assert.equal(axis.updateSize.callCount, 3);
+
+    assert.equal(axis.updateSizeArgs[0].left, 0);
+    assert.equal(axis.updateSizeArgs[1].left, 14);
+    assert.equal(axis.updateSizeArgs[2].left, 26);
+
+    assert.equal(axis.updateSize.lastCall.args[1], false);
+    assert.equal(axis.updateSize.lastCall.args[2], false);
 });

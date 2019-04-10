@@ -398,7 +398,6 @@ module.exports = {
             }
 
             coords = coords || this._getTitleCoords();
-
             if(!this._isHorizontal) {
                 attrs.rotate = options.position === LEFT ? 270 : 90;
             }
@@ -407,6 +406,8 @@ module.exports = {
                 .css(vizUtils.patchFontOptions(titleOptions.font))
                 .attr(attrs)
                 .append(group);
+
+            this._checkTitleOverflow(text);
 
             return text;
         },
@@ -924,19 +925,28 @@ module.exports = {
             title.element.attr(params);
         },
 
-        _checkTitleOverflow: function() {
-            if(!this._title) {
+        _checkTitleOverflow: function(titleElement) {
+            if(!this._title && !titleElement) {
                 return;
             }
 
             var canvasLength = this._getScreenDelta(),
-                title = this._title,
+                title = titleElement ? { bBox: titleElement.getBBox(), element: titleElement } : this._title,
+                titleOptions = this._options.title,
+                isWordWrap = !!(titleOptions.wordWrap || titleOptions.overflow),
                 boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
-                title.element.applyEllipsis(canvasLength) && title.element.setTitle(this._options.title.text);
+                if(isWordWrap) {
+                    this._wrapped = title.element.setMaxWidth(canvasLength, {
+                        wordWrap: titleOptions.wordWrap,
+                        overflow: titleOptions.overflow
+                    });
+                } else {
+                    title.element.applyEllipsis(canvasLength) && title.element.setTitle(titleOptions.text);
+                }
             } else {
-                title.element.restoreText();
+                !isWordWrap && this._wrapped && title.element.restoreText();
             }
         },
 
@@ -999,6 +1009,10 @@ module.exports = {
                 minVisible: seriesData.minVisible,
                 maxVisible: seriesData.maxVisible
             }, that._series, that.isArgumentAxis);
+        },
+
+        hasWrap() {
+            return this._wrapped;
         },
 
         _getStick: function() {

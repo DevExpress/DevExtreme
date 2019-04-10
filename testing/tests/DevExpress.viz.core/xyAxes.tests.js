@@ -1083,10 +1083,11 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
     this.translator.translate.withArgs(9).returns(60);
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
+            { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
             { x: 20, y: 0, width: 20, height: 5 },
             { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
+            { x: 60, y: 0, width: 10, height: 5 },
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1106,7 +1107,7 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
     });
 
     texts = this.renderer.text;
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 616, "title offset");
+    assert.equal(texts.lastCall.returnValue.attr.lastCall.args[0].translateY, 616, "title offset");
 });
 
 QUnit.test("labels overlap after rotation", function(assert) {
@@ -1302,6 +1303,7 @@ QUnit.test("Labels overlap", function(assert) {
 QUnit.test("Check title offset after olerlap resolving", function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
+            { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
             { x: 20, y: 0, width: 10, height: 5 },
             { x: 45, y: 0, width: 10, height: 7 },
@@ -1328,7 +1330,7 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
     texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 614, "title offset");
+    assert.equal(texts.lastCall.returnValue.attr.lastCall.args[0].translateY, 614, "title offset");
 });
 
 QUnit.test("Labels overlap, some of them hide", function(assert) {
@@ -2371,6 +2373,24 @@ QUnit.test("Estimate draws title text and remove it", function(assert) {
     assert.strictEqual(textElement.remove.callCount, 1, "element removed");
 });
 
+QUnit.test("Check title overflow on draw", function(assert) {
+    this.canvas.width = 20;
+    this.canvas.right = 10;
+    this.createDrawnAxis({
+        isHorizontal: true,
+        title: {
+            wordWrap: "word-break",
+            overflow: "none",
+            text: "Title text"
+        }
+    });
+
+    assert.strictEqual(this.renderer.text.callCount, 1);
+    const textElement = this.renderer.text.firstCall.returnValue;
+    assert.deepEqual(textElement.setMaxWidth.callCount, 1);
+    assert.deepEqual(textElement.setMaxWidth.firstCall.args, [10, { overflow: "none", wordWrap: "word-break" }]);
+});
+
 QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
     this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
@@ -2385,6 +2405,10 @@ QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
         }
     });
 
+
+    this.bBoxes.push({
+        height: 14
+    });
     this.bBoxes.push({
         height: 44
     });

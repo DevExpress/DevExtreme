@@ -255,9 +255,9 @@ function getVerticalAxesMargins(axes) {
     }, { panes: {} });
 }
 
-function performActionOnAxes(axes, action, actionArgument1, actionArgument2) {
+function performActionOnAxes(axes, action, actionArgument1, actionArgument2, actionArgument3) {
     axes.forEach(function(axis) {
-        axis[action](actionArgument1 && actionArgument1[axis.pane], actionArgument2 && actionArgument2[axis.pane] || actionArgument2);
+        axis[action](actionArgument1 && actionArgument1[axis.pane], actionArgument2 && actionArgument2[axis.pane] || actionArgument2, actionArgument3);
     });
 }
 
@@ -843,6 +843,14 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _renderAxes: function(drawOptions, panesBorderOptions) {
+        function calculateTitlesWidth(axes) {
+            return axes.map(axis => {
+                if(!axis.getTitle) return 0;
+
+                const title = axis.getTitle();
+                return title ? title.bBox.width : 0;
+            });
+        }
         var that = this,
             rotated = that._isRotated(),
             synchronizeMultiAxes = that._themeManager.getOptions("synchronizeMultiAxes"),
@@ -873,7 +881,7 @@ var dxChart = AdvancedChart.inherit({
         }
 
         var vAxesMargins = { panes: {} },
-            hAxesMargins = getHorizontalAxesMargins(horizontalAxes, function(axis) { return axis.estimateMargins(panesCanvases[axis.pane]); });
+            hAxesMargins = getHorizontalAxesMargins(horizontalAxes, axis => axis.estimateMargins(panesCanvases[axis.pane]));
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
@@ -883,6 +891,8 @@ var dxChart = AdvancedChart.inherit({
         drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
         hAxesMargins = getHorizontalAxesMargins(horizontalAxes, getAxisMargins);
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+
+        let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
         performActionOnAxes(allAxes, "updateSize", panesCanvases, axisAnimationEnabled(drawOptions, that._getVisibleSeries()));
 
@@ -897,6 +907,25 @@ var dxChart = AdvancedChart.inherit({
 
         that._valueAxes.forEach((axis) => {
             axis.setInitRange();
+        });
+
+        verticalAxes.forEach((axis, i) => {
+            if(axis.hasWrap && axis.hasWrap()) {
+                const title = axis.getTitle();
+                const newTitleWidth = title ? title.bBox.width : 0;
+                const offset = newTitleWidth - oldTitlesWidth[i];
+                if(axis.getOptions().position === "right") {
+                    vAxesMargins.right += offset;
+                } else {
+                    vAxesMargins.left += offset;
+                    that.panes.forEach(({ name }) => vAxesMargins.panes[name].left += offset);
+                }
+
+                panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+
+                performActionOnAxes(allAxes, "updateSize", panesCanvases, false, false);
+                oldTitlesWidth = calculateTitlesWidth(verticalAxes);
+            }
         });
 
         return cleanPanesCanvases;
