@@ -1179,7 +1179,7 @@ var PivotGrid = Widget.inherit({
                 field = e.cell.path && areaFields[e.cell.path.length - 1],
                 dataSource = that.getDataSource();
 
-            if(field && field.allowExpandAll && e.cell.path.length < e[e.area + "Fields"].length) {
+            if(field && field.allowExpandAll && e.cell.path.length < e[e.area + "Fields"].length && !dataSource.paginate()) {
                 items.push({
                     beginGroup: true,
                     icon: "none",
@@ -1197,7 +1197,7 @@ var PivotGrid = Widget.inherit({
                 });
             }
 
-            if(e.cell.isLast) {
+            if(e.cell.isLast && !dataSource.paginate()) {
                 var sortingBySummaryItemCount = 0;
                 each(oppositeAreaFields, function(index, field) {
                     if(!field.allowSortingBySummary) {

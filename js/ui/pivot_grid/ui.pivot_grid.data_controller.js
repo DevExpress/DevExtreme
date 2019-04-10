@@ -813,6 +813,8 @@ exports.DataController = Class.inherit((function() {
                     storeLoadOptions.push(extend({}, options, {
                         area: "row",
                         headerName: "rows",
+                        rows: options.rows.slice(0, rowExpandedPaths[i].length + 1),
+                        columns: options.columns.slice(0, 1),
                         path: rowExpandedPaths[i],
                         rowSkip: rowExpandedSkips[i],
                         rowTake: rowExpandedTakes[i] || 20
@@ -831,9 +833,11 @@ exports.DataController = Class.inherit((function() {
                 if(options.headerName === "rows") {
                     options.rowSkip = 0;
                     options.rowTake = rowPageSize;
+                    options.rows = options.rows.slice(0, options.path.length + 1);
                 } else {
                     options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
                     options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+                    options.rows = options.rows.slice(0, 1);
                     this._processPagingForExpandedPaths(options, storeLoadOptions, reload);
                 }
             }
@@ -846,9 +850,11 @@ exports.DataController = Class.inherit((function() {
                 if(options.headerName === "columns") {
                     options.columnSkip = 0;
                     options.columnTake = columnPageSize;
+                    options.columns = options.columns.slice(0, options.path.length + 1);
                 } else {
                     options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
                     options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                    options.columns = options.columns.slice(0, 1);
                 }
             }
         },
