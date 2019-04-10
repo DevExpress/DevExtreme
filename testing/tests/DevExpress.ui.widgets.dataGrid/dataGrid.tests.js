@@ -6463,6 +6463,33 @@ QUnit.test("Horizontal scroll should not exist if master-detail contains the sim
     assert.equal($(scrollable.content()).width(), $(scrollable._container()).width(), "no scroll");
 });
 
+// T728069
+QUnit.test("Horizontal scroll should not exist if fixed column with custom buttons exists", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        width: 600,
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        columnAutoWidth: true,
+        columns: ["field1", "field2", {
+            type: "buttons",
+            fixed: true,
+            buttons: [
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" },
+                { icon: "repeat" }
+            ]
+        }]
+    });
+
+    // assert
+    var scrollable = dataGrid.getScrollable();
+    assert.roughEqual($(scrollable.content()).width(), $(scrollable._container()).width(), 1.01, "no scroll");
+});
+
 if(browser.msie && parseInt(browser.version) <= 11) {
     QUnit.test("Update the scrollable for IE browsers when the adaptive column is hidden", function(assert) {
         // arrange
@@ -6740,6 +6767,39 @@ QUnit.test("selection should works correctly if row rendering mode is virtual", 
     assert.equal(visibleRows[6].key, 12, "selected row key");
     assert.equal(visibleRows[6].isSelected, true, "isSelected for selected row");
     assert.ok($(dataGrid.getRowElement(6)).hasClass("dx-selection"), "dx-selection class is added");
+});
+
+// T726385
+QUnit.test("selectAll should works correctly if selectAllMode is page and row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 30; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        selection: {
+            mode: "multiple",
+            selectAllMode: "page"
+        },
+        scrolling: {
+            rowRenderingMode: "virtual"
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.selectAll();
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(dataGrid.getSelectedRowKeys().length, 20, "selected row key count equals pageSize");
 });
 
 // T644981
@@ -11469,6 +11529,7 @@ QUnit.test("update focus border on resize", function(assert) {
 });
 
 QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)'", function(assert) {
+    $("#qunit-fixture").css("position", "static");
     // arrange, act
     var dataGrid = createDataGrid({
         filterRow: { visible: true },
@@ -11505,6 +11566,33 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
     if(devices.real().deviceType === "desktop") {
         assert.deepEqual(selectionRangeArgs, [[$focusedInput.get(0), { selectionStart: 1, selectionEnd: 1 }]], "setSelectionRange args");
     }
+
+    $("#qunit-fixture").css("position", "");
+});
+
+QUnit.testInActiveWindow("DataGrid should lose focus in header after updateDimensions if focus is outside window", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        selection: {
+            mode: "multiple"
+        },
+        columns: [
+            { dataField: "field1" },
+            { dataField: "field2" }
+        ],
+        dataSource: [{ field1: 1, field2: 2 }]
+    });
+
+    this.clock.tick();
+
+    $(dataGrid.element()).find(".dx-checkbox").first().focus();
+
+    // assert
+    assert.ok($(":focus").length, "focus exists");
+
+    dataGrid.updateDimensions();
+
+    assert.notOk($(":focus").length, "focus is lost");
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
