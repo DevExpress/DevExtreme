@@ -6043,7 +6043,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.onDataChanged */
-        onDataChanged?: ((e: any) => any);
+        onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
     }
     /** @name dxDiagram */
     export class dxDiagram extends Widget {

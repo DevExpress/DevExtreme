@@ -86,6 +86,7 @@ class Diagram extends Widget {
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field4 data:string
             * @action
             */
             onDataChanged: null,
@@ -96,10 +97,14 @@ class Diagram extends Widget {
         this._dataChangeAction = this._createActionByOption("onDataChanged");
     }
     _raiseDataChangeAction() {
+        if(!this.option("onDataChanged")) return;
+
         if(!this._dataChangeAction) {
             this._createDataChangeAction();
         }
-        this._dataChangeAction({});
+        this._dataChangeAction({
+            data: this.getData()
+        });
     }
 
     _optionChanged(args) {
