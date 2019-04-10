@@ -248,7 +248,6 @@ var ResizingController = modules.ViewController.inherit({
 
         if(needBestFit) {
             focusedElement = domAdapter.getActiveElement();
-            isFocusOutsideWindow = focusedElement && focusedElement.getBoundingClientRect().bottom < 0;
             selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
@@ -280,11 +279,14 @@ var ResizingController = modules.ViewController.inherit({
             if(resetBestFitMode) {
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
-                if(focusedElement && !isFocusOutsideWindow && focusedElement !== domAdapter.getActiveElement()) {
-                    if(browser.msie) {
-                        setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
-                    } else {
-                        restoreFocus(focusedElement, selectionRange);
+                if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
+                    isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
+                    if(!isFocusOutsideWindow) {
+                        if(browser.msie) {
+                            setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
+                        } else {
+                            restoreFocus(focusedElement, selectionRange);
+                        }
                     }
                 }
             }
