@@ -72,7 +72,7 @@ let DropDownButton = Widget.inherit({
             selectedItemKey: null,
 
             /**
-             * @name dxDropDownButtonOptions.selectedItemKey
+             * @name dxDropDownButtonOptions.stylingMode
              * @type Enums.ButtonStylingMode
              * @default 'outlined'
              */
