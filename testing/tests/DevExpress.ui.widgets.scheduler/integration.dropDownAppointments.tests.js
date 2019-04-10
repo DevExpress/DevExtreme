@@ -6,7 +6,7 @@ import "ui/scheduler/ui.scheduler";
 import "common.css!";
 import "generic_light.css!";
 
-QUnit.testStart(function() {
+QUnit.testStart(() => {
     $("#qunit-fixture").html(
         '<div id="scheduler"></div>');
 });
