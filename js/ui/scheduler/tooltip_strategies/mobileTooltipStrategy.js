@@ -1,10 +1,9 @@
-import List from "../../list/ui.list.edit";
 import Overlay from "../../overlay";
 import { TooltipStrategyBase } from './tooltipStrategyBase';
 import $ from "../../../core/renderer";
 import { getWindow } from "../../../core/utils/window";
 
-const SLIDE_PANEL_CLASS_NAME = "dx-scheduler-slide-panel";
+const SLIDE_PANEL_CLASS_NAME = "dx-scheduler-overlay-panel";
 
 const animationConfig = {
     show: {
@@ -27,14 +26,16 @@ const positionConfig = {
 };
 
 export class MobileTooltipStrategy extends TooltipStrategyBase {
-    constructor(scheduler) {
-        super(scheduler);
-
-        this.list = this.createList();
-        this.overlay = this.createOverlay();
+    _onListItemClick(e) {
+        super._onListItemClick(e);
+        this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
     }
 
-    createOverlay() {
+    _shouldUseTarget() {
+        return false;
+    }
+
+    _createTooltip(target, list) {
         const $overlay = $("<div>").addClass(SLIDE_PANEL_CLASS_NAME).appendTo(this.scheduler.$element());
         return this.scheduler._createComponent($overlay, Overlay, {
             shading: false,
@@ -45,19 +46,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
             closeOnOutsideClick: true,
             width: "100%",
             height: "100%",
-            contentTemplate: () => this.list.$element()
-        });
-    }
-
-    show(dataItemList) {
-        this.list.option('dataSource', dataItemList);
-        this.overlay.option("visible", true);
-    }
-
-    createList() {
-        const $list = $("<div>");
-        return this.scheduler._createComponent($list, List, {
-            itemTemplate: (item) => this._renderTemplate(item.data, item.currentData, item.targetedData, item.$appointment)
+            contentTemplate: () => list.$element()
         });
     }
 }

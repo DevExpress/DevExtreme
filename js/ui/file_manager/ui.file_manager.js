@@ -42,7 +42,7 @@ class FileManager extends Widget {
         this._provider = this._getFileProvider();
         this._currentFolder = new FileManagerItem("", "", true);
 
-        this._commandManager = new FileManagerCommandManager();
+        this._commandManager = new FileManagerCommandManager(this.option("editing"));
 
         const $toolbar = $("<div>").appendTo(this.$element());
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
@@ -395,7 +395,50 @@ class FileManager extends Widget {
             * @type_function_param1 fileItem:object
             * @type_function_return string
             */
-            customThumbnail: null
+            customThumbnail: null,
+
+            /**
+             * @name dxFileManagerOptions.editing
+             * @type object
+             */
+            editing: {
+                /**
+                 * @name dxFileManagerOptions.editing.allowCreate
+                 * @type boolean
+                 * @default false
+                 */
+                allowCreate: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowCopy
+                 * @type boolean
+                 * @default false
+                 */
+                allowCopy: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowMove
+                 * @type boolean
+                 * @default false
+                 */
+                allowMove: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowRemove
+                 * @type boolean
+                 * @default false
+                 */
+                allowRemove: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowRename
+                 * @type boolean
+                 * @default false
+                 */
+                allowRename: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowUpload
+                 * @type boolean
+                 * @default false
+                 */
+                allowUpload: false
+            }
         });
     }
 
@@ -407,6 +450,7 @@ class FileManager extends Widget {
             case "selection":
             case "itemList":
             case "customThumbnail":
+            case "editing":
                 this.repaint();
                 break;
             default:

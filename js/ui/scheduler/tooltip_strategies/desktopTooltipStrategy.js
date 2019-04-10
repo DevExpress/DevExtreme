@@ -1,5 +1,5 @@
 import $ from "../../../core/renderer";
-import { TooltipStrategyBase } from './tooltipStrategyBase';
+import { TooltipStrategyBase, createDefaultTooltipTemplate } from './tooltipStrategyBase';
 import Tooltip from "../../tooltip";
 import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
@@ -40,13 +40,7 @@ class TooltipBehaviorBase {
     }
 
     createFunctionTemplate(template, data, targetData, index) {
-        return new FunctionTemplate(options => {
-            return template.render({
-                model: data,
-                targetedAppointmentData: targetData,
-                container: options.container
-            });
-        });
+        return createDefaultTooltipTemplate(template, data, targetData, index);
     }
 }
 
@@ -116,6 +110,9 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     createFunctionTemplate(template, data, targetData, index) {
+        if(this._isEmptyDropDownAppointmentTemplate()) {
+            return super.createFunctionTemplate(template, data, targetData, index);
+        }
         return new FunctionTemplate((options) => {
             return template.render({
                 model: data,
@@ -215,24 +212,10 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 }
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
-    show(target, dataList, isSingleBehavior) {
-        if(this._canShowTooltip(target, dataList)) {
-            this.behavior = this._createBehavior(isSingleBehavior, target);
-            this.hide();
-
-            if(!this.tooltip) {
-                this.list = this._createList(target, dataList);
-                this.tooltip = this._createTooltip(target, this.list);
-            } else {
-                this.list.option("dataSource", dataList);
-                this.tooltip.option("target", target);
-                this.tooltip.option("visible", true);
-            }
-
-            this.list.focus();
-            this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
-            this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
-        }
+    _showCore(target, dataList, isSingleBehavior) {
+        this.behavior = this._createBehavior(isSingleBehavior, target);
+        super._showCore(target, dataList, isSingleBehavior);
+        this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
     }
 
     _createBehavior(isSingleBehavior, target) {
@@ -256,7 +239,6 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         this.$tooltip = this._createTooltipElement();
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
-            visible: true,
             target: target,
             rtlEnabled: this.scheduler.option("rtlEnabled"),
             contentTemplate: () => list.$element()
@@ -271,24 +253,8 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         this.behavior.onListItemRendered(e);
     }
 
-    _canShowTooltip(target, dataList) {
-        if(!dataList.length || this.tooltip && this.tooltip.option("visible") && $(this.tooltip.option("target")).get(0) === $(target).get(0)) {
-            return false;
-        }
-        return true;
-    }
-
-    _onDeleteButtonClick() {
-        this.hide();
-    }
     _onListItemClick(e) {
         super._onListItemClick(e);
         this.behavior.onListItemClick(e);
-    }
-
-    hide() {
-        if(this.tooltip) {
-            this.tooltip.option("visible", false);
-        }
     }
 }

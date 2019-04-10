@@ -19,6 +19,14 @@ const moduleConfig = {
             itemList: {
                 showFolders: false,
                 showParentFolder: false
+            },
+            editing: {
+                allowCreate: true,
+                allowCopy: true,
+                allowMove: true,
+                allowRemove: true,
+                allowRename: true,
+                allowUpload: true
             }
         });
 

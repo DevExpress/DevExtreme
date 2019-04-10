@@ -192,6 +192,10 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorMention.itemTemplate
             * @type template|function
             * @default "item"
+            * @type_function_param1 itemData:object
+            * @type_function_param2 itemIndex:number
+            * @type_function_param3 itemElement:dxElement
+            * @type_function_return string|Node|jQuery
             */
             /**
             * @name dxHtmlEditorMention.displayExpr
@@ -214,6 +218,12 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorMention.template
             * @type template|function
             * @default null
+            * @type_function_param1 mentionData:object
+            * @type_function_param1_field1 marker:string
+            * @type_function_param1_field2 id:string|number
+            * @type_function_param1_field3 value:any
+            * @type_function_param2 contentElement:dxElement
+            * @type_function_return string|Node|jQuery
             */
         });
     },
