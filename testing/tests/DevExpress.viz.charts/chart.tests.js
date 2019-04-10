@@ -87,6 +87,10 @@ var environment = {
                 axis.pane = pane;
             };
             axis.adjust = noop;
+            axis.estimateMargins = function() {
+                return { left: 0, top: 0, right: 0, bottom: 0 };
+            };
+            axis.stub("getMargins").returns({ left: 0, top: 0, right: 0, bottom: 0 });
             axis.stub("getOptions").returns({});
             return axis;
         });
@@ -130,63 +134,6 @@ QUnit.test("Set adaptive layout options", function(assert) {
     this.createChart();
 
     assert.deepEqual(this.LayoutManager.firstCall.returnValue.setOptions.lastCall.args, [{ width: 80, height: 80, keepLabels: true }]);
-});
-
-QUnit.test("position elements", function(assert) {
-    this.createChart();
-
-    assert.equal(this.layoutManagers[0].layoutElements.callCount, 1);
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[0][0], this.titles[0]);
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[0][1], this.legends[0]);
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[0][2], undefined);
-    assert.deepEqual(this.layoutManagers[0].layoutElements.getCall(0).args[1], {
-        bottom: 0,
-        height: 400,
-        left: 0,
-        originalBottom: 0,
-        originalLeft: 0,
-        originalRight: 0,
-        originalTop: 0,
-        right: 0,
-        top: 0,
-        width: 1000
-    });
-});
-
-QUnit.test("getLayoutTargets", function(assert) {
-    this.createChart();
-
-    assert.deepEqual(this.layoutManagers[0].layoutElements.getCall(0).args[3], [{
-        border: {},
-        borderCoords: {
-            bottom: 400,
-            height: 400,
-            left: 0,
-            right: 1000,
-            top: 0,
-            width: 1000
-        },
-        canvas: {
-            bottom: 0,
-            height: 400,
-            left: 0,
-            originalBottom: 0,
-            originalLeft: 0,
-            originalRight: 0,
-            originalTop: 0,
-            right: 0,
-            top: 0,
-            width: 1000
-        },
-        name: "default",
-        weight: 1
-    }]);
-});
-
-QUnit.test("isRotated", function(assert) {
-    this.createChart();
-
-    assert.strictEqual(this.layoutManagers[0].layoutElements.getCall(0).args[4], false);
 });
 
 QUnit.module("dxChart user options of dataValidator", environment);
@@ -373,7 +320,8 @@ QUnit.test("getValueAxis. Call without name.", function(assert) {
         }, {
             pane: "topPane",
             name: "third"
-        }]
+        }],
+        synchronizeMultiAxes: false
     };
     var chart = this.createChart();
     var valueAxis = chart.getValueAxis();
@@ -403,7 +351,8 @@ QUnit.test("getValueAxis. With name", function(assert) {
             name: "first"
         }, {
             name: "second"
-        }]
+        }],
+        synchronizeMultiAxes: false
     };
     var chart = this.createChart();
     var valueAxis = chart.getValueAxis("second");

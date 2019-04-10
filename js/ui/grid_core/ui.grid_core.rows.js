@@ -179,7 +179,7 @@ module.exports = {
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 values:Array<Object>
+            * @type_function_param1_field8 values:Array<any>
             * @type_function_param1_field9 columns:Array<Object>
             * @type_function_param1_field10 rowIndex:number
             * @type_function_param1_field11 rowType:string
@@ -199,7 +199,7 @@ module.exports = {
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 values:Array<Object>
+            * @type_function_param1_field8 values:Array<any>
             * @type_function_param1_field9 columns:Array<Object>
             * @type_function_param1_field10 rowIndex:number
             * @type_function_param1_field11 rowType:string
@@ -257,7 +257,7 @@ module.exports = {
             * @type_function_param1_field4 event:event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
-            * @type_function_param1_field7 values:Array<Object>
+            * @type_function_param1_field7 values:Array<any>
             * @type_function_param1_field8 columns:Array<dxDataGridColumn>
             * @type_function_param1_field9 rowIndex:number
             * @type_function_param1_field10 rowType:string
@@ -265,7 +265,6 @@ module.exports = {
             * @type_function_param1_field12 isExpanded:boolean
             * @type_function_param1_field13 groupIndex:number
             * @type_function_param1_field14 rowElement:dxElement
-            * @type_function_param1_field15 handled:boolean
             * @extends Action
             * @action
             */
@@ -276,14 +275,13 @@ module.exports = {
             * @type_function_param1_field4 event:event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
-            * @type_function_param1_field7 values:Array<Object>
+            * @type_function_param1_field7 values:Array<any>
             * @type_function_param1_field8 columns:Array<dxTreeListColumn>
             * @type_function_param1_field9 rowIndex:number
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
             * @type_function_param1_field13 rowElement:dxElement
-            * @type_function_param1_field14 handled:boolean
             * @extends Action
             * @action
             */
@@ -418,7 +416,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 values:Array<Object>
+             * @type_function_param1_field6 values:Array<any>
              * @type_function_param1_field7 columns:Array<dxDataGridColumn>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
@@ -435,7 +433,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 values:Array<Object>
+             * @type_function_param1_field6 values:Array<any>
              * @type_function_param1_field7 columns:Array<dxTreeListColumn>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
@@ -1131,12 +1129,6 @@ module.exports = {
                             return $(rows[index]);
                         }
                     }
-                },
-
-                getCellIndex: function($cell) {
-                    var cellIndex = $cell.length ? $cell[0].cellIndex : -1;
-
-                    return cellIndex;
                 },
 
                 updateFreeSpaceRowHeight: function($table) {

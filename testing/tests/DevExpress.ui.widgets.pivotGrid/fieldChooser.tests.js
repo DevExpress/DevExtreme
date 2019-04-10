@@ -26,9 +26,9 @@ var createMockDataSource = function(options) {
             return options[area + "Fields"] || [];
         },
         field: sinon.stub(),
-        getFieldValues: function(index) {
+        getFieldValues: sinon.spy(function(index) {
             return $.Deferred().resolve(options.fieldValues[index]);
-        },
+        }),
         fields: function() {
             return options.fields;
         },
@@ -36,6 +36,9 @@ var createMockDataSource = function(options) {
             return {
                 fields: options.fields
             };
+        },
+        paginate: function() {
+            return false;
         },
         load: sinon.stub(),
         on: sinon.stub(),
@@ -2044,6 +2047,39 @@ QUnit.test("Search in headerFilter", function(assert) {
     assert.strictEqual($listItems.text(), "test2", "correct item's text");
 });
 
+QUnit.test("headerFilter items if showRelevantValues is true", function(assert) {
+    var that = this,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1, text: "test1" }, { value: 2, text: "test2" }]
+            ]
+        };
+
+    this.setup(dataSourceOptions, {
+        headerFilter: {
+            showRelevantValues: true
+        }
+    });
+
+    $.each(fields, function(_, field) {
+        that.$container.append(that.fieldChooser.renderField(field));
+    });
+
+    var fieldElements = that.$container.find(".dx-area-field");
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+
+    // act
+    assert.strictEqual(this.dataSource.getFieldValues.callCount, 1, "getFieldValues is called once");
+    assert.deepEqual(this.dataSource.getFieldValues.getCall(0).args, [
+        0 /* index */,
+        true /* showRelevantValues */,
+        undefined /* options */
+    ], "getFieldValues calling args");
+});
 
 QUnit.module("applyChangesMode: onDemand", {
     beforeEach: function() {

@@ -404,7 +404,16 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
-                    return !isEditing && column.command === "expand";
+                    if(this._isLegacyNavigation()) {
+                        return !isEditing && column.command === "expand";
+                    }
+                    if(isCellEditing) {
+                        return !column.command;
+                    }
+                    if(isRowEditingInCurrentRow) {
+                        return column.command !== "select";
+                    }
+                    return !isEditing;
                 }
 
                 if(isCellEditing && row && row.rowType !== "data") {
@@ -482,6 +491,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return this.option("keyboardNavigation.enterKeyAction") === "startEdit";
     },
 
+    _isLegacyNavigation: function() {
+        return this.option("useLegacyKeyboardNavigation");
+    },
+
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
             rowIndex = this.getVisibleRowIndex(),
@@ -496,7 +509,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(key !== undefined && item && item.data && !item.data.isContinuation) {
                 this._dataController.changeRowExpand(key);
             }
-
         } else {
             this._processEnterKeyForDataCell(eventArgs, isEditing);
         }
@@ -954,10 +966,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
     _getNextCellByTabKey: function($event, direction, elementType) {
         var $cell = this._getNextCell(direction, elementType),
-            args = this._fireFocusedCellChanging($event, $cell, true);
-        if(args.cancel) {
+            args = $cell && this._fireFocusedCellChanging($event, $cell, true);
+
+        if(!args || args.cancel) {
             return;
         }
+
         if(args.$newCellElement) {
             $cell = args.$newCellElement;
         }
@@ -1381,7 +1395,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             isHighlighted = isCellElement($(element));
 
         if(!element) {
-            activeElementSelector = focusedRowEnabled ? ".dx-row[tabindex]" : ".dx-row[tabIndex], .dx-row > td[tabindex]";
+            activeElementSelector = ".dx-datagrid-rowsview .dx-row[tabindex]";
+            if(!focusedRowEnabled) {
+                activeElementSelector += ", .dx-datagrid-rowsview .dx-row > td[tabindex]";
+            }
             element = this.component.$element().find(activeElementSelector).first();
         }
 
@@ -1486,6 +1503,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         switch(args.name) {
             case "useKeyboard":
             case "keyboardNavigation":
+            case "useLegacyKeyboardNavigation":
                 args.handled = true;
                 break;
             default:
@@ -1606,6 +1624,8 @@ module.exports = {
     defaultOptions: function() {
         return {
             useKeyboard: true,
+
+            useLegacyKeyboardNavigation: false,
 
             /**
              * @name GridBaseOptions.keyboardNavigation
@@ -1889,8 +1909,11 @@ module.exports = {
                     return isCellEditing;
                 },
                 editRow: function(rowIndex) {
-                    let keyboardController = this.getController("keyboardNavigation");
-                    if(this.option("editing.mode") === EDIT_MODE_FORM) {
+                    var keyboardController = this.getController("keyboardNavigation"),
+                        columnIndex = this.option("focusedColumnIndex"),
+                        column = this._columnsController.getVisibleColumns()[columnIndex];
+
+                    if(column && column.type || this.option("editing.mode") === EDIT_MODE_FORM) {
                         keyboardController._resetFocusedCell();
                     }
                     this.callBase(rowIndex);

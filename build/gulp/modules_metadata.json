@@ -291,6 +291,12 @@
     }
   },
   {
+    "name": "ui/diagram",
+    "exports": {
+      "default": { "path": "ui.dxDiagram", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/dialog",
     "exports": {
       "alert": { "path": "ui.dialog.alert" },
@@ -427,18 +433,6 @@
     "exports": {
       "default": { "path": "ui.dxOverlay" },
       "baseZIndex": { "path": "ui.dxOverlay.baseZIndex" }
-    }
-  },
-  {
-    "name": "ui/panorama",
-    "exports": {
-      "default": { "path": "ui.dxPanorama", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/pivot",
-    "exports": {
-      "default": { "path": "ui.dxPivot", "isWidget": true }
     }
   },
   {

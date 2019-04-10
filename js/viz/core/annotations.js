@@ -3,12 +3,14 @@ import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
 import { events } from "../components/consts";
 import { patchFontOptions } from "./utils";
+import { Plaque } from "./plaque";
 
 const MOVE_EVENT = events["mousemove"] + ".annotations";
 const ANNOTATION_DATA = "annotation-data";
 
 function coreAnnotation(options, draw) {
     return {
+        type: options.type,
         name: options.name,
         x: options.x,
         y: options.y,
@@ -16,14 +18,22 @@ function coreAnnotation(options, draw) {
         argument: options.argument,
         axis: options.axis,
         series: options.series,
-        _options: options,
+        options: options,
         draw: function(widget, group) {
             this.coords = widget._getAnnotationCoords(this);
             const { x, y } = this.coords;
-            isDefined(x) && isDefined(y) && draw.call(this, { x, y }, widget, group, this._options.image);
+
+            if(isDefined(x) && isDefined(y)) {
+                const annotationGroup = widget._renderer.g().append(group);
+
+                const plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
+
+                plaque.move(x, y);
+                applyClipPath(annotationGroup, widget, this._pane);
+            }
         },
         getTooltipFormatObject() {
-            return extend({}, this._options);
+            return extend({}, this.options);
         },
         getTooltipParams() {
             const { x, y } = this.coords;
@@ -37,35 +47,44 @@ function applyClipPath(elem, widget, pane) {
 }
 
 function labelAnnotation(options) {
-    return coreAnnotation(options, function({ x, y }, widget, group) {
-        const text = widget._renderer.text(options.label.text, x, y).data({ [ANNOTATION_DATA]: this }).css(patchFontOptions(options.label.font)).append(group);
-        applyClipPath(text, widget, this._pane);
+    return coreAnnotation(options, function(widget, group) {
+        widget._renderer
+            .text(options.text)
+            .data({ [ANNOTATION_DATA]: this })
+            .css(patchFontOptions(options.font))
+            .append(group);
     });
 }
 
 function imageAnnotation(options) {
-    const { width, height, url, location } = options.image;
-    return coreAnnotation(options, function({ x, y }, widget, group) {
-        const image = widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ [ANNOTATION_DATA]: this }).append(group);
-        applyClipPath(image, widget, this._pane);
+    const { width, height, url, location } = options.image || {};
+    return coreAnnotation(options, function(widget, group) {
+        widget._renderer
+            .image(0, 0, width, height, url, location || "center")
+            .data({ [ANNOTATION_DATA]: this })
+            .append(group);
     });
 }
 
-function mergeOptions(itemOptions, commonOptions, key) {
-    return extend(true, {}, itemOptions, { [key]: commonOptions }, { [key]: itemOptions[key] });
-}
+function createAnnotation(item, commonOptions) {
+    let options = extend(true, {}, commonOptions, item);
+    if(options.customizeAnnotation && options.customizeAnnotation.call) {
+        options = extend(true, options, options.customizeAnnotation(item));
+    }
 
-function createAnnotation(itemOptions, commonOptions) {
-    // Choose annotation type and merge common and individual options
-    if(isDefined(itemOptions.image)) {
-        return imageAnnotation(mergeOptions(itemOptions, commonOptions.imageOptions, "image"));
-    } else if(isDefined(itemOptions.label)) {
-        return labelAnnotation(mergeOptions(itemOptions, commonOptions.labelOptions, "label"));
+    if(options.type === "image") {
+        return imageAnnotation(options);
+    } else if(options.type === "label") {
+        return labelAnnotation(options);
     }
 }
 
-export let createAnnotations = function(options) {
-    return options.items.map(itemOptions => createAnnotation(itemOptions, options));
+export let createAnnotations = function(items, options) {
+    return items.reduce((arr, item) => {
+        const annotation = createAnnotation(item, options);
+        annotation && arr.push(annotation);
+        return arr;
+    }, []);
 };
 
 ///#DEBUG
@@ -143,7 +162,8 @@ const chartPlugin = {
         },
         _onMouseMove({ target }) {
             const annotation = target[ANNOTATION_DATA];
-            if(!annotation) {
+
+            if(!annotation || !annotation.options.tooltipEnabled) {
                 this._annotations.tooltip.hide();
                 return;
             }
@@ -156,8 +176,7 @@ const chartPlugin = {
                 rootOffset = this._renderer.getRootOffset();
             coords.x += rootOffset.left;
             coords.y += rootOffset.top;
-
-            this._annotations.tooltip.show(tooltipFormatObject, coords, { target: annotation });
+            this._annotations.tooltip.show(tooltipFormatObject, coords, { target: annotation }, annotation.options.customizeTooltip);
         }
     }
 };
@@ -173,7 +192,7 @@ const corePlugin = {
     },
     extenders: {
         _createHtmlStructure() {
-            this._annotationsGroup = this._renderer.g().attr({ "class": this._rootClassPrefix + "-annotations" }).linkOn(this._renderer.root, "annotations").linkAppend();
+            this._annotationsGroup = this._renderer.g().attr({ "class": `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, "annotations").linkAppend();
         },
         _renderExtraElements() {
             this._annotationsGroup.clear();
@@ -184,33 +203,47 @@ const corePlugin = {
         _buildAnnotations() {
             this._annotations.items = [];
 
-            // TODO test theme
-            const options = this._getOption("annotations");
+            const items = this._getOption("annotations");
+            const options = this._getOption("commonAnnotationSettings") || {};
 
-            if(!options || !options.items) {
+            if(!items || !items.length) {
                 return;
             }
 
             this._annotations.tooltip = new Tooltip({
-                cssClass: "dxc-tooltip",
+                cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
                 eventTrigger: this._eventTrigger,
                 widgetRoot: this.element(),
             });
 
             this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-            const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"), { enabled: false });
-            if(options.customizeTooltip) {
-                tooltipOptions.customizeTooltip = options.customizeTooltip;
-                tooltipOptions.enabled = true;
-            }
+            const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
             this._annotations.tooltip.update(tooltipOptions);
 
-            this._annotations.items = createAnnotations(options);
+            this._annotations.items = createAnnotations(items, options);
             this._renderer.root.on(MOVE_EVENT, this._onMouseMove.bind(this));
         },
         _getAnnotationCoords() { return {}; }
     },
     customize(constructor) {
+        constructor.addChange({
+            code: "ANNOTATIONITEMS",
+            handler() {
+                this._requestChange(["ANNOTATIONS"]);
+            },
+            isOptionChange: true,
+            option: "annotations"
+        });
+
+        constructor.addChange({
+            code: "ANNOTATIONSSETTINGS",
+            handler() {
+                this._requestChange(["ANNOTATIONS"]);
+            },
+            isOptionChange: true,
+            option: "commonAnnotationSettings"
+        });
+
         constructor.addChange({
             code: "ANNOTATIONS",
             handler() {
@@ -218,11 +251,10 @@ const corePlugin = {
                 this._change(["FORCE_RENDER"]);
             },
             isThemeDependent: true,
-            isOptionChange: true,
-            option: "annotations"
+            isOptionChange: true
         });
     },
-    fontFields: ["annotations.labelOptions.font"]
+    fontFields: ["commonAnnotationSettings.font"]
 };
 
 export const plugins = {

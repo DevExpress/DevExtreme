@@ -27,7 +27,6 @@ const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
 const FILE_MANAGER_DIRS_TREE_CLASS = FILE_MANAGER_CLASS + "-dirs-tree";
 const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator";
-const FILE_MANAGER_TOOLBAR_CLASS = FILE_MANAGER_CLASS + "-toolbar";
 const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + "-inactive-area";
 const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-editing-container";
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
@@ -43,19 +42,18 @@ class FileManager extends Widget {
         this._provider = this._getFileProvider();
         this._currentFolder = new FileManagerItem("", "", true);
 
-        this._commandManager = new FileManagerCommandManager();
+        this._commandManager = new FileManagerCommandManager(this.option("editing"));
 
-        const toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
+        const $toolbar = $("<div>").appendTo(this.$element());
+        this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
-            "onItemClick": ({ itemName }) => this._onToolbarItemClick(itemName)
+            itemListViewMode: this.option("itemList").mode
         });
-        toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
 
         this._createEditing();
 
         this._$viewContainer = this._createViewContainer();
         this.$element()
-            .append(toolbar.$element())
             .append(this._$viewContainer)
             .append(this._editing.$element())
             .addClass(FILE_MANAGER_CLASS);
@@ -125,6 +123,7 @@ class FileManager extends Widget {
             selectionMode: selectionOptions.mode,
             getItems: this._getItemListItems.bind(this),
             onError: ({ error }) => this._showError(error),
+            onSelectionChanged: this._onItemListSelectionChanged.bind(this),
             onSelectedItemOpened: ({ item }) => this._tryOpen(item),
             onContextMenuItemClick: ({ name, fileItem }) => this._onContextMenuItemClick(name, fileItem),
             getItemThumbnail: this._getItemThumbnail.bind(this)
@@ -140,12 +139,14 @@ class FileManager extends Widget {
     _createBreadcrumbs() {
         this._breadcrumbs = this._createComponent($("<div>"), FileManagerBreadcrumbs, {
             path: "",
-            onPathChanged: e => this.setCurrentFolderPath(e.newPath)
+            onPathChanged: e => this.setCurrentFolderPath(e.newPath),
+            onOutsideClick: () => this._itemList.clearSelection()
         });
     }
 
     _initCommandManager() {
         const actions = extend(this._editing.getCommandActions(), {
+            refresh: () => this._refreshData(),
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details")
         });
@@ -156,8 +157,9 @@ class FileManager extends Widget {
         this.setCurrentFolder(this._filesTreeView.getCurrentFolder());
     }
 
-    _onToolbarItemClick(name) {
-        this.executeCommand(name);
+    _onItemListSelectionChanged() {
+        const items = this.getSelectedItems();
+        this._toolbar.update(items);
     }
 
     _onContextMenuItemClick(name) {
@@ -183,6 +185,10 @@ class FileManager extends Widget {
 
         $activeArea.removeClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
         $inactiveArea.addClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
+
+        if(!active) {
+            this._itemList.clearSelection();
+        }
     }
 
     _tryOpen(item) {
@@ -389,7 +395,50 @@ class FileManager extends Widget {
             * @type_function_param1 fileItem:object
             * @type_function_return string
             */
-            customThumbnail: null
+            customThumbnail: null,
+
+            /**
+             * @name dxFileManagerOptions.editing
+             * @type object
+             */
+            editing: {
+                /**
+                 * @name dxFileManagerOptions.editing.allowCreate
+                 * @type boolean
+                 * @default false
+                 */
+                allowCreate: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowCopy
+                 * @type boolean
+                 * @default false
+                 */
+                allowCopy: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowMove
+                 * @type boolean
+                 * @default false
+                 */
+                allowMove: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowRemove
+                 * @type boolean
+                 * @default false
+                 */
+                allowRemove: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowRename
+                 * @type boolean
+                 * @default false
+                 */
+                allowRename: false,
+                /**
+                 * @name dxFileManagerOptions.editing.allowUpload
+                 * @type boolean
+                 * @default false
+                 */
+                allowUpload: false
+            }
         });
     }
 
@@ -401,6 +450,7 @@ class FileManager extends Widget {
             case "selection":
             case "itemList":
             case "customThumbnail":
+            case "editing":
                 this.repaint();
                 break;
             default:

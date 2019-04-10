@@ -171,9 +171,6 @@ namespace StyleCompiler
                 "tagBox",
                 "radioButton",
                 "radioGroup",
-                "pivotTabs",
-                "pivot",
-                "panorama",
                 "accordion",
                 "slideOutView",
                 "slideOut",
@@ -203,7 +200,8 @@ namespace StyleCompiler
                 "card",
                 "htmlEditor",
                 "floatingActionButton",
-                "fileManager"
+                "fileManager",
+                "diagram"
             });
 
             // Non-themeable components that have only common styles

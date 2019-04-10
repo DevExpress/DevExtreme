@@ -554,6 +554,14 @@
 
 @checkbox-icon-border-radius: @base-border-radius-exsmall;
 
+// Diagram
+@diagram-border-color: @base-border-color;
+@diagram-toolbar-border-color: @base-border-color;
+@diagram-normal-format-active-bg: lighten(@base-element-bg, 10%);
+@diagram-default-format-active-bg: darken(@base-accent, 10%);
+@diagram-danger-format-active-bg: darken(@base-danger, 10%);
+@diagram-success-format-active-bg: darken(@base-success, 10%);
+
 // Drawer
 /**
 * @name 10. Shader background color
@@ -1170,10 +1178,6 @@
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
 @colorview-border-color: @base-border-color;
 @colorview-label-color: @base-label-color;
-
-//PivoTabs
-@pivottabs-tab-color: darken(@base-text-color, 38.5%);
-@pivottabs-tab-selected-color: @base-text-color;
 
 // DataGrid
 /**
@@ -2207,3 +2211,13 @@
 * @group filterbuilder
 */
 @filterbuilder-menu-icon-color: darken(@base-icon-color, 33.7%);
+
+// FileManager
+@filemanager-border-color: @base-border-color;
+@filemanager-file-toolbar-bg: darken(@base-bg, 3%);
+@filemanager-editor-active-bg: fade(@base-text-color, 10%);
+@filemanager-dirs-tree-item-focus-bg: darken(@base-bg, 8%);
+@filemanager-dirs-tree-item-focus-color: @base-text-color;
+@filemanager-breadcrumbs-item-focus-bg: @base-border-color;
+@filemanager-breadcrumbs-item-focus-color: @base-text-color;
+@filemanager-thumbnails-image-icon-color: @base-border-color;

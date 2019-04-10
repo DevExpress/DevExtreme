@@ -19,6 +19,14 @@ const moduleConfig = {
             itemList: {
                 showFolders: false,
                 showParentFolder: false
+            },
+            editing: {
+                allowCreate: true,
+                allowCopy: true,
+                allowMove: true,
+                allowRemove: true,
+                allowRename: true,
+                allowUpload: true
             }
         });
 
@@ -90,7 +98,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         assert.ok($row.hasClass(internals.SELECTION_CLASS), "file selected");
 
-        const $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Create')`);
+        const $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('New folder')`);
         $commandButton.trigger("dxclick");
         this.clock.tick(400);
 

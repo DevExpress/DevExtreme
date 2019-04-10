@@ -284,8 +284,38 @@ var BaseWidget = {
                 color: '#232323',
                 size: 16,
                 opacity: undefined
-            }
-        }
+            },
+            /**
+            * @name BaseWidgetOptions.title.subtitle.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+            * @name BaseWidgetOptions.title.subtitle.textOverflow
+            * @type Enums.VizTextOverflow
+            * @default "ellipsis"
+            */
+            textOverflow: "ellipsis",
+            /**
+            * @name BaseWidgetOptions.title.subtitle.offset
+            * @type number
+            * @default 0
+            */
+            offset: 0
+        },
+        /**
+        * @name BaseWidgetOptions.title.wordWrap
+        * @type Enums.VizWordWrap
+        * @default "normal"
+        */
+        wordWrap: "normal",
+        /**
+        * @name BaseWidgetOptions.title.textOverflow
+        * @type Enums.VizTextOverflow
+        * @default "ellipsis"
+        */
+        textOverflow: "ellipsis"
     },
     /**
     * @name BaseWidgetOptions.export
@@ -941,7 +971,13 @@ var BaseLegend = {
                 color: '#232323',
                 size: 14,
                 opacity: undefined
-            }
+            },
+            /**
+            * @name BaseLegend.title.subtitle.offset
+            * @type number
+            * @default 0
+            */
+            offset: 0
         }
     }    
 };
