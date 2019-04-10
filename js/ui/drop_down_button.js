@@ -72,6 +72,13 @@ let DropDownButton = Widget.inherit({
             selectedItemKey: null,
 
             /**
+             * @name dxDropDownButtonOptions.selectedItemKey
+             * @type Enums.ButtonStylingMode
+             * @default 'outlined'
+             */
+            stylingMode: "outlined",
+
+            /**
              * @name dxDropDownButtonOptions.deferRendering
              * @type boolean
              * @default true
@@ -299,7 +306,9 @@ let DropDownButton = Widget.inherit({
         return extend({
             items: this._getButtonGroupItems(),
             onItemClick: this._buttonGroupItemClick.bind(this),
-            stylingMode: "outlined",
+            width: this.option("width"),
+            height: this.option("height"),
+            stylingMode: this.option("stylingMode"),
             selectionMode: "none"
         }, this._getInnerOptionsCache("buttonGroupOptions"));
     },
@@ -310,8 +319,14 @@ let DropDownButton = Widget.inherit({
             focusStateEnabled: false,
             deferRendering: this.option("deferRendering"),
             minWidth: 130,
-            closeOnOutsideClick: function(e) {
-                return !($(e.target).closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`).length);
+            closeOnOutsideClick: (e) => {
+                const $toggleButton = $(e.target).closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
+                if(!$toggleButton.length) {
+                    return true;
+                }
+
+                const $element = $toggleButton.closest(`.${DROP_DOWN_BUTTON_CLASS}`);
+                return $element.get(0) !== this.$element().get(0);
             },
             showTitle: false,
             animation: {
@@ -330,9 +345,7 @@ let DropDownButton = Widget.inherit({
                     y: -1
                 }
             },
-            contentTemplate: (content) => {
-                const $content = $(content);
-                $content.addClass(DROP_DOWN_BUTTON_CONTENT);
+            contentTemplate: () => {
                 this._list = this._createComponent($("<div>"), List, this._listOptions());
 
                 this._list.registerKeyHandler("escape", this._escHandler.bind(this));
@@ -340,7 +353,7 @@ let DropDownButton = Widget.inherit({
                 this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
                 this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
 
-                $content.append(this._list.$element());
+                return this._list.$element();
             }
         }, this._getInnerOptionsCache("dropDownOptions"));
     },
@@ -385,6 +398,7 @@ let DropDownButton = Widget.inherit({
         const $popup = $("<div>");
         this.$element().append($popup);
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
+        $(this._popup.content()).addClass(DROP_DOWN_BUTTON_CONTENT);
         this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
     },
 
@@ -445,10 +459,10 @@ let DropDownButton = Widget.inherit({
 
     _updateActionButton(selectedItem) {
         if(this.option("useSelectMode")) {
-            this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
+            this.option({
                 text: this._getDisplayValue(selectedItem),
                 icon: isPlainObject(selectedItem) ? selectedItem.icon : undefined
-            }));
+            });
         }
 
         this._setOptionSilent("selectedItem", selectedItem);
@@ -516,6 +530,11 @@ let DropDownButton = Widget.inherit({
                 this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
                     text: value
                 }));
+                break;
+            case "stylingMode":
+            case "width":
+            case "height":
+                this._buttonGroup.option(name, value);
                 break;
             case "itemTemplate":
             case "grouped":
