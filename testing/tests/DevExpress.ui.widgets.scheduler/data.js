@@ -1,4 +1,4 @@
-export const simpleArrayData = [
+export const getSimpleDataArray = () => [
     {
         text: "Website Re-Design Plan",
         startDate: new Date(2017, 4, 22, 9, 30),

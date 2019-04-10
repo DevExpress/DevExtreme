@@ -406,7 +406,19 @@ var commonPieChartSeries = {
             * @default undefined
             */
             color: undefined
-        }
+        },
+        /**
+        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow
+        * @default 'ellipsis'
+        * @type Enums.VizTextOverflow
+        */
+        textOverflow: 'ellipsis',
+        /**
+        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap
+        * @default 'normal'
+        * @type Enums.VizWordWrap
+        */
+        wordWrap: 'normal'
     }
 };
 

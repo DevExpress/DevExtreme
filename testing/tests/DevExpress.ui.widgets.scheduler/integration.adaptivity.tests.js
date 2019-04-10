@@ -1,7 +1,7 @@
 import $ from "jquery";
 import fx from "animation/fx";
 import { SchedulerTestWrapper } from "./helpers.js";
-import { simpleArrayData } from './data.js';
+import { getSimpleDataArray } from './data.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -20,7 +20,7 @@ const moduleConfig = {
 
         this.createInstance = function(options) {
             const defaultOption = {
-                dataSource: [...simpleArrayData],
+                dataSource: getSimpleDataArray(),
                 views: ["agenda", "day", "week", "workWeek", "month"],
                 currentView: "month",
                 currentDate: new Date(2017, 4, 25),

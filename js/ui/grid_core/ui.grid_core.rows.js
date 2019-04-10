@@ -265,7 +265,6 @@ module.exports = {
             * @type_function_param1_field12 isExpanded:boolean
             * @type_function_param1_field13 groupIndex:number
             * @type_function_param1_field14 rowElement:dxElement
-            * @type_function_param1_field15 handled:boolean
             * @extends Action
             * @action
             */
@@ -283,7 +282,6 @@ module.exports = {
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
             * @type_function_param1_field13 rowElement:dxElement
-            * @type_function_param1_field14 handled:boolean
             * @extends Action
             * @action
             */

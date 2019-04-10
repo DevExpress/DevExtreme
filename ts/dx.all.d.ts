@@ -243,20 +243,6 @@ interface JQuery {
     dxNumberBox(options: DevExpress.ui.dxNumberBoxOptions): JQuery;
 }
 interface JQuery {
-    dxPanorama(): JQuery;
-    dxPanorama(options: "instance"): DevExpress.ui.dxPanorama;
-    dxPanorama(options: string): any;
-    dxPanorama(options: string, ...params: any[]): any;
-    dxPanorama(options: DevExpress.ui.dxPanoramaOptions): JQuery;
-}
-interface JQuery {
-    dxPivot(): JQuery;
-    dxPivot(options: "instance"): DevExpress.ui.dxPivot;
-    dxPivot(options: string): any;
-    dxPivot(options: string, ...params: any[]): any;
-    dxPivot(options: DevExpress.ui.dxPivotOptions): JQuery;
-}
-interface JQuery {
     dxPivotGrid(): JQuery;
     dxPivotGrid(options: "instance"): DevExpress.ui.dxPivotGrid;
     dxPivotGrid(options: string): any;
@@ -1518,7 +1504,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.placeholderSize */
         placeholderSize?: number;
         /** @name BaseWidget.Options.title.subtitle */
-        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'break-word' | 'none' } | string;
+        subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'breakWord' | 'none' } | string;
         /** @name BaseWidget.Options.title.text */
         text?: string;
         /** @name BaseWidget.Options.title.textOverflow */
@@ -1526,7 +1512,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseWidget.Options.title.wordWrap */
-        wordWrap?: 'normal' | 'break-word' | 'none';
+        wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /** @name BaseWidget.Options.tooltip */
     interface BaseWidgetTooltip {
@@ -2302,7 +2288,7 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
         /** @name dxChart.Options.commonAxisSettings.label.wordWrap */
-        wordWrap?: 'normal' | 'break-word' | 'none';
+        wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /** @name dxChart.Options.commonAxisSettings.stripStyle */
     export interface dxChartCommonAxisSettingsStripStyle {
@@ -3723,7 +3709,7 @@ declare module DevExpress.viz {
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle */
         hoverStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } };
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.label */
-        label?: { argumentFormat?: DevExpress.ui.format, backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), font?: Font, format?: DevExpress.ui.format, position?: 'columns' | 'inside' | 'outside', radialOffset?: number, rotationAngle?: number, visible?: boolean };
+        label?: { argumentFormat?: DevExpress.ui.format, backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), font?: Font, format?: DevExpress.ui.format, position?: 'columns' | 'inside' | 'outside', radialOffset?: number, rotationAngle?: number, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount */
         maxLabelCount?: number;
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize */
@@ -4481,7 +4467,7 @@ declare module DevExpress.viz {
         /** @name dxTreeMap.Options.selectionMode */
         selectionMode?: 'multiple' | 'none' | 'single';
         /** @name dxTreeMap.Options.tile */
-        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'break-word' | 'none' }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /** @name dxTreeMap.Options.tooltip */
         tooltip?: dxTreeMapTooltip;
         /** @name dxTreeMap.Options.valueField */
@@ -5835,7 +5821,7 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.Options.onRowClick */
         onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** @name dxDataGrid.Options.onRowDblClick */
-        onRowDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any);
+        onRowDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDataGrid.Options.onRowPrepared */
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDataGrid.Options.remoteOperations */
@@ -6294,6 +6280,8 @@ declare module DevExpress.ui {
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
         /** @name dxFileManager.Options.customThumbnail */
         customThumbnail?: ((fileItem: any) => string);
+        /** @name dxFileManager.Options.editing */
+        editing?: { allowCopy?: boolean, allowCreate?: boolean, allowMove?: boolean, allowRemove?: boolean, allowRename?: boolean, allowUpload?: boolean };
         /** @name dxFileManager.Options.fileSystemStore */
         fileSystemStore?: any;
         /** @name dxFileManager.Options.itemList */
@@ -7369,49 +7357,6 @@ declare module DevExpress.ui {
         /** @name dxOverlay.toggle(showing) */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
-    /** @name dxPanorama.Options */
-    export interface dxPanoramaOptions extends CollectionWidgetOptions<dxPanorama> {
-        /** @name dxPanorama.Options.backgroundImage */
-        backgroundImage?: { height?: number, url?: string, width?: number };
-        /** @name dxPanorama.Options.focusStateEnabled */
-        focusStateEnabled?: boolean;
-        /** @name dxPanorama.Options.items */
-        items?: Array<string | dxPanoramaItem | any>;
-        /** @name dxPanorama.Options.selectedIndex */
-        selectedIndex?: number;
-        /** @name dxPanorama.Options.title */
-        title?: string;
-    }
-    /** @deprecated */
-    /** @name dxPanorama */
-    export class dxPanorama extends CollectionWidget {
-        constructor(element: Element, options?: dxPanoramaOptions)
-        constructor(element: JQuery, options?: dxPanoramaOptions)
-    }
-    /** @name dxPanoramaItem */
-    export interface dxPanoramaItem extends CollectionWidgetItem {
-        /** @name dxPanoramaItem.title */
-        title?: string;
-    }
-    /** @name dxPivot.Options */
-    export interface dxPivotOptions extends CollectionWidgetOptions<dxPivot> {
-        /** @name dxPivot.Options.contentTemplate */
-        contentTemplate?: template | ((container: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxPivot.Options.itemTitleTemplate */
-        itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** @name dxPivot.Options.items */
-        items?: Array<string | dxPivotItem | any>;
-        /** @name dxPivot.Options.selectedIndex */
-        selectedIndex?: number;
-        /** @name dxPivot.Options.swipeEnabled */
-        swipeEnabled?: boolean;
-    }
-    /** @deprecated */
-    /** @name dxPivot */
-    export class dxPivot extends CollectionWidget {
-        constructor(element: Element, options?: dxPivotOptions)
-        constructor(element: JQuery, options?: dxPivotOptions)
-    }
     /** @name dxPivotGrid.Options */
     export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
         /** @name dxPivotGrid.Options.allowExpandAll */
@@ -7579,13 +7524,6 @@ declare module DevExpress.ui {
         value(field: DevExpress.data.PivotGridDataSourceField | string, isCalculatedValue: boolean): any;
         /** @name dxPivotGridSummaryCell.value(isCalculatedValue) */
         value(isCalculatedValue: boolean): any;
-    }
-    /** @name dxPivotItem */
-    export interface dxPivotItem extends CollectionWidgetItem {
-        /** @name dxPivotItem.title */
-        title?: string;
-        /** @name dxPivotItem.titleTemplate */
-        titleTemplate?: template | (() => string | Element | JQuery);
     }
     /** @name dxPopover.Options */
     export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
@@ -8672,7 +8610,7 @@ declare module DevExpress.ui {
         /** @name dxTreeList.Options.onRowClick */
         onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** @name dxTreeList.Options.onRowDblClick */
-        onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any);
+        onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxTreeList.Options.onRowPrepared */
         onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxTreeList.Options.paging */

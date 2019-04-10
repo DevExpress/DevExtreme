@@ -430,18 +430,6 @@
     }
   },
   {
-    "name": "ui/panorama",
-    "exports": {
-      "default": { "path": "ui.dxPanorama", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/pivot",
-    "exports": {
-      "default": { "path": "ui.dxPivot", "isWidget": true }
-    }
-  },
-  {
     "name": "ui/pivot_grid",
     "exports": {
       "default": { "path": "ui.dxPivotGrid", "isWidget": true }

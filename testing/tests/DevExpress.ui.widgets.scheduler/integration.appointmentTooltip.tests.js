@@ -10,7 +10,7 @@ import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import dataUtils from "core/element_data";
 import { SchedulerTestWrapper, tooltipHelper, appointmentsHelper, appointmentPopupHelper } from './helpers.js';
-import { simpleArrayData } from './data.js';
+import { getSimpleDataArray } from './data.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -863,8 +863,9 @@ const moduleConfig = {
         fx.off = true;
 
         this.createInstance = function(options) {
+            this.data = getSimpleDataArray();
             const defaultOption = {
-                dataSource: [...simpleArrayData],
+                dataSource: this.data,
                 views: ["agenda", "day", "week", "workWeek", "month"],
                 currentView: "month",
                 currentDate: new Date(2017, 4, 25),
@@ -961,7 +962,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "Value on init should be correct");
         assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
 
-        this.instance.deleteAppointment(simpleArrayData[0]);
+        this.instance.deleteAppointment(this.data[0]);
         assert.equal(appointmentsHelper.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
 
         this.instance.addAppointment({
@@ -1065,10 +1066,6 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
 
     QUnit.test("appointmentTooltipTemplate method should pass valid arguments", function(assert) {
         let templateCallCount = 0;
-        const checkItemTemplateContent = (index) => {
-            assert.ok(this.scheduler.tooltip.checkItemElementHtml(index, `template item index - ${index}`), "Template should render valid content dependent on item index");
-        };
-
         this.createInstance({
             appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
                 assert.ok(contentElement.className.indexOf("dx-list-item-content") !== -1, "Content element should be list item");
@@ -1081,13 +1078,16 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         });
 
         this.scheduler.appointments.click();
-        checkItemTemplateContent(0);
+        this.clock.tick(300);
+        assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index`);
+
         templateCallCount = 0;
 
         const buttonCount = this.scheduler.appointments.compact.getButtonCount();
         this.scheduler.appointments.compact.click(buttonCount - 1);
+        this.clock.tick(300);
 
-        checkItemTemplateContent(0);
-        checkItemTemplateContent(1);
+        assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index. Compact appointments`);
+        assert.ok(this.scheduler.tooltip.checkItemElementHtml(1, `template item index - ${1}`), `Template should render content contains ${1} item index. Compact appointments`);
     });
 });

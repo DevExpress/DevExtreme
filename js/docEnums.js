@@ -67,7 +67,7 @@
 
 /**
  * @typedef {string} Enums.VizWordWrap
- * @enum {'normal'|'break-word'|'none'}
+ * @enum {'normal'|'breakWord'|'none'}
  */
 
 /**
