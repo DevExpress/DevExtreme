@@ -143,7 +143,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return this._defaultWidth;
     },
 
-    getCompactAppointmentDefaultSize: noop,
+    getCompactAppointmentDefaultWidth: noop,
 
     getCompactAppointmentLeftOffset: noop,
     getCompactAppointmentTopOffset: noop,

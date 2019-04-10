@@ -13,9 +13,12 @@ var abstract = Class.abstract;
 
 var APPOINTMENT_MIN_COUNT = 1,
     APPOINTMENT_MIN_SIZE = 2,
-    COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
+
+    COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15,
+
     APPOINTMENT_DEFAULT_HEIGHT = 20,
     APPOINTMENT_DEFAULT_WIDTH = 40,
+
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
@@ -537,7 +540,7 @@ var BaseRenderingStrategy = Class.inherit({
     _getMaxNeighborAppointmentCount: function() {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
         if(!overlappingMode) {
-            var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentLeftOffset();
+            var outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
             return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
         } else {
             return 0;
@@ -593,8 +596,8 @@ var BaseRenderingStrategy = Class.inherit({
         return this._defaultWidth;
     },
 
-    getCompactAppointmentDefaultSize: function() {
-        return COMPACT_APPOINTMENT_DEFAULT_SIZE;
+    getCompactAppointmentDefaultWidth: function() {
+        return COMPACT_APPOINTMENT_DEFAULT_WIDTH;
     },
 
     getCompactAppointmentTopOffset: function() {
@@ -627,7 +630,7 @@ var BaseRenderingStrategy = Class.inherit({
             compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
 
         if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
             compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
 
             top = coordinates.top + compactAppointmentTopOffset;
