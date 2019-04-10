@@ -392,7 +392,19 @@ var dxFunnel = {
         * @type_function_return string
         * @notUsedInTheme
         */
-        customizeText: undefined
+        customizeText: undefined,
+        /**
+        * @name dxFunnelOptions.label.textOverflow
+        * @type Enums.VizTextOverflow
+        * @default 'ellipsis'
+        */
+        textOverflow: 'ellipsis',
+       /**
+        * @name dxFunnelOptions.label.wordWrap
+        * @type Enums.VizWordWrap
+        * @default 'normal'
+        */
+       wordWrap: 'normal'
     },
     /**
     * @name dxFunnelOptions.legend

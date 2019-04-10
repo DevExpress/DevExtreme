@@ -3506,7 +3506,7 @@ declare module DevExpress.viz {
         /** @name dxFunnel.Options.item */
         item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } } };
         /** @name dxFunnel.Options.label */
-        label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: DevExpress.ui.format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, visible?: boolean };
+        label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: DevExpress.ui.format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
         /** @name dxFunnel.Options.legend */
         legend?: dxFunnelLegend;
         /** @name dxFunnel.Options.neckHeight */
@@ -8363,7 +8363,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<string | dxActionButton>;
+        buttons?: Array<'clear' | 'spins' | 'dropDown' | dxActionButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */

@@ -841,6 +841,11 @@
  */
 
 /**
+ * @typedef {string} Enums.TextEditorButtonName
+ * @enum {'clear'|'spins'|'dropDown'}
+ */
+
+/**
  * @typedef {string} Enums.SmallValuesGroupingMode
  * @enum {'none'|'smallValueThreshold'|'topN'}
  */

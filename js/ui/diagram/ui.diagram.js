@@ -47,7 +47,9 @@ class Diagram extends Widget {
         this._createComponent($toolbox, DiagramToolbox, {
             onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category)
         });
-        this._createComponent($options, DiagramOptions);
+        this._createComponent($options, DiagramOptions, {
+            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar)
+        });
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
         this._diagramInstance.onChanged = this._raiseDataChangeAction.bind(this);
