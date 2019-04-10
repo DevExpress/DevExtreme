@@ -92,7 +92,6 @@ const ActionButtonBase = ActionButtonItem.inherit({
 
     _renderActions() {
         const actions = this.option("actions");
-        const minActionButtonCount = 2;
         const lastActionIndex = actions.length - 1;
 
         if(this._actionItems.length) {
@@ -102,8 +101,9 @@ const ActionButtonBase = ActionButtonItem.inherit({
             });
         }
 
-        if(actions.length < minActionButtonCount) {
-            this._render();
+        if(actions.length === 1) {
+            this._renderIcon();
+            this._renderCloseIcon();
             return;
         }
 
@@ -215,7 +215,6 @@ exports.disposeAction = function(actionId) {
     if(savedActionsCount === savedActions.length) return;
 
     if(!savedActions.length) {
-        actionButtonBase.option({ actions: [] });
         actionButtonBase.dispose();
         actionButtonBase.element().remove();
         actionButtonBase = null;
