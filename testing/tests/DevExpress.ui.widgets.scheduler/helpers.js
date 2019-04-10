@@ -64,6 +64,17 @@ export class SchedulerTestWrapper {
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick")
         };
+
+        this.workSpace = {
+            getCells: () => $(".dx-scheduler-date-table-cell"),
+            getCell: (index) => this.workSpace.getCells().eq(index),
+            getAllDayCells: () => $(".dx-scheduler-all-day-table-cell"),
+            getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
+            getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
+            getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
+            getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
+            getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight()
+        };
     }
 
     isAdaptivity() {
@@ -114,6 +125,13 @@ export const appointmentsHelper = {
         getButtonText: (index = 0) => appointmentsHelper.compact.getButton(index).find("span").text(),
         click: (index = 0) => appointmentsHelper.compact.getButton(index).trigger("dxclick"),
     }
+};
+
+export const workspaceHelper = {
+    getCells: () => $(".dx-scheduler-date-table-cell"),
+    getCell: (index) => workspaceHelper.getCells().eq(index),
+    getAllDayCells: () => $(".dx-scheduler-all-day-table-cell"),
+    getAllDayCell: (index) => workspaceHelper.getAllDayCells().eq(index)
 };
 
 export const appointmentPopupHelper = {
