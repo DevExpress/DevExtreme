@@ -961,6 +961,7 @@ QUnit.test("There is not real overlap of the labels. Alignment value is right", 
 QUnit.test("Check title offset after olerlap resolving", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
+        { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 20, height: 10 },
         { x: 45, y: 0, width: 10, height: 5 },
@@ -1134,7 +1135,7 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
     });
 
     texts = this.renderer.text;
-    assert.equal(texts.lastCall.returnValue.attr.lastCall.args[0].translateY, 616, "title offset");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 616, "title offset");
 });
 
 QUnit.test("labels overlap after rotation", function(assert) {
@@ -1357,7 +1358,7 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
     texts = this.renderer.text;
     assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
 
-    assert.equal(texts.lastCall.returnValue.attr.lastCall.args[0].translateY, 614, "title offset");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 614, "title offset");
 });
 
 QUnit.test("Labels overlap, some of them hide", function(assert) {

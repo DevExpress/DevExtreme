@@ -946,7 +946,7 @@ module.exports = {
                     title.element.applyEllipsis(canvasLength) && title.element.setTitle(titleOptions.text);
                 }
             } else {
-                !isWordWrap && this._wrapped && title.element.restoreText();
+                !isWordWrap && !this._wrapped && title.element.restoreText();
             }
         },
 

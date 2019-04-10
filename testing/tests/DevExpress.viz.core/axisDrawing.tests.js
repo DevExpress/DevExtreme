@@ -159,7 +159,7 @@ QUnit.test("Create groups and append them to groups from options", function(asse
 
     // assert
     var g = renderer.g;
-    assert.deepEqual(g.getCall(0).returnValue.append.getCall(0).args[0], axesContainerGroup, "_axisGroup");
+    assert.deepEqual(g.getCall(0).returnValue.append.getCall(1).args[0], axesContainerGroup, "_axisGroup");
     assert.deepEqual(g.getCall(1).returnValue.append.getCall(0).args[0], stripsGroup, "_axisStripGroup");
     assert.deepEqual(g.getCall(2).returnValue.append.getCall(0).args[0], gridGroup, "_axisGridGroup");
     assert.deepEqual(g.getCall(3).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, "_axisElementsGroup");
@@ -197,7 +197,7 @@ QUnit.test("Some groups are not passed - created groups are not appended", funct
 
     // assert
     var g = renderer.g;
-    assert.deepEqual(g.getCall(0).returnValue.stub("append").getCall(0).args[0], axesContainerGroup, "_axisGroup");
+    assert.deepEqual(g.getCall(0).returnValue.stub("append").getCall(1).args[0], axesContainerGroup, "_axisGroup");
     assert.deepEqual(g.getCall(1).returnValue.stub("append").callCount, 0, "_axisStripGroup");
     assert.deepEqual(g.getCall(2).returnValue.stub("append").callCount, 0, "_axisGridGroup");
     assert.deepEqual(g.getCall(3).returnValue.stub("append").getCall(0).args[0], g.getCall(0).returnValue, "_axisElementsGroup");
@@ -5965,6 +5965,7 @@ QUnit.test("Horizontal bottom. With date markers, last marker without label", fu
         return function() {
             return [
                 { x: 0, y: 0, width: 10, height: 10 }, // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -6093,6 +6094,7 @@ QUnit.test("Horizontal top", function(assert) {
         return function() {
             return [
                 { x: 0, y: 0, width: 10, height: 10 }, // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -6207,6 +6209,7 @@ QUnit.test("Vertical left", function(assert) {
         return function() {
             return [
                 { x: 0, y: 0, width: 14, height: 10 }, // title
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
                 { x: 0, y: 0, width: 13, height: 10 }, // tick label
@@ -6320,6 +6323,7 @@ QUnit.test("Vertical right", function(assert) {
         var idx = 0;
         return function() {
             return [
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
