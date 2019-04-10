@@ -409,7 +409,7 @@ var Map = Widget.inherit({
     },
 
     _cancelEvent: function(e) {
-        var cancelByProvider = this._provider && this._provider.isEventsCanceled() && !this.option("disabled");
+        var cancelByProvider = this._provider && this._provider.isEventsCanceled(e) && !this.option("disabled");
         if(!(config.designMode) && cancelByProvider) {
             e.stopPropagation();
         }
