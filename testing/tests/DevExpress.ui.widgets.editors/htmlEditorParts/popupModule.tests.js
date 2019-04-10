@@ -4,6 +4,7 @@ import PopupModule from "ui/html_editor/modules/popup";
 
 const POPUP_CLASS = "dx-popup";
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
+const SUGGESTION_LIST_WRAPPER_CLASS = "dx-suggestion-list-wrapper";
 
 const moduleConfig = {
     beforeEach: () => {
@@ -50,7 +51,9 @@ QUnit.module("Popup module", moduleConfig, () => {
         popupModule.showPopup();
         this.clock.tick();
         const $suggestionList = $(`.${SUGGESTION_LIST_CLASS}`);
+        const $suggestionListWrapper = $suggestionList.closest(`.${SUGGESTION_LIST_WRAPPER_CLASS}`);
 
+        assert.strictEqual($suggestionListWrapper.length, 1, "Suggestion list is wrapped by element with specific class");
         assert.ok($suggestionList.is(":visible"), "list is visible");
         assert.strictEqual($suggestionList.length, 1, "one list");
         assert.ok(insertEmbedContent.notCalled, "ok");
