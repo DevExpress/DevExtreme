@@ -833,7 +833,7 @@ function cloneAndRemoveAttrs(node) {
 
 function setMaxWidth(maxWidth, options = {}) {
     var that = this,
-        lines,
+        lines = [],
         textChanged = false,
         ellipsis,
         ellipsisWidth,
@@ -873,7 +873,7 @@ function setMaxWidth(maxWidth, options = {}) {
     ellipsis.remove();
     that._hasEllipsis = textChanged;
 
-    return that._texts && that._texts.length || 1;
+    return { rowCount: lines.length, textChanged };
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
