@@ -50,17 +50,17 @@ function exportDataGrid(options) {
     }
 
     return new Promise((resolve) => {
-        var items = exportController._getAllItems();
+        var controllerRowsPromise = exportController._getAllItems();
 
-        items.done((items) => {
-            for(let rowIndex = 0; rowIndex < items.length; rowIndex++) {
+        controllerRowsPromise.done((controllerRows) => {
+            for(let rowIndex = 0; rowIndex < controllerRows.length; rowIndex++) {
                 let dataRow = worksheet.getRow(result.to.row);
 
-                dataRow.outlineLevel = _getDataRowOutlineLevel(exportController, items[rowIndex]);
+                dataRow.outlineLevel = _getRowOutlineLevel(exportController, controllerRows[rowIndex]);
 
                 let currentColumnIndex = result.from.column;
-                for(let cellIndex = 0; cellIndex < items[rowIndex].values.length; cellIndex++) {
-                    dataRow.getCell(currentColumnIndex).value = _getDataRowCellValue(exportController, items[rowIndex], cellIndex);
+                for(let cellIndex = 0; cellIndex < controllerRows[rowIndex].values.length; cellIndex++) {
+                    dataRow.getCell(currentColumnIndex).value = _getCellValue(exportController, controllerRows[rowIndex], cellIndex);
 
                     currentColumnIndex++;
                 }
@@ -74,18 +74,18 @@ function exportDataGrid(options) {
     });
 }
 
-function _getDataRowCellValue(exportController, dataRow, cellIndex) {
-    switch(dataRow.rowType) {
+function _getCellValue(exportController, controllerRow, cellIndex) {
+    switch(controllerRow.rowType) {
         case "group":
             if(cellIndex === 0) {
-                return _getGroupCellValue(exportController, dataRow);
+                return _getGroupCellValue(exportController, controllerRow);
             }
 
-            return _getGroupSummaryCellValue(exportController, dataRow.values[cellIndex]);
+            return _getGroupSummaryCellValue(exportController, controllerRow.values[cellIndex]);
         case "totalFooter":
         case "groupFooter":
-            if(cellIndex < dataRow.values.length) {
-                let value = dataRow.values[cellIndex];
+            if(cellIndex < controllerRow.values.length) {
+                let value = controllerRow.values[cellIndex];
 
                 if(typeUtils.isDefined(value)) {
                     return dataGridCore.getSummaryText(value, exportController.option("summary.texts"));
@@ -95,7 +95,7 @@ function _getDataRowCellValue(exportController, dataRow, cellIndex) {
             }
             break;
         default:
-            return dataRow.values[cellIndex];
+            return controllerRow.values[cellIndex];
     }
 }
 
@@ -110,18 +110,18 @@ function _getGroupSummaryCellValue(exportController, summaryItems) {
     return null;
 }
 
-function _getDataRowOutlineLevel(exportController, item) {
-    if(item.rowType === "totalFooter") return 0;
+function _getRowOutlineLevel(exportController, controllerRow) {
+    if(controllerRow.rowType === "totalFooter") return 0;
 
-    return typeUtils.isDefined(item.groupIndex) ? item.groupIndex : exportController._columnsController.getGroupColumns().length;
+    return typeUtils.isDefined(controllerRow.groupIndex) ? controllerRow.groupIndex : exportController._columnsController.getGroupColumns().length;
 }
 
-function _getGroupCellValue(exportController, item) {
-    var groupColumn = exportController._columnsController.getGroupColumns()[item.groupIndex],
-        value = dataGridCore.getDisplayValue(groupColumn, item.key[item.groupIndex], item.data, item.rowType),
+function _getGroupCellValue(exportController, controllerRow) {
+    var groupColumn = exportController._columnsController.getGroupColumns()[controllerRow.groupIndex],
+        value = dataGridCore.getDisplayValue(groupColumn, controllerRow.key[controllerRow.groupIndex], controllerRow.data, controllerRow.rowType),
         result = groupColumn.caption + ": " + dataGridCore.formatValue(value, groupColumn);
 
-    var summaryCells = item.summaryCells;
+    var summaryCells = controllerRow.summaryCells;
     if(summaryCells && summaryCells[0] && summaryCells[0].length) {
         result += " " + dataGridCore.getGroupRowSummaryText(summaryCells[0], exportController.option("summary.texts"));
     }
