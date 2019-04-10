@@ -914,17 +914,13 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
                 buttonHeight: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
-                isCompact: this._isGroupCompact(virtualGroup),
-                isVertical: this.invoke("isVerticalDropDownAppointments")
+                isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
+                applyOffset: this._isGroupCompact(virtualGroup)
             });
         }).bind(this));
     },
 
     _isGroupCompact: function(virtualGroup) {
-        if(this.invoke("isAdaptive")) {
-            return true;
-        }
-
         return !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments");
     },
 
