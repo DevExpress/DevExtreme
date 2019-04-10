@@ -1618,6 +1618,8 @@ registerTheme({
         neckHeight: 0,
         resolveLabelOverlapping: "shift",
         label: {
+            textOverflow: "ellipsis",
+            wordWrap: "normal",
             visible: true,
             horizontalAlignment: RIGHT,
             horizontalOffset: 0,
