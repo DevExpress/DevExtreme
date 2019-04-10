@@ -911,8 +911,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
-                buttonHeight: buttonHeight,
+                width: buttonWidth - this.option("_appointmentGroupButtonOffset"),
+                height: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
                 isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
                 applyOffset: this._isGroupCompact(virtualGroup)
