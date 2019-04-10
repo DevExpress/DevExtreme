@@ -37,6 +37,12 @@
             color: @accordion-title-active-color;
             background-color: @accordion-title-active-bg;
         }
+        
+        &:not(.dx-accordion-item-opened) {
+            .dx-icon {
+                color: @accordion-icon-active-color;
+            }
+        }
     }
 
     &.dx-state-hover {

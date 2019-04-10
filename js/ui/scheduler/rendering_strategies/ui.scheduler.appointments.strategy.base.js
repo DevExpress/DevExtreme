@@ -476,8 +476,6 @@ var BaseRenderingStrategy = Class.inherit({
             realStartDate = this.startDate(appointment, true),
             viewStartDate = this.startDate(appointment, false, position);
 
-        endDate = this._checkWrongEndDate(appointment, realStartDate, endDate);
-
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
@@ -517,15 +515,6 @@ var BaseRenderingStrategy = Class.inherit({
 
     _calculateDurationByDaylightDiff: function(duration, diff) {
         return duration + diff * toMs("minute");
-    },
-
-    _checkWrongEndDate: function(appointment, startDate, endDate) {
-        if(!endDate || startDate.getTime() >= endDate.getTime()) {
-            endDate = new Date(startDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
-            this.instance.fire("setField", "endDate", appointment, endDate);
-        }
-
-        return endDate;
     },
 
     _getAppointmentDurationInMs: function(startDate, endDate, allDay) {

@@ -825,6 +825,10 @@ const subscribes = {
         options.callback(result);
     },
 
+    fixWrongEndDate: function(appointment, startDate, endDate) {
+        return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
+    },
+
     getEndDayHour: function() {
         return this.option("endDayHour");
     },

@@ -208,12 +208,15 @@ exports.FocusController = core.ViewController.inherit((function() {
                 $focusedRow,
                 $tableElement;
 
-            each(rowsView.getTableElements(), function(_, element) {
+            each(rowsView.getTableElements(), function(index, element) {
                 $tableElement = $(element);
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
                 if(focusedRowIndex >= 0) {
+                    let isMainTable = index === 0;
                     $focusedRow = that._prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
-                    that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
+                    if(isMainTable) {
+                        that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
+                    }
                 }
             });
         },
@@ -374,15 +377,6 @@ module.exports = {
                     this.callBase($cell, direction);
 
                     this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
-                },
-            },
-
-            selection: {
-                changeItemSelection: function(itemIndex, keys) {
-                    if(!this.option("focusedRowEnabled") || this.isSelectionWithCheckboxes()) {
-                        this.callBase(itemIndex, keys);
-                    }
-                    return null;
                 },
             },
 
