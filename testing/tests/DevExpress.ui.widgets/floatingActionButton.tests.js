@@ -57,10 +57,12 @@ QUnit.module("maxActionButtonCount option", () => {
         const fabInstances = [];
 
         for(let i = 0; i < 8; i++) {
-            fabInstances.push($("<div>")
-                .appendTo($container)
-                .dxFloatingActionButton({ icon: "favorites" })
-                .dxFloatingActionButton("instance"));
+            try {
+                fabInstances.push($("<div>")
+                    .appendTo($container)
+                    .dxFloatingActionButton({ icon: "favorites" })
+                    .dxFloatingActionButton("instance"));
+            } catch(error) {}
         }
 
         assert.equal($("." + FAB_MAIN_CLASS).length, 1, "one main fab is created");
@@ -74,8 +76,14 @@ QUnit.module("create multiple actions", (hooks) => {
     let secondInstance;
 
     hooks.beforeEach(() => {
-        const firstElement = $("#fab-one").dxFloatingActionButton({ icon: "arrowdown" });
-        const secondElement = $("#fab-two").dxFloatingActionButton({ icon: "arrowup" });
+        const firstElement = $("#fab-one").dxFloatingActionButton({
+            icon: "arrowdown",
+            hint: "Arrow down"
+        });
+        const secondElement = $("#fab-two").dxFloatingActionButton({
+            icon: "arrowup",
+            hint: "Arrow up"
+        });
         firstInstance = firstElement.dxFloatingActionButton("instance");
         secondInstance = secondElement.dxFloatingActionButton("instance");
     }),
@@ -89,9 +97,12 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.ok($fabMainElement.length === 1, "create one main fab");
         assert.ok($fabElement.length === 3, "create two actions");
 
+        assert.equal($fabMainElement.attr("title"), undefined, "default hint empty");
         assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is applied");
         assert.equal($fabMainContent.find(".dx-icon-close").length, 1, "default close is applied");
 
+        assert.equal($($fabElement[1]).attr("title"), "Arrow down", "first action with right hint");
+        assert.equal($($fabElement[2]).attr("title"), "Arrow up", "second action with right hint");
         assert.equal($($fabContent[1]).find(".dx-icon-arrowdown").length, 1, "first action with arrowdown icon");
         assert.equal($($fabContent[2]).find(".dx-icon-arrowup").length, 1, "second action with arrowup icon");
 
@@ -106,6 +117,10 @@ QUnit.module("create multiple actions", (hooks) => {
 
         assert.equal($($fabContent[1]).find(".dx-icon-find").length, 1, "first action icon changed on icon find");
         assert.equal($($fabContent[2]).find(".dx-icon-filter").length, 1, "second action icon changed on icon filter");
+
+        secondInstance.dispose();
+
+        assert.equal($fabMainElement.attr("title"), "Arrow down", "hint by first action option");
     });
 });
 
@@ -116,7 +131,7 @@ QUnit.module("modify global action button config", (hooks) => {
         $("#fab-two").dxFloatingActionButton("instance").dispose();
     }),
 
-    test("check main fab changes", (assert) => {
+    test("check main fab rendering", (assert) => {
         config({
             floatingActionButtonConfig: {
                 icon: "favorites",
@@ -159,40 +174,27 @@ QUnit.module("add or remove action buttons", (hooks) => {
         $("#fab-two").dxFloatingActionButton("instance").dispose();
     }),
 
-    test("check rendering", (assert) => {
-        config({
-            floatingActionButtonConfig: {
-                icon: "menu"
-            }
-        });
+    test("check main fab rendering", (assert) => {
 
         $("#fab-one").dxFloatingActionButton({
             icon: "plus",
             hint: "Add a Row"
         });
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
-        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-        const fabMainOffsetY = 16;
-
-        assert.equal($fabMainContent.find(".dx-icon-plus").length, 1, "default icon by config");
-        assert.equal($fabMainElement.attr("title"), "Add a Row", "default hint by config");
-
         $("#fab-two").dxFloatingActionButton({
             icon: "trash",
             hint: "Delete Selected Rows"
         });
 
-        assert.equal($fabMainContent.find(".dx-icon-menu").length, 1, "default icon is changed");
-        assert.equal($fabMainElement.attr("title"), undefined, "default hint empty");
-
         $("#fab-two").dxFloatingActionButton("instance").dispose();
 
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const $fabElement = $("." + FAB_CLASS);
-        const $fabContent = $fabElement.find(".dx-overlay-content");
+        const fabMainOffsetY = 16;
 
-        assert.equal($fabContent.parent(".dx-overlay-wrapper").length, 1, "action button content include in wrapper");
-        assert.equal($fabContent.length, 1, "one action button");
+        assert.equal($fabMainContent.parent(".dx-overlay-wrapper").length, 1, "main action button contain overlay wrapper");
+        assert.equal($fabElement.length, 1, "one action button");
         assert.equal($fabMainContent.find(".dx-icon-plus").length, 1, "use icon by option");
 
         $("#fab-one").dxFloatingActionButton("instance").option("icon", "favorites");

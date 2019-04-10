@@ -181,6 +181,7 @@ exports.initAction = function(newAction) {
 
         if(!isActionExist) {
             if(savedActions.length >= actionButtonBase.option("maxActionButtonCount")) {
+                newAction.dispose();
                 errors.log("W1014");
                 return;
             }
@@ -188,7 +189,6 @@ exports.initAction = function(newAction) {
             actionButtonBase.option(extend(actionButtonBase._getDefaultOptions(), {
                 actions: savedActions
             }));
-
         } else if(savedActions.length === 1) {
             actionButtonBase.option(extend({}, newAction._options, {
                 actions: savedActions,
@@ -205,10 +205,14 @@ exports.disposeAction = function(actionId) {
     if(!actionButtonBase) return;
 
     let savedActions = actionButtonBase.option("actions");
+    const savedActionsCount = savedActions.length;
+
 
     savedActions = savedActions.filter(action => {
         return action._options.id !== actionId;
     });
+
+    if(savedActionsCount === savedActions.length) return;
 
     if(!savedActions.length) {
         actionButtonBase.option({ actions: [] });
