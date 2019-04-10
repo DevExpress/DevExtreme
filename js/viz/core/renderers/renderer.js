@@ -833,7 +833,7 @@ function cloneAndRemoveAttrs(node) {
 
 function setMaxWidth(maxWidth, options = {}) {
     var that = this,
-        lines,
+        lines = [],
         textChanged = false,
         ellipsis,
         ellipsisWidth,
@@ -873,7 +873,7 @@ function setMaxWidth(maxWidth, options = {}) {
     ellipsis.remove();
     that._hasEllipsis = textChanged;
 
-    return textChanged;
+    return { rowCount: lines.length, textChanged };
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
@@ -1021,7 +1021,6 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     return [{ commonLength: wholeText.length, parts }].concat(restLines);
 }
 
-
 function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options) {
     if(!texts) {
         const textValue = element.textContent;
@@ -1065,7 +1064,6 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 
         return [lines, startBox, endBox, stop, text.line];
     }, [[], 0, 0, false, 0])[0];
-
 }
 
 function setNewText(text, index, insertString = ELLIPSIS) {
