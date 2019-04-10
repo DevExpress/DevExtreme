@@ -28,6 +28,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 }
             },
             maxActionButtonCount: 5,
+            hint: "",
             actions: [],
             visible: true,
             activeStateEnabled: true,
@@ -59,6 +60,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _render() {
         this.$element().addClass(FAB_MAIN_CLASS);
         this.callBase();
+        this._moveToContainer();
         this._renderCloseIcon();
         this._renderClick();
     },
@@ -115,7 +117,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 this._clickHandler();
             });
 
-            const actionOffsetY = this.option("indent") + this.option("childIndent") * i;
+            const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * i;
 
             action._options.position = {
                 of: this.$content(),
@@ -140,12 +142,13 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 this._renderClick();
                 this._renderActions();
                 break;
-            case "position":
             case "maxActionButtonCount":
                 this._renderActions();
                 break;
             case "closeIcon":
                 this._renderCloseIcon();
+                break;
+            case "position":
                 break;
             default:
                 this.callBase(args);
@@ -158,11 +161,14 @@ exports.initAction = function(newAction) {
     if(!actionButtonBase) {
         const $fabMainElement = $("<div>")
             .appendTo(getSwatchContainer(newAction.$element()));
-        actionButtonBase = new ActionButtonBase($fabMainElement, {
-            icon: newAction._options.icon,
-            onClick: newAction._options.onClick,
-            actions: [ newAction ]
-        });
+
+        actionButtonBase = new ActionButtonBase($fabMainElement,
+            extend({}, newAction._options, {
+                actions: [ newAction ],
+                visible: true
+            })
+        );
+
     } else {
         const savedActions = actionButtonBase.option("actions");
 
@@ -179,15 +185,16 @@ exports.initAction = function(newAction) {
                 return;
             }
             savedActions.push(newAction);
-            actionButtonBase.option({
-                actions: savedActions,
-                icon: actionButtonBase._getDefaultOptions().icon
-            });
+            actionButtonBase.option(extend(actionButtonBase._getDefaultOptions(), {
+                actions: savedActions
+            }));
+
         } else if(savedActions.length === 1) {
-            actionButtonBase.option({
-                onClick: newAction._options.onClick,
-                icon: newAction._options.icon
-            });
+            actionButtonBase.option(extend({}, newAction._options, {
+                actions: savedActions,
+                visible: true,
+                position: actionButtonBase._getDefaultOptions().position
+            }));
         } else {
             actionButtonBase.option({ actions: savedActions });
         }
@@ -209,11 +216,12 @@ exports.disposeAction = function(actionId) {
         actionButtonBase.element().remove();
         actionButtonBase = null;
     } else if(savedActions.length === 1) {
-        actionButtonBase.option({
+        actionButtonBase.option(extend({}, savedActions[0]._options, {
             actions: savedActions,
-            icon: savedActions[0]._options.icon,
-            onClick: savedActions[0]._options.onClick
-        });
+            visible: true,
+            position: actionButtonBase._getDefaultOptions().position
+        }));
+
     } else {
         actionButtonBase.option({ actions: savedActions });
     }

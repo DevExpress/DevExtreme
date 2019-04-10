@@ -133,8 +133,8 @@ QUnit.module("modify global action button config", (hooks) => {
 
         assert.equal($fabMainContent.find(".dx-icon-favorites").length, 1, "default icon is changed");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
-        assert.equal($fabMainContent.offset().top, 9, "default position top is changed");
-        assert.equal($fabMainContent.offset().left, 9, "default position left is changed");
+        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
     });
 
     test("main button has default icon if config has no icon", (assert) => {
@@ -152,3 +152,60 @@ QUnit.module("modify global action button config", (hooks) => {
         assert.equal($fabMainContentIcons.length, 2, "only two icons rendered on the main button");
     });
 });
+
+QUnit.module("add or remove action buttons", (hooks) => {
+    hooks.afterEach(() => {
+        $("#fab-one").dxFloatingActionButton("instance").dispose();
+        $("#fab-two").dxFloatingActionButton("instance").dispose();
+    }),
+
+    test("check rendering", (assert) => {
+        config({
+            floatingActionButtonConfig: {
+                icon: "menu"
+            }
+        });
+
+        $("#fab-one").dxFloatingActionButton({
+            icon: "plus",
+            hint: "Add a Row"
+        });
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+        const fabMainOffsetY = 16;
+
+        assert.equal($fabMainContent.find(".dx-icon-plus").length, 1, "default icon by config");
+        assert.equal($fabMainElement.attr("title"), "Add a Row", "default hint by config");
+
+        $("#fab-two").dxFloatingActionButton({
+            icon: "trash",
+            hint: "Delete Selected Rows"
+        });
+
+        assert.equal($fabMainContent.find(".dx-icon-menu").length, 1, "default icon is changed");
+        assert.equal($fabMainElement.attr("title"), undefined, "default hint empty");
+
+        $("#fab-two").dxFloatingActionButton("instance").dispose();
+
+        const $fabElement = $("." + FAB_CLASS);
+        const $fabContent = $fabElement.find(".dx-overlay-content");
+
+        assert.equal($fabContent.parent(".dx-overlay-wrapper").length, 1, "action button content include in wrapper");
+        assert.equal($fabContent.length, 1, "one action button");
+        assert.equal($fabMainContent.find(".dx-icon-plus").length, 1, "use icon by option");
+
+        $("#fab-one").dxFloatingActionButton("instance").option("icon", "favorites");
+
+        assert.equal($fabMainContent.find(".dx-icon-favorites").length, 1, "use icon after change icon option");
+        assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position after change icon option");
+
+        $("#fab-two").dxFloatingActionButton({
+            icon: "trash",
+            hint: "Delete Selected Rows"
+        });
+
+        assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position");
+    });
+});
+
