@@ -4,8 +4,6 @@
 @WIN8_NAVIGATOR_ICON_SIZE: 26px;
 @WIN8_SCHEDULER_SWITCHER_LABEL_OFFSET: 80px;
 
-@WIN8_SCHEDULER_RECURRENCE_RULE_ITEM_PADDING: 84px;
-
 .scheduler-mixin(100px);
 
 .dx-scheduler-header,
@@ -26,8 +24,7 @@
     text-align: center;
 }
 
-.dx-scheduler-navigator,
-.dx-scheduler-appointment-tooltip {
+.dx-scheduler-navigator {
     .dx-button .dx-icon {
         width: @WIN8_NAVIGATOR_ICON_SIZE;
         height: @WIN8_NAVIGATOR_ICON_SIZE;
@@ -70,22 +67,6 @@
     }
 }
 
-.dx-scheduler-appointment-tooltip {
-    margin-right: 0;
-    width: 200px;
-
-    .dx-button {
-        padding: 0;
-        margin-right: 20px;
-        max-width: 130px;
-
-        .dx-rtl & {
-            margin-right: 0;
-            margin-left: 20px;
-        }
-    }
-}
-
 .dx-scheduler-all-day-title {
     top: @WIN8_SCHEDULER_HEADER_HEIGHT;
 }
@@ -122,10 +103,5 @@
     }
 }
 
-.dx-scheduler-appointment-popup {
-    .dx-scheduler-recurrence-rule-item {
-        padding-left: @WIN8_SCHEDULER_RECURRENCE_RULE_ITEM_PADDING;
-    }
-}
 
 

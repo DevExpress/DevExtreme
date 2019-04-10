@@ -1,3 +1,7 @@
+.dx-dropdownbutton {
+    display: inline-block;
+}
+
 .dx-dropdownbutton-content {
     &.dx-popup-content {
         padding: 0;
@@ -16,6 +20,13 @@
 }
 
 .dx-dropdownbutton-action {
+    &.dx-button .dx-button-content {
+        padding-right: 4px;
+        padding-left: 10px;
+    }
+}
+
+.dx-dropdownbutton-action:not(.dx-buttongroup-last-item) {
     &.dx-button {
         border-right: none;
     }

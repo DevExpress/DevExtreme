@@ -62,6 +62,10 @@ function getFilterExpressionForFilterValue(field, filterValue) {
 function createFieldFilterExpressions(field, operation) {
     var fieldFilterExpressions = [];
 
+    if(field.searchValue) {
+        return [field.dataField, "contains", field.searchValue];
+    }
+
     if(field.filterType === "exclude") {
         operation = operation || "and";
     } else {
@@ -308,7 +312,7 @@ function parseResult(data, total, descriptions, result) {
 }
 
 function getFiltersForDimension(fields) {
-    return (fields || []).filter(f => f.filterValues && f.filterValues.length);
+    return (fields || []).filter(f => f.filterValues && f.filterValues.length || f.searchValue);
 }
 
 function getExpandedIndex(options, axis) {
@@ -414,7 +418,9 @@ function getRequestsData(options) {
     columnTotalsOptions = getGrandTotalRequest(options, "columns", columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
 
     if(options.rows.length && options.columns.length) {
-        data = data.concat(columnTotalsOptions);
+        if(!options.headerName) {
+            data = data.concat(columnTotalsOptions);
+        }
 
         for(var i = rowExpandedIndex; i < rowExpandedLevel + 1; i++) {
             var rows = options.rows.slice(rowExpandedIndex, i + 1),

@@ -99,7 +99,7 @@ Tooltip.prototype = {
         that._textFontStyles.color = options.font.color;
         that._wrapper.css({ "zIndex": options.zIndex });
 
-        that._customizeTooltip = typeUtils.isFunction(options.customizeTooltip) ? options.customizeTooltip : null;
+        that._customizeTooltip = options.customizeTooltip;
         return that;
     },
 
@@ -135,12 +135,13 @@ Tooltip.prototype = {
         return this.setOptions(options).render();
     },
 
-    _prepare: function(formatObject, state) {
-        var options = this._options,
-            customize = {};
+    _prepare: function(formatObject, state, customizeTooltip = this._customizeTooltip) {
+        const options = this._options;
 
-        if(this._customizeTooltip) {
-            customize = this._customizeTooltip.call(formatObject, formatObject);
+        let customize = {};
+
+        if(typeUtils.isFunction(customizeTooltip)) {
+            customize = customizeTooltip.call(formatObject, formatObject);
             customize = typeUtils.isPlainObject(customize) ? customize : {};
             if("text" in customize) {
                 state.text = typeUtils.isDefined(customize.text) ? String(customize.text) : "";
@@ -158,7 +159,7 @@ Tooltip.prototype = {
         return !!state.text || !!state.html;
     },
 
-    show: function(formatObject, params, eventData) {
+    show: function(formatObject, params, eventData, customizeTooltip) {
         var that = this,
             state = {},
             options = that._options,
@@ -174,7 +175,7 @@ Tooltip.prototype = {
             blur = ss.blur * 2 + 1,
             getComputedStyle = window.getComputedStyle;
 
-        if(!that._prepare(formatObject, state)) {
+        if(!that._prepare(formatObject, state, customizeTooltip)) {
             return false;
         }
 

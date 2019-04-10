@@ -33,7 +33,7 @@
 * @type text
 * @group base.common
 */
-@base-border-radius: 4px;
+@base-border-radius: @MATERIAL_BASE_BORDER_RADIUS;
 
 @base-inverted-bg: lighten(@base-bg, 100%);
 @base-element-bg: @base-bg;
@@ -543,6 +543,14 @@
 
 @checkbox-icon-border-radius: @base-border-radius - 2;
 
+// Diagram
+@diagram-border-color: @base-border-color;
+@diagram-toolbar-border-color: @base-border-color;
+@diagram-normal-format-active-bg: darken(@button-normal-bg, 10%);
+@diagram-default-format-active-bg: darken(@button-default-bg, 10%);
+@diagram-danger-format-active-bg: darken(@button-danger-bg, 10%);
+@diagram-success-format-active-bg: darken(@button-success-bg, 10%);
+
 // Drawer
 /**
 * @name 10. Shader background color
@@ -625,6 +633,7 @@
 @htmleditor-variable-bg: fade(@base-accent, 15%);
 @htmleditor-resize-frame-border-color: @base-accent;
 @htmleditor-resize-handle-bg: @base-accent;
+@htmleditor-mention-bg: lighten(@base-bg, 12%);
 
 // List
 /**
@@ -709,8 +718,6 @@
 
 @list-icon-color: @base-icon-color;
 
-@list-group-header-default-padding-top: 14px;
-@list-group-header-compact-padding-top: 10px;
 @list-item-chevron-icon-color: @base-icon-color;
 
 // Overlay
@@ -761,7 +768,6 @@
 // Lookup
 
 @lookup-icon-color: @base-icon-color;
-@lookup-validation-message-color: @base-invalid-color;
 
 // Selectbox
 /**
@@ -1095,10 +1101,6 @@
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
 @colorview-border-color: @base-border-color;
 @colorview-label-color: @base-label-color;
-
-//PivoTabs
-@pivottabs-tab-color: lighten(@base-text-color, 38.5%);
-@pivottabs-tab-selected-color: @base-text-color;
 
 //DataGrid
 /**
@@ -1749,16 +1751,10 @@
 @scheduler-header-bg: @base-bg;
 @scheduler-alldaypanel-bg: @base-element-bg;
 
-@scheduler-recurence-editor-bg: @base-element-bg;
-
-@scheduler-recurence-editor-border-color: darken(@base-element-bg, 5%);
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(0, 0, 0, 0.03);
 @SCHEDULER_FIRST_MONTH_CELL_BACKGROUND_COLOR: fadeout(@SCHEDULER_APPOINTMENT_BASE_COLOR, 85%);
-@scheduler-appointment-tooltip-bg: @base-accent;
-@scheduler-appointment-tooltip-text-color: @base-inverted-text-color;
-@scheduler-appointment-tooltip-icon-color: @scheduler-appointment-tooltip-text-color;
 
 //SlideOutView
 @slideoutview-content-border-color: fade(@base-border-color, 50%);

@@ -31,6 +31,36 @@ QUnit.module("Subscribes", {
     }
 });
 
+QUnit.test("'fixWrongEndDate' should process endDate correctly", function(assert) {
+    this.createInstance({
+        currentView: "week"
+    });
+
+    var checkedDate = this.instance.fire("fixWrongEndDate",
+        {
+            startDate: new Date(2019, 4, 3, 12),
+            allDay: false
+        }, new Date(2019, 4, 3, 12), undefined);
+
+    assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), "checked date is ok when endDate is undefined");
+
+    checkedDate = this.instance.fire("fixWrongEndDate",
+        {
+            startDate: new Date(2019, 4, 3, 12),
+            allDay: false
+        }, new Date(2019, 4, 3, 12), new Date("string"));
+
+    assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), "checked date is ok when endDate is invalid");
+
+    checkedDate = this.instance.fire("fixWrongEndDate",
+        {
+            startDate: new Date(2019, 4, 3, 12),
+            allDay: true
+        }, new Date(2019, 4, 3, 12), undefined);
+
+    assert.equal(checkedDate.getHours(), 23, "checked date is ok when endDate is undefined, allDay appointment");
+    assert.equal(checkedDate.getMinutes(), 59, "checked date is ok when endDate is undefined, allDay appointment");
+});
 
 QUnit.test("'getTargetedAppointmentData' should return correct data for recurrence appointments (T660901)", function(assert) {
     var appointmentData = {
@@ -496,6 +526,47 @@ QUnit.test("'showAddAppointmentPopup' should update appointment data if there is
         End: new Date(2015, 1, 1, 1),
         AllDay: true
     }, "Appointment data is OK");
+});
+
+QUnit.test("'resizePopup' should trigger dxresize event for appointment popup", function(assert) {
+    var resizeHandler = sinon.spy();
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: []
+    });
+
+    this.instance.fire("showAddAppointmentPopup", {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    });
+
+    $(this.instance._popup.$element()).on("dxresize", resizeHandler);
+    this.instance.fire("resizePopup");
+
+    assert.ok(resizeHandler.called, "event has been triggered");
+});
+
+QUnit.test("'resizePopup' should trigger setPopupMaxHeight for appointment popup", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: []
+    });
+
+    var setPopupMaxHeight = sinon.stub(this.instance, "_setPopupContentMaxHeight");
+
+    this.instance.fire("showAddAppointmentPopup", {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    });
+
+    this.instance.fire("resizePopup");
+
+    assert.ok(setPopupMaxHeight.called, "event has been triggered");
 });
 
 QUnit.test("'appointmentFocused' should fire restoreScrollTop", function(assert) {

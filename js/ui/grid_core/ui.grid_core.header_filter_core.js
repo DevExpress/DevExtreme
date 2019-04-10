@@ -343,6 +343,9 @@ exports.headerFilterMixin = {
 
             if(allowHeaderFiltering(column)) {
                 $headerFilterIndicator = this.callBase(options).toggleClass("dx-header-filter-empty", this._isHeaderFilterEmpty(column));
+                if(!this.option("useLegacyKeyboardNavigation")) {
+                    $headerFilterIndicator.attr("tabindex", this.option("tabindex") || 0);
+                }
             }
 
             return $headerFilterIndicator;

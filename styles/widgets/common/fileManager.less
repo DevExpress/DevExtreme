@@ -1,0 +1,201 @@
+.dx-filemanager {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid;
+    
+    .dx-filemanager-toolbar {
+        padding: 6px 10px;
+
+        .dx-filemanager-toolbar-separator-item {
+            width: 1px;
+            height: 36px;
+            margin-right: 5px;
+        }
+    }
+
+    .dx-filemanager-container {
+        display: flex;
+        height: 100%;
+        border-top: 1px solid;
+        box-sizing: border-box;
+
+        .dx-filemanager-dirs-tree {
+            min-width: 20%;
+            padding: 5px 10px;
+        }
+    }
+
+    .dx-filemanager-view-separator {
+        min-width: 2px;
+    }
+    .dx-filemanager-view-separator:hover {
+        cursor: col-resize;
+    }
+    
+    .dx-filemanager-breadcrumbs {
+        padding: 6px 11px;
+        border-bottom: 1px solid;
+        
+        .dx-menu-horizontal .dx-menu-item-wrapper {
+            vertical-align: middle;
+        }
+
+        .dx-menu-item-content {
+            padding: 5px 0 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-parent-folder-item .dx-menu-item-content {
+            padding: 5px 9px 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
+            width: 1px;
+            height: 36px;
+            padding: 0;
+            margin: 0 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-path-separator-item .dx-menu-item-content {
+            padding: 5px 1px 10px;
+        }
+
+        .dx-filemanager-breadcrumbs-separator-item,
+        .dx-filemanager-breadcrumbs-path-separator-item {
+            &.dx-state-hover {
+                cursor: default;
+            }
+        }
+    }
+
+    .dx-filemanager-editing-container {
+        position: absolute;
+        top: -5000px;
+        left: -5000px;
+    }
+    
+    .dx-filemanager-fileuploader .dx-filemanager-fileuploader-fileinput {
+        display: none;
+    }
+
+    .dx-filemanager-file-actions-button {
+       visibility: hidden;
+       float: right;
+       border: none;
+       background-color: transparent;
+
+       .dx-button-content {
+            padding: 10px 7px;
+       }
+       
+       i {
+           font-style: normal;
+       }
+    }
+
+    .dx-row.dx-selection .dx-filemanager-file-actions-button,
+    .dx-row.dx-state-hover .dx-filemanager-file-actions-button {
+        visibility: visible;
+    }
+    
+    .dx-filemanager-items-panel {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .dx-filemanager-thumbnails {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        .dx-filemanager-thumbnails-view-port {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            box-sizing: border-box;
+            padding: 5px;
+
+            .dx-filemanager-thumbnails-container {
+                user-select: none;
+            }
+
+            .dx-filemanager-thumbnails-item {
+                float: left;
+                text-align: center;
+                cursor: pointer;
+                white-space: nowrap;
+                width: 100px;
+                height: 100px;
+                border: 1px dashed transparent;
+                margin: 5px;
+                box-sizing: border-box;
+
+                .dx-filemanager-thumbnails-item-content {
+                    overflow: hidden;
+                    padding: 13px 0 10px;
+
+                    .dx-filemanager-thumbnails-item-thumbnail {
+                        border: 0;
+                        width: 48px;
+                        height: 48px;
+                        font-size: 48px;
+                    }
+
+                    .dx-filemanager-thumbnails-item-spacer {
+                        border: 0;
+                        padding: 0;
+                        margin: 0;
+                        height: 10px;
+                        visibility: hidden;
+                    }
+
+                    .dx-filemanager-thumbnails-item-name {
+                        overflow: hidden;
+                        width: 100%;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
+
+    .dx-filemanager-details {
+        height: 100%;
+        overflow: hidden;
+        user-select: none;
+
+        & > div {
+            height: 100%;
+        }
+
+        .dx-filemanager-details-item-thumbnail {
+            font-size: 18px;
+        }
+    }
+
+}
+
+.dx-filemanager-dialog.dx-filemanager-dialog-folder-chooser,
+.dx-filemanager-progresspanel {
+    height: 100%;
+    overflow: auto;
+}
+
+.dx-filemanager-progresspanel {
+    box-sizing: border-box;
+    padding: 5px;
+
+    .dx-filemanager-progressbox {
+        float: left;
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .dx-filemanager-progressbox-cancel-button {
+        margin-top: 5px;
+        float: right;
+    }
+}

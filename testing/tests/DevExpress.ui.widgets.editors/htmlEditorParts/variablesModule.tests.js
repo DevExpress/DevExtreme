@@ -126,7 +126,7 @@ QUnit.module("Variable format", () => {
 });
 
 QUnit.module("Variables module", moduleConfig, () => {
-    test("Render toolbar without any options", (assert) => {
+    test("insert variable after click on item", (assert) => {
         this.options.escapeChar = "#";
         const variables = new Variables(this.quillMock, this.options);
 

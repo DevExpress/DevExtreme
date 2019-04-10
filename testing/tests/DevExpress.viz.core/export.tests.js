@@ -26,6 +26,12 @@ QUnit.module("Creation", {
                 weight: 200
             },
             button: {
+                margin: {
+                    left: 1,
+                    top: 2,
+                    bottom: 3,
+                    right: 4
+                },
                 "default": {
                     color: "#707070",
                     borderColor: "#b6b6b6",
@@ -762,6 +768,12 @@ QUnit.module("API", {
             font: {},
 
             button: {
+                margin: {
+                    left: 1,
+                    top: 2,
+                    bottom: 3,
+                    right: 4
+                },
                 "default": {
                     color: "#707070",
                     borderColor: "#b6b6b6",
@@ -855,6 +867,28 @@ QUnit.test("Shift", function(assert) {
 
     // assert
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(1).args[0], { translateY: 20 }, "y shifting");
+});
+
+QUnit.test("Move", function(assert) {
+    // arrange
+    var exportMenu = this.createExportMenu();
+
+    this.renderer.g.getCall(0).returnValue.attr.reset();
+
+    // act
+    exportMenu.move([10, 20]);
+
+    // assert
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 11, translateY: 22 });
+});
+
+QUnit.test("Measure", function(assert) {
+    // arrange
+    var exportMenu = this.createExportMenu();
+    // act
+    var size = exportMenu.measure();
+    // assert
+    assert.deepEqual(size, [40, 40]);
 });
 
 QUnit.test("Hide", function(assert) {

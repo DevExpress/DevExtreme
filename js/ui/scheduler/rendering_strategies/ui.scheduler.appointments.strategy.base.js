@@ -301,22 +301,30 @@ var BaseRenderingStrategy = Class.inherit({
     _sortCondition: abstract,
 
     _rowCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top);
+        var isSomeEdge = this._isSomeEdge(a, b);
+
+        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
+            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
         return columnCondition ? columnCondition : rowCondition ? rowCondition : a.isStart - b.isStart;
     },
 
     _columnCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top);
+        var isSomeEdge = this._isSomeEdge(a, b);
+
+        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
+            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
         return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
     },
 
-    _normalizeCondition: function(first, second) {
+    _isSomeEdge: function(a, b) {
+        return a.i === b.i && a.j === b.j;
+    },
+
+    _normalizeCondition: function(first, second, isSomeEdge) {
         // NOTE: ie & ff pixels
         var result = first - second;
 
-        return Math.abs(result) > 0.1 ? result : 0;
+        return isSomeEdge || Math.abs(result) > 0.1 ? result : 0;
     },
 
     _getResultPositions: function(sortedArray) {
@@ -468,8 +476,6 @@ var BaseRenderingStrategy = Class.inherit({
             realStartDate = this.startDate(appointment, true),
             viewStartDate = this.startDate(appointment, false, position);
 
-        endDate = this._checkWrongEndDate(appointment, realStartDate, endDate);
-
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
@@ -509,15 +515,6 @@ var BaseRenderingStrategy = Class.inherit({
 
     _calculateDurationByDaylightDiff: function(duration, diff) {
         return duration + diff * toMs("minute");
-    },
-
-    _checkWrongEndDate: function(appointment, startDate, endDate) {
-        if(!endDate || startDate.getTime() >= endDate.getTime()) {
-            endDate = new Date(startDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
-            this.instance.fire("setField", "endDate", appointment, endDate);
-        }
-
-        return endDate;
     },
 
     _getAppointmentDurationInMs: function(startDate, endDate, allDay) {
@@ -724,7 +721,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _isCompactTheme: function() {
-        return (themes.current() || "").split(".")[2] === "compact";
+        return (themes.current() || "").split(".").pop() === "compact";
     },
 
     _getAppointmentDefaultOffset: function() {

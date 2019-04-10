@@ -14,27 +14,7 @@ define(function(require) {
         DATA_SOURCE_URL = "http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll",
         pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
         pivotGridDataSource = require("ui/pivot_grid/data_source"),
-        Store = require("ui/pivot_grid/xmla_store"),
-        errors = require("data/errors").errors,
-        ajax = require("core/utils/ajax"),
-        languageId = require("localization/language_codes").getLanguageId(),
-        testEnvironment = {
-            beforeEach: function() {
-                this.store = new Store(this.dataSource);
-
-                this.load = function(options) {
-                    return this.store.load(options).done(function(data) {
-                        pivotGridDataSource.sort(options, data);
-                    });
-                };
-
-            },
-            dataSource: {
-                url: DATA_SOURCE_URL,
-                catalog: "Adventure Works DW Standard Edition",
-                cube: "Adventure Works"
-            }
-        },
+        XmlaStore = require("ui/pivot_grid/xmla_store"),
 
         CATEGORIES_DATA = [
             { key: "[Product].[Category].&[4]", value: "Accessories", text: "Accessories", index: 1 },
@@ -116,41 +96,7 @@ define(function(require) {
             text: "CY 2004",
             value: 2004,
             key: "[Ship Date].[Calendar].[Calendar Year].&[2004]"
-        }],
-
-        ERROR_RESPONCE = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><soap:Fault xmlns="http://schemas.xmlsoap.org/soap/envelope/"><faultcode>XMLAnalysisError.0xc10a004d</faultcode><faultstring>Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.</faultstring><detail><Error ErrorCode="3238658125" Description="Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function." Source="Microsoft SQL Server 2008 R2 Analysis Services" HelpFile=""><Location xmlns="http://schemas.microsoft.com/analysisservices/2003/engine" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100="http://schemas.microsoft.com/analysisservices/2008/engine/100" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"><Start><Line>1</Line><Column>77</Column></Start><End><Line>1</Line><Column>203</Column></End><LineOffset>0</LineOffset><TextLength>127</TextLength></Location></Error></detail></soap:Fault></soap:Body></soap:Envelope>',
-
-        stubsEnvironment = {
-            beforeEach: function() {
-                var that = this;
-                sinon.spy(errors, "log");
-                sinon.spy(errors, "Error");
-
-                testEnvironment.beforeEach.call(that);
-                that.sendDeferred = $.Deferred();
-
-                that.sendRequest = sinon.stub(pivotGridUtils, "sendRequest", function() {
-                    return that.sendDeferred;
-                });
-            },
-            afterEach: function() {
-                this.sendRequest.restore();
-                errors.log.restore();
-                errors.Error.restore();
-                // testEnvironment.afterEach.call(this);
-            },
-            dataSource: testEnvironment.dataSource,
-
-            getRequest: function(num) {
-                var call = num === undefined ? this.sendRequest.lastCall : this.sendRequest.getCall(num);
-                return call.args[0].data;
-            },
-
-            getQuery: function(num) {
-                var query = $(this.getRequest(num)).find("Statement").text();
-                return query;
-            }
-        };
+        }];
 
     function findItems(data, field, value) {
         var result = [];
@@ -192,6 +138,23 @@ define(function(require) {
         });
         return data;
     }
+    var testEnvironment = {
+        beforeEach: function() {
+            this.store = new XmlaStore(this.dataSource);
+
+            this.load = function(options) {
+                return this.store.load(options).done(function(data) {
+                    pivotGridDataSource.sort(options, data);
+                });
+            };
+
+        },
+        dataSource: {
+            url: DATA_SOURCE_URL,
+            catalog: "Adventure Works DW Standard Edition",
+            cube: "Adventure Works"
+        }
+    };
 
     QUnit.module("Adventure Works", testEnvironment);
 
@@ -202,7 +165,7 @@ define(function(require) {
 
     QUnit.test("incorrect dataSource", function(assert) {
         var done = assert.async();
-        new Store({
+        new XmlaStore({
             url: "",
             catalog: "Adventure Works DW Standard Edition",
             cube: "Adventure Works"
@@ -841,13 +804,12 @@ define(function(require) {
         this.store
             .load({
                 columns: [],
-                rows: [{ dataField: "[Ship Date].[Calendar Year]", filterValues: [CALENDAR_YEAR_DATA[0].key] }, { dataField: "[Ship Date].[Month Of Year]" }],
+                rows: [{ dataField: "[Ship Date].[Calendar Year]" }, { dataField: "[Ship Date].[Month Of Year]" }],
                 values: [{ dataField: "[Measures].[Customer Count]" }],
-                headerName: "columns",
                 rowExpandedPaths: [[CALENDAR_YEAR_DATA[0].key]]
             })
             .done(function(data) {
-                assert.strictEqual(data.rows.length, 1);
+                assert.strictEqual(data.rows.length, 4);
                 assert.strictEqual(data.rows[0].value, "");
                 assert.strictEqual(getValue(data, data.rows[0], data.columns[0]), 962);
             })
@@ -859,6 +821,14 @@ define(function(require) {
     });
 
     QUnit.module("Hierarchies", testEnvironment);
+
+    function getGrandTotalIndexForExpanding(store) {
+        if(store instanceof XmlaStore) {
+            return undefined;
+        } else {
+            return 0;
+        }
+    }
 
     QUnit.test("Load from hierachy", function(assert) {
         var done = assert.async();
@@ -890,6 +860,7 @@ define(function(require) {
 
     QUnit.test("Hierarchy. Expand item", function(assert) {
         var done = assert.async();
+        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: "[Product].[Product Categories].[Category]",
@@ -909,26 +880,23 @@ define(function(require) {
 
             assert.strictEqual(data.rows[0].text, "January 2003");
             assert.deepEqual(data.rows[0].value, "2003-01-01 00:00:00");
-            assert.strictEqual(data.rows[0].index, 3, "January 2003 index");
 
             assert.deepEqual(data.rows[11].value, "2003-12-01 00:00:00");
             assert.strictEqual(data.rows[11].text, "December 2003");
-            assert.strictEqual(data.rows[11].index, 18, "December 2003 index");
 
             assert.strictEqual(data.grandTotalColumnIndex, 0, "grandTotalColumnIndex");
-            assert.strictEqual(data.grandTotalRowIndex, undefined, "grandTotalRowIndex");
+            assert.strictEqual(data.grandTotalRowIndex, expectedTotalIndex, "grandTotalRowIndex");
+            assert.strictEqual(getValue(data, data.rows[6]), 462, "GT - 2003 July");
+            assert.strictEqual(getValue(data, data.rows[7]), 1262, "GT - 2003 August");
+            assert.strictEqual(getValue(data, data.rows[7], data.columns[1]), 492, "Bikes - 2003 August");
 
-            assert.strictEqual(data.values[12][0][0], 462, "GT - 2003 July");
-
-            assert.strictEqual(data.values[13][0][0], 1262, "GT - 2003 August");
-
-            assert.strictEqual(data.values[13][2][0], 492), "Bikes - 2003 August";
         }).fail(getFailCallBack(assert))
             .always(done);
     });
 
     QUnit.test("Hierarchy. Expand column & row", function(assert) {
         var done = assert.async();
+        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: "[Product].[Product Categories].[Category]",
@@ -956,28 +924,24 @@ define(function(require) {
             assert.ok(!data.rows[0].children);
 
             assert.strictEqual(data.rows[2].text, "CY 2003");
-            assert.strictEqual(data.rows[2].index, 3, "expanded row");
             assert.ok(data.rows[2].children, "expanded row should has children");
             assert.strictEqual(data.rows[2].children.length, 12);
             assert.strictEqual(data.rows[2].children[0].text, "January 2003");
             assert.deepEqual(data.rows[2].children[0].value, "2003-01-01 00:00:00");
-            assert.strictEqual(data.rows[2].children[0].index, 7, "January 2003 index");
 
-            assert.strictEqual(data.grandTotalColumnIndex, undefined);
+            assert.strictEqual(data.grandTotalColumnIndex, expectedTotalIndex, "GT column index");
             assert.strictEqual(data.grandTotalRowIndex, 0, "GT row index");
 
-            assert.strictEqual(data.values[3][1][0], 1896, "Mounain Bikes - 2003");
-
-            assert.strictEqual(data.values[7][1][0], 98, "Mounain Bikes - 2003 January");
-
-            assert.strictEqual(data.values[13][3][0], null, "Touring Bikes - 2003 June");
-
+            assert.strictEqual(getValue(data, data.rows[2], data.columns[0]), 1896, "Mounain Bikes - 2003");
+            assert.strictEqual(getValue(data, data.rows[2].children[0], data.columns[0]), 98, "Mounain Bikes - 2003 January");
+            assert.strictEqual(getValue(data, data.rows[2].children[5], data.columns[2]), null, "Touring Bikes - 2003 June");
         }).fail(getFailCallBack(assert))
             .always(done);
     });
 
     QUnit.test("Hierarchy. Expand second level child", function(assert) {
         var done = assert.async();
+        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: "[Product].[Product Categories].[Category]",
@@ -992,8 +956,9 @@ define(function(require) {
                 { dataField: "[Ship Date].[Calendar].[Date]", hierarchyName: "[Ship Date].[Calendar]" }
             ],
             values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
+            rowExpandedPaths: [["&[2003]"]],
             headerName: "rows",
-            path: ["&[2003]", "[Ship Date].[Calendar].[Month].&[2003]&[8]"]
+            path: ["[Ship Date].[Calendar].[Calendar Year].&[2003]", "[Ship Date].[Calendar].[Month].&[2003]&[8]"]
         }).done(function(data) {
             assert.deepEqual(data.columns, CATEGORIES_HIERARCHY_DATA);
             assert.strictEqual(data.rows.length, 31);
@@ -1012,7 +977,7 @@ define(function(require) {
             assert.ok(!data.rows[2].children, "expanded row should has children");
 
             assert.strictEqual(data.grandTotalColumnIndex, 0);
-            assert.strictEqual(data.grandTotalRowIndex, undefined);
+            assert.strictEqual(data.grandTotalRowIndex, expectedTotalIndex);
 
             assert.strictEqual(data.values[1][0][0], 15, "GT - August1");
             assert.strictEqual(data.values[1][1][0], 12, "Bikes - August1");
@@ -1026,6 +991,7 @@ define(function(require) {
 
     QUnit.test("Hierarchy. Expand child when opposite axis expanded on several levels", function(assert) {
         var done = assert.async();
+        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: "[Product].[Product Categories].[Category]",
@@ -1060,18 +1026,16 @@ define(function(require) {
             assert.equal(data.rows[2].children[7].text, "August 2003", "expanded month value");
             assert.ok(data.rows[2].children[7].children, "children exist");
             assert.equal(data.rows[2].children[7].children.length, 31, "expanded month's childern");
-            assert.equal(data.rows[2].children[7].children[3].index, 26, "August 4 index");
             assert.equal(data.rows[2].children[7].children[3].text, "August 4, 2003", "August 4 value");
 
-            assert.strictEqual(data.rows[2].index, 3, "expanded row index");
             assert.strictEqual(data.rows[2].text, "CY 2003", "expanded row value");
             assert.ok(data.rows[2].children, "expanded row should has children");
             assert.strictEqual(data.rows[2].children.length, 12, "expanded row children");
 
-            assert.strictEqual(data.grandTotalColumnIndex, undefined);
+            assert.strictEqual(data.grandTotalColumnIndex, expectedTotalIndex);
             assert.strictEqual(data.grandTotalRowIndex, 0);
 
-            assert.strictEqual(data.values[17][1][0], 184, "GT - Mountain Bikes - August");
+            assert.strictEqual(getValue(data, data.rows[2].children[7], BIKES_SUBCATEGORY_DATA[0]), 184, "Mountain Bikes - August");
             assert.strictEqual(getValue(data, data.rows[2].children[7].children[3], BIKES_SUBCATEGORY_DATA[0]), 5, "Mountain Bikes - August4");
             assert.strictEqual(getValue(data, data.rows[2].children[7].children[3], BIKES_SUBCATEGORY_DATA[1]), 9, "Road Bikes - August4");
             assert.strictEqual(getValue(data, data.rows[2].children[7].children[3], BIKES_SUBCATEGORY_DATA[2]), 2, "Touring Bikes - August4");
@@ -1251,6 +1215,7 @@ define(function(require) {
 
     QUnit.test("Hierarchy. Expand item with expanded children", function(assert) {
         var done = assert.async();
+        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: "[Product].[Product Categories].[Category]",
@@ -1291,7 +1256,7 @@ define(function(require) {
             assert.strictEqual(data.rows[data.rows.length - 1].index, 2);
 
             assert.strictEqual(data.grandTotalColumnIndex, 0);
-            assert.strictEqual(data.grandTotalRowIndex, undefined);
+            assert.strictEqual(data.grandTotalRowIndex, expectedTotalIndex);
             assert.strictEqual(getValue(data, data.rows[0]), 1730, "H1 CY 2003 Total");
             assert.strictEqual(getValue(data, data.rows[0].children[1]), 938, "Q2 CY 2003 Total");
             assert.strictEqual(getValue(data, data.rows[1]), 7839, "H2 CY 2003 Total");
@@ -1387,6 +1352,7 @@ define(function(require) {
 
     QUnit.test("Not hierarchy & hierarchy. Expand item", function(assert) {
         var done = assert.async();
+        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [
                 { dataField: "[Product].[Category]" },
@@ -1396,19 +1362,20 @@ define(function(require) {
             headerName: "columns",
             path: ["&[1]"]
         }).done(function(data) {
-            var calendarYearData = $.map(CALENDAR_HIERARCHY_YEAR_DATA, function(item) {
+            var calendarYearData = expectedTotalIndex === undefined ? $.map(CALENDAR_HIERARCHY_YEAR_DATA, function(item) {
                 return $.extend({}, item, { index: item.index - 1 });
-            });
+            }) : CALENDAR_HIERARCHY_YEAR_DATA;
 
             assert.deepEqual(data.rows, []);
             assert.deepEqual(data.columns, calendarYearData);
 
-            assert.strictEqual(data.grandTotalColumnIndex, undefined);
+            assert.strictEqual(data.grandTotalColumnIndex, expectedTotalIndex);
             assert.strictEqual(data.grandTotalRowIndex, 0);
-            assert.strictEqual(data.values[0][0][0], 962, "GT - CY 2001");
-            assert.strictEqual(data.values[0][1][0], 2665, "GT - CY 2002");
-            assert.strictEqual(data.values[0][2][0], 4756, "GT - CY 2003");
-            assert.strictEqual(data.values[0][3][0], 5646, "GT - CY 2004");
+
+            assert.strictEqual(getValue(data, undefined, data.columns[0]), 962, "GT - CY 2001");
+            assert.strictEqual(getValue(data, undefined, data.columns[1]), 2665, "GT - CY 2002");
+            assert.strictEqual(getValue(data, undefined, data.columns[2]), 4756, "GT - CY 2003");
+            assert.strictEqual(getValue(data, undefined, data.columns[3]), 5646, "GT - CY 2004");
 
         }).fail(getFailCallBack(assert))
             .always(done);
@@ -1580,14 +1547,15 @@ define(function(require) {
             assert.strictEqual(data.columns[0].text, "Clothing");
             assert.strictEqual(data.columns[0].index, 1);
             assert.strictEqual(data.columns[0].children[0].text, "CY 2003");
-            assert.strictEqual(data.columns[0].children[0].index, 2);
 
             assert.strictEqual(data.columns[0].children[0].children[0].text, "December 2003");
-            assert.strictEqual(data.columns[0].children[0].children[0].index, 11);
 
             assert.strictEqual(data.grandTotalColumnIndex, 0);
 
-            assert.deepEqual(data.values, [[[2717], [2717], [2717], [2717], [1064], [122], [426], [532], [1704], [547], [530], [655]]]);
+            assert.equal(getValue(data, undefined, data.columns[0]), 2717);
+            assert.equal(getValue(data, undefined, data.columns[0].children[0]), 2717);
+            assert.equal(getValue(data, undefined, data.columns[0].children[0].children[0]), 655);
+            assert.equal(getValue(data, undefined, data.columns[0].children[0].children[5]), 122);
 
         }).fail(getFailCallBack(assert))
             .always(done);
@@ -1620,7 +1588,7 @@ define(function(require) {
             assert.strictEqual(getValue(data, undefined, data.columns[0]), 962, "GT -  CY 2001 Total");
             assert.strictEqual(getValue(data, undefined, data.columns[2].children[1].children[1]), 2513, "CY 2003 Road Bikes Total");
 
-            assert.strictEqual(data.values[0][3][0], 9002, "GT -  CY 2003 Total");
+            assert.strictEqual(getValue(data, undefined, data.columns[2]), 9002, "GT -  CY 2003 Total");
         }).fail(getFailCallBack(assert))
             .always(done);
     });
@@ -1948,7 +1916,7 @@ define(function(require) {
 
     QUnit.test("Discover. Incorrect dataSource url", function(assert) {
         var done = assert.async();
-        new Store({
+        new XmlaStore({
             url: "",
             catalog: "Adventure Works DW Standard Edition",
             cube: "Adventure Works"
@@ -1960,7 +1928,7 @@ define(function(require) {
 
     QUnit.test("Discover. Incorrect dataSource cube", function(assert) {
         var done = assert.async();
-        new Store($.extend({}, this.dataSource, {
+        new XmlaStore($.extend({}, this.dataSource, {
             cube: "cube"
         })).getFields()
             .done(function(data) {
@@ -1970,7 +1938,7 @@ define(function(require) {
 
     QUnit.test("Discover. Incorrect dataSource catalog", function(assert) {
         var done = assert.async();
-        new Store($.extend({}, this.dataSource, {
+        new XmlaStore($.extend({}, this.dataSource, {
             catalog: "catalog"
         })).getFields()
             .done(function(data) {
@@ -3646,6 +3614,7 @@ define(function(require) {
 
     QUnit.test("Sort group when expanded item", function(assert) {
         var done = assert.async();
+        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.load({
             columns: [
                 {
@@ -3679,34 +3648,18 @@ define(function(require) {
             assert.strictEqual(data.columns[2].text, "Accessories");
 
             assert.deepEqual(removeIndexesAndValue(data.rows), [
-                {
-                    text: "August 2004"
-                },
-                {
-                    text: "July 2004"
-                },
-                {
-                    text: "June 2004"
-                },
-                {
-                    text: "May 2004"
-                },
-                {
-                    text: "April 2004"
-                },
-                {
-                    text: "March 2004"
-                },
-                {
-                    text: "February 2004"
-                },
-                {
-                    text: "January 2004"
-                }
+                { text: "August 2004" },
+                { text: "July 2004" },
+                { text: "June 2004" },
+                { text: "May 2004" },
+                { text: "April 2004" },
+                { text: "March 2004" },
+                { text: "February 2004" },
+                { text: "January 2004" }
             ]);
 
             assert.strictEqual(data.grandTotalColumnIndex, 0);
-            assert.strictEqual(data.grandTotalRowIndex, undefined);
+            assert.strictEqual(data.grandTotalRowIndex, expectedTotalIndex);
 
             // assert.deepEqual(getColumnByIndex(data.values, 0), [11753, 1414, 1414, 209, 1229, 10682, 5973, 2119, 2142, 1909, 5271, 1870, 1795, 1834]);
 
@@ -3939,7 +3892,7 @@ define(function(require) {
 
     QUnit.test("T248791. Dimension with zero level members", function(assert) {
         var done = assert.async(),
-            store = new Store({
+            store = new XmlaStore({
                 url: DATA_SOURCE_URL,
                 catalog: "Q380421",
                 cube: "CubeMobile"
@@ -3953,10 +3906,14 @@ define(function(require) {
         }).done(function(data) {
             assert.deepEqual(data.rows, []);
             assert.strictEqual(data.columns.length, 3);
-            assert.strictEqual(data.grandTotalColumnIndex, undefined);
-            assert.strictEqual(data.grandTotalRowIndex, 0);
 
-            assert.deepEqual(data.values, [[[1836], [1836], [1836]]]);
+            assert.strictEqual(data.grandTotalRowIndex, 0);
+            if(data.grandTotalColumnIndex === undefined) {
+                assert.deepEqual(data.values, [[[1836], [1836], [1836]]]);
+            } else {
+                assert.deepEqual(data.values, [[undefined, [1836], [1836], [1836]]]);
+            }
+
 
         }).always(done);
 
@@ -3964,7 +3921,7 @@ define(function(require) {
 
     QUnit.test("T248791. Dimension with zero level members. Expand All level", function(assert) {
         var done = assert.async(),
-            store = new Store({
+            store = new XmlaStore({
                 url: DATA_SOURCE_URL,
                 catalog: "Q380421",
                 cube: "CubeMobile"
@@ -3979,563 +3936,180 @@ define(function(require) {
             assert.deepEqual(data.rows, []);
             assert.strictEqual(data.columns.length, 3);
             assert.ok(data.columns[0].children);
-            assert.strictEqual(data.grandTotalColumnIndex, undefined);
             assert.strictEqual(data.grandTotalRowIndex, 0);
 
-            assert.deepEqual(data.values, [[[1836], [1836], [1836], [1503], [333], [1503], [333], [1503], [333]]]);
+            if(data.grandTotalColumnIndex === undefined) {
+                assert.deepEqual(data.values, [[[1836], [1836], [1836], [1503], [333], [1503], [333], [1503], [333]]]);
+            } else {
+                assert.deepEqual(data.values, [[undefined, [1836], [1503], [333], [1836], [1503], [333], [1836], [1503], [333]]]);
+            }
+
         }).always(done);
     });
 
-    QUnit.module("Send Request", {
-        beforeEach: function() {
-            sinon.stub(ajax, "sendRequest");
-            ajax.sendRequest.returns($.Deferred().reject());
-            this.dataSource = $.extend(true, {}, testEnvironment.dataSource);
-        },
+    QUnit.module("Subset", testEnvironment);
 
-        afterEach: function() {
-            ajax.sendRequest.restore();
-        },
+    function getHeaderItemValue(headerItem) {
+        return headerItem.value;
+    }
 
-        loadOptions: {
-            columns: [
-                { dataField: "DimensionField" }
-            ],
-            values: [{ dataField: "MeasureField" }]
-        }
-
-    });
-
-    QUnit.test("send ajax request on load", function(assert) {
-        var store = new Store(this.dataSource),
-            ajaxArg;
-
-        store.load(this.loadOptions);
-
-        assert.ok(ajax.sendRequest.calledOnce);
-        ajaxArg = ajax.sendRequest.lastCall.args[0];
-
-        assert.strictEqual(ajaxArg.url, this.dataSource.url, "url");
-        assert.strictEqual(ajaxArg.method, "POST", "method");
-        assert.ok(ajaxArg.data, "data");
-        assert.deepEqual(ajaxArg.xhrFields, {}, "xhrFields");
-        assert.deepEqual(ajaxArg.headers, { "Content-Type": "text/xml" }, "headers");
-        assert.strictEqual(ajaxArg.beforeSend, undefined);
-    });
-
-    QUnit.test("send ajax request with before send callback", function(assert) {
-        var dataSource = this.dataSource,
-            beforeSend = function(settings) {
-                // assert beforeSend argument
-                assert.strictEqual(settings.url, dataSource.url, "url");
-                assert.strictEqual(settings.method, "POST", "method");
-                assert.ok(settings.data, "data");
-                assert.deepEqual(settings.xhrFields, {}, "xhrFields");
-                assert.deepEqual(settings.headers, { "Content-Type": "text/xml" }, "headers");
-                assert.strictEqual(settings.beforeSend, undefined);
-
-                // act
-                settings.headers["my-header"] = "my-header-value";
-            };
-        dataSource.beforeSend = beforeSend;
-
-        var store = new Store(dataSource),
-            ajaxArg;
-
-        store.load(this.loadOptions);
-        // assert
-        assert.ok(ajax.sendRequest.calledOnce);
-        ajaxArg = ajax.sendRequest.lastCall.args[0];
-
-        assert.strictEqual(ajaxArg.url, dataSource.url, "url");
-        assert.strictEqual(ajaxArg.method, "POST", "method");
-        assert.ok(ajaxArg.data, "data");
-        assert.deepEqual(ajaxArg.xhrFields, {}, "xhrFields");
-        assert.deepEqual(ajaxArg.headers, {
-            "Content-Type": "text/xml",
-            "my-header": "my-header-value"
-        }, "headers");
-        assert.strictEqual(ajaxArg.beforeSend, undefined);
-    });
-
-    QUnit.module("Tests with Mocks", stubsEnvironment);
-
-    QUnit.test("Use fields with expression", function(assert) {
+    QUnit.test("Skip and take rows", function(assert) {
+        var done = assert.async();
         this.store.load({
-            columns: [{
-                dataField: "[Product].[My_Category]",
-                expression: "[Poduct].[Category]+[Poduct].[Subcategory]"
-            }],
-            rows: [{ dataField: "[Ship_Date].[Calendar_Year]" }],
-            values: [{ dataField: "[Measures].[My_Measure]", expression: "[Measures].[Customer_Count]*100" }]
-        });
-
-        var query = this.getQuery(),
-            declarations = query.match(/(member)\s([^\s])+\sas\s([^\s])+/ig) || [];
-
-        assert.ok(query);
-        assert.strictEqual(declarations.length, 1);
-        assert.strictEqual(declarations[0], "member [Measures].[My_Measure] as [Measures].[Customer_Count]*100");
-    });
-
-    QUnit.test("Use fields with expression as function", function(assert) {
-        this.store.load({
-            columns: [{ dataField: "[Product].[My_Category]" }],
-            rows: [{ dataField: "[Ship_Date].[Calendar_Year]" }],
-            values: [{
-                dataField: "[Measures].[My_Measure]", expression: function() {
-                }
-            }]
-        });
-
-        var query = this.getQuery(),
-            declarations = query.match(/(member)\s([^\s])+\sas\s([^\s])+/ig) || [];
-
-        assert.ok(query);
-        assert.strictEqual(declarations.length, 0);
-    });
-
-    QUnit.test("FilterValues using caption", function(assert) {
-        this.store.load({
-            columns: [{
-                dataField: "[Product].[Category]",
-                filterValues: ["Bikes", "Accessories"],
-                filterType: "include"
-            }],
             rows: [{
-                dataField: "[Ship Date].[Calendar Year]",
-                filterValues: ["CY 2002", "CY 2003"],
-                filterType: "include"
+                dataField: "[Product].[Subcategory]",
+                filterValues: [
+                    "Bike Racks",
+                    "Bottles and Cages",
+                    "Caps",
+                    "Cleaners"
+                ]
             }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        });
-
-        var query = this.getQuery(),
-            filterExpr = query.match(/\(select(.+?)on 0/gi);
-
-        assert.strictEqual(filterExpr.length, 2);
-        assert.strictEqual(filterExpr[0], "(SELECT {[Ship Date].[Calendar Year].[CY 2002],[Ship Date].[Calendar Year].[CY 2003]}on 0");
-        assert.strictEqual(filterExpr[1], "(SELECT {[Product].[Category].[Bikes],[Product].[Category].[Accessories]}on 0");
-
-    });
-
-    QUnit.test("Numeric value in filterValues", function(assert) {
-        this.store.load({
-            columns: [{ dataField: "[Product].[Category]", filterValues: [1], filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        });
-
-        var query = this.getQuery(),
-            filterExpr = query.match(/\(select(.+?)on 0/gi);
-
-        assert.strictEqual(filterExpr.length, 1);
-        assert.strictEqual(filterExpr[0], "(SELECT {[Product].[Category].[1]}on 0");
-
-    });
-
-    QUnit.test("FilterValues using key and caption", function(assert) {
-        this.store.load({
-            columns: [{ dataField: "[Product].[Category]", filterValues: ["&[1]", "&[3]"], filterType: "include" }],
-            rows: [{
-                dataField: "[Ship Date].[Calendar Year]",
-                filterValues: ["CY 2002", "&[2003]"],
-                filterType: "include"
-            }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        });
-
-        var query = this.getQuery(),
-            filterExpr = query.match(/\(select(.+?)on 0/gi);
-
-        assert.strictEqual(filterExpr.length, 2);
-        assert.strictEqual(filterExpr[0], "(SELECT {[Ship Date].[Calendar Year].[CY 2002],[Ship Date].[Calendar Year].&[2003]}on 0");
-        assert.strictEqual(filterExpr[1], "(SELECT {[Product].[Category].&[1],[Product].[Category].&[3]}on 0");
-    });
-
-    QUnit.test("Parse error response on load", function(assert) {
-        this.sendDeferred.resolve(ERROR_RESPONCE);
-
-        this.store.load({
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        }).done(function() {
-            assert.ok(false);
-        })
-            .fail(function(error) {
-                assert.ok(error.message.indexOf("Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.") > -1);
-            });
-    });
-
-    QUnit.test("T504918. Error in cell", function(assert) {
-        this.sendDeferred.resolve('<root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Fact Product Sales Count]</UName><Caption>Fact Product Sales Count</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Fact Product Sales Count</MEMBER_VALUE></Member></Tuple><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Product Actual Cost]</UName><Caption>Product Actual Cost</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>131072</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Product Actual Cost</MEMBER_VALUE></Member></Tuple></Tuples></Axis><Axis name="SlicerAxis"><Tuples><Tuple><Member Hierarchy="[Dim Stores].[Store ID]"><UName>[Dim Stores].[Store ID].[All]</UName><Caption>All</Caption><LName>[Dim Stores].[Store ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Sales Person].[Sales Person ID]"><UName>[Dim Sales Person].[Sales Person ID].[All]</UName><Caption>All</Caption><LName>[Dim Sales Person].[Sales Person ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Customer].[Customer ID]"><UName>[Dim Customer].[Customer ID].[All]</UName><Caption>All</Caption><LName>[Dim Customer].[Customer ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Key]"><UName>[Dim Product].[Product Key].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Name]"><UName>[Dim Product].[Product Name].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Hierarchy]"><UName>[Dim Date].[Hierarchy].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Hierarchy].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Date Key]"><UName>[Dim Date].[Date Key].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Date Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Full Date UK]"><UName>[Dim Date].[Full Date UK].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Full Date UK].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month]"><UName>[Dim Date].[Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month Name]"><UName>[Dim Date].[Month Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter]"><UName>[Dim Date].[Quarter].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter Name]"><UName>[Dim Date].[Quarter Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Week Of Month]"><UName>[Dim Date].[Week Of Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Week Of Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Year]"><UName>[Dim Date].[Year].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Year].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Time].[Time Key]"><UName>[Dim Time].[Time Key].[All]</UName><Caption>All</Caption><LName>[Dim Time].[Time Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value xsi:type="xsd:int">25</Value><Language>1033</Language></Cell><Cell CellOrdinal="1"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value></Cell></CellData></root>');
-        this.store.load({
-            columns: [],
-            rows: [],
-            values: [
-                { dataField: "[Measures].[Fact Product Sales Count]" },
-                { dataField: "[Measures].[Product Actual Cost]" }
-            ]
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            rowSkip: 2,
+            rowTake: 2
         }).done(function(data) {
-            assert.deepEqual(data.values, [[[25, "#N/A"]]], "cell data");
-            assert.equal(errors.log.callCount, 1);
-            assert.deepEqual(errors.log.lastCall.args, ["W4002", "Read access to the cell is denied."]);
-        }).fail(function() {
-            assert.ok(false);
-        });
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, undefined, "Caps", "Cleaners"]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
     });
 
-    QUnit.test("Same errors in defferent cells", function(assert) {
-        this.sendDeferred.resolve('<root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Fact Product Sales Count]</UName><Caption>Fact Product Sales Count</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Fact Product Sales Count</MEMBER_VALUE></Member></Tuple><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Product Actual Cost]</UName><Caption>Product Actual Cost</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>131072</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Product Actual Cost</MEMBER_VALUE></Member></Tuple></Tuples></Axis><Axis name="SlicerAxis"><Tuples><Tuple><Member Hierarchy="[Dim Stores].[Store ID]"><UName>[Dim Stores].[Store ID].[All]</UName><Caption>All</Caption><LName>[Dim Stores].[Store ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Sales Person].[Sales Person ID]"><UName>[Dim Sales Person].[Sales Person ID].[All]</UName><Caption>All</Caption><LName>[Dim Sales Person].[Sales Person ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Customer].[Customer ID]"><UName>[Dim Customer].[Customer ID].[All]</UName><Caption>All</Caption><LName>[Dim Customer].[Customer ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Key]"><UName>[Dim Product].[Product Key].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Name]"><UName>[Dim Product].[Product Name].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Hierarchy]"><UName>[Dim Date].[Hierarchy].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Hierarchy].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Date Key]"><UName>[Dim Date].[Date Key].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Date Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Full Date UK]"><UName>[Dim Date].[Full Date UK].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Full Date UK].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month]"><UName>[Dim Date].[Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month Name]"><UName>[Dim Date].[Month Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter]"><UName>[Dim Date].[Quarter].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter Name]"><UName>[Dim Date].[Quarter Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Week Of Month]"><UName>[Dim Date].[Week Of Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Week Of Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Year]"><UName>[Dim Date].[Year].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Year].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Time].[Time Key]"><UName>[Dim Time].[Time Key].[All]</UName><Caption>All</Caption><LName>[Dim Time].[Time Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value><Language>1033</Language></Cell><Cell CellOrdinal="1"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value></Cell></CellData></root>');
-        this.store.load({
-            columns: [],
-            rows: [],
-            values: [
-                { dataField: "[Measures].[Fact Product Sales Count]" },
-                { dataField: "[Measures].[Product Actual Cost]" }
-            ]
-        }).done(function(data) {
-            assert.deepEqual(data.values, [[["#N/A", "#N/A"]]], "cell data");
-            assert.equal(errors.log.callCount, 1);
-            assert.deepEqual(errors.log.lastCall.args, ["W4002", "Read access to the cell is denied."]);
-        }).fail(function() {
-            assert.ok(false);
-        });
-    });
-
-    QUnit.test("Differrent errors in defferent cells", function(assert) {
-        this.sendDeferred.resolve('<root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Fact Product Sales Count]</UName><Caption>Fact Product Sales Count</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Fact Product Sales Count</MEMBER_VALUE></Member></Tuple><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Product Actual Cost]</UName><Caption>Product Actual Cost</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>131072</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Product Actual Cost</MEMBER_VALUE></Member></Tuple></Tuples></Axis><Axis name="SlicerAxis"><Tuples><Tuple><Member Hierarchy="[Dim Stores].[Store ID]"><UName>[Dim Stores].[Store ID].[All]</UName><Caption>All</Caption><LName>[Dim Stores].[Store ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Sales Person].[Sales Person ID]"><UName>[Dim Sales Person].[Sales Person ID].[All]</UName><Caption>All</Caption><LName>[Dim Sales Person].[Sales Person ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Customer].[Customer ID]"><UName>[Dim Customer].[Customer ID].[All]</UName><Caption>All</Caption><LName>[Dim Customer].[Customer ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Key]"><UName>[Dim Product].[Product Key].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Name]"><UName>[Dim Product].[Product Name].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Hierarchy]"><UName>[Dim Date].[Hierarchy].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Hierarchy].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Date Key]"><UName>[Dim Date].[Date Key].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Date Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Full Date UK]"><UName>[Dim Date].[Full Date UK].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Full Date UK].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month]"><UName>[Dim Date].[Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month Name]"><UName>[Dim Date].[Month Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter]"><UName>[Dim Date].[Quarter].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter Name]"><UName>[Dim Date].[Quarter Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Week Of Month]"><UName>[Dim Date].[Week Of Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Week Of Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Year]"><UName>[Dim Date].[Year].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Year].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Time].[Time Key]"><UName>[Dim Time].[Time Key].[All]</UName><Caption>All</Caption><LName>[Dim Time].[Time Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value><Error><ErrorCode>323865234</ErrorCode><Description>Unknown Error.</Description></Error></Value><Language>1033</Language></Cell><Cell CellOrdinal="1"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value></Cell></CellData></root>');
-        this.store.load({
-            columns: [],
-            rows: [],
-            values: [
-                { dataField: "[Measures].[Fact Product Sales Count]" },
-                { dataField: "[Measures].[Product Actual Cost]" }
-            ]
-        }).done(function(data) {
-            assert.deepEqual(data.values, [[["#N/A", "#N/A"]]], "cell data");
-            assert.equal(errors.log.callCount, 2);
-            assert.deepEqual(errors.log.getCall(0).args, ["W4002", "Unknown Error."]);
-            assert.deepEqual(errors.log.getCall(1).args, ["W4002", "Read access to the cell is denied."]);
-        }).fail(function() {
-            assert.ok(false);
-        });
-    });
-
-    QUnit.test("Throw error when unexpected response", function(assert) {
-        this.sendDeferred.resolve("");
-        this.store.load({
-            columns: [],
-            rows: [],
-            values: []
-        }).done(function(data) {
-            assert.ok(false);
-        }).fail(function() {
-            assert.equal(errors.Error.lastCall.args[0], "E4023");
-            assert.equal(errors.Error.lastCall.args[1], "");
-        });
-    });
-
-    QUnit.test("Parse time type cell data", function(assert) {
-        this.sendDeferred.resolve('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Duracao]</UName><Caption>Duracao</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Duracao</MEMBER_VALUE></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value>28:59:08</Value><FormatString>Long Time</FormatString></Cell></CellData></root></return></ExecuteResponse></soap:Body></soap:Envelope>');
-
-        this.store.load({
-            columns: [],
-            rows: [],
-            values: [{ dataField: "[Measures].[Duracao]" }]
-        })
-            .done(function(data) {
-                assert.strictEqual(getValue(data), "28:59:08");
-            });
-    });
-
-    QUnit.test("Language Id passed to discover query", function(assert) {
-        this.store.getFields();
-
-        this.sendRequest.getCalls().forEach(function(call) {
-            assert.equal($(call.args[0].data).find("LocaleIdentifier").text(), languageId);
-        });
-    });
-
-    QUnit.test("Language Id passed to execute query", function(assert) {
-        this.store.load({
-            columns: [],
-            rows: [],
-            values: [{ dataField: "[Measures].[Duracao]" }]
-        });
-
-        assert.equal($(this.getRequest(0)).find("LocaleIdentifier").text(), languageId);
-    });
-
-    QUnit.test("No LocaleIdentifier in query if unknown locale is set", function(assert) {
-        var localization = require("localization"),
-            locale = localization.locale();
-
-        localization.locale("unknown");
-
-        try {
-            this.store.load({
-                columns: [],
-                rows: [],
-                values: [{ dataField: "[Measures].[Duracao]" }]
-            });
-
-            assert.equal($(this.getRequest(0)).find("LocaleIdentifier").length, 0);
-        } finally {
-            localization.locale(locale);
-        }
-    });
-
-    QUnit.test("T566739. Do not generate CrossJoin in select statement if skipValues is set to true", function(assert) {
-        this.store.load({
-            columns: [{ dataField: "[Product].[Category]" }],
-            rows: [],
-            values: [
-                { dataField: "[Measures].[Internet Order Count]", caption: 'Data1' },
-                { dataField: "[Measures].[Growth in Customer Base]", caption: 'Data2' },
-                { dataField: "[Measures].[Customer Count]", caption: 'Data3' }
-            ],
-            skipValues: true
-        });
-
-        assert.ok(this.getQuery().toLowerCase().indexOf("crossjoin") === -1);
-    });
-
-    QUnit.test("Use full item key in descendants expression. T620434", function(assert) {
-        this.store.load({
-            columns: [],
-            rows: [
-                { dataField: "[Ship Date].[Calendar].[Calendar]", hierarchyName: "[Ship Date].[Calendar]" },
-                { dataField: "[Ship Date].[Calendar].[Month]", hierarchyName: "[Ship Date].[Calendar]" }
-            ],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
-            headerName: "rows",
-            path: ["[Ship Date].[Calendar Bla Bla].&[2002]"]
-        });
-
-        var query = this.getQuery();
-
-        assert.ok(query.indexOf("{[Ship Date].[Calendar Bla Bla].&[2002]}") >= 0, "Descendants argument has full key");
-    });
-
-    QUnit.test("T675232. Build a correct filter query when a member has empty key", function(assert) {
+    QUnit.test("Skip and take columns", function(assert) {
+        var done = assert.async();
         this.store.load({
             columns: [{
-                dataField: "[Product].[Category]",
-                filterValues: ["[Product].[Category]&"],
-                filterType: "include"
+                dataField: "[Ship Date].[Calendar Year]"
             }],
-            rows: [],
-            values: []
-        });
-
-        var filterExpr = this.getQuery().match(/\(select(.+?)on 0/gi);
-
-        assert.deepEqual(filterExpr, ["(SELECT {[Product].[Category].[Product].[Category]&}on 0"]);
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            columnSkip: 2,
+            columnTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [undefined, undefined, 2003, 2004]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
     });
 
-    QUnit.module("getDrillDownItems", stubsEnvironment);
-
-    QUnit.test("getDrillDownItems with empty paths", function(assert) {
-        var loadOptions = {
+    QUnit.test("take columns", function(assert) {
+        var done = assert.async();
+        this.store.load({
             columns: [{
-                dataField: "[Product].[Category]",
-                filterValues: ["Bikes", "Accessories"],
-                filterType: "include"
+                dataField: "[Ship Date].[Calendar Year]"
             }],
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            columnSkip: 0,
+            columnTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [2001, 2002, undefined, undefined]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("Skip and take columns with searchValue", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [{
+                dataField: "[Product].[Product]", searchValue: "Men's"
+            }],
+            columnSkip: 2,
+            columnTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [
+                undefined, undefined,
+                "Men's Sports Shorts, L", "Men's Sports Shorts, M",
+                undefined, undefined,
+                undefined, undefined,
+                undefined, undefined,
+                undefined
+            ]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("Skip and take columns with wrong searchValue", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [{
+                dataField: "[Product].[Product]", searchValue: "wrong"
+            }],
+            columnSkip: 2,
+            columnTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), []);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("Skip and take rows and columns", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [{
+                dataField: "[Product].[Subcategory]",
+                filterValues: [
+                    "Bike Racks",
+                    "Bike Stands",
+                    "Bottles and Cages",
+                    "Caps",
+                    "Cleaners"
+                ]
+            }],
+            rows: [{ dataField: "[Product].[Category]" }],
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            columnSkip: 2,
+            columnTake: 2,
+            rowSkip: 1,
+            rowTake: 1
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), [undefined, undefined, "Bottles and Cages", "Caps", undefined]);
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, "Clothing"]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+
+    QUnit.test("Skip and take rows and columns with empty dimensions", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            columns: [],
+            rows: [],
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            columnSkip: 2,
+            columnTake: 2,
+            rowSkip: 1,
+            rowTake: 1
+        }).done(function(data) {
+            assert.deepEqual(data.columns.map(getHeaderItemValue), []);
+            assert.deepEqual(data.rows.map(getHeaderItemValue), []);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
+    QUnit.test("Skip and take rows with sortOrder desc", function(assert) {
+        var done = assert.async();
+        this.store.load({
             rows: [{
-                dataField: "[Ship Date].[Calendar Year]",
-                filterValues: ["CY 2002", "CY 2003"],
-                filterType: "include"
+                dataField: "[Ship Date].[Month of Year]", sortOrder: "desc"
             }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
-            filters: [{ dataField: "[Product].[Color]", filterValues: ["Red"] }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [] });
-        assert.strictEqual(this.getQuery(), "drillthrough SELECT [Measures].[Customer Count] on 0 FROM (SELECT {[Product].[Color].[Red]}on 0 FROM (SELECT {[Ship Date].[Calendar Year].[CY 2002],[Ship Date].[Calendar Year].[CY 2003]}on 0 FROM (SELECT {[Product].[Category].[Bikes],[Product].[Category].[Accessories]}on 0 FROM [Adventure Works])))  CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
+            values: [],
+            rowSkip: 2,
+            rowTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, undefined, 10, 9, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
     });
 
-    QUnit.test("getDrillDownItems with paths", function(assert) {
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: ["Bikes"], rowPath: ["CY 2004"] });
-        assert.strictEqual(this.getQuery(), "drillthrough SELECT [Measures].[Customer Count] on 0 FROM [Adventure Works] WHERE ([Product].[Category].[Bikes],[Ship Date].[Calendar Year].[CY 2004]) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-    });
-
-    QUnit.test("getDrillDownItems with custom columns", function(assert) {
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }],
-        };
-
-        this.store.getDrillDownItems(loadOptions, {
-            columnPath: [],
-            rowPath: [],
-            customColumns: ["Column1", "Column2"]
-        });
-        assert.strictEqual(this.getQuery(), "drillthrough SELECT [Measures].[Customer Count] on 0 FROM [Adventure Works]  CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS return Column1,Column2");
-    });
-
-    QUnit.test("getDrillDownItems with several value fields", function(assert) {
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{
-                dataField: "[Measures].[Customer Count]",
-                caption: 'Count'
-            }, { dataField: "[Measures].[Internet Sales Order]", caption: 'Sales Order' }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], dataIndex: 0 });
-        this.store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], dataIndex: 1 });
-        this.store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], dataIndex: 2 });
-
-        assert.strictEqual(this.getQuery(0), "drillthrough SELECT [Measures].[Customer Count] on 0 FROM [Adventure Works]  CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-        assert.strictEqual(this.getQuery(1), "drillthrough SELECT [Measures].[Internet Sales Order] on 0 FROM [Adventure Works]  CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-        assert.strictEqual(this.getQuery(2), "drillthrough SELECT [Measures].[Customer Count] on 0 FROM [Adventure Works]  CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-    });
-
-    QUnit.test("getDrillDownItems with paths without rows", function(assert) {
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: ["Bikes"], rowPath: [] });
-        assert.strictEqual(this.getQuery(), "drillthrough SELECT [Measures].[Customer Count] on 0 FROM [Adventure Works] WHERE ([Product].[Category].[Bikes]) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-    });
-
-    QUnit.test("getDrillDownItems without value fields", function(assert) {
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [] });
-
-        assert.strictEqual(this.getQuery(), "drillthrough SELECT [Measures] on 0 FROM [Adventure Works]  CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-    });
-
-    QUnit.test("getDrillDownItems with paths when Hierarchy", function(assert) {
-        var loadOptions = {
-            columns: [
-                {
-                    dataField: "[Ship Date].[Calendar].[Calendar Year]",
-                    hierarchyName: "[Ship Date].[Calendar]",
-                    expanded: true
-                },
-                {
-                    dataField: "[Product].[Product Categories].[Category]",
-                    hierarchyName: "[Product].[Product Categories]",
-                    expanded: true
-                },
-                {
-                    dataField: "[Product].[Product Categories].[Subcategory]",
-                    hierarchyName: "[Product].[Product Categories]"
-                }
-            ],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: ["&[2003]", "&[1]", "&[13]"], rowPath: ["CY 2004"] });
-        assert.strictEqual(this.getQuery(), "drillthrough SELECT [Measures].[Customer Count] on 0 FROM [Adventure Works] WHERE ([Ship Date].[Calendar].[Calendar Year].&[2003],[Product].[Product Categories].[Subcategory].&[13],[Ship Date].[Calendar Year].[CY 2004]) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-    });
-
-    QUnit.test("max drillDownRowCount", function(assert) {
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: ["Bikes"], rowPath: ["CY 2004"], maxRowCount: 120 });
-        assert.strictEqual(this.getQuery(), "drillthrough maxrows 120 SELECT [Measures].[Customer Count] on 0 FROM [Adventure Works] WHERE ([Product].[Category].[Bikes],[Ship Date].[Calendar Year].[CY 2004]) CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS");
-    });
-
-    QUnit.test("parse drillDown response", function(assert) {
-        var textResponse = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><xsd:schema xmlns:sql="urn:schemas-microsoft-com:xml-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" elementFormDefault="qualified"><xsd:element name="root"><xsd:complexType><xsd:sequence minOccurs="0" maxOccurs="unbounded"><xsd:element name="row" type="row"/></xsd:sequence></xsd:complexType></xsd:element><xsd:simpleType name="uuid"><xsd:restriction base="xsd:string"><xsd:pattern value="[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}"/></xsd:restriction></xsd:simpleType><xsd:complexType name="xmlDocument"><xsd:sequence><xsd:any/></xsd:sequence></xsd:complexType><xsd:complexType name="row"><xsd:sequence><xsd:element sql:field="[Internet Customers].[$Customer.Customer]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Promotion.Promotion]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Sales Territory.Sales Territory Region]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Internet Sales Order Details.Internet Sales Order]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Ship Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Delivery Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Product.Product]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Source Currency.Source Currency Code]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[Customer Count]" name="_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_" minOccurs="0"/></xsd:sequence></xsd:complexType></xsd:schema><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Jon V. Yang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43793   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 29, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>August 3, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 38</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Eugene L. Huang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43767   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 18, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 25, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 30, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Black, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Ruben Torres</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43736   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 10, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 17, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row></root></return></ExecuteResponse></soap:Body></soap:Envelope>';
-        this.sendDeferred.resolve(textResponse);
-
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [] }).done(function(data) {
-            assert.strictEqual(data.length, 3);
-
-            assert.deepEqual(data[0], {
-                "Customer Customer": "Jon V. Yang",
-                "Date Date": "July 22, 2001",
-                "Delivery Date Date": "August 3, 2001",
-                "Internet Sales Order Details Internet Sales Order": "SO43793   Line 1",
-                "Product Product": "Mountain-100 Silver, 38",
-                "Promotion Promotion": "No Discount",
-                "Sales Territory Sales Territory Region": "Australia",
-                "Ship Date Date": "July 29, 2001",
-                "Source Currency Source Currency Code": "AUD",
-                "Customer Count": "1"
-            });
-        });
-
-    });
-
-    QUnit.test("create drillDown dataSource", function(assert) {
-        var textResponse = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><xsd:schema xmlns:sql="urn:schemas-microsoft-com:xml-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" elementFormDefault="qualified"><xsd:element name="root"><xsd:complexType><xsd:sequence minOccurs="0" maxOccurs="unbounded"><xsd:element name="row" type="row"/></xsd:sequence></xsd:complexType></xsd:element><xsd:simpleType name="uuid"><xsd:restriction base="xsd:string"><xsd:pattern value="[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}"/></xsd:restriction></xsd:simpleType><xsd:complexType name="xmlDocument"><xsd:sequence><xsd:any/></xsd:sequence></xsd:complexType><xsd:complexType name="row"><xsd:sequence><xsd:element sql:field="[Internet Customers].[$Customer.Customer]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Promotion.Promotion]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Sales Territory.Sales Territory Region]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Internet Sales Order Details.Internet Sales Order]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Ship Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Delivery Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Product.Product]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Source Currency.Source Currency Code]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[Customer Count]" name="_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_" minOccurs="0"/></xsd:sequence></xsd:complexType></xsd:schema><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Jon V. Yang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43793   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 29, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>August 3, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 38</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Eugene L. Huang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43767   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 18, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 25, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 30, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Black, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Ruben Torres</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43736   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 10, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 17, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row></root></return></ExecuteResponse></soap:Body></soap:Envelope>';
-        this.sendDeferred.resolve(textResponse);
-
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        };
-
-        var drillDownDataSource = this.store.createDrillDownDataSource(loadOptions, { columnPath: [], rowPath: [] });
-
-        drillDownDataSource.paginate(false);
-
-        drillDownDataSource.load().done(function(data) {
-            assert.strictEqual(data.length, 3);
-
-            assert.deepEqual(data[0], {
-                "Customer Customer": "Jon V. Yang",
-                "Date Date": "July 22, 2001",
-                "Delivery Date Date": "August 3, 2001",
-                "Internet Sales Order Details Internet Sales Order": "SO43793   Line 1",
-                "Product Product": "Mountain-100 Silver, 38",
-                "Promotion Promotion": "No Discount",
-                "Sales Territory Sales Territory Region": "Australia",
-                "Ship Date Date": "July 29, 2001",
-                "Source Currency Source Currency Code": "AUD",
-                "Customer Count": "1"
-            });
-        });
-    });
-
-    QUnit.test("getDrillDownItems - parse error response", function(assert) {
-        this.sendDeferred.resolve(ERROR_RESPONCE);
-
-        var loadOptions = {
-            columns: [{ dataField: "[Product].[Category]", filterType: "include" }],
-            rows: [{ dataField: "[Ship Date].[Calendar Year]", filterType: "include" }],
-            values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
-        };
-
-        this.store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [] })
-            .done(function() {
-                assert.ok(false);
-            })
-            .fail(function(error) {
-                assert.ok(error.message.indexOf("Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.") > -1);
-
-            });
+    QUnit.test("Skip and take rows with sortOrder desc amd sortBy displayText", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            rows: [{
+                dataField: "[Ship Date].[Month of Year]", sortOrder: "desc", sortBy: "displayText"
+            }],
+            values: [],
+            rowSkip: 2,
+            rowTake: 2
+        }).done(function(data) {
+            assert.deepEqual(data.rows.map(getHeaderItemValue), [undefined, undefined, 11, 5, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]);
+        }).fail(getFailCallBack(assert))
+            .always(done);
     });
 });

@@ -2,12 +2,14 @@ import $ from "jquery";
 
 import PopupModule from "ui/html_editor/modules/popup";
 
-const POPOVER_CLASS = "dx-popup";
+const POPUP_CLASS = "dx-popup";
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
+const SUGGESTION_LIST_WRAPPER_CLASS = "dx-suggestion-list-wrapper";
 
 const moduleConfig = {
     beforeEach: () => {
         this.$element = $("#htmlEditor");
+        this.clock = sinon.useFakeTimers();
 
         this.options = {
             editorInstance: {
@@ -19,6 +21,9 @@ const moduleConfig = {
                 }
             }
         };
+    },
+    afterEach: () => {
+        this.clock.restore();
     }
 };
 
@@ -33,8 +38,37 @@ QUnit.module("Popup module", moduleConfig, () => {
         const $suggestionList = $popup.find(`.${SUGGESTION_LIST_CLASS}`);
         const listDataSource = $suggestionList.dxList("option", "dataSource");
 
-        assert.ok($popup.hasClass(POPOVER_CLASS), "Popup rendered");
-        assert.equal($suggestionList.length, 1, "Popup contains one suggestion list");
+        assert.ok($popup.hasClass(POPUP_CLASS), "Popup rendered");
+        assert.strictEqual($suggestionList.length, 1, "Popup contains one suggestion list");
         assert.deepEqual(listDataSource, this.options.dataSource, "List has a correct dataSource");
+    });
+
+    test("Show and hide popup on item selecting", (assert) => {
+        this.options.dataSource = ["Test1", "Test2"];
+        const popupModule = new PopupModule({}, this.options);
+        const insertEmbedContent = sinon.spy(popupModule, "insertEmbedContent");
+
+        popupModule.showPopup();
+        this.clock.tick();
+        const $suggestionList = $(`.${SUGGESTION_LIST_CLASS}`);
+        const $suggestionListWrapper = $suggestionList.closest(`.${SUGGESTION_LIST_WRAPPER_CLASS}`);
+
+        assert.strictEqual($suggestionListWrapper.length, 1, "Suggestion list is wrapped by element with specific class");
+        assert.ok($suggestionList.is(":visible"), "list is visible");
+        assert.strictEqual($suggestionList.length, 1, "one list");
+        assert.ok(insertEmbedContent.notCalled, "ok");
+
+        $suggestionList.find(".dx-list-item").first().trigger("dxclick");
+        this.clock.tick(500);
+        assert.ok(insertEmbedContent.calledOnce, "ok");
+        assert.notOk($suggestionList.is(":visible"), "list isn't visible");
+    });
+
+    test("Save position and get position", (assert) => {
+        const popupModule = new PopupModule({}, this.options);
+
+        popupModule.savePosition(5);
+
+        assert.strictEqual(popupModule.getPosition(), 5, "correct position");
     });
 });

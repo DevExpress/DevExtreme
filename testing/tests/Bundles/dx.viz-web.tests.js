@@ -1,5 +1,4 @@
 var $ = require("jquery"),
-    ko = require("knockout"),
     angular = require("angular");
 
 require("bundles/dx.viz-web.js");
@@ -18,7 +17,6 @@ QUnit.test("DevExpress namespaces", function(assert) {
         assert.ok(DevExpress[namespace], namespace + " namespace");
     });
 
-    assert.ok(ko.bindingHandlers.dxAction, "knockout integration");
     assert.ok(angular.module("dx"), "angular integration");
 });
 

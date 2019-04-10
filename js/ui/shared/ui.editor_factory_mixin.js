@@ -233,6 +233,8 @@ var EditorFactoryMixin = (function() {
     };
     return {
         createEditor: function($container, options) {
+            let editorName;
+
             options.cancel = false;
             options.editorElement = getPublicElement($container);
 
@@ -260,10 +262,13 @@ var EditorFactoryMixin = (function() {
                 }
             }
 
+            editorName = options.editorName;
             this.executeAction("onEditorPreparing", options);
 
             if(options.cancel) {
                 return;
+            } else if(options.parentType === "dataRow" && options.editorType && editorName === options.editorName) {
+                options.editorName = options.editorType;
             }
 
             createEditorCore(this, options);

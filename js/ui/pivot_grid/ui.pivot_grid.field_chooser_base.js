@@ -318,14 +318,16 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 var field = $(e.currentTarget).data("field"),
                     mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field)),
                     isHeaderFilter = $(e.target).hasClass("dx-header-filter"),
-                    dataSource = that._dataSource;
+                    dataSource = that._dataSource,
+                    type = mainGroupField.groupName ? 'tree' : 'list',
+                    paginate = dataSource.paginate() && type === 'list';
 
                 if(isHeaderFilter) {
                     that._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
-                        type: mainGroupField.groupName ? 'tree' : 'list',
+                        type: type,
                         encodeHtml: that.option("encodeHtml"),
                         dataSource: {
-                            useDefaultSearch: true,
+                            useDefaultSearch: !paginate,
                             // paginate: false,
                             load: function(options) {
                                 var userData = options.userData;
@@ -333,9 +335,13 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                     return userData.store.load(options);
                                 } else {
                                     var d = new Deferred();
-                                    dataSource.getFieldValues(mainGroupField.index).done(function(data) {
-                                        userData.store = new ArrayStore(data);
-                                        userData.store.load(options).done(d.resolve).fail(d.reject);
+                                    dataSource.getFieldValues(mainGroupField.index, that.option("headerFilter.showRelevantValues"), paginate ? options : undefined).done(function(data) {
+                                        if(paginate) {
+                                            d.resolve(data);
+                                        } else {
+                                            userData.store = new ArrayStore(data);
+                                            userData.store.load(options).done(d.resolve).fail(d.reject);
+                                        }
                                     }).fail(d.reject);
                                     return d;
                                 }

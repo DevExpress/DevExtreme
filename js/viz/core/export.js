@@ -437,11 +437,16 @@ extend(ExportMenu.prototype, {
 
     measure() {
         this._fillSpace();
-        return [BUTTON_SIZE + SHADOW_OFFSET, BUTTON_SIZE];
+        const margin = this._options.button.margin;
+        return [BUTTON_SIZE + margin.left + margin.right, BUTTON_SIZE + margin.top + margin.bottom];
     },
 
     move(rect) {
-        this._group.attr({ translateX: Math.round(rect[0]), translateY: Math.round(rect[1]) });
+        const margin = this._options.button.margin;
+        this._group.attr({
+            translateX: Math.round(rect[0]) + margin.left,
+            translateY: Math.round(rect[1]) + margin.top
+        });
     },
 
     _fillSpace() {

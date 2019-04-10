@@ -9,12 +9,13 @@ if(useJQuery) {
         jQuery.event.special[name] = eventObject;
     });
 
-    var passiveListenerEventName = eventsEngine.passiveListenerEvents.nativeEventName;
-    jQuery.event.special[passiveListenerEventName] = {
-        setup: function(data, namespaces, handler) {
-            domAdapter.listen(this, passiveListenerEventName, handler, { passive: false });
-        }
-    };
+    eventsEngine.forcePassiveFalseEventNames.forEach(function(eventName) {
+        jQuery.event.special[eventName] = {
+            setup: function(data, namespaces, handler) {
+                domAdapter.listen(this, eventName, handler, { passive: false });
+            }
+        };
+    });
 
     eventsEngine.set({
         on: function(element) {

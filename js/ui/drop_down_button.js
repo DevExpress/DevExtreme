@@ -4,9 +4,12 @@ import registerComponent from "../core/component_registrator";
 import ButtonGroup from "./button_group";
 import Popup from "./popup";
 import List from "./list";
-import DataExpressionMixin from "./editor/ui.data_expression";
-import { extend } from "../core/utils/extend";
+import { compileGetter } from "../core/utils/data";
+import DataHelperMixin from "../data_helper";
+import { DataSource } from "../data/data_source/data_source";
+import ArrayStore from "../data/array_store";
 import { Deferred } from "../core/utils/deferred";
+import { extend } from "../core/utils/extend";
 import { isPlainObject } from "../core/utils/type";
 import { ensureDefined } from "../core/utils/common";
 import { format as formatMessage } from "../localization/message";
@@ -18,20 +21,14 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
 /**
  * @name dxDropDownButton
- * @inherits Widget, DataExpressionMixin
+ * @inherits Widget
  * @module ui/drop_down_button
  * @export default
  */
-
 let DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
-        return extend(this.callBase(), DataExpressionMixin._dataExpressionDefaultOptions(), {
-            deferRendering: true,
-            showEvent: "click",
-            showSelectedItem: true,
-            grouped: false,
-            noDataText: formatMessage("dxCollectionWidget-noDataText"),
+        return extend(this.callBase(), {
 
             /**
              * @name dxDropDownButtonOptions.itemTemplate
@@ -42,29 +39,211 @@ let DropDownButton = Widget.inherit({
              * @type_function_return string|Node|jQuery
              */
             itemTemplate: "item",
+
+            /**
+             * @name dxDropDownButtonOptions.keyExpr
+             * @type string|function
+             * @default 'this'
+             * @type_function_param1 itemData:object
+             */
+            keyExpr: "this",
+
+            /**
+             * @name dxDropDownButtonOptions.displayExpr
+             * @type string|function
+             * @default 'this'
+             * @type_function_param1 itemData:object
+             */
+            displayExpr: "this",
+
+            /**
+             * @name dxDropDownButtonOptions.selectedItem
+             * @type string|integer|object
+             * @default null
+             * @readonly
+             */
+            selectedItem: null,
+
+            /**
+             * @name dxDropDownButtonOptions.selectedItemKey
+             * @type string|integer
+             * @default null
+             */
+            selectedItemKey: null,
+
+            /**
+             * @name dxDropDownButtonOptions.deferRendering
+             * @type boolean
+             * @default true
+             */
+            deferRendering: true,
+
+            /**
+             * @name dxDropDownButtonOptions.noDataText
+             * @type string
+             * @default 'No data to display'
+             */
+            noDataText: formatMessage("dxCollectionWidget-noDataText"),
+
+            /**
+             * @name dxDropDownButtonOptions.useSelectMode
+             * @type boolean
+             * @default false
+             */
+            useSelectMode: false,
+
+            /**
+             * @name dxDropDownButtonOptions.splitButton
+             * @type boolean
+             * @default true
+             */
+            splitButton: true,
+
+            /**
+             * @name dxDropDownButtonOptions.text
+             * @type string
+             * @default ""
+             */
+            text: "",
+
+            /**
+             * @name dxDropDownButtonOptions.icon
+             * @type string
+             * @default undefined
+             */
+            icon: undefined,
+
+            /**
+             * @name dxDropDownButtonOptions.onActionButtonClick
+             * @type function(e)|string
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 selectedItem:object
+             * @action
+             */
+            onActionButtonClick: null,
+
+            /**
+             * @name dxDropDownButtonOptions.onSelectionChanged
+             * @type function(e)|string
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 oldSelectedItem:object
+             * @type_function_param1_field5 selectedItem:object
+             * @action
+             */
+            onSelectionChanged: null,
+
+            /**
+             * @name dxDropDownButtonOptions.items
+             * @type Array<CollectionWidgetItem, object>
+             * @default []
+             */
+            items: [],
+
+            /**
+             * @name dxDropDownButtonOptions.dataSource
+             * @type string|Array<CollectionWidgetItem, object>|DataSource|DataSourceOptions
+             * @default null
+             */
+            dataSource: null,
+
+            /**
+             * @name dxDropDownButtonOptions.dropDownOptions
+             * @type dxPopupOptions
+             * @default {}
+             */
+            dropDownOptions: {},
+
+            grouped: false,
             groupTemplate: "group",
-            displayExpr: undefined,
-            valueExpr: "this"
+            buttonGroupOptions: {},
+        });
+    },
+
+    _setOptionsByReference() {
+        this.callBase();
+
+        extend(this._optionsByReference, {
+            selectedItem: true
         });
     },
 
     _init() {
         this.callBase();
-        this._initDataExpressions();
         this._createItemClickAction();
+        this._createActionClickAction();
+        this._createSelectionChangedAction();
+        this._compileKeyGetter();
+        this._compileDisplayGetter();
+        this._initDataSource();
+        this._itemsToDataSource();
+        this._initInnerOptionCache("buttonGroupOptions");
+        this._initInnerOptionCache("dropDownOptions");
+    },
+
+    _itemsToDataSource: function() {
+        if(!this._dataSource) {
+            this._dataSource = new DataSource({
+                store: new ArrayStore(this.option("items")),
+                pageSize: 0
+            });
+        }
+    },
+
+    _compileKeyGetter() {
+        this._keyGetter = compileGetter(this.option("keyExpr"));
+    },
+
+    _compileDisplayGetter() {
+        this._displayGetter = compileGetter(this.option("displayExpr"));
     },
 
     _initMarkup() {
+        this.callBase();
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
+        this._loadSelectedItem().done(this._updateActionButton.bind(this));
         if(!this.option("deferRendering")) {
             this._renderPopup();
         }
-        this._renderValue();
+    },
+
+    _loadSelectedItem() {
+        const d = new Deferred();
+
+        if(this._list) {
+            return d.resolve(this._list.option("selectedItem"));
+        }
+
+        const selectedItemKey = this.option("selectedItemKey");
+        this._loadSingle(this.option("keyExpr"), selectedItemKey)
+            .done(d.resolve)
+            .fail(() => {
+                d.resolve(this.option("selectedItem"));
+            });
+
+        return d.promise();
+    },
+
+    _createActionClickAction() {
+        this._actionClickAction = this._createActionByOption("onActionButtonClick");
+    },
+
+    _createSelectionChangedAction() {
+        this._selectionChangedAction = this._createActionByOption("onSelectionChanged");
     },
 
     _createItemClickAction() {
         this._itemClickAction = this._createActionByOption("onItemClick");
+    },
+
+    _fireSelectionChangedAction({ previousValue, value }) {
+        this._selectionChangedAction({
+            oldSelectedItem: previousValue,
+            selectedItem: value
+        });
     },
 
     _fireItemClickAction({ event, itemElement, itemData }) {
@@ -75,31 +254,65 @@ let DropDownButton = Widget.inherit({
         });
     },
 
+    _actionButtonConfig() {
+        const splitButton = this.option("splitButton");
+        return {
+            text: this.option("text"),
+            icon: splitButton ? this.option("icon") : "spindown",
+            iconPosition: splitButton ? "left" : "right",
+            elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
+        };
+    },
+
+    _getButtonGroupItems() {
+        const items = [];
+        items.push(this._actionButtonConfig());
+        if(this.option("splitButton")) {
+            items.push({
+                icon: "spindown",
+                width: 26,
+                elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
+            });
+        }
+        return items;
+    },
+
+    _buttonGroupItemClick({ event, itemData }) {
+        const isActionButton = itemData.elementAttr.class === DROP_DOWN_BUTTON_ACTION_CLASS;
+        const isToggleButton = itemData.elementAttr.class === DROP_DOWN_BUTTON_TOGGLE_CLASS;
+
+        if(isToggleButton) {
+            this.toggle();
+        } else if(isActionButton) {
+            if(this.option("splitButton")) {
+                this._actionClickAction({
+                    event,
+                    selectedItem: this.option("selectedItem")
+                });
+            } else {
+                this.toggle();
+            }
+        }
+    },
+
     _buttonGroupOptions() {
-        return extend(true, {
-            items: [
-                {
-                    icon: "default",
-                    onClick: this._fireItemClickAction.bind(this),
-                    elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
-                },
-                {
-                    icon: "spindown",
-                    width: 24,
-                    elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS },
-                    onClick: this.toggle.bind(this)
-                }
-            ],
+        return extend({
+            items: this._getButtonGroupItems(),
+            onItemClick: this._buttonGroupItemClick.bind(this),
             stylingMode: "outlined",
             selectionMode: "none"
-        }, this.option("buttonGroupOptions"));
+        }, this._getInnerOptionsCache("buttonGroupOptions"));
     },
 
     _popupOptions() {
         return extend({
+            dragEnabled: false,
+            focusStateEnabled: false,
             deferRendering: this.option("deferRendering"),
             minWidth: 130,
-            closeOnOutsideClick: true,
+            closeOnOutsideClick: function(e) {
+                return !($(e.target).closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`).length);
+            },
             showTitle: false,
             animation: {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
@@ -117,40 +330,62 @@ let DropDownButton = Widget.inherit({
                     y: -1
                 }
             },
-            arrowPosition: "end",
             contentTemplate: (content) => {
                 const $content = $(content);
                 $content.addClass(DROP_DOWN_BUTTON_CONTENT);
                 this._list = this._createComponent($("<div>"), List, this._listOptions());
+
+                this._list.registerKeyHandler("escape", this._escHandler.bind(this));
+                this._list.registerKeyHandler("tab", this._escHandler.bind(this));
+                this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
+                this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
+
                 $content.append(this._list.$element());
             }
-        }, this.option("dropDownOptions"));
+        }, this._getInnerOptionsCache("dropDownOptions"));
     },
 
     _listOptions() {
+        const selectedItemKey = this.option("selectedItemKey");
         return {
             selectionMode: "single",
-            selectedItemKeys: [this.option("value")],
+            selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
             grouped: this.option("grouped"),
-            keyExpr: this._getCollectionKeyExpr(),
+            keyExpr: this.option("keyExpr"),
             noDataText: this.option("noDataText"),
             displayExpr: this.option("displayExpr"),
             itemTemplate: this.option("itemTemplate"),
-            tabIndex: null,
+            items: this.option("items"),
             dataSource: this._dataSource,
             onItemClick: (e) => {
-                this.option("value", this._valueGetter(e.itemData));
+                this.option("selectedItemKey", this._keyGetter(e.itemData));
                 const actionResult = this._fireItemClickAction(e);
                 if(actionResult !== false) {
                     this.toggle(false);
+                    this._buttonGroup.focus();
                 }
             }
         };
     },
 
+    _upDownKeyHandler() {
+        if(this._popup && this._popup.option("visible") && this._list) {
+            this._list.focus();
+        } else {
+            this.open();
+        }
+    },
+
+    _escHandler() {
+        this.close();
+        this._buttonGroup.focus();
+    },
+
     _renderPopup() {
-        this._popup = this._createComponent($("<div>"), Popup, this._popupOptions());
-        this.$element().append(this._popup.$element());
+        const $popup = $("<div>");
+        this.$element().append($popup);
+        this._popup = this._createComponent($popup, Popup, this._popupOptions());
+        this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
     },
 
     _renderButtonGroup() {
@@ -158,57 +393,65 @@ let DropDownButton = Widget.inherit({
         if(!this._buttonGroup) {
             this.$element().append($buttonGroup);
         }
+
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
+        this._buttonGroup.registerKeyHandler("downArrow", this._upDownKeyHandler.bind(this));
+        this._buttonGroup.registerKeyHandler("tab", this.close.bind(this));
+        this._buttonGroup.registerKeyHandler("upArrow", this._upDownKeyHandler.bind(this));
+        this._buttonGroup.registerKeyHandler("escape", this._escHandler.bind(this));
+
+        this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
     },
 
-    _renderValue(value = this.option("value")) {
-        this._loadItemByKey(value)
-            .done((itemData) => {
-                this._actionItem = itemData;
-                if(this.option("showSelectedItem")) {
-                    this._setActionButton(itemData);
-                }
-            })
-            .fail(() => {
-                this._actionItem = value;
-                if(this.option("showSelectedItem")) {
-                    this._setActionButton(value);
-                }
-            });
-    },
-
-    _loadItemByKey(key) {
-        if(isPlainObject(key)) {
-            return new Deferred().resolve(key).promise();
-        }
-
-        if(this._list) {
-            this._setListOption("selectedItemKeys", [key]);
-            return new Deferred().resolve(this._list.option("selectedItem")).promise();
-        } else {
-            return this._loadValue(key);
-        }
-    },
-
-    _setActionButton(itemData) {
-        const displayedValue = String(ensureDefined(this._displayGetter(itemData), ""));
-
-        this._buttonGroup.option("items[0].text", displayedValue);
-        this._buttonGroup.option("items[0].icon", itemData && itemData.icon);
-    },
-
+    /**
+     * @name dxDropDownButton.toggle
+     * @publicName toggle(visibility)
+     * @param1 visibility:boolean
+     * @return Promise<void>
+     */
     toggle(visible) {
         this._popup || this._renderPopup();
-        this._popup.toggle(visible);
+        return this._popup.toggle(visible);
+    },
+
+    /**
+     * @name dxDropDownButton.open
+     * @publicName open()
+     * @return Promise<void>
+     */
+    open() {
+        return this.toggle(true);
+    },
+
+    /**
+     * @name dxDropDownButton.close
+     * @publicName close()
+     * @return Promise<void>
+     */
+    close() {
+        return this.toggle(false);
     },
 
     _setListOption(name, value) {
         this._list && this._list.option(name, value);
     },
 
-    _setCollectionWidgetOption() {
-        this._setListOption.apply(this, arguments);
+    _getDisplayValue(item) {
+        const isPrimitiveItem = !isPlainObject(item);
+        const displayValue = isPrimitiveItem ? item : this._displayGetter(item);
+        return !isPlainObject(displayValue) ? String(ensureDefined(displayValue, "")) : "";
+    },
+
+    _updateActionButton(selectedItem) {
+        if(this.option("useSelectMode")) {
+            this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
+                text: this._getDisplayValue(selectedItem),
+                icon: isPlainObject(selectedItem) ? selectedItem.icon : undefined
+            }));
+        }
+
+        this._setOptionSilent("selectedItem", selectedItem);
     },
 
     _clean() {
@@ -216,39 +459,94 @@ let DropDownButton = Widget.inherit({
         this._popup && this._popup.$element().remove();
     },
 
+    _selectedItemKeyChanged(value) {
+        this._setListOption("selectedItemKeys", value ? [value] : []);
+        const oldSelectedItem = this.option("selectedItem");
+        this._loadSelectedItem().done((selectedItem) => {
+            this._updateActionButton(selectedItem);
+
+            if(this._displayGetter(oldSelectedItem) !== this._displayGetter(selectedItem)) {
+                this._fireSelectionChangedAction({
+                    previousValue: oldSelectedItem,
+                    value: selectedItem
+                });
+            }
+        });
+    },
+
     _optionChanged(args) {
         const { name, value } = args;
-        this._dataExpressionOptionChanged(args);
         switch(args.name) {
-            case "items":
-            case "dataSource":
-            case "valueExpr":
-            case "displayExpr":
-            case "itemTemplate":
-            case "showEvent":
-            case "showSelectedItem":
+            case "useSelectMode":
                 break;
+            case "splitButton":
+                this._renderButtonGroup();
+                break;
+            case "displayExpr":
+                this._compileDisplayGetter();
+                break;
+            case "keyExpr":
+                this._compileKeyGetter();
+                break;
+            case "buttonGroupOptions":
+                this._innerOptionChanged(this._buttonGroup, args);
+                break;
+            case "dropDownOptions":
+                this._innerOptionChanged(this._popup, args);
+                break;
+            case "items":
+                this._dataSource = null;
+                this._itemsToDataSource();
+                this._setListOption(name, value);
+                this._setListOption("selectedItemKeys", []);
+                this._loadSelectedItem().done(this._updateActionButton.bind(this));
+                break;
+            case "dataSource":
+                this._initDataSource();
+                this._setListOption(name, value);
+                this._setListOption("selectedItemKeys", []);
+                this._loadSelectedItem().done(this._updateActionButton.bind(this));
+                break;
+            case "icon":
+                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
+                    icon: value
+                }));
+                break;
+            case "text":
+                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
+                    text: value
+                }));
+                break;
+            case "itemTemplate":
             case "grouped":
             case "noDataText":
             case "groupTemplate":
                 this._setListOption(name, value);
                 break;
+            case "selectedItemKey":
+                this._selectedItemKeyChanged(value);
+                break;
+            case "selectedItem":
+                break;
             case "onItemClick":
                 this._createItemClickAction();
+                break;
+            case "onActionButtonClick":
+                this._createActionClickAction();
+                break;
+            case "onSelectionChanged":
+                this._createSelectionChangedAction();
                 break;
             case "deferRendering":
                 if(!value && !this._popup) {
                     this._renderPopup();
                 }
                 break;
-            case "value":
-                this._renderValue(value);
-                break;
             default:
                 this.callBase(args);
         }
     }
-}).include(DataExpressionMixin);
+}).include(DataHelperMixin);
 
 registerComponent("dxDropDownButton", DropDownButton);
 module.exports = DropDownButton;

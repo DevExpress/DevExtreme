@@ -21,35 +21,15 @@
     }
 }
 
-    .dx-dropdowneditor.dx-show-clear-button {
-        .dx-texteditor-input {
-            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
-        }
-
-        &.dx-rtl .dx-texteditor-input {
-            padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
-            padding-right: 0;
-        }
-    }
-
 .invalid-dropdowneditor-input-padding() {
     &.dx-dropdowneditor-button-visible {
         .dx-texteditor-input {
-            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
-        }
-
-        &.dx-show-clear-button .dx-texteditor-input {
-            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+            padding-right: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
         }
 
         &.dx-rtl {
             .dx-texteditor-input {
-                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
-                padding-right: 0;
-            }
-
-            &.dx-show-clear-button .dx-texteditor-input {
-                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+                padding-left: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
                 padding-right: 0;
             }
         }
@@ -99,16 +79,6 @@
 }
 
 .dx-rtl {
-    .dx-dropdowneditor-button-visible,
-    &.dx-dropdowneditor-button-visible {
-        &.dx-show-clear-button {
-            .dx-texteditor-input {
-                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
-                padding-right: 0;
-            }
-        }
-    }
-
     .dx-dropdowneditor-icon {
         background-position: 0% 50%;
     }

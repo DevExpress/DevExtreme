@@ -911,6 +911,10 @@ export const MockAxis = function(renderOptions) {
 
         updateCanvas: sinon.stub(),
 
+        hideTitle: sinon.spy(),
+
+        hideOuterElements: sinon.spy(),
+
         setPane: function(pane) {
             this.pane = pane;
             this._options.pane = pane;

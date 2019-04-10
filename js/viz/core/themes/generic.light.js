@@ -34,8 +34,8 @@ registerTheme({
     backgroundColor: WHITE,
     primaryTitleColor: PRIMARY_TITLE_COLOR,
     secondaryTitleColor: SECONDARY_TITLE_COLOR,
-    axisColor: LIGHT_GREY,
-    axisLabelColor: SECONDARY_TITLE_COLOR,
+    gridColor: LIGHT_GREY,
+    axisColor: SECONDARY_TITLE_COLOR,
     title: {
         backgroundColor: WHITE,
         font: {
@@ -46,8 +46,13 @@ registerTheme({
         subtitle: {
             font: {
                 size: 16
-            }
-        }
+            },
+            offset: 0,
+            wordWrap: "normal",
+            textOverflow: "ellipsis"
+        },
+        wordWrap: "normal",
+        textOverflow: "ellipsis"
     },
     loadingIndicator: {
         text: "Loading..."
@@ -61,6 +66,12 @@ registerTheme({
             weight: 400
         },
         button: {
+            margin: {
+                top: 8,
+                left: 10,
+                right: 10,
+                bottom: 8
+            },
             "default": {
                 color: "#333",
                 borderColor: "#ddd",
@@ -142,10 +153,15 @@ registerTheme({
                 weight: 200
             },
             subtitle: {
+                offset: 0,
                 font: {
                     size: 14
-                }
-            }
+                },
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            },
+            wordWrap: "none",
+            textOverflow: "ellipsis"
         }
     },
     "chart:common": {
@@ -245,7 +261,7 @@ registerTheme({
         resolveLabelOverlapping: NONE
     },
     "chart:common:axis": {
-        visible: false,
+        visible: true,
         valueMarginsEnabled: true,
         placeholderSize: null,
         logarithmBase: 10,
@@ -264,17 +280,17 @@ registerTheme({
             opacity: 0.3
         },
         tick: {
-            visible: false,
+            visible: true,
             width: 1,
-            length: 8,
-            shift: 0
+            length: 7,
+            shift: 3
         },
         minorTick: {
             visible: false,
             width: 1,
             opacity: 0.3,
-            length: 8,
-            shift: 0
+            length: 7,
+            shift: 3
         },
         stripStyle: {
             paddingLeftRight: 10,
@@ -634,7 +650,9 @@ registerTheme({
             label: {
                 displayMode: "standard",
                 overlappingBehavior: "hide",
-                indentFromAxis: 10
+                indentFromAxis: 10,
+                wordWrap: "normal",
+                overflow: "none"
             },
             title: {
                 font: {
@@ -690,12 +708,32 @@ registerTheme({
             },
             constantLines: []
         },
-        annotations: {
-            imageOptions: {
-                location: "full"
+        commonAnnotationSettings: {
+            font: {
+                color: "#333333"
             },
-            labelOptions: {
-                font: {}
+            tooltipEnabled: true,
+            border: {
+                width: 1,
+                color: "#dddddd",
+                dashStyle: SOLID,
+                visible: true
+            },
+            color: WHITE,
+            opacity: 0.9,
+            arrowLength: 14,
+            arrowWidth: 14,
+            paddingLeftRight: 10,
+            paddingTopBottom: 10,
+            shadow: {
+                opacity: 0.15,
+                offsetX: 0,
+                offsetY: 1,
+                blur: 4,
+                color: BLACK
+            },
+            image: {
+                location: "full"
             }
         },
         argumentAxis: {
@@ -712,7 +750,7 @@ registerTheme({
         commonPaneSettings: {
             backgroundColor: NONE,
             border: {
-                color: LIGHT_GREY,
+                color: SECONDARY_TITLE_COLOR,
                 width: 1,
                 visible: false,
                 top: true,
@@ -849,6 +887,10 @@ registerTheme({
                         width: 2
                     }
                 }
+            },
+            label: {
+                textOverflow: "ellipsis",
+                wordWrap: "normal"
             }
         },
         legend: {
@@ -1313,7 +1355,9 @@ registerTheme({
                     offsetY: 1,
                     blur: 1,
                     color: "#000000"
-                }
+                },
+                wordWrap: "normal",
+                textOverflow: "ellipsis"
             }
         },
         group: {
@@ -1349,7 +1393,8 @@ registerTheme({
                 font: {
                     color: SECONDARY_TITLE_COLOR,
                     weight: 600
-                }
+                },
+                textOverflow: "ellipsis"
             }
         },
 

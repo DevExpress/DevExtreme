@@ -32,7 +32,11 @@ class LessMetadataPreCompilerPlugin {
         this.modifyVars = modifyVars;
     }
 
-    process(less) {
+    process(less, context) {
+        if(context && context.fileInfo.filename !== "input") {
+            return less;
+        }
+
         less += "#devexpress-metadata-compiler{";
         for(let key in this._metadata) {
             if(this._metadata.hasOwnProperty(key)) {
@@ -162,7 +166,8 @@ class LessTemplateLoader {
                 resolve({
                     compiledMetadata: compiledMetadata,
                     css: this._makeInfoHeader() + output.css,
-                    swatchSelector: this.swatchSelector
+                    swatchSelector: this.swatchSelector,
+                    version: this.version
                 });
             }, error => {
                 reject(error);

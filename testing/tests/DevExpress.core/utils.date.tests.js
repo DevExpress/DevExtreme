@@ -521,6 +521,12 @@ QUnit.test("trimming time of date", function(assert) {
     assert.deepEqual(dateUtils.trimTime(date), new Date(2015, 7, 16), "Date is correct after time trimming");
 });
 
+QUnit.test("setting to the day end", function(assert) {
+    var date = new Date(2015, 7, 16, 2, 30, 17, 100);
+
+    assert.deepEqual(dateUtils.setToDayEnd(date), new Date(2015, 7, 16, 23, 59, 59, 999), "Date is correct after time setting day end");
+});
+
 QUnit.test("rounding date by startDayHour", function(assert) {
     var date = new Date(2015, 7, 16, 8, 30);
 

@@ -1,4 +1,27 @@
-var $ = require("jquery");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import errors from "ui/widget/ui.errors";
+import translator from "animation/translator";
+import dateLocalization from "localization/date";
+import messageLocalization from "localization/message";
+import dblclickEvent from "events/dblclick";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import Color from "color";
+import tooltip from "ui/tooltip/ui.tooltip";
+import devices from "core/devices";
+import config from "core/config";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import dataUtils from "core/element_data";
+import dateSerialization from "core/utils/date_serialization";
+import { tooltipHelper, appointmentsHelper } from "./helpers.js";
+
+import "ui/scheduler/ui.scheduler";
+import "ui/switch";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -6,31 +29,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-
-var noop = require("core/utils/common").noop,
-    errors = require("ui/widget/ui.errors"),
-    translator = require("animation/translator"),
-    dateLocalization = require("localization/date"),
-    messageLocalization = require("localization/message"),
-    dblclickEvent = require("events/dblclick"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    Color = require("color"),
-    tooltip = require("ui/tooltip/ui.tooltip"),
-    devices = require("core/devices"),
-    config = require("core/config"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    dataUtils = require("core/element_data"),
-    dateSerialization = require("core/utils/date_serialization");
-
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
 
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
@@ -87,8 +85,7 @@ QUnit.module("Integration: Appointments", {
                 assert.ok(dataSource.indexOf(itemData) > -1, "appointment data contains in the data source");
             }
         });
-
-        $(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance").open();
+        appointmentsHelper.compact.click();
     }
 });
 
@@ -513,6 +510,28 @@ QUnit.test("Scheduler tasks should have a right height when currentView is chang
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
 });
 
+QUnit.test("Short tasks should have a right height (T725948)", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                endDate: "2019-03-20T12:06:41.000Z",
+                startDate: "2019-03-20T12:06:40.000Z"
+            }
+        ],
+        currentView: "day",
+        views: ["day"],
+        height: 800,
+        currentDate: new Date(2019, 2, 20),
+        firstDayOfWeek: 1,
+        cellDuration: 15
+    });
+    this.clock.tick();
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+
+    assert.roughEqual($appointment.height(), 3, 0.5, "Task has a right height");
+});
+
 QUnit.test("Two not rival appointments with fractional coordinates should have correct positions(ie)", function(assert) {
     this.createInstance({
         dataSource: [
@@ -599,7 +618,7 @@ QUnit.test("DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.test("Recurrence repeat-end editor should be closed after reopening appointment popup", function(assert) {
+QUnit.test("Recurrence repeat-type editor should have default 'never' value after reopening appointment popup", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -614,23 +633,25 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(firstAppointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
-        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor,
+        repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "daily");
 
-    repeatEndEditor.option("value", true);
+    repeatTypeEditor.option("value", "count");
     $(".dx-scheduler-appointment-popup").find(".dx-popup-done").trigger("dxclick");
 
     this.instance.showAppointmentPopup(secondAppointment);
 
-    form = this.instance.getAppointmentDetailsForm(),
-    repeatOnEditor = form.getEditor("repeatOnOff"),
-    repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+    form = this.instance.getAppointmentDetailsForm();
+    recurrenceEditor = form.getEditor("recurrenceRule");
+    freqEditor = recurrenceEditor._freqEditor;
+    repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "daily");
 
-    assert.notOk(repeatEndEditor.option("value"), "Switch is closed");
+    assert.ok(repeatTypeEditor.option("value"), 'never', "Repeat-type editor value is ok");
 });
 
 QUnit.test("Disabled appointment could not be focused", function(assert) {
@@ -669,10 +690,9 @@ QUnit.test("Appointment dates should not be normalized before sending to the det
 
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger("dxclick");
+    appointmentsHelper.click();
     this.clock.tick(300);
-    var $tooltip = $(".dx-scheduler-appointment-tooltip");
-    $tooltip.find(".dx-scheduler-appointment-tooltip-buttons").find(".dx-button").eq(1).trigger("dxclick");
+    tooltipHelper.clickOnItem();
 
     try {
         var args = spy.getCall(0).args[0];
@@ -708,14 +728,14 @@ QUnit.test("Appointment labels should be localized before sending to the details
         formItems = detailsForm.option("items");
 
     assert.equal(formItems[0].label.text, messageLocalization.format("dxScheduler-editorLabelTitle"), "Title is OK");
-    assert.equal(formItems[1].itemType, "empty", "Item is empty");
-    assert.equal(formItems[2].label.text, messageLocalization.format("dxScheduler-allDay"), "All-day is OK");
-    assert.equal(formItems[3].label.text, messageLocalization.format("dxScheduler-editorLabelStartDate"), "Start date is OK");
-    assert.equal(formItems[4].label.text, " ", "Start date tz is OK");
-    assert.equal(formItems[5].label.text, messageLocalization.format("dxScheduler-editorLabelEndDate"), "End date is OK");
-    assert.equal(formItems[6].label.text, " ", "End date tz is OK");
-    assert.equal(formItems[7].itemType, "empty", "Item is empty");
-    assert.equal(formItems[8].label.text, messageLocalization.format("dxScheduler-editorLabelDescription"), "Description is OK");
+    assert.equal(formItems[1].label.text, messageLocalization.format("dxScheduler-editorLabelStartDate"), "Start date is OK");
+    assert.equal(formItems[2].label.text, " ", "Start date tz is OK");
+    assert.equal(formItems[3].label.text, messageLocalization.format("dxScheduler-editorLabelEndDate"), "End date is OK");
+    assert.equal(formItems[4].label.text, " ", "End date tz is OK");
+    assert.equal(formItems[5].label.text, messageLocalization.format("dxScheduler-allDay"), "All-day is OK");
+    assert.equal(formItems[6].itemType, "empty", "Item is empty");
+    assert.equal(formItems[7].label.text, messageLocalization.format("dxScheduler-editorLabelDescription"), "Description is OK");
+    assert.equal(formItems[8].itemType, "empty", "Item is empty");
     assert.equal(formItems[9].label.text, messageLocalization.format("dxScheduler-editorLabelRecurrence"), "Recurrence is OK");
 });
 
@@ -2519,12 +2539,8 @@ QUnit.test("Many dropDown appts with one multi day task should be grouped correc
         { text: 'long appt', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 31, 1) }
     ]);
 
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(ddAppointments.length, 7, "There are 7 drop down appts");
+    appointmentsHelper.compact.click();
+    assert.equal(tooltipHelper.getItemCount(), 7, "There are 7 drop down appts");
 });
 
 QUnit.test("Many dropDown appts should be grouped correctly with one multi day task which started before dropDown (T525443)", function(assert) {
@@ -2554,12 +2570,8 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
         { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) }
     ]);
 
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(ddAppointments.length, 13, "There are 13 drop down appts");
+    appointmentsHelper.compact.click();
+    assert.equal(tooltipHelper.getItemCount(), 13, "There are 13 drop down appts");
 });
 
 QUnit.test("DropDown appointment button should have correct coordinates: rtl mode", function(assert) {
@@ -2619,8 +2631,9 @@ QUnit.test("DropDown appointment buttons should have correct quantity with multi
 });
 
 QUnit.test("DropDown appointment should raise the onAppointmentClick event", function(assert) {
-    var spy = sinon.spy();
-    var appointments = [
+    let tooltipItemElement = null;
+    const spy = sinon.spy();
+    const appointments = [
         { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
         { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
         { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
@@ -2639,7 +2652,8 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
             assert.equal(args.component, instance, "dxScheduler is 'component'");
             assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
             assert.deepEqual(args.appointmentData, appointments[4], "Appointment data is OK");
-            assert.equal($(args.appointmentElement).get(0), dropDown._list.$element().find(".dx-list-item").eq(2).get(0), "Appointment element is OK");
+
+            assert.equal($(args.appointmentElement).get(0), tooltipItemElement, "Appointment element is OK");
             assert.ok(args.event instanceof $.Event, "Event is OK");
 
             assert.notOk(args.hasOwnProperty('itemData'));
@@ -2656,10 +2670,9 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
         sinon.stub(instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
 
         instance.option("dataSource", appointments);
-
-        var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-        dropDown.open();
-        $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
+        appointmentsHelper.compact.click();
+        tooltipItemElement = tooltipHelper.getItemElement(2).get(0);
+        tooltipHelper.clickOnItem(2);
 
     } finally {
         this.instance.showAppointmentPopup = showAppointmentPopup;
@@ -2695,9 +2708,8 @@ QUnit.test("DropDown appointment should process the onAppointmentClick event cor
 
         instance.option("dataSource", appointments);
 
-        var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-        dropDown.open();
-        $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
+        appointmentsHelper.compact.click();
+        tooltipHelper.clickOnItem(2);
 
         assert.notOk(spy.calledOnce, "showAppointmentPopup wasn't called");
     } finally {
@@ -2706,6 +2718,14 @@ QUnit.test("DropDown appointment should process the onAppointmentClick event cor
 });
 
 QUnit.test("DropDown appointment should be painted depend on resource color", function(assert) {
+    const colors = [
+        "#ff0000",
+        "#ff0000",
+        "#0000ff",
+        "#0000ff",
+        "#0000ff"
+    ];
+
     var appointments = [
         { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
         { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
@@ -2716,6 +2736,7 @@ QUnit.test("DropDown appointment should be painted depend on resource color", fu
         { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
         { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
     ];
+
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
         views: ["month"],
@@ -2737,19 +2758,21 @@ QUnit.test("DropDown appointment should be painted depend on resource color", fu
 
     this.instance.option("dataSource", appointments);
 
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "borderLeftColor"), "#0000ff", "Appointment color is OK");
+    appointmentsHelper.compact.click();
+    tooltipHelper.getMarkers().each((index, element) => {
+        assert.equal(this.getAppointmentColor($(element)), colors[index], "Appointment color is OK");
+    });
 });
 
 QUnit.test("DropDown appointment should be painted depend on resource color when resourses store is asynchronous", function(assert) {
+    const colors = [
+        "#ff0000",
+        "#ff0000",
+        "#0000ff",
+        "#0000ff",
+        "#0000ff"
+    ];
+
     var appointments = [
         { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
         { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
@@ -2792,18 +2815,12 @@ QUnit.test("DropDown appointment should be painted depend on resource color when
     sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
 
     this.instance.option("dataSource", appointments);
-
     this.clock.tick(300);
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "borderLeftColor"), "#0000ff", "Appointment color is OK");
+    appointmentsHelper.compact.click();
+    tooltipHelper.getMarkers().each((index, element) => {
+        assert.equal(this.getAppointmentColor($(element)), colors[index], "Appointment color is OK");
+    });
 });
 
 QUnit.test("DropDown appointments should not be duplicated when items option change (T503748)", function(assert) {
@@ -2829,12 +2846,8 @@ QUnit.test("DropDown appointments should not be duplicated when items option cha
         endDate: new Date(2016, 8, 12, 1)
     });
 
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(ddAppointments.length, 3, "There are 3 drop down appts");
+    appointmentsHelper.compact.click();
+    assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts");
 });
 
 QUnit.test("Recurrence appointment should be rendered correctly when currentDate was changed: month view", function(assert) {
@@ -3046,11 +3059,8 @@ QUnit.test("DropDown appointment should be rendered correctly with expressions o
         }
     });
 
-    $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
-
-    var $appointment = $(".dx-dropdownmenu-list .dx-item").first();
-
-    assert.equal($appointment.find(".custom-title").text(), "Item 2", "Text is correct on init");
+    appointmentsHelper.compact.click();
+    assert.equal(tooltipHelper.getItemElement().find(".custom-title").text(), "Item 2", "Text is correct on init");
 });
 
 QUnit.test("DropDown button should be rendered correctly when appointmentCollectorTemplate is used", function(assert) {
@@ -3092,7 +3102,6 @@ QUnit.test("DropDown button should be rendered correctly when appointmentCollect
 });
 
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
-
     var startDate = new Date(2015, 1, 4, 1),
         endDate = new Date(2015, 1, 4, 2);
     var appointment = {
@@ -3172,10 +3181,8 @@ QUnit.test("dxScheduler should render dropDownAppointment appointment template w
         }
     });
 
-    $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
-    var $appointment = $(".dx-dropdownmenu-list .dx-item").first();
-
-    assert.equal($appointment.text(), "text", "Text is correct on init");
+    appointmentsHelper.compact.click();
+    assert.equal(tooltipHelper.getItemElement().text(), "text", "Text is correct on init");
 });
 
 QUnit.test("Appointment should have right position, if it's startDate time less than startDayHour option value", function(assert) {

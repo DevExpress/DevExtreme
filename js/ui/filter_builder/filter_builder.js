@@ -48,10 +48,10 @@ const FILTER_BUILDER_CLASS = "dx-filterbuilder",
 
 var ACTIONS = [{
         name: "onEditorPreparing",
-        config: { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" }
+        config: { excludeValidators: ["disabled", "readOnly"], category: "rendering" }
     }, {
         name: "onEditorPrepared",
-        config: { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" }
+        config: { excludeValidators: ["disabled", "readOnly"], category: "rendering" }
     }, {
         name: "onValueChanged",
         config: { excludeValidators: ["disabled", "readOnly"] }

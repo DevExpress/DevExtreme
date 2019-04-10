@@ -460,7 +460,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             var that = this,
                 virtualItemsCount = that.virtualItemsCount();
 
-            return virtualItemsCount ? (virtualItemsCount.begin + virtualItemsCount.end) * that._viewportItemSize * that._sizeRatio + that._contentSize : 0;
+            return virtualItemsCount ? that.getContentOffset("begin") + that.getContentOffset("end") + that._contentSize : 0;
         },
         getViewportItemIndex: function() {
             return this._viewportItemIndex;
@@ -636,7 +636,8 @@ exports.VirtualScrollController = Class.inherit((function() {
                     that._cache.push(cacheItem);
                 }
 
-                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0, removeCacheItem);
+                var isDelayChanged = isVirtualMode(that) && lastCacheLength === 0;
+                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
                         that.load(); // needed for infinite scrolling when height is not defined

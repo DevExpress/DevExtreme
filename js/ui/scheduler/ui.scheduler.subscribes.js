@@ -445,8 +445,12 @@ const subscribes = {
         options.callback(updatedEndDate);
     },
 
-    renderDropDownAppointments: function(options) {
-        this._dropDownAppointments.render(options, this);
+    renderCompactAppointments: function(options) {
+        this._compactAppointmentsHelper.render(options);
+    },
+
+    clearCompactAppointments: function() {
+        this._compactAppointmentsHelper.clear();
     },
 
     supportCompactDropDownAppointments: function() {
@@ -505,6 +509,10 @@ const subscribes = {
 
     recurrenceEditorVisibilityChanged: function(visible) {
         this.recurrenceEditorVisibilityChanged(visible);
+    },
+
+    resizePopup: function() {
+        this.resizePopup();
     },
 
     getField: function(field, obj) {
@@ -818,6 +826,10 @@ const subscribes = {
             result = floorQuantityOfDays * visibleDayDuration + tailDuration;
         }
         options.callback(result);
+    },
+
+    fixWrongEndDate: function(appointment, startDate, endDate) {
+        return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
     },
 
     getEndDayHour: function() {

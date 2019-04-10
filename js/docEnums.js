@@ -71,6 +71,16 @@
  */
 
 /**
+ * @typedef {string} Enums.VizWordWrap
+ * @enum {'normal'|'breakWord'|'none'}
+ */
+
+/**
+  * @typedef {string} Enums.VizTextOverflow
+  * @enum {'ellipsis'|'hide'|'none'}
+  */
+
+/**
  * @typedef {string} Enums.VizPaletteExtensionMode
  * @enum {'alternate'|'blend'|'extrapolate'}
  */
@@ -198,6 +208,11 @@
 /**
  * @typedef {string} Enums.SeriesType
  * @enum {'area'|'bar'|'bubble'|'candlestick'|'fullstackedarea'|'fullstackedbar'|'fullstackedline'|'fullstackedspline'|'fullstackedsplinearea'|'line'|'rangearea'|'rangebar'|'scatter'|'spline'|'splinearea'|'stackedarea'|'stackedbar'|'stackedline'|'stackedspline'|'stackedsplinearea'|'steparea'|'stepline'|'stock'}
+ */
+
+/**
+ * @typedef {string} Enums.AnnotationType
+ * @enum {'label'|'image'}
  */
 
 /**
@@ -821,6 +836,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ActionButtonLocation
+ * @enum {'after'|'before'}
+ */
+
+/**
  * @typedef {string} Enums.SmallValuesGroupingMode
  * @enum {'none'|'smallValueThreshold'|'topN'}
  */
@@ -978,4 +998,9 @@
 /**
  * @typedef {string} Enums.TreeListFilterMode
  * @enum {'fullBranch'|'withAncestors'}
+ */
+
+/**
+ * @typedef {string} Enums.GridStartEditAction
+ * @enum {'click'|'dblClick'}
  */

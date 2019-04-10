@@ -804,6 +804,7 @@
 
         return {
             eventMock: eventMock,
+            simulateEvent: simulateEvent,
 
             start: function() {
                 _x = 0;

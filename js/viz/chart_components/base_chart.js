@@ -14,7 +14,6 @@ var commonUtils = require("../../core/utils/common"),
     chartThemeManagerModule = require("../components/chart_theme_manager"),
     LayoutManagerModule = require("./layout_manager"),
     trackerModule = require("./tracker"),
-    headerBlockModule = require("./header_block"),
 
     REINIT_REFRESH_ACTION = "_reinit",
     REINIT_DATA_SOURCE_REFRESH_ACTION = "_updateDataSource",
@@ -148,13 +147,14 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
         });
     }
 
-    if(!checkStackOverlap(rollingStocks)) return;
+    if(!checkStackOverlap(rollingStocks)) return false;
     checkHeightRollingStock(rollingStocks, stubCanvas);
 
     prepareOverlapStacks(rollingStocks);
 
     rollingStocks.reverse();
     moveRollingStock(rollingStocks, stubCanvas);
+    return true;
 }
 
 function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
@@ -316,11 +316,6 @@ var overlapping = {
     resolveLabelOverlappingInOneDirection: resolveLabelOverlappingInOneDirection
 };
 
-function suppressCommonLayout(layout) {
-    layout.forward = function(rect) { return rect; };
-    layout.backward = noop;
-}
-
 var BaseChart = BaseWidget.inherit({
     _eventsMap: {
         onSeriesClick: { name: "seriesClick" },
@@ -342,7 +337,7 @@ var BaseChart = BaseWidget.inherit({
 
     _rootClass: "dxc-chart",
 
-    _initialChanges: ["REINIT"],
+    _initialChanges: ["INIT"],
 
     _themeDependentChanges: ["REFRESH_SERIES_REINIT"],
 
@@ -363,11 +358,9 @@ var BaseChart = BaseWidget.inherit({
 
     _initCore: function() {
         var that = this;
-        suppressCommonLayout(that._layout);
         that._canvasClipRect = that._renderer.clipRect();
 
         that._createHtmlStructure();
-        that._headerBlock = new headerBlockModule.HeaderBlock();
         that._createLegend();
         that._createTracker();
         that._needHandleRenderComplete = true;
@@ -399,25 +392,16 @@ var BaseChart = BaseWidget.inherit({
 
     _reinit() {
         const that = this;
-        // _skipRender = !that._initialized;
 
         _setCanvasValues(that._canvas);
         that._reinitAxes();
-        // NOTE: T273635
-        // Changing the `_initialized` flag prevents `_render` which is synchronously called from the `_updateDataSource` when data source is local and series rendering is synchronous
-        // This is possible because `_render` checks the `_initialized` flag
-        // if (!_skipRender) {
-        that._skipRender = true; // T273635, T351032
-        // }
-        that._updateDataSource();
-        if(!that.series || that.needToPopulateSeries) {
-            that._dataSpecificInit(false);
-        }
-        // if (!_skipRender) {
-        that._skipRender = false; // T273635, T351032
-        // }
-        that._correctAxes();
-        /* _skipRender || */that._forceRender();
+
+        that._requestChange([
+            "DATA_SOURCE",
+            "DATA_INIT",
+            "CORRECT_AXIS",
+            "FULL_RENDER"
+        ]);
     },
 
     _correctAxes: noop,
@@ -499,7 +483,6 @@ var BaseChart = BaseWidget.inherit({
 
         disposeObjectsInArray.call(that, "series");
 
-        disposeObject("_headerBlock");
         disposeObject("_tracker");
         disposeObject("_crosshair");
 
@@ -556,11 +539,12 @@ var BaseChart = BaseWidget.inherit({
         return this._themeManager.getOptions(name);
     },
 
-    _applySize: function() {
-        // if (this._initialized) {
-        //    this._resize();
-        // }
-        this._processRefreshData(RESIZE_REFRESH_ACTION);
+    _applySize: function(rect) {
+        this._rect = rect.slice();
+
+        if(!this._changes.has("FULL_RENDER")) {
+            this._processRefreshData(RESIZE_REFRESH_ACTION);
+        }
     },
 
     // _resize: function () {
@@ -614,12 +598,22 @@ var BaseChart = BaseWidget.inherit({
         }, trackerCanvases);
     },
 
+    _createCanvasFromRect(rect) {
+        const currentCanvas = this._canvas;
+        return _setCanvasValues({
+            left: rect[0],
+            top: rect[1],
+            right: currentCanvas.width - rect[2],
+            bottom: currentCanvas.height - rect[3],
+            width: currentCanvas.width,
+            height: currentCanvas.height
+        });
+    },
+
     _doRender: function(_options) {
         var that = this,
             drawOptions,
             recreateCanvas;
-
-        if(/* !that._initialized || */that._skipRender) return; // NOTE: Because _render can be called from _init!
 
         if(that._canvas.width === 0 && that._canvas.height === 0) return;
 
@@ -639,13 +633,14 @@ var BaseChart = BaseWidget.inherit({
         }
 
         ///#DEBUG
-        that.DEBUG_canvas = that._canvas;
+        that.DEBUG_canvas = _setCanvasValues(that._canvas);
         ///#ENDDEBUG
 
         recreateCanvas && that._updateCanvasClipRect(that._canvas);
 
+        this._canvas = this._createCanvasFromRect(this._rect);
+
         that._renderer.stopAllAnimations(true);
-        _setCanvasValues(that._canvas);
         that._cleanGroups();
         const startTime = new Date();
         that._renderElements(drawOptions);
@@ -653,48 +648,44 @@ var BaseChart = BaseWidget.inherit({
         that._lastRenderingTime = new Date() - startTime;
     },
 
+    _layoutAxes: noop,
+
     _renderElements: function(drawOptions) {
         var that = this,
             preparedOptions = that._prepareToRender(drawOptions),
             isRotated = that._isRotated(),
             isLegendInside = that._isLegendInside(),
             trackerCanvases = [],
-            layoutTargets = that._getLayoutTargets(),
             dirtyCanvas = extend({}, that._canvas),
             argBusinessRange,
             zoomMinArg,
-            drawElements = [],
-            layoutCanvas = drawOptions.drawTitle && drawOptions.drawLegend && drawOptions.adjustAxes,
             zoomMaxArg;
 
         ///#DEBUG
         that.DEBUG_dirtyCanvas = dirtyCanvas;
         ///#ENDDEBUG
-        if(layoutCanvas) {
-            drawElements = that._getDrawElements(drawOptions, isLegendInside);
-        }
 
         that._renderer.lock();
 
+        if(drawOptions.drawLegend && that._legend) {
+            that._legendGroup.linkAppend();
+        }
+
         that.layoutManager.setOptions(that._layoutManagerOptions());
-        that.layoutManager.layoutElements(
-            drawElements,
-            that._canvas,
-            function(sizeShortage) {
-                var panesCanvases = that._renderAxes(drawOptions, preparedOptions, isRotated);
-                that._shrinkAxes(sizeShortage, panesCanvases);
-            },
-            layoutTargets,
-            isRotated
-        );
-        layoutCanvas && that._updateCanvasClipRect(dirtyCanvas);
+
+        const layoutTargets = that._getLayoutTargets();
+
+        this._layoutAxes((needSpace) => {
+            const canvas = that._renderAxes(drawOptions, preparedOptions);
+            that._shrinkAxes(needSpace, canvas);
+        });
+
 
         that._applyClipRects(preparedOptions);
         that._appendSeriesGroups();
         that._createCrosshairCursor();
 
-        _each(layoutTargets, function() {
-            var canvas = this.canvas;
+        layoutTargets.forEach(({ canvas }) => {
             trackerCanvases.push({
                 left: canvas.left,
                 right: canvas.width - canvas.right,
@@ -761,9 +752,11 @@ var BaseChart = BaseWidget.inherit({
                 that._getLegendCallBack(singleSeries)
             );
         }
-        that._adjustSeriesLabels(resolveLabelOverlapping === "shift");
-        if(resolveLabelOverlapping !== "none") {
-            that._resolveLabelOverlapping(resolveLabelOverlapping);
+
+        if(resolveLabelOverlapping === "none") {
+            that._adjustSeriesLabels(false);
+        } else {
+            that._locateLabels(resolveLabelOverlapping);
         }
 
         that._renderTrackers(isLegendInside);
@@ -775,6 +768,10 @@ var BaseChart = BaseWidget.inherit({
 
         that._drawn();
         that._renderCompleteHandler();
+    },
+
+    _locateLabels(resolveLabelOverlapping) {
+        this._resolveLabelOverlapping(resolveLabelOverlapping);
     },
 
     _renderExtraElements() {},
@@ -797,7 +794,7 @@ var BaseChart = BaseWidget.inherit({
                 func = this._resolveLabelOverlappingShift;
                 break;
         }
-        typeUtils.isFunction(func) && func.call(this);
+        return typeUtils.isFunction(func) && func.call(this);
     },
 
     _getVisibleSeries: function() {
@@ -854,6 +851,12 @@ var BaseChart = BaseWidget.inherit({
         that._scaleBreaksGroup.linkRemove().clear();
     },
 
+    _allowLegendInsidePosition() {
+        return false;
+    },
+
+    _updateLegendPosition: noop,
+
     _createLegend: function() {
         var that = this,
             legendSettings = getLegendSettings(that._legendDataField);
@@ -865,8 +868,13 @@ var BaseChart = BaseWidget.inherit({
             itemGroupClass: "dxc-item",
             titleGroupClass: "dxc-title",
             textField: legendSettings.textField,
-            getFormatObject: legendSettings.getFormatObject
+            getFormatObject: legendSettings.getFormatObject,
+            allowInsidePosition: that._allowLegendInsidePosition()
         });
+
+        that._updateLegend();
+
+        that._layout.add(that._legend);
     },
 
     _updateLegend: function() {
@@ -878,6 +886,7 @@ var BaseChart = BaseWidget.inherit({
         legendOptions.containerBackgroundColor = themeManager.getOptions("containerBackgroundColor");
         legendOptions._incidentOccurred = that._incidentOccurred; // TODO: Why is `_` used?
         that._legend.update(legendData, legendOptions, themeManager.theme("legend").title);
+        this._change(["LAYOUT"]);
     },
 
     _prepareDrawOptions: function(drawOptions) {
@@ -906,6 +915,8 @@ var BaseChart = BaseWidget.inherit({
             this._currentRefreshData = newRefreshAction;
             // this._invalidate();
         }
+
+        this._requestChange(["REFRESH"]);
     },
 
     _getLegendData: function() {
@@ -987,7 +998,6 @@ var BaseChart = BaseWidget.inherit({
         const that = this;
         that._themeManager.update(that._options);
         that.callBase.apply(that, arguments);
-        that._doRefresh();
     },
 
     _optionChangesMap: {
@@ -996,8 +1006,8 @@ var BaseChart = BaseWidget.inherit({
         palette: "PALETTE",
         paletteExtensionMode: "PALETTE",
 
-        legend: "DATA_INIT",
-        seriesTemplate: "DATA_INIT",
+        legend: "FORCE_DATA_INIT",
+        seriesTemplate: "FORCE_DATA_INIT",
 
         "export": "FORCE_RENDER",
 
@@ -1018,8 +1028,10 @@ var BaseChart = BaseWidget.inherit({
         scrollBar: "SCROLL_BAR"
     },
 
-    _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT",
-        "FORCE_RENDER", "VISUAL_RANGE", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
+    _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "CORRECT_AXIS"],
+
+    _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES",
+        "FORCE_RENDER", "VISUAL_RANGE", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT", "REFRESH", "FULL_RENDER"],
 
     _change_ANIMATION: function() {
         this._renderer.updateAnimationOptions(this._getAnimationOptions());
@@ -1027,20 +1039,26 @@ var BaseChart = BaseWidget.inherit({
 
     _change_DATA_SOURCE: function() {
         this._needHandleRenderComplete = true;
-        this._processRefreshData(REINIT_DATA_SOURCE_REFRESH_ACTION);
+        this._updateDataSource();
     },
 
     _change_PALETTE: function() {
         this._themeManager.updatePalette();
-        this._refreshSeries(DATA_INIT_REFRESH_ACTION);
+        this._refreshSeries("DATA_INIT");
     },
 
     _change_REFRESH_SERIES_DATA_INIT: function() {
-        this._refreshSeries(DATA_INIT_REFRESH_ACTION);
+        this._refreshSeries("DATA_INIT");
     },
 
     _change_DATA_INIT: function() {
-        this._processRefreshData(DATA_INIT_REFRESH_ACTION);
+        if((!this.series || this.needToPopulateSeries) && !this._changes.has("FORCE_DATA_INIT")) {
+            this._dataInit();
+        }
+    },
+
+    _change_FORCE_DATA_INIT: function() {
+        this._dataInit();
     },
 
     _change_REFRESH_SERIES_FAMILIES: function() {
@@ -1054,16 +1072,16 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _change_AXES_AND_PANES: function() {
-        this._refreshSeries(REINIT_REFRESH_ACTION);
+        this._refreshSeries("INIT");
     },
 
     _change_ROTATED: function() {
         this._createScrollBar();
-        this._refreshSeries(REINIT_REFRESH_ACTION);
+        this._refreshSeries("INIT");
     },
 
     _change_REFRESH_SERIES_REINIT: function() {
-        this._refreshSeries(REINIT_REFRESH_ACTION);
+        this._refreshSeries("INIT");
     },
 
     _change_SCROLL_BAR: function() {
@@ -1081,7 +1099,11 @@ var BaseChart = BaseWidget.inherit({
 
     _refreshSeries: function(actionName) {
         this.needToPopulateSeries = true;
-        this._processRefreshData(actionName);
+        this._requestChange([actionName]);
+    },
+
+    _change_CORRECT_AXIS() {
+        this._correctAxes();
     },
 
     _doRefresh: function() {
@@ -1110,10 +1132,10 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        if(this._applyingChanges) {
-            this._dataInit();
-        } else {
+        if(this._changes.has("INIT")) {
             this._requestChange(["DATA_INIT"]);
+        } else {
+            this._requestChange(["FORCE_DATA_INIT"]);
         }
     },
 
@@ -1141,9 +1163,12 @@ var BaseChart = BaseWidget.inherit({
         that._repopulateSeries();
         that._seriesPopulatedHandlerCore();
         that._populateBusinessRange();
-        that._tracker.updateSeries(that.series, that._skipRender);
+        that._tracker.updateSeries(that.series, this._changes.has("INIT"));
         that._updateLegend();
-        needRedraw && that._forceRender();
+        if(needRedraw) {
+            this._requestChange(["FULL_RENDER"]);
+        }
+        // needRedraw && that._forceRender();
     },
 
     _forceRender: function() {
@@ -1201,41 +1226,6 @@ var BaseChart = BaseWidget.inherit({
         }
     },
 
-    _getDrawElements: function(drawOptions, legendHasInsidePosition) {
-        var that = this,
-            drawElements = [],
-            exportOptions = that._themeManager.getOptions("export"),
-            titleOptions = that._title.getLayoutOptions() || {},
-            legendOptions,
-            headerElements = [];
-
-        if(that._exportMenu && exportOptions.enabled) {
-            headerElements.push(that._exportMenu);
-            drawElements.push(that._headerBlock);
-        }
-
-        if(drawOptions.drawTitle) {
-            titleOptions.verticalAlignment !== "bottom" && headerElements.length ? headerElements.push(that._title) : drawElements.push(that._title);
-        }
-
-        if(drawOptions.drawLegend && that._legend) {
-            that._legendGroup.linkAppend();
-            if(!legendHasInsidePosition) {
-                legendOptions = that._legend.getLayoutOptions();
-                if(headerElements.length === 1 && legendOptions.verticalAlignment !== "bottom" && legendOptions.cutSide === "vertical") {
-                    headerElements.push(that._legend);
-                } else {
-                    drawElements.push(that._legend);
-                }
-            }
-        }
-
-        if(headerElements.length) {
-            that._headerBlock.update(headerElements, that._canvas);
-        }
-        return drawElements;
-    },
-
     _dataIsReady: function() {
         // In order to support scenario when chart is created without "dataSource" and it is considered
         // as data is being loaded the check for state of "dataSource" option is added
@@ -1257,7 +1247,7 @@ var BaseChart = BaseWidget.inherit({
             that._populateBusinessRange(target && target.getValueAxis());
             that._renderer.stopAllAnimations(true);
             that._updateLegend();
-            that._doRender({ force: true });
+            that._requestChange(["FULL_RENDER"]);
         };
 
         for(let i = 0; i < allSeriesOptions.length; i++) {
@@ -1399,8 +1389,28 @@ var BaseChart = BaseWidget.inherit({
     refresh: function() {
         this._disposeSeries();
         this._disposeSeriesFamilies();
-        this._change(["CONTAINER_SIZE"]);
-        this._requestChange(["REFRESH_SERIES_REINIT"]);
+        this._requestChange(["CONTAINER_SIZE", "REFRESH_SERIES_REINIT"]);
+    },
+
+    _getMinSize() {
+        const adaptiveLayout = this._layoutManagerOptions();
+        return [adaptiveLayout.width, adaptiveLayout.height];
+    },
+
+    _change_REFRESH() {
+        if(!this._changes.has("INIT")) {
+            this._doRefresh();
+        } else {
+            this._currentRefreshData = null;
+        }
+    },
+
+    _change_FULL_RENDER() {
+        this._forceRender();
+    },
+
+    _change_INIT() {
+        this._reinit();
     }
 });
 

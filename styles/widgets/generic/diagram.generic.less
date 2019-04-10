@@ -1,0 +1,33 @@
+.dx-diagram {
+    border-color: @diagram-border-color;
+
+    .dx-diagram-toolbar-wrapper:first-child {
+        border-bottom: 1px solid @diagram-toolbar-border-color;
+    }
+}
+
+.dx-diagram-toolbar {
+    background-color: transparent;
+
+    .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
+        background-color: @diagram-normal-format-active-bg;
+
+        &.dx-button-success {
+            background-color: @diagram-success-format-active-bg;
+        }
+
+        &.dx-button-default {
+            background-color: @diagram-default-format-active-bg;
+        }
+
+        &.dx-button-danger {
+            background-color: @diagram-danger-format-active-bg;
+        }
+    }
+}
+
+.dx-diagram-toolbox {
+    .dx-accordion .dx-accordion-item {
+        border: none;
+    }
+}

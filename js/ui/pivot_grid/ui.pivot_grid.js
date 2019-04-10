@@ -201,7 +201,9 @@ var PivotGrid = Widget.inherit({
                  */
                 useNative: "auto",
 
-                removeInvisiblePages: true
+                removeInvisiblePages: true,
+                virtualRowHeight: 50,
+                virtualColumnWidth: 100
             },
             encodeHtml: true,
             /**
@@ -760,6 +762,12 @@ var PivotGrid = Widget.inherit({
                  * @default false
                  */
                 allowSearch: false,
+                /**
+                 * @name dxPivotGridOptions.headerFilter.showRelevantValues
+                 * @type boolean
+                 * @default false
+                 */
+                showRelevantValues: false,
                 /**
                  * @name dxPivotGridOptions.headerFilter.searchTimeout
                  * @type number
@@ -1729,7 +1737,8 @@ var PivotGrid = Widget.inherit({
             rowsAreaWidth = 0,
             hasRowsScroll,
             hasColumnsScroll,
-            scrollBarInfo = getScrollBarInfo(that.option("scrolling.useNative")),
+            scrollingOptions = that.option("scrolling") || {},
+            scrollBarInfo = getScrollBarInfo(scrollingOptions.useNative),
             scrollBarWidth = scrollBarInfo.scrollBarWidth,
             dataAreaCell = tableElement.find("." + DATA_AREA_CELL_CLASS),
             rowAreaCell = tableElement.find("." + ROW_AREA_CELL_CLASS),
@@ -1872,11 +1881,12 @@ var PivotGrid = Widget.inherit({
                     columnsArea.groupWidth(groupWidth - diff);
                 }
 
-                if(that.option("scrolling.mode") === "virtual" && !that._dataController.isEmpty()) {
-
+                if(scrollingOptions.mode === "virtual" && !that._dataController.isEmpty()) {
                     var virtualContentParams = that._dataController.calculateVirtualContentParams({
-                        contentWidth: totalWidth,
-                        contentHeight: totalHeight,
+                        virtualRowHeight: scrollingOptions.virtualRowHeight,
+                        virtualColumnWidth: scrollingOptions.virtualColumnWidth,
+                        itemWidths: resultWidths,
+                        itemHeights: resultHeights,
                         rowCount: resultHeights.length,
                         columnCount: resultWidths.length,
                         viewportWidth: groupWidth,

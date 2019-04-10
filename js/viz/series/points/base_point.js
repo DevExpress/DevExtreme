@@ -440,7 +440,7 @@ Point.prototype = {
     correctCoordinates: _noop,
     coordsIn: _noop,
     getTooltipParams: _noop,
-    setLabelEllipsis: _noop,
+    applyWordWrap: _noop,
     setLabelTrackerData: _noop,
     updateLabelCoord: _noop,
     drawLabel: _noop,

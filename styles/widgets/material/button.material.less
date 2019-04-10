@@ -1,16 +1,21 @@
 .dx-size-default() {
     @MATERIAL_BUTTON_HORIZONTAL_PADDING: 16px;
     @MATERIAL_BUTTON_VERTICAL_PADDING: 6px;
-    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0px 1px 5px;
-    @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0px 4px 11px;
     @MATERIAL_BUTTON_HEIGHT: 36px;
     @MATERIAL_BUTTON_MIN_WIDTH: 64px;
+    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0px 1px 3px;
+    @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0px 4px 6px;
 }
 .dx-size-compact() {
-    @MATERIAL_BUTTON_HORIZONTAL_PADDING: 10px;
+    @MATERIAL_BUTTON_HORIZONTAL_PADDING: 16px;
     @MATERIAL_BUTTON_VERTICAL_PADDING: 5px;
-    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0 1px 2px;
+    @MATERIAL_BUTTON_HEIGHT: 28px;
+    @MATERIAL_BUTTON_MIN_WIDTH: 48px;
+    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0px 1px 3px;
+    @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0px 4px 6px;
 }
+
+
 
 @MATERIAL_BUTTON_PADDING: @MATERIAL_BUTTON_VERTICAL_PADDING @MATERIAL_BUTTON_HORIZONTAL_PADDING;
 @MATERIAL_BUTTON_ICONONLY_PADDING: @MATERIAL_BUTTON_VERTICAL_PADDING;
@@ -19,6 +24,7 @@
 @MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW: @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE @button-active-shadow-color;
 @MATERIAL_NORMAL_BUTTON_HOVERED_STATE_SHADOW: @MATERIAL_BUTTON_BOX_SHADOW_SIZE @button-hover-shadow-color;
 @MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: @MATERIAL_BUTTON_BOX_SHADOW_SIZE @button-focused-shadow-color;
+@MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN: 5px;
 
 .dx-button-content {
     line-height: 0;
@@ -291,6 +297,136 @@
 
     &.dx-button-success {
         .dx-button-outlined-color-styling(@button-success-bg, @button-success-bg);
+    }
+}
+
+.dx-editor-outlined, .dx-editor-filled {
+    .dx-texteditor-buttons-container {
+        > .dx-button {
+            margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+        }
+
+        &:first-child {
+            > .dx-button {
+                &:first-child {
+                    margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        &:last-child {
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                }
+            }
+
+            > .dx-dropdowneditor-button:last-child {
+                margin-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
+        }
+
+        .dx-rtl& {
+            &:first-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:first-child:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                    }
+                }
+            }
+
+            &:last-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+
+                    &:last-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+                }
+
+                > .dx-dropdowneditor-button:last-child {
+                    margin-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+.dx-editor-underlined {
+    .dx-texteditor-buttons-container {
+        > .dx-button {
+            margin: 0 @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN 3px;
+
+            .dx-button-content {
+                padding-bottom: 3px;
+            }
+        }
+
+        &:first-child {
+            > .dx-button {
+                &:first-child {
+                    margin-left:0;
+                }
+            }
+        }
+
+        &:last-child {
+            > .dx-button {
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .dx-rtl& {
+            &:first-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            &:last-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -6,6 +6,13 @@
     }
 }
 
+.dx-editor-content-wrapper() {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    align-items: baseline;
+}
+
 /*B231111*/
 .dx-placeholder {
     position: absolute;
@@ -35,6 +42,7 @@
 }
 
 .dx-texteditor-container {
+    display: flex;
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -42,12 +50,15 @@
 }
 
 .dx-texteditor-buttons-container {
-    position: absolute;
     display: flex;
-    top: 0;
-    right: 0;
     width: auto;
-    height: 100%;
+    flex-grow: 0;
+    flex-basis: content;
+    align-items: center;
+}
+
+.dx-texteditor-input-container {
+    .dx-editor-content-wrapper();
 }
 
 .dx-texteditor-input {
@@ -105,17 +116,6 @@
         text-align: right;
         left: auto;
         right: 0;
-    }
-
-    .dx-clear-button-area {
-        float: left;
-        right: auto;
-        left: 0;
-    }
-
-    .dx-texteditor-buttons-container {
-        left: 0;
-        right: auto;
     }
 }
 

@@ -2914,7 +2914,7 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
         dataAreaScrollable.off("scroll", scrollAssert);
 
         // assert
-        assert.equal(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
+        assert.roughEqual(pivotGrid._scrollLeft, 10, 1, "_scrollLeft variable store inverted value");
         assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
@@ -4422,11 +4422,13 @@ QUnit.test("Virtual Scrolling", function(assert) {
 
     assert.deepEqual(this.dataController.calculateVirtualContentParams.lastCall.args[0], {
         columnCount: 4,
-        contentHeight: 71,
-        contentWidth: 200,
+        itemHeights: [43, 28],
+        itemWidths: [20, 40, 60, 20],
         rowCount: 2,
         viewportHeight: 71,
-        viewportWidth: 899
+        viewportWidth: 899,
+        virtualColumnWidth: 100,
+        virtualRowHeight: 50
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
@@ -4483,11 +4485,13 @@ QUnit.test("Virtual Scrolling. Widget height is not defined", function(assert) {
 
     assert.deepEqual(this.dataController.calculateVirtualContentParams.lastCall.args[0], {
         columnCount: 4,
-        contentHeight: 71,
-        contentWidth: 200,
+        itemHeights: [43, 28],
+        itemWidths: [20, 40, 60, 20],
         rowCount: 2,
         viewportHeight: $(window).outerHeight(),
-        viewportWidth: 899
+        viewportWidth: 899,
+        virtualColumnWidth: 100,
+        virtualRowHeight: 50
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));

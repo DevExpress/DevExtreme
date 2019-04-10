@@ -338,6 +338,14 @@
 
 @checkbox-icon-border-radius: @base-border-radius - 2px;
 
+// Diagram
+@diagram-border-color: @base-border-color;
+@diagram-toolbar-border-color: @base-border-color;
+@diagram-normal-format-active-bg: @base-bg;;
+@diagram-default-format-active-bg: @base-default;
+@diagram-danger-format-active-bg: @base-danger;
+@diagram-success-format-active-bg: @base-success;
+
 // Drawer
 /**
 * @name 10. Shader background color
@@ -424,6 +432,7 @@
 @htmleditor-variable-bg: fade(@base-accent, 15%);
 @htmleditor-resize-frame-border-color: @base-accent;
 @htmleditor-resize-handle-bg: @base-accent;
+@htmleditor-mention-bg: #fff - @base-bg;
 
 // List
 /**
@@ -577,7 +586,6 @@
 // Lookup
 
 @lookup-icon-color: @base-icon-color;
-@lookup-validation-message-color: @base-invalid-color;
 
 // Selectbox
 /**
@@ -867,10 +875,6 @@
 */
 @colorbox-overlay-bg: @base-bg;
 @colorbox-palette-cell-bg: @base-bg;
-
-//PivoTabs
-@pivottabs-tab-color: @base-text-color;
-@pivottabs-tab-selected-color: @base-text-color;
 
 // DataGrid
 /**
@@ -1365,12 +1369,13 @@
 @scheduler-header-bg: @base-bg;
 @scheduler-alldaypanel-bg: @base-bg;
 
-@scheduler-recurence-editor-bg: fade(@base-inverted-bg, 40%);
+@scheduler-appointment-form-separator-color: @base-border-color;
+
 @scheduler-tab-selected-bg: @base-inverted-bg;
 @scheduler-tab-selected-before-bg: transparent;
 
 @scheduler-tab-focused-border-color: @base-border-color;
-@scheduler-recurence-editor-border-color: fade(#fff - @base-border-color, 70%);
+
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: 1;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: true;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: fade(#3806ff, 60%);
@@ -1722,3 +1727,13 @@
 * @group filterbuilder
 */
 @filterbuilder-menu-icon-color: @base-icon-color;
+
+// FileManager
+@filemanager-border-color: @base-border-color;
+@filemanager-file-toolbar-bg: darken(@base-bg, 3%);
+@filemanager-editor-active-bg: fade(@base-text-color, 10%);
+@filemanager-dirs-tree-item-focus-bg: darken(@base-bg, 8%);
+@filemanager-dirs-tree-item-focus-color: @base-text-color;
+@filemanager-breadcrumbs-item-focus-bg: @base-border-color;
+@filemanager-breadcrumbs-item-focus-color: @base-text-color;
+@filemanager-thumbnails-image-icon-color: @base-border-color;

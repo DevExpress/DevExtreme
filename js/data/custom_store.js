@@ -123,7 +123,16 @@ function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
     if(store.__rawData) {
         continuation(store.__rawData);
     } else {
-        invokeUserLoad(store, userFuncOptions)
+        var loadPromise = store.__rawDataPromise || invokeUserLoad(store, userFuncOptions);
+
+        if(store._cacheRawData) {
+            store.__rawDataPromise = loadPromise;
+        }
+
+        loadPromise
+            .always(function() {
+                delete store.__rawDataPromise;
+            })
             .done(function(rawData) {
                 if(store._cacheRawData) {
                     store.__rawData = rawData;
