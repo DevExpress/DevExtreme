@@ -2464,6 +2464,35 @@ QUnit.test("DropDown appointment button should have correct coordinates", functi
     assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
 });
 
+QUnit.test("DropDown appointment button should have correct coordinates on weekView, not in allDay panel", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: ["week"],
+        width: 840,
+        currentView: "week",
+        firstDayOfWeek: 1,
+        maxAppointmentsPerCell: 1
+    });
+
+    this.instance.option("dataSource", [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) }
+    ]);
+
+    let $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    let buttonWidth = $dropDownButton.outerWidth();
+    let buttonCoordinates = translator.locate($dropDownButton);
+    let $cell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(2);
+    let cellWidth = $cell.outerWidth();
+    let expectedCoordinates = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(2).position();
+
+    const WEEK_VIEW_BUTTON_OFFSET = 5;
+
+    assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
+    assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + cellWidth - buttonWidth - WEEK_VIEW_BUTTON_OFFSET, 1.001, "Left coordinate is OK");
+    assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+});
+
 QUnit.test("DropDown appointment button should have correct width when intervalCount is set", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
