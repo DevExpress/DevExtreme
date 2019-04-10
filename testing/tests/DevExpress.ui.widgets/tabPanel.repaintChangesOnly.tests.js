@@ -207,6 +207,29 @@ QUnit.module("repaintChangesOnly", {
         assert.notOk(this.tabPanelContainsElement(item2.content), item2.content, `doesn't contain '${item2.content}'`);
     });
 
+    QUnit.test("[{1}, {2}] -> [selectedIndex: 1]", function(assert) {
+        const item1 = { text: "1a", content: "1a_" };
+        const item2 = { text: "2a", content: "2a_" };
+        this.createTabPanel({ items: [item1, item2] });
+
+        this.tabPanel.option("selectedIndex", 1);
+        this.clock.tick(1);
+
+        assert.equal(this.titleRenderedSpy.callCount, 0, "titleRenderedSpy.callCount");
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "itemRenderedSpy");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, item2, "itemRenderedSpy.firstCall.args[0].itemData");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemIndex, 1, "itemRenderedSpy.firstCall.args[0].index");
+
+        assert.equal(this.itemDeletedSpy.callCount, 0, "onItemDeleted");
+
+        assert.ok(this.tabPanelContainsElement(item1.text), item1.text, `contains '${item1.text}'`);
+        assert.ok(this.tabPanelContainsElement(item2.text), item2.text, `contains '${item2.text}'`);
+
+        assert.ok(this.tabPanelContainsElement(item1.content), item1.content, `contains '${item1.content}'`);
+        assert.ok(this.tabPanelContainsElement(item2.content), item2.content, `contains '${item2.content}'`);
+    });
+
     QUnit.test("[{1}, {2}] -> [{1, visible:false}, {2}]", function(assert) {
         const item1 = { text: "1a", content: "1a_" };
         const item2 = { text: "2a", content: "2a_" };
