@@ -35,7 +35,7 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
                 height: 800,
                 dataSource: this.tasks,
                 adaptivityEnabled: true,
-                views: ["month"],
+                views: ["month", "week"],
                 width: 840,
                 currentView: "month",
                 currentDate: new Date(2019, 2, 4)
@@ -45,6 +45,9 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
         // NOTE: sizes of the current config in create instance
         this.cellWidth = 120;
         this.cellHeight = 115;
+
+        this.allDayCellWidth = 105;
+        this.allDayCellHeight = 74;
     },
     afterEach: () => {
         fx.off = false;
@@ -70,6 +73,19 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
         assert.equal($appointments.length, 0, "Appointments are not rendered");
     });
 
+    QUnit.test("There are no ordinary appointments on adaptive week view allDay panel", (assert) => {
+        this.createInstance();
+
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
+        this.instance.option("currentView", "week");
+
+        let $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
+        let $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
+
+        assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
+        assert.equal($appointments.length, 0, "Appointments are not rendered");
+    });
+
     QUnit.test("Adaptive dropDown appointment button should have correct coordinates", (assert) => {
         this.createInstance();
 
@@ -80,6 +96,21 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
 
         assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.cellWidth - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE) / 2, 1.001, "Left coordinate is OK");
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + this.cellHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET, 1.001, "Top coordinate is OK");
+    });
+
+    QUnit.test("Adaptive dropDown appointment button should have correct coordinates in allDay panel", (assert) => {
+        this.createInstance();
+
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
+        this.instance.option("currentView", "week");
+
+        let $dropDownButton = this.instance.$element().find("." + DROP_DOWN_APPOINTMENT_CLASS);
+
+        let buttonCoordinates = translator.locate($dropDownButton);
+        let expectedCoordinates = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(1).position();
+
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.allDayCellWidth - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE) / 2, 1.001, "Left coordinate is OK");
+        assert.roughEqual(buttonCoordinates.top, (this.allDayCellHeight - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE) / 2, 1.001, "Top coordinate is OK");
     });
 });
 
