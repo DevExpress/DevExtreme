@@ -147,13 +147,14 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
         });
     }
 
-    if(!checkStackOverlap(rollingStocks)) return;
+    if(!checkStackOverlap(rollingStocks)) return false;
     checkHeightRollingStock(rollingStocks, stubCanvas);
 
     prepareOverlapStacks(rollingStocks);
 
     rollingStocks.reverse();
     moveRollingStock(rollingStocks, stubCanvas);
+    return true;
 }
 
 function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
@@ -751,9 +752,11 @@ var BaseChart = BaseWidget.inherit({
                 that._getLegendCallBack(singleSeries)
             );
         }
-        that._adjustSeriesLabels(resolveLabelOverlapping === "shift");
-        if(resolveLabelOverlapping !== "none") {
-            that._resolveLabelOverlapping(resolveLabelOverlapping);
+
+        if(resolveLabelOverlapping === "none") {
+            that._adjustSeriesLabels(false);
+        } else {
+            that._locateLabels(resolveLabelOverlapping);
         }
 
         that._renderTrackers(isLegendInside);
@@ -765,6 +768,10 @@ var BaseChart = BaseWidget.inherit({
 
         that._drawn();
         that._renderCompleteHandler();
+    },
+
+    _locateLabels(resolveLabelOverlapping) {
+        this._resolveLabelOverlapping(resolveLabelOverlapping);
     },
 
     _renderExtraElements() {},
@@ -787,7 +794,7 @@ var BaseChart = BaseWidget.inherit({
                 func = this._resolveLabelOverlappingShift;
                 break;
         }
-        typeUtils.isFunction(func) && func.call(this);
+        return typeUtils.isFunction(func) && func.call(this);
     },
 
     _getVisibleSeries: function() {

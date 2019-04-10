@@ -5778,8 +5778,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             result = text.setMaxWidth(110, {
                 wordWrap: "normal"
             });
-
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 5);
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test" },
@@ -5802,7 +5801,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "clip"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 1);
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "longlonglonglonglong" },
@@ -5820,7 +5819,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 wordWrap: "word-break"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 2);
 
             assert.equal(text.element.textContent, "longlonglonglonglonglonglong");
             assert.equal(text.element.childNodes.length, 2);
@@ -5838,7 +5837,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "clip"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 3);
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "long" },
@@ -5861,7 +5860,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 3);
 
             assert.ok(text.element.childNodes[1].textContent.indexOf("...") !== -1);
 
@@ -5878,7 +5877,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "hide"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 1);
             assert.equal(text.getBBox().width, 0);
         });
 
@@ -5891,7 +5890,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 wordWrap: "normal"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 4);
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test text" },
@@ -5913,7 +5912,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 1);
 
             assert.ok(text.element.textContent.indexOf("...") > 0);
             assert.equal(text.element.childNodes.length, 1);
@@ -5931,7 +5930,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 9);
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There " },
@@ -5960,7 +5959,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 1);
 
             assert.equal(text.element.childNodes.length, 1);
         });
@@ -5975,7 +5974,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 2);
 
             assert.equal(text.element.childNodes.length, 2);
         });
@@ -5992,7 +5991,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 wordWrap: "normal"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 4);
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test text" },
@@ -6015,7 +6014,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.strictEqual(result, true);
+            assert.deepEqual(result, 1);
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "..." }

@@ -887,6 +887,10 @@ registerTheme({
                         width: 2
                     }
                 }
+            },
+            label: {
+                textOverflow: "ellipsis",
+                wordWrap: "normal"
             }
         },
         legend: {

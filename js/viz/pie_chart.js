@@ -1,22 +1,17 @@
-var seriesConsts = require("./components/consts"),
-    vizUtils = require("./core/utils"),
-    extend = require("../core/utils/extend").extend,
-    isNumeric = require("../core/utils/type").isNumeric,
-    each = require("../core/utils/iterator").each,
-    rangeModule = require("./translators/range"),
-    registerComponent = require("../core/component_registrator"),
-    baseChartModule = require("./chart_components/base_chart"),
-    BaseChart = baseChartModule.BaseChart,
-    overlapping = baseChartModule.overlapping,
-    seriesSpacing = seriesConsts.pieSeriesSpacing,
-    translator1DModule = require("./translators/translator1d"),
-    OPTIONS_FOR_REFRESH_SERIES = ["startAngle", "innerRadius", "segmentsDirection", "type"],
-    _extend = extend,
-    _each = each,
-    _noop = require("../core/utils/common").noop,
-    _getVerticallyShiftedAngularCoords = require("./core/utils").getVerticallyShiftedAngularCoords,
+import { pieSeriesSpacing as seriesSpacing, states } from "./components/consts";
+import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from "./core/utils";
+import { extend as _extend } from "../core/utils/extend";
+import { isNumeric } from "../core/utils/type";
+import { each as _each } from "../core/utils/iterator";
+import rangeModule from "./translators/range";
+import registerComponent from "../core/component_registrator";
+import { BaseChart, overlapping } from "./chart_components/base_chart";
+import { noop as _noop } from "../core/utils/common";
+import translator1DModule from "./translators/translator1d";
 
-    states = seriesConsts.states, NORMAL_STATE = states.normalMark,
+const OPTIONS_FOR_REFRESH_SERIES = ["startAngle", "innerRadius", "segmentsDirection", "type"],
+    NORMAL_STATE = states.normalMark,
+    MAX_RESOLVE_ITERATION_COUNT = 5,
     LEGEND_ACTIONS = [states.resetItem, states.applyHover, states.applySelected, states.applySelected];
 
 function getLegendItemAction(points) {
@@ -286,10 +281,18 @@ var dxPieChart = BaseChart.inherit({
         };
     },
 
+    _locateLabels(resolveLabelOverlapping) {
+        let iterationCount = 0;
+        let labelsWereOverlapped;
+        let wordWrapApplied;
+        do {
+            labelsWereOverlapped = this._resolveLabelOverlapping(resolveLabelOverlapping);
+            wordWrapApplied = this._adjustSeriesLabels(resolveLabelOverlapping === "shift");
+        } while((labelsWereOverlapped || wordWrapApplied) && ++iterationCount < MAX_RESOLVE_ITERATION_COUNT);
+    },
+
     _adjustSeriesLabels: function(moveLabelsFromCenter) {
-        this.series.forEach(function(series) {
-            series.adjustLabels(moveLabelsFromCenter);
-        });
+        return this.series.reduce((r, s) => s.adjustLabels(moveLabelsFromCenter) || r, false);
     },
 
     _prepareStackPoints: _noop,
@@ -304,44 +307,46 @@ var dxPieChart = BaseChart.inherit({
             seriesByPosition = that.series.reduce(function(r, s) {
                 (r[s.getOptions().label.position] || r.outside).push(s);
                 return r;
-            }, { inside: [], columns: [], outside: [] });
+            }, { inside: [], columns: [], outside: [] }),
+            labelsOverlapped = false;
 
         if(seriesByPosition.inside.length > 0) {
-            resolve(seriesByPosition.inside.reduce(function(r, singleSeries) {
+            labelsOverlapped = resolve(seriesByPosition.inside.reduce(function(r, singleSeries) {
                 return singleSeries.getVisiblePoints().reduce(function(r, point) {
                     r.left.push(point);
                     return r;
                 }, r);
-            }, { left: [], right: [] }), shiftInColumnFunction);
+            }, { left: [], right: [] }), shiftInColumnFunction) || labelsOverlapped;
         }
 
-        seriesByPosition.columns.forEach(function(singleSeries) {
-            resolve(dividePoints(singleSeries), shiftInColumnFunction);
-        });
+        labelsOverlapped = seriesByPosition.columns.reduce((r, singleSeries) => {
+            return resolve(dividePoints(singleSeries), shiftInColumnFunction) || r;
+        }, labelsOverlapped);
 
         if(seriesByPosition.outside.length > 0) {
-            resolve(seriesByPosition.outside.reduce(function(r, singleSeries) {
+            labelsOverlapped = resolve(seriesByPosition.outside.reduce(function(r, singleSeries) {
                 return dividePoints(singleSeries, r);
-            }, null), shiftFunction);
-            that._adjustSeriesLabels(true);
+            }, null), shiftFunction) || labelsOverlapped;
         }
+        return labelsOverlapped;
 
         function dividePoints(series, points) {
             return series.getVisiblePoints().reduce(function(r, point) {
-                var angle = vizUtils.normalizeAngle(point.middleAngle);
+                var angle = normalizeAngle(point.middleAngle);
                 (angle <= 90 || angle >= 270 ? r.right : r.left).push(point);
                 return r;
             }, points || { left: [], right: [] });
         }
 
         function resolve(points, shiftCallback) {
+            let overlapped = false;
             if(inverseDirection) {
                 points.left.reverse();
                 points.right.reverse();
             }
 
-            overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, shiftCallback);
-            overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, shiftCallback);
+            overlapped = overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, shiftCallback);
+            return overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, shiftCallback) || overlapped;
         }
 
         function shiftFunction(box, length) {

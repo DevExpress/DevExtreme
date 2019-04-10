@@ -86,6 +86,7 @@ function environmentWithStubLabels() {
         point._label = sinon.createStubInstance(labelModule.Label);
         point._label.getLayoutOptions.returns(this.options.label);
         point._label.getBoundingRect.returns(labelBBox || { height: 10, width: 20, x: 10, y: 15 });
+        point._label.fit.returns(true);
     };
 }
 
@@ -1121,7 +1122,7 @@ QUnit.test("T626329. Outside, move from center. Shrink big label with half canva
     this.options.label.position = "outside";
     var point = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 110, y: 10, width: 410, height: 10 });
 
-    point.setLabelEllipsis(true);
+    point.applyWordWrap(true);
     assert.equal(point._label.fit.args[0][0], 300);
 });
 
@@ -1220,29 +1221,31 @@ QUnit.module("set label ellipsis", {
 
 QUnit.test("Single series, label is outside right bound - fit in reduced space", function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
-    point.setLabelEllipsis();
+    var textEllipsis = point.applyWordWrap();
 
     assert.deepEqual(point._label.fit.args[0][0], 10);
+    assert.strictEqual(textEllipsis, true, "text has ellipsis");
 });
 
 QUnit.test("Single series, label is outside left bound - fit in reduced space", function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: -15, width: 30, y: 10, height: 30 });
-    point.setLabelEllipsis();
+    point.applyWordWrap();
 
     assert.deepEqual(point._label.fit.args[0][0], 15);
 });
 
 QUnit.test("Single series, label is inside bounds - do not fit", function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 400, width: 30, y: 10, height: 30 });
-    point.setLabelEllipsis();
+    var textEllipsis = point.applyWordWrap();
 
     assert.strictEqual(point._label.fit.callCount, 0);
+    assert.strictEqual(textEllipsis, false, "text do not have ellipsis");
 });
 
 QUnit.test("Multiple series, first series, columns, label is outside right bound - fit in reduced space", function(assert) {
     this.series.index = 0;
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
-    point.setLabelEllipsis();
+    point.applyWordWrap();
 
     assert.deepEqual(point._label.fit.args[0][0], 10);
 });
@@ -1250,7 +1253,7 @@ QUnit.test("Multiple series, first series, columns, label is outside right bound
 QUnit.test("Multiple series, non-first series, columns - fit in column width", function(assert) {
     this.series.index = 1;
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 185, y: 10, height: 30 });
-    point.setLabelEllipsis();
+    point.applyWordWrap();
 
     assert.deepEqual(point._label.fit.args[0][0], 150);
 });
@@ -1258,7 +1261,7 @@ QUnit.test("Multiple series, non-first series, columns - fit in column width", f
 QUnit.test("set label ellipsis. not drawn point", function(assert) {
     assert.expect(3);
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 });
-    point.setLabelEllipsis();
+    point.applyWordWrap();
     point.updateLabelCoord();
 });
 
@@ -1266,7 +1269,7 @@ QUnit.test("Inside. Label is outside bound but label width less that visible are
     this.options.label.position = "inside";
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
 
-    point.setLabelEllipsis();
+    point.applyWordWrap();
 
     assert.strictEqual(point._label.fit.callCount, 0);
 });
@@ -1275,7 +1278,7 @@ QUnit.test("Inside. Label width more that visible area - fit in visible area", f
     this.options.label.position = "inside";
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 620, y: 10, height: 30 });
 
-    point.setLabelEllipsis();
+    point.applyWordWrap();
 
     assert.deepEqual(point._label.fit.args[0][0], 600);
 });
