@@ -89,7 +89,7 @@ class Diagram extends Widget {
             * @type_function_param1_field4 data:string
             * @action
             */
-            onDataChanged: null,
+            onDataChanged: null
         });
     }
 
