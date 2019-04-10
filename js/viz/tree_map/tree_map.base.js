@@ -604,7 +604,10 @@ function layoutTextNode(node, params) {
 
     if(_isDefined(resolveLabelOverflow)) {
         if(resolveLabelOverflow === "ellipsis" && fitByHeight) {
-            text.applyEllipsis(effectiveWidth);
+            text.setMaxSize(effectiveWidth, undefined, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
             if(!fitByWidth) {
                 bBox = text.getBBox();
                 fitByWidth = bBox.width <= effectiveWidth;
@@ -612,7 +615,8 @@ function layoutTextNode(node, params) {
         }
     } else {
         fitByWidth = true;
-        text.setMaxWidth(effectiveWidth, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: "none" } :
+        fitByHeight = true;
+        text.setMaxSize(effectiveWidth, rect[3] - rect[1] - paddingTopBottom, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: "none" } :
             { textOverflow: tileLabelOverflow, wordWrap: tileLabelWordWrap });
     }
 
