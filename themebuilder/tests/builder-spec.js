@@ -43,17 +43,32 @@ describe("Builder - testing exported function", () => {
         });
     }).timeout(5000);
 
-    it("Build theme with changed color constants", () => {
+    it("Build theme with changed color constants (generic)", () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
             lessCompiler: lessCompiler,
-            baseTheme: "material.blue.light.compact",
-            items: [{ key: "@base-bg", value: "red" }]
+            items: [{ key: "@base-bg", value: "#abcdef" }]
         };
 
         return buildTheme(config).then((result) => {
             assert.notEqual(result.css, "", "Has css in result");
+            assert.ok(/#abcdef/.test(result.css), "Color was changed");
+        });
+    }).timeout(5000);
+
+    it("Build theme with changed color constants (material)", () => {
+        const config = {
+            command: commands.BUILD_THEME,
+            reader: fileReader,
+            lessCompiler: lessCompiler,
+            baseTheme: "material.blue.light",
+            items: [{ key: "@base-bg", value: "#abcdef" }]
+        };
+
+        return buildTheme(config).then((result) => {
+            assert.notEqual(result.css, "", "Has css in result");
+            assert.ok(/#abcdef/.test(result.css), "Color was changed");
         });
     }).timeout(5000);
 });
