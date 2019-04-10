@@ -140,7 +140,7 @@ class FileManagerToolbar extends Widget {
             return { name, text };
         });
 
-        const selectedIndex = this.option("itemListViewMode") === "thumbnails" ? 0 : 1;
+        const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 0 : 1;
 
         return {
             widget: "dxSelectBox",
@@ -189,7 +189,7 @@ class FileManagerToolbar extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
-            itemListViewMode: "details"
+            itemViewMode: "details"
         });
     }
 
@@ -198,7 +198,7 @@ class FileManagerToolbar extends Widget {
 
         switch(name) {
             case "commandManager":
-            case "itemListViewMode":
+            case "itemViewMode":
                 this.repaint();
                 break;
             default:

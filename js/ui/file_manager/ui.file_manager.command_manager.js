@@ -3,9 +3,9 @@ import { isString } from "../../core/utils/type";
 
 export class FileManagerCommandManager {
 
-    constructor(editingSettings) {
+    constructor(permissions) {
         this._actions = {};
-        this._editingSettings = editingSettings || {};
+        this._permissions = permissions || {};
 
         this._initCommands();
     }
@@ -16,30 +16,30 @@ export class FileManagerCommandManager {
                 name: "create",
                 text: "New folder",
                 icon: "plus",
-                enabled: this._editingSettings.allowCreate,
+                enabled: this._permissions.create,
                 noFileItemRequired: true
             },
             {
                 name: "rename",
                 text: "Rename",
-                enabled: this._editingSettings.allowRename,
+                enabled: this._permissions.rename,
                 isSingleFileItemCommand: true
             },
             {
                 name: "move",
                 text: "Move",
-                enabled: this._editingSettings.allowMove
+                enabled: this._permissions.move
             },
             {
                 name: "copy",
                 text: "Copy",
-                enabled: this._editingSettings.allowCopy
+                enabled: this._permissions.copy
             },
             {
                 name: "delete",
                 text: "Delete",
                 icon: "remove",
-                enabled: this._editingSettings.allowRemove,
+                enabled: this._permissions.remove,
             },
             {
                 name: "download",
@@ -51,7 +51,7 @@ export class FileManagerCommandManager {
                 name: "upload",
                 text: "Upload files",
                 icon: "upload",
-                enabled: this._editingSettings.allowUpload,
+                enabled: this._permissions.upload,
                 noFileItemRequired: true
             },
             {

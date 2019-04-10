@@ -40,10 +40,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const controllerClass = multipleSelection ? MultipleSelectionController : SingleSelectionController;
         this._selectionController = new controllerClass(controllerOptions);
 
-        this._$itemListContainer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
+        this._$itemViewContainer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
 
         this._$viewPort = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
-        this._$viewPort.append(this._$itemListContainer);
+        this._$viewPort.append(this._$itemViewContainer);
 
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
@@ -237,7 +237,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const itemHeight = $item.outerHeight(true);
 
-        const viewPortWidth = this._$itemListContainer.innerWidth();
+        const viewPortWidth = this._$itemViewContainer.innerWidth();
         const viewPortHeight = this._$viewPort.innerHeight();
         const viewPortScrollTop = this._$viewPort.scrollTop();
         const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
@@ -322,7 +322,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _renderItems(items) {
-        this._$itemListContainer.empty();
+        this._$itemViewContainer.empty();
 
         for(let i = 0; i < items.length; i++) {
             const item = items[i];
@@ -356,7 +356,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         $item.append($itemContent);
         $itemContent.append($itemThumbnail, $itemSpacer, $itemName);
-        this._$itemListContainer.append($item);
+        this._$itemViewContainer.append($item);
 
         item._state.$element = $item;
     }
