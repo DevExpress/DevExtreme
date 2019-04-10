@@ -232,6 +232,19 @@ var MultiView = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _updateIndicesAfterIndex: function(index) {
+        this.callBase(index);
+        this._deferredItems.splice(index + 1, 1);
+        for(var i = index + 1; i < this._deferredItems.length; i++) {
+            var item = this.option("items")[i];
+            var $item = this._findItemElementByItem(item);
+            if(!$item.length) {
+                return;
+            }
+            this._refreshItem($item, item);
+        }
+    },
+
     _renderItemContent: function(args) {
         var renderContentDeferred = new Deferred();
 
