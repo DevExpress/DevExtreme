@@ -1331,7 +1331,7 @@ QUnit.test("Label's fit. Count of rows changed", function(assert) {
     const label = this.createAndDrawLabel();
 
     this.renderer.text.lastCall.returnValue.setMaxWidth = function() {
-        return 2;
+        return { rowsCount: 2 };
     };
     label.shift(-7, -2);
 
@@ -1343,7 +1343,7 @@ QUnit.test("Label's fit. Count of rows not changed", function(assert) {
     const label = this.createAndDrawLabel();
 
     this.renderer.text.lastCall.returnValue.setMaxWidth = function() {
-        return 1;
+        return { rowsCount: 1 };
     };
     label.shift(-7, -2);
     label.fit(31);

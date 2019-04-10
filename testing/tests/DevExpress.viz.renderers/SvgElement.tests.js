@@ -5778,7 +5778,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             result = text.setMaxWidth(110, {
                 wordWrap: "normal"
             });
-            assert.deepEqual(result, 5);
+            assert.deepEqual(result, { rowsCount: 5, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test" },
@@ -5801,7 +5801,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "clip"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowsCount: 1, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "longlonglonglonglong" },
@@ -5819,7 +5819,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 wordWrap: "word-break"
             });
 
-            assert.deepEqual(result, 2);
+            assert.deepEqual(result, { rowsCount: 2, textChanged: true });
 
             assert.equal(text.element.textContent, "longlonglonglonglonglonglong");
             assert.equal(text.element.childNodes.length, 2);
@@ -5837,7 +5837,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "clip"
             });
 
-            assert.deepEqual(result, 3);
+            assert.deepEqual(result, { rowsCount: 3, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "long" },
@@ -5860,7 +5860,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 3);
+            assert.deepEqual(result, { rowsCount: 3, textChanged: true });
 
             assert.ok(text.element.childNodes[1].textContent.indexOf("...") !== -1);
 
@@ -5877,7 +5877,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "hide"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowsCount: 1, textChanged: true });
             assert.equal(text.getBBox().width, 0);
         });
 
@@ -5890,7 +5890,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 wordWrap: "normal"
             });
 
-            assert.deepEqual(result, 4);
+            assert.deepEqual(result, { rowsCount: 4, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test text" },
@@ -5912,7 +5912,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowsCount: 1, textChanged: true });
 
             assert.ok(text.element.textContent.indexOf("...") > 0);
             assert.equal(text.element.childNodes.length, 1);
@@ -5930,7 +5930,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 9);
+            assert.deepEqual(result, { rowsCount: 9, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There " },
@@ -5959,7 +5959,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowsCount: 1, textChanged: true });
 
             assert.equal(text.element.childNodes.length, 1);
         });
@@ -5974,7 +5974,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 2);
+            assert.deepEqual(result, { rowsCount: 2, textChanged: true });
 
             assert.equal(text.element.childNodes.length, 2);
         });
@@ -5991,7 +5991,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 wordWrap: "normal"
             });
 
-            assert.deepEqual(result, 4);
+            assert.deepEqual(result, { rowsCount: 4, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test text" },
@@ -6014,7 +6014,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowsCount: 1, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "..." }
