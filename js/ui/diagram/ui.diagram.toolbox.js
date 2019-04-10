@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 
 import Widget from "../widget/ui.widget";
 import Accordion from "../accordion";
+import ScrollView from "../scroll_view";
 import ShapeCategories from "./ui.diagram.shape.categories";
 
 const DIAGRAM_TOOLBOX_CLASS = "dx-diagram-toolbox";
@@ -14,8 +15,13 @@ class DiagramToolbox extends Widget {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(DIAGRAM_TOOLBOX_CLASS);
-        const $accordion = $("<div>")
+        const $scrollViewWrapper = $("<div>")
             .appendTo(this.$element());
+
+        const scrollView = this._createComponent($scrollViewWrapper, ScrollView);
+
+        const $accordion = $("<div>")
+            .appendTo(scrollView.content());
 
         this._renderAccordion($accordion);
     }
