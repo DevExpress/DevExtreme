@@ -233,6 +233,8 @@ function current(options) {
         }
     }
 
+    checkThemeDeprecation();
+
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
 
@@ -318,6 +320,9 @@ function isIos7(themeName) {
 
 function isGeneric(themeName) {
     return isTheme("generic", themeName);
+}
+
+function checkThemeDeprecation() {
 }
 
 var initDeferred = new Deferred();
