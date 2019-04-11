@@ -615,7 +615,7 @@ Axis.prototype = {
             renderer = that._renderer,
             classSelector = that._axisCssPrefix;
 
-        that._axisGroup = renderer.g().attr({ "class": classSelector + "axis" }).append(renderer.root);
+        that._axisGroup = renderer.g().attr({ "class": classSelector + "axis" });
         that._axisStripGroup = renderer.g().attr({ "class": classSelector + "strips" });
         that._axisGridGroup = renderer.g().attr({ "class": classSelector + "grid" });
         that._axisElementsGroup = renderer.g().attr({ "class": classSelector + "elements" }).append(that._axisGroup);

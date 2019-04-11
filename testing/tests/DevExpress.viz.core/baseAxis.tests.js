@@ -116,8 +116,6 @@ QUnit.test("Create axis", function(assert) {
     assert.equal(renderer.g.getCall(10).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
     assert.equal(renderer.g.getCall(11).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
     assert.equal(renderer.g.getCall(12).returnValue._stored_settings["class"], "testWidget-testType-axis-labels", "Group for axis labels was created");
-
-    assert.equal(renderer.root.children[0], renderer.g.getCall(0).returnValue, "axis group should be in root");
 });
 
 QUnit.test("Create axis when axis class is undefined", function(assert) {
