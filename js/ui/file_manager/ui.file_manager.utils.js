@@ -17,8 +17,16 @@ const getParentPath = path => {
     return index !== -1 ? path.substr(0, index) : "";
 };
 
-const getPathParts = path => {
-    return path.split(PATH_SEPARATOR);
+const getPathParts = (path, includeFullPath) => {
+    const result = path.split(PATH_SEPARATOR);
+
+    if(includeFullPath) {
+        for(let i = 0; i < result.length; i++) {
+            result[i] = pathCombine(i === 0 ? "" : result[i - 1], result[i]);
+        }
+    }
+
+    return result;
 };
 
 const pathCombine = function() {

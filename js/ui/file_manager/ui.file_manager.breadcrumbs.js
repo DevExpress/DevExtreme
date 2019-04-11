@@ -6,7 +6,7 @@ import { addNamespace } from "../../events/utils";
 import Widget from "../widget/ui.widget";
 import Menu from "../menu/ui.menu";
 
-import { getPathParts, getParentPath, pathCombine } from "./ui.file_manager.utils";
+import { getPathParts, getParentPath, getName } from "./ui.file_manager.utils";
 
 const FILE_MANAGER_BREADCRUMBS_CLASS = "dx-filemanager-breadcrumbs";
 const FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS = FILE_MANAGER_BREADCRUMBS_CLASS + "-parent-folder-item";
@@ -38,74 +38,53 @@ class FileManagerBreadcrumbs extends Widget {
 
     _getMenuItems() {
         const path = this.option("path");
+        const parts = path ? getPathParts(path, true) : [];
+        const rootFolder = this.option("rootFolderDisplayName");
+        rootFolder && parts.unshift(rootFolder);
 
         const result = [
             {
                 icon: "arrowup",
-                isParentItem: true
+                path: getParentPath(path),
+                isPathItem: true,
+                cssClass: FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS
             },
             {
-                isSeparator: true
+                cssClass: FILE_MANAGER_BREADCRUMBS_SEPARATOR_ITEM_CLASS
             }
         ];
 
-        if(path) {
-            const parts = getPathParts(path);
-            for(let i = 0; i < parts.length; i++) {
-                const part = parts[i];
+        for(let i = 0; i < parts.length; i++) {
+            const part = parts[i];
 
-                const item = {
-                    value: part,
-                    text: part,
-                    isPartItem: true
-                };
-                result.push(item);
+            result.push({
+                text: getName(part),
+                path: i === 0 ? "" : part,
+                isPathItem: true
+            });
 
-                if(i !== parts.length - 1) {
-                    const itemSeparator = {
-                        icon: "spinnext",
-                        isPathSeparator: true
-                    };
-                    result.push(itemSeparator);
-                }
+            if(i !== parts.length - 1) {
+                result.push({
+                    icon: "spinnext",
+                    cssClass: FILE_MANAGER_BREADCRUMBS_PATH_SEPARATOR_ITEM_CLASS
+                });
             }
         }
 
         return result;
     }
 
-    _onItemClick(e) {
-        const path = this.option("path");
-
-        let newPath = "";
-        if(e.itemData.isParentItem) {
-            newPath = getParentPath(path);
-        } else if(e.itemData.isPartItem) {
-            newPath = this._getPathByMenuItemIndex(e.itemIndex);
-        } else {
+    _onItemClick({ itemData }) {
+        if(!itemData.isPathItem) {
             return;
         }
+
+        const path = this.option("path");
+        const newPath = itemData.path;
 
         if(newPath !== path) {
             this._raisePathChanged(newPath);
         }
-    }
-
-    _getPathByMenuItemIndex(index) {
-        let result = "";
-
-        const items = this._menu.option("items");
-        for(let i = 0; i <= index; i++) {
-            const item = items[i];
-            if(!item.isPartItem) {
-                continue;
-            }
-
-            const part = item.value;
-            result = pathCombine(result, part);
-        }
-
-        return result;
     }
 
     _onClick({ target }) {
@@ -116,19 +95,8 @@ class FileManagerBreadcrumbs extends Widget {
     }
 
     _onItemRendered({ itemElement, itemData }) {
-        const cssClass = this._getItemCssClass(itemData);
-        if(cssClass) {
-            $(itemElement).addClass(cssClass);
-        }
-    }
-
-    _getItemCssClass({ isParentItem, isSeparator, isPathSeparator }) {
-        if(isParentItem) {
-            return FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS;
-        } else if(isSeparator) {
-            return FILE_MANAGER_BREADCRUMBS_SEPARATOR_ITEM_CLASS;
-        } else if(isPathSeparator) {
-            return FILE_MANAGER_BREADCRUMBS_PATH_SEPARATOR_ITEM_CLASS;
+        if(itemData.cssClass) {
+            $(itemElement).addClass(itemData.cssClass);
         }
     }
 
@@ -149,6 +117,7 @@ class FileManagerBreadcrumbs extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            rootFolderDisplayName: "Files",
             path: "",
             onPathChanged: null,
             onOutsideClick: null
@@ -159,6 +128,7 @@ class FileManagerBreadcrumbs extends Widget {
         const name = args.name;
 
         switch(name) {
+            case "rootFolderDisplayName":
             case "path":
                 this.repaint();
                 break;
