@@ -109,11 +109,16 @@ interface JQuery {
     dxDeferRendering(options: string, ...params: any[]): any;
     dxDeferRendering(options: DevExpress.ui.dxDeferRenderingOptions): JQuery;
 }
+
 interface JQuery {
     dxDiagram(): JQuery;
+
     dxDiagram(options: "instance"): DevExpress.ui.dxDiagram;
+
     dxDiagram(options: string): any;
+
     dxDiagram(options: string, ...params: any[]): any;
+
     dxDiagram(options: DevExpress.ui.dxDiagramOptions): JQuery;
 }
 interface JQuery {
@@ -6051,9 +6056,11 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxDeferRenderingOptions)
         constructor(element: JQuery, options?: dxDeferRenderingOptions)
     }
+
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     }
+
     /** @name dxDiagram */
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
@@ -6151,6 +6158,8 @@ declare module DevExpress.ui {
         selectedItemKey?: string | number;
         /** @name dxDropDownButton.Options.splitButton */
         splitButton?: boolean;
+        /** @name dxDropDownButton.Options.stylingMode */
+        stylingMode?: 'text' | 'outlined' | 'contained';
         /** @name dxDropDownButton.Options.text */
         text?: string;
         /** @name dxDropDownButton.Options.useSelectMode */
