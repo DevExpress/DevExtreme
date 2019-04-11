@@ -14,6 +14,7 @@ window.internals = {
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
+    FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
     BUTTON_TEXT_CLASS: "dx-button-text",

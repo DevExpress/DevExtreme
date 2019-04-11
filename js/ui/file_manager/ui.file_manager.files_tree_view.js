@@ -1,60 +1,109 @@
+import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import { Deferred, when } from "../../core/utils/deferred";
-import { each } from "../../core/utils/iterator";
 
 import Widget from "../widget/ui.widget";
 import { extend } from "../../core/utils/extend";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 import { FileManagerItem } from "./file_provider/file_provider";
-import { getPathParts, pathCombine } from "./ui.file_manager.utils";
+import whenSome from "./ui.file_manager.common";
+import { getParentPath, getName } from "./ui.file_manager.utils";
+
+const FILE_MANAGER_DIRS_TREE_CLASS = "dx-filemanager-dirs-tree";
+const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = "dx-filemanager-focused-item";
+const TREE_VIEW_ITEM_CLASS = "dx-treeview-item";
 
 class FileManagerFilesTreeView extends Widget {
 
     _initMarkup() {
         this._initActions();
-        this._initCurrentPathState();
+        this._setSelectedItem();
 
-        this._filesTreeView = this._createComponent(this.$element(), TreeViewSearch, {
+        this._model = new FilesTreeViewModel({
+            rootItemText: this.option("rootFolderDisplayName"),
+            initialDir: this.option("initialFolder"),
+            getItems: this.option("getItems"),
+            onSelectedItemLoaded: item => this._onModelSelectedItemLoaded(item)
+        });
+
+        const $treeView = $("<div>")
+            .addClass(FILE_MANAGER_DIRS_TREE_CLASS)
+            .appendTo(this.$element());
+
+        this._filesTreeView = this._createComponent($treeView, TreeViewSearch, {
             dataStructure: "plain",
             rootValue: "",
-            keyExpr: "relativeName",
-            parentIdExpr: "parentPath",
-            displayExpr: "name",
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
             onItemClick: this._onFilesTreeViewItemClick.bind(this),
-            onItemExpanded: this._onFilesTreeViewItemExpanded.bind(this)
+            onItemExpanded: ({ itemData }) => this._model.changeItemExpandState(itemData, true),
+            onItemCollapsed: ({ itemData }) => this._model.changeItemExpandState(itemData, false),
+            onItemRendered: e => this._onFilesTreeViewItemRendered(e)
         });
-        eventsEngine.on(this._filesTreeView.$element(), "click", this._raiseClick.bind(this));
+
+        eventsEngine.on($treeView, "click", this._raiseClick.bind(this));
     }
 
     _onFilesTreeViewCreateChildren(parent) {
-        const parentItem = parent ? parent.itemData : null;
-        const itemsGetter = this.option("getItems");
-        const itemsResult = itemsGetter(parentItem);
-        return when(itemsResult).done(items => {
-            this._applyIconsToItems(items);
-            if(parentItem) {
-                this._resolvePathLoading(parentItem.relativeName);
-            }
-        });
+        return this._model.expandAndGetChildren(parent && parent.itemData);
     }
 
-    _onFilesTreeViewItemClick(e) {
-        this._changeCurrentFolder(e.itemData);
+    _onFilesTreeViewItemClick({ itemElement, itemData }) {
+        if(this._selectedItem && this._selectedItem.dataItem.equals(itemData.dataItem)) {
+            return;
+        }
+
+        this._model.selectItem(itemData);
+        this._changeSelectedItem(itemData, $(itemElement));
     }
 
-    _changeCurrentFolder(folder) {
-        const newPath = folder.relativeName;
-        if(newPath !== this._currentPath) {
-            this._currentPath = newPath;
-            this._currentFolder = folder;
-            this._raiseCurrentFolderChanged();
+    _onFilesTreeViewItemRendered({ itemElement, itemData }) {
+        const focused = this._selectedItem && this._selectedItem.dataItem.equals(itemData.dataItem);
+        if(focused) {
+            this._updateFocusedElement($(itemElement));
         }
     }
 
-    _applyIconsToItems(items) {
-        each(items, (_, item) => { item.icon = "folder"; });
+    _onModelSelectedItemLoaded(item) {
+        if(this._filesTreeView) {
+            this._handleModelSelectedItemLoaded(item);
+        } else {
+            setTimeout(() => this._handleModelSelectedItemLoaded(item));
+        }
+    }
+
+    _handleModelSelectedItemLoaded(item) {
+        const $element = this._getItemElement(item);
+        this._changeSelectedItem(item, $element);
+    }
+
+    _changeSelectedItem(item, $element) {
+        this._setSelectedItem(item, $element);
+        this._raiseCurrentFolderChanged();
+    }
+
+    _setSelectedItem(item, $element) {
+        this._selectedItem = item || null;
+        this._updateFocusedElement($element);
+    }
+
+    _updateFocusedElement($element) {
+        if(this._$focusedElement) {
+            this._$focusedElement.toggleClass(FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS, false);
+        }
+        this._$focusedElement = $element || $();
+        this._$focusedElement.toggleClass(FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS, true);
+    }
+
+    _getItemElement(item) {
+        const node = this._filesTreeView._dataAdapter.getNodeByKey(item.id);
+        if(node) {
+            const $node = this._filesTreeView._getNodeElement(node);
+            if($node) {
+                return $node.children(`.${TREE_VIEW_ITEM_CLASS}`);
+            }
+        }
+        return null;
     }
 
     _raiseCurrentFolderChanged() {
@@ -63,63 +112,6 @@ class FileManagerFilesTreeView extends Widget {
 
     _raiseClick() {
         this._actions.onClick();
-    }
-
-    _initCurrentPathState() {
-        this._currentPath = "";
-        this._rootFolder = new FileManagerItem("", "", true);
-        this._currentFolder = this._rootFolder;
-        this._loadMap = {};
-    }
-
-    _ensurePathExpanded(path) {
-        let result = new Deferred().resolve().promise();
-
-        if(!path) {
-            return result;
-        }
-
-        let currentPath = "";
-        const parts = getPathParts(path);
-
-        each(parts, (_, part) => {
-
-            currentPath = pathCombine(currentPath, part);
-
-            const getExpandFunc = p => (() => this._expandLoadedPath(p));
-            result = result.then(getExpandFunc(currentPath));
-
-        });
-
-        return result;
-    }
-
-    _expandLoadedPath(path) {
-        const node = this._filesTreeView._dataAdapter.getNodeByKey(path);
-        if(!node.expanded) {
-            let deferred = this._loadMap[path];
-            if(!deferred) {
-                deferred = new Deferred();
-                this._loadMap[path] = deferred;
-                this._filesTreeView.expandItem(path);
-            }
-            return deferred.promise();
-        } else {
-            return new Deferred().resolve().promise();
-        }
-    }
-
-    _onFilesTreeViewItemExpanded(e) {
-        const path = e.itemData ? e.itemData.relativeName : "";
-        this._resolvePathLoading(path);
-    }
-
-    _resolvePathLoading(path) {
-        const deferred = this._loadMap[path];
-        if(deferred) {
-            this._loadMap[path] = null;
-            deferred.resolve();
-        }
     }
 
     _initActions() {
@@ -131,6 +123,8 @@ class FileManagerFilesTreeView extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            rootFolderDisplayName: "Files",
+            initialFolder: null,
             getItems: null,
             onCurrentFolderChanged: null,
             onClick: null
@@ -142,6 +136,8 @@ class FileManagerFilesTreeView extends Widget {
 
         switch(name) {
             case "getItems":
+            case "rootFolderDisplayName":
+            case "initialFolder":
                 this.repaint();
                 break;
             case "onCurrentFolderChanged":
@@ -154,11 +150,14 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     refreshData() {
+        const oldPath = this.getCurrentFolderPath();
+
+        this._setSelectedItem();
+
+        this._model.refresh();
         this._filesTreeView.option("dataSource", []);
 
-        const currentFolderChanged = this.getCurrentFolderPath() !== "";
-
-        this._initCurrentPathState();
+        const currentFolderChanged = this.getCurrentFolderPath() !== oldPath;
 
         if(currentFolderChanged) {
             this._raiseCurrentFolderChanged();
@@ -170,30 +169,269 @@ class FileManagerFilesTreeView extends Widget {
             return;
         }
 
-        this._ensurePathExpanded(path)
-            .then(() => this._setCurrentLoadedPath(path));
-    }
+        const folder = new FileManagerItem(getParentPath(path), getName(path), true);
+        const parentFolder = folder.getParent();
+        const item = this._model.getItemByDataItem(folder);
+        const parentItem = parentFolder ? this._model.getItemByDataItem(parentFolder) : null;
 
-    _setCurrentLoadedPath(path) {
-        let $node = null;
-        let folder = this._rootFolder;
-
-        if(path) {
-            const node = this._filesTreeView._dataAdapter.getNodeByKey(path);
-            $node = this._filesTreeView._getNodeElement(node);
-            folder = node.internalFields.item;
+        this._model.selectItem(item);
+        if(!parentItem || parentItem.childrenLoaded) {
+            this._onModelSelectedItemLoaded(item);
+        } else {
+            this._model.expandAndGetChildren(parentItem).done(() => {
+                parentItem.expanded = false;
+                this._filesTreeView.expandItem(parentItem);
+            });
         }
-
-        this._filesTreeView.option("focusedElement", $node);
-        this._changeCurrentFolder(folder);
     }
 
     getCurrentFolderPath() {
-        return this._currentPath;
+        return this.getCurrentFolder() ? this.getCurrentFolder().relativeName : null;
     }
 
     getCurrentFolder() {
-        return this._currentFolder;
+        return this._selectedItem ? this._selectedItem.dataItem : null;
+    }
+
+}
+
+class FilesTreeViewModel {
+
+    constructor(options) {
+        this._options = options;
+
+        this._expandedDataItems = { };
+
+        this._selectedDataItem = null;
+
+        this._initState();
+
+        const initialDir = this._options.initialDir;
+        if(initialDir) {
+            this._selectedDataItem = initialDir;
+            this._setTreeLineExpandState(initialDir);
+        }
+    }
+
+    selectItem(item) {
+        this._selectedDataItem = item.dataItem;
+    }
+
+    expandAndGetChildren(item) {
+        if(!item) {
+            this._onItemLoaded(this._rootItem);
+            return new Deferred().resolve([ this._rootItem ]).promise();
+        } else if(item.isRoot) {
+            return this._expandAndGetChildrenForRootItem();
+        } else {
+            return this._expandAndGetChildrenForGeneralItem(item);
+        }
+    }
+
+    refresh() {
+        this._initState();
+    }
+
+    changeItemExpandState(item, expanded) {
+        if(expanded) {
+            this._expandedDataItems[item.dataKey] = item.dataItem;
+        } else {
+            delete this._expandedDataItems[item.dataKey];
+        }
+
+        item.expanded = expanded;
+    }
+
+    getItemByDataItem(dataItem) {
+        let result = this._itemMap[dataItem.relativeName];
+        if(!result) {
+            result = this._createItem(dataItem);
+        }
+        return result;
+    }
+
+    _expandAndGetChildrenForRootItem() {
+        const dataItems = Object.keys(this._expandedDataItems)
+            .filter(key => this._isVisibleAndExpandedItem(key))
+            .map(key => this._expandedDataItems[key]);
+
+        const deferreds = dataItems.map(dataItem => {
+            const item = this.getItemByDataItem(dataItem);
+            return this._expandAndGetChildrenForGeneralItem(item);
+        });
+
+        return whenSome(deferreds)
+            .then(() => {
+                this._ensureSelectedItemLoaded();
+                return this._rootItem.children;
+            });
+    }
+
+    _expandAndGetChildrenForGeneralItem(item) {
+        if(item.expanded && item.childrenLoaded) {
+            return new Deferred().resolve(item.children).promise();
+        }
+
+        let result = this._loadMap[item.id];
+        if(result) {
+            return result;
+        }
+
+        this.changeItemExpandState(item, true);
+
+        if(item.isRoot) {
+            result = new Deferred().resolve().promise();
+        } else {
+            const parentData = item.dataItem.getParent();
+            const parentItem = this.getItemByDataItem(parentData);
+            result = this._expandAndGetChildrenForGeneralItem(parentItem);
+        }
+
+        result = result.then(items => {
+            if(!items || items.some(i => item.dataItem.equals(i.dataItem))) {
+                return this._loadChildren(item);
+            } else {
+                this._onItemNotFound(item);
+                return [];
+            }
+        });
+
+        this._loadMap[item.id] = result;
+
+        const deleteLoadAction = () => { delete this._loadMap[item.id]; };
+        result.done(deleteLoadAction).fail(deleteLoadAction);
+
+        return result;
+    }
+
+    _loadChildren(item) {
+        const dataResult = this._options.getItems(item.dataItem);
+
+        return when(dataResult)
+            .then(dataItems => {
+                item.children = [];
+                dataItems.forEach(dataItem => {
+                    const childItem = this.getItemByDataItem(dataItem);
+                    item.children.push(childItem);
+                    this._onItemLoaded(childItem);
+                });
+                item.childrenLoaded = true;
+                return item.children;
+            });
+    }
+
+    _isVisibleAndExpandedItem(dataKey) {
+        const dataItem = this._expandedDataItems[dataKey];
+        if(!dataItem) {
+            return false;
+        } else if(dataItem.isRoot()) {
+            return true;
+        }
+
+        const parentKey = getParentPath(dataItem.relativeName);
+        return this._isVisibleAndExpandedItem(parentKey);
+    }
+
+    _setTreeLineExpandState(dataItem) {
+        const item = this.getItemByDataItem(dataItem);
+        this.changeItemExpandState(item, true);
+
+        if(!item.isRoot) {
+            const parentData = dataItem.getParent();
+            this._setTreeLineExpandState(parentData);
+        }
+    }
+
+    _ensureSelectedItemLoaded() {
+        let selectedItem = this._getSelectedItem();
+        if(selectedItem.isRoot || selectedItem.childrenLoaded) {
+            return;
+        }
+
+        for(let key in this._itemMap) {
+            if(!this._itemMap.hasOwnProperty(key)) {
+                continue;
+            }
+
+            const item = this._itemMap[key];
+            if(item.childrenLoaded && item.children.indexOf(selectedItem) !== -1) {
+                return;
+            }
+        }
+
+        this._selectedDataItem = selectedItem.dataItem.getParent();
+        selectedItem = this._getSelectedItem();
+        this._raiseSelectedItemLoaded(selectedItem);
+    }
+
+    _onItemLoaded(item) {
+        if(this._isSelectedItem(item)) {
+            this._raiseSelectedItemLoaded(item);
+        }
+    }
+
+    _onItemNotFound(item) {
+        this.changeItemExpandState(item, false);
+
+        if(this._selectedDataItem.relativeName.indexOf(item.dataItem.relativeName) === 0) {
+            this._selectedDataItem = item.dataItem.getParent();
+            const selectedItem = this._getSelectedItem();
+            this._raiseSelectedItemLoaded(selectedItem);
+        }
+    }
+
+    _getSelectedItem() {
+        return this.getItemByDataItem(this._selectedDataItem);
+    }
+
+    _isSelectedItem(item) {
+        return item === this._getSelectedItem();
+    }
+
+    _initState() {
+        this._itemMap = { };
+        this._loadMap = { };
+
+        const rootData = new FileManagerItem("", "", true);
+        rootData.name = this._options.rootItemText;
+        this._rootItem = this.getItemByDataItem(rootData);
+        this.changeItemExpandState(this._rootItem, true);
+
+        if(!this._selectedDataItem) {
+            this._selectedDataItem = rootData;
+        }
+    }
+
+    _createItem(dataItem) {
+        const dataKey = dataItem.relativeName;
+        const isRoot = !dataItem.relativeName;
+        const parentId = isRoot ? "" : this._getTreeItemKey(dataItem.parentPath);
+        const expanded = !!this._expandedDataItems[dataKey];
+
+        const result = {
+            dataKey,
+            childrenLoaded: false,
+            dataItem,
+            isRoot,
+
+            id: this._getTreeItemKey(dataItem.relativeName),
+            parentId,
+            text: dataItem.name,
+            expanded,
+            icon: "folder"
+        };
+
+        this._itemMap[result.dataKey] = result;
+
+        return result;
+    }
+
+    _getTreeItemKey(dataKey) {
+        return `TVK_${dataKey}`;
+    }
+
+    _raiseSelectedItemLoaded(item) {
+        this._options.onSelectedItemLoaded(item);
     }
 
 }

@@ -113,6 +113,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         let $folderNode = getFolderNode(this.$element, 0);
         $folderNode.trigger("dxclick");
+        $folderNode.trigger("click");
         this.clock.tick(400);
 
         $toolbar = getToolbar(this.$element);
@@ -158,6 +159,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const $item = findDetailsItem(this.$element, "File 1.txt");
         $item.trigger("dxclick");
+        $item.trigger("click");
         this.clock.tick(400);
 
         $toolbar = getToolbar(this.$element);
@@ -165,6 +167,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         let $folderNode = getFolderNode(this.$element, 0);
         $folderNode.trigger("dxclick");
+        $folderNode.trigger("click");
         this.clock.tick(400);
 
         $toolbar = getToolbar(this.$element);
