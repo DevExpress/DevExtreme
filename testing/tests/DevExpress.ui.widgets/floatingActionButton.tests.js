@@ -211,3 +211,67 @@ QUnit.module("add or remove action buttons", (hooks) => {
     });
 });
 
+
+QUnit.module("check action buttons position", (hooks) => {
+    hooks.afterEach(() => {
+        $("#fab-one").dxFloatingActionButton("instance").dispose();
+        $("#fab-two").dxFloatingActionButton("instance").dispose();
+    }),
+
+    test("if container is window", (assert) => {
+
+        $("#fab-one").dxFloatingActionButton({
+            icon: "plus"
+        });
+
+        $("#fab-two").dxFloatingActionButton({
+            icon: "trash"
+        });
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainWrapper = $fabMainElement.find(".dx-overlay-wrapper");
+        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+        const $fabElement = $("." + FAB_CLASS);
+
+        $fabMainContent.trigger("dxclick");
+
+        const $fabWrapper = $fabElement.find(".dx-overlay-wrapper");
+
+        assert.equal($fabMainWrapper.css("position"), "fixed", "position is fixed");
+        assert.equal($($fabWrapper[1]).css("position"), $fabMainWrapper.css("position"), "first action has the same position with main fab");
+        assert.equal($($fabWrapper[2]).css("position"), $fabMainWrapper.css("position"), "second action has the same position with main fab");
+    });
+
+    test("if random container", (assert) => {
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    of: $("#fabs")
+                }
+            }
+        });
+
+        $("#fab-one").dxFloatingActionButton({
+            icon: "plus"
+        });
+
+        $("#fab-two").dxFloatingActionButton({
+            icon: "trash"
+        });
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainWrapper = $fabMainElement.find(".dx-overlay-wrapper");
+        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+        const $fabElement = $("." + FAB_CLASS);
+
+        $fabMainContent.trigger("dxclick");
+
+        const $fabWrapper = $fabElement.find(".dx-overlay-wrapper");
+
+        assert.equal($fabMainWrapper.css("position"), "absolute", "position is absolute");
+        assert.equal($($fabWrapper[1]).css("position"), $fabMainWrapper.css("position"), "first action has the same position with main fab");
+        assert.equal($($fabWrapper[2]).css("position"), $fabMainWrapper.css("position"), "second action has the same position with main fab");
+    });
+});
+

@@ -16,7 +16,8 @@ const ActionButtonItem = Overlay.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
             shading: false,
-            useInkRipple: false
+            useInkRipple: false,
+            callOverlayRenderShading: false
         });
     },
 
@@ -59,6 +60,12 @@ const ActionButtonItem = Overlay.inherit({
             this._$icon,
             this._options.icon,
             FAB_ICON_CLASS);
+    },
+
+    _renderShading() {
+        if(this._options.callOverlayRenderShading) {
+            this.callBase();
+        }
     },
 
     _setClickAction() {

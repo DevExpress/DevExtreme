@@ -34,7 +34,8 @@ const ActionButtonBase = ActionButtonItem.inherit({
             activeStateEnabled: true,
             hoverStateEnabled: true,
             indent: 56,
-            childIndent: 36
+            childIndent: 36,
+            callOverlayRenderShading: true
         };
 
         return extend(
@@ -84,6 +85,10 @@ const ActionButtonBase = ActionButtonItem.inherit({
         const actions = this._actionItems;
         actions.forEach(action => {
             action.toggle();
+
+            if(action.option("visible")) {
+                action._$wrapper.css("position", this._$wrapper.css("position"));
+            }
         });
 
         this._$icon.toggle();
@@ -93,6 +98,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _renderActions() {
         const actions = this.option("actions");
         const lastActionIndex = actions.length - 1;
+        const minActionButtonCount = 1;
 
         if(this._actionItems.length) {
             this._actionItems.forEach(actionItem => {
@@ -101,7 +107,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             });
         }
 
-        if(actions.length === 1) {
+        if(actions.length === minActionButtonCount) {
             this._renderIcon();
             this._renderCloseIcon();
             return;
@@ -128,6 +134,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                     y: -actionOffsetY
                 }
             };
+
 
             action._options.animation.show.delay = action._options.animation.show.duration * i;
             action._options.animation.hide.delay = action._options.animation.hide.duration * (lastActionIndex - i);
@@ -224,7 +231,6 @@ exports.disposeAction = function(actionId) {
             visible: true,
             position: actionButtonBase._getDefaultOptions().position
         }));
-
     } else {
         actionButtonBase.option({ actions: savedActions });
     }
