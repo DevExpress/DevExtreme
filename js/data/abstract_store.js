@@ -333,14 +333,19 @@ Store.create = function(alias, options) {
     return new storeImpl[alias](options);
 };
 
+Store.registerClass = function(type, alias) {
+    if (alias) {
+        storeImpl[alias] = type
+    }
+    return type
+}
+
 Store.inherit = function(inheritor) {
     return function(members, alias) {
         var type = inheritor.apply(this, [members]);
-        if(alias) {
-            storeImpl[alias] = type;
-        }
+        Store.registerClass(type, alias);
         return type;
-    };
+    }
 }(Store.inherit);
 
 module.exports = Store;
