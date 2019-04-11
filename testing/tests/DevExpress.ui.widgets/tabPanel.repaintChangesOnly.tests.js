@@ -14,12 +14,6 @@ QUnit.module("repaintChangesOnly", {
         this.titleRenderedSpy = sinon.spy();
         this.itemDeletedSpy = sinon.spy();
 
-        this.clearSpies = () => {
-            this.itemRenderedSpy.reset();
-            this.titleRenderedSpy.reset();
-            this.itemDeletedSpy.reset();
-        };
-
         this.createTabPanel = (options) => {
             options.repaintChangesOnly = true;
             options.itemTemplate = (itemData) => `<div id='id_${itemData.content}'>${itemData.content}</div>`;
