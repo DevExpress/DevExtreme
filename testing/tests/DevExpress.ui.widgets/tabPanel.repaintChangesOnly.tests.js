@@ -82,6 +82,22 @@ QUnit.module("repaintChangesOnly", {
 }, () => {
     ["items", "dataSource"].forEach(dataSourcePropertyName => {
         let testContext = `, option(${dataSourcePropertyName})`;
+
+        QUnit.test("[] -> [{1}]" + testContext, function(assert) {
+            this.createTabPanel({ items: [] });
+
+            const item1_ = { text: "1a", content: "1a_" };
+            this.tabPanel.option(dataSourcePropertyName, [item1_]);
+            this.clock.tick(1);
+
+            this.checkTitleRendered(assert, 1, item1_);
+            //this.checkItemRendered(assert, 0);
+            this.checkItemDeleted(assert, 0);
+
+            this.checkContainsElements(assert, [item1_.text/*, item1_.content*/]);
+            this.checkContainsEmptyMessage(assert, false);
+        });
+
         QUnit.test("[{1}] -> []" + testContext, function(assert) {
             const item1 = { text: "1a", content: "1a_" };
             this.createTabPanel({ items: [item1] });
