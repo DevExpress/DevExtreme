@@ -335,14 +335,6 @@ const subscribes = {
         return this.getWorkSpaceDateTableOffset();
     },
 
-    getDateTableWidth: function() {
-        return this._workSpace.getDateTableWidth();
-    },
-
-    getTimePanelWidth: function() {
-        return this._workSpace.getTimePanelWidth();
-    },
-
     correctAppointmentCoordinates: function(options) {
         let isAllDay = options.allDay,
             containerSign = options.isFixedContainer ? -1 : 1;
