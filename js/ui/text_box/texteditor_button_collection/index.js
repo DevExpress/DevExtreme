@@ -130,7 +130,7 @@ export default class TextEditorButtonCollection {
     getButton(buttonName) {
         const button = find(this.buttons, ({ name }) => name === buttonName);
 
-        return button && button.instance;
+        return button ? button.instance : null;
     }
 
     renderAfterButtons(buttons, $container) {
