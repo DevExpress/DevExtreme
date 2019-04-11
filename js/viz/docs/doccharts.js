@@ -3412,6 +3412,42 @@ var dxChartCommonAnnotationConfig = {
     */
     type: undefined,
     /**
+    * @name dxChartCommonAnnotationConfig.argument
+    * @type number | datetime | string
+    * @default undefined
+    */
+    argument: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.value
+    * @type number | datetime | string
+    * @default undefined
+    */
+    value: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.axis
+    * @type string
+    * @default undefined
+    */
+    axis: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.series
+    * @type string
+    * @default undefined
+    */
+    series: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.x
+    * @type number
+    * @default undefined
+    */
+    x: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.y
+    * @type number
+    * @default undefined
+    */
+    y: undefined,
+    /**
     * @name dxChartCommonAnnotationConfig.tooltipEnabled
     * @type boolean
     * @default true
