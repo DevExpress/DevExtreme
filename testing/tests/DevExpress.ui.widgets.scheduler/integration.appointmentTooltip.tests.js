@@ -1068,7 +1068,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         let templateCallCount = 0;
         this.createInstance({
             appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
-                assert.ok(contentElement.className.indexOf("dx-list-item-content") !== -1, "Content element should be list item");
+                assert.ok($(contentElement).hasClass("dx-list-item-content"), "Content element should be list item");
                 assert.equal(targetedAppointmentData.text, appointmentData.text, "targetedAppointmentData should be not empty");
                 assert.equal(index, templateCallCount, "Index should be correct pass in template callback");
 

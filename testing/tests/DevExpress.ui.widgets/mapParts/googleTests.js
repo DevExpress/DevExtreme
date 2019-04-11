@@ -1,19 +1,15 @@
 /* global google */
 
-var $ = require("jquery"),
-    testing = require("./utils.js"),
-    devices = require("core/devices"),
-    errors = require("ui/widget/ui.errors"),
-    GoogleProvider = require("ui/map/provider.dynamic.google"),
-    ajaxMock = require("../../../helpers/ajaxMock.js");
+import $ from "jquery";
+import { LOCATIONS, MARKERS, ROUTES } from "./utils.js";
+import devices from "core/devices";
+import errors from "ui/widget/ui.errors";
+import GoogleProvider from "ui/map/provider.dynamic.google";
+import ajaxMock from "../../../helpers/ajaxMock.js";
 
-require("ui/map");
+import "ui/map";
 
-var LOCATIONS = testing.LOCATIONS,
-    MARKERS = testing.MARKERS,
-    ROUTES = testing.ROUTES;
-
-var prepareTestingGoogleProvider = function() {
+const prepareTestingGoogleProvider = function() {
     window.geocodedLocation = new google.maps.LatLng(-1.12345, -1.12345);
     window.geocodedWithErrorLocation = new google.maps.LatLng();
 
@@ -31,6 +27,8 @@ var prepareTestingGoogleProvider = function() {
     google.assignedCenterCount = 0;
     google.statusCallback = null;
 };
+
+const INFO_BOX_CLASS = "gm-style-iw";
 
 QUnit.module("google provider", {
     beforeEach: function() {
@@ -1460,4 +1458,33 @@ QUnit.test("StopPropagation is not called when gestureHandling of map is coopera
         devices.real = real;
         done();
     });
+});
+
+QUnit.test("Event propagation isn't stopped for the infoBox content", function(assert) {
+    const $map = $("#map").dxMap({
+        provider: "google",
+        width: 400,
+        height: 500,
+    });
+
+    const pointerDownStub = sinon.stub();
+    $map.on("dxpointerdown", pointerDownStub);
+
+    const $mapContainer = $map.children();
+    const $infoBoxContent = $("<div>");
+
+    $("<div>")
+        .addClass(INFO_BOX_CLASS)
+        .append($infoBoxContent)
+        .appendTo($mapContainer);
+
+    $infoBoxContent.trigger("dxpointerdown");
+    $mapContainer.trigger("dxpointerdown");
+
+    assert.ok(pointerDownStub.calledTwice, "cancelEvent handler calls twice");
+
+    const isContentEventStopped = pointerDownStub.getCall(0).args[0].isPropagationStopped();
+    const isMapEventStopped = pointerDownStub.getCall(1).args[0].isPropagationStopped();
+    assert.notOk(isContentEventStopped, "Event dispatched on the info box content element isn't canceled");
+    assert.ok(isMapEventStopped, "Event dispatched on the map content element is canceled");
 });

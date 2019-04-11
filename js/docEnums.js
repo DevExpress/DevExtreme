@@ -841,6 +841,11 @@
  */
 
 /**
+ * @typedef {string} Enums.TextEditorButtonName
+ * @enum {'clear'|'spins'|'dropDown'}
+ */
+
+/**
  * @typedef {string} Enums.SmallValuesGroupingMode
  * @enum {'none'|'smallValueThreshold'|'topN'}
  */
@@ -1003,4 +1008,15 @@
 /**
  * @typedef {string} Enums.GridStartEditAction
  * @enum {'click'|'dblClick'}
+ */
+
+/**
+ * @typedef {string} Enums.FileManagerSelectionMode
+ * @enum {'multiple'|'single'}
+ */
+
+
+/**
+ * @typedef {string} Enums.FileManagerItemViewMode
+ * @enum {'details'|'thumbnails'}
  */

@@ -6027,6 +6027,40 @@ QUnit.test("first load", function(assert) {
     ]);
 });
 
+QUnit.test("expanded field option should be ignored", function(assert) {
+    var dataController = this.setup({
+        paginate: true,
+        store: new this.MockStore({
+            rowCount: 10,
+            columnCount: 10
+        }),
+        pageSize: 4,
+        fields: [
+            { area: "row", expanded: true }, { area: "row" },
+            { area: "column", expanded: true }, { area: "column" },
+            { area: "data" }
+        ]
+    });
+
+    assert.strictEqual(this.loadArgs.length, 1, "one load");
+    assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows with one level only");
+    assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns with one level only");
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [[
+        { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true, expanded: false },
+        { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', isLast: true, expanded: false }
+    ]]);
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true, expanded: false }],
+        [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true, expanded: false }]
+    ]);
+});
+
 QUnit.test("load after scroll", function(assert) {
     var dataController = this.setup();
 
