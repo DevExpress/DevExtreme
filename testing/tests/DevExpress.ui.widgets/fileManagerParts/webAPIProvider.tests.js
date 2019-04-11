@@ -57,7 +57,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.endpointUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
+            url: this.options.endpointUrl + "?command=GetDirContents&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: {
                 result: itemData,
                 success: true
@@ -75,7 +75,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.endpointUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
+            url: this.options.endpointUrl + "?command=GetDirContents&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: {
                 success: true,
                 result: itemData
