@@ -11,37 +11,37 @@ const registerKeyHandlerTestHelper = {
                 this.handler = sinon.spy();
 
                 this.createWidget = (options = {}) => {
-                    this.$element = $("<div>")[WidgetName]($.extend({
+                    this.$widget = $("<div>")[WidgetName]($.extend({
                         focusStateEnabled: true,
                         items: [{ text: "text" }]
                     }, options)).appendTo("#qunit-fixture");
                 };
 
-                this.getInstance = () => { return this.$element[WidgetName]("instance"); };
+                this.widget = () => { return this.$widget[WidgetName]("instance"); };
 
                 this.checkKeyHandlerCall = (assert, key) => {
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.deepEqual(this.handler.firstCall.args[0].target, this.getInstance().element(), "event.target");
+                    assert.deepEqual(this.handler.firstCall.args[0].target, this.widget().element(), "event.target");
                 };
             },
             afterEach: () => {
-                this.$element.remove();
+                this.$widget.remove();
             }
         }, () => {
             SUPPORTED_KEYS.forEach((key) => {
                 QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
                     this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
 
-                    keyboardMock(this.$element).press(key);
+                    keyboardMock(this.$widget).press(key);
                     this.checkKeyHandlerCall(assert, key);
                 });
 
                 QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
                     this.createWidget();
 
-                    this.getInstance().registerKeyHandler(key, this.handler);
+                    this.widget().registerKeyHandler(key, this.handler);
 
-                    keyboardMock(this.$element).press(key);
+                    keyboardMock(this.$widget).press(key);
                     this.checkKeyHandlerCall(assert, key);
                 });
             });
