@@ -285,7 +285,7 @@ QUnit.module("keyboard", () => {
                 onInitialized: e => {
                     e.component.registerKeyHandler(key, handler);
                 }
-            });
+            }).dxButtonGroup("instance");
 
             const triggerEvent = keyboardMock(buttonGroup.element()).press(key);
 
