@@ -60,19 +60,17 @@ class FileManagerBreadcrumbs extends Widget {
             const partPath = i === 0 ? "" : part;
             const partText = getName(part);
 
-            const item = {
+            result.push({
                 text: partText,
                 path: partPath,
                 isPathItem: true
-            };
-            result.push(item);
+            });
 
             if(i !== parts.length - 1) {
-                const itemSeparator = {
+                result.push({
                     icon: "spinnext",
                     cssClass: FILE_MANAGER_BREADCRUMBS_PATH_SEPARATOR_ITEM_CLASS
-                };
-                result.push(itemSeparator);
+                });
             }
         }
 

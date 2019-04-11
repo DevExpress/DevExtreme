@@ -21,10 +21,8 @@ const getPathParts = (path, includeFullPath) => {
     const result = path.split(PATH_SEPARATOR);
 
     if(includeFullPath) {
-        let currentPath = "";
         for(let i = 0; i < result.length; i++) {
-            result[i] = pathCombine(currentPath, result[i]);
-            currentPath = result[i];
+            result[i] = pathCombine(i === 0 ? "" : result[i - 1], result[i]);
         }
     }
 
