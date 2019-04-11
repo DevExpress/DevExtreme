@@ -19,11 +19,9 @@ const registerKeyHandlerTestHelper = {
 
                 this.getInstance = () => { return this.$element[WidgetName]("instance"); };
 
-                this.pressKey = (key) => { this.triggeredEvent = keyboardMock(this.getInstance().element()).press(key); };
-
-                this.checkAsserts = (assert, key) => {
+                this.checkKeyHandlerCall = (assert, key) => {
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.deepEqual(this.triggeredEvent.event.target, this.getInstance().element(), "event.target");
+                    assert.deepEqual(this.handler.firstCall.args[0].target, this.getInstance().element(), "event.target");
                 };
             },
             afterEach: () => {
@@ -34,9 +32,8 @@ const registerKeyHandlerTestHelper = {
                 QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
                     this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
 
-                    this.pressKey(key);
-
-                    this.checkAsserts(assert, key);
+                    keyboardMock(this.$element).press(key);
+                    this.checkKeyHandlerCall(assert, key);
                 });
 
                 QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
@@ -44,9 +41,8 @@ const registerKeyHandlerTestHelper = {
 
                     this.getInstance().registerKeyHandler(key, this.handler);
 
-                    this.pressKey(key);
-
-                    this.checkAsserts(assert, key);
+                    keyboardMock(this.$element).press(key);
+                    this.checkKeyHandlerCall(assert, key);
                 });
             });
         });
