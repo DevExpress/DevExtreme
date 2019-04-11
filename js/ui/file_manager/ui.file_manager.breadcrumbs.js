@@ -38,13 +38,14 @@ class FileManagerBreadcrumbs extends Widget {
 
     _getMenuItems() {
         const path = this.option("path");
-        const rootName = this.option("rootFolderDisplayName");
-        const parentPath = getParentPath(path);
+        const parts = path ? getPathParts(path, true) : [];
+        const rootFolder = this.option("rootFolderDisplayName");
+        rootFolder && parts.unshift(rootFolder);
 
         const result = [
             {
                 icon: "arrowup",
-                path: parentPath,
+                path: getParentPath(path),
                 isPathItem: true,
                 cssClass: FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS
             },
@@ -53,16 +54,12 @@ class FileManagerBreadcrumbs extends Widget {
             }
         ];
 
-        const parts = path ? getPathParts(path, true) : [];
-        parts.unshift(rootName);
         for(let i = 0; i < parts.length; i++) {
             const part = parts[i];
-            const partPath = i === 0 ? "" : part;
-            const partText = getName(part);
 
             result.push({
-                text: partText,
-                path: partPath,
+                text: getName(part),
+                path: i === 0 ? "" : part,
                 isPathItem: true
             });
 
