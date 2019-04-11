@@ -10,7 +10,7 @@ const registerKeyHandlerTestHelper = {
             beforeEach: () => {
                 this.handler = sinon.spy();
 
-                this.initializeWidget = (options) => {
+                this.createWidget = (options = {}) => {
                     this.$element = $("<div>")[WidgetName]($.extend({
                         focusStateEnabled: true,
                         items: [{ text: "text" }]
@@ -32,7 +32,7 @@ const registerKeyHandlerTestHelper = {
         }, () => {
             SUPPORTED_KEYS.forEach((key) => {
                 QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
-                    this.initializeWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
+                    this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
 
                     this.pressKey(key);
 
@@ -40,7 +40,7 @@ const registerKeyHandlerTestHelper = {
                 });
 
                 QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
-                    this.initializeWidget({});
+                    this.createWidget();
 
                     this.getInstance().registerKeyHandler(key, this.handler);
 
