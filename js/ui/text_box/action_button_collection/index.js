@@ -130,7 +130,7 @@ export default class ActionButtonCollection {
     getButton(buttonName) {
         const button = find(this.buttons, ({ name }) => name === buttonName);
 
-        return button ? button.instance : null;
+        return button && button.instance;
     }
 
     renderAfterButtons(buttons, $container) {

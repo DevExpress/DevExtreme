@@ -8479,7 +8479,7 @@ declare module DevExpress.ui {
         /** @name dxTextEditor.focus() */
         focus(): void;
         /** @name dxTextEditor.getButton(name) */
-        getButton(name: string): any;
+        getButton(name: string): dxButton | undefined;
     }
     /** @name dxTileView.Options */
     export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
