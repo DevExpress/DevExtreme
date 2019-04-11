@@ -733,7 +733,8 @@ registerTheme({
                 color: BLACK
             },
             image: {
-                location: "full"
+                width: 30,
+                height: 30
             }
         },
         argumentAxis: {
