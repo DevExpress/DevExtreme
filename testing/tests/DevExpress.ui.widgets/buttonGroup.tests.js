@@ -272,6 +272,45 @@ QUnit.module("Events", () => {
 });
 
 
+QUnit.module("keyboard", () => {
+    const supportedKeys = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
+
+    supportedKeys.forEach((key) => {
+        QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
+            const handler = sinon.spy();
+
+            const buttonGroup = $("#widget").dxButtonGroup({
+                focusStateEnabled: true,
+                items: [{ text: "text" }],
+                onInitialized: e => {
+                    e.component.registerKeyHandler(key, handler);
+                }
+            }).dxButtonGroup("instance");
+
+            const triggerEvent = keyboardMock(buttonGroup.element()).press(key);
+
+            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
+            assert.deepEqual(triggerEvent.event.target, buttonGroup.element(), "event.target");
+        });
+
+        QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
+            const handler = sinon.spy();
+
+            const buttonGroup = $("#widget").dxButtonGroup({
+                focusStateEnabled: true,
+                items: [{ text: "text" }]
+            }).dxButtonGroup("instance");
+
+            buttonGroup.registerKeyHandler(key, handler);
+
+            const triggerEvent = keyboardMock(buttonGroup.element()).press(key);
+
+            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
+            assert.deepEqual(triggerEvent.event.target, buttonGroup.element(), "event.target");
+        });
+    });
+});
+
 QUnit.module("selection", () => {
     QUnit.test("change selection in the single by click", function(assert) {
         const $buttonGroup = $("#buttonGroup").dxButtonGroup({

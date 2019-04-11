@@ -440,35 +440,41 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
 
-    test("RegisterKeyHandler", (assert) => {
-        const handler = sinon.spy();
+    const supportedKeys = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
 
-        let radioGroup = createRadioGroup({
-            focusStateEnabled: true,
-            items: [{ text: "text" }]
-        }).dxRadioGroup("instance");
+    supportedKeys.forEach((key) => {
+        test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
+            const handler = sinon.spy();
 
-        radioGroup.registerKeyHandler("backspace", handler);
+            const radioGroup = createRadioGroup({
+                focusStateEnabled: true,
+                items: [{ text: "text" }],
+                onInitialized: e => {
+                    e.component.registerKeyHandler(key, handler);
+                }
+            }).dxRadioGroup("instance");
 
-        keyboardMock(radioGroup.element()).press("backspace");
+            const triggerEvent = keyboardMock(radioGroup.element()).press(key);
 
-        assert.strictEqual(handler.callCount, 1, "registerKeyHandler was called");
-    });
+            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
+            assert.deepEqual(triggerEvent.event.target, radioGroup.element(), "event.target");
+        });
 
-    test("RegisterKeyHandler - onInitialize", (assert) => {
-        const handler = sinon.spy();
+        test(`RegisterKeyHandler -> "${key}"`, (assert) => {
+            const handler = sinon.spy();
 
-        let radioGroup = createRadioGroup({
-            focusStateEnabled: true,
-            items: [{ text: "text" }],
-            onInitialized: e => {
-                e.component.registerKeyHandler("backspace", handler);
-            }
-        }).dxRadioGroup("instance");
+            const radioGroup = createRadioGroup({
+                focusStateEnabled: true,
+                items: [{ text: "text" }]
+            }).dxRadioGroup("instance");
 
-        keyboardMock(radioGroup.element()).press("backspace");
+            radioGroup.registerKeyHandler(key, handler);
 
-        assert.strictEqual(handler.callCount, 1, "registerKeyHandler was called");
+            const triggerEvent = keyboardMock(radioGroup.element()).press(key);
+
+            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
+            assert.deepEqual(triggerEvent.event.target, radioGroup.element(), "event.target");
+        });
     });
 });
 
