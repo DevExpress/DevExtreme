@@ -6130,6 +6130,8 @@ declare module DevExpress.ui {
     }
     /** @name dxDropDownButton.Options */
     export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
+        /** @name dxDropDownButton.Options.contentTemplate */
+        contentTemplate?: template | ((contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.dataSource */
         dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxDropDownButton.Options.deferRendering */

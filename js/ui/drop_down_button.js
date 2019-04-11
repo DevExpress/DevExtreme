@@ -1,10 +1,12 @@
 import $ from "../core/renderer";
 import Widget from "./widget/ui.widget";
+import FunctionTemplate from "./widget/function_template";
 import registerComponent from "../core/component_registrator";
 import ButtonGroup from "./button_group";
 import Popup from "./popup";
 import List from "./list";
 import { compileGetter } from "../core/utils/data";
+import domUtils from "../core/utils/dom";
 import DataHelperMixin from "../data_helper";
 import { DataSource } from "../data/data_source/data_source";
 import ArrayStore from "../data/array_store";
@@ -163,6 +165,15 @@ let DropDownButton = Widget.inherit({
              */
             dropDownOptions: {},
 
+            /**
+             * @name dxDropDownButtonOptions.contentTemplate
+             * @type template|function
+             * @default "content"
+             * @type_function_param1 contentElement:dxElement
+             * @type_function_return string|Node|jQuery
+             */
+            contentTemplate: "content",
+
             grouped: false,
             groupTemplate: "group",
             buttonGroupOptions: {},
@@ -188,6 +199,20 @@ let DropDownButton = Widget.inherit({
         this._itemsToDataSource();
         this._initInnerOptionCache("buttonGroupOptions");
         this._initInnerOptionCache("dropDownOptions");
+    },
+
+    _initTemplates() {
+        this.callBase();
+        this._defaultTemplates["content"] = new FunctionTemplate((options) => {
+            const $popupContent = $(options.container);
+            const $listContainer = $("<div>").appendTo($popupContent);
+            this._list = this._createComponent($listContainer, List, this._listOptions());
+
+            this._list.registerKeyHandler("escape", this._escHandler.bind(this));
+            this._list.registerKeyHandler("tab", this._escHandler.bind(this));
+            this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
+            this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
+        });
     },
 
     _itemsToDataSource: function() {
@@ -314,12 +339,28 @@ let DropDownButton = Widget.inherit({
         }, this._getInnerOptionsCache("buttonGroupOptions"));
     },
 
+    _renderPopupContent() {
+        const $content = this._popup.$content();
+        const template = this._getTemplateByOption("contentTemplate");
+
+        $content.empty();
+
+        return template.render({
+            container: domUtils.getPublicElement($content),
+            model: {
+                component: this
+            }
+        });
+    },
+
     _popupOptions() {
         return extend({
             dragEnabled: false,
             focusStateEnabled: false,
             deferRendering: this.option("deferRendering"),
-            minWidth: 130,
+            minWidth: () => {
+                return this.$element().outerWidth();
+            },
             closeOnOutsideClick: (e) => {
                 const $toggleButton = $(e.target).closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
                 if(!$toggleButton.length) {
@@ -345,15 +386,6 @@ let DropDownButton = Widget.inherit({
                 offset: {
                     y: -1
                 }
-            },
-            contentTemplate: ($container) => {
-                const $listContainer = $("<div>").appendTo($container);
-                this._list = this._createComponent($listContainer, List, this._listOptions());
-
-                this._list.registerKeyHandler("escape", this._escHandler.bind(this));
-                this._list.registerKeyHandler("tab", this._escHandler.bind(this));
-                this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
-                this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
             }
         }, this._getInnerOptionsCache("dropDownOptions"));
     },
@@ -399,7 +431,8 @@ let DropDownButton = Widget.inherit({
         const $popup = $("<div>");
         this.$element().append($popup);
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
-        $(this._popup.content()).addClass(DROP_DOWN_BUTTON_CONTENT);
+        this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
+        this._renderPopupContent();
         this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
     },
 
@@ -546,6 +579,9 @@ let DropDownButton = Widget.inherit({
             case "noDataText":
             case "groupTemplate":
                 this._setListOption(name, value);
+                break;
+            case "contentTemplate":
+                this._popup && this._renderPopupContent();
                 break;
             case "selectedItemKey":
                 this._selectedItemKeyChanged(value);

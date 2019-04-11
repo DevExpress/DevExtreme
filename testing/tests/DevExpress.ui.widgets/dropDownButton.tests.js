@@ -213,7 +213,6 @@ QUnit.module("popup integration", {
         const buttonGroupElement = getButtonGroup(this.instance).element();
         const options = {
             deferRendering: this.instance.option("deferRendering"),
-            minWidth: 130,
             dragEnabled: false,
             showTitle: false,
             animation: {
@@ -985,5 +984,26 @@ QUnit.module("keyboard navigation", {
         assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
         assert.ok(getButtonGroup(this.dropDownButton).$element().hasClass("dx-state-focused"), "button group was focused");
         assert.strictEqual(event.isDefaultPrevented(), false, "event was not prevented and native focus move next");
+    });
+});
+
+QUnit.module("custom content template", {}, () => {
+    QUnit.test("contentTemplate option can be used", (assert) => {
+        const templateHandler = sinon.stub().returns("Template 1");
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            contentTemplate: templateHandler,
+            deferRendering: false
+        });
+
+        const popupContent = getPopup(dropDownButton).content();
+        assert.strictEqual(templateHandler.callCount, 1, "templateHandler was called");
+        assert.strictEqual(templateHandler.getCall(0).args[0].component, dropDownButton, "component is correct");
+        assert.strictEqual(templateHandler.getCall(0).args[1], popupContent, "container is correct");
+        assert.strictEqual($(popupContent).text(), "Template 1", "template was rendered");
+
+        const templateHandler2 = sinon.stub().returns("Template 2");
+        dropDownButton.option("contentTemplate", templateHandler2);
+        assert.strictEqual(templateHandler.callCount, 1, "templateHandler was called");
+        assert.strictEqual($(popupContent).text(), "Template 2", "template was rendered");
     });
 });
