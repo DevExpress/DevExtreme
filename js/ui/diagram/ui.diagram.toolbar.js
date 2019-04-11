@@ -12,10 +12,19 @@ import "../check_box";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
 const TOOLBAR_CLASS = "dx-diagram-toolbar";
 
+const UI_ITEMS = [
+    {
+        name: "options",
+        icon: "preferences",
+        hint: "Show Page Properties"
+    }
+];
+
 class DiagramToolbar extends Widget {
     _init() {
         this.bar = new DiagramBar(this);
         this._toolbarWidgets = {};
+        this._createOnUIItemToggle();
         super._init();
     }
     _initMarkup() {
@@ -27,26 +36,41 @@ class DiagramToolbar extends Widget {
     }
     _renderToolbar($toolbar) {
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, {
-            dataSource: this._prepareToolbarItems()
+            dataSource: this._prepareCommandItems().concat(this._prepareUIItems())
         });
     }
-    _prepareToolbarItems() {
-        return this._getButtons().map(item => {
-            return extend(true, {
-                widget: item.widget || "dxButton",
-                location: "before",
-                locateInMenu: "auto",
+    _prepareUIItems() {
+        return UI_ITEMS.map(item => extend(true,
+            this._createItem(item, "after"),
+            {
                 options: {
-                    text: item.text,
-                    hint: item.hint,
-                    icon: item.icon,
-                    onInitialized: (e) => this._onToolbarItemInitialized(e.component, item.name)
+                    onClick: (e) => this._onUIItemToggleAction({ name: item.name })
                 }
-            }, this._createWidgetActionOptions(item), this._createWidgetOptions(item));
-        });
+            })
+        );
+    }
+    _prepareCommandItems() {
+        return this._getButtons().map(item => extend(true,
+            this._createItem(item, "before"),
+            this._createWidgetActionOptions(item),
+            this._createWidgetOptions(item))
+        );
     }
     _onToolbarItemInitialized(widget, name) {
         this._toolbarWidgets[name] = widget;
+    }
+    _createItem(item, location) {
+        return {
+            widget: item.widget || "dxButton",
+            location: location,
+            locateInMenu: "auto",
+            options: {
+                text: item.text,
+                hint: item.hint,
+                icon: item.icon,
+                onInitialized: (e) => this._onToolbarItemInitialized(e.component, item.name)
+            }
+        };
     }
     _createWidgetOptions({ widget, items }) {
         if(widget === "dxSelectBox") {
@@ -78,6 +102,9 @@ class DiagramToolbar extends Widget {
     _onButtonClick(itemName) {
         this.bar._raiseBarCommandExecuted(itemName);
     }
+    _createOnUIItemToggle() {
+        this._onUIItemToggleAction = this._createActionByOption("onUIItemToggle");
+    }
 
     _setItemEnabled(name, enabled) {
         if(name in this._toolbarWidgets) {
@@ -95,6 +122,15 @@ class DiagramToolbar extends Widget {
             widget.option("value", value);
         } else if(value !== undefined) {
             widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
+        }
+    }
+    _optionChanged(args) {
+        switch(args.name) {
+            case "onUIItemToggle":
+                this._createOnUIItemToggle();
+                break;
+            default:
+                this.callBase(args);
         }
     }
 }
