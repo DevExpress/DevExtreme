@@ -14,7 +14,8 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "bootstrap": "^4.3.1",
-    "less-plugin-autoprefix": "^2.0.0"
+    "less-plugin-autoprefix": "^2.0.0",
+    "semver": "^5.6.0"
   },
   "scripts": {
     "test": "mocha -R spec tests/*-spec.js"

@@ -17,12 +17,16 @@
 
 .dx-nav-item,
 .dx-rtl .dx-nav-item {
+    background: @navbar-tab-bg;
+
     .dx-tab-text {
         line-height: normal;
+        color: @navbar-tab-color;
     }
 
     .dx-navbar & .dx-icon {
         .dx-icon-sizing(@GENERIC_NAVBAR_ICON_SIZE);
+        color: @navbar-tab-color;
     }
 
     &.dx-tab-selected,
@@ -35,6 +39,10 @@
 
     &.dx-tab-selected {
         background: @navbar-tab-selected-bg;
+        
+        .dx-tab-text, .dx-icon {
+            color: @navbar-tab-selected-color;
+        }
     }
 
     &.dx-state-active {
