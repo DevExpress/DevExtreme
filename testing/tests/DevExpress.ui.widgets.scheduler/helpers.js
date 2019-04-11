@@ -127,13 +127,6 @@ export const appointmentsHelper = {
     }
 };
 
-export const workspaceHelper = {
-    getCells: () => $(".dx-scheduler-date-table-cell"),
-    getCell: (index) => workspaceHelper.getCells().eq(index),
-    getAllDayCells: () => $(".dx-scheduler-all-day-table-cell"),
-    getAllDayCell: (index) => workspaceHelper.getAllDayCells().eq(index)
-};
-
 export const appointmentPopupHelper = {
     getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
     hide: () => appointmentPopupHelper.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick")
