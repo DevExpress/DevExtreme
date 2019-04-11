@@ -1,3 +1,4 @@
+import $ from "jquery";
 import { createAnnotations } from "viz/core/annotations";
 import vizMocks from "../../helpers/vizMocks.js";
 
@@ -213,10 +214,7 @@ QUnit.test("Get tooltip format object", function(assert) {
     annotation.draw(this.widget, this.group);
 
     // assert
-    assert.deepEqual(annotation.getTooltipFormatObject(), {
-        ...items[0],
-        valueText: "item_desc"
-    });
+    assert.deepEqual(annotation.getTooltipFormatObject(), $.extend({ valueText: "item_desc" }, items[0]));
 });
 
 QUnit.test("customizeTooltip in item", function(assert) {
