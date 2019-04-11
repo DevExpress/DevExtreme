@@ -805,6 +805,8 @@ QUnit.module("keyboard navigation", {
     beforeEach: () => {
         this.$element = $("#dropDownButton");
         this.dropDownButton = new DropDownButton(this.$element, {
+            focusStateEnabled: true,
+            deferRendering: false,
             items: [
                 { name: "Item 1", id: 1 },
                 { name: "Item 2", id: 2 },
@@ -819,6 +821,15 @@ QUnit.module("keyboard navigation", {
         this.keyboard.press("right"); // TODO: Remove after T730639 fix
     }
 }, () => {
+    QUnit.test("focusStateEnabled option should be transfered to list and buttonGroup", (assert) => {
+        assert.ok(getList(this.dropDownButton).option("focusStateEnabled"), "list got option on init");
+        assert.ok(getButtonGroup(this.dropDownButton).option("focusStateEnabled"), "buttonGroup got option on init");
+
+        this.dropDownButton.option("focusStateEnabled", false);
+        assert.notOk(getList(this.dropDownButton).option("focusStateEnabled"), "list got option on change");
+        assert.notOk(getButtonGroup(this.dropDownButton).option("focusStateEnabled"), "buttonGroup got option on change");
+    });
+
     QUnit.testInActiveWindow("arrow right and left should select a button", (assert) => {
         this.keyboard.press("right");
         assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");

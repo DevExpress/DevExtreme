@@ -305,6 +305,7 @@ let DropDownButton = Widget.inherit({
     _buttonGroupOptions() {
         return extend({
             items: this._getButtonGroupItems(),
+            focusStateEnabled: this.option("focusStateEnabled"),
             onItemClick: this._buttonGroupItemClick.bind(this),
             width: this.option("width"),
             height: this.option("height"),
@@ -362,6 +363,7 @@ let DropDownButton = Widget.inherit({
         const selectedItemKey = this.option("selectedItemKey");
         return {
             selectionMode: "single",
+            focusStateEnabled: this.option("focusStateEnabled"),
             selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
             grouped: this.option("grouped"),
             keyExpr: this.option("keyExpr"),
@@ -507,6 +509,10 @@ let DropDownButton = Widget.inherit({
                 break;
             case "dropDownOptions":
                 this._innerOptionChanged(this._popup, args);
+                break;
+            case "focusStateEnabled":
+                this._setListOption(name, value);
+                this._buttonGroup.option(name, value);
                 break;
             case "items":
                 this._dataSource = null;
