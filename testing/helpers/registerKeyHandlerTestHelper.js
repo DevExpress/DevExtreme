@@ -15,13 +15,13 @@ const registerKeyHandlerTestHelper = {
                         focusStateEnabled: true,
                         items: [{ text: "text" }]
                     }, options)).appendTo("#qunit-fixture");
-                };
 
-                this.widget = () => { return this.$widget[WidgetName]("instance"); };
+                    this.widget = this.$widget[WidgetName]("instance");
+                };
 
                 this.checkKeyHandlerCall = (assert, key) => {
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.deepEqual(this.handler.firstCall.args[0].target, this.widget().element(), "event.target");
+                    assert.deepEqual(this.handler.firstCall.args[0].target, this.widget.element(), "event.target");
                 };
             },
             afterEach: () => {
@@ -39,7 +39,7 @@ const registerKeyHandlerTestHelper = {
                 QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
                     this.createWidget();
 
-                    this.widget().registerKeyHandler(key, this.handler);
+                    this.widget.registerKeyHandler(key, this.handler);
 
                     keyboardMock(this.$widget).press(key);
                     this.checkKeyHandlerCall(assert, key);
