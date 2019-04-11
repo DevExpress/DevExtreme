@@ -279,7 +279,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     W1013: "The \"message\" field in the dialog component was renamed to \"messageHtml\". Change your code correspondingly. In addition, if you used HTML code in the message, make sure that it is secure",
 
     /**
-    * @name ErrorsCore.W0017
+    * @name ErrorsUIWidgets.W1014
     */
     W1014: "The Floating Action Button exceeds the recommended action count. If you need to display more actions, increase the maxActionButtonCount option value in the global config."
 });
