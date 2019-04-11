@@ -939,7 +939,7 @@ module.exports = {
                 this._wrapped = title.element.setMaxSize(canvasLength, undefined, {
                     wordWrap: titleOptions.wordWrap || "none",
                     textOverflow: titleOptions.textOverflow || "ellipsis"
-                });
+                }) !== 1;
             } else {
                 !this._wrapped && title.element.restoreText();
             }
