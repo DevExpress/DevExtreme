@@ -9484,7 +9484,7 @@ QUnit.test("Horizontal. Title does not fit to canvas - apply Ellipsis and set hi
     this.axis.updateSize(this.canvas);
 
     // assert
-    assert.deepEqual(title.setMaxWidth.lastCall.args[0], 80);
+    assert.deepEqual(title.setMaxSize.lastCall.args[0], 80);
     assert.equal(title.restoreText.callCount, 0);
 });
 
@@ -9540,7 +9540,7 @@ QUnit.test("Vertical. Title does not fit to canvas - apply Ellipsis and set hint
     this.axis.updateSize(this.canvas);
 
     // assert
-    assert.deepEqual(title.setMaxWidth.lastCall.args[0], 40);
+    assert.deepEqual(title.setMaxSize.lastCall.args[0], 40);
     assert.equal(title.restoreText.callCount, 0);
 });
 

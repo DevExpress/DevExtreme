@@ -936,7 +936,7 @@ module.exports = {
                 boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
-                this._wrapped = title.element.setMaxWidth(canvasLength, {
+                this._wrapped = title.element.setMaxSize(canvasLength, undefined, {
                     wordWrap: titleOptions.wordWrap || "none",
                     textOverflow: titleOptions.textOverflow || "ellipsis"
                 });

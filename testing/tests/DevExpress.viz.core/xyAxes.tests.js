@@ -2415,8 +2415,8 @@ QUnit.test("Check title overflow on draw", function(assert) {
 
     assert.strictEqual(this.renderer.text.callCount, 1);
     const textElement = this.renderer.text.firstCall.returnValue;
-    assert.deepEqual(textElement.setMaxWidth.callCount, 1);
-    assert.deepEqual(textElement.setMaxWidth.firstCall.args, [10, { textOverflow: "none", wordWrap: "word-break" }]);
+    assert.deepEqual(textElement.setMaxSize.callCount, 1);
+    assert.deepEqual(textElement.setMaxSize.firstCall.args, [10, undefined, { textOverflow: "none", wordWrap: "word-break" }]);
 });
 
 QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
