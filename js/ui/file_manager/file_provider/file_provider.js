@@ -5,7 +5,7 @@ const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 /**
 * @name FileProvider
 * @type object
-* @module file_provider
+* @module ui/file_manager/file_provider/file_provider
 * @export default
 */
 class FileProvider {
