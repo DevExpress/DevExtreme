@@ -2582,7 +2582,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.height */
         height?: number;
         /** @name dxChartCommonAnnotationConfig.image */
-        image?: string | { height?: number, location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string, width?: number };
+        image?: { height?: number, url?: string, width?: number };
         /** @name dxChartCommonAnnotationConfig.opacity */
         opacity?: number;
         /** @name dxChartCommonAnnotationConfig.paddingLeftRight */

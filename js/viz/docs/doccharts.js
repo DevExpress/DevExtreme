@@ -3592,7 +3592,7 @@ var dxChartCommonAnnotationConfig = {
     },
     /**
     * @name dxChartCommonAnnotationConfig.image
-    * @type string|object
+    * @type object
     */
     image: {
         /**
@@ -3601,12 +3601,6 @@ var dxChartCommonAnnotationConfig = {
         * @default undefined
         */
         url: undefined,
-        /**
-        * @name dxChartCommonAnnotationConfig.image.location
-        * @type Enums.BackgroundImageLocation
-        * @default 'full'
-        */
-        location: 'full',
         /**
         * @name dxChartCommonAnnotationConfig.image.width
         * @type number

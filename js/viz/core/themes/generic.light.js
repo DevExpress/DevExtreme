@@ -732,9 +732,7 @@ registerTheme({
                 blur: 4,
                 color: BLACK
             },
-            image: {
-                location: "full"
-            }
+            image: {}
         },
         argumentAxis: {
             endOnTick: false,
