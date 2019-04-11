@@ -12,10 +12,7 @@ function hasText(text) {
 }
 
 function processTitleLength(elem, text, width, options) {
-    const changed = elem.attr({ text: text }).setMaxWidth(width, options);
-    if(changed) {
-        elem.setTitle(text);
-    }
+    elem.attr({ text }).setMaxSize(width, undefined, options).textChanged && elem.setTitle(text);
 }
 
 function pickMarginValue(value) {

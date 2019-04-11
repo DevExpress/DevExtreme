@@ -285,7 +285,7 @@ function Label(renderSettings) {
     this._container = renderSettings.labelsGroup;
     this._point = renderSettings.point;
     this._strategy = renderSettings.strategy;
-    this._rowsCount = 1;
+    this._rowCount = 1;
 }
 
 Label.prototype = {
@@ -456,16 +456,19 @@ Label.prototype = {
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
     fit: function(maxWidth) {
         const padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
-        let rowsCountChanged = false;
+        let rowCountChanged = false;
         if(this._text) {
-            const rowsCount = this._text.setMaxWidth(maxWidth - padding, this._options);
-            if(rowsCount !== this._rowsCount) {
-                rowsCountChanged = true;
-                this._rowsCount = rowsCount;
+            let { rowCount } = this._text.setMaxSize(maxWidth - padding, undefined, this._options);
+            if(rowCount === 0) {
+                rowCount = 1;
+            }
+            if(rowCount !== this._rowCount) {
+                rowCountChanged = true;
+                this._rowCount = rowCount;
             }
         }
         this._updateBackground(this._text.getBBox());
-        return rowsCountChanged;
+        return rowCountChanged;
     },
 
     resetEllipsis: function() {

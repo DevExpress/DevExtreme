@@ -10,10 +10,21 @@ import { Deferred } from "../../../core/utils/deferred";
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
 
-class WebAPIFileProvider extends FileProvider {
+/**
+* @name WebApiFileProvider
+* @inherits FileProvider
+* @type object
+* @module file_provider.webapi
+* @export default
+*/
+class WebApiFileProvider extends FileProvider {
 
     constructor(options) {
         super();
+        /**
+         * @name WebApiFileProviderOptions.endpointUrl
+         * @type string
+         */
         this._options = options;
     }
 
@@ -76,7 +87,7 @@ class WebAPIFileProvider extends FileProvider {
 
         const deferred = new Deferred();
         ajax.sendRequest({
-            url: this._options.loadUrl,
+            url: this._options.endpointUrl,
             method: "POST",
             dataType: "json",
             data: formData,
@@ -107,7 +118,7 @@ class WebAPIFileProvider extends FileProvider {
     }
 
     _getEntriesByPath(path) {
-        return this._executeRequest("GetDirContent", { parentId: path });
+        return this._executeRequest("GetDirContents", { parentId: path });
     }
 
     _executeRequest(command, args) {
@@ -118,7 +129,7 @@ class WebAPIFileProvider extends FileProvider {
 
         const deferred = new Deferred();
         ajax.sendRequest({
-            url: this._options.loadUrl + "?" + queryString,
+            url: this._options.endpointUrl + "?" + queryString,
             dataType: "json",
             cache: false
         }).then(result => {
@@ -183,4 +194,4 @@ class WebAPIFileProvider extends FileProvider {
 
 }
 
-module.exports = WebAPIFileProvider;
+module.exports = WebApiFileProvider;

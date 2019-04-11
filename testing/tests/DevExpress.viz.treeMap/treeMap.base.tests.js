@@ -3,6 +3,11 @@ var $ = require("jquery"),
     themeModule = require("viz/themes"),
     DataSource = require("data/data_source/data_source").DataSource;
 
+var ELLIPSIS_SETTINGS = {
+    wordWrap: "none",
+    textOverflow: "ellipsis"
+};
+
 function createDataSource(value) {
     return new DataSource({
         load: function() {
@@ -983,8 +988,8 @@ QUnit.test("resolveLabelOverflow changed for tile labels", function(assert) {
     widget.option("resolveLabelOverflow", "ellipsis");
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "visible");
-    assert.ok(this.renderer.text.lastCall.returnValue.applyEllipsis.calledOnce);
-    assert.equal(this.renderer.text.lastCall.returnValue.applyEllipsis.args[0][0], 20);
+    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [20, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.test("Passing 'wordWrap' and 'overflow' options to texts for tiles", function(assert) {
@@ -1002,8 +1007,8 @@ QUnit.test("Passing 'wordWrap' and 'overflow' options to texts for tiles", funct
         dataSource: [{ name: "Label", value: 10 }]
     });
 
-    assert.ok(this.renderer.text.lastCall.returnValue.setMaxWidth.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxWidth.lastCall.args, [20, { wordWrap: "wordWrap_1", textOverflow: "overflow_1" }]);
+    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [20, 396, { wordWrap: "wordWrap_1", textOverflow: "overflow_1" }]);
 });
 
 QUnit.test("Passing 'overflow' option to texts for group", function(assert) {
@@ -1020,8 +1025,8 @@ QUnit.test("Passing 'overflow' option to texts for group", function(assert) {
         dataSource: [{ name: "groupName", items: [{ name: "Label", value: 10 }] }]
     });
 
-    assert.ok(this.renderer.text.getCall(1).returnValue.setMaxWidth.calledOnce);
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.setMaxWidth.lastCall.args, [12, { textOverflow: "overflow_1", wordWrap: "none" }]);
+    assert.ok(this.renderer.text.getCall(1).returnValue.setMaxSize.calledOnce);
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args, [12, 9, { textOverflow: "overflow_1", wordWrap: "none" }]);
 });
 
 QUnit.test("Do not hide label if it width is equal to allowed width", function(assert) {
@@ -1050,8 +1055,8 @@ QUnit.test("resolveLabelOverflow changed for group labels", function(assert) {
     widget.option("resolveLabelOverflow", "ellipsis");
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "visible");
-    assert.ok(this.renderer.text.lastCall.returnValue.applyEllipsis.calledOnce);
-    assert.equal(this.renderer.text.lastCall.returnValue.applyEllipsis.args[0][0], 12);
+    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [12, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.module("labels", environment);
@@ -1252,6 +1257,19 @@ QUnit.test("label's height > tile height", function(assert) {
         dataSource: [{ value: 1, name: "some" }]
     });
 
+    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "visible");
+});
+
+QUnit.test("label's height > tile height. resolveLabelOverflow", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 4, height: 15 };
+    common.createWidget({
+        size: {
+            height: 10
+        },
+        dataSource: [{ value: 1, name: "some" }],
+        resolveLabelOverflow: "ellipsis"
+    });
+
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
 });
 
@@ -1262,7 +1280,8 @@ QUnit.test("Hide multiline tile's label", function(assert) {
         size: {
             height: 10
         },
-        dataSource: [{ value: 1, name: "some<br />second line" }]
+        dataSource: [{ value: 1, name: "some<br />second line" }],
+        resolveLabelOverflow: "ellipsis"
     });
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
@@ -1294,8 +1313,8 @@ QUnit.test("ellipsis label in header", function(assert) {
     });
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "visible");
-    assert.ok(this.renderer.text.lastCall.returnValue.applyEllipsis.calledOnce);
-    assert.equal(this.renderer.text.lastCall.returnValue.applyEllipsis.args[0][0], 12);
+    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [12, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.test("ellipsis label in header does not fit in width", function(assert) {
@@ -1310,8 +1329,8 @@ QUnit.test("ellipsis label in header does not fit in width", function(assert) {
     });
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
-    assert.ok(this.renderer.text.lastCall.returnValue.applyEllipsis.calledOnce);
-    assert.equal(this.renderer.text.lastCall.returnValue.applyEllipsis.args[0][0], 2);
+    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [2, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.test("label in header does not fit in width, but fit after ellipsis", function(assert) {
@@ -1328,8 +1347,8 @@ QUnit.test("label in header does not fit in width, but fit after ellipsis", func
     });
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "visible");
-    assert.ok(this.renderer.text.lastCall.returnValue.applyEllipsis.calledOnce);
-    assert.equal(this.renderer.text.lastCall.returnValue.applyEllipsis.args[0][0], 7);
+    assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [7, undefined, ELLIPSIS_SETTINGS]);
 });
 
 QUnit.test("draw only header labels", function(assert) {
@@ -1421,6 +1440,7 @@ QUnit.test("labels with small widget height", function(assert) {
         size: {
             height: 17
         },
+        resolveLabelOverflow: "ellipsis",
         dataSource: [{ name: 'g', value: 1 }]
     });
 
@@ -1474,7 +1494,7 @@ QUnit.test("ellipsis mode, change width from small to big - reapply ellipsis", f
     });
 
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "visible");
-    assert.equal(this.renderer.text.lastCall.returnValue.stub("applyEllipsis").called, true);
+    assert.equal(this.renderer.text.lastCall.returnValue.stub("setMaxSize").called, true);
 });
 
 QUnit.module("'onDrawn' event", $.extend({}, environment, {
