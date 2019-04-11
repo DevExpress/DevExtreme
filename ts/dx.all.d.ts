@@ -2323,6 +2323,10 @@ declare module DevExpress.viz {
         font?: Font;
         /** @name dxChart.Options.commonAxisSettings.title.margin */
         margin?: number;
+        /** @name dxChart.Options.commonAxisSettings.title.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
+        /** @name dxChart.Options.commonAxisSettings.title.wordWrap */
+        wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /** @name dxChart.Options.commonPaneSettings */
     export interface dxChartCommonPaneSettings {
