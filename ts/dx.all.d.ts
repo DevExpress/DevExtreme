@@ -109,11 +109,16 @@ interface JQuery {
     dxDeferRendering(options: string, ...params: any[]): any;
     dxDeferRendering(options: DevExpress.ui.dxDeferRenderingOptions): JQuery;
 }
+
 interface JQuery {
     dxDiagram(): JQuery;
+
     dxDiagram(options: "instance"): DevExpress.ui.dxDiagram;
+
     dxDiagram(options: string): any;
+
     dxDiagram(options: string, ...params: any[]): any;
+
     dxDiagram(options: DevExpress.ui.dxDiagramOptions): JQuery;
 }
 interface JQuery {
@@ -2010,6 +2015,8 @@ declare module DevExpress.viz {
         containerBackgroundColor?: string;
         /** @name dxChart.Options.crosshair */
         crosshair?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', enabled?: boolean, horizontalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, verticalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, width?: number };
+        /** @name dxChart.Options.customizeAnnotation */
+        customizeAnnotation?: ((annotationItem: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
         /** @name dxChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** @name dxChart.Options.defaultPane */
@@ -2545,16 +2552,18 @@ declare module DevExpress.viz {
     }
     /** @name dxChartCommonAnnotationConfig */
     export interface dxChartCommonAnnotationConfig {
+        /** @name dxChartCommonAnnotationConfig.argument */
+        argument?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.arrowLength */
         arrowLength?: number;
         /** @name dxChartCommonAnnotationConfig.arrowWidth */
         arrowWidth?: number;
+        /** @name dxChartCommonAnnotationConfig.axis */
+        axis?: string;
         /** @name dxChartCommonAnnotationConfig.border */
         border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name dxChartCommonAnnotationConfig.color */
         color?: string;
-        /** @name dxChartCommonAnnotationConfig.customizeAnnotation */
-        customizeAnnotation?: ((annotationItem: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
         customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
         /** @name dxChartCommonAnnotationConfig.font */
@@ -2569,14 +2578,22 @@ declare module DevExpress.viz {
         paddingLeftRight?: number;
         /** @name dxChartCommonAnnotationConfig.paddingTopBottom */
         paddingTopBottom?: number;
+        /** @name dxChartCommonAnnotationConfig.series */
+        series?: string;
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.type */
         type?: 'label' | 'image';
+        /** @name dxChartCommonAnnotationConfig.value */
+        value?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.width */
         width?: number;
+        /** @name dxChartCommonAnnotationConfig.x */
+        x?: number;
+        /** @name dxChartCommonAnnotationConfig.y */
+        y?: number;
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
@@ -3506,7 +3523,7 @@ declare module DevExpress.viz {
         /** @name dxFunnel.Options.item */
         item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } } };
         /** @name dxFunnel.Options.label */
-        label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: DevExpress.ui.format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, visible?: boolean };
+        label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: DevExpress.ui.format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
         /** @name dxFunnel.Options.legend */
         legend?: dxFunnelLegend;
         /** @name dxFunnel.Options.neckHeight */
@@ -4816,6 +4833,8 @@ declare module DevExpress.ui {
         /** @name EmailRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
+    /** @name FileProvider */
+    export type FileProvider = any;
     /** @name GridBase.Options */
     export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
         /** @name GridBase.Options.allowColumnReordering */
@@ -5387,6 +5406,15 @@ declare module DevExpress.ui {
         trim?: boolean;
         /** @name StringLengthRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+    }
+    /** @name WebApiFileProvider.Options */
+    export interface WebApiFileProviderOptions {
+        /** @name WebApiFileProvider.Options.endpointUrl */
+        endpointUrl?: string;
+    }
+    /** @name WebApiFileProvider */
+    export class WebApiFileProvider {
+        constructor(options?: WebApiFileProviderOptions)
     }
     /** @name Widget.Options */
     export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
@@ -6040,9 +6068,11 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxDeferRenderingOptions)
         constructor(element: JQuery, options?: dxDeferRenderingOptions)
     }
+
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     }
+
     /** @name dxDiagram */
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
@@ -6140,6 +6170,8 @@ declare module DevExpress.ui {
         selectedItemKey?: string | number;
         /** @name dxDropDownButton.Options.splitButton */
         splitButton?: boolean;
+        /** @name dxDropDownButton.Options.stylingMode */
+        stylingMode?: 'text' | 'outlined' | 'contained';
         /** @name dxDropDownButton.Options.text */
         text?: string;
         /** @name dxDropDownButton.Options.useSelectMode */
@@ -6278,16 +6310,16 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManager.Options */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
-        /** @name dxFileManager.Options.customThumbnail */
-        customThumbnail?: ((fileItem: any) => string);
-        /** @name dxFileManager.Options.editing */
-        editing?: { allowCopy?: boolean, allowCreate?: boolean, allowMove?: boolean, allowRemove?: boolean, allowRename?: boolean, allowUpload?: boolean };
-        /** @name dxFileManager.Options.fileSystemStore */
-        fileSystemStore?: any;
-        /** @name dxFileManager.Options.itemList */
-        itemList?: any;
-        /** @name dxFileManager.Options.selection */
-        selection?: any;
+        /** @name dxFileManager.Options.customizeThumbnail */
+        customizeThumbnail?: ((fileItem: any) => string);
+        /** @name dxFileManager.Options.fileProvider */
+        fileProvider?: any;
+        /** @name dxFileManager.Options.itemView */
+        itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /** @name dxFileManager.Options.permissions */
+        permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+        /** @name dxFileManager.Options.selectionMode */
+        selectionMode?: 'multiple' | 'single';
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {
@@ -8357,7 +8389,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<string | dxActionButton>;
+        buttons?: Array<'clear' | 'spins' | 'dropDown' | dxActionButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */

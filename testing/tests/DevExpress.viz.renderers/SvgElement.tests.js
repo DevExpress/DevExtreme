@@ -5775,10 +5775,10 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal"
             });
-            assert.deepEqual(result, 5);
+            assert.deepEqual(result, { rowCount: 5, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test" },
@@ -5796,12 +5796,12 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal",
                 textOverflow: "clip"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowCount: 1, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "longlonglonglonglong" },
@@ -5815,11 +5815,11 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "word-break"
             });
 
-            assert.deepEqual(result, 2);
+            assert.deepEqual(result, { rowCount: 2, textChanged: true });
 
             assert.equal(text.element.textContent, "longlonglonglonglonglonglong");
             assert.equal(text.element.childNodes.length, 2);
@@ -5832,12 +5832,12 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal",
                 textOverflow: "clip"
             });
 
-            assert.deepEqual(result, 3);
+            assert.deepEqual(result, { rowCount: 3, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "long" },
@@ -5855,12 +5855,12 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal",
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 3);
+            assert.deepEqual(result, { rowCount: 3, textChanged: true });
 
             assert.ok(text.element.childNodes[1].textContent.indexOf("...") !== -1);
 
@@ -5872,12 +5872,12 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal",
                 textOverflow: "hide"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowCount: 0, textChanged: true });
             assert.equal(text.getBBox().width, 0);
         });
 
@@ -5886,11 +5886,11 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal"
             });
 
-            assert.deepEqual(result, 4);
+            assert.deepEqual(result, { rowCount: 4, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test text" },
@@ -5907,12 +5907,12 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "none",
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowCount: 1, textChanged: true });
 
             assert.ok(text.element.textContent.indexOf("...") > 0);
             assert.equal(text.element.childNodes.length, 1);
@@ -5925,12 +5925,12 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal",
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 9);
+            assert.deepEqual(result, { rowCount: 5, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There " },
@@ -5954,14 +5954,26 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "none",
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowCount: 1, textChanged: true });
 
             assert.equal(text.element.childNodes.length, 1);
+        });
+
+        QUnit.test("Complex text. wordWrap: none, text overflow: ellipsis - remove test next to ellipsis. Stroked text", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", "stroke-width": 2, text: "longlonglonglonglong <b>longlonglonglonglong</b>" });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, undefined, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
+
+            assert.equal(text.element.childNodes.length, 2);
         });
 
         QUnit.test("Complex text. wordWrap: normal, text overflow: ellipsis - wrap word", function(assert) {
@@ -5969,12 +5981,12 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal",
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 2);
+            assert.deepEqual(result, { rowCount: 2, textChanged: true });
 
             assert.equal(text.element.childNodes.length, 2);
         });
@@ -5987,11 +5999,11 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(110, {
+            result = text.setMaxSize(110, undefined, {
                 wordWrap: "normal"
             });
 
-            assert.deepEqual(result, 4);
+            assert.deepEqual(result, { rowCount: 4, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "There is test text" },
@@ -6009,16 +6021,82 @@ function checkDashStyle(assert, elem, result, style, value) {
                 result;
 
             this.prepareRenderBeforeEllipsis();
-            result = text.setMaxWidth(1, {
+            result = text.setMaxSize(1, undefined, {
                 wordWrap: "none",
                 textOverflow: "ellipsis"
             });
 
-            assert.deepEqual(result, 1);
+            assert.deepEqual(result, { rowCount: 1, textChanged: true });
 
             this.checkTspans(assert, text, [
                 { x: 35, y: 100, text: "..." }
             ], { x: 35, y: 100 });
+        });
+
+        QUnit.test("Set max height. textOverflow hide", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There is test text for checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, 20, {
+                wordWrap: "normal",
+                textOverflow: "hide"
+            });
+
+            assert.equal(text.getBBox().height, 0);
+        });
+
+        QUnit.test("Set max height. textOverflow ellipsis. multi line text, Last text width less than maxWidth - add ... at the end", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There\nis\ntest\ntext\nfor checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, 25, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "There" },
+                { x: 35, dy: 12, text: "is..." },
+            ], { x: 35, y: 100 });
+        });
+
+        QUnit.test("Set max height. textOverflow ellipsis. multi line text, Do not add ... double times", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "Text\nText Text Text Text Text Text\nText"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, 25, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
+
+            assert.ok(text.element.childNodes[1].textContent.indexOf("...") > 0);
+            assert.equal(text.element.childNodes[1].textContent.indexOf("......"), -1);
+            assert.ok(text.getBBox().width <= 110);
+        });
+
+        QUnit.test("Set max height. textOverflow ellipsis. Slice text", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "Text\nText Text Text 1\nText"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, 25, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
+
+            assert.ok(text.element.childNodes[1].textContent.indexOf("...") > 0);
+            assert.ok(text.getBBox().width <= 110);
         });
     }
 })();

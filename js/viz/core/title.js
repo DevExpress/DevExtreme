@@ -12,10 +12,7 @@ function hasText(text) {
 }
 
 function processTitleLength(elem, text, width, options) {
-    const changed = elem.attr({ text: text }).setMaxWidth(width, options);
-    if(changed) {
-        elem.setTitle(text);
-    }
+    elem.attr({ text }).setMaxSize(width, undefined, options).textChanged && elem.setTitle(text);
 }
 
 function pickMarginValue(value) {
@@ -159,14 +156,12 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     },
 
     draw: function(width, height) {
-        var that = this,
-            layoutOptions;
+        var that = this;
 
         that._group.linkAppend();
         that._correctTitleLength(width);
-        layoutOptions = that.getLayoutOptions();
 
-        if(layoutOptions.height > height) {
+        if(that._group.getBBox().height > height) {
             this.freeSpace();
         }
 

@@ -1308,7 +1308,7 @@ QUnit.test("fit without background", function(assert) {
 
     var text = this.renderer.text.getCall(0).returnValue;
 
-    assert.equal(text.setMaxWidth.args[0][0], 15, "Max width param");
+    assert.equal(text.setMaxSize.args[0][0], 15, "Max width param");
 });
 
 QUnit.test("fit with background", function(assert) {
@@ -1322,7 +1322,7 @@ QUnit.test("fit with background", function(assert) {
     var text = this.renderer.text.getCall(0).returnValue,
         background = this.renderer.rect.getCall(0).returnValue;
 
-    assert.equal(text.setMaxWidth.args[0][0], 15, "Max width param");
+    assert.equal(text.setMaxSize.args[0][0], 15, "Max width param");
     assert.strictEqual(background.attr.called, true, "New background rect");
 });
 
@@ -1330,8 +1330,8 @@ QUnit.test("Label's fit. Count of rows changed", function(assert) {
     this.options.background = { fill: "red" };
     const label = this.createAndDrawLabel();
 
-    this.renderer.text.lastCall.returnValue.setMaxWidth = function() {
-        return 2;
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { rowCount: 2 };
     };
     label.shift(-7, -2);
 
@@ -1342,11 +1342,22 @@ QUnit.test("Label's fit. Count of rows not changed", function(assert) {
     this.options.background = { fill: "red" };
     const label = this.createAndDrawLabel();
 
-    this.renderer.text.lastCall.returnValue.setMaxWidth = function() {
-        return 1;
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { rowCount: 1 };
     };
     label.shift(-7, -2);
     label.fit(31);
+    assert.strictEqual(label.fit(31), false);
+});
+
+QUnit.test("Label's fit. rowCount = 0 ", function(assert) {
+    this.options.background = { fill: "red" };
+    const label = this.createAndDrawLabel();
+
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { rowCount: 0 };
+    };
+    label.shift(-7, -2);
     assert.strictEqual(label.fit(31), false);
 });
 

@@ -380,15 +380,6 @@ module.exports = {
                 },
             },
 
-            selection: {
-                changeItemSelection: function(itemIndex, keys) {
-                    if(!this.option("focusedRowEnabled") || this.isSelectionWithCheckboxes()) {
-                        this.callBase(itemIndex, keys);
-                    }
-                    return null;
-                },
-            },
-
             editorFactory: {
                 renderFocusOverlay: function($element, hideBorder) {
                     var keyboardController = this.getController("keyboardNavigation"),

@@ -10,7 +10,7 @@ import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import dataUtils from "core/element_data";
 import { SchedulerTestWrapper, tooltipHelper, appointmentsHelper, appointmentPopupHelper } from './helpers.js';
-import { simpleArrayData } from './data.js';
+import { getSimpleDataArray } from './data.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -863,8 +863,9 @@ const moduleConfig = {
         fx.off = true;
 
         this.createInstance = function(options) {
+            this.data = getSimpleDataArray();
             const defaultOption = {
-                dataSource: [...simpleArrayData],
+                dataSource: this.data,
                 views: ["agenda", "day", "week", "workWeek", "month"],
                 currentView: "month",
                 currentDate: new Date(2017, 4, 25),
@@ -961,7 +962,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "Value on init should be correct");
         assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
 
-        this.instance.deleteAppointment(simpleArrayData[0]);
+        this.instance.deleteAppointment(this.data[0]);
         assert.equal(appointmentsHelper.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
 
         this.instance.addAppointment({
@@ -1067,7 +1068,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         let templateCallCount = 0;
         this.createInstance({
             appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
-                assert.ok(contentElement.className.indexOf("dx-list-item-content") !== -1, "Content element should be list item");
+                assert.ok($(contentElement).hasClass("dx-list-item-content"), "Content element should be list item");
                 assert.equal(targetedAppointmentData.text, appointmentData.text, "targetedAppointmentData should be not empty");
                 assert.equal(index, templateCallCount, "Index should be correct pass in template callback");
 
