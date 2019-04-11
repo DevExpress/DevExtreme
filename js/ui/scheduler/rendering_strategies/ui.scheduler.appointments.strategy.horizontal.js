@@ -130,7 +130,7 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return result;
     },
 
-    getCompactAppointmentGroupMaxWidth: function() {
+    getDropDownAppointmentWidth: function() {
         return this.getDefaultCellWidth() - DROP_DOWN_BUTTON_OFFSET * 2;
     },
 

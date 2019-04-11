@@ -188,8 +188,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             compactAppointmentDefaultOffset;
 
         if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
+            compactAppointmentDefaultOffset = this.getCompactAppointmentLeftOffset();
             top = coordinates.top + compactAppointmentDefaultOffset;
             appointmentLeft = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
             appointmentWidth = compactAppointmentDefaultSize;
@@ -205,6 +205,14 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             left: appointmentLeft,
             empty: this._isAppointmentEmpty(height, width)
         };
+    },
+
+    getCompactAppointmentTopOffset: function(allDay) {
+        if(this.instance.fire("isAdaptive") && allDay) {
+            return (this._allDayHeight - this.getDropDownButtonAdaptiveSize()) / 2;
+        } else {
+            return this.callBase(allDay);
+        }
     },
 
     _calculateVerticalGeometryConfig: function(coordinates) {
@@ -304,8 +312,15 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
+        let allDayAppointmentCount;
+
+        if(this.instance.fire("isAdaptive")) {
+            allDayAppointmentCount = 0;
+        } else {
+            allDayAppointmentCount = this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell");
+        }
         return {
-            allDay: this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell"),
+            allDay: allDayAppointmentCount,
             simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
         };
     },

@@ -894,7 +894,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
                 left = virtualCoordinates.left;
 
-            var buttonWidth = this.invoke("getCompactAppointmentGroupMaxWidth", virtualGroup.isAllDay),
+            var buttonWidth = this.invoke("getDropDownAppointmentWidth", virtualGroup.isAllDay),
+                buttonHeight = this.invoke("getDropDownAppointmentHeight"),
                 rtlOffset = 0;
 
             if(this.option("rtlEnabled")) {
@@ -910,11 +911,17 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
+                width: buttonWidth - this.option("_appointmentGroupButtonOffset"),
+                height: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
-                isCompact: !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments")
+                isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
+                applyOffset: this._isGroupCompact(virtualGroup)
             });
         }).bind(this));
+    },
+
+    _isGroupCompact: function(virtualGroup) {
+        return !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments");
     },
 
     _sortAppointmentsByStartDate: function(appointments) {
