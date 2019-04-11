@@ -2577,12 +2577,14 @@ declare module DevExpress.viz {
         color?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
         customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.description */
+        description?: string;
         /** @name dxChartCommonAnnotationConfig.font */
         font?: Font;
         /** @name dxChartCommonAnnotationConfig.height */
         height?: number;
         /** @name dxChartCommonAnnotationConfig.image */
-        image?: string | { height?: number, location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string, width?: number };
+        image?: string | { height?: number, url?: string, width?: number };
         /** @name dxChartCommonAnnotationConfig.opacity */
         opacity?: number;
         /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
@@ -2593,10 +2595,12 @@ declare module DevExpress.viz {
         series?: string;
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name dxChartCommonAnnotationConfig.text */
+        text?: string;
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.type */
-        type?: 'label' | 'image';
+        type?: 'text' | 'image';
         /** @name dxChartCommonAnnotationConfig.value */
         value?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.width */

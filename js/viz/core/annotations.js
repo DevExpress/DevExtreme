@@ -33,7 +33,7 @@ function coreAnnotation(options, draw) {
             }
         },
         getTooltipFormatObject() {
-            return extend({}, this.options);
+            return extend({ valueText: this.options.description }, this.options);
         },
         getTooltipParams() {
             const { x, y } = this.coords;
@@ -74,7 +74,7 @@ function createAnnotation(item, commonOptions, customizeAnnotation) {
 
     if(options.type === "image") {
         return imageAnnotation(options);
-    } else if(options.type === "label") {
+    } else if(options.type === "text") {
         return labelAnnotation(options);
     }
 }

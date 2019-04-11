@@ -212,7 +212,7 @@
 
 /**
  * @typedef {string} Enums.AnnotationType
- * @enum {'label'|'image'}
+ * @enum {'text'|'image'}
  */
 
 /**
