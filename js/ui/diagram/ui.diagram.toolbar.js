@@ -5,6 +5,9 @@ import Toolbar from "../toolbar";
 import DiagramCommands from "./ui.diagram.commands";
 import { getDiagram } from "./diagram_importer";
 import { extend } from "../../core/utils/extend";
+import "../select_box";
+import "../color_box";
+import "../check_box";
 
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
 const TOOLBAR_CLASS = "dx-diagram-toolbar";
@@ -70,7 +73,7 @@ class DiagramToolbar extends Widget {
         }
     }
     _getButtons() {
-        return DiagramCommands.load();
+        return DiagramCommands.getToolbar();
     }
     _onButtonClick(itemName) {
         this.bar._raiseBarCommandExecuted(itemName);
@@ -90,7 +93,7 @@ class DiagramToolbar extends Widget {
             return;
         } else if("value" in widget.option()) {
             widget.option("value", value);
-        } else {
+        } else if(value !== undefined) {
             widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
         }
     }
@@ -108,7 +111,7 @@ class DiagramBar {
 
     /* implementation of IBar */
     getCommandKeys() {
-        return DiagramCommands.load().map(c => c.name);
+        return DiagramCommands.getToolbar().map(c => c.name);
     }
     setItemValue(key, value) {
         this._widget._setItemValue(key, value);

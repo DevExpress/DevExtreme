@@ -207,7 +207,7 @@ module.exports = _extend({}, symbolPoint, {
             visibleArea = that._getVisibleArea(),
             position = label.getLayoutOptions().position,
             width = box.width,
-            rowsCountChanged = false;
+            rowCountChanged = false;
 
         if(position === "columns" && that.series.index > 0) {
             width = visibleArea.maxX - that.centerX - that.radiusLabels;
@@ -225,9 +225,9 @@ module.exports = _extend({}, symbolPoint, {
             }
         }
         if(width < box.width) {
-            rowsCountChanged = label.fit(width);
+            rowCountChanged = label.fit(width);
         }
-        return rowsCountChanged;
+        return rowCountChanged;
     },
 
     setLabelTrackerData: function() {

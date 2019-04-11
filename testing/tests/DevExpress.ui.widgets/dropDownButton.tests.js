@@ -77,6 +77,32 @@ QUnit.module("markup", {
         assert.strictEqual($actionButtonText, "", "action button text is empty");
         assert.strictEqual($listItemText, "", "item text is empty");
     });
+
+    QUnit.test("width option should be transfered to buttonGroup", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            text: "Item 1",
+            icon: "box",
+            width: 235
+        });
+
+        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 235, "width was successfully transfered");
+
+        dropDownButton.option("width", 135);
+        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 135, "width was successfully changed");
+    });
+
+    QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            text: "Item 1",
+            icon: "box",
+            stylingMode: "text"
+        });
+
+        assert.strictEqual(getButtonGroup(dropDownButton).option("stylingMode"), "text", "stylingMode was successfully transfered");
+
+        dropDownButton.option("stylingMode", "outlined");
+        assert.strictEqual(getButtonGroup(dropDownButton).option("stylingMode"), "outlined", "stylingMode was successfully changed");
+    });
 });
 
 QUnit.module("button group integration", {}, () => {
@@ -135,6 +161,25 @@ QUnit.module("button group integration", {}, () => {
 
         assert.strictEqual(instance.option("buttonGroupOptions.stylingMode"), "outlined", "option is correct");
     });
+
+    QUnit.test("text and icon options should depend on selection", (assert) => {
+        const instance = new DropDownButton("#dropDownButton", {
+            text: "Item 1",
+            icon: "box",
+            keyExpr: "id",
+            displayExpr: "text",
+            items: [{ id: 1, text: "User", icon: "user" }, { id: 2, text: "Group", icon: "group" }],
+            selectedItemKey: 1,
+            useSelectMode: true
+        });
+
+        assert.strictEqual(instance.option("text"), "User", "text option is correct");
+        assert.strictEqual(instance.option("icon"), "user", "icon option is correct");
+
+        instance.option("selectedItemKey", 2);
+        assert.strictEqual(instance.option("text"), "Group", "text option is correct");
+        assert.strictEqual(instance.option("icon"), "group", "icon option is correct");
+    });
 });
 
 QUnit.module("popup integration", {
@@ -148,6 +193,20 @@ QUnit.module("popup integration", {
 }, () => {
     QUnit.test("popup content should have special class", (assert) => {
         assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
+    });
+
+    QUnit.test("popup content should have special class when custom template is used", (assert) => {
+        const instance = new DropDownButton("#dropDownButton2", {
+            deferRendering: false,
+            dropDownOptions: {
+                contentTemplate: () => {
+                    return "Custom Content";
+                }
+            }
+        });
+
+        const $popupContent = $(getPopup(instance).content());
+        assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
     });
 
     QUnit.test("popup should have correct options after rendering", (assert) => {
@@ -210,7 +269,23 @@ QUnit.module("popup integration", {
         eventsEngine.trigger($toggleButton, "dxpointerdown");
         eventsEngine.trigger($toggleButton, "dxclick");
         assert.notOk(this.instance.option("dropDownOptions.visible"), "popup is hidden");
+    });
 
+    QUnit.test("click on other toggle button should be outside", (assert) => {
+        const otherButton = new DropDownButton("#dropDownButton2", {
+            text: "Text",
+            icon: "box",
+            splitButton: true
+        });
+
+        let $toggleButton = getToggleButton(this.instance);
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.ok(this.instance.option("dropDownOptions.visible"), "popup is visible");
+
+        $toggleButton = getToggleButton(otherButton);
+        eventsEngine.trigger($toggleButton, "dxpointerdown");
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.notOk(this.instance.option("dropDownOptions.visible"), "popup is hidden");
     });
 });
 
@@ -730,6 +805,8 @@ QUnit.module("keyboard navigation", {
     beforeEach: () => {
         this.$element = $("#dropDownButton");
         this.dropDownButton = new DropDownButton(this.$element, {
+            focusStateEnabled: true,
+            deferRendering: false,
             items: [
                 { name: "Item 1", id: 1 },
                 { name: "Item 2", id: 2 },
@@ -744,6 +821,15 @@ QUnit.module("keyboard navigation", {
         this.keyboard.press("right"); // TODO: Remove after T730639 fix
     }
 }, () => {
+    QUnit.test("focusStateEnabled option should be transfered to list and buttonGroup", (assert) => {
+        assert.ok(getList(this.dropDownButton).option("focusStateEnabled"), "list got option on init");
+        assert.ok(getButtonGroup(this.dropDownButton).option("focusStateEnabled"), "buttonGroup got option on init");
+
+        this.dropDownButton.option("focusStateEnabled", false);
+        assert.notOk(getList(this.dropDownButton).option("focusStateEnabled"), "list got option on change");
+        assert.notOk(getButtonGroup(this.dropDownButton).option("focusStateEnabled"), "buttonGroup got option on change");
+    });
+
     QUnit.testInActiveWindow("arrow right and left should select a button", (assert) => {
         this.keyboard.press("right");
         assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");

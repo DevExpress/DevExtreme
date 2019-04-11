@@ -322,7 +322,7 @@ QUnit.test("Drawing with subtitle", function(assert) {
     assert.deepEqual(subtitleElement.attr.getCall(1).args[0], { text: "subtitle", y: 0 });
     assert.deepEqual(subtitleElement.move.lastCall.args, [0, 8]);
 
-    assert.ok(subtitleElement.move.lastCall.calledAfter(titleElement.setMaxWidth.lastCall));
+    assert.ok(subtitleElement.move.lastCall.calledAfter(titleElement.setMaxSize.lastCall));
 });
 
 QUnit.test("Second Update", function(assert) {
@@ -383,8 +383,8 @@ QUnit.test("Length of title greater than canvas width", function(assert) {
 
     this.createTitle().draw(this.canvas.width, this.canvas.height);
 
-    assert.equal(this.renderer.text.getCall(0).returnValue.setMaxWidth.lastCall.args[0], 770);
-    assert.equal(this.renderer.text.getCall(1).returnValue.setMaxWidth.lastCall.args[0], 770);
+    assert.equal(this.renderer.text.getCall(0).returnValue.setMaxSize.lastCall.args[0], 770);
+    assert.equal(this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args[0], 770);
 });
 
 QUnit.test("Set title if text has big size", function(assert) {
