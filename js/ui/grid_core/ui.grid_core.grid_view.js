@@ -9,6 +9,7 @@ import messageLocalization from "../../localization/message";
 import { when, Deferred } from "../../core/utils/deferred";
 import domAdapter from "../../core/dom_adapter";
 import browser from "../../core/utils/browser";
+import accessibility from "../shared/accessibility";
 
 var TABLE_CLASS = "table",
     BORDERS_CLASS = "borders",
@@ -66,7 +67,7 @@ var calculateFreeWidthWithCurrentMinWidth = function(that, columnIndex, currentM
 };
 
 var restoreFocus = function(focusedElement, selectionRange) {
-    focusedElement.focus();
+    accessibility.hiddenFocus(focusedElement);
     gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 

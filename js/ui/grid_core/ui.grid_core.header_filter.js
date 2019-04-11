@@ -331,9 +331,7 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
 
         if(indicatorName === "headerFilter") {
             eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
-                var event = e.event;
-
-                event.stopPropagation();
+                e.event.stopPropagation();
                 that.getController("headerFilter").showHeaderFilterMenu(column.index, false);
             }));
         }
