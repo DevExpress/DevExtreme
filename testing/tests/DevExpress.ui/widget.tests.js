@@ -12,6 +12,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import dataUtils from "core/element_data";
 import { deferUpdate } from "core/utils/common";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "common.css!";
 
@@ -1363,6 +1364,10 @@ QUnit.module("keyboard navigation", {}, () => {
         assert.equal(handler.callCount, 1, "new handler fired");
     });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxWidget");
+}
 
 QUnit.module("isReady", {}, () => {
     QUnit.test("widget is ready after rendering", (assert) => {

@@ -3,10 +3,10 @@ import devices from "core/devices";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "ui/radio_group";
 
-const SUPPORTED_KEYS = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
 const { testStart, module, test, testInActiveWindow } = QUnit;
 
 testStart(() => {
@@ -440,42 +440,11 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(0).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
-
-    SUPPORTED_KEYS.forEach((key) => {
-        test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
-            const handler = sinon.spy();
-
-            const radioGroup = createRadioGroup({
-                focusStateEnabled: true,
-                items: [{ text: "text" }],
-                onInitialized: e => {
-                    e.component.registerKeyHandler(key, handler);
-                }
-            }).dxRadioGroup("instance");
-
-            const triggerEvent = keyboardMock(radioGroup.element()).press(key);
-
-            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
-            assert.deepEqual(triggerEvent.event.target, radioGroup.element(), "event.target");
-        });
-
-        test(`RegisterKeyHandler -> "${key}"`, (assert) => {
-            const handler = sinon.spy();
-
-            const radioGroup = createRadioGroup({
-                focusStateEnabled: true,
-                items: [{ text: "text" }]
-            }).dxRadioGroup("instance");
-
-            radioGroup.registerKeyHandler(key, handler);
-
-            const triggerEvent = keyboardMock(radioGroup.element()).press(key);
-
-            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
-            assert.deepEqual(triggerEvent.event.target, radioGroup.element(), "event.target");
-        });
-    });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxRadioGroup");
+}
 
 module("focus policy", moduleConfig, () => {
     test("focused-state set up on radio group after focusing on any item", assert => {

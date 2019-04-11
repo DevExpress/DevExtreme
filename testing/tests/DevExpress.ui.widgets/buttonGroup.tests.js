@@ -1,9 +1,11 @@
 import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
+import devices from "core/devices";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
@@ -11,8 +13,6 @@ const BUTTON_CLASS = "dx-button",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + "-item-has-width",
     DX_ITEM_SELECTED_CLASS = "dx-item-selected";
-
-const SUPPORTED_KEYS = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
 
 QUnit.testStart(() => {
     const markup = `
@@ -273,43 +273,9 @@ QUnit.module("Events", () => {
     });
 });
 
-
-QUnit.module("keyboard", () => {
-    SUPPORTED_KEYS.forEach((key) => {
-        QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
-            const handler = sinon.spy();
-
-            const buttonGroup = $("#widget").dxButtonGroup({
-                focusStateEnabled: true,
-                items: [{ text: "text" }],
-                onInitialized: e => {
-                    e.component.registerKeyHandler(key, handler);
-                }
-            }).dxButtonGroup("instance");
-
-            const triggerEvent = keyboardMock(buttonGroup.element()).press(key);
-
-            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
-            assert.deepEqual(triggerEvent.event.target, buttonGroup.element(), "event.target");
-        });
-
-        QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
-            const handler = sinon.spy();
-
-            const buttonGroup = $("#widget").dxButtonGroup({
-                focusStateEnabled: true,
-                items: [{ text: "text" }]
-            }).dxButtonGroup("instance");
-
-            buttonGroup.registerKeyHandler(key, handler);
-
-            const triggerEvent = keyboardMock(buttonGroup.element()).press(key);
-
-            assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
-            assert.deepEqual(triggerEvent.event.target, buttonGroup.element(), "event.target");
-        });
-    });
-});
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxButtonGroup");
+}
 
 QUnit.module("selection", () => {
     QUnit.test("change selection in the single by click", function(assert) {
