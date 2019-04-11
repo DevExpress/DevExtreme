@@ -12,6 +12,8 @@ const BUTTON_CLASS = "dx-button",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + "-item-has-width",
     DX_ITEM_SELECTED_CLASS = "dx-item-selected";
 
+const SUPPORTED_KEYS = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
+
 QUnit.testStart(() => {
     const markup = `
         <div id="buttonGroup"></div>
@@ -273,9 +275,7 @@ QUnit.module("Events", () => {
 
 
 QUnit.module("keyboard", () => {
-    const supportedKeys = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
-
-    supportedKeys.forEach((key) => {
+    SUPPORTED_KEYS.forEach((key) => {
         QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
             const handler = sinon.spy();
 
@@ -285,7 +285,7 @@ QUnit.module("keyboard", () => {
                 onInitialized: e => {
                     e.component.registerKeyHandler(key, handler);
                 }
-            }).dxButtonGroup("instance");
+            });
 
             const triggerEvent = keyboardMock(buttonGroup.element()).press(key);
 

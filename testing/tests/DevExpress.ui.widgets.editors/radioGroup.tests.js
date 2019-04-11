@@ -6,6 +6,7 @@ import { DataSource } from "data/data_source/data_source";
 
 import "ui/radio_group";
 
+const SUPPORTED_KEYS = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
 const { testStart, module, test, testInActiveWindow } = QUnit;
 
 testStart(() => {
@@ -440,9 +441,7 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
 
-    const supportedKeys = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
-
-    supportedKeys.forEach((key) => {
+    SUPPORTED_KEYS((key) => {
         test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
             const handler = sinon.spy();
 
