@@ -5891,19 +5891,19 @@ QUnit.module("Remote paging", {
                     items.push({
                         value: value,
                         text: value,
-                        index: i + 1
+                        index: i - skip + 1
                     });
                 }
             }
             return items;
         };
 
-        var createValues = function(rowCount, columnCount) {
+        var createValues = function(loadOptions, columnCount) {
             var result = [];
-            for(var rowIndex = 0; rowIndex < rowCount + 1; rowIndex++) {
+            for(var rowIndex = loadOptions.rowSkip; rowIndex < loadOptions.rowSkip + loadOptions.rowTake + 1; rowIndex++) {
                 var row = [];
                 result.push(row);
-                for(var columnIndex = 0; columnIndex < columnCount + 1; columnIndex++) {
+                for(var columnIndex = loadOptions.columnSkip; columnIndex < loadOptions.columnSkip + loadOptions.columnTake + 1; columnIndex++) {
                     row.push([ rowIndex * 10 + columnIndex ]);
                 }
             }
@@ -5929,7 +5929,7 @@ QUnit.module("Remote paging", {
                 return $.Deferred().resolve({
                     rows: createItems(rowCount, "row ", loadOptions.rowSkip, loadOptions.rowTake, rowCount && loadOptions.rows[0].sortOrder === "desc"),
                     columns: createItems(columnCount, "column ", loadOptions.columnSkip, loadOptions.columnTake, columnCount && loadOptions.columns[0].sortOrder === "desc"),
-                    values: createValues(rowCount, columnCount),
+                    values: createValues(loadOptions),
                     grandTotalRowIndex: 0,
                     grandTotalColumnIndex: 0
                 });
@@ -6039,8 +6039,8 @@ QUnit.test("load after scroll", function(assert) {
     assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
     assert.strictEqual(this.loadArgs[0].rowSkip, 4, "load args rowSkip");
     assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 2, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].columnTake, 0, "load args columnTake");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6054,6 +6054,31 @@ QUnit.test("load after scroll", function(assert) {
         [{ dataSourceIndex: 4, text: 'row 6', path: ['row 6'], type: 'D', isLast: true }],
         [{ dataSourceIndex: 5, text: 'row 7', path: ['row 7'], type: 'D', isLast: true }],
         [{ dataSourceIndex: 6, text: 'row 8', path: ['row 8'], type: 'D', isLast: true }],
+    ]);
+});
+
+QUnit.test("load from cache after scroll and return scroll", function(assert) {
+    var dataController = this.setup();
+
+    dataController.setViewportPosition(0, 0);
+    dataController.setViewportPosition(0, 8 * 20);
+
+    this.loadArgs = [];
+    dataController.setViewportPosition(0, 0);
+
+    assert.strictEqual(this.loadArgs.length, 0, "no load");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [[
+        { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
+        { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', isLast: true },
+        { dataSourceIndex: 3, text: 'column 3', path: ['column 3'], type: 'D', isLast: true },
+        { dataSourceIndex: 4, text: 'column 4', path: ['column 4'], type: 'D', isLast: true },
+    ]]);
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 3, text: 'row 3', path: ['row 3'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 4, text: 'row 4', path: ['row 4'], type: 'D', isLast: true }]
     ]);
 });
 
