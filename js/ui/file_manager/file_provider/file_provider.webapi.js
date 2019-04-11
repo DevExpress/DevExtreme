@@ -14,7 +14,7 @@ const FILE_CHUNK_BLOB_NAME = "chunk";
 * @name WebApiFileProvider
 * @inherits FileProvider
 * @type object
-* @module file_provider.webapi
+* @module ui/file_manager/file_provider/file_provider.webapi
 * @export default
 */
 class WebApiFileProvider extends FileProvider {
