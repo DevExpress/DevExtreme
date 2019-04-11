@@ -2,6 +2,7 @@ import $ from "jquery";
 import DropDownButton from "ui/drop_down_button";
 import typeUtils from "core/utils/type";
 import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
 import "common.css!";
 
@@ -42,8 +43,9 @@ QUnit.module("markup", {
         this.instance = new DropDownButton("#dropDownButton", {});
     }
 }, () => {
-    QUnit.test("element should have dropDownButton class", (assert) => {
-        assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), "class is ok");
+    QUnit.test("element should have dropDownButton and widget class", (assert) => {
+        assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), "dropdownbutton class is ok");
+        assert.ok(this.instance.$element().hasClass("dx-widget"), "widget class is ok");
     });
 
     QUnit.test("popup and list should not be rendered if deferRendering is true", (assert) => {
@@ -74,6 +76,32 @@ QUnit.module("markup", {
 
         assert.strictEqual($actionButtonText, "", "action button text is empty");
         assert.strictEqual($listItemText, "", "item text is empty");
+    });
+
+    QUnit.test("width option should be transfered to buttonGroup", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            text: "Item 1",
+            icon: "box",
+            width: 235
+        });
+
+        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 235, "width was successfully transfered");
+
+        dropDownButton.option("width", 135);
+        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 135, "width was successfully changed");
+    });
+
+    QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            text: "Item 1",
+            icon: "box",
+            stylingMode: "text"
+        });
+
+        assert.strictEqual(getButtonGroup(dropDownButton).option("stylingMode"), "text", "stylingMode was successfully transfered");
+
+        dropDownButton.option("stylingMode", "outlined");
+        assert.strictEqual(getButtonGroup(dropDownButton).option("stylingMode"), "outlined", "stylingMode was successfully changed");
     });
 });
 
@@ -133,6 +161,25 @@ QUnit.module("button group integration", {}, () => {
 
         assert.strictEqual(instance.option("buttonGroupOptions.stylingMode"), "outlined", "option is correct");
     });
+
+    QUnit.test("text and icon options should depend on selection", (assert) => {
+        const instance = new DropDownButton("#dropDownButton", {
+            text: "Item 1",
+            icon: "box",
+            keyExpr: "id",
+            displayExpr: "text",
+            items: [{ id: 1, text: "User", icon: "user" }, { id: 2, text: "Group", icon: "group" }],
+            selectedItemKey: 1,
+            useSelectMode: true
+        });
+
+        assert.strictEqual(instance.option("text"), "User", "text option is correct");
+        assert.strictEqual(instance.option("icon"), "user", "icon option is correct");
+
+        instance.option("selectedItemKey", 2);
+        assert.strictEqual(instance.option("text"), "Group", "text option is correct");
+        assert.strictEqual(instance.option("icon"), "group", "icon option is correct");
+    });
 });
 
 QUnit.module("popup integration", {
@@ -148,13 +195,26 @@ QUnit.module("popup integration", {
         assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
     });
 
+    QUnit.test("popup content should have special class when custom template is used", (assert) => {
+        const instance = new DropDownButton("#dropDownButton2", {
+            deferRendering: false,
+            dropDownOptions: {
+                contentTemplate: () => {
+                    return "Custom Content";
+                }
+            }
+        });
+
+        const $popupContent = $(getPopup(instance).content());
+        assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
+    });
+
     QUnit.test("popup should have correct options after rendering", (assert) => {
         const buttonGroupElement = getButtonGroup(this.instance).element();
         const options = {
             deferRendering: this.instance.option("deferRendering"),
             minWidth: 130,
             dragEnabled: false,
-            closeOnOutsideClick: true,
             showTitle: false,
             animation: {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
@@ -199,6 +259,33 @@ QUnit.module("popup integration", {
 
         instance.repaint();
         assert.strictEqual(getPopup(instance).option("visible"), true, "options have been stored after the repaint");
+    });
+
+    QUnit.test("click on toggle button should not be outside", (assert) => {
+        const $toggleButton = getToggleButton(this.instance);
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.ok(this.instance.option("dropDownOptions.visible"), "popup is visible");
+
+        eventsEngine.trigger($toggleButton, "dxpointerdown");
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.notOk(this.instance.option("dropDownOptions.visible"), "popup is hidden");
+    });
+
+    QUnit.test("click on other toggle button should be outside", (assert) => {
+        const otherButton = new DropDownButton("#dropDownButton2", {
+            text: "Text",
+            icon: "box",
+            splitButton: true
+        });
+
+        let $toggleButton = getToggleButton(this.instance);
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.ok(this.instance.option("dropDownOptions.visible"), "popup is visible");
+
+        $toggleButton = getToggleButton(otherButton);
+        eventsEngine.trigger($toggleButton, "dxpointerdown");
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.notOk(this.instance.option("dropDownOptions.visible"), "popup is hidden");
     });
 });
 
@@ -711,5 +798,192 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.deepEqual(e.oldSelectedItem, items[1], "oldSelectedItem is correct");
         assert.deepEqual(e.selectedItem, items[0], "selectedItem is correct");
+    });
+});
+
+QUnit.module("keyboard navigation", {
+    beforeEach: () => {
+        this.$element = $("#dropDownButton");
+        this.dropDownButton = new DropDownButton(this.$element, {
+            focusStateEnabled: true,
+            deferRendering: false,
+            items: [
+                { name: "Item 1", id: 1 },
+                { name: "Item 2", id: 2 },
+                { name: "Item 3", id: 3 }
+            ],
+            displayExpr: "name",
+            keyExpr: "id"
+        });
+        this.$actionButton = getActionButton(this.dropDownButton);
+        this.$toggleButton = getToggleButton(this.dropDownButton);
+        this.keyboard = keyboardMock(getButtonGroup(this.dropDownButton).element());
+        this.keyboard.press("right"); // TODO: Remove after T730639 fix
+    }
+}, () => {
+    QUnit.test("focusStateEnabled option should be transfered to list and buttonGroup", (assert) => {
+        assert.ok(getList(this.dropDownButton).option("focusStateEnabled"), "list got option on init");
+        assert.ok(getButtonGroup(this.dropDownButton).option("focusStateEnabled"), "buttonGroup got option on init");
+
+        this.dropDownButton.option("focusStateEnabled", false);
+        assert.notOk(getList(this.dropDownButton).option("focusStateEnabled"), "list got option on change");
+        assert.notOk(getButtonGroup(this.dropDownButton).option("focusStateEnabled"), "buttonGroup got option on change");
+    });
+
+    QUnit.testInActiveWindow("arrow right and left should select a button", (assert) => {
+        this.keyboard.press("right");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+        assert.notOk(this.$actionButton.hasClass("dx-state-focused"), "action button lose focus");
+
+        this.keyboard.press("left");
+        assert.notOk(this.$toggleButton.hasClass("dx-state-focused"), "action button lose");
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("action button should be clicked on enter or space", (assert) => {
+        const handler = sinon.spy();
+        this.dropDownButton.option("onActionButtonClick", handler);
+
+        this.keyboard.press("enter");
+        assert.strictEqual(handler.callCount, 1, "action button pressed");
+
+        this.keyboard.press("space");
+        assert.strictEqual(handler.callCount, 2, "action button pressed twice");
+    });
+
+    QUnit.testInActiveWindow("toggle button should be clicked on enter or space", (assert) => {
+        this.keyboard.press("right").press("enter");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+
+        this.keyboard.press("space");
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("list should get first focused item when down arrow pressed after opening", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const $firstItem = getList(this.dropDownButton).itemElements().first();
+
+        assert.ok($firstItem.hasClass("dx-state-focused"), "first list item is focused");
+    });
+
+    QUnit.testInActiveWindow("list should get first focused item when up arrow pressed after opening", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("up");
+
+        const $firstItem = getList(this.dropDownButton).itemElements().first();
+
+        assert.ok($firstItem.hasClass("dx-state-focused"), "first list item is focused");
+    });
+
+    QUnit.testInActiveWindow("esc on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("esc");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("esc on button group should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("esc");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("left on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("left");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("right on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("enter")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("right");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+
+        // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
+        assert.ok(this.$actionButton.hasClass("dx-state-focused"), "action button is focused");
+    });
+
+    QUnit.testInActiveWindow("down arrow on toggle button should open the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+    });
+
+    QUnit.testInActiveWindow("selection of the item should return focus to the button group", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down")
+            .press("down");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        listKeyboard.press("enter");
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(this.$toggleButton.hasClass("dx-state-focused"), "toggle button is focused");
+    });
+
+    QUnit.testInActiveWindow("tab on button should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+
+        this.keyboard.press("tab");
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+    });
+
+    QUnit.testInActiveWindow("tab on list should close the popup", (assert) => {
+        this.keyboard
+            .press("right")
+            .press("down")
+            .press("down");
+
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "popup is opened");
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+        const event = listKeyboard.press("tab").event;
+
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "popup is closed");
+        assert.ok(getButtonGroup(this.dropDownButton).$element().hasClass("dx-state-focused"), "button group was focused");
+        assert.strictEqual(event.isDefaultPrevented(), false, "event was not prevented and native focus move next");
     });
 });

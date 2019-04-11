@@ -393,7 +393,7 @@ function getConditionFilterExpression(condition, fields, customOperations, targe
 }
 
 function getFilterExpression(value, fields, customOperations, target) {
-    if(value === null) {
+    if(!isDefined(value)) {
         return null;
     }
 

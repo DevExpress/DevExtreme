@@ -18,7 +18,7 @@ QUnit.module("Image annotation", environment);
 QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     const testCase = (coords, message) => {
         this.widget._getAnnotationCoords.returns(coords);
-        const annotation = createAnnotations([{ type: "image", imageUrl: "some_url" }], {})[0];
+        const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {})[0];
 
         annotation.draw(this.widget, this.group);
 
@@ -32,23 +32,40 @@ QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
 });
 
 QUnit.test("Image params", function(assert) {
-    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", imageUrl: "some_url", imageSize: { width: 10, height: 10 }, imageLocation: "some_location" }])[0];
+    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10, height: 10, location: "some_location" } }])[0];
 
     annotation.draw(this.widget, this.group);
 
     assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, "some_url", "some_location"]);
 });
 
-QUnit.test("Merge common and partial options", function(assert) {
-    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", imageUrl: "some_url", imageSize: { width: 10 } }], { imageSize: { height: 10 } })[0];
+QUnit.test("Merge common and item options", function(assert) {
+    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10 } }], { image: { height: 10 } })[0];
 
     annotation.draw(this.widget, this.group);
 
     assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, "some_url", "center"]);
 });
 
+QUnit.test("Merge customizeAnnotation result and common+item options", function(assert) {
+    const customizeAnnotation = sinon.stub().returns({ image: { url: "customized_url" } });
+    const itemOptions = {
+        x: 10, y: 20,
+        type: "image",
+        image: { url: "some_url", width: 10 },
+        customizeAnnotation
+    };
+    const annotation = createAnnotations([itemOptions], { image: { height: 10 } })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, "customized_url", "center"]);
+    assert.equal(customizeAnnotation.callCount, 1);
+    assert.equal(customizeAnnotation.getCall(0).args[0], itemOptions);
+});
+
 QUnit.test("Draw image inside a plaque with borders and arrow", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", imageUrl: "some_url", imageSize: { width: 20, height: 13 } }], {
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -122,7 +139,7 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
 });
 
 QUnit.test("Draw image inside a plaque without borders", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", imageUrl: "some_url", imageSize: { width: 20, height: 13 } }], {
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -169,7 +186,7 @@ QUnit.test("Label params", function(assert) {
     assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20 }]);
 });
 
-QUnit.test("Merge common and partial options", function(assert) {
+QUnit.test("Merge common and item options", function(assert) {
     const annotation = createAnnotations([{ x: 0, y: 0, type: "label", text: "some text", font: { size: 20 } } ], {
         font: { color: "red" }
     })[0];
@@ -182,7 +199,7 @@ QUnit.test("Merge common and partial options", function(assert) {
 QUnit.module("Tooltip", environment);
 
 QUnit.test("Get tooltip params", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", imageUrl: "some_url" }], {})[0];
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url" } }], {})[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -191,7 +208,7 @@ QUnit.test("Get tooltip params", function(assert) {
 });
 
 QUnit.test("Get tooltip format object", function(assert) {
-    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", imageUrl: "some_url" }];
+    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" } }];
     const annotation = createAnnotations(items, {})[0];
 
     annotation.draw(this.widget, this.group);
@@ -202,11 +219,25 @@ QUnit.test("Get tooltip format object", function(assert) {
 
 QUnit.test("customizeTooltip in item", function(assert) {
     const customizeTooltip = function() { return 2; };
-    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", imageUrl: "some_url", customizeTooltip }];
+    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" }, customizeTooltip }];
     const annotation = createAnnotations(items, { customizeTooltip: function() { return 1; } })[0];
 
     annotation.draw(this.widget, this.group);
 
     // assert
     assert.equal(annotation.options.customizeTooltip, customizeTooltip);
+});
+
+QUnit.module("Misc", environment);
+
+QUnit.test("Do not create annotation with wrong type", function(assert) {
+    const annotations = createAnnotations([
+        { type: "image" },
+        { type: "wrongtype" },
+        { type: "label" }
+    ], {});
+
+    assert.equal(annotations.length, 2);
+    assert.equal(annotations[0].type, "image");
+    assert.equal(annotations[1].type, "label");
 });

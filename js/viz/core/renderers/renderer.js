@@ -750,7 +750,7 @@ function parseMultiline(text) {
         i = 0,
         items = [];
     for(; i < texts.length; i++) {
-        items.push({ value: texts[i].trim(), height: 0 });
+        items.push({ value: texts[i].trim(), height: 0, line: i });
     }
     return items;
 }
@@ -831,9 +831,9 @@ function cloneAndRemoveAttrs(node) {
     return clone || node;
 }
 
-function setMaxWidth(maxWidth, options = {}) {
+function setMaxSize(maxWidth, maxHeight, options = {}) {
     var that = this,
-        lines,
+        lines = [],
         textChanged = false,
         ellipsis,
         ellipsisWidth,
@@ -843,14 +843,18 @@ function setMaxWidth(maxWidth, options = {}) {
 
     ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
     ellipsisWidth = ellipsis.getBBox().width;
-    if(that._getElementBBox().width > maxWidth) {
+
+    const { width, height } = that._getElementBBox();
+
+    if(width > maxWidth || maxHeight && height > maxHeight) {
         if(maxWidth - ellipsisWidth < 0) {
             ellipsisMaxWidth = 0;
         } else {
             ellipsisMaxWidth -= ellipsisWidth;
         }
 
-        lines = applyOverflowRules(that.element, that._texts, maxWidth, ellipsisMaxWidth, options);
+        lines = applyOverflowRules(that.element, that._texts, maxWidth, ellipsisMaxWidth, options, maxHeight);
+        lines = setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, parseFloat(this._getLineHeight()));
 
         this._texts = lines.reduce((texts, line) => {
             return texts.concat(line.parts);
@@ -873,7 +877,7 @@ function setMaxWidth(maxWidth, options = {}) {
     ellipsis.remove();
     that._hasEllipsis = textChanged;
 
-    return textChanged;
+    return { rowCount: lines.length, textChanged };
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
@@ -950,6 +954,19 @@ function getWordBreakIndex(text, maxWidth) {
     }
 }
 
+function setEllipsis(text, ellipsisMaxWidth) {
+    if(text.value.length && text.tspan.parentNode) {
+        for(let i = text.value.length - 1; i >= 1; i--) {
+            if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
+                setNewText(text, i, ELLIPSIS);
+                break;
+            } else if(i === 1) {
+                setNewText(text, 0, ELLIPSIS);
+            }
+        }
+    }
+}
+
 function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     const wholeText = text.value;
     let breakIndex;
@@ -995,14 +1012,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
 
     if(text.value.length) {
         if(options.textOverflow === "ellipsis" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
-            for(let i = text.value.length - 1; i >= 1; i--) {
-                if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
-                    setNewText(text, i, ELLIPSIS);
-                    break;
-                } else if(i === 1) {
-                    setNewText(text, 0, ELLIPSIS);
-                }
-            }
+            setEllipsis(text, ellipsisMaxWidth);
         }
 
         if(options.textOverflow === "hide" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
@@ -1021,6 +1031,53 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     return [{ commonLength: wholeText.length, parts }].concat(restLines);
 }
 
+function calculateLineHeight(line, lineHeight) {
+    return line.parts.reduce((height, text) => {
+        return Math.max(height, getItemLineHeight(text, lineHeight));
+    }, 0);
+}
+
+function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
+    if(!isFinite(maxHeight)) {
+        return lines;
+    }
+    const result = lines.reduce(([lines, commonHeight], l, index, arr) => {
+        const height = calculateLineHeight(l, lineHeight);
+        commonHeight += height;
+        if(commonHeight < maxHeight) {
+            lines.push(l);
+        } else {
+            l.parts.forEach(item => {
+                removeTextSpan(item);
+            });
+            if(options.textOverflow === "ellipsis") {
+                const prevLine = arr[index - 1];
+                if(prevLine) {
+                    const text = prevLine.parts[prevLine.parts.length - 1];
+                    if(!text.hasEllipsis) {
+                        if(text.endBox < ellipsisMaxWidth) {
+                            setNewText(text, text.value.length, ELLIPSIS);
+                        } else {
+                            setEllipsis(text, ellipsisMaxWidth);
+                        }
+                    }
+                }
+            }
+        }
+        return [lines, commonHeight];
+    }, [[], 0]);
+
+    if(options.textOverflow === "hide" && result[1] > maxHeight) {
+        result[0].forEach(l => {
+            l.parts.forEach(item => {
+                removeTextSpan(item);
+            });
+        });
+        return [];
+    }
+
+    return result[0];
+}
 
 function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options) {
     if(!texts) {
@@ -1031,6 +1088,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 
         texts = [text];
     }
+
     return texts.reduce(([lines, startBox, endBox, stop, lineNumber], text) => {
         const line = lines[lines.length - 1];
         if(stop) {
@@ -1042,7 +1100,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
         } else {
             text.startBox = startBox;
             if(startBox > ellipsisMaxWidth && options.wordWrap === "none" && options.textOverflow === "ellipsis") {
-                text.tspan.parentNode.removeChild(text.tspan);
+                removeTextSpan(text);
                 return [lines, startBox, endBox, stop, lineNumber];
             }
             line.parts.push(text);
@@ -1065,18 +1123,20 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 
         return [lines, startBox, endBox, stop, text.line];
     }, [[], 0, 0, false, 0])[0];
-
 }
 
 function setNewText(text, index, insertString = ELLIPSIS) {
     var newText = text.value.substr(0, index) + insertString;
     text.value = text.tspan.textContent = newText;
     text.stroke && (text.stroke.textContent = newText);
+    if(insertString === ELLIPSIS) {
+        text.hasEllipsis = true;
+    }
 }
 
 function removeTextSpan(text) {
-    text.tspan.parentNode.removeChild(text.tspan);
-    text.stroke && text.stroke.parentNode.removeChild(text.stroke);
+    text.tspan.parentNode && text.tspan.parentNode.removeChild(text.tspan);
+    text.stroke && text.stroke.parentNode && text.stroke.parentNode.removeChild(text.stroke);
 }
 
 function createTextNodes(wrapper, text, isStroked) {
@@ -1118,11 +1178,15 @@ function setTextNodeAttribute(item, name, value) {
     item.stroke && item.stroke.setAttribute(name, value);
 }
 
+function getItemLineHeight(item, defaultValue) {
+    return item.inherits ? maxLengthFontSize(item.height, defaultValue) : (item.height || defaultValue);
+}
+
 function locateTextNodes(wrapper) {
     if(!wrapper._texts) return;
     var items = wrapper._texts,
         x = wrapper._settings.x,
-        lineHeight = !isNaN(_parseFloat(wrapper._styles[KEY_FONT_SIZE])) ? wrapper._styles[KEY_FONT_SIZE] : DEFAULT_FONT_SIZE,
+        lineHeight = wrapper._getLineHeight(),
         i, ii,
         item = items[0];
     setTextNodeAttribute(item, "x", x);
@@ -1131,7 +1195,8 @@ function locateTextNodes(wrapper) {
         item = items[i];
         if(_parseFloat(item.height) >= 0) {
             setTextNodeAttribute(item, "x", x);
-            setTextNodeAttribute(item, "dy", item.inherits ? maxLengthFontSize(item.height, lineHeight) : (item.height || lineHeight)); // T177039
+            const height = getItemLineHeight(item, lineHeight);
+            setTextNodeAttribute(item, "dy", height); // T177039
         }
     }
 }
@@ -1676,8 +1741,11 @@ extend(TextSvgElement.prototype, {
     attr: textAttr,
     css: textCss,
     applyEllipsis,
-    setMaxWidth,
-    restoreText
+    setMaxSize,
+    restoreText,
+    _getLineHeight() {
+        return !isNaN(_parseFloat(this._styles[KEY_FONT_SIZE])) ? this._styles[KEY_FONT_SIZE] : DEFAULT_FONT_SIZE;
+    }
 });
 // TextSvgElement
 

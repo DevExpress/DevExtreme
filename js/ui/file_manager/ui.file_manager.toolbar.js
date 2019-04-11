@@ -11,6 +11,55 @@ const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = "dx-filemanager-general-toolbar";
 const FILE_MANAGER_FILE_TOOLBAR_CLASS = "dx-filemanager-file-toolbar";
 const FILE_MANAGER_TOOLBAR_SEPARATOR_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-separator-item";
 
+const DEFAULT_TOOLBAR_FILE_ITEMS = [
+    {
+        commandName: "download",
+        location: "before"
+    },
+    {
+        commandName: "delete",
+        location: "before"
+    },
+    {
+        commandName: "move",
+        location: "before"
+    },
+    {
+        commandName: "copy",
+        location: "before"
+    },
+    {
+        commandName: "rename",
+        location: "before"
+    }
+];
+
+const DEFAULT_TOOLBAR_GENERAL_ITEMS = [
+    {
+        commandName: "create",
+        location: "before"
+    },
+    {
+        commandName: "upload",
+        location: "before"
+    },
+    {
+        commandName: "refresh",
+        location: "after",
+        showText: "inMenu"
+    },
+    {
+        commandName: "separator",
+        location: "after"
+    },
+    {
+        commandName: "viewMode",
+        location: "after"
+    }
+];
+
+const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ "separator", "viewMode" ];
+
 class FileManagerToolbar extends Widget {
 
     _initMarkup() {
@@ -91,7 +140,7 @@ class FileManagerToolbar extends Widget {
             return { name, text };
         });
 
-        const selectedIndex = this.option("itemListViewMode") === "thumbnails" ? 0 : 1;
+        const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 0 : 1;
 
         return {
             widget: "dxSelectBox",
@@ -106,60 +155,25 @@ class FileManagerToolbar extends Widget {
     }
 
     _getFileToolbarDefaultItems() {
-        return [
-            {
-                commandName: "download",
-                location: "before"
-            },
-            {
-                commandName: "delete",
-                location: "before"
-            },
-            {
-                commandName: "move",
-                location: "before"
-            },
-            {
-                commandName: "copy",
-                location: "before"
-            },
-            {
-                commandName: "rename",
-                location: "before"
-            }
-        ];
+        return DEFAULT_TOOLBAR_FILE_ITEMS;
     }
 
     _getGeneralToolbarDefaultItems() {
-        return [
-            {
-                commandName: "create",
-                location: "before"
-            },
-            {
-                commandName: "upload",
-                location: "before"
-            },
-            {
-                commandName: "refresh",
-                location: "after",
-                showText: "inMenu"
-            },
-            {
-                commandName: "separator",
-                location: "after"
-            },
-            {
-                commandName: "viewMode",
-                location: "after"
+        var result = [ ];
+        for(let i = 0; i < DEFAULT_TOOLBAR_GENERAL_ITEMS.length; i++) {
+            var item = DEFAULT_TOOLBAR_GENERAL_ITEMS[i];
+            if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(item.commandName) > -1 || this._commandManager.isCommandAvailable(item.commandName)) {
+                result.push(item);
             }
-        ];
+        }
+        return result;
     }
 
     _updateFileToolbar(fileItems) {
         const items = this._fileToolbar.option("items");
         items.forEach(({ visible, commandName }, index) => {
             const itemVisible = ensureDefined(visible, true);
+
             const showItem = this._commandManager.isCommandAvailable(commandName, fileItems);
             if(showItem !== itemVisible) {
                 const optionName = `items[${index}].visible`;
@@ -175,7 +189,7 @@ class FileManagerToolbar extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
-            itemListViewMode: "details"
+            itemViewMode: "details"
         });
     }
 
@@ -184,7 +198,7 @@ class FileManagerToolbar extends Widget {
 
         switch(name) {
             case "commandManager":
-            case "itemListViewMode":
+            case "itemViewMode":
                 this.repaint();
                 break;
             default:
@@ -194,8 +208,10 @@ class FileManagerToolbar extends Widget {
 
     update(fileItems) {
         fileItems = ensureDefined(fileItems, []);
-        const showGeneralToolbar = fileItems.length === 0;
 
+        this._updateFileToolbar(fileItems);
+
+        const showGeneralToolbar = fileItems.length === 0 || !this._fileToolbar.option("items").some(i => ensureDefined(i.visible, true));
         if(this._generalToolbarVisible !== showGeneralToolbar) {
             this._generalToolbar.option("visible", showGeneralToolbar);
             this._fileToolbar.option("visible", !showGeneralToolbar);
@@ -203,10 +219,6 @@ class FileManagerToolbar extends Widget {
 
             this.$element().toggleClass(FILE_MANAGER_GENERAL_TOOLBAR_CLASS, showGeneralToolbar);
             this.$element().toggleClass(FILE_MANAGER_FILE_TOOLBAR_CLASS, !showGeneralToolbar);
-        }
-
-        if(!showGeneralToolbar) {
-            this._updateFileToolbar(fileItems);
         }
     }
 

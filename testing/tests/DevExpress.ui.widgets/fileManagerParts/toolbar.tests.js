@@ -28,11 +28,19 @@ const createFileManager = useThumbnailViewMode => {
     const viewMode = useThumbnailViewMode ? "thumbnails" : "details";
 
     $("#fileManager").dxFileManager({
-        fileSystemStore: fileSystem,
-        itemList: {
+        fileProvider: fileSystem,
+        itemView: {
             mode: viewMode,
             showFolders: false,
             showParentFolder: false
+        },
+        permissions: {
+            create: true,
+            copy: true,
+            move: true,
+            remove: true,
+            rename: true,
+            upload: true
         }
     });
 };
@@ -81,13 +89,12 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(internals.FILE_TOOLBAR_CLASS), "file toolbar displayed");
 
         $elements = getToolbarElements(this.$element);
-        assert.equal($elements.length, 5, "has buttons");
+        assert.equal($elements.length, 4, "has buttons");
 
-        assert.ok($elements.eq(0).text().indexOf("Download") !== -1, "download button displayed");
-        assert.ok($elements.eq(1).text().indexOf("Delete") !== -1, "delete button displayed");
-        assert.ok($elements.eq(2).text().indexOf("Move") !== -1, "move displayed");
-        assert.ok($elements.eq(3).text().indexOf("Copy") !== -1, "copy displayed");
-        assert.ok($elements.eq(4).text().indexOf("Rename") !== -1, "rename displayed");
+        assert.ok($elements.eq(0).text().indexOf("Delete") !== -1, "delete button displayed");
+        assert.ok($elements.eq(1).text().indexOf("Move") !== -1, "move displayed");
+        assert.ok($elements.eq(2).text().indexOf("Copy") !== -1, "copy displayed");
+        assert.ok($elements.eq(3).text().indexOf("Rename") !== -1, "rename displayed");
     });
 
     test("toolbar updated after folder changing in thumbnails view mode", (assert) => {
@@ -134,13 +141,12 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(internals.FILE_TOOLBAR_CLASS), "file toolbar displayed");
 
         $elements = getToolbarElements(this.$element);
-        assert.equal($elements.length, 5, "has buttons");
+        assert.equal($elements.length, 4, "has buttons");
 
-        assert.ok($elements.eq(0).text().indexOf("Download") !== -1, "download button displayed");
-        assert.ok($elements.eq(1).text().indexOf("Delete") !== -1, "delete button displayed");
-        assert.ok($elements.eq(2).text().indexOf("Move") !== -1, "move displayed");
-        assert.ok($elements.eq(3).text().indexOf("Copy") !== -1, "copy displayed");
-        assert.ok($elements.eq(4).text().indexOf("Rename") !== -1, "rename displayed");
+        assert.ok($elements.eq(0).text().indexOf("Delete") !== -1, "delete button displayed");
+        assert.ok($elements.eq(1).text().indexOf("Move") !== -1, "move displayed");
+        assert.ok($elements.eq(2).text().indexOf("Copy") !== -1, "copy displayed");
+        assert.ok($elements.eq(3).text().indexOf("Rename") !== -1, "rename displayed");
     });
 
     test("toolbar updated after folder changing in details view mode", (assert) => {
@@ -163,6 +169,32 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         $toolbar = getToolbar(this.$element);
         assert.ok($toolbar.hasClass(internals.GENERAL_TOOLBAR_CLASS), "general toolbar displayed");
+    });
+
+    test("Display only general toolbar if file toolbar doesn't have items", (assert) => {
+        createFileManager(false);
+
+        var fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("permissions", {
+            create: false,
+            copy: false,
+            move: false,
+            remove: false,
+            rename: false,
+            upload: false
+        });
+        this.clock.tick(400);
+
+        const $toolbar = getToolbar(this.$element);
+        assert.ok($toolbar.hasClass(internals.GENERAL_TOOLBAR_CLASS), "general toolbar displayed");
+        assert.ok(!$toolbar.hasClass(internals.FILE_TOOLBAR_CLASS), "file toolbar hidden");
+
+        const $item = findDetailsItem(this.$element, "File 1.txt");
+        $item.trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.ok($toolbar.hasClass(internals.GENERAL_TOOLBAR_CLASS), "general toolbar displayed");
+        assert.ok(!$toolbar.hasClass(internals.FILE_TOOLBAR_CLASS), "file toolbar hidden");
     });
 
 });

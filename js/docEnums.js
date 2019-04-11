@@ -72,7 +72,7 @@
 
 /**
  * @typedef {string} Enums.VizWordWrap
- * @enum {'normal'|'break-word'|'none'}
+ * @enum {'normal'|'breakWord'|'none'}
  */
 
 /**
@@ -208,6 +208,11 @@
 /**
  * @typedef {string} Enums.SeriesType
  * @enum {'area'|'bar'|'bubble'|'candlestick'|'fullstackedarea'|'fullstackedbar'|'fullstackedline'|'fullstackedspline'|'fullstackedsplinearea'|'line'|'rangearea'|'rangebar'|'scatter'|'spline'|'splinearea'|'stackedarea'|'stackedbar'|'stackedline'|'stackedspline'|'stackedsplinearea'|'steparea'|'stepline'|'stock'}
+ */
+
+/**
+ * @typedef {string} Enums.AnnotationType
+ * @enum {'label'|'image'}
  */
 
 /**
@@ -836,6 +841,11 @@
  */
 
 /**
+ * @typedef {string} Enums.TextEditorButtonName
+ * @enum {'clear'|'spins'|'dropDown'}
+ */
+
+/**
  * @typedef {string} Enums.SmallValuesGroupingMode
  * @enum {'none'|'smallValueThreshold'|'topN'}
  */
@@ -998,4 +1008,15 @@
 /**
  * @typedef {string} Enums.GridStartEditAction
  * @enum {'click'|'dblClick'}
+ */
+
+/**
+ * @typedef {string} Enums.FileManagerSelectionMode
+ * @enum {'multiple'|'single'}
+ */
+
+
+/**
+ * @typedef {string} Enums.FileManagerItemViewMode
+ * @enum {'details'|'thumbnails'}
  */

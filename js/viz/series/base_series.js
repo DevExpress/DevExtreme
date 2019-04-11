@@ -119,7 +119,9 @@ function getLabelOptions(labelOptions, defaultColor) {
         background: backgroundAttr,
         position: opt.position,
         connector: connectorAttr,
-        rotationAngle: opt.rotationAngle
+        rotationAngle: opt.rotationAngle,
+        wordWrap: opt.wordWrap,
+        textOverflow: opt.textOverflow
     };
 }
 

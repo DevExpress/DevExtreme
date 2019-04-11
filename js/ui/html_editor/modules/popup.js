@@ -7,6 +7,7 @@ import Popup from "../../popup";
 import List from "../../list";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
+const SUGGESTION_LIST_WRAPPER_CLASS = "dx-suggestion-list-wrapper";
 const BaseModule = getQuill().import("core/module");
 
 class ListPopupModule extends BaseModule {
@@ -22,6 +23,7 @@ class ListPopupModule extends BaseModule {
 
         this.options = extend({}, this._getDefaultOptions(), options);
         this._popup = this.renderPopup();
+        this._popup._wrapper().addClass(SUGGESTION_LIST_WRAPPER_CLASS);
     }
 
     renderList($container, options) {

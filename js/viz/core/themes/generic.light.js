@@ -709,10 +709,10 @@ registerTheme({
             constantLines: []
         },
         commonAnnotationSettings: {
-            imageLocation: "full",
-            font: {},
+            font: {
+                color: "#333333"
+            },
             tooltipEnabled: true,
-
             border: {
                 width: 1,
                 color: "#dddddd",
@@ -731,6 +731,9 @@ registerTheme({
                 offsetY: 1,
                 blur: 4,
                 color: BLACK
+            },
+            image: {
+                location: "full"
             }
         },
         argumentAxis: {
@@ -884,6 +887,10 @@ registerTheme({
                         width: 2
                     }
                 }
+            },
+            label: {
+                textOverflow: "ellipsis",
+                wordWrap: "normal"
             }
         },
         legend: {
@@ -1611,6 +1618,8 @@ registerTheme({
         neckHeight: 0,
         resolveLabelOverlapping: "shift",
         label: {
+            textOverflow: "ellipsis",
+            wordWrap: "normal",
             visible: true,
             horizontalAlignment: RIGHT,
             horizontalOffset: 0,

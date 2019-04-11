@@ -220,7 +220,7 @@ var baseFixedColumns = {
             }
 
             if(isEmptyCell) {
-                if(that.option("legacyRendering") || (column.command || options.rowType === "group")) {
+                if(that.option("legacyRendering") || (column.command && column.type !== "buttons" || options.rowType === "group")) {
                     $cell
                         .html("&nbsp;")
                         .addClass(column.cssClass);
