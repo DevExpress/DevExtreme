@@ -2550,10 +2550,14 @@ declare module DevExpress.viz {
     }
     /** @name dxChartCommonAnnotationConfig */
     export interface dxChartCommonAnnotationConfig {
+        /** @name dxChartCommonAnnotationConfig.argument */
+        argument?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.arrowLength */
         arrowLength?: number;
         /** @name dxChartCommonAnnotationConfig.arrowWidth */
         arrowWidth?: number;
+        /** @name dxChartCommonAnnotationConfig.axis */
+        axis?: string;
         /** @name dxChartCommonAnnotationConfig.border */
         border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name dxChartCommonAnnotationConfig.color */
@@ -2574,14 +2578,22 @@ declare module DevExpress.viz {
         paddingLeftRight?: number;
         /** @name dxChartCommonAnnotationConfig.paddingTopBottom */
         paddingTopBottom?: number;
+        /** @name dxChartCommonAnnotationConfig.series */
+        series?: string;
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.type */
         type?: 'label' | 'image';
+        /** @name dxChartCommonAnnotationConfig.value */
+        value?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.width */
         width?: number;
+        /** @name dxChartCommonAnnotationConfig.x */
+        x?: number;
+        /** @name dxChartCommonAnnotationConfig.y */
+        y?: number;
     }
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
