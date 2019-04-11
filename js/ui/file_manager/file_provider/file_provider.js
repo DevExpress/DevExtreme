@@ -2,6 +2,12 @@ import { pathCombine, getFileExtension } from "../ui.file_manager.utils";
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
+/**
+* @name FileProvider
+* @type object
+* @module file_provider
+* @export default
+*/
 class FileProvider {
 
     getFolders(path) {

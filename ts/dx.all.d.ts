@@ -4816,6 +4816,8 @@ declare module DevExpress.ui {
         /** @name EmailRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
+    /** @name FileProvider */
+    export type FileProvider = any;
     /** @name GridBase.Options */
     export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
         /** @name GridBase.Options.allowColumnReordering */
@@ -5387,6 +5389,15 @@ declare module DevExpress.ui {
         trim?: boolean;
         /** @name StringLengthRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+    }
+    /** @name WebApiFileProvider.Options */
+    export interface WebApiFileProviderOptions {
+        /** @name WebApiFileProvider.Options.endpointUrl */
+        endpointUrl?: string;
+    }
+    /** @name WebApiFileProvider */
+    export class WebApiFileProvider {
+        constructor(options?: WebApiFileProviderOptions)
     }
     /** @name Widget.Options */
     export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
@@ -6278,16 +6289,16 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManager.Options */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
-        /** @name dxFileManager.Options.customThumbnail */
-        customThumbnail?: ((fileItem: any) => string);
-        /** @name dxFileManager.Options.editing */
-        editing?: { allowCopy?: boolean, allowCreate?: boolean, allowMove?: boolean, allowRemove?: boolean, allowRename?: boolean, allowUpload?: boolean };
-        /** @name dxFileManager.Options.fileSystemStore */
-        fileSystemStore?: any;
-        /** @name dxFileManager.Options.itemList */
-        itemList?: any;
-        /** @name dxFileManager.Options.selection */
-        selection?: any;
+        /** @name dxFileManager.Options.customizeThumbnail */
+        customizeThumbnail?: ((fileItem: any) => string);
+        /** @name dxFileManager.Options.fileProvider */
+        fileProvider?: any;
+        /** @name dxFileManager.Options.itemView */
+        itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /** @name dxFileManager.Options.permissions */
+        permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+        /** @name dxFileManager.Options.selectionMode */
+        selectionMode?: 'multiple' | 'single';
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {

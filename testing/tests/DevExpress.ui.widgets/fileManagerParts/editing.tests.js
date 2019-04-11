@@ -15,18 +15,19 @@ const moduleConfig = {
         fx.off = true;
 
         $("#fileManager").dxFileManager({
-            fileSystemStore: fileSystem,
-            itemList: {
+            fileProvider: fileSystem,
+            selectionMode: "single",
+            itemView: {
                 showFolders: false,
                 showParentFolder: false
             },
-            editing: {
-                allowCreate: true,
-                allowCopy: true,
-                allowMove: true,
-                allowRemove: true,
-                allowRename: true,
-                allowUpload: true
+            permissions: {
+                create: true,
+                copy: true,
+                move: true,
+                remove: true,
+                rename: true,
+                upload: true
             }
         });
 
