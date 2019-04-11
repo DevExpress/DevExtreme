@@ -1123,7 +1123,7 @@ var dxChart = {
             * @type Enums.VizTextOverflow
             * @default "ellipsis"
             */
-            textOverflow: "ellipsis"   
+            textOverflow: "ellipsis"
         },
         /**
         * @name dxChartOptions.commonAxisSettings.stripStyle
@@ -1308,7 +1308,7 @@ var dxChart = {
             * @type string
             * @default undefined
             */
-            text: undefined         
+            text: undefined
         },
         /**
         * @name dxChartOptions.argumentAxis.workdaysOnly
@@ -1924,6 +1924,15 @@ var dxChart = {
     * @type Array<dxChartAnnotationConfig,object>
     */
     annotations: [{}],
+    /**
+    * @name dxChartOptions.customizeAnnotation
+    * @type function(annotationItem)
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_return dxChartAnnotationConfig
+    * @default undefined
+    * @notUsedInTheme
+    */
+    customizeAnnotation: undefined,
     /**
     * @name dxChartOptions.onSeriesHoverChanged
     * @extends Action
@@ -3632,16 +3641,7 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     * @notUsedInTheme
     */
-    customizeTooltip: undefined,
-    /**
-    * @name dxChartCommonAnnotationConfig.customizeAnnotation
-    * @type function(annotationItem)
-    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
-    * @type_function_return dxChartAnnotationConfig
-    * @default undefined
-    * @notUsedInTheme
-    */
-    customizeAnnotation: undefined
+    customizeTooltip: undefined
 };
 
 /**
