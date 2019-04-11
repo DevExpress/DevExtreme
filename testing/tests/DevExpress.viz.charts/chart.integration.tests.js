@@ -2820,5 +2820,5 @@ QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", functi
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, 43, 1.5));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 44, 2.1));
 });
