@@ -12,7 +12,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     ClearButton = require("./ui.text_editor.clear").default,
-    ActionButtonCollection = require("./action_button_collection/index").default,
+    TextEditorButtonCollection = require("./texteditor_button_collection/index").default,
     config = require("../../core/config"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
@@ -72,7 +72,7 @@ var TextEditorBase = Editor.inherit({
             checkButtonsOptionType(options.buttons);
         }
 
-        this._buttonCollection = new ActionButtonCollection(this, this._getDefaultButtons());
+        this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
 
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
@@ -83,29 +83,29 @@ var TextEditorBase = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxActionButton
+            * @name dxTextEditorButton
             * @type object
             */
             /**
-            * @name dxActionButton.name
+            * @name dxTextEditorButton.name
             * @type string
             * @default undefined
             */
             /**
             /**
-            * @name dxActionButton.location
-            * @type Enums.ActionButtonLocation
+            * @name dxTextEditorButton.location
+            * @type Enums.TextEditorButtonLocation
             * @default "after"
             */
             /**
-            * @name dxActionButton.options
+            * @name dxTextEditorButton.options
             * @type dxButtonOptions
             * @default undefined
             */
 
             /**
             * @name dxTextEditorOptions.buttons
-            * @type Array<Enums.TextEditorButtonName,dxActionButton>
+            * @type Array<Enums.TextEditorButtonName,dxTextEditorButton>
             * @default undefined
             */
             buttons: void 0,

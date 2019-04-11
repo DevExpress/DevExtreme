@@ -54,7 +54,7 @@ function checkPredefinedButtonName(name, predefinedButtonsInfo) {
     }
 }
 
-export default class ActionButtonCollection {
+export default class TextEditorButtonCollection {
     constructor(editor, defaultButtonsInfo) {
         this.buttons = [];
         this.defaultButtonsInfo = defaultButtonsInfo;
@@ -130,7 +130,7 @@ export default class ActionButtonCollection {
     getButton(buttonName) {
         const button = find(this.buttons, ({ name }) => name === buttonName);
 
-        return button ? button.instance : null;
+        return button && button.instance;
     }
 
     renderAfterButtons(buttons, $container) {

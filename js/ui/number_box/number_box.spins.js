@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import ActionButton from "../text_box/action_button_collection/button";
+import TextEditorButton from "../text_box/texteditor_button_collection/button";
 import SpinButton from "./number_box.spin";
 import { addNamespace } from "../../events/utils";
 import { down as pointerDown } from "../../events/pointer";
@@ -10,7 +10,7 @@ const SPIN_CLASS = "dx-numberbox-spin";
 const SPIN_CONTAINER_CLASS = "dx-numberbox-spin-container";
 const SPIN_TOUCH_FRIENDLY_CLASS = "dx-numberbox-spin-touch-friendly";
 
-export default class SpinButtons extends ActionButton {
+export default class SpinButtons extends TextEditorButton {
     _attachEvents(instance, $spinContainer) {
         const { editor } = this;
         const eventName = addNamespace(pointerDown, editor.NAME);
