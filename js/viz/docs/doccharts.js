@@ -1111,7 +1111,19 @@ var dxChart = {
             * @type Enums.HorizontalAlignment
             * @default 'center'
             */
-            alignment: 'center'
+            alignment: 'center',
+            /**
+            * @name dxChartOptions.commonAxisSettings.title.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+            * @name dxChartOptions.commonAxisSettings.title.textOverflow
+            * @type Enums.VizTextOverflow
+            * @default "ellipsis"
+            */
+            textOverflow: "ellipsis"
         },
         /**
         * @name dxChartOptions.commonAxisSettings.stripStyle
@@ -1912,6 +1924,15 @@ var dxChart = {
     * @type Array<dxChartAnnotationConfig,object>
     */
     annotations: [{}],
+    /**
+    * @name dxChartOptions.customizeAnnotation
+    * @type function(annotationItem)
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_return dxChartAnnotationConfig
+    * @default undefined
+    * @notUsedInTheme
+    */
+    customizeAnnotation: undefined,
     /**
     * @name dxChartOptions.onSeriesHoverChanged
     * @extends Action
@@ -3412,6 +3433,42 @@ var dxChartCommonAnnotationConfig = {
     */
     type: undefined,
     /**
+    * @name dxChartCommonAnnotationConfig.argument
+    * @type number | datetime | string
+    * @default undefined
+    */
+    argument: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.value
+    * @type number | datetime | string
+    * @default undefined
+    */
+    value: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.axis
+    * @type string
+    * @default undefined
+    */
+    axis: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.series
+    * @type string
+    * @default undefined
+    */
+    series: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.x
+    * @type number
+    * @default undefined
+    */
+    x: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.y
+    * @type number
+    * @default undefined
+    */
+    y: undefined,
+    /**
     * @name dxChartCommonAnnotationConfig.tooltipEnabled
     * @type boolean
     * @default true
@@ -3584,16 +3641,7 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     * @notUsedInTheme
     */
-    customizeTooltip: undefined,
-    /**
-    * @name dxChartCommonAnnotationConfig.customizeAnnotation
-    * @type function(annotationItem)
-    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
-    * @type_function_return dxChartAnnotationConfig
-    * @default undefined
-    * @notUsedInTheme
-    */
-    customizeAnnotation: undefined
+    customizeTooltip: undefined
 };
 
 /**
