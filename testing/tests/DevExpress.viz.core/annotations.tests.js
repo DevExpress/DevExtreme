@@ -52,10 +52,9 @@ QUnit.test("Merge customizeAnnotation result and common+item options", function(
     const itemOptions = {
         x: 10, y: 20,
         type: "image",
-        image: { url: "some_url", width: 10 },
-        customizeAnnotation
+        image: { url: "some_url", width: 10 }
     };
-    const annotation = createAnnotations([itemOptions], { image: { height: 10 } })[0];
+    const annotation = createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
 
     annotation.draw(this.widget, this.group);
 
