@@ -13,6 +13,7 @@ window.internals = {
     GRID_DATA_ROW_CLASS: "dx-data-row",
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
+    BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
@@ -20,6 +21,7 @@ window.internals = {
     BUTTON_TEXT_CLASS: "dx-button-text",
     SELECT_BOX_CLASS: "dx-selectbox",
     TEXT_EDITOR_INPUT_CLASS: "dx-texteditor-input",
+    MENU_ITEM_WITH_TEXT_CLASS: "dx-menu-item-has-text",
     SELECTION_CLASS: "dx-selection"
 };
 
@@ -100,5 +102,6 @@ QUnit.testStart(() => {
 
 import "./fileManagerParts/contextMenu.tests.js";
 import "./fileManagerParts/toolbar.tests.js";
+import "./fileManagerParts/navigation.tests.js";
 import "./fileManagerParts/editing.tests.js";
 import "./fileManagerParts/webAPIProvider.tests.js";
