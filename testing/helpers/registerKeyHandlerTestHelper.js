@@ -8,16 +8,13 @@ const registerKeyHandlerTestHelper = {
 
         QUnit.module("RegisterKeyHandler", {
             beforeEach: () => {
-                this.$element = $(`<div id="${WidgetName}">`);
-                $("#qunit-fixture").append(this.$element);
-
                 this.handler = sinon.spy();
 
                 this.initializeWidget = (options) => {
-                    this.$element[WidgetName]($.extend({
+                    this.$element = $("<div>")[WidgetName]($.extend({
                         focusStateEnabled: true,
                         items: [{ text: "text" }]
-                    }, options));
+                    }, options)).appendTo("#qunit-fixture");
                 };
 
                 this.getInstance = () => { return this.$element[WidgetName]("instance"); };
