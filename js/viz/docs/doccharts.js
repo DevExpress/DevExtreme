@@ -1111,7 +1111,19 @@ var dxChart = {
             * @type Enums.HorizontalAlignment
             * @default 'center'
             */
-            alignment: 'center'
+            alignment: 'center',
+            /**
+            * @name dxChartOptions.commonAxisSettings.title.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+            * @name dxChartOptions.commonAxisSettings.title.textOverflow
+            * @type Enums.VizTextOverflow
+            * @default "ellipsis"
+            */
+            textOverflow: "ellipsis"   
         },
         /**
         * @name dxChartOptions.commonAxisSettings.stripStyle
@@ -1296,7 +1308,7 @@ var dxChart = {
             * @type string
             * @default undefined
             */
-            text: undefined
+            text: undefined         
         },
         /**
         * @name dxChartOptions.argumentAxis.workdaysOnly

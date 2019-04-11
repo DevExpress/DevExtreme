@@ -5965,6 +5965,7 @@ QUnit.test("Horizontal bottom. With date markers, last marker without label", fu
         return function() {
             return [
                 { x: 0, y: 0, width: 10, height: 10 }, // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -6093,6 +6094,7 @@ QUnit.test("Horizontal top", function(assert) {
         return function() {
             return [
                 { x: 0, y: 0, width: 10, height: 10 }, // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -6207,6 +6209,7 @@ QUnit.test("Vertical left", function(assert) {
         return function() {
             return [
                 { x: 0, y: 0, width: 14, height: 10 }, // title
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
                 { x: 0, y: 0, width: 13, height: 10 }, // tick label
@@ -6320,6 +6323,7 @@ QUnit.test("Vertical right", function(assert) {
         var idx = 0;
         return function() {
             return [
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
@@ -9474,15 +9478,13 @@ QUnit.test("Horizontal. Title does not fit to canvas - apply Ellipsis and set hi
     this.axis.draw(this.zeroMarginCanvas);
 
     var title = renderer.text.getCall(0).returnValue;
-    title.applyEllipsis = sinon.stub().returns(true);
     title.restoreText = sinon.stub();
 
     // act
     this.axis.updateSize(this.canvas);
 
     // assert
-    assert.deepEqual(title.applyEllipsis.lastCall.args, [80]);
-    assert.deepEqual(title.setTitle.lastCall.args, ["Title text"]);
+    assert.deepEqual(title.setMaxSize.lastCall.args[0], 80);
     assert.equal(title.restoreText.callCount, 0);
 });
 
@@ -9532,15 +9534,13 @@ QUnit.test("Vertical. Title does not fit to canvas - apply Ellipsis and set hint
     this.axis.draw(this.zeroMarginCanvas);
 
     var title = renderer.text.getCall(0).returnValue;
-    title.applyEllipsis = sinon.stub().returns(true);
     title.restoreText = sinon.stub();
 
     // act
     this.axis.updateSize(this.canvas);
 
     // assert
-    assert.deepEqual(title.applyEllipsis.lastCall.args, [40]);
-    assert.deepEqual(title.setTitle.lastCall.args, ["Title text"]);
+    assert.deepEqual(title.setMaxSize.lastCall.args[0], 40);
     assert.equal(title.restoreText.callCount, 0);
 });
 
