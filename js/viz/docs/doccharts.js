@@ -821,9 +821,9 @@ var dxChart = {
         /**
         * @name dxChartOptions.commonAxisSettings.color
         * @type string
-        * @default '#d3d3d3'
+        * @default '#767676'
         */
-        color: '#d3d3d3',
+        color: '#767676',
         /**
         * @name dxChartOptions.commonAxisSettings.width
         * @type number
@@ -2442,9 +2442,9 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.commonAxisSettings.color
         * @type string
-        * @default '#d3d3d3'
+        * @default '#767676'
         */
-        color: '#d3d3d3',
+        color: '#767676',
         /**
         * @name dxPolarChartOptions.commonAxisSettings.width
         * @type number

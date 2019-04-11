@@ -160,11 +160,6 @@ registerTheme({
     },
 
     chart: {
-        commonPaneSettings: {
-            border: {
-                color: LIGHT_LABEL_COLOR
-            }
-        },
         scrollBar: {
             color: "#bfbfbf",
             opacity: 0.7
@@ -247,7 +242,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: DARK_LABEL_COLOR
+                color: LABEL_BORDER_COLOR
             }
         },
         commonAxisSettings: {

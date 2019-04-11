@@ -43,7 +43,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: WHITE
+                color: '#454545'
             }
         }
     },
@@ -93,13 +93,6 @@ registerTheme({
     tooltip: {
         font: {
             color: BLACK
-        }
-    },
-    chart: {
-        commonPaneSettings: {
-            border: {
-                color: BLACK
-            }
         }
     },
     rangeSelector: {

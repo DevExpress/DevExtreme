@@ -70,7 +70,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: TEXT_COLOR
+                color: BORDER_COLOR
             }
         },
         commonAxisSettings: {
