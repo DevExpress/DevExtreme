@@ -4,48 +4,52 @@ import keyboardMock from "./keyboardMock.js";
 const SUPPORTED_KEYS = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
 
 const registerKeyHandlerTestHelper = {
-    runTests: function(QUnit, WidgetName, options = {}) {
+    runTests: function(QUnit, WidgetName) {
 
         QUnit.module("RegisterKeyHandler", {
             beforeEach: () => {
-                $("#qunit-fixture").append("<div id='dxWidget'>");
+                this.$element = $(`<div id="${WidgetName}">`);
+                $("#qunit-fixture").append(this.$element);
+
+                this.handler = sinon.spy();
+
+                this.initializeWidget = (options) => {
+                    this.$element[WidgetName]($.extend({
+                        focusStateEnabled: true,
+                        items: [{ text: "text" }]
+                    }, options));
+                };
+
+                this.getInstance = () => { return this.$element[WidgetName]("instance"); };
+
+                this.pressKey = (key) => { this.triggeredEvent = keyboardMock(this.getInstance().element()).press(key); };
+
+                this.checkAsserts = (assert, key) => {
+                    assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
+                    assert.deepEqual(this.triggeredEvent.event.target, this.getInstance().element(), "event.target");
+                };
             },
             afterEach: () => {
-                $("#dxWidget").remove();
+                this.$element.remove();
             }
         }, () => {
             SUPPORTED_KEYS.forEach((key) => {
                 QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
-                    const handler = sinon.spy();
+                    this.initializeWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
 
-                    const instance = $("#dxWidget")[WidgetName]({
-                        focusStateEnabled: true,
-                        items: [{ text: "text" }],
-                        onInitialized: e => {
-                            e.component.registerKeyHandler(key, handler);
-                        }
-                    })[WidgetName]("instance");
+                    this.pressKey(key);
 
-                    const triggerEvent = keyboardMock(instance.element()).press(key);
-
-                    assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.deepEqual(triggerEvent.event.target, instance.element(), "event.target");
+                    this.checkAsserts(assert, key);
                 });
 
                 QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
-                    const handler = sinon.spy();
+                    this.initializeWidget({});
 
-                    const instance = $("#dxWidget")[WidgetName]({
-                        focusStateEnabled: true,
-                        items: [{ text: "text" }]
-                    })[WidgetName]("instance");
+                    this.getInstance().registerKeyHandler(key, this.handler);
 
-                    instance.registerKeyHandler(key, handler);
+                    this.pressKey(key);
 
-                    const triggerEvent = keyboardMock(instance.element()).press(key);
-
-                    assert.strictEqual(handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.deepEqual(triggerEvent.event.target, instance.element(), "event.target");
+                    this.checkAsserts(assert, key);
                 });
             });
         });
