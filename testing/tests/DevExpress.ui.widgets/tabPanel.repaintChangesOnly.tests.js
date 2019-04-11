@@ -91,10 +91,10 @@ QUnit.module("repaintChangesOnly", {
             this.clock.tick(1);
 
             this.checkTitleRendered(assert, 1, item1_);
-            //this.checkItemRendered(assert, 0);
+            // this.checkItemRendered(assert, 0);
             this.checkItemDeleted(assert, 0);
 
-            this.checkContainsElements(assert, [item1_.text/*, item1_.content*/]);
+            this.checkContainsElements(assert, [item1_.text/* , item1_.content */]);
             this.checkContainsEmptyMessage(assert, false);
         });
 
