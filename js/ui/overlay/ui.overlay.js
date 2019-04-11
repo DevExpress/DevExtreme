@@ -1240,12 +1240,15 @@ var Overlay = Widget.inherit({
         this._actions.onPositioned({ position: resultPosition });
     },
 
-    _renderShading: function() {
+    _fixWrapperPosition: function() {
         var $wrapper = this._$wrapper,
             $container = this._getContainer();
 
         $wrapper.css("position", this._isWindow($container) && !iOS ? "fixed" : "absolute");
+    },
 
+    _renderShading: function() {
+        this._fixWrapperPosition();
         this._renderShadingDimensions();
         this._renderShadingPosition();
     },
