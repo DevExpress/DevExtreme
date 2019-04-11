@@ -398,7 +398,6 @@ module.exports = {
             }
 
             coords = coords || this._getTitleCoords();
-
             if(!this._isHorizontal) {
                 attrs.rotate = options.position === LEFT ? 270 : 90;
             }
@@ -407,6 +406,8 @@ module.exports = {
                 .css(vizUtils.patchFontOptions(titleOptions.font))
                 .attr(attrs)
                 .append(group);
+
+            this._checkTitleOverflow(text);
 
             return text;
         },
@@ -924,19 +925,23 @@ module.exports = {
             title.element.attr(params);
         },
 
-        _checkTitleOverflow: function() {
-            if(!this._title) {
+        _checkTitleOverflow: function(titleElement) {
+            if(!this._title && !titleElement) {
                 return;
             }
 
             var canvasLength = this._getScreenDelta(),
-                title = this._title,
+                title = titleElement ? { bBox: titleElement.getBBox(), element: titleElement } : this._title,
+                titleOptions = this._options.title,
                 boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
-                title.element.applyEllipsis(canvasLength) && title.element.setTitle(this._options.title.text);
+                this._wrapped = title.element.setMaxSize(canvasLength, undefined, {
+                    wordWrap: titleOptions.wordWrap || "none",
+                    textOverflow: titleOptions.textOverflow || "ellipsis"
+                });
             } else {
-                title.element.restoreText();
+                !this._wrapped && title.element.restoreText();
             }
         },
 
@@ -1001,6 +1006,9 @@ module.exports = {
             }, that._series, that.isArgumentAxis);
         },
 
+        hasWrap() {
+            return this._wrapped;
+        },
         getAxisPosition() {
             return this._axisPosition;
         },

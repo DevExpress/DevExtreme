@@ -933,6 +933,10 @@ Axis.prototype = {
         }
     },
 
+    getTitle: function() {
+        return this._title;
+    },
+
     hideOuterElements: function() {
         var that = this,
             options = that._options;
@@ -1758,6 +1762,8 @@ Axis.prototype = {
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks);
 
+        that._axisGroup.append(that._axesContainerGroup);
+
         that._drawAxis();
         that._drawTitle();
         drawTickMarks(that._majorTicks, options.tick);
@@ -1781,7 +1787,6 @@ Axis.prototype = {
 
         that._dateMarkers = that._drawDateMarkers() || [];
 
-        that._axisGroup.append(that._axesContainerGroup);
         that._labelAxesGroup && that._axisStripLabelGroup.append(that._labelAxesGroup);
         that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
@@ -1846,9 +1851,16 @@ Axis.prototype = {
         callAction(this._majorTicks, "animateLabels");
     },
 
-    updateSize: function(canvas, animate) {
+    updateSize: function(canvas, animate, updateTitle = true) {
         var that = this;
         that.updateCanvas(canvas);
+
+        if(updateTitle) {
+            that._checkTitleOverflow();
+            that._measureTitle();
+            that._updateTitleCoords();
+        }
+
         that._reinitTranslator(that._getViewportRange());
         that.applyMargins();
 
@@ -1874,9 +1886,6 @@ Axis.prototype = {
         that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(l => l.updatePosition(animationEnabled));
 
         callAction(that._strips, "updatePosition", animationEnabled);
-
-        that._updateTitleCoords();
-        that._checkTitleOverflow();
 
         updateGridsPosition(that._majorTicks, animationEnabled);
         updateGridsPosition(that._minorTicks, animationEnabled);
