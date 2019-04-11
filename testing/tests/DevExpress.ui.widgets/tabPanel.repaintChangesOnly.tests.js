@@ -44,30 +44,26 @@ QUnit.module("repaintChangesOnly", {
         this.checkContainsElements = (assert, idList) => {
             idList.forEach((id) => { assert.ok(this.containsElement(id), `contains '${id}'`); });
         };
-        this.checkTitleRendered = (assert, callCount, itemData) => {
-            assert.equal(this.titleRenderedSpy.callCount, callCount, "titleRenderedSpy.callCount");
-            if(callCount > 0) {
-                assert.deepEqual(this.titleRenderedSpy.firstCall.args[0].itemData, itemData, "titleRenderedSpy.firstCall.args[0].itemData");
+        this.checkTitleRendered = (assert, expectedCalls) => {
+            assert.equal(this.titleRenderedSpy.callCount, expectedCalls.length, "titleRenderedSpy.callCount");
+            let calls = this.titleRenderedSpy.getCalls();
+            for(let i = 0; i < expectedCalls.length && i < calls.length; i++) {
+                assert.deepEqual(calls[i].args[0].itemData, expectedCalls[i], `titleRenderedSpy.calls[${i}].itemData`);
             }
         };
-        this.checkItemRendered = (assert, callCount, itemData1, itemIndex1, itemData2, itemIndex2) => {
-            assert.equal(this.itemRenderedSpy.callCount, callCount, "itemRenderedSpy.callCount");
-            if(callCount > 0) {
-                assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, itemData1, "itemRenderedSpy.firstCall.args[0].itemData");
-                assert.equal(this.itemRenderedSpy.firstCall.args[0].itemIndex, itemIndex1, "itemRenderedSpy.firstCall.args[0].index");
-            }
-            if(callCount > 1) {
-                assert.deepEqual(this.itemRenderedSpy.secondCall.args[0].itemData, itemData2, "itemRenderedSpy.secondCall.args[0].itemData");
-                assert.equal(this.itemRenderedSpy.secondCall.args[0].itemIndex, itemIndex2, "itemRenderedSpy.secondCall.args[0].index");
-            }
-            if(callCount > 2) {
-                assert.ok(false, "callCount > 2");
+        this.checkItemRendered = (assert, expectedCalls) => {
+            assert.equal(this.itemRenderedSpy.callCount, expectedCalls.length, "itemRenderedSpy.callCount");
+            let calls = this.itemRenderedSpy.getCalls();
+            for(let i = 0; i < expectedCalls.length && i < calls.length; i++) {
+                assert.deepEqual(calls[i].args[0].itemData, expectedCalls[i].data, `itemRenderedSpy.call[${i}].itemData`);
+                assert.equal(calls[i].args[0].itemIndex, expectedCalls[i].index, `itemRenderedSpy.call[${i}].itemINdex`);
             }
         };
-        this.checkItemDeleted = (assert, callCount, itemData) => {
-            assert.equal(this.itemDeletedSpy.callCount, callCount, "itemDeletedSpy.callCount");
-            if(callCount > 0) {
-                assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData, itemData, "itemDeletedSpy.firstCall.args[0].itemData");
+        this.checkItemDeleted = (assert, expectedCalls) => {
+            assert.equal(this.itemDeletedSpy.callCount, expectedCalls.length, "itemDeletedSpy.callCount");
+            let calls = this.itemDeletedSpy.getCalls();
+            for(let i = 0; i < expectedCalls.length && i < calls.length; i++) {
+                assert.deepEqual(calls[i].args[0].itemData, expectedCalls[i], `itemDeletedSpy.call[${i}].itemData`);
             }
         };
         this.checkContainsEmptyMessage = (assert, expected) => {
@@ -90,9 +86,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1_]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 1, item1_);
-            // this.checkItemRendered(assert, 0);
-            this.checkItemDeleted(assert, 0);
+            this.checkTitleRendered(assert, [item1_]);
+            // this.checkItemRendered(assert, []);
+            this.checkItemDeleted(assert, []);
 
             this.checkContainsElements(assert, [item1_.text/* , item1_.content */]);
             this.checkContainsEmptyMessage(assert, false);
@@ -105,9 +101,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, []);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 0);
-            this.checkItemRendered(assert, 0);
-            this.checkItemDeleted(assert, 1, item1);
+            this.checkTitleRendered(assert, []);
+            this.checkItemRendered(assert, []);
+            this.checkItemDeleted(assert, [item1]);
 
             this.checkNotContainsElements(assert, [item1.text, item1.content]);
             this.checkContainsEmptyMessage(assert, true);
@@ -121,9 +117,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1, item2]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 1, item2);
-            this.checkItemRendered(assert, 0);
-            this.checkItemDeleted(assert, 0);
+            this.checkTitleRendered(assert, [item2]);
+            this.checkItemRendered(assert, []);
+            this.checkItemDeleted(assert, []);
 
             this.checkContainsElements(assert, [item1.text, item2.text, item1.content]);
             this.checkNotContainsElements(assert, [item2.content]);
@@ -138,9 +134,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1_]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 1, item1_);
-            this.checkItemRendered(assert, 1, item1_, 0);
-            this.checkItemDeleted(assert, 1, item1);
+            this.checkTitleRendered(assert, [item1_]);
+            this.checkItemRendered(assert, [{ data: item1_, index: 0 }]);
+            this.checkItemDeleted(assert, [item1]);
 
             this.checkContainsElements(assert, [item1_.text, item1_.content]);
             this.checkNotContainsElements(assert, [item1.content]);
@@ -155,9 +151,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1_]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 1, item1_);
-            this.checkItemRendered(assert, 1, item1_, 0);
-            this.checkItemDeleted(assert, 1, item1);
+            this.checkTitleRendered(assert, [item1_]);
+            this.checkItemRendered(assert, [{ data: item1_, index: 0 }]);
+            this.checkItemDeleted(assert, [item1]);
 
             this.checkContainsElements(assert, [item1_.text, item1_.content]);
             this.checkNotContainsElements(assert, [item1.text]);
@@ -172,9 +168,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1_]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 1, item1_);
-            this.checkItemRendered(assert, 1, item1_, 0);
-            this.checkItemDeleted(assert, 1, item1);
+            this.checkTitleRendered(assert, [item1_]);
+            this.checkItemRendered(assert, [{ data: item1_, index: 0 }]);
+            this.checkItemDeleted(assert, [item1]);
 
             this.checkContainsElements(assert, [item1_.text, item1_.content]);
             this.checkNotContainsElements(assert, [item1.text, item1.content]);
@@ -189,9 +185,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item2_]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 1, item2_);
-            this.checkItemRendered(assert, 1, item2_, 0);
-            this.checkItemDeleted(assert, 1, item1);
+            this.checkTitleRendered(assert, [item2_]);
+            this.checkItemRendered(assert, [{ data: item2_, index: 0 }]);
+            this.checkItemDeleted(assert, [item1]);
 
             this.checkContainsElements(assert, [item2_.text, item2_.content]);
             this.checkNotContainsElements(assert, [item1.text, item1.content]);
@@ -206,9 +202,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 0);
-            this.checkItemRendered(assert, 0);
-            this.checkItemDeleted(assert, 1, item2);
+            this.checkTitleRendered(assert, []);
+            this.checkItemRendered(assert, []);
+            this.checkItemDeleted(assert, [item2]);
 
             this.checkContainsElements(assert, [item1.text, item1.content]);
             this.checkNotContainsElements(assert, [item2.text, item2.content]);
@@ -223,9 +219,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option("selectedIndex", 1);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 0);
-            this.checkItemRendered(assert, 1, item2, 1);
-            this.checkItemDeleted(assert, 0);
+            this.checkTitleRendered(assert, []);
+            this.checkItemRendered(assert, [{ data: item2, index: 1 }]);
+            this.checkItemDeleted(assert, []);
 
             this.checkContainsElements(assert, [item1.text, item1.content, item2.text, item2.content]);
             this.checkContainsEmptyMessage(assert, false);
@@ -240,9 +236,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1_, item2]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 1, item1_);
-            this.checkItemRendered(assert, 2, item2, 1, item1_, 0);
-            this.checkItemDeleted(assert, 1, item1);
+            this.checkTitleRendered(assert, [item1_]);
+            this.checkItemRendered(assert, [{ data: item2, index: 1 }, { data: item1_, index: 0 }]);
+            this.checkItemDeleted(assert, [item1]);
 
             this.checkContainsElements(assert, [item1.text, item1.content, item2.text, item2.content]);
             this.checkContainsEmptyMessage(assert, false);
@@ -256,9 +252,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item2]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 0);
-            this.checkItemRendered(assert, 1, item2, 0);
-            this.checkItemDeleted(assert, 1, item1);
+            this.checkTitleRendered(assert, []);
+            this.checkItemRendered(assert, [{ data: item2, index: 0 }]);
+            this.checkItemDeleted(assert, [item1]);
 
             this.checkContainsElements(assert, [item2.text, item2.content]);
             this.checkNotContainsElements(assert, [item1.text, item1.content]);
@@ -285,9 +281,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 0);
-            this.checkItemRendered(assert, 1, item1, 0);
-            this.checkItemDeleted(assert, 1, item2);
+            this.checkTitleRendered(assert, []);
+            this.checkItemRendered(assert, [{ data: item1, index: 0 }]);
+            this.checkItemDeleted(assert, [item2]);
 
             this.checkContainsElements(assert, [item1.text, item1.content]);
             this.checkNotContainsElements(assert, [item2.text, item2.content]);
@@ -316,9 +312,9 @@ QUnit.module("repaintChangesOnly", {
             this.tabPanel.option(dataSourcePropertyName, [item1, item3]);
             this.clock.tick(1);
 
-            this.checkTitleRendered(assert, 0);
-            this.checkItemRendered(assert, 1, item3, 1);
-            this.checkItemDeleted(assert, 1, item2);
+            this.checkTitleRendered(assert, []);
+            this.checkItemRendered(assert, [{ data: item3, index: 1 }]);
+            this.checkItemDeleted(assert, [item2]);
 
             this.checkContainsElements(assert, [item1.text, item3.text, item3.content]);
             this.checkNotContainsElements(assert, [item1.content, item2.text, item2.content]);
