@@ -38,13 +38,13 @@
         .dx-icon-sortdown;
     }
 
-    .dx-header-row {
-        & > .dx-cell-focus-disabled,
-        & > .dx-cell-focus-disabled .dx-header-filter {
+    .dx-datagrid-headers {
+        .dx-header-row > td,
+        .dx-header-filter {
             outline: none;
         }
 
-        &.dx-state-focused {
+        &.dx-state-focused .dx-header-row {
             td:focus,
             td .dx-header-filter:focus {
                 outline: 2px solid @datagrid-focused-border-color;

@@ -5,7 +5,7 @@ import messageLocalization from "../../localization/message";
 import { isDefined } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
-import { normalizeKeyName } from "../../events/utils";
+import { registerKeyboardAction } from "../shared/accessibility";
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
@@ -22,8 +22,7 @@ var CELL_CONTENT_CLASS = "text-content",
     SORT_INDICATOR_CLASS = "dx-sort-indicator",
     HEADER_FILTER_CLASS_SELECTOR = ".dx-header-filter",
     HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator",
-    MULTI_ROW_HEADER_CLASS = "dx-header-multi-row",
-    FOCUS_STATE_CLASS = "dx-state-focused";
+    MULTI_ROW_HEADER_CLASS = "dx-header-multi-row";
 
 module.exports = {
     defaultOptions: function() {
@@ -89,56 +88,6 @@ module.exports = {
                     return this.option("useLegacyKeyboardNavigation");
                 },
 
-                _processKeyDown: function(event) {
-                    var args = {
-                            handled: false,
-                            event: event
-                        },
-                        $target = $(event.target),
-                        keyName = normalizeKeyName(event),
-                        keyboardController = this.getController("keyboardNavigation");
-
-                    keyboardController && keyboardController.executeAction("onKeyDown", args);
-                    if(!args.handled) {
-                        switch(keyName) {
-                            case "enter":
-                            case "space":
-                                this._handleActionKeyDown(event);
-                                break;
-
-                            case "tab":
-                                this._setHeaderRowFocusState($target);
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                },
-                _setHeaderRowFocusState: function($headerCell) {
-                    $headerCell.closest(`tr.${HEADER_ROW_CLASS}`).addClass(FOCUS_STATE_CLASS);
-                },
-
-                _handleActionKeyDown: function(event) {
-                    var $target = $(event.target);
-
-                    this._lastActionElement = event.target;
-
-                    if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-                        let headerFilterController = this.getController("headerFilter"),
-                            $column = $target.closest("td"),
-                            columnIndex = this.getCellIndex($column);
-                        if(columnIndex >= 0) {
-                            headerFilterController.showHeaderFilterMenu(columnIndex, false);
-                        }
-                    } else {
-                        let $row = $target.closest(ROW_CLASS_SELECTOR);
-                        this._processHeaderAction(event, $row);
-                    }
-
-                    event.preventDefault();
-                },
-
                 _getDefaultTemplate: function(column) {
                     var that = this,
                         template;
@@ -199,7 +148,7 @@ module.exports = {
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
                         if(!this._isLegacyKeyboardNavigation()) {
-                            if(options.column && (!options.column.type || options.column.type === "selection")) {
+                            if(options.column && !options.column.type) {
                                 $cell.attr("tabindex", this.option("tabindex") || 0);
                             }
                         }
@@ -227,11 +176,32 @@ module.exports = {
                     if(row.rowType === "header") {
                         $row.addClass(HEADER_ROW_CLASS);
                         if(!this._isLegacyKeyboardNavigation()) {
-                            eventsEngine.on($row, "keydown", "td", this.createAction(e => this._processKeyDown(e.event)));
+                            registerKeyboardAction(this, $row, "td", this._handleActionKeyDown.bind(this));
                         }
                     }
 
                     return $row;
+                },
+
+                _handleActionKeyDown: function(args) {
+                    var event = args.event,
+                        $target = $(event.target);
+
+                    this._lastActionElement = event.target;
+
+                    if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+                        let headerFilterController = this.getController("headerFilter"),
+                            $column = $target.closest("td"),
+                            columnIndex = this.getColumnIndexByElement($column);
+                        if(columnIndex >= 0) {
+                            headerFilterController.showHeaderFilterMenu(columnIndex, false);
+                        }
+                    } else {
+                        let $row = $target.closest(ROW_CLASS_SELECTOR);
+                        this._processHeaderAction(event, $row);
+                    }
+
+                    event.preventDefault();
                 },
 
                 _renderCore: function() {
@@ -264,12 +234,11 @@ module.exports = {
 
                 _restoreLastFocusedElement: function() {
                     var $table = this.element(),
-                        $headerCells = $table.find(`tr.${HEADER_ROW_CLASS} > td`);
+                        $headerCells = $table.find(`tr.${HEADER_ROW_CLASS} > td[tabindex]`);
 
                     if($headerCells.length > 1) {
                         let $firstCell = $headerCells.first();
                         eventsEngine.on($firstCell, "focus", e => {
-                            this._setHeaderRowFocusState($(e.target));
                             if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
                                 $(this._lastActionElement).trigger("focus");
                                 this._lastActionElement = null;
@@ -432,13 +401,13 @@ module.exports = {
                     }
                 },
 
-                getCellIndex: function($cell) {
-                    let cellIndex = this.callBase($cell),
+                getColumnIndexByElement: function($cell) {
+                    let cellIndex = this.getCellIndex($cell),
                         $row = $cell.closest(".dx-row"),
                         rowIndex = $row[0].rowIndex,
                         column = this.getColumns(rowIndex)[cellIndex];
 
-                    return column ? this._columnsController.getVisibleIndex(column.index) : -1;
+                    return column ? column.index : -1;
                 },
 
                 getVisibleColumnIndex: function(columnIndex, rowIndex) {

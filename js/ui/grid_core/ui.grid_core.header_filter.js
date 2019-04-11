@@ -16,14 +16,13 @@ import { isWrapped } from "../../core/utils/variable_wrapper";
 import { Deferred } from "../../core/utils/deferred";
 
 var DATE_INTERVAL_FORMATS = {
-        'month': function(value) {
-            return dateLocalization.getMonthNames()[value - 1];
-        },
-        'quarter': function(value) {
-            return dateLocalization.format(new Date(2000, value * 3 - 1), 'quarter');
-        }
+    'month': function(value) {
+        return dateLocalization.getMonthNames()[value - 1];
     },
-    FOCUS_STATE_CLASS = "dx-state-focused";
+    'quarter': function(value) {
+        return dateLocalization.format(new Date(2000, value * 3 - 1), 'quarter');
+    }
+};
 
 var HeaderFilterController = modules.ViewController.inherit((function() {
     var getFormatOptions = function(value, column, currentLevel) {
@@ -332,7 +331,6 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
 
         if(indicatorName === "headerFilter") {
             eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
-                $indicator.removeClass(FOCUS_STATE_CLASS);
                 e.event.stopPropagation();
                 that.getController("headerFilter").showHeaderFilterMenu(column.index, false);
             }));

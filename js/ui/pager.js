@@ -14,7 +14,7 @@ var $ = require("../core/renderer"),
     SelectBox = require("./select_box"),
     NumberBox = require("./number_box"),
     eventUtils = require("../events/utils"),
-    registerKeyboardSupportAccessibility = require("./shared/accessibility").registerKeyboardSupportAccessibility;
+    registerKeyboardAction = require("./shared/accessibility").registerKeyboardAction;
 
 var PAGES_LIMITER = 4,
     PAGER_CLASS = 'dx-pager',
@@ -306,7 +306,7 @@ var Pager = Widget.inherit({
 
             eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, that._pageClickHandler);
 
-            registerKeyboardSupportAccessibility(that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
+            registerKeyboardAction(that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
         }
 
         for(var i = 0; i < pagesLength; i++) {
@@ -371,7 +371,7 @@ var Pager = Widget.inherit({
             clickAction({ event: e });
         });
 
-        registerKeyboardSupportAccessibility(that, $pageCount, undefined, clickAction);
+        registerKeyboardAction(that, $pageCount, undefined, clickAction);
 
         $pageCount.appendTo($container);
 
@@ -449,7 +449,7 @@ var Pager = Widget.inherit({
             clickPagesSizeAction({ event: e });
         });
 
-        registerKeyboardSupportAccessibility(that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
+        registerKeyboardAction(that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
 
         for(i = 0; i < pagesSizesLength; i++) {
             $pageSize = $('<div>')
@@ -555,7 +555,7 @@ var Pager = Widget.inherit({
                 clickAction({ event: e });
             });
 
-            registerKeyboardSupportAccessibility(that, $button, undefined, clickAction);
+            registerKeyboardAction(that, $button, undefined, clickAction);
 
             that.setAria({
                 "role": "button",
@@ -699,7 +699,7 @@ var Pager = Widget.inherit({
         if(this._$pagesChooser) {
             eventsEngine.off(this._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], this.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, this._pageClickHandler);
 
-            registerKeyboardSupportAccessibility(this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
+            registerKeyboardAction(this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
         }
 
         this.callBase();

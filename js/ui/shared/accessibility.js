@@ -4,7 +4,10 @@ import eventUtils from "../../events/utils";
 
 const FOCUS_STATE_CLASS = "dx-state-focused";
 
-const processKeyDown = function(event, action, $mainElement) {
+var isMouseDown = false,
+    isHiddenFocusing = false;
+
+function processKeyDown(event, action, $mainElement) {
     var keyName = eventUtils.normalizeKeyName(event);
 
     if(keyName === "enter" || keyName === "space") {
@@ -12,25 +15,31 @@ const processKeyDown = function(event, action, $mainElement) {
     } else if(keyName === "tab") {
         $mainElement.addClass(FOCUS_STATE_CLASS);
     }
-};
+}
 
 module.exports = {
-    registerKeyboardSupportAccessibility: function(component, $element, selector, action) {
-        if(component.option("useLegacyKeyboardNavigation")) return;
+    hiddenFocus: function(element) {
+        isHiddenFocusing = true;
+        element.focus();
+        isHiddenFocusing = false;
+    },
+    registerKeyboardAction: function(component, $element, selector, action) {
+        if(component.option("useLegacyKeyboardNavigation")) {
+            return;
+        }
 
         var $mainElement = $(component.element());
 
         eventsEngine.on($element, "keydown", selector, e => processKeyDown(e, action, $mainElement));
         eventsEngine.on($element, "mousedown", selector, () => {
-            component._preventFocusState = true;
+            isMouseDown = true;
             $mainElement.removeClass(FOCUS_STATE_CLASS);
         });
-        eventsEngine.on($element, "focus", selector, () => {
-            if(!component._preventFocusState) {
+        eventsEngine.on($element, "focusin", selector, () => {
+            if(!isMouseDown && !isHiddenFocusing) {
                 $mainElement.addClass(FOCUS_STATE_CLASS);
             }
-            component._preventFocusState = false;
+            isMouseDown = false;
         });
     }
 };
-

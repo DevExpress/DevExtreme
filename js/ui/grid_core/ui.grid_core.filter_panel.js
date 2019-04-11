@@ -8,7 +8,7 @@ import CheckBox from "../check_box";
 import utils from "../filter_builder/utils";
 import { when, Deferred } from "../../core/utils/deferred";
 import inflector from "../../core/utils/inflector";
-import { registerKeyboardSupportAccessibility } from "../shared/accessibility";
+import { registerKeyboardAction } from "../shared/accessibility";
 
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
@@ -71,7 +71,7 @@ var FilterPanelView = modules.View.inherit({
 
         eventsEngine.on($element, "click", () => that._showFilterBuilder());
 
-        registerKeyboardSupportAccessibility(that, $element, undefined, () => that._showFilterBuilder());
+        registerKeyboardAction(that, $element, undefined, () => that._showFilterBuilder());
 
         that._addTabIndexToElement($element);
 
@@ -105,7 +105,7 @@ var FilterPanelView = modules.View.inherit({
 
         eventsEngine.on($textElement, "click", () => that._showFilterBuilder());
 
-        registerKeyboardSupportAccessibility(that, $textElement, undefined, () => that._showFilterBuilder());
+        registerKeyboardAction(that, $textElement, undefined, () => that._showFilterBuilder());
 
         that._addTabIndexToElement($textElement);
 
@@ -125,7 +125,7 @@ var FilterPanelView = modules.View.inherit({
 
         eventsEngine.on($element, "click", clearFilterValue);
 
-        registerKeyboardSupportAccessibility(this, $element, undefined, clearFilterValue);
+        registerKeyboardAction(this, $element, undefined, clearFilterValue);
 
         that._addTabIndexToElement($element);
 
