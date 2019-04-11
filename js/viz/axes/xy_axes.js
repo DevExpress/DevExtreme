@@ -933,20 +933,15 @@ module.exports = {
             var canvasLength = this._getScreenDelta(),
                 title = titleElement ? { bBox: titleElement.getBBox(), element: titleElement } : this._title,
                 titleOptions = this._options.title,
-                isWordWrap = !!(titleOptions.wordWrap || titleOptions.overflow),
                 boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
-                if(isWordWrap) {
-                    this._wrapped = title.element.setMaxWidth(canvasLength, {
-                        wordWrap: titleOptions.wordWrap,
-                        overflow: titleOptions.overflow
-                    });
-                } else {
-                    title.element.applyEllipsis(canvasLength) && title.element.setTitle(titleOptions.text);
-                }
+                this._wrapped = title.element.setMaxWidth(canvasLength, {
+                    wordWrap: titleOptions.wordWrap || "none",
+                    textOverflow: titleOptions.textOverflow || "ellipsis"
+                });
             } else {
-                !isWordWrap && !this._wrapped && title.element.restoreText();
+                !this._wrapped && title.element.restoreText();
             }
         },
 
