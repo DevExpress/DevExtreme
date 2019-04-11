@@ -1324,21 +1324,51 @@ module.exports = Class.inherit((function() {
             }
         },
 
+        _hasPagingValues: function(options, area, oppositeIndex) {
+            var takeField = area + "Take",
+                skipField = area + "Skip",
+                values = this._data.values,
+                items = this._data[area + "s"],
+                indices = [];
+
+            for(let i = options[skipField]; i < options[skipField] + options[takeField]; i++) {
+                if(items[i]) {
+                    indices.push(items[i].index);
+                }
+            }
+
+            return indices.every(index => {
+                if(index !== undefined) {
+                    if(area === "row") {
+                        return (values[index] || [])[oppositeIndex];
+                    } else {
+                        return (values[oppositeIndex] || [])[index];
+                    }
+                }
+            });
+        },
+
         _processPagingCacheByArea: function(options, pageSize, area) {
             var takeField = area + "Take",
                 skipField = area + "Skip",
-                items = this._data[area + "s"];
+                items = this._data[area + "s"],
+                oppositeArea = area === "row" ? "column" : "row",
+                item;
 
             if(options[takeField]) {
                 if(options.path) {
-                    var headerItem = findHeaderItem(items, options.path);
+                    let headerItem = findHeaderItem(items, options.path);
                     items = headerItem && headerItem.children || [];
                 }
                 do {
-                    var item = items[options[skipField]];
+                    item = items[options[skipField]];
                     if(item && item.index !== undefined) {
-                        options[skipField]++;
-                        options[takeField]--;
+                        if(this._hasPagingValues(options, oppositeArea, item.index)) {
+                            options[skipField]++;
+                            options[takeField]--;
+                        } else {
+                            break;
+                        }
                     }
                 } while(item && item.index !== undefined && options[takeField]);
 
