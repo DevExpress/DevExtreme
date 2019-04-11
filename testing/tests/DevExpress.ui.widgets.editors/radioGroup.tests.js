@@ -441,7 +441,7 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
 
-    SUPPORTED_KEYS((key) => {
+    SUPPORTED_KEYS.forEach((key) => {
         test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
             const handler = sinon.spy();
 
