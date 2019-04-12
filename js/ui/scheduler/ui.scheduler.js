@@ -2922,7 +2922,7 @@ const Scheduler = Widget.inherit({
 
         $scrollable.css("height", "initial");
 
-        if($scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
+        if($scrollable.length && $scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
             $scrollable.height(popupContent.height());
         }
     },
