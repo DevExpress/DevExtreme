@@ -338,7 +338,7 @@ Store.registerClass = function(type, alias) {
         storeImpl[alias] = type
     }
     return type
-}
+};
 
 Store.inherit = function(inheritor) {
     return function(members, alias) {
