@@ -2407,7 +2407,7 @@ QUnit.test("Check title overflow on draw", function(assert) {
     this.createDrawnAxis({
         isHorizontal: true,
         title: {
-            wordWrap: "word-break",
+            wordWrap: "breakWord",
             textOverflow: "none",
             text: "Title text"
         }
@@ -2416,7 +2416,27 @@ QUnit.test("Check title overflow on draw", function(assert) {
     assert.strictEqual(this.renderer.text.callCount, 1);
     const textElement = this.renderer.text.firstCall.returnValue;
     assert.deepEqual(textElement.setMaxSize.callCount, 1);
-    assert.deepEqual(textElement.setMaxSize.firstCall.args, [10, undefined, { textOverflow: "none", wordWrap: "word-break" }]);
+    assert.deepEqual(textElement.setMaxSize.firstCall.args, [10, undefined, { textOverflow: "none", wordWrap: "breakWord" }]);
+});
+
+QUnit.test("Check title rest", function(assert) {
+    this.renderer.bBoxTemplate = function() {
+        return { height: 29, width: 9 };
+    };
+    const axis = this.createDrawnAxis({
+        isHorizontal: true,
+        title: {
+            wordWrap: "breakWord",
+            textOverflow: "none",
+            text: "Title text"
+        }
+    });
+
+    axis.updateSize({ width: 40, right: 4, left: 3 });
+    axis.updateSize({ width: 50, right: 4, left: 3 });
+    assert.strictEqual(this.renderer.text.callCount, 1);
+    const textElement = this.renderer.text.firstCall.returnValue;
+    assert.equal(textElement.restoreText.callCount, 1);
 });
 
 QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {

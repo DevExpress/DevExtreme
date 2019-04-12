@@ -429,6 +429,9 @@ module.exports = {
 
         _measureTitle: function() {
             if(this._title) {
+                if(this._title.bBox && !this._title.originalSize) {
+                    this._title.originalSize = this._title.bBox;
+                }
                 this._title.bBox = this._title.element.getBBox();
             }
         },
@@ -938,12 +941,14 @@ module.exports = {
                 boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
-                this._wrapped = title.element.setMaxSize(canvasLength, undefined, {
+                title.element.setMaxSize(canvasLength, undefined, {
                     wordWrap: titleOptions.wordWrap || "none",
                     textOverflow: titleOptions.textOverflow || "ellipsis"
-                }) !== 1;
+                });
+                this._wrapped = (titleOptions.wordWrap && titleOptions.wordWrap !== "none");
             } else {
-                !this._wrapped && title.element.restoreText();
+                const moreThanOriginalSize = title.originalSize && canvasLength > (this._isHorizontal ? title.originalSize.width : title.originalSize.height);
+                !this._wrapped && moreThanOriginalSize && title.element.restoreText();
             }
         },
 
