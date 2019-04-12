@@ -31,8 +31,8 @@ var APPOINTMENT_MIN_COUNT = 1,
 
     // DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
 
-    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28,
-    DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
+    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
+    // DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
@@ -618,16 +618,22 @@ var BaseRenderingStrategy = Class.inherit({
         return this._defaultWidth;
     },
 
+    getDefaultCellHeight: function() {
+        return this._defaultHeight;
+    },
+
     getCompactAppointmentDefaultWidth: function() {
         return COMPACT_APPOINTMENT_DEFAULT_WIDTH;
     },
 
     getCompactAppointmentTopOffset: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return this._defaultHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
-        }
+        return this.getPositioningStrategy().getCompactAppointmentTopOffset();
 
-        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+        // if(this.instance.fire("isAdaptive")) {
+        //     return this._defaultHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
+        // }
+
+        // return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
     getCompactAppointmentLeftOffset: function() {

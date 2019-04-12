@@ -5,6 +5,7 @@
 import typeUtils from "../../../core/utils/type";
 
 const DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24;
+const COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 
 class AppointmentPositioningStrategy {
 
@@ -23,6 +24,10 @@ class AppointmentPositioningStrategy {
         } else {
             return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
         }
+    }
+
+    getCompactAppointmentTopOffset() {
+        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     }
 }
 
