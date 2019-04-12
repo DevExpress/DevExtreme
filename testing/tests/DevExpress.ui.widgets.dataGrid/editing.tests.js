@@ -7277,6 +7277,49 @@ QUnit.test("The button column should not be shown in the edit form", function(as
     assert.strictEqual($testElement.find(".dx-datagrid-edit-form-item").length, 5, "count editor of the form");
 });
 
+// T729713
+QUnit.test("Cell mode - The editCellTemplate of the column should not be called when editing another column", function(assert) {
+    // arrange
+    var that = this,
+        $inputElement,
+        rowsView = that.rowsView,
+        $testElement = $("#container"),
+        editCellTemplate = sinon.spy(function(_, options) {
+            return $("<div>").dxTextBox({
+                value: options.value,
+                onValueChanged: function(e) {
+                    options.setValue(e.value);
+                }
+            });
+        });
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+
+    rowsView.render($testElement);
+    that.columnOption("name", "editCellTemplate", editCellTemplate);
+
+    // act
+    $(rowsView.getCellElement(0, 0)).trigger("dxclick");
+    that.clock.tick();
+
+    $inputElement = getInputElements($(rowsView.getCellElement(0, 0))).first();
+    $inputElement.val("test");
+
+    // assert
+    assert.strictEqual(editCellTemplate.callCount, 1);
+
+    // act
+    eventsEngine.trigger($inputElement[0], "change");
+    $(rowsView.getCellElement(0, 1)).trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(editCellTemplate.callCount, 1);
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
