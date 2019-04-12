@@ -1,6 +1,8 @@
 import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
+import devices from "core/devices";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
@@ -150,6 +152,10 @@ QUnit.module("option changed", {
         assert.equal(buttons[1].option("stylingMode"), "text", "second button");
     });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxButtonGroup");
+}
 
 QUnit.module("selection", () => {
     QUnit.test("change selection in the single by click", function(assert) {
