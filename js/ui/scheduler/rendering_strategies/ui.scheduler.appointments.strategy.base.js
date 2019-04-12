@@ -1,11 +1,13 @@
-var noop = require("../../../core/utils/common").noop,
-    Class = require("../../../core/class"),
-    extend = require("../../../core/utils/extend").extend,
-    errors = require("../../widget/ui.errors"),
-    dateUtils = require("../../../core/utils/date"),
-    isNumeric = require("../../../core/utils/type").isNumeric,
-    typeUtils = require("../../../core/utils/type"),
-    themes = require("../../themes");
+import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.base";
+import { noop } from "../../../core/utils/common";
+import Class from "../../../core/class";
+import { extend } from "../../../core/utils/extend";
+import errors from "../../widget/ui.errors";
+import dateUtils from "../../../core/utils/date";
+import { isNumeric } from "../../../core/utils/type";
+import typeUtils from "../../../core/utils/type";
+import themes from "../../themes";
+
 
 var toMs = dateUtils.dateToMilliseconds;
 
@@ -33,6 +35,16 @@ var APPOINTMENT_MIN_COUNT = 1,
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
         this.instance = instance;
+
+        this._initPositioningStrategy();
+    },
+
+    _initPositioningStrategy: function() {
+        this._positioningStrategy = new BasePositioningStrategy();
+    },
+
+    getPositioningStrategy: function() {
+        return this._positioningStrategy;
     },
 
     getAppointmentMinSize: function() {
