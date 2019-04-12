@@ -2,7 +2,6 @@ var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
     List = require("../list"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
-    themes = require("../themes"),
     noop = require("../../core/utils/common").noop,
     isDate = require("../../core/utils/type").isDate,
     extend = require("../../core/utils/extend").extend,
@@ -42,22 +41,9 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        var result = extend(popupConfig, {
+        return extend(popupConfig, {
             width: this._getPopupWidth()
         });
-
-        if(themes.isAndroid5()) {
-            extend(true, result, {
-                position: {
-                    offset: {
-                        h: -16,
-                        v: -10
-                    }
-                }
-            });
-        }
-
-        return result;
     },
 
     useCurrentDateByDefault: function() {
@@ -65,13 +51,7 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getPopupWidth: function() {
-        var result = this.dateBox.$element().outerWidth();
-
-        if(themes.isAndroid5()) {
-            result += 32;
-        }
-
-        return result;
+        return this.dateBox.$element().outerWidth();
     },
 
     popupShowingHandler: function() {
