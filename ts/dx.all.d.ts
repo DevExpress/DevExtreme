@@ -9366,7 +9366,7 @@ declare module DevExpress.exporter {
         column?: DevExpress.ui.dxDataGridColumn;
         /** @name ExcelDataGridCell.data */
         data?: any;
-        /** @name ExcelDataGridCell.groupIndex */
+        /** @name ExcelDataGridCell.rowGroupIndex */
         groupIndex?: number;
         /** @name ExcelDataGridCell.groupSummaryItems */
         groupSummaryItems?: Array<{ name?: string, value?: any }>;
