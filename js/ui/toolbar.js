@@ -7,16 +7,12 @@ var $ = require("../core/renderer"),
     iteratorUtils = require("../core/utils/iterator"),
     ActionSheetStrategy = require("./toolbar/ui.toolbar.strategy.action_sheet"),
     DropDownMenuStrategy = require("./toolbar/ui.toolbar.strategy.drop_down_menu"),
-    ListBottomStrategy = require("./toolbar/ui.toolbar.strategy.list_bottom"),
-    ListTopStrategy = require("./toolbar/ui.toolbar.strategy.list_top"),
     ToolbarBase = require("./toolbar/ui.toolbar.base"),
     ChildDefaultTemplate = require("./widget/child_default_template");
 
 var STRATEGIES = {
     actionSheet: ActionSheetStrategy,
-    dropDownMenu: DropDownMenuStrategy,
-    listBottom: ListBottomStrategy,
-    listTop: ListTopStrategy
+    dropDownMenu: DropDownMenuStrategy
 };
 
 var TOOLBAR_AUTO_HIDE_ITEM_CLASS = "dx-toolbar-item-auto-hide",
@@ -50,7 +46,7 @@ var Toolbar = ToolbarBase.inherit({
             * @name dxToolbarOptions.submenuType
             * @type string
             * @default 'dropDownMenu'
-            * @acceptValues 'actionSheet'|'listTop'|'listBottom'|'dropDownMenu'
+            * @acceptValues 'actionSheet'|'dropDownMenu'
             * @hidden
             */
             submenuType: "dropDownMenu",
@@ -168,30 +164,6 @@ var Toolbar = ToolbarBase.inherit({
                 },
                 options: {
                     submenuType: "actionSheet"
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    submenuType: "dropDownMenu"
-                }
-            },
-            {
-                device: function() {
-                    return themes.isWin8(themeName);
-                },
-                options: {
-                    submenuType: "listBottom"
-                }
-            },
-            {
-                device: function() {
-                    return themes.isWin10(themeName);
-                },
-                options: {
-                    submenuType: "listTop"
                 }
             }
         ]);
@@ -322,12 +294,6 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _requireDropDownStrategy: function() {
-        var strategyName = this.option("submenuType");
-
-        if((strategyName === "listBottom" || strategyName === "listTop") && this.option("renderAs") === "topToolbar") {
-            return true;
-        }
-
         var items = this.option("items") || [],
             result = false;
 

@@ -3,7 +3,6 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     DropDownList = require("./drop_down_editor/ui.drop_down_list"),
-    themes = require("./themes"),
     Deferred = require("../core/utils/deferred").Deferred;
 
 var AUTOCOMPLETE_CLASS = "dx-autocomplete",
@@ -115,24 +114,6 @@ var Autocomplete = DropDownList.inherit({
             * @inheritdoc
             */
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    popupPosition: {
-                        offset: {
-                            h: -16,
-                            v: -8
-                        }
-                    }
-                }
-            }
-        ]);
     },
 
     /**

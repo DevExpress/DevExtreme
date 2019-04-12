@@ -94,14 +94,6 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isWin8(themeName) || themes.isWin10(themeName);
-                },
-                options: {
-                    _animatingSegmentCount: 5
-                }
-            },
-            {
-                device: function() {
                     return themes.isIos7(themeName);
                 },
                 options: {
@@ -110,7 +102,7 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial(themeName) || themes.isAndroid5(themeName);
+                    return themes.isMaterial(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 2,

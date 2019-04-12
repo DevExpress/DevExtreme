@@ -135,7 +135,6 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             columnChooserOptions = that.option("columnChooser"),
             themeName = themes.current(),
             isGenericTheme = themes.isGeneric(themeName),
-            isAndroid5Theme = themes.isAndroid5(themeName),
             isMaterial = themes.isMaterial(themeName),
             dxPopupOptions = {
                 visible: false,
@@ -144,7 +143,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 dragEnabled: true,
                 resizeEnabled: true,
                 toolbarItems: [
-                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isAndroid5Theme || isMaterial ? "before" : "center" }
+                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isMaterial ? "before" : "center" }
                 ],
                 position: that.getController("columnChooser").getPosition(),
                 width: columnChooserOptions.width,

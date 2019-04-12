@@ -6,8 +6,7 @@ var $ = require("../../core/renderer"),
     inkRipple = require("../widget/utils.ink_ripple"),
     HierarchicalCollectionWidget = require("../hierarchical_collection/ui.hierarchical_collection_widget"),
     MenuBaseEditStrategy = require("./ui.menu_base.edit.strategy"),
-    devices = require("../../core/devices"),
-    themes = require("../themes");
+    devices = require("../../core/devices");
 
 var DX_MENU_CLASS = "dx-menu",
     DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + "-no-icons",
@@ -254,19 +253,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @default true
             */
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    useInkRipple: true
-                }
-            }
-        ]);
     },
 
     _activeStateUnit: "." + ITEM_CLASS,

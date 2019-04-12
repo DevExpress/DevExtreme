@@ -23,8 +23,6 @@ require("./themes/generic.darkviolet");
 require("./themes/generic.greenmist");
 require("./themes/material");
 require("./themes/ios");
-require("./themes/android");
-require("./themes/win");
 
 function getThemePart(theme, path) {
     var _theme = theme;

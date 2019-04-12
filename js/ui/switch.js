@@ -123,14 +123,6 @@ var Switch = Editor.inherit({
                 }
             },
             {
-                device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    useInkRipple: true
-                }
-            },
-            {
                 device: function(device) {
                     return themes.isIos7(themeName);
                 },

@@ -14,7 +14,6 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
-    themes = require("../themes"),
     ChildDefaultTemplate = require("../widget/child_default_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
     DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
@@ -243,14 +242,6 @@ var DropDownList = DropDownEditor.inherit({
                 },
                 options: {
                     popupPosition: { offset: { v: -6 } }
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    popupWidthExtension: 32
                 }
             },
             {
