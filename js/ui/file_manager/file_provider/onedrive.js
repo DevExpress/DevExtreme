@@ -10,6 +10,13 @@ const REST_API_URL = "https://graph.microsoft.com/";
 const DRIVE_API_URL = REST_API_URL + "v1.0/drive";
 const APP_ROOT_URL = DRIVE_API_URL + "/special/approot";
 
+/**
+* @name OneDriveFileProvider
+* @inherits FileProvider
+* @type object
+* @module ui/file_manager/file_provider/onedrive
+* @export default
+*/
 class OneDriveFileProvider extends FileProvider {
 
     constructor(options) {
