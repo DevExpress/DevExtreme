@@ -176,7 +176,7 @@ module.exports = {
                     if(row.rowType === "header") {
                         $row.addClass(HEADER_ROW_CLASS);
                         if(!this._isLegacyKeyboardNavigation()) {
-                            registerKeyboardAction(this, $row, "td", this._handleActionKeyDown.bind(this));
+                            registerKeyboardAction("headerColumns", this, $row, "td", this._handleActionKeyDown.bind(this));
                         }
                     }
 

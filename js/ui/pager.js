@@ -14,7 +14,8 @@ var $ = require("../core/renderer"),
     SelectBox = require("./select_box"),
     NumberBox = require("./number_box"),
     eventUtils = require("../events/utils"),
-    registerKeyboardAction = require("./shared/accessibility").registerKeyboardAction;
+    registerKeyboardAction = require("./shared/accessibility").registerKeyboardAction,
+    setTabIndex = require("./shared/accessibility").setTabIndex;
 
 var PAGES_LIMITER = 4,
     PAGER_CLASS = 'dx-pager',
@@ -211,12 +212,6 @@ var Pager = Widget.inherit({
         page.select(true);
         that.selectedPage = page;
 
-        if(!that.option("useLegacyKeyboardNavigation")) {
-            let tabIndex = that.option("tabindex") || 0;
-            that.selectedPage.element().attr("tabindex", tabIndex);
-            that._updatePagesTabIndices.apply(that);
-        }
-
         if(nextPage && nextPage.value() - value > 1) {
             if(page.index !== 0) {
                 prevPage.value(value + 1);
@@ -306,7 +301,7 @@ var Pager = Widget.inherit({
 
             eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, that._pageClickHandler);
 
-            registerKeyboardAction(that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
+            registerKeyboardAction("pager", that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
         }
 
         for(var i = 0; i < pagesLength; i++) {
@@ -318,6 +313,8 @@ var Pager = Widget.inherit({
                 "role": "button",
                 "label": "Page " + page.value()
             }, page.element());
+
+            setTabIndex(that, page.element());
 
             if(pages[i + 1] && pages[i + 1].value() - page.value() > 1) {
                 $separator = $("<div>").text(". . .").addClass(PAGER_PAGE_SEPARATOR_CLASS);
@@ -371,7 +368,7 @@ var Pager = Widget.inherit({
             clickAction({ event: e });
         });
 
-        registerKeyboardAction(that, $pageCount, undefined, clickAction);
+        registerKeyboardAction("pager", that, $pageCount, undefined, clickAction);
 
         $pageCount.appendTo($container);
 
@@ -449,7 +446,7 @@ var Pager = Widget.inherit({
             clickPagesSizeAction({ event: e });
         });
 
-        registerKeyboardAction(that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
+        registerKeyboardAction("pager", that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
 
         for(i = 0; i < pagesSizesLength; i++) {
             $pageSize = $('<div>')
@@ -460,6 +457,8 @@ var Pager = Widget.inherit({
                 "role": "button",
                 "label": "Display " + pageSizes[i] + " items on page"
             }, $pageSize);
+
+            setTabIndex(that, $pageSize);
 
             if(currentPageSize === pageSizes[i]) {
                 $pageSize.addClass(PAGER_SELECTION_CLASS);
@@ -555,12 +554,14 @@ var Pager = Widget.inherit({
                 clickAction({ event: e });
             });
 
-            registerKeyboardAction(that, $button, undefined, clickAction);
+            registerKeyboardAction("pager", that, $button, undefined, clickAction);
 
             that.setAria({
                 "role": "button",
                 "label": direction === "prev" ? "Previous page" : " Next page"
             }, $button);
+
+            setTabIndex(that, $button);
 
             if(that.option("rtlEnabled")) {
                 $button.addClass(direction === "prev" ? PAGER_NEXT_BUTTON_CLASS : PAGER_PREV_BUTTON_CLASS);
@@ -699,7 +700,7 @@ var Pager = Widget.inherit({
         if(this._$pagesChooser) {
             eventsEngine.off(this._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], this.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, this._pageClickHandler);
 
-            registerKeyboardAction(this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
+            registerKeyboardAction("pager", this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
         }
 
         this.callBase();

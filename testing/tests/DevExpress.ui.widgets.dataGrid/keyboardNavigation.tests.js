@@ -5,6 +5,7 @@ QUnit.testStart(function() {
 </div>';
 
     $("#qunit-fixture").html(markup);
+    // $(markup).appendTo("body");
 });
 
 import "common.css!";
@@ -101,8 +102,8 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
     return result;
 }
 
-function fireKeyDown($target, key) {
-    $target.trigger(eventUtils.createEvent("keydown", { target: $target.get(0), key: key }));
+function fireKeyDown($target, key, ctrlKey) {
+    $target.trigger(eventUtils.createEvent("keydown", { target: $target.get(0), key: key, ctrlKey: ctrlKey }));
 }
 
 function focusCell(columnIndex, rowIndex) {
@@ -8614,7 +8615,7 @@ QUnit.module("Keyboard navigation accessibility", {
         }, this.options);
 
         setupDataGridModules(this,
-            ["data", "columns", "columnHeaders", "sorting", "headerFilter", "filterSync", "filterPanel", "rows", "editorFactory", "gridView", "editing", "selection", "focus", "keyboardNavigation", "validating", "masterDetail"],
+            ["data", "columns", "columnHeaders", "sorting", "pager", "headerFilter", "filterSync", "filterPanel", "filterRow", "rows", "editorFactory", "gridView", "editing", "selection", "focus", "keyboardNavigation", "validating", "masterDetail"],
             { initViews: true }
         );
     },
@@ -8983,5 +8984,65 @@ QUnit.module("Keyboard navigation accessibility", {
         fireKeyDown($(":focus"), "Tab");
         // assert
         assert.ok($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+    });
+
+    testInDesktop("View selector", function(assert) {
+        var $element;
+
+        this.options = {
+            headerFilter: { visible: true },
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            pager: {
+                allowedPageSizes: [1, 2],
+                showPageSizeSelector: true,
+                showNavigationButtons: true,
+                visible: true
+            }
+        };
+
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        $element = $(".dx-datagrid-headers .dx-header-row > td").first();
+        $element.focus();
+
+        // act
+        fireKeyDown($(":focus"), "ArrowDown", true);
+        // assert
+        assert.ok($(":focus").is(".dx-datagrid-filter-row .dx-texteditor-input"), "focused element");
+        assert.equal($(":focus").index(), 0, "focused element index");
+
+        // act
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
+        fireKeyDown($(":focus"), "ArrowUp", true);
+        // assert
+        assert.ok($(":focus").is(".dx-datagrid-filter-row .dx-texteditor-input"), "focused element");
+        assert.equal($(":focus").index(), 0, "focused element index");
+
+        // act
+        fireKeyDown($(":focus"), "ArrowUp", true);
+        // assert
+        assert.ok($(":focus").is(".dx-header-row > td"), "focused element");
+        assert.equal($(":focus").index(), 0, "focused element index");
+
+        // act
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
+        fireKeyDown($(":focus"), "ArrowDown", true);
+        // assert
+        assert.ok($(":focus").is(".dx-datagrid-filter-panel .dx-icon-filter"), "focused element");
+
+        // act
+        fireKeyDown($(":focus"), "ArrowDown", true);
+        // assert
+        assert.ok($(":focus").is(".dx-datagrid-pager .dx-page-size[tabindex]"), "focused element");
+
+        // act
+        fireKeyDown($(":focus"), "ArrowUp", true);
+        // assert
+        assert.ok($(":focus").is(".dx-datagrid-filter-panel .dx-icon-filter"), "focused element");
     });
 });
