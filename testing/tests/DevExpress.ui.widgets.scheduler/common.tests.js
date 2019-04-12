@@ -3784,6 +3784,18 @@ QUnit.testStart(function() {
         assert.ok(this.instance.$element().hasClass("dx-scheduler-small"), "Scheduler has 'dx-scheduler-small' css class");
     });
 
+    QUnit.test("Scheduler should have adaptive css class depend on adaptivityEnabled option", function(assert) {
+        this.createInstance({
+            width: 300,
+            adaptivityEnabled: true
+        });
+
+        assert.ok(this.instance.$element().hasClass("dx-scheduler-adaptive"), "Scheduler has 'dx-scheduler-adaptive' css class");
+
+        this.instance.option("adaptivityEnabled", false);
+
+        assert.notOk(this.instance.$element().hasClass("dx-scheduler-adaptive"), "Scheduler hasn't 'dx-scheduler-adaptive' css class");
+    });
 
     QUnit.test("Scheduler should have a small css class", function(assert) {
         this.createInstance({
