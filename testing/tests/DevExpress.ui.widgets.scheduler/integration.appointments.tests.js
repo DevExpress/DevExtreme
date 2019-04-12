@@ -72,6 +72,7 @@ QUnit.module("Integration: Appointments", {
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
+        document.activeElement && document.activeElement.blur();
     },
     checkItemDataInDropDownTemplate: function(assert, dataSource, currentDate) {
         this.createInstance({
