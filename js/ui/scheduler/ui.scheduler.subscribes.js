@@ -519,6 +519,10 @@ const subscribes = {
         this.resizePopup();
     },
 
+    checkPopupSize: function() {
+        this.checkPopupSize();
+    },
+
     getField: function(field, obj) {
         if(!typeUtils.isDefined(this._dataAccessors.getter[field])) {
             return;

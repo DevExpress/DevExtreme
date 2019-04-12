@@ -2261,6 +2261,9 @@ const Scheduler = Widget.inherit({
                     container: options.container
                 });
             }),
+            onShown: () => {
+                this.checkPopupSize();
+            },
             defaultOptionsRules: [
                 {
                     device: function() {
@@ -2908,7 +2911,9 @@ const Scheduler = Widget.inherit({
 
     resizePopup: function() {
         domUtils.triggerResizeEvent(this._popup.$element());
+    },
 
+    checkPopupSize: function() {
         // NOTE: WA because of T731123
         this._setPopupContentMaxHeight();
     },

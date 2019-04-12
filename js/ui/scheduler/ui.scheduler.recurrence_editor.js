@@ -229,6 +229,7 @@ const RecurrenceEditor = Editor.inherit({
             onValueChanged: (args)=> {
                 this._valueChangedHandler(args);
                 this.invoke("resizePopup");
+                this.invoke("checkPopupSize");
             }
         });
 
