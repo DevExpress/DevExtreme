@@ -1,7 +1,7 @@
 import ajax from "../../../core/utils/ajax";
 import { Deferred } from "../../../core/utils/deferred";
 import { FileProvider } from "./file_provider";
-import ArrayFileProvider from "./file_provider.array";
+import ArrayFileProvider from "./array";
 
 class AjaxFileProvider extends FileProvider {
 

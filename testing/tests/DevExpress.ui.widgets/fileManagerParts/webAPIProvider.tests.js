@@ -1,7 +1,7 @@
 import "ui/file_manager";
 import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
-import WebApiFileProvider from "ui/file_manager/file_provider/file_provider.webapi";
+import WebApiFileProvider from "ui/file_manager/file_provider/webapi";
 import ajaxMock from "../../../helpers/ajaxMock.js";
 import { when } from "core/utils/deferred";
 
