@@ -3,9 +3,10 @@ import { noop } from "../../../core/utils/common";
 import Guid from "../../../core/guid";
 import { getWindow } from "../../../core/utils/window";
 import { each } from "../../../core/utils/iterator";
+import { Deferred } from "../../../core/utils/deferred";
+import { deserializeDate } from "../../../core/utils/date_serialization";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
-import { Deferred } from "../../../core/utils/deferred";
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
@@ -185,7 +186,7 @@ class WebApiFileProvider extends FileProvider {
             if(!itemType || isFolder === useFolders) {
                 const item = new FileManagerItem(path, entry.name, isFolder);
                 item.length = entry.size || 0;
-                item.lastWriteTime = entry.lastWriteTime;
+                item.lastWriteTime = deserializeDate(entry.lastWriteTime);
                 result.push(item);
             }
         });
