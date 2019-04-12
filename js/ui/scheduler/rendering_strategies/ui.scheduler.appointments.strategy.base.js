@@ -25,7 +25,6 @@ var APPOINTMENT_MIN_COUNT = 1,
 
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
-    COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
 
     ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET = 35,
 
@@ -637,11 +636,13 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     getCompactAppointmentLeftOffset: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return (this._defaultWidth - DROP_DOWN_BUTTON_ADAPTIVE_SIZE) / 2;
-        }
+        return this.getPositioningStrategy().getCompactAppointmentLeftOffset();
 
-        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+        // if(this.instance.fire("isAdaptive")) {
+        //     return (this._defaultWidth - DROP_DOWN_BUTTON_ADAPTIVE_SIZE) / 2;
+        // }
+
+        // return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
     getAppointmentDataCalculator: noop,

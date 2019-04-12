@@ -17,6 +17,10 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     getCompactAppointmentTopOffset() {
         return this.getRenderingStrategy().getDefaultCellHeight() - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
     }
+
+    getCompactAppointmentLeftOffset() {
+        return (this.getRenderingStrategy().getDefaultCellWidth() - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET) / 2;
+    }
 }
 
 module.exports = AdaptivePositioningStrategy;

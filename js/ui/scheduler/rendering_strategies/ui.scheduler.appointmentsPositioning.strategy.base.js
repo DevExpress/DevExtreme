@@ -29,6 +29,10 @@ class AppointmentPositioningStrategy {
     getCompactAppointmentTopOffset() {
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     }
+
+    getCompactAppointmentLeftOffset() {
+        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+    }
 }
 
 module.exports = AppointmentPositioningStrategy;
