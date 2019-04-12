@@ -34,7 +34,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             activeStateEnabled: true,
             hoverStateEnabled: true,
             indent: 56,
-            childIndent: 36,
+            childIndent: 40,
             callOverlayRenderShading: true
         };
 
