@@ -42,6 +42,8 @@ export class SchedulerTestWrapper {
             getAppointmentCount: () => this.appointments.getAppointments().length,
             getAppointment: (index = 0) => this.appointments.getAppointments().eq(index),
             getTitleText: (index = 0) => this.appointments.getAppointment(index).find(".dx-scheduler-appointment-title").text(),
+            getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
+            getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
 
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();

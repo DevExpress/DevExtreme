@@ -6,8 +6,12 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
+
     APPOINTMENT_MIN_WIDTH = 5,
     APPOINTMENT_DEFAULT_WIDTH = 50,
+
+    ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30,
+
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
@@ -258,7 +262,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentMaxWidth: function() {
-        var offset = devices.current().deviceType === "desktop" ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET,
+        var offset = devices.current().deviceType === "desktop" && !this.instance.fire("isAdaptive") ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET,
             width = this._defaultWidth - offset;
 
         return width > 0 ? width : this.getAppointmentMinSize();
@@ -325,8 +329,24 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         };
     },
 
+    _getAppointmentMinCount: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return 0;
+        }
+
+        this.callBase();
+    },
+
     _calculateDynamicAppointmentCountPerCell: function() {
-        return Math.floor(this._getAppointmentMaxWidth() / APPOINTMENT_DEFAULT_WIDTH);
+        return Math.floor(this._getAppointmentMaxWidth() / this._getAppointmentDefaultWidth());
+    },
+
+    _getAppointmentDefaultWidth: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
+        }
+
+        return APPOINTMENT_DEFAULT_WIDTH;
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {

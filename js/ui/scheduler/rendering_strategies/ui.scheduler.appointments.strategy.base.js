@@ -23,6 +23,8 @@ var APPOINTMENT_MIN_COUNT = 1,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
 
+    ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET = 35,
+
     DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
 
     DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28,
@@ -769,9 +771,15 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultOffset: function() {
-        return this._isCompactTheme()
-            ? COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET
-            : this.instance.option("_appointmentOffset");
+        if(this.instance.fire("isAdaptive")) {
+            return ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET;
+        }
+
+        if(this._isCompactTheme()) {
+            return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
+        }
+
+        return this.instance.option("_appointmentOffset");
     },
 
     _getAppointmentDefaultHeight: function() {
