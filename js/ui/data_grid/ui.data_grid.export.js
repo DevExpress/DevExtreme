@@ -243,7 +243,7 @@ exports.DataProvider = Class.inherit({
                                 result.cellSourceData.totalSummaryItemName = value.name;
                                 result.value = dataGridCore.getSummaryText(value, this._options.summaryTexts);
                             } else {
-                                result.cellSourceData = undefined;
+                                result.cellSourceData.value = undefined;
                             }
                         }
                         break;
@@ -264,7 +264,7 @@ exports.DataProvider = Class.inherit({
                                 }
                                 result.value = value;
                             } else {
-                                result.cellSourceData = undefined;
+                                result.cellSourceData.value = undefined;
                             }
                         }
                         break;
