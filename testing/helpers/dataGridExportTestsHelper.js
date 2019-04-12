@@ -96,6 +96,7 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
                             assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${i}`);
                             assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${i}`);
                             assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${i}`);
+                            assert.strictEqual(actualColumn.groupIndex, expectedColumn.groupIndex, `column.groupIndex, ${i}`);
                         }
 
                         const actualRow = actualArgsItem.gridCell.row;
