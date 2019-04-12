@@ -19,7 +19,7 @@ class AppointmentPositioningStrategy {
     getDropDownAppointmentWidth(intervalCount, isAllDay) {
         if(isAllDay || !typeUtils.isDefined(isAllDay)) {
             var widthInPercents = 75;
-            return widthInPercents * this.getDefaultCellWidth() / 100;
+            return widthInPercents * this.getRenderingStrategy().getDefaultCellWidth() / 100;
         } else {
             return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
         }
