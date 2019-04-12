@@ -11,6 +11,7 @@ import KeyboardProcessor from "../widget/ui.keyboard_processor";
 import eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import { noop } from "../../core/utils/common";
+import { selectView } from "../shared/accessibility";
 
 var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_CLASS = "edit-form",
@@ -1096,7 +1097,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 case "upArrow":
                 case "downArrow":
-                    this._upDownKeysHandler(e, isEditing);
+                    if(e.ctrl) {
+                        selectView("rowsView", this, originalEvent);
+                    } else {
+                        this._upDownKeysHandler(e, isEditing);
+                    }
                     break;
 
                 case "pageUp":
