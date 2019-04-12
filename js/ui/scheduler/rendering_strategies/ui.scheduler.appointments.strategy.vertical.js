@@ -334,7 +334,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             return 0;
         }
 
-        this.callBase();
+        return this.callBase();
     },
 
     _calculateDynamicAppointmentCountPerCell: function() {
