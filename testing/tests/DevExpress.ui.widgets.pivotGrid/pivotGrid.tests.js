@@ -1736,7 +1736,7 @@ QUnit.test("Sorting by Summary should not be allowd if paginate is true", functi
     // act
     $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers td').last().trigger('dxcontextmenu');
 
-    assert.deepEqual(contextMenuArgs[0].items.map(i => i.text), ["Show Field Chooser"], "context menu items");
+    assert.deepEqual(contextMenuArgs[0].items.map(function(i) { return i.text; }), ["Show Field Chooser"], "context menu items");
 });
 
 QUnit.test("Sorting by Summary context menu", function(assert) {
@@ -2298,7 +2298,7 @@ QUnit.test("expand All should not be allowed if paginate true", function(assert)
     $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers .dx-pivotgrid-collapsed').trigger('dxcontextmenu');
 
     // assert
-    assert.deepEqual(contextMenuArgs[0].items.map(item => item.text), ["Show Field Chooser"], "context menu items");
+    assert.deepEqual(contextMenuArgs[0].items.map(function(item) { return item.text; }), ["Show Field Chooser"], "context menu items");
 });
 
 QUnit.test("expand All items for field in group", function(assert) {

@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import { extend } from "../../core/utils/extend";
 import typeUtils from "../../core/utils/type";
-import { when } from "../../core/utils/deferred";
+import { when, Deferred } from "../../core/utils/deferred";
 
 import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
@@ -25,7 +25,7 @@ import WebApiFileProvider from "./file_provider/file_provider.webapi";
 
 const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
-const FILE_MANAGER_DIRS_TREE_CLASS = FILE_MANAGER_CLASS + "-dirs-tree";
+const FILE_MANAGER_DIRS_PANEL_CLASS = FILE_MANAGER_CLASS + "-dirs-panel";
 const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator";
 const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + "-inactive-area";
 const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-editing-container";
@@ -40,7 +40,7 @@ class FileManager extends Widget {
         super._initMarkup();
 
         this._provider = this._getFileProvider();
-        this._currentFolder = new FileManagerItem("", "", true);
+        this._currentFolder = null;
 
         this._commandManager = new FileManagerCommandManager(this.option("permissions"));
 
@@ -111,7 +111,7 @@ class FileManager extends Widget {
             onCurrentFolderChanged: this._onFilesTreeViewCurrentFolderChanged.bind(this),
             onClick: () => this._setItemsViewAreaActive(false)
         });
-        this._filesTreeView.$element().addClass(FILE_MANAGER_DIRS_TREE_CLASS);
+        this._filesTreeView.$element().addClass(FILE_MANAGER_DIRS_PANEL_CLASS);
     }
 
     _createItemView(viewMode) {
@@ -260,6 +260,11 @@ class FileManager extends Widget {
 
     _getItemViewItems() {
         const path = this.getCurrentFolderPath();
+
+        if(path === null) {
+            return new Deferred().promise();
+        }
+
         const options = this.option("itemView");
         const itemType = options.showFolders ? "" : "file";
         let result = this._provider.getItems(path, itemType);
@@ -480,11 +485,11 @@ class FileManager extends Widget {
     }
 
     getCurrentFolderPath() {
-        return this._currentFolder.relativeName;
+        return this.getCurrentFolder() ? this.getCurrentFolder().relativeName : null;
     }
 
     setCurrentFolder(folder) {
-        const newPath = folder.relativeName;
+        const newPath = folder ? folder.relativeName : null;
         if(newPath === this.getCurrentFolderPath()) {
             return;
         }
@@ -492,7 +497,7 @@ class FileManager extends Widget {
         this._currentFolder = folder;
         this._filesTreeView.setCurrentFolderPath(newPath);
         this._loadItemViewData();
-        this._breadcrumbs.option("path", newPath);
+        this._breadcrumbs.option("path", newPath || "");
     }
 
     getCurrentFolder() {

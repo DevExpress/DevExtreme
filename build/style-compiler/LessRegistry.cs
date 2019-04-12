@@ -181,6 +181,7 @@ namespace StyleCompiler
                 "drawer",
                 "card",
                 "htmlEditor",
+                "floatingActionButton",
                 "fileManager",
                 "diagram"
             });

@@ -536,7 +536,8 @@ QUnit.module("Lifecycle", environment, function() {
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], {
             some: "options",
             image: {
-                location: "full"
+                width: 30,
+                height: 30
             },
             font: {
                 color: "#333333",

@@ -164,6 +164,13 @@ interface JQuery {
     dxFilterBuilder(options: DevExpress.ui.dxFilterBuilderOptions): JQuery;
 }
 interface JQuery {
+    dxFloatingActionButton(): JQuery;
+    dxFloatingActionButton(options: "instance"): DevExpress.ui.dxFloatingActionButton;
+    dxFloatingActionButton(options: string): any;
+    dxFloatingActionButton(options: string, ...params: any[]): any;
+    dxFloatingActionButton(options: DevExpress.ui.dxFloatingActionButtonOptions): JQuery;
+}
+interface JQuery {
     dxForm(): JQuery;
     dxForm(options: "instance"): DevExpress.ui.dxForm;
     dxForm(options: string): any;
@@ -2323,6 +2330,10 @@ declare module DevExpress.viz {
         font?: Font;
         /** @name dxChart.Options.commonAxisSettings.title.margin */
         margin?: number;
+        /** @name dxChart.Options.commonAxisSettings.title.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
+        /** @name dxChart.Options.commonAxisSettings.title.wordWrap */
+        wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /** @name dxChart.Options.commonPaneSettings */
     export interface dxChartCommonPaneSettings {
@@ -2566,12 +2577,14 @@ declare module DevExpress.viz {
         color?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
         customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.description */
+        description?: string;
         /** @name dxChartCommonAnnotationConfig.font */
         font?: Font;
         /** @name dxChartCommonAnnotationConfig.height */
         height?: number;
         /** @name dxChartCommonAnnotationConfig.image */
-        image?: string | { height?: number, location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string, width?: number };
+        image?: string | { height?: number, url?: string, width?: number };
         /** @name dxChartCommonAnnotationConfig.opacity */
         opacity?: number;
         /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
@@ -2582,10 +2595,12 @@ declare module DevExpress.viz {
         series?: string;
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name dxChartCommonAnnotationConfig.text */
+        text?: string;
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.type */
-        type?: 'label' | 'image';
+        type?: 'text' | 'image';
         /** @name dxChartCommonAnnotationConfig.value */
         value?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.width */
@@ -6474,6 +6489,18 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilderField.trueText */
         trueText?: string;
     }
+    /** @name dxFloatingActionButton.Options */
+    export interface dxFloatingActionButtonOptions extends WidgetOptions<dxFloatingActionButton> {
+        /** @name dxFloatingActionButton.Options.icon */
+        icon?: string;
+        /** @name dxFloatingActionButton.Options.onClick */
+        onClick?: ((e: { event?: event, component?: dxFloatingActionButton, element?: DevExpress.core.dxElement }) => any);
+    }
+    /** @name dxFloatingActionButton */
+    export class dxFloatingActionButton extends Widget {
+        constructor(element: Element, options?: dxFloatingActionButtonOptions)
+        constructor(element: JQuery, options?: dxFloatingActionButtonOptions)
+    }
     /** @name dxForm.Options */
     export interface dxFormOptions extends WidgetOptions<dxForm> {
         /** @name dxForm.Options.alignItemLabels */
@@ -9229,6 +9256,8 @@ declare module DevExpress {
         defaultCurrency?: string;
         /** @name globalConfig.editorStylingMode */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
+        /** @name globalConfig.floatingActionButtonConfig */
+        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxActionButtonCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
         /** @name globalConfig.forceIsoDateParsing */
         forceIsoDateParsing?: boolean;
         /** @name globalConfig.oDataFilterToLower */

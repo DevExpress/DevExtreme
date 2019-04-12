@@ -8,7 +8,7 @@ import CheckBox from "../check_box";
 import utils from "../filter_builder/utils";
 import { when, Deferred } from "../../core/utils/deferred";
 import inflector from "../../core/utils/inflector";
-import { normalizeKeyName } from "../../events/utils";
+import { registerKeyboardAction } from "../shared/accessibility";
 
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
@@ -69,12 +69,11 @@ var FilterPanelView = modules.View.inherit({
         var that = this,
             $element = $("<div>").addClass("dx-icon-filter");
 
-        eventsEngine.on($element, "click", that._showFilterBuilder.bind(that));
-        if(!this.option("useLegacyKeyboardNavigation")) {
-            eventsEngine.on($element, "keydown", e => that._processKeyDown(e, that._showFilterBuilder.bind(that)));
-        }
+        eventsEngine.on($element, "click", () => that._showFilterBuilder());
 
-        this._addTabIndexToElement($element);
+        registerKeyboardAction(that, $element, undefined, () => that._showFilterBuilder());
+
+        that._addTabIndexToElement($element);
 
         return $element;
     },
@@ -103,12 +102,12 @@ var FilterPanelView = modules.View.inherit({
             filterText = that.option("filterPanel.texts.createFilter");
             $textElement.text(filterText);
         }
-        eventsEngine.on($textElement, "click", that._showFilterBuilder.bind(that));
-        if(!this.option("useLegacyKeyboardNavigation")) {
-            eventsEngine.on($textElement, "keydown", e => that._processKeyDown(e, that._showFilterBuilder.bind(that)));
-        }
 
-        this._addTabIndexToElement($textElement);
+        eventsEngine.on($textElement, "click", () => that._showFilterBuilder());
+
+        registerKeyboardAction(that, $textElement, undefined, () => that._showFilterBuilder());
+
+        that._addTabIndexToElement($textElement);
 
         return $textElement;
     },
@@ -125,21 +124,12 @@ var FilterPanelView = modules.View.inherit({
                 .text(that.option("filterPanel.texts.clearFilter"));
 
         eventsEngine.on($element, "click", clearFilterValue);
-        if(!this.option("useLegacyKeyboardNavigation")) {
-            eventsEngine.on($element, "keydown", e => that._processKeyDown(e, clearFilterValue));
-        }
+
+        registerKeyboardAction(this, $element, undefined, clearFilterValue);
 
         that._addTabIndexToElement($element);
 
         return $element;
-    },
-
-    _processKeyDown: function(event, action) {
-        var keyName = normalizeKeyName(event);
-
-        if(keyName === "enter" || keyName === "space") {
-            action();
-        }
     },
 
     _addTabIndexToElement: function($element) {
