@@ -6155,7 +6155,7 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.onItemClick */
         onItemClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
         /** @name dxDropDownButton.Options.onSelectionChanged */
-        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
+        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
@@ -6177,7 +6177,6 @@ declare module DevExpress.ui {
         close(): Promise<void> & JQueryPromise<void>;
         /** @name dxDropDownButton.open() */
         open(): Promise<void> & JQueryPromise<void>;
-
         /** @name dxDropDownButton.toggle() */
         toggle(): Promise<void> & JQueryPromise<void>;
         /** @name dxDropDownButton.toggle(visibility) */

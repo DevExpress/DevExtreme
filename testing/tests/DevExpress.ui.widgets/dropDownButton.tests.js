@@ -767,8 +767,8 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(Object.keys(e).length, 4, "event has 4 properties");
         assert.strictEqual(e.component, dropDownButton, "component is correct");
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
-        assert.strictEqual(e.oldSelectedItem, 2, "oldSelectedItem is correct");
-        assert.strictEqual(e.selectedItem, 1, "selectedItem is correct");
+        assert.strictEqual(e.previousItem, 2, "previousItem is correct");
+        assert.strictEqual(e.item, 1, "item is correct");
     });
 
     QUnit.test("onSelectionChanged event with data expressions", (assert) => {
@@ -792,8 +792,8 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(Object.keys(e).length, 4, "event has 4 properties");
         assert.strictEqual(e.component, dropDownButton, "component is correct");
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
-        assert.deepEqual(e.oldSelectedItem, items[1], "oldSelectedItem is correct");
-        assert.deepEqual(e.selectedItem, items[0], "selectedItem is correct");
+        assert.deepEqual(e.previousItem, items[1], "previousItem is correct");
+        assert.deepEqual(e.item, items[0], "item is correct");
     });
 });
 

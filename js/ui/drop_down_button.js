@@ -138,8 +138,8 @@ let DropDownButton = Widget.inherit({
              * @type function(e)|string
              * @extends Action
              * @type_function_param1 e:object
-             * @type_function_param1_field4 oldSelectedItem:object
-             * @type_function_param1_field5 selectedItem:object
+             * @type_function_param1_field4 item:object
+             * @type_function_param1_field5 previousItem:object
              * @action
              */
             onSelectionChanged: null,
@@ -286,8 +286,8 @@ let DropDownButton = Widget.inherit({
 
     _fireSelectionChangedAction({ previousValue, value }) {
         this._selectionChangedAction({
-            oldSelectedItem: previousValue,
-            selectedItem: value
+            item: value,
+            previousItem: previousValue
         });
     },
 
@@ -525,13 +525,13 @@ let DropDownButton = Widget.inherit({
 
     _selectedItemKeyChanged(value) {
         this._setListOption("selectedItemKeys", value ? [value] : []);
-        const oldSelectedItem = this.option("selectedItem");
+        const previousItem = this.option("selectedItem");
         this._loadSelectedItem().done((selectedItem) => {
             this._updateActionButton(selectedItem);
 
-            if(this._displayGetter(oldSelectedItem) !== this._displayGetter(selectedItem)) {
+            if(this._displayGetter(previousItem) !== this._displayGetter(selectedItem)) {
                 this._fireSelectionChangedAction({
-                    previousValue: oldSelectedItem,
+                    previousValue: previousItem,
                     value: selectedItem
                 });
             }
