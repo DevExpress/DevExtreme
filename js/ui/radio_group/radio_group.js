@@ -141,7 +141,7 @@ class RadioGroup extends Editor {
     }
 
     _focusTarget() {
-        return this.$element().parent();
+        return this.$element();
     }
 
     _getAriaTarget() {
@@ -279,9 +279,6 @@ class RadioGroup extends Editor {
         this._renderLayout();
         super._render();
         this._updateItemsSize();
-    }
-
-    _renderFocusState() {
     }
 
     _renderInkRipple() {
