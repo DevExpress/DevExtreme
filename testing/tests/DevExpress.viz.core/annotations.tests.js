@@ -1,3 +1,4 @@
+import $ from "jquery";
 import { createAnnotations } from "viz/core/annotations";
 import vizMocks from "../../helpers/vizMocks.js";
 
@@ -52,10 +53,9 @@ QUnit.test("Merge customizeAnnotation result and common+item options", function(
     const itemOptions = {
         x: 10, y: 20,
         type: "image",
-        image: { url: "some_url", width: 10 },
-        customizeAnnotation
+        image: { url: "some_url", width: 10 }
     };
-    const annotation = createAnnotations([itemOptions], { image: { height: 10 } })[0];
+    const annotation = createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -165,20 +165,20 @@ QUnit.test("Draw image inside a plaque without borders", function(assert) {
 QUnit.module("Text annotaion", environment);
 
 QUnit.test("Draw text inside plaque", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "label", text: "some text", font: {} } ], {})[0];
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: {} } ], {})[0];
     this.renderer.g.reset();
 
     annotation.draw(this.widget, this.group);
 
     const annotationGroup = this.renderer.g.getCall(1).returnValue;
-    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-label-annotation" }]);
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-text-annotation" }]);
 
     assert.strictEqual(this.renderer.text.callCount, 1);
     assert.deepEqual(this.renderer.text.firstCall.returnValue.append.firstCall.args, [this.renderer.g.getCall(2).returnValue]);
 });
 
-QUnit.test("Label params", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "label", text: "some text", font: { size: 20 } } ], {})[0];
+QUnit.test("Text params", function(assert) {
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {})[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -187,7 +187,7 @@ QUnit.test("Label params", function(assert) {
 });
 
 QUnit.test("Merge common and item options", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "label", text: "some text", font: { size: 20 } } ], {
+    const annotation = createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {
         font: { color: "red" }
     })[0];
 
@@ -208,13 +208,13 @@ QUnit.test("Get tooltip params", function(assert) {
 });
 
 QUnit.test("Get tooltip format object", function(assert) {
-    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" } }];
+    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" }, description: "item_desc" }];
     const annotation = createAnnotations(items, {})[0];
 
     annotation.draw(this.widget, this.group);
 
     // assert
-    assert.deepEqual(annotation.getTooltipFormatObject(), items[0]);
+    assert.deepEqual(annotation.getTooltipFormatObject(), $.extend({ valueText: "item_desc" }, items[0]));
 });
 
 QUnit.test("customizeTooltip in item", function(assert) {
@@ -234,10 +234,10 @@ QUnit.test("Do not create annotation with wrong type", function(assert) {
     const annotations = createAnnotations([
         { type: "image" },
         { type: "wrongtype" },
-        { type: "label" }
+        { type: "text" }
     ], {});
 
     assert.equal(annotations.length, 2);
     assert.equal(annotations[0].type, "image");
-    assert.equal(annotations[1].type, "label");
+    assert.equal(annotations[1].type, "text");
 });

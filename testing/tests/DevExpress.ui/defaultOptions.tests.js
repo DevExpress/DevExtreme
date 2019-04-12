@@ -10,10 +10,7 @@ var $ = require("jquery"),
 
     ActionSheet = require("ui/action_sheet"),
     Accordion = require("ui/accordion"),
-    Autocomplete = require("ui/autocomplete"),
     Box = require("ui/box"),
-    Button = require("ui/button"),
-    CheckBox = require("ui/check_box"),
     ColorBox = require("ui/color_box"),
     DataGrid = require("ui/data_grid"),
     DateBox = require("ui/date_box"),
@@ -38,15 +35,11 @@ var $ = require("jquery"),
     NavBar = require("ui/nav_bar"),
     Popup = require("ui/popup"),
     Popover = require("ui/popover"),
-    RadioButton = require("ui/radio_group/radio_button"),
     RadioGroup = require("ui/radio_group"),
     Scheduler = require("ui/scheduler/ui.scheduler"),
     Scrollable = require("ui/scroll_view/ui.scrollable"),
     ScrollView = require("ui/scroll_view"),
     SelectBox = require("ui/select_box"),
-    Slider = require("ui/slider"),
-    Swipeable = require("events/gesture/swipeable"), // eslint-disable-line no-unused-vars
-    Switch = require("ui/switch"),
     Tabs = require("ui/tabs"),
     TabPanel = require("ui/tab_panel"),
     TagBox = require("ui/tag_box"),
@@ -246,24 +239,6 @@ testComponentDefaults(FakeDialogComponent,
 );
 
 testComponentDefaults(FakeDialogComponent,
-    { phone: true },
-    {
-        position: {
-            my: "top center",
-            at: "top center",
-            offset: "0 0"
-        }
-    },
-    function() {
-        this.origIsWin8 = themes.isWin8;
-        themes.isWin8 = function() { return true; };
-    },
-    function() {
-        themes.isWin8 = this.origIsWin8;
-    }
-);
-
-testComponentDefaults(FakeDialogComponent,
     { platform: "android" },
     {
         lWidth: "60%",
@@ -295,23 +270,6 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        validationMessageOffset: {
-            h: 0,
-            v: -8
-        }
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(TextEditor,
-    {},
-    {
         stylingMode: "underlined"
     },
     function() {
@@ -333,20 +291,6 @@ testComponentDefaults(TextEditor,
 testComponentDefaults(DropDownEditor,
     [
         { platform: "generic" }
-    ],
-    {
-        popupPosition: {
-            offset: { h: 0, v: 0 },
-            my: "left top",
-            at: "left bottom",
-            collision: "flip flip"
-        }
-    }
-);
-
-testComponentDefaults(DropDownEditor,
-    [
-        { platform: "win", version: [10, 0] }
     ],
     {
         popupPosition: {
@@ -400,82 +344,10 @@ testComponentDefaults(DropDownList,
 );
 
 testComponentDefaults(DropDownList,
-    { platform: "generic" },
-    {
-        popupWidthExtension: 32
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(DropDownList,
     {},
     {
         groupTemplate: "group",
         grouped: false
-    }
-);
-
-testComponentDefaults(Autocomplete,
-    {},
-    {
-        popupPosition: {
-            offset: {
-                h: -16,
-                v: -8
-            }
-        }
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(SelectBox,
-    {},
-    {
-        _isAdaptablePopupPosition: true,
-        popupPosition: {
-            at: "left top",
-            offset: { h: 0, v: 0 }
-        }
-    },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("win8");
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
-testComponentDefaults(SelectBox,
-    {},
-    {
-        activeStateEnabled: true,
-        _isAdaptablePopupPosition: true,
-        popupPosition: {
-            offset: {
-                h: -16,
-                v: -8
-            }
-        }
-    },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("android5");
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -679,24 +551,6 @@ testComponentDefaults(Popup,
     },
     function() {
         devices.real(this._origDevice);
-    }
-);
-
-testComponentDefaults(Popup,
-    { phone: true },
-    {
-        position: {
-            my: "top center",
-            at: "top center",
-            offset: "0 0"
-        }
-    },
-    function() {
-        this.origIsWin8 = themes.isWin8;
-        themes.isWin8 = function() { return true; };
-    },
-    function() {
-        themes.isWin8 = this.origIsWin8;
     }
 );
 
@@ -995,39 +849,6 @@ testComponentDefaults(Toolbar,
     }
 );
 
-testComponentDefaults(Toolbar,
-    {},
-    { submenuType: "listBottom" },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("win8");
-    }, function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
-testComponentDefaults(Toolbar,
-    {},
-    { submenuType: "listTop" },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("win10");
-    }, function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
-testComponentDefaults(Toolbar,
-    {},
-    { submenuType: "dropDownMenu" },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("android5");
-    }, function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
 testComponentDefaults(TabPanel,
     { platform: "generic" },
     {
@@ -1039,21 +860,6 @@ testComponentDefaults(NavBar,
     {},
     {
         scrollingEnabled: false
-    }
-);
-
-testComponentDefaults(LoadIndicator,
-    {},
-    {
-        _animatingSegmentCount: 2,
-        _animatingSegmentInner: true
-    },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("android5");
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -1102,36 +908,6 @@ testComponentDefaults(LoadIndicator,
     }
 );
 
-testComponentDefaults(LoadIndicator,
-    {},
-    {
-        _animatingSegmentCount: 5,
-        _animatingSegmentInner: false
-    },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("win8");
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
-testComponentDefaults(LoadIndicator,
-    {},
-    {
-        _animatingSegmentCount: 5,
-        _animatingSegmentInner: false
-    },
-    function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current("win10");
-    },
-    function() {
-        themes.current(this.originalCurrentTheme);
-    }
-);
-
 testComponentDefaults(LoadPanel,
     {},
     {
@@ -1157,52 +933,10 @@ testComponentDefaults(LoadPanel,
     }
 );
 
-testComponentDefaults(Button,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(CheckBox,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
 testComponentDefaults(ColorBox,
     { },
     {
         valueChangeEvent: "change"
-    }
-);
-
-testComponentDefaults(List,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
     }
 );
 
@@ -1242,34 +976,6 @@ testComponentDefaults(TreeList,
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
-    }
-);
-
-testComponentDefaults(Lookup,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(MenuBase,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
     }
 );
 
@@ -1317,93 +1023,9 @@ testComponentDefaults(TreeView,
     }
 );
 
-testComponentDefaults(RadioButton,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(RadioGroup,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(SelectBox,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
 testComponentDefaults(SelectBox, {},
     {
         allowClearing: true
-    }
-);
-
-testComponentDefaults(Slider,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(Switch,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
-    }
-);
-
-testComponentDefaults(Tabs,
-    { platform: devices.current().platform },
-    {
-        useInkRipple: true
-    },
-    function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
     }
 );
 

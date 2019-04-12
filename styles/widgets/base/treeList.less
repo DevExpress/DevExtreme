@@ -49,6 +49,26 @@
         .dx-icon-sortdown;
     }
 
+    .dx-header-row {
+        & > .dx-cell-focus-disabled,
+        & > .dx-cell-focus-disabled .dx-header-filter {
+            outline: none;
+        }
+
+        &.dx-state-focused {
+            td:focus,
+            td .dx-header-filter:focus {
+                outline: 2px solid @treelist-focused-border-color;
+            }
+            td:focus {
+                outline-offset: -2px;
+            }
+            td .dx-header-filter:focus {
+                outline-offset: 2px;
+            }
+        }
+    }
+
     .dx-header-filter {
         position: relative;
         color: @HEADER_FILTER_COLOR;
@@ -85,6 +105,13 @@
             &.dx-last-cell {
                 border-right: none;
             }
+        }
+    }
+
+    .dx-treelist-rowsview.dx-state-focused .dx-data-row {
+        & > td.dx-command-edit > a.dx-link:focus {
+            outline: 2px solid @datagrid-focused-border-color;
+            outline-offset: 2px;
         }
     }
 

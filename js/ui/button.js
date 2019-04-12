@@ -185,7 +185,7 @@ var Button = Widget.inherit({
             {
                 device: function() {
                     var themeName = themes.current();
-                    return themes.isMaterial(themeName) || themes.isAndroid5(themeName);
+                    return themes.isMaterial(themeName);
                 },
                 options: {
                     useInkRipple: true

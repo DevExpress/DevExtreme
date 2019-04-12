@@ -1,6 +1,10 @@
 import { when } from "../../core/utils/deferred";
+import { noop } from "../../core/utils/common";
 
 const whenSome = function(arg, onSuccess, onError) {
+    onSuccess = onSuccess || noop;
+    onError = onError || noop;
+
     const createResult = function(result, success, canceled, error) {
         return {
             result: result,

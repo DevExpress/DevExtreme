@@ -8762,85 +8762,87 @@ QUnit.module("Keyboard navigation accessibility", {
         assert.notOk($(this.getCellElement(1, 0)).hasClass("dx-focused"), "Cell focused");
     });
 
-    testInDesktop("Enter, Space key down by header cell", function(assert) {
-        var keyDownFiresCount = 0;
-        // arrange
-        this.options = {
-            onKeyDown: () => ++keyDownFiresCount
-        };
-        this.setupModule();
-        this.gridView.render($("#container"));
+    // TODO onKeyDown event
+    // testInDesktop("Enter, Space key down by header cell", function(assert) {
+    //     var keyDownFiresCount = 0;
+    //     // arrange
+    //     this.options = {
+    //         onKeyDown: () => ++keyDownFiresCount
+    //     };
+    //     this.setupModule();
+    //     this.gridView.render($("#container"));
 
-        // act
-        var $firstCell = $(this.$element()).find(".dx-header-row td").eq(0);
-        $firstCell.focus();
-        this.clock.tick();
+    //     // act
+    //     var $firstCell = $(this.$element()).find(".dx-header-row td").eq(0);
+    //     $firstCell.focus();
+    //     this.clock.tick();
 
-        // assert
-        assert.notOk(this.getController("data").getDataSource().sort(), "Sorting");
+    //     // assert
+    //     assert.notOk(this.getController("data").getDataSource().sort(), "Sorting");
 
-        // act
-        fireKeyDown($firstCell, "Enter");
-        this.clock.tick();
+    //     // act
+    //     fireKeyDown($firstCell, "Enter");
+    //     this.clock.tick();
 
-        // assert
-        assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: false }], "Sorting");
-        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+    //     // assert
+    //     assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: false }], "Sorting");
+    //     assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
 
-        // act
-        fireKeyDown($firstCell, " ");
-        this.clock.tick();
+    //     // act
+    //     fireKeyDown($firstCell, " ");
+    //     this.clock.tick();
 
-        // assert
-        assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: true }], "Sorting");
-        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
-    });
+    //     // assert
+    //     assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: true }], "Sorting");
+    //     assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    // });
 
-    testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
-        var $firstCell,
-            $headerFilterCell,
-            keyDownFiresCount = 0,
-            headerFilterShownCount = 0;
+    // testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
+    //     var $firstCell,
+    //         $headerFilterCell,
+    //         keyDownFiresCount = 0,
+    //         headerFilterShownCount = 0;
 
-        // arrange
-        this.options = {
-            onKeyDown: () => ++keyDownFiresCount,
-            headerFilter: {
-                visible: true
-            }
-        };
-        this.setupModule();
-        this.gridView.render($("#container"));
-        this.getView("headerFilterView").showHeaderFilterMenu = ($columnElement, options) => {
-            assert.equal(options.column.dataField, "name");
-            ++headerFilterShownCount;
-        };
+    //     // arrange
+    //     this.options = {
+    //         onKeyDown: () => ++keyDownFiresCount,
+    //         headerFilter: {
+    //             visible: true
+    //         }
+    //     };
+    //     this.setupModule();
+    //     this.gridView.render($("#container"));
+    //     this.getView("headerFilterView").showHeaderFilterMenu = ($columnElement, options) => {
+    //         assert.equal(options.column.dataField, "name");
+    //         ++headerFilterShownCount;
+    //     };
 
-        // arrange
-        $firstCell = $(this.$element()).find(".dx-header-row td").eq(0);
-        $headerFilterCell = $firstCell.find(".dx-header-filter");
+    //     // arrange
+    //     $firstCell = $(this.$element()).find(".dx-header-row td").eq(0);
+    //     $headerFilterCell = $firstCell.find(".dx-header-filter");
 
-        // act
-        $headerFilterCell.focus();
-        fireKeyDown($headerFilterCell, "Enter");
-        this.clock.tick();
+    //     // act
+    //     $headerFilterCell.focus();
+    //     fireKeyDown($headerFilterCell, "Enter");
+    //     this.clock.tick();
 
-        // assert
-        assert.equal(headerFilterShownCount, 1, "headerFilterShownCount");
-        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+    //     // assert
+    //     assert.equal(headerFilterShownCount, 1, "headerFilterShownCount");
+    //     assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
 
-        // act
-        fireKeyDown($headerFilterCell, " ");
-        this.clock.tick();
+    //     // act
+    //     fireKeyDown($headerFilterCell, " ");
+    //     this.clock.tick();
 
-        // assert
-        assert.equal(headerFilterShownCount, 2, "headerFilterShownCount");
-        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
-    });
+    //     // assert
+    //     assert.equal(headerFilterShownCount, 2, "headerFilterShownCount");
+    //     assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    // });
 
     testInDesktop("Enter, Space key down on filter panel elements", function(assert) {
         var $cell,
-            filterBuilderShownCount = 0;
+            filterBuilderShownCount = 0,
+            filterPanelView;
 
         // arrange
         this.options = {
@@ -8852,7 +8854,10 @@ QUnit.module("Keyboard navigation accessibility", {
 
         this.setupModule();
         this.gridView.render($("#container"));
-        this.getView("filterPanelView")._showFilterBuilder = () => ++filterBuilderShownCount;
+        filterPanelView = this.getView("filterPanelView");
+        filterPanelView._showFilterBuilder = () => {
+            ++filterBuilderShownCount;
+        };
 
         // arrange
         $cell = $(".dx-datagrid-filter-panel .dx-icon-filter");
@@ -8889,5 +8894,94 @@ QUnit.module("Keyboard navigation accessibility", {
 
         // assert
         assert.equal(this.options.filterValue, null, "filterValue");
+    });
+
+    testInDesktop("Header row focus state", function(assert) {
+        var $headers;
+
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+        $headers = $(".dx-datagrid-headers");
+
+        // act
+        fireKeyDown($("body"), "Tab");
+        $headers.find(".dx-header-row > td").eq(1).focus();
+
+        // assert
+        assert.ok($headers.hasClass("dx-state-focused"), "Header row focus state");
+
+        // act
+        fireKeyDown($(":focus"), "Tab");
+
+        // assert
+        assert.ok($headers.hasClass("dx-state-focused"), "Header row focus state");
+
+        // act
+        $(":focus").trigger("mousedown");
+
+        // assert
+        assert.notOk($headers.hasClass("dx-state-focused"), "Header row focus state");
+    });
+
+    testInDesktop("Rows view focus state", function(assert) {
+        var $rowsView;
+
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.focusCell(1, 1);
+        $rowsView = this.keyboardNavigationController._focusedView.element();
+
+        // assert
+        assert.notOk($rowsView.hasClass("dx-state-focused"), "RowsView focus state");
+
+        // act
+        this.triggerKeyDown("Tab");
+
+        // assert
+        assert.ok($rowsView.hasClass("dx-state-focused"), "RowsView focus state");
+
+        // act
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
+
+        // assert
+        assert.notOk($rowsView.hasClass("dx-state-focused"), "RowsView focus state");
+    });
+
+    testInDesktop("Filter panel focus state", function(assert) {
+        var $filterPanel;
+
+        this.options = {
+            filterPanel: {
+                visible: true
+            },
+            filterValue: ["name", "=", "Alex"]
+        };
+
+        // arrange
+        this.setupModule();
+        this.gridView.render($("#container"));
+        $filterPanel = $(".dx-datagrid-filter-panel");
+
+        // assert
+        assert.notOk($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+
+        // act
+        $filterPanel.find(".dx-icon-filter").trigger("focus");
+        // assert
+        assert.notOk($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+        // act
+        fireKeyDown($(":focus"), "Tab");
+        // assert
+        assert.ok($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+        // act
+        $(":focus").trigger("mousedown");
+        // assert
+        assert.notOk($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
+        // act
+        fireKeyDown($(":focus"), "Tab");
+        // assert
+        assert.ok($filterPanel.hasClass("dx-state-focused"), "Filter panel focus state");
     });
 });

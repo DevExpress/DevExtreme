@@ -1,11 +1,11 @@
-import { pathCombine, getFileExtension } from "../ui.file_manager.utils";
+import { pathCombine, getFileExtension, getParentPath, getName } from "../ui.file_manager.utils";
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
 /**
 * @name FileProvider
 * @type object
-* @module file_provider
+* @module ui/file_manager/file_provider/file_provider
 * @export default
 */
 class FileProvider {
@@ -75,6 +75,22 @@ class FileManagerItem {
 
     getExtension() {
         return this.isFolder ? "" : getFileExtension(this.name);
+    }
+
+    getParent() {
+        if(this.isRoot()) {
+            return null;
+        }
+
+        return new FileManagerItem(getParentPath(this.parentPath), getName(this.parentPath), true);
+    }
+
+    isRoot() {
+        return !this.relativeName;
+    }
+
+    equals(item) {
+        return item && this.relativeName === item.relativeName;
     }
 
     createClone() {

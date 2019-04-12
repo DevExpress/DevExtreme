@@ -27,6 +27,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     DATEBOX_WIDGET_NAME = "dxDateBox",
+    FOCUS_STATE_CLASS = "dx-state-focused",
 
     FAST_EDITING_DELETE_KEY = "delete",
 
@@ -145,11 +146,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _clickHandler: function(e) {
         var event = e.event,
             $target = $(event.currentTarget),
-            data = event.data;
+            data = event.data,
+            focusedViewElement = data.view && data.view.element();
 
         if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
+
+            $(focusedViewElement).removeClass(FOCUS_STATE_CLASS);
 
             if($target.parent().hasClass(FREESPACE_ROW_CLASS)) {
 
@@ -856,11 +860,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var editingOptions = this.option("editing"),
             direction = eventArgs.shift ? "previous" : "next",
             isOriginalHandlerRequired = !eventArgs.shift && this._isLastValidCell(this._focusedCellPosition) || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition)),
-            eventTarget = eventArgs.originalEvent.target;
+            eventTarget = eventArgs.originalEvent.target,
+            focusedViewElement = this._focusedView && this._focusedView.element();
 
         if(this._handleTabKeyOnMasterDetailCell(eventTarget, direction)) {
             return;
         }
+
+        $(focusedViewElement).addClass(FOCUS_STATE_CLASS);
 
         if(editingOptions && eventTarget && !isOriginalHandlerRequired) {
             if($(eventTarget).hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
