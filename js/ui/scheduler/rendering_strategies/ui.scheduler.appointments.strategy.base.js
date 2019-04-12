@@ -1,4 +1,6 @@
 import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.base";
+import AdaptivePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.adaptive";
+
 import { noop } from "../../../core/utils/common";
 import Class from "../../../core/class";
 import { extend } from "../../../core/utils/extend";
@@ -27,7 +29,7 @@ var APPOINTMENT_MIN_COUNT = 1,
 
     ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET = 35,
 
-    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
+    // DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
 
     DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28,
     DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
@@ -40,7 +42,11 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _initPositioningStrategy: function() {
-        this._positioningStrategy = new BasePositioningStrategy();
+        if(this.instance.fire("isAdaptive")) {
+            this._positioningStrategy = new AdaptivePositioningStrategy(this);
+        } else {
+            this._positioningStrategy = new BasePositioningStrategy(this);
+        }
     },
 
     getPositioningStrategy: function() {
@@ -584,16 +590,18 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     getDropDownAppointmentWidth: function(intervalCount, isAllDay) {
-        if(this.instance.fire("isAdaptive")) {
-            return this.getDropDownButtonAdaptiveSize();
-        } else {
-            if(isAllDay || !typeUtils.isDefined(isAllDay)) {
-                var widthInPercents = 75;
-                return widthInPercents * this.getDefaultCellWidth() / 100;
-            } else {
-                return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
-            }
-        }
+        return this.getPositioningStrategy().getDropDownAppointmentWidth(intervalCount, isAllDay);
+
+        // if(this.instance.fire("isAdaptive")) {
+        //     return this.getDropDownButtonAdaptiveSize();
+        // } else {
+        //     if(isAllDay || !typeUtils.isDefined(isAllDay)) {
+        //         var widthInPercents = 75;
+        //         return widthInPercents * this.getDefaultCellWidth() / 100;
+        //     } else {
+        //         return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
+        //     }
+        // }
     },
 
     getDropDownAppointmentHeight: function() {
