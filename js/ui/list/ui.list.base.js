@@ -478,14 +478,6 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    useInkRipple: true
-                }
-            },
-            {
-                device: function() {
                     return devices.current().platform === "win" && devices.isSimulator();
                 },
 

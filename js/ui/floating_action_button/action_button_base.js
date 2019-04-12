@@ -34,7 +34,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             activeStateEnabled: true,
             hoverStateEnabled: true,
             indent: 56,
-            childIndent: 36,
+            childIndent: 40,
             callOverlayRenderShading: true
         };
 
@@ -103,7 +103,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
         if(this._actionItems.length) {
             this._actionItems.forEach(actionItem => {
                 actionItem.dispose();
-                actionItem.element().remove();
+                actionItem.$element().remove();
             });
         }
 
@@ -223,7 +223,7 @@ exports.disposeAction = function(actionId) {
 
     if(!savedActions.length) {
         actionButtonBase.dispose();
-        actionButtonBase.element().remove();
+        actionButtonBase.$element().remove();
         actionButtonBase = null;
     } else if(savedActions.length === 1) {
         actionButtonBase.option(extend({}, savedActions[0]._options, {

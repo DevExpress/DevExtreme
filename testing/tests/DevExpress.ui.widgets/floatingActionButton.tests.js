@@ -107,7 +107,7 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.equal($fabContent.eq(2).find(".dx-icon-arrowup").length, 1, "second action with arrowup icon");
 
         assert.equal(firstInstance.option("position").offset.y, -56, "right fist action position");
-        assert.equal(secondInstance.option("position").offset.y, -92, "right second action position");
+        assert.equal(secondInstance.option("position").offset.y, -96, "right second action position");
 
         firstInstance.option("icon", "find");
         secondInstance.option("icon", "filter");
