@@ -392,6 +392,7 @@ QUnit.test("Horizontal top", function(assert) {
     this.updateOptions({
         isHorizontal: true,
         position: "top",
+        width: 2,
         tick: {
             visible: true,
             color: "#123456",
@@ -483,9 +484,9 @@ QUnit.test("Vertical left", function(assert) {
     this.axis.draw(this.canvas);
 
     var path = this.renderer.path;
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [10 - 5, 40, 10 + 5, 40], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [10 - 5, 50, 10 + 5, 50], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [10 - 5, 60, 10 + 5, 60], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [10 - 4, 40, 10 + 6, 40], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [10 - 4, 50, 10 + 6, 50], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [10 - 4, 60, 10 + 6, 60], opacity: 1 });
 });
 
 QUnit.test("Vertical right", function(assert) {
@@ -697,9 +698,9 @@ QUnit.test("Horizontal top, minor tick marks", function(assert) {
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(2).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 30 - 5, 30, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 30 - 5, 50, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 30 - 4, 30, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 30 - 4, 50, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 4, 70, 30 + 6], opacity: 1 });
 });
 
 QUnit.test("Horizontal top, minor tick marks with offset", function(assert) {
@@ -727,9 +728,9 @@ QUnit.test("Horizontal top, minor tick marks with offset", function(assert) {
 
     var path = this.renderer.path;
 
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0].points, [30, 20, 30, 30]);
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0].points, [50, 20, 50, 30]);
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0].points, [70, 20, 70, 30]);
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0].points, [30, 21, 30, 31]);
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0].points, [50, 21, 50, 31]);
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0].points, [70, 21, 70, 31]);
 });
 
 QUnit.test("Categories. DiscreteAxisDivisionMode - betweenLabels. Do not draw last tick mark", function(assert) {
@@ -764,9 +765,9 @@ QUnit.test("Categories. DiscreteAxisDivisionMode - betweenLabels. Do not draw la
 
     var path = this.renderer.path;
     assert.equal(path.callCount, 3);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 30 - 5, 30, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 30 - 5, 50, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 30 - 4, 30, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 30 - 4, 50, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 4, 70, 30 + 6], opacity: 1 });
 });
 
 QUnit.test("Categories. DiscreteAxisDivisionMode - crossLabels. Draw all grid lines", function(assert) {
@@ -802,10 +803,10 @@ QUnit.test("Categories. DiscreteAxisDivisionMode - crossLabels. Draw all grid li
 
     var path = this.renderer.path;
     assert.equal(path.callCount, 4);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [20, 30 - 5, 20, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [40, 30 - 5, 40, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [60, 30 - 5, 60, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(3).returnValue.attr.getCall(1).args[0], { points: [80, 30 - 5, 80, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [20, 30 - 4, 20, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [40, 30 - 4, 40, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [60, 30 - 4, 60, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(3).returnValue.attr.getCall(1).args[0], { points: [80, 30 - 4, 80, 30 + 6], opacity: 1 });
 });
 
 QUnit.test("Check calls to translator. Major ticks. Categories, discreteAxisDivisionMode betweenLabels", function(assert) {
@@ -948,9 +949,9 @@ QUnit.test("Horizontal. Position top. Positive tick offset", function(assert) {
     this.axis.draw(this.canvas);
 
     var path = this.renderer.path;
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 20, 30, 30], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 20, 50, 30], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 20, 70, 30], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 21, 30, 31], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 21, 50, 31], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 21, 70, 31], opacity: 1 });
 });
 
 QUnit.test("Horizontal. Position bottom. Positive tick offset", function(assert) {
@@ -988,6 +989,7 @@ QUnit.test("Vertical. Position left. Positive tick offset", function(assert) {
     this.updateOptions({
         isHorizontal: false,
         position: "left",
+        width: 2,
         tick: {
             visible: true,
             width: 5,
@@ -5965,6 +5967,7 @@ QUnit.test("Horizontal bottom. With date markers, last marker without label", fu
         return function() {
             return [
                 { x: 0, y: 0, width: 10, height: 10 }, // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -6093,6 +6096,7 @@ QUnit.test("Horizontal top", function(assert) {
         return function() {
             return [
                 { x: 0, y: 0, width: 10, height: 10 }, // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -6207,6 +6211,7 @@ QUnit.test("Vertical left", function(assert) {
         return function() {
             return [
                 { x: 0, y: 0, width: 14, height: 10 }, // title
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
                 { x: 0, y: 0, width: 13, height: 10 }, // tick label
@@ -6320,6 +6325,7 @@ QUnit.test("Vertical right", function(assert) {
         var idx = 0;
         return function() {
             return [
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
@@ -9176,9 +9182,9 @@ QUnit.test("Update tick mark points", function(assert) {
 
     var path = this.renderer.path;
     assert.deepEqual(this.axis._majorTicks.length, 3);
-    assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 30 - 5, 30, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [50, 30 - 5, 50, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 30 - 4, 30, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [50, 30 - 4, 50, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [70, 30 - 4, 70, 30 + 6], opacity: 1 });
 });
 
 QUnit.test("Update minor tick mark points", function(assert) {
@@ -9209,9 +9215,9 @@ QUnit.test("Update minor tick mark points", function(assert) {
 
     var path = this.renderer.path;
     assert.deepEqual(this.axis._minorTicks.length, 3);
-    assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 30 - 5, 30, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [50, 30 - 5, 50, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 30 - 4, 30, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [50, 30 - 4, 50, 30 + 6], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [70, 30 - 4, 70, 30 + 6], opacity: 1 });
 });
 
 QUnit.test("Update boundary tick mark points", function(assert) {
@@ -9474,15 +9480,13 @@ QUnit.test("Horizontal. Title does not fit to canvas - apply Ellipsis and set hi
     this.axis.draw(this.zeroMarginCanvas);
 
     var title = renderer.text.getCall(0).returnValue;
-    title.applyEllipsis = sinon.stub().returns(true);
     title.restoreText = sinon.stub();
 
     // act
     this.axis.updateSize(this.canvas);
 
     // assert
-    assert.deepEqual(title.applyEllipsis.lastCall.args, [80]);
-    assert.deepEqual(title.setTitle.lastCall.args, ["Title text"]);
+    assert.deepEqual(title.setMaxSize.lastCall.args[0], 80);
     assert.equal(title.restoreText.callCount, 0);
 });
 
@@ -9532,15 +9536,13 @@ QUnit.test("Vertical. Title does not fit to canvas - apply Ellipsis and set hint
     this.axis.draw(this.zeroMarginCanvas);
 
     var title = renderer.text.getCall(0).returnValue;
-    title.applyEllipsis = sinon.stub().returns(true);
     title.restoreText = sinon.stub();
 
     // act
     this.axis.updateSize(this.canvas);
 
     // assert
-    assert.deepEqual(title.applyEllipsis.lastCall.args, [40]);
-    assert.deepEqual(title.setTitle.lastCall.args, ["Title text"]);
+    assert.deepEqual(title.setMaxSize.lastCall.args[0], 40);
     assert.equal(title.restoreText.callCount, 0);
 });
 
@@ -10410,7 +10412,7 @@ QUnit.test("Do not animate tick mark on first drawing", function(assert) {
 
     assert.equal(tick.stub("animate").callCount, 0);
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [40, 27, 40, 33],
+        points: [40, 28, 40, 34],
         opacity: 1
     });
 });
@@ -10446,11 +10448,11 @@ QUnit.test("Animate tick to the new position on second drawing", function(assert
 
     assert.equal(tick.stub("animate").callCount, 1);
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [40, 27, 40, 33]
+        points: [40, 28, 40, 34]
     });
 
     assert.deepEqual(tick.animate.lastCall.args[0], {
-        points: [50, 27, 50, 33],
+        points: [50, 28, 50, 34],
         opacity: 1
     });
 });
@@ -10488,7 +10490,7 @@ QUnit.test("Fade in new tick on second drawing", function(assert) {
 
     assert.equal(tick.stub("animate").callCount, 1);
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [70, 27, 70, 33],
+        points: [70, 28, 70, 34],
         opacity: 0
     });
 
@@ -11021,7 +11023,7 @@ QUnit.test("Do not animate minor tick mark on first drawing", function(assert) {
 
     assert.equal(tick.stub("animate").callCount, 0);
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [40, 27, 40, 33],
+        points: [40, 28, 40, 34],
         opacity: 1
     });
 });
@@ -11058,11 +11060,11 @@ QUnit.test("Animate minor Tick to the new position on second drawing", function(
 
     assert.equal(tick.stub("animate").callCount, 1);
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [40, 27, 40, 33]
+        points: [40, 28, 40, 34]
     });
 
     assert.deepEqual(tick.animate.lastCall.args[0], {
-        points: [50, 27, 50, 33],
+        points: [50, 28, 50, 34],
         opacity: 1
     }, "animate attrs");
 });
@@ -11100,7 +11102,7 @@ QUnit.test("Fade in new minor tick on second drawing", function(assert) {
 
     assert.equal(tick.stub("animate").callCount, 1);
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [70, 27, 70, 33],
+        points: [70, 28, 70, 34],
         opacity: 0
     });
 
@@ -11332,7 +11334,7 @@ QUnit.test("Draw tick mark and grid line in new position", function(assert) {
     // assert
     const tick = renderer.path.firstCall.returnValue;
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [50, 27, 50, 33],
+        points: [50, 28, 50, 34],
         opacity: 1
     });
 
@@ -11724,7 +11726,7 @@ QUnit.test("Do not animate on second drawing if on first one stub data was rende
 
     assert.equal(tick.stub("animate").callCount, 0);
     assert.deepEqual(tick.attr.lastCall.args[0], {
-        points: [40, 27, 40, 33],
+        points: [40, 28, 40, 34],
         opacity: 1
     });
 });
@@ -11766,5 +11768,5 @@ QUnit.test("Update skikipped categories on second drawing", function(assert) {
 
     var path = this.renderer.path;
     assert.equal(path.callCount, 1);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 4, 70, 30 + 6], opacity: 1 });
 });

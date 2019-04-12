@@ -125,7 +125,10 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         };
     },
 
-    getCompactAppointmentGroupMaxWidth: function(intervalCount) {
+    getDropDownAppointmentWidth: function(intervalCount) {
+        if(this.instance.fire("isAdaptive")) {
+            return this.getDropDownButtonAdaptiveSize();
+        }
         var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
         return this.getDefaultCellWidth() - offset;
     },
