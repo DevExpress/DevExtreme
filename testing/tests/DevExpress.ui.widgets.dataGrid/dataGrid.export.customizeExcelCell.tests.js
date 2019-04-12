@@ -1256,8 +1256,8 @@ QUnit.test("Check arguments for total summary with null/undefined", function(ass
                 { value: null }, { value: undefined }, { value: null }, { value: undefined },
                 { value: "Max: ", gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
                 { value: "Max: ", gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: ds[0].f2, totalSummaryItemName: 2 } },
-                { value: null, gridCell: { column: grid.columnOption(2), rowType: "totalFooter", value: undefined } },
-                { value: null, gridCell: { column: grid.columnOption(3), rowType: "totalFooter", value: undefined } }
+                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: "totalFooter", value: undefined } },
+                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: "totalFooter", value: undefined } }
             ]
         }
     );
