@@ -198,10 +198,8 @@ QUnit.module("popup integration", {
     QUnit.test("popup content should have special class when custom template is used", (assert) => {
         const instance = new DropDownButton("#dropDownButton2", {
             deferRendering: false,
-            dropDownOptions: {
-                contentTemplate: () => {
-                    return "Custom Content";
-                }
+            dropDownContentTemplate: () => {
+                return "Custom Content";
             }
         });
 
@@ -210,7 +208,6 @@ QUnit.module("popup integration", {
     });
 
     QUnit.test("popup should have correct options after rendering", (assert) => {
-        const buttonGroupElement = getButtonGroup(this.instance).element();
         const options = {
             deferRendering: this.instance.option("deferRendering"),
             dragEnabled: false,
@@ -223,10 +220,10 @@ QUnit.module("popup integration", {
             height: "auto",
             shading: false,
             position: {
-                of: buttonGroupElement,
+                of: this.instance.$element(),
                 collision: "flipfit",
-                my: "top right",
-                at: "bottom right",
+                my: "top left",
+                at: "bottom left",
                 offset: {
                     y: -1
                 }
@@ -716,12 +713,12 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(handler.callCount, 1, "handler was called");
     });
 
-    QUnit.test("onActionButtonClick event", (assert) => {
+    QUnit.test("onButtonClick event", (assert) => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
             selectedItemKey: 2,
-            onActionButtonClick: handler
+            onButtonClick: handler
         });
 
         const $actionButton = getActionButton(dropDownButton);
@@ -737,14 +734,14 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.selectedItem, 2, "itemData is correct");
     });
 
-    QUnit.test("onActionButtonClick event change", (assert) => {
+    QUnit.test("onButtonClick event change", (assert) => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
             selectedItemKey: 2
         });
 
-        dropDownButton.option("onActionButtonClick", handler);
+        dropDownButton.option("onButtonClick", handler);
         const $actionButton = getActionButton(dropDownButton);
 
         eventsEngine.trigger($actionButton, "dxclick");
@@ -841,7 +838,7 @@ QUnit.module("keyboard navigation", {
 
     QUnit.testInActiveWindow("action button should be clicked on enter or space", (assert) => {
         const handler = sinon.spy();
-        this.dropDownButton.option("onActionButtonClick", handler);
+        this.dropDownButton.option("onButtonClick", handler);
 
         this.keyboard.press("enter");
         assert.strictEqual(handler.callCount, 1, "action button pressed");
@@ -988,22 +985,37 @@ QUnit.module("keyboard navigation", {
 });
 
 QUnit.module("custom content template", {}, () => {
-    QUnit.test("contentTemplate option can be used", (assert) => {
+    QUnit.test("dropDownContentTemplate option can be used", (assert) => {
         const templateHandler = sinon.stub().returns("Template 1");
         const dropDownButton = new DropDownButton("#dropDownButton2", {
-            contentTemplate: templateHandler,
+            items: [1, 2, 3],
+            dropDownContentTemplate: templateHandler,
             deferRendering: false
         });
 
         const popupContent = getPopup(dropDownButton).content();
         assert.strictEqual(templateHandler.callCount, 1, "templateHandler was called");
-        assert.strictEqual(templateHandler.getCall(0).args[0].component, dropDownButton, "component is correct");
+        assert.deepEqual(templateHandler.getCall(0).args[0], [1, 2, 3], "data is correct");
         assert.strictEqual(templateHandler.getCall(0).args[1], popupContent, "container is correct");
         assert.strictEqual($(popupContent).text(), "Template 1", "template was rendered");
 
         const templateHandler2 = sinon.stub().returns("Template 2");
-        dropDownButton.option("contentTemplate", templateHandler2);
+        dropDownButton.option("dropDownContentTemplate", templateHandler2);
         assert.strictEqual(templateHandler.callCount, 1, "templateHandler was called");
         assert.strictEqual($(popupContent).text(), "Template 2", "template was rendered");
+    });
+
+    QUnit.test("datasource should be passed to contentTemplae when items are not specified", (assert) => {
+        const templateHandler = sinon.stub().returns("Template 1");
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            dataSource: {
+                load: sinon.stub().returns([1, 2, 3]),
+                byKey: sinon.stub().returns(1)
+            },
+            dropDownContentTemplate: templateHandler,
+            deferRendering: false
+        });
+
+        assert.deepEqual(templateHandler.getCall(0).args[0], dropDownButton.getDataSource(), "data is correct");
     });
 });

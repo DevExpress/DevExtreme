@@ -44,9 +44,8 @@ let DropDownButton = Widget.inherit({
 
             /**
              * @name dxDropDownButtonOptions.keyExpr
-             * @type string|function
+             * @type string
              * @default 'this'
-             * @type_function_param1 itemData:object
              */
             keyExpr: "this",
 
@@ -55,6 +54,7 @@ let DropDownButton = Widget.inherit({
              * @type string|function
              * @default 'this'
              * @type_function_param1 itemData:object
+             * @type_function_return string
              */
             displayExpr: "this",
 
@@ -123,7 +123,7 @@ let DropDownButton = Widget.inherit({
             icon: undefined,
 
             /**
-             * @name dxDropDownButtonOptions.onActionButtonClick
+             * @name dxDropDownButtonOptions.onButtonClick
              * @type function(e)|string
              * @extends Action
              * @type_function_param1 e:object
@@ -131,7 +131,7 @@ let DropDownButton = Widget.inherit({
              * @type_function_param1_field5 selectedItem:object
              * @action
              */
-            onActionButtonClick: null,
+            onButtonClick: null,
 
             /**
              * @name dxDropDownButtonOptions.onSelectionChanged
@@ -145,11 +145,23 @@ let DropDownButton = Widget.inherit({
             onSelectionChanged: null,
 
             /**
+             * @name dxDropDownButtonOptions.onItemClick
+             * @type function(e)|string
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 itemData:object
+             * @type_function_param1_field6 itemElement:dxElement
+             * @action
+             */
+            onItemClick: null,
+
+            /**
              * @name dxDropDownButtonOptions.items
              * @type Array<CollectionWidgetItem, object>
-             * @default []
+             * @default null
              */
-            items: [],
+            items: null,
 
             /**
              * @name dxDropDownButtonOptions.dataSource
@@ -166,13 +178,14 @@ let DropDownButton = Widget.inherit({
             dropDownOptions: {},
 
             /**
-             * @name dxDropDownButtonOptions.contentTemplate
+             * @name dxDropDownButtonOptions.dropDownContentTemplate
              * @type template|function
              * @default "content"
-             * @type_function_param1 contentElement:dxElement
+             * @type_function_param1 data:Array<string,number,Object>|DataSource
+             * @type_function_param2 contentElement:dxElement
              * @type_function_return string|Node|jQuery
              */
-            contentTemplate: "content",
+            dropDownContentTemplate: "content",
 
             grouped: false,
             groupTemplate: "group",
@@ -260,7 +273,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _createActionClickAction() {
-        this._actionClickAction = this._createActionByOption("onActionButtonClick");
+        this._actionClickAction = this._createActionByOption("onButtonClick");
     },
 
     _createSelectionChangedAction() {
@@ -341,15 +354,13 @@ let DropDownButton = Widget.inherit({
 
     _renderPopupContent() {
         const $content = this._popup.$content();
-        const template = this._getTemplateByOption("contentTemplate");
+        const template = this._getTemplateByOption("dropDownContentTemplate");
 
         $content.empty();
 
         return template.render({
             container: domUtils.getPublicElement($content),
-            model: {
-                component: this
-            }
+            model: this.option("items") || this._dataSource
         });
     },
 
@@ -379,10 +390,10 @@ let DropDownButton = Widget.inherit({
             height: "auto",
             shading: false,
             position: {
-                of: this._buttonGroup.element(),
+                of: this.$element(),
                 collision: "flipfit",
-                my: "top right",
-                at: "bottom right",
+                my: "top left",
+                at: "bottom left",
                 offset: {
                     y: -1
                 }
@@ -452,6 +463,11 @@ let DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
     },
 
+    /**
+     * @name dxDropDownButton.toggle
+     * @publicName toggle()
+     * @return Promise<void>
+     */
     /**
      * @name dxDropDownButton.toggle
      * @publicName toggle(visibility)
@@ -580,7 +596,7 @@ let DropDownButton = Widget.inherit({
             case "groupTemplate":
                 this._setListOption(name, value);
                 break;
-            case "contentTemplate":
+            case "dropDownContentTemplate":
                 this._popup && this._renderPopupContent();
                 break;
             case "selectedItemKey":
@@ -591,7 +607,7 @@ let DropDownButton = Widget.inherit({
             case "onItemClick":
                 this._createItemClickAction();
                 break;
-            case "onActionButtonClick":
+            case "onButtonClick":
                 this._createActionClickAction();
                 break;
             case "onSelectionChanged":
