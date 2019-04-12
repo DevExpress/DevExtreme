@@ -235,7 +235,7 @@ var MultiView = CollectionWidget.inherit({
     _updateIndicesAfterIndex: function(index) {
         this.callBase(index);
         this._deferredItems.splice(index + 1, 1);
-        for(var i = index + 1; i < this._deferredItems.length; i++) {
+        for(var i = index + 1; i < this.option("items").length; i++) {
             var item = this.option("items")[i];
             var $item = this._findItemElementByItem(item);
             if(!$item.length) {
