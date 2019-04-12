@@ -8,6 +8,7 @@ import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import modules from "./ui.grid_core.modules";
 import clickEvent from "../../events/click";
+import pointerEvents from "../../events/pointer";
 import { getIndexByKey, createObjectWithChanges, setEmptyText, getSelectionRange, setSelectionRange } from "./ui.grid_core.utils";
 import { addNamespace } from "../../events/utils";
 import dialog from "../dialog";
@@ -217,7 +218,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                eventsEngine.on(domAdapter.getDocument(), clickEvent.name, that._saveEditorHandler);
+                eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -488,7 +489,7 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(domAdapter.getDocument(), clickEvent.name, this._saveEditorHandler);
+            eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {
