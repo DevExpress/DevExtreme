@@ -85,7 +85,10 @@ var environment = {
         event.pointerType = pointerType;
         event.originalEvent = $.extend($.Event(type), { pointerType: pointerType });
         if(/^touch/.test(type)) {
-            event.originalEvent.touches = [{}];
+            event.originalEvent.touches = [{
+                pageX: x,
+                pageY: y
+            }];
         } else if(pointerType) {
             event.originalEvent.pointerId = 100;
         }
