@@ -68,6 +68,13 @@ const ActionButtonItem = Overlay.inherit({
         }
     },
 
+    _fixWrapperPosition() {
+        const $wrapper = this._$wrapper;
+        const $container = this._getContainer();
+
+        $wrapper.css("position", this._isWindow($container) ? "fixed" : "absolute");
+    },
+
     _setClickAction() {
         const eventName = addNamespace(clickEvent.name, this.NAME);
         const overlayContent = this.$element().find(OVERLAY_CONTENT_SELECTOR);
