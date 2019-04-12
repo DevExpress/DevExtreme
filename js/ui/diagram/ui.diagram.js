@@ -74,7 +74,7 @@ class Diagram extends Widget {
             }
         });
 
-        this._toolbarInstance.option("onUIItemToggle", (e) => {
+        this._toolbarInstance.option("onWidgetCommand", (e) => {
             if(e.name === "options") {
                 drawer.toggle();
             }
