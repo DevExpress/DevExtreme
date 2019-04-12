@@ -1,9 +1,11 @@
 import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
+import devices from "core/devices";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
@@ -271,6 +273,9 @@ QUnit.module("Events", () => {
     });
 });
 
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxButtonGroup");
+}
 
 QUnit.module("selection", () => {
     QUnit.test("change selection in the single by click", function(assert) {
