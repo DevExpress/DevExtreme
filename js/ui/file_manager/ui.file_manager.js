@@ -18,10 +18,10 @@ import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
 import { getName, getParentPath } from "./ui.file_manager.utils";
 
 import { FileProvider, FileManagerItem } from "./file_provider/file_provider";
-import ArrayFileProvider from "./file_provider/file_provider.array";
-import AjaxFileProvider from "./file_provider/file_provider.ajax";
-import OneDriveFileProvider from "./file_provider/file_provider.onedrive";
-import WebApiFileProvider from "./file_provider/file_provider.webapi";
+import ArrayFileProvider from "./file_provider/array";
+import AjaxFileProvider from "./file_provider/ajax";
+import OneDriveFileProvider from "./file_provider/onedrive";
+import WebApiFileProvider from "./file_provider/webapi";
 
 const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
