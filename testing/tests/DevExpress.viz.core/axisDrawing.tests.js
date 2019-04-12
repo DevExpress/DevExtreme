@@ -9508,7 +9508,6 @@ QUnit.test("Horizontal. Title fit to canvas - do not apply Ellipsis nor set hint
 
     var title = renderer.text.getCall(0).returnValue;
     title.applyEllipsis = sinon.stub().returns(true);
-    title.restoreText = sinon.stub();
 
     // act
     this.axis.updateSize(this.canvas);
@@ -9516,7 +9515,6 @@ QUnit.test("Horizontal. Title fit to canvas - do not apply Ellipsis nor set hint
     // assert
     assert.equal(title.applyEllipsis.callCount, 0);
     assert.equal(title.stub("setTitle").callCount, 0);
-    assert.equal(title.restoreText.callCount, 1);
 });
 
 QUnit.test("Vertical. Title does not fit to canvas - apply Ellipsis and set hint", function(assert) {
@@ -9564,7 +9562,6 @@ QUnit.test("Vertical. Title fit to canvas - do not apply Ellipsis nor set hint",
 
     var title = renderer.text.getCall(0).returnValue;
     title.applyEllipsis = sinon.stub().returns(true);
-    title.restoreText = sinon.stub();
 
     // act
     this.axis.updateSize(this.canvas);
@@ -9572,7 +9569,6 @@ QUnit.test("Vertical. Title fit to canvas - do not apply Ellipsis nor set hint",
     // assert
     assert.equal(title.applyEllipsis.callCount, 0);
     assert.equal(title.stub("setTitle").callCount, 0);
-    assert.equal(title.restoreText.callCount, 1);
 });
 
 QUnit.test("Do not draw grid outside canvas", function(assert) {
