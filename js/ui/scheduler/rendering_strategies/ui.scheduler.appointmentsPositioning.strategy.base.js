@@ -6,6 +6,7 @@ import typeUtils from "../../../core/utils/type";
 
 const DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24;
 const COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
+const COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22;
 
 class AppointmentPositioningStrategy {
 
@@ -32,6 +33,14 @@ class AppointmentPositioningStrategy {
 
     getCompactAppointmentLeftOffset() {
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+    }
+
+    getAppointmentDefaultOffset() {
+        if(this.getRenderingStrategy()._isCompactTheme()) {
+            return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
+        }
+
+        return this.getRenderingStrategy().instance.option("_appointmentOffset");
     }
 }
 

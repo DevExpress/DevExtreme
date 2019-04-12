@@ -4,6 +4,7 @@ import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.stra
 
 const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 const DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
+const ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET = 35;
 
 class AdaptivePositioningStrategy extends BasePositioningStrategy {
     getDropDownAppointmentWidth(intervalCount, isAllDay) {
@@ -20,6 +21,10 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
 
     getCompactAppointmentLeftOffset() {
         return (this.getRenderingStrategy().getDefaultCellWidth() - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET) / 2;
+    }
+
+    getAppointmentDefaultOffset() {
+        return ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET;
     }
 }
 
