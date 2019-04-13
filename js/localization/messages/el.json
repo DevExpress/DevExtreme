@@ -6,6 +6,7 @@
         "Clear": "Εκκαθάριση",
         "Done": "Καταχώρηση",
         "Loading": "Φόρτωση",
+        "Select": "Επιλέξτε...",
         "Search": "Αναζήτηση",
         "Back": "Πίσω",
         "OK": "ΟΚ",
@@ -192,7 +193,8 @@
         "dxScheduler-recurrenceMonthly": "Μηνιαία",
         "dxScheduler-recurrenceYearly": "Ετήσια",
 
-        "dxScheduler-recurrenceEvery": "Κάθε",
+        "dxScheduler-recurrenceRepeatEvery": "Κάθε",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "Τερματισμός επανάληψης",
         "dxScheduler-recurrenceAfter": "Μετά",
         "dxScheduler-recurrenceOn": "On",

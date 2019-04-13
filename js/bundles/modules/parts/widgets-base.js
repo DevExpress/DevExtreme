@@ -1,5 +1,6 @@
 var DevExpress = require("./core");
 require("./data");
+require("./file_providers");
 
 /// BUNDLER_PARTS
 /* UI core (dx.module-core.js) */
@@ -30,6 +31,7 @@ ui.dxDeferRendering = require("../../../ui/defer_rendering");
 ui.dxDropDownBox = require("../../../ui/drop_down_box");
 ui.dxDropDownMenu = require("../../../ui/drop_down_menu");
 ui.dxFileUploader = require("../../../ui/file_uploader");
+ui.dxFloatingActionButton = require("../../../ui/floating_action_button");
 ui.dxForm = require("../../../ui/form");
 ui.dxGallery = require("../../../ui/gallery");
 ui.dxHtmlEditor = require("../../../ui/html_editor");

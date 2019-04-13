@@ -1,10 +1,8 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
 import devices from "../../core/devices";
 import inkRipple from "../widget/utils.ink_ripple";
 import registerComponent from "../../core/component_registrator";
-import themes from "../themes";
 import ChildDefaultTemplate from "../widget/child_default_template";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
 import DataExpressionMixin from "../editor/ui.data_expression";
@@ -135,9 +133,6 @@ class RadioGroup extends Editor {
                 */
                 focusStateEnabled: true
             }
-        }, {
-            device: () => themes.isAndroid5(),
-            options: { useInkRipple: true }
         }]);
     }
 
@@ -146,7 +141,7 @@ class RadioGroup extends Editor {
     }
 
     _focusTarget() {
-        return this.$element().parent();
+        return this.$element();
     }
 
     _getAriaTarget() {
@@ -200,10 +195,6 @@ class RadioGroup extends Editor {
 
     _getItemValue(item) {
         return this._valueGetter ? this._valueGetter(item) : item.text;
-    }
-
-    _getSelectedItemKeys(value = this.option("value")) {
-        return isDefined(value) ? [value] : [];
     }
 
     _getSubmitElement() {
@@ -267,7 +258,7 @@ class RadioGroup extends Editor {
                 this._setCollectionWidgetOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "value":
-                this._setCollectionWidgetOption("selectedItemKeys", this._getSelectedItemKeys(value));
+                this._setCollectionWidgetOption("selectedItemKeys", [value]);
                 this._setSubmitValue(value);
                 super._optionChanged(args);
                 break;
@@ -288,9 +279,6 @@ class RadioGroup extends Editor {
         this._renderLayout();
         super._render();
         this._updateItemsSize();
-    }
-
-    _renderFocusState() {
     }
 
     _renderInkRipple() {
@@ -325,7 +313,7 @@ class RadioGroup extends Editor {
             scrollingEnabled: false,
             selectionByClick: false,
             selectionMode: "single",
-            selectedItemKeys: this._getSelectedItemKeys(),
+            selectedItemKeys: [this.option("value")],
             tabIndex: this.option("tabIndex")
         });
     }

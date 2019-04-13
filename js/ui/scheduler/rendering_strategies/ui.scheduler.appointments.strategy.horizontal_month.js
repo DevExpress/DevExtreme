@@ -91,9 +91,11 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _columnCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top),
-            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition);
+        var isSomeEdge = this._isSomeEdge(a, b);
+
+        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
+            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge),
+            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition, isSomeEdge);
 
         return rowCondition ? rowCondition : columnCondition ? columnCondition : cellPositionCondition ? cellPositionCondition : a.isStart - b.isStart;
     },
@@ -123,7 +125,10 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         };
     },
 
-    getCompactAppointmentGroupMaxWidth: function(intervalCount) {
+    getDropDownAppointmentWidth: function(intervalCount) {
+        if(this.instance.fire("isAdaptive")) {
+            return this.getDropDownButtonAdaptiveSize();
+        }
         var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
         return this.getDefaultCellWidth() - offset;
     },

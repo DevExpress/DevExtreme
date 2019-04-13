@@ -137,15 +137,16 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _markAppointmentAsVirtual: noop,
 
-    getCompactAppointmentGroupMaxWidth: noop,
+    getDropDownAppointmentWidth: noop,
 
     getDefaultCellWidth: function() {
         return this._defaultWidth;
     },
 
-    getCompactAppointmentDefaultSize: noop,
+    getCompactAppointmentDefaultWidth: noop,
 
-    getCompactAppointmentDefaultOffset: noop,
+    getCompactAppointmentLeftOffset: noop,
+    getCompactAppointmentTopOffset: noop,
 
     calculateRows: function(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
@@ -170,7 +171,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 var startDate = this.instance.fire("getField", "startDate", appointment),
                     endDate = this.instance.fire("getField", "endDate", appointment);
 
-                this._checkWrongEndDate(appointment, startDate, endDate);
+                this.instance.fire("fixWrongEndDate", appointment, startDate, endDate);
 
                 needClearSettings && delete appointment.settings;
 

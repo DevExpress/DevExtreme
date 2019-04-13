@@ -37,10 +37,18 @@ namespace StyleCompiler.ThemeBuilder
             new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_PURPLE_DARK),
             new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_TEAL_DARK),
 
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_BLUE_LIGHT, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_ORANGE_LIGHT, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_LIME_LIGHT, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_PURPLE_LIGHT, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_TEAL_LIGHT, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_BLUE_DARK, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_ORANGE_DARK, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_LIME_DARK, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_PURPLE_DARK, LessRegistry.SIZE_SCHEME_COMPACT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_TEAL_DARK, LessRegistry.SIZE_SCHEME_COMPACT),
+
             new ThemeId(LessRegistry.THEME_IOS7, LessRegistry.COLOR_SCHEME_DEFAULT),
-            new ThemeId(LessRegistry.THEME_ANDROID5, LessRegistry.COLOR_SCHEME_LIGHT),
-            new ThemeId(LessRegistry.THEME_WIN10, LessRegistry.COLOR_SCHEME_BLACK),
-            new ThemeId(LessRegistry.THEME_WIN10, LessRegistry.COLOR_SCHEME_WHITE)
         };
 
         readonly string

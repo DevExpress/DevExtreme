@@ -1,28 +1,27 @@
-var pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
-var $ = require("jquery"),
-    VerticalAppointmentsStrategy = require("ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical"),
-    HorizontalMonthAppointmentsStrategy = require("ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month"),
-    SchedulerAppointments = require("ui/scheduler/ui.scheduler.appointments"),
-    dropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),
-    eventsEngine = require("events/core/events_engine"),
-    dblclickEvent = require("events/dblclick"),
-    translator = require("animation/translator"),
-    dataCoreUtils = require("core/utils/data"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    dateUtils = require("core/utils/date"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    compileGetter = dataCoreUtils.compileGetter,
-    compileSetter = dataCoreUtils.compileSetter,
-    Draggable = require("ui/draggable"),
-    Resizable = require("ui/resizable"),
-    Widget = require("ui/widget/ui.widget"),
-    fx = require("animation/fx"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource;
+import $ from "jquery";
+import VerticalAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical";
+import HorizontalMonthAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month";
+import SchedulerAppointments from "ui/scheduler/ui.scheduler.appointments";
+import eventsEngine from "events/core/events_engine";
+import dblclickEvent from "events/dblclick";
+import translator from "animation/translator";
+import dataCoreUtils from "core/utils/data";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import dateUtils from "core/utils/date";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import Draggable from "ui/draggable";
+import Resizable from "ui/resizable";
+import fx from "animation/fx";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+
+const compileGetter = dataCoreUtils.compileGetter;
+const compileSetter = dataCoreUtils.compileSetter;
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-appointments"></div>\
@@ -71,20 +70,6 @@ var moduleOptions = {
         var subscribes = {
             needCoordinates: function(options) {
                 options.callback(that.getCoordinates.apply(that));
-            },
-            renderDropDownAppointments: function(options) {
-                var $menu = $("<div>").appendTo("#qunit-fixture #scheduler-appointments");
-
-                return dropDownAppointments.render({
-                    $container: $menu,
-                    coordinates: options.coordinates,
-                    items: options.items,
-                    color: options.color,
-                    itemTemplate: options.itemTemplate,
-                    buttonWidth: options.buttonWidth
-                }, new (Widget.inherit({
-                    fire: function() { }
-                }))($("<div>")));
             },
             getAppointmentColor: function(options) {
                 options.callback($.Deferred().resolve("red").promise());

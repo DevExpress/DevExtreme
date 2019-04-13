@@ -1,4 +1,17 @@
-var $ = require("jquery");
+import $ from "jquery";
+import dblclickEvent from "events/dblclick";
+import Color from "color";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dateSerialization from "core/utils/date_serialization";
+import { appointmentsHelper, tooltipHelper } from './helpers.js';
+
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -6,20 +19,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-var dblclickEvent = require("events/dblclick"),
-    Color = require("color"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dateSerialization = require("core/utils/date_serialization");
-
-require("ui/scheduler/ui.scheduler");
 
 QUnit.module("Integration: Recurring Appointments", {
     beforeEach: function() {
@@ -456,10 +455,10 @@ QUnit.test("Recurrent Task deleting, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    appointmentsHelper.click(1);
     this.clock.tick(300);
 
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    tooltipHelper.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedRecurringItem = this.instance.option("dataSource").items()[0],
@@ -488,9 +487,9 @@ QUnit.test("Recurrent Task editing, confirmation tooltip should be shown after t
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    appointmentsHelper.click(2);
     this.clock.tick(300);
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
+    tooltipHelper.clickOnItem();
 
     assert.ok($(".dx-dialog.dx-overlay-modal").length, "Dialog was shown");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
@@ -523,9 +522,9 @@ QUnit.test("Recurrent Task editing, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    appointmentsHelper.click(2);
     this.clock.tick(300);
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
+    tooltipHelper.clickOnItem();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $title = $(".dx-textbox").eq(0),
@@ -808,17 +807,19 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
     var form = this.instance.getAppointmentDetailsForm(),
         recurrenceItemClass = "dx-scheduler-recurrence-rule-item",
         openedRecurrenceItemClass = "dx-scheduler-recurrence-rule-item-opened",
-        $recurrenceItem = form.$element().find("." + recurrenceItemClass);
+        $recurrenceItem = form.$element().find("." + recurrenceItemClass),
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    form.$element().find(".dx-switch").eq(1).dxSwitch("instance").option("value", true);
+    freqEditor.option("value", "daily");
     $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
 });
 
-QUnit.test("Recurrence editor should work correctly after toggling repeat and end-repeat switch", function(assert) {
+QUnit.test("Recurrence editor should work correctly after toggling repeat and repeat-type editor", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -832,17 +833,18 @@ QUnit.test("Recurrence editor should work correctly after toggling repeat and en
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
-        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor,
+        repeatTypeEditor = recurrenceEditor._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
-    repeatEndEditor.option("value", true);
-    repeatOnEditor.option("value", false);
+    freqEditor.option("value", "daily");
+    repeatTypeEditor.option("value", 'count');
+    freqEditor.option("value", 'never');
 
     assert.ok(true, "recurrence editor works correctly");
 });
 
-QUnit.test("Recurrence editor should work correctly after switch off the recurrence", function(assert) {
+QUnit.test("Recurrence editor should work correctly after turn off the recurrence", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
         dataSource: new DataSource({
@@ -863,9 +865,10 @@ QUnit.test("Recurrence editor should work correctly after switch off the recurre
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
-    repeatOnEditor.option("value", false);
+    freqEditor.option("value", "never");
 
     assert.ok(true, "recurrence editor works correctly");
 });
@@ -1169,15 +1172,13 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone after 
         timeZone: "Australia/Sydney"
     });
 
-
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    appointmentsHelper.click();
     this.clock.tick(300);
 
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    tooltipHelper.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
-
     assert.notOk($appointment.length, "appt is deleted");
 });
 
@@ -1196,10 +1197,10 @@ QUnit.test("Recurrence exception should be adjusted by appointment timezone afte
         currentDate: new Date(2018, 3, 1)
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    appointmentsHelper.click();
     this.clock.tick(300);
 
-    $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
+    tooltipHelper.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),

@@ -255,9 +255,9 @@ function getVerticalAxesMargins(axes) {
     }, { panes: {} });
 }
 
-function performActionOnAxes(axes, action, actionArgument1, actionArgument2) {
+function performActionOnAxes(axes, action, actionArgument1, actionArgument2, actionArgument3) {
     axes.forEach(function(axis) {
-        axis[action](actionArgument1 && actionArgument1[axis.pane], actionArgument2 && actionArgument2[axis.pane] || actionArgument2);
+        axis[action](actionArgument1 && actionArgument1[axis.pane], actionArgument2 && actionArgument2[axis.pane] || actionArgument2, actionArgument3);
     });
 }
 
@@ -354,6 +354,10 @@ var dxChart = AdvancedChart.inherit({
             "zoomingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" },
             "scrollingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" }
         });
+    },
+
+    _partialOptionChangesMap: {
+        visualRange: "VISUAL_RANGE"
     },
 
     _initCore: function() {
@@ -549,9 +553,7 @@ var dxChart = AdvancedChart.inherit({
     _createPanesBorderOptions: function() {
         var commonBorderOptions = this._themeManager.getOptions("commonPaneSettings").border,
             panesBorderOptions = {};
-        _each(this.panes, function(_, pane) {
-            panesBorderOptions[pane.name] = _extend(true, {}, commonBorderOptions, pane.border);
-        });
+        this.panes.forEach(pane => panesBorderOptions[pane.name] = _extend(true, {}, commonBorderOptions, pane.border));
         return panesBorderOptions;
     },
 
@@ -576,7 +578,6 @@ var dxChart = AdvancedChart.inherit({
         this._createPanesBackground();
         this._appendAxesGroups();
 
-        this._updatePanesCanvases(drawOptions);
         this._adjustViewport();
 
         return panesBorderOptions;
@@ -654,7 +655,7 @@ var dxChart = AdvancedChart.inherit({
 
         that._argumentAxes.forEach(function(axis) {
             axis.updateCanvas(that._canvas);
-            axis.setBusinessRange(viewport, undefined, undefined, that._axesReinitialized);
+            axis.setBusinessRange(viewport, that._axesReinitialized);
         });
 
         that.callBase();
@@ -705,6 +706,10 @@ var dxChart = AdvancedChart.inherit({
                 undefined
             );
         }
+    },
+
+    _allowLegendInsidePosition() {
+        return true;
     },
 
     _applyExtraSettings: function(series) {
@@ -843,6 +848,14 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _renderAxes: function(drawOptions, panesBorderOptions) {
+        function calculateTitlesWidth(axes) {
+            return axes.map(axis => {
+                if(!axis.getTitle) return 0;
+
+                const title = axis.getTitle();
+                return title ? title.bBox.width : 0;
+            });
+        }
         var that = this,
             rotated = that._isRotated(),
             synchronizeMultiAxes = that._themeManager.getOptions("synchronizeMultiAxes"),
@@ -873,7 +886,7 @@ var dxChart = AdvancedChart.inherit({
         }
 
         var vAxesMargins = { panes: {} },
-            hAxesMargins = getHorizontalAxesMargins(horizontalAxes, function(axis) { return axis.estimateMargins(panesCanvases[axis.pane]); });
+            hAxesMargins = getHorizontalAxesMargins(horizontalAxes, axis => axis.estimateMargins(panesCanvases[axis.pane]));
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
@@ -883,6 +896,8 @@ var dxChart = AdvancedChart.inherit({
         drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
         hAxesMargins = getHorizontalAxesMargins(horizontalAxes, getAxisMargins);
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+
+        let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
         performActionOnAxes(allAxes, "updateSize", panesCanvases, axisAnimationEnabled(drawOptions, that._getVisibleSeries()));
 
@@ -897,6 +912,25 @@ var dxChart = AdvancedChart.inherit({
 
         that._valueAxes.forEach((axis) => {
             axis.setInitRange();
+        });
+
+        verticalAxes.forEach((axis, i) => {
+            if(axis.hasWrap && axis.hasWrap()) {
+                const title = axis.getTitle();
+                const newTitleWidth = title ? title.bBox.width : 0;
+                const offset = newTitleWidth - oldTitlesWidth[i];
+                if(axis.getOptions().position === "right") {
+                    vAxesMargins.right += offset;
+                } else {
+                    vAxesMargins.left += offset;
+                    that.panes.forEach(({ name }) => vAxesMargins.panes[name].left += offset);
+                }
+
+                panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+
+                performActionOnAxes(allAxes, "updateSize", panesCanvases, false, false);
+                oldTitlesWidth = calculateTitlesWidth(verticalAxes);
+            }
         });
 
         return cleanPanesCanvases;
@@ -1368,8 +1402,6 @@ var dxChart = AdvancedChart.inherit({
         });
     }
 });
-
-dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 dxChart.addPlugin(require("./chart_components/zoom_and_pan"));

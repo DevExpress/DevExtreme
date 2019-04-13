@@ -72,13 +72,12 @@ function parseCategories(categories, parser) {
 }
 
 function parseAxisCategories(groupsData, parsers) {
-    var argumentCategories = groupsData.argumentOptions && groupsData.argumentOptions.categories,
-        valueParser = parsers[1];
+    var argumentCategories = groupsData.argumentOptions && groupsData.argumentOptions.categories;
 
-    groupsData.groups.forEach(function(valueGroup) {
+    groupsData.groups.forEach(function(valueGroup, i) {
         var categories = valueGroup.valueOptions && valueGroup.valueOptions.categories;
         if(categories) {
-            valueGroup.valueOptions.categories = parseCategories(categories, valueParser);
+            valueGroup.valueOptions.categories = parseCategories(categories, parsers[i + 1]);
         }
     });
 
@@ -152,7 +151,7 @@ function prepareParsers(groupsData, incidentOccurred) {
         cache = {},
         list = [];
 
-    groupsData.groups.forEach(function(group) {
+    groupsData.groups.forEach(function(group, groupIndex) {
         group.series.forEach(function(series) {
             ignoreEmptyPoints = series.getOptions().ignoreEmptyPoints;
             valueParser = createParserUnit(group.valueType, group.valueAxisType, ignoreEmptyPoints, incidentOccurred);
@@ -160,7 +159,7 @@ function prepareParsers(groupsData, incidentOccurred) {
 
             cache[series.getArgumentField()] = argumentParser;
             series.getValueFields().forEach(function(field) {
-                !categoryParsers[1] && (categoryParsers[1] = valueParser);
+                categoryParsers[groupIndex + 1] = valueParser;
                 cache[field] = valueParser;
             });
 

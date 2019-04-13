@@ -1,13 +1,11 @@
-var $ = require("jquery"),
-    DropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),
-    dataCoreUtils = require("core/utils/data"),
-    typeUtils = require("core/utils/type"),
-    compileGetter = dataCoreUtils.compileGetter,
-    compileSetter = dataCoreUtils.compileSetter,
-    Widget = require("ui/widget/ui.widget"),
-    fx = require("animation/fx");
+import $ from "jquery";
+import dataCoreUtils from "core/utils/data";
+import typeUtils from "core/utils/type";
+import fx from "animation/fx";
+import "ui/scheduler/ui.scheduler";
 
-require("ui/scheduler/ui.scheduler");
+const compileGetter = dataCoreUtils.compileGetter;
+const compileSetter = dataCoreUtils.compileSetter;
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-appointments"></div>\
@@ -58,27 +56,15 @@ var moduleOptions = {
             if(command === "getCellDimensions") {
                 options.callback(this.cellWidth, this.cellHeight, this.allDayHeight);
             }
-            if(command === "renderDropDownAppointments") {
 
-                var $menu = $("<div>").appendTo("#qunit-fixture #scheduler-appointments");
-
-                return new DropDownAppointments().render({
-                    $container: $menu,
-                    coordinates: options.coordinates,
-                    items: options.items,
-                    color: options.color,
-                    itemTemplate: options.itemTemplate,
-                    buttonWidth: options.buttonWidth
-                }, new (Widget.inherit({
-                    fire: function() { }
-                }))($("<div>")));
-            }
             if(command === "getAppointmentColor") {
                 options.callback($.Deferred().resolve("red").promise());
             }
+
             if(command === "getResourceForPainting") {
                 options.callback({ field: "roomId" });
             }
+
             if(command === "getAppointmentDurationInMs") {
                 options.callback(options.endDate.getTime() - options.startDate.getTime());
             }

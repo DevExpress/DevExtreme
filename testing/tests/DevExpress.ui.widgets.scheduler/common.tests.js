@@ -1,30 +1,31 @@
-var pointerMock = require("../../helpers/pointerMock.js");
+import pointerMock from "../../helpers/pointerMock.js";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    isRenderer = require("core/utils/type").isRenderer,
-    translator = require("animation/translator"),
-    devices = require("core/devices"),
-    domUtils = require("core/utils/dom"),
-    errors = require("ui/widget/ui.errors"),
-    Color = require("color"),
-    fx = require("animation/fx"),
-    config = require("core/config"),
-    dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment_model"),
-    dxSchedulerWorkSpace = require("ui/scheduler/workspaces/ui.scheduler.work_space"),
-    dxSchedulerWorkSpaceDay = require("ui/scheduler/workspaces/ui.scheduler.work_space_day"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    SchedulerTimezones = require("ui/scheduler/timezones/ui.scheduler.timezones"),
-    dataUtils = require("core/element_data"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    themes = require("ui/themes");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { isRenderer } from "core/utils/type";
+import translator from "animation/translator";
+import devices from "core/devices";
+import domUtils from "core/utils/dom";
+import errors from "ui/widget/ui.errors";
+import Color from "color";
+import fx from "animation/fx";
+import config from "core/config";
+import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
+import dxSchedulerWorkSpace from "ui/scheduler/workspaces/ui.scheduler.work_space";
+import dxSchedulerWorkSpaceDay from "ui/scheduler/workspaces/ui.scheduler.work_space_day";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import SchedulerTimezones from "ui/scheduler/timezones/ui.scheduler.timezones";
+import dataUtils from "core/element_data";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import themes from "ui/themes";
+import { appointmentsHelper } from "./helpers.js";
 
-require("ui/scheduler/ui.scheduler");
-require("common.css!");
-require("generic_light.css!");
+import "ui/scheduler/ui.scheduler";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
@@ -1836,19 +1837,6 @@ QUnit.testStart(function() {
         assert.deepEqual(editing, defaultEditing);
     });
 
-    QUnit.test("Drop-down appointments should be repainted if the 'editing' option is changed", function(assert) {
-        this.createInstance({
-            editing: true
-        });
-
-        var repaintStub = sinon.stub(this.instance._dropDownAppointments, "repaintExisting");
-
-        this.instance.option("editing", false);
-
-        assert.ok(repaintStub.calledOnce, "Appointments are repainted");
-        assert.equal(repaintStub.getCall(0).args[0], this.instance.$element(), "Argument is OK");
-    });
-
     QUnit.test("Scheduler should be repainted after currentTime indication toggling", function(assert) {
         this.createInstance({
             showCurrentTimeIndicator: true,
@@ -3447,12 +3435,14 @@ QUnit.testStart(function() {
             focusStateEnabled: false
         });
 
-        var ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
-        assert.notOk(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+        appointmentsHelper.compact.click();
+        assert.notOk(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+
+        this.instance._appointmentTooltip.hide();
 
         this.instance.option("focusStateEnabled", true);
-        ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
-        assert.ok(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+        appointmentsHelper.compact.click();
+        assert.ok(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
     });
 
     QUnit.test("Workspace navigation by arrows should work correctly with opened dropDown appointments", function(assert) {
@@ -3794,6 +3784,18 @@ QUnit.testStart(function() {
         assert.ok(this.instance.$element().hasClass("dx-scheduler-small"), "Scheduler has 'dx-scheduler-small' css class");
     });
 
+    QUnit.test("Scheduler should have adaptive css class depend on adaptivityEnabled option", function(assert) {
+        this.createInstance({
+            width: 300,
+            adaptivityEnabled: true
+        });
+
+        assert.ok(this.instance.$element().hasClass("dx-scheduler-adaptive"), "Scheduler has 'dx-scheduler-adaptive' css class");
+
+        this.instance.option("adaptivityEnabled", false);
+
+        assert.notOk(this.instance.$element().hasClass("dx-scheduler-adaptive"), "Scheduler hasn't 'dx-scheduler-adaptive' css class");
+    });
 
     QUnit.test("Scheduler should have a small css class", function(assert) {
         this.createInstance({
@@ -4153,7 +4155,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");
@@ -4193,7 +4195,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");

@@ -498,6 +498,7 @@ Axis.prototype = {
     _adjustLabels: function(offset) {
         var that = this,
             maxSize = that._majorTicks.reduce(function(size, tick) {
+                if(!tick.label) return size;
                 var bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
                 return {
                     width: _max(size.width || 0, bBox.width),
@@ -523,6 +524,8 @@ Axis.prototype = {
             box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0),
             position = options.position,
             textAlign = tick.labelAlignment || options.label.alignment,
+            isDiscrete = that._options.type === "discrete",
+            isFlatLabel = tick.labelRotationAngle % 90 === 0,
             indentFromAxis = options.label.indentFromAxis,
             axisPosition = that._axisPosition,
             labelCoords = tick.labelCoords,
@@ -538,9 +541,9 @@ Axis.prototype = {
             }
 
             if(textAlign === RIGHT) {
-                translateX = labelX - box.x - box.width;
+                translateX = isDiscrete && isFlatLabel ? tick.coords.x - (box.x + box.width) : labelX - box.x - box.width;
             } else if(textAlign === LEFT) {
-                translateX = labelX - box.x;
+                translateX = isDiscrete && isFlatLabel ? labelX - box.x - (tick.coords.x - labelX) : labelX - box.x;
             } else {
                 translateX = labelX - box.x - box.width / 2;
             }
@@ -930,6 +933,10 @@ Axis.prototype = {
         }
     },
 
+    getTitle: function() {
+        return this._title;
+    },
+
     hideOuterElements: function() {
         var that = this,
             options = that._options;
@@ -1139,7 +1146,7 @@ Axis.prototype = {
         return center;
     },
 
-    setBusinessRange(range, categoriesOrder, oppositeVisualRangeUpdateMode, axisReinitialized) {
+    setBusinessRange(range, axisReinitialized, oppositeVisualRangeUpdateMode) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
@@ -1177,14 +1184,10 @@ Axis.prototype = {
         that._seriesData.minVisible = that._seriesData.minVisible === undefined ? that._seriesData.min : that._seriesData.minVisible;
         that._seriesData.maxVisible = that._seriesData.maxVisible === undefined ? that._seriesData.max : that._seriesData.maxVisible;
 
-        if(that.isArgumentAxis) {
-            that._seriesData.sortCategories(categoriesOrder);
-        } else {
-            if(options.showZero) {
-                that._seriesData.correctValueZeroLevel();
-            }
-            that._seriesData.sortCategories(that.getCategoriesSorter());
+        if(!that.isArgumentAxis && options.showZero) {
+            that._seriesData.correctValueZeroLevel();
         }
+        that._seriesData.sortCategories(that.getCategoriesSorter());
 
         that._seriesData.breaks =
             that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
@@ -1759,6 +1762,8 @@ Axis.prototype = {
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks);
 
+        that._axisGroup.append(that._axesContainerGroup);
+
         that._drawAxis();
         that._drawTitle();
         drawTickMarks(that._majorTicks, options.tick);
@@ -1782,7 +1787,6 @@ Axis.prototype = {
 
         that._dateMarkers = that._drawDateMarkers() || [];
 
-        that._axisGroup.append(that._axesContainerGroup);
         that._labelAxesGroup && that._axisStripLabelGroup.append(that._labelAxesGroup);
         that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
@@ -1799,6 +1803,29 @@ Axis.prototype = {
 
         that._measureTitle();
         measureLabels(that._majorTicks);
+        let textWidth;
+        if(that._isHorizontal) {
+            if(isDefined(that._tickInterval)) {
+                textWidth = that.getTranslator().getInterval(options.dataType === "datetime" ? dateToMilliseconds(that._tickInterval) : that._tickInterval);
+            }
+        } else {
+            textWidth = options.placeholderSize;
+        }
+
+        const displayMode = that._validateDisplayMode(options.label.displayMode);
+        const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
+        const wordWrapMode = options.label.wordWrap || "none";
+        const overflowMode = options.label.textOverflow || "none";
+
+        if((wordWrapMode !== "none" || overflowMode !== "none") && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
+            if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
+                that._majorTicks.forEach(tick => {
+                    tick.label && tick.label.setMaxSize(textWidth, undefined, options.label);
+                });
+                measureLabels(that._majorTicks);
+            }
+        }
+
         measureLabels(that._outsideConstantLines);
         measureLabels(that._insideConstantLines);
         measureLabels(that._strips);
@@ -1824,9 +1851,16 @@ Axis.prototype = {
         callAction(this._majorTicks, "animateLabels");
     },
 
-    updateSize: function(canvas, animate) {
+    updateSize: function(canvas, animate, updateTitle = true) {
         var that = this;
         that.updateCanvas(canvas);
+
+        if(updateTitle) {
+            that._checkTitleOverflow();
+            that._measureTitle();
+            that._updateTitleCoords();
+        }
+
         that._reinitTranslator(that._getViewportRange());
         that.applyMargins();
 
@@ -1852,9 +1886,6 @@ Axis.prototype = {
         that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(l => l.updatePosition(animationEnabled));
 
         callAction(that._strips, "updatePosition", animationEnabled);
-
-        that._updateTitleCoords();
-        that._checkTitleOverflow();
 
         updateGridsPosition(that._majorTicks, animationEnabled);
         updateGridsPosition(that._minorTicks, animationEnabled);

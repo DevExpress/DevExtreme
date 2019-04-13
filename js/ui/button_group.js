@@ -125,7 +125,20 @@ const ButtonGroup = Widget.inherit({
              * @type_function_param1_field5 removedItems:array<any>
              * @action
              */
-            onSelectionChanged: null
+            onSelectionChanged: null,
+
+            /**
+            * @name dxButtonGroupOptions.onItemClick
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 itemIndex:number
+            * @type_function_param1_field7 event:event
+            * @action
+            */
+            onItemClick: null
         });
     },
 
@@ -168,6 +181,15 @@ const ButtonGroup = Widget.inherit({
             this._prepareItemStyles($container);
             this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions()));
         }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
+    },
+
+    _init() {
+        this.callBase();
+        this._createItemClickAction();
+    },
+
+    _createItemClickAction() {
+        this._itemClickAction = this._createActionByOption("onItemClick");
     },
 
     _initMarkup() {
@@ -219,6 +241,9 @@ const ButtonGroup = Widget.inherit({
             onSelectionChanged: e => {
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
+            },
+            onItemClick: e => {
+                this._itemClickAction(e);
             }
         };
 
@@ -233,17 +258,7 @@ const ButtonGroup = Widget.inherit({
         this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
     },
 
-    _setOptionSilent: function(name, value) {
-        this._cancelOptionChange = name;
-        this.option(name, value);
-        this._cancelOptionChange = false;
-    },
-
     _optionChanged(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "stylingMode":
             case "selectionMode":
@@ -259,6 +274,9 @@ const ButtonGroup = Widget.inherit({
             case "selectedItemKeys":
             case "selectedItems":
                 this._buttonsCollection.option(args.name, args.value);
+                break;
+            case "onItemClick":
+                this._createItemClickAction();
                 break;
             case "onSelectionChanged":
                 break;

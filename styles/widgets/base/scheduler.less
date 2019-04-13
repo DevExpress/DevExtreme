@@ -30,12 +30,6 @@
 @SCHEDULER_MONTH_DATE_TEXT_SIZE: 16px;
 @SCHEDULER_MONTH_DATE_TEXT_PADDING: 6px;
 
-@SCHEDULER_RECURRENCE_LINE_TOP_POSITION: 70px;
-
-@SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 250px;
-@SCHEDULER_APPOINTMENT_TOOLTIP_BUTTONS_GAP: 10px;
-@SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 16px;
-
 @SCHEDULER_APPOINTMENT_MIN_SIZE: 4px;
 @SCHEDULER_APPOINTMENT_CONTENT_PADDING: 5px 7px;
 @SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 40px;
@@ -69,7 +63,6 @@
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 7px;
 @SCHEDULER_REDUCED_ICON_OFFSET: 5px;
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 20px;
-@SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET: 20px;
 
 @SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE: 16px;
 
@@ -87,6 +80,11 @@
 @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE: 2px;
 
 @SCHEDULER_TIMELINE_MIN_HEIGHT: 100px;
+
+@SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET: 20px;
+@SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -88px;
+@SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET: 5px;
+@SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING: 20px;
 
 .dx-scheduler-group-mixin(@padding) {
     .dx-scrollable {
@@ -381,7 +379,7 @@
                 margin-left: 0
             }
 
-             .dx-scheduler-date-table-scrollable {
+            .dx-scheduler-date-table-scrollable {
                 margin-left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH  + 1px + @offset;
             }
 
@@ -429,7 +427,7 @@
             .dx-scheduler-date-table {
                 margin-left: 0;
 
-                 .dx-rtl & {
+                .dx-rtl & {
                     margin-right: 0;
                     margin-left: 0;
                 }
@@ -438,7 +436,7 @@
             .dx-scheduler-fixed-appointments {
                 left: @size;
 
-                 .dx-rtl & {
+                .dx-rtl & {
                     right: @size;
                     left: 0;
                 }
@@ -2008,36 +2006,7 @@
         .dx-overflow();
     }
 
-    .dx-scheduler-appointment-tooltip {
-        text-align: left;
-        width: @SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH;
-
-        .dx-button-content {
-            font-size: @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE / 1.2;
-
-            .dx-icon {
-                font-size: @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE;
-            }
-        }
-    }
-
-    .dx-scheduler-appointment-tooltip-date,
-    .dx-scheduler-appointment-tooltip-title {
-        .dx-overflow();
-    }
-
-    .dx-scheduler-appointment-tooltip-title {
-        font-size: @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE;
-        font-weight: bold;
-        width: 100%;
-    }
-
-    .dx-scheduler-appointment-tooltip-buttons {
-        margin-top: @SCHEDULER_APPOINTMENT_TOOLTIP_BUTTONS_GAP;
-    }
-
     .dx-scheduler-appointment-popup {
-
         .dx-layout-manager .dx-label-h-align .dx-field-item-content {
             .dx-switch,
             .dx-checkbox {
@@ -2045,65 +2014,57 @@
             }
         }
 
-        .dx-form {
-            padding: 0 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET 0 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
+        .dx-field-item-label-location-left {
+            padding-right: @SCHEDULER_APPOINTMENT_FORM_LABEL_PADDING;
         }
 
-        .dx-scheduler-recurrence-rule-item {
-            position: relative;
-            padding-right: 0;
+        .dx-scheduler-recurrence-rule-item.dx-field-item {
+            padding-top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
 
-            .dx-field-item-label {
-                vertical-align: top;
-
-                &.dx-field-item-label-location-right {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
+            &.dx-label-h-align.dx-flex-layout {
+                -webkit-align-items: start;
+                -webkit-box-align: start;
+                align-items: start;
             }
 
             .dx-field-value,
             .dx-field-label {
                 float: none;
 
-                .dx-recurrence-numberbox-repeat-count {
+                 .dx-recurrence-numberbox-repeat-count {
                     float: left;
                 }
             }
 
+            .dx-field-item-label:first-child {
+                padding-top: @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET;
+            }
+
+            .dx-recurrence-numberbox-interval-label,
+            .dx-recurrence-repeat-on-label,
+            .dx-recurrence-repeat-end-container-label {
+                position: absolute;
+
+                // NOTE: labels allignment in recurrence editor with the base offset
+                left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET - 2px;
+
+                padding-right: 10px;
+                padding-top: 3px;
+            }
+
+            .dx-recurrence-repeat-end-container-label,
+            .dx-recurrence-repeat-end-container {
+                padding-top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
+            }
+
+            .dx-recurrence-radiogroup-repeat-type {
+                position: relative;
+                left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET;
+                top: @SCHEDULER_RECURRENCE_EDITOR_TOP_OFFSET;
+            }
+
             .dx-field-value {
                 display: inline-block;
-            }
-
-            .dx-field-label {
-                padding: 3px 0;
-            }
-
-            &.dx-scheduler-recurrence-rule-item-opened {
-                &:before {
-                    display: block;
-                }
-            }
-
-            &:before {
-                content: "";
-                position: absolute;
-                top: 50px;
-                margin-top: -35px;
-                bottom: 0;
-                width: 100%;
-                display: none;
-            }
-
-            &.dx-label-v-align {
-                &:before {
-                    top: @SCHEDULER_RECURRENCE_LINE_TOP_POSITION;
-                }
-            }
-
-            .dx-field-item-content-location-left {
-                .dx-recurrence-editor {
-                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
             }
         }
 
@@ -2173,10 +2134,6 @@
                 padding-left: 0;
             }
         }
-    }
-
-    .dx-scheduler-dropdown-appointment {
-        border-left: 5px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
     }
 
     .dx-scheduler-agenda {
@@ -2698,10 +2655,6 @@
             }
         }
 
-        .dx-scheduler-appointment-tooltip {
-            text-align: right;
-        }
-
         .dx-scheduler-appointment-recurrence-icon {
             left: @SCHEDULER_RECURRENCE_ICON_OFFSET;
             right: auto;
@@ -2719,11 +2672,6 @@
         .dx-scheduler-work-space-work-week .dx-scheduler-all-day-table-cell {
             border-right: @SCHEDULER_BASE_BORDER;
             border-left: none;
-        }
-
-        .dx-scheduler-dropdown-appointment {
-            border-left: none;
-            border-right: 3px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
         }
 
         &.dx-scheduler-work-space-both-scrollbar {
@@ -2825,31 +2773,6 @@
             }
         }
 
-        .dx-scheduler-recurrence-rule-item {
-            .dx-field-item-label {
-                &.dx-field-item-label-location-left,
-                &.dx-field-item-label-location-top {
-                    padding-left: 10px;
-                }
-
-                &.dx-field-item-label-location-right {
-                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-
-            &.dx-label-v-align {
-                .dx-recurrence-editor {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-
-            .dx-field-item-content-location-left {
-                .dx-recurrence-editor {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-        }
-
         .dx-scheduler-agenda {
             .dx-scheduler-scrollable-appointments {
                 padding-right: @SCHEDULER_LEFT_COLUMN_WIDTH;
@@ -2880,5 +2803,12 @@
                 float: left;
             }
         }
+    }
+}
+
+.dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
+.dx-scheduler .dx-scheduler-overlay-panel {
+    .dx-tooltip-appointment-item-marker-body {
+        background: @SCHEDULER_APPOINTMENT_BASE_COLOR;
     }
 }

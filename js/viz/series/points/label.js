@@ -1,15 +1,17 @@
-var _format = require("../../../format_helper").format,
-    vizUtils = require("../../core/utils"),
-    each = require("../../../core/utils/iterator").each,
-    extend = require("../../../core/utils/extend").extend,
-    _degreesToRadians = vizUtils.degreesToRadians,
-    _patchFontOptions = vizUtils.patchFontOptions,
-    _math = Math,
+import { format as _format } from "../../../format_helper";
+import {
+    degreesToRadians as _degreesToRadians,
+    patchFontOptions as _patchFontOptions,
+    getCosAndSin as _getCosAndSin,
+    rotateBBox as _rotateBBox
+} from "../../core/utils";
+import { each } from "../../../core/utils/iterator";
+import { extend } from "../../../core/utils/extend";
+
+const _math = Math,
     _round = _math.round,
     _floor = _math.floor,
     _abs = _math.abs,
-    _getCosAndSin = vizUtils.getCosAndSin,
-    _rotateBBox = vizUtils.rotateBBox,
 
     CONNECTOR_LENGTH = 12,
     LABEL_BACKGROUND_PADDING_X = 8,
@@ -283,6 +285,7 @@ function Label(renderSettings) {
     this._container = renderSettings.labelsGroup;
     this._point = renderSettings.point;
     this._strategy = renderSettings.strategy;
+    this._rowCount = 1;
 }
 
 Label.prototype = {
@@ -452,9 +455,20 @@ Label.prototype = {
 
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
     fit: function(maxWidth) {
-        var padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
-        this._text && this._text.applyEllipsis(maxWidth - padding);
+        const padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
+        let rowCountChanged = false;
+        if(this._text) {
+            let { rowCount } = this._text.setMaxSize(maxWidth - padding, undefined, this._options);
+            if(rowCount === 0) {
+                rowCount = 1;
+            }
+            if(rowCount !== this._rowCount) {
+                rowCountChanged = true;
+                this._rowCount = rowCount;
+            }
+        }
         this._updateBackground(this._text.getBBox());
+        return rowCountChanged;
     },
 
     resetEllipsis: function() {

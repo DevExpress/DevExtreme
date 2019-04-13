@@ -30,7 +30,6 @@ const config = {
     * @type boolean
     */
     oDataFilterToLower: true,
-    designMode: false,
     /**
     * @name globalConfig.serverDecimalSeparator
     * @type string
@@ -80,6 +79,47 @@ const config = {
     * @default false
     */
     useLegacyVisibleIndex: false,
+
+    /**
+    * @name globalConfig.floatingActionButtonConfig
+    * @type object
+    */
+    floatingActionButtonConfig: {
+        /**
+        * @name globalConfig.floatingActionButtonConfig.icon
+        * @type string
+        * @default "add"
+        */
+        icon: "add",
+
+        /**
+        * @name globalConfig.floatingActionButtonConfig.closeIcon
+        * @type string
+        * @default "close"
+        */
+        closeIcon: "close",
+
+        /**
+        * @name globalConfig.floatingActionButtonConfig.position
+        * @type Enums.PositionAlignment|positionConfig|function
+        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
+        */
+        position: {
+            at: "right bottom",
+            my: "right bottom",
+            offset: {
+                x: -16,
+                y: -16
+            }
+        },
+
+        /**
+        * @name globalConfig.floatingActionButtonConfig.maxActionButtonCount
+        * @type number
+        * @default 5
+        */
+        maxActionButtonCount: 5
+    },
 
     optionsParser: (optionsString) => {
         if(optionsString.trim().charAt(0) !== "{") {

@@ -6,30 +6,42 @@
     @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 24px;
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
+    @MATERIAL_TAGBOX_TAG_MARGIN: 8px;
+    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 12px 12px 4px 12px;
 }
 .dx-size-compact() {
-    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 4px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 17px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 2px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 2px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
-    @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 3px;
-    @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 17px;
-    @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 7px;
-    @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 1px;
+    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 8px;
+    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 32px;
+    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 4px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 4px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
+    @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 4px;
+    @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 24px;
+    @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
+    @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
+    @MATERIAL_TAGBOX_TAG_MARGIN: 5px;
+    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 8px 8px 2px 8px;
 }
 .dx-tagbox {
+    .dx-texteditor-input-container {
+        height: 100%;
+    }
+
     &.dx-editor-filled, &.dx-editor-outlined {
         .dx-texteditor-input {
             padding: 0;
         }
 
         .dx-tag-container {
-            padding: 12px 12px 4px 12px;
-            min-height: 56px;
+            padding: @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING;
+            min-height: @MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
         }
     }
 }
 
 .dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
+    .dx-tag-container {
+        margin-top: 1px;
+    }
+
     .dx-texteditor-input {
         padding-left: 0;
 
@@ -53,20 +65,6 @@
         &:after {
             border-bottom: 0;
         }
-    }
-}
-
-.dx-dropdowneditor-button-visible .dx-tag-container {
-    padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-}
-
-.dx-show-clear-button {
-    .dx-tag-container {
-        padding-right: @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-    }
-
-    &.dx-dropdowneditor-button-visible .dx-tag-container {
-        padding-right: @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
     }
 }
 
@@ -119,7 +117,7 @@
 }
 
 .dx-tag {
-    margin: 0 8px 8px 0;
+    margin: 0 @MATERIAL_TAGBOX_TAG_MARGIN @MATERIAL_TAGBOX_TAG_MARGIN 0;
 
     &:hover {
         .dx-tag-content {
@@ -170,22 +168,5 @@
 
     .dx-tag-remove-button {
         left: 4px!important;
-    }
-
-    &.dx-dropdowneditor-button-visible .dx-tag-container {
-        padding-right: 0;
-        padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-    }
-
-    &.dx-show-clear-button {
-        .dx-tag-container {
-            padding-right: 0;
-            padding-left: @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-        }
-
-        &.dx-dropdowneditor-button-visible .dx-tag-container {
-            padding-right: 0;
-            padding-left: @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-        }
     }
 }

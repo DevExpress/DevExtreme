@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    Title = require("viz/core/title").Title;
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import { Title } from "viz/core/title";
 
 var environment = {
     beforeEach: function() {
@@ -20,7 +20,8 @@ var environment = {
             text: "test",
             placeholderSize: 5,
             subtitle: {
-                text: "subtitle"
+                text: "subtitle",
+                offset: 2
             }
         };
 
@@ -310,14 +311,18 @@ QUnit.test("shift title", function(assert) {
 QUnit.test("Drawing with subtitle", function(assert) {
     this.createTitle().draw();
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "center" });
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], { text: "A", y: 0 });
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(2).args[0], { text: "test" });
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(3).args[0], { y: -12 });
+    const titleElement = this.renderer.text.getCall(0).returnValue;
+    assert.deepEqual(titleElement.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(titleElement.attr.getCall(1).args[0], { text: "A", y: 0 });
+    assert.deepEqual(titleElement.attr.getCall(2).args[0], { text: "test" });
+    assert.deepEqual(titleElement.attr.getCall(3).args[0], { y: -12 });
 
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], { align: "center" });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(1).args[0], { text: "subtitle", y: 0 });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(2).args[0], { y: -21 });
+    const subtitleElement = this.renderer.text.getCall(1).returnValue;
+    assert.deepEqual(subtitleElement.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(subtitleElement.attr.getCall(1).args[0], { text: "subtitle", y: 0 });
+    assert.deepEqual(subtitleElement.move.lastCall.args, [0, 8]);
+
+    assert.ok(subtitleElement.move.lastCall.calledAfter(titleElement.setMaxSize.lastCall));
 });
 
 QUnit.test("Second Update", function(assert) {
@@ -378,8 +383,8 @@ QUnit.test("Length of title greater than canvas width", function(assert) {
 
     this.createTitle().draw(this.canvas.width, this.canvas.height);
 
-    assert.equal(this.renderer.text.getCall(0).returnValue.applyEllipsis.lastCall.args[0], 770);
-    assert.equal(this.renderer.text.getCall(1).returnValue.applyEllipsis.lastCall.args[0], 770);
+    assert.equal(this.renderer.text.getCall(0).returnValue.setMaxSize.lastCall.args[0], 770);
+    assert.equal(this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args[0], 770);
 });
 
 QUnit.test("Set title if text has big size", function(assert) {
@@ -501,14 +506,14 @@ QUnit.test("move", function(assert) {
     assert.strictEqual(spy.callCount, 0, "not drawn");
 });
 
-QUnit.test("move - not enough size", function(assert) {
+QUnit.test("move - not enough size in rect - move to second rect", function(assert) {
     var title = this.createTitle().draw(),
         spy = sinon.spy(title, "draw");
 
-    title.move([20, 10, 50, 40]);
+    title.move([20, 10, 50, 40], [10, 10, 100, 40]);
 
-    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.getCall(0).args, [19, -14], "position");
-    assert.strictEqual(spy.callCount, 1, "drawn");
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.getCall(0).args, [9, -14], "position");
+    assert.strictEqual(spy.callCount, 0, "drawn");
 });
 
 QUnit.test("freeSpace", function(assert) {

@@ -199,6 +199,12 @@
     }
   },
   {
+    "name": "ui/floating_action_button",
+    "exports": {
+      "default": { "path": "ui.dxFloatingActionButton", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/accordion",
     "exports": {
       "default": { "path": "ui.dxAccordion", "isWidget": true }
@@ -285,6 +291,12 @@
     }
   },
   {
+    "name": "ui/diagram",
+    "exports": {
+      "default": { "path": "ui.dxDiagram", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/dialog",
     "exports": {
       "alert": { "path": "ui.dialog.alert" },
@@ -330,6 +342,12 @@
     "name": "ui/filter_builder",
     "exports": {
       "default": { "path": "ui.dxFilterBuilder", "isWidget": true }
+    }
+  },
+  {
+    "name": "ui/file_manager",
+    "exports": {
+      "default": { "path": "ui.dxFileManager", "isWidget": true }
     }
   },
   {
@@ -415,18 +433,6 @@
     "exports": {
       "default": { "path": "ui.dxOverlay" },
       "baseZIndex": { "path": "ui.dxOverlay.baseZIndex" }
-    }
-  },
-  {
-    "name": "ui/panorama",
-    "exports": {
-      "default": { "path": "ui.dxPanorama", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/pivot",
-    "exports": {
-      "default": { "path": "ui.dxPivot", "isWidget": true }
     }
   },
   {

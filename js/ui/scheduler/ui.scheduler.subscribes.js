@@ -288,8 +288,12 @@ const subscribes = {
         return this.getLayoutManager().getRenderingStrategyInstance().getDeltaTime(e, initialSize, itemData);
     },
 
-    getCompactAppointmentGroupMaxWidth: function(isAllDay) {
-        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount, isAllDay);
+    getDropDownAppointmentWidth: function(isAllDay) {
+        return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentWidth(this._getViewCountConfig().intervalCount, isAllDay);
+    },
+
+    getDropDownAppointmentHeight: function() {
+        return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentHeight();
     },
 
     getStartDate: function(appointmentData, skipNormalize) {
@@ -445,8 +449,12 @@ const subscribes = {
         options.callback(updatedEndDate);
     },
 
-    renderDropDownAppointments: function(options) {
-        this._dropDownAppointments.render(options, this);
+    renderCompactAppointments: function(options) {
+        this._compactAppointmentsHelper.render(options);
+    },
+
+    clearCompactAppointments: function() {
+        this._compactAppointmentsHelper.clear();
     },
 
     supportCompactDropDownAppointments: function() {
@@ -505,6 +513,10 @@ const subscribes = {
 
     recurrenceEditorVisibilityChanged: function(visible) {
         this.recurrenceEditorVisibilityChanged(visible);
+    },
+
+    resizePopup: function() {
+        this.resizePopup();
     },
 
     getField: function(field, obj) {
@@ -820,12 +832,20 @@ const subscribes = {
         options.callback(result);
     },
 
+    fixWrongEndDate: function(appointment, startDate, endDate) {
+        return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
+    },
+
     getEndDayHour: function() {
         return this.option("endDayHour");
     },
 
     getStartDayHour: function() {
         return this.option("startDayHour");
+    },
+
+    isAdaptive: function() {
+        return this.option("adaptivityEnabled");
     }
 };
 module.exports = subscribes;

@@ -1,20 +1,19 @@
-var common = require("./common"),
-    Node = require("./node"),
+import { buildRectAppearance as _buildRectAppearance, buildTextAppearance as _buildTextAppearance } from "./common";
+import Node from "./node";
+import { getAlgorithm as _getTilingAlgorithm } from "./tiling";
+import { getColorizer as _getColorizer } from "./colorizing";
+import { patchFontOptions as _patchFontOptions } from "../core/utils";
+import { noop as _noop } from "../../core/utils/common";
+import { isDefined as _isDefined } from "../../core/utils/type";
+import { extend as _extend } from "../../core/utils/extend";
 
-    _getTilingAlgorithm = require("./tiling").getAlgorithm,
-    _getColorizer = require("./colorizing").getColorizer,
-    _patchFontOptions = require("../core/utils").patchFontOptions,
-    _buildRectAppearance = common.buildRectAppearance,
-    _buildTextAppearance = common.buildTextAppearance,
-    _noop = require("../../core/utils/common").noop,
-    _max = Math.max,
-
-    directions = {
-        "lefttoprightbottom": [+1, +1],
-        "leftbottomrighttop": [+1, -1],
-        "righttopleftbottom": [-1, +1],
-        "rightbottomlefttop": [-1, -1]
-    };
+const _max = Math.max;
+const directions = {
+    "lefttoprightbottom": [+1, +1],
+    "leftbottomrighttop": [+1, -1],
+    "righttopleftbottom": [-1, +1],
+    "rightbottomlefttop": [-1, -1]
+};
 
 // At least one algorithm is required.
 require("./tiling.squarified");
@@ -49,6 +48,16 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
     _getDefaultSize: function() {
         return { width: 400, height: 400 };
+    },
+
+    _setDeprecatedOptions: function() {
+        this.callBase.apply(this, arguments);
+        _extend(this._deprecatedOptions, {
+            "resolveLabelOverflow": {
+                since: "19.1",
+                message: "Use the 'tile.label.overflow' and 'group.label.textOverflow' option instead"
+            }
+        });
     },
 
     _themeSection: "treeMap",
@@ -302,17 +311,24 @@ var dxTreeMap = require("../core/base_widget").inherit({
     _calculateLabelSettings: function(settings, options, filter) {
         var bBox = this._getTextBBox(options.font),
             paddingLeftRight = pickPositiveInteger(options.paddingLeftRight),
-            paddingTopBottom = pickPositiveInteger(options.paddingTopBottom);
+            paddingTopBottom = pickPositiveInteger(options.paddingTopBottom),
+            tileLabelOptions = this._getOption("tile.label"),
+            groupLabelOptions = this._getOption("group.label");
 
         settings.labelState = _buildTextAppearance(options, filter);
         settings.labelState.visible = !("visible" in options) || !!options.visible;
+        this._suppressDeprecatedWarnings();
         settings.labelParams = {
             height: bBox.height,
             rtlEnabled: this._getOption("rtlEnabled", true),
             paddingTopBottom: paddingTopBottom,
             paddingLeftRight: paddingLeftRight,
-            resolveLabelOverflow: this._getOption("resolveLabelOverflow", true)
+            resolveLabelOverflow: this._getOption("resolveLabelOverflow", true),
+            tileLabelWordWrap: tileLabelOptions.wordWrap,
+            tileLabelOverflow: tileLabelOptions.textOverflow,
+            groupLabelOverflow: groupLabelOptions.textOverflow
         };
+        this._resumeDeprecatedWarnings();
     },
 
     _changeMaxDepth: function() {
@@ -578,16 +594,30 @@ function layoutTextNode(node, params) {
         bBox = text.getBBox(),
         paddingLeftRight = params.paddingLeftRight,
         paddingTopBottom = params.paddingTopBottom,
-        effectiveWidth = rect[2] - rect[0] - paddingLeftRight,
+        effectiveWidth = rect[2] - rect[0] - 2 * paddingLeftRight,
         fitByHeight = bBox.height + paddingTopBottom <= rect[3] - rect[1],
-        fitByWidth = bBox.width <= effectiveWidth;
+        fitByWidth = bBox.width <= effectiveWidth,
+        resolveLabelOverflow = params.resolveLabelOverflow,
+        groupLabelOverflow = params.groupLabelOverflow,
+        tileLabelOverflow = params.tileLabelOverflow,
+        tileLabelWordWrap = params.tileLabelWordWrap;
 
-    if(params.resolveLabelOverflow === "ellipsis" && fitByHeight) {
-        text.applyEllipsis(effectiveWidth);
-        if(!fitByWidth) {
-            bBox = text.getBBox();
-            fitByWidth = bBox.width <= effectiveWidth;
+    if(_isDefined(resolveLabelOverflow)) {
+        if(resolveLabelOverflow === "ellipsis" && fitByHeight) {
+            text.setMaxSize(effectiveWidth, undefined, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
+            if(!fitByWidth) {
+                bBox = text.getBBox();
+                fitByWidth = bBox.width <= effectiveWidth;
+            }
         }
+    } else {
+        fitByWidth = true;
+        fitByHeight = true;
+        text.setMaxSize(effectiveWidth, rect[3] - rect[1] - paddingTopBottom, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: "none" } :
+            { textOverflow: tileLabelOverflow, wordWrap: tileLabelWordWrap });
     }
 
     text.attr({

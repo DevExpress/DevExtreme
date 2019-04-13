@@ -1488,6 +1488,7 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
 
     // act
     $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("focus");
+    $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("dxpointerdown");
     $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("dxclick");
     that.clock.tick();
 

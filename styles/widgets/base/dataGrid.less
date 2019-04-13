@@ -38,6 +38,26 @@
         .dx-icon-sortdown;
     }
 
+    .dx-datagrid-headers {
+        .dx-header-row > td,
+        .dx-header-filter {
+            outline: none;
+        }
+
+        &.dx-state-focused .dx-header-row {
+            td:focus,
+            td .dx-header-filter:focus {
+                outline: 2px solid @datagrid-focused-border-color;
+            }
+            td:focus {
+                outline-offset: -2px;
+            }
+            td .dx-header-filter:focus {
+                outline-offset: 2px;
+            }
+        }
+    }
+
     .dx-header-filter {
         position: relative;
         color: @HEADER_FILTER_COLOR;
@@ -77,6 +97,13 @@
         }
     }
 
+    .dx-datagrid-rowsview.dx-state-focused .dx-data-row {
+        & > td.dx-command-edit > a.dx-link:focus {
+            outline: 2px solid @datagrid-focused-border-color;
+            outline-offset: 2px;
+        }
+    }
+
     .dx-datagrid-rowsview {
         .dx-datagrid-edit-form {
             background-color: @datagrid-base-background-color;
@@ -87,11 +114,7 @@
 
             &:not(.dx-datagrid-group-space):before {
                 display: block;
-                position: absolute;
-                left: 7px;
-                right: 7px;
-                top: 0;
-                bottom: 0;
+                height: 100%;
                 content: '';
                 background-image: @datagrid-text-stub-background-image-path;
                 background-repeat: no-repeat repeat;
@@ -131,6 +154,18 @@
 .dx-datagrid-filter-panel {
     color: @datagrid-base-color;
     border-top: @datagrid-border;
+    .dx-icon-filter,
+    .dx-datagrid-filter-panel-text,
+    .dx-datagrid-filter-panel-clear-filter {
+        outline: none;
+    }
+    &.dx-state-focused {
+        .dx-icon-filter:focus,
+        .dx-datagrid-filter-panel-text:focus,
+        .dx-datagrid-filter-panel-clear-filter:focus {
+            outline: 2px solid @datagrid-focused-border-color;
+        }
+    }
 }
 
 .dx-datagrid-form-buttons-container {

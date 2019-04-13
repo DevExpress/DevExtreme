@@ -19,8 +19,8 @@ registerTheme({
     backgroundColor: "#2a2a2a",
     primaryTitleColor: "#dedede",
     secondaryTitleColor: "#a3a3a3",
-    axisColor: "#555555",
-    axisLabelColor: "#a3a3a3",
+    gridColor: "#555555",
+    axisColor: "#a3a3a3",
     "export": {
         backgroundColor: "#2a2a2a",
         font: {

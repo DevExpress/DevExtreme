@@ -1,5 +1,6 @@
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
+    registerThemeAlias = themeModule.registerThemeAlias,
 
     FONT_FAMILY = "'Roboto', 'RobotoFallback', 'Helvetica', 'Arial', sans-serif",
 
@@ -68,6 +69,9 @@ registerTheme({
 
     chart: {
         commonAxisSettings: {
+            minorTick: {
+                opacity: 0.5
+            },
             label: {
                 font: {
                     size: 11
@@ -86,6 +90,11 @@ registerTheme({
     },
 
     polar: {
+        commonAxisSettings: {
+            minorTick: {
+                opacity: 0.5
+            }
+        },
         title: {
             horizontalAlignment: "center",
             subtitle: {
@@ -140,8 +149,8 @@ registerTheme({
 
 registerTheme({
     name: "material.light",
-    axisColor: "#e0e0e0",
-    axisLabelColor: LIGHT_LABEL_COLOR,
+    gridColor: "#e0e0e0",
+    axisColor: LIGHT_LABEL_COLOR,
     primaryTitleColor: LIGHT_TITLE_COLOR,
 
     legend: {
@@ -170,9 +179,9 @@ registerTheme({
 
 registerTheme({
     name: "material.dark",
-    axisColor: "#515159",
+    gridColor: "#515159",
     backgroundColor: DARK_BACKGROUND_COLOR,
-    axisLabelColor: DARK_LABEL_COLOR,
+    axisColor: DARK_LABEL_COLOR,
     font: {
         color: DARK_LABEL_COLOR
     },
@@ -427,14 +436,20 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
     }, "material." + themeName);
 }
 
-registerMaterialColorScheme("blue", "light", "#03a9f4");
-registerMaterialColorScheme("lime", "light", "#cddc39");
-registerMaterialColorScheme("orange", "light", "#ff5722");
-registerMaterialColorScheme("purple", "light", "#9c27b0");
-registerMaterialColorScheme("teal", "light", "#009688");
+var materialAccents = {
+    "blue": "#03a9f4",
+    "lime": "#cddc39",
+    "orange": "#ff5722",
+    "purple": "#9c27b0",
+    "teal": "#009688"
+};
 
-registerMaterialColorScheme("blue", "dark", "#03a9f4");
-registerMaterialColorScheme("lime", "dark", "#cddc39");
-registerMaterialColorScheme("orange", "dark", "#ff5722");
-registerMaterialColorScheme("purple", "dark", "#9c27b0");
-registerMaterialColorScheme("teal", "dark", "#009688");
+for(var accent in materialAccents) {
+    if(materialAccents.hasOwnProperty(accent)) {
+        var color = materialAccents[accent];
+        registerMaterialColorScheme(accent, "light", color);
+        registerMaterialColorScheme(accent, "dark", color);
+        registerThemeAlias(`material.${accent}.light.compact`, `material.${accent}.light`);
+        registerThemeAlias(`material.${accent}.dark.compact`, `material.${accent}.dark`);
+    }
+}

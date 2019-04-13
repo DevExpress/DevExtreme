@@ -7,10 +7,6 @@ const DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button";
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
 
 export default class ClearButton extends ActionButton {
-    constructor(editor, options) {
-        super("dropDown", editor, options);
-    }
-
     _attachEvents(instance) {
         const { editor } = this;
 

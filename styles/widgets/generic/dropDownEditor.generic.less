@@ -9,10 +9,6 @@
     @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE -
     @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
-@GENERIC_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING:
-    @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
-    @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-
 @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET:
     @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
     @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
@@ -33,6 +29,7 @@
 
 .dx-dropdowneditor-button {
     width: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+    min-width: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
     padding: @GENERIC_DROPDOWNEDITOR_BUTTON_OFFSET;
     border-radius: @button-border-radius;
 
@@ -76,31 +73,17 @@
 
 .dx-dropdowneditor .dx-clear-button-area {
     width: @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+    min-width: @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
 }
 
 .dx-dropdowneditor-button-visible {
-    &.dx-show-clear-button .dx-texteditor-input {
-        padding-right: @GENERIC_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-
-        .dx-rtl &,
-        .dx-rtl& {
-            padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
-            padding-left: @GENERIC_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-        }
-
-        .dx-rtl.dx-searchbox&,
-        .dx-rtl .dx-searchbox& {
-            padding-right: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        }
-    }
-
     .dx-texteditor-input {
-        padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+        padding-right: 0;
 
         .dx-rtl &,
         .dx-rtl& {
             padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
-            padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+            padding-left: 0;
         }
 
         .dx-rtl.dx-editor-underlined&,
@@ -111,31 +94,14 @@
 }
 
 .invalid-dropdowneditor-input-padding() {
-    &.dx-dropdowneditor-button-visible {
+    .dx-texteditor-input {
+        padding-right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+    }
+
+    &.dx-rtl {
         .dx-texteditor-input {
-            padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
-        }
-
-        &.dx-rtl .dx-texteditor-input {
-            padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-            padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
-        }
-
-        &.dx-rtl.dx-editor-underlined {
-            .dx-texteditor-input {
-                padding-right: 0;
-            }
-        }
-
-        &.dx-show-clear-button {
-            .dx-texteditor-input {
-                padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-            }
-
-            &.dx-rtl .dx-texteditor-input {
-                padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-                padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-            }
+            padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+            padding-left: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
         }
     }
 }

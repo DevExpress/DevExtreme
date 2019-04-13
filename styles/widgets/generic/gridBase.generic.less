@@ -211,40 +211,6 @@
             padding-bottom: @GENERIC_GRID_BASE_CELL_PADDING;
         }
 
-        .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button {
-                .dx-texteditor-input {
-                    padding-right: @GENERIC_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                }
-
-                &.dx-invalid {
-                    .dx-texteditor-input {
-                        padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-                    }
-
-                    &.dx-rtl .dx-texteditor-input {
-                        padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-                        padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-                    }
-                }
-            }
-
-            &.dx-invalid {
-                .dx-texteditor-input {
-                    padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
-                }
-
-                &.dx-rtl .dx-texteditor-input {
-                    padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-                    padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
-                }
-            }
-
-            .dx-texteditor-input {
-                padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-            }
-        }
-
         .dx-searchbox {
             .dx-texteditor-input,
             .dx-placeholder:before {
@@ -642,7 +608,11 @@
     }
 
     .dx-@{widgetName}-rowsview {
-        border-top: ~"@{@{widgetName}-border}";
+
+        .dx-@{widgetName}-borders &,
+        .dx-@{widgetName}-headers + & {
+            border-top: ~"@{@{widgetName}-border}";
+        }
 
         .dx-row {
             border-top: @GENERIC_GRID_BASE_ROW_BORDER;
@@ -844,6 +814,21 @@
 
         &.dx-widget {
             color: ~"@{@{widgetName}-base-color}";
+        }
+
+        .dx-page,
+        .dx-page-size,
+        .dx-navigate-button {
+            outline: none;
+        }
+
+        &.dx-state-focused {
+            .dx-page:focus,
+            .dx-page-size:focus,
+            .dx-navigate-button:focus {
+                outline: 2px solid @datagrid-focused-border-color;
+                outline-offset: -2px;
+            }
         }
     }
 

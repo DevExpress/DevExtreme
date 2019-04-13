@@ -11,6 +11,8 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import dataUtils from "core/element_data";
+import { deferUpdate } from "core/utils/common";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "common.css!";
 
@@ -602,34 +604,6 @@ QUnit.module("ui feedback", {
             .dxWidget({ activeStateEnabled: true });
         pointerMock(el).start("touch").down().up();
         this.clock.tick(FEEDBACK_HIDE_TIMEOUT);
-    });
-
-    QUnit.test("feedback should be disabled in design mode", (assert) => {
-        config({ designMode: true });
-
-        try {
-            const el = this.element.dxWidget({
-                activeStateEnabled: true
-            });
-
-            const instance = el.dxWidget("instance");
-
-            this.mouse.active();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            this.mouse.inactive();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            instance.option("activeStateEnabled", false);
-
-            this.mouse.active();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            this.mouse.inactive();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-        } finally {
-            config({ designMode: false });
-        }
     });
 
     QUnit.test("set disabled of one widget doesn't turn off the feedback of another active element", (assert) => {
@@ -1391,6 +1365,10 @@ QUnit.module("keyboard navigation", {}, () => {
     });
 });
 
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxWidget");
+}
+
 QUnit.module("isReady", {}, () => {
     QUnit.test("widget is ready after rendering", (assert) => {
 
@@ -1410,6 +1388,15 @@ QUnit.module("isReady", {}, () => {
         assert.equal(isReadyOnInit, false, "widget is not ready on init");
         assert.equal($widget.dxWidget("isReady"), true, "widget is ready after render");
 
+    });
+
+    QUnit.test("widget doesn't throw if disposed before rendering (T717968)", (assert) => {
+
+        deferUpdate(() => {
+            new DxWidget("#widget").dispose();
+        });
+
+        assert.ok(true);
     });
 });
 
@@ -1534,8 +1521,7 @@ QUnit.module("inner options cache", {}, () => {
         _optionChanged(args) {
             switch(args.name) {
                 case "innerComponentOptions":
-                    this.innerComponent.option(args.value);
-                    this._cacheInnerOptions("innerComponentOptions", args.value);
+                    this._innerOptionChanged(this.innerComponent, args);
                     break;
                 default:
                     this.callBase(args);
@@ -1580,5 +1566,20 @@ QUnit.module("inner options cache", {}, () => {
 
         assert.strictEqual(widget.innerComponent.option("someOption"), "Test", "option has been passed");
         assert.strictEqual(widget.innerComponent.option("defaultOption"), "New", "default option has been redefined");
+    });
+
+    QUnit.test("the exception should not be shown when the inner component is not exist yet", (assert) => {
+        const widget = new TestWidget("#widget", {
+            innerComponentOptions: {
+                someOption: "Test",
+                defaultOption: "New"
+            }
+        });
+
+        delete widget.innerComponent;
+        widget.option("innerComponentOptions.someOption", "Test2");
+        widget.repaint();
+
+        assert.strictEqual(widget.innerComponent.option("someOption"), "Test2", "option is correct");
     });
 });

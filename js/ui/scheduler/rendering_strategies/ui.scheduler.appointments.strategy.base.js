@@ -13,14 +13,20 @@ var abstract = Class.abstract;
 
 var APPOINTMENT_MIN_COUNT = 1,
     APPOINTMENT_MIN_SIZE = 2,
-    COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
+
+    COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15,
+
     APPOINTMENT_DEFAULT_HEIGHT = 20,
     APPOINTMENT_DEFAULT_WIDTH = 40,
+
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
 
-    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24;
+    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
+
+    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28,
+    DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
@@ -301,22 +307,30 @@ var BaseRenderingStrategy = Class.inherit({
     _sortCondition: abstract,
 
     _rowCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top);
+        var isSomeEdge = this._isSomeEdge(a, b);
+
+        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
+            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
         return columnCondition ? columnCondition : rowCondition ? rowCondition : a.isStart - b.isStart;
     },
 
     _columnCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top);
+        var isSomeEdge = this._isSomeEdge(a, b);
+
+        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
+            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
         return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
     },
 
-    _normalizeCondition: function(first, second) {
+    _isSomeEdge: function(a, b) {
+        return a.i === b.i && a.j === b.j;
+    },
+
+    _normalizeCondition: function(first, second, isSomeEdge) {
         // NOTE: ie & ff pixels
         var result = first - second;
 
-        return Math.abs(result) > 0.1 ? result : 0;
+        return isSomeEdge || Math.abs(result) > 0.1 ? result : 0;
     },
 
     _getResultPositions: function(sortedArray) {
@@ -468,8 +482,6 @@ var BaseRenderingStrategy = Class.inherit({
             realStartDate = this.startDate(appointment, true),
             viewStartDate = this.startDate(appointment, false, position);
 
-        endDate = this._checkWrongEndDate(appointment, realStartDate, endDate);
-
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
@@ -511,15 +523,6 @@ var BaseRenderingStrategy = Class.inherit({
         return duration + diff * toMs("minute");
     },
 
-    _checkWrongEndDate: function(appointment, startDate, endDate) {
-        if(!endDate || startDate.getTime() >= endDate.getTime()) {
-            endDate = new Date(startDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
-            this.instance.fire("setField", "endDate", appointment, endDate);
-        }
-
-        return endDate;
-    },
-
     _getAppointmentDurationInMs: function(startDate, endDate, allDay) {
         var result;
         this.instance.fire("getAppointmentDurationInMs", {
@@ -537,8 +540,8 @@ var BaseRenderingStrategy = Class.inherit({
     _getMaxNeighborAppointmentCount: function() {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
         if(!overlappingMode) {
-            var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentDefaultOffset();
-            return Math.floor(this.getCompactAppointmentGroupMaxWidth() / outerAppointmentWidth);
+            var outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
+            return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
         } else {
             return 0;
         }
@@ -566,24 +569,50 @@ var BaseRenderingStrategy = Class.inherit({
         }
     },
 
-    getCompactAppointmentGroupMaxWidth: function(intervalCount, isAllDay) {
-        if(isAllDay || !typeUtils.isDefined(isAllDay)) {
-            var widthInPercents = 75;
-            return widthInPercents * this.getDefaultCellWidth() / 100;
+    getDropDownAppointmentWidth: function(intervalCount, isAllDay) {
+        if(this.instance.fire("isAdaptive")) {
+            return this.getDropDownButtonAdaptiveSize();
         } else {
-            return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
+            if(isAllDay || !typeUtils.isDefined(isAllDay)) {
+                var widthInPercents = 75;
+                return widthInPercents * this.getDefaultCellWidth() / 100;
+            } else {
+                return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
+            }
         }
+    },
+
+    getDropDownAppointmentHeight: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return this.getDropDownButtonAdaptiveSize();
+        }
+    },
+
+    getDropDownButtonAdaptiveSize: function() {
+        return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
     },
 
     getDefaultCellWidth: function() {
         return this._defaultWidth;
     },
 
-    getCompactAppointmentDefaultSize: function() {
-        return COMPACT_APPOINTMENT_DEFAULT_SIZE;
+    getCompactAppointmentDefaultWidth: function() {
+        return COMPACT_APPOINTMENT_DEFAULT_WIDTH;
     },
 
-    getCompactAppointmentDefaultOffset: function() {
+    getCompactAppointmentTopOffset: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return this._defaultHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
+        }
+
+        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+    },
+
+    getCompactAppointmentLeftOffset: function() {
+        if(this.instance.fire("isAdaptive")) {
+            return (this._defaultWidth - DROP_DOWN_BUTTON_ADAPTIVE_SIZE) / 2;
+        }
+
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
@@ -597,13 +626,21 @@ var BaseRenderingStrategy = Class.inherit({
             width = coordinates.width,
             left = coordinates.left,
             compactAppointmentDefaultSize,
-            compactAppointmentDefaultOffset;
+            compactAppointmentLeftOffset,
+            compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
 
         if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
-            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
+            compactAppointmentLeftOffset = this.getCompactAppointmentLeftOffset();
+
+            top = coordinates.top + compactAppointmentTopOffset;
+            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
+
+            if(this.instance.fire("isAdaptive")) {
+                coordinates.top = top;
+                coordinates.left = coordinates.left + compactAppointmentLeftOffset;
+            }
+
             appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
 
@@ -620,7 +657,7 @@ var BaseRenderingStrategy = Class.inherit({
             return {
                 height: appointmentHeight,
                 width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x * dateTableOffset / 100 + "px)",
-                top: top,
+                top: this.instance.fire("isAdaptive") ? top + compactAppointmentTopOffset : top,
                 left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
                 empty: this._isAppointmentEmpty(height, width)
             };
@@ -714,9 +751,13 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        var cellHeight = this.instance.fire("getCellHeight");
+        if(this.instance.fire("isAdaptive")) {
+            return 0;
+        } else {
+            var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+            return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+        }
     },
 
     _getAppointmentMinCount: function() {
@@ -724,7 +765,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _isCompactTheme: function() {
-        return (themes.current() || "").split(".")[2] === "compact";
+        return (themes.current() || "").split(".").pop() === "compact";
     },
 
     _getAppointmentDefaultOffset: function() {

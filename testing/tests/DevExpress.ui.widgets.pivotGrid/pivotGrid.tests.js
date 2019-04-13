@@ -1708,6 +1708,37 @@ QUnit.test("Sorting by Summary context menu with zero value", function(assert) {
     assert.equal($rows.eq(2).text(), "e2");
 });
 
+QUnit.test("Sorting by Summary should not be allowd if paginate is true", function(assert) {
+    var contextMenuArgs = [],
+        dataSourceInstance = new PivotGridDataSource({
+            paginate: true,
+            fields: [
+                { dataField: "field1", area: "row" },
+                { dataField: "field2", area: "data", summaryType: "sum" }
+            ],
+            store: [
+                { field1: 'e1', field2: 0.0 },
+                { field1: 'e2', field2: -4.0 },
+                { field1: 'e3', field2: 1.0 },
+            ]
+        });
+
+    createPivotGrid({
+        onContextMenuPreparing: function(e) {
+            contextMenuArgs.push(e);
+        },
+        allowSortingBySummary: true,
+        dataSource: dataSourceInstance
+    }, assert);
+
+    this.clock.tick(500);
+
+    // act
+    $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers td').last().trigger('dxcontextmenu');
+
+    assert.deepEqual(contextMenuArgs[0].items.map(function(i) { return i.text; }), ["Show Field Chooser"], "context menu items");
+});
+
 QUnit.test("Sorting by Summary context menu", function(assert) {
     var contextMenuArgs = [],
         pivotGrid = createPivotGrid({
@@ -2225,6 +2256,49 @@ QUnit.test("expand All items", function(assert) {
     // assert
 
     assert.deepEqual(dataSource.expandAll.lastCall.args, [0], "collapseLevel args");
+});
+
+QUnit.test("expand All should not be allowed if paginate true", function(assert) {
+    var contextMenuArgs = [];
+
+    createPivotGrid({
+        dataSource: {
+            paginate: true,
+            fields: [
+                { format: 'decimal', area: "column", allowExpandAll: true, expanded: false, index: 0 },
+                { dataField: "d", area: "row" },
+                { format: { format: 'quarter', dateType: 'full' }, area: "column", index: 1 },
+                { caption: 'Sum1', format: 'currency', area: "data", index: 2 }
+            ],
+            rows: [
+                { value: 'A', index: 0 },
+                { value: 'B', index: 1 }
+            ],
+            columns: [{
+                value: '2010', index: 2,
+                children: [
+                    { value: '1', index: 0 },
+                    { value: '2', index: 1 }
+                ]
+            }, {
+                value: '2012', index: 3
+            }],
+            values: [
+                [[1, 0.1], [8, 0.8], [15, 0.15], [36, 0.36], [43, 0.43]],
+                [[2, 0.2], [9, 0.9], [16, 0.16], [37, 0.37], [44, 0.44]],
+                [[3, 0.3], [10, 0.1], [17, 0.17], [38, 0.38], [45, 0.45]]
+            ]
+        },
+        onContextMenuPreparing: function(e) {
+            contextMenuArgs.push(e);
+        }
+    }, assert);
+
+    // act
+    $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers .dx-pivotgrid-collapsed').trigger('dxcontextmenu');
+
+    // assert
+    assert.deepEqual(contextMenuArgs[0].items.map(function(item) { return item.text; }), ["Show Field Chooser"], "context menu items");
 });
 
 QUnit.test("expand All items for field in group", function(assert) {
@@ -2914,7 +2988,7 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
         dataAreaScrollable.off("scroll", scrollAssert);
 
         // assert
-        assert.equal(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
+        assert.roughEqual(pivotGrid._scrollLeft, 10, 1, "_scrollLeft variable store inverted value");
         assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
@@ -4422,11 +4496,13 @@ QUnit.test("Virtual Scrolling", function(assert) {
 
     assert.deepEqual(this.dataController.calculateVirtualContentParams.lastCall.args[0], {
         columnCount: 4,
-        contentHeight: 71,
-        contentWidth: 200,
+        itemHeights: [43, 28],
+        itemWidths: [20, 40, 60, 20],
         rowCount: 2,
         viewportHeight: 71,
-        viewportWidth: 899
+        viewportWidth: 899,
+        virtualColumnWidth: 100,
+        virtualRowHeight: 50
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
@@ -4483,11 +4559,13 @@ QUnit.test("Virtual Scrolling. Widget height is not defined", function(assert) {
 
     assert.deepEqual(this.dataController.calculateVirtualContentParams.lastCall.args[0], {
         columnCount: 4,
-        contentHeight: 71,
-        contentWidth: 200,
+        itemHeights: [43, 28],
+        itemWidths: [20, 40, 60, 20],
         rowCount: 2,
         viewportHeight: $(window).outerHeight(),
-        viewportWidth: 899
+        viewportWidth: 899,
+        virtualColumnWidth: 100,
+        virtualRowHeight: 50
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));

@@ -47,7 +47,6 @@ export const run = function() {
             this.$element = $("#cmp");
             this.data = generateData(10);
             this.items = () => this.instance.option("items");
-            this.onCustomizeStoreLoadOptionsSpy = sinon.spy();
             this.onItemDeletingSpy = sinon.spy();
             this.instance = new TestComponent(this.$element, {
                 dataSource: new DataSource({
@@ -55,7 +54,6 @@ export const run = function() {
                     loadMode: "raw",
                     pageSize: 2,
                     pushAggregationTimeout: 0,
-                    onCustomizeStoreLoadOptions: this.onCustomizeStoreLoadOptionsSpy,
                     key: "id"
                 }),
                 onItemDeleting: this.onItemDeletingSpy
@@ -84,6 +82,25 @@ export const run = function() {
             assert.equal(this.items().length, 3);
             assert.equal(this.items()[0].id, 1);
             assert.equal(this.items()[2].id, 3);
+        });
+
+        // T723520
+        QUnit.test("correct index after push 'remove' and dataSource reload", function(assert) {
+            this.instance._shouldAppendItems = () => false;
+            this.instance.getDataSource().pageSize(20);
+            this.instance.reload();
+
+            this.store.push([{ type: "remove", key: 0 }]);
+
+            var loadingSpy = sinon.spy();
+            this.store.on("loading", loadingSpy);
+            this.instance.getDataSource().reload();
+
+            assert.equal(this.items().length, 9);
+            assert.equal(loadingSpy.callCount, 1);
+            const { skip, take } = loadingSpy.getCall(0).args[0];
+            assert.equal(skip, 0);
+            assert.equal(take, 20);
         });
 
         QUnit.test("fire deleting event after push 'remove'", function(assert) {

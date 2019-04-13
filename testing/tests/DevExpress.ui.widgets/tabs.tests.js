@@ -1,7 +1,6 @@
 import $ from "jquery";
 import domUtils from "core/utils/dom";
 import holdEvent from "events/hold";
-import config from "core/config";
 import pointerMock from "../../helpers/pointerMock.js";
 import { DataSource } from "data/data_source/data_source";
 
@@ -123,28 +122,6 @@ QUnit.test("disabled tab can't be selected by click", function(assert) {
     assert.equal(tabsInstance.option("selectedIndex"), 2);
 });
 
-QUnit.test("design mode", function(assert) {
-    config({ designMode: true });
-
-    try {
-        var tabsElement = $("#tabs").dxTabs({
-            items: [
-                { text: "0" },
-                { text: "1" },
-                { text: "2" }
-            ]
-        });
-
-        var tabsInstance = tabsElement.dxTabs("instance"),
-            $tabItems = $(tabsInstance._itemElements());
-
-        $tabItems.eq(1).click();
-        assert.ok(!$tabItems.eq(1).hasClass(TAB_SELECTED_CLASS));
-    } finally {
-        config({ designMode: false });
-    }
-});
-
 QUnit.test("regression: wrong selectedIndex in tab mouseup handler", function(assert) {
     var selectedIndex;
 
@@ -255,45 +232,6 @@ QUnit.test("regression: B251795", function(assert) {
     assert.equal(itemSelectFired, 0);
 });
 
-QUnit.module("widget sizing render");
-
-QUnit.test("change width", function(assert) {
-    var $element = $("#widget").dxTabs({ items: [1, 2, 3] }),
-        instance = $element.dxTabs("instance"),
-        customWidth = 400;
-
-    instance.option("width", customWidth);
-
-    assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("nav buttons should be rendered when widget is rendered invisible", function(assert) {
-    var $container = $("<div>");
-
-    try {
-        var $element = $("<div>").appendTo($container).dxTabs({
-            items: [
-                { text: "user" },
-                { text: "analytics" },
-                { text: "customers" },
-                { text: "search" },
-                { text: "favorites" }
-            ],
-            wordWrap: false,
-            scrollingEnabled: true,
-            showNavButtons: true,
-            width: 100
-        });
-
-        $container.appendTo("#qunit-fixture");
-        domUtils.triggerShownEvent($container);
-
-        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
-    } finally {
-        $container.remove();
-    }
-});
-
 QUnit.test("Tabs in multiple mode", function(assert) {
     var $element = $("#widget").dxTabs({
             items: [
@@ -396,6 +334,33 @@ QUnit.test("nav buttons class should be added if showNavButtons=true", function(
     });
 
     assert.ok($element.hasClass(TABS_NAV_BUTTONS_CLASS), "navs class added");
+});
+
+QUnit.test("nav buttons should be rendered when widget is rendered invisible", function(assert) {
+    var $container = $("<div>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+            items: [
+                { text: "user" },
+                { text: "analytics" },
+                { text: "customers" },
+                { text: "search" },
+                { text: "favorites" }
+            ],
+            wordWrap: false,
+            scrollingEnabled: true,
+            showNavButtons: true,
+            width: 100
+        });
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
+    } finally {
+        $container.remove();
+    }
 });
 
 QUnit.test("right nav button should be rendered if showNavButtons=true and possible to scroll right", function(assert) {
@@ -621,7 +586,6 @@ QUnit.test("tabs should hide navigation if scrollable is not allowed after resiz
         instance = $element.dxTabs("instance");
 
     instance.option("width", 700);
-    $($element).trigger("dxresize");
 
     assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons was removed");
     assert.equal($element.find("." + TABS_SCROLLABLE_CLASS).length, 0, "scrollable was removed");

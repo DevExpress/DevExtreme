@@ -43,7 +43,7 @@ QUnit.test("Theme manager with no settings", function(assert) {
         "commonAxisSettings.label.font",
         "commonAxisSettings.title.font",
         "crosshair.label.font",
-        "annotations.labelOptions.font"
+        "commonAnnotationSettings.font"
     ] }]);
 });
 
@@ -66,7 +66,7 @@ QUnit.test("Updating layoutManager options", function(assert) {
 });
 
 // T708642
-QUnit.test("Claer hover after series updating", function(assert) {
+QUnit.test("Clear hover after series updating", function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({}));
     chartMocks.seriesMockData.series.push(new MockSeries({}));
 
@@ -168,16 +168,18 @@ QUnit.test("actions sequence on render chart", function(assert) {
     // arrange
     chartMocks.seriesMockData.series.push(new MockSeries({}));
 
-    var chart = this.createChart({
+    this.createChart({
         dataSource: [],
-        series: [{ type: "line" }]
+        series: [{ type: "line" }],
+        adaptiveLayout: {
+            width: 1,
+            height: 1
+        }
     });
-
-    var layoutElementsSpy = chart.layoutManager.layoutElements,
-        updatePanesCanvasesSpy = vizUtils.updatePanesCanvases;
+    var updatePanesCanvasesSpy = vizUtils.updatePanesCanvases;
     // assert
-    assert.equal(updatePanesCanvasesSpy.callCount, 2);
-    assert.ok(updatePanesCanvasesSpy.secondCall.calledAfter(layoutElementsSpy.firstCall), "second call updatePanes after draw title and legend");
+    assert.equal(updatePanesCanvasesSpy.callCount, 1);
+    assert.ok(updatePanesCanvasesSpy.lastCall.calledAfter(commons.getTitleStub().move.lastCall), "second call updatePanes after draw title");
 });
 
 QUnit.test("Actions sequence with series on render chart", function(assert) {

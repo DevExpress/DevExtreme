@@ -958,6 +958,34 @@ QUnit.test("There is not real overlap of the labels. Alignment value is right", 
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
+QUnit.test("Check title offset after olerlap resolving", function(assert) {
+    var markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 10 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    this.renderer.text = spyRendererText.call(this, markersBBoxes);
+
+    this.drawAxisWithOptions({
+        min: 1,
+        max: 10,
+        title: {
+            text: "Title",
+            margin: 0
+        },
+        label: {
+            overlappingBehavior: "hide",
+            indentFromAxis: 0
+        }
+    });
+
+    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"]);
+    assert.equal(this.renderer.text.getCall(0).returnValue.attr.lastCall.args[0].translateY, 605, "title offset");
+});
+
 QUnit.module("Label overlapping, 'rotate' mode", overlappingEnvironment);
 
 QUnit.test("horizontal axis, labels overlap, rotationAngle is 90", function(assert) {
@@ -1083,10 +1111,11 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
     this.translator.translate.withArgs(9).returns(60);
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
+            { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
             { x: 20, y: 0, width: 20, height: 5 },
             { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
+            { x: 60, y: 0, width: 10, height: 5 },
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1301,6 +1330,7 @@ QUnit.test("Labels overlap", function(assert) {
 
 QUnit.test("Check title offset after olerlap resolving", function(assert) {
     var markersBBoxes = [
+            { x: 0, y: 0, width: 10, height: 5 },
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
             { x: 20, y: 0, width: 10, height: 5 },
@@ -2371,6 +2401,44 @@ QUnit.test("Estimate draws title text and remove it", function(assert) {
     assert.strictEqual(textElement.remove.callCount, 1, "element removed");
 });
 
+QUnit.test("Check title overflow on draw", function(assert) {
+    this.canvas.width = 20;
+    this.canvas.right = 10;
+    this.createDrawnAxis({
+        isHorizontal: true,
+        title: {
+            wordWrap: "breakWord",
+            textOverflow: "none",
+            text: "Title text"
+        }
+    });
+
+    assert.strictEqual(this.renderer.text.callCount, 1);
+    const textElement = this.renderer.text.firstCall.returnValue;
+    assert.deepEqual(textElement.setMaxSize.callCount, 1);
+    assert.deepEqual(textElement.setMaxSize.firstCall.args, [10, undefined, { textOverflow: "none", wordWrap: "breakWord" }]);
+});
+
+QUnit.test("Check title rest", function(assert) {
+    this.renderer.bBoxTemplate = function() {
+        return { height: 29, width: 9 };
+    };
+    const axis = this.createDrawnAxis({
+        isHorizontal: true,
+        title: {
+            wordWrap: "breakWord",
+            textOverflow: "none",
+            text: "Title text"
+        }
+    });
+
+    axis.updateSize({ width: 40, right: 4, left: 3 });
+    axis.updateSize({ width: 50, right: 4, left: 3 });
+    assert.strictEqual(this.renderer.text.callCount, 1);
+    const textElement = this.renderer.text.firstCall.returnValue;
+    assert.equal(textElement.restoreText.callCount, 1);
+});
+
 QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
     this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
@@ -2385,6 +2453,10 @@ QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
         }
     });
 
+
+    this.bBoxes.push({
+        height: 14
+    });
     this.bBoxes.push({
         height: 44
     });
@@ -4552,7 +4624,7 @@ QUnit.test("Do not adjust axis if it has min/max", function(assert) {
         max: 15
     });
 
-    this.axis.setBusinessRange({ min: -100, max: 100 }, undefined, undefined, true);
+    this.axis.setBusinessRange({ min: -100, max: 100 }, true);
     this.axis.setMarginOptions({});
 
     this.axis.adjust();

@@ -739,21 +739,123 @@ exports.DataController = Class.inherit((function() {
             that._changingDuration = new Date() - startChanging;
         },
 
-        _handleCustomizeStoreLoadOptions: function(options) {
+        _correctSkipsTakes: function(rowIndex, rowSkip, rowSpan, levels, skips, takes) {
+            var endIndex = rowSpan ? rowIndex + rowSpan - 1 : rowIndex;
+            skips[levels.length] = skips[levels.length] || 0;
+            takes[levels.length] = takes[levels.length] || 0;
+            if(endIndex < rowSkip) {
+                skips[levels.length]++;
+            } else {
+                takes[levels.length]++;
+            }
+        },
+
+        _calculatePagingForExpandedPaths: function(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
+            var rows = this._rowsInfo,
+                rowCount = Math.min(options.rowSkip + options.rowTake, rows.length),
+                rowExpandedPaths = options.rowExpandedPaths,
+                levels = [],
+                expandedPathIndexes = {},
+                i, j,
+                path;
+
+            rowExpandedPaths.forEach((path, index) => {
+                expandedPathIndexes[path] = index;
+            });
+
+            for(i = 0; i < rowCount; i++) {
+                takes.length = skips.length = levels.length + 1;
+                for(j = 0; j < rows[i].length; j++) {
+                    var cell = rows[i][j];
+
+                    if(cell.type === "D") {
+                        this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
+
+                        path = cell.path || path;
+                        var expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, path.length - 1)] : -1;
+
+                        if(expandIndex >= 0) {
+                            rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
+                            rowExpandedTakes[expandIndex] = takes[levels.length] || 0;
+                        }
+
+                        if(cell.rowspan) {
+                            levels.push(cell.rowspan);
+                        }
+                    }
+                }
+                levels = levels.map(level => level - 1).filter(level => level > 0);
+            }
+        },
+
+        _processPagingForExpandedPaths: function(options, storeLoadOptions, reload) {
+            var rowExpandedPaths = options.rowExpandedPaths,
+                rowExpandedSkips = rowExpandedPaths.map(() => 0),
+                rowExpandedTakes = rowExpandedPaths.map(() => reload ? options.pageSize : 0),
+                skips = [],
+                takes = [];
+
+            if(!reload) {
+                this._calculatePagingForExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes);
+            }
+            this._savePagingForExpandedPaths(options, storeLoadOptions, skips[0], takes[0], rowExpandedSkips, rowExpandedTakes);
+        },
+
+        _savePagingForExpandedPaths: function(options, storeLoadOptions, skip, take, rowExpandedSkips, rowExpandedTakes) {
+            var rowExpandedPaths = options.rowExpandedPaths;
+
+            options.rowExpandedPaths = [];
+            options.rowSkip = skip !== undefined ? skip : options.rowSkip;
+            options.rowTake = take !== undefined ? take : options.rowTake;
+
+            for(var i = 0; i < rowExpandedPaths.length; i++) {
+                if(rowExpandedTakes[i]) {
+                    storeLoadOptions.push(extend({}, options, {
+                        area: "row",
+                        headerName: "rows",
+                        rows: options.rows.slice(0, rowExpandedPaths[i].length + 1),
+                        columns: options.columns.slice(0, 1),
+                        path: rowExpandedPaths[i],
+                        rowSkip: rowExpandedSkips[i],
+                        rowTake: rowExpandedTakes[i] || 20
+                    }));
+                }
+            }
+        },
+
+        _handleCustomizeStoreLoadOptions: function(storeLoadOptions, reload) {
+            var options = storeLoadOptions[0];
             var rowsScrollController = this._rowsScrollController;
+
             if(this._dataSource.paginate() && rowsScrollController) {
                 var rowPageSize = rowsScrollController._dataSource.pageSize();
 
-                options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
-                options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+                if(options.headerName === "rows") {
+                    options.rowSkip = 0;
+                    options.rowTake = rowPageSize;
+                    options.rows = options.rows.slice(0, options.path.length + 1);
+                } else {
+                    options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
+                    options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+                    options.rows = options.rows.slice(0, 1);
+                    this._processPagingForExpandedPaths(options, storeLoadOptions, reload);
+                }
             }
 
             var columnsScrollController = this._columnsScrollController;
+
             if(this._dataSource.paginate() && columnsScrollController) {
                 var columnPageSize = columnsScrollController._dataSource.pageSize();
 
-                options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
-                options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                if(options.headerName === "columns") {
+                    options.columnSkip = 0;
+                    options.columnTake = columnPageSize;
+                    options.columns = options.columns.slice(0, options.path.length + 1);
+                } else {
+                    options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
+                    options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                    options.columns = options.columns.slice(0, 1);
+                }
             }
         },
 
@@ -777,40 +879,25 @@ exports.DataController = Class.inherit((function() {
         calculateVirtualContentParams: function(contentParams) {
             var that = this,
                 rowsScrollController = that._rowsScrollController,
-                columnsScrollController = that._columnsScrollController,
-                rowViewportItemSize = contentParams.contentHeight / contentParams.rowCount,
-                columnViewportItemSize = contentParams.contentWidth / contentParams.columnCount,
-                oldColumnViewportItemSize,
-                oldRowViewportItemSize,
-                newLeftPosition,
-                newTopPosition;
+                columnsScrollController = that._columnsScrollController;
 
             if(rowsScrollController && columnsScrollController) {
-                oldColumnViewportItemSize = columnsScrollController.viewportItemSize();
-                oldRowViewportItemSize = rowsScrollController.viewportItemSize();
-
-                rowsScrollController.viewportItemSize(rowViewportItemSize);
-                columnsScrollController.viewportItemSize(columnViewportItemSize);
-
+                rowsScrollController.viewportItemSize(contentParams.virtualRowHeight);
                 rowsScrollController.viewportSize(contentParams.viewportHeight / rowsScrollController.viewportItemSize());
-                rowsScrollController.setContentSize(contentParams.contentHeight);
+                rowsScrollController.setContentSize(contentParams.itemHeights);
 
+                columnsScrollController.viewportItemSize(contentParams.virtualColumnWidth);
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
-                columnsScrollController.setContentSize(contentParams.contentWidth);
+                columnsScrollController.setContentSize(contentParams.itemWidths);
 
                 commonUtils.deferUpdate(function() {
                     columnsScrollController.loadIfNeed();
                     rowsScrollController.loadIfNeed();
                 });
 
-                newLeftPosition = columnsScrollController.getViewportPosition() * columnViewportItemSize / oldColumnViewportItemSize;
-                newTopPosition = rowsScrollController.getViewportPosition() * rowViewportItemSize / oldRowViewportItemSize;
-
-                that.setViewportPosition(newLeftPosition, newTopPosition);
-
                 that.scrollChanged.fire({
-                    left: newLeftPosition,
-                    top: newTopPosition
+                    left: columnsScrollController.getViewportPosition(),
+                    top: rowsScrollController.getViewportPosition()
                 });
 
                 return {

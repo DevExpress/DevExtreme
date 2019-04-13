@@ -921,7 +921,7 @@ var TagBox = SelectBox.inherit({
         this.option("selectedItems", this._selectedItems.slice());
         this._cleanTags();
 
-        var $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input()),
+        var $multiTag = this._multiTagRequired() && this._renderMultiTag(this._$textEditorInputContainer),
             showMultiTagOnly = this.option("showMultiTagOnly"),
             maxDisplayedTags = this.option("maxDisplayedTags");
 
@@ -929,7 +929,7 @@ var TagBox = SelectBox.inherit({
             if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxDisplayedTags >= -1)) {
                 return false;
             }
-            this._renderTag(item, $multiTag || this._input());
+            this._renderTag(item, $multiTag || this._$textEditorInputContainer);
         }.bind(this));
 
         this._scrollContainer("end");

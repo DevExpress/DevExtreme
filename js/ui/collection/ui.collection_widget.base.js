@@ -70,10 +70,10 @@ var CollectionWidget = Widget.inherit({
                     return;
                 }
 
-                e.target = $itemElement;
-                e.currentTarget = $itemElement;
-
-                this._itemClickHandler(e);
+                this._itemClickHandler(extend({}, e, {
+                    target: $itemElement,
+                    currentTarget: $itemElement
+                }));
             },
             space = function(e) {
                 e.preventDefault();
@@ -1026,7 +1026,7 @@ var CollectionWidget = Widget.inherit({
     _createItemRenderAction: function() {
         return (this._itemRenderAction = this._createActionByOption("onItemRendered", {
             element: this.element(),
-            excludeValidators: ["designMode", "disabled", "readOnly"],
+            excludeValidators: ["disabled", "readOnly"],
             category: "rendering"
         }));
     },

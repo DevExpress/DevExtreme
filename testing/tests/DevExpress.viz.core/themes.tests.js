@@ -5,8 +5,6 @@ var $ = require("jquery"),
 require("viz/core/themes/generic.light");
 require("viz/core/themes/generic.dark");
 require("viz/core/themes/ios");
-require("viz/core/themes/android");
-require("viz/core/themes/win");
 
 QUnit.moduleStart(function() {
     $.each([
@@ -86,8 +84,8 @@ QUnit.test("Patched properties on register theme", function(assert) {
         backgroundColor: "background color",
         primaryTitleColor: "primary title color",
         secondaryTitleColor: "secondary title color",
+        gridColor: "grid color",
         axisColor: "axis color",
-        axisLabelColor: "axis label color",
         redrawOnResize: "redraw on resize",
         tooltip: { some: "tooltip settings" },
         "export": {
@@ -148,24 +146,24 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.chart.commonAxisSettings.title.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
     assert.deepEqual(theme.polar.commonAxisSettings.title.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
 
+    // gridColor
+    assert.strictEqual(theme.legend.border.color, theme.gridColor, "gridColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.grid.color, theme.gridColor, "gridColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.minorGrid.color, theme.gridColor, "gridColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.grid.color, theme.gridColor, "gridColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.minorGrid.color, theme.gridColor, "gridColor");
+
     // axisColor
-    assert.strictEqual(theme.legend.border.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.chart.commonAxisSettings.color, theme.axisColor, "axisColor");
-    assert.deepEqual(theme.chart.commonAxisSettings.grid.color, theme.axisColor, "axisColor");
-    assert.deepEqual(theme.chart.commonAxisSettings.minorGrid.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.chart.commonAxisSettings.tick.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.chart.commonAxisSettings.minorTick.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.polar.commonAxisSettings.color, theme.axisColor, "axisColor");
-    assert.deepEqual(theme.polar.commonAxisSettings.grid.color, theme.axisColor, "axisColor");
-    assert.deepEqual(theme.polar.commonAxisSettings.minorGrid.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.polar.commonAxisSettings.tick.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.polar.commonAxisSettings.minorTick.color, theme.axisColor, "axisColor");
-
-    // axisLabelColor
-    assert.strictEqual(theme.gauge.scale.label.font.color, theme.axisLabelColor, "axisLabelColor");
-    assert.strictEqual(theme.rangeSelector.scale.label.font.color, theme.axisLabelColor, "axisLabelColor");
-    assert.deepEqual(theme.chart.commonAxisSettings.label.font.color, theme.axisLabelColor, "axisLabelColor");
-    assert.deepEqual(theme.polar.commonAxisSettings.label.font.color, theme.axisLabelColor, "axisLabelColor");
+    assert.strictEqual(theme.gauge.scale.label.font.color, theme.axisColor, "axisColor");
+    assert.strictEqual(theme.rangeSelector.scale.label.font.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.label.font.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.label.font.color, theme.axisColor, "axisColor");
 
     // redrawOnResize
     assert.strictEqual(theme.chart.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
@@ -246,7 +244,7 @@ QUnit.test("Patched properties on register theme", function(assert) {
     });
 
     // treeMap
-    assert.strictEqual(theme.treeMap.group.border.color, theme.axisColor, "treeMap - group.border.color");
+    assert.strictEqual(theme.treeMap.group.border.color, theme.gridColor, "treeMap - group.border.color");
     assert.strictEqual(theme.treeMap.tile.selectionStyle.border.color, theme.primaryTitleColor, "treeMap - tile.selectionStyle.border.color");
     assert.strictEqual(theme.treeMap.group.selectionStyle.border.color, theme.primaryTitleColor, "treeMap - group.selectionStyle.border.color");
 });
@@ -317,20 +315,6 @@ QUnit.test("currentTheme return registered default theme", function(assert) {
     var currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, "custom default theme");
-});
-
-QUnit.module("currentTheme method. deprecated arguments");
-
-QUnit.test("Set custom theme (with colorScheme)", function(assert) {
-    themeModule.currentTheme("win8", "light");
-
-    assert.strictEqual(themeModule.currentTheme(), "win8.white", "valid custom theme");
-});
-
-QUnit.test("Set custom theme with wrong colorScheme", function(assert) {
-    themeModule.currentTheme("win8", "dark");
-
-    assert.strictEqual(themeModule.currentTheme(), "win8.black", "valid custom theme");
 });
 
 QUnit.test("Invalid input data", function(assert) {

@@ -4,9 +4,7 @@ import "ui/drop_down_menu";
 import $ from "jquery";
 import Toolbar from "ui/toolbar";
 import fx from "animation/fx";
-import { hideCallback as hideTopOverlayCallback } from "mobile/hide_top_overlay";
 import resizeCallbacks from "core/utils/resize_callbacks";
-import pointerMock from "../../helpers/pointerMock.js";
 import themes from "ui/themes";
 
 import "common.css!";
@@ -35,8 +33,6 @@ const TOOLBAR_AFTER_CONTAINER_CLASS = "dx-toolbar-after";
 const TOOLBAR_CENTER_CONTAINER_CLASS = "dx-toolbar-center";
 const TOOLBAR_LABEL_CLASS = "dx-toolbar-label";
 const TOOLBAR_MENU_BUTTON_CLASS = "dx-toolbar-menu-button";
-const TOOLBAR_LIST_VISIBLE_CLASS = "dx-toolbar-list-visible";
-const TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container";
 const TOOLBAR_MENU_SECTION_CLASS = "dx-toolbar-menu-section";
 const LIST_ITEM_CLASS = "dx-list-item";
 
@@ -199,6 +195,35 @@ QUnit.test("Buttons has default style in generic theme", function(assert) {
     assert.notOk(button.hasClass("dx-button-mode-text"));
 });
 
+QUnit.test("Toolbar provides it's own templates for the item widgets", function(assert) {
+    var templateUsed;
+
+    this.element.dxToolbar({
+        items: [{
+            location: 'before',
+            widget: 'dxButton',
+            options: { template: 'custom' }
+        }],
+        integrationOptions: {
+            templates: {
+                custom: {
+                    render: (options) => {
+                        templateUsed = true;
+                        $("<div>")
+                            .attr("data-options", "dxTemplate: { name: 'custom' }")
+                            .addClass("custom-template")
+                            .text("Custom text")
+                            .appendTo(options.container);
+                    }
+                }
+            }
+        }
+    });
+
+    assert.ok(templateUsed);
+    assert.equal(this.element.find(".custom-template").length, 1);
+});
+
 
 QUnit.module("toolbar with menu", {
     beforeEach: function() {
@@ -211,105 +236,6 @@ QUnit.module("toolbar with menu", {
     afterEach: function() {
         fx.off = false;
     }
-});
-
-QUnit.test("render menu items", function(assert) {
-    this.element.dxToolbar({
-        items: [
-            { location: 'before', text: 'item1' },
-            { location: 'menu', text: 'item2' },
-            { location: 'menu', text: 'item3' }
-        ],
-        submenuType: "listBottom"
-    });
-
-    var items = this.element.find("." + TOOLBAR_ITEM_CLASS);
-    assert.equal(items.length, 1);
-
-    items = this.element.find(".dx-list-item");
-    assert.equal(items.length, 2);
-});
-
-QUnit.test("toolbar item should not be rendered twice after option change", function(assert) {
-    this.element.dxToolbar({
-        items: [
-            { location: 'menu', text: 'item1' },
-            { location: 'before', text: 'item2' },
-            { location: 'menu', text: 'item3' },
-            { location: 'before', text: 'item4' }
-        ],
-        submenuType: "listBottom"
-    });
-
-    this.element.dxToolbar("option", "items[3].option", true);
-    var items = this.element.find("." + TOOLBAR_ITEM_CLASS);
-    assert.equal(items.length, 2, "items length is correct");
-});
-
-QUnit.test("render menu button", function(assert) {
-    this.element.dxToolbar({
-        items: [
-            { location: 'menu', text: 'item' }
-        ],
-        submenuType: "listBottom"
-    });
-
-    var menuButton = this.element.find("." + TOOLBAR_MENU_BUTTON_CLASS);
-
-    assert.equal(menuButton.length, 1);
-
-    this.instance.option("items", [{ text: "newItem" }]);
-    menuButton = this.element.find("." + TOOLBAR_MENU_BUTTON_CLASS);
-    assert.equal(menuButton.length, 1, "win8 appbar mode has menu button");
-
-    this.instance.option("renderAs", "topToolbar");
-    menuButton = this.element.find("." + TOOLBAR_MENU_BUTTON_CLASS);
-    assert.equal(menuButton.length, 0);
-});
-
-QUnit.test("menu type", function(assert) {
-    this.element.dxToolbar({
-        items: [
-            { location: 'before', text: 'item1' },
-            { location: 'menu', text: 'item2' }
-        ],
-        submenuType: "listBottom"
-    });
-
-    var $submenu = this.element.find(".dx-list");
-    assert.equal($submenu.length, 1);
-
-    this.instance.option("submenuType", "actionSheet");
-    $submenu = this.element.find(".dx-list");
-    assert.equal(this.element.find("." + TOOLBAR_MENU_BUTTON_CLASS).length, 1, "menu button was rendered");
-    assert.equal(this.element.find("." + TOOLBAR_MENU_BUTTON_CLASS + " .dx-icon").length, 1, "menu button has icon");
-
-    assert.equal($submenu.length, 0, "previous type is removed");
-    $submenu = $(".dx-actionsheet .dx-popup");
-    assert.equal($submenu.length, 1);
-
-    this.instance.option("submenuType", "dropDownMenu");
-    $submenu = this.element.find("." + DROP_DOWN_MENU_CLASS);
-    assert.equal($submenu.length, 1);
-    assert.equal(this.element.find("." + TOOLBAR_MENU_BUTTON_CLASS).length, 0, "menu button already rendered in dxDropDownMenu");
-});
-
-QUnit.test("menu item click action", function(assert) {
-    var count = 0;
-    this.element.dxToolbar({
-        onItemClick: function() {
-            count++;
-        },
-        items: [
-            { location: 'menu', text: 'item1' },
-            { location: 'menu', text: 'item2' }
-        ],
-        submenuType: "listBottom"
-    });
-
-    var submenu = this.element.find(".dx-list-item").get(0);
-    $(submenu).trigger("dxclick");
-    assert.equal(count, 1, "onItemClick was executed");
 });
 
 QUnit.test("menu button click doesn't dispatch action", function(assert) {
@@ -329,68 +255,6 @@ QUnit.test("menu button click doesn't dispatch action", function(assert) {
     assert.equal(count, 0, "onItemClick was not executed");
 });
 
-QUnit.test("menu item itemTemplate", function(assert) {
-    this.element.dxToolbar({
-        menuItemTemplate: function(item, index) {
-            return index + ": " + item.text;
-        },
-        items: [
-            { location: 'menu', text: 'a' },
-            { location: 'menu', text: 'b' }
-        ],
-        submenuType: "listBottom"
-    });
-
-    var items = this.element.find(".dx-list-item");
-
-    assert.equal(items.eq(0).text(), "0: a");
-    assert.equal(items.eq(1).text(), "1: b");
-
-    this.instance.option("menuItemTemplate", function(item, index) {
-        return item.text + ": " + index;
-    });
-
-    items = this.element.find(".dx-list-item");
-    assert.equal(items.eq(0).text(), "a: 0");
-    assert.equal(items.eq(1).text(), "b: 1");
-});
-
-QUnit.test("renderAs option", function(assert) {
-    var instance = this.element.dxToolbar({
-        renderAs: "topToolbar",
-        submenuType: "listBottom",
-        items: [
-            { location: 'menu', text: 'a' },
-            { location: 'menu', text: 'b' }
-        ],
-    }).dxToolbar("instance");
-
-    assert.ok(!this.element.hasClass("dx-toolbar-bottom"));
-    assert.ok(this.element.find(".dx-list-item:visible").length === 0, "win8 menu was not rendered for topToolbar");
-
-    instance.option("renderAs", "bottomToolbar");
-    assert.ok(this.element.hasClass("dx-toolbar-bottom"));
-    assert.ok(this.element.find(".dx-list-item").length === 2, "menu was rendered");
-});
-
-QUnit.test("toolbar should get 'list-visible' class when menu is visible", function(assert) {
-    var $element = this.element.dxToolbar({
-        renderAs: "bottomToolbar",
-        submenuType: "listBottom",
-        items: [
-            { location: 'menu', text: 'a' },
-            { location: 'menu', text: 'b' }
-        ]
-    });
-    var $menu = $element.find("." + TOOLBAR_MENU_BUTTON_CLASS);
-
-    $($menu).trigger("dxclick");
-    assert.ok($element.hasClass(TOOLBAR_LIST_VISIBLE_CLASS), "'list-visible' class is attached when list is shown");
-
-    $($menu).trigger("dxclick");
-    assert.ok(!$element.hasClass(TOOLBAR_LIST_VISIBLE_CLASS), "'list-visible' class is removed when list is hidden");
-});
-
 QUnit.test("windowResize should not show/hide menu that doesn't created", function(assert) {
     this.element.dxToolbar({
         renderAs: "topToolbar",
@@ -400,19 +264,6 @@ QUnit.test("windowResize should not show/hide menu that doesn't created", functi
 
     resizeCallbacks.fire();
     assert.ok(true);
-});
-
-QUnit.test("win8 topToolbar menu", function(assert) {
-    this.element.dxToolbar({
-        renderAs: "topToolbar",
-        submenuType: "listBottom",
-        items: [
-            { location: 'menu', text: 'a' },
-            { location: 'menu', text: 'b' }
-        ],
-    });
-
-    assert.ok(this.element.find("." + DROP_DOWN_MENU_CLASS).length === 1, "dropdown was rendered");
 });
 
 QUnit.test("option visible for menu items", function(assert) {
@@ -427,30 +278,6 @@ QUnit.test("option visible for menu items", function(assert) {
 
     instance.option("items", [{ location: 'menu', text: 'a', visible: false }]);
     assert.ok(this.element.find("." + DROP_DOWN_MENU_CLASS).length === 0, "dropdown was not rendered");
-});
-
-QUnit.test("option visible", function(assert) {
-    this.element.dxToolbar({
-        visible: false,
-        items: [
-            { text: 'a' },
-            { location: 'menu', text: 'b' }
-        ],
-        submenuType: "listBottom"
-    });
-
-
-    var listOverlay = this.instance._listOverlay;
-    if(listOverlay) {
-        listOverlay.show();
-        listOverlay.hide();
-    }
-
-    var $content = this.element.find(".dx-overlay-content");
-    assert.ok($content.is(":hidden"));
-
-    this.instance.option("visible", true);
-    assert.ok($content.is(":visible"));
 });
 
 QUnit.test("changing field of item in submenu", function(assert) {
@@ -481,201 +308,6 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
 
     assert.equal(position.at, "bottom right", "at position is correct");
     assert.equal(position.my, "top right", "my position is correct");
-});
-
-
-QUnit.module("swipe", {
-    beforeEach: function() {
-        this.$element = $("#toolbar");
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-});
-
-QUnit.test("container swipe", function(assert) {
-    this.$element.dxToolbar({
-        items: [
-            { text: 'a' },
-            { location: 'menu', text: 'b' }
-        ],
-        submenuType: "listBottom",
-        renderAs: "bottomToolbar"
-    });
-
-    var $container = this.$element.find(".dx-overlay-content"),
-        $itemsContainer = this.$element.find(".dx-toolbar-items-container"),
-        pointer = pointerMock($itemsContainer);
-
-    var listHeight = this.$element.find(".dx-list").height(),
-        swipeHeight = listHeight + ($itemsContainer.height() - this.$element.height());
-
-    assert.roughEqual($container.position().top, 0, 0.5, "menu hidden at start");
-
-    pointer.start().swipeStart().swipe(-0.5);
-    assert.roughEqual($container.position().top, -0.5 * swipeHeight, 0.5);
-
-    pointer.swipeEnd(-1);
-    assert.roughEqual($container.position().top, -swipeHeight, 0.5);
-
-    pointer.start().swipeStart().swipe(0.5);
-    assert.roughEqual($container.position().top, -0.5 * swipeHeight, 0.5);
-
-    pointer.swipeEnd(1);
-    assert.roughEqual($container.position().top, 0, 0.5);
-});
-
-QUnit.test("menu button click", function(assert) {
-    this.$element.dxToolbar({
-        items: [
-            { location: 'menu', text: 'item' }
-        ],
-        submenuType: "listBottom",
-        renderAs: "bottomToolbar"
-    });
-
-    var $menuButton = this.$element.find("." + TOOLBAR_MENU_BUTTON_CLASS),
-        $itemsContainer = this.$element.find(".dx-toolbar-items-container"),
-        $container = this.$element.find(".dx-overlay-content");
-
-    var listHeight = this.$element.find(".dx-list").height(),
-        swipeHeight = listHeight + ($itemsContainer.height() - this.$element.height());
-
-    var position = $container.position().top;
-
-    $($menuButton).trigger("dxclick");
-    assert.equal($container.position().top, -swipeHeight);
-
-    $($menuButton).trigger("dxclick");
-    assert.equal($container.position().top, position);
-});
-
-QUnit.test("close win8 appbar on 'back' button click", function(assert) {
-    this.$element.dxToolbar({
-        items: [
-            { location: 'menu', text: 'item' }
-        ],
-        submenuType: "listBottom",
-        renderAs: "bottomToolbar"
-    });
-
-    var $menuButton = this.$element.find("." + TOOLBAR_MENU_BUTTON_CLASS),
-        $itemsContainer = this.$element.find(".dx-toolbar-items-container"),
-        $container = this.$element.find(".dx-overlay-content");
-
-    var listHeight = this.$element.find(".dx-list").height(),
-        swipeHeight = listHeight + ($itemsContainer.height() - this.$element.height());
-
-    var position = $container.position().top;
-
-    $($menuButton).trigger("dxclick");
-    assert.equal($container.position().top, -swipeHeight);
-
-    hideTopOverlayCallback.fire();
-    assert.equal($container.position().top, position);
-});
-
-QUnit.test("close win8 appbar on menu item click", function(assert) {
-    this.$element.dxToolbar({
-        items: [
-            { location: 'menu', text: 'item1' },
-            { location: 'menu', text: 'item2' }
-        ],
-        submenuType: "listBottom",
-        renderAs: "bottomToolbar"
-    });
-
-    var $menuButton = this.$element.find("." + TOOLBAR_MENU_BUTTON_CLASS),
-        $container = this.$element.find(".dx-overlay-content"),
-        position = $container.position().top;
-
-    $($menuButton).trigger("dxclick");
-
-    var submenu = this.$element.find(".dx-list-item").get(0);
-    $(submenu).trigger("dxclick");
-    assert.equal($container.position().top, position);
-});
-
-QUnit.test("appbar state with only menu items", function(assert) {
-    var instance = this.$element.dxToolbar({
-        items: [
-            { location: 'menu', text: 'b' }
-        ],
-        submenuType: "listBottom"
-    }).dxToolbar("instance");
-
-    assert.ok(this.$element.hasClass("dx-toolbar-mini"));
-
-    instance.option("items", [{ text: 'a' }, { location: 'menu', text: 'b' }]);
-    assert.ok(!this.$element.hasClass("dx-toolbar-mini"));
-});
-
-
-QUnit.module("submenuType = 'listTop'", {
-    beforeEach: function() {
-        this.$element = $("#toolbar");
-        this.instance = this.$element.dxToolbar({
-            items: [
-                { location: 'menu', text: 'item1' },
-                { location: 'menu', text: 'item2' }
-            ],
-            submenuType: "listTop",
-            renderAs: "bottomToolbar"
-        }).dxToolbar("instance");
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-});
-
-QUnit.test("toolbar items container should get correct z-index in 'listTop' strategy", function(assert) {
-    var $container = this.$element.find("." + TOOLBAR_ITEMS_CONTAINER_CLASS);
-    var $overlayContent = this.$element.find(".dx-overlay-content");
-
-    assert.ok($container.css("zIndex") - $overlayContent.css("zIndex") > 0, "toolbar items container z-index is correct");
-});
-
-QUnit.test("toolbar items container should be rendered directly in widget's element", function(assert) {
-    var $container = this.$element.children("." + TOOLBAR_ITEMS_CONTAINER_CLASS);
-    assert.equal($container.length, 1, "toolbar items container is rendered directly in widget's element");
-});
-
-QUnit.test("menu should not be reopened after the menu button click", function(assert) {
-    var $container = this.$element.children("." + TOOLBAR_ITEMS_CONTAINER_CLASS);
-    var $menuButton = $container.find("." + TOOLBAR_MENU_BUTTON_CLASS);
-    var instance = this.instance;
-
-    var pointer = pointerMock($menuButton).start();
-    var isMenuVisible = function(toolbar) {
-        return toolbar._menuStrategy._menuShown;
-    };
-
-    assert.ok(!isMenuVisible(instance), "menu is closed initially");
-
-    pointer.click();
-    assert.ok(isMenuVisible(instance), "menu is opened after menu button click");
-
-    pointer.click();
-    assert.ok(!isMenuVisible(instance), "menu is closed after menu button second click");
-});
-
-QUnit.test("it should be possible to expand toolbar with no items in submenu", function(assert) {
-    var instance = $("#widget").dxToolbar({
-        submenuType: "listTop",
-        renderAs: "bottomToolbar"
-    }).dxToolbar("instance");
-
-    var $menuButton = instance.$element().find("." + TOOLBAR_MENU_BUTTON_CLASS);
-    var isMenuVisible = function(toolbar) {
-        return toolbar._menuStrategy._menuShown;
-    };
-
-    $($menuButton).trigger("dxclick");
-    assert.ok(isMenuVisible(instance), "toolbar is expanded");
 });
 
 

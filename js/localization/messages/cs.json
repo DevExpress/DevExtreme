@@ -193,7 +193,8 @@
         "dxScheduler-recurrenceMonthly": "Měsíčně",
         "dxScheduler-recurrenceYearly": "Ročně",
 
-        "dxScheduler-recurrenceEvery": "Každý",
+        "dxScheduler-recurrenceRepeatEvery": "Každý",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "Konec opakování",
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Zap",

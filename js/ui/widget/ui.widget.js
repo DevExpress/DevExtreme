@@ -51,7 +51,11 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
             errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
         }
 
-        widgetElement[widgetName](widgetOptions);
+        if(options.parent) {
+            options.parent._createComponent(widgetElement, widgetName, widgetOptions);
+        } else {
+            widgetElement[widgetName](widgetOptions);
+        }
 
         return widgetElement;
     }
@@ -248,6 +252,25 @@ var Widget = DOMComponent.inherit({
     _cacheInnerOptions: function(optionContainer, optionValue) {
         var cacheName = optionContainer + "Cache";
         this[cacheName] = extend(this[cacheName], optionValue);
+    },
+
+    _getOptionsFromContainer: function({ name, fullName, value }) {
+        var options = {};
+
+        if(name === fullName) {
+            options = value;
+        } else {
+            var option = fullName.split(".").pop();
+            options[option] = value;
+        }
+
+        return options;
+    },
+
+    _innerOptionChanged: function(innerWidget, args) {
+        var options = this._getOptionsFromContainer(args);
+        innerWidget && innerWidget.option(options);
+        this._cacheInnerOptions(args.name, options);
     },
 
     _getInnerOptionsCache: function(optionContainer) {
@@ -471,7 +494,7 @@ var Widget = DOMComponent.inherit({
 
     _initContentReadyAction: function() {
         this._contentReadyAction = this._createActionByOption("onContentReady", {
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
@@ -505,8 +528,14 @@ var Widget = DOMComponent.inherit({
 
     _renderContent: function() {
         commonUtils.deferRender(() => {
+            if(this._disposed) {
+                return;
+            }
             return this._renderContentImpl();
         }).done(() => {
+            if(this._disposed) {
+                return;
+            }
             this._fireContentReadyAction();
         });
     },

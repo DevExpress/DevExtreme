@@ -1275,6 +1275,21 @@ QUnit.test("Filter by dayOfWeek", function(assert) {
     });
 });
 
+QUnit.test("Search", function(assert) {
+    var store = new RemoteStore({
+        load: function(loadOptions) {
+            assert.deepEqual(loadOptions.filter, ["ShipCountry", "contains", "ru"]);
+            return $.Deferred();
+        }
+    });
+
+    store.load({
+        columns: [],
+        rows: [{ dataField: "ShipCountry", searchValue: "ru" }],
+        values: [{ summaryType: 'count' }],
+    });
+});
+
 QUnit.test("Include filter by Quarter", function(assert) {
     var store = new RemoteStore({
         load: function(loadOptions) {
@@ -1481,6 +1496,7 @@ QUnit.test("Expanded column after expanded item. when no row fields", function(a
 });
 
 QUnit.test("Expand row", function(assert) {
+    var loadSpy = sinon.spy(this.externalStore, "load");
     this.load({
         rows: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }],
         columns: [{ dataField: "ShipVia" }],
@@ -1496,6 +1512,7 @@ QUnit.test("Expand row", function(assert) {
 
         assert.equal(data.columns.length, 3, "rows count");
         assert.equal(data.columns[0].value, 1, "first column value is correct");
+        assert.equal(loadSpy.callCount, 1);
     });
 });
 
