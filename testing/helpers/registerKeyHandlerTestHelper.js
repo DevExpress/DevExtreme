@@ -8,7 +8,9 @@ const registerKeyHandlerTestHelper = {
 
         QUnit.module("RegisterKeyHandler", {
             beforeEach: () => {
-                this.handler = sinon.spy();
+                this.handler = {
+                    callCount: 0
+                };
 
                 this.createWidget = (options = {}) => {
                     this.$widget = $("<div>")[WidgetName]($.extend({
@@ -21,7 +23,7 @@ const registerKeyHandlerTestHelper = {
 
                 this.checkKeyHandlerCall = (assert, key) => {
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.strictEqual(this.handler.getCall(0).args[0].target.className, this.widget.element().className || this.widget.element().get(0).className, "event.target");
+                    assert.ok(this.$widget.is(this.handler.event.target), "event.target");
                 };
             },
             afterEach: () => {
@@ -30,7 +32,7 @@ const registerKeyHandlerTestHelper = {
         }, () => {
             SUPPORTED_KEYS.forEach((key) => {
                 QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
-                    this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
+                    this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, (e) => { this.handler.event = e; this.handler.callCount++; }); } });
 
                     keyboardMock(this.$widget).press(key);
                     this.checkKeyHandlerCall(assert, key);
@@ -39,7 +41,7 @@ const registerKeyHandlerTestHelper = {
                 QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
                     this.createWidget();
 
-                    this.widget.registerKeyHandler(key, this.handler);
+                    this.widget.registerKeyHandler(key, (e) => { this.handler.event = e; this.handler.callCount++; });
 
                     keyboardMock(this.$widget).press(key);
                     this.checkKeyHandlerCall(assert, key);
