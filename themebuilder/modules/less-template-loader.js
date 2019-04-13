@@ -166,7 +166,8 @@ class LessTemplateLoader {
                 resolve({
                     compiledMetadata: compiledMetadata,
                     css: this._makeInfoHeader() + output.css,
-                    swatchSelector: this.swatchSelector
+                    swatchSelector: this.swatchSelector,
+                    version: this.version
                 });
             }, error => {
                 reject(error);

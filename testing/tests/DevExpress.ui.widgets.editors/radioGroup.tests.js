@@ -3,6 +3,7 @@ import devices from "core/devices";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "ui/radio_group";
 
@@ -440,6 +441,10 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxRadioGroup");
+}
 
 module("focus policy", moduleConfig, () => {
     test("focused-state set up on radio group after focusing on any item", assert => {
