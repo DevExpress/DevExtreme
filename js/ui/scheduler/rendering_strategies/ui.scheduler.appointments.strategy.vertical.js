@@ -315,18 +315,22 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return this._fixUnstableSorting(result, a, b);
     },
 
-    _getDynamicAppointmentCountPerCell: function() {
-        let allDayAppointmentCount;
+    // _getDynamicAppointmentCountPerCell: function() {
+    //     let allDayAppointmentCount;
 
-        if(this.instance.fire("isAdaptive")) {
-            allDayAppointmentCount = 0;
-        } else {
-            allDayAppointmentCount = this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell");
-        }
-        return {
-            allDay: allDayAppointmentCount,
-            simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
-        };
+    //     if(this.instance.fire("isAdaptive")) {
+    //         allDayAppointmentCount = 0;
+    //     } else {
+    //         allDayAppointmentCount = this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell");
+    //     }
+    //     return {
+    //         allDay: allDayAppointmentCount,
+    //         simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
+    //     };
+    // },
+
+    hasAllDayAppointments: function() {
+        return true;
     },
 
     _getAppointmentMinCount: function() {

@@ -26,6 +26,19 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     getAppointmentDefaultOffset() {
         return ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET;
     }
+
+    getDynamicAppointmentCountPerCell() {
+        let renderingStrategy = this.getRenderingStrategy();
+
+        if(renderingStrategy.hasAllDayAppointments()) {
+            return {
+                allDay: 0,
+                simple: renderingStrategy._calculateDynamicAppointmentCountPerCell() || renderingStrategy._getAppointmentMinCount()
+            };
+        } else {
+            return 0;
+        }
+    }
 }
 
 module.exports = AdaptivePositioningStrategy;

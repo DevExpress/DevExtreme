@@ -42,6 +42,21 @@ class AppointmentPositioningStrategy {
 
         return this.getRenderingStrategy().instance.option("_appointmentOffset");
     }
+
+    getDynamicAppointmentCountPerCell() {
+        let renderingStrategy = this.getRenderingStrategy();
+
+        if(renderingStrategy.hasAllDayAppointments()) {
+            return {
+                allDay: renderingStrategy.instance._groupOrientation === "vertical" ? 0 : renderingStrategy.instance.option("_appointmentCountPerCell"),
+                simple: renderingStrategy._calculateDynamicAppointmentCountPerCell() || renderingStrategy._getAppointmentMinCount()
+            };
+        } else {
+            let cellHeight = renderingStrategy.instance.fire("getCellHeight");
+
+            return Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || renderingStrategy._getAppointmentMinCount();
+        }
+    }
 }
 
 module.exports = AppointmentPositioningStrategy;

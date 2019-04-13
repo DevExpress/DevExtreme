@@ -780,13 +780,19 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return 0;
-        } else {
-            var cellHeight = this.instance.fire("getCellHeight");
+        return this.getPositioningStrategy().getDynamicAppointmentCountPerCell();
 
-            return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
-        }
+        // if(this.instance.fire("isAdaptive")) {
+        //     return 0;
+        // } else {
+        //     var cellHeight = this.instance.fire("getCellHeight");
+
+        //     return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+        // }
+    },
+
+    hasAllDayAppointments: function() {
+        return false;
     },
 
     _getAppointmentMinCount: function() {
