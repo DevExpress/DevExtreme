@@ -9367,7 +9367,7 @@ declare module DevExpress.exporter {
         /** @name ExcelDataGridCell.data */
         data?: any;
         /** @name ExcelDataGridCell.rowGroupIndex */
-        groupIndex?: number;
+        rowGroupIndex?: number;
         /** @name ExcelDataGridCell.groupSummaryItems */
         groupSummaryItems?: Array<{ name?: string, value?: any }>;
         /** @name ExcelDataGridCell.rowType */
