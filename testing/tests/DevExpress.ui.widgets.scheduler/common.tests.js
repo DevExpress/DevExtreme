@@ -3215,6 +3215,11 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Popup content should have correct height on a small screen", function(assert) {
+        if(devices.real().platform !== "generic") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
         let realClientHeight = document.documentElement.clientHeight;
 
         try {
