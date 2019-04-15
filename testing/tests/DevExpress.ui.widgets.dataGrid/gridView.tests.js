@@ -75,6 +75,9 @@ function createGridView(options, userOptions) {
                 })
             };
             this.createGridView = createGridView;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 
@@ -1023,6 +1026,7 @@ function createGridView(options, userOptions) {
             this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
+            this.dispose();
             this.clock.restore();
         }
     });
@@ -1998,6 +2002,49 @@ function createGridView(options, userOptions) {
         assert.strictEqual($colElements.get(2).style.width, "100px", "width of the group column");
         assert.strictEqual($colElements.get(3).style.width, "100px", "width of the group column");
     });
+
+    // T729862
+    QUnit.test("Expand column width should be correct when the grouping and summary options are changed dynamically", function(assert) {
+        // arrange
+        var $colElements,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3" }],
+                columns: [
+                    { dataField: "field1" },
+                    { dataField: "field2" },
+                    { dataField: "field3" }
+                ],
+                summary: {
+                    totalItems: [{
+                        column: "field1",
+                        summaryType: "count"
+                    }],
+                    texts: {
+                        count: "Count={0}"
+                    }
+                }
+            });
+
+        gridView.render($testElement);
+        gridView.update();
+
+        // act
+        this.dataController.beginUpdate();
+        this.columnsController.beginUpdate();
+
+        this.option("summary", []);
+        this.dataController.optionChanged({ name: "summary", fullName: "summary", value: [] });
+        this.columnOption("field1", "groupIndex", 0);
+
+        this.columnsController.endUpdate();
+        this.dataController.endUpdate();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-rowsview").find("col");
+        assert.strictEqual($colElements.get(0).style.width, "30px", "width of the expand column");
+    });
 }());
 
 // Fixed columns///
@@ -2013,6 +2060,9 @@ function createGridView(options, userOptions) {
                 })
             };
             this.createGridView = createGridView;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 
