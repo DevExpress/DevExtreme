@@ -7,6 +7,7 @@ import typeUtils from "../../../core/utils/type";
 const DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24;
 const COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 const COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22;
+const APPOINTMENT_MIN_COUNT = 1;
 
 class AppointmentPositioningStrategy {
 
@@ -57,6 +58,11 @@ class AppointmentPositioningStrategy {
         } else {
             return allDayCount;
         }
+    }
+
+    // NOTE: implement this
+    _getAppointmentMinCount() {
+        return APPOINTMENT_MIN_COUNT;
     }
 }
 
