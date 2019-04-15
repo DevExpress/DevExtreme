@@ -101,7 +101,7 @@ gulp.task('style-compiler-tb-assets', function(callback) {
 
     runStyleCompiler(
         'tb-assets', [
-            '--version=' + context.version.product,
+            '--version=' + context.version.package,
             '--tb-ui-path=' + assetsPath
         ],
         callback
