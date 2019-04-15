@@ -444,6 +444,54 @@ QUnit.test("Pass visualRange array if options is set using array", function(asse
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
 });
 
+QUnit.test("Can disable visualRange two way binding", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var visualRangeChanged = sinon.spy();
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 5
+        }, {
+            arg: 5,
+            val: 7
+        }, {
+            arg: 8,
+            val: 3
+        }, {
+            arg: 11,
+            val: 8
+        }],
+        argumentAxis: {
+            visualRange: {
+                startValue: 1,
+                endValue: 2
+            }
+        },
+        series: { type: "line" },
+        onOptionChanged: visualRangeChanged,
+        disableTwoWayBinding: true
+    });
+
+    chart.getArgumentAxis().visualRange([3, 6]);
+    assert.deepEqual(visualRangeChanged.callCount, 0);
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), {
+        startValue: 3,
+        endValue: 6
+    });
+    assert.deepEqual(chart.option().argumentAxis.visualRange, {
+        startValue: 1,
+        endValue: 2
+    });
+});
+
 QUnit.test("Set visualRange for multi axis/pane (check option method and adjustOnZoom)", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
     var visualRangeChanged = sinon.spy();
