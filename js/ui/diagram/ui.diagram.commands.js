@@ -70,19 +70,34 @@ const DiagramCommands = {
                 name: DiagramCommand.ConnectorLineOption,
                 widget: "dxSelectBox",
                 text: "Line Option",
-                items: ["Straight", "Orthogonal"]
+                items: [
+                    { name: "Straight", value: 0 },
+                    { name: "Orthogonal", value: 1 }
+                ],
+                displayExpr: "name",
+                valueExpr: "value"
             },
             {
                 name: DiagramCommand.ConnectorStartLineEnding,
                 widget: "dxSelectBox",
                 text: "Start Line Ending",
-                items: ["None", "Arrow"]
+                items: [
+                    { name: "None", value: 0 },
+                    { name: "Arrow", value: 1 }
+                ],
+                displayExpr: "name",
+                valueExpr: "value"
             },
             {
                 name: DiagramCommand.ConnectorEndLineEnding,
                 widget: "dxSelectBox",
                 text: "End Line Ending",
-                items: ["None", "Arrow"]
+                items: [
+                    { name: "None", value: 0 },
+                    { name: "Arrow", value: 1 }
+                ],
+                displayExpr: "name",
+                valueExpr: "value"
             },
             {
                 name: DiagramCommand.AutoLayoutTree,

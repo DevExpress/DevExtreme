@@ -17,14 +17,17 @@
         flex-basis: 0;
     }
 
-    .dx-diagram-toolbox,
-    .dx-diagram-options {
-        flex: 300px 0;
+    .dx-diagram-toolbox {
+        flex: 240px 0;
+        overflow-y: auto;
     }
-    .dx-diagram-content {
+    .dx-diagram-drawer-wrapper {
         flex: 1;
     }
-    .dx-diagram-toolbox {
-        overflow-y: auto;
+    .dx-diagram-content {
+        height: 100%;
+    }
+    .dx-diagram-options .dx-accordion {
+        width: 280px;
     }
 }
