@@ -1090,4 +1090,31 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index. Compact appointments`);
         assert.ok(this.scheduler.tooltip.checkItemElementHtml(1, `template item index - ${1}`), `Template should render content contains ${1} item index. Compact appointments`);
     });
+
+    QUnit.test("Keyboard navigation in tooltip", function(assert) {
+        this.createInstance();
+        const ITEM_FOCUSED_STATE_CLASS_NAME = "dx-state-focused";
+
+        const checkFocusedState = index => this.scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
+
+        this.scheduler.appointments.click();
+
+        assert.notOk(checkFocusedState(0), "On first show tooltip, list item shouldn't focused");
+
+        const keyboard = keyboardMock(this.scheduler.tooltip.getContentElement());
+        keyboard.keyDown("down");
+
+        assert.ok(checkFocusedState(0), "After press key down, list item should focused");
+
+        const buttonCount = this.scheduler.appointments.compact.getButtonCount();
+        this.scheduler.appointments.compact.click(buttonCount - 1);
+
+        assert.notOk(checkFocusedState(0), "After tooltip showed, list item shouldn't focused");
+
+        keyboard.keyDown("down");
+        assert.ok(checkFocusedState(0), "After press key down, first list item should focused");
+
+        keyboard.keyDown("down");
+        assert.ok(checkFocusedState(1), "After press key down, second list item should focused");
+    });
 });
