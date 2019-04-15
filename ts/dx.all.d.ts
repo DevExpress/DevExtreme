@@ -1481,6 +1481,8 @@ declare module DevExpress.exporter {
         column?: DevExpress.ui.dxDataGridColumn;
         /** The data object of the cell's row. */
         data?: any;
+        /** The group index of the row. Available when the rowType is "group". */
+        rowGroupIndex?: number;
         /** Information about group summary items the cell represents. */
         groupSummaryItems?: Array<{ name?: string, value?: any }>;
         /** The type of the cell's row. */
