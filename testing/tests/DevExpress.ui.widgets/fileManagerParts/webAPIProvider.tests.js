@@ -1,15 +1,16 @@
 import "ui/file_manager";
 import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
-import WebAPIFileProvider from "ui/file_manager/file_provider/file_provider.webapi";
+import WebApiFileProvider from "ui/file_manager/file_provider/webapi";
 import ajaxMock from "../../../helpers/ajaxMock.js";
 import { when } from "core/utils/deferred";
+import { deserializeDate } from "core/utils/date_serialization";
 
 const { test } = QUnit;
 
 const createFileManagerItem = (parentPath, name, isFolder, lastWriteTimeString, length) => {
     const result = new FileManagerItem(parentPath, name, isFolder);
-    result.lastWriteTime = lastWriteTimeString; // TODO make conversion to 'Date' type
+    result.lastWriteTime = deserializeDate(lastWriteTimeString);
     result.length = length;
     return result;
 };
@@ -39,10 +40,10 @@ const moduleConfig = {
 
     beforeEach: () => {
         this.options = {
-            loadUrl: "/api/endpoint"
+            endpointUrl: "/api/endpoint"
         };
 
-        this.provider = new WebAPIFileProvider(this.options);
+        this.provider = new WebApiFileProvider(this.options);
     },
 
     afterEach: () => {
@@ -57,7 +58,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
+            url: this.options.endpointUrl + "?command=GetDirContents&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: {
                 result: itemData,
                 success: true
@@ -75,7 +76,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
+            url: this.options.endpointUrl + "?command=GetDirContents&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: {
                 success: true,
                 result: itemData
@@ -93,7 +94,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=CreateDir&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
+            url: this.options.endpointUrl + "?command=CreateDir&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: {
                 success: true
             }
@@ -111,7 +112,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Rename&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
+            url: this.options.endpointUrl + "?command=Rename&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: {
                 success: true
             }
@@ -129,7 +130,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Remove&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%7D",
+            url: this.options.endpointUrl + "?command=Remove&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%7D",
             responseText: {
                 success: true
             }
@@ -148,7 +149,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Move&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
+            url: this.options.endpointUrl + "?command=Move&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
             responseText: {
                 success: true
             }
@@ -168,7 +169,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%22%7D",
+            url: this.options.endpointUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%22%7D",
             responseText: {
                 success: true
             }

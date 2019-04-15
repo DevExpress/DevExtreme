@@ -259,18 +259,6 @@ var Popup = Overlay.inherit({
 
         return this.callBase().concat([
             {
-                device: function(device) {
-                    return device.phone && themes.isWin8(themeName);
-                },
-                options: {
-                    position: {
-                        my: "top center",
-                        at: "top center",
-                        offset: "0 0"
-                    }
-                }
-            },
-            {
                 device: { platform: "ios" },
                 options: {
                     /**

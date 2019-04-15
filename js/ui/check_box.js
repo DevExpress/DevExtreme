@@ -6,7 +6,6 @@ var $ = require("../core/renderer"),
     Editor = require("./editor/editor"),
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
-    themes = require("./themes"),
     clickEvent = require("../events/click");
 
 var CHECKBOX_CLASS = "dx-checkbox",
@@ -95,14 +94,6 @@ var CheckBox = Editor.inherit({
                     * @inheritdoc
                     */
                     focusStateEnabled: true
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    useInkRipple: true
                 }
             }
         ]);

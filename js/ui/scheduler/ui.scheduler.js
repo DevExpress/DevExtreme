@@ -58,6 +58,7 @@ const toMs = dateUtils.dateToMilliseconds;
 
 const WIDGET_CLASS = "dx-scheduler",
     WIDGET_SMALL_CLASS = "dx-scheduler-small",
+    WIDGET_ADAPTIVE_CLASS = "dx-scheduler-adaptive",
     WIDGET_READONLY_CLASS = "dx-scheduler-readonly",
     APPOINTMENT_POPUP_CLASS = "dx-scheduler-appointment-popup",
     RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item",
@@ -1332,7 +1333,6 @@ const Scheduler = Widget.inherit({
                 this._updateOption("workSpace", name, value);
                 this.repaint();
                 break;
-            case "adaptivityEnabled":
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
             case "recurrenceEditMode":
@@ -1366,6 +1366,10 @@ const Scheduler = Widget.inherit({
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
                 this._initAppointmentTemplate();
+                this.repaint();
+                break;
+            case "adaptivityEnabled":
+                this._toggleAdaptiveClass();
                 this.repaint();
                 break;
             default:
@@ -1540,6 +1544,10 @@ const Scheduler = Widget.inherit({
     _toggleSmallClass: function() {
         var width = this.$element().get(0).getBoundingClientRect().width;
         this.$element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
+    },
+
+    _toggleAdaptiveClass: function() {
+        this.$element().toggleClass(WIDGET_ADAPTIVE_CLASS, this.option("adaptivityEnabled"));
     },
 
     _visibilityChanged: function(visible) {
@@ -1835,7 +1843,10 @@ const Scheduler = Widget.inherit({
     },
 
     _render: function() {
+        // NOTE: remove small class applying after adaptivity implementation
         this._toggleSmallClass();
+
+        this._toggleAdaptiveClass();
 
         this.callBase();
     },
@@ -2250,6 +2261,9 @@ const Scheduler = Widget.inherit({
                     container: options.container
                 });
             }),
+            onShown: () => {
+                this._setPopupContentMaxHeight();
+            },
             defaultOptionsRules: [
                 {
                     device: function() {
@@ -2908,7 +2922,7 @@ const Scheduler = Widget.inherit({
 
         $scrollable.css("height", "initial");
 
-        if($scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
+        if($scrollable.length && $scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
             $scrollable.height(popupContent.height());
         }
     },

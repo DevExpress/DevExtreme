@@ -815,6 +815,21 @@
         &.dx-widget {
             color: ~"@{@{widgetName}-base-color}";
         }
+
+        .dx-page,
+        .dx-page-size,
+        .dx-navigate-button {
+            outline: none;
+        }
+
+        &.dx-state-focused {
+            .dx-page:focus,
+            .dx-page-size:focus,
+            .dx-navigate-button:focus {
+                outline: 2px solid @datagrid-focused-border-color;
+                outline-offset: -2px;
+            }
+        }
     }
 
     .dx-@{widgetName}-summary-item {

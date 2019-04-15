@@ -733,7 +733,8 @@ registerTheme({
                 color: BLACK
             },
             image: {
-                location: "full"
+                width: 30,
+                height: 30
             }
         },
         argumentAxis: {
@@ -750,7 +751,7 @@ registerTheme({
         commonPaneSettings: {
             backgroundColor: NONE,
             border: {
-                color: SECONDARY_TITLE_COLOR,
+                color: LIGHT_GREY,
                 width: 1,
                 visible: false,
                 top: true,

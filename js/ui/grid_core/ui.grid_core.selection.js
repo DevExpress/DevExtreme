@@ -740,7 +740,7 @@ module.exports = {
                         editorOptions: {
                             visible: that.option("selection.allowSelectAll") || selectionController.isSelectAll() !== false
                         },
-                        tabIndex: -1,
+                        tabIndex: that.option("useLegacyKeyboardNavigation") ? -1 : (that.option("tabIndex") || 0),
                         setValue: function(value, e) {
                             var allowSelectAll = that.option("selection.allowSelectAll");
                             e.component.option("visible", allowSelectAll || e.component.option("value") !== false);

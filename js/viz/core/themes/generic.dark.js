@@ -79,7 +79,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: "#a3a3a3"
+                color: "#494949"
             }
         },
         commonAxisSettings: {

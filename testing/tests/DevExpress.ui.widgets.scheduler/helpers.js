@@ -64,6 +64,17 @@ export class SchedulerTestWrapper {
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick")
         };
+
+        this.workSpace = {
+            getCells: () => $(".dx-scheduler-date-table-cell"),
+            getCell: (index) => this.workSpace.getCells().eq(index),
+            getAllDayCells: () => $(".dx-scheduler-all-day-table-cell"),
+            getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
+            getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
+            getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
+            getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
+            getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight()
+        };
     }
 
     isAdaptivity() {

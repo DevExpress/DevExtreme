@@ -13,7 +13,8 @@ var $ = require("../core/renderer"),
     Widget = require("./widget/ui.widget"),
     SelectBox = require("./select_box"),
     NumberBox = require("./number_box"),
-    eventUtils = require("../events/utils");
+    eventUtils = require("../events/utils"),
+    registerKeyboardAction = require("./shared/accessibility").registerKeyboardAction;
 
 var PAGES_LIMITER = 4,
     PAGER_CLASS = 'dx-pager',
@@ -302,11 +303,10 @@ var Pager = Widget.inherit({
             that._pageClickHandler = function(e) {
                 clickPagesIndexAction({ event: e });
             };
-            that._pageKeyDownHandler = function(e) {
-                that._processKeyDown(e, clickPagesIndexAction);
-            };
+
             eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, that._pageClickHandler);
-            eventsEngine.on(that._$pagesChooser, "keydown", PAGER_PAGE_CLASS_SELECTOR, that._pageKeyDownHandler);
+
+            registerKeyboardAction(that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
         }
 
         for(var i = 0; i < pagesLength; i++) {
@@ -370,7 +370,8 @@ var Pager = Widget.inherit({
         eventsEngine.on($pageCount, eventUtils.addNamespace(clickEvent.name, that.Name + "PagesCount"), function(e) {
             clickAction({ event: e });
         });
-        eventsEngine.on($pageCount, "keydown", e => this._processKeyDown(e, clickAction));
+
+        registerKeyboardAction(that, $pageCount, undefined, clickAction);
 
         $pageCount.appendTo($container);
 
@@ -420,14 +421,6 @@ var Pager = Widget.inherit({
         that._updatePagesChooserWidth();
     },
 
-    _processKeyDown: function(event, action) {
-        var keyName = eventUtils.normalizeKeyName(event);
-
-        if(keyName === "enter" || keyName === "space") {
-            action({ event: event });
-        }
-    },
-
     _renderPageSizes: function() {
         var that = this,
             i,
@@ -455,7 +448,8 @@ var Pager = Widget.inherit({
         eventsEngine.on(that._$pagesSizeChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "PageSize"), PAGER_PAGE_SIZE_CLASS_SELECTOR, function(e) {
             clickPagesSizeAction({ event: e });
         });
-        eventsEngine.on(that._$pagesSizeChooser, "keydown", PAGER_PAGE_SIZE_CLASS_SELECTOR, e => this._processKeyDown(e, clickPagesSizeAction));
+
+        registerKeyboardAction(that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
 
         for(i = 0; i < pagesSizesLength; i++) {
             $pageSize = $('<div>')
@@ -560,7 +554,8 @@ var Pager = Widget.inherit({
 
                 clickAction({ event: e });
             });
-            eventsEngine.on($button, "keydown", e => this._processKeyDown(e, clickAction));
+
+            registerKeyboardAction(that, $button, undefined, clickAction);
 
             that.setAria({
                 "role": "button",
@@ -703,7 +698,8 @@ var Pager = Widget.inherit({
     _clean: function() {
         if(this._$pagesChooser) {
             eventsEngine.off(this._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], this.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, this._pageClickHandler);
-            eventsEngine.off(this._$pagesChooser, "keydown", PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
+
+            registerKeyboardAction(this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
         }
 
         this.callBase();

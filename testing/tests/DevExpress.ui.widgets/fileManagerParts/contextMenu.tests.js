@@ -13,13 +13,11 @@ const moduleConfig = {
         fx.off = true;
 
         $("#fileManager").dxFileManager({
-            fileSystemStore: fileSystem,
-            itemList: {
+            fileProvider: fileSystem,
+            itemView: {
                 showFolders: false
             },
-            selection: {
-                mode: "multiple"
-            }
+            selectionMode: "multiple"
         });
 
         this.clock.tick(400);

@@ -3,7 +3,6 @@ import { extend } from "../../core/utils/extend";
 import devices from "../../core/devices";
 import inkRipple from "../widget/utils.ink_ripple";
 import registerComponent from "../../core/component_registrator";
-import themes from "../themes";
 import ChildDefaultTemplate from "../widget/child_default_template";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
 import DataExpressionMixin from "../editor/ui.data_expression";
@@ -134,9 +133,6 @@ class RadioGroup extends Editor {
                 */
                 focusStateEnabled: true
             }
-        }, {
-            device: () => themes.isAndroid5(),
-            options: { useInkRipple: true }
         }]);
     }
 
@@ -145,7 +141,7 @@ class RadioGroup extends Editor {
     }
 
     _focusTarget() {
-        return this.$element().parent();
+        return this.$element();
     }
 
     _getAriaTarget() {
@@ -283,9 +279,6 @@ class RadioGroup extends Editor {
         this._renderLayout();
         super._render();
         this._updateItemsSize();
-    }
-
-    _renderFocusState() {
     }
 
     _renderInkRipple() {
