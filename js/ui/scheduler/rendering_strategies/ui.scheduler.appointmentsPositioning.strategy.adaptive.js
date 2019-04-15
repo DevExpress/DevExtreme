@@ -2,8 +2,9 @@
 import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.base";
 // import $ from "../../core/renderer";
 
-const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
-const DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
+const COLLECTOR_ADAPTIVE_SIZE = 28;
+const COLLECTOR_ADAPTIVE_BOTTOM_OFFSET = 40;
+
 const ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET = 35;
 const ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30;
 
@@ -13,15 +14,15 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     }
 
     getDropDownButtonAdaptiveSize() {
-        return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
+        return COLLECTOR_ADAPTIVE_SIZE;
     }
 
     getCompactAppointmentTopOffset() {
-        return this.getRenderingStrategy().getDefaultCellHeight() - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
+        return this.getRenderingStrategy().getDefaultCellHeight() - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
     }
 
     getCompactAppointmentLeftOffset() {
-        return (this.getRenderingStrategy().getDefaultCellWidth() - DROP_DOWN_BUTTON_ADAPTIVE_SIZE) / 2;
+        return (this.getRenderingStrategy().getDefaultCellWidth() - COLLECTOR_ADAPTIVE_SIZE) / 2;
     }
 
     getAppointmentDefaultOffset() {

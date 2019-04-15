@@ -4,11 +4,15 @@
 // import { camelize } from "../../core/utils/inflector";
 import typeUtils from "../../../core/utils/type";
 
-const DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24;
+const COLLECTOR_DEFAULT_WIDTH = 24;
+
 const COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 const COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22;
+
 const APPOINTMENT_MIN_COUNT = 1;
 const APPOINTMENT_DEFAULT_WIDTH = 40;
+
+const COLLECTOR_WIDTH_IN_PERCENTS = 75;
 
 class AppointmentPositioningStrategy {
 
@@ -22,10 +26,9 @@ class AppointmentPositioningStrategy {
 
     getDropDownAppointmentWidth(intervalCount, isAllDay) {
         if(isAllDay || !typeUtils.isDefined(isAllDay)) {
-            var widthInPercents = 75;
-            return widthInPercents * this.getRenderingStrategy().getDefaultCellWidth() / 100;
+            return COLLECTOR_WIDTH_IN_PERCENTS * this.getRenderingStrategy().getDefaultCellWidth() / 100;
         } else {
-            return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
+            return COLLECTOR_DEFAULT_WIDTH;
         }
     }
 
