@@ -6086,12 +6086,18 @@ declare module DevExpress.ui {
 
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
+        /** @name dxDiagram.Options.onDataChanged */
+        onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
     }
 
     /** @name dxDiagram */
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
         constructor(element: JQuery, options?: dxDiagramOptions)
+        /** @name dxDiagram.getData() */
+        getData(): string;
+        /** @name dxDiagram.setData(value) */
+        setData(data: string): void;
     }
     /** @name dxDrawer.Options */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
