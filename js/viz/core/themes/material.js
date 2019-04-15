@@ -61,7 +61,7 @@ registerTheme({
         paddingTopBottom: 6,
         arrowLength: 0,
         location: "edge",
-        color: "#fff",
+        color: "#616161",
         font: {
             color: "#fff"
         }
