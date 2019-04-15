@@ -151,7 +151,8 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _toggleBestFitModeForView: function(view, className, isBestFit) {
-        if(!view) return;
+        if(!view || !view.isVisible()) return;
+
         var $rowsTable = this._rowsView._getTableElement(),
             $viewTable = view._getTableElement(),
             $tableBody;
