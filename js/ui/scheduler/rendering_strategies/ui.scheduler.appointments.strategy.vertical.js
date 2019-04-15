@@ -8,9 +8,6 @@ var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
 
     APPOINTMENT_MIN_WIDTH = 5,
-    // APPOINTMENT_DEFAULT_WIDTH = 50,
-
-    // ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30,
 
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -318,14 +315,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     hasAllDayAppointments: function() {
         return true;
     },
-
-    // _getAppointmentDefaultWidth: function() {
-    //     if(this.instance.fire("isAdaptive")) {
-    //         return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
-    //     }
-
-    //     return APPOINTMENT_DEFAULT_WIDTH;
-    // },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);
