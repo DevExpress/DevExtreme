@@ -5,6 +5,7 @@ import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.stra
 const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 const DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
 const ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET = 35;
+const ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30;
 
 class AdaptivePositioningStrategy extends BasePositioningStrategy {
     getDropDownAppointmentWidth(intervalCount, isAllDay) {
@@ -33,11 +34,25 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         if(renderingStrategy.hasAllDayAppointments()) {
             return {
                 allDay: 0,
-                simple: renderingStrategy._calculateDynamicAppointmentCountPerCell() || renderingStrategy._getAppointmentMinCount()
+                simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
             };
         } else {
             return 0;
         }
+    }
+
+    _getAppointmentMinCount() {
+        return 0;
+    }
+
+    _getAppointmentDefaultWidth() {
+        let renderingStrategy = this.getRenderingStrategy();
+
+        if(renderingStrategy.hasAllDayAppointments()) {
+            return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
+        }
+
+        return super._getAppointmentDefaultWidth();
     }
 }
 

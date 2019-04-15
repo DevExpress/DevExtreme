@@ -15,13 +15,14 @@ var toMs = dateUtils.dateToMilliseconds;
 
 var abstract = Class.abstract;
 
-var APPOINTMENT_MIN_COUNT = 1,
-    APPOINTMENT_MIN_SIZE = 2,
+var APPOINTMENT_MIN_SIZE = 2,
+
+    // APPOINTMENT_MIN_COUNT = 1,
 
     COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15,
 
     APPOINTMENT_DEFAULT_HEIGHT = 20,
-    APPOINTMENT_DEFAULT_WIDTH = 40,
+    // APPOINTMENT_DEFAULT_WIDTH = 40,
 
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     // COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
@@ -795,10 +796,6 @@ var BaseRenderingStrategy = Class.inherit({
         return false;
     },
 
-    _getAppointmentMinCount: function() {
-        return APPOINTMENT_MIN_COUNT;
-    },
-
     _isCompactTheme: function() {
         return (themes.current() || "").split(".").pop() === "compact";
     },
@@ -825,7 +822,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultWidth: function() {
-        return APPOINTMENT_DEFAULT_WIDTH;
+        return this.getPositioningStrategy()._getAppointmentDefaultWidth();
     },
 
     _needVerticalGroupBounds: function() {

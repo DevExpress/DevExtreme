@@ -333,17 +333,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return true;
     },
 
-    _getAppointmentMinCount: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return 0;
-        }
-
-        return this.callBase();
-    },
-
-    _calculateDynamicAppointmentCountPerCell: function() {
-        return Math.floor(this._getAppointmentMaxWidth() / this._getAppointmentDefaultWidth());
-    },
+    // _calculateDynamicAppointmentCountPerCell: function() {
+    //     return Math.floor(this._getAppointmentMaxWidth() / this._getAppointmentDefaultWidth());
+    // },
 
     _getAppointmentDefaultWidth: function() {
         if(this.instance.fire("isAdaptive")) {
