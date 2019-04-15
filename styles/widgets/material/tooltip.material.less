@@ -21,8 +21,9 @@
                 margin-top: 0;
                 .dx-tooltip-appointment-item {
                     .dx-tooltip-appointment-item-marker-body {
-                        width: 24px;
-                        height: 24px;
+                        @MATERIAL_TOOLTIP_MARKER_DIMENSION: 24px;
+                        width: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
+                        height: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
                     }
                     .dx-tooltip-appointment-item-content-subject {
                         font-size: 18px;
