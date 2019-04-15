@@ -46,15 +46,16 @@ class AppointmentPositioningStrategy {
     getDynamicAppointmentCountPerCell() {
         let renderingStrategy = this.getRenderingStrategy();
 
+        let cellHeight = renderingStrategy.instance.fire("getCellHeight");
+        let allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || renderingStrategy._getAppointmentMinCount();
+
         if(renderingStrategy.hasAllDayAppointments()) {
             return {
-                allDay: renderingStrategy.instance._groupOrientation === "vertical" ? 0 : renderingStrategy.instance.option("_appointmentCountPerCell"),
+                allDay: renderingStrategy.instance._groupOrientation === "vertical" ? allDayCount : renderingStrategy.instance.option("_appointmentCountPerCell"),
                 simple: renderingStrategy._calculateDynamicAppointmentCountPerCell() || renderingStrategy._getAppointmentMinCount()
             };
         } else {
-            let cellHeight = renderingStrategy.instance.fire("getCellHeight");
-
-            return Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || renderingStrategy._getAppointmentMinCount();
+            return allDayCount;
         }
     }
 }
