@@ -1243,6 +1243,9 @@ var dxChart = AdvancedChart.inherit({
 
     _notify() {
         const that = this;
+        if(that.option("disableTwoWayBinding") === true) { // for dashboards T732396
+            return;
+        }
         const argumentVisualRange =
             vizUtils.convertVisualRangeObject(this._argumentAxes[0].visualRange(), !_isArray(that.option("argumentAxis.visualRange")));
 
