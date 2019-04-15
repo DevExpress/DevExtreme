@@ -1,7 +1,3 @@
-// import $ from "../../core/renderer";
-// import fx from "../../animation/fx";
-// import { Deferred, when } from "../../core/utils/deferred";
-// import { camelize } from "../../core/utils/inflector";
 import typeUtils from "../../../core/utils/type";
 
 const COLLECTOR_DEFAULT_WIDTH = 24;

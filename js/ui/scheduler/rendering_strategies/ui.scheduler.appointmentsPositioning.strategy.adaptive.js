@@ -1,6 +1,5 @@
 
 import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.base";
-// import $ from "../../core/renderer";
 
 const COLLECTOR_ADAPTIVE_SIZE = 28;
 const COLLECTOR_ADAPTIVE_BOTTOM_OFFSET = 40;
