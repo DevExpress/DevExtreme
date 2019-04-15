@@ -285,10 +285,6 @@
 
 }
 
-.dx-scheduler-dropdown-appointments {
-    margin-top: @MATERIAL_SCHEDULER_DROPDOWN_DAY_MARGIN;
-}
-
 .dx-scheduler-work-space {
     .dx-scheduler-scrollable-offset-mixin(@MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT, @MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
 }
@@ -387,8 +383,10 @@
 }
 
 .dx-scheduler-dropdown-appointments {
+    margin-top: @MATERIAL_SCHEDULER_DROPDOWN_DAY_MARGIN;
     position: absolute;
     &.dx-button {
+        border-radius: 12px;
         height: @MATERIAL_SCHEDULER_DROPDOWN_BUTTON_HEIGHT;
         min-width: auto;
         width: auto;
