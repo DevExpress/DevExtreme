@@ -1117,4 +1117,62 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         keyboard.keyDown("down");
         assert.ok(checkFocusedState(1), "After press key down, second list item should focused");
     });
+
+    QUnit.test("Tooltip should crop list, if list has many items", function(assert) {
+        this.createInstance({
+            dataSource: [
+                {
+                    text: "Prepare 2015 Marketing Plan",
+                    startDate: new Date(2017, 4, 25, 11, 0),
+                    endDate: new Date(2017, 4, 25, 13, 30)
+                }, {
+                    text: "Prepare 2015 Marketing Plan",
+                    startDate: new Date(2017, 4, 25, 11, 0),
+                    endDate: new Date(2017, 4, 25, 13, 30)
+                }, {
+                    text: "Prepare 2015 Marketing Plan",
+                    startDate: new Date(2017, 4, 25, 11, 0),
+                    endDate: new Date(2017, 4, 25, 13, 30)
+                }, {
+                    text: "Prepare 2015 Marketing Plan",
+                    startDate: new Date(2017, 4, 25, 11, 0),
+                    endDate: new Date(2017, 4, 25, 13, 30)
+                }, {
+                    text: "Prepare 2015 Marketing Plan",
+                    startDate: new Date(2017, 4, 25, 11, 0),
+                    endDate: new Date(2017, 4, 25, 13, 30)
+                }, {
+                    text: "Prepare 2015 Marketing Plan",
+                    startDate: new Date(2017, 4, 25, 11, 0),
+                    endDate: new Date(2017, 4, 25, 13, 30)
+                }
+            ]
+        });
+
+        const { getItemCount, getContentElement, getDesktopOverlayContentElement } = this.scheduler.tooltip;
+
+        this.scheduler.appointments.compact.click();
+        assert.equal(getItemCount(), 4, "Tooltip should render 4 items");
+        assert.ok(getContentElement() > getDesktopOverlayContentElement().outerHeight(), "Tooltip height should less then list height");
+
+        this.scheduler.instance.option("dataSource", [
+            {
+                text: "Prepare 2015 Marketing Plan",
+                startDate: new Date(2017, 4, 25, 11, 0),
+                endDate: new Date(2017, 4, 25, 13, 30)
+            }, {
+                text: "Prepare 2015 Marketing Plan",
+                startDate: new Date(2017, 4, 25, 11, 0),
+                endDate: new Date(2017, 4, 25, 13, 30)
+            }, {
+                text: "Prepare 2015 Marketing Plan",
+                startDate: new Date(2017, 4, 25, 11, 0),
+                endDate: new Date(2017, 4, 25, 13, 30)
+            }
+        ]);
+
+        this.scheduler.appointments.compact.click();
+        assert.equal(getItemCount(), 1, "Tooltip should render 1 item");
+        assert.roughEqual(getContentElement().outerHeight(), getDesktopOverlayContentElement().outerHeight(), 10, "Tooltip height should equals then list height");
+    });
 });
