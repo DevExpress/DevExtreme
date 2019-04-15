@@ -72,7 +72,7 @@ QUnit.module("Integration: Appointments", {
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
-        tooltip.hide();
+        this.instance.hideAppointmentTooltip(); // TODO:
     },
     checkItemDataInDropDownTemplate: function(assert, dataSource, currentDate) {
         this.createInstance({
@@ -3184,8 +3184,6 @@ QUnit.test("dxScheduler should render dropDownAppointment appointment template w
 
     appointmentsHelper.compact.click();
     assert.equal(tooltipHelper.getItemElement().text(), "text", "Text is correct on init");
-
-    this.instance.hideAppointmentTooltip(); // TODO:
 });
 
 QUnit.test("Appointment should have right position, if it's startDate time less than startDayHour option value", function(assert) {
