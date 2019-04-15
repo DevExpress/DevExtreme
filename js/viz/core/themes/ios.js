@@ -33,7 +33,7 @@ themeModule.registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: SECONDARY_TEXT_COLOR
+                color: BORDER_COLOR
             }
         }
     },

@@ -55,7 +55,7 @@
         applyEllipsis: function(maxWidth) { // for text
             return maxWidth < 50;
         },
-        setMaxWidth: function(maxWidth) { // for text
+        setMaxSize: function(maxWidth) { // for text
             return { textChanged: maxWidth < 50 };
         },
         stopAnimation: function() {

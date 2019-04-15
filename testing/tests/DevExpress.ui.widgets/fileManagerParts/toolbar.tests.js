@@ -28,19 +28,19 @@ const createFileManager = useThumbnailViewMode => {
     const viewMode = useThumbnailViewMode ? "thumbnails" : "details";
 
     $("#fileManager").dxFileManager({
-        fileSystemStore: fileSystem,
-        itemList: {
+        fileProvider: fileSystem,
+        itemView: {
             mode: viewMode,
             showFolders: false,
             showParentFolder: false
         },
-        editing: {
-            allowCreate: true,
-            allowCopy: true,
-            allowMove: true,
-            allowRemove: true,
-            allowRename: true,
-            allowUpload: true
+        permissions: {
+            create: true,
+            copy: true,
+            move: true,
+            remove: true,
+            rename: true,
+            upload: true
         }
     });
 };
@@ -113,6 +113,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         let $folderNode = getFolderNode(this.$element, 0);
         $folderNode.trigger("dxclick");
+        $folderNode.trigger("click");
         this.clock.tick(400);
 
         $toolbar = getToolbar(this.$element);
@@ -158,6 +159,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const $item = findDetailsItem(this.$element, "File 1.txt");
         $item.trigger("dxclick");
+        $item.trigger("click");
         this.clock.tick(400);
 
         $toolbar = getToolbar(this.$element);
@@ -165,6 +167,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         let $folderNode = getFolderNode(this.$element, 0);
         $folderNode.trigger("dxclick");
+        $folderNode.trigger("click");
         this.clock.tick(400);
 
         $toolbar = getToolbar(this.$element);
@@ -175,13 +178,13 @@ QUnit.module("Toolbar", moduleConfig, () => {
         createFileManager(false);
 
         var fileManagerInstance = $("#fileManager").dxFileManager("instance");
-        fileManagerInstance.option("editing", {
-            allowCreate: false,
-            allowCopy: false,
-            allowMove: false,
-            allowRemove: false,
-            allowRename: false,
-            allowUpload: false
+        fileManagerInstance.option("permissions", {
+            create: false,
+            copy: false,
+            move: false,
+            remove: false,
+            rename: false,
+            upload: false
         });
         this.clock.tick(400);
 

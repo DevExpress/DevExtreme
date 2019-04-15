@@ -33,7 +33,7 @@ function coreAnnotation(options, draw) {
             }
         },
         getTooltipFormatObject() {
-            return extend({}, this.options);
+            return extend({ valueText: this.options.description }, this.options);
         },
         getTooltipParams() {
             const { x, y } = this.coords;
@@ -66,22 +66,22 @@ function imageAnnotation(options) {
     });
 }
 
-function createAnnotation(item, commonOptions) {
+function createAnnotation(item, commonOptions, customizeAnnotation) {
     let options = extend(true, {}, commonOptions, item);
-    if(options.customizeAnnotation && options.customizeAnnotation.call) {
-        options = extend(true, options, options.customizeAnnotation(item));
+    if(customizeAnnotation && customizeAnnotation.call) {
+        options = extend(true, options, customizeAnnotation(item));
     }
 
     if(options.type === "image") {
         return imageAnnotation(options);
-    } else if(options.type === "label") {
+    } else if(options.type === "text") {
         return labelAnnotation(options);
     }
 }
 
-export let createAnnotations = function(items, options) {
+export let createAnnotations = function(items, options = {}, customizeAnnotation) {
     return items.reduce((arr, item) => {
-        const annotation = createAnnotation(item, options);
+        const annotation = createAnnotation(item, options, customizeAnnotation);
         annotation && arr.push(annotation);
         return arr;
     }, []);
@@ -204,8 +204,6 @@ const corePlugin = {
             this._annotations.items = [];
 
             const items = this._getOption("annotations");
-            const options = this._getOption("commonAnnotationSettings") || {};
-
             if(!items || !items.length) {
                 return;
             }
@@ -220,7 +218,7 @@ const corePlugin = {
             const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
             this._annotations.tooltip.update(tooltipOptions);
 
-            this._annotations.items = createAnnotations(items, options);
+            this._annotations.items = createAnnotations(items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
             this._renderer.root.on(MOVE_EVENT, this._onMouseMove.bind(this));
         },
         _getAnnotationCoords() { return {}; }

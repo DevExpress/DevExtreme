@@ -137,15 +137,16 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _markAppointmentAsVirtual: noop,
 
-    getCompactAppointmentGroupMaxWidth: noop,
+    getDropDownAppointmentWidth: noop,
 
     getDefaultCellWidth: function() {
         return this._defaultWidth;
     },
 
-    getCompactAppointmentDefaultSize: noop,
+    getCompactAppointmentDefaultWidth: noop,
 
-    getCompactAppointmentDefaultOffset: noop,
+    getCompactAppointmentLeftOffset: noop,
+    getCompactAppointmentTopOffset: noop,
 
     calculateRows: function(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];

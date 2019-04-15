@@ -18,21 +18,21 @@ QUnit.module("themes", {
 });
 
 QUnit.test("theme changing", function(assert) {
-    themes.current("android5.light");
+    themes.current("generic.light");
 
-    assert.equal(themes.current(), "android5.light");
+    assert.equal(themes.current(), "generic.light");
     assert.equal(viewport.classList.toString(), [
         "dx-viewport",
         "dx-device-desktop",
         "dx-device-generic",
-        "dx-theme-android5",
-        "dx-theme-android5-typography",
+        "dx-theme-generic",
+        "dx-theme-generic-typography",
         "dx-color-scheme-light"
     ].join(" "));
 });
 
 QUnit.test("viewport changing", function(assert) {
-    themes.current("android5.light");
+    themes.current("generic.light");
 
     var fixture = document.getElementById("qunit-fixture");
     var newViewport = document.createElement("div");
@@ -44,8 +44,8 @@ QUnit.test("viewport changing", function(assert) {
     assert.equal(newViewport.classList.toString(), [
         "dx-device-desktop",
         "dx-device-generic",
-        "dx-theme-android5",
-        "dx-theme-android5-typography",
+        "dx-theme-generic",
+        "dx-theme-generic-typography",
         "dx-color-scheme-light"
     ].join(" "));
 

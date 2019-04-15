@@ -454,7 +454,7 @@ QUnit.test("setViewport position. Scroll to far page", function(assert) {
 
 QUnit.test("getVirtualContentSize after far scroll if itemSizes are not equal to virtual item size", function(assert) {
     var realItemSize = 10;
-    var realItemSizes = Array.from({ length: 20 }, () => realItemSize);
+    var realItemSizes = Array.apply(null, Array(20)).map(() => realItemSize);
 
     this.scrollController.setContentSize(realItemSizes);
     this.scrollController.setViewportPosition(1000);

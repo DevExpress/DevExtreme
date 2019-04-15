@@ -45,16 +45,6 @@
     .dx-filemanager-container {
         border-top-color: @filemanager-border-color;
     }
-
-    .dx-filemanager-dirs-tree {
-        .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
-            background: @filemanager-dirs-tree-item-focus-bg;
-            
-            & * {
-                color: @filemanager-dirs-tree-item-focus-color;
-            }
-        }
-    }
     
     .dx-filemanager-breadcrumbs {
         border-bottom-color: @filemanager-border-color;
@@ -101,6 +91,28 @@
                     color: @filemanager-thumbnails-image-icon-color;
                 }
             }
+        }
+    }
+}
+
+.dx-filemanager-dirs-tree.dx-treeview {
+    .dx-state-focused > .dx-treeview-item {
+        background: transparent;
+        
+        &.dx-state-hover {
+            background: @filemanager-dirs-tree-item-focus-bg;
+        }
+        
+        & * {
+            color: @filemanager-dirs-tree-item-focus-color;
+        }
+    }
+
+    .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item {
+        background: @filemanager-dirs-tree-item-focus-bg;
+        
+        & * {
+            color: @filemanager-dirs-tree-item-focus-color;
         }
     }
 }

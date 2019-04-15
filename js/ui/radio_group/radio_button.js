@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     Editor = require("../editor/editor"),
     eventUtils = require("../../events/utils"),
-    themes = require("../themes"),
     clickEvent = require("../../events/click");
 
 var RADIO_BUTTON_CLASS = "dx-radiobutton",
@@ -53,14 +52,6 @@ var RadioButton = Editor.inherit({
                 },
                 options: {
                     focusStateEnabled: true
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    useInkRipple: true
                 }
             }
         ]);

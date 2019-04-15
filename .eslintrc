@@ -146,6 +146,7 @@
                     "odata",      // OData
                     "rtl",        // Right-to-Left
                     "scss",
+                    "semver",     // The semantic versioner for npm 
                     "sinon",      // JS library
                     "tspan",      // SVG element
                     "tspans",
@@ -157,6 +158,7 @@
                     "xmla",       // XML for Analysis
                     "ldml",       // LOCALE DATA MARKUP LANGUAGE
 
+                    "API",
                     "accessor",
                     "accessors",
                     "acos",
@@ -294,6 +296,7 @@
                     "getters",
                     "gregorian",
                     "guid",
+                    "gte",
                     "hideable",
                     "historyless",
                     "hor",

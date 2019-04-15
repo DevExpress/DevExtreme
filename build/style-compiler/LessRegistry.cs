@@ -24,10 +24,7 @@ namespace StyleCompiler
         public const string
             THEME_GENERIC = "generic",
             THEME_MATERIAL = "material",
-            THEME_IOS7 = "ios7",
-            THEME_ANDROID5 = "android5",
-            THEME_WIN8 = "win8",
-            THEME_WIN10 = "win10";
+            THEME_IOS7 = "ios7";
 
         public const string
             COLOR_SCHEME_DEFAULT = "default",
@@ -65,7 +62,7 @@ namespace StyleCompiler
                 new CssDistributionInfo {
                     LicenseInfo = EULA_DEVEXTREME,
                     Modules = new[] { MODULE_WIDGETS_BASE },
-                    SupportedThemes = new[] { THEME_GENERIC, THEME_MATERIAL, THEME_IOS7, THEME_ANDROID5, THEME_WIN8, THEME_WIN10 },
+                    SupportedThemes = new[] { THEME_GENERIC, THEME_MATERIAL, THEME_IOS7 },
 
                     SupportedSizeSchemes = new Dictionary<string,string[]> {
                         { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } },
@@ -82,16 +79,6 @@ namespace StyleCompiler
                 ColorSchemeNames = new [] { COLOR_SCHEME_DEFAULT }
             },
             new KnownThemeInfo {
-                Name = THEME_ANDROID5,
-                PublicName = THEME_ANDROID5,
-                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT }
-            },
-            new KnownThemeInfo {
-                Name = THEME_WIN8,
-                PublicName = THEME_WIN8,
-                ColorSchemeNames = new[] { COLOR_SCHEME_BLACK, COLOR_SCHEME_WHITE }
-            },
-            new KnownThemeInfo {
                 Name = THEME_GENERIC,
                 PublicName = string.Empty,
                 ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_GREENMIST, COLOR_SCHEME_CONTRAST }
@@ -101,11 +88,6 @@ namespace StyleCompiler
                 PublicName = THEME_MATERIAL,
                 ColorSchemeNames = new[] { COLOR_SCHEME_BLUE_LIGHT, COLOR_SCHEME_ORANGE_LIGHT, COLOR_SCHEME_LIME_LIGHT, COLOR_SCHEME_PURPLE_LIGHT, COLOR_SCHEME_TEAL_LIGHT, COLOR_SCHEME_BLUE_DARK, COLOR_SCHEME_ORANGE_DARK, COLOR_SCHEME_LIME_DARK, COLOR_SCHEME_PURPLE_DARK, COLOR_SCHEME_TEAL_DARK }
             },
-            new KnownThemeInfo {
-                Name = THEME_WIN10,
-                PublicName = THEME_WIN10,
-                ColorSchemeNames = new[] { COLOR_SCHEME_BLACK, COLOR_SCHEME_WHITE }
-            }
         }.ToDictionary(i => i.Name);
 
         static string[] GenerateWidgetsLessFileList(string themeName)
@@ -199,6 +181,7 @@ namespace StyleCompiler
                 "drawer",
                 "card",
                 "htmlEditor",
+                "floatingActionButton",
                 "fileManager",
                 "diagram"
             });
