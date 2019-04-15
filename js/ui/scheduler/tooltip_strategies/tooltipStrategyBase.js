@@ -48,7 +48,7 @@ export class TooltipStrategyBase {
         }
 
         this.tooltip.option("visible", true);
-        // this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
+        this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
     }
 
     hide() {

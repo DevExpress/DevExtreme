@@ -72,6 +72,7 @@ QUnit.module("Integration: Appointments", {
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
+        tooltip.hide();
     },
     checkItemDataInDropDownTemplate: function(assert, dataSource, currentDate) {
         this.createInstance({
