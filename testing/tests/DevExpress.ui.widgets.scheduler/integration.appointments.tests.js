@@ -50,6 +50,8 @@ QUnit.module("Integration: Appointments", {
         fx.off = true;
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
+            this.clock.tick(300);
+            this.instance.focus();
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || "backgroundColor";
@@ -72,7 +74,6 @@ QUnit.module("Integration: Appointments", {
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
-        this.instance.hideAppointmentTooltip(); // TODO:
     },
     checkItemDataInDropDownTemplate: function(assert, dataSource, currentDate) {
         this.createInstance({
@@ -3199,8 +3200,6 @@ QUnit.test("Appointment should have right position, if it's startDate time less 
         dataSource: [appointment],
         startDayHour: 3
     });
-
-    this.instance.focus();
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
         $targetCell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(1);
