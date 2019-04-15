@@ -8,9 +8,9 @@ var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
 
     APPOINTMENT_MIN_WIDTH = 5,
-    APPOINTMENT_DEFAULT_WIDTH = 50,
+    // APPOINTMENT_DEFAULT_WIDTH = 50,
 
-    ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30,
+    // ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30,
 
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -315,35 +315,17 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return this._fixUnstableSorting(result, a, b);
     },
 
-    // _getDynamicAppointmentCountPerCell: function() {
-    //     let allDayAppointmentCount;
-
-    //     if(this.instance.fire("isAdaptive")) {
-    //         allDayAppointmentCount = 0;
-    //     } else {
-    //         allDayAppointmentCount = this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell");
-    //     }
-    //     return {
-    //         allDay: allDayAppointmentCount,
-    //         simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
-    //     };
-    // },
-
     hasAllDayAppointments: function() {
         return true;
     },
 
-    // _calculateDynamicAppointmentCountPerCell: function() {
-    //     return Math.floor(this._getAppointmentMaxWidth() / this._getAppointmentDefaultWidth());
+    // _getAppointmentDefaultWidth: function() {
+    //     if(this.instance.fire("isAdaptive")) {
+    //         return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
+    //     }
+
+    //     return APPOINTMENT_DEFAULT_WIDTH;
     // },
-
-    _getAppointmentDefaultWidth: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
-        }
-
-        return APPOINTMENT_DEFAULT_WIDTH;
-    },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);

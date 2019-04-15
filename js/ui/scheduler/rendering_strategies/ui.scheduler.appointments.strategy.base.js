@@ -591,17 +591,6 @@ var BaseRenderingStrategy = Class.inherit({
 
     getDropDownAppointmentWidth: function(intervalCount, isAllDay) {
         return this.getPositioningStrategy().getDropDownAppointmentWidth(intervalCount, isAllDay);
-
-        // if(this.instance.fire("isAdaptive")) {
-        //     return this.getDropDownButtonAdaptiveSize();
-        // } else {
-        //     if(isAllDay || !typeUtils.isDefined(isAllDay)) {
-        //         var widthInPercents = 75;
-        //         return widthInPercents * this.getDefaultCellWidth() / 100;
-        //     } else {
-        //         return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
-        //     }
-        // }
     },
 
     getDropDownAppointmentHeight: function() {
@@ -628,22 +617,10 @@ var BaseRenderingStrategy = Class.inherit({
 
     getCompactAppointmentTopOffset: function() {
         return this.getPositioningStrategy().getCompactAppointmentTopOffset();
-
-        // if(this.instance.fire("isAdaptive")) {
-        //     return this._defaultHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
-        // }
-
-        // return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
     getCompactAppointmentLeftOffset: function() {
         return this.getPositioningStrategy().getCompactAppointmentLeftOffset();
-
-        // if(this.instance.fire("isAdaptive")) {
-        //     return (this._defaultWidth - DROP_DOWN_BUTTON_ADAPTIVE_SIZE) / 2;
-        // }
-
-        // return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
     getAppointmentDataCalculator: noop,
@@ -782,14 +759,6 @@ var BaseRenderingStrategy = Class.inherit({
 
     _getDynamicAppointmentCountPerCell: function() {
         return this.getPositioningStrategy().getDynamicAppointmentCountPerCell();
-
-        // if(this.instance.fire("isAdaptive")) {
-        //     return 0;
-        // } else {
-        //     var cellHeight = this.instance.fire("getCellHeight");
-
-        //     return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
-        // }
     },
 
     hasAllDayAppointments: function() {
@@ -802,15 +771,6 @@ var BaseRenderingStrategy = Class.inherit({
 
     _getAppointmentDefaultOffset: function() {
         return this.getPositioningStrategy().getAppointmentDefaultOffset();
-        // if(this.instance.fire("isAdaptive")) {
-        //     return ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET;
-        // }
-
-        // if(this._isCompactTheme()) {
-        //     return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
-        // }
-
-        // return this.instance.option("_appointmentOffset");
     },
 
     _getAppointmentDefaultHeight: function() {
