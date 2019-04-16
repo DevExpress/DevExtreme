@@ -36,7 +36,7 @@
 * @type string
 */
 /**
-* @name ExcelDataGridCell.rowGroupIndex
+* @name ExcelDataGridCell.groupIndex
 * @type number
 */
 /**

@@ -44,6 +44,8 @@ export class SchedulerTestWrapper {
             getAppointmentCount: () => this.appointments.getAppointments().length,
             getAppointment: (index = 0) => this.appointments.getAppointments().eq(index),
             getTitleText: (index = 0) => this.appointments.getAppointment(index).find(".dx-scheduler-appointment-title").text(),
+            getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
+            getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
 
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();
@@ -64,7 +66,12 @@ export class SchedulerTestWrapper {
         this.appointmentPopup = {
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
-            hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick")
+            hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
+        };
+
+        this.appointmentForm = {
+            getFormInstance: () => this.appointmentPopup.getPopup().find(".dx-form").dxForm("instance"),
+            hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs")
         };
 
         this.workSpace = {
@@ -128,7 +135,7 @@ export const appointmentsHelper = {
         click: (index = 0) => appointmentsHelper.compact.getButton(index).trigger("dxclick"),
     }
 };
-
+// TODO: Don't use
 export const appointmentPopupHelper = {
     getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
     hide: () => appointmentPopupHelper.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick")
