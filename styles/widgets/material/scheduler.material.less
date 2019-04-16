@@ -24,6 +24,8 @@
     @MATERIAL_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 1px solid transparent;
 
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 300px;
+    @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE: 18px;
+    @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE: 14px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET: 8px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT: 22px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_TIMELINE__TIME_HEIGHT: 34px;
@@ -62,6 +64,8 @@
     @MATERIAL_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 1px solid transparent;
 
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 300px;
+    @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE: 14px;
+    @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE: 11px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET: 4px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT: 22px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_TIMELINE__TIME_HEIGHT: 34px;
@@ -901,7 +905,6 @@
 }
 .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
     padding: 0;
-    font-size: 12px;
 
     .dx-list-item {
         margin-bottom: 0;
@@ -926,12 +929,16 @@
             }
             .dx-tooltip-appointment-item-content-subject {
                 margin-top: 4px;
-                font-size: 18px;
+                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE;
             }
             .dx-tooltip-appointment-item-content-date {
-                font-size: 14px;
+                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE;
                 opacity: 1;
                 margin-top: 4px;
+            }
+
+            .dx-tooltip-appointment-item-delete-button-container {
+                padding-top: 6px;
             }
         }
     }
