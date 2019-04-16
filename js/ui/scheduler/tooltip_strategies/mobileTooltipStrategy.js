@@ -4,7 +4,6 @@ import $ from "../../../core/renderer";
 import { getWindow } from "../../../core/utils/window";
 
 const SLIDE_PANEL_CLASS_NAME = "dx-scheduler-overlay-panel";
-// const MAX_OVERLAY_HEIGHT = 250;
 
 const animationConfig = {
     show: {
@@ -46,7 +45,6 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
             target: this.scheduler.$element(),
             container: this.scheduler.$element(),
             closeOnOutsideClick: true,
-            // maxHeight: MAX_OVERLAY_HEIGHT,
             width: "100%",
             height: "auto",
             contentTemplate: () => list.$element()
