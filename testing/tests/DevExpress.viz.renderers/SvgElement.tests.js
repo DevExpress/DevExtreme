@@ -6048,6 +6048,35 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.equal(text.getBBox().height, 0);
         });
 
+        QUnit.test("Set max height. null as height", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There is test text for checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, null, {
+                wordWrap: "normal",
+                textOverflow: "ellipsis"
+            });
+            assert.ok(text.getBBox().height !== 0);
+        });
+
+        QUnit.test("Set max height. TextOverflow = 'none'. Show all texts ", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There is test text for checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, 10, {
+                wordWrap: "normal",
+                textOverflow: "none"
+            });
+
+            assert.ok(text.getBBox().height !== 0);
+        });
+
         QUnit.test("Set max height. textOverflow ellipsis. multi line text, Last text width less than maxWidth - add ... at the end", function(assert) {
             var text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: "black",
