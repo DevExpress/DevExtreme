@@ -1,22 +1,24 @@
 import { extend } from "../../core/utils/extend";
+import { isDefined } from "../../core/utils/type";
 
-const getCloudPoints = function({ width, height }, { arrowLength, arrowWidth }) {
+const getCloudPoints = function({ width, height }, x, y, anchorX, anchorY, { arrowWidth }) {
     var halfArrowWidth = arrowWidth / 2,
-        halfContentWidth = width / 2,
+        halfWidth = width / 2,
+        halfHeight = height / 2,
         cloudPoints,
         arrowPoints = [6, 0],
-        x1 = halfContentWidth + halfArrowWidth,
-        x2 = halfContentWidth,
-        x3 = halfContentWidth - halfArrowWidth,
-        y1 = height,
-        y3 = height,
-        y2 = height + arrowLength;
+        x1 = x + halfArrowWidth,
+        x2 = anchorX,
+        x3 = x - halfArrowWidth,
+        y1 = y + halfHeight,
+        y3 = y + halfHeight,
+        y2 = anchorY;
 
     cloudPoints = [
-        0, 0, // lt
-        width, 0, // rt
-        width, height, // rb
-        0, height // lb
+        x - halfWidth, y - halfHeight, // lt
+        x + halfWidth, y - halfHeight, // rt
+        x + halfWidth, y + halfHeight, // rb
+        x - halfWidth, y + halfHeight // lb
     ];
 
     arrowPoints.splice(2, 0, x1, y1, x2, y2, x3, y3);
@@ -27,13 +29,25 @@ const getCloudPoints = function({ width, height }, { arrowLength, arrowWidth }) 
 
 export class Plaque {
     constructor(options, widget, root, renderContent) {
-        const renderer = widget._renderer;
+        this.widget = widget;
+        this.options = options;
+        this.root = root;
+        this.renderContent = renderContent;
+    }
+
+    draw({ x: anchorX, y: anchorY }) {
+        const renderer = this.widget._renderer;
+        const options = this.options;
+        let { x, y } = options;
+
+        if(!isDefined(anchorX) && (!isDefined(x) || !isDefined(y))) {
+            return;
+        }
+
         const shadow = renderer.shadowFilter().attr(extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow));
 
         let cloudSettings = { opacity: options.opacity, filter: shadow.id, "stroke-width": 0, fill: options.color };
         let borderOptions = options.border || {};
-
-        this.options = options;
 
         if(borderOptions.visible) {
             extend(cloudSettings, {
@@ -44,30 +58,34 @@ export class Plaque {
             });
         }
 
-        this._group = renderer.g().attr({ class: `dxc-${ options.type }-annotation` }).append(root);
-
-        const cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(this._group);
-
-        const contentGroup = renderer.g().append(this._group);
+        const group = renderer.g().attr({ class: `dxc-${ options.type }-annotation` }).append(this.root);
+        const cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(group);
 
         const paddingLeftRight = options.paddingLeftRight;
         const paddingTopBottom = options.paddingTopBottom;
 
-        renderContent(widget, contentGroup);
+        const contentGroup = renderer.g().append(group);
+        this.renderContent(this.widget, contentGroup);
         const bBox = contentGroup.getBBox();
-        contentGroup.move(paddingLeftRight - bBox.x, paddingTopBottom - bBox.y);
-
-        this.size = {
+        const size = {
             width: bBox.width + 2 * paddingLeftRight,
             height: bBox.height + 2 * paddingTopBottom
         };
 
-        cloud.attr({
-            points: getCloudPoints(this.size, options)
-        });
-    }
+        if(!isDefined(x)) {
+            x = anchorX;
+        } else if(!isDefined(anchorX)) {
+            anchorX = x;
+        }
 
-    move(x, y) {
-        this._group.move(Math.round(x - this.size.width / 2), y - this.size.height - this.options.arrowLength);
+        if(!isDefined(y)) {
+            y = anchorY - options.arrowLength - size.height / 2;
+        } else if(!isDefined(anchorY)) {
+            anchorY = y + size.height / 2;
+        }
+        // TODO check if anchor is inside plaque
+
+        cloud.attr({ points: getCloudPoints(size, x, y, anchorX, anchorY, options) });
+        contentGroup.move(x - bBox.x - bBox.width / 2, y - bBox.y - bBox.height / 2);
     }
 }
