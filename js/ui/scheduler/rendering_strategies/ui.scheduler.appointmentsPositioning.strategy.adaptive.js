@@ -16,8 +16,14 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         return COLLECTOR_ADAPTIVE_SIZE;
     }
 
-    getCompactAppointmentTopOffset() {
-        return this.getRenderingStrategy().getDefaultCellHeight() - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
+    getCompactAppointmentTopOffset(allDay) {
+        let renderingStrategy = this.getRenderingStrategy();
+
+        if(renderingStrategy.hasAllDayAppointments() && allDay) {
+            return (renderingStrategy.getDefaultAllDayCellHeight() - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
+        } else {
+            return this.getRenderingStrategy().getDefaultCellHeight() - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
+        }
     }
 
     getCompactAppointmentLeftOffset() {
@@ -39,6 +45,10 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         } else {
             return 0;
         }
+    }
+
+    getDropDownAppointmentHeight() {
+        return COLLECTOR_ADAPTIVE_SIZE;
     }
 
     _getAppointmentMinCount() {

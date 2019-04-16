@@ -61,6 +61,10 @@ class AppointmentPositioningStrategy {
         }
     }
 
+    getDropDownAppointmentHeight() {
+        return undefined;
+    }
+
     _getAppointmentMinCount() {
         return APPOINTMENT_MIN_COUNT;
     }

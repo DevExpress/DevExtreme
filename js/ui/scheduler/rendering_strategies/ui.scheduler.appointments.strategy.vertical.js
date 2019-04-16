@@ -25,7 +25,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 deltaHeight = this._correctOnePxGap(deltaHeight);
             }
 
-            deltaTime = 60000 * Math.round(deltaHeight / this._defaultHeight * this.instance.getAppointmentDurationInMinutes());
+            deltaTime = 60000 * Math.round(deltaHeight / this.getDefaultCellHeight() * this.instance.getAppointmentDurationInMinutes());
         }
         return deltaTime;
     },
@@ -109,7 +109,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             width = appointmentGeometry.width,
             result = [],
             currentPartTop = this.instance.fire("getGroupTop", appointmentSettings.groupIndex),
-            offset = this.instance.fire("isGroupedByDate") ? this._defaultWidth * this.instance.fire("getGroupCount") : this._defaultWidth,
+            offset = this.instance.fire("isGroupedByDate") ? this.getDefaultCellWidth() * this.instance.fire("getGroupCount") : this.getDefaultCellWidth(),
             left = appointmentSettings.left + offset;
 
         if(tailHeight) {
@@ -135,19 +135,19 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _correctOnePxGap: function(deltaHeight) {
-        if(Math.abs(deltaHeight) % this._defaultHeight) {
+        if(Math.abs(deltaHeight) % this.getDefaultCellHeight()) {
             deltaHeight--;
         }
         return deltaHeight;
     },
 
     _getMinuteHeight: function() {
-        return this._defaultHeight / this.instance.getAppointmentDurationInMinutes();
+        return this.getDefaultCellHeight() / this.instance.getAppointmentDurationInMinutes();
     },
 
     _getCompactLeftCoordinate: function(itemLeft, index) {
         var cellBorderSize = 1,
-            cellWidth = this._defaultWidth || this.getAppointmentMinSize();
+            cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         return itemLeft + (cellBorderSize + cellWidth) * index;
     },
@@ -208,13 +208,13 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         };
     },
 
-    getCompactAppointmentTopOffset: function(allDay) {
-        if(this.instance.fire("isAdaptive") && allDay) {
-            return (this._allDayHeight - this.getDropDownButtonAdaptiveSize()) / 2;
-        } else {
-            return this.callBase(allDay);
-        }
-    },
+    // getCompactAppointmentTopOffset: function(allDay) {
+    //     if(this.instance.fire("isAdaptive") && allDay) {
+    //         return (this._allDayHeight - this.getDropDownButtonAdaptiveSize()) / 2;
+    //     } else {
+    //         return this.callBase(allDay);
+    //     }
+    // },
 
     _calculateVerticalGeometryConfig: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
@@ -245,7 +245,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getMaxWidth: function() {
-        return this._defaultWidth || this.invoke("getCellWidth");
+        return this.getDefaultCellWidth() || this.invoke("getCellWidth");
     },
 
     isAllDay: function(appointmentData) {
@@ -260,7 +260,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _getAppointmentMaxWidth: function() {
         var offset = devices.current().deviceType === "desktop" && !this.instance.fire("isAdaptive") ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET,
-            width = this._defaultWidth - offset;
+            width = this.getDefaultCellWidth() - offset;
 
         return width > 0 ? width : this.getAppointmentMinSize();
     },
@@ -272,7 +272,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
         var startDate = new Date(this.startDate(appointment, false, position)),
             endDate = this.endDate(appointment, position, isRecurring),
-            cellWidth = this._defaultWidth || this.getAppointmentMinSize();
+            cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);
         var durationInHours = (endDate.getTime() - startDate.getTime()) / 3600000;
@@ -352,7 +352,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getMaxHeight: function() {
-        return this._allDayHeight || this.getAppointmentMinSize();
+        return this.getDefaultAllDayCellHeight() || this.getAppointmentMinSize();
     },
 
     _needVerticalGroupBounds: function(allDay) {
