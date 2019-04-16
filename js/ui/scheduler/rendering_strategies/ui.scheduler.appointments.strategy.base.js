@@ -584,9 +584,6 @@ var BaseRenderingStrategy = Class.inherit({
 
     getDropDownAppointmentHeight: function() {
         return this.getPositioningStrategy().getDropDownAppointmentHeight();
-        // if(this.instance.fire("isAdaptive")) {
-        //     return this.getDropDownButtonAdaptiveSize();
-        // }
     },
 
     getDropDownButtonAdaptiveSize: function() {
@@ -609,8 +606,8 @@ var BaseRenderingStrategy = Class.inherit({
         return COMPACT_APPOINTMENT_DEFAULT_WIDTH;
     },
 
-    getCompactAppointmentTopOffset: function() {
-        return this.getPositioningStrategy().getCompactAppointmentTopOffset();
+    getCompactAppointmentTopOffset: function(allDay) {
+        return this.getPositioningStrategy().getCompactAppointmentTopOffset(allDay);
     },
 
     getCompactAppointmentLeftOffset: function() {
