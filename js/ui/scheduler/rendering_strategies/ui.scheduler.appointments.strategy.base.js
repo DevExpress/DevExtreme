@@ -31,11 +31,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _initPositioningStrategy: function() {
-        if(this.instance.fire("isAdaptive")) {
-            this._positioningStrategy = new AdaptivePositioningStrategy(this);
-        } else {
-            this._positioningStrategy = new BasePositioningStrategy(this);
-        }
+        this._positioningStrategy = this.instance.fire("isAdaptive") ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
     },
 
     getPositioningStrategy: function() {
