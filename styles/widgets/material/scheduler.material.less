@@ -34,9 +34,10 @@
     @MATERIAL_SCHEDULER_APPOINTMENT_CONTENT_PADDING: 5px 7px;
     @MATERIAL_SCHEDULER_DROPDOWN_APPOINTMENT_MARGIN_TOP: 7px;
     @MATERIAL_SCHEDULER_DROPDOWN_BUTTON_HEIGHT: 22px;
-    @MATERIAL_SCHEDULER_DROPDOWN_BUTTON_PADDING: 5px;
+    @MATERIAL_SCHEDULER_DROPDOWN_BUTTON_PADDING: 4px;
     @MATERIAL_SCHEDULER_DROPDOWN_DAY_MARGIN: 5px;
 
+    @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_CONTENT_MARGIN_LEFT: 10px;
     @MATERIAL_TOOLTIP_MARKER_DIMENSION: 24px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP: 4px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP: 1px;
@@ -81,6 +82,7 @@
     @MATERIAL_SCHEDULER_DROPDOWN_BUTTON_PADDING: 2px;
     @MATERIAL_SCHEDULER_DROPDOWN_DAY_MARGIN: 2px;
 
+    @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_CONTENT_MARGIN_LEFT: 8px;
     @MATERIAL_TOOLTIP_MARKER_DIMENSION: 18px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP: 3px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP: 2px;
@@ -932,18 +934,21 @@
             border-top-right-radius: @tooltip-border-radius;
         }
         .dx-tooltip-appointment-item {
+            margin-left: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_CONTENT_MARGIN_LEFT;
             .dx-tooltip-appointment-item-marker-body {
                 width: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
                 height: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
             }
-            .dx-tooltip-appointment-item-content-subject {
-                margin-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP;
-                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE;
-            }
-            .dx-tooltip-appointment-item-content-date {
-                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE;
-                opacity: 1;
-                margin-top: 4px;
+            .dx-tooltip-appointment-item-content {
+                .dx-tooltip-appointment-item-content-subject {
+                    margin-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP;
+                    font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE;
+                }
+                .dx-tooltip-appointment-item-content-date {
+                    font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE;
+                    opacity: 1;
+                    margin-top: 4px;
+                }
             }
 
             .dx-tooltip-appointment-item-delete-button-container {
