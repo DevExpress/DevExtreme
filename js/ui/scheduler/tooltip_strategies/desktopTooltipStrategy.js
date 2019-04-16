@@ -8,6 +8,7 @@ import FunctionTemplate from "../../widget/function_template";
 import { extendFromObject } from "../../../core/utils/extend";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
+const MAX_TOOLTIP_HEIGHT = 200;
 
 class TooltipBehaviorBase {
     constructor(scheduler, target) {
@@ -242,6 +243,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
             target: target,
+            maxHeight: MAX_TOOLTIP_HEIGHT,
             rtlEnabled: this.scheduler.option("rtlEnabled"),
             contentTemplate: () => list.$element()
         });
