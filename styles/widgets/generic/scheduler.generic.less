@@ -71,6 +71,9 @@
 
 @SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
 
+@GENERIC_SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
+@GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP: 10px;
+
 .scheduler-mixin(100px);
 
 .dx-scheduler-time-panel-cell {
@@ -418,12 +421,12 @@
 
         &.dx-label-h-align {
             .dx-recurrence-repeat-on-week {
-                padding-top: 7px;
-                padding-bottom: 7px;
+                padding-top: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
+                padding-bottom: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
             }
 
             .dx-recurrence-repeat-end-container.dx-field {
-                padding-top: 10px;
+                padding-top: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP;
             }
         }
     }
