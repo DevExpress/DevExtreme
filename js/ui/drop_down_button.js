@@ -172,6 +172,20 @@ let DropDownButton = Widget.inherit({
             dataSource: null,
 
             /**
+             * @name dxDropDownButtonOptions.focusStateEnabled
+             * @type boolean
+             * @default true
+             */
+            focusStateEnabled: true,
+
+            /**
+             * @name dxDropDownButtonOptions.hoverStateEnabled
+             * @type boolean
+             * @default true
+             */
+            hoverStateEnabled: true,
+
+            /**
              * @name dxDropDownButtonOptions.dropDownOptions
              * @type dxPopupOptions
              * @default {}
@@ -345,6 +359,7 @@ let DropDownButton = Widget.inherit({
         return extend({
             items: this._getButtonGroupItems(),
             focusStateEnabled: this.option("focusStateEnabled"),
+            hoverStateEnabled: this.option("hoverStateEnabled"),
             onItemClick: this._buttonGroupItemClick.bind(this),
             width: this.option("width"),
             height: this.option("height"),
@@ -407,6 +422,7 @@ let DropDownButton = Widget.inherit({
         return {
             selectionMode: "single",
             focusStateEnabled: this.option("focusStateEnabled"),
+            hoverStateEnabled: this.option("hoverStateEnabled"),
             selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
             grouped: this.option("grouped"),
             keyExpr: this.option("keyExpr"),
@@ -560,6 +576,7 @@ let DropDownButton = Widget.inherit({
                 this._innerOptionChanged(this._popup, args);
                 break;
             case "focusStateEnabled":
+            case "hoverStateEnabled":
                 this._setListOption(name, value);
                 this._buttonGroup.option(name, value);
                 break;
