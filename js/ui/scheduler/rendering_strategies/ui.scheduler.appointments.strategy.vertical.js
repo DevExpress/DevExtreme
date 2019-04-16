@@ -12,12 +12,14 @@ var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
+var toMs = dateUtils.dateToMilliseconds;
+
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {
         var deltaTime = 0;
 
         if(this.isAllDay(appointment)) {
-            deltaTime = this._getDeltaWidth(args, initialSize) * 24 * 60 * 60000;
+            deltaTime = this._getDeltaWidth(args, initialSize) * toMs("day");
         } else {
             var deltaHeight = args.height - initialSize.height;
 
@@ -25,7 +27,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 deltaHeight = this._correctOnePxGap(deltaHeight);
             }
 
-            deltaTime = 60000 * Math.round(deltaHeight / this.getDefaultCellHeight() * this.instance.getAppointmentDurationInMinutes());
+            deltaTime = toMs("minute") * Math.round(deltaHeight / this.getDefaultCellHeight() * this.instance.getAppointmentDurationInMinutes());
         }
         return deltaTime;
     },
@@ -267,7 +269,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);
-        var durationInHours = (endDate.getTime() - startDate.getTime()) / 3600000;
+        var durationInHours = (endDate.getTime() - startDate.getTime()) / toMs("hour");
 
         var width = Math.ceil(durationInHours / 24) * cellWidth;
 
@@ -285,7 +287,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         var fullDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay),
-            durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate) / 60000;
+            durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate) / toMs("minute");
 
         var height = durationInMinutes * this._getMinuteHeight();
 

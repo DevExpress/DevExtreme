@@ -138,7 +138,7 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var deltaTime = 0,
             deltaWidth = args.width - initialSize.width;
 
-        deltaTime = 60000 * Math.round(deltaWidth / this.getDefaultCellWidth() * this.instance.getAppointmentDurationInMinutes());
+        deltaTime = toMs("minute") * Math.round(deltaWidth / this.getDefaultCellWidth() * this.instance.getAppointmentDurationInMinutes());
 
         return deltaTime;
     },
