@@ -201,6 +201,39 @@ const DiagramCommands = {
                 widget: "dxCheckBox"
             }
         ];
+    },
+    getContextMenu: function() {
+        const { DiagramCommand } = getDiagram();
+        return [
+            {
+                command: DiagramCommand.Cut,
+                text: "Cut"
+            },
+            {
+                command: DiagramCommand.Copy,
+                text: "Copy"
+            },
+            {
+                command: DiagramCommand.Paste,
+                text: "Paste"
+            },
+            {
+                command: DiagramCommand.SelectAll,
+                text: "Select All"
+            },
+            {
+                command: DiagramCommand.Delete,
+                text: "Delete"
+            },
+            {
+                command: DiagramCommand.BringToFront,
+                text: "Bring to Front"
+            },
+            {
+                command: DiagramCommand.SendToBack,
+                text: "Send to Back"
+            }
+        ];
     }
 };
 

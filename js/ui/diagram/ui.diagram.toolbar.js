@@ -4,7 +4,7 @@ import Widget from "../widget/ui.widget";
 import Toolbar from "../toolbar";
 import ContextMenu from "../context_menu";
 import DiagramCommands from "./ui.diagram.commands";
-import { getDiagram } from "./diagram_importer";
+import DiagramBar from "./diagram_bar";
 import { extend } from "../../core/utils/extend";
 import "../select_box";
 import "../color_box";
@@ -22,7 +22,7 @@ const WIDGET_COMMANDS = [
 
 class DiagramToolbar extends Widget {
     _init() {
-        this.bar = new DiagramBar(this);
+        this.bar = new ToolbarDiagramBar(this);
         this._itemHelpers = {};
         this._contextMenus = [];
         this._createOnWidgetCommand();
@@ -126,7 +126,7 @@ class DiagramToolbar extends Widget {
     }
     _execDiagramCommand(command, value) {
         if(!this._updateLocked) {
-            this.bar._raiseBarCommandExecuted(command, value);
+            this.bar.raiseBarCommandExecuted(command, value);
         }
     }
     _execWidgetCommand(command) {
@@ -169,17 +169,7 @@ class DiagramToolbar extends Widget {
     }
 }
 
-class DiagramBar {
-    constructor(widget) {
-        const EventDispatcher = getDiagram().EventDispatcher;
-        this.onChanged = new EventDispatcher(); /* implementation of IBar */
-        this._widget = widget;
-    }
-    _raiseBarCommandExecuted(key, parameter) {
-        this.onChanged.raise("NotifyBarCommandExecuted", parseInt(key), parameter);
-    }
-
-    /* implementation of IBar */
+class ToolbarDiagramBar extends DiagramBar {
     getCommandKeys() {
         return DiagramCommands.getToolbar().reduce((commands, i) => {
             if(i.command !== undefined) {
@@ -189,18 +179,13 @@ class DiagramBar {
         }, []);
     }
     setItemValue(key, value) {
-        this._widget._setItemValue(key, value);
+        this._owner._setItemValue(key, value);
     }
     setItemEnabled(key, enabled) {
-        this._widget._setItemEnabled(key, enabled);
-    }
-    setItemVisible(key, enabled) {
+        this._owner._setItemEnabled(key, enabled);
     }
     setEnabled(enabled) {
-        this._widget._setEnabled(enabled);
-    }
-    isVisible() {
-        return true;
+        this._owner._setEnabled(enabled);
     }
 }
 

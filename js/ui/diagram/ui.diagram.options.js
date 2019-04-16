@@ -4,7 +4,7 @@ import Accordion from "../accordion";
 import Form from "../form";
 import DiagramCommands from "./ui.diagram.commands";
 import { extend } from "../../core/utils/extend";
-import { getDiagram } from "./diagram_importer";
+import DiagramBar from "./diagram_bar";
 
 const DIAGRAM_OPTIONS_CLASS = "dx-diagram-options";
 const OPTIONS = [
@@ -17,7 +17,7 @@ const OPTIONS = [
 class DiagramOptions extends Widget {
     _init() {
         super._init();
-        this.bar = new DiagramBar(this);
+        this.bar = new OptionsDiagramBar(this);
         this._valueConverters = {};
     }
     _initMarkup() {
@@ -77,7 +77,7 @@ class DiagramOptions extends Widget {
             if(valueConverter) {
                 value = valueConverter.getValue(value);
             }
-            this.bar._raiseBarCommandExecuted(parseInt(key), value);
+            this.bar.raiseBarCommandExecuted(parseInt(key), value);
         }
     }
     _setItemValue(key, value) {
@@ -92,34 +92,22 @@ class DiagramOptions extends Widget {
     _setEnabled(enabled) {
         this._formInstance.option("disabled", !enabled);
     }
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            container: null
+        });
+    }
 }
 
-class DiagramBar {
-    constructor(widget) {
-        const { EventDispatcher } = getDiagram();
-        this.onChanged = new EventDispatcher(); /* implementation of IBar */
-        this._widget = widget;
-    }
-    _raiseBarCommandExecuted(key, parameter) {
-        this.onChanged.raise("NotifyBarCommandExecuted", parseInt(key), parameter);
-    }
-
-    /* implementation of IBar */
+class OptionsDiagramBar extends DiagramBar {
     getCommandKeys() {
         return DiagramCommands.getOptions().map(c => c.command);
     }
     setItemValue(key, value) {
-        this._widget._setItemValue(key, value);
-    }
-    setItemEnabled(key, enabled) {
-    }
-    setItemVisible(key, enabled) {
+        this._owner._setItemValue(key, value);
     }
     setEnabled(enabled) {
-        this._widget._setEnabled(enabled);
-    }
-    isVisible() {
-        return true;
+        this._owner._setEnabled(enabled);
     }
 }
 
