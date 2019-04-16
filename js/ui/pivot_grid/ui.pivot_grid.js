@@ -1848,7 +1848,7 @@ var PivotGrid = Widget.inherit({
                 }
 
                 tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);
-                columnHeaderCell.children().css("max-width", groupWidth);
+                columnHeaderCell.children().css("maxWidth", groupWidth);
                 columnsArea.groupWidth(groupWidth);
                 columnsArea.processScrollBarSpacing(hasRowsScroll ? scrollBarWidth : 0);
                 columnsArea.setColumnsWidth(resultWidths);
