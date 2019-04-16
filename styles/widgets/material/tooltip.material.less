@@ -10,8 +10,13 @@
     .dx-overlay-content {
         background-color: @tooltip-bg;
         color: @tooltip-color;
+        box-shadow: none;
         border-radius: @tooltip-border-radius;
         min-height: auto;
+        .dx-popup-content {	
+            padding: @MATERIAL_TOOLTIP_PADDING;	
+            font-size: 12px;
+        }
     }
 
     &.dx-popover-wrapper .dx-popover-arrow {
