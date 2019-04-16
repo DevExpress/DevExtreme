@@ -8,6 +8,8 @@ import FunctionTemplate from "../../widget/function_template";
 import { extendFromObject } from "../../../core/utils/extend";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
+const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
+const FAKE_APPOINTMENT_DRAG_CONTAINER = '.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper';
 
 class TooltipBehaviorBase {
     constructor(scheduler, target) {
@@ -72,7 +74,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         if(this.scheduler._allowDragging()) {
             const appData = e.itemData.data;
 
-            eventsEngine.on(e.itemElement, dragEvents.start, () => this._onAppointmentDragStart(appData, appData.settings, $(this.target)));
+            eventsEngine.on(e.itemElement, dragEvents.start, (mouseEvent) => this._onAppointmentDragStart(appData, appData.settings, mouseEvent, this.scheduler));
             eventsEngine.on(e.itemElement, dragEvents.move, (e) => this._onAppointmentDragMove(e, appData.allDay));
             eventsEngine.on(e.itemElement, dragEvents.end, () => this._onAppointmentDragEnd(appData));
         }
@@ -134,9 +136,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         return this.scheduler.option("dropDownAppointmentTemplate") === "dropDownAppointment";
     }
 
-    _onAppointmentDragStart(itemData, settings, $target) {
-        this.scheduler.hideAppointmentTooltip();
-
+    _onAppointmentDragStart(itemData, settings, mouseEvent, scheduler) {
         const appointmentInstance = this.scheduler.getAppointmentsInstance(),
             appointmentIndex = appointmentInstance.option("items").length;
 
@@ -150,7 +150,9 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         });
 
         const $items = appointmentInstance._findItemElementByItem(itemData);
-        $items.length > 0 && this._prepareDragItem($target, $items, settings);
+        $items.length > 0 && this._prepareDragItem($items, settings, mouseEvent, scheduler);
+
+        this.scheduler.hideAppointmentTooltip();
     }
 
     _onAppointmentDragMove(e, allDay) {
@@ -186,14 +188,17 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         newCellIndex === oldCellIndex && appointments._clearItem({ itemData: itemData });
     }
 
-    _prepareDragItem($target, $items, settings) {
-        const targetPosition = translator.locate($target);
+    _prepareDragItem($items, settings, mouseEvent, schedulerElement) {
+        const scheduler = schedulerElement._$element.find(FAKE_APPOINTMENT_DRAG_CONTAINER);
+        const schedulerOffset = scheduler.offset();
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
+        const scrollTop = this._$draggedItem.hasClass(ALL_DAY_PANEL_APPOINTMENT_CLASS)
+            ? schedulerElement._workSpace.getAllDayHeight()
+            : schedulerElement._workSpace.getScrollableScrollTop();
         this._startPosition = {
-            top: targetPosition.top,
-            left: targetPosition.left
+            top: mouseEvent.pageY - schedulerOffset.top - (this._$draggedItem.height() / 2) + scrollTop,
+            left: mouseEvent.pageX - schedulerOffset.left - (this._$draggedItem.width() / 2)
         };
-
         translator.move(this._$draggedItem, this._startPosition);
         eventsEngine.trigger(this._$draggedItem, dragEvents.start);
     }
