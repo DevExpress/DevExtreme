@@ -85,7 +85,7 @@ function getViewportReducer(series) {
         const add = getAddFunction(range, false);
         const interval = range.interval;
 
-        if(isFinite(interval)) {
+        if(isFinite(interval) && _isDefined(viewport.startValue) && _isDefined(viewport.endValue)) {
             viewport.startValue = add(viewport.startValue, interval, -1);
             viewport.endValue = add(viewport.endValue, interval);
         }
