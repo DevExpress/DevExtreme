@@ -3573,6 +3573,29 @@ QUnit.test("T510943. Row area width is higher than a container's width", functio
     assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), dataArea.tableElement().width().toFixed(2));
 });
 
+QUnit.test("PivotGrid table width should be correct if width is small and fieldPanel is visible", function(assert) {
+    var pivotGrid = createPivotGrid({
+        fieldPanel: {
+            visible: true
+        },
+        height: 300,
+        width: 300,
+        dataSource: {
+            fields: [{
+                dataField: "Product_Sale_Price",
+                summaryType: "count",
+                area: "data"
+            }],
+            store: [{}]
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($(pivotGrid.element()).find('table').first().width(), 300);
+});
+
 QUnit.test('Pivot grid with border', function(assert) {
     var columnItems = [
         {

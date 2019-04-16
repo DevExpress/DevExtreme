@@ -1736,6 +1736,7 @@ var PivotGrid = Widget.inherit({
             columnAreaCell = tableElement.find("." + COLUMN_AREA_CELL_CLASS),
             descriptionCell = tableElement.find("." + DESCRIPTION_AREA_CELL_CLASS),
             filterHeaderCell = tableElement.find(".dx-filter-header"),
+            columnHeaderCell = tableElement.find(".dx-column-header"),
             elementWidth,
             columnsAreaHeight,
             descriptionCellHeight,
@@ -1794,7 +1795,7 @@ var PivotGrid = Widget.inherit({
             rowsAreaColumnWidths = rowsArea.getColumnsWidth();
 
             if(that._hasHeight) {
-                bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, tableElement.find(".dx-column-header"), filterHeaderCell], "height");
+                bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], "height");
                 groupHeight = that.$element().height() - filterHeaderCell.height() - tableElement.find(".dx-data-header").height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
@@ -1838,7 +1839,7 @@ var PivotGrid = Widget.inherit({
                 }
 
                 tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);
-
+                columnHeaderCell.children().css("maxWidth", groupWidth);
                 columnsArea.groupWidth(groupWidth);
                 columnsArea.processScrollBarSpacing(hasRowsScroll ? scrollBarWidth : 0);
                 columnsArea.setColumnsWidth(resultWidths);
