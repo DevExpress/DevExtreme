@@ -51,6 +51,7 @@ class AppointmentPositioningStrategy {
         let cellHeight = renderingStrategy.instance.fire("getCellHeight");
         let allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
 
+        // NOTE: Simplify using only object
         if(renderingStrategy.hasAllDayAppointments()) {
             return {
                 allDay: renderingStrategy.instance._groupOrientation === "vertical" ? allDayCount : renderingStrategy.instance.option("_appointmentCountPerCell"),
