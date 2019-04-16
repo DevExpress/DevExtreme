@@ -22,7 +22,8 @@ const animationConfig = {
 
 const positionConfig = {
     my: "bottom",
-    at: "bottom"
+    at: "bottom",
+    of: getWindow()
 };
 
 export class MobileTooltipStrategy extends TooltipStrategyBase {
@@ -45,7 +46,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
             container: this.scheduler.$element(),
             closeOnOutsideClick: true,
             width: "100%",
-            height: "100%",
+            height: "auto",
             contentTemplate: () => list.$element()
         });
     }
