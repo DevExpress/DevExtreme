@@ -40,6 +40,8 @@ const KEEP = "keep";
 const SHIFT = "shift";
 const RESET = "reset";
 
+const ROTATE = "rotate";
+
 const DEFAULT_AXIS_DIVISION_FACTOR = 50;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 
@@ -1804,12 +1806,18 @@ Axis.prototype = {
         that._measureTitle();
         measureLabels(that._majorTicks);
         let textWidth;
+        let textHeight;
+        let convertedTickInterval;
+        const tickInterval = that._tickInterval;
+        if(isDefined(tickInterval)) {
+            convertedTickInterval = that.getTranslator().getInterval(options.dataType === "datetime" ? dateToMilliseconds(tickInterval) : tickInterval);
+        }
         if(that._isHorizontal) {
-            if(isDefined(that._tickInterval)) {
-                textWidth = that.getTranslator().getInterval(options.dataType === "datetime" ? dateToMilliseconds(that._tickInterval) : that._tickInterval);
-            }
+            textWidth = convertedTickInterval;
+            textHeight = options.placeholderSize;
         } else {
             textWidth = options.placeholderSize;
+            textHeight = convertedTickInterval;
         }
 
         const displayMode = that._validateDisplayMode(options.label.displayMode);
@@ -1817,10 +1825,22 @@ Axis.prototype = {
         const wordWrapMode = options.label.wordWrap || "none";
         const overflowMode = options.label.textOverflow || "none";
 
-        if((wordWrapMode !== "none" || overflowMode !== "none") && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
-            if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
+        if((wordWrapMode !== "none" || overflowMode !== "none") && displayMode !== ROTATE && overlappingMode !== ROTATE && overlappingMode !== "auto") {
+            let correctByWidth = false;
+            let correctByHeight = false;
+            if(textWidth) {
+                if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
+                    correctByWidth = true;
+                }
+            }
+            if(textHeight) {
+                if(that._majorTicks.some(tick => tick.labelBBox.height > textHeight)) {
+                    correctByHeight = true;
+                }
+            }
+            if(correctByWidth || correctByHeight) {
                 that._majorTicks.forEach(tick => {
-                    tick.label && tick.label.setMaxSize(textWidth, undefined, options.label);
+                    tick.label && tick.label.setMaxSize(textWidth, textHeight, options.label);
                 });
                 measureLabels(that._majorTicks);
             }
@@ -2322,7 +2342,7 @@ Axis.prototype = {
 
         step = that._getStep(boxes);
         switch(displayMode) {
-            case "rotate":
+            case ROTATE:
                 if(ignoreOverlapping) {
                     notRecastStep = true;
                     step = 1;
@@ -2371,7 +2391,7 @@ Axis.prototype = {
             alignment,
             func;
         switch(mode) {
-            case "rotate":
+            case ROTATE:
                 if(!labelOpt.userAlignment) {
                     alignment = angle < 0 ? RIGHT : LEFT;
                     if(angle % 90 === 0) {
@@ -2401,7 +2421,7 @@ Axis.prototype = {
                 if(step === 2) {
                     that._applyLabelMode("stagger", step, boxes, behavior);
                 } else {
-                    that._applyLabelMode("rotate", step, boxes, { rotationAngle: getOptimalAngle(boxes, labelOpt) });
+                    that._applyLabelMode(ROTATE, step, boxes, { rotationAngle: getOptimalAngle(boxes, labelOpt) });
                 }
                 break;
             default:

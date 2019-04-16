@@ -652,7 +652,7 @@ registerTheme({
                 overlappingBehavior: "hide",
                 indentFromAxis: 10,
                 wordWrap: "normal",
-                overflow: "none"
+                textOverflow: "none"
             },
             title: {
                 font: {
