@@ -38,6 +38,7 @@ const DAY_OF_MONTH = "dx-recurrence-numberbox-day-of-month";
 const REPEAT_ON_YEAR_EDITOR = "dx-recurrence-repeat-on-year";
 const MONTH_OF_YEAR = "dx-recurrence-selectbox-month-of-year";
 const FIELD_CLASS = "dx-field";
+const RECURRENCE_FREQ_FIELD = "dx-recurrence-freq-field";
 const FIELD_LABEL_CLASS = "dx-field-label";
 const FIELD_VALUE_CLASS = "dx-field-value";
 
@@ -234,6 +235,7 @@ const RecurrenceEditor = Editor.inherit({
 
         const $field = $("<div>")
             .addClass(FIELD_CLASS)
+            .addClass(RECURRENCE_FREQ_FIELD)
             .append($freqEditor);
 
         this.$element().prepend($field);
