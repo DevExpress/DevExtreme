@@ -378,13 +378,47 @@ QUnit.test("Length of title greater than canvas width", function(assert) {
     this.renderer.bBoxTemplate = { height: 10, width: 900 };
     this.options.text = "test big title";
     this.options.subtitle.text = "test subtitle";
+    this.options.wordWrap = "titleWordWrap";
+    this.options.textOverflow = "titleTextOverflow";
+
+    this.options.subtitle.wordWrap = "subtitleWordWrap";
+    this.options.subtitle.textOverflow = "subtitleTextOverflow";
+
+    this.options.placeholderSize = 90;
 
     this.options.margin = { left: 10, right: 20 };
 
     this.createTitle().draw(this.canvas.width, this.canvas.height);
 
-    assert.equal(this.renderer.text.getCall(0).returnValue.setMaxSize.lastCall.args[0], 770);
-    assert.equal(this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args[0], 770);
+    const titleSetMaxSizeArgs = this.renderer.text.getCall(0).returnValue.setMaxSize.lastCall.args;
+    assert.equal(titleSetMaxSizeArgs[0], 770);
+    assert.equal(titleSetMaxSizeArgs[1], 90);
+    assert.deepEqual(titleSetMaxSizeArgs[2].wordWrap, "titleWordWrap");
+    assert.deepEqual(titleSetMaxSizeArgs[2].textOverflow, "titleTextOverflow");
+
+    const subtitleSetMaxSizeArgs = this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args;
+    assert.equal(subtitleSetMaxSizeArgs[0], 770);
+    assert.equal(subtitleSetMaxSizeArgs[1], 90 - 10);
+    assert.deepEqual(subtitleSetMaxSizeArgs[2].wordWrap, "subtitleWordWrap");
+    assert.deepEqual(subtitleSetMaxSizeArgs[2].textOverflow, "subtitleTextOverflow");
+});
+
+QUnit.test("Length of title greater than canvas width without placeholderSize", function(assert) {
+    this.renderer.bBoxTemplate = { height: 10, width: 900 };
+    this.options.text = "test big title";
+    this.options.subtitle.text = "test subtitle";
+
+    this.options.placeholderSize = undefined;
+
+    this.options.margin = { left: 10, right: 20 };
+
+    this.createTitle().draw(this.canvas.width, this.canvas.height);
+
+    const titleSetMaxSizeArgs = this.renderer.text.getCall(0).returnValue.setMaxSize.lastCall.args;
+    assert.equal(titleSetMaxSizeArgs[1], undefined);
+
+    const subtitleSetMaxSizeArgs = this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args;
+    assert.equal(subtitleSetMaxSizeArgs[1], undefined);
 });
 
 QUnit.test("Set title if text has big size", function(assert) {
