@@ -14,6 +14,7 @@ QUnit.testStart(() => {
 
 const ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE = 28;
 const DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
+const DROP_DOWN_BUTTON_ADAPTIVE_RIGHT_OFFSET = 5;
 
 QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
     beforeEach: () => {
@@ -80,7 +81,16 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + this.scheduler.workSpace.getCellHeight() - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET, 1.001, "Top coordinate is OK");
     });
 
-    QUnit.test("Adaptive dropDown appointment button should have correct coordinates in allDay panel", (assert) => {
+    QUnit.test("Adaptive dropDown appointment button should have correct sizes", (assert) => {
+        this.createInstance();
+
+        let $dropDownButton = this.scheduler.appointments.compact.getButton(0);
+
+        assert.roughEqual($dropDownButton.outerWidth(), ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE, 1.001, "Width is OK");
+        assert.roughEqual($dropDownButton.outerHeight(), ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE, 1.001, "Height is OK");
+    });
+
+    QUnit.test("Adaptive dropDown appointment button should have correct coordinates on allDay panel", (assert) => {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
@@ -93,6 +103,88 @@ QUnit.module("Integration: DropDownAppointments, adaptivityEnabled = true", {
 
         assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE) / 2, 1.001, "Left coordinate is OK");
         assert.roughEqual(buttonCoordinates.top, (this.scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE) / 2, 1.001, "Top coordinate is OK");
+    });
+
+    QUnit.test("Adaptive dropDown appointment button should have correct sizes on allDayPanel", (assert) => {
+        this.createInstance();
+
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
+        this.instance.option("currentView", "week");
+
+        let $dropDownButton = this.scheduler.appointments.compact.getButton(0);
+
+        assert.roughEqual($dropDownButton.outerWidth(), ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE, 1.001, "Width is OK");
+        assert.roughEqual($dropDownButton.outerHeight(), ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE, 1.001, "Height is OK");
+    });
+
+    QUnit.test("Ordinary appointment count depends on scheduler width on week view", (assert) => {
+        this.createInstance();
+
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
+        this.instance.option("currentView", "week");
+
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, "DropDown button is rendered");
+        assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, "Appointment is rendered");
+
+        this.instance.option("width", 200);
+
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, "DropDown button is rendered");
+        assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appointment isn't rendered");
+
+        this.instance.option("width", 1000);
+
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, "DropDown button isn't rendered");
+        assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
+    });
+
+    QUnit.test("Ordinary appointments should have correct sizes on week view", (assert) => {
+        this.createInstance();
+
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
+        this.instance.option("currentView", "week");
+
+        let $appointment = this.scheduler.appointments.getAppointment(0);
+
+        assert.roughEqual($appointment.outerWidth(), 70, 1.001, "Width is OK");
+        assert.roughEqual($appointment.outerHeight(), 50, 1.001, "Height is OK");
+
+        this.instance.option("width", 1000);
+
+        let $firstAppointment = this.scheduler.appointments.getAppointment(0);
+        let $secondAppointment = this.scheduler.appointments.getAppointment(1);
+
+        assert.roughEqual($firstAppointment.outerWidth(), 46.5, 1.001, "Width is OK");
+        assert.roughEqual($firstAppointment.outerHeight(), 50, 1.001, "Height is OK");
+
+        assert.roughEqual($secondAppointment.outerWidth(), 46.5, 1.001, "Width is OK");
+        assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, "Height is OK");
+    });
+
+    QUnit.test("Adaptive dropDown appointment button should have correct coordinates on week view", (assert) => {
+        this.createInstance();
+
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
+        this.instance.option("currentView", "week");
+
+        let $dropDownButton = this.scheduler.appointments.compact.getButton(0);
+
+        let buttonCoordinates = translator.locate($dropDownButton);
+        let expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE - DROP_DOWN_BUTTON_ADAPTIVE_RIGHT_OFFSET, 1.001, "Left coordinate is OK");
+        assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+    });
+
+    QUnit.test("Adaptive dropDown appointment button should have correct sizes on week view", (assert) => {
+        this.createInstance();
+
+        this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
+        this.instance.option("currentView", "week");
+
+        let $dropDownButton = this.scheduler.appointments.compact.getButton(0);
+
+        assert.roughEqual($dropDownButton.outerWidth(), ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE, 1.001, "Width is OK");
+        assert.roughEqual($dropDownButton.outerHeight(), ADAPTIVE_DROP_DOWN_BUTTON_DEFAULT_SIZE, 1.001, "Height is OK");
     });
 });
 

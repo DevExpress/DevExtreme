@@ -1,36 +1,41 @@
-var noop = require("../../../core/utils/common").noop,
-    Class = require("../../../core/class"),
-    extend = require("../../../core/utils/extend").extend,
-    errors = require("../../widget/ui.errors"),
-    dateUtils = require("../../../core/utils/date"),
-    isNumeric = require("../../../core/utils/type").isNumeric,
-    typeUtils = require("../../../core/utils/type"),
-    themes = require("../../themes");
+import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.base";
+import AdaptivePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.adaptive";
+
+import { noop } from "../../../core/utils/common";
+import Class from "../../../core/class";
+import { extend } from "../../../core/utils/extend";
+import errors from "../../widget/ui.errors";
+import dateUtils from "../../../core/utils/date";
+import { isNumeric } from "../../../core/utils/type";
+import typeUtils from "../../../core/utils/type";
+import themes from "../../themes";
+
 
 var toMs = dateUtils.dateToMilliseconds;
 
 var abstract = Class.abstract;
 
-var APPOINTMENT_MIN_COUNT = 1,
-    APPOINTMENT_MIN_SIZE = 2,
-
+var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15,
-
     APPOINTMENT_DEFAULT_HEIGHT = 20,
-    APPOINTMENT_DEFAULT_WIDTH = 40,
 
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
-    COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
-    COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
 
-    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24,
-
-    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28,
-    DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET = 40;
+    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
         this.instance = instance;
+
+        this._initPositioningStrategy();
+    },
+
+    _initPositioningStrategy: function() {
+        this._positioningStrategy = this.instance.fire("isAdaptive") ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
+    },
+
+    getPositioningStrategy: function() {
+        return this._positioningStrategy;
     },
 
     getAppointmentMinSize: function() {
@@ -104,7 +109,7 @@ var BaseRenderingStrategy = Class.inherit({
     _correctRtlCoordinatesParts: noop,
 
     _getAppointmentMaxWidth: function() {
-        return this._defaultWidth;
+        return this.getDefaultCellWidth();
     },
 
     _getItemPosition: function(item) {
@@ -206,7 +211,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getCompactAppointmentParts: function(appointmentWidth) {
-        var cellWidth = this._defaultWidth || this.getAppointmentMinSize();
+        var cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         return Math.round(appointmentWidth / cellWidth);
     },
@@ -235,7 +240,7 @@ var BaseRenderingStrategy = Class.inherit({
             result = etalon + comparisonParameters.width - comparisonParameters.left;
         }
 
-        return result > this._defaultWidth / 2;
+        return result > this.getDefaultCellWidth() / 2;
     },
 
     isAllDay: function() {
@@ -570,22 +575,11 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     getDropDownAppointmentWidth: function(intervalCount, isAllDay) {
-        if(this.instance.fire("isAdaptive")) {
-            return this.getDropDownButtonAdaptiveSize();
-        } else {
-            if(isAllDay || !typeUtils.isDefined(isAllDay)) {
-                var widthInPercents = 75;
-                return widthInPercents * this.getDefaultCellWidth() / 100;
-            } else {
-                return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
-            }
-        }
+        return this.getPositioningStrategy().getDropDownAppointmentWidth(intervalCount, isAllDay);
     },
 
     getDropDownAppointmentHeight: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return this.getDropDownButtonAdaptiveSize();
-        }
+        return this.getPositioningStrategy().getDropDownAppointmentHeight();
     },
 
     getDropDownButtonAdaptiveSize: function() {
@@ -596,24 +590,24 @@ var BaseRenderingStrategy = Class.inherit({
         return this._defaultWidth;
     },
 
+    getDefaultCellHeight: function() {
+        return this._defaultHeight;
+    },
+
+    getDefaultAllDayCellHeight: function() {
+        return this._allDayHeight;
+    },
+
     getCompactAppointmentDefaultWidth: function() {
         return COMPACT_APPOINTMENT_DEFAULT_WIDTH;
     },
 
-    getCompactAppointmentTopOffset: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return this._defaultHeight - DROP_DOWN_BUTTON_ADAPTIVE_BOTTOM_OFFSET;
-        }
-
-        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+    getCompactAppointmentTopOffset: function(allDay) {
+        return this.getPositioningStrategy().getCompactAppointmentTopOffset(allDay);
     },
 
     getCompactAppointmentLeftOffset: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return (this._defaultWidth - DROP_DOWN_BUTTON_ADAPTIVE_SIZE) / 2;
-        }
-
-        return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
+        return this.getPositioningStrategy().getCompactAppointmentLeftOffset();
     },
 
     getAppointmentDataCalculator: noop,
@@ -728,17 +722,11 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        if(this.instance.fire("isAdaptive")) {
-            return 0;
-        } else {
-            var cellHeight = this.instance.fire("getCellHeight");
-
-            return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
-        }
+        return this.getPositioningStrategy().getDynamicAppointmentCountPerCell();
     },
 
-    _getAppointmentMinCount: function() {
-        return APPOINTMENT_MIN_COUNT;
+    hasAllDayAppointments: function() {
+        return false;
     },
 
     _isCompactTheme: function() {
@@ -746,9 +734,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultOffset: function() {
-        return this._isCompactTheme()
-            ? COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET
-            : this.instance.option("_appointmentOffset");
+        return this.getPositioningStrategy().getAppointmentDefaultOffset();
     },
 
     _getAppointmentDefaultHeight: function() {
@@ -760,7 +746,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultWidth: function() {
-        return APPOINTMENT_DEFAULT_WIDTH;
+        return this.getPositioningStrategy()._getAppointmentDefaultWidth();
     },
 
     _needVerticalGroupBounds: function() {

@@ -11,7 +11,7 @@ var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inheri
     calculateAppointmentWidth: function(appointment, position, isRecurring) {
         var startDate = new Date(this.startDate(appointment, false, position)),
             endDate = new Date(this.endDate(appointment, position, isRecurring)),
-            cellWidth = this._defaultWidth || this.getAppointmentMinSize();
+            cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);
 

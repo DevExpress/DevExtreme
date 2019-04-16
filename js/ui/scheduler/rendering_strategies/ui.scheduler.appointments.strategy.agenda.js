@@ -96,7 +96,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _correctRtlCoordinatesParts: noop,
 
     _getAppointmentMaxWidth: function() {
-        return this._defaultWidth;
+        return this.getDefaultCellWidth();
     },
 
     _needVerifyItemSize: function() {
