@@ -120,6 +120,19 @@ QUnit.module("button group integration", {}, () => {
         assert.strictEqual(buttonGroupItems[1].width, 26, "button content should be 24px without borders");
     });
 
+    QUnit.test("hoverStateEnabled should be transfered to the buttonGroup", (assert) => {
+        const instance = new DropDownButton("#dropDownButton", { hoverStateEnabled: false, deferRendering: false });
+        const buttonGroup = getButtonGroup(instance);
+        const list = getList(instance);
+
+        assert.strictEqual(buttonGroup.option("hoverStateEnabled"), false, "buttonGroup has correct option");
+        assert.strictEqual(list.option("hoverStateEnabled"), false, "List has correct option");
+
+        instance.option("hoverStateEnabled", true);
+        assert.strictEqual(buttonGroup.option("hoverStateEnabled"), true, "buttonGroup has changed option");
+        assert.strictEqual(list.option("hoverStateEnabled"), true, "List has changed option");
+    });
+
     QUnit.test("toggle button should toggle the widget", (assert) => {
         const instance = new DropDownButton("#dropDownButton", {});
         const $toggleButton = getToggleButton(instance);
@@ -210,6 +223,7 @@ QUnit.module("popup integration", {
     QUnit.test("popup should have correct options after rendering", (assert) => {
         const options = {
             deferRendering: this.instance.option("deferRendering"),
+            focusStateEnabled: false,
             dragEnabled: false,
             showTitle: false,
             animation: {

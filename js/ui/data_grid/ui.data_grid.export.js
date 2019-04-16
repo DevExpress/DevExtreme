@@ -243,11 +243,12 @@ exports.DataProvider = Class.inherit({
                                 result.cellSourceData.totalSummaryItemName = value.name;
                                 result.value = dataGridCore.getSummaryText(value, this._options.summaryTexts);
                             } else {
-                                result.cellSourceData = undefined;
+                                result.cellSourceData.value = undefined;
                             }
                         }
                         break;
                     case "group":
+                        result.cellSourceData.groupIndex = item.groupIndex;
                         if(cellIndex < 1) {
                             result.cellSourceData.column = this._options.groupColumns[item.groupIndex];
                             result.cellSourceData.value = item.key[item.groupIndex];
@@ -263,7 +264,7 @@ exports.DataProvider = Class.inherit({
                                 }
                                 result.value = value;
                             } else {
-                                result.cellSourceData = undefined;
+                                result.cellSourceData.value = undefined;
                             }
                         }
                         break;
@@ -276,7 +277,6 @@ exports.DataProvider = Class.inherit({
                             result.cellSourceData.value = value;
                         }
                         result.cellSourceData.data = item.data;
-                        result.cellSourceData.rowType = item.rowType;
                 }
             }
         }

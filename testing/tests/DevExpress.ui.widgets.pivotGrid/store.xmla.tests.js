@@ -3974,6 +3974,32 @@ define(function(require) {
             .always(done);
     });
 
+    QUnit.test("Skip and take rows if expand", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            path: ["&[2001]"],
+            area: "column",
+            headerName: "columns",
+            rows: [{
+                dataField: "[Customer].[Customer]",
+            }],
+            columns: [{
+                dataField: "[Ship Date].[Calendar Year]"
+            }, {
+                dataField: "[Ship Date].[Month of Year]"
+            }],
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            rowSkip: 0,
+            rowTake: 2
+        }).done(function(data) {
+            assert.strictEqual(data.rows.length, 18484);
+            assert.strictEqual(data.rows[0].value, "Aaron A. Allen");
+            assert.strictEqual(data.rows[1].value, "Aaron A. Hayes");
+            assert.strictEqual(data.rows[2].value, undefined);
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
     QUnit.test("Skip and take columns", function(assert) {
         var done = assert.async();
         this.store.load({
@@ -4019,7 +4045,7 @@ define(function(require) {
                 undefined, undefined,
                 undefined, undefined,
                 undefined, undefined,
-                undefined
+                undefined, undefined
             ]);
         }).fail(getFailCallBack(assert))
             .always(done);

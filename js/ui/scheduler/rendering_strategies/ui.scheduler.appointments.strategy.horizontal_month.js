@@ -19,7 +19,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth) || fullWeekAppointmentWidth,
             result = [],
             totalWidth = appointmentGeometry.reducedWidth + tailWidth,
-            currentPartTop = appointmentSettings.top + this._defaultHeight,
+            currentPartTop = appointmentSettings.top + this.getDefaultCellHeight(),
             left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
         if(this.instance._groupOrientation === "vertical") {
@@ -40,7 +40,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
                 cellIndex: 0
             }));
 
-            currentPartTop += this._defaultHeight;
+            currentPartTop += this.getDefaultCellHeight();
             totalWidth += fullWeekAppointmentWidth;
         }
 
