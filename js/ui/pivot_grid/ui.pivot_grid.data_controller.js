@@ -22,7 +22,8 @@ var Callbacks = require("../../core/utils/callbacks"),
     GRAND_TOTAL_TYPE = "GT",
     TOTAL_TYPE = "T",
     DATA_TYPE = "D",
-    NOT_AVAILABLE = "#N/A";
+    NOT_AVAILABLE = "#N/A",
+    CHANGING_DURATION_IF_PAGINATE = 300;
 
 var proxyMethod = function(instance, methodName, defaultResult) {
     if(!instance[methodName]) {
@@ -610,6 +611,10 @@ exports.DataController = Class.inherit((function() {
                 },
 
                 changingDuration: function() {
+                    var dataSource = dataController._dataSource;
+                    if(dataSource.paginate()) {
+                        return CHANGING_DURATION_IF_PAGINATE;
+                    }
                     return dataController._changingDuration || 0;
                 }
             }, dataAdapter));
@@ -750,7 +755,7 @@ exports.DataController = Class.inherit((function() {
             }
         },
 
-        _calculatePagingForExpandedPaths: function(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
+        _calculatePagingForRowExpandedPaths: function(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
             var rows = this._rowsInfo,
                 rowCount = Math.min(options.rowSkip + options.rowTake, rows.length),
                 rowExpandedPaths = options.rowExpandedPaths,
@@ -772,7 +777,7 @@ exports.DataController = Class.inherit((function() {
                         this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
 
                         path = cell.path || path;
-                        var expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, path.length - 1)] : -1;
+                        var expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, -1)] : -1;
 
                         if(expandIndex >= 0) {
                             rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
@@ -788,36 +793,76 @@ exports.DataController = Class.inherit((function() {
             }
         },
 
-        _processPagingForExpandedPaths: function(options, storeLoadOptions, reload) {
-            var rowExpandedPaths = options.rowExpandedPaths,
-                rowExpandedSkips = rowExpandedPaths.map(() => 0),
-                rowExpandedTakes = rowExpandedPaths.map(() => reload ? options.pageSize : 0),
+        _calculatePagingForColumnExpandedPaths: function(options, skips, takes, expandedSkips, expandedTakes) {
+            var skipByPath = {},
+                takeByPath = {};
+
+            virtualColumnsCore.foreachColumnInfo(this._columnsInfo, function(columnInfo, columnIndex) {
+                if(columnInfo.type === "D" && columnInfo.path && columnInfo.dataIndex === undefined) {
+                    var colspan = columnInfo.colspan || 1,
+                        path = columnInfo.path.slice(0, -1).toString();
+
+                    skipByPath[path] = skipByPath[path] || 0;
+                    takeByPath[path] = takeByPath[path] || 0;
+
+                    if(columnIndex + colspan <= options.columnSkip) {
+                        skipByPath[path]++;
+                    } else if(columnIndex < options.columnSkip + options.columnTake) {
+                        takeByPath[path]++;
+                    }
+                }
+            });
+
+            skips[0] = skipByPath[[]];
+            takes[0] = takeByPath[[]];
+
+            options.columnExpandedPaths.forEach(function(path, index) {
+                var skip = skipByPath[path];
+                var take = takeByPath[path];
+
+                if(skip !== undefined) {
+                    expandedSkips[index] = skip;
+                }
+                if(take !== undefined) {
+                    expandedTakes[index] = take;
+                }
+            });
+        },
+
+        _processPagingForExpandedPaths: function(options, area, storeLoadOptions, reload) {
+            var expandedPaths = options[area + "ExpandedPaths"],
+                expandedSkips = expandedPaths.map(() => 0),
+                expandedTakes = expandedPaths.map(() => reload ? options.pageSize : 0),
                 skips = [],
                 takes = [];
 
             if(!reload) {
-                this._calculatePagingForExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes);
+                if(area === "row") {
+                    this._calculatePagingForRowExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
+                } else {
+                    this._calculatePagingForColumnExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
+                }
             }
-            this._savePagingForExpandedPaths(options, storeLoadOptions, skips[0], takes[0], rowExpandedSkips, rowExpandedTakes);
+            this._savePagingForExpandedPaths(options, area, storeLoadOptions, skips[0], takes[0], expandedSkips, expandedTakes);
         },
 
-        _savePagingForExpandedPaths: function(options, storeLoadOptions, skip, take, rowExpandedSkips, rowExpandedTakes) {
-            var rowExpandedPaths = options.rowExpandedPaths;
+        _savePagingForExpandedPaths: function(options, area, storeLoadOptions, skip, take, expandedSkips, expandedTakes) {
+            var expandedPaths = options[area + "ExpandedPaths"];
 
-            options.rowExpandedPaths = [];
-            options.rowSkip = skip !== undefined ? skip : options.rowSkip;
-            options.rowTake = take !== undefined ? take : options.rowTake;
+            options[area + "ExpandedPaths"] = [];
+            options[area + "Skip"] = skip !== undefined ? skip : options[area + "Skip"];
+            options[area + "Take"] = take !== undefined ? take : options[area + "Take"];
 
-            for(var i = 0; i < rowExpandedPaths.length; i++) {
-                if(rowExpandedTakes[i]) {
+            for(var i = 0; i < expandedPaths.length; i++) {
+                if(expandedTakes[i]) {
                     storeLoadOptions.push(extend({}, options, {
-                        area: "row",
-                        headerName: "rows",
-                        rows: options.rows.slice(0, rowExpandedPaths[i].length + 1),
-                        columns: options.columns.slice(0, 1),
-                        path: rowExpandedPaths[i],
-                        rowSkip: rowExpandedSkips[i],
-                        rowTake: rowExpandedTakes[i] || 20
+                        area: area,
+                        headerName: area + "s",
+                        rows: options.rows.slice(0, area === "row" ? expandedPaths[i].length + 1 : 1),
+                        columns: options.columns.slice(0, area === "column" ? expandedPaths[i].length + 1 : 1),
+                        path: expandedPaths[i],
+                        [area + "Skip"]: expandedSkips[i],
+                        [area + "Take"]: expandedTakes[i]
                     }));
                 }
             }
@@ -834,11 +879,12 @@ exports.DataController = Class.inherit((function() {
                     options.rowSkip = 0;
                     options.rowTake = rowPageSize;
                     options.rows = options.rows.slice(0, options.path.length + 1);
+                    options.rowExpandedPaths = [];
                 } else {
                     options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
                     options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+                    this._processPagingForExpandedPaths(options, "row", storeLoadOptions, reload);
                     options.rows = options.rows.slice(0, 1);
-                    this._processPagingForExpandedPaths(options, storeLoadOptions, reload);
                 }
             }
 
@@ -851,9 +897,11 @@ exports.DataController = Class.inherit((function() {
                     options.columnSkip = 0;
                     options.columnTake = columnPageSize;
                     options.columns = options.columns.slice(0, options.path.length + 1);
+                    options.columnExpandedPaths = [];
                 } else {
                     options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
                     options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                    this._processPagingForExpandedPaths(options, "column", storeLoadOptions, reload);
                     options.columns = options.columns.slice(0, 1);
                 }
             }

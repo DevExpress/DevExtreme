@@ -10,6 +10,7 @@ import { extendFromObject } from "../../../core/utils/extend";
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
 const FAKE_APPOINTMENT_DRAG_CONTAINER = '.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper';
+const MAX_TOOLTIP_HEIGHT = 200;
 
 class TooltipBehaviorBase {
     constructor(scheduler, target) {
@@ -221,6 +222,8 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         this.behavior = this._createBehavior(isSingleBehavior, target);
         super._showCore(target, dataList, isSingleBehavior);
         this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
+        this.list.focus();
+        this.list.option("focusedElement", null);
     }
 
     _createBehavior(isSingleBehavior, target) {
@@ -245,6 +248,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
             target: target,
+            maxHeight: MAX_TOOLTIP_HEIGHT,
             rtlEnabled: this.scheduler.option("rtlEnabled"),
             contentTemplate: () => list.$element()
         });

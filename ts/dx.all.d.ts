@@ -6173,10 +6173,14 @@ declare module DevExpress.ui {
         dropDownContentTemplate?: template | ((data: Array<string | number | any> | DevExpress.data.DataSource, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
+        /** @name dxDropDownButton.Options.focusStateEnabled */
+        focusStateEnabled?: boolean;
+        /** @name dxDropDownButton.Options.hoverStateEnabled */
+        hoverStateEnabled?: boolean;
         /** @name dxDropDownButton.Options.icon */
         icon?: string;
         /** @name dxDropDownButton.Options.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.items */
         items?: Array<CollectionWidgetItem | any>;
         /** @name dxDropDownButton.Options.keyExpr */
@@ -6208,6 +6212,9 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxDropDownButtonOptions)
         /** @name dxDropDownButton.close() */
         close(): Promise<void> & JQueryPromise<void>;
+
+        /** @name DataHelperMixin.getDataSource() */
+        getDataSource(): DevExpress.data.DataSource;
         /** @name dxDropDownButton.open() */
         open(): Promise<void> & JQueryPromise<void>;
         /** @name dxDropDownButton.toggle() */
@@ -9419,6 +9426,8 @@ declare module DevExpress.exporter {
         column?: DevExpress.ui.dxDataGridColumn;
         /** @name ExcelDataGridCell.data */
         data?: any;
+        /** @name ExcelDataGridCell.rowGroupIndex */
+        rowGroupIndex?: number;
         /** @name ExcelDataGridCell.groupSummaryItems */
         groupSummaryItems?: Array<{ name?: string, value?: any }>;
         /** @name ExcelDataGridCell.rowType */

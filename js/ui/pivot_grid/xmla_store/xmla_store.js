@@ -204,7 +204,7 @@ exports.XmlaStore = Class.inherit((function() {
         return crossJoinElements(crossJoinArgs);
     }
 
-    function fillCrossJoins(crossJoins, path, expandLevel, expandIndex, slicePath, options, axisName, cellsString, take) {
+    function fillCrossJoins(crossJoins, path, expandLevel, expandIndex, slicePath, options, axisName, cellsString, take, totalsOnly) {
         var expandAllCount = -1,
             dimensions = options[axisName],
             dimensionIndex;
@@ -212,7 +212,11 @@ exports.XmlaStore = Class.inherit((function() {
         do {
             expandAllCount++;
             dimensionIndex = path.length + expandAllCount + expandIndex;
-            crossJoins.push(stringFormat(mdxNonEmpty, generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName, take), cellsString));
+            var crossJoin = generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName, take);
+            if(!take && !totalsOnly) {
+                crossJoin = stringFormat(mdxNonEmpty, crossJoin, cellsString);
+            }
+            crossJoins.push(crossJoin);
         } while(dimensions[dimensionIndex] && dimensions[dimensionIndex + 1] && dimensions[dimensionIndex].expanded);
     }
 
@@ -243,7 +247,7 @@ exports.XmlaStore = Class.inherit((function() {
             }
             expandLevel = pivotGridUtils.getExpandedLevel(options, axisName);
 
-            fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString, axisName === "rows" ? options.rowTake : options.columnTake);
+            fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString, axisName === "rows" ? options.rowTake : options.columnTake, options.totalsOnly);
             each(expandedPaths, function(_, expandedPath) {
                 fillCrossJoins(crossJoins, expandedPath, expandLevel, expandIndex, expandedPath, options, axisName, cellsString);
             });
