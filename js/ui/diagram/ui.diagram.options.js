@@ -42,7 +42,7 @@ class DiagramOptions extends Widget {
             items: DiagramCommands.getOptions().map(item => {
                 return extend(true, {
                     editorType: item.widget,
-                    dataField: item.name.toString(),
+                    dataField: item.command.toString(),
                     label: {
                         text: item.text
                     },
@@ -50,7 +50,7 @@ class DiagramOptions extends Widget {
                         text: item.text,
                         hint: item.hint,
                         icon: item.icon,
-                        onInitialized: (e) => this._onToolbarItemInitialized(e.component, item.name)
+                        onInitialized: (e) => this._onToolbarItemInitialized(e.component, item.command)
                     }
                 }, this._createWidgetOptions(item));
             }),
@@ -59,7 +59,7 @@ class DiagramOptions extends Widget {
     }
     _createWidgetOptions(item) {
         if(item.getValue && item.setValue) {
-            this._valueConverters[item.name] = { getValue: item.getValue, setValue: item.setValue };
+            this._valueConverters[item.command] = { getValue: item.getValue, setValue: item.setValue };
         }
         if(item.widget === "dxSelectBox") {
             return {
@@ -106,7 +106,7 @@ class DiagramBar {
 
     /* implementation of IBar */
     getCommandKeys() {
-        return DiagramCommands.getOptions().map(c => c.name);
+        return DiagramCommands.getOptions().map(c => c.command);
     }
     setItemValue(key, value) {
         this._widget._setItemValue(key, value);
