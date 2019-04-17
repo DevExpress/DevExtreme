@@ -64,6 +64,11 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
 
         return super._getAppointmentDefaultWidth();
     }
+
+    _calculateDynamicAppointmentCountPerCell() {
+        return Math.floor(this.getRenderingStrategy()._getAppointmentMaxWidth() / this.getRenderingStrategy()._getAppointmentDefaultWidth());
+    }
+
 }
 
 module.exports = AdaptivePositioningStrategy;
