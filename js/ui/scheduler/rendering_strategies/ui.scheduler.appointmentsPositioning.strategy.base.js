@@ -7,7 +7,7 @@ const COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22;
 
 const APPOINTMENT_MIN_COUNT = 1;
 const APPOINTMENT_DEFAULT_WIDTH = 40;
-const APPOINTMENT_INCREASED_WIDTH = 50;
+// const APPOINTMENT_INCREASED_WIDTH = 50;
 
 const COLLECTOR_WIDTH_IN_PERCENTS = 75;
 
@@ -75,11 +75,11 @@ class AppointmentPositioningStrategy {
     }
 
     _getAppointmentDefaultWidth() {
-        let renderingStrategy = this.getRenderingStrategy();
+        // let renderingStrategy = this.getRenderingStrategy();
 
-        if(renderingStrategy.hasAllDayAppointments()) {
-            return APPOINTMENT_INCREASED_WIDTH;
-        }
+        // if(renderingStrategy.hasAllDayAppointments()) {
+        //     return APPOINTMENT_INCREASED_WIDTH;
+        // }
         return APPOINTMENT_DEFAULT_WIDTH;
     }
 }
