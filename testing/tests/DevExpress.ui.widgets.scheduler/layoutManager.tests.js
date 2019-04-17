@@ -2237,21 +2237,13 @@ QUnit.test("Full-size appointment should not have empty class in 'auto' mode, we
         }
     );
 
-    var getWidthStub = sinon.stub(this.instance.getRenderingStrategyInstance(), "_getAppointmentDefaultWidth", function() {
-        return 40;
-    });
+    this.instance.option("dataSource", items);
 
-    try {
-        this.instance.option("dataSource", items);
+    var $firstAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0),
+        $secondAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(1);
 
-        var $firstAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0),
-            $secondAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(1);
-
-        assert.ok(!$firstAppointment.hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
-        assert.ok(!$secondAppointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
-    } finally {
-        getWidthStub.restore();
-    }
+    assert.ok(!$firstAppointment.hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
+    assert.ok(!$secondAppointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
 });
 
 QUnit.test("Full-size appointment should have correct height, 'numeric' mode", function(assert) {
