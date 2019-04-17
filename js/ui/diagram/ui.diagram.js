@@ -169,8 +169,6 @@ class Diagram extends Widget {
     _getDataLayoutType() {
         const { DataLayoutType } = getDiagram();
         switch(this.option("layout")) {
-            case "tree":
-                return DataLayoutType.Tree;
             case "sugiyama":
                 return DataLayoutType.Sugiyama;
             default:
@@ -184,7 +182,7 @@ class Diagram extends Widget {
         this._updateDiagramLockCount++;
     }
     _endUpdateDiagram() {
-        this._updateDiagramLockCount = Math.max(this._updateLockCount - 1, 0);
+        this._updateDiagramLockCount = Math.max(this._updateDiagramLockCount - 1, 0);
         if(!this._updateDiagramLockCount) {
             this._bindDiagramData();
         }
