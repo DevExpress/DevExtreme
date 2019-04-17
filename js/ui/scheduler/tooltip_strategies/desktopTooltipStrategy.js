@@ -136,7 +136,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         return this.scheduler.option("dropDownAppointmentTemplate") === "dropDownAppointment";
     }
 
-    _onAppointmentDragStart(itemData, settings, e) {
+    _onAppointmentDragStart(itemData, settings, eventArgs) {
         const appointmentInstance = this.scheduler.getAppointmentsInstance(),
             appointmentIndex = appointmentInstance.option("items").length;
 
@@ -150,15 +150,15 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         });
 
         const $items = appointmentInstance._findItemElementByItem(itemData);
-        $items.length > 0 && this._prepareDragItem($items, settings, e);
+        $items.length > 0 && this._prepareDragItem($items, settings, eventArgs);
 
         this.scheduler.hideAppointmentTooltip();
     }
 
-    _onAppointmentDragMove(e, allDay) {
+    _onAppointmentDragMove(eventArgs, allDay) {
         let coordinates = {
-            left: this._startPosition.left + e.offset.x,
-            top: this._startPosition.top + e.offset.y
+            left: this._startPosition.left + eventArgs.offset.x,
+            top: this._startPosition.top + eventArgs.offset.y
         };
 
         this.scheduler.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
@@ -188,15 +188,15 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         newCellIndex === oldCellIndex && appointments._clearItem({ itemData: itemData });
     }
 
-    _prepareDragItem($items, settings, e) {
+    _prepareDragItem($items, settings, eventArgs) {
         const dragContainerOffset = this._getDragContainerOffset();
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
         const scrollTop = this._$draggedItem.hasClass(ALL_DAY_PANEL_APPOINTMENT_CLASS)
             ? this.scheduler._workSpace.getAllDayHeight()
             : this.scheduler._workSpace.getScrollableScrollTop();
         this._startPosition = {
-            top: e.pageY - dragContainerOffset.top - (this._$draggedItem.height() / 2) + scrollTop,
-            left: e.pageX - dragContainerOffset.left - (this._$draggedItem.width() / 2)
+            top: eventArgs.pageY - dragContainerOffset.top - (this._$draggedItem.height() / 2) + scrollTop,
+            left: eventArgs.pageX - dragContainerOffset.left - (this._$draggedItem.width() / 2)
         };
         translator.move(this._$draggedItem, this._startPosition);
         eventsEngine.trigger(this._$draggedItem, dragEvents.start);
