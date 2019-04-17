@@ -3,7 +3,8 @@ import * as vizMocks from "../../helpers/vizMocks.js";
 import { noop } from "core/utils/common";
 import vizUtils from "viz/core/utils";
 import pointModule from "viz/series/points/base_point";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 import { insertMockFactory, MockAxis, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
