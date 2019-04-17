@@ -1,7 +1,6 @@
 import $ from "../../core/renderer";
 import { getImageContainer } from "../../core/utils/icon";
 
-import Button from "../button";
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 
@@ -9,8 +8,8 @@ import FileManagerItemListBase from "./ui.file_manager.item_list";
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
-const FILE_MANAGER_FILE_ACTIONS_BUTTON = "dx-filemanager-file-actions-button";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
+const COMMAND_BUTTON_CLASS = "dx-command-select";
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -81,14 +80,11 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onShowFileItemActionButtonClick(e) {
-        this._ensureContextMenu();
-
-        const $row = e.component.$element().closest(this._getItemSelector());
+    _onFileItemActionButtonClick({ component, element }) {
+        const $row = component.$element().closest(this._getItemSelector());
         const item = $row.data("item");
         this._ensureItemSelected(item);
-        this._contextMenu.option("dataSource", this._createContextMenuItems(item));
-        this._displayContextMenu(e.element, e.event.offsetX, e.event.offsetY);
+        this._showContextMenu(this.getSelectedItems(), element);
     }
 
     _getItemSelector() {
@@ -114,7 +110,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
         const item = e.row.data;
         this._ensureItemSelected(item);
-        e.items = this._createContextMenuItems(item);
+        e.items = this._contextMenu.createContextMenuItems(this.getSelectedItems());
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
@@ -125,16 +121,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _createNameColumnCell(container, cellInfo) {
-        const button = this._createComponent($("<div>"), Button, {
-            text: "&vellip;",
-            onClick: this._onShowFileItemActionButtonClick.bind(this),
-            template(e) {
-                return $("<i>").html("&vellip;");
-            }
-        });
-        button.$element().addClass(`${FILE_MANAGER_FILE_ACTIONS_BUTTON} dx-command-select`);
+        const $container = $(container);
+        $(container).append(cellInfo.data.name);
 
-        $(container).append(cellInfo.data.name, button.$element());
+        this._contextMenu.createFileActionsButton($container, {
+            cssClass: COMMAND_BUTTON_CLASS,
+            onFileActionsButtonClick: e => this._onFileItemActionButtonClick(e)
+        });
     }
 
     _ensureItemSelected(item) {

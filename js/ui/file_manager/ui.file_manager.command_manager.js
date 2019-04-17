@@ -65,14 +65,12 @@ export class FileManagerCommandManager {
                 name: "thumbnails",
                 text: "Thumbnails View",
                 enabled: true,
-                displayInToolbarOnly: true,
                 noFileItemRequired: true
             },
             {
                 name: "details",
                 text: "Details View",
                 enabled: true,
-                displayInToolbarOnly: true,
                 noFileItemRequired: true
             }
         ];
@@ -85,17 +83,12 @@ export class FileManagerCommandManager {
         this._actions = extend(this._actions, actions);
     }
 
-    executeCommand(command) {
+    executeCommand(command, arg) {
         const commandName = isString(command) ? command : command.name;
         const action = this._actions[commandName];
         if(action) {
-            action();
+            action(arg);
         }
-    }
-
-    getCommands(forToolbar, items) {
-        return this._commands
-            .filter(c => (!c.displayInToolbarOnly || forToolbar) && (!items || this.isCommandAvailable(c.name, items)));
     }
 
     getCommandByName(name) {

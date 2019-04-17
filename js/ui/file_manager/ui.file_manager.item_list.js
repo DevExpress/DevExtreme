@@ -1,10 +1,8 @@
-import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { name as dblClickName } from "../../events/double_click";
 import { addNamespace } from "../../events/utils";
 import eventsEngine from "../../events/core/events_engine";
 
-import ContextMenu from "../context_menu/ui.context_menu";
 import Widget from "../widget/ui.widget";
 
 const FILE_MANAGER_FILES_VIEW_CLASS = "dx-filemanager-files-view";
@@ -23,60 +21,23 @@ class FileManagerItemListBase extends Widget {
         super._initMarkup();
     }
 
-    _displayContextMenu(element, offsetX, offsetY) {
-        this._contextMenu.option({
-            "target": element,
-            "position": {
-                of: element,
-                offset: offsetX + " " + offsetY
-            }
-        });
-        this._contextMenu.show();
-    }
-
-    _ensureContextMenu() {
-        if(this._contextMenu) {
-            return;
-        }
-
-        const $menu = $("<div>").appendTo(this.$element());
-        this._contextMenu = this._createComponent($menu, ContextMenu, {
-            onItemClick: this._raiseOnContextMenuItemClick.bind(this)
-        });
-    }
-
-    _createContextMenuItems(fileItem) {
-        const commandManager = this.option("commandManager");
-        return commandManager.getCommands(false, this.getSelectedItems())
-            .map(({ name, text, icon }) => {
-                return {
-                    name,
-                    text,
-                    icon,
-                    onItemClick: this._raiseOnContextMenuItemClick.bind(this)
-                };
-            });
-    }
-
     _initActions() {
         this._actions = {
             onError: this._createActionByOption("onError"),
             onSelectionChanged: this._createActionByOption("onSelectionChanged"),
-            onSelectedItemOpened: this._createActionByOption("onSelectedItemOpened"),
-            onContextMenuItemClick: this._createActionByOption("onContextMenuItemClick")
+            onSelectedItemOpened: this._createActionByOption("onSelectedItemOpened")
         };
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            commandManager: null,
             selectionMode: "single",
+            contextMenu: null,
             getItems: null,
             getItemThumbnail: null,
             onError: null,
             onSelectionChanged: null,
-            onSelectedItemOpened: null,
-            onContextMenuItemClick: null
+            onSelectedItemOpened: null
         });
     }
 
@@ -85,6 +46,7 @@ class FileManagerItemListBase extends Widget {
 
         switch(name) {
             case "selectionMode":
+            case "contextMenu":
             case "getItems":
             case "getItemThumbnail":
                 this.repaint();
@@ -92,10 +54,7 @@ class FileManagerItemListBase extends Widget {
             case "onError":
             case "onSelectedItemOpened":
             case "onSelectionChanged":
-            case "onContextMenuItemClick":
                 this._actions[name] = this._createActionByOption(name);
-                break;
-            case "commandManager":
                 break;
             default:
                 super._optionChanged(args);
@@ -119,10 +78,6 @@ class FileManagerItemListBase extends Widget {
         this._actions.onSelectedItemOpened({ item });
     }
 
-    _raiseOnContextMenuItemClick({ itemData: { name, fileItem } }) {
-        this._actions.onContextMenuItemClick({ name, fileItem });
-    }
-
     _getItemThumbnail(item) {
         const itemThumbnailGetter = this.option("getItemThumbnail");
         return itemThumbnailGetter ? itemThumbnailGetter(item) : "";
@@ -134,6 +89,14 @@ class FileManagerItemListBase extends Widget {
 
     _onItemDblClick(e) {
 
+    }
+
+    _showContextMenu(items, element) {
+        this._contextMenu.showFor(items, element);
+    }
+
+    get _contextMenu() {
+        return this.option("contextMenu");
     }
 
     refreshData() {

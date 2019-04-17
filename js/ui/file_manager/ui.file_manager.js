@@ -9,6 +9,7 @@ import Widget from "../widget/ui.widget";
 import notify from "../notify";
 
 import { FileManagerCommandManager } from "./ui.file_manager.command_manager";
+import FileManagerContextMenu from "./ui.file_manager.context_menu";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerDetailsItemList from "./ui.file_manager.item_list.details";
 import FileManagerThumbnailsItemList from "./ui.file_manager.item_list.thumbnails";
@@ -48,6 +49,11 @@ class FileManager extends Widget {
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
             itemViewMode: this.option("itemView").mode
+        });
+
+        const $contextMenu = $("<div>").appendTo(this.$element());
+        this._contextMenu = this._createComponent($contextMenu, FileManagerContextMenu, {
+            commandManager: this._commandManager
         });
 
         this._createEditing();
@@ -107,6 +113,7 @@ class FileManager extends Widget {
 
     _createFilesTreeView() {
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
+            contextMenu: this._contextMenu,
             getItems: this._getFilesTreeViewItems.bind(this),
             onCurrentFolderChanged: this._onFilesTreeViewCurrentFolderChanged.bind(this),
             onClick: () => this._setItemsViewAreaActive(false)
@@ -118,13 +125,12 @@ class FileManager extends Widget {
         const itemViewOptions = this.option("itemView");
 
         const options = {
-            commandManager: this._commandManager,
             selectionMode: this.option("selectionMode"),
+            contextMenu: this._contextMenu,
             getItems: this._getItemViewItems.bind(this),
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onSelectedItemOpened: ({ item }) => this._tryOpen(item),
-            onContextMenuItemClick: ({ name, fileItem }) => this._onContextMenuItemClick(name, fileItem),
             getItemThumbnail: this._getItemThumbnail.bind(this)
         };
 
@@ -159,10 +165,6 @@ class FileManager extends Widget {
     _onItemViewSelectionChanged() {
         const items = this.getSelectedItems();
         this._toolbar.update(items);
-    }
-
-    _onContextMenuItemClick(name) {
-        this.executeCommand(name);
     }
 
     _setItemsViewAreaActive(active) {
