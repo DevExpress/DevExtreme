@@ -6082,6 +6082,12 @@ declare module DevExpress.ui {
     }
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
+        /** @name dxDiagram.Options.edges */
+        edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string, idExpr?: string, toExpr?: string };
+        /** @name dxDiagram.Options.layout */
+        layout?: 'tree' | 'sugiyama';
+        /** @name dxDiagram.Options.nodes */
+        nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, idExpr?: string, textExpr?: string, typeExpr?: string };
         /** @name dxDiagram.Options.onDataChanged */
         onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
     }
@@ -6092,7 +6098,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.getData() */
         getData(): string;
         /** @name dxDiagram.setData(value) */
-        setData(data: string): void;
+        setData(data: string, keepExistingItems: boolean): void;
     }
     /** @name dxDrawer.Options */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
