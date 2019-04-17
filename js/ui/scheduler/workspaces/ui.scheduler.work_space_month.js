@@ -264,7 +264,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
-    applyGroupButtonOffset: function() {
+    applyCollectorOffset: function() {
         return true;
     },
 

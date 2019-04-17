@@ -2494,9 +2494,14 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
-    applyGroupButtonOffset: function() {
+    getDateTableWidth: function() {
+        return this._$dateTable.get(0).getBoundingClientRect().width;
+    },
+
+    applyCollectorOffset: function() {
         return false;
     },
+
     _supportCompactDropDownAppointments: function() {
         return true;
     },
