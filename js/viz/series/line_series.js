@@ -206,21 +206,21 @@ var lineMethods = {
 var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods);
 
 exports.chart["stepline"] = _extend({}, lineSeries, {
-    _calculateStepLinePoints: function(points) {
-        var segment = [];
+    _calculateStepLinePoints(points) {
+        const segment = [];
+        const coordName = this._options.rotated ? "x" : "y";
+
         _each(points, function(i, pt) {
-            var stepY,
-                point;
+            let point;
 
             if(!i) {
                 segment.push(pt);
                 return;
-
             }
-            stepY = segment[segment.length - 1].y;
-            if(stepY !== pt.y) {
+            const step = segment[segment.length - 1][coordName];
+            if(step !== pt[coordName]) {
                 point = objectUtils.clone(pt);
-                point.y = stepY;
+                point[coordName] = step;
                 segment.push(point);
             }
             segment.push(pt);
@@ -234,22 +234,16 @@ exports.chart["stepline"] = _extend({}, lineSeries, {
 
     getSeriesPairCoord(coord, isArgument) {
         let oppositeCoord;
-        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
+        const rotated = this._options.rotated;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
         const coordName = !isOpposite ? "vx" : "vy";
         const oppositeCoordName = !isOpposite ? "vy" : "vx";
         const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
-        const axis = isArgument ? this.getArgumentAxis() : this.getValueAxis();
-        const inverted = axis.getOptions().inverted;
 
         for(let i = 0; i < nearestPoints.length; i++) {
             const p = nearestPoints[i];
-            let tmpCoord;
+            const tmpCoord = isArgument && coord !== p[1][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
 
-            if(!isOpposite) {
-                tmpCoord = p[0][oppositeCoordName];
-            } else {
-                tmpCoord = !inverted && p[0][coordName] <= p[1][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
-            }
             if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
                 break;
