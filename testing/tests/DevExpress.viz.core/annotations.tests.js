@@ -17,19 +17,19 @@ const environment = {
 QUnit.module("Image annotation", environment);
 
 QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
-    const testCase = (coords, message) => {
-        this.widget._getAnnotationCoords.returns(coords);
-        const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {})[0];
+    const testCase = (anchor, coords, message) => {
+        this.widget._getAnnotationCoords.returns(anchor);
+        const annotation = createAnnotations([$.extend({ type: "image", image: { url: "some_url" } }, coords)], {})[0];
 
         annotation.draw(this.widget, this.group);
 
         assert.equal(this.renderer.stub("image").callCount, 0, message);
     };
 
-    testCase({ x: undefined, y: undefined }, "Both values are undefined");
-    testCase({ x: null, y: null }, "Both values are null");
-    testCase({ x: 100, y: undefined }, "Only y is undefined");
-    testCase({ x: undefined, y: 100 }, "Only x is undefined");
+    testCase({ x: undefined, y: undefined }, { x: undefined, y: undefined }, "No anchor, no coords");
+    testCase({ x: null, y: null }, { x: null, y: null }, "No anchor, no coords");
+    testCase({ x: undefined, y: undefined }, { x: 100, y: undefined }, "Only x is defined");
+    testCase({ x: undefined, y: undefined }, { x: undefined, y: 100 }, "Only y is defined");
 });
 
 QUnit.test("Image params", function(assert) {
@@ -65,7 +65,7 @@ QUnit.test("Merge customizeAnnotation result and common+item options", function(
 });
 
 QUnit.test("Draw image inside a plaque with borders and arrow", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -98,7 +98,6 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
     const annotationGroup = this.renderer.g.getCall(1).returnValue;
     assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-image-annotation" }]);
     assert.deepEqual(annotationGroup.append.firstCall.args, [wrapperGroup]);
-    assert.deepEqual(annotationGroup.move.firstCall.args, [80, 140]);
 
     assert.equal(this.renderer.shadowFilter.callCount, 1);
     assert.deepEqual(this.renderer.shadowFilter.firstCall.returnValue.attr.firstCall.args, [{
@@ -127,12 +126,12 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
     assert.deepEqual(plaque.append.firstCall.args, [annotationGroup]);
     assert.equal(plaque.sharp.callCount, 1);
     assert.deepEqual(plaque.attr.lastCall.args, [{
-        points: [0, 0, 40, 0, 40, 40, 35, 40, 20, 60, 5, 40, 0, 40]
+        points: [80, 140, 120, 140, 120, 180, 115, 180, 100, 200, 85, 180, 80, 180]
     }]);
 
     const contentGroup = this.renderer.g.getCall(2).returnValue;
     assert.deepEqual(contentGroup.append.firstCall.args, [annotationGroup]);
-    assert.deepEqual(contentGroup.move.firstCall.args, [9, 13]);
+    assert.deepEqual(contentGroup.move.firstCall.args, [100 - 1 - 10, 160 - 2 - 5]);
 
     assert.equal(this.renderer.image.callCount, 1);
     assert.deepEqual(this.renderer.image.firstCall.returnValue.append.firstCall.args, [contentGroup]);
@@ -160,6 +159,107 @@ QUnit.test("Draw image inside a plaque without borders", function(assert) {
         "filter": "shadowFilter.id",
         opacity: 0.5
     }]);
+});
+
+QUnit.test("Draw annotation with anchor and x/y", function(assert) {
+    const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 30,
+        paddingLeftRight: 10,
+        paddingTopBottom: 15
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [280, 30, 320, 30, 320, 70, 315, 70, 100, 200, 285, 70, 280, 70]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 50 - 2 - 5]);
+});
+
+QUnit.test("Draw annotation with anchor and only x", function(assert) {
+    const annotation = createAnnotations([{ x: 300, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 30,
+        paddingLeftRight: 10,
+        paddingTopBottom: 15
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [280, 140, 320, 140, 320, 180, 315, 180, 100, 200, 285, 180, 280, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 160 - 2 - 5]);
+});
+
+QUnit.test("Draw annotation with anchor and only y", function(assert) {
+    const annotation = createAnnotations([{ y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 30,
+        paddingLeftRight: 10,
+        paddingTopBottom: 15
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [80, 30, 120, 30, 120, 70, 115, 70, 100, 200, 85, 70, 80, 70]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [100 - 1 - 10, 50 - 2 - 5]);
+});
+
+QUnit.test("Draw annotation with x/y and without anchor", function(assert) {
+    this.widget._getAnnotationCoords.returns({});
+    const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 30,
+        paddingLeftRight: 10,
+        paddingTopBottom: 15
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [280, 30, 320, 30, 320, 70, 315, 70, 300, 70, 285, 70, 280, 70]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 50 - 2 - 5]);
 });
 
 QUnit.module("Text annotaion", environment);
