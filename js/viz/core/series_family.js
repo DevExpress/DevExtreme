@@ -147,16 +147,21 @@ function getStackSumByArg(stackKeepers, stackName, argument) {
     return positiveStackValue + negativeStackValue;
 }
 
-function getSeriesStackIndexCallback(rotated) {
-    if(!rotated) {
+function getSeriesStackIndexCallback(inverted) {
+    if(!inverted) {
         return function(index) { return index; };
     } else {
         return function(index, stackCount) { return stackCount - index - 1; };
     }
 }
 
+function isInverted(series) {
+    return series[0] && series[0].getArgumentAxis().getTranslator().isInverted();
+}
+
 function adjustBarSeriesDimensions() {
-    adjustBarSeriesDimensionsCore(getVisibleSeries(this), this._options, getSeriesStackIndexCallback(this.rotated));
+    const series = getVisibleSeries(this);
+    adjustBarSeriesDimensionsCore(series, this._options, getSeriesStackIndexCallback(isInverted(series)));
 }
 
 function adjustStackedSeriesValues() {
@@ -322,7 +327,8 @@ function updateBarSeriesValues() {
 }
 
 function adjustCandlestickSeriesDimensions() {
-    adjustBarSeriesDimensionsCore(getVisibleSeries(this), { barWidth: null, equalBarWidth: true, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(this.rotated));
+    const series = getVisibleSeries(this);
+    adjustBarSeriesDimensionsCore(series, { barWidth: null, equalBarWidth: true, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
 }
 
 function adjustBubbleSeriesDimensions() {
@@ -382,7 +388,6 @@ function SeriesFamily(options) {
 
     that.type = _normalizeEnum(options.type);
     that.pane = options.pane;
-    that.rotated = options.rotated;
     that.series = [];
 
     that.updateOptions(options);
