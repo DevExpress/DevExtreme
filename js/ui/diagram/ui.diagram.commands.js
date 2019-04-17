@@ -5,69 +5,69 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return [
             {
-                name: DiagramCommand.Undo,
+                command: DiagramCommand.Undo,
                 hint: 'Undo',
                 icon: "undo"
             },
             {
-                name: DiagramCommand.Redo,
+                command: DiagramCommand.Redo,
                 hint: "Redo",
                 icon: "redo"
             },
             {
-                name: DiagramCommand.FontName,
+                command: DiagramCommand.FontName,
                 beginGroup: true,
                 widget: "dxSelectBox",
                 items: ["Arial", "Arial Black", "Helvetica", "Times New Roman", "Courier New", "Courier", "Verdana", "Georgia", "Comic Sans MS", "Trebuchet MS"]
             },
             {
-                name: DiagramCommand.FontSize,
+                command: DiagramCommand.FontSize,
                 widget: "dxSelectBox",
                 items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"]
             },
             {
-                name: DiagramCommand.Bold,
+                command: DiagramCommand.Bold,
                 hint: "Bold",
                 icon: "bold"
             },
             {
-                name: DiagramCommand.Italic,
+                command: DiagramCommand.Italic,
                 hint: "Italic",
                 icon: "italic"
             },
             {
-                name: DiagramCommand.Underline,
+                command: DiagramCommand.Underline,
                 hint: "Underline",
                 icon: "underline"
             },
             {
-                name: DiagramCommand.FontColor,
+                command: DiagramCommand.FontColor,
                 text: "Text Color",
                 widget: "dxColorBox"
             },
             {
-                name: DiagramCommand.StrokeColor,
+                command: DiagramCommand.StrokeColor,
                 text: "Line Color",
                 widget: "dxColorBox"
             },
             {
-                name: DiagramCommand.TextLeftAlign,
+                command: DiagramCommand.TextLeftAlign,
                 hint: "Align Left",
                 icon: "alignleft",
                 beginGroup: true
             },
             {
-                name: DiagramCommand.TextCenterAlign,
+                command: DiagramCommand.TextCenterAlign,
                 hint: "Center",
                 icon: "aligncenter"
             },
             {
-                name: DiagramCommand.TextRightAlign,
+                command: DiagramCommand.TextRightAlign,
                 hint: "Align Right",
                 icon: "alignright"
             },
             {
-                name: DiagramCommand.ConnectorLineOption,
+                command: DiagramCommand.ConnectorLineOption,
                 widget: "dxSelectBox",
                 text: "Line Option",
                 items: [
@@ -78,7 +78,7 @@ const DiagramCommands = {
                 valueExpr: "value"
             },
             {
-                name: DiagramCommand.ConnectorStartLineEnding,
+                command: DiagramCommand.ConnectorStartLineEnding,
                 widget: "dxSelectBox",
                 text: "Start Line Ending",
                 items: [
@@ -89,7 +89,7 @@ const DiagramCommands = {
                 valueExpr: "value"
             },
             {
-                name: DiagramCommand.ConnectorEndLineEnding,
+                command: DiagramCommand.ConnectorEndLineEnding,
                 widget: "dxSelectBox",
                 text: "End Line Ending",
                 items: [
@@ -100,12 +100,12 @@ const DiagramCommands = {
                 valueExpr: "value"
             },
             {
-                name: DiagramCommand.AutoLayoutTree,
-                text: "Tree Auto Layout"
-            },
-            {
-                name: DiagramCommand.AutoLayoutTree,
-                text: "Layered Auto Layout"
+                widget: "dxButton",
+                text: "Auto Layout",
+                items: [
+                    { command: DiagramCommand.AutoLayoutTree, text: "Tree" },
+                    { command: DiagramCommand.AutoLayoutFlow, text: "Layered" }
+                ]
             }
         ];
     },
@@ -113,7 +113,7 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return [
             {
-                name: DiagramCommand.PageSize,
+                command: DiagramCommand.PageSize,
                 text: "Page Size",
                 widget: "dxSelectBox",
                 getValue: (v) => {
@@ -168,12 +168,12 @@ const DiagramCommands = {
                 ]
             },
             {
-                name: DiagramCommand.PageLandscape,
+                command: DiagramCommand.PageLandscape,
                 text: "Page Landscape",
                 widget: "dxCheckBox"
             },
             {
-                name: DiagramCommand.GridSize,
+                command: DiagramCommand.GridSize,
                 text: "Grid Size",
                 widget: "dxSelectBox",
                 items: [
@@ -196,9 +196,42 @@ const DiagramCommands = {
                 ]
             },
             {
-                name: DiagramCommand.SnapToGrid,
+                command: DiagramCommand.SnapToGrid,
                 text: "Snap to Grid",
                 widget: "dxCheckBox"
+            }
+        ];
+    },
+    getContextMenu: function() {
+        const { DiagramCommand } = getDiagram();
+        return [
+            {
+                command: DiagramCommand.Cut,
+                text: "Cut"
+            },
+            {
+                command: DiagramCommand.Copy,
+                text: "Copy"
+            },
+            {
+                command: DiagramCommand.Paste,
+                text: "Paste"
+            },
+            {
+                command: DiagramCommand.SelectAll,
+                text: "Select All"
+            },
+            {
+                command: DiagramCommand.Delete,
+                text: "Delete"
+            },
+            {
+                command: DiagramCommand.BringToFront,
+                text: "Bring to Front"
+            },
+            {
+                command: DiagramCommand.SendToBack,
+                text: "Send to Back"
             }
         ];
     }

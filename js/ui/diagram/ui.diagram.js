@@ -6,6 +6,7 @@ import { extend } from "../../core/utils/extend";
 import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramToolbox from "./ui.diagram.toolbox";
 import DiagramOptions from "./ui.diagram.options";
+import DiagramContextMenu from "./ui.diagram.contextmenu";
 import { getDiagram } from "./diagram_importer";
 import { hasWindow } from "../../core/utils/window";
 
@@ -39,6 +40,8 @@ class Diagram extends Widget {
         this._createComponent($toolbox, DiagramToolbox, {
             onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category)
         });
+
+        this._renderContextMenu($mainElement);
 
         !isServerSide && this._diagramInstance.createDocument($mainElement[0]);
     }
@@ -82,6 +85,16 @@ class Diagram extends Widget {
         });
 
         return $content;
+    }
+
+    _renderContextMenu($mainElement) {
+        const $contextMenu = $("<div>")
+            .appendTo(this.$element());
+        this._createComponent($contextMenu, DiagramContextMenu, {
+            container: $mainElement,
+            onContentReady: ({ component }) => this._diagramInstance.barManager.registerBar(component.bar),
+            onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar)
+        });
     }
 
     _initDiagram() {

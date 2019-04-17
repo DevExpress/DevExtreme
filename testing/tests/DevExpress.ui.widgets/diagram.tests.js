@@ -10,7 +10,11 @@ QUnit.testStart(() => {
 });
 
 const TOOLBAR_SELECTOR = ".dx-diagram-toolbar";
+const CONTEXT_MENU_SELECTOR = ".dx-has-context-menu:last";
 const TOOLBAR_ITEM_ACTIVE_CLASS = "dx-format-active";
+const MAIN_ELEMENT_SELECTOR = ".dxdi-control";
+const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":19, "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
+const DX_MENU_ITEM_SELECTOR = ".dx-menu-item";
 
 const moduleConfig = {
     beforeEach: () => {
@@ -47,6 +51,28 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         const fontSelectBox = this.$element.find(TOOLBAR_SELECTOR).find(".dx-selectbox").eq(0).dxSelectBox("instance");
         fontSelectBox.option("value", "Arial Black");
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, "Arial Black");
+    });
+});
+QUnit.module("Context Menu", moduleConfig, () => {
+    test("should load default items", (assert) => {
+        const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
+        assert.ok(contextMenu.option("items").length > 1);
+    });
+    test("should update items on showing", (assert) => {
+        const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
+        assert.notOk(contextMenu.option("visible"));
+        assert.notOk(contextMenu.option("items")[0].disabled);
+        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        assert.ok(contextMenu.option("visible"));
+        assert.ok(contextMenu.option("items")[0].disabled);
+    });
+    test("should execute commands on click", (assert) => {
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
+        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        assert.ok(this.instance._diagramInstance.selection.isEmpty());
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick");
+        assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
 });
 
