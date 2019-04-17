@@ -421,6 +421,15 @@ QUnit.module("common use cases", {
         eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
         assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "action button doesn't open the dropdown");
     });
+
+    QUnit.test("spindown secondary icon should be rendered when splitButton is false", (assert) => {
+        this.dropDownButton.option("splitButton", false);
+
+        const $icons = getActionButton(this.dropDownButton).find(".dx-icon");
+        assert.strictEqual($icons.length, 2, "2 icons are rendered");
+        assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
+        assert.ok($icons.eq(1).hasClass("dx-icon-spindown"), "second icon is correct");
+    });
 });
 
 QUnit.module("public methods", {

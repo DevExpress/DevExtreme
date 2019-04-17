@@ -7,6 +7,7 @@ import Popup from "./popup";
 import List from "./list";
 import { compileGetter } from "../core/utils/data";
 import domUtils from "../core/utils/dom";
+import iconUtils from "../core/utils/icon";
 import DataHelperMixin from "../data_helper";
 import { DataSource } from "../data/data_source/data_source";
 import ArrayStore from "../data/array_store";
@@ -300,11 +301,9 @@ let DropDownButton = Widget.inherit({
     },
 
     _actionButtonConfig() {
-        const splitButton = this.option("splitButton");
         return {
             text: this.option("text"),
-            icon: splitButton ? this.option("icon") : "spindown",
-            iconPosition: splitButton ? "left" : "right",
+            icon: this.option("icon"),
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
     },
@@ -447,6 +446,13 @@ let DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
     },
 
+    _renderAdditionalIcon() {
+        const $firstButtonContent = this._buttonGroup.$element().find(".dx-button-content").eq(0);
+        const $iconElement = iconUtils.getImageContainer("spindown");
+        $iconElement.addClass("dx-icon-right");
+        $firstButtonContent.append($iconElement);
+    },
+
     _renderButtonGroup() {
         let $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $("<div>");
         if(!this._buttonGroup) {
@@ -459,6 +465,8 @@ let DropDownButton = Widget.inherit({
         this._buttonGroup.registerKeyHandler("tab", this.close.bind(this));
         this._buttonGroup.registerKeyHandler("upArrow", this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler("escape", this._escHandler.bind(this));
+
+        this.option("splitButton") || this._renderAdditionalIcon();
 
         this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
     },
@@ -579,11 +587,13 @@ let DropDownButton = Widget.inherit({
                 this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
                     icon: value
                 }));
+                this.option("splitButton") || this._renderAdditionalIcon();
                 break;
             case "text":
                 this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
                     text: value
                 }));
+                this.option("splitButton") || this._renderAdditionalIcon();
                 break;
             case "stylingMode":
             case "width":
