@@ -3,11 +3,13 @@ import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
 
 const FOCUS_STATE_CLASS = "dx-state-focused",
+    FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     DATA_ROW_SELECTOR = ".dx-datagrid-rowsview .dx-datagrid-content .dx-data-row",
     viewItemSelectorMap = {
         headerColumns: [".dx-datagrid-headers .dx-header-row > td.dx-datagrid-action"],
         filterRow: [".dx-datagrid-headers .dx-datagrid-filter-row .dx-editor-cell input"],
-        rowsView: [`${DATA_ROW_SELECTOR} > td[tabindex]`, `${DATA_ROW_SELECTOR} > td:not([class*=dx-command])`],
+        rowsView: [`${DATA_ROW_SELECTOR} > td[tabindex]`, `${DATA_ROW_SELECTOR} > td`],
+        footer: [".dx-datagrid-total-footer .dx-datagrid-summary-item"],
         filterPanel: [".dx-datagrid-filter-panel .dx-icon-filter"],
         pager: [".dx-datagrid-pager [tabindex]", ".dx-datagrid-pager .dx-selection"]
     };
@@ -19,7 +21,7 @@ function processKeyDown(viewName, component, event, action, $mainElement) {
     var keyName = eventUtils.normalizeKeyName(event);
 
     if(keyName === "enter" || keyName === "space") {
-        action({ event: event });
+        action && action({ event: event });
     } else if(keyName === "tab") {
         $mainElement.addClass(FOCUS_STATE_CLASS);
     } else {
@@ -79,6 +81,7 @@ module.exports = {
                 if($focusViewElement && $focusViewElement.length) {
                     $focusViewElement.attr("tabindex", component.option("tabindex") || 0);
                     eventsEngine.trigger($focusViewElement, "focus");
+                    $focusViewElement.removeClass(FOCUS_DISABLED_CLASS);
                     break;
                 }
             }
