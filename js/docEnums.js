@@ -1015,3 +1015,8 @@
  * @typedef {string} Enums.FileManagerItemViewMode
  * @enum {'details'|'thumbnails'}
  */
+
+/**
+ * @typedef {string} Enums.DiagramAutoLayout
+ * @enum {'tree'|'sugiyama'}
+ */
