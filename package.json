@@ -122,7 +122,5 @@
     "ie > 10",
     "> 1%"
   ],
-  "pre-commit": [
-    "lint-staged"
-  ]
+  "pre-commit": "lint-staged"
 }
