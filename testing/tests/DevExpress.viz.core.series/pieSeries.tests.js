@@ -3,7 +3,8 @@ import * as vizMocks from "../../helpers/vizMocks.js";
 import { noop } from "core/utils/common";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
