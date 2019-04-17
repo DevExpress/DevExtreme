@@ -193,8 +193,8 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             ]
         });
 
-        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 100, y: 75 });
-        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 50, y: 25 });
+        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 50, y: 75 });
+        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 100, y: 25 });
     });
 
     QUnit.test("Get coordinates from series. Steparea series", function(assert) {
@@ -229,8 +229,8 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             ]
         });
 
-        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 100, y: 75 });
-        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 50, y: 25 });
+        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 50, y: 75 });
+        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 100, y: 25 });
     });
 
     QUnit.test("Get coordinates from series. Spline series", function(assert) {

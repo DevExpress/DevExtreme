@@ -217,7 +217,7 @@ exports.chart["stepline"] = _extend({}, lineSeries, {
                 segment.push(pt);
                 return;
             }
-            let step = segment[segment.length - 1][coordName];
+            const step = segment[segment.length - 1][coordName];
             if(step !== pt[coordName]) {
                 point = objectUtils.clone(pt);
                 point[coordName] = step;
