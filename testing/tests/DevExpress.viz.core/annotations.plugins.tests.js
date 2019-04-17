@@ -193,8 +193,8 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             ]
         });
 
-        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 100, y: 75 });
-        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 50, y: 25 });
+        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 50, y: 75 });
+        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 100, y: 25 });
     });
 
     QUnit.test("Get coordinates from series. Steparea series", function(assert) {
@@ -229,8 +229,8 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             ]
         });
 
-        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 100, y: 75 });
-        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 50, y: 25 });
+        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 50, y: 75 });
+        this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 100, y: 25 });
     });
 
     QUnit.test("Get coordinates from series. Spline series", function(assert) {
@@ -646,8 +646,8 @@ QUnit.module("Coordinates calculation. Chart plugin", {
         // stepline, x
         testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 25, "stepline", false, "Stepline. Can't find by x");
         testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 74, "stepline", true, "Stepline. Can't find by x (inverted)");
-        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 89, "stepline", false, "Stepline. Can't find by x (rotated)");
-        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 89, "stepline", true, "Stepline. Can't find by x (inverted, rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 50, "stepline", false, "Stepline. Can't find by x (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 50, "stepline", true, "Stepline. Can't find by x (inverted, rotated)");
 
         // stepline, argument
         testCase({ dataSource: otherSource }, { argument: 25, series: "s1" }, 49, "stepline", false, "Stepline. Can't find by argument");
@@ -663,7 +663,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
                 visualRange: [0, 100],
                 inverted: true
             }
-        }, { x: 70, series: "s1" }, 0, "steparea", false, "Steparea. Can't find by x (rotated)");
+        }, { x: 70, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by x (rotated)");
         testCase({
             dataSource: otherSource,
             rotated: true,
@@ -671,7 +671,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
                 visualRange: [0, 100],
                 inverted: true
             }
-        }, { x: 30, series: "s1" }, 0, "steparea", true, "Steparea. Can't find by x (inverted, rotated)");
+        }, { x: 30, series: "s1" }, 50, "steparea", true, "Steparea. Can't find by x (inverted, rotated)");
 
         // steparea, argument
         testCase({ dataSource: otherSource }, { argument: 25, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by argument");
@@ -831,7 +831,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
                 visualRange: [0, 100],
                 inverted: true
             }
-        }, { y: 70, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by y (rotated)");
+        }, { y: 70, series: "s1" }, 99, "steparea", false, "Steparea. Can't find by y (rotated)");
         testCase({
             dataSource: otherSource,
             rotated: true,
@@ -839,7 +839,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
                 visualRange: [0, 100],
                 inverted: true
             }
-        }, { y: 30, series: "s1" }, 0, "steparea", true, "Steparea. Can't find by y (inverted, rotated)");
+        }, { y: 30, series: "s1" }, 50, "steparea", true, "Steparea. Can't find by y (inverted, rotated)");
 
         // steparea, value
         testCase({ dataSource: otherSource }, { value: 155, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by value");
