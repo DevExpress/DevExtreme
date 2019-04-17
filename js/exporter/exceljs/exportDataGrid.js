@@ -80,7 +80,7 @@ function exportDataGrid(options) {
 }
 
 function _callCustomizeCell(customizeCell, cell, cellData) {
-    customizeCell && customizeCell({
+    customizeCell({
         cell: cell,
         gridCell: {
             column: cellData.cellSourceData.column,

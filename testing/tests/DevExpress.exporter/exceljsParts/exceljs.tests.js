@@ -32,9 +32,16 @@ QUnit.module("API", moduleConfig, () => {
         QUnit.assert.strictEqual(worksheet.getCell(eventArgs.cell._address), eventArgs.cell, "cell");
 
         if(expectedArgs !== undefined) {
-            QUnit.assert.deepEqual(expectedArgs[callIndex].gridCell.column, eventArgs.gridCell.column, "gridCell.column");
-            QUnit.assert.strictEqual(expectedArgs[callIndex].gridCell.rowType, eventArgs.gridCell.rowType, "gridCell.rowType");
-            QUnit.assert.strictEqual(expectedArgs[callIndex].gridCell.value, eventArgs.gridCell.value, "gridCell.value");
+            let expectedColumn = expectedArgs[callIndex].gridCell.column;
+            let actualColumn = eventArgs.gridCell.column;
+
+            QUnit.assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${callIndex}`);
+            QUnit.assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${callIndex}`);
+            QUnit.assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${callIndex}`);
+            QUnit.assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${callIndex}`);
+
+            QUnit.assert.strictEqual(expectedArgs[callIndex].gridCell.rowType, eventArgs.gridCell.rowType, `rowType ${callIndex}`);
+            QUnit.assert.strictEqual(expectedArgs[callIndex].gridCell.value, eventArgs.gridCell.value, `value ${callIndex}`);
         }
     }
 
