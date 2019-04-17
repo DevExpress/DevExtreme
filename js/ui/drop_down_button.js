@@ -105,9 +105,9 @@ let DropDownButton = Widget.inherit({
             /**
              * @name dxDropDownButtonOptions.splitButton
              * @type boolean
-             * @default true
+             * @default false
              */
-            splitButton: true,
+            splitButton: false,
 
             /**
              * @name dxDropDownButtonOptions.text
@@ -328,12 +328,12 @@ let DropDownButton = Widget.inherit({
         if(isToggleButton) {
             this.toggle();
         } else if(isActionButton) {
-            if(this.option("splitButton")) {
-                this._actionClickAction({
-                    event,
-                    selectedItem: this.option("selectedItem")
-                });
-            } else {
+            this._actionClickAction({
+                event,
+                selectedItem: this.option("selectedItem")
+            });
+
+            if(!this.option("splitButton")) {
                 this.toggle();
             }
         }
