@@ -84,18 +84,30 @@ class DiagramToolbar extends Widget {
             case "dxColorBox":
                 return {
                     options: {
-                        onValueChanged: (e) => handler.call(this, item.command, e.component.option("value"))
+                        onValueChanged: (e) => {
+                            const parameter = this._getExecCommandParameter(item, e.component.option("value"));
+                            handler.call(this, item.command, parameter);
+                        }
                     }
                 };
             default:
                 if(!item.items) {
                     return {
                         options: {
-                            onClick: (e) => handler.call(this, item.command)
+                            onClick: (e) => {
+                                const parameter = this._getExecCommandParameter(item);
+                                handler.call(this, item.command, parameter);
+                            }
                         }
                     };
                 }
         }
+    }
+    _getExecCommandParameter(item, widgetValue) {
+        if(item.getParameter) {
+            return item.getParameter(this, widgetValue);
+        }
+        return widgetValue;
     }
     _onItemInitialized(widget, item) {
         if(item.command !== undefined) {
@@ -113,8 +125,12 @@ class DiagramToolbar extends Widget {
                 target: widget.$element(),
                 showEvent: "dxclick",
                 position: { at: "left bottom" },
-                onItemClick: (e) => actionHandler.call(this, e.itemData.command),
-                onInitialized: ({ component }) => this._onContextMenuInitialized(component, item)
+                onItemClick: ({ itemData }) => {
+                    const parameter = this._getExecCommandParameter(itemData);
+                    actionHandler.call(this, itemData.command, parameter);
+                },
+                onInitialized: ({ component }) => this._onContextMenuInitialized(component, item),
+                onDisposing: ({ component }) => this._onContextMenuDisposing(component, item)
             });
         }
     }
@@ -123,6 +139,9 @@ class DiagramToolbar extends Widget {
         item.items.forEach((item, index) => {
             this._itemHelpers[item.command] = new ContextMenuItemHelper(widget, index);
         });
+    }
+    _onContextMenuDisposing(widget, item) {
+        this._contextMenus = this._contextMenus.filter(cm => cm !== widget);
     }
     _execDiagramCommand(command, value) {
         if(!this._updateLocked) {
@@ -163,9 +182,19 @@ class DiagramToolbar extends Widget {
             case "onWidgetCommand":
                 this._createOnWidgetCommand();
                 break;
+            case "export":
+                break;
             default:
                 super._optionChanged(args);
         }
+    }
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            "export": {
+                fileName: "Diagram",
+                proxyUrl: undefined
+            }
+        });
     }
 }
 
