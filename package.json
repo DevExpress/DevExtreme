@@ -114,8 +114,7 @@
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
-    "test-env": "node testing/launch",
-    "update-ts": "node ./build/update-ts.js"
+    "test-env": "node testing/launch"
   },
   "browserslist": [
     "last 2 versions",
@@ -124,7 +123,6 @@
     "> 1%"
   ],
   "pre-commit": [
-    "lint-staged",
-    "update-ts"
+    "lint-staged"
   ]
 }
