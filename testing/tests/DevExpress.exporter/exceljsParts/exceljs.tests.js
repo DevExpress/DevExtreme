@@ -20,6 +20,7 @@ const moduleConfig = {
     },
     beforeEach: () => {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
+        this.customizeCellCallCount = 0;
     },
     after: () => {
         clearDxObjectAssign();
@@ -27,6 +28,16 @@ const moduleConfig = {
 };
 
 QUnit.module("API", moduleConfig, () => {
+    function checkCustomizeCell(worksheet, eventArgs, expectedArgs, callIndex) {
+        QUnit.assert.strictEqual(worksheet.getCell(eventArgs.cell._address), eventArgs.cell, "cell");
+
+        if(expectedArgs !== undefined) {
+            QUnit.assert.deepEqual(expectedArgs[callIndex].gridCell.column, eventArgs.gridCell.column, "gridCell.column");
+            QUnit.assert.strictEqual(expectedArgs[callIndex].gridCell.rowType, eventArgs.gridCell.rowType, "gridCell.rowType");
+            QUnit.assert.strictEqual(expectedArgs[callIndex].gridCell.value, eventArgs.gridCell.value, "gridCell.value");
+        }
+    }
+
     function checkAutoFilter(assert, worksheet, excelFilterEnabled, from, to) {
         if(excelFilterEnabled === true) {
             assert.deepEqual(worksheet.autoFilter.from, from, "worksheet.autoFilter.from");
@@ -49,7 +60,7 @@ QUnit.module("API", moduleConfig, () => {
 
         [true, false].forEach((excelFilterEnabled) => {
             let options = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
-            const getConfig = (dataGrid) => ({ dataGrid: dataGrid, worksheet: this.worksheet, topLeftCell: topLeftCell, excelFilterEnabled: excelFilterEnabled });
+            const getConfig = (dataGrid, expectedArgs) => ({ dataGrid: dataGrid, worksheet: this.worksheet, topLeftCell: topLeftCell, excelFilterEnabled: excelFilterEnabled, customizeCell: (eventArgs) => { checkCustomizeCell(this.worksheet, eventArgs, expectedArgs, this.customizeCellCallCount++); } });
 
             QUnit.test("Empty grid" + options, (assert) => {
                 const done = assert.async();
@@ -72,7 +83,9 @@ QUnit.module("API", moduleConfig, () => {
                     columns: [{ caption: "f1" }]
                 }).dxDataGrid("instance");
 
-                exportDataGrid(getConfig(dataGrid)).then((result) => {
+                let expectedArgs = [ { value: "f1", gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } } ];
+
+                exportDataGrid(getConfig(dataGrid, expectedArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, topLeft, { row: 1, column: 1 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, 'f1', `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
@@ -264,7 +277,14 @@ QUnit.module("API", moduleConfig, () => {
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
-                exportDataGrid(getConfig(dataGrid)).then((result) => {
+                let expectedArgs = [
+                    { value: "f1", gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } },
+                    { value: "f2", gridCell: { rowType: 'header', column: dataGrid.columnOption(1) } },
+                    { value: "1", gridCell: { rowType: 'data', column: dataGrid.columnOption(0) } },
+                    { value: "2", gridCell: { rowType: 'data', column: dataGrid.columnOption(1) } },
+                ];
+
+                exportDataGrid(getConfig(dataGrid, expectedArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
                     checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "1", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
