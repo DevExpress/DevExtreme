@@ -17,6 +17,7 @@ import CustomStore from "data/custom_store";
 import dataUtils from "core/element_data";
 import dateSerialization from "core/utils/date_serialization";
 import { tooltipHelper, appointmentsHelper } from "./helpers.js";
+import themes from "ui/themes";
 
 import "ui/scheduler/ui.scheduler";
 import "ui/switch";
@@ -2464,6 +2465,37 @@ QUnit.test("DropDown appointment button should have correct coordinates", functi
     assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
     assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left, 1.001, "Left coordinate is OK");
     assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+});
+
+QUnit.test("Collector should have correct size in material theme", function(assert) {
+    const origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: ["month"],
+        width: 840,
+        currentView: "month",
+        firstDayOfWeek: 1
+    });
+
+    sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(2);
+
+    this.instance.option("dataSource", [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
+    ]);
+
+    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+
+    assert.roughEqual($dropDownButton.get(0).getBoundingClientRect().width, 63, 1, "Collector width is ok");
+    assert.roughEqual($dropDownButton.get(0).getBoundingClientRect().height, 20, 1, "Collector height is ok");
+
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.test("DropDown appointment button should have correct coordinates on weekView, not in allDay panel", function(assert) {
