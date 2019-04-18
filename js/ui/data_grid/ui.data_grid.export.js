@@ -207,7 +207,7 @@ exports.DataProvider = Class.inherit({
         return result;
     },
 
-    getCellData: function(rowIndex, cellIndex) {
+    getCellData: function(rowIndex, cellIndex, excelJSApproach) {
         const result = { cellSourceData: {}, value };
         var column,
             value,
@@ -260,7 +260,7 @@ exports.DataProvider = Class.inherit({
                                 result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(summaryItems);
                                 value = "";
                                 for(i = 0; i < summaryItems.length; i++) {
-                                    value += (i > 0 ? "\n" : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
+                                    value += (i > 0 ? (excelJSApproach ? "\n" : " \n ") : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
                                 }
                                 result.value = value;
                             } else {

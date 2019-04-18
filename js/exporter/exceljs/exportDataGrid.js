@@ -30,7 +30,7 @@ function exportDataGrid(options) {
                     let currentColumnIndex = result.from.column;
 
                     for(let i = 0; i < columns.length; i++) {
-                        let cellData = dataProvider.getCellData(0, i);
+                        let cellData = dataProvider.getCellData(0, i, true);
                         headerRow.getCell(currentColumnIndex).value = cellData.value;
 
                         customizeCell && _callCustomizeCell(customizeCell, headerRow.getCell(currentColumnIndex), cellData);
@@ -62,7 +62,7 @@ function exportDataGrid(options) {
 
                 let currentColumnIndex = result.from.column;
                 for(let cellIndex = 0; cellIndex < controllerRows[rowIndex].values.length; cellIndex++) {
-                    let cellData = dataProvider.getCellData(rowIndex + dataProvider.getHeaderRowCount(), cellIndex);
+                    let cellData = dataProvider.getCellData(rowIndex + dataProvider.getHeaderRowCount(), cellIndex, true);
                     dataRow.getCell(currentColumnIndex).value = cellData.value;
 
                     customizeCell && _callCustomizeCell(customizeCell, dataRow.getCell(currentColumnIndex), cellData);
@@ -84,9 +84,11 @@ function _callCustomizeCell(customizeCell, cell, cellData) {
         cell: cell,
         gridCell: {
             column: cellData.cellSourceData.column,
-            rowType: cellData.cellSourceData.rowType
-        },
-        value: cellData.value
+            rowType: cellData.cellSourceData.rowType,
+            data: cellData.cellSourceData.data,
+            value: cellData.value,
+            groupIndex: cellData.cellSourceData.groupIndex
+        }
     });
 }
 
