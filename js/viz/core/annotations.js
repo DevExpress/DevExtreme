@@ -1,12 +1,18 @@
 import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
-import { events } from "../components/consts";
 import { patchFontOptions } from "./utils";
 import { Plaque } from "./plaque";
+import pointerEvents from "../../events/pointer";
+import dragEvents from "../../events/drag";
 
-const MOVE_EVENT = events["mousemove"] + ".annotations";
 const ANNOTATION_DATA = "annotation-data";
+
+const EVENTS_NS = ".annotations";
+const MOVE_EVENT = pointerEvents.move + EVENTS_NS;
+
+const DRAG_START_EVENT_NAME = dragEvents.start + EVENTS_NS;
+const DRAG_EVENT_NAME = dragEvents.move + EVENTS_NS;
 
 function coreAnnotation(options, draw) {
     return {
@@ -22,9 +28,20 @@ function coreAnnotation(options, draw) {
         draw: function(widget, group) {
             this.anchor = widget._getAnnotationCoords(this);
             const annotationGroup = widget._renderer.g().append(group);
-            const plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
-            plaque.draw(this.anchor);
+            this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
+            this.plaque.draw(this.anchor);
             applyClipPath(annotationGroup, widget, this._pane);
+
+            if(options.draggable) {
+                annotationGroup
+                    .on(DRAG_START_EVENT_NAME, { immediate: true }, e => {
+                        this._dragOffsetX = this.plaque.x - e.pageX;
+                        this._dragOffsetY = this.plaque.y - e.pageY;
+                    })
+                    .on(DRAG_EVENT_NAME, e => {
+                        this.plaque.move(e.pageX + this._dragOffsetX, e.pageY + this._dragOffsetY);
+                    });
+            }
         },
         getTooltipFormatObject() {
             return extend({ valueText: this.options.description }, this.options);
