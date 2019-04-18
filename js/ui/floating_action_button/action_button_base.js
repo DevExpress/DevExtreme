@@ -9,6 +9,7 @@ import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
+const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
 let actionButtonBase = null;
 
@@ -71,6 +72,8 @@ const ActionButtonBase = ActionButtonItem.inherit({
             this._$closeIcon,
             this._options.closeIcon,
             FAB_CLOSE_ICON_CLASS);
+
+        this._$closeIcon.addClass(INVISIBLE_STATE_CLASS);
     },
 
     _renderClick() {
@@ -91,8 +94,8 @@ const ActionButtonBase = ActionButtonItem.inherit({
             }
         });
 
-        this._$icon.toggle();
-        this._$closeIcon.toggle();
+        this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
+        this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
     },
 
     _renderActions() {
@@ -107,11 +110,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             });
         }
 
-        if(actions.length === minActionButtonCount) {
-            this._renderIcon();
-            this._renderCloseIcon();
-            return;
-        }
+        if(actions.length === minActionButtonCount) return;
 
         for(let i = 0; i < actions.length; i++) {
             const action = actions[i];
@@ -135,7 +134,6 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 }
             };
 
-
             action._options.animation.show.delay = action._options.animation.show.duration * i;
             action._options.animation.hide.delay = action._options.animation.hide.duration * (lastActionIndex - i);
 
@@ -146,6 +144,8 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "actions":
+                this._renderIcon();
+                this._renderCloseIcon();
                 this._renderClick();
                 this._renderActions();
                 break;
@@ -164,6 +164,9 @@ const ActionButtonBase = ActionButtonItem.inherit({
 });
 
 exports.initAction = function(newAction) {
+    // TODO: workaround for Angular/React/Vue
+    delete newAction._options.onInitializing;
+
     let isActionExist = false;
     if(!actionButtonBase) {
         const $fabMainElement = $("<div>")
