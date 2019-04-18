@@ -1,6 +1,9 @@
 import { extend } from "../../core/utils/extend";
 import { isDefined } from "../../core/utils/type";
-import { round, min, max } from "Math";
+
+const round = Math.round;
+const max = Math.max;
+const min = Math.min;
 
 const buildFlatArray = (...points) => [].concat(...points);
 
