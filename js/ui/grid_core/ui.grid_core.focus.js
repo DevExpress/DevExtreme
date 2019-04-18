@@ -56,7 +56,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                 isLocalIndex = !isVirtualScrolling || visiblePagesCount > pageIndex,
                 setKeyByIndex = () => {
                     if(this._isValidFocusedRowIndex(index)) {
-                        let focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
+                        let rowIndex = Math.min(index - dataController.getRowIndexOffset(), dataController.items().length - 1),
+                            focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
+
                         if(focusedRowKey !== undefined && !this.isRowFocused(focusedRowKey)) {
                             this.option("focusedRowKey", focusedRowKey);
                         }
@@ -64,7 +66,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 };
 
             if(!isLocalIndex) {
-                dataController.pageIndex(pageIndex).done(() => setKeyByIndex());
+                dataController.pageIndex(pageIndex).done(setKeyByIndex);
             } else {
                 setKeyByIndex();
             }

@@ -4140,3 +4140,32 @@ QUnit.testInActiveWindow("DataGrid should restore tabindex for the first cell if
     // assert
     assert.equal($(this.getCellElement(0, 0)).attr("tabindex"), 0, "tabindex");
 });
+
+// T730760
+QUnit.testInActiveWindow("DataGrid should normalize the focused row index on paging", function(assert) {
+    // arrange
+    this.$element = () => $("#container");
+    this.options = {
+        focusedRowEnabled: true,
+        height: 100,
+        keyExpr: "id",
+        focusedRowIndex: 3,
+        dataSource: generateItems(7),
+        paging: {
+            pageSize: 5
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.pageIndex(1);
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "focusedRowIndex is normalized");
+    assert.equal(this.option("focusedRowKey"), 7, "focusedRowKey is correct");
+});
