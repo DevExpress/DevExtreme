@@ -28,6 +28,7 @@ class FileManagerContextMenu extends Widget {
     _initMarkup() {
         const $menu = $("<div>").appendTo(this.$element());
         this._contextMenu = this._createComponent($menu, ContextMenu, {
+            showEvent: "",
             onItemClick: ({ itemData: { commandName } }) => this._onContextMenuItemClick(commandName),
             onHidden: () => this._onContextMenuHidden()
         });
@@ -39,7 +40,10 @@ class FileManagerContextMenu extends Widget {
         const items = this.createContextMenuItems(fileItems);
 
         const position = {
-            of: element
+            of: element,
+            at: "top left",
+            my: "top left",
+            offset: ""
         };
 
         if(offset) {
