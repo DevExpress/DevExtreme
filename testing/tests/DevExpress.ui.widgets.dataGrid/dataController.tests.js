@@ -3345,6 +3345,18 @@ QUnit.test("change sorting in onContentReady", function(assert) {
     assert.equal(countCallDataSourceChanged, 3, "count call changed of the dataSource");
 });
 
+// T717716
+QUnit.test("rows should not be recreated on pageIndex event", function(assert) {
+    var rows = this.getVisibleRows(),
+        firstRow = rows[0];
+
+    // act
+    this.dataController.dataSource().changed.fire({ changeType: "pageIndex" });
+
+    // assert
+    assert.strictEqual(this.getVisibleRows(), rows, "rows are not changed");
+    assert.strictEqual(this.getVisibleRows()[0], firstRow, "first row is not changed");
+});
 
 var setupVirtualRenderingModule = function() {
     var array = [];
@@ -3388,19 +3400,6 @@ var setupVirtualRenderingModule = function() {
         that.changedArgs.push(e);
     });
 };
-
-// T717716
-QUnit.test("rows should not be recreated on pageIndex event", function(assert) {
-    var rows = this.getVisibleRows(),
-        firstRow = rows[0];
-
-    // act
-    this.dataController.dataSource().changed.fire({ changeType: "pageIndex" });
-
-    // assert
-    assert.strictEqual(this.getVisibleRows(), rows, "rows are not changed");
-    assert.strictEqual(this.getVisibleRows()[0], firstRow, "first row is not changed");
-});
 
 var teardownVirtualRenderingModule = function() {
     this.dispose();
@@ -3551,6 +3550,31 @@ QUnit.test("scroll to far", function(assert) {
         changeType: "append",
         items: this.dataController.items().slice(10, 15)
     }]);
+});
+
+// T730143
+QUnit.test("scroll to end if data if grouped and remoteOperations are enabled (sorting, filtering, paging)", function(assert) {
+    this.pageSize(200);
+    this.columnOption("value", "groupIndex", 0);
+    this.option("remoteOperations", {
+        sorting: true,
+        filtering: true,
+        paging: true
+    });
+    this.dataController._refreshDataSource();
+    this.clock.tick();
+
+    // act
+    this.dataController.setViewportPosition(100000);
+    this.clock.tick();
+
+    // assert
+    var itemCount = this.dataController.items().length;
+    assert.strictEqual(itemCount, 19);
+    assert.deepEqual(this.dataController.items()[itemCount - 2].key, ["value99"]);
+    assert.strictEqual(this.dataController.items()[itemCount - 1].key, 99);
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.itemsCount(), 100);
 });
 
 QUnit.test("scroll to previous render page", function(assert) {
