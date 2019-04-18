@@ -107,7 +107,7 @@ QUnit.module("markup", {
 
 QUnit.module("button group integration", {}, () => {
     QUnit.test("element should have buttonGroup inside", (assert) => {
-        const instance = new DropDownButton("#dropDownButton", { selectionMode: true });
+        const instance = new DropDownButton("#dropDownButton", { selectionMode: true, splitButton: true });
         const buttonGroup = getButtonGroup(instance);
         assert.strictEqual(buttonGroup.NAME, "dxButtonGroup", "buttonGroup rendered");
         assert.strictEqual(buttonGroup.option("selectionMode"), "none", "selection should be disabled");
@@ -134,7 +134,7 @@ QUnit.module("button group integration", {}, () => {
     });
 
     QUnit.test("toggle button should toggle the widget", (assert) => {
-        const instance = new DropDownButton("#dropDownButton", {});
+        const instance = new DropDownButton("#dropDownButton", { splitButton: true });
         const $toggleButton = getToggleButton(instance);
 
         eventsEngine.trigger($toggleButton, "dxclick");
@@ -145,7 +145,7 @@ QUnit.module("button group integration", {}, () => {
     });
 
     QUnit.test("action and toggle button should have special class", (assert) => {
-        const instance = new DropDownButton("#dropDownButton", {});
+        const instance = new DropDownButton("#dropDownButton", { splitButton: true });
 
         assert.ok(instance.$element().find(".dx-button").eq(0).hasClass(DROP_DOWN_BUTTON_ACTION_CLASS));
         assert.ok(instance.$element().find(".dx-button").eq(1).hasClass(DROP_DOWN_BUTTON_TOGGLE_CLASS));
@@ -199,6 +199,7 @@ QUnit.module("popup integration", {
     beforeEach: () => {
         this.instance = new DropDownButton("#dropDownButton", {
             deferRendering: false,
+            splitButton: true,
             items: [{ text: "Item 1" }, { text: "Item 2" }]
         });
         this.popup = getPopup(this.instance);
@@ -435,6 +436,15 @@ QUnit.module("common use cases", {
         eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
         assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "action button doesn't open the dropdown");
     });
+
+    QUnit.test("spindown secondary icon should be rendered when splitButton is false", (assert) => {
+        this.dropDownButton.option("splitButton", false);
+
+        const $icons = getActionButton(this.dropDownButton).find(".dx-icon");
+        assert.strictEqual($icons.length, 2, "2 icons are rendered");
+        assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
+        assert.ok($icons.eq(1).hasClass("dx-icon-spindown"), "second icon is correct");
+    });
 });
 
 QUnit.module("public methods", {
@@ -617,8 +627,8 @@ QUnit.module("items changing", {
         const loadCount = loadHandler.callCount;
         const byKeyCount = byKeyHandler.callCount;
 
-        this.dropDownButton.option("splitButton", false);
         this.dropDownButton.option("splitButton", true);
+        this.dropDownButton.option("splitButton", false);
 
         assert.strictEqual(byKeyHandler.callCount, byKeyCount, "byKey was not called");
         assert.strictEqual(loadHandler.callCount, loadCount, "load was not called");
@@ -731,6 +741,7 @@ QUnit.module("events", {}, () => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
+            splitButton: true,
             selectedItemKey: 2,
             onButtonClick: handler
         });
@@ -748,10 +759,25 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.selectedItem, 2, "itemData is correct");
     });
 
+    QUnit.test("onButtonClick should be called even if splitButton is false", (assert) => {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: [1, 2, 3],
+            splitButton: false,
+            onButtonClick: handler
+        });
+
+        const $actionButton = getActionButton(dropDownButton);
+        eventsEngine.trigger($actionButton, "dxclick");
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+    });
+
     QUnit.test("onButtonClick event change", (assert) => {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [1, 2, 3],
+            splitButton: true,
             selectedItemKey: 2
         });
 
@@ -816,6 +842,7 @@ QUnit.module("keyboard navigation", {
         this.$element = $("#dropDownButton");
         this.dropDownButton = new DropDownButton(this.$element, {
             focusStateEnabled: true,
+            splitButton: true,
             deferRendering: false,
             items: [
                 { name: "Item 1", id: 1 },
