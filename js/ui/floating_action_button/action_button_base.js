@@ -9,6 +9,7 @@ import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
+const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
 let actionButtonBase = null;
 
@@ -71,6 +72,8 @@ const ActionButtonBase = ActionButtonItem.inherit({
             this._$closeIcon,
             this._options.closeIcon,
             FAB_CLOSE_ICON_CLASS);
+
+        this._$closeIcon.addClass(INVISIBLE_STATE_CLASS);
     },
 
     _renderClick() {
@@ -91,8 +94,8 @@ const ActionButtonBase = ActionButtonItem.inherit({
             }
         });
 
-        this._$icon.toggle();
-        this._$closeIcon.toggle();
+        this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
+        this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
     },
 
     _renderActions() {
@@ -135,6 +138,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 }
             };
 
+            action._options.onInitializing = null;
 
             action._options.animation.show.delay = action._options.animation.show.duration * i;
             action._options.animation.hide.delay = action._options.animation.hide.duration * (lastActionIndex - i);
@@ -172,7 +176,8 @@ exports.initAction = function(newAction) {
         actionButtonBase = new ActionButtonBase($fabMainElement,
             extend({}, newAction._options, {
                 actions: [ newAction ],
-                visible: true
+                visible: true,
+                onInitializing: null
             })
         );
 
