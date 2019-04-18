@@ -67,7 +67,7 @@ class DiagramToolbar extends Widget {
             }
         };
     }
-    _createItemOptions({ widget, items, valueExpr, displayExpr }) {
+    _createItemOptions({ widget, items, valueExpr, displayExpr, showText }) {
         if(widget === "dxSelectBox") {
             return {
                 options: {
@@ -75,6 +75,10 @@ class DiagramToolbar extends Widget {
                     valueExpr,
                     displayExpr
                 }
+            };
+        } else if(!widget || widget === "dxButton") {
+            return {
+                showText: showText || "inMenu"
             };
         }
     }
