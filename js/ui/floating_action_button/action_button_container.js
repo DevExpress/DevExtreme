@@ -11,9 +11,9 @@ const FAB_MAIN_CLASS = "dx-fa-button-main";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
 const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
-let actionButtonBase = null;
+let actionButtonContainer = null;
 
-const ActionButtonBase = ActionButtonItem.inherit({
+const ActionButtonContainer = ActionButtonItem.inherit({
     _actionItems: [],
 
     _getDefaultOptions() {
@@ -28,7 +28,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                     y: -16
                 }
             },
-            maxActionButtonCount: 5,
+            maxSpeedDialCount: 5,
             hint: "",
             actions: [],
             visible: true,
@@ -149,7 +149,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 this._renderClick();
                 this._renderActions();
                 break;
-            case "maxActionButtonCount":
+            case "maxSpeedDialCount":
                 this._renderActions();
                 break;
             case "closeIcon":
@@ -168,11 +168,11 @@ exports.initAction = function(newAction) {
     delete newAction._options.onInitializing;
 
     let isActionExist = false;
-    if(!actionButtonBase) {
+    if(!actionButtonContainer) {
         const $fabMainElement = $("<div>")
             .appendTo(getSwatchContainer(newAction.$element()));
 
-        actionButtonBase = new ActionButtonBase($fabMainElement,
+        actionButtonContainer = new ActionButtonContainer($fabMainElement,
             extend({}, newAction._options, {
                 actions: [ newAction ],
                 visible: true
@@ -180,7 +180,7 @@ exports.initAction = function(newAction) {
         );
 
     } else {
-        const savedActions = actionButtonBase.option("actions");
+        const savedActions = actionButtonContainer.option("actions");
 
         savedActions.forEach(action => {
             if(action._options.id === newAction._options.id) {
@@ -190,31 +190,31 @@ exports.initAction = function(newAction) {
         });
 
         if(!isActionExist) {
-            if(savedActions.length >= actionButtonBase.option("maxActionButtonCount")) {
+            if(savedActions.length >= actionButtonContainer.option("maxSpeedDialCount")) {
                 newAction.dispose();
                 errors.log("W1014");
                 return;
             }
             savedActions.push(newAction);
-            actionButtonBase.option(extend(actionButtonBase._getDefaultOptions(), {
+            actionButtonContainer.option(extend(actionButtonContainer._getDefaultOptions(), {
                 actions: savedActions
             }));
         } else if(savedActions.length === 1) {
-            actionButtonBase.option(extend({}, newAction._options, {
+            actionButtonContainer.option(extend({}, newAction._options, {
                 actions: savedActions,
                 visible: true,
-                position: actionButtonBase._getDefaultOptions().position
+                position: actionButtonContainer._getDefaultOptions().position
             }));
         } else {
-            actionButtonBase.option({ actions: savedActions });
+            actionButtonContainer.option({ actions: savedActions });
         }
     }
 };
 
 exports.disposeAction = function(actionId) {
-    if(!actionButtonBase) return;
+    if(!actionButtonContainer) return;
 
-    let savedActions = actionButtonBase.option("actions");
+    let savedActions = actionButtonContainer.option("actions");
     const savedActionsCount = savedActions.length;
 
 
@@ -225,16 +225,16 @@ exports.disposeAction = function(actionId) {
     if(savedActionsCount === savedActions.length) return;
 
     if(!savedActions.length) {
-        actionButtonBase.dispose();
-        actionButtonBase.$element().remove();
-        actionButtonBase = null;
+        actionButtonContainer.dispose();
+        actionButtonContainer.$element().remove();
+        actionButtonContainer = null;
     } else if(savedActions.length === 1) {
-        actionButtonBase.option(extend({}, savedActions[0]._options, {
+        actionButtonContainer.option(extend({}, savedActions[0]._options, {
             actions: savedActions,
             visible: true,
-            position: actionButtonBase._getDefaultOptions().position
+            position: actionButtonContainer._getDefaultOptions().position
         }));
     } else {
-        actionButtonBase.option({ actions: savedActions });
+        actionButtonContainer.option({ actions: savedActions });
     }
 };

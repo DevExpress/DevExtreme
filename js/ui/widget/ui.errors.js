@@ -281,5 +281,5 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1014
     */
-    W1014: "The Floating Action Button exceeds the recommended action count. If you need to display more actions, increase the maxActionButtonCount option value in the global config."
+    W1014: "The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialCount option value in the global config."
 });
