@@ -7,7 +7,7 @@ import Popup from "./popup";
 import List from "./list";
 import { compileGetter } from "../core/utils/data";
 import domUtils from "../core/utils/dom";
-import iconUtils from "../core/utils/icon";
+import { getImageContainer } from "../core/utils/icon";
 import DataHelperMixin from "../data_helper";
 import { DataSource } from "../data/data_source/data_source";
 import ArrayStore from "../data/array_store";
@@ -21,6 +21,8 @@ const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
+const DX_BUTTON_CONTENT_CLASS = "dx-button-content";
+const DX_ICON_RIGHT_CLASS = "dx-icon-right";
 
 /**
  * @name dxDropDownButton
@@ -464,10 +466,16 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderAdditionalIcon() {
-        const $firstButtonContent = this._buttonGroup.$element().find(".dx-button-content").eq(0);
-        const $iconElement = iconUtils.getImageContainer("spindown");
-        $iconElement.addClass("dx-icon-right");
-        $firstButtonContent.append($iconElement);
+        if(this.option("splitButton")) {
+            return;
+        }
+
+        const $firstButtonContent = this._buttonGroup.$element().find(`.${DX_BUTTON_CONTENT_CLASS}`).eq(0);
+        const $iconElement = getImageContainer("spindown");
+
+        $iconElement
+            .addClass(DX_ICON_RIGHT_CLASS)
+            .appendTo($firstButtonContent);
     },
 
     _renderButtonGroup() {
@@ -483,7 +491,7 @@ let DropDownButton = Widget.inherit({
         this._buttonGroup.registerKeyHandler("upArrow", this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler("escape", this._escHandler.bind(this));
 
-        this.option("splitButton") || this._renderAdditionalIcon();
+        this._renderAdditionalIcon();
 
         this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
     },
@@ -605,13 +613,13 @@ let DropDownButton = Widget.inherit({
                 this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
                     icon: value
                 }));
-                this.option("splitButton") || this._renderAdditionalIcon();
+                this._renderAdditionalIcon();
                 break;
             case "text":
                 this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
                     text: value
                 }));
-                this.option("splitButton") || this._renderAdditionalIcon();
+                this._renderAdditionalIcon();
                 break;
             case "stylingMode":
             case "width":
