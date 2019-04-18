@@ -1,5 +1,6 @@
 import { extend } from "../../core/utils/extend";
 import { isDefined } from "../../core/utils/type";
+import { round, min, max } from "Math";
 
 const buildFlatArray = (...points) => [].concat(...points);
 
@@ -8,10 +9,10 @@ const getCloudPoints = function({ width, height }, x, y, anchorX, anchorY, { arr
     const halfWidth = width / 2;
     const halfHeight = height / 2;
 
-    const xr = Math.round(x + halfWidth);
-    const xl = Math.round(x - halfWidth);
-    const yt = Math.round(y - halfHeight);
-    const yb = Math.round(y + halfHeight);
+    const xr = round(x + halfWidth);
+    const xl = round(x - halfWidth);
+    const yt = round(y - halfHeight);
+    const yb = round(y + halfHeight);
     const leftTopCorner = [xl, yt];
     const rightTopCorner = [xr, yt];
     const rightBottomCorner = [xr, yb];
@@ -20,10 +21,10 @@ const getCloudPoints = function({ width, height }, x, y, anchorX, anchorY, { arr
     const arrowX = anchorX <= xl ? xl : xr <= anchorX ? xr : anchorX;
     const arrowY = anchorY <= yt ? yt : yb <= anchorY ? yb : anchorY;
 
-    const arrowBaseBottom = Math.min(arrowY + halfArrowWidth, yb);
-    const arrowBaseTop = Math.max(arrowY - halfArrowWidth, yt);
-    const arrowBaseLeft = Math.max(arrowX - halfArrowWidth, xl);
-    const arrowBaseRight = Math.min(arrowX + halfArrowWidth, xr);
+    const arrowBaseBottom = min(arrowY + halfArrowWidth, yb);
+    const arrowBaseTop = max(arrowY - halfArrowWidth, yt);
+    const arrowBaseLeft = max(arrowX - halfArrowWidth, xl);
+    const arrowBaseRight = min(arrowX + halfArrowWidth, xr);
     let points;
 
     // 1 | 2 | 3
