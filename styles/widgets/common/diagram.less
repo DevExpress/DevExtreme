@@ -18,11 +18,15 @@
     }
 
     .dx-diagram-toolbox {
-        flex: 240px 0;
+        flex: 240px 0 0;
         overflow-y: auto;
+        position: relative;
+    }
+    .dx-diagram-toolbox > * {
+        position: absolute;
     }
     .dx-diagram-drawer-wrapper {
-        flex: 1;
+        flex: 1 0px;
     }
     .dx-diagram-content {
         height: 100%;
