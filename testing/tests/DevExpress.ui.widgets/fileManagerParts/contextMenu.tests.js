@@ -106,7 +106,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
 
-    test('right click by focused folder node', assert => {
+    test('right click by focused folder node', function(assert) {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
         assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
 
@@ -126,7 +126,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
     });
 
-    test('right click by non focused folder node', assert => {
+    test('right click by non focused folder node', function(assert) {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
         assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
 
@@ -146,7 +146,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
     });
 
-    test('click by focused folder node action button', assert => {
+    test('click by focused folder node action button', function(assert) {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
         assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
 
@@ -166,7 +166,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
     });
 
-    test('click by non focused folder node action button', assert => {
+    test('click by non focused folder node action button', function(assert) {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
         assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
 
