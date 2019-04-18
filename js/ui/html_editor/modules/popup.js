@@ -10,6 +10,8 @@ const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const SUGGESTION_LIST_WRAPPER_CLASS = "dx-suggestion-list-wrapper";
 const BaseModule = getQuill().import("core/module");
 
+const MIN_HEIGHT = 100;
+
 class ListPopupModule extends BaseModule {
 
     _getDefaultOptions() {
@@ -80,12 +82,9 @@ class ListPopupModule extends BaseModule {
     }
 
     get maxHeight() {
-        const $element = this.options.editorInstance.$element();
-        const { top } = $element.offset();
-        const windowHeight = $(getWindow()).height();
-        const maxHeight = Math.max(top, windowHeight - top - $element.outerHeight());
-
-        return Math.min(windowHeight * 0.5, maxHeight);
+        const window = getWindow();
+        const windowHeight = window && $(window).height() || 0;
+        return Math.max(MIN_HEIGHT, windowHeight * 0.5);
     }
 
     selectionChangedHandler(e) {
