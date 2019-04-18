@@ -1908,7 +1908,7 @@ const Scheduler = Widget.inherit({
     },
 
     getCollectorOffset: function() {
-        if(this._workSpace.applyCollectorOffset() && !this.option("adaptivityEnabled")) {
+        if(this._workSpace.needApplyCollectorOffset() && !this.option("adaptivityEnabled")) {
             return this.option("_collectorOffset");
         } else {
             return 0;

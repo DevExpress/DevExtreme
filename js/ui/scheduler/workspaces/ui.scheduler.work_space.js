@@ -2494,7 +2494,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
-    applyCollectorOffset: function() {
+    needApplyCollectorOffset: function() {
         return false;
     },
 

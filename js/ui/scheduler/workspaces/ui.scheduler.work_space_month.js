@@ -264,7 +264,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
-    applyCollectorOffset: function() {
+    needApplyCollectorOffset: function() {
         return true;
     },
 
