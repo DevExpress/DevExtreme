@@ -110,11 +110,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             });
         }
 
-        if(actions.length === minActionButtonCount) {
-            this._renderIcon();
-            this._renderCloseIcon();
-            return;
-        }
+        if(actions.length === minActionButtonCount) return;
 
         for(let i = 0; i < actions.length; i++) {
             const action = actions[i];
@@ -148,6 +144,8 @@ const ActionButtonBase = ActionButtonItem.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "actions":
+                this._renderIcon();
+                this._renderCloseIcon();
                 this._renderClick();
                 this._renderActions();
                 break;
@@ -168,7 +166,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
 exports.initAction = function(newAction) {
     // TODO: workaround for Angular/React/Vue
     newAction._options.onInitializing = null;
-    
+
     let isActionExist = false;
     if(!actionButtonBase) {
         const $fabMainElement = $("<div>")
