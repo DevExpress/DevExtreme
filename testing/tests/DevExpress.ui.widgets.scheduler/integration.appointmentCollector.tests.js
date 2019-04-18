@@ -93,7 +93,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
 
     QUnit.test("Adaptive collector should have correct size in material theme", (assert) => {
         const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        themes.isMaterial = () => true;
 
         this.createInstance();
         let $collector = this.scheduler.appointments.compact.getButton(0);

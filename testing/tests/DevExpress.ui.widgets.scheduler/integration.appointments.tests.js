@@ -2469,7 +2469,7 @@ QUnit.test("DropDown appointment button should have correct coordinates", functi
 
 QUnit.test("Collector should have correct size in material theme", function(assert) {
     const origIsMaterial = themes.isMaterial;
-    themes.isMaterial = function() { return true; };
+    themes.isMaterial = () => true;
 
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
