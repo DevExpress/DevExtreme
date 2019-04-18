@@ -6084,6 +6084,8 @@ declare module DevExpress.ui {
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string, idExpr?: string, toExpr?: string };
+        /** @name dxDiagram.Options.export */
+        export?: { fileName?: string, proxyUrl?: string };
         /** @name dxDiagram.Options.layout */
         layout?: 'tree' | 'sugiyama';
         /** @name dxDiagram.Options.nodes */
