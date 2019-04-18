@@ -147,7 +147,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allowResize: true,
             allowAllDayResize: true,
             onAppointmentDblClick: null,
-            _appointmentGroupButtonOffset: 0
+            _collectorOffset: 0
         });
     },
 
@@ -911,7 +911,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                width: buttonWidth - this.option("_appointmentGroupButtonOffset"),
+                width: buttonWidth - this.option("_collectorOffset"),
                 height: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
                 isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
