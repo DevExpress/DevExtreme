@@ -6,13 +6,13 @@ import "ui/file_manager";
 import fx from "animation/fx";
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         const fileSystem = createTestFileSystem();
 
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
-        $("#fileManager").dxFileManager({
+        this.$element = $("#fileManager").dxFileManager({
             fileProvider: fileSystem,
             itemView: {
                 mode: "thumbnails"
@@ -30,7 +30,7 @@ const moduleConfig = {
         this.clock.tick(400);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.tick(5000);
 
         this.clock.restore();
@@ -70,7 +70,7 @@ const findThumbnailsItem = ($element, itemName) => {
 
 QUnit.module("Navigation operations", moduleConfig, () => {
 
-    test("keep selection and expanded state during refresh", assert => {
+    test("keep selection and expanded state during refresh", function(assert) {
         assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
         assert.equal(getBreadcrumbsPath(this.$element), "Files", "breadcrumbs refrers to the root");
 
@@ -102,7 +102,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(getBreadcrumbsPath(this.$element), "Files/Folder 1/Folder 1.1", "breadcrumbs refrers to the descendant folder");
     });
 
-    test("navigate by folders in item view", assert => {
+    test("navigate by folders in item view", function(assert) {
         let $item = findThumbnailsItem(this.$element, "Folder 1");
         $item.trigger("dxdblclick");
         this.clock.tick(400);
