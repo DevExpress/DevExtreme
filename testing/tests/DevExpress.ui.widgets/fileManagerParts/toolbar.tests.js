@@ -8,14 +8,14 @@ import fx from "animation/fx";
 const { test } = QUnit;
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.$element = $("#fileManager");
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.tick(5000);
 
         this.clock.restore();
@@ -67,7 +67,7 @@ const getFolderNode = ($element, index) => {
 
 QUnit.module("Toolbar", moduleConfig, () => {
 
-    test("toolbar updated after selection changing in thumbnails view mode", (assert) => {
+    test("toolbar updated after selection changing in thumbnails view mode", function(assert) {
         createFileManager(true);
         this.clock.tick(400);
 
@@ -97,7 +97,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($elements.eq(3).text().indexOf("Rename") !== -1, "rename displayed");
     });
 
-    test("toolbar updated after folder changing in thumbnails view mode", (assert) => {
+    test("toolbar updated after folder changing in thumbnails view mode", function(assert) {
         createFileManager(true);
         this.clock.tick(400);
 
@@ -120,7 +120,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(internals.GENERAL_TOOLBAR_CLASS), "general toolbar displayed");
     });
 
-    test("toolbar updated after selection changing in details view mode", (assert) => {
+    test("toolbar updated after selection changing in details view mode", function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
@@ -150,7 +150,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($elements.eq(3).text().indexOf("Rename") !== -1, "rename displayed");
     });
 
-    test("toolbar updated after folder changing in details view mode", (assert) => {
+    test("toolbar updated after folder changing in details view mode", function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
@@ -174,7 +174,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(internals.GENERAL_TOOLBAR_CLASS), "general toolbar displayed");
     });
 
-    test("Display only general toolbar if file toolbar doesn't have items", (assert) => {
+    test("Display only general toolbar if file toolbar doesn't have items", function(assert) {
         createFileManager(false);
 
         var fileManagerInstance = $("#fileManager").dxFileManager("instance");

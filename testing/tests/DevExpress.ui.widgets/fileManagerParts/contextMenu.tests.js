@@ -6,13 +6,13 @@ import "ui/file_manager";
 import fx from "animation/fx";
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         const fileSystem = createTestFileSystem();
 
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
-        $("#fileManager").dxFileManager({
+        this.$element = $("#fileManager").dxFileManager({
             fileProvider: fileSystem,
             itemView: {
                 showFolders: false
@@ -23,7 +23,7 @@ const moduleConfig = {
         this.clock.tick(400);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.tick(5000);
 
         this.clock.restore();
@@ -42,7 +42,7 @@ const getRowInDetailsView = ($element, index) => $element.find(`.${internals.GRI
 const getContextMenuItems = () => $(".dx-context-menu .dx-menu-item");
 
 QUnit.module("Raise context menu", moduleConfig, () => {
-    test('right click by row', assert => {
+    test('right click by row', function(assert) {
         const $row1 = getRowInDetailsView(this.$element, 1);
         assert.notOk($row1.hasClass("dx-selection"));
         assert.equal(getContextMenuItems().length, 0);
@@ -60,7 +60,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(getContextMenuItems().length > 0);
     });
 
-    test('right click by row and click by select check box', assert => {
+    test('right click by row and click by select check box', function(assert) {
         getSelectCheckBoxInDetailsView(this.$element, 1).trigger("dxclick");
 
         const $row1 = getRowInDetailsView(this.$element, 1);
@@ -74,7 +74,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(getContextMenuItems().length > 0);
     });
 
-    test('click by row\'s action button', assert => {
+    test('click by row\'s action button', function(assert) {
         const $row1 = getRowInDetailsView(this.$element, 1);
         $row1.trigger("dxhoverstart");
         getRowActionButtonInDetailsView(this.$element, 1).trigger("dxclick");
@@ -90,7 +90,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(getContextMenuItems().length > 0);
     });
 
-    test('click by select check box and row\'s action button', assert => {
+    test('click by select check box and row\'s action button', function(assert) {
         getSelectCheckBoxInDetailsView(this.$element, 1).trigger("dxclick");
 
         const $row1 = getRowInDetailsView(this.$element, 1);
