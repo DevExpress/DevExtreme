@@ -910,7 +910,7 @@ const Scheduler = Widget.inherit({
             _appointmentTooltipOpenButtonText: messageLocalization.format("dxScheduler-openAppointment"),
             _dropDownButtonIcon: "overflow",
             _appointmentCountPerCell: 2,
-            _appointmentGroupButtonOffset: 0,
+            _collectorOffset: 0,
             _appointmentOffset: 26
 
             /**
@@ -1096,7 +1096,7 @@ const Scheduler = Widget.inherit({
                     _appointmentTooltipOpenButtonText: null,
                     _dropDownButtonIcon: "chevrondown",
                     _appointmentCountPerCell: 1,
-                    _appointmentGroupButtonOffset: 20,
+                    _collectorOffset: 20,
                     _appointmentOffset: 30
                 }
             }
@@ -1346,7 +1346,7 @@ const Scheduler = Widget.inherit({
             case "_appointmentTooltipOpenButtonText":
             case "_dropDownButtonIcon":
             case "_appointmentCountPerCell":
-            case "_appointmentGroupButtonOffset":
+            case "_collectorOffset":
             case "_appointmentOffset":
                 this.repaint();
                 break;
@@ -1908,9 +1908,9 @@ const Scheduler = Widget.inherit({
         return config;
     },
 
-    getAppointmentGroupButtonOffset: function() {
-        if(this._workSpace.applyGroupButtonOffset()) {
-            return this.option("_appointmentGroupButtonOffset");
+    getCollectorOffset: function() {
+        if(this._workSpace.needApplyCollectorOffset() && !this.option("adaptivityEnabled")) {
+            return this.option("_collectorOffset");
         } else {
             return 0;
         }
@@ -1957,7 +1957,8 @@ const Scheduler = Widget.inherit({
 
         this._recalculateWorkspace();
         countConfig.startDate && this._header && this._header.option("currentDate", this._workSpace._getHeaderDate());
-        this._appointments.option("_appointmentGroupButtonOffset", this.getAppointmentGroupButtonOffset());
+
+        this._appointments.option("_collectorOffset", this.getCollectorOffset());
     },
 
     _getViewCountConfig: function() {
