@@ -163,12 +163,15 @@ QUnit.module("addClass method");
 
 QUnit.test("class should be set for only an element node", function(assert) {
     var element = renderer("<div>"),
-        textNodeElement = renderer(document.createTextNode('text'));
+        textNodeElement = renderer(document.createTextNode("text")),
+        svgElement = renderer(document.createElementNS("http://www.w3.org/2000/svg", "circle"));
 
     element.addClass("someClass");
     textNodeElement.addClass("someClass");
+    svgElement.addClass("someClass");
 
     assert.ok(element.hasClass("someClass"));
+    assert.ok(svgElement.hasClass("someClass"));
     assert.notOk(textNodeElement.hasClass("someClass"));
 });
 
@@ -179,6 +182,15 @@ QUnit.test("class should not be set when class name empty", function(assert) {
     element.addClass("someClass");
 
     element.removeClass(" someClass");
+
+    assert.notOk(element.hasClass("someClass"));
+});
+
+QUnit.test("class should be removed from SVG", function(assert) {
+    var element = renderer(document.createElementNS("http://www.w3.org/2000/svg", "circle"));
+    element.addClass("someClass");
+
+    element.removeClass("someClass");
 
     assert.notOk(element.hasClass("someClass"));
 });

@@ -141,7 +141,8 @@ initRender.prototype.hasClass = function(className) {
         if(this[0].classList) {
             if(this[0].classList.contains(classNames[i])) return true;
         } else { // IE9
-            if(this[0].className.split(" ").indexOf(classNames[i]) >= 0) return true;
+            const className = typeUtils.isString(this[0].className) ? this[0].className : domAdapter.getAttribute(this[0], 'class');
+            if(className.split(" ").indexOf(classNames[i]) >= 0) return true;
         }
     }
     return false;
