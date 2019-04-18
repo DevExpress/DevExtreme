@@ -2,7 +2,7 @@ import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
-import { initAction, disposeAction } from "./action_button_container";
+import { initAction, disposeAction } from "./speed_dial_main_item";
 
 const SpeedDialAction = Widget.inherit({
     _getDefaultOptions() {
