@@ -1,30 +1,55 @@
 import { extend } from "../../core/utils/extend";
 import { isDefined } from "../../core/utils/type";
 
+const buildFlatArray = (...points) => [].concat(...points);
+
 const getCloudPoints = function({ width, height }, x, y, anchorX, anchorY, { arrowWidth }) {
-    var halfArrowWidth = arrowWidth / 2,
-        halfWidth = width / 2,
-        halfHeight = height / 2,
-        cloudPoints,
-        arrowPoints = [6, 0],
-        x1 = x + halfArrowWidth,
-        x2 = anchorX,
-        x3 = x - halfArrowWidth,
-        y1 = y + halfHeight,
-        y3 = y + halfHeight,
-        y2 = anchorY;
+    const halfArrowWidth = arrowWidth / 2;
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
 
-    cloudPoints = [
-        x - halfWidth, y - halfHeight, // lt
-        x + halfWidth, y - halfHeight, // rt
-        x + halfWidth, y + halfHeight, // rb
-        x - halfWidth, y + halfHeight // lb
-    ];
+    const xr = Math.round(x + halfWidth);
+    const xl = Math.round(x - halfWidth);
+    const yt = Math.round(y - halfHeight);
+    const yb = Math.round(y + halfHeight);
+    const leftTopCorner = [xl, yt];
+    const rightTopCorner = [xr, yt];
+    const rightBottomCorner = [xr, yb];
+    const leftBottomCorner = [xl, yb];
 
-    arrowPoints.splice(2, 0, x1, y1, x2, y2, x3, y3);
-    cloudPoints.splice.apply(cloudPoints, arrowPoints);
+    const arrowX = anchorX <= xl ? xl : xr <= anchorX ? xr : anchorX;
+    const arrowY = anchorY <= yt ? yt : yb <= anchorY ? yb : anchorY;
 
-    return cloudPoints;
+    const arrowBaseBottom = Math.min(arrowY + halfArrowWidth, yb);
+    const arrowBaseTop = Math.max(arrowY - halfArrowWidth, yt);
+    const arrowBaseLeft = Math.max(arrowX - halfArrowWidth, xl);
+    const arrowBaseRight = Math.min(arrowX + halfArrowWidth, xr);
+    let points;
+
+    // 1 | 2 | 3
+    // 8 | 0 | 4
+    // 7 | 6 | 5
+    if(xl <= anchorX && anchorX <= xr && yt <= anchorY && anchorY <= yb) { // 0
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, leftBottomCorner);
+    } else if(anchorX < xl && anchorY < yt) { // 1
+        points = buildFlatArray([xl, arrowBaseBottom, anchorX, anchorY, arrowBaseRight, yt], rightTopCorner, rightBottomCorner, leftBottomCorner);
+    } else if(anchorX >= xl && anchorX <= xr && anchorY < yt) { // 2
+        points = buildFlatArray(leftTopCorner, [arrowBaseLeft, yt, anchorX, anchorY, arrowBaseRight, yt], rightTopCorner, rightBottomCorner, leftBottomCorner);
+    } else if(anchorX > xr && anchorY < yt) { // 3
+        points = buildFlatArray(leftTopCorner, [arrowBaseLeft, yt, anchorX, anchorY, xr, arrowBaseBottom], rightBottomCorner, leftBottomCorner);
+    } else if(anchorX > xr && anchorY >= yt && anchorY <= yb) { // 4
+        points = buildFlatArray(leftTopCorner, rightTopCorner, [xr, arrowBaseTop, anchorX, anchorY, xr, arrowBaseBottom], rightBottomCorner, leftBottomCorner);
+    } else if(anchorX > xr && anchorY > yb) { // 5
+        points = buildFlatArray(leftTopCorner, rightTopCorner, [xr, arrowBaseTop, anchorX, anchorY, arrowBaseLeft, yb], leftBottomCorner);
+    } else if(anchorX >= xl && anchorX <= xr && anchorY > yb) { // 6
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, [arrowBaseRight, yb, anchorX, anchorY, arrowBaseLeft, yb], leftBottomCorner);
+    } else if(anchorX < xl && anchorY > yb) { // 7
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, [arrowBaseRight, yb, anchorX, anchorY, xl, arrowBaseTop]);
+    } else if(anchorX < xl && anchorY >= yt && anchorY <= yb) { // 8
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, leftBottomCorner, [xl, arrowBaseBottom, anchorX, anchorY, xl, arrowBaseTop]);
+    }
+
+    return points;
 };
 
 export class Plaque {
@@ -59,15 +84,15 @@ export class Plaque {
         }
 
         const group = renderer.g().attr({ class: `dxc-${ options.type }-annotation` }).append(this.root);
-        const cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(group);
+        this._cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(group);
 
         const paddingLeftRight = options.paddingLeftRight;
         const paddingTopBottom = options.paddingTopBottom;
 
-        const contentGroup = renderer.g().append(group);
-        this.renderContent(this.widget, contentGroup);
-        const bBox = contentGroup.getBBox();
-        const size = {
+        this._contentGroup = renderer.g().append(group);
+        this.renderContent(this.widget, this._contentGroup);
+        const bBox = this._contentBBox = this._contentGroup.getBBox();
+        const size = this._size = {
             width: bBox.width + 2 * paddingLeftRight,
             height: bBox.height + 2 * paddingTopBottom
         };
@@ -83,9 +108,16 @@ export class Plaque {
         } else if(!isDefined(anchorY)) {
             anchorY = y + size.height / 2;
         }
-        // TODO check if anchor is inside plaque
 
-        cloud.attr({ points: getCloudPoints(size, x, y, anchorX, anchorY, options) });
-        contentGroup.move(x - bBox.x - bBox.width / 2, y - bBox.y - bBox.height / 2);
+        this.anchorX = anchorX;
+        this.anchorY = anchorY;
+        this.move(x, y);
+    }
+
+    move(x, y) {
+        this.x = x;
+        this.y = y;
+        this._cloud.attr({ points: getCloudPoints(this._size, x, y, this.anchorX, this.anchorY, this.options) });
+        this._contentGroup.move(x - this._contentBBox.x - this._contentBBox.width / 2, y - this._contentBBox.y - this._contentBBox.height / 2);
     }
 }
