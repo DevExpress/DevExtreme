@@ -1191,7 +1191,7 @@ QUnit.module("Tooltip", function(hooks) {
 
         const tooltip = this.tooltip;
 
-        assert.equal(this.renderer.root.on.lastCall.args[0], "mousemove.annotations", "renderer root should be subscribe on mousemove");
+        assert.equal(this.renderer.root.on.lastCall.args[0], "dxpointermove.annotations", "renderer root should be subscribe on dxpointermove");
         this.renderer.root.on.lastCall.args[1]({ target: { "annotation-data": point } });
 
         assert.equal(chart.hideTooltip.callCount, 1);
@@ -1269,6 +1269,6 @@ QUnit.module("Tooltip", function(hooks) {
         chart.dispose();
 
         assert.equal(this.tooltip.dispose.callCount, 1);
-        assert.equal(this.renderer.root.off.getCall(3).args[0], "mousemove.annotations");
+        assert.equal(this.renderer.root.off.getCall(3).args[0], "dxpointermove.annotations");
     });
 });
