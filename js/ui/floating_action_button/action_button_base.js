@@ -166,7 +166,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
 });
 
 exports.initAction = function(newAction) {
-    //TODO: workaround for Angular/React/Vue
+    // TODO: workaround for Angular/React/Vue
     newAction._options.onInitializing = null;
     
     let isActionExist = false;
