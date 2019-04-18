@@ -17,7 +17,7 @@ const FOCUS_STATE_CLASS = "dx-state-focused",
 var isMouseDown = false,
     isHiddenFocusing = false;
 
-function processKeyDown(viewName, component, event, action, $mainElement) {
+function processKeyDown(viewName, instance, event, action, $mainElement) {
     var keyName = eventUtils.normalizeKeyName(event);
 
     if(keyName === "enter" || keyName === "space") {
@@ -25,14 +25,22 @@ function processKeyDown(viewName, component, event, action, $mainElement) {
     } else if(keyName === "tab") {
         $mainElement.addClass(FOCUS_STATE_CLASS);
     } else {
-        module.exports.selectView(viewName, component, event);
+        module.exports.selectView(viewName, instance, event);
     }
 }
 
-function findFocusedViewElement(viewSelectors) {
+function findFocusedViewElement(instance, viewSelectors) {
     for(let index in viewSelectors) {
-        let selector = viewSelectors[index],
-            $focusViewElement = $(selector).first();
+        let componentName = instance.component && instance.component.NAME,
+            selector = viewSelectors[index],
+            $focusViewElement;
+
+        if(componentName === "dxTreeList") {
+            selector = selector.replace(/dx-datagrid/g, "dx-treelist");
+        }
+
+        $focusViewElement = $(selector).first();
+
         if($focusViewElement.length) {
             return $focusViewElement;
         }
@@ -46,14 +54,14 @@ module.exports = {
         isHiddenFocusing = false;
     },
 
-    registerKeyboardAction: function(viewName, component, $element, selector, action) {
-        if(component.option("useLegacyKeyboardNavigation")) {
+    registerKeyboardAction: function(viewName, instance, $element, selector, action) {
+        if(instance.option("useLegacyKeyboardNavigation")) {
             return;
         }
 
-        var $mainElement = $(component.element());
+        var $mainElement = $(instance.element());
 
-        eventsEngine.on($element, "keydown", selector, e => processKeyDown(viewName, component, e, action, $mainElement));
+        eventsEngine.on($element, "keydown", selector, e => processKeyDown(viewName, instance, e, action, $mainElement));
         eventsEngine.on($element, "mousedown", selector, () => {
             isMouseDown = true;
             $mainElement.removeClass(FOCUS_STATE_CLASS);
@@ -66,7 +74,7 @@ module.exports = {
         });
     },
 
-    selectView: function(viewName, component, event) {
+    selectView: function(viewName, instance, event) {
         var keyName = eventUtils.normalizeKeyName(event);
 
         if(event.ctrlKey && (keyName === "upArrow" || keyName === "downArrow")) {
@@ -77,9 +85,9 @@ module.exports = {
                 viewItemIndex = keyName === "upArrow" ? --viewItemIndex : ++viewItemIndex;
                 let viewName = viewNames[viewItemIndex],
                     viewSelectors = viewItemSelectorMap[viewName],
-                    $focusViewElement = findFocusedViewElement(viewSelectors);
+                    $focusViewElement = findFocusedViewElement(instance, viewSelectors);
                 if($focusViewElement && $focusViewElement.length) {
-                    $focusViewElement.attr("tabindex", component.option("tabindex") || 0);
+                    $focusViewElement.attr("tabindex", instance.option("tabindex") || 0);
                     eventsEngine.trigger($focusViewElement, "focus");
                     $focusViewElement.removeClass(FOCUS_DISABLED_CLASS);
                     break;
@@ -88,9 +96,9 @@ module.exports = {
         }
     },
 
-    setTabIndex: function(component, $element) {
-        if(!component.option("useLegacyKeyboardnavigation")) {
-            $element.attr("tabindex", component.option("tabindex") || 0);
+    setTabIndex: function(instance, $element) {
+        if(!instance.option("useLegacyKeyboardnavigation")) {
+            $element.attr("tabindex", instance.option("tabindex") || 0);
         }
     }
 };
