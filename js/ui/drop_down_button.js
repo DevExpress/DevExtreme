@@ -24,7 +24,7 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
 /**
  * @name dxDropDownButton
- * @inherits Widget
+ * @inherits Widget, DataHelperMixin
  * @module ui/drop_down_button
  * @export default
  */
@@ -38,7 +38,8 @@ let DropDownButton = Widget.inherit({
              * @type template|function
              * @default "item"
              * @type_function_param1 itemData:object
-             * @type_function_param2 itemElement:dxElement
+             * @type_function_param2 itemIndex:number
+             * @type_function_param3 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
             itemTemplate: "item",
@@ -170,6 +171,20 @@ let DropDownButton = Widget.inherit({
              * @default null
              */
             dataSource: null,
+
+            /**
+             * @name dxDropDownButtonOptions.focusStateEnabled
+             * @type boolean
+             * @default true
+             */
+            focusStateEnabled: true,
+
+            /**
+             * @name dxDropDownButtonOptions.hoverStateEnabled
+             * @type boolean
+             * @default true
+             */
+            hoverStateEnabled: true,
 
             /**
              * @name dxDropDownButtonOptions.dropDownOptions
@@ -343,6 +358,7 @@ let DropDownButton = Widget.inherit({
         return extend({
             items: this._getButtonGroupItems(),
             focusStateEnabled: this.option("focusStateEnabled"),
+            hoverStateEnabled: this.option("hoverStateEnabled"),
             onItemClick: this._buttonGroupItemClick.bind(this),
             width: this.option("width"),
             height: this.option("height"),
@@ -405,6 +421,7 @@ let DropDownButton = Widget.inherit({
         return {
             selectionMode: "single",
             focusStateEnabled: this.option("focusStateEnabled"),
+            hoverStateEnabled: this.option("hoverStateEnabled"),
             selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
             grouped: this.option("grouped"),
             keyExpr: this.option("keyExpr"),
@@ -567,6 +584,7 @@ let DropDownButton = Widget.inherit({
                 this._innerOptionChanged(this._popup, args);
                 break;
             case "focusStateEnabled":
+            case "hoverStateEnabled":
                 this._setListOption(name, value);
                 this._buttonGroup.option(name, value);
                 break;

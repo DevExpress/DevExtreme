@@ -154,7 +154,7 @@ exports.chart["steparea"] = _extend({}, areaSeries, {
     _prepareSegment: function(points, rotated) {
         var stepLineSeries = lineSeries.chart["stepline"];
         points = areaSeries._processSinglePointsAreaSegment(points, rotated);
-        return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints(points));
+        return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints.call(this, points));
     },
 
     getSeriesPairCoord: lineSeries.chart["stepline"].getSeriesPairCoord

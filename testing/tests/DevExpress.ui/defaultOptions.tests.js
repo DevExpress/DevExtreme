@@ -320,6 +320,8 @@ testComponentDefaults(DropDownButton, {}, {
     useSelectMode: false,
     splitButton: false,
     selectedItemKey: null,
+    focusStateEnabled: true,
+    hoverStateEnabled: true,
     selectedItem: null,
     icon: undefined,
     grouped: false,

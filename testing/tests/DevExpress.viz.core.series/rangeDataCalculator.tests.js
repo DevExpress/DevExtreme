@@ -1,6 +1,7 @@
 import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 
 function getOriginalData(data) {
     return $.map(data, function(item) {
@@ -2696,6 +2697,42 @@ QUnit.test("Add interval if checkInterval in marginOptions", function(assert) {
 
     assert.equal(rangeData.min, 20, "min Visible Y");
     assert.equal(rangeData.max, 50, "max Visible Y");
+});
+
+QUnit.test("No errors when there is no axis viewport", function(assert) {
+    const data = [
+        { arg: new Date(1), val: 10 },
+        { arg: new Date(2), val: 20 },
+        { arg: new Date(3), val: 30 },
+        { arg: new Date(4), val: 40 },
+        { arg: new Date(5), val: 50 },
+        { arg: new Date(6), val: 60 }];
+
+    this.argumentAxis.getTranslator = function() {
+        return {
+            getBusinessRange() {
+                return {
+                    interval: 1,
+                    dataType: "datetime"
+                };
+            }
+        };
+    };
+    this.argumentAxis.getMarginOptions = () => { return { checkInterval: true }; };
+    this.argumentAxis.visualRange = () => { };
+
+    this.defaultOptions.showZero = false;
+    const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+    series.createPoints();
+
+    this.zoom(new Date(3), new Date(4));
+
+    const rangeData = series.getViewport();
+
+    assert.equal(rangeData.min, 10, "min Visible Y");
+    assert.equal(rangeData.max, 60, "max Visible Y");
 });
 
 QUnit.module("Get points in viewport", {
