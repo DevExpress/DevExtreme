@@ -138,8 +138,6 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 }
             };
 
-            action._options.onInitializing = null;
-
             action._options.animation.show.delay = action._options.animation.show.duration * i;
             action._options.animation.hide.delay = action._options.animation.hide.duration * (lastActionIndex - i);
 
@@ -168,6 +166,9 @@ const ActionButtonBase = ActionButtonItem.inherit({
 });
 
 exports.initAction = function(newAction) {
+    //TODO: workaround for Angular/React/Vue
+    newAction._options.onInitializing = null;
+    
     let isActionExist = false;
     if(!actionButtonBase) {
         const $fabMainElement = $("<div>")
@@ -176,8 +177,7 @@ exports.initAction = function(newAction) {
         actionButtonBase = new ActionButtonBase($fabMainElement,
             extend({}, newAction._options, {
                 actions: [ newAction ],
-                visible: true,
-                onInitializing: null
+                visible: true
             })
         );
 
