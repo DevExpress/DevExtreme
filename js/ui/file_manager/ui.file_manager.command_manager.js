@@ -100,7 +100,7 @@ export class FileManagerCommandManager {
         if(!command || !command.enabled) {
             return false;
         }
-        return command.noFileItemRequired || items.length > 0 && (!command.isSingleFileItemCommand || items.length === 1);
+        return command.noFileItemRequired || items && items.length > 0 && (!command.isSingleFileItemCommand || items.length === 1);
     }
 
 }

@@ -104,13 +104,15 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenuPreparing(e) {
-        if(e.row.rowType !== 'data') {
-            return;
+        let fileItems = null;
+
+        if(e.row && e.row.rowType === "data") {
+            const item = e.row.data;
+            this._ensureItemSelected(item);
+            fileItems = this.getSelectedItems();
         }
 
-        const item = e.row.data;
-        this._ensureItemSelected(item);
-        e.items = this._contextMenu.createContextMenuItems(this.getSelectedItems());
+        e.items = this._contextMenu.createContextMenuItems(fileItems);
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
