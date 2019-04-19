@@ -114,11 +114,11 @@ const config = {
         },
 
         /**
-        * @name globalConfig.floatingActionButtonConfig.maxSpeedDialCount
+        * @name globalConfig.floatingActionButtonConfig.maxSpeedDialActionCount
         * @type number
         * @default 5
         */
-        maxSpeedDialCount: 5
+        maxSpeedDialActionCount: 5
     },
 
     optionsParser: (optionsString) => {

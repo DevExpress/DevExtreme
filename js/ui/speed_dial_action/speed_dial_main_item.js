@@ -28,7 +28,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                     y: -16
                 }
             },
-            maxSpeedDialCount: 5,
+            maxSpeedDialActionCount: 5,
             hint: "",
             actions: [],
             visible: true,
@@ -149,7 +149,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._renderClick();
                 this._renderActions();
                 break;
-            case "maxSpeedDialCount":
+            case "maxSpeedDialActionCount":
                 this._renderActions();
                 break;
             case "closeIcon":
@@ -190,7 +190,7 @@ exports.initAction = function(newAction) {
         });
 
         if(!isActionExist) {
-            if(savedActions.length >= speedDialMainItem.option("maxSpeedDialCount")) {
+            if(savedActions.length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
                 newAction.dispose();
                 errors.log("W1014");
                 return;

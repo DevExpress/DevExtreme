@@ -51,7 +51,7 @@ QUnit.module("create one action", () => {
 });
 
 
-QUnit.module("maxSpeedDialCount option", () => {
+QUnit.module("maxSpeedDialActionCount option", () => {
     test("check action buttons count", (assert) => {
         const $container = $("#fabs");
         const fabInstances = [];
