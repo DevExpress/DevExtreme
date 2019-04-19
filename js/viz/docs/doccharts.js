@@ -1922,6 +1922,7 @@ var dxChart = {
     /**
     * @name dxChartOptions.annotations
     * @type Array<dxChartAnnotationConfig,object>
+    * @inherits dxChartOptions.commonAnnotationSettings
     */
     annotations: [{}],
     /**
