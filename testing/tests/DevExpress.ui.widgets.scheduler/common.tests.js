@@ -3213,8 +3213,8 @@ QUnit.testStart(function() {
 
         assert.ok(setPopupMaxHeight.called, "method has been called");
     });
-    // TODO: This test doesn't a success because the top padding is added to the scrollable content
-    QUnit.skip("Popup content should have correct height on a small screen", function(assert) {
+
+    QUnit.test("Popup content should have correct height on a small screen", function(assert) {
         let realClientHeight = document.documentElement.clientHeight;
 
         try {
