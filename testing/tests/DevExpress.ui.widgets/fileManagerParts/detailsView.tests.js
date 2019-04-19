@@ -1,8 +1,7 @@
-/* global internals */
-
 import $ from "jquery";
 import "ui/file_manager";
 import fx from "animation/fx";
+import { Consts } from "../../../helpers/fileManagerHelpers.js";
 
 const { test } = QUnit;
 
@@ -56,7 +55,7 @@ const moduleConfig = {
 };
 
 const getFileSizeCellValueInDetailsView = ($element, rowIndex) => {
-    return $element.find(`tr.${internals.GRID_DATA_ROW_CLASS}[aria-rowindex=${rowIndex}] td`)
+    return $element.find(`tr.${Consts.GRID_DATA_ROW_CLASS}[aria-rowindex=${rowIndex}] td`)
         .eq(4)
         .text();
 };

@@ -6,6 +6,7 @@ import CustomStore from "../../data/custom_store";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
 import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
+import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
@@ -49,6 +50,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 },
                 {
                     dataField: "lastWriteTime",
+                    caption: "Date Modified",
                     minWidth: 200,
                     width: "25%"
                 },
@@ -147,19 +149,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _calculateLengthColumnCellValue(rowData) {
-        if(rowData.isFolder) {
-            return "";
-        }
-
-        const sizesTitles = [ "B", "KB", "MB", "GB", "TB" ];
-        let displaySize = rowData.length;
-        let index = 0;
-        while(displaySize >= 1024 && index <= sizesTitles.length - 1) {
-            displaySize /= 1024;
-            index++;
-        }
-        displaySize = Math.round(displaySize * 10) / 10;
-        return `${displaySize} ${sizesTitles[index]}`;
+        return rowData.isFolder ? "" : getDisplayFileSize(rowData.length);
     }
 
     _ensureItemSelected(item) {
