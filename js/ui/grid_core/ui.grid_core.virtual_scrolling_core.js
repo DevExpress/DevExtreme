@@ -558,9 +558,9 @@ exports.VirtualScrollController = Class.inherit((function() {
                                 result.resolve();
                             }
                         }).fail(result.reject);
+                        dataSource.updateLoading();
                     }
                 }
-                dataSource.updateLoading();
             } else {
                 result = dataSource.load();
             }
