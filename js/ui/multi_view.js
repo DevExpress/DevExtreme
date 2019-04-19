@@ -287,11 +287,13 @@ var MultiView = CollectionWidget.inherit({
 
     _updateItemsPosition: function(selectedIndex, newIndex) {
         var $itemElements = this._itemElements(),
-            positionSign = -this._animationDirection(newIndex, selectedIndex),
+            positionSign = isDefined(newIndex) ? -this._animationDirection(newIndex, selectedIndex) : undefined,
             $selectedItem = $itemElements.eq(selectedIndex);
 
         _translator.move($selectedItem, 0);
-        _translator.move($itemElements.eq(newIndex), positionSign * 100 + "%");
+        if(isDefined(newIndex)) {
+            _translator.move($itemElements.eq(newIndex), positionSign * 100 + "%");
+        }
     },
 
     _updateItemsVisibility: function(selectedIndex, newIndex) {
