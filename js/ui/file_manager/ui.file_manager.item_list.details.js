@@ -1,21 +1,23 @@
 import $ from "../../core/renderer";
 import { getImageContainer } from "../../core/utils/icon";
 
-import Button from "../button";
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
+import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
-const FILE_MANAGER_FILE_ACTIONS_BUTTON = "dx-filemanager-file-actions-button";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _initMarkup() {
         this._createFilesView();
+
+        this._contextMenu.option("onContextMenuHidden", () => this._onContextMenuHidden());
+
         super._initMarkup();
     }
 
@@ -81,14 +83,20 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onShowFileItemActionButtonClick(e) {
-        this._ensureContextMenu();
-
-        const $row = e.component.$element().closest(this._getItemSelector());
+    _onFileItemActionButtonClick({ component, element, event }) {
+        event.stopPropagation();
+        const $row = component.$element().closest(this._getItemSelector());
         const item = $row.data("item");
         this._ensureItemSelected(item);
-        this._contextMenu.option("dataSource", this._createContextMenuItems(item));
-        this._displayContextMenu(e.element, e.event.offsetX, e.event.offsetY);
+        this._showContextMenu(this.getSelectedItems(), element);
+        this._activeFileActionsButton = component;
+        this._activeFileActionsButton.setActive(true);
+    }
+
+    _onContextMenuHidden() {
+        if(this._activeFileActionsButton) {
+            this._activeFileActionsButton.setActive(false);
+        }
     }
 
     _getItemSelector() {
@@ -108,13 +116,15 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenuPreparing(e) {
-        if(e.row.rowType !== 'data') {
-            return;
+        let fileItems = null;
+
+        if(e.row && e.row.rowType === "data") {
+            const item = e.row.data;
+            this._ensureItemSelected(item);
+            fileItems = this.getSelectedItems();
         }
 
-        const item = e.row.data;
-        this._ensureItemSelected(item);
-        e.items = this._createContextMenuItems(item);
+        e.items = this._contextMenu.createContextMenuItems(fileItems);
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
@@ -125,16 +135,12 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _createNameColumnCell(container, cellInfo) {
-        const button = this._createComponent($("<div>"), Button, {
-            text: "&vellip;",
-            onClick: this._onShowFileItemActionButtonClick.bind(this),
-            template(e) {
-                return $("<i>").html("&vellip;");
-            }
-        });
-        button.$element().addClass(`${FILE_MANAGER_FILE_ACTIONS_BUTTON} dx-command-select`);
+        const $button = $("<div>");
+        $(container).append(cellInfo.data.name, $button);
 
-        $(container).append(cellInfo.data.name, button.$element());
+        this._createComponent($button, FileManagerFileActionsButton, {
+            onClick: e => this._onFileItemActionButtonClick(e)
+        });
     }
 
     _ensureItemSelected(item) {

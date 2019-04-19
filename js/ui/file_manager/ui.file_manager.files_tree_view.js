@@ -1,14 +1,18 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import { Deferred, when } from "../../core/utils/deferred";
+import { extend } from "../../core/utils/extend";
+import { getImageContainer } from "../../core/utils/icon";
+import { noop } from "../../core/utils/common";
 
 import Widget from "../widget/ui.widget";
-import { extend } from "../../core/utils/extend";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 import { FileManagerItem } from "./file_provider/file_provider";
 import whenSome from "./ui.file_manager.common";
 import { getParentPath, getName } from "./ui.file_manager.utils";
+
+import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
 
 const FILE_MANAGER_DIRS_TREE_CLASS = "dx-filemanager-dirs-tree";
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = "dx-filemanager-focused-item";
@@ -19,6 +23,8 @@ class FileManagerFilesTreeView extends Widget {
     _initMarkup() {
         this._initActions();
         this._setSelectedItem();
+
+        this._createFileActionsButton = noop;
 
         this._model = new FilesTreeViewModel({
             rootItemText: this.option("rootFolderDisplayName"),
@@ -31,15 +37,24 @@ class FileManagerFilesTreeView extends Widget {
             .addClass(FILE_MANAGER_DIRS_TREE_CLASS)
             .appendTo(this.$element());
 
-        this._filesTreeView = this._createComponent($treeView, TreeViewSearch, {
+        const treeViewOptions = {
             dataStructure: "plain",
             rootValue: "",
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
+            itemTemplate: this._createFilesTreeViewItemTemplate.bind(this),
             onItemClick: this._onFilesTreeViewItemClick.bind(this),
             onItemExpanded: ({ itemData }) => this._model.changeItemExpandState(itemData, true),
             onItemCollapsed: ({ itemData }) => this._model.changeItemExpandState(itemData, false),
             onItemRendered: e => this._onFilesTreeViewItemRendered(e)
-        });
+        };
+
+        if(this._contextMenu) {
+            this._contextMenu.option("onContextMenuHidden", () => this._onContextMenuHidden());
+            treeViewOptions.onItemContextMenu = e => this._onFilesTreeViewItemContextMenu(e);
+            this._createFileActionsButton = (element, options) => this._createComponent(element, FileManagerFileActionsButton, options);
+        }
+
+        this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
 
         eventsEngine.on($treeView, "click", this._raiseClick.bind(this));
     }
@@ -61,6 +76,43 @@ class FileManagerFilesTreeView extends Widget {
         const focused = this._selectedItem && this._selectedItem.dataItem.equals(itemData.dataItem);
         if(focused) {
             this._updateFocusedElement($(itemElement));
+        }
+    }
+
+    _createFilesTreeViewItemTemplate(itemData, itemIndex, itemElement) {
+        const $itemElement = $(itemElement);
+        const $itemWrapper = $itemElement.closest(this._filesTreeViewItemSelector);
+        $itemWrapper.data("item", itemData);
+
+        const $button = $("<div>");
+        $itemElement.append(
+            getImageContainer(itemData.icon),
+            $("<span>").text(itemData.text),
+            $button);
+
+        this._createFileActionsButton($button, {
+            onClick: e => this._onFileItemActionButtonClick(e)
+        });
+    }
+
+    _onFilesTreeViewItemContextMenu({ itemElement, event }) {
+        event.preventDefault();
+        const itemData = $(itemElement).data("item");
+        this._contextMenu.showAt([ itemData.dataItem ], itemElement, event);
+    }
+
+    _onFileItemActionButtonClick({ component, element, event }) {
+        event.stopPropagation();
+        const $item = component.$element().closest(this._filesTreeViewItemSelector);
+        const item = $item.data("item");
+        this._contextMenu.showAt([ item.dataItem ], element);
+        this._activeFileActionsButton = component;
+        this._activeFileActionsButton.setActive(true);
+    }
+
+    _onContextMenuHidden() {
+        if(this._activeFileActionsButton) {
+            this._activeFileActionsButton.setActive(false);
         }
     }
 
@@ -100,7 +152,7 @@ class FileManagerFilesTreeView extends Widget {
         if(node) {
             const $node = this._filesTreeView._getNodeElement(node);
             if($node) {
-                return $node.children(`.${TREE_VIEW_ITEM_CLASS}`);
+                return $node.children(this._filesTreeViewItemSelector);
             }
         }
         return null;
@@ -125,6 +177,7 @@ class FileManagerFilesTreeView extends Widget {
         return extend(super._getDefaultOptions(), {
             rootFolderDisplayName: "Files",
             initialFolder: null,
+            contextMenu: null,
             getItems: null,
             onCurrentFolderChanged: null,
             onClick: null
@@ -138,6 +191,7 @@ class FileManagerFilesTreeView extends Widget {
             case "getItems":
             case "rootFolderDisplayName":
             case "initialFolder":
+            case "contextMenu":
                 this.repaint();
                 break;
             case "onCurrentFolderChanged":
@@ -147,6 +201,14 @@ class FileManagerFilesTreeView extends Widget {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    get _filesTreeViewItemSelector() {
+        return `.${TREE_VIEW_ITEM_CLASS}`;
+    }
+
+    get _contextMenu() {
+        return this.option("contextMenu");
     }
 
     refreshData() {
