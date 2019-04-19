@@ -7,7 +7,7 @@ function exportDataGrid(options) {
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
-        summaryRight: false,
+        summaryRight: false
     };
 
     let result = {
@@ -23,17 +23,12 @@ function exportDataGrid(options) {
             let headerRowCount = dataProvider.getHeaderRowCount();
             let dataRowsCount = dataProvider.getRowsCount();
 
-            if(excelFilterEnabled === true && headerRowCount > 0) {
-                worksheet.autoFilter = { from: result.from, to: { row: result.to.row + headerRowCount - 1, column: result.to.column + columns.length - 1 } };
-                worksheet.views = [{ state: 'frozen', ySplit: result.from.row + dataProvider.getFrozenArea().y - 1 }];
-            }
-
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(result.to.row);
                 if(rowIndex < headerRowCount) {
-                    _exportRow(rowIndex, columns, row, result.from.column, dataProvider, customizeCell);
+                    _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
                 } else {
-                    _exportRow(rowIndex, controllerRows[rowIndex - headerRowCount].values, row, result.from.column, dataProvider, customizeCell);
+                    _exportRow(rowIndex, controllerRows[rowIndex - headerRowCount].values.length, row, result.from.column, dataProvider, customizeCell);
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
                 }
                 result.to.row++;
@@ -41,13 +36,19 @@ function exportDataGrid(options) {
 
             result.to.column += columns.length > 0 ? columns.length - 1 : 0;
             result.to.row -= controllerRows.length > 0 || (controllerRows.length === 0 && headerRowCount > 0) ? 1 : 0;
+
+            if(excelFilterEnabled === true) {
+                if(dataRowsCount > 0) worksheet.autoFilter = result;
+                worksheet.views = [{ state: 'frozen', ySplit: result.from.row + dataProvider.getFrozenArea().y - 1 }];
+            }
+
             resolve(result);
         });
     });
 }
 
-function _exportRow(rowIndex, values, row, currentColumnIndex, dataProvider, customizeCell) {
-    for(let cellIndex = 0; cellIndex < values.length; cellIndex++) {
+function _exportRow(rowIndex, cellCount, row, currentColumnIndex, dataProvider, customizeCell) {
+    for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const cell = row.getCell(currentColumnIndex);
 

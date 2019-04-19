@@ -50,11 +50,11 @@ QUnit.module("API", moduleConfig, () => {
         }
     }
 
-    function checkAutoFilter(assert, worksheet, excelFilterEnabled, from, to) {
+    function checkAutoFilter(assert, worksheet, excelFilterEnabled, from, to, frozenArea) {
         if(excelFilterEnabled === true) {
             assert.deepEqual(worksheet.autoFilter.from, from, "worksheet.autoFilter.from");
             assert.deepEqual(worksheet.autoFilter.to, to, "worksheet.autoFilter.to");
-            assert.deepEqual(worksheet.views, [ { state: "frozen", ySplit: to.row } ], "worksheet.views");
+            assert.deepEqual(worksheet.views, [ { state: "frozen", ySplit: frozenArea.y } ], "worksheet.views");
         } else {
             assert.equal(worksheet.autoFilter, undefined, "worksheet.autoFilter");
         }
@@ -136,7 +136,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, topLeft, { row: 1, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft);
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, topLeft, "result.to");
@@ -177,7 +177,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -215,7 +215,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, topLeft, { row: 1, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row, column: topLeft.column }, "result.to");
@@ -236,7 +236,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, topLeft, { row: 1, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row, column: topLeft.column }, "result.to");
@@ -263,7 +263,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 2 }, { row: 1, column: 3 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f3", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 2).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 2}).value`);
@@ -291,7 +291,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f3", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -318,7 +318,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f3", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -345,7 +345,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -372,7 +372,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 });
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "1", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column + 1).value, "2", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -401,7 +401,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft);
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "1", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -430,7 +430,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft);
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 1, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "number", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -459,7 +459,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft);
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "true", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -489,7 +489,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft);
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -519,7 +519,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft);
+                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, dateTime, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -555,7 +555,7 @@ QUnit.module("API", moduleConfig, () => {
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 4, column: topLeft.column }, { row: 5, column: 1 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row }, { x: 0, y: topLeft.row });
 
                 assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "f2", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row}).outlineLevel`);
@@ -716,7 +716,7 @@ QUnit.module("API", moduleConfig, () => {
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
                 checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
@@ -764,7 +764,7 @@ QUnit.module("API", moduleConfig, () => {
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 5, column: topLeft.column }, { row: 6, column: 1 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
                 checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 5, column: topLeft.column }, "result.to");
@@ -873,7 +873,7 @@ QUnit.module("API", moduleConfig, () => {
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 10, column: topLeft.column }, { row: 11, column: 1 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
                 checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 10, column: topLeft.column }, "result.to");
@@ -949,7 +949,7 @@ QUnit.module("API", moduleConfig, () => {
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 10, column: topLeft.column + 1 }, { row: 11, column: 2 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
                 checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 10, column: topLeft.column + 1 }, "result.to");
@@ -1017,7 +1017,7 @@ QUnit.module("API", moduleConfig, () => {
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 4, column: topLeft.column + 2 }, { row: 5, column: 3 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
                 checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 4, column: topLeft.column + 2 }, "result.to");
@@ -1072,7 +1072,7 @@ QUnit.module("API", moduleConfig, () => {
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
+                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
                 checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
