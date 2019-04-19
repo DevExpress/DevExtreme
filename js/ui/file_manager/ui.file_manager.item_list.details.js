@@ -83,7 +83,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onFileItemActionButtonClick({ component, element }) {
+    _onFileItemActionButtonClick({ component, element, event }) {
+        event.stopPropagation();
         const $row = component.$element().closest(this._getItemSelector());
         const item = $row.data("item");
         this._ensureItemSelected(item);
