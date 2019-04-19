@@ -54,8 +54,11 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 },
                 {
                     dataField: "length",
+                    caption: "File Size",
                     minWidth: 100,
-                    width: "10%"
+                    width: "10%",
+                    alignment: "right",
+                    calculateCellValue: this._calculateLengthColumnCellValue.bind(this)
                 }
             ],
             onRowPrepared: this._onRowPrepared.bind(this),
@@ -141,6 +144,22 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._createComponent($button, FileManagerFileActionsButton, {
             onClick: e => this._onFileItemActionButtonClick(e)
         });
+    }
+
+    _calculateLengthColumnCellValue(rowData) {
+        if(rowData.isFolder) {
+            return "";
+        }
+
+        const sizesTitles = [ "B", "KB", "MB", "GB", "TB" ];
+        let displaySize = rowData.length;
+        let index = 0;
+        while(displaySize >= 1024 && index <= sizesTitles.length - 1) {
+            displaySize /= 1024;
+            index++;
+        }
+        displaySize = Math.round(displaySize * 10) / 10;
+        return `${displaySize} ${sizesTitles[index]}`;
     }
 
     _ensureItemSelected(item) {
