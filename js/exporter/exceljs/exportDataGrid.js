@@ -3,7 +3,7 @@ import typeUtils from "../../core/utils/type";
 function exportDataGrid(options) {
     if(!typeUtils.isDefined(options)) return;
 
-    let { customizeCell, dataGrid, worksheet, topLeftCell = { row: 1, column: 1 } } = options;
+    let { customizeCell, dataGrid, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -15,87 +15,58 @@ function exportDataGrid(options) {
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
 
-    let exportController = dataGrid.getController("export");
     let dataProvider = dataGrid.getDataProvider();
 
     return new Promise((resolve) => {
         dataProvider.ready().done((controllerRows) => {
             let columns = dataProvider.getColumns();
+            let headerRowCount = dataProvider.getHeaderRowCount();
+            let dataRowsCount = dataProvider.getRowsCount();
 
-            if(columns.length > 0) {
-                result.to.column += columns.length - 1;
-
-                if(dataGrid.option("showColumnHeaders")) {
-                    let headerRow = worksheet.getRow(result.to.row);
-                    let currentColumnIndex = result.from.column;
-
-                    for(let i = 0; i < columns.length; i++) {
-                        let cellData = dataProvider.getCellData(0, i, true);
-                        headerRow.getCell(currentColumnIndex).value = cellData.value;
-
-                        customizeCell && _callCustomizeCell(customizeCell, headerRow.getCell(currentColumnIndex), cellData);
-
-                        currentColumnIndex++;
-                    }
-
-                    if(options.excelFilterEnabled === true) {
-                        worksheet.autoFilter = {
-                            from: {
-                                row: result.from.row,
-                                column: result.from.column,
-                            },
-                            to: {
-                                row: result.to.row,
-                                column: result.from.column + columns.length - 1
-                            }
-                        };
-                        worksheet.views = [{ state: 'frozen', ySplit: result.to.row }];
-                    }
-                    result.to.row++;
-                }
+            if(excelFilterEnabled === true && headerRowCount > 0) {
+                worksheet.autoFilter = { from: result.from, to: { row: result.to.row + headerRowCount - 1, column: result.to.column + columns.length - 1 } };
+                worksheet.views = [{ state: 'frozen', ySplit: result.from.row + dataProvider.getFrozenArea().y - 1 }];
             }
 
-            for(let rowIndex = 0; rowIndex < controllerRows.length; rowIndex++) {
-                let dataRow = worksheet.getRow(result.to.row);
-
-                dataRow.outlineLevel = _getRowOutlineLevel(exportController, controllerRows[rowIndex]);
-
-                let currentColumnIndex = result.from.column;
-                for(let cellIndex = 0; cellIndex < controllerRows[rowIndex].values.length; cellIndex++) {
-                    let cellData = dataProvider.getCellData(rowIndex + dataProvider.getHeaderRowCount(), cellIndex, true);
-                    dataRow.getCell(currentColumnIndex).value = cellData.value;
-
-                    customizeCell && _callCustomizeCell(customizeCell, dataRow.getCell(currentColumnIndex), cellData);
-
-                    currentColumnIndex++;
+            for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
+                const row = worksheet.getRow(result.to.row);
+                if(rowIndex < headerRowCount) {
+                    _exportRow(rowIndex, columns, row, result.from.column, dataProvider, customizeCell);
+                } else {
+                    _exportRow(rowIndex, controllerRows[rowIndex - headerRowCount].values, row, result.from.column, dataProvider, customizeCell);
+                    row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
                 }
                 result.to.row++;
             }
 
-            if(result.to.row > topLeftCell.row) result.to.row--;
-
+            result.to.column += columns.length > 0 ? columns.length - 1 : 0;
+            result.to.row -= controllerRows.length > 0 || (controllerRows.length === 0 && headerRowCount > 0) ? 1 : 0;
             resolve(result);
         });
     });
 }
 
-function _callCustomizeCell(customizeCell, cell, cellData) {
-    customizeCell({
-        cell: cell,
-        gridCell: {
-            column: cellData.cellSourceData.column,
-            rowType: cellData.cellSourceData.rowType,
-            data: cellData.cellSourceData.data,
-            value: cellData.value,
-            groupIndex: cellData.cellSourceData.groupIndex
+function _exportRow(rowIndex, values, row, currentColumnIndex, dataProvider, customizeCell) {
+    for(let cellIndex = 0; cellIndex < values.length; cellIndex++) {
+        const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
+        const cell = row.getCell(currentColumnIndex);
+
+        cell.value = cellData.value;
+
+        if(typeUtils.isDefined(customizeCell)) {
+            customizeCell({
+                cell: cell,
+                gridCell: {
+                    column: cellData.cellSourceData.column,
+                    rowType: cellData.cellSourceData.rowType,
+                    data: cellData.cellSourceData.data,
+                    value: cellData.value,
+                    groupIndex: cellData.cellSourceData.groupIndex
+                }
+            });
         }
-    });
-}
-
-function _getRowOutlineLevel(exportController, controllerRow) {
-    if(controllerRow.rowType === "totalFooter") return 0;
-
-    return typeUtils.isDefined(controllerRow.groupIndex) ? controllerRow.groupIndex : exportController._columnsController.getGroupColumns().length;
+        currentColumnIndex++;
+    }
 }
 
 export { exportDataGrid };
