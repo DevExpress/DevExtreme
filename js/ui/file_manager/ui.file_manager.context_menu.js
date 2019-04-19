@@ -86,11 +86,11 @@ class FileManagerContextMenu extends Widget {
     }
 
     _createMenuItemByCommandName(commandName) {
-        const command = this._commandManager.getCommandByName(commandName);
+        const { text, icon} = this._commandManager.getCommandByName(commandName);
         return {
             commandName,
-            text: command.text,
-            icon: command.icon,
+            text,
+            icon,
             onItemClick: () => this._onContextMenuItemClick(commandName)
         };
     }
