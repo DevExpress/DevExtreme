@@ -143,8 +143,9 @@ const DiagramCommands = {
                 text: "Auto Layout",
                 showText: "always",
                 items: [
-                    { command: DiagramCommand.AutoLayoutTree, text: "Tree" },
-                    { command: DiagramCommand.AutoLayoutFlow, text: "Layered" }
+                    { command: DiagramCommand.AutoLayoutTreeVertical, text: "Tree (vertical)" },
+                    { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Layered (vertical)" },
+                    { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Layered (horizontal)" }
                 ]
             }
         ];
