@@ -166,10 +166,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenu(e) {
+        e.preventDefault();
         this._onClick(e);
 
         const items = this.getSelectedItems();
-        this._showContextMenu(items, e.target);
+        this._showContextMenu(items, e.target, e);
     }
 
     _selectItemByItemElement($item, e) {
