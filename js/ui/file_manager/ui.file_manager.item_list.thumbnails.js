@@ -5,6 +5,7 @@ import iconUtils from "../../core/utils/icon";
 import eventsEngine from "../../events/core/events_engine";
 import { addNamespace } from "../../events/utils";
 import { name as contextMenuEventName } from "../../events/contextmenu";
+import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
 
@@ -361,7 +362,16 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _getTooltipText(item) {
-        return item.tooltipText || `${item.name}\r\nSize: ${item.length}\r\nDate modified: ${item.lastWriteTime}`;
+        if(item.tooltipText) {
+            return item.tooltipText;
+        }
+
+        var text = `${item.name}\r\n`;
+        if(!item.isFolder) {
+            text += `Size: ${getDisplayFileSize(item.length)}\r\n`;
+        }
+        text += `Date Modified: ${item.lastWriteTime}`;
+        return text;
     }
 
     _getUniqueId() {
