@@ -10,7 +10,6 @@ import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button"
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
-const COMMAND_BUTTON_CLASS = "dx-command-select";
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -137,7 +136,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         $(container).append(cellInfo.data.name, $button);
 
         this._createComponent($button, FileManagerFileActionsButton, {
-            cssClass: COMMAND_BUTTON_CLASS,
             onClick: e => this._onFileItemActionButtonClick(e)
         });
     }

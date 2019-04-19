@@ -13,14 +13,11 @@ class FileManagerFileActionsButton extends Widget {
     _initMarkup() {
         this._createClickAction();
 
-        let cssClass = this.option("cssClass");
-        cssClass += (cssClass ? " " : "") + FILE_MANAGER_FILE_ACTIONS_BUTTON;
-
         const $button = $("<div>");
 
         this.$element()
             .append($button)
-            .addClass(cssClass);
+            .addClass(FILE_MANAGER_FILE_ACTIONS_BUTTON);
 
         this._button = this._createComponent($button, Button, {
             text: "&vellip;",
