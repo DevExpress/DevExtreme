@@ -35,7 +35,7 @@ class FileManagerContextMenu extends Widget {
         super._initMarkup();
     }
 
-    showFor(fileItems, element, offset) {
+    showAt(fileItems, element, offset) {
         if(this._isVisible) {
             this._raiseContextMenuHidden();
         }

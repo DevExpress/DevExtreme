@@ -98,14 +98,14 @@ class FileManagerFilesTreeView extends Widget {
     _onFilesTreeViewItemContextMenu({ itemElement, event }) {
         event.preventDefault();
         const itemData = $(itemElement).data("item");
-        this._contextMenu.showFor([ itemData.dataItem ], itemElement, event);
+        this._contextMenu.showAt([ itemData.dataItem ], itemElement, event);
     }
 
     _onFileItemActionButtonClick({ component, element, event }) {
         event.stopPropagation();
         const $item = component.$element().closest(this._filesTreeViewItemSelector);
         const item = $item.data("item");
-        this._contextMenu.showFor([ item.dataItem ], element);
+        this._contextMenu.showAt([ item.dataItem ], element);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
     }

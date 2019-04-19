@@ -92,7 +92,7 @@ class FileManagerItemListBase extends Widget {
     }
 
     _showContextMenu(items, element) {
-        this._contextMenu.showFor(items, element);
+        this._contextMenu.showAt(items, element);
     }
 
     get _contextMenu() {
