@@ -24,18 +24,18 @@ function exportDataGrid(options) {
             let dataRowsCount = dataProvider.getRowsCount();
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                const row = worksheet.getRow(result.to.row);
-                if(rowIndex < headerRowCount) {
-                    _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
-                } else {
-                    _exportRow(rowIndex, controllerRows[rowIndex - headerRowCount].values.length, row, result.from.column, dataProvider, customizeCell);
+                const row = worksheet.getRow(result.from.row + rowIndex);
+                _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
+
+                if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
                 }
-                result.to.row++;
+                if(rowIndex >= 1) {
+                    result.to.row++;
+                }
             }
 
             result.to.column += columns.length > 0 ? columns.length - 1 : 0;
-            result.to.row -= controllerRows.length > 0 || (controllerRows.length === 0 && headerRowCount > 0) ? 1 : 0;
 
             if(excelFilterEnabled === true) {
                 if(dataRowsCount > 0) worksheet.autoFilter = result;
