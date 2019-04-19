@@ -51,11 +51,6 @@ class FileManager extends Widget {
             itemViewMode: this.option("itemView").mode
         });
 
-        const $contextMenu = $("<div>").appendTo(this.$element());
-        this._contextMenu = this._createComponent($contextMenu, FileManagerContextMenu, {
-            commandManager: this._commandManager
-        });
-
         this._createEditing();
 
         this._$viewContainer = this._createViewContainer();
@@ -113,7 +108,7 @@ class FileManager extends Widget {
 
     _createFilesTreeView() {
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
-            contextMenu: this._contextMenu,
+            contextMenu: this._createContextMenu(),
             getItems: this._getFilesTreeViewItems.bind(this),
             onCurrentFolderChanged: this._onFilesTreeViewCurrentFolderChanged.bind(this),
             onClick: () => this._setItemsViewAreaActive(false)
@@ -126,7 +121,7 @@ class FileManager extends Widget {
 
         const options = {
             selectionMode: this.option("selectionMode"),
-            contextMenu: this._contextMenu,
+            contextMenu: this._createContextMenu(),
             getItems: this._getItemViewItems.bind(this),
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
@@ -146,6 +141,13 @@ class FileManager extends Widget {
             path: "",
             onPathChanged: e => this.setCurrentFolderPath(e.newPath),
             onOutsideClick: () => this._itemView.clearSelection()
+        });
+    }
+
+    _createContextMenu() {
+        const $contextMenu = $("<div>").appendTo(this.$element());
+        return this._createComponent($contextMenu, FileManagerContextMenu, {
+            commandManager: this._commandManager
         });
     }
 
@@ -212,11 +214,16 @@ class FileManager extends Widget {
     }
 
     _switchView(viewMode) {
-        this._itemView.dispose();
-        this._itemView.$element().remove();
+        this._disposeWidget(this._itemView.option("contextMenu"));
+        this._disposeWidget(this._itemView);
 
         this._createItemView(viewMode);
         this._$itemsPanel.append(this._itemView.$element());
+    }
+
+    _disposeWidget(widget) {
+        widget.dispose();
+        widget.$element().remove();
     }
 
     _getMultipleSelectedItems() {

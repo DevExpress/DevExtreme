@@ -5,6 +5,7 @@ import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
+import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
@@ -15,6 +16,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _initMarkup() {
         this._createFilesView();
+
+        this._contextMenu.option("onContextMenuHidden", () => this._onContextMenuHidden());
+
         super._initMarkup();
     }
 
@@ -85,6 +89,12 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const item = $row.data("item");
         this._ensureItemSelected(item);
         this._showContextMenu(this.getSelectedItems(), element);
+        this._activeFileActionsButton = component;
+        this._activeFileActionsButton.setActive(true);
+    }
+
+    _onContextMenuHidden() {
+        this._activeFileActionsButton.setActive(false);
     }
 
     _getItemSelector() {
@@ -123,12 +133,12 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _createNameColumnCell(container, cellInfo) {
-        const $container = $(container);
-        $(container).append(cellInfo.data.name);
+        const $button = $("<div>");
+        $(container).append(cellInfo.data.name, $button);
 
-        this._contextMenu.createFileActionsButton($container, {
+        this._createComponent($button, FileManagerFileActionsButton, {
             cssClass: COMMAND_BUTTON_CLASS,
-            onFileActionsButtonClick: e => this._onFileItemActionButtonClick(e)
+            onClick: e => this._onFileItemActionButtonClick(e)
         });
     }
 

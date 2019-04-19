@@ -12,6 +12,8 @@ import { FileManagerItem } from "./file_provider/file_provider";
 import whenSome from "./ui.file_manager.common";
 import { getParentPath, getName } from "./ui.file_manager.utils";
 
+import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
+
 const FILE_MANAGER_DIRS_TREE_CLASS = "dx-filemanager-dirs-tree";
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = "dx-filemanager-focused-item";
 const TREE_VIEW_ITEM_CLASS = "dx-treeview-item";
@@ -47,8 +49,9 @@ class FileManagerFilesTreeView extends Widget {
         };
 
         if(this._contextMenu) {
+            this._contextMenu.option("onContextMenuHidden", () => this._onContextMenuHidden());
             treeViewOptions.onItemContextMenu = e => this._onFilesTreeViewItemContextMenu(e);
-            this._createFileActionsButton = (element, options) => this._contextMenu.createFileActionsButton(element, options);
+            this._createFileActionsButton = (element, options) => this._createComponent(element, FileManagerFileActionsButton, options);
         }
 
         this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
@@ -81,12 +84,14 @@ class FileManagerFilesTreeView extends Widget {
         const $itemWrapper = $itemElement.closest(this._filesTreeViewItemSelector);
         $itemWrapper.data("item", itemData);
 
+        const $button = $("<div>");
         $itemElement.append(
             getImageContainer(itemData.icon),
-            $("<span>").text(itemData.text));
+            $("<span>").text(itemData.text),
+            $button);
 
-        this._createFileActionsButton($itemElement, {
-            onFileActionsButtonClick: e => this._onFileItemActionButtonClick(e)
+        this._createFileActionsButton($button, {
+            onClick: e => this._onFileItemActionButtonClick(e)
         });
     }
 
@@ -101,6 +106,12 @@ class FileManagerFilesTreeView extends Widget {
         const $item = component.$element().closest(this._filesTreeViewItemSelector);
         const item = $item.data("item");
         this._contextMenu.showFor([ item.dataItem ], element);
+        this._activeFileActionsButton = component;
+        this._activeFileActionsButton.setActive(true);
+    }
+
+    _onContextMenuHidden() {
+        this._activeFileActionsButton.setActive(false);
     }
 
     _onModelSelectedItemLoaded(item) {

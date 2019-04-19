@@ -77,21 +77,6 @@
         display: none;
     }
 
-    .dx-filemanager-file-actions-button {
-       visibility: hidden;
-       float: right;
-       border: none;
-       background-color: transparent;
-
-       .dx-button-content {
-            padding: 10px 7px;
-       }
-       
-       i {
-           font-style: normal;
-       }
-    }
-
     .dx-row.dx-selection .dx-filemanager-file-actions-button,
     .dx-row.dx-state-hover .dx-filemanager-file-actions-button {
         visibility: visible;
@@ -178,10 +163,29 @@
 
 }
 
-.dx-filemanager-file-actions-button.dx-filemanager-file-actions-button-activated,
-.dx-filemanager-file-actions-button:hover {
-    visibility: visible;
-}
+.dx-filemanager-file-actions-button {
+    visibility: hidden;
+    float: right;
+    text-align: center;
+
+    .dx-button {
+         border: none;
+         background-color: transparent;
+
+         .dx-button-content {
+             padding: 10px 7px;
+         }
+
+         i {
+             font-style: normal;
+         }
+    }
+
+    &.dx-filemanager-file-actions-button-activated,
+    &:hover {
+        visibility: visible;
+    }
+ }
 
 .dx-filemanager-dirs-tree {
     .dx-filemanager-file-actions-button .dx-button-content {
