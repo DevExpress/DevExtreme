@@ -599,17 +599,23 @@ QUnit.module("API", moduleConfig, () => {
             }).dxDataGrid("instance");
 
             let expectedCustomizeCellArgs = [
-                { excelCell: { row: topLeft.row, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: "f1: f1_1 (Max of f2 is 1)" } },
-                { excelCell: { row: topLeft.row + 1, column: topLeft.column }, gridCell: { rowType: "data", value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { row: topLeft.row + 2, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: "f1: f1_2 (Max of f2 is 3)" } },
-                { excelCell: { row: topLeft.row + 3, column: topLeft.column }, gridCell: { rowType: "data", value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
             ];
 
+            const expectedRows = [
+                { values: [ "f1: f1_1 (Max of f2 is 1)" ], outlineLevel: 0 },
+                { values: [ 1 ], outlineLevel: 1 },
+                { values: [ "f1: f1_2 (Max of f2 is 3)" ], outlineLevel: 0 },
+                { values: [ 3 ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then(() => {
-
-                assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "f1: f1_1 (Max of f2 is 1)", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "f1: f1_2 (Max of f2 is 3)", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
-
+                checkValues(assert, expectedRows, this.worksheet, topLeft);
                 done();
             });
         });
@@ -637,25 +643,27 @@ QUnit.module("API", moduleConfig, () => {
             }).dxDataGrid("instance");
 
             let expectedCustomizeCellArgs = [
-                { excelCell: { row: topLeft.row, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: "f1: " + ds[0].f1 } },
-                { excelCell: { row: topLeft.row + 1, column: topLeft.column }, gridCell: { rowType: "data", value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { row: topLeft.row + 2, column: topLeft.column }, gridCell: { rowType: "groupFooter", value: "Max: " + ds[0].f2, column: dataGrid.columnOption(1) } },
-                { excelCell: { row: topLeft.row + 3, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: "f1: " + ds[1].f1 } },
-                { excelCell: { row: topLeft.row + 4, column: topLeft.column }, gridCell: { rowType: "data", value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } },
-                { excelCell: { row: topLeft.row + 5, column: topLeft.column }, gridCell: { rowType: "groupFooter", value: "Max: " + ds[1].f2, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(1) } },
             ];
 
+            const expectedRows = [
+                { values: [ "f1: f1_1" ], outlineLevel: 0 },
+                { values: [ "f2_1" ], outlineLevel: 1 },
+                { values: [ "Max: f2_1" ], outlineLevel: 1 },
+                { values: [ "f1: f1_2" ], outlineLevel: 0 },
+                { values: [ "f2_2" ], outlineLevel: 1 },
+                { values: [ "Max: f2_2" ], outlineLevel: 1 },
+            ];
+
+            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "f1: f1_1", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "f2_1", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "Max: f2_1", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 2}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column).value, "f1: f1_2", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 4).getCell(topLeft.column).value, "f2_2", `this.worksheet.getRow(${topLeft.row + 4}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 5).getCell(topLeft.column).value, "Max: f2_2", `this.worksheet.getRow(${topLeft.row + 5}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 5).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 5}).outlineLevel`);
-
+                checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 5, column: topLeft.column }, "result.to");
                 done();
@@ -687,34 +695,29 @@ QUnit.module("API", moduleConfig, () => {
             }).dxDataGrid("instance");
 
             let expectedCustomizeCellArgs = [
-                { excelCell: { row: topLeft.row, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), value: "f2: f1_2 (Count: 1, Count: 1)" } },
-                { excelCell: { row: topLeft.row, column: topLeft.column + 1 }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2), value: undefined } },
-                { excelCell: { row: topLeft.row + 1, column: topLeft.column }, gridCell: { rowType: "data", value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { row: topLeft.row + 1, column: topLeft.column + 1 }, gridCell: { rowType: "data", value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { row: topLeft.row + 2, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), value: "f2: f2_2 (Count: 1, Count: 1)" } },
-                { excelCell: { row: topLeft.row + 2, column: topLeft.column + 1 }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2), value: undefined } },
-                { excelCell: { row: topLeft.row + 3, column: topLeft.column }, gridCell: { rowType: "data", value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } },
-                { excelCell: { row: topLeft.row + 3, column: topLeft.column + 1 }, gridCell: { rowType: "data", value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
             ];
+
+            const expectedRows = [
+                { values: [ "f2: f1_2 (Count: 1, Count: 1)", undefined ], outlineLevel: 0 },
+                { values: [ "f1_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f2: f2_2 (Count: 1, Count: 1)", undefined], outlineLevel: 0 },
+                { values: [ "f1_1", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
                 checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
-
-                assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "f2: f1_2 (Count: 1, Count: 1)", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column})`);
-                assert.equal(this.worksheet.getRow(topLeft.row).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "f1_1", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column + 1).value, "f3_1", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column + 1}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 1}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "f2: f2_2 (Count: 1, Count: 1)", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 2}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column).value, "f1_1", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column + 1).value, "f3_2", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column + 1}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 3).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 3}).outlineLevel`);
-
+                checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
                 done();
@@ -740,36 +743,29 @@ QUnit.module("API", moduleConfig, () => {
             }).dxDataGrid("instance");
 
             let expectedCustomizeCellArgs = [
-                { excelCell: { row: topLeft.row, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: "f1: " + ds[0].f1 } },
-                { excelCell: { row: topLeft.row + 1, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1), value: "f2: " + ds[0].f2 } },
-                { excelCell: { row: topLeft.row + 2, column: topLeft.column }, gridCell: { rowType: "data", value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { row: topLeft.row + 3, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: "f1: " + ds[1].f1 } },
-                { excelCell: { row: topLeft.row + 4, column: topLeft.column }, gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1), value: "f2: " + ds[1].f2 } },
-                { excelCell: { row: topLeft.row + 5, column: topLeft.column }, gridCell: { rowType: "data", value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
             ];
+
+            const expectedRows = [
+                { values: [ "f1: f1_1" ], outlineLevel: 0 },
+                { values: [ "f2: f1_2" ], outlineLevel: 1 },
+                { values: [ "f3_1" ], outlineLevel: 2 },
+                { values: [ "f1: f1_2" ], outlineLevel: 0 },
+                { values: [ "f2: f2_2" ], outlineLevel: 1 },
+                { values: [ "f3_2" ], outlineLevel: 2 }
+            ];
+
+            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                 checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 5, column: topLeft.column }, { row: 6, column: 1 });
                 checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft);
-
-                assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "f1: f1_1", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).getCell(topLeft.column).value, "f2: f1_2", `this.worksheet.getRow(${topLeft.row + 1}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 1).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 1}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).getCell(topLeft.column).value, "f3_1", `this.worksheet.getRow(${topLeft.row + 2}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 2).outlineLevel, 2, `this.worksheet.getRow(${topLeft.row + 2}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 3).getCell(topLeft.column).value, "f1: f1_2", `this.worksheet.getRow(${topLeft.row + 3}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 3).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row + 3}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 4).getCell(topLeft.column).value, "f2: f2_2", `this.worksheet.getRow(${topLeft.row + 4}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 4).outlineLevel, 1, `this.worksheet.getRow(${topLeft.row + 4}).outlineLevel`);
-
-                assert.equal(this.worksheet.getRow(topLeft.row + 5).getCell(topLeft.column).value, "f3_2", `this.worksheet.getRow(${topLeft.row + 5}).getCell(${topLeft.column}).value`);
-                assert.equal(this.worksheet.getRow(topLeft.row + 5).outlineLevel, 2, `this.worksheet.getRow(${topLeft.row + 5}).outlineLevel`);
-
+                checkValues(assert, expectedRows, this.worksheet, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 5, column: topLeft.column }, "result.to");
                 done();
