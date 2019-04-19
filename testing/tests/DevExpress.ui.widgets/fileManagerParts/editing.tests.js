@@ -8,13 +8,13 @@ import fx from "animation/fx";
 const { test } = QUnit;
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         const fileSystem = createTestFileSystem();
 
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
-        $("#fileManager").dxFileManager({
+        this.$element = $("#fileManager").dxFileManager({
             fileProvider: fileSystem,
             selectionMode: "single",
             itemView: {
@@ -34,7 +34,7 @@ const moduleConfig = {
         this.clock.tick(400);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.tick(5000);
 
         this.clock.restore();
@@ -68,7 +68,7 @@ const getFolderToggles = ($element, inDialog) => {
 
 QUnit.module("Editing operations", moduleConfig, () => {
 
-    test("rename folder in folders area", (assert) => {
+    test("rename folder in folders area", function(assert) {
         let $folderNode = getFolderNode(this.$element, 1);
         assert.equal($folderNode.text(), "Folder 1", "has target folder");
 
@@ -95,7 +95,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
     });
 
-    test("rename file in items area", (assert) => {
+    test("rename file in items area", function(assert) {
         let $cell = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td`).eq(1);
         assert.equal($cell.get(0).childNodes[0].textContent, "File 1.txt", "has target file");
 
@@ -122,7 +122,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
     });
 
-    test("create folder in folders area from items area without folders", (assert) => {
+    test("create folder in folders area from items area without folders", function(assert) {
         const $row = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS}`).eq(1);
         $row.trigger("dxclick");
 
@@ -147,7 +147,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
     });
 
-    test("delete folder in folders area", (assert) => {
+    test("delete folder in folders area", function(assert) {
         let $folderNodes = getFolderNodes(this.$element);
         const initialCount = $folderNodes.length;
         const $folderNode = $folderNodes.eq(1);
@@ -168,7 +168,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
     });
 
-    test("delete file in items area", (assert) => {
+    test("delete file in items area", function(assert) {
         let $rows = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS}`);
         const initialCount = $rows.length;
 
@@ -191,7 +191,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
     });
 
-    test("move folder in folders area", (assert) => {
+    test("move folder in folders area", function(assert) {
         let $folderNodes = getFolderNodes(this.$element);
         const initialCount = $folderNodes.length;
         const $folderNode = $folderNodes.eq(1);
@@ -232,7 +232,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal($cells.get(1).childNodes[0].textContent, "File 1-2.jpg", "file moved with target folder");
     });
 
-    test("copy folder in folders area", (assert) => {
+    test("copy folder in folders area", function(assert) {
         let $folderNodes = getFolderNodes(this.$element);
         const initialCount = $folderNodes.length;
         const $folderNode = $folderNodes.eq(1);
@@ -273,7 +273,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal($cells.get(1).childNodes[0].textContent, "File 1-2.jpg", "file copied with target folder");
     });
 
-    test("move file in items area", (assert) => {
+    test("move file in items area", function(assert) {
         let $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         const initialCount = $cells.length;
         const $cell = $cells.eq(0);
@@ -309,7 +309,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal($cells.get(0).childNodes[0].textContent, "File 1.txt", "file moved to another folder");
     });
 
-    test("copy file in items area", (assert) => {
+    test("copy file in items area", function(assert) {
         let $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         const initialCount = $cells.length;
         const $cell = $cells.eq(0);

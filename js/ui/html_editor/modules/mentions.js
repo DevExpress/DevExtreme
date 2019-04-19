@@ -353,7 +353,7 @@ class MentionModule extends PopupModule {
             my: "top left",
             at: "top left",
             collision: {
-                y: "flip",
+                y: "none",
                 x: "flipfit"
             }
         };

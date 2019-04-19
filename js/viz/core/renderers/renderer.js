@@ -832,6 +832,7 @@ function cloneAndRemoveAttrs(node) {
 }
 
 function setMaxSize(maxWidth, maxHeight, options = {}) {
+    maxWidth = Number(maxWidth);
     var that = this,
         lines = [],
         textChanged = false,
@@ -1037,8 +1038,11 @@ function calculateLineHeight(line, lineHeight) {
     }, 0);
 }
 
-function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
-    if(!isFinite(maxHeight)) {
+function setMaxHeight(lines, ellipsisMaxWidth, { textOverflow }, maxHeight, lineHeight) {
+    if(!isFinite(maxHeight)
+        || Number(maxHeight) === 0
+        || textOverflow === "none"
+    ) {
         return lines;
     }
     const result = lines.reduce(([lines, commonHeight], l, index, arr) => {
@@ -1050,7 +1054,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
             l.parts.forEach(item => {
                 removeTextSpan(item);
             });
-            if(options.textOverflow === "ellipsis") {
+            if(textOverflow === "ellipsis") {
                 const prevLine = arr[index - 1];
                 if(prevLine) {
                     const text = prevLine.parts[prevLine.parts.length - 1];
@@ -1067,7 +1071,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
         return [lines, commonHeight];
     }, [[], 0]);
 
-    if(options.textOverflow === "hide" && result[1] > maxHeight) {
+    if(textOverflow === "hide" && result[1] > maxHeight) {
         result[0].forEach(l => {
             l.parts.forEach(item => {
                 removeTextSpan(item);

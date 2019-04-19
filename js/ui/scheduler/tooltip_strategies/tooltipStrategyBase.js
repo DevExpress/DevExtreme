@@ -47,7 +47,6 @@ export class TooltipStrategyBase {
             }
         }
 
-        this.list.focus();
         this.tooltip.option("visible", true);
         this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
     }
@@ -168,6 +167,7 @@ export class TooltipStrategyBase {
         $container.append($deleteButton);
         this.scheduler._createComponent($deleteButton, Button, {
             icon: "trash",
+            stylingMode: "text",
             onClick: e => {
                 this._onDeleteButtonClick();
                 this.scheduler._checkRecurringAppointment(data, currentData,

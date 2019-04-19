@@ -78,6 +78,10 @@ var nativeDOMAdapterStrategy = {
         }
     },
 
+    getAttribute: function(element, name) {
+        return element.getAttribute(name);
+    },
+
     setAttribute: function(element, name, value) {
         element.setAttribute(name, value);
     },
@@ -105,14 +109,24 @@ var nativeDOMAdapterStrategy = {
                     element.classList.remove(className);
                 }
             } else { // IE9
-                var classNames = element.className.split(" ");
+                var classNameSupported = typeof element.className === 'string';
+                var elementClass = classNameSupported ? element.className : (this.getAttribute(element, 'class') || '');
+                var classNames = elementClass.split(" ");
                 var classIndex = classNames.indexOf(className);
+                var resultClassName;
                 if(isAdd && classIndex < 0) {
-                    element.className = element.className ? element.className + " " + className : className;
+                    resultClassName = elementClass ? elementClass + " " + className : className;
                 }
                 if(!isAdd && classIndex >= 0) {
                     classNames.splice(classIndex, 1);
-                    element.className = classNames.join(" ");
+                    resultClassName = classNames.join(" ");
+                }
+                if(resultClassName !== undefined) {
+                    if(classNameSupported) {
+                        element.className = resultClassName;
+                    } else {
+                        this.setAttribute(element, 'class', resultClassName);
+                    }
                 }
             }
         }

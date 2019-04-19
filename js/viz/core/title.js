@@ -11,8 +11,10 @@ function hasText(text) {
     return !!(text && String(text).length > 0);
 }
 
-function processTitleLength(elem, text, width, options) {
-    elem.attr({ text }).setMaxSize(width, undefined, options).textChanged && elem.setTitle(text);
+function processTitleLength(elem, text, width, options, placeholderSize) {
+    if(elem.attr({ text }).setMaxSize(width, placeholderSize, options).textChanged) {
+        elem.setTitle(text);
+    }
 }
 
 function pickMarginValue(value) {
@@ -180,10 +182,14 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         const margin = options.margin;
         const maxWidth = width - margin.left - margin.right;
 
+        let placeholderSize = options.placeholderSize;
 
-        processTitleLength(that._titleElement, options.text, maxWidth, options);
+        processTitleLength(that._titleElement, options.text, maxWidth, options, placeholderSize);
         if(that._subtitleElement) {
-            processTitleLength(that._subtitleElement, options.subtitle.text, maxWidth, options.subtitle);
+            if(_Number(placeholderSize) > 0) {
+                placeholderSize -= that._titleElement.getBBox().height;
+            }
+            processTitleLength(that._subtitleElement, options.subtitle.text, maxWidth, options.subtitle, placeholderSize);
             that._shiftSubtitle();
         }
 

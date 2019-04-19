@@ -57,6 +57,7 @@
 /**
  * @typedef {string} Enums.VizTheme
  * @enum {'generic.dark'|'generic.light'|'generic.contrast'|'ios7.default'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
+ * @member 'ios7.default' @deprecated 'generic.light'
  */
 
 /**
@@ -1014,4 +1015,9 @@
 /**
  * @typedef {string} Enums.FileManagerItemViewMode
  * @enum {'details'|'thumbnails'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramAutoLayout
+ * @enum {'tree'|'sugiyama'}
  */

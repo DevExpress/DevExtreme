@@ -21,7 +21,7 @@ const registerKeyHandlerTestHelper = {
 
                 this.checkKeyHandlerCall = (assert, key) => {
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.deepEqual(this.handler.firstCall.args[0].target, this.widget.element(), "event.target");
+                    assert.ok(this.$widget.is(this.handler.firstCall.args[0].target), "event.target");
                 };
             },
             afterEach: () => {

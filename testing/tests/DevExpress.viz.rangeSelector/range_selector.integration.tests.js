@@ -603,6 +603,26 @@ QUnit.test("Keep mode", function(assert) {
     assert.deepEqual(rangeSelector.getValue(), [5, 7]);
 });
 
+QUnit.test("There is no error when date scale and bar series", function(assert) {
+    var rangeSelector = this.createRangeSelector({
+        scale: {
+            valueType: 'datetime',
+            type: 'discrete'
+        },
+        dataSource: [{
+            arg: "2017-01-01",
+            value: 4
+        }],
+        chart: {
+            series: {
+                type: "bar"
+            }
+        }
+    });
+
+    assert.ok(rangeSelector);
+});
+
 // T696409
 QUnit.test("RS with DX dataSource", function(assert) {
     var done = assert.async(1),

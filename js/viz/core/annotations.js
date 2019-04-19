@@ -1,12 +1,18 @@
 import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
-import { events } from "../components/consts";
 import { patchFontOptions } from "./utils";
 import { Plaque } from "./plaque";
+import pointerEvents from "../../events/pointer";
+import dragEvents from "../../events/drag";
 
-const MOVE_EVENT = events["mousemove"] + ".annotations";
 const ANNOTATION_DATA = "annotation-data";
+
+const EVENTS_NS = ".annotations";
+const MOVE_EVENT = pointerEvents.move + EVENTS_NS;
+
+const DRAG_START_EVENT_NAME = dragEvents.start + EVENTS_NS;
+const DRAG_EVENT_NAME = dragEvents.move + EVENTS_NS;
 
 function coreAnnotation(options, draw) {
     return {
@@ -20,23 +26,28 @@ function coreAnnotation(options, draw) {
         series: options.series,
         options: options,
         draw: function(widget, group) {
-            this.coords = widget._getAnnotationCoords(this);
-            const { x, y } = this.coords;
+            this.anchor = widget._getAnnotationCoords(this);
+            const annotationGroup = widget._renderer.g().append(group);
+            this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
+            this.plaque.draw(this.anchor);
+            applyClipPath(annotationGroup, widget, this._pane);
 
-            if(isDefined(x) && isDefined(y)) {
-                const annotationGroup = widget._renderer.g().append(group);
-
-                const plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
-
-                plaque.move(x, y);
-                applyClipPath(annotationGroup, widget, this._pane);
+            if(options.draggable) {
+                annotationGroup
+                    .on(DRAG_START_EVENT_NAME, { immediate: true }, e => {
+                        this._dragOffsetX = this.plaque.x - e.pageX;
+                        this._dragOffsetY = this.plaque.y - e.pageY;
+                    })
+                    .on(DRAG_EVENT_NAME, e => {
+                        this.plaque.move(e.pageX + this._dragOffsetX, e.pageY + this._dragOffsetY);
+                    });
             }
         },
         getTooltipFormatObject() {
             return extend({ valueText: this.options.description }, this.options);
         },
         getTooltipParams() {
-            const { x, y } = this.coords;
+            const { x, y } = this.anchor;
             return { x, y };
         }
     };
@@ -105,7 +116,7 @@ const chartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
-            let coords = { x: annotation.x, y: annotation.y };
+            const coords = { };
             const argCoordName = this._options.rotated ? "y" : "x";
             const valCoordName = this._options.rotated ? "x" : "y";
             const argument = annotation.argument;
@@ -121,17 +132,17 @@ const chartPlugin = {
                 isDefined(axis) && (annotation._pane = axis.pane);
             }
 
-            if(!isDefined(coords[argCoordName]) && isDefined(argument)) {
+            if(isDefined(argument)) {
                 coords[argCoordName] = argAxis.getTranslator().translate(argument);
                 !isDefined(annotation._pane) && (annotation._pane = argAxis.pane);
             }
 
-            if(!isDefined(coords[valCoordName]) && isDefined(value)) {
+            if(isDefined(value)) {
                 coords[valCoordName] = axis && axis.getTranslator().translate(value);
                 !isDefined(annotation._pane) && isDefined(axis) && (annotation._pane = axis.pane);
             }
 
-            if(isDefined(coords[argCoordName]) && !isDefined(coords[valCoordName]) && !isDefined(value)) {
+            if(isDefined(coords[argCoordName]) && !isDefined(value)) {
                 if(!isDefined(axis) && !isDefined(series)) {
                     coords[valCoordName] = argAxis.getAxisPosition();
                 } else if(isDefined(axis) && !isDefined(series)) {
@@ -146,7 +157,7 @@ const chartPlugin = {
                 }
             }
 
-            if(!isDefined(coords[argCoordName]) && !isDefined(argument) && isDefined(coords[valCoordName])) {
+            if(!isDefined(argument) && isDefined(coords[valCoordName])) {
                 if(isDefined(axis) && !isDefined(series)) {
                     coords[argCoordName] = axis.getAxisPosition();
                 } else if(isDefined(series)) {
@@ -160,8 +171,8 @@ const chartPlugin = {
             }
             return coords;
         },
-        _onMouseMove({ target }) {
-            const annotation = target[ANNOTATION_DATA];
+        _onMouseMove(event) {
+            const annotation = event.target[ANNOTATION_DATA];
 
             if(!annotation || !annotation.options.tooltipEnabled) {
                 this._annotations.tooltip.hide();
@@ -176,7 +187,16 @@ const chartPlugin = {
                 rootOffset = this._renderer.getRootOffset();
             coords.x += rootOffset.left;
             coords.y += rootOffset.top;
+
             this._annotations.tooltip.show(tooltipFormatObject, coords, { target: annotation }, annotation.options.customizeTooltip);
+
+            // function getEventCoords(event) {
+            //     var originalEvent = event.originalEvent,
+            //         touch = (originalEvent.touches && originalEvent.touches[0]) || {};
+            //     return { x: touch.pageX || originalEvent.pageX || event.pageX, y: touch.pageY || originalEvent.pageY || event.pageY };
+            // }
+
+            // this._annotations.tooltip.show(tooltipFormatObject, getEventCoords(event), { target: annotation }, annotation.options.customizeTooltip);
         }
     }
 };

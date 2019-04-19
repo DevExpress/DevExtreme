@@ -2220,6 +2220,32 @@ QUnit.test("Full-size appointment should not have empty class in 'auto' mode", f
     }
 });
 
+QUnit.test("Full-size appointment should not have empty class in 'auto' mode, week view", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            width: 620,
+            dataSource: []
+        }
+    );
+
+    this.instance.option("dataSource", items);
+
+    var $firstAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0),
+        $secondAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(1);
+
+    assert.ok(!$firstAppointment.hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
+    assert.ok(!$secondAppointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
+});
+
 QUnit.test("Full-size appointment should have correct height, 'numeric' mode", function(assert) {
     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
