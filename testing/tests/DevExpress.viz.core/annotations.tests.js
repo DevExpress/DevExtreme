@@ -162,13 +162,14 @@ QUnit.test("Draw image inside a plaque without borders", function(assert) {
 });
 
 QUnit.test("Draw annotation with anchor and x/y", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 290, y: 200 });
     const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
         },
         arrowLength: 20,
-        arrowWidth: 30,
+        arrowWidth: 10,
         paddingLeftRight: 10,
         paddingTopBottom: 15
     })[0];
@@ -179,7 +180,7 @@ QUnit.test("Draw annotation with anchor and x/y", function(assert) {
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
     assert.deepEqual(plaque.attr.lastCall.args, [{
-        points: [280, 30, 320, 30, 320, 70, 315, 70, 100, 200, 285, 70, 280, 70]
+        points: [280, 30, 320, 30, 320, 70, 295, 70, 290, 200, 285, 70, 280, 70]
     }]);
 
     const contentGroup = this.renderer.g.getCall(2).returnValue;
@@ -187,13 +188,14 @@ QUnit.test("Draw annotation with anchor and x/y", function(assert) {
 });
 
 QUnit.test("Draw annotation with anchor and only x", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 290, y: 200 });
     const annotation = createAnnotations([{ x: 300, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
         },
         arrowLength: 20,
-        arrowWidth: 30,
+        arrowWidth: 10,
         paddingLeftRight: 10,
         paddingTopBottom: 15
     })[0];
@@ -204,7 +206,7 @@ QUnit.test("Draw annotation with anchor and only x", function(assert) {
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
     assert.deepEqual(plaque.attr.lastCall.args, [{
-        points: [280, 140, 320, 140, 320, 180, 315, 180, 100, 200, 285, 180, 280, 180]
+        points: [280, 140, 320, 140, 320, 180, 295, 180, 290, 200, 285, 180, 280, 180]
     }]);
 
     const contentGroup = this.renderer.g.getCall(2).returnValue;
@@ -255,11 +257,507 @@ QUnit.test("Draw annotation with x/y and without anchor", function(assert) {
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
     assert.deepEqual(plaque.attr.lastCall.args, [{
-        points: [280, 30, 320, 30, 320, 70, 315, 70, 300, 70, 285, 70, 280, 70]
+        points: [280, 30, 320, 30, 320, 70, 280, 70]
     }]);
 
     const contentGroup = this.renderer.g.getCall(2).returnValue;
     assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 50 - 2 - 5]);
+});
+
+QUnit.module("Check plaque path", environment);
+
+QUnit.test("Arrow on the top, left side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 120, y: 240, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [100, 220, 100, 220, 100, 200, 110, 220, 140, 220, 140, 260, 100, 260]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [120 - 10, 240 - 10]);
+});
+
+QUnit.test("Arrow on the top, center", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 100, y: 240, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [80, 220, 90, 220, 100, 200, 110, 220, 120, 220, 120, 260, 80, 260]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 240 - 10]);
+});
+
+QUnit.test("Arrow on the top, right side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 80, y: 240, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [60, 220, 90, 220, 100, 200, 100, 220, 100, 220, 100, 260, 60, 260]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [80 - 10, 240 - 10]);
+});
+
+QUnit.test("Arrow on the bottom, left side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 120, y: 160, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [100, 140, 140, 140, 140, 180, 110, 180, 100, 200, 100, 180, 100, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [120 - 10, 160 - 10]);
+});
+
+QUnit.test("Arrow on the bottom, center", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [80, 140, 120, 140, 120, 180, 110, 180, 100, 200, 90, 180, 80, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 160 - 10]);
+});
+
+QUnit.test("Arrow on the bottom, right side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 80, y: 160, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [60, 140, 100, 140, 100, 180, 100, 180, 100, 200, 90, 180, 60, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [80 - 10, 160 - 10]);
+});
+
+QUnit.test("Arrow on the left, top side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 60, y: 220, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [40, 200, 80, 200, 80, 200, 100, 200, 80, 210, 80, 240, 40, 240]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 220 - 10]);
+});
+
+QUnit.test("Arrow on the left, center", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [40, 180, 80, 180, 80, 190, 100, 200, 80, 210, 80, 220, 40, 220]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 200 - 10]);
+});
+
+QUnit.test("Arrow on the left, bottom side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 60, y: 180, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [40, 160, 80, 160, 80, 190, 100, 200, 80, 200, 80, 200, 40, 200]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 180 - 10]);
+});
+
+QUnit.test("Arrow on the right, top side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 140, y: 220, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [120, 200, 160, 200, 160, 240, 120, 240, 120, 210, 100, 200, 120, 200]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 220 - 10]);
+});
+
+QUnit.test("Arrow on the left, center", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 140, y: 200, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [120, 180, 160, 180, 160, 220, 120, 220, 120, 210, 100, 200, 120, 190]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 200 - 10]);
+});
+
+QUnit.test("Arrow on the left, bottom side", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 140, y: 180, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [120, 160, 160, 160, 160, 200, 120, 200, 120, 200, 100, 200, 120, 190]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 180 - 10]);
+});
+
+QUnit.test("Arrow on top-left corner", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 140, y: 240, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [120, 230, 100, 200, 130, 220, 160, 220, 160, 260, 120, 260]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 240 - 10]);
+});
+
+QUnit.test("Arrow on top-right corner", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 60, y: 240, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [40, 220, 70, 220, 100, 200, 80, 230, 80, 260, 40, 260]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 240 - 10]);
+});
+
+QUnit.test("Arrow on bottom-right corner", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 60, y: 160, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [40, 140, 80, 140, 80, 170, 100, 200, 70, 180, 40, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 160 - 10]);
+});
+
+QUnit.test("Arrow on bottom-left corner", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 140, y: 160, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [120, 140, 160, 140, 160, 180, 130, 180, 100, 200, 120, 170]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 160 - 10]);
+});
+
+QUnit.test("Anchor is inside plaque", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 100, y: 200, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [80, 180, 120, 180, 120, 220, 80, 220]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 200 - 10]);
+});
+
+QUnit.test("Arrow on the left, center. Arrow width is bigger than annotation height", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 200,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [40, 180, 80, 180, 80, 180, 100, 200, 80, 220, 80, 220, 40, 220]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 200 - 10]);
+});
+
+QUnit.test("Arrow on the bottom, center. Arrow width is bigger than annotation width", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 200,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [80, 140, 120, 140, 120, 180, 120, 180, 100, 200, 80, 180, 80, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 160 - 10]);
 });
 
 QUnit.module("Text annotaion", environment);

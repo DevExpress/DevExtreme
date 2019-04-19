@@ -502,4 +502,15 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok($list.is(":visible"));
         assert.deepEqual(this.log[2], { operation: "getContents", index: 0, length: 1 });
     });
+
+    test("popup position collision", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+        mention.savePosition(0);
+        const { collision } = mention._popupPosition;
+
+        assert.deepEqual(collision, {
+            x: "flipfit",
+            y: "none"
+        }, "Check popup position collision resolve strategy");
+    });
 });

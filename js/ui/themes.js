@@ -323,6 +323,9 @@ function isGeneric(themeName) {
 }
 
 function checkThemeDeprecation() {
+    if(isIos7()) {
+        errors.log("W0010", "The 'ios7' theme", "19.1", "Use the 'generic' theme instead.");
+    }
 }
 
 var initDeferred = new Deferred();

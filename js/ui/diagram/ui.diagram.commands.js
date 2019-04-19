@@ -1,4 +1,7 @@
 import { getDiagram } from "./diagram_importer";
+import { fileSaver } from "../../exporter/file_saver";
+import { isFunction } from "../../core/utils/type";
+import { getWindow } from "../../core/utils/window";
 
 const DiagramCommands = {
     getToolbar: function() {
@@ -98,6 +101,33 @@ const DiagramCommands = {
                 ],
                 displayExpr: "name",
                 valueExpr: "value"
+            },
+            {
+                widget: "dxButton",
+                icon: "export",
+                items: [
+                    {
+                        command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to SVG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to PNG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to JPEG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
+                        }
+                    }
+                ]
             },
             {
                 widget: "dxButton",
@@ -234,6 +264,24 @@ const DiagramCommands = {
                 text: "Send to Back"
             }
         ];
+    },
+    _exportTo(widget, dataURI, format, mimeString) {
+        const window = getWindow();
+        if(window && window.atob && isFunction(window.Blob)) {
+            const blob = this._getBlobByDataURI(window, dataURI, mimeString);
+            const options = widget.option("export");
+            fileSaver.saveAs(options.fileName || "foo", format, blob, options.proxyURL);
+        }
+    },
+    _getBlobByDataURI(window, dataURI, mimeString) {
+        var byteString = window.atob(dataURI.split(',')[1]);
+        var arrayBuffer = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(arrayBuffer);
+        for(var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        var dataView = new DataView(arrayBuffer);
+        return new window.Blob([dataView], { type: mimeString });
     }
 };
 

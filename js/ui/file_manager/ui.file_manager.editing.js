@@ -111,7 +111,7 @@ class FileManagerEditingControl extends Widget {
                 dialog: this._renameItemDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: ([item], { name }) => this._provider.renameItem(item, name),
-                getSuccessMessage: items => "Items deleted",
+                getSuccessMessage: items => "Item renamed",
                 getErrorMessage: ([{ name }], info) => `Rename operation failed for the ${name} item`,
             },
 
@@ -119,7 +119,7 @@ class FileManagerEditingControl extends Widget {
                 dialog: this._confirmationDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: (items, arg) => this._provider.deleteItems(items),
-                getSuccessMessage: items => "Item renamed",
+                getSuccessMessage: items => "Items deleted",
                 getErrorMessage: (items, { index }) => `Delete operation failed for the ${items[index].name} item`
             },
 

@@ -158,7 +158,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
                 * @type_function_param3 targetedAppointmentData:object
-                * @type_function_param3 itemIndex:number
+                * @type_function_param4 itemIndex:number
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -2925,7 +2925,7 @@ const Scheduler = Widget.inherit({
         $scrollable.css("height", "initial");
 
         if($scrollable.length && $scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
-            $scrollable.height(popupContent.height());
+            $scrollable.outerHeight(popupContent.height());
         }
     },
 

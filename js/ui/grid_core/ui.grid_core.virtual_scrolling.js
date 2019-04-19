@@ -805,7 +805,7 @@ module.exports = {
                         that._visibleItems = [];
 
                         var isItemCountable = function(item) {
-                            return item.rowType === "data" || item.rowType === "group";
+                            return item.rowType === "data" || item.rowType === "group" && that._dataSource.isGroupItemCountable(item.data);
                         };
 
                         that._rowsScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
