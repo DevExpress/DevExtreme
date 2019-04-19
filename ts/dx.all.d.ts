@@ -9332,8 +9332,6 @@ declare module DevExpress {
         /** @name positionConfig.offset */
         offset?: string | { x?: number, y?: number };
     }
-    /** @name processHardwareBackButton() */
-    export function processHardwareBackButton(): void;
     /** @name registerComponent(name, componentClass) */
     export function registerComponent(name: string, componentClass: any): void;
     /** @name registerComponent(name, namespace, componentClass) */
