@@ -10,17 +10,13 @@ QUnit.module("Integration tests", {
         const that = this;
         this.originalAnimationMoveTo = animation.moveTo;
         animation.moveTo = function($element, position) {
-            if(position === "NaN%") {
-                assert.ok(false, `${position} is not a %, _animation.moveTo`);
-            }
+            assert.notEqual(position, "NaN%", `${position} is not a %, _animation.moveTo`);
             that.originalAnimationMoveTo.apply(null, arguments);
         };
 
         this.originalTranslatorMove = _translator.move;
         _translator.move = function($element, position) {
-            if(position === "NaN%") {
-                assert.ok(false, `${position} is not a %, _translator.move`);
-            }
+            assert.notEqual(position, "NaN%", `${position} is not a %, _animation.moveTo`);
             that.originalTranslatorMove.apply(null, arguments);
         };
 
@@ -57,112 +53,139 @@ function() {
 
     // TODO: check "[false, true].forEach(deferRendering => {"
 
-    [false, true].forEach(rtlEnabled => {
-        [undefined, 100].forEach(height => {
+    [false, true].forEach(deferRendering => {
+        [false, true].forEach(rtlEnabled => {
+            [undefined, 100].forEach(height => {
 
-            const context = `, rtlEnabled:${rtlEnabled}, height:${height}`;
+                const context = `, rtlEnabled:${rtlEnabled}, height:${height}`;
 
-            function createMultiView(options) {
-                options.rtlEnabled = rtlEnabled;
-                options.width = 200;
-                options.animationEnabled = false;
-                options.itemTemplate = (itemData) => `<div id='${getElementId(itemData)}'>${itemData}</div>`;
-                if(height !== undefined) {
-                    options.height = height;
+                function createMultiView(options) {
+                    options.deferRendering = deferRendering;
+                    options.rtlEnabled = rtlEnabled;
+                    if(height !== undefined) {
+                        options.height = height;
+                    }
+                    options.width = 200;
+                    options.animationEnabled = false;
+                    options.itemTemplate = (itemData) => `<div id='${getElementId(itemData)}'>${itemData}</div>`;
+
+                    return $("#myView").dxMultiView(options);
                 }
 
-                return $("#myView").dxMultiView(options);
-            }
+                QUnit.test("[{0,selected}, 1]" + context, function(assert) {
+                    const $multiView = createMultiView({
+                        items: [0, 1],
+                        selectedIndex: 0
+                    });
 
-            QUnit.test("[{0,selected}, 1]" + context, function(assert) {
-                const $multiView = createMultiView({
-                    items: [0, 1],
-                    selectedIndex: 0
+                    checkContainsElements(assert, $multiView, [0]);
+                    if(deferRendering) {
+                        checkNotContainsElements(assert, $multiView, [1]);
+                    } else {
+                        checkContainsElements(assert, $multiView, [1]);
+                    }
+                    checkItemRect(assert, $multiView, 0, { left: 0, width: 200 });
                 });
 
-                checkContainsElements(assert, $multiView, [0]);
-                checkNotContainsElements(assert, $multiView, [1]);
-                checkItemRect(assert, $multiView, 0, { left: 0, width: 200 });
-            });
+                QUnit.test("[{0,selected}, 1] -> [options(selectedIndex,1)]" + context, function(assert) {
+                    const $multiView = createMultiView({
+                        items: [0, 1],
+                        selectedIndex: 0
+                    });
+                    const instance = $multiView.dxMultiView("instance");
 
-            QUnit.test("[{0,selected}, 1] -> [options(selectedIndex,1)]" + context, function(assert) {
-                const $multiView = createMultiView({
-                    items: [0, 1],
-                    selectedIndex: 0
-                });
-                const instance = $multiView.dxMultiView("instance");
+                    instance.option("selectedIndex", 1);
 
-                instance.option("selectedIndex", 1);
-
-                checkContainsElements(assert, $multiView, [0, 1]);
-                checkItemRect(assert, $multiView, 1, { left: 0, width: 200 });
-            });
-
-            QUnit.test("[{0,selected}, 1, 2]" + context, function(assert) {
-                const $multiView = createMultiView({
-                    items: [0, 1, 2],
-                    selectedIndex: 0
+                    checkContainsElements(assert, $multiView, [0, 1]);
+                    checkItemRect(assert, $multiView, 1, { left: 0, width: 200 });
                 });
 
-                checkContainsElements(assert, $multiView, [0]);
-                checkNotContainsElements(assert, $multiView, [1, 2]);
-                checkItemRect(assert, $multiView, 0, { left: 0, width: 200 });
-            });
+                QUnit.test("[{0,selected}, 1, 2]" + context, function(assert) {
+                    const $multiView = createMultiView({
+                        items: [0, 1, 2],
+                        selectedIndex: 0
+                    });
 
-            QUnit.test("[{0,selected}, 1, 2] -> [options(selectedIndex,1)] -> [options(selectedIndex,2)]" + context, function(assert) {
-                const $multiView = createMultiView({
-                    items: [0, 1, 2],
-                    selectedIndex: 0
-                });
-                const instance = $multiView.dxMultiView("instance");
-
-                instance.option("selectedIndex", 1);
-
-                checkContainsElements(assert, $multiView, [0, 1]);
-                checkNotContainsElements(assert, $multiView, [2]);
-                checkItemRect(assert, $multiView, 1, { left: 0, width: 200 });
-
-                instance.option("selectedIndex", 2);
-
-                checkContainsElements(assert, $multiView, [0, 1, 2]);
-                checkItemRect(assert, $multiView, 2, { left: 0, width: 200 });
-            });
-
-            QUnit.test("[0, {1,selected}, 2]" + context, function(assert) {
-                const $multiView = createMultiView({
-                    items: [0, 1, 2],
-                    selectedIndex: 1
+                    checkContainsElements(assert, $multiView, [0]);
+                    if(deferRendering) {
+                        checkNotContainsElements(assert, $multiView, [1, 2]);
+                    } else {
+                        checkContainsElements(assert, $multiView, [1, 2]);
+                    }
+                    checkItemRect(assert, $multiView, 0, { left: 0, width: 200 });
                 });
 
-                checkContainsElements(assert, $multiView, [1]);
-                checkNotContainsElements(assert, $multiView, [0, 2]);
-                checkItemRect(assert, $multiView, 1, { left: 0, width: 200 });
-            });
+                QUnit.test("[{0,selected}, 1, 2] -> [options(selectedIndex,1)] -> [options(selectedIndex,2)]" + context, function(assert) {
+                    const $multiView = createMultiView({
+                        items: [0, 1, 2],
+                        selectedIndex: 0
+                    });
+                    const instance = $multiView.dxMultiView("instance");
 
-            QUnit.test("[0, {1,selected}, 2] -> [options(selectedIndex, 0)]" + context, function(assert) {
-                const $multiView = createMultiView({
-                    items: [0, 1, 2],
-                    selectedIndex: 1
+                    instance.option("selectedIndex", 1);
+
+                    checkContainsElements(assert, $multiView, [0, 1]);
+                    if(deferRendering) {
+                        checkNotContainsElements(assert, $multiView, [2]);
+                    } else {
+                        checkContainsElements(assert, $multiView, [2]);
+                    }
+                    checkItemRect(assert, $multiView, 1, { left: 0, width: 200 });
+
+                    instance.option("selectedIndex", 2);
+
+                    checkContainsElements(assert, $multiView, [0, 1, 2]);
+                    checkItemRect(assert, $multiView, 2, { left: 0, width: 200 });
                 });
-                const instance = $multiView.dxMultiView("instance");
-                instance.option("selectedIndex", 0);
 
-                checkContainsElements(assert, $multiView, [0, 1]);
-                checkNotContainsElements(assert, $multiView, [2]);
-                checkItemRect(assert, $multiView, 0, { left: 0, width: 200 });
-            });
+                QUnit.test("[0, {1,selected}, 2]" + context, function(assert) {
+                    const $multiView = createMultiView({
+                        items: [0, 1, 2],
+                        selectedIndex: 1
+                    });
 
-            QUnit.test("[0, {1,selected}, 2] -> [options(selectedIndex, 2)]" + context, function(assert) {
-                const $multiView = createMultiView({
-                    items: [0, 1, 2],
-                    selectedIndex: 1
+                    checkContainsElements(assert, $multiView, [1]);
+                    if(deferRendering) {
+                        checkNotContainsElements(assert, $multiView, [0, 2]);
+                    } else {
+                        checkContainsElements(assert, $multiView, [0, 2]);
+                    }
+                    checkItemRect(assert, $multiView, 1, { left: 0, width: 200 });
                 });
-                const instance = $multiView.dxMultiView("instance");
-                instance.option("selectedIndex", 2);
 
-                checkContainsElements(assert, $multiView, [1, 2]);
-                checkNotContainsElements(assert, $multiView, [0]);
-                checkItemRect(assert, $multiView, 2, { left: 0, width: 200 });
+                QUnit.test("[0, {1,selected}, 2] -> [options(selectedIndex, 0)]" + context, function(assert) {
+                    const $multiView = createMultiView({
+                        items: [0, 1, 2],
+                        selectedIndex: 1
+                    });
+                    const instance = $multiView.dxMultiView("instance");
+                    instance.option("selectedIndex", 0);
+
+                    checkContainsElements(assert, $multiView, [0, 1]);
+                    if(deferRendering) {
+                        checkNotContainsElements(assert, $multiView, [2]);
+                    } else {
+                        checkContainsElements(assert, $multiView, [2]);
+                    }
+                    checkItemRect(assert, $multiView, 0, { left: 0, width: 200 });
+                });
+
+                QUnit.test("[0, {1,selected}, 2] -> [options(selectedIndex, 2)]" + context, function(assert) {
+                    const $multiView = createMultiView({
+                        items: [0, 1, 2],
+                        selectedIndex: 1
+                    });
+                    const instance = $multiView.dxMultiView("instance");
+                    instance.option("selectedIndex", 2);
+
+                    checkContainsElements(assert, $multiView, [1, 2]);
+                    if(deferRendering) {
+                        checkNotContainsElements(assert, $multiView, [0]);
+                    } else {
+                        checkContainsElements(assert, $multiView, [0]);
+                    }
+                    checkItemRect(assert, $multiView, 2, { left: 0, width: 200 });
+                });
             });
         });
     });
