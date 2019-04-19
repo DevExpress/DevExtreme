@@ -10,12 +10,14 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.Undo,
                 hint: 'Undo',
-                icon: "undo"
+                icon: "undo",
+                text: "Undo",
             },
             {
                 command: DiagramCommand.Redo,
                 hint: "Redo",
-                icon: "redo"
+                icon: "redo",
+                text: "Redo",
             },
             {
                 command: DiagramCommand.FontName,
@@ -31,16 +33,19 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.Bold,
                 hint: "Bold",
+                text: "Bold",
                 icon: "bold"
             },
             {
                 command: DiagramCommand.Italic,
                 hint: "Italic",
+                text: "Italic",
                 icon: "italic"
             },
             {
                 command: DiagramCommand.Underline,
                 hint: "Underline",
+                text: "Underline",
                 icon: "underline"
             },
             {
@@ -56,17 +61,20 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.TextLeftAlign,
                 hint: "Align Left",
+                text: "Align Left",
                 icon: "alignleft",
                 beginGroup: true
             },
             {
                 command: DiagramCommand.TextCenterAlign,
-                hint: "Center",
+                hint: "Align Center",
+                text: "Center",
                 icon: "aligncenter"
             },
             {
                 command: DiagramCommand.TextRightAlign,
                 hint: "Align Right",
+                text: "Align Right",
                 icon: "alignright"
             },
             {
@@ -105,6 +113,7 @@ const DiagramCommands = {
             {
                 widget: "dxButton",
                 icon: "export",
+                text: "Export",
                 items: [
                     {
                         command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
@@ -132,6 +141,7 @@ const DiagramCommands = {
             {
                 widget: "dxButton",
                 text: "Auto Layout",
+                showText: "always",
                 items: [
                     { command: DiagramCommand.AutoLayoutTree, text: "Tree" },
                     { command: DiagramCommand.AutoLayoutFlow, text: "Layered" }
