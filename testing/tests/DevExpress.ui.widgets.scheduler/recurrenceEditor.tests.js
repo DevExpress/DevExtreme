@@ -383,7 +383,7 @@ QUnit.test("Recurrence editor should correctly process values from repeat-count 
     assert.equal(this.instance.option("value"), "FREQ=WEEKLY;COUNT=9", "Recurrence editor has right value");
 });
 
-QUnit.test("Recurrence until-date editor should process rules correctly", function(assert) {
+QUnit.test("Recurrence until-date editor should not process rules if it was set in recurrence string(T726894)", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY;UNTIL=20151007" });
 
     var $untilDate = this.instance.$element().find("." + REPEAT_DATE_EDITOR),
@@ -393,7 +393,7 @@ QUnit.test("Recurrence until-date editor should process rules correctly", functi
 
     this.instance.option("value", "FREQ=WEEKLY;UNTIL=20151107");
 
-    assert.equal(untilDate.option("value").toString(), new Date(2015, 10, 7, 23, 59, 59).toString(), "value of until-date editor is correct");
+    assert.equal(untilDate.option("value").toString(), recurrenceUtils.getDateByAsciiString("20151107"), "value of until-date editor is correct");
 });
 
 QUnit.test("Recurrence editor should correctly process values from until-date editor", function(assert) {
@@ -696,19 +696,19 @@ QUnit.test("Recurrence editor should process values from repeat-on-editor correc
         freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
 
     monthEditor.option("value", "10");
-    freqEditor.option("value", "daily");
+    freqEditor.option("value", "DAILY");
 
     assert.equal(this.instance.option("value"), "FREQ=DAILY", "recurrence editor value is correct");
 
-    freqEditor.option("value", "monthly");
+    freqEditor.option("value", "MONTHLY");
 
     var $dayOfMonth = this.instance.$element().find("." + DAY_OF_MONTH),
         dayEditor = $dayOfMonth.dxNumberBox("instance");
 
     dayEditor.option("value", 5);
-    freqEditor.option("value", "yearly");
+    freqEditor.option("value", "YEARLY");
 
-    assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3", "recurrence editor value is correct");
+    assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=5;BYMONTH=3", "recurrence editor value is correct");
 });
 
 QUnit.test("It should not be possible to set incorrect day of month", function(assert) {

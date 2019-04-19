@@ -353,6 +353,10 @@ var dxChart = AdvancedChart.inherit({
         });
     },
 
+    _partialOptionChangesMap: {
+        visualRange: "VISUAL_RANGE"
+    },
+
     _initCore: function() {
         this.paneAxis = {};
         this._panesClipRects = {};
@@ -651,7 +655,7 @@ var dxChart = AdvancedChart.inherit({
 
         that._argumentAxes.forEach(function(axis) {
             axis.updateCanvas(that._canvas);
-            axis.setBusinessRange(viewport, undefined, undefined, that._axesReinitialized);
+            axis.setBusinessRange(viewport, that._axesReinitialized);
         });
 
         that.callBase();
@@ -790,7 +794,7 @@ var dxChart = AdvancedChart.inherit({
         if(!sizeShortage || !panesCanvases) {
             return;
         }
-
+        this._renderer.stopAllAnimations();
         var that = this,
             rotated = that._isRotated(),
             extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes),
@@ -1239,6 +1243,9 @@ var dxChart = AdvancedChart.inherit({
 
     _notify() {
         const that = this;
+        if(that.option("disableTwoWayBinding") === true) { // for dashboards T732396
+            return;
+        }
         const argumentVisualRange =
             vizUtils.convertVisualRangeObject(this._argumentAxes[0].visualRange(), !_isArray(that.option("argumentAxis.visualRange")));
 
@@ -1253,8 +1260,6 @@ var dxChart = AdvancedChart.inherit({
         });
     }
 });
-
-dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 dxChart.addPlugin(require("./chart_components/zoom_and_pan"));

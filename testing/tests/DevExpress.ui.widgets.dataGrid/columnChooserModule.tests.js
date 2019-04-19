@@ -965,20 +965,27 @@ QUnit.test("CheckBox mode - Update a selection state when column visibility is c
     $.extend(this.columns, [{ caption: "Column 1", index: 0, visible: true, showInColumnChooser: true }, { caption: "Column 2", index: 1, visible: true, showInColumnChooser: true }]);
     this.setTestElement($testElement);
 
+    sinon.spy(this.columnChooserView, "_renderTreeView");
+
     // act
     this.columnChooserView.showColumnChooser();
     this.clock.tick(1000);
+
+    assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, "treeview is rendered");
+
 
     this.columnsController.columnOption(0, "visible", false);
     this.columnsController.columnsChanged.fire({
         columnIndex: 0,
         optionNames: {
-            visible: true
+            visible: true,
+            length: 1
         }
     });
 
     // assert
     assert.ok(!this.columnChooserView._columnChooserList.getNodes()[0].selected, "first item is not selected");
+    assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, "treeview is not rerendered"); // T726413
 
     this.columnChooserView.hideColumnChooser();
 });
@@ -1014,7 +1021,7 @@ QUnit.test("CheckBox mode - scroll position after selecting an last item", funct
 
     // act
     this.columnsController.columnOption(7, "visible", false);
-    this.columnChooserView.render($testElement, true);
+    this.columnChooserView.render($testElement, "full");
 
     // assert
     scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");

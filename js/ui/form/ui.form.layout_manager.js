@@ -1,7 +1,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
-    InstanceStorage = require("./instance_storage").default,
+    FormItemsRunTimeInfo = require("./ui.form.items_runtime_info").default,
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
@@ -108,7 +108,7 @@ var LayoutManager = Widget.inherit({
 
         this.callBase();
         this._itemWatchers = [];
-        this._instanceStorage = new InstanceStorage();
+        this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
         this._updateReferencedOptions(layoutData);
         this._initDataAndItems(layoutData);
     },
@@ -304,7 +304,7 @@ var LayoutManager = Widget.inherit({
     },
 
     _initMarkup: function() {
-        this._instanceStorage.clear();
+        this._itemsRunTimeInfo.clear();
         this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
@@ -579,7 +579,7 @@ var LayoutManager = Widget.inherit({
 
         var instance = this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
 
-        this._instanceStorage.add(item, instance, item.guid);
+        this._itemsRunTimeInfo.add(item, instance, item.guid, $container);
         this._addItemClasses($container, item.col);
 
         return $button;
@@ -637,7 +637,7 @@ var LayoutManager = Widget.inherit({
             validationBoundary: that.option("validationBoundary")
         });
 
-        this._instanceStorage.add(item, instance, item.guid);
+        this._itemsRunTimeInfo.add(item, instance, item.guid, $container);
 
         var $validationTarget = $editor.children().first();
 
@@ -1067,8 +1067,6 @@ var LayoutManager = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var that = this;
-
         if(args.fullName.search("layoutData.") === 0) {
             return;
         }
@@ -1086,18 +1084,20 @@ var LayoutManager = Widget.inherit({
 
                 if(this.option("items")) {
                     if(!typeUtils.isEmptyObject(args.value)) {
-                        this._instanceStorage.each(function(instance, item) {
-                            var name = that._getName(item);
+                        this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
+                            if(typeUtils.isDefined(itemRunTimeInfo.item)) {
+                                var dataField = itemRunTimeInfo.item.dataField;
 
-                            if(name) {
-                                var valueGetter = dataUtils.compileGetter(name),
-                                    dataValue = valueGetter(args.value);
+                                if(dataField && typeUtils.isDefined(itemRunTimeInfo.widgetInstance)) {
+                                    var valueGetter = dataUtils.compileGetter(dataField),
+                                        dataValue = valueGetter(args.value);
 
-                                if(dataValue === undefined) {
-                                    instance.reset();
-                                    instance.option("isValid", true);
-                                } else {
-                                    instance.option("value", dataValue);
+                                    if(dataValue === undefined) {
+                                        itemRunTimeInfo.widgetInstance.reset();
+                                        itemRunTimeInfo.widgetInstance.option("isValid", true);
+                                    } else {
+                                        itemRunTimeInfo.widgetInstance.option("value", dataValue);
+                                    }
                                 }
                             }
                         });
@@ -1223,7 +1223,7 @@ var LayoutManager = Widget.inherit({
     },
 
     getEditor: function(field) {
-        return this._instanceStorage.findByDataField(field) || this._instanceStorage.findByName(field);
+        return this._itemsRunTimeInfo.findWidgetInstanceByDataField(field) || this._itemsRunTimeInfo.findWidgetInstanceByName(field);
     },
 
     isSingleColumnMode: function(component) {

@@ -1,42 +1,48 @@
-var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
-    eventsEngine = require("../events/core/events_engine"),
-    Component = require("../core/component"),
-    isFunction = require("../core/utils/type").isFunction,
-    Action = require("../core/action"),
-    domUtils = require("../core/utils/dom"),
-    each = require("../core/utils/iterator").each,
-    viewPortUtils = require("../core/utils/view_port"),
-    extend = require("../core/utils/extend").extend,
-    isPlainObject = require("../core/utils/type").isPlainObject,
-    devices = require("../core/devices"),
-    themes = require("./themes"),
-    errors = require("./widget/ui.errors"),
-    messageLocalization = require("../localization/message"),
-    Popup = require("./popup"),
-    config = require("../core/config"),
-    Deferred = require("../core/utils/deferred").Deferred;
+import $ from "../core/renderer";
+import Component from "../core/component";
+import Action from "../core/action";
+import devices from "../core/devices";
+import config from "../core/config";
 
-var DEFAULT_BUTTON = {
+import { resetActiveElement } from "../core/utils/dom";
+import { Deferred } from "../core/utils/deferred";
+import { isFunction } from "../core/utils/type";
+import { each } from "../core/utils/iterator";
+import { isPlainObject } from "../core/utils/type";
+import { extend } from "../core/utils/extend";
+import { getWindow } from "../core/utils/window";
+import { trigger } from "../events/core/events_engine";
+import { value as getViewport } from "../core/utils/view_port";
+
+import themes from "./themes";
+import messageLocalization from "../localization/message";
+import errors from "./widget/ui.errors";
+import Popup from "./popup";
+
+const window = getWindow();
+
+const DEFAULT_BUTTON = {
     text: "OK",
     onClick: function() { return true; }
 };
 
-var DX_DIALOG_CLASSNAME = "dx-dialog",
-    DX_DIALOG_WRAPPER_CLASSNAME = DX_DIALOG_CLASSNAME + "-wrapper",
-    DX_DIALOG_ROOT_CLASSNAME = DX_DIALOG_CLASSNAME + "-root",
-    DX_DIALOG_CONTENT_CLASSNAME = DX_DIALOG_CLASSNAME + "-content",
-    DX_DIALOG_MESSAGE_CLASSNAME = DX_DIALOG_CLASSNAME + "-message",
-    DX_DIALOG_BUTTONS_CLASSNAME = DX_DIALOG_CLASSNAME + "-buttons",
-    DX_DIALOG_BUTTON_CLASSNAME = DX_DIALOG_CLASSNAME + "-button";
+const DX_DIALOG_CLASSNAME = "dx-dialog";
+const DX_DIALOG_WRAPPER_CLASSNAME = `${DX_DIALOG_CLASSNAME}-wrapper`;
+const DX_DIALOG_ROOT_CLASSNAME = `${DX_DIALOG_CLASSNAME}-root`;
+const DX_DIALOG_CONTENT_CLASSNAME = `${DX_DIALOG_CLASSNAME}-content`;
+const DX_DIALOG_MESSAGE_CLASSNAME = `${DX_DIALOG_CLASSNAME}-message`;
+const DX_DIALOG_BUTTONS_CLASSNAME = `${DX_DIALOG_CLASSNAME}-buttons`;
+const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 
-var FakeDialogComponent = Component.inherit({
+const DX_BUTTON_CLASSNAME = "dx-button";
+
+const FakeDialogComponent = Component.inherit({
     ctor: function(element, options) {
         this.callBase(options);
     },
 
     _defaultOptionsRules: function() {
-        var themeName = themes.current();
+        const themeName = themes.current();
 
         return this.callBase().concat([
             {
@@ -93,29 +99,40 @@ exports.title = "";
  * @return Object
  * @param1 options:object
  * @param1_field1 title:String
- * @param1_field2 message:String
+ * @param1_field2 messageHtml:String
  * @param1_field3 buttons:Array<dxButtonOptions>
  * @param1_field4 showTitle:boolean
+ * @param1_field5 message:String:deprecated(messageHtml)
  * @static
  * @module ui/dialog
  * @export custom
  */
 exports.custom = function(options) {
-    var deferred = new Deferred();
+    const deferred = new Deferred();
 
-    var defaultOptions = new FakeDialogComponent().option();
+    const defaultOptions = new FakeDialogComponent().option();
 
     options = extend(defaultOptions, options);
 
-    var $element = $("<div>").addClass(DX_DIALOG_CLASSNAME)
-        .appendTo(viewPortUtils.value());
+    const $element = $("<div>")
+        .addClass(DX_DIALOG_CLASSNAME)
+        .appendTo(getViewport());
 
-    var $message = $("<div>").addClass(DX_DIALOG_MESSAGE_CLASSNAME)
-        .html(String(options.message));
+    const isMessageDefined = "message" in options;
+    const isMessageHtmlDefined = "messageHtml" in options;
 
-    var popupToolbarItems = [];
+    if(isMessageDefined) {
+        errors.log("W1013");
+    }
 
-    var toolbarItemsOption = options.toolbarItems;
+    const messageHtml = String(isMessageHtmlDefined ? options.messageHtml : options.message);
+
+    const $message = $("<div>").addClass(DX_DIALOG_MESSAGE_CLASSNAME)
+        .html(messageHtml);
+
+    const popupToolbarItems = [];
+
+    let toolbarItemsOption = options.toolbarItems;
 
     if(toolbarItemsOption) {
         errors.log("W0001", "DevExpress.ui.dialog", "toolbarItems", "16.2", "Use the 'buttons' option instead");
@@ -124,32 +141,32 @@ exports.custom = function(options) {
     }
 
     each(toolbarItemsOption || [DEFAULT_BUTTON], function() {
-        var action = new Action(this.onClick, {
+        const action = new Action(this.onClick, {
             context: popupInstance
         });
 
         popupToolbarItems.push({
-            toolbar: 'bottom',
-            location: devices.current().android ? 'after' : 'center',
-            widget: 'dxButton',
+            toolbar: "bottom",
+            location: devices.current().android ? "after" : "center",
+            widget: "dxButton",
             options: extend({}, this, {
                 onClick: function() {
-                    var result = action.execute(arguments);
+                    const result = action.execute(...arguments);
                     hide(result);
                 }
             })
         });
     });
 
-    var popupInstance = new Popup($element, extend({
+    const popupInstance = new Popup($element, extend({
         title: options.title || exports.title,
         showTitle: function() {
-            var isTitle = options.showTitle === undefined ? true : options.showTitle;
+            const isTitle = options.showTitle === undefined ? true : options.showTitle;
             return isTitle;
         }(),
         height: "auto",
         width: function() {
-            var isPortrait = $(window).height() > $(window).width(),
+            const isPortrait = $(window).height() > $(window).width(),
                 key = (isPortrait ? "p" : "l") + "Width",
                 widthOption = options.hasOwnProperty(key) ? options[key] : options["width"];
 
@@ -166,18 +183,18 @@ exports.custom = function(options) {
             e.component
                 .bottomToolbar()
                 .addClass(DX_DIALOG_BUTTONS_CLASSNAME)
-                .find(".dx-button")
+                .find(`.${DX_BUTTON_CLASSNAME}`)
                 .addClass(DX_DIALOG_BUTTON_CLASSNAME);
 
-            domUtils.resetActiveElement();
+            resetActiveElement();
         },
         onShown: function(e) {
-            var $firstButton = e.component
+            const $firstButton = e.component
                 .bottomToolbar()
-                .find(".dx-button")
+                .find(`.${DX_BUTTON_CLASSNAME}`)
                 .first();
 
-            eventsEngine.trigger($firstButton, "focus");
+            trigger($firstButton, "focus");
         },
         onHiding: function() {
             deferred.reject();
@@ -235,43 +252,37 @@ exports.custom = function(options) {
 
 /**
  * @name ui.dialogmethods.alert
- * @publicName alert(message,title)
- * @param1 message:string
+ * @publicName alert(messageHtml,title)
+ * @param1 messageHtml:string
  * @param2 title:string
  * @return Promise<void>
  * @static
  * @module ui/dialog
  * @export alert
  */
-exports.alert = function(message, title, showTitle) {
-    var options = isPlainObject(message)
-        ? message
-        : {
-            title: title,
-            message: message,
-            showTitle: showTitle
-        };
+exports.alert = function(messageHtml, title, showTitle) {
+    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle };
 
     return exports.custom(options).show();
 };
 
 /**
  * @name ui.dialogmethods.confirm
- * @publicName confirm(message,title)
- * @param1 message:string
+ * @publicName confirm(messageHtml,title)
+ * @param1 messageHtml:string
  * @param2 title:string
  * @return Promise<boolean>
  * @static
  * @module ui/dialog
  * @export confirm
  */
-exports.confirm = function(message, title, showTitle) {
-    var options = isPlainObject(message)
-        ? message
+exports.confirm = function(messageHtml, title, showTitle) {
+    const options = isPlainObject(messageHtml)
+        ? messageHtml
         : {
-            title: title,
-            message: message,
-            showTitle: showTitle,
+            title,
+            messageHtml,
+            showTitle,
             buttons: [
                 { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
                 { text: messageLocalization.format("No"), onClick: function() { return false; } }

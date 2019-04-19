@@ -279,6 +279,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
         this._initVisibilityActions();
         this._initPopupInitializedAction();
+        this._initInnerOptionCache("dropDownOptions");
     },
 
     _initVisibilityActions: function() {
@@ -342,14 +343,22 @@ var DropDownEditor = TextBox.inherit({
         }
     },
 
+    _getFieldTemplate: function() {
+        return this.option("fieldTemplate") && this._getTemplateByOption("fieldTemplate");
+    },
+
     _renderField: function() {
-        var fieldTemplate = this._getTemplateByOption("fieldTemplate");
+        const fieldTemplate = this._getFieldTemplate();
 
-        if(!(fieldTemplate && this.option("fieldTemplate"))) {
-            return;
+        fieldTemplate && this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
+    },
+
+    _renderPlaceholder: function() {
+        const hasFieldTemplate = !!this._getFieldTemplate();
+
+        if(!hasFieldTemplate) {
+            this.callBase();
         }
-
-        this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {
@@ -533,7 +542,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderPopup: function() {
-        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this.option("dropDownOptions")));
+        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._getInnerOptionsCache("dropDownOptions")));
 
         this._popup.on({
             "showing": this._popupShowingHandler.bind(this),
@@ -660,7 +669,6 @@ var DropDownEditor = TextBox.inherit({
     _clean: function() {
         delete this._$dropDownButton;
         delete this._openOnFieldClickAction;
-        delete this._options.dropDownOptions;
 
         if(this._$popup) {
             this._$popup.remove();
@@ -813,6 +821,7 @@ var DropDownEditor = TextBox.inherit({
                 break;
             case "dropDownOptions":
                 this._popupOptionChanged(args);
+                this._cacheInnerOptions("dropDownOptions", args.value);
                 break;
             case "popupPosition":
             case "deferRendering":

@@ -1,6 +1,6 @@
 import Callbacks from "../../core/utils/callbacks";
 import gridCore from "../data_grid/ui.data_grid.core";
-import commonUtils from "../../core/utils/common";
+import { executeAsync, getKeyHash } from "../../core/utils/common";
 import typeUtils from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
@@ -44,7 +44,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
     function executeTask(action, timeout) {
         if(typeUtils.isDefined(timeout)) {
-            commonUtils.executeAsync(action, timeout);
+            executeAsync(action, timeout);
         } else {
             action();
         }
@@ -76,6 +76,7 @@ module.exports = gridCore.Controller.inherit((function() {
             that._hasLastPage = false;
             that._currentTotalCount = 0;
             that._cachedPagesData = createEmptyPagesData();
+            that._lastOperationTypes = {};
 
 
             that.changed = Callbacks();
@@ -168,6 +169,24 @@ module.exports = gridCore.Controller.inherit((function() {
             if(!fromStore) {
                 this._applyBatch(changes);
             }
+        },
+        getDataIndexGetter: function() {
+            if(!this._dataIndexGetter) {
+                var indexByKey;
+                var store = this.store();
+                this._dataIndexGetter = data => {
+                    var storeData = this._cachedStoreData || [];
+                    if(!indexByKey) {
+                        indexByKey = {};
+                        for(var i = 0; i < storeData.length; i++) {
+                            indexByKey[getKeyHash(store.keyOf(storeData[i]))] = i;
+                        }
+                    }
+                    return indexByKey[getKeyHash(store.keyOf(data))];
+                };
+            }
+
+            return this._dataIndexGetter;
         },
         _getKeyInfo: function() {
             return this.store();
@@ -269,9 +288,12 @@ module.exports = gridCore.Controller.inherit((function() {
                 options.operationTypes = operationTypes;
                 that._isRefreshing = true;
 
-                when(isRefreshing || that.refresh(options, isReload, operationTypes)).done(function() {
+                when(isRefreshing || that._isRefreshed || that.refresh(options, isReload, operationTypes)).done(function() {
                     if(that._lastOperationId === options.operationId) {
-                        that.load();
+                        that._isRefreshed = true;
+                        that.load().always(function() {
+                            that._isRefreshed = false;
+                        });
                     }
                 }).fail(function() {
                     dataSource.cancel(options.operationId);
@@ -333,7 +355,9 @@ module.exports = gridCore.Controller.inherit((function() {
 
             if(options.lastLoadOptions) {
                 this._lastLoadOptions = options.lastLoadOptions;
-                this._operationTypes = options.operationTypes;
+                Object.keys(options.operationTypes).forEach(operationType => {
+                    this._lastOperationTypes[operationType] = this._lastOperationTypes[operationType] || options.operationTypes[operationType];
+                });
             }
 
             if(localPaging) {
@@ -439,9 +463,12 @@ module.exports = gridCore.Controller.inherit((function() {
             }
 
             if(!isLoading) {
-                this.component._optionCache = {};
-                this.changed.fire(args);
-                this.component._optionCache = undefined;
+                that._operationTypes = that._lastOperationTypes;
+                that._lastOperationTypes = {};
+
+                that.component._optionCache = {};
+                that.changed.fire(args);
+                that.component._optionCache = undefined;
             }
         },
         _scheduleCustomLoadCallbacks: function(deferred) {

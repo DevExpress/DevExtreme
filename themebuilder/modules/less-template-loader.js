@@ -1,6 +1,7 @@
+const LessPluginAutoPrefix = require("less-plugin-autoprefix");
+
 const BOOTSTRAP_SCSS_PATH = "bootstrap/scss/";
 const THEMEBUILDER_LESS_PATH = "devextreme-themebuilder/data/less/";
-
 const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
 
 const createModifyVars = modifyVars => {
@@ -31,7 +32,11 @@ class LessMetadataPreCompilerPlugin {
         this.modifyVars = modifyVars;
     }
 
-    process(less) {
+    process(less, context) {
+        if(context && context.fileInfo.filename !== "input") {
+            return less;
+        }
+
         less += "#devexpress-metadata-compiler{";
         for(let key in this._metadata) {
             if(this._metadata.hasOwnProperty(key)) {
@@ -126,6 +131,7 @@ class LessTemplateLoader {
 
     compileLess(less, modifyVars, metadata) {
         return new Promise((resolve, reject) => {
+            const browsersList = require("../package.json").browserslist;
             let compiledMetadata = {};
             let options = {};
 
@@ -136,19 +142,22 @@ class LessTemplateLoader {
 
             let customOptions = {
                 modifyVars: modifyVars,
-                plugins: [{
-                    install: (_, pluginManager) => {
-                        pluginManager.addPostProcessor(new LessFontPlugin(this.options));
+                plugins: [
+                    new LessPluginAutoPrefix({ browsers: browsersList }),
+                    {
+                        install: (_, pluginManager) => {
+                            pluginManager.addPostProcessor(new LessFontPlugin(this.options));
+                        }
+                    }, {
+                        install: (_, pluginManager) => {
+                            pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector, modifyVars));
+                        }
+                    }, {
+                        install: (_, pluginManager) => {
+                            pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector, this.outColorScheme));
+                        }
                     }
-                }, {
-                    install: (_, pluginManager) => {
-                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector, modifyVars));
-                    }
-                }, {
-                    install: (_, pluginManager) => {
-                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector, this.outColorScheme));
-                    }
-                }]
+                ]
             };
 
             Object.assign(options, customOptions);
@@ -157,7 +166,8 @@ class LessTemplateLoader {
                 resolve({
                     compiledMetadata: compiledMetadata,
                     css: this._makeInfoHeader() + output.css,
-                    swatchSelector: this.swatchSelector
+                    swatchSelector: this.swatchSelector,
+                    version: this.version
                 });
             }, error => {
                 reject(error);

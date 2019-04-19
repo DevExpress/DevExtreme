@@ -143,7 +143,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             bBox = text.getBBox();
             text.remove();
 
-            context.textVerticalOffset = -bBox.y - bBox.height / 2;
+            context.textY = bBox.y;
             context.textWidth = bBox.width;
             context.textHeight = bBox.height;
         }
@@ -157,6 +157,8 @@ var dxBarGauge = dxBaseGauge.inherit({
         if(this._context.textEnabled) {
             result.horizontalMargin = this._context.textWidth;
             result.verticalMargin = this._context.textHeight;
+            result.inverseHorizontalMargin = this._context.textWidth / 2;
+            result.inverseVerticalMargin = this._context.textHeight / 2;
         }
         return result;
     },
@@ -207,7 +209,8 @@ var dxBarGauge = dxBaseGauge.inherit({
         _count = _min(_floor((radius + spacing) / context.barSize), count);
         that._setBarsCount(_count);
         radius = that._outerRadius;
-        context.textRadius = radius + that._textIndent;
+        context.textRadius = radius;
+        context.textIndent = that._textIndent;
         that._palette.reset();
         unitOffset = context.barSize + spacing;
         for(i = 0; i < _count; ++i, radius -= unitOffset) {
@@ -373,7 +376,7 @@ _extend(BarWrapper.prototype, {
         that._color = options.color;
         that._bar.attr({ fill: options.color });
         if(context.textEnabled) {
-            that._line.attr({ points: [context.x, context.y - that._settings.innerRadius, context.x, context.y - context.textRadius], stroke: context.lineColor || options.color }).sharp();
+            that._line.attr({ points: [context.x, context.y - that._settings.innerRadius, context.x, context.y - context.textRadius - context.textIndent], stroke: context.lineColor || options.color }).sharp();
             that._text.css({ fill: context.textColor || options.color });
         }
         return that;
@@ -393,22 +396,42 @@ _extend(BarWrapper.prototype, {
 
     setAngle: function(angle) {
         var that = this,
+            context = that._context,
+            settings = that._settings,
             cosSin;
 
         that._angle = angle;
-        setAngles(that._settings, that._context.baseAngle, that._angle);
-        that._bar.attr(that._settings);
-        that._tracker.attr(that._settings);
-        if(that._context.textEnabled) {
-            var text = _formatValue(that._value, that._context.formatOptions, { index: that._index });
-            that._line.attr({ visibility: text === "" ? "hidden" : null });
-            that._line.rotate(_convertAngleToRendererSpace(that._angle), that._context.x, that._context.y);
-            cosSin = _getCosAndSin(that._angle);
+        setAngles(settings, context.baseAngle, angle);
+        that._bar.attr(settings);
+        that._tracker.attr(settings);
+        if(context.textEnabled) {
+            cosSin = _getCosAndSin(angle);
+            var indent = context.textIndent,
+                radius = context.textRadius + indent,
+                x = context.x + radius * cosSin.cos,
+                y = context.y - radius * cosSin.sin,
+                halfWidth = context.textWidth * 0.5,
+                textHeight = context.textHeight,
+                textY = context.textY;
+
+            if(_abs(x - context.x) > indent) {
+                x += (x < context.x) ? -halfWidth : halfWidth;
+            }
+            if(_abs(y - context.y) <= indent) {
+                y -= textY + textHeight * 0.5;
+            } else {
+                y -= (y < context.y) ? textY + textHeight : textY;
+            }
+
+            var text = _formatValue(that._value, context.formatOptions, { index: that._index });
             that._text.attr({
                 text: text,
-                x: that._context.x + (that._context.textRadius + that._context.textWidth * 0.6) * cosSin.cos,
-                y: that._context.y - (that._context.textRadius + that._context.textHeight * 0.6) * cosSin.sin + that._context.textVerticalOffset
+                x: x,
+                y: y
             });
+
+            that._line.attr({ visibility: text === "" ? "hidden" : null });
+            that._line.rotate(_convertAngleToRendererSpace(angle), context.x, context.y);
         }
         return that;
     },

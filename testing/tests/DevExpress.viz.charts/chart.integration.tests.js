@@ -8,7 +8,8 @@ var $ = require("jquery"),
     dxPieChart = require("viz/pie_chart"),
     dxPolarChart = require("viz/polar_chart"),
     baseChartModule = require("viz/chart_components/base_chart"),
-    setupSeriesFamily = require("../../helpers/chartMocks.js").setupSeriesFamily;
+    setupSeriesFamily = require("../../helpers/chartMocks.js").setupSeriesFamily,
+    pointerMock = require("../../helpers/pointerMock.js");
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -441,6 +442,54 @@ QUnit.test("Pass visualRange array if options is set using array", function(asse
     chart.getArgumentAxis().visualRange([3, 6]);
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
+});
+
+QUnit.test("Can disable visualRange two way binding", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var visualRangeChanged = sinon.spy();
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 5
+        }, {
+            arg: 5,
+            val: 7
+        }, {
+            arg: 8,
+            val: 3
+        }, {
+            arg: 11,
+            val: 8
+        }],
+        argumentAxis: {
+            visualRange: {
+                startValue: 1,
+                endValue: 2
+            }
+        },
+        series: { type: "line" },
+        onOptionChanged: visualRangeChanged,
+        disableTwoWayBinding: true
+    });
+
+    chart.getArgumentAxis().visualRange([3, 6]);
+    assert.deepEqual(visualRangeChanged.callCount, 0);
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), {
+        startValue: 3,
+        endValue: 6
+    });
+    assert.deepEqual(chart.option().argumentAxis.visualRange, {
+        startValue: 1,
+        endValue: 2
+    });
 });
 
 QUnit.test("Set visualRange for multi axis/pane (check option method and adjustOnZoom)", function(assert) {
@@ -2477,6 +2526,32 @@ QUnit.test("Recalculate argument range data from all visible series", function(a
     assert.equal(argRange.min, 2);
     assert.equal(argRange.max, 3);
     assert.equal(argRange.isEmpty(), false);
+});
+
+QUnit.test("T720002, T719994. Change hovered series at runtime should not throw exception", function(assert) {
+    var clock = sinon.useFakeTimers();
+    try {
+        var chart = this.createChart({
+                dataSource: [
+                    { arg: 1, val: 400 }
+                ],
+                size: {
+                    width: 400,
+                    height: 400
+                },
+                series: [{}, {}]
+            }),
+            rootOffset = chart._renderer.getRootOffset();
+
+        pointerMock($(".dxc-trackers > path").eq(1)).start().move(rootOffset.left + 100, rootOffset.top + 100);
+        clock.tick(100);
+
+        chart.option({ series: [{}] });
+
+        assert.equal(chart.getAllSeries().length, 1);
+    } finally {
+        clock.restore();
+    }
 });
 
 // T688232

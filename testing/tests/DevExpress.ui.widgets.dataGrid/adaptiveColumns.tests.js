@@ -2009,6 +2009,37 @@ QUnit.test("Hide the adaptive and master detail row", function(assert) {
     assert.ok($rows.eq(0).css("display") === "none", "master detail row");
 });
 
+QUnit.test("Expand adaptive row when row as tbody", function(assert) {
+    // arrange
+    $(".dx-datagrid").width(200);
+
+    var $rowElements,
+        $testElement = $("#container");
+
+    this.options = {
+        rowTemplate: function(container, options) {
+            $("<tbody class=\"dx-row dx-data-row\"><tr><td></td></tr></tbody>").appendTo(container);
+        }
+    };
+    setupDataGrid(this);
+    this.rowsView.render($testElement);
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 3, "row count");
+
+    // act
+    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+    this.clock.tick();
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 4, "row count");
+    assert.ok($rowElements.eq(0).hasClass("dx-data-row"), "data row");
+    assert.ok($rowElements.eq(1).hasClass("dx-adaptive-detail-row"), "adaptive detail row");
+});
+
 QUnit.module("Editing", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -2859,7 +2890,7 @@ QUnit.test("Edit batch. Close edit mode and cancel editing when click out the da
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     this.clock.tick();
     editor.option("value", 102);
-    $(document).trigger("dxclick");
+    $(document).trigger("dxpointerdown");
     this.clock.tick();
     $itemsContent = $(".dx-field-item-content");
 
@@ -2962,7 +2993,7 @@ QUnit.test("Edit batch. Form's item is marked as modified", function(assert) {
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxTextBox("instance");
     editor.option("value", "Test");
-    $(document).trigger("dxclick");
+    $(document).trigger("dxpointerdown");
     this.clock.tick();
     $itemsContent = $(".dx-field-item-content");
 
@@ -3017,7 +3048,7 @@ QUnit.test("Edit batch. Form's item is marked as modified for other adaptive row
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxTextBox("instance");
     editor.option("value", "test");
-    $(document.body).trigger("dxclick");
+    $(document.body).trigger("dxpointerdown");
     this.clock.tick();
     this.adaptiveColumnsController.collapseAdaptiveDetailRow(dataSource[0]);
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3211,7 +3242,7 @@ QUnit.test("Edit batch. Show modified state in a cell when cell is edited inside
 
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 102);
-    $(document).trigger("dxclick");
+    $(document).trigger("dxpointerdown");
     this.clock.tick();
     $(".dx-datagrid").width(1000);
     this.resizingController.resize();
@@ -3540,7 +3571,7 @@ QUnit.test("Create new row is the cell mode. Save new values", function(assert) 
 
     // act
     editors.first().dxTextBox("instance").option("value", "12test");
-    $(document).trigger("dxclick");
+    $(document).trigger("dxpointerdown");
     this.clock.tick();
 
     // assert
@@ -3792,7 +3823,7 @@ QUnit.module("Validation", {
 
         editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
         editor.option("value", "");
-        $(document).trigger("dxclick");
+        $(document).trigger("dxpointerdown");
         this.clock.tick();
 
         // assert
@@ -3893,7 +3924,7 @@ QUnit.module("Validation", {
 
         editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
         editor.option("value", "");
-        $(document).trigger("dxclick");
+        $(document).trigger("dxpointerdown");
         this.clock.tick();
 
         // assert
@@ -3960,7 +3991,7 @@ QUnit.module("Validation", {
 
         editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
         editor.option("value", "");
-        $(document).trigger("dxclick");
+        $(document).trigger("dxpointerdown");
         this.clock.tick();
 
         $itemsContent = $(".dx-field-item-content");

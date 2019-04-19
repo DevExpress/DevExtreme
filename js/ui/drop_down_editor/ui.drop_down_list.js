@@ -576,9 +576,10 @@ var DropDownList = DropDownEditor.inherit({
             noDataText: this.option("noDataText"),
             grouped: this.option("grouped"),
             onContentReady: this._listContentReadyHandler.bind(this),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            itemTemplate: this.option("itemTemplate"),
             indicateLoading: false,
             keyExpr: this._getCollectionKeyExpr(),
+            displayExpr: this._displayGetterExpr(),
             groupTemplate: this.option("groupTemplate"),
             tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
@@ -861,6 +862,7 @@ var DropDownList = DropDownEditor.inherit({
                 break;
             case "displayExpr":
                 this._renderValue();
+                this._setListOption("displayExpr", this._displayGetterExpr());
                 break;
             case "searchMode":
                 this._validateSearchMode();

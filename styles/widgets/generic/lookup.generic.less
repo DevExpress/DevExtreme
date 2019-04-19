@@ -113,21 +113,6 @@
     }
 }
 
-.dx-lookup-validation-message {
-    font-size: @GENERIC_LOOKUP_INVALID_MESSAGE_FONT_SIZE;
-    line-height: @GENERIC_LOOKUP_INVALID_MESSAGE_FONT_SIZE;
-    padding: @GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_TOP @GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL @GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM;
-    margin-bottom: @GENERIC_LOOKUP_INVALID_MESSAGE_MARGIN_BOTTOM;
-    margin-left: -@GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL;
-    border-bottom: 1px solid @overlay-border-color;
-    color: @lookup-validation-message-color;
-
-    .dx-rtl & {
-        margin-right: -@GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL;
-        margin-left: 0;
-    }
-}
-
 .dx-lookup-popup-search .dx-list {
     height: calc(~'100% - '@GENERIC_LOOKUP_LIST_TOP);
 }
@@ -135,24 +120,4 @@
 .dx-lookup-search-wrapper {
     padding: @GENERIC_LOOKUP_POPUP_CONTENT_PADDING;
     padding-bottom: @GENERIC_LOOKUP_POPUP_CONTENT_PADDING - 6px;
-}
-
-.dx-popup-content {
-    &.dx-lookup-invalid {
-        padding-top: 0;
-
-        .dx-lookup-validation-message {
-            display: inline-block;
-        }
-
-        .dx-list {
-            top: @GENERIC_LOOKUP_INVALID_MESSAGE_FONT_SIZE + @GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_TOP + @GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM + 1px;
-        }
-
-        .dx-lookup-popup-search & {
-            .dx-list {
-                top: @GENERIC_LOOKUP_LIST_TOP + @GENERIC_LOOKUP_INVALID_MESSAGE_FONT_SIZE + @GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_TOP + @GENERIC_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM + 1px;
-            }
-        }
-    }
 }

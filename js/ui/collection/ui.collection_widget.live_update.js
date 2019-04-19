@@ -19,6 +19,10 @@ export default CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._customizeStoreLoadOptions = (e) => {
+            var dataSource = this._dataSource;
+            if(dataSource && !dataSource.isLoaded()) {
+                this._correctionIndex = 0;
+            }
             if(this._correctionIndex && e.storeLoadOptions) {
                 e.storeLoadOptions.skip += this._correctionIndex;
             }
@@ -136,7 +140,15 @@ export default CollectionWidget.inherit({
 
     _modifyByChanges: function(changes, isPartialRefresh) {
         let items = this._editStrategy.itemsGetter(),
-            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
+            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) },
+            dataSource = this._dataSource,
+            paginate = dataSource && dataSource.paginate(),
+            group = dataSource && dataSource.group();
+
+        if(paginate || group) {
+            changes = changes.filter(item => item.type !== "insert" || item.index !== undefined);
+        }
+
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
         this._renderedItemsCount = items.length;
         this._refreshItemsCache();

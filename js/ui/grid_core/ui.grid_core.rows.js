@@ -29,7 +29,6 @@ var ROWS_VIEW_CLASS = "rowsview",
     LAST_ROW_BORDER = "dx-last-row-border",
     EMPTY_CLASS = "dx-empty",
     ROW_INSERTED_ANIMATION_CLASS = "row-inserted-animation",
-    ROW_CLASS = "dx-row",
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -671,13 +670,10 @@ module.exports = {
                     }
                 },
 
-                _getBodies: function(tableElement) {
-                    return $(tableElement).children("tbody").not(".dx-header").not(".dx-footer");
-                },
-
-                _createEmptyRow: function(className, isFixed) {
+                _createEmptyRow: function(className, isFixed, height) {
                     var that = this,
                         i,
+                        $cell,
                         $row = that._createRow(),
                         columns = isFixed ? this.getFixedColumns() : this.getColumns();
 
@@ -686,26 +682,15 @@ module.exports = {
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
                     for(i = 0; i < columns.length; i++) {
-                        $row.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
+                        $cell = that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns });
+                        isNumeric(height) && $cell.css("height", height);
+
+                        $row.append($cell);
                     }
 
                     that.setAria("role", "presentation", $row);
 
                     return $row;
-                },
-
-                _wrapEmptyRowIfNeed: function($table, $emptyRow, className) {
-                    var $tBodies = this._getBodies($table);
-
-                    if($tBodies.filter("." + ROW_CLASS).length) {
-                        var $tbody = $("<tbody>").addClass(className);
-
-                        this.setAria("role", "presentation", $tbody);
-
-                        return $tbody.append($emptyRow);
-                    }
-
-                    return $emptyRow;
                 },
 
                 _appendEmptyRow: function($table, $emptyRow, location) {
@@ -722,7 +707,7 @@ module.exports = {
                 _renderFreeSpaceRow: function($tableElement) {
                     var $freeSpaceRowElement = this._createEmptyRow(FREE_SPACE_CLASS);
 
-                    $freeSpaceRowElement = this._wrapEmptyRowIfNeed($tableElement, $freeSpaceRowElement, FREE_SPACE_CLASS);
+                    $freeSpaceRowElement = this._wrapRowIfNeed($tableElement, $freeSpaceRowElement);
 
                     this._appendEmptyRow($tableElement, $freeSpaceRowElement);
                 },

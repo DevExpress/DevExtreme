@@ -90,6 +90,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return 0;
             },
 
+            getRowIndexDelta: function() {
+                return 0;
+            },
+
             items: function() {
                 return options.items;
             },
@@ -249,6 +253,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 this.cancelEditRowCallCount++;
             },
             isEditing: function() {
+                return this._isEditing;
+            },
+            isEditRow: function(visibleIndex) {
                 return this._isEditing;
             },
             getEditMode: commonUtils.noop,

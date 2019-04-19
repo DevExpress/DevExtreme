@@ -5,7 +5,6 @@
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
-export DEVEXTREME_QUNIT_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
@@ -14,6 +13,8 @@ function run_lint {
 }
 
 function run_test {
+    export DEVEXTREME_QUNIT_CI=true
+    
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true&nojquery=true"
     local runner_pid
@@ -78,12 +79,22 @@ function run_test {
     exit $runner_result
 }
 
+function run_test_themebuilder {
+    dotnet build build/build-dotnet.sln
+    npm i
+    npm run build-themebuilder-assets
+    cd themebuilder
+    npm i
+    npm run test
+}
+
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
 case "$TARGET" in
     "lint") run_lint ;;
     "test") run_test ;;
+    "test_themebuilder") run_test_themebuilder ;;
 
     *)
         echo "Unknown target"

@@ -1,29 +1,31 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    dataUtils = require("../../core/element_data"),
-    translator = require("../../animation/translator"),
-    dateUtils = require("../../core/utils/date"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    objectUtils = require("../../core/utils/object"),
-    arrayUtils = require("../../core/utils/array"),
-    extend = require("../../core/utils/extend").extend,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    recurrenceUtils = require("./utils.recurrence"),
-    registerComponent = require("../../core/component_registrator"),
-    publisherMixin = require("./ui.scheduler.publisher_mixin"),
-    Appointment = require("./ui.scheduler.appointment"),
-    eventUtils = require("../../events/utils"),
-    dblclickEvent = require("../../events/double_click"),
-    dateLocalization = require("../../localization/date"),
-    messageLocalization = require("../../localization/message"),
-    CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    Draggable = require("../draggable"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import dataUtils from "../../core/element_data";
+import translator from "../../animation/translator";
+import dateUtils from "../../core/utils/date";
+import commonUtils from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import objectUtils from "../../core/utils/object";
+import arrayUtils from "../../core/utils/array";
+import { extend } from "../../core/utils/extend";
+import { getPublicElement } from "../../core/utils/dom";
+import recurrenceUtils from "./utils.recurrence";
+import registerComponent from "../../core/component_registrator";
+import publisherMixin from "./ui.scheduler.publisher_mixin";
+import Appointment from "./ui.scheduler.appointment";
+import eventUtils from "../../events/utils";
+import dblclickEvent from "../../events/double_click";
+import dateLocalization from "../../localization/date";
+import messageLocalization from "../../localization/message";
+import CollectionWidget from "../collection/ui.collection_widget.edit";
+import Draggable from "../draggable";
+import { Deferred } from "../../core/utils/deferred";
 
-var COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
+const APPOINTMENT_SETTINGS_NAME = "dxAppointmentSettings";
+
+const COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
     APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment",
     APPOINTMENT_TITLE_CLASS = "dx-scheduler-appointment-title",
     APPOINTMENT_CONTENT_DETAILS_CLASS = "dx-scheduler-appointment-content-details",
@@ -33,7 +35,7 @@ var COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
 
     DBLCLICK_EVENT_NAME = eventUtils.addNamespace(dblclickEvent.name, "dxSchedulerAppointment");
 
-var toMs = dateUtils.dateToMilliseconds;
+const toMs = dateUtils.dateToMilliseconds;
 
 var SchedulerAppointments = CollectionWidget.inherit({
     _supportedKeys: function() {
@@ -187,31 +189,71 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
     },
 
+    _isAllDayAppointment: function(appointment) {
+        return appointment.settings.length && appointment.settings[0].allDay || false;
+    },
+
+    _isRepaintAppointment: function(appointment) {
+        return !typeUtils.isDefined(appointment.needRepaint) || appointment.needRepaint === true;
+    },
+
+    _isRepaintAll: function(appointments) {
+        if(this.invoke("isCurrentViewAgenda")) {
+            return false;
+        }
+        for(let i = 0; i < appointments.length; i++) {
+            const appointment = appointments[i];
+            if(!this._isRepaintAppointment(appointment)) {
+                return false;
+            }
+        }
+        return true;
+    },
+
+    _applyFragment: function(fragment, allDay) {
+        if(fragment.children().length > 0) {
+            this._getAppointmentContainer(allDay).append(fragment);
+        }
+    },
+
+    _onEachAppointment: function(appointment, index, container, isRepaintAll) {
+        if(appointment && appointment.needRemove === true) {
+            this._clearItem(appointment);
+            return;
+        }
+
+        if(appointment.needRepaint === false) {
+            this._processRenderedAppointment(appointment);
+        }
+
+        if(this._isRepaintAppointment(appointment)) {
+            appointment.needRepaint = false;
+            !isRepaintAll && this._clearItem(appointment);
+
+            this._renderItem(index, appointment, container);
+        }
+    },
+
     _repaintAppointments: function(appointments) {
-        var itemsLength = appointments.length;
+        const isRepaintAll = this._isRepaintAll(appointments);
 
-        if(!itemsLength) {
-            this._cleanItemContainer();
+        const allDayFragment = $(domAdapter.createDocumentFragment());
+        const commonFragment = $(domAdapter.createDocumentFragment());
+
+        if(isRepaintAll) {
+            this._getAppointmentContainer(true).html("");
+            this._getAppointmentContainer(false).html("");
         }
 
-        for(var i = 0; i < itemsLength; i++) {
-            var item = appointments[i];
+        !appointments.length && this._cleanItemContainer();
 
-            if(item && item.needRemove === true) {
-                this._clearItem(item);
-                appointments.splice(i, 1);
-                i--;
-                continue;
-            }
-            if(item && item.needRepaint === false) {
-                this._processRenderedAppointment(item);
-            }
-            if(item && (!typeUtils.isDefined(item.needRepaint) || item.needRepaint === true)) {
-                item.needRepaint = false;
-                this._clearItem(item);
-                this._renderItem(i, item);
-            }
-        }
+        appointments.forEach((appointment, index) => {
+            const container = this._isAllDayAppointment(appointment) ? allDayFragment : commonFragment;
+            this._onEachAppointment(appointment, index, container, isRepaintAll);
+        });
+
+        this._applyFragment(allDayFragment, true);
+        this._applyFragment(commonFragment, false);
     },
 
     _attachAppointmentsEvents: function() {
@@ -469,29 +511,26 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this.notifyObserver("showEditAppointmentPopup", { data: appointmentData, target: $targetAppointment });
     },
 
-    _renderItem: function(index, item) {
-        var allDay = item.settings.length && item.settings[0].allDay,
-            $container = this._getAppointmentContainer(allDay),
-            coordinateCount = item.settings.length;
+    _renderItem: function(index, item, container) {
+        const itemData = item.itemData;
 
-        var itemData = item.itemData;
-
-        for(var i = 0; i < coordinateCount; i++) {
-            this._currentAppointmentSettings = item.settings[i];
-
-            var $item = this.callBase(index, itemData, $container);
-            $item.data("dxAppointmentSettings", item.settings[i]);
+        for(let i = 0; i < item.settings.length; i++) {
+            const setting = item.settings[i];
+            this._currentAppointmentSettings = setting;
+            const $item = this.callBase(index, itemData, container);
+            $item.data(APPOINTMENT_SETTINGS_NAME, setting);
         }
     },
 
+    _getItemContent: function($itemFrame) {
+        $itemFrame.data(APPOINTMENT_SETTINGS_NAME, this._currentAppointmentSettings);
+        const $itemContent = this.callBase($itemFrame);
+        return $itemContent;
+    },
+
     _createItemByTemplate: function(itemTemplate, renderArgs) {
-        var itemData = this.invoke("appendSingleAppointmentData", {
-            appointmentData: renderArgs.itemData,
-            index: renderArgs.index,
-            startDate: this._currentAppointmentSettings.startDate
-        });
         return itemTemplate.render({
-            model: itemData,
+            model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index
         });
@@ -513,6 +552,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointment: function($appointment, settings) {
+        $appointment.data(APPOINTMENT_SETTINGS_NAME, settings);
+
         this._applyResourceDataAttr($appointment);
         var data = this._getItemData($appointment),
             geometry = this.invoke("getAppointmentGeometry", settings),

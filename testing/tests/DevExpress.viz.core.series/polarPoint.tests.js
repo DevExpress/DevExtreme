@@ -2,7 +2,8 @@ import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 
 var defaultStyle = {
         normal: {
@@ -161,6 +162,22 @@ QUnit.test("Draw point with errorBar", function(assert) {
         rotateX: 100,
         rotateY: 200
     });
+});
+
+QUnit.test("Draw errorBar with relative edgeLength", function(assert) {
+    this.data = { argument: 1, value: 1, lowError: 3, highError: 4 };
+    createAndDrawPoint.call(this, {
+        type: "bar",
+        errorBars: {
+            color: "red",
+            lineWidth: 3,
+            edgeLength: 0.8,
+            opacity: 1
+        }
+    });
+
+    assert.strictEqual(this.renderer.path.callCount, 1);
+    assert.deepEqual(this.renderer.path.lastCall.args[0], [[100, 186, 100, 186], [100, 186, 100, 188], [100, 188, 100, 188]]);
 });
 
 QUnit.test("Draw error bar - show highError", function(assert) {

@@ -24,7 +24,7 @@ var setupModule = function() {
         }
     };
 
-    setupTreeListModules(this, ["data", "columns", "masterDetail", "virtualScrolling"]);
+    setupTreeListModules(this, ["data", "columns", "keyboardNavigation", "focus", "masterDetail", "virtualScrolling"]);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -620,6 +620,41 @@ QUnit.test("The expandRowKeys should be not changed when loading data when there
     // assert
     assert.deepEqual(expandedRowKeys, [1], "expandedRowKeys value when data isn't loaded");
     assert.deepEqual(that.option("expandedRowKeys"), [3], "expandedRowKeys value when data is loaded");
+});
+
+QUnit.test("TreeList should not throw exception on filtering if focused row is not in filter condition (T724482)", function(assert) {
+    // arrange
+    let clock = sinon.useFakeTimers();
+    this.applyOptions({
+        remoteOperations: true,
+        dataSource: [
+            { id: 1, parentId: 0 },
+            { id: 2, parentId: 1 },
+            { id: 3, parentId: 0 },
+            { id: 4, parentId: 3 }
+        ],
+        parentIdExpr: "parentId",
+        keyExpr: "id",
+        expandNodesOnFiltering: true,
+        focusedRowEnabled: true,
+        focusedRowKey: 4,
+        loadPanel: {
+            enabled: true
+        }
+    });
+
+    // act, assert
+    try {
+        this.getDataSource().filter(["id", "=", 2]);
+        this.getDataSource().load();
+        clock.tick();
+    } catch(e) {
+        assert.ok(false, e);
+    }
+    // assert
+    assert.notOk(this.dataController.isLoading(), "Is loading");
+    assert.equal(this.dataController.getVisibleRows().length, 2, "Visible rows count");
+    clock.restore();
 });
 
 QUnit.test("Get node by key", function(assert) {
@@ -2518,14 +2553,15 @@ QUnit.module("Filtering", { beforeEach: function() {
         { id: 3, parentId: 0, name: "Name 2", age: 18 },
         { id: 4, parentId: 1, name: "Name 6", age: 16 },
         { id: 5, parentId: 1, name: "Name 5", age: 15 },
-        { id: 6, parentId: 1, name: "Name 4", age: 15 }
+        { id: 6, parentId: 1, name: "Name 4", age: 15 },
+        { id: 7, parentId: 6, name: "Name 7", age: 18 }
     ];
 
     this.setupTreeList = function(options) {
         if(!("loadingTimeout" in options)) {
             options.loadingTimeout = null;
         }
-        setupTreeListModules(this, ["data", "columns", "search"], {
+        setupTreeListModules(this, ["data", "columns", "filterRow", "search"], {
             initDefaultOptions: true,
             options: options
         });
@@ -2554,4 +2590,39 @@ QUnit.test("Search should work correctly with hierarchical structure", function(
     assert.strictEqual(items.length, 2, "item count");
     assert.deepEqual(items[0].data, { "id": 1, "name": "Alex", "parentId": 0 }, "first item");
     assert.deepEqual(items[1].data, { "id": 2, "name": "Bob", "parentId": 1 }, "second item");
+});
+
+// T724827
+QUnit.test("The filter query should be correct after resetting the filter value", function(assert) {
+    // arrange
+    var items,
+        filter,
+        store = new ArrayStore(this.items);
+
+    this.setupTreeList({
+        remoteOperations: {
+            filtering: true
+        },
+        dataSource: {
+            load: function(loadOptions) {
+                filter = filter || loadOptions.filter;
+                return store.load(loadOptions);
+            }
+        },
+        columns: [{ dataField: "name", dataType: "string" }, { dataField: "age", dataType: "number", filterValue: 18 }]
+    });
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 4, "item count");
+    assert.deepEqual(filter, ["age", "=", 18], "filter");
+
+    // act
+    filter = null;
+    this.columnOption("age", "filterValue", undefined);
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 3, "item count");
+    assert.deepEqual(filter, ["parentId", "=", 0], "filter");
 });

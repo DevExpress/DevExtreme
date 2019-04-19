@@ -3145,6 +3145,56 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
     });
 });
 
+QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)", function(assert) {
+    // arrange
+    var $cell;
+
+    this.columns = [
+        { visible: true, command: "expand" },
+        { caption: 'Column 1', visible: true, dataField: "Column1", allowEditing: true },
+        { caption: 'Column 2', visible: true, dataField: "Column2", allowEditing: false }
+    ];
+
+    this.dataControllerOptions = {
+        pageCount: 10,
+        pageIndex: 0,
+        pageSize: 10,
+        items: [
+            { values: [null, 'test0', 'test1'], rowType: 'data', key: 0 },
+            { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 1 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 2 }
+        ]
+    };
+
+    this.options = {
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        }
+    };
+
+    setupModules(this);
+
+    // act
+    this.gridView.render($("#container"));
+    this.editCell(0, 1);
+    this.clock.tick();
+
+    $cell = $("#container").find(".dx-data-row").eq(0).find("td:nth-child(2)").eq(0);
+
+    // assert
+    assert.ok(this.editingController.isEditing(), "is editing");
+
+    // act
+    this.triggerKeyDown("tab", false, false, $cell);
+    this.clock.tick();
+
+    // assert
+    assert.ok(this.editingController.isEditing(), "is editing");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 2, columnIndex: 1 });
+});
+
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
     // arrange
     this.columns = [
@@ -4703,6 +4753,58 @@ QUnit.testInActiveWindow("Down arrow key should work correctly after page down k
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 4 }, "focused position");
 });
 
+QUnit.testInActiveWindow("DataGrid should not scroll back to the focused editing cell after append rows in virtual scrolling (T715091)", function(assert) {
+    // arrange
+    var $cell;
+
+    this.dataControllerOptions = {
+        pageCount: 4,
+        pageIndex: 0,
+        pageSize: 2,
+        items: [
+            { values: ["test11", "test21", "test31", "test41"], rowType: "data", key: 0 },
+            { values: ["test12", "test22", "test32", "test42"], rowType: "data", key: 1 },
+            { values: ["test13", "test23", "test33", "test43"], rowType: "data", key: 2 },
+            { values: ["test14", "test24", "test34", "test44"], rowType: "data", key: 3 },
+            { values: ["test15", "test25", "test35", "test45"], rowType: "data", key: 4 },
+            { values: ["test16", "test26", "test36", "test46"], rowType: "data", key: 5 },
+            { values: ["test17", "test27", "test37", "test47"], rowType: "data", key: 6 },
+            { values: ["test18", "test28", "test38", "test48"], rowType: "data", key: 7 },
+            { values: ["test19", "test29", "test39", "test49"], rowType: "data", key: 8 }
+        ]
+    };
+
+    setupModules(this);
+    this.options.scrolling = { mode: "virtual" };
+    this.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+
+    this.gridView.render($("#container"));
+    this.rowsView.height(70);
+    this.rowsView.resize();
+
+    this.focusFirstCell();
+    this.clock.tick();
+    this.editCell(0, 0);
+    this.clock.tick();
+
+    // act
+    $cell = $(this.getCellElement(0, 0));
+    this.triggerKeyDown("tab", false, false, $cell);
+    this.keyboardNavigationController._updateFocus = function() {
+        // assert
+        assert.ok(false, "keyboardNavigation._updateFocus should not be called");
+    };
+    this.clock.tick();
+    this.dataController.changed.fire({ changeType: "append" });
+    this.clock.tick();
+
+    // assert
+    assert.ok(true, "keyboardNavigation._updateFocus was not called");
+});
+
 // T680076
 QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded page when virtual scrolling is enabled", function(assert) {
     // arrange
@@ -5031,7 +5133,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
             }
         }, this.options);
 
-        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"], {
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail"], {
             initViews: true
         });
     },
@@ -5165,6 +5267,60 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
         assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process", function(assert) {
+        // arrange
+        var keyboardNavigationController,
+            focusedCellChangingFiresCount = 0,
+            focusedCellChangedFiresCount = 0,
+            $cell;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'cell', allowUpdating: true },
+            onEditingStart: function(e) {
+                e.cancel = e.data.name === "Alex";
+            },
+            onFocusedCellChanging: e => {
+                ++focusedCellChangingFiresCount;
+            },
+            onFocusedCellChanged: e => {
+                ++focusedCellChangedFiresCount;
+            },
+        };
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.editCell(1, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(focusedCellChangingFiresCount, 1, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 1, "onFocusedCellChanged fires count");
+
+        // act
+        $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.editCell(0, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(focusedCellChangingFiresCount, 2, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 2, "onFocusedCellChanged fires count");
+        assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+        assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
+        assert.equal(this.rowsView.element().find("input").length, 0, "input");
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
@@ -5405,6 +5561,49 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
         // T672133
         assert.ok(that.rowsView.element().is(":focus"), "rowsView has focus to work pageUp/pageDown");
+    });
+
+    QUnit.testInActiveWindow("Click by freespace cells should not generate exception if editing started and editing mode is cell", function(assert) {
+        // arrange
+        var that = this;
+        that.$element = function() {
+            return $("#container");
+        };
+        that.data = [
+            { name: "Alex", phone: "555555", room: 0 },
+            { name: "Dan1", phone: "666666", room: 1 },
+            { name: "Dan2", phone: "777777", room: 2 },
+            { name: "Dan3", phone: "888888", room: 3 }
+        ];
+
+        that.options = {
+            height: 300,
+            editing: {
+                allowUpdating: true,
+                mode: "cell"
+            }
+        };
+
+        that.setupModule();
+
+        // act
+        that.gridView.render($("#container"));
+
+        // act
+        this.editCell(1, 1);
+        this.clock.tick();
+        var $cell = $(that.rowsView.element().find(".dx-freespace-row").eq(0).find("td").eq(1));
+
+        try {
+            // act
+            $cell.trigger(CLICK_EVENT);
+            this.clock.tick();
+            // assert
+            assert.ok(true, "No exception");
+        } catch(e) {
+            // assert
+            assert.ok(false, e);
+        }
     });
 
     QUnit.testInActiveWindow("virtual row cells should not have focus", function(assert) {

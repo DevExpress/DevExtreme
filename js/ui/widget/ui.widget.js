@@ -51,7 +51,11 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
             errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
         }
 
-        widgetElement[widgetName](widgetOptions);
+        if(options.parent) {
+            options.parent._createComponent(widgetElement, widgetName, widgetOptions);
+        } else {
+            widgetElement[widgetName](widgetOptions);
+        }
 
         return widgetElement;
     }
@@ -241,10 +245,33 @@ var Widget = DOMComponent.inherit({
         this._extractAnonymousTemplate();
     },
 
-    _extractTemplates: function() {
-        var templates = this.option("integrationOptions.templates"),
-            templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
+    _clearInnerOptionCache: function(optionContainer) {
+        this[optionContainer + "Cache"] = {};
+    },
 
+    _cacheInnerOptions: function(optionContainer, optionValue) {
+        var cacheName = optionContainer + "Cache";
+        this[cacheName] = extend(this[cacheName], optionValue);
+    },
+
+    _getInnerOptionsCache: function(optionContainer) {
+        return this[optionContainer + "Cache"];
+    },
+
+    _initInnerOptionCache: function(optionContainer) {
+        this._clearInnerOptionCache(optionContainer);
+        this._cacheInnerOptions(optionContainer, this.option(optionContainer));
+    },
+
+    _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
+        this._options[optionsContainer] = extend({}, innerWidget.option());
+        innerWidget.on("optionChanged", function(e) {
+            this._options[optionsContainer] = extend({}, e.component.option());
+        }.bind(this));
+    },
+
+    _extractTemplates: function() {
+        var templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
         var templatesMap = {};
 
         templateElements.each(function(_, template) {
@@ -266,9 +293,14 @@ var Widget = DOMComponent.inherit({
         each(templatesMap, (function(templateName, value) {
             var deviceTemplate = this._findTemplateByDevice(value);
             if(deviceTemplate) {
-                templates[templateName] = this._createTemplate(deviceTemplate);
+                this._saveTemplate(templateName, deviceTemplate);
             }
         }).bind(this));
+    },
+
+    _saveTemplate: function(name, template) {
+        var templates = this.option("integrationOptions.templates");
+        templates[name] = this._createTemplate(template);
     },
 
     _findTemplateByDevice: function(templates) {
@@ -477,8 +509,14 @@ var Widget = DOMComponent.inherit({
 
     _renderContent: function() {
         commonUtils.deferRender(() => {
+            if(this._disposed) {
+                return;
+            }
             return this._renderContentImpl();
         }).done(() => {
+            if(this._disposed) {
+                return;
+            }
             this._fireContentReadyAction();
         });
     },

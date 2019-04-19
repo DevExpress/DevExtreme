@@ -1,24 +1,27 @@
-var $ = require("jquery"),
-    Lookup = require("ui/lookup"),
-    Popup = require("ui/popup"),
-    List = require("ui/list"),
-    Popover = require("ui/popover"),
-    devices = require("core/devices"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    Query = require("data/query"),
-    fx = require("animation/fx"),
-    dataUtils = require("core/element_data"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    themes = require("ui/themes");
+import $ from "jquery";
+import fx from "animation/fx";
+import devices from "core/devices";
+import dataUtils from "core/element_data";
+import config from "core/config";
+import { isRenderer } from "core/utils/type";
 
-require("common.css!");
-require("generic_light.css!");
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import Query from "data/query";
+import { DataSource } from "data/data_source/data_source";
+
+import themes from "ui/themes";
+import Lookup from "ui/lookup";
+import Popup from "ui/popup";
+import List from "ui/list";
+import Popover from "ui/popover";
+
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -64,7 +67,6 @@ var OVERLAY_SHADER_CLASS = "dx-overlay-shader",
 
     LOOKUP_SEARCH_WRAPPER_CLASS = "dx-lookup-search-wrapper",
     LOOKUP_FIELD_CLASS = "dx-lookup-field",
-    LOOKUP_POPUP_INVALID_CLASS = "dx-lookup-invalid",
 
     FOCUSED_CLASS = "dx-state-focused";
 
@@ -1397,6 +1399,26 @@ QUnit.test("Check popup position for Material theme when fullScreen option is tr
     }
 });
 
+QUnit.test("onValueChanged argument should contains an event property after selecting an item by click", function(assert) {
+    const valueChangedStub = sinon.stub();
+    this.instance.option({
+        dataSource: [1, 2, 3],
+        onValueChanged: valueChangedStub
+    });
+
+    this.togglePopup();
+
+    this.$list
+        .find(".dx-list-item")
+        .first()
+        .trigger("dxclick");
+
+    const { event } = valueChangedStub.lastCall.args[0];
+
+    assert.ok(event);
+    assert.strictEqual(event.type, "dxclick");
+});
+
 
 QUnit.module("hidden input");
 
@@ -1953,22 +1975,6 @@ QUnit.test("'showCancelButton' option should affect on Cancel button rendering",
     assert.equal($popupWrapper.find(".dx-popup-cancel.dx-button").length, 0, "Apply button is not rendered");
 });
 
-QUnit.test("Placeholder should be rendered if fieldTemplate defined with 'input'", function(assert) {
-    var placeholderText = "Placeholder here...";
-
-    var $element = $("#lookupWithFieldTemplate").dxLookup({
-        fieldTemplate: function(data, element) {
-            assert.equal(isRenderer(element), !!config().useJQuery, "element is correct");
-
-            $(element).append($("<div>").dxTextBox({}));
-        },
-        placeholder: placeholderText
-    });
-
-    assert.ok($element.find(".dx-placeholder").length, "placeholder was rendered");
-    assert.equal($element.find(".dx-placeholder").eq(0).attr("DATA-DX_PLACEHOLDER"), placeholderText, "placeholder text was rendered");
-});
-
 QUnit.test("search wrapper should not be rendered if the 'searchEnabled' option is false", function(assert) {
     var instance = $("#lookup").dxLookup({
         searchEnabled: false,
@@ -2318,9 +2324,6 @@ QUnit.test("group options bouncing", function(assert) {
 QUnit.module("Native scrolling");
 
 QUnit.test("After load new page scrollTop should not be changed", function(assert) {
-    require("common.css!");
-    require("generic_light.css!");
-
     var data = [],
         done = assert.async();
 
@@ -2362,9 +2365,6 @@ QUnit.test("After load new page scrollTop should not be changed", function(asser
 });
 
 QUnit.test("Popup height should be decrease after a loading of new page and searching", function(assert) {
-    require("common.css!");
-    require("generic_light.css!");
-
     var data = [];
 
     for(var i = 100; i >= 0; i--) {
@@ -2953,60 +2953,6 @@ QUnit.test("popup title collapse if empty title option (B232073)", function(asse
 
     var $popupTitle = $(popup._wrapper()).find(".dx-popup-title");
     assert.ok($popupTitle.height() > 0);
-});
-
-QUnit.test("Lookup-specific validation message should be rendered in lookup's popup", function(assert) {
-    var $element = $("#widget").dxLookup(),
-        instance = $element.dxLookup("instance");
-
-    instance.option("usePopover", false);
-
-    $($element.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
-    var $popup = $(".dx-popup-wrapper");
-    var $popupValidationMessage = $popup.find(".dx-lookup-validation-message");
-
-    assert.ok($popupValidationMessage.length, "Validation message should be rendered in popup mode");
-});
-
-QUnit.test("Lookup-specific validation message should NOT be rendered in popover", function(assert) {
-    var $element = $("#widget").dxLookup(),
-        instance = $element.dxLookup("instance");
-
-    instance.option("usePopover", true);
-
-    $($element.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
-
-    if(instance._popup.NAME === "dxPopup") {
-        assert.ok(true, "Looks like we are running on real device and usage of Popup is forced by code. Stopping test case.");
-        return;
-    }
-
-    var $popup = $(".dx-popup-wrapper");
-    var $popupValidationMessage = $popup.find(".dx-lookup-validation-message");
-
-    assert.ok(!$popupValidationMessage.length, "Validation message should not be rendered in popover mode");
-});
-
-QUnit.test("popup should also get 'invalid' class", function(assert) {
-    var $element = $("#widget").dxLookup({
-            usePopover: false
-        }),
-        instance = $element.dxLookup("instance");
-
-    instance.open();
-
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-    assert.ok(!$popupContent.hasClass(LOOKUP_POPUP_INVALID_CLASS), "popup content doesn't have invalid class");
-
-    instance.close();
-    instance.option({
-        validationError: { message: "Some error happened" },
-        isValid: false
-    });
-    instance.open();
-
-    $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-    assert.ok($popupContent.hasClass(LOOKUP_POPUP_INVALID_CLASS), "popup content has invalid class");
 });
 
 

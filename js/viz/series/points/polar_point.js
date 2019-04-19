@@ -163,6 +163,11 @@ exports.polarBarPoint = _extend({}, barPoint, {
         that.middleAngle = that.angle = -normalizeAngle(that.middleAngleCorrection - that.angle);
     },
 
+    _getErrorBarBaseEdgeLength() {
+        const coord = this.getMarkerCoords();
+        return _math.PI * coord.outerRadius * _math.abs(coord.startAngle - coord.endAngle) / 180;
+    },
+
     getMarkerCoords: function() {
         return {
             x: this.centerX,

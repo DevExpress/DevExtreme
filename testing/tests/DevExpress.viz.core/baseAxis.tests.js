@@ -344,6 +344,17 @@ QUnit.test("getCategoriesSorter returns categoriesSortingMethod option value", f
     assert.equal(sort, "sorting method");
 });
 
+// T714928
+QUnit.test("categoriesSortingMethod returns 'categories' option when 'categoriesSortingMethod' option is not set", function(assert) {
+    this.updateOptions({
+        categories: ["1", "2"]
+    });
+
+    var sort = this.axis.getCategoriesSorter();
+
+    assert.deepEqual(sort, ["1", "2"]);
+});
+
 QUnit.module("Labels Settings", {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -1259,7 +1270,7 @@ QUnit.test("minValueMargin - apply margins to the min", function(assert) {
     });
 });
 
-// T603177
+// T603177, T724328
 QUnit.test("Margins for one point (dateTime)", function(assert) {
     var date = new Date('2018/05/02');
 
@@ -1281,7 +1292,7 @@ QUnit.test("Margins for one point (dateTime)", function(assert) {
             min: date,
             max: date,
             minVisible: date,
-            interval: 0,
+            interval: Infinity,
             maxVisible: date
         }
     });
@@ -3333,18 +3344,6 @@ QUnit.test("Add categories to range", function(assert) {
     assert.deepEqual(businessRange.categories, ["A", "B", "C"]);
 });
 
-QUnit.test("Sort categories using array of ordered categories", function(assert) {
-    this.updateOptions({ type: "discrete" });
-    this.axis.validate();
-
-    this.axis.setBusinessRange({
-        categories: ["A", "D", "E", "C", "F"]
-    }, ["A", "B", "C", "D", "E", "F"]);
-
-    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.deepEqual(businessRange.categories, ["A", "C", "D", "E", "F"]);
-});
-
 // T474125
 QUnit.test("Sort datetime categories", function(assert) {
     this.updateOptions({ type: "discrete", argumentType: "datetime" });
@@ -3356,6 +3355,18 @@ QUnit.test("Sort datetime categories", function(assert) {
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.deepEqual(businessRange.categories, [new Date(2017, 1, 2), new Date(2017, 2, 2), new Date(2017, 6, 2), new Date(2017, 8, 2)]);
+});
+
+QUnit.test("Argument axis categories sorting. Categories option - sort by option", function(assert) {
+    this.updateOptions({ type: "discrete", valueType: "numeric", categories: [4, 3, 2, 1, 0] });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: [2, 3, 5, 1]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.deepEqual(businessRange.categories, [4, 3, 2, 1, 0, 5]);
 });
 
 QUnit.test("Set logarithm base for logarithmic axis", function(assert) {

@@ -273,11 +273,11 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _handleDataLoading: function(options) {
-            var combinedParentIdFilter,
+            var expandedRowKeys,
+                combinedParentIdFilter,
                 parentIdsToLoad,
                 rootValue = this.option("rootValue"),
                 parentIdExpr = this.option("parentIdExpr"),
-                expandedRowKeys = this.option("expandedRowKeys"),
                 filterMode = this.option("filterMode"),
                 parentIds = options.storeLoadOptions.parentIds;
 
@@ -289,6 +289,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
             if(options.remoteOperations.filtering && !options.isCustomLoading) {
                 if(filterMode === "standard" || !options.storeLoadOptions.filter) {
+                    expandedRowKeys = options.collapseVisibleNodes ? [] : this.option("expandedRowKeys");
                     parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds || []);
                     parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 
@@ -555,10 +556,12 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 callBase = that.callBase,
                 filter = options.storeLoadOptions.filter || options.loadOptions.filter,
                 filterMode = that.option("filterMode"),
-                visibleItems;
+                visibleItems,
+                parentIds = options.storeLoadOptions.parentIds,
+                needLoadParents = filter && (!parentIds || !parentIds.length) && filterMode !== "standard";
 
             if(!options.isCustomLoading) {
-                if(filter && !options.storeLoadOptions.parentIds && filterMode !== "standard") {
+                if(needLoadParents) {
                     var d = options.data = new Deferred();
                     if(filterMode === "smart") {
                         visibleItems = data;

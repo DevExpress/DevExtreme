@@ -16,10 +16,10 @@ var $ = require("jquery"),
 require("common.css!");
 require("generic_light.css!");
 
-require("ui/scheduler/ui.scheduler.work_space_day");
-require("ui/scheduler/ui.scheduler.work_space_week");
-require("ui/scheduler/ui.scheduler.work_space_work_week");
-require("ui/scheduler/ui.scheduler.work_space_month");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_day");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_week");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_work_week");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_month");
 
 var CELL_CLASS = "dx-scheduler-date-table-cell",
     DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
@@ -952,6 +952,37 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 14, 11, 30), "cell has right startDate");
         assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 14, 12), "cell has right endtDate");
     });
+
+    QUnit.test("Vertical grouped work space should calculate max top position", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 2, 16),
+            firstDayOfWeek: 1,
+            showAllDayPanel: true,
+            startDayHour: 8,
+            endDayHour: 9,
+            groupOrientation: "vertical",
+            groups: [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            },
+            {
+                name: "two",
+                items: [{ id: 1, text: "c" }, { id: 2, text: "d" }]
+            }]
+        });
+
+        var $rows = this.instance.$element().find(".dx-scheduler-date-table tr"),
+            $firstGroupLastCell = $rows.eq(2).find("td").first(),
+            $secondGroupLastCell = $rows.eq(5).find("td").first(),
+            $thirdGroupLastCell = $rows.eq(8).find("td").first(),
+            $fourthGroupLastCell = $rows.eq(11).find("td").first();
+
+        assert.roughEqual($firstGroupLastCell.position().top + $firstGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(0), 1.1, "Max top is OK");
+        assert.roughEqual($secondGroupLastCell.position().top + $secondGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(1), 1.1, "Max top is OK");
+        assert.roughEqual($thirdGroupLastCell.position().top + $thirdGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(2), 1.1, "Max top is OK");
+        assert.roughEqual($fourthGroupLastCell.position().top + $fourthGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(3), 1.1, "Max top is OK");
+    });
+
 })("Work Space Week");
 
 

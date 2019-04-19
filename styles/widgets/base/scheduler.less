@@ -38,7 +38,7 @@
 
 @SCHEDULER_APPOINTMENT_MIN_SIZE: 4px;
 @SCHEDULER_APPOINTMENT_CONTENT_PADDING: 5px 7px;
-@SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 5px 40px 5px 7px;
+@SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 40px;
 @SCHEDULER_APPOINTMENT_RECURRENCE_CONTENT_PADDING: 5px 25px 5px 7px;
 @SCHEDULER_APPOINTMENT_RECURRENCE_CONTENT_PADDING_RTL: 5px 7px 5px 25px;
 
@@ -68,6 +68,7 @@
 
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 7px;
 @SCHEDULER_REDUCED_ICON_OFFSET: 5px;
+@SCHEDULER_RECURRENCE_ICON_OFFSET: 20px;
 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET: 20px;
 
 @SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE: 16px;
@@ -1048,9 +1049,9 @@
             display: none;
         }
 
-        .dx-scheduler-appointment-reduced {
+        .dx-scheduler-appointment-reduced.dx-scheduler-appointment-head {
             .dx-scheduler-appointment-recurrence-icon {
-                right: 20px;
+                right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
             }
         }
     }
@@ -1871,7 +1872,7 @@
     .dx-scheduler-work-space-day {
         .dx-scheduler-appointment-reduced {
             .dx-scheduler-appointment-content {
-                padding: @SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING;
+                padding-right: @SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING;
             }
         }
 
@@ -1882,7 +1883,7 @@
         .dx-scheduler-appointment-head {
             .dx-scheduler-appointment-recurrence-icon {
                 top: calc(~'35% - 3px');
-                right: 20px;
+                right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
             }
         }
     }
@@ -1925,7 +1926,7 @@
 
     .dx-scheduler-all-day-appointment .dx-scheduler-appointment-reduced-icon {
         position: absolute;
-        top: 35%;
+        top: 15%;
     }
 
     .dx-scheduler-appointment {
@@ -1943,7 +1944,7 @@
         position: absolute;
         background-repeat: no-repeat;
         top: 3px;
-        right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
+        right: @SCHEDULER_REDUCED_ICON_OFFSET;
         display: none;
 
         &.dx-icon-repeat {
@@ -2707,9 +2708,9 @@
         }
 
 
-        .dx-scheduler-appointment-reduced {
+        .dx-scheduler-appointment-reduced.dx-scheduler-appointment-head {
             .dx-scheduler-appointment-recurrence-icon {
-                left: 20px;
+                left: @SCHEDULER_RECURRENCE_ICON_OFFSET;
                 right: auto;
             }
         }

@@ -1,13 +1,11 @@
-var Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
-    each = require("../../core/utils/iterator").each,
-    VerticalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.vertical"),
-    HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal"),
-    HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line"),
-    HorizontalMonthAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month"),
-    AgendaAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.agenda");
+import commonUtils from "../../core/utils/common";
+import VerticalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.vertical";
+import HorizontalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal";
+import HorizontalMonthLineAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line";
+import HorizontalMonthAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month";
+import AgendaAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.agenda";
 
-var RENDERING_STRATEGIES = {
+const RENDERING_STRATEGIES = {
     "horizontal": HorizontalAppointmentsStrategy,
     "horizontalMonth": HorizontalMonthAppointmentsStrategy,
     "horizontalMonthLine": HorizontalMonthLineAppointmentsStrategy,
@@ -15,184 +13,136 @@ var RENDERING_STRATEGIES = {
     "agenda": AgendaAppointmentsStrategy
 };
 
-var AppointmentLayoutManager = Class.inherit({
-    ctor: function(instance, renderingStrategy) {
+class AppointmentLayoutManager {
+    constructor(instance, renderingStrategy) {
         this.instance = instance;
-
         renderingStrategy && this.initRenderingStrategy(renderingStrategy);
-    },
+    }
 
-    getCellDimensions: function(options) {
+    getCellDimensions(options) {
         if(this.instance._workSpace) {
             options.callback(this.instance._workSpace.getCellWidth(), this.instance._workSpace.getCellHeight(), this.instance._workSpace.getAllDayHeight());
         }
-    },
+    }
 
-    getGroupOrientation: function(options) {
+    getGroupOrientation(options) {
         if(this.instance._workSpace) {
             options.callback(this.instance._workSpace._getRealGroupOrientation());
         }
-    },
+    }
 
-    initRenderingStrategy: function(renderingStrategy) {
-        var Strategy = RENDERING_STRATEGIES[renderingStrategy];
+    initRenderingStrategy(renderingStrategy) {
+        const Strategy = RENDERING_STRATEGIES[renderingStrategy];
         this._renderingStrategyInstance = new Strategy(this.instance);
         this.renderingStrategy = renderingStrategy;
-    },
+    }
 
-    createAppointmentsMap: function(items) {
-        var result = [];
-
+    createAppointmentsMap(items) {
         this.getCellDimensions({
-            callback: (function(width, height, allDayHeight) {
+            callback: (width, height, allDayHeight) => {
                 this.instance._cellWidth = width;
                 this.instance._cellHeight = height;
                 this.instance._allDayCellHeight = allDayHeight;
-            }).bind(this)
+            }
         });
         this.getGroupOrientation({
-            callback: (function(groupOrientation) {
-                this.instance._groupOrientation = groupOrientation;
-            }).bind(this)
+            callback: groupOrientation => this.instance._groupOrientation = groupOrientation
         });
 
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(items);
 
-        each(items, (function(index, itemData) {
-            !this._renderingStrategyInstance.keepAppointmentSettings() && delete itemData.settings;
+        return this._createAppointmentsMapCore(items || [], this._positionMap);
+    }
 
-            var appointmentSettings = this._positionMap[index];
+    _createAppointmentsMapCore(list, positionMap) {
+        return list.map((data, index) => {
+            if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
+                delete data.settings;
+            }
 
-            each(appointmentSettings, (function(_, settings) {
+            const appointmentSettings = positionMap[index];
+            appointmentSettings.forEach(settings => {
                 settings.direction = this.renderingStrategy === "vertical" && !settings.allDay ? "vertical" : "horizontal";
-            }).bind(this));
-
-            result.push({
-                itemData: itemData,
-                settings: appointmentSettings
             });
 
-        }).bind(this));
-
-        return result;
-    },
-
-    _markDeletedAppointments: function(renderedItems, appointments) {
-        var itemFound,
-            result = [];
-
-        each(renderedItems, (function(i, currentItem) {
-            itemFound = false;
-
-            each(appointments, (function(i, item) {
-                if(currentItem.itemData === item.itemData) {
-                    itemFound = true;
-                }
-            }).bind(this));
-
-            if(!itemFound) {
-                currentItem.needRemove = true;
-                currentItem.needRepaint = false;
-                result.push(currentItem);
-            }
-        }).bind(this));
-
-        return result;
-    },
-
-    checkRepaintItemByKeys: function(itemData) {
-        var result = false;
-        this.instance.getUpdatedAppointmentKeys().forEach(function(obj) {
-            if(itemData[obj.key] === obj.value) {
-                result = true;
-            }
-
+            return {
+                itemData: data,
+                settings: appointmentSettings,
+                needRepaint: true,
+                needRemove: false
+            };
         });
-        return result;
-    },
+    }
 
-    checkRepaintItemByValue: function(itemData) {
-        var appointment = this.instance.getUpdatedAppointment();
-        return appointment && (commonUtils.equalByValue(itemData, appointment) || Object.keys(appointment).length !== Object.keys(itemData).length);
-    },
+    _hasChangesInData(data) {
+        const updatedData = this.instance.getUpdatedAppointment();
+        return updatedData === data || this.instance.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
+    }
 
-    markRepaintedAppointments: function(appointments, renderedItems) {
-        var isAgenda = this.renderingStrategy === "agenda",
-            result = this._markDeletedAppointments(renderedItems, appointments),
-            itemFound,
-            repaintAll = false;
+    _hasChangesInSettings(settingList, oldSettingList) {
+        if(settingList.length !== oldSettingList.length) {
+            return true;
+        }
 
-        each(appointments, (function(_, currentItem) {
-            itemFound = false;
-            currentItem.needRepaint = false;
+        for(let i = 0; i < settingList.length; i++) {
+            const newSettings = settingList[i],
+                oldSettings = oldSettingList[i];
 
-            each(renderedItems, function(_, item) {
-                if(currentItem.itemData === item.itemData) {
-                    item.needRepaint = false;
-                    itemFound = true;
-
-                    if(this.checkRepaintItemByValue(item.itemData) || this.checkRepaintItemByKeys(item.itemData)) {
-                        item.needRepaint = true;
-                        if(isAgenda) {
-                            repaintAll = true;
-                        }
-                    }
-
-                    if(this._compareSettings(currentItem, item, isAgenda) || repaintAll) {
-                        item.settings = currentItem.settings;
-                        item.needRepaint = true;
-                        item.needRemove = false;
-                        if(isAgenda) {
-                            result.push(item);
-                            repaintAll = true;
-                        }
-                    }
-                }
-
-            }.bind(this));
-
-            if(!itemFound) {
-                currentItem.needRepaint = true;
-                currentItem.needRemove = false;
-                renderedItems.push(currentItem);
-                isAgenda && result.push(currentItem);
+            if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
+                oldSettings.sortedIndex = newSettings.sortedIndex;
             }
 
-        }).bind(this));
-
-        return isAgenda && result.length ? result : renderedItems;
-    },
-
-    _compareSettings: function(currentItem, item, isAgenda) {
-        var currentItemSettingsLength = currentItem.settings.length,
-            itemSettingsLength = item.settings.length,
-            result = false;
-
-        if(currentItemSettingsLength === itemSettingsLength) {
-            for(var k = 0; k < currentItemSettingsLength; k++) {
-                var currentItemSettings = currentItem.settings[k],
-                    itemSettings = item.settings[k];
-
-                if(!isAgenda && itemSettings) {
-                    itemSettings.sortedIndex = currentItemSettings.sortedIndex;
-                }
-
-                if(!commonUtils.equalByValue(currentItemSettings, itemSettings)) {
-
-                    result = true;
-                    break;
-                }
+            if(!commonUtils.equalByValue(newSettings, oldSettings)) {
+                return true;
             }
-        } else {
-            result = true;
+        }
+
+        return false;
+    }
+
+    _getEqualAppointmentFromList(appointment, list) {
+        for(let i = 0; i < list.length; i++) {
+            const item = list[i];
+            if(item.itemData === appointment.itemData) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    _getDeletedAppointments(appointmentList, oldAppointmentList) {
+        const result = [];
+
+        for(let i = 0; i < oldAppointmentList.length; i++) {
+            const oldAppointment = oldAppointmentList[i];
+            const appointment = this._getEqualAppointmentFromList(oldAppointment, appointmentList);
+            if(!appointment) {
+                oldAppointment.needRemove = true;
+                result.push(oldAppointment);
+            }
         }
 
         return result;
-    },
+    }
 
-    getRenderingStrategyInstance: function() {
+    getRepaintedAppointments(appointmentList, oldAppointmentList) {
+        if(oldAppointmentList.length === 0 || this.renderingStrategy === "agenda") {
+            return appointmentList;
+        }
+
+        for(let i = 0; i < appointmentList.length; i++) {
+            const appointment = appointmentList[i];
+            const oldAppointment = this._getEqualAppointmentFromList(appointment, oldAppointmentList);
+            if(oldAppointment) {
+                appointment.needRepaint = this._hasChangesInData(appointment.itemData) || this._hasChangesInSettings(appointment.settings, oldAppointment.settings);
+            }
+        }
+        return appointmentList.concat(this._getDeletedAppointments(appointmentList, oldAppointmentList));
+    }
+
+    getRenderingStrategyInstance() {
         return this._renderingStrategyInstance;
     }
-});
+}
 
 module.exports = AppointmentLayoutManager;

@@ -87,11 +87,7 @@
 
             &:not(.dx-datagrid-group-space):before {
                 display: block;
-                position: absolute;
-                left: 7px;
-                right: 7px;
-                top: 0;
-                bottom: 0;
+                height: 100%;
                 content: '';
                 background-image: @datagrid-text-stub-background-image-path;
                 background-repeat: no-repeat repeat;
@@ -168,6 +164,7 @@
         .dx-datagrid-rowsview .dx-data-row, .dx-datagrid-rowsview .dx-freespace-row, .dx-datagrid-headers .dx-row {
             td.dx-pointer-events-none {
                 border-left: 2px solid @datagrid-border-color;
+                border-right: 2px solid @datagrid-border-color;
 
                 &.dx-first-cell {
                     border-right: none;

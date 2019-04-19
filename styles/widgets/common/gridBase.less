@@ -384,6 +384,10 @@
             .dx-text-content-alignment-right {
                 margin-left: @GRID_TEXT_CONTENT_MARGIN;
             }
+
+            .dx-master-detail-cell {
+                max-width: 0;
+            }
         }
 
         [class*="column"] + [class*="column"]:last-child {
@@ -471,6 +475,7 @@
                 width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
                 min-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
                 max-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
+                .user-select(none);
             }
         }
 

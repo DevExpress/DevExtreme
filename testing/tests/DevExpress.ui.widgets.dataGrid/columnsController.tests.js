@@ -5152,6 +5152,28 @@ QUnit.test("Sorting should be reset to the initialized state after a column is u
     assert.strictEqual(this.columnsController.getColumns()[0].sortOrder, "desc", "sortOrder");
 });
 
+QUnit.test("Initial columns should not be changed on an attempt to manipulate columns at runtime", function(assert) {
+    // arrange
+    this.applyOptions({ columns: [
+        { dataField: "field1", caption: "field 1" },
+        { dataField: "field2", caption: "field 2" },
+        { dataField: "field3", caption: "field 3" }
+    ] });
+
+    // act
+    this.deleteColumn(2);
+    this.addColumn({ dataField: "field4" });
+    this.columnsController.columnOption(2, "caption", "Test");
+
+    // assert
+    assert.deepEqual(this.option("columns"), [
+        { dataField: "field1", caption: "field 1" },
+        { dataField: "field2", caption: "field 2" },
+        { dataField: "field3", caption: "field 3" }
+    ], "initial columns");
+});
+
+
 QUnit.module("Sorting/Grouping", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("disabled sorting", function(assert) {
@@ -8317,6 +8339,71 @@ QUnit.test("Delete band column via API", function(assert) {
     assert.strictEqual(visibleColumns.length, 1, "column count");
     assert.strictEqual(visibleColumns[0].dataField, "TestField1", "dataField of the column");
     assert.strictEqual(this.columnsController.getRowCount(), 1, "header row count");
+});
+
+// T715902
+QUnit.test("No exceptions on an attempt to manipulate columns at runtime", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        columns: [
+            { dataField: "TestField1", caption: "Column 1" },
+            { dataField: "TestField2", caption: "Column 2" },
+            { dataField: "TestField3", caption: "Column 3" }
+        ]
+    });
+
+    try {
+        // act
+        this.deleteColumn(2);
+        this.addColumn({ caption: "band", isBand: true });
+        this.addColumn({ dataField: "TestField4", ownerBand: 2 });
+        this.columnOption(3, "caption", "Column 4");
+
+        // assert
+        visibleColumns = this.columnsController.getVisibleColumns(0);
+        assert.strictEqual(visibleColumns.length, 3, "column count of the first row");
+        assert.strictEqual(visibleColumns[0].dataField, "TestField1", "dataField of the first column of the first row");
+        assert.strictEqual(visibleColumns[1].dataField, "TestField2", "dataField of the second column of the first row");
+        assert.strictEqual(visibleColumns[2].caption, "band", "caption of the third column of the first row");
+
+        visibleColumns = this.columnsController.getVisibleColumns(1);
+        assert.strictEqual(visibleColumns.length, 1, "column count of the second row");
+        assert.strictEqual(visibleColumns[0].dataField, "TestField4", "dataField of the first column of the second row");
+        assert.strictEqual(visibleColumns[0].caption, "Column 4", "caption of the first column of the second row");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    }
+});
+
+// T721413
+QUnit.test("getFixedColumns in rtl mode when there are fixed and grouped columns", function(assert) {
+    // arrange, act
+    this.applyOptions({
+        columnFixing: {
+            enabled: true
+        },
+        rtlEnabled: true,
+        columns: [
+            { dataField: "TestField1", caption: "Column 1", fixed: true, fixedPosition: "right" },
+            { dataField: "TestField2", caption: "Column 2", groupIndex: 0 },
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField3", caption: "Column 3" },
+                    { dataField: "TestField4", caption: "Column 4" }
+                ]
+            }
+        ]
+    });
+
+    // assert
+    var fixedColumns = this.columnsController.getFixedColumns();
+    assert.strictEqual(fixedColumns.length, 3, "count fixed column");
+    assert.strictEqual(fixedColumns[0].command, "expand", "expand column");
+    assert.strictEqual(fixedColumns[1].caption, "Column 1", "fixed column");
+    assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
 });
 
 

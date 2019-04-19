@@ -150,7 +150,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this;
 
-            if(!that.option("legacyRendering") && isVirtualMode(that) && !operationTypes.reload && operationTypes.skip && that._renderTime < that.option("scrolling.renderingThreshold")) {
+            if(!that.option("legacyRendering") && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._renderTime < that.option("scrolling.renderingThreshold")) {
                 options.delay = undefined;
             }
 
@@ -436,9 +436,9 @@ var VirtualScrollingRowsViewExtender = (function() {
         _addVirtualRow: function($table, isFixed, location, position) {
             if(!position) return;
 
-            var $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed).css("height", position);
+            var $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed, position);
 
-            $virtualRow = this._wrapEmptyRowIfNeed($table, $virtualRow, VIRTUAL_ROW_CLASS);
+            $virtualRow = this._wrapRowIfNeed($table, $virtualRow);
 
             this._appendEmptyRow($table, $virtualRow, location);
         },
@@ -805,7 +805,7 @@ module.exports = {
                         that._visibleItems = [];
 
                         var isItemCountable = function(item) {
-                            return item.rowType === "data" || item.rowType === "group";
+                            return item.rowType === "data" || item.rowType === "group" && that._dataSource.isGroupItemCountable(item.data);
                         };
 
                         that._rowsScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
@@ -975,8 +975,8 @@ module.exports = {
                                 break;
                         }
                     },
-                    items: function() {
-                        return this._visibleItems || this._items;
+                    items: function(allItems) {
+                        return allItems ? this._items : (this._visibleItems || this._items);
                     },
                     getRowIndexDelta: function() {
                         var visibleItems = this._visibleItems,

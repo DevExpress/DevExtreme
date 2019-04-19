@@ -1391,14 +1391,22 @@ module.exports = Class.inherit((function() {
         collapseAll: function(id) {
             var dataChanged = false,
                 field = this.field(id) || {},
-                areaOffset = inArray(field, this.getAreaFields(field.area));
+                areaOffsets = [inArray(field, this.getAreaFields(field.area))];
 
             field.expanded = false;
+            if(field && field.levels) {
+                areaOffsets = [];
+                field.levels.forEach(f => {
+                    areaOffsets.push(inArray(f, this.getAreaFields(field.area)));
+                    f.expanded = false;
+                });
+            }
+
             foreachTree(this._data[field.area + "s"], function(items) {
                 var item = items[0],
                     path = createPath(items);
 
-                if(item && item.children && areaOffset === path.length - 1) {
+                if(item && item.children && areaOffsets.indexOf(path.length - 1) !== -1) {
                     item.collapsedChildren = item.children;
                     delete item.children;
                     dataChanged = true;
@@ -1409,14 +1417,19 @@ module.exports = Class.inherit((function() {
         },
 
         /**
-       * @name PivotGridDataSourceMethods.expandAll
-       * @publicName expandAll(id)
-       * @param1 id:number|string
-       */
+        * @name PivotGridDataSourceMethods.expandAll
+        * @publicName expandAll(id)
+        * @param1 id:number|string
+        */
         expandAll: function(id) {
             var field = this.field(id);
             if(field && field.area) {
                 field.expanded = true;
+                if(field && field.levels) {
+                    field.levels.forEach(f => {
+                        f.expanded = true;
+                    });
+                }
                 this.load();
             }
         },
