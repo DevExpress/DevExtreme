@@ -59,7 +59,8 @@ export class FileManagerWrapper {
     }
 
     getFolderActionButton(index) {
-        return this.getFolderNode(index).find(`.${Consts.FILE_ACTION_BUTTON_CLASS}`);
+        const $folderNode = this.getFolderNode(index);
+        return this._findActionButton($folderNode);
     }
 
     getBreadcrumbsPath() {
@@ -93,7 +94,8 @@ export class FileManagerWrapper {
     }
 
     getRowActionButtonInDetailsView(index) {
-        return this.getRowInDetailsView(index).find(`.${Consts.FILE_ACTION_BUTTON_CLASS}`);
+        const $row = this.getRowInDetailsView(index);
+        return this._findActionButton($row);
     }
 
     getSelectCheckBoxInDetailsView(index) {
@@ -118,6 +120,10 @@ export class FileManagerWrapper {
 
     getContextMenuItem(text) {
         return this.getContextMenuItems(true).filter(`:contains('${text}')`);
+    }
+
+    _findActionButton($container) {
+        return $container.find(`.${Consts.FILE_ACTION_BUTTON_CLASS} .${Consts.BUTTON_CLASS}`);
     }
 
 }

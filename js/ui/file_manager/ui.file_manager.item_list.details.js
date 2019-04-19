@@ -93,7 +93,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenuHidden() {
-        this._activeFileActionsButton.setActive(false);
+        if(this._activeFileActionsButton) {
+            this._activeFileActionsButton.setActive(false);
+        }
     }
 
     _getItemSelector() {
