@@ -18,7 +18,7 @@ function exportDataGrid(options) {
     let dataProvider = dataGrid.getDataProvider();
 
     return new Promise((resolve) => {
-        dataProvider.ready().done((controllerRows) => {
+        dataProvider.ready().done(() => {
             let columns = dataProvider.getColumns();
             let headerRowCount = dataProvider.getHeaderRowCount();
             let dataRowsCount = dataProvider.getRowsCount();
@@ -47,10 +47,10 @@ function exportDataGrid(options) {
     });
 }
 
-function _exportRow(rowIndex, cellCount, row, currentColumnIndex, dataProvider, customizeCell) {
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-        const cell = row.getCell(currentColumnIndex);
+        const cell = row.getCell(startColumnIndex + cellIndex);
 
         cell.value = cellData.value;
 
@@ -66,7 +66,6 @@ function _exportRow(rowIndex, cellCount, row, currentColumnIndex, dataProvider, 
                 }
             });
         }
-        currentColumnIndex++;
     }
 }
 
