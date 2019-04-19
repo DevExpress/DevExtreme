@@ -167,6 +167,7 @@ export class TooltipStrategyBase {
         $container.append($deleteButton);
         this.scheduler._createComponent($deleteButton, Button, {
             icon: "trash",
+            stylingMode: "text",
             onClick: e => {
                 this._onDeleteButtonClick();
                 this.scheduler._checkRecurringAppointment(data, currentData,
