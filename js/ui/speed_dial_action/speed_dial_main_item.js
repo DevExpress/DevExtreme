@@ -4,16 +4,16 @@ import { extend } from "../../core/utils/extend";
 import eventsEngine from "../../events/core/events_engine";
 import errors from "../widget/ui.errors";
 import { getSwatchContainer } from "../widget/swatch_container";
-import ActionButtonItem from "./action_button_item";
+import SpeedDialItem from "./speed_dial_item";
 import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
 const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
-let actionButtonBase = null;
+let speedDialMainItem = null;
 
-const ActionButtonBase = ActionButtonItem.inherit({
+const SpeedDialMainItem = SpeedDialItem.inherit({
     _actionItems: [],
 
     _getDefaultOptions() {
@@ -28,7 +28,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                     y: -16
                 }
             },
-            maxActionButtonCount: 5,
+            maxSpeedDialActionCount: 5,
             hint: "",
             actions: [],
             visible: true,
@@ -137,7 +137,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
             action._options.animation.show.delay = action._options.animation.show.duration * i;
             action._options.animation.hide.delay = action._options.animation.hide.duration * (lastActionIndex - i);
 
-            this._actionItems.push(this._createComponent($actionElement, ActionButtonItem, action._options));
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
         }
     },
 
@@ -149,7 +149,7 @@ const ActionButtonBase = ActionButtonItem.inherit({
                 this._renderClick();
                 this._renderActions();
                 break;
-            case "maxActionButtonCount":
+            case "maxSpeedDialActionCount":
                 this._renderActions();
                 break;
             case "closeIcon":
@@ -168,11 +168,11 @@ exports.initAction = function(newAction) {
     delete newAction._options.onInitializing;
 
     let isActionExist = false;
-    if(!actionButtonBase) {
+    if(!speedDialMainItem) {
         const $fabMainElement = $("<div>")
             .appendTo(getSwatchContainer(newAction.$element()));
 
-        actionButtonBase = new ActionButtonBase($fabMainElement,
+        speedDialMainItem = newAction._createComponent($fabMainElement, SpeedDialMainItem,
             extend({}, newAction._options, {
                 actions: [ newAction ],
                 visible: true
@@ -180,7 +180,7 @@ exports.initAction = function(newAction) {
         );
 
     } else {
-        const savedActions = actionButtonBase.option("actions");
+        const savedActions = speedDialMainItem.option("actions");
 
         savedActions.forEach(action => {
             if(action._options.id === newAction._options.id) {
@@ -190,31 +190,31 @@ exports.initAction = function(newAction) {
         });
 
         if(!isActionExist) {
-            if(savedActions.length >= actionButtonBase.option("maxActionButtonCount")) {
+            if(savedActions.length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
                 newAction.dispose();
                 errors.log("W1014");
                 return;
             }
             savedActions.push(newAction);
-            actionButtonBase.option(extend(actionButtonBase._getDefaultOptions(), {
+            speedDialMainItem.option(extend(speedDialMainItem._getDefaultOptions(), {
                 actions: savedActions
             }));
         } else if(savedActions.length === 1) {
-            actionButtonBase.option(extend({}, newAction._options, {
+            speedDialMainItem.option(extend({}, newAction._options, {
                 actions: savedActions,
                 visible: true,
-                position: actionButtonBase._getDefaultOptions().position
+                position: speedDialMainItem._getDefaultOptions().position
             }));
         } else {
-            actionButtonBase.option({ actions: savedActions });
+            speedDialMainItem.option({ actions: savedActions });
         }
     }
 };
 
 exports.disposeAction = function(actionId) {
-    if(!actionButtonBase) return;
+    if(!speedDialMainItem) return;
 
-    let savedActions = actionButtonBase.option("actions");
+    let savedActions = speedDialMainItem.option("actions");
     const savedActionsCount = savedActions.length;
 
 
@@ -225,16 +225,16 @@ exports.disposeAction = function(actionId) {
     if(savedActionsCount === savedActions.length) return;
 
     if(!savedActions.length) {
-        actionButtonBase.dispose();
-        actionButtonBase.$element().remove();
-        actionButtonBase = null;
+        speedDialMainItem.dispose();
+        speedDialMainItem.$element().remove();
+        speedDialMainItem = null;
     } else if(savedActions.length === 1) {
-        actionButtonBase.option(extend({}, savedActions[0]._options, {
+        speedDialMainItem.option(extend({}, savedActions[0]._options, {
             actions: savedActions,
             visible: true,
-            position: actionButtonBase._getDefaultOptions().position
+            position: speedDialMainItem._getDefaultOptions().position
         }));
     } else {
-        actionButtonBase.option({ actions: savedActions });
+        speedDialMainItem.option({ actions: savedActions });
     }
 };

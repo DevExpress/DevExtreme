@@ -12,7 +12,7 @@ const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
-const ActionButtonItem = Overlay.inherit({
+const SpeedDialItem = Overlay.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
             shading: false,
@@ -130,4 +130,4 @@ const ActionButtonItem = Overlay.inherit({
     }
 });
 
-module.exports = ActionButtonItem;
+module.exports = SpeedDialItem;
