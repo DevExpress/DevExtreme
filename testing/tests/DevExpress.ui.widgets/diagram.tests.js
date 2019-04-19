@@ -78,6 +78,6 @@ QUnit.module("Context Menu", moduleConfig, () => {
 
 function findToolbarItem($diagram, label) {
     return $diagram.find(TOOLBAR_SELECTOR).find(".dx-widget").filter(function() {
-        return $(this).text().toLowerCase().includes(label);
+        return $(this).text().toLowerCase().indexOf(label) >= 0;
     });
 }
