@@ -193,12 +193,6 @@
     }
   },
   {
-    "name": "mobile/process_hardware_back_button",
-    "exports": {
-      "default": { "path": "processHardwareBackButton" }
-    }
-  },
-  {
     "name": "ui/speed_dial_action",
     "exports": {
       "default": { "path": "ui.dxSpeedDialAction", "isWidget": true }
