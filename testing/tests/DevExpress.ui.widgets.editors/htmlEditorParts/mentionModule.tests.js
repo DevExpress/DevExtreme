@@ -59,6 +59,7 @@ const moduleConfig = {
             getFormat: noop,
             on: noop,
             deleteText: (index, length) => { this.log.push({ operation: "deleteText", index, length }); },
+            insertText: (index, text, formats) => { this.log.push({ operation: "insertText", index, length }); },
             keyboard: {
                 addBinding: ({ key }, handler) => {
 
@@ -237,7 +238,11 @@ QUnit.module("Mentions module", moduleConfig, () => {
                 value: "Alex manager"
             }
         }, {
-            index: 1, // restore selection
+            index: 1, // insert space after the mention
+            length: 1,
+            operation: "insertText"
+        }, {
+            index: 2, // restore selection
             operation: "setSelection"
         }]);
     });
@@ -323,7 +328,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         $items.first().trigger("dxclick");
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[4], {
+        assert.deepEqual(this.log[5], {
             format: "mention",
             position: 0,
             value: {
