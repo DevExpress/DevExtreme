@@ -3,7 +3,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Web;
 
-
 namespace StyleCompiler
 {
     static class ImageInliner
@@ -70,8 +69,7 @@ namespace StyleCompiler
 
         static string GenerateDataUrl(string path)
         {
-            var mime = Utils.GetMime(path);
-            return GetEncodedUrl(File.ReadAllBytes(path), mime);
+            return GetEncodedUrl(File.ReadAllBytes(path), Utils.GetMime(path));
         }
 
     }
