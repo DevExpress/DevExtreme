@@ -82,6 +82,7 @@ function run_test {
 function run_test_themebuilder {
     dotnet build build/build-dotnet.sln
     npm i
+    npm run build-themes
     npm run build-themebuilder-assets
     cd themebuilder
     npm i
