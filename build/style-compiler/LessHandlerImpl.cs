@@ -68,7 +68,7 @@ namespace StyleCompiler
 
                 if (url.StartsWith("icons/"))
                 {
-                    return $"url(/test-server/icons?path={Uri.EscapeDataString(url)})";                                        
+                    return $"url(/test-server/icons?path={Uri.EscapeDataString(url)})";
                 }
 
                 throw new NotSupportedException("Unknown url prefix: " + url);
