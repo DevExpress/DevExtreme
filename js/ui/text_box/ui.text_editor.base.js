@@ -831,7 +831,7 @@ var TextEditorBase = Editor.inherit({
     * @name dxTextEditorMethods.getButton
     * @publicName getButton(name)
     * @param1 name:string
-    * @return any
+    * @return dxButton | undefined
     */
     getButton(name) {
         return this._buttonCollection.getButton(name);
