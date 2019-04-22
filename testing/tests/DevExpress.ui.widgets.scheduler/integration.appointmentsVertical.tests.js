@@ -459,9 +459,9 @@ QUnit.test("dropDown appointment should not compact class on vertical view", fun
         { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) }
     ]);
 
-    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-appointment-collector").eq(0);
 
-    assert.ok($dropDown.hasClass("dx-scheduler-dropdown-appointments-compact"), "class is ok");
+    assert.ok($dropDown.hasClass("dx-scheduler-appointment-collector-compact"), "class is ok");
 });
 
 QUnit.test("Appointments should be rendered correctly, Day view with intervalCount", function(assert) {
