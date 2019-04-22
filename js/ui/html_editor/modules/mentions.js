@@ -8,6 +8,7 @@ import PopupModule from "./popup";
 import Mention from "../formats/mention";
 
 const USER_ACTION = "user";
+const SILENT_ACTION = "silent";
 const DEFAULT_MARKER = "@";
 
 const KEY_CODES = {
@@ -210,9 +211,10 @@ class MentionModule extends PopupModule {
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, textLength, "silent");
+            this.quill.deleteText(startIndex, textLength, SILENT_ACTION);
             this.quill.insertEmbed(startIndex, "mention", value);
-            this.quill.setSelection(startIndex + 1);
+            this.quill.insertText(startIndex + 1, ' ', SILENT_ACTION);
+            this.quill.setSelection(startIndex + 2);
         }.bind(this));
     }
 
