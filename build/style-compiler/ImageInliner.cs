@@ -1,6 +1,9 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
+
 
 namespace StyleCompiler
 {
@@ -55,12 +58,26 @@ namespace StyleCompiler
             return Regex.Match(path, "(\\.(eot|woff|woff2|ttf)(\\?#\\w*)?['\"]?)$").Success;
         }
 
+        static string GetEncodedUrl(byte[] fileContent, string mime)
+        {
+            var isSvgImage = mime == "image/svg+xml";
+            var content = "data:" + mime;
+            content += isSvgImage ? ";charset=UTF-8," : ";base64,";
+            content += isSvgImage ?
+                HttpUtility.UrlEncode(fileContent).Replace("+", "%20") : // encodeUriComponent
+                Convert.ToBase64String(fileContent);
+
+            if(isSvgImage) {
+                content = "\"" + content + "\"";
+            }
+
+            return content;
+        }
+
         static string GenerateDataUrl(string path)
         {
-            return "data:"
-                + Utils.GetMime(path)
-                + ";base64,"
-                + Convert.ToBase64String(File.ReadAllBytes(path));
+            var mime = Utils.GetMime(path);
+            return GetEncodedUrl(File.ReadAllBytes(path), mime);
         }
 
     }
