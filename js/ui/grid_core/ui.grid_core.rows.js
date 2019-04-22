@@ -1406,7 +1406,7 @@ module.exports = {
                             break;
                         case "loadPanel":
                             that._tableElement = null;
-                            that._invalidate(true, true);
+                            that._invalidate(true, args.fullName !== "loadPanel.enabled");
                             args.handled = true;
                             break;
                         case "noDataText":
