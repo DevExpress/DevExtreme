@@ -6048,6 +6048,35 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.equal(text.getBBox().height, 0);
         });
 
+        QUnit.test("Set max height. null as height", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There is test text for checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, null, {
+                wordWrap: "normal",
+                textOverflow: "ellipsis"
+            });
+            assert.ok(text.getBBox().height !== 0);
+        });
+
+        QUnit.test("Set max height. TextOverflow = 'none'. Show all texts ", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There is test text for checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, 10, {
+                wordWrap: "normal",
+                textOverflow: "none"
+            });
+
+            assert.ok(text.getBBox().height !== 0);
+        });
+
         QUnit.test("Set max height. textOverflow ellipsis. multi line text, Last text width less than maxWidth - add ... at the end", function(assert) {
             var text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: "black",
@@ -6097,6 +6126,24 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             assert.ok(text.element.childNodes[1].textContent.indexOf("...") > 0);
             assert.ok(text.getBBox().width <= 110);
+        });
+
+        QUnit.test("Set max height without width", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "Text\nText Text Text 1\nText"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(null, 25, {
+                wordWrap: "breakWord",
+                textOverflow: "ellipsis"
+            });
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "Text" },
+                { x: 35, dy: 12, text: "Text Text Text 1..." },
+            ], { x: 35, y: 100 });
         });
     }
 })();

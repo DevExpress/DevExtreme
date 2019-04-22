@@ -821,9 +821,9 @@ var dxChart = {
         /**
         * @name dxChartOptions.commonAxisSettings.color
         * @type string
-        * @default '#d3d3d3'
+        * @default '#767676'
         */
-        color: '#d3d3d3',
+        color: '#767676',
         /**
         * @name dxChartOptions.commonAxisSettings.width
         * @type number
@@ -1922,6 +1922,7 @@ var dxChart = {
     /**
     * @name dxChartOptions.annotations
     * @type Array<dxChartAnnotationConfig,object>
+    * @inherits dxChartOptions.commonAnnotationSettings
     */
     annotations: [{}],
     /**
@@ -2442,9 +2443,9 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.commonAxisSettings.color
         * @type string
-        * @default '#d3d3d3'
+        * @default '#767676'
         */
-        color: '#d3d3d3',
+        color: '#767676',
         /**
         * @name dxPolarChartOptions.commonAxisSettings.width
         * @type number
@@ -3422,9 +3423,9 @@ var BaseChart = {
 };
 
 /**
-    * @name dxChartCommonAnnotationConfig
-    * @type object
-    */
+* @name dxChartCommonAnnotationConfig
+* @type object
+*/
 var dxChartCommonAnnotationConfig = {
     /**
     * @name dxChartCommonAnnotationConfig.type
@@ -3521,6 +3522,7 @@ var dxChartCommonAnnotationConfig = {
         * @default true
         */
         visible: true
+        // cornerRadius: 0
     },
     /**
     * @name dxChartCommonAnnotationConfig.font
@@ -3602,25 +3604,30 @@ var dxChartCommonAnnotationConfig = {
         */
         url: undefined,
         /**
-        * @name dxChartCommonAnnotationConfig.image.location
-        * @type Enums.BackgroundImageLocation
-        * @default 'full'
-        */
-        location: 'full',
-        /**
         * @name dxChartCommonAnnotationConfig.image.width
         * @type number
-        * @default undefined
+        * @default 30
         */
-        width: undefined,
+        width: 30,
         /**
         * @name dxChartCommonAnnotationConfig.image.height
         * @type number
-        * @default undefined
+        * @default 30
         */
-        height: undefined
+        height: 30
     },
-    // cornerRadius: 0,
+    /**
+    * @name dxChartCommonAnnotationConfig.text
+    * @type string
+    * @default undefined
+    */
+    text: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.description
+    * @type string
+    * @default undefined
+    */
+    description: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.width
     * @type number
@@ -3641,9 +3648,20 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     * @notUsedInTheme
     */
-    customizeTooltip: undefined
+    customizeTooltip: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.wordWrap
+    * @type Enums.VizWordWrap
+    * @default "normal"
+    */
+    wordWrap: "normal",
+    /**
+    * @name dxChartCommonAnnotationConfig.textOverflow
+    * @type Enums.VizTextOverflow
+    * @default "ellipsis"
+    */
+    textOverflow: "ellipsis"
 };
-
 /**
 * @name dxChartAnnotationConfig
 * @type object

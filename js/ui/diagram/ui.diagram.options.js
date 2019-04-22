@@ -4,7 +4,7 @@ import Accordion from "../accordion";
 import Form from "../form";
 import DiagramCommands from "./ui.diagram.commands";
 import { extend } from "../../core/utils/extend";
-import { getDiagram } from "./diagram_importer";
+import DiagramBar from "./diagram_bar";
 
 const DIAGRAM_OPTIONS_CLASS = "dx-diagram-options";
 const OPTIONS = [
@@ -17,7 +17,7 @@ const OPTIONS = [
 class DiagramOptions extends Widget {
     _init() {
         super._init();
-        this.bar = new DiagramBar(this);
+        this.bar = new OptionsDiagramBar(this);
         this._valueConverters = {};
     }
     _initMarkup() {
@@ -42,7 +42,7 @@ class DiagramOptions extends Widget {
             items: DiagramCommands.getOptions().map(item => {
                 return extend(true, {
                     editorType: item.widget,
-                    dataField: item.name.toString(),
+                    dataField: item.command.toString(),
                     label: {
                         text: item.text
                     },
@@ -50,7 +50,7 @@ class DiagramOptions extends Widget {
                         text: item.text,
                         hint: item.hint,
                         icon: item.icon,
-                        onInitialized: (e) => this._onToolbarItemInitialized(e.component, item.name)
+                        onInitialized: (e) => this._onToolbarItemInitialized(e.component, item.command)
                     }
                 }, this._createWidgetOptions(item));
             }),
@@ -59,7 +59,7 @@ class DiagramOptions extends Widget {
     }
     _createWidgetOptions(item) {
         if(item.getValue && item.setValue) {
-            this._valueConverters[item.name] = { getValue: item.getValue, setValue: item.setValue };
+            this._valueConverters[item.command] = { getValue: item.getValue, setValue: item.setValue };
         }
         if(item.widget === "dxSelectBox") {
             return {
@@ -72,12 +72,12 @@ class DiagramOptions extends Widget {
         }
     }
     _onDiagramOptionChanged(key, value) {
-        if(!this._uiLocked && value !== undefined) {
+        if(!this._updateLocked && value !== undefined) {
             const valueConverter = this._valueConverters[key];
             if(valueConverter) {
                 value = valueConverter.getValue(value);
             }
-            this.bar._raiseBarCommandExecuted(parseInt(key), value);
+            this.bar.raiseBarCommandExecuted(parseInt(key), value);
         }
     }
     _setItemValue(key, value) {
@@ -85,41 +85,29 @@ class DiagramOptions extends Widget {
         if(valueConverter) {
             value = valueConverter.setValue(value);
         }
-        this._uiLocked = true;
+        this._updateLocked = true;
         this._formInstance.updateData(key.toString(), value);
-        this._uiLocked = false;
+        this._updateLocked = false;
     }
     _setEnabled(enabled) {
         this._formInstance.option("disabled", !enabled);
     }
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            container: null
+        });
+    }
 }
 
-class DiagramBar {
-    constructor(widget) {
-        const { EventDispatcher } = getDiagram();
-        this.onChanged = new EventDispatcher(); /* implementation of IBar */
-        this._widget = widget;
-    }
-    _raiseBarCommandExecuted(key, parameter) {
-        this.onChanged.raise("NotifyBarCommandExecuted", parseInt(key), parameter);
-    }
-
-    /* implementation of IBar */
+class OptionsDiagramBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getOptions().map(c => c.name);
+        return DiagramCommands.getOptions().map(c => c.command);
     }
     setItemValue(key, value) {
-        this._widget._setItemValue(key, value);
-    }
-    setItemEnabled(key, enabled) {
-    }
-    setItemVisible(key, enabled) {
+        this._owner._setItemValue(key, value);
     }
     setEnabled(enabled) {
-        this._widget._setEnabled(enabled);
-    }
-    isVisible() {
-        return true;
+        this._owner._setEnabled(enabled);
     }
 }
 

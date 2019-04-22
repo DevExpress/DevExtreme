@@ -1,96 +1,152 @@
 import { getDiagram } from "./diagram_importer";
+import { fileSaver } from "../../exporter/file_saver";
+import { isFunction } from "../../core/utils/type";
+import { getWindow } from "../../core/utils/window";
 
 const DiagramCommands = {
     getToolbar: function() {
         const { DiagramCommand } = getDiagram();
         return [
             {
-                name: DiagramCommand.Undo,
+                command: DiagramCommand.Undo,
                 hint: 'Undo',
-                icon: "undo"
+                icon: "undo",
+                text: "Undo",
             },
             {
-                name: DiagramCommand.Redo,
+                command: DiagramCommand.Redo,
                 hint: "Redo",
-                icon: "redo"
+                icon: "redo",
+                text: "Redo",
             },
             {
-                name: DiagramCommand.FontName,
+                command: DiagramCommand.FontName,
                 beginGroup: true,
                 widget: "dxSelectBox",
                 items: ["Arial", "Arial Black", "Helvetica", "Times New Roman", "Courier New", "Courier", "Verdana", "Georgia", "Comic Sans MS", "Trebuchet MS"]
             },
             {
-                name: DiagramCommand.FontSize,
+                command: DiagramCommand.FontSize,
                 widget: "dxSelectBox",
                 items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"]
             },
             {
-                name: DiagramCommand.Bold,
+                command: DiagramCommand.Bold,
                 hint: "Bold",
+                text: "Bold",
                 icon: "bold"
             },
             {
-                name: DiagramCommand.Italic,
+                command: DiagramCommand.Italic,
                 hint: "Italic",
+                text: "Italic",
                 icon: "italic"
             },
             {
-                name: DiagramCommand.Underline,
+                command: DiagramCommand.Underline,
                 hint: "Underline",
+                text: "Underline",
                 icon: "underline"
             },
             {
-                name: DiagramCommand.FontColor,
+                command: DiagramCommand.FontColor,
                 text: "Text Color",
                 widget: "dxColorBox"
             },
             {
-                name: DiagramCommand.StrokeColor,
+                command: DiagramCommand.StrokeColor,
                 text: "Line Color",
                 widget: "dxColorBox"
             },
             {
-                name: DiagramCommand.TextLeftAlign,
+                command: DiagramCommand.TextLeftAlign,
                 hint: "Align Left",
+                text: "Align Left",
                 icon: "alignleft",
                 beginGroup: true
             },
             {
-                name: DiagramCommand.TextCenterAlign,
-                hint: "Center",
+                command: DiagramCommand.TextCenterAlign,
+                hint: "Align Center",
+                text: "Center",
                 icon: "aligncenter"
             },
             {
-                name: DiagramCommand.TextRightAlign,
+                command: DiagramCommand.TextRightAlign,
                 hint: "Align Right",
+                text: "Align Right",
                 icon: "alignright"
             },
             {
-                name: DiagramCommand.ConnectorLineOption,
+                command: DiagramCommand.ConnectorLineOption,
                 widget: "dxSelectBox",
                 text: "Line Option",
-                items: ["Straight", "Orthogonal"]
+                items: [
+                    { name: "Straight", value: 0 },
+                    { name: "Orthogonal", value: 1 }
+                ],
+                displayExpr: "name",
+                valueExpr: "value"
             },
             {
-                name: DiagramCommand.ConnectorStartLineEnding,
+                command: DiagramCommand.ConnectorStartLineEnding,
                 widget: "dxSelectBox",
                 text: "Start Line Ending",
-                items: ["None", "Arrow"]
+                items: [
+                    { name: "None", value: 0 },
+                    { name: "Arrow", value: 1 }
+                ],
+                displayExpr: "name",
+                valueExpr: "value"
             },
             {
-                name: DiagramCommand.ConnectorEndLineEnding,
+                command: DiagramCommand.ConnectorEndLineEnding,
                 widget: "dxSelectBox",
                 text: "End Line Ending",
-                items: ["None", "Arrow"]
+                items: [
+                    { name: "None", value: 0 },
+                    { name: "Arrow", value: 1 }
+                ],
+                displayExpr: "name",
+                valueExpr: "value"
             },
             {
-                name: DiagramCommand.AutoLayoutTree,
-                text: "Tree Auto Layout"
+                widget: "dxButton",
+                icon: "export",
+                text: "Export",
+                items: [
+                    {
+                        command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to SVG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to PNG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to JPEG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
+                        }
+                    }
+                ]
             },
             {
-                name: DiagramCommand.AutoLayoutTree,
-                text: "Layered Auto Layout"
+                widget: "dxButton",
+                text: "Auto Layout",
+                showText: "always",
+                items: [
+                    { command: DiagramCommand.AutoLayoutTreeVertical, text: "Tree (vertical)" },
+                    { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Layered (vertical)" },
+                    { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Layered (horizontal)" }
+                ]
             }
         ];
     },
@@ -98,7 +154,7 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return [
             {
-                name: DiagramCommand.PageSize,
+                command: DiagramCommand.PageSize,
                 text: "Page Size",
                 widget: "dxSelectBox",
                 getValue: (v) => {
@@ -153,12 +209,12 @@ const DiagramCommands = {
                 ]
             },
             {
-                name: DiagramCommand.PageLandscape,
+                command: DiagramCommand.PageLandscape,
                 text: "Page Landscape",
                 widget: "dxCheckBox"
             },
             {
-                name: DiagramCommand.GridSize,
+                command: DiagramCommand.GridSize,
                 text: "Grid Size",
                 widget: "dxSelectBox",
                 items: [
@@ -181,11 +237,62 @@ const DiagramCommands = {
                 ]
             },
             {
-                name: DiagramCommand.SnapToGrid,
+                command: DiagramCommand.SnapToGrid,
                 text: "Snap to Grid",
                 widget: "dxCheckBox"
             }
         ];
+    },
+    getContextMenu: function() {
+        const { DiagramCommand } = getDiagram();
+        return [
+            {
+                command: DiagramCommand.Cut,
+                text: "Cut"
+            },
+            {
+                command: DiagramCommand.Copy,
+                text: "Copy"
+            },
+            {
+                command: DiagramCommand.Paste,
+                text: "Paste"
+            },
+            {
+                command: DiagramCommand.SelectAll,
+                text: "Select All"
+            },
+            {
+                command: DiagramCommand.Delete,
+                text: "Delete"
+            },
+            {
+                command: DiagramCommand.BringToFront,
+                text: "Bring to Front"
+            },
+            {
+                command: DiagramCommand.SendToBack,
+                text: "Send to Back"
+            }
+        ];
+    },
+    _exportTo(widget, dataURI, format, mimeString) {
+        const window = getWindow();
+        if(window && window.atob && isFunction(window.Blob)) {
+            const blob = this._getBlobByDataURI(window, dataURI, mimeString);
+            const options = widget.option("export");
+            fileSaver.saveAs(options.fileName || "foo", format, blob, options.proxyURL);
+        }
+    },
+    _getBlobByDataURI(window, dataURI, mimeString) {
+        var byteString = window.atob(dataURI.split(',')[1]);
+        var arrayBuffer = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(arrayBuffer);
+        for(var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        var dataView = new DataView(arrayBuffer);
+        return new window.Blob([dataView], { type: mimeString });
     }
 };
 

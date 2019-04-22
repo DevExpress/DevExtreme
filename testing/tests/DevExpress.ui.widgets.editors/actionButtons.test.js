@@ -128,7 +128,7 @@ module("API", () => {
         const customButton = selectBox.getButton("custom");
 
         assert.ok(clearButton.hasClass("dx-clear-button-area"));
-        assert.strictEqual(fakeButton, null);
+        assert.strictEqual(fakeButton, undefined);
         assert.ok(dropDownButton.$element().hasClass("dx-dropdowneditor-button"));
         assert.strictEqual(customButton.option("text"), "customButtonText");
     });
@@ -200,16 +200,23 @@ module("rendering", () => {
             assert.notOk(getButtonPlaceHolders($after).length);
         });
 
+        test("should render predefined button ('clear') configurated as object", (assert) => {
+            const $textBox = $("<div>").dxTextBox({ showClearButton: true, buttons: [{ name: "clear" }] });
+            let $after = getActionButtons($textBox).$after;
+            assert.ok(isClearButton($after.eq(0)));
+        });
+
         test("should have only 'clear' predefined button", (assert) => {
             const error = new Error("editor does not have 'fakeButtonName' action button");
 
             assert.throws(() => $("<div>").dxTextBox({ buttons: ["fakeButtonName"] }), error);
         });
 
-        test("custom button should not have 'clear' name", (assert) => {
-            const error = new Error("'clear' name reserved for the predefined action button");
+        test("predefined button should not have 'location' or 'options' fields in predefined button configuration", (assert) => {
+            const error = new Error("Predefined 'clear' button must have no 'location' or 'options' fields in the configuration");
 
-            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "clear" }] }), error);
+            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "clear", location: "after" }] }), error);
+            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "clear", options: {} }] }), error);
         });
 
         test("custom button with location 'before' should be rendered", (assert) => {
@@ -298,17 +305,31 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($after).length, 0);
         });
 
+        test("should render predefined buttons ('clear', 'spins') configurated as object", (assert) => {
+            const $numberBox = $("<div>").dxNumberBox({
+                showClearButton: true,
+                showSpinButtons: true,
+                buttons: [{ name: "clear" }, { name: "spins" }]
+            });
+
+            const { $before, $after } = getActionButtons($numberBox);
+
+            assert.notOk($before.length);
+            assert.strictEqual($after.length, 2);
+            assert.strictEqual(getButtonPlaceHolders($after).length, 0);
+        });
+
         test("should have only 'clear', 'spins' predefined buttons", (assert) => {
             const error = new Error("editor does not have 'fakeButtonName' action button");
 
             assert.throws(() => $("<div>").dxNumberBox({ buttons: ["fakeButtonName"] }), error);
         });
 
-        test("custom button should not have 'clear' or 'spins' name", (assert) => {
-            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "clear" }] }),
-                new Error("'clear' name reserved for the predefined action button"));
-            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "spins" }] }),
-                new Error("'spins' name reserved for the predefined action button"));
+        test("predefined buttons should not have 'location' or 'options' fields in predefined button configuration", (assert) => {
+            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "clear", location: "after", options: {} }] }),
+                new Error("Predefined 'clear' button must have no 'location' or 'options' fields in the configuration"));
+            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "spins", location: "after", options: {} }] }),
+                new Error("Predefined 'spins' button must have no 'location' or 'options' fields in the configuration"));
         });
     });
 
@@ -352,17 +373,29 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($after).length, 0);
         });
 
+        test("should render predefined buttons ('clear', 'dropDown') configurated as object", (assert) => {
+            const $selectBox = $("<div>").dxSelectBox({
+                showClearButton: true,
+                buttons: [{ name: "clear" }, { name: "dropDown" }]
+            });
+            const { $before, $after } = getActionButtons($selectBox);
+
+            assert.notOk($before.length);
+            assert.strictEqual($after.length, 2);
+            assert.strictEqual(getButtonPlaceHolders($after).length, 0);
+        });
+
         test("should have only 'clear', 'dropDown' predefined button", (assert) => {
             const error = new Error("editor does not have 'fakeButtonName' action button");
 
             assert.throws(() => $("<div>").dxSelectBox({ buttons: ["fakeButtonName"] }), error);
         });
 
-        test("custom button should not have 'clear' or 'dropDown' name", (assert) => {
-            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "clear" }] }),
-                new Error("'clear' name reserved for the predefined action button"));
-            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "dropDown" }] }),
-                new Error("'dropDown' name reserved for the predefined action button"));
+        test("predefined buttons should not have 'location' or 'options' fields in predefined button configuration", (assert) => {
+            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "clear", location: "after", options: {} }] }),
+                new Error("Predefined 'clear' button must have no 'location' or 'options' fields in the configuration"));
+            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "dropDown", location: "after", options: {} }] }),
+                new Error("Predefined 'dropDown' button must have no 'location' or 'options' fields in the configuration"));
         });
 
         test("buttons is rendered with fieldTemplate", (assert) => {

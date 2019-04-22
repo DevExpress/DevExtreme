@@ -652,7 +652,7 @@ registerTheme({
                 overlappingBehavior: "hide",
                 indentFromAxis: 10,
                 wordWrap: "normal",
-                overflow: "none"
+                textOverflow: "none"
             },
             title: {
                 font: {
@@ -733,8 +733,11 @@ registerTheme({
                 color: BLACK
             },
             image: {
-                location: "full"
-            }
+                width: 30,
+                height: 30
+            },
+            wordWrap: "normal",
+            textOverflow: "ellipsis"
         },
         argumentAxis: {
             endOnTick: false,
@@ -750,7 +753,7 @@ registerTheme({
         commonPaneSettings: {
             backgroundColor: NONE,
             border: {
-                color: SECONDARY_TITLE_COLOR,
+                color: LIGHT_GREY,
                 width: 1,
                 visible: false,
                 top: true,

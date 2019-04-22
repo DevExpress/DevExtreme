@@ -48,9 +48,13 @@ function checkNamesUniqueness(existingNames, newName) {
     existingNames.push(newName);
 }
 
-function checkPredefinedButtonName(name, predefinedButtonsInfo) {
-    if(find(predefinedButtonsInfo, (info) => info.name === name)) {
-        throw new Error(`'${name}' name reserved for the predefined action button`);
+function isPredefinedButtonName(name, predefinedButtonsInfo) {
+    return !!(find(predefinedButtonsInfo, (info) => info.name === name));
+}
+
+function checkExcessOptions(button) {
+    if(typeof button === "object" && (button.location || button.options)) {
+        throw new Error(`Predefined '${button.name}' button must have no 'location' or 'options' fields in the configuration`);
     }
 }
 
@@ -65,10 +69,16 @@ export default class TextEditorButtonCollection {
         const names = [];
 
         return buttons.map((button) => {
-            const isDefaultButton = typeof button === "string";
+            const isStringButton = typeof button === "string";
+
+            if(!isStringButton) {
+                checkButtonInfo(button);
+            }
+            const isDefaultButton = isStringButton || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
 
             if(isDefaultButton) {
-                const defaultButtonInfo = find(this.defaultButtonsInfo, ({ name }) => name === button);
+                checkExcessOptions(button);
+                const defaultButtonInfo = find(this.defaultButtonsInfo, ({ name }) => name === button || name === button.name);
 
                 if(!defaultButtonInfo) {
                     throw new Error(`editor does not have '${button}' action button`);
@@ -78,12 +88,9 @@ export default class TextEditorButtonCollection {
 
                 return defaultButtonInfo;
             } else {
-                checkButtonInfo(button);
-
                 const { name } = button;
 
                 checkNamesUniqueness(names, name);
-                checkPredefinedButtonName(name, this.defaultButtonsInfo);
 
                 return extend(button, { Ctor: CustomButton });
             }
@@ -130,7 +137,7 @@ export default class TextEditorButtonCollection {
     getButton(buttonName) {
         const button = find(this.buttons, ({ name }) => name === buttonName);
 
-        return button ? button.instance : null;
+        return button && button.instance;
     }
 
     renderAfterButtons(buttons, $container) {

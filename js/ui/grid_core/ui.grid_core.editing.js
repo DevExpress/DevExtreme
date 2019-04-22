@@ -8,6 +8,7 @@ import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import modules from "./ui.grid_core.modules";
 import clickEvent from "../../events/click";
+import pointerEvents from "../../events/pointer";
 import { getIndexByKey, createObjectWithChanges, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from "./ui.grid_core.utils";
 import { addNamespace } from "../../events/utils";
 import dialog from "../dialog";
@@ -172,6 +173,16 @@ var EditingController = modules.ViewController.inherit((function() {
         return item.isCustomEditorType ? item.editorType : column.formItem && column.formItem.editorType;
     };
 
+    var forEachFormItems = (items, callBack) => {
+        items.forEach((item) => {
+            if(item.items || item.tabs) {
+                forEachFormItems(item.items || item.tabs, callBack);
+            } else {
+                callBack(item);
+            }
+        });
+    };
+
     return {
         init: function() {
             var that = this;
@@ -222,7 +233,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                eventsEngine.on(domAdapter.getDocument(), clickEvent.name, that._saveEditorHandler);
+                eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -493,7 +504,7 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(domAdapter.getDocument(), clickEvent.name, this._saveEditorHandler);
+            eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {
@@ -554,7 +565,9 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         isEditCell: function(rowIndex, columnIndex) {
-            return this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
+            var hasEditData = !!(Array.isArray(this._editData) && this._editData.length);
+
+            return hasEditData && this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
         },
 
         getPopupContent: function() {
@@ -1784,8 +1797,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this;
 
             return function($container, detailOptions, renderFormOnly) {
-                var itemId,
-                    editFormOptions = that.option("editing.form"),
+                var editFormOptions = that.option("editing.form"),
                     items = that.option("editing.form.items"),
                     userCustomizeItem = that.option("editing.form.customizeItem"),
                     editData = that._editData[getIndexByKey(detailOptions.key, that._editData)],
@@ -1805,8 +1817,8 @@ var EditingController = modules.ViewController.inherit((function() {
                         }
                     });
                 } else {
-                    items.forEach((item) => {
-                        itemId = item && (item.name || item.dataField);
+                    forEachFormItems(items, (item) => {
+                        let itemId = item && (item.name || item.dataField);
 
                         if(itemId) {
                             isCustomEditorType[itemId] = !!item.editorType;
@@ -1821,9 +1833,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     formID: "dx-" + new Guid(),
                     validationGroup: editData,
                     customizeItem: function(item) {
-                        var column;
-
-                        itemId = item.name || item.dataField;
+                        var column,
+                            itemId = item.name || item.dataField;
 
                         if(item.column || itemId) {
                             column = item.column || that._columnsController.columnOption(item.name ? "name:" + item.name : "dataField:" + item.dataField);

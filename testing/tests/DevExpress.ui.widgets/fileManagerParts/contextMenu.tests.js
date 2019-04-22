@@ -1,109 +1,189 @@
-/* global internals, createTestFileSystem */
-
 import $ from "jquery";
 const { test } = QUnit;
 import "ui/file_manager";
 import fx from "animation/fx";
+import { Consts, FileManagerWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
 
 const moduleConfig = {
-    beforeEach: () => {
+
+    beforeEach: function() {
         const fileSystem = createTestFileSystem();
 
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
-        $("#fileManager").dxFileManager({
+        this.$element = $("#fileManager").dxFileManager({
             fileProvider: fileSystem,
             itemView: {
                 showFolders: false
             },
-            selectionMode: "multiple"
+            permissions: {
+                create: true,
+                copy: true,
+                move: true,
+                remove: true,
+                rename: true,
+                upload: true
+            }
         });
+
+        this.wrapper = new FileManagerWrapper(this.$element);
 
         this.clock.tick(400);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.tick(5000);
 
         this.clock.restore();
         fx.off = false;
     }
+
 };
 
-const getRowActionButtonInDetailsView = ($element, index) => getRowInDetailsView($element, index).find(".dx-filemanager-file-actions-button");
-
-const getSelectCheckBoxInDetailsView = ($element, index) => getRowInDetailsView($element, index).find("td").eq(0);
-
-const getRowNameCellInDetailsView = ($element, index) => getRowInDetailsView($element, index).find("td").eq(1);
-
-const getRowInDetailsView = ($element, index) => $element.find(`.${internals.GRID_DATA_ROW_CLASS}[aria-rowindex=${index}]`);
-
-const getContextMenuItems = () => $(".dx-context-menu .dx-menu-item");
-
 QUnit.module("Raise context menu", moduleConfig, () => {
-    test('right click by row', assert => {
-        const $row1 = getRowInDetailsView(this.$element, 1);
-        assert.notOk($row1.hasClass("dx-selection"));
-        assert.equal(getContextMenuItems().length, 0);
 
-        getRowNameCellInDetailsView(this.$element, 1).trigger("dxcontextmenu");
-        assert.ok($row1.hasClass("dx-selection"));
-        assert.ok(getContextMenuItems().length > 0);
+    test('right click by row', function(assert) {
+        const $row1 = this.wrapper.getRowInDetailsView(1);
+        assert.notOk($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
 
-        const $row2 = getRowInDetailsView(this.$element, 2);
-        assert.notOk($row2.hasClass("dx-selection"));
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.ok(this.wrapper.getContextMenuItems().length > 0);
 
-        getRowNameCellInDetailsView(this.$element, 2).trigger("dxcontextmenu");
-        assert.notOk($row1.hasClass("dx-selection"));
-        assert.ok($row2.hasClass("dx-selection"));
-        assert.ok(getContextMenuItems().length > 0);
+        const $row2 = this.wrapper.getRowInDetailsView(2);
+        assert.notOk($row2.hasClass(Consts.SELECTION_CLASS));
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger("dxcontextmenu");
+        assert.notOk($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.ok($row2.hasClass(Consts.SELECTION_CLASS));
+        assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
 
-    test('right click by row and click by select check box', assert => {
-        getSelectCheckBoxInDetailsView(this.$element, 1).trigger("dxclick");
+    test('right click by row and click by select check box', function(assert) {
+        this.wrapper.getSelectCheckBoxInDetailsView(1).trigger("dxclick");
 
-        const $row1 = getRowInDetailsView(this.$element, 1);
-        assert.ok($row1.hasClass("dx-selection"));
-        assert.equal(getContextMenuItems().length, 0);
+        const $row1 = this.wrapper.getRowInDetailsView(1);
+        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
 
-        getRowNameCellInDetailsView(this.$element, 2).trigger("dxcontextmenu");
-        const $row2 = getRowInDetailsView(this.$element, 2);
-        assert.ok($row1.hasClass("dx-selection"));
-        assert.ok($row2.hasClass("dx-selection"));
-        assert.ok(getContextMenuItems().length > 0);
+        this.wrapper.getRowNameCellInDetailsView(2).trigger("dxcontextmenu");
+        const $row2 = this.wrapper.getRowInDetailsView(2);
+        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.ok($row2.hasClass(Consts.SELECTION_CLASS));
+        assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
 
-    test('click by row\'s action button', assert => {
-        const $row1 = getRowInDetailsView(this.$element, 1);
+    test('click by row\'s action button', function(assert) {
+        const $row1 = this.wrapper.getRowInDetailsView(1);
         $row1.trigger("dxhoverstart");
-        getRowActionButtonInDetailsView(this.$element, 1).trigger("dxclick");
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger("dxclick");
 
-        assert.ok($row1.hasClass("dx-selection"));
-        assert.ok(getContextMenuItems().length > 0);
+        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.ok(this.wrapper.getContextMenuItems().length > 0);
 
-        const $row2 = getRowInDetailsView(this.$element, 2);
+        const $row2 = this.wrapper.getRowInDetailsView(2);
         $row2.trigger("dxhoverstart");
-        getRowActionButtonInDetailsView(this.$element, 2).trigger("dxclick");
-        assert.notOk($row1.hasClass("dx-selection"));
-        assert.ok($row2.hasClass("dx-selection"));
-        assert.ok(getContextMenuItems().length > 0);
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger("dxclick");
+        assert.notOk($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.ok($row2.hasClass(Consts.SELECTION_CLASS));
+        assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
 
-    test('click by select check box and row\'s action button', assert => {
-        getSelectCheckBoxInDetailsView(this.$element, 1).trigger("dxclick");
+    test('click by select check box and row\'s action button', function(assert) {
+        this.wrapper.getSelectCheckBoxInDetailsView(1).trigger("dxclick");
 
-        const $row1 = getRowInDetailsView(this.$element, 1);
-        assert.ok($row1.hasClass("dx-selection"));
-        assert.equal(getContextMenuItems().length, 0);
+        const $row1 = this.wrapper.getRowInDetailsView(1);
+        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
 
-        const $row2 = getRowInDetailsView(this.$element, 2);
+        const $row2 = this.wrapper.getRowInDetailsView(2);
         $row2.trigger("dxhoverstart");
-        getRowActionButtonInDetailsView(this.$element, 2).trigger("dxclick");
-        assert.ok($row1.hasClass("dx-selection"));
-        assert.ok($row2.hasClass("dx-selection"));
-        assert.ok(getContextMenuItems().length > 0);
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger("dxclick");
+        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        assert.ok($row2.hasClass(Consts.SELECTION_CLASS));
+        assert.ok(this.wrapper.getContextMenuItems().length > 0);
+    });
 
+    test('right click by focused folder node', function(assert) {
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderNode(0).trigger("dxcontextmenu");
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
+
+        this.wrapper.getContextMenuItem("Refresh").trigger("dxclick");
+
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems(true).length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderNode(1).trigger("dxcontextmenu");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
+    });
+
+    test('right click by non focused folder node', function(assert) {
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderNode(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
+
+        this.wrapper.getContextMenuItem("Refresh").trigger("dxclick");
+
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems(true).length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderNode(1).trigger("dxcontextmenu");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
+    });
+
+    test('click by focused folder node action button', function(assert) {
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderActionButton(0).trigger("dxclick");
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
+
+        this.wrapper.getContextMenuItem("Refresh").trigger("dxclick");
+
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems(true).length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderNode(1).trigger("dxcontextmenu");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
+    });
+
+    test('click by non focused folder node action button', function(assert) {
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderActionButton(1).trigger("dxclick");
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
+
+        this.wrapper.getContextMenuItem("Refresh").trigger("dxclick");
+
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems(true).length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderNode(1).trigger("dxcontextmenu");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
     });
 
 });

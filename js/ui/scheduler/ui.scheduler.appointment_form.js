@@ -1,20 +1,22 @@
-var $ = require("../../core/renderer"),
-    Form = require("../form"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    messageLocalization = require("../../localization/message"),
-    clickEvent = require("../../events/click"),
-    typeUtils = require("../../core/utils/type"),
-    eventsEngine = require("../../events/core/events_engine");
+import $ from "../../core/renderer";
+import Form from "../form";
+import dateSerialization from "../../core/utils/date_serialization";
+import messageLocalization from "../../localization/message";
+import clickEvent from "../../events/click";
+import typeUtils from "../../core/utils/type";
+import eventsEngine from "../../events/core/events_engine";
 
-require("./ui.scheduler.recurrence_editor");
-require("./timezones/ui.scheduler.timezone_editor");
-require("../text_area");
-require("../tag_box");
+import "./ui.scheduler.recurrence_editor";
+import "./timezones/ui.scheduler.timezone_editor";
+import "../text_area";
+import "../tag_box";
 
-var RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
+const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
 
-var SchedulerAppointmentForm = {
+const SCREEN_SIZE_OF_TOP_LABEL_LOCATION = 608;
+const SCREEN_SIZE_OF_SINGLE_COLUMN = 460;
 
+const SchedulerAppointmentForm = {
     _appointmentForm: {},
 
     _validateAppointmentFormDate: function(editor, value, previousValue) {
@@ -35,8 +37,14 @@ var SchedulerAppointmentForm = {
         return endDate;
     },
 
-    create: function(componentCreator, $container, isReadOnly, formData) {
+    _updateLabelLocation: function(formWidth) {
+        const form = this._appointmentForm;
+        if(form._initialized && form.isReady()) {
+            form.option("labelLocation", formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
+        }
+    },
 
+    create: function(componentCreator, $container, isReadOnly, formData) {
         this._appointmentForm = componentCreator($container, Form, {
             items: this._editors,
             readOnly: isReadOnly,
@@ -44,7 +52,12 @@ var SchedulerAppointmentForm = {
             scrollingEnabled: true,
             formData: formData,
             colCount: 2,
-            showColonAfterLabel: false
+            showColonAfterLabel: false,
+            screenByWidth: () => {
+                const formWidth = $container.outerWidth();
+                this._updateLabelLocation(formWidth);
+                return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? "xs" : "lg";
+            }
         });
 
         return this._appointmentForm;

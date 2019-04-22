@@ -153,9 +153,13 @@ module.exports = Class.inherit((function() {
         if(headerItem.children && headerItem.children.length === children.length) {
             for(var i = 0; i < children.length; i++) {
                 var child = children[i];
-                if(child.index !== undefined && headerItem.children[i].index === undefined) {
-                    child.index = applyingItemIndexesToCurrent[child.index] = emptyIndex++;
-                    headerItem.children[i] = child;
+                if(child.index !== undefined) {
+                    if(headerItem.children[i].index === undefined) {
+                        child.index = applyingItemIndexesToCurrent[child.index] = emptyIndex++;
+                        headerItem.children[i] = child;
+                    } else {
+                        applyingItemIndexesToCurrent[child.index] = headerItem.children[i].index;
+                    }
                 }
             }
         } else {
@@ -1331,6 +1335,14 @@ module.exports = Class.inherit((function() {
                 items = this._data[area + "s"],
                 indices = [];
 
+            if(options.path && options.area === area) {
+                let headerItem = findHeaderItem(items, options.path);
+                items = headerItem && headerItem.children;
+                if(!items) {
+                    return false;
+                }
+            }
+
             for(let i = options[skipField]; i < options[skipField] + options[takeField]; i++) {
                 if(items[i]) {
                     indices.push(items[i].index);
@@ -1356,7 +1368,7 @@ module.exports = Class.inherit((function() {
                 item;
 
             if(options[takeField]) {
-                if(options.path) {
+                if(options.path && options.area === area) {
                     let headerItem = findHeaderItem(items, options.path);
                     items = headerItem && headerItem.children || [];
                 }
@@ -1429,7 +1441,9 @@ module.exports = Class.inherit((function() {
                     that._processPagingCache(storeLoadOptions);
                 }
 
-                storeLoadOptions = storeLoadOptions.filter(options => options.rowTake !== 0);
+                storeLoadOptions = storeLoadOptions.filter(options => {
+                    return !(options.rows.length && options.rowTake === 0) && !(options.columns.length && options.columnTake === 0);
+                });
 
                 if(!storeLoadOptions.length) {
                     that._update(deferred);

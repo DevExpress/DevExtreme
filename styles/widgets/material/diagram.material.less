@@ -4,6 +4,21 @@
     .dx-diagram-toolbar-wrapper:first-child {
         border-bottom: 1px solid @diagram-toolbar-border-color;
     }
+
+    .dx-diagram-toolbox,
+    .dx-diagram-options {
+        background: @overlay-content-bg;
+        .dx-accordion .dx-accordion-item {
+            border: none;
+        }
+    }
+
+    .dx-diagram-toolbox {
+        border-right-color: @diagram-toolbar-border-color;
+    }
+    .dx-diagram-options {
+        border-left-color: @diagram-toolbar-border-color;
+    }
 }
 
 .dx-diagram-toolbar {
@@ -23,12 +38,5 @@
         &.dx-button-danger {
             background-color: @diagram-danger-format-active-bg;
         }
-    }
-}
-
-.dx-diagram-toolbox,
-.dx-diagram-options {
-    .dx-accordion .dx-accordion-item {
-        border: none;
     }
 }

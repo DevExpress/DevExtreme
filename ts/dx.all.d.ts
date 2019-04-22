@@ -109,16 +109,11 @@ interface JQuery {
     dxDeferRendering(options: string, ...params: any[]): any;
     dxDeferRendering(options: DevExpress.ui.dxDeferRenderingOptions): JQuery;
 }
-
 interface JQuery {
     dxDiagram(): JQuery;
-
     dxDiagram(options: "instance"): DevExpress.ui.dxDiagram;
-
     dxDiagram(options: string): any;
-
     dxDiagram(options: string, ...params: any[]): any;
-
     dxDiagram(options: DevExpress.ui.dxDiagramOptions): JQuery;
 }
 interface JQuery {
@@ -162,13 +157,6 @@ interface JQuery {
     dxFilterBuilder(options: string): any;
     dxFilterBuilder(options: string, ...params: any[]): any;
     dxFilterBuilder(options: DevExpress.ui.dxFilterBuilderOptions): JQuery;
-}
-interface JQuery {
-    dxFloatingActionButton(): JQuery;
-    dxFloatingActionButton(options: "instance"): DevExpress.ui.dxFloatingActionButton;
-    dxFloatingActionButton(options: string): any;
-    dxFloatingActionButton(options: string, ...params: any[]): any;
-    dxFloatingActionButton(options: DevExpress.ui.dxFloatingActionButtonOptions): JQuery;
 }
 interface JQuery {
     dxForm(): JQuery;
@@ -365,6 +353,13 @@ interface JQuery {
     dxSlider(options: string): any;
     dxSlider(options: string, ...params: any[]): any;
     dxSlider(options: DevExpress.ui.dxSliderOptions): JQuery;
+}
+interface JQuery {
+    dxSpeedDialAction(): JQuery;
+    dxSpeedDialAction(options: "instance"): DevExpress.ui.dxSpeedDialAction;
+    dxSpeedDialAction(options: string): any;
+    dxSpeedDialAction(options: string, ...params: any[]): any;
+    dxSpeedDialAction(options: DevExpress.ui.dxSpeedDialActionOptions): JQuery;
 }
 interface JQuery {
     dxSwitch(): JQuery;
@@ -1451,7 +1446,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.size */
         size?: BaseWidgetSize;
         /** @name BaseWidget.Options.theme */
-        theme?: 'android5.light' | 'generic.dark' | 'generic.light' | 'generic.contrast' | 'ios7.default' | 'win10.black' | 'win10.white' | 'win8.black' | 'win8.white' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
+        theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'ios7.default' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
         /** @name BaseWidget.Options.title */
         title?: BaseWidgetTitle | string;
         /** @name BaseWidget.Options.tooltip */
@@ -2577,12 +2572,14 @@ declare module DevExpress.viz {
         color?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
         customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.description */
+        description?: string;
         /** @name dxChartCommonAnnotationConfig.font */
         font?: Font;
         /** @name dxChartCommonAnnotationConfig.height */
         height?: number;
         /** @name dxChartCommonAnnotationConfig.image */
-        image?: string | { height?: number, location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string, width?: number };
+        image?: string | { height?: number, url?: string, width?: number };
         /** @name dxChartCommonAnnotationConfig.opacity */
         opacity?: number;
         /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
@@ -2593,14 +2590,20 @@ declare module DevExpress.viz {
         series?: string;
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name dxChartCommonAnnotationConfig.text */
+        text?: string;
+        /** @name dxChartCommonAnnotationConfig.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.type */
-        type?: 'label' | 'image';
+        type?: 'text' | 'image';
         /** @name dxChartCommonAnnotationConfig.value */
         value?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.width */
         width?: number;
+        /** @name dxChartCommonAnnotationConfig.wordWrap */
+        wordWrap?: 'normal' | 'breakWord' | 'none';
         /** @name dxChartCommonAnnotationConfig.x */
         x?: number;
         /** @name dxChartCommonAnnotationConfig.y */
@@ -5349,6 +5352,8 @@ declare module DevExpress.ui {
         /** @name NumericRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
+    /** @name OneDriveFileProvider */
+    export type OneDriveFileProvider = any;
     /** @name PatternRule */
     export interface PatternRule {
         /** @name PatternRule.ignoreEmptyValue */
@@ -6070,15 +6075,27 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxDeferRenderingOptions)
         constructor(element: JQuery, options?: dxDeferRenderingOptions)
     }
-
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
+        /** @name dxDiagram.Options.edges */
+        edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
+        /** @name dxDiagram.Options.export */
+        export?: { fileName?: string, proxyUrl?: string };
+        /** @name dxDiagram.Options.layout */
+        layout?: 'tree' | 'sugiyama';
+        /** @name dxDiagram.Options.nodes */
+        nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
+        /** @name dxDiagram.Options.onDataChanged */
+        onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
     }
-
     /** @name dxDiagram */
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
         constructor(element: JQuery, options?: dxDiagramOptions)
+        /** @name dxDiagram.getData() */
+        getData(): string;
+        /** @name dxDiagram.setData(value) */
+        setData(data: string, keepExistingItems: boolean): void;
     }
     /** @name dxDrawer.Options */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
@@ -6149,23 +6166,31 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.deferRendering */
         deferRendering?: boolean;
         /** @name dxDropDownButton.Options.displayExpr */
-        displayExpr?: string | ((itemData: any) => any);
+        displayExpr?: string | ((itemData: any) => string);
+        /** @name dxDropDownButton.Options.dropDownContentTemplate */
+        dropDownContentTemplate?: template | ((data: Array<string | number | any> | DevExpress.data.DataSource, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
+        /** @name dxDropDownButton.Options.focusStateEnabled */
+        focusStateEnabled?: boolean;
+        /** @name dxDropDownButton.Options.hoverStateEnabled */
+        hoverStateEnabled?: boolean;
         /** @name dxDropDownButton.Options.icon */
         icon?: string;
         /** @name dxDropDownButton.Options.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.items */
         items?: Array<CollectionWidgetItem | any>;
         /** @name dxDropDownButton.Options.keyExpr */
-        keyExpr?: string | ((itemData: any) => any);
+        keyExpr?: string;
         /** @name dxDropDownButton.Options.noDataText */
         noDataText?: string;
-        /** @name dxDropDownButton.Options.onActionButtonClick */
-        onActionButtonClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.onButtonClick */
+        onButtonClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.onItemClick */
+        onItemClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
         /** @name dxDropDownButton.Options.onSelectionChanged */
-        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
+        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
@@ -6185,8 +6210,12 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxDropDownButtonOptions)
         /** @name dxDropDownButton.close() */
         close(): Promise<void> & JQueryPromise<void>;
+        /** @name DataHelperMixin.getDataSource() */
+        getDataSource(): DevExpress.data.DataSource;
         /** @name dxDropDownButton.open() */
         open(): Promise<void> & JQueryPromise<void>;
+        /** @name dxDropDownButton.toggle() */
+        toggle(): Promise<void> & JQueryPromise<void>;
         /** @name dxDropDownButton.toggle(visibility) */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
     }
@@ -6475,18 +6504,6 @@ declare module DevExpress.ui {
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
         /** @name dxFilterBuilderField.trueText */
         trueText?: string;
-    }
-    /** @name dxFloatingActionButton.Options */
-    export interface dxFloatingActionButtonOptions extends WidgetOptions<dxFloatingActionButton> {
-        /** @name dxFloatingActionButton.Options.icon */
-        icon?: string;
-        /** @name dxFloatingActionButton.Options.onClick */
-        onClick?: ((e: { event?: event, component?: dxFloatingActionButton, element?: DevExpress.core.dxElement }) => any);
-    }
-    /** @name dxFloatingActionButton */
-    export class dxFloatingActionButton extends Widget {
-        constructor(element: Element, options?: dxFloatingActionButtonOptions)
-        constructor(element: JQuery, options?: dxFloatingActionButtonOptions)
     }
     /** @name dxForm.Options */
     export interface dxFormOptions extends WidgetOptions<dxForm> {
@@ -7818,7 +7835,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.Options.appointmentTemplate */
         appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxScheduler.Options.appointmentTooltipTemplate */
-        appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement, targetedAppointmentData: any) => string | Element | JQuery);
+        appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement, targetedAppointmentData: any, itemIndex: number) => string | Element | JQuery);
         /** @name dxScheduler.Options.cellDuration */
         cellDuration?: number;
         /** @name dxScheduler.Options.crossScrollingEnabled */
@@ -7931,7 +7948,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.Options.useDropDownViewSwitcher */
         useDropDownViewSwitcher?: boolean;
         /** @name dxScheduler.Options.views */
-        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement, targetedAppointmentData: any) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
+        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement, targetedAppointmentData: any, itemIndex: number) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
     }
     /** @name dxScheduler */
     export class dxScheduler extends Widget {
@@ -8221,6 +8238,18 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
+    /** @name dxSpeedDialAction.Options */
+    export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
+        /** @name dxSpeedDialAction.Options.icon */
+        icon?: string;
+        /** @name dxSpeedDialAction.Options.onClick */
+        onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement }) => any);
+    }
+    /** @name dxSpeedDialAction */
+    export class dxSpeedDialAction extends Widget {
+        constructor(element: Element, options?: dxSpeedDialActionOptions)
+        constructor(element: JQuery, options?: dxSpeedDialActionOptions)
+    }
     /** @name dxSwitch.Options */
     export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
         /** @name dxSwitch.Options.activeStateEnabled */
@@ -8470,7 +8499,7 @@ declare module DevExpress.ui {
         /** @name dxTextEditor.focus() */
         focus(): void;
         /** @name dxTextEditor.getButton(name) */
-        getButton(name: string): any;
+        getButton(name: string): dxButton | undefined;
     }
     /** @name dxTextEditorButton */
     export interface dxTextEditorButton {
@@ -9253,7 +9282,7 @@ declare module DevExpress {
         /** @name globalConfig.editorStylingMode */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** @name globalConfig.floatingActionButtonConfig */
-        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxActionButtonCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
+        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
         /** @name globalConfig.forceIsoDateParsing */
         forceIsoDateParsing?: boolean;
         /** @name globalConfig.oDataFilterToLower */
@@ -9307,8 +9336,6 @@ declare module DevExpress {
         /** @name positionConfig.offset */
         offset?: string | { x?: number, y?: number };
     }
-    /** @name processHardwareBackButton() */
-    export function processHardwareBackButton(): void;
     /** @name registerComponent(name, componentClass) */
     export function registerComponent(name: string, componentClass: any): void;
     /** @name registerComponent(name, namespace, componentClass) */
@@ -9403,6 +9430,8 @@ declare module DevExpress.exporter {
         column?: DevExpress.ui.dxDataGridColumn;
         /** @name ExcelDataGridCell.data */
         data?: any;
+        /** @name ExcelDataGridCell.groupIndex */
+        groupIndex?: number;
         /** @name ExcelDataGridCell.groupSummaryItems */
         groupSummaryItems?: Array<{ name?: string, value?: any }>;
         /** @name ExcelDataGridCell.rowType */

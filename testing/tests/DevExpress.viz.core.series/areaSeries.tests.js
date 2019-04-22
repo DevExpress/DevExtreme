@@ -3,7 +3,8 @@ import * as vizMocks from "../../helpers/vizMocks.js";
 import { noop } from "core/utils/common";
 import vizUtils from "viz/core/utils";
 import pointModule from "viz/series/points/base_point";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 import { insertMockFactory, MockAxis, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
@@ -1188,6 +1189,53 @@ function setDiscreteType(series) {
         checkGroups(assert, series);
     });
 
+    QUnit.test("Update simple data without animation. Rotated", function(assert) {
+        var series = this.createSeries({
+            type: seriesType,
+            rotated: true,
+            point: { visible: false }
+
+        });
+        series.updateData(this.data);
+        series.createPoints();
+        $.each(series._points, function(i, pt) {
+            pt.x = pt.argument;
+            pt.y = pt.value;
+            pt.minY = 0;
+        });
+        series.draw(false);
+        // act
+        series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
+        series.createPoints();
+        $.each(series._points, function(i, pt) {
+            pt.x = pt.value;
+            pt.y = pt.argument;
+            pt.minX = 0;
+        });
+
+        series.draw(false);
+        // assert
+        assert.equal(this.renderer.stub("path").callCount, 2);
+        assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
+        assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
+
+        var element = this.renderer.stub("path").getCall(0).returnValue,
+            elementPoints = element._stored_settings.points;
+
+        assert.equal(element.stub("append").lastCall.args[0], series._bordersGroup);
+        assert.ok(!element.stub("animate").called);
+        checkElementPoints(assert, elementPoints, [[2, 1], [2, 2], [1, 2]], false, "line points");
+
+        element = this.renderer.stub("path").getCall(1).returnValue;
+        elementPoints = element._stored_settings.points;
+
+        assert.equal(element.stub("append").lastCall.args[0], series._elementsGroup);
+        assert.ok(!element.stub("animate").called);
+        checkElementPoints(assert, elementPoints, [[2, 1], [2, 2], [1, 2], [1, 0], [2, 0], [2, 0]], false, "areaElement");
+
+        checkGroups(assert, series);
+    });
+
     QUnit.test("Draw simple data with animation", function(assert) {
         var series = this.createSeries({
             type: seriesType,
@@ -1419,9 +1467,9 @@ function setDiscreteType(series) {
         // assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
-        checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[10, 1], [10, 1], [10, 2]], false, "line element");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[10, 1], [10, 2]], false, "line element");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
-        checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], [[10, 1], [10, 1], [10, 2], [5, 2], [5, 1], [5, 1]], false, "area Element");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], [[10, 1], [10, 2], [5, 2], [5, 1]], false, "area Element");
 
         checkGroups(assert, series);
     });

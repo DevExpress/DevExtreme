@@ -3196,6 +3196,57 @@ QUnit.testStart(function() {
         assert.equal(args.form, this.instance.getAppointmentDetailsForm(), "Appointment form is OK");
     });
 
+    QUnit.test("'_setPopupContentMaxHeight' should be called while opening popup", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2015, 1, 1),
+            currentView: "day",
+            dataSource: []
+        });
+
+        var setPopupMaxHeight = sinon.stub(this.instance, "_setPopupContentMaxHeight");
+
+        this.instance.fire("showAddAppointmentPopup", {
+            startDate: new Date(2015, 1, 1),
+            endDate: new Date(2015, 1, 1, 1),
+            allDay: true
+        });
+
+        assert.ok(setPopupMaxHeight.called, "method has been called");
+    });
+
+    QUnit.test("Popup content should have correct height on a small screen", function(assert) {
+        let realClientHeight = document.documentElement.clientHeight;
+
+        try {
+            Object.defineProperty(document.documentElement, 'clientHeight', {
+                get: () => 500,
+                configurable: true
+            });
+
+            this.createInstance({
+                currentDate: new Date(2015, 1, 1),
+                currentView: "day",
+                dataSource: []
+            });
+
+            this.instance.fire("showAddAppointmentPopup", {
+                startDate: new Date(2015, 1, 1),
+                endDate: new Date(2015, 1, 1, 1),
+                allDay: true
+            });
+            this.clock.tick(300);
+
+            let $popupContent = this.instance._popup.$content();
+            let $scrollable = $popupContent.find(".dx-scrollable-content");
+
+            assert.equal($scrollable.get(0).getBoundingClientRect().height, $popupContent.height(), "Height is correct");
+        } finally {
+            Object.defineProperty(document.documentElement, 'clientHeight', {
+                get: () => realClientHeight
+            });
+        }
+    });
+
     QUnit.test("Option changed", function(assert) {
         this.createInstance();
 
@@ -4307,7 +4358,7 @@ QUnit.testStart(function() {
         assert.equal(header.option("_dropDownButtonIcon"), "chevrondown", "header has correct _dropDownButtonIcon");
     });
 
-    QUnit.test("_appointmentGroupButtonOffset option should be passed to SchedulerAppointments depending on the view", function(assert) {
+    QUnit.test("_collectorOffset option should be passed to SchedulerAppointments depending on the view", function(assert) {
         this.createInstance({
             currentView: "month",
             showCurrentTimeIndicator: false
@@ -4315,10 +4366,27 @@ QUnit.testStart(function() {
 
         var appointments = this.instance.getAppointmentsInstance();
 
-        assert.equal(appointments.option("_appointmentGroupButtonOffset"), 20, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
+        assert.equal(appointments.option("_collectorOffset"), 20, "SchedulerAppointments has correct _collectorOffset");
 
         this.instance.option("currentView", "week");
-        assert.equal(appointments.option("_appointmentGroupButtonOffset"), 0, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
+        assert.equal(appointments.option("_collectorOffset"), 0, "SchedulerAppointments has correct _collectorOffset");
+    });
+
+    QUnit.test("Real _collectorOffset option should be passed to SchedulerAppointments depending on the adaptivityEnabled", function(assert) {
+        this.createInstance({
+            currentView: "month",
+            showCurrentTimeIndicator: false,
+            adaptivityEnabled: false
+        });
+
+        var appointments = this.instance.getAppointmentsInstance();
+
+        assert.equal(appointments.option("_collectorOffset"), 20, "SchedulerAppointments has correct _collectorOffset");
+
+        this.instance.option("adaptivityEnabled", true);
+        appointments = this.instance.getAppointmentsInstance();
+
+        assert.equal(appointments.option("_collectorOffset"), 0, "SchedulerAppointments has correct _collectorOffset");
     });
 
 })("View with configuration");

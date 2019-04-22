@@ -263,9 +263,8 @@ var DropDownEditor = TextBox.inherit({
         return this.callBase().concat([
             {
                 device: function(device) {
-                    var isGeneric = device.platform === "generic",
-                        isWin10 = device.platform === "win" && device.version && device.version[0] === 10;
-                    return isGeneric || isWin10;
+                    var isGeneric = device.platform === "generic";
+                    return isGeneric;
                 },
                 options: {
                     popupPosition: { offset: { v: 0 } }

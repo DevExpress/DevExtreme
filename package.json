@@ -44,6 +44,7 @@
     "cldr-core": "latest",
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
+    "devexpress-diagram": "0.0.7",
     "dot": "1.1.2",
     "eslint": "^5.9.0",
     "eslint-plugin-spellcheck": "0.0.11",
@@ -99,8 +100,7 @@
     "vinyl-named": "^1.1.0",
     "webpack": "^3.10.0",
     "webpack-stream": "^3.2.0",
-    "yargs": "^4.6.0",
-    "devexpress-diagram": "^0.0.1"
+    "yargs": "^4.6.0"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
@@ -114,8 +114,7 @@
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
-    "test-env": "node testing/launch",
-    "update-ts": "node ./build/update-ts.js"
+    "test-env": "node testing/launch"
   },
   "browserslist": [
     "last 2 versions",
@@ -123,8 +122,5 @@
     "ie > 10",
     "> 1%"
   ],
-  "pre-commit": [
-    "lint-staged",
-    "update-ts"
-  ]
+  "pre-commit": "lint-staged"
 }

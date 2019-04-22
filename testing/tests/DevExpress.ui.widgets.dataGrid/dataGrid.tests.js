@@ -6810,6 +6810,41 @@ QUnit.test("selectAll should works correctly if selectAllMode is page and row re
     assert.equal(dataGrid.getSelectedRowKeys().length, 20, "selected row key count equals pageSize");
 });
 
+// T726385
+QUnit.test("selection after scrolling should works correctly if row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 30; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        selection: {
+            mode: "single"
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+    $(dataGrid.getRowElement(0)).trigger("dxclick");
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(visibleRows[0].isSelected, true, "first visible row is selected");
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [11], "selected row key count equals pageSize");
+});
+
 // T644981
 QUnit.test("grouping should works correctly if row rendering mode is virtual and dataSource is remote", function(assert) {
     // arrange, act
@@ -13283,6 +13318,41 @@ QUnit.test("DataGrid should not paginate to the already loaded page if it is not
 
     // assert
     assert.deepEqual(visibleRow0.key, dataGrid.getController("data").getVisibleRows()[0].key, "Compare first visible row");
+});
+
+// T731090
+QUnit.test("DataGrid should hide load panel after filtering to no data if focused row is enabled", function(assert) {
+    // arrange
+    var generateDataSource = function(count) {
+            var result = [];
+            for(var i = 1; i <= count; ++i) {
+                result.push({ id: i });
+            }
+            return result;
+        },
+        dataGrid = createDataGrid({
+            height: 100,
+            dataSource: generateDataSource(100),
+            keyExpr: "id",
+            focusedRowEnabled: true,
+            focusedRowKey: 1,
+            scrolling: {
+                mode: "virtual"
+            }
+        });
+
+    this.clock.tick();
+
+    dataGrid.pageIndex(5);
+    this.clock.tick();
+
+    // act
+    dataGrid.filter(["id", "=", 666]);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no rows");
+    assert.strictEqual(dataGrid.getController("data").isLoading(), false, "no loading");
 });
 
 // T558189

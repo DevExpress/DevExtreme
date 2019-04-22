@@ -1,39 +1,82 @@
 import { extend } from "../../core/utils/extend";
+import { isDefined } from "../../core/utils/type";
 
-const getCloudPoints = function({ width, height }, { arrowLength, arrowWidth }) {
-    var halfArrowWidth = arrowWidth / 2,
-        halfContentWidth = width / 2,
-        cloudPoints,
-        arrowPoints = [6, 0],
-        x1 = halfContentWidth + halfArrowWidth,
-        x2 = halfContentWidth,
-        x3 = halfContentWidth - halfArrowWidth,
-        y1 = height,
-        y3 = height,
-        y2 = height + arrowLength;
+const round = Math.round;
+const max = Math.max;
+const min = Math.min;
 
-    cloudPoints = [
-        0, 0, // lt
-        width, 0, // rt
-        width, height, // rb
-        0, height // lb
-    ];
+const buildFlatArray = (...points) => [].concat(...points);
 
-    arrowPoints.splice(2, 0, x1, y1, x2, y2, x3, y3);
-    cloudPoints.splice.apply(cloudPoints, arrowPoints);
+const getCloudPoints = function({ width, height }, x, y, anchorX, anchorY, { arrowWidth }) {
+    const halfArrowWidth = arrowWidth / 2;
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
 
-    return cloudPoints;
+    const xr = round(x + halfWidth);
+    const xl = round(x - halfWidth);
+    const yt = round(y - halfHeight);
+    const yb = round(y + halfHeight);
+    const leftTopCorner = [xl, yt];
+    const rightTopCorner = [xr, yt];
+    const rightBottomCorner = [xr, yb];
+    const leftBottomCorner = [xl, yb];
+
+    const arrowX = anchorX <= xl ? xl : xr <= anchorX ? xr : anchorX;
+    const arrowY = anchorY <= yt ? yt : yb <= anchorY ? yb : anchorY;
+
+    const arrowBaseBottom = min(arrowY + halfArrowWidth, yb);
+    const arrowBaseTop = max(arrowY - halfArrowWidth, yt);
+    const arrowBaseLeft = max(arrowX - halfArrowWidth, xl);
+    const arrowBaseRight = min(arrowX + halfArrowWidth, xr);
+    let points;
+
+    // 1 | 2 | 3
+    // 8 | 0 | 4
+    // 7 | 6 | 5
+    if(xl <= anchorX && anchorX <= xr && yt <= anchorY && anchorY <= yb) { // 0
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, leftBottomCorner);
+    } else if(anchorX < xl && anchorY < yt) { // 1
+        points = buildFlatArray([xl, arrowBaseBottom, anchorX, anchorY, arrowBaseRight, yt], rightTopCorner, rightBottomCorner, leftBottomCorner);
+    } else if(anchorX >= xl && anchorX <= xr && anchorY < yt) { // 2
+        points = buildFlatArray(leftTopCorner, [arrowBaseLeft, yt, anchorX, anchorY, arrowBaseRight, yt], rightTopCorner, rightBottomCorner, leftBottomCorner);
+    } else if(anchorX > xr && anchorY < yt) { // 3
+        points = buildFlatArray(leftTopCorner, [arrowBaseLeft, yt, anchorX, anchorY, xr, arrowBaseBottom], rightBottomCorner, leftBottomCorner);
+    } else if(anchorX > xr && anchorY >= yt && anchorY <= yb) { // 4
+        points = buildFlatArray(leftTopCorner, rightTopCorner, [xr, arrowBaseTop, anchorX, anchorY, xr, arrowBaseBottom], rightBottomCorner, leftBottomCorner);
+    } else if(anchorX > xr && anchorY > yb) { // 5
+        points = buildFlatArray(leftTopCorner, rightTopCorner, [xr, arrowBaseTop, anchorX, anchorY, arrowBaseLeft, yb], leftBottomCorner);
+    } else if(anchorX >= xl && anchorX <= xr && anchorY > yb) { // 6
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, [arrowBaseRight, yb, anchorX, anchorY, arrowBaseLeft, yb], leftBottomCorner);
+    } else if(anchorX < xl && anchorY > yb) { // 7
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, [arrowBaseRight, yb, anchorX, anchorY, xl, arrowBaseTop]);
+    } else if(anchorX < xl && anchorY >= yt && anchorY <= yb) { // 8
+        points = buildFlatArray(leftTopCorner, rightTopCorner, rightBottomCorner, leftBottomCorner, [xl, arrowBaseBottom, anchorX, anchorY, xl, arrowBaseTop]);
+    }
+
+    return points;
 };
 
 export class Plaque {
     constructor(options, widget, root, renderContent) {
-        const renderer = widget._renderer;
+        this.widget = widget;
+        this.options = options;
+        this.root = root;
+        this.renderContent = renderContent;
+    }
+
+    draw({ x: anchorX, y: anchorY }) {
+        const renderer = this.widget._renderer;
+        const options = this.options;
+        let { x, y } = options;
+
+        if(!isDefined(anchorX) && (!isDefined(x) || !isDefined(y))) {
+            return;
+        }
+
         const shadow = renderer.shadowFilter().attr(extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow));
 
         let cloudSettings = { opacity: options.opacity, filter: shadow.id, "stroke-width": 0, fill: options.color };
         let borderOptions = options.border || {};
-
-        this.options = options;
 
         if(borderOptions.visible) {
             extend(cloudSettings, {
@@ -44,30 +87,47 @@ export class Plaque {
             });
         }
 
-        this._group = renderer.g().attr({ class: `dxc-${ options.type }-annotation` }).append(root);
+        const group = renderer.g().attr({ class: `dxc-${ options.type }-annotation` }).append(this.root);
+        this._cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(group);
 
-        const cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(this._group);
+        this._contentGroup = renderer.g().append(group);
 
-        const contentGroup = renderer.g().append(this._group);
+        const contentWidth = options.width > 0 ? options.width : null;
+        const contentHeight = options.height > 0 ? options.height : null;
 
-        const paddingLeftRight = options.paddingLeftRight;
-        const paddingTopBottom = options.paddingTopBottom;
+        this.renderContent(this.widget, this._contentGroup, {
+            width: contentWidth,
+            height: contentHeight
+        });
 
-        renderContent(widget, contentGroup);
-        const bBox = contentGroup.getBBox();
-        contentGroup.move(paddingLeftRight - bBox.x, paddingTopBottom - bBox.y);
+        const bBox = this._contentBBox = this._contentGroup.getBBox();
 
-        this.size = {
-            width: bBox.width + 2 * paddingLeftRight,
-            height: bBox.height + 2 * paddingTopBottom
+        const size = this._size = {
+            width: max(contentWidth, bBox.width) + options.paddingLeftRight * 2,
+            height: max(contentHeight, bBox.height) + options.paddingTopBottom * 2
         };
 
-        cloud.attr({
-            points: getCloudPoints(this.size, options)
-        });
+        if(!isDefined(x)) {
+            x = anchorX;
+        } else if(!isDefined(anchorX)) {
+            anchorX = x;
+        }
+
+        if(!isDefined(y)) {
+            y = anchorY - options.arrowLength - size.height / 2;
+        } else if(!isDefined(anchorY)) {
+            anchorY = y + size.height / 2;
+        }
+
+        this.anchorX = anchorX;
+        this.anchorY = anchorY;
+        this.move(x, y);
     }
 
     move(x, y) {
-        this._group.move(Math.round(x - this.size.width / 2), y - this.size.height - this.options.arrowLength);
+        this.x = x;
+        this.y = y;
+        this._cloud.attr({ points: getCloudPoints(this._size, x, y, this.anchorX, this.anchorY, this.options) });
+        this._contentGroup.move(x - this._contentBBox.x - this._contentBBox.width / 2, y - this._contentBBox.y - this._contentBBox.height / 2);
     }
 }

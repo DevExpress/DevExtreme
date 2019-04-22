@@ -14,7 +14,6 @@ import { getWindow } from "../core/utils/window";
 import { trigger } from "../events/core/events_engine";
 import { value as getViewport } from "../core/utils/view_port";
 
-import themes from "./themes";
 import messageLocalization from "../localization/message";
 import errors from "./widget/ui.errors";
 import Popup from "./popup";
@@ -42,7 +41,6 @@ const FakeDialogComponent = Component.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
 
         return this.callBase().concat([
             {
@@ -56,29 +54,6 @@ const FakeDialogComponent = Component.inherit({
                 options: {
                     lWidth: "60%",
                     pWidth: "80%"
-                }
-            },
-            {
-                device: function(device) {
-                    return !device.phone && themes.isWin8(themeName);
-                },
-                options: {
-                    width: function() {
-                        return $(window).width();
-                    }
-                }
-            },
-            {
-                device: function(device) {
-                    return device.phone && themes.isWin8(themeName);
-                },
-                options: {
-                    position: {
-                        my: "top center",
-                        at: "top center",
-                        of: window,
-                        offset: "0 0"
-                    }
                 }
             }
         ]);

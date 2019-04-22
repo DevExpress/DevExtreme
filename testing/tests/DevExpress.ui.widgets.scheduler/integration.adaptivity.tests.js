@@ -2,88 +2,91 @@ import $ from "jquery";
 import fx from "animation/fx";
 import { SchedulerTestWrapper } from "./helpers.js";
 import { getSimpleDataArray } from './data.js';
+import resizeCallbacks from "core/utils/resize_callbacks";
+import "ui/switch";
 
 import "common.css!";
 import "generic_light.css!";
 import "ui/scheduler/ui.scheduler";
 
-QUnit.testStart(function() {
+const { testStart, test, skip, module } = QUnit;
+
+testStart(function() {
     $("#qunit-fixture").html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
+        `<div id="scheduler">
+            <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
+        </div>`
+    );
 });
 
-const moduleConfig = {
-    beforeEach: function() {
-        fx.off = true;
-
-        this.createInstance = function(options) {
-            const defaultOption = {
-                dataSource: getSimpleDataArray(),
-                views: ["agenda", "day", "week", "workWeek", "month"],
-                currentView: "month",
-                currentDate: new Date(2017, 4, 25),
-                startDayHour: 9,
-                height: 600,
-                adaptivityEnabled: true
-            };
-            this.instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-
-        this.clock = sinon.useFakeTimers();
-    },
-
-    afterEach: function() {
-        fx.off = false;
-        this.clock.restore();
-    },
+const createInstance = function(options) {
+    const defaultOption = {
+        dataSource: getSimpleDataArray(),
+        views: ["agenda", "day", "week", "workWeek", "month"],
+        currentView: "month",
+        currentDate: new Date(2017, 4, 25),
+        startDayHour: 9,
+        height: 600,
+        adaptivityEnabled: true
+    };
+    const instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
 };
 
-QUnit.module("Mobile tooltip", moduleConfig, function() {
-    QUnit.test("Title in mobile tooltip should equals title of cell appointments in month view", function(assert) {
-        this.createInstance();
-        assert.notOk(this.scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
+const moduleConfig = {
+    beforeEach() {
+        fx.off = true;
+    },
 
-        for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
-            this.scheduler.appointments.click(i);
-            assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
-            assert.equal(this.scheduler.tooltip.getTitleText(), this.scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
+    afterEach() {
+        fx.off = false;
+    }
+};
+
+module("Mobile tooltip", moduleConfig, () => {
+    test("Title in mobile tooltip should equals title of cell appointments in month view", function(assert) {
+        const scheduler = createInstance();
+        assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
+
+        for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+            scheduler.appointments.click(i);
+            assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
+            assert.equal(scheduler.tooltip.getTitleText(), scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
         }
     });
 
-    QUnit.skip("Tooltip should hide after execute actions", function(assert) {
-        this.createInstance();
-        const initialDataCount = this.scheduler.instance.option("dataSource").length;
+    skip("Tooltip should hide after execute actions", function(assert) {
+        const scheduler = createInstance();
+        const initialDataCount = scheduler.instance.option("dataSource").length;
 
-        assert.notOk(this.scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
+        assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
-        this.scheduler.appointments.click();
-        assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
+        scheduler.appointments.click();
+        assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
 
-        this.scheduler.tooltip.clickOnItem();
+        scheduler.tooltip.clickOnItem();
 
-        assert.ok(this.scheduler.appointmentPopup.isVisible(), "Appointment popup should be visible after click on item in tooltip");
-        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip should be hide after showing Appointment popup");
+        assert.ok(scheduler.appointmentPopup.isVisible(), "Appointment popup should be visible after click on item in tooltip");
+        assert.notOk(scheduler.tooltip.isVisible(), "Tooltip should be hide after showing Appointment popup");
 
-        this.scheduler.appointmentPopup.hide();
-        this.scheduler.appointments.click();
-        assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
+        scheduler.appointmentPopup.hide();
+        scheduler.appointments.click();
+        assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
 
-        this.scheduler.tooltip.clickOnDeleteButton();
-        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip should be hide after click on remove button in tooltip");
+        scheduler.tooltip.clickOnDeleteButton();
+        assert.notOk(scheduler.tooltip.isVisible(), "Tooltip should be hide after click on remove button in tooltip");
 
-        assert.equal(this.scheduler.instance.option("dataSource").length, initialDataCount - 1, "Appointment should delete form dataSource after click on delete button in tooltip");
+        assert.equal(scheduler.instance.option("dataSource").length, initialDataCount - 1, "Appointment should delete form dataSource after click on delete button in tooltip");
     });
 
-    QUnit.skip("appointmentTooltipTemplate method should pass valid arguments and render valid html markup", function(assert) {
+    skip("appointmentTooltipTemplate method should pass valid arguments and render valid html markup", function(assert) {
         let templateCallCount = 0;
         const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = "appointment-tooltip-template-marker";
+        const scheduler = createInstance();
 
         const checkItemTemplate = (index) => {
-            assert.ok(this.scheduler.tooltip.checkItemElementHtml(index, `<div class="${TOOLTIP_TEMPLATE_MARKER_CLASS_NAME}">`), "Template should contain valid custom css class ");
-            assert.ok(this.scheduler.tooltip.checkItemElementHtml(index, `template item index - ${index}`), "Template should render valid content dependent on item index");
+            assert.ok(scheduler.tooltip.checkItemElementHtml(index, `<div class="${TOOLTIP_TEMPLATE_MARKER_CLASS_NAME}">`), "Template should contain valid custom css class ");
+            assert.ok(scheduler.tooltip.checkItemElementHtml(index, `template item index - ${index}`), "Template should render valid content dependent on item index");
         };
 
         this.createInstance({
@@ -96,14 +99,105 @@ QUnit.module("Mobile tooltip", moduleConfig, function() {
             }
         });
 
-        this.scheduler.appointments.click();
+        scheduler.appointments.click();
         checkItemTemplate(0);
-        assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
+        assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
         templateCallCount = 0;
 
-        const buttonCount = this.scheduler.appointments.compact.getButtonCount();
-        this.scheduler.appointments.compact.click(buttonCount - 1);
+        const buttonCount = scheduler.appointments.compact.getButtonCount();
+        scheduler.appointments.compact.click(buttonCount - 1);
         checkItemTemplate(0);
         checkItemTemplate(1);
+    });
+});
+
+module("Appointment form - mobile", moduleConfig, () => {
+    test("Label location is left when the form's width > 610px on first show", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(700);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        const form = scheduler.appointmentForm.getFormInstance();
+        assert.equal(form.option("labelLocation"), "left", "label location of Form");
+    });
+
+    test("Label location is top when the form's width < 610px on first show", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(600);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        const form = scheduler.appointmentForm.getFormInstance();
+        assert.equal(form.option("labelLocation"), "top", "label location of Form");
+    });
+
+    test("Items has layout has one column when the form's width < 460px on first show", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(400);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), "Appointment form has single column");
+    });
+
+    test("Items has layout has non-one column when the form's width > 460px on first show", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(463);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), "Appointment form has not single column");
+    });
+
+    test("Label location is left when the form's width > 610px on window resizing", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(400);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        scheduler.appointmentPopup.setPopupWidth(620);
+        resizeCallbacks.fire();
+
+        const form = scheduler.appointmentForm.getFormInstance();
+        assert.equal(form.option("labelLocation"), "left", "label location of Form");
+    });
+
+    test("Label location is top when the form's width < 610px on window resizing", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(700);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        scheduler.appointmentPopup.setPopupWidth(600);
+        resizeCallbacks.fire();
+
+        const form = scheduler.appointmentForm.getFormInstance();
+
+        assert.equal(form.option("labelLocation"), "top", "label location of Form");
+    });
+
+    test("Items has layout has one column when the form's width < 460px on window resizing", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(500);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        scheduler.appointmentPopup.setPopupWidth(400);
+        resizeCallbacks.fire();
+
+        assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), "Appointment form has single column");
+    });
+
+    test("Items has layout has non-one column when the form's width > 460px on window resizing", function(assert) {
+        const scheduler = createInstance();
+        scheduler.appointmentPopup.setInitialWidth(460);
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.clickOnItem();
+
+        scheduler.appointmentPopup.setPopupWidth(463);
+        resizeCallbacks.fire();
+
+        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), "Appointment form has not single column");
     });
 });

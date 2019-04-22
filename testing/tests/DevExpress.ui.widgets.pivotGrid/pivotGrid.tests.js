@@ -1736,7 +1736,7 @@ QUnit.test("Sorting by Summary should not be allowd if paginate is true", functi
     // act
     $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers td').last().trigger('dxcontextmenu');
 
-    assert.deepEqual(contextMenuArgs[0].items.map(i => i.text), ["Show Field Chooser"], "context menu items");
+    assert.deepEqual(contextMenuArgs[0].items.map(function(i) { return i.text; }), ["Show Field Chooser"], "context menu items");
 });
 
 QUnit.test("Sorting by Summary context menu", function(assert) {
@@ -2298,7 +2298,7 @@ QUnit.test("expand All should not be allowed if paginate true", function(assert)
     $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers .dx-pivotgrid-collapsed').trigger('dxcontextmenu');
 
     // assert
-    assert.deepEqual(contextMenuArgs[0].items.map(item => item.text), ["Show Field Chooser"], "context menu items");
+    assert.deepEqual(contextMenuArgs[0].items.map(function(item) { return item.text; }), ["Show Field Chooser"], "context menu items");
 });
 
 QUnit.test("expand All items for field in group", function(assert) {
@@ -3643,6 +3643,29 @@ QUnit.test("T510943. Row area width is higher than a container's width", functio
     // assert
     var dataArea = pivotGrid._dataArea;
     assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), dataArea.tableElement().width().toFixed(2));
+});
+
+QUnit.test("PivotGrid table width should be correct if width is small and fieldPanel is visible", function(assert) {
+    var pivotGrid = createPivotGrid({
+        fieldPanel: {
+            visible: true
+        },
+        height: 300,
+        width: 300,
+        dataSource: {
+            fields: [{
+                dataField: "Product_Sale_Price",
+                summaryType: "count",
+                area: "data"
+            }],
+            store: [{}]
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($(pivotGrid.element()).find('table').first().width(), 300);
 });
 
 QUnit.test('Pivot grid with border', function(assert) {

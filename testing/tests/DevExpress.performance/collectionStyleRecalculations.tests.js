@@ -20,7 +20,7 @@ QUnit.performanceTest("dxTabs should force minimum relayout count on creation", 
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 6);
+    assert.measureStyleRecalculation(measureFunction, 5);
 });
 
 QUnit.performanceTest("dxTabs without scrolling should not force relayout on dxshown event", function(assert) {

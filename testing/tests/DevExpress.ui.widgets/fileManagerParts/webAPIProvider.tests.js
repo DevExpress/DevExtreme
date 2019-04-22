@@ -1,15 +1,16 @@
 import "ui/file_manager";
 import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
-import WebApiFileProvider from "ui/file_manager/file_provider/file_provider.webapi";
+import WebApiFileProvider from "ui/file_manager/file_provider/webapi";
 import ajaxMock from "../../../helpers/ajaxMock.js";
 import { when } from "core/utils/deferred";
+import { deserializeDate } from "core/utils/date_serialization";
 
 const { test } = QUnit;
 
 const createFileManagerItem = (parentPath, name, isFolder, lastWriteTimeString, length) => {
     const result = new FileManagerItem(parentPath, name, isFolder);
-    result.lastWriteTime = lastWriteTimeString; // TODO make conversion to 'Date' type
+    result.lastWriteTime = deserializeDate(lastWriteTimeString);
     result.length = length;
     return result;
 };
@@ -37,7 +38,7 @@ const fileManagerFiles = fileManagerItems.slice(FOLDER_COUNT);
 
 const moduleConfig = {
 
-    beforeEach: () => {
+    beforeEach: function() {
         this.options = {
             endpointUrl: "/api/endpoint"
         };
@@ -45,7 +46,7 @@ const moduleConfig = {
         this.provider = new WebApiFileProvider(this.options);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         ajaxMock.clear();
     }
 
@@ -53,7 +54,7 @@ const moduleConfig = {
 
 QUnit.module("Web API Provider", moduleConfig, () => {
 
-    test("get folders test", (assert) => {
+    test("get folders test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -71,7 +72,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("get files test", (assert) => {
+    test("get files test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -89,7 +90,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("create folder test", (assert) => {
+    test("create folder test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -107,7 +108,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("rename item test", (assert) => {
+    test("rename item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -125,7 +126,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("delete item test", (assert) => {
+    test("delete item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -144,7 +145,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("move item test", (assert) => {
+    test("move item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -164,7 +165,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("copy item test", (assert) => {
+    test("copy item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({

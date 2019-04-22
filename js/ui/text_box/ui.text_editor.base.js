@@ -325,14 +325,6 @@ var TextEditorBase = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    validationMessageOffset: { v: -8 }
-                }
-            },
-            {
-                device: function() {
                     return themes.isMaterial(themeName);
                 },
                 options: {
@@ -839,7 +831,7 @@ var TextEditorBase = Editor.inherit({
     * @name dxTextEditorMethods.getButton
     * @publicName getButton(name)
     * @param1 name:string
-    * @return any
+    * @return dxButton | undefined
     */
     getButton(name) {
         return this._buttonCollection.getButton(name);

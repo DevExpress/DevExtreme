@@ -17,14 +17,25 @@
         flex-basis: 0;
     }
 
-    .dx-diagram-toolbox,
-    .dx-diagram-options {
-        flex: 300px 0;
+    .dx-diagram-toolbox {
+        flex: 240px 0 0;
+        overflow-y: auto;
+        position: relative;
+        border-right: @TRANSPARENT_BORDER;
+    }
+    .dx-diagram-toolbox > * {
+        position: absolute;
+    }
+    .dx-diagram-drawer-wrapper {
+        flex: 1 0px;
     }
     .dx-diagram-content {
-        flex: 1;
+        height: 100%;
     }
-    .dx-diagram-toolbox {
-        overflow-y: auto;
+    .dx-diagram-options {
+        border-left: @TRANSPARENT_BORDER;
+    }
+    .dx-diagram-options .dx-accordion {
+        width: 280px;
     }
 }
