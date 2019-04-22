@@ -1007,9 +1007,9 @@ QUnit.test("Multiple showing appointment popup for recurrence appointments shoul
 
 QUnit.test("Appointment popup will render even if no appointmentData is provided (T734413)", function(assert) {
     const scheduler = createInstance();
-    scheduler.instance.showAppointmentPopup({});
-    scheduler.instance.hideAppointmentPopup();
-    scheduler.instance.showAppointmentPopup({});
+    scheduler.instance.showAppointmentPopup({}, true);
+    scheduler.instance.hideAppointmentPopup(true);
+    scheduler.instance.showAppointmentPopup({}, true);
     const formData = scheduler.appointmentForm.getFormInstance().option('formData'),
         startDate = formData.startDate,
         endDate = formData.endDate,
