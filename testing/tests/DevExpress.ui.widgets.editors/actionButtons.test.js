@@ -128,7 +128,7 @@ module("API", () => {
         const customButton = selectBox.getButton("custom");
 
         assert.ok(clearButton.hasClass("dx-clear-button-area"));
-        assert.strictEqual(fakeButton, null);
+        assert.strictEqual(fakeButton, undefined);
         assert.ok(dropDownButton.$element().hasClass("dx-dropdowneditor-button"));
         assert.strictEqual(customButton.option("text"), "customButtonText");
     });
