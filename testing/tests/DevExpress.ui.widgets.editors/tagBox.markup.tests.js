@@ -21,7 +21,8 @@ var EMPTY_INPUT_CLASS = "dx-texteditor-empty",
     TAGBOX_SINGLE_LINE_CLASS = "dx-tagbox-single-line",
     TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template",
     TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template",
-    SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event";
+    SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event",
+    TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container";
 
 var moduleSetup = {
     beforeEach: function() {
@@ -62,6 +63,7 @@ QUnit.test("tagbox should have base class", function(assert) {
     assert.equal($tagContent.length, 2, "each tag has tag content");
     assert.deepEqual(this.getTexts($tagContent), ["1", "2"], "each tag content has correct text");
     assert.equal($tagContent.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).length, 2, "each tag has remove button");
+    assert.ok($tags.eq(0).parent().hasClass(TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS), "tags are placed in the element with TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS");
 });
 
 QUnit.test("tagbox should render custom values in tags", function(assert) {
