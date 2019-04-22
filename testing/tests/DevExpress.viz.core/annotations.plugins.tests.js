@@ -1013,6 +1013,8 @@ QUnit.module("Lifecycle", environment, function() {
             arrowWidth: 14,
             paddingLeftRight: 10,
             paddingTopBottom: 10,
+            textOverflow: "ellipsis",
+            wordWrap: "normal",
             shadow: {
                 opacity: 0.15,
                 offsetX: 0,

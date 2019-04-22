@@ -735,7 +735,9 @@ registerTheme({
             image: {
                 width: 30,
                 height: 30
-            }
+            },
+            wordWrap: "normal",
+            textOverflow: "ellipsis"
         },
         argumentAxis: {
             endOnTick: false,

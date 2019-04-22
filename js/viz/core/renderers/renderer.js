@@ -1059,7 +1059,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, { textOverflow }, maxHeight, line
                 if(prevLine) {
                     const text = prevLine.parts[prevLine.parts.length - 1];
                     if(!text.hasEllipsis) {
-                        if(text.endBox < ellipsisMaxWidth) {
+                        if(ellipsisMaxWidth === 0 || text.endBox < ellipsisMaxWidth) {
                             setNewText(text, text.value.length, ELLIPSIS);
                         } else {
                             setEllipsis(text, ellipsisMaxWidth);
@@ -1115,7 +1115,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 
         startBox = endBox;
 
-        if(endBox > maxWidth) {
+        if(maxWidth > 0 && endBox > maxWidth) {
             const wordWrapLines = wordWrap(text, maxWidth, ellipsisMaxWidth, options);
             if(!wordWrapLines.length) {
                 lines = [];

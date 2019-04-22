@@ -2592,6 +2592,8 @@ declare module DevExpress.viz {
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
         /** @name dxChartCommonAnnotationConfig.text */
         text?: string;
+        /** @name dxChartCommonAnnotationConfig.textOverflow */
+        textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.type */
@@ -2600,6 +2602,8 @@ declare module DevExpress.viz {
         value?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.width */
         width?: number;
+        /** @name dxChartCommonAnnotationConfig.wordWrap */
+        wordWrap?: 'normal' | 'breakWord' | 'none';
         /** @name dxChartCommonAnnotationConfig.x */
         x?: number;
         /** @name dxChartCommonAnnotationConfig.y */

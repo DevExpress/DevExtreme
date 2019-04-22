@@ -6127,5 +6127,23 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.ok(text.element.childNodes[1].textContent.indexOf("...") > 0);
             assert.ok(text.getBBox().width <= 110);
         });
+
+        QUnit.test("Set max height without width", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "Text\nText Text Text 1\nText"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(null, 25, {
+                wordWrap: "breakWord",
+                textOverflow: "ellipsis"
+            });
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "Text" },
+                { x: 35, dy: 12, text: "Text Text Text 1..." },
+            ], { x: 35, y: 100 });
+        });
     }
 })();

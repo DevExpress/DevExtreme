@@ -137,6 +137,27 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
     assert.deepEqual(this.renderer.image.firstCall.returnValue.append.firstCall.args, [contentGroup]);
 });
 
+QUnit.test("Get size from annotation setting if it less than image size", function(assert) {
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url", width: 50, height: 50 } }], {
+        color: "#AAAAAA",
+        opacity: 0.5,
+        arrowLength: 0,
+        arrowWidth: 0,
+        paddingLeftRight: 0,
+        paddingTopBottom: 0,
+        width: 20,
+        height: 30
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const imageArgs = this.renderer.image.lastCall.args;
+    assert.deepEqual(imageArgs[2], 20, "width");
+    assert.deepEqual(imageArgs[3], 30, "height");
+});
+
 QUnit.test("Draw image inside a plaque without borders", function(assert) {
     const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
@@ -772,7 +793,9 @@ QUnit.test("Draw text inside plaque", function(assert) {
     assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-text-annotation" }]);
 
     assert.strictEqual(this.renderer.text.callCount, 1);
-    assert.deepEqual(this.renderer.text.firstCall.returnValue.append.firstCall.args, [this.renderer.g.getCall(2).returnValue]);
+    const text = this.renderer.text.firstCall.returnValue;
+    assert.deepEqual(text.append.firstCall.args, [this.renderer.g.getCall(2).returnValue]);
+    assert.ok(!text.setMaxSize.called);
 });
 
 QUnit.test("Text params", function(assert) {
@@ -792,6 +815,90 @@ QUnit.test("Merge common and item options", function(assert) {
     annotation.draw(this.widget, this.group);
 
     assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20, "fill": "red" }]);
+});
+
+QUnit.test("Draw text with width/height", function(assert) {
+    const annotation = createAnnotations([{
+        x: 0, y: 0,
+        type: "text",
+        text: "some text",
+        font: {},
+        width: 100,
+        height: 150,
+        textOverflow: "hide",
+        wordWrap: "normal",
+        paddingLeftRight: 10,
+        paddingTopBottom: 20,
+        arrowWidth: 0
+    }], {})[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    const annotationGroup = this.renderer.g.getCall(1).returnValue;
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-text-annotation" }]);
+
+    const text = this.renderer.text.firstCall.returnValue;
+
+    assert.equal(text.setMaxSize.callCount, 1);
+    assert.deepEqual(text.setMaxSize.lastCall.args, [100, 150, { textOverflow: "hide", wordWrap: "normal" }]);
+
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [-60, -95, 60, -95, 60, 95, 100, 200, 60, 95, -60, 95]
+    }]);
+});
+
+QUnit.test("Do not call setMax size is less than 0", function(assert) {
+    const annotation = createAnnotations([{
+        x: 0, y: 0,
+        type: "text",
+        text: "some text",
+        font: {},
+        width: -1,
+        height: -1,
+        textOverflow: "hide",
+        wordWrap: "normal",
+        paddingLeftRight: 30,
+        paddingTopBottom: 20,
+        arrowWidth: 0
+    }], {})[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    const annotationGroup = this.renderer.g.getCall(1).returnValue;
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-text-annotation" }]);
+
+    const text = this.renderer.text.firstCall.returnValue;
+
+    assert.ok(!text.stub("setMaxSize").called);
+});
+
+
+QUnit.test("Draw plague bound text bbox if it greater than passed size", function(assert) {
+    const annotation = createAnnotations([{
+        x: 0, y: 0,
+        type: "text",
+        text: "some text",
+        font: {},
+        width: 1,
+        height: 1,
+        textOverflow: "hide",
+        wordWrap: "normal",
+        paddingLeftRight: 0,
+        paddingTopBottom: 0,
+        arrowWidth: 0
+    }], {})[0];
+    this.renderer.g.reset();
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 100, height: 200 };
+
+    annotation.draw(this.widget, this.group);
+
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [-50, -100, 50, -100, 50, 100, 100, 200, 50, 100, -50, 100]
+    }]);
 });
 
 QUnit.module("Tooltip", environment);

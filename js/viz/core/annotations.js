@@ -58,20 +58,30 @@ function applyClipPath(elem, widget, pane) {
 }
 
 function labelAnnotation(options) {
-    return coreAnnotation(options, function(widget, group) {
-        widget._renderer
+    return coreAnnotation(options, function(widget, group, { width, height }) {
+        const text = widget._renderer
             .text(options.text)
             .data({ [ANNOTATION_DATA]: this })
             .css(patchFontOptions(options.font))
             .append(group);
+
+        if(isDefined(width) || isDefined(height)) {
+            text.setMaxSize(width, height, {
+                wordWrap: options.wordWrap,
+                textOverflow: options.textOverflow
+            });
+        }
     });
 }
 
 function imageAnnotation(options) {
     const { width, height, url, location } = options.image || {};
-    return coreAnnotation(options, function(widget, group) {
+    return coreAnnotation(options, function(widget, group, { width: outerWidth, height: outerHeight }) {
+        const imageWidth = outerWidth > 0 ? Math.min(width, outerWidth) : width;
+        const imageHeight = outerHeight > 0 ? Math.min(height, outerHeight) : height;
+
         widget._renderer
-            .image(0, 0, width, height, url, location || "center")
+            .image(0, 0, imageWidth, imageHeight, url, location || "center")
             .data({ [ANNOTATION_DATA]: this })
             .append(group);
     });

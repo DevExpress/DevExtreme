@@ -3648,9 +3648,20 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     * @notUsedInTheme
     */
-    customizeTooltip: undefined
+    customizeTooltip: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.wordWrap
+    * @type Enums.VizWordWrap
+    * @default "normal"
+    */
+    wordWrap: "normal",
+    /**
+    * @name dxChartCommonAnnotationConfig.textOverflow
+    * @type Enums.VizTextOverflow
+    * @default "ellipsis"
+    */
+    textOverflow: "ellipsis"
 };
-
 /**
 * @name dxChartAnnotationConfig
 * @type object
