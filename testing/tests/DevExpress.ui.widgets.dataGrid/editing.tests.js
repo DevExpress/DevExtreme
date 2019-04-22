@@ -7320,6 +7320,54 @@ QUnit.test("Cell mode - The editCellTemplate of the column should not be called 
     assert.strictEqual(editCellTemplate.callCount, 1);
 });
 
+// T725319
+QUnit.test("Load panel should be hidden when changing loadPanel.enabled while loading", function(assert) {
+    // arrange
+    fx.off = true;
+
+    try {
+        var that = this,
+            $testElement = $("#container");
+
+        that.options.editing = {
+            mode: "row",
+            allowUpdating: true,
+            allowDeleting: true,
+            texts: {
+                confirmDeleteMessage: "",
+                editRow: ""
+            }
+        };
+        that.options.loadPanel = {
+            enabled: true
+        };
+        that.options.onRowRemoving = function(e) {
+            setTimeout(() => {
+                that.option("loadPanel.enabled", false);
+                that.rowsView.beginUpdate();
+                that.rowsView.optionChanged({ name: "loadPanel", fullName: "loadPanel.enabled" });
+                that.rowsView.endUpdate();
+            }, 10);
+            e.cancel = $.Deferred().promise();
+        };
+        that.isReady = function() {
+            that.dataController.isReady();
+        };
+
+        that.rowsView.render($testElement);
+        that.editingController.optionChanged({ name: "onRowRemoving" });
+
+        // act
+        that.deleteRow(0);
+        that.clock.tick(10);
+
+        // assert
+        assert.notOk(that.rowsView._loadPanel, "hasn't loadPanel");
+    } finally {
+        fx.off = false;
+    }
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
