@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import ActionButton from "./action_button_collection/button";
+import TextEditorButton from "./texteditor_button_collection/button";
 import { addNamespace } from "../../events/utils";
 import { down as pointerDown } from "../../events/pointer";
 import { name as click } from "../../events/click";
@@ -11,7 +11,7 @@ const TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear";
 const TEXTEDITOR_ICON_CLASS = "dx-icon";
 const TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS = "dx-show-clear-button";
 
-export default class ClearButton extends ActionButton {
+export default class ClearButton extends TextEditorButton {
     _create() {
         const $element = $("<span>")
             .addClass(TEXTEDITOR_CLEAR_BUTTON_CLASS)

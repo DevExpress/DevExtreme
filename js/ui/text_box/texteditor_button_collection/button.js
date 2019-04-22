@@ -1,6 +1,6 @@
 import $ from "../../../core/renderer";
 
-export default class ActionButton {
+export default class TextEditorButton {
     constructor(name, editor, options) {
         this.instance = null;
 

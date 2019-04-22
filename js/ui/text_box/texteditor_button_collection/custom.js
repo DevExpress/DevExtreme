@@ -1,8 +1,8 @@
 import $ from "../../../core/renderer";
-import ActionButton from "./button";
+import TextEditorButton from "./button";
 import Button from "../../button";
 
-export default class CustomButton extends ActionButton {
+export default class CustomButton extends TextEditorButton {
     _attachEvents() {
     }
 

@@ -8,7 +8,7 @@ import "ui/number_box";
 
 const { module, test } = QUnit;
 
-function getActionButtons($editor) {
+function getTextEditorButtons($editor) {
     return {
         $before: $editor.find(" > div > .dx-texteditor-buttons-container:first-child, > .dx-dropdowneditor-input-wrapper > div > .dx-texteditor-buttons-container:first-child").children(),
         $after: $editor.find(".dx-texteditor-buttons-container:last-child").children()
@@ -30,7 +30,7 @@ function isDropDownButton($element) {
 module("button collection", () => {
     test("should render default buttons if the 'buttons' option is not defined", (assert) => {
         const $textBox = $("<div>").dxTextBox({ showClearButton: true });
-        const { $before, $after } = getActionButtons($textBox);
+        const { $before, $after } = getTextEditorButtons($textBox);
 
         assert.notOk($before.length);
         assert.strictEqual($after.length, 1);
@@ -38,7 +38,7 @@ module("button collection", () => {
 
     test("should not render default buttons if the collection is defined", (assert) => {
         const $textBox = $("<div>").dxTextBox({ buttons: [], showClearButton: true });
-        const { $before, $after } = getActionButtons($textBox);
+        const { $before, $after } = getTextEditorButtons($textBox);
 
         assert.notOk($before.length);
         assert.notOk($after.length);
@@ -103,7 +103,7 @@ module("button collection", () => {
 
             test("'options' and 'location' fields should not be required", (assert) => {
                 const $textBox = $("<div>").dxTextBox({ buttons: [{ name: "name1" }, { name: "name2" }] });
-                const { $before, $after } = getActionButtons($textBox);
+                const { $before, $after } = getTextEditorButtons($textBox);
 
                 assert.notOk($before.length);
                 assert.strictEqual($after.length, 2);
@@ -151,7 +151,7 @@ module("rendering", () => {
                     }
                 }]
             });
-            const $after = getActionButtons($textBox).$after;
+            const $after = getTextEditorButtons($textBox).$after;
 
             assert.strictEqual($after.length, 1);
             assert.strictEqual($after.text(), "custom");
@@ -164,7 +164,7 @@ module("rendering", () => {
                 value: "text"
             });
 
-            const $after = getActionButtons($textBox).$after;
+            const $after = getTextEditorButtons($textBox).$after;
             assert.strictEqual($after.length, 1);
             assert.strictEqual(getButtonPlaceHolders($after).length, 1);
         });
@@ -172,7 +172,7 @@ module("rendering", () => {
         test("should render 'clear' button only after it becomes visible", (assert) => {
             const $textBox = $("<div>").dxTextBox({});
             const textBox = $textBox.dxTextBox("instance");
-            let { $before, $after } = getActionButtons($textBox);
+            let { $before, $after } = getTextEditorButtons($textBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 1);
@@ -180,10 +180,10 @@ module("rendering", () => {
 
             textBox.option({ showClearButton: true });
 
-            const actionButtons = getActionButtons($textBox);
+            const textEditorButtons = getTextEditorButtons($textBox);
 
-            $before = actionButtons.$before;
-            $after = actionButtons.$after;
+            $before = textEditorButtons.$before;
+            $after = textEditorButtons.$after;
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 1);
@@ -193,7 +193,7 @@ module("rendering", () => {
 
         test("should render predefined button ('clear')", (assert) => {
             const $textBox = $("<div>").dxTextBox({ showClearButton: true, buttons: ["clear"] });
-            const { $before, $after } = getActionButtons($textBox);
+            const { $before, $after } = getTextEditorButtons($textBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 1);
@@ -202,7 +202,7 @@ module("rendering", () => {
 
         test("should render predefined button ('clear') configurated as object", (assert) => {
             const $textBox = $("<div>").dxTextBox({ showClearButton: true, buttons: [{ name: "clear" }] });
-            let $after = getActionButtons($textBox).$after;
+            let $after = getTextEditorButtons($textBox).$after;
             assert.ok(isClearButton($after.eq(0)));
         });
 
@@ -231,7 +231,7 @@ module("rendering", () => {
                     }
                 }]
             });
-            const { $before, $after } = getActionButtons($textBox);
+            const { $before, $after } = getTextEditorButtons($textBox);
 
             assert.strictEqual($before.length, 1);
             assert.strictEqual($after.length, 0);
@@ -249,7 +249,7 @@ module("rendering", () => {
                     }
                 }]
             });
-            const { $before, $after } = getActionButtons($textBox);
+            const { $before, $after } = getTextEditorButtons($textBox);
 
             assert.strictEqual($after.length, 1);
             assert.strictEqual($before.length, 0);
@@ -264,7 +264,7 @@ module("rendering", () => {
                 buttons: ["spins"],
                 value: 1
             });
-            const $after = getActionButtons($numberBox).$after;
+            const $after = getTextEditorButtons($numberBox).$after;
 
             assert.ok($after.length, 1);
             assert.ok(isSpinButton($after.eq(0)));
@@ -273,7 +273,7 @@ module("rendering", () => {
         test("should render 'spins' buttons only after they become visible", (assert) => {
             const $numberBox = $("<div>").dxNumberBox({ showClearButton: true });
             const numberBox = $numberBox.dxNumberBox("instance");
-            let { $before, $after } = getActionButtons($numberBox);
+            let { $before, $after } = getTextEditorButtons($numberBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -282,10 +282,10 @@ module("rendering", () => {
 
             numberBox.option({ text: "Some text", showSpinButtons: true });
 
-            const actionButtons = getActionButtons($numberBox);
+            const textEditorButtons = getTextEditorButtons($numberBox);
 
-            $before = actionButtons.$before;
-            $after = actionButtons.$after;
+            $before = textEditorButtons.$before;
+            $after = textEditorButtons.$after;
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -298,7 +298,7 @@ module("rendering", () => {
                 showSpinButtons: true,
                 buttons: ["clear", "spins"]
             });
-            const { $before, $after } = getActionButtons($numberBox);
+            const { $before, $after } = getTextEditorButtons($numberBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -312,7 +312,7 @@ module("rendering", () => {
                 buttons: [{ name: "clear" }, { name: "spins" }]
             });
 
-            const { $before, $after } = getActionButtons($numberBox);
+            const { $before, $after } = getTextEditorButtons($numberBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -336,7 +336,7 @@ module("rendering", () => {
     module("dropDownEditors", () => {
         test("should render drop down button", (assert) => {
             const $selectBox = $("<div>").dxSelectBox({ buttons: ["dropDown"], items: ["1", "2"], value: "1" });
-            const $after = getActionButtons($selectBox).$after;
+            const $after = getTextEditorButtons($selectBox).$after;
 
             assert.strictEqual($after.length, 1);
             assert.ok(isDropDownButton($after.eq(0)));
@@ -345,7 +345,7 @@ module("rendering", () => {
         test("should render 'dropDown' button only after it becomes visible", (assert) => {
             const $selectBox = $("<div>").dxSelectBox({ showClearButton: true, showDropDownButton: false });
             const selectBox = $selectBox.dxSelectBox("instance");
-            let { $before, $after } = getActionButtons($selectBox);
+            let { $before, $after } = getTextEditorButtons($selectBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -354,10 +354,10 @@ module("rendering", () => {
 
             selectBox.option({ text: "Some text", showDropDownButton: true });
 
-            const actionButtons = getActionButtons($selectBox);
+            const textEditorButtons = getTextEditorButtons($selectBox);
 
-            $before = actionButtons.$before;
-            $after = actionButtons.$after;
+            $before = textEditorButtons.$before;
+            $after = textEditorButtons.$after;
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -366,7 +366,7 @@ module("rendering", () => {
 
         test("should render predefined buttons ('clear', 'dropDown')", (assert) => {
             const $selectBox = $("<div>").dxSelectBox({ showClearButton: true, buttons: ["clear", "dropDown"] });
-            const { $before, $after } = getActionButtons($selectBox);
+            const { $before, $after } = getTextEditorButtons($selectBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -378,7 +378,7 @@ module("rendering", () => {
                 showClearButton: true,
                 buttons: [{ name: "clear" }, { name: "dropDown" }]
             });
-            const { $before, $after } = getActionButtons($selectBox);
+            const { $before, $after } = getTextEditorButtons($selectBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -415,7 +415,7 @@ module("rendering", () => {
                     return $("<div>").addClass("custom-template").text(value).append($textBox);
                 }
             });
-            const { $before, $after } = getActionButtons($selectBox);
+            const { $before, $after } = getTextEditorButtons($selectBox);
             assert.strictEqual($before.eq(0).text(), "before1");
             assert.strictEqual($selectBox.find(".custom-template").text(), "1");
             assert.ok(isClearButton($after.eq(1)));
@@ -442,7 +442,7 @@ module("rendering", () => {
             });
             const $textBox = $selectBox.find("#internal-textbox");
 
-            const $textBoxAfter = getActionButtons($textBox).$after;
+            const $textBoxAfter = getTextEditorButtons($textBox).$after;
             assert.strictEqual($textBoxAfter.length, 1);
             assert.strictEqual(getButtonPlaceHolders($textBoxAfter).length, 1);
         });
@@ -468,7 +468,7 @@ module("rendering", () => {
                 value: "test"
             });
             const $textBox = $selectBox.find("#internal-textbox");
-            const $textBoxAfter = getActionButtons($textBox).$after;
+            const $textBoxAfter = getTextEditorButtons($textBox).$after;
 
             assert.strictEqual($textBoxAfter.length, 1);
             assert.ok(isClearButton($textBoxAfter.eq(0)));
@@ -494,7 +494,7 @@ module("reordering", () => {
                 value: "text"
             });
 
-            const $after = getActionButtons($textBox).$after;
+            const $after = getTextEditorButtons($textBox).$after;
 
             assert.strictEqual($after.length, 2);
             assert.ok(isClearButton($after.eq(0)));
@@ -527,7 +527,7 @@ module("reordering", () => {
                 value: "text"
             });
 
-            const { $before, $after } = getActionButtons($textBox);
+            const { $before, $after } = getTextEditorButtons($textBox);
 
             assert.strictEqual($before.length, 1);
             assert.strictEqual($before.text(), "before1");
@@ -556,7 +556,7 @@ module("reordering", () => {
                 }],
                 value: "text"
             });
-            const { $before, $after } = getActionButtons($textBox);
+            const { $before, $after } = getTextEditorButtons($textBox);
 
             assert.strictEqual($before.length, 1);
             assert.strictEqual($before.text(), "before1");
@@ -577,7 +577,7 @@ module("reordering", () => {
                 buttons: ["spins", "clear"],
                 value: 1
             });
-            const $after = getActionButtons($numberBox).$after;
+            const $after = getTextEditorButtons($numberBox).$after;
             assert.ok(isSpinButton($after.eq(0)));
             assert.ok(isClearButton($after.eq(1)));
         });
@@ -613,7 +613,7 @@ module("reordering", () => {
                 }],
                 value: 1
             });
-            const { $before, $after } = getActionButtons($numberBox);
+            const { $before, $after } = getTextEditorButtons($numberBox);
 
             assert.strictEqual($after.eq(0).text(), "after1");
             assert.ok(isClearButton($after.eq(1)));
@@ -632,7 +632,7 @@ module("reordering", () => {
                 buttons: ["dropDown", "clear"],
                 value: 1
             });
-            const $after = getActionButtons($selectBox).$after;
+            const $after = getTextEditorButtons($selectBox).$after;
 
             assert.ok(isDropDownButton($after.eq(0)));
             assert.ok(isClearButton($after.eq(1)));
@@ -668,7 +668,7 @@ module("reordering", () => {
                 }],
                 value: 1
             });
-            const { $before, $after } = getActionButtons($selectBox);
+            const { $before, $after } = getTextEditorButtons($selectBox);
 
             assert.strictEqual($after.eq(0).text(), "after1");
             assert.ok(isClearButton($after.eq(1)));
@@ -701,7 +701,7 @@ module("collection updating", () => {
             textBox.option("buttons[1].options.text", "custom2");
             textBox.option("buttons[1].location", "before");
 
-            const { $before, $after } = getActionButtons($textBox);
+            const { $before, $after } = getTextEditorButtons($textBox);
 
             assert.strictEqual($before.length, 1);
             assert.strictEqual($before.eq(0).text(), "custom2");
@@ -726,7 +726,7 @@ module("collection updating", () => {
 
             textBox.option("buttons", [customButtonConfig, "clear"]);
 
-            const $after = getActionButtons($textBox).$after;
+            const $after = getTextEditorButtons($textBox).$after;
 
             assert.strictEqual($after.eq(0).text(), "custom");
             assert.ok(isClearButton($after.eq(1)));
@@ -759,7 +759,7 @@ module("collection updating", () => {
                 customButtonConfig
             ]);
 
-            const { $before, $after } = getActionButtons($textBox);
+            const { $before, $after } = getTextEditorButtons($textBox);
 
             assert.strictEqual($before.length, 1);
             assert.strictEqual($after.length, 2);
@@ -775,19 +775,19 @@ module("collection updating", () => {
             });
             const textBox = $textBox.dxTextBox("instance");
 
-            let $after = getActionButtons($textBox).$after;
+            let $after = getTextEditorButtons($textBox).$after;
             assert.strictEqual($after.length, 1);
 
             textBox.option("buttons", []);
-            $after = getActionButtons($textBox).$after;
+            $after = getTextEditorButtons($textBox).$after;
             assert.strictEqual($after.length, 0);
 
             textBox.option("buttons", ["clear"]);
-            $after = getActionButtons($textBox).$after;
+            $after = getTextEditorButtons($textBox).$after;
             assert.strictEqual($after.length, 1);
 
             textBox.option("showClearButton", false);
-            $after = getActionButtons($textBox).$after;
+            $after = getTextEditorButtons($textBox).$after;
             assert.strictEqual($after.length, 1);
             assert.ok($after.eq(0).is(":hidden"));
         });
@@ -825,19 +825,19 @@ module("collection updating", () => {
             });
             const numberBox = $numberBox.dxNumberBox("instance");
 
-            let $after = getActionButtons($numberBox).$after;
+            let $after = getTextEditorButtons($numberBox).$after;
             assert.strictEqual($after.length, 1);
 
             numberBox.option("buttons", []);
-            $after = getActionButtons($numberBox).$after;
+            $after = getTextEditorButtons($numberBox).$after;
             assert.strictEqual($after.length, 0);
 
             numberBox.option("buttons", ["spins"]);
-            $after = getActionButtons($numberBox).$after;
+            $after = getTextEditorButtons($numberBox).$after;
             assert.strictEqual($after.length, 1);
 
             numberBox.option("showSpinButtons", false);
-            $after = getActionButtons($numberBox).$after;
+            $after = getTextEditorButtons($numberBox).$after;
             assert.strictEqual($after.length, 1);
             assert.ok($after.eq(0).children().eq(0).is(":hidden"));
             assert.ok($after.eq(0).children().eq(1).is(":hidden"));
@@ -855,20 +855,20 @@ module("collection updating", () => {
             selectBox.option("buttons", ["dropDown"]);
             selectBox.option("dropDownButtonTemplate", buttonTemplate);
 
-            let $after = getActionButtons($selectBox).$after;
+            let $after = getTextEditorButtons($selectBox).$after;
             assert.strictEqual($after.length, 1);
             assert.strictEqual($after.eq(0).text(), "Template");
 
             selectBox.option("buttons", []);
-            $after = getActionButtons($selectBox).$after;
+            $after = getTextEditorButtons($selectBox).$after;
             assert.strictEqual($after.length, 0, "Button was not rendered");
 
             selectBox.option("buttons", ["dropDown"]);
-            $after = getActionButtons($selectBox).$after;
+            $after = getTextEditorButtons($selectBox).$after;
             assert.strictEqual($after.eq(0).text(), "Template");
 
             selectBox.option("dropDownButtonTemplate", null);
-            $after = getActionButtons($selectBox).$after;
+            $after = getTextEditorButtons($selectBox).$after;
             assert.ok(isDropDownButton($after.eq(0)));
         });
     });
