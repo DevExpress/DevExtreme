@@ -90,15 +90,21 @@ export class Plaque {
         const group = renderer.g().attr({ class: `dxc-${ options.type }-annotation` }).append(this.root);
         this._cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(group);
 
-        const paddingLeftRight = options.paddingLeftRight;
-        const paddingTopBottom = options.paddingTopBottom;
-
         this._contentGroup = renderer.g().append(group);
-        this.renderContent(this.widget, this._contentGroup);
+
+        const contentWidth = options.width > 0 ? options.width : null;
+        const contentHeight = options.height > 0 ? options.height : null;
+
+        this.renderContent(this.widget, this._contentGroup, {
+            width: contentWidth,
+            height: contentHeight
+        });
+
         const bBox = this._contentBBox = this._contentGroup.getBBox();
+
         const size = this._size = {
-            width: bBox.width + 2 * paddingLeftRight,
-            height: bBox.height + 2 * paddingTopBottom
+            width: max(contentWidth, bBox.width) + options.paddingLeftRight * 2,
+            height: max(contentHeight, bBox.height) + options.paddingTopBottom * 2
         };
 
         if(!isDefined(x)) {
