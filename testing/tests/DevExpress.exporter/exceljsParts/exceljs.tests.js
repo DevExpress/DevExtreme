@@ -1,6 +1,6 @@
 import $ from "jquery";
 import ExcelJS from "exceljs";
-import { exportDataGrid } from "exporter/exceljs/excelExporter";
+import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
 import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
 import typeUtils from "core/utils/type";
 
@@ -95,7 +95,7 @@ QUnit.module("API", moduleConfig, () => {
         let topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
 
         const getConfig = (dataGrid, expectedCustomizeCellArgs) => ({
-            component: dataGrid,
+            dataGrid: dataGrid,
             worksheet: this.worksheet,
             topLeftCell: topLeftCell,
             customizeCell: (eventArgs) => {

@@ -1,9 +1,9 @@
 import typeUtils from "../../core/utils/type";
 
-export default function exportDataGrid(options) {
+function exportDataGrid(options) {
     if(!typeUtils.isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled } = options;
+    let { customizeCell, dataGrid, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -15,7 +15,7 @@ export default function exportDataGrid(options) {
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
 
-    let dataProvider = component.getDataProvider();
+    let dataProvider = dataGrid.getDataProvider();
 
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
@@ -69,4 +69,5 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
+export { exportDataGrid };
 
