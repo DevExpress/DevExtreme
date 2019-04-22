@@ -326,7 +326,7 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
         }
     }
 
-    if(httpStatus >= 400) {
+    if(httpStatus >= 400 || httpStatus === 0) {
         errorData.httpStatus = httpStatus;
         return extend(Error(message), errorData);
     }
