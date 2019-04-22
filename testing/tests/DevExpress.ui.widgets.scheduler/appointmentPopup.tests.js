@@ -993,3 +993,19 @@ QUnit.test("Multiple showing appointment popup for recurrence appointments shoul
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
 });
+
+QUnit.test("Appointment popup will render even if no appointmentData is provided (T734413)", function(assert) {
+    this.instance.showAppointmentPopup({}, true);
+    this.instance.hideAppointmentPopup(true);
+    this.instance.showAppointmentPopup({}, true);
+    var formData = this.instance.getAppointmentDetailsForm().option('formData'),
+        startDate = formData.startDate,
+        endDate = formData.endDate,
+        $startDate = $(".dx-scheduler-appointment-popup .dx-datebox.dx-validator .dx-dropdowneditor-input-wrapper > input[name='startDate']"),
+        $endDate = $(".dx-scheduler-appointment-popup .dx-datebox.dx-validator .dx-dropdowneditor-input-wrapper > input[name='endDate']");
+    assert.equal(startDate, null, "startDate in dxForm is null");
+    assert.equal(endDate, null, "endDate in dxForm is null");
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+    assert.equal($startDate[0].value, "", "rendered startDate datebox is empty");
+    assert.equal($endDate[0].value, "", "rendered endDate datebox is empty");
+});
