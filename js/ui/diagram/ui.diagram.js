@@ -179,7 +179,10 @@ class Diagram extends Widget {
                 getText: compileGetter(this.option("nodes.textExpr")),
                 setText: compileSetter(this.option("nodes.textExpr")),
                 getType: compileGetter(this.option("nodes.typeExpr")),
-                setType: compileSetter(this.option("nodes.typeExpr"))
+                setType: compileSetter(this.option("nodes.typeExpr")),
+
+                getParentKey: compileGetter(this.option("nodes.parentKeyExpr")),
+                getItems: compileGetter(this.option("nodes.itemsExpr"))
             },
             edgeDataImporter: {
                 getKey: compileGetter(this.option("edges.keyExpr")),
@@ -277,7 +280,21 @@ class Diagram extends Widget {
                 * @type_function_param1 data:object
                 * @default "type"
                 */
-                typeExpr: "type"
+                typeExpr: "type",
+                /**
+                * @name dxDiagramOptions.nodes.parentKeyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "parentId"
+                */
+                parentKeyExpr: "parentId",
+                /**
+                * @name dxDiagramOptions.nodes.itemsExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "items"
+                */
+                itemsExpr: "items"
             },
             /**
             * @name dxDiagramOptions.edges
