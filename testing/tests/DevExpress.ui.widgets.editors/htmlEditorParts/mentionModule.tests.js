@@ -59,7 +59,7 @@ const moduleConfig = {
             getFormat: noop,
             on: noop,
             deleteText: (index, length) => { this.log.push({ operation: "deleteText", index, length }); },
-            insertText: (index, text, formats) => { this.log.push({ operation: "insertText", index, length }); },
+            insertText: (index, text, formats) => { this.log.push({ operation: "insertText", index, text, formats }); },
             keyboard: {
                 addBinding: ({ key }, handler) => {
 
@@ -239,8 +239,9 @@ QUnit.module("Mentions module", moduleConfig, () => {
             }
         }, {
             index: 1, // insert space after the mention
-            length: 1,
-            operation: "insertText"
+            text: " ",
+            operation: "insertText",
+            formats: "silent"
         }, {
             index: 2, // restore selection
             operation: "setSelection"
