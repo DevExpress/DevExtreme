@@ -6700,7 +6700,7 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
-    if(browser.msie && browser.version === "18.17763") {
+    if(browser.msie && browser.version === "18.18362") {
         assert.ok(true);
         return;
     }
