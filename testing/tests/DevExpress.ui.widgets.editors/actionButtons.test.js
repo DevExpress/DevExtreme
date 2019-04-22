@@ -202,7 +202,7 @@ module("rendering", () => {
 
         test("should render predefined button ('clear') configurated as object", (assert) => {
             const $textBox = $("<div>").dxTextBox({ showClearButton: true, buttons: [{ name: "clear" }] });
-            let $after = getActionButtons($textBox).$after;
+            let $after = getTextEditorButtons($textBox).$after;
             assert.ok(isClearButton($after.eq(0)));
         });
 
@@ -312,7 +312,7 @@ module("rendering", () => {
                 buttons: [{ name: "clear" }, { name: "spins" }]
             });
 
-            const { $before, $after } = getActionButtons($numberBox);
+            const { $before, $after } = getTextEditorButtons($numberBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
@@ -378,7 +378,7 @@ module("rendering", () => {
                 showClearButton: true,
                 buttons: [{ name: "clear" }, { name: "dropDown" }]
             });
-            const { $before, $after } = getActionButtons($selectBox);
+            const { $before, $after } = getTextEditorButtons($selectBox);
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
