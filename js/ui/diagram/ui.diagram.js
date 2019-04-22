@@ -11,6 +11,7 @@ import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
 import { getDiagram } from "./diagram_importer";
 import { hasWindow } from "../../core/utils/window";
+import { compileGetter, compileSetter } from "../../core/utils/data";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
@@ -107,6 +108,12 @@ class Diagram extends Widget {
         const { DiagramControl } = getDiagram();
         this._diagramInstance = new DiagramControl();
         this._diagramInstance.onChanged = this._raiseDataChangeAction.bind(this);
+        this._diagramInstance.onEdgeInserted = this._raiseEdgeInsertedAction.bind(this);
+        this._diagramInstance.onEdgeUpdated = this._raiseEdgeUpdatedAction.bind(this);
+        this._diagramInstance.onEdgeRemoved = this._raiseEdgeRemovedAction.bind(this);
+        this._diagramInstance.onNodeInserted = this._raiseNodeInsertedAction.bind(this);
+        this._diagramInstance.onNodeUpdated = this._raiseNodeUpdatedAction.bind(this);
+        this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
     }
     _refreshDataSources() {
         this._beginUpdateDiagram();
@@ -166,15 +173,21 @@ class Diagram extends Widget {
         const data = {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
-            nodeMapping: {
-                idField: this.option("nodes.idExpr"),
-                textField: this.option("nodes.textExpr"),
-                typeField: this.option("nodes.typeExpr")
+            nodeDataImporter: {
+                getKey: compileGetter(this.option("nodes.keyExpr")),
+                setKey: compileSetter(this.option("nodes.keyExpr")),
+                getText: compileGetter(this.option("nodes.textExpr")),
+                setText: compileSetter(this.option("nodes.textExpr")),
+                getType: compileGetter(this.option("nodes.typeExpr")),
+                setType: compileSetter(this.option("nodes.typeExpr"))
             },
-            edgeMapping: {
-                idField: this.option("edges.idExpr"),
-                fromField: this.option("edges.fromExpr"),
-                toField: this.option("edges.toExpr")
+            edgeDataImporter: {
+                getKey: compileGetter(this.option("edges.keyExpr")),
+                setKey: compileSetter(this.option("edges.keyExpr")),
+                getFrom: compileGetter(this.option("edges.fromExpr")),
+                setFrom: compileSetter(this.option("edges.fromExpr")),
+                getTo: compileGetter(this.option("edges.toExpr")),
+                setTo: compileSetter(this.option("edges.toExpr"))
             },
             layoutType: this._getDataLayoutType()
         };
@@ -237,52 +250,69 @@ class Diagram extends Widget {
             * @type Object
             * @default null
             */
-            /**
-            * @name dxDiagramOptions.nodes.dataSource
-            * @type Array<Object>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxDiagramOptions.nodes.idExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.nodes.textExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.nodes.typeExpr
-            * @type string
-            * @default undefined
-            */
+            nodes: {
+                /**
+                * @name dxDiagramOptions.nodes.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxDiagramOptions.nodes.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: "id",
+                /**
+                * @name dxDiagramOptions.nodes.textExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "text"
+                */
+                textExpr: "text",
+                /**
+                * @name dxDiagramOptions.nodes.typeExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "type"
+                */
+                typeExpr: "type"
+            },
             /**
             * @name dxDiagramOptions.edges
             * @type Object
             * @default null
             */
-            /**
-            * @name dxDiagramOptions.edges.dataSource
-            * @type Array<Object>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxDiagramOptions.edges.idExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.edges.fromExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.edges.toExpr
-            * @type string
-            * @default undefined
-            */
-
+            edges: {
+                /**
+                * @name dxDiagramOptions.edges.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxDiagramOptions.edges.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: "id",
+                /**
+                * @name dxDiagramOptions.edges.fromExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "from"
+                */
+                fromExpr: "from",
+                /**
+                * @name dxDiagramOptions.edges.toExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "to"
+                */
+                toExpr: "to"
+            },
             /**
              * @name dxDiagramOptions.layout
              * @type Enums.DiagramAutoLayout
@@ -324,6 +354,37 @@ class Diagram extends Widget {
             data: this.getData()
         });
     }
+    _raiseEdgeInsertedAction(data, callback) {
+        if(this._edgesOption) {
+            this._edgesOption.insert(data, callback);
+        }
+    }
+    _raiseEdgeUpdatedAction(key, data, callback) {
+        if(this._edgesOption) {
+            this._edgesOption.update(key, data, callback);
+        }
+    }
+    _raiseEdgeRemovedAction(key, callback) {
+        if(this._edgesOption) {
+            this._edgesOption.remove(key, callback);
+        }
+    }
+    _raiseNodeInsertedAction(data, callback) {
+        if(this._nodesOption) {
+            this._nodesOption.insert(data, callback);
+        }
+    }
+    _raiseNodeUpdatedAction(key, data, callback) {
+        if(this._nodesOption) {
+            this._nodesOption.update(key, data, callback);
+        }
+    }
+    _raiseNodeRemovedAction(key, callback) {
+        if(this._nodesOption) {
+            this._nodesOption.remove(key, callback);
+        }
+    }
+
 
     _optionChanged(args) {
         switch(args.name) {
