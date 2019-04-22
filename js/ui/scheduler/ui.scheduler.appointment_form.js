@@ -4,7 +4,6 @@ import dateSerialization from "../../core/utils/date_serialization";
 import messageLocalization from "../../localization/message";
 import clickEvent from "../../events/click";
 import typeUtils from "../../core/utils/type";
-import windowUtils from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 
 import "./ui.scheduler.recurrence_editor";
@@ -14,7 +13,7 @@ import "../tag_box";
 
 const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
 
-const SCREEN_SIZE_OF_TOP_LABEL_LOCATION = 610;
+const SCREEN_SIZE_OF_TOP_LABEL_LOCATION = 608;
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 460;
 
 const SchedulerAppointmentForm = {
@@ -38,8 +37,11 @@ const SchedulerAppointmentForm = {
         return endDate;
     },
 
-    _updateLabelLocation: function(form, width) {
-        form.option("labelLocation", width < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
+    _updateLabelLocation: function(formWidth) {
+        const form = this._appointmentForm;
+        if(form._initialized && form.isReady()) {
+            form.option("labelLocation", formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
+        }
     },
 
     create: function(componentCreator, $container, isReadOnly, formData) {
@@ -51,16 +53,10 @@ const SchedulerAppointmentForm = {
             formData: formData,
             colCount: 2,
             showColonAfterLabel: false,
-            onContentReady: e => {
-                if(windowUtils.hasWindow()) {
-                    const window = windowUtils.getWindow();
-                    this._updateLabelLocation(e.component, $(window).width());
-                }
-            },
-            screenByWidth: width => {
-                const form = this._appointmentForm;
-                form._initialized && this._updateLabelLocation(form, width);
-                return width < SCREEN_SIZE_OF_SINGLE_COLUMN ? "xs" : "lg";
+            screenByWidth: () => {
+                const formWidth = $container.outerWidth();
+                this._updateLabelLocation(formWidth);
+                return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? "xs" : "lg";
             }
         });
 
