@@ -65,8 +65,17 @@ export class SchedulerTestWrapper {
 
         this.appointmentPopup = {
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
+            getPopupInstance: () => $(".dx-scheduler-appointment-popup.dx-widget").dxPopup("instance"),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
+            setInitialWidth: width => {
+                const popupConfig = this.instance._popupConfig;
+                this.instance._popupConfig = appointmentData => {
+                    const config = popupConfig.call(this.instance, appointmentData);
+                    return Object.assign(config, { width: width });
+                };
+            },
+            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width)
         };
 
         this.appointmentForm = {
