@@ -1,18 +1,29 @@
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    SchedulerTimezoneEditor = require("ui/scheduler/timezones/ui.scheduler.timezone_editor"),
-    fx = require("animation/fx"),
-    DataSource = require("data/data_source/data_source").DataSource;
+import { SchedulerTestWrapper } from "./helpers.js";
 
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
+import $ from "jquery";
+import devices from "core/devices";
+import SchedulerTimezoneEditor from "ui/scheduler/timezones/ui.scheduler.timezone_editor";
+import fx from "animation/fx";
+import { DataSource } from "data/data_source/data_source";
+
+import "ui/scheduler/ui.scheduler";
+import "ui/switch";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
+
+const createInstance = function(options) {
+    const defaultOption = {
+        dataSource: [],
+        maxAppointmentsPerCell: null
+    };
+    const instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 var moduleOptions = {
     beforeEach: function() {
@@ -995,17 +1006,19 @@ QUnit.test("Multiple showing appointment popup for recurrence appointments shoul
 });
 
 QUnit.test("Appointment popup will render even if no appointmentData is provided (T734413)", function(assert) {
-    this.instance.showAppointmentPopup({}, true);
-    this.instance.hideAppointmentPopup(true);
-    this.instance.showAppointmentPopup({}, true);
-    var formData = this.instance.getAppointmentDetailsForm().option('formData'),
+    var scheduler = createInstance();
+    scheduler.instance.showAppointmentPopup({}, true);
+    scheduler.instance.hideAppointmentPopup(true);
+    scheduler.instance.showAppointmentPopup({}, true);
+    var formData = scheduler.appointmentForm.getFormInstance().option('formData'),
         startDate = formData.startDate,
         endDate = formData.endDate,
-        $startDate = $(".dx-scheduler-appointment-popup .dx-datebox.dx-validator .dx-dropdowneditor-input-wrapper > input[name='startDate']"),
-        $endDate = $(".dx-scheduler-appointment-popup .dx-datebox.dx-validator .dx-dropdowneditor-input-wrapper > input[name='endDate']");
+        popup = scheduler.appointmentPopup.getPopup(),
+        $startDate = popup.find("input[name='startDate']"),
+        $endDate = popup.find("input[name='endDate']");
     assert.equal(startDate, null, "startDate in dxForm is null");
     assert.equal(endDate, null, "endDate in dxForm is null");
-    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+    assert.equal(scheduler.appointmentPopup.isVisible(), true, "Popup is rendered");
     assert.equal($startDate[0].value, "", "rendered startDate datebox is empty");
     assert.equal($endDate[0].value, "", "rendered endDate datebox is empty");
 });
