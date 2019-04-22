@@ -1810,7 +1810,7 @@ QUnit.test("error handlers (check params)", function(assert) {
     }, done, assert);
 });
 
-QUnit.test("unexpected server response with 0 status", function(assert) {
+QUnit.test("non HTTP failure", function(assert) {
     var done = assert.async();
     ajaxMock.setup({
         url: "odata.org/get",
