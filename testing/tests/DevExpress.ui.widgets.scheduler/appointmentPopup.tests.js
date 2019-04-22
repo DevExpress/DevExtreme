@@ -1006,11 +1006,11 @@ QUnit.test("Multiple showing appointment popup for recurrence appointments shoul
 });
 
 QUnit.test("Appointment popup will render even if no appointmentData is provided (T734413)", function(assert) {
-    var scheduler = createInstance();
-    scheduler.instance.showAppointmentPopup({}, true);
-    scheduler.instance.hideAppointmentPopup(true);
-    scheduler.instance.showAppointmentPopup({}, true);
-    var formData = scheduler.appointmentForm.getFormInstance().option('formData'),
+    const scheduler = createInstance();
+    scheduler.instance.showAppointmentPopup({});
+    scheduler.instance.hideAppointmentPopup();
+    scheduler.instance.showAppointmentPopup({});
+    const formData = scheduler.appointmentForm.getFormInstance().option('formData'),
         startDate = formData.startDate,
         endDate = formData.endDate,
         popup = scheduler.appointmentPopup.getPopup(),
@@ -1018,7 +1018,7 @@ QUnit.test("Appointment popup will render even if no appointmentData is provided
         $endDate = popup.find("input[name='endDate']");
     assert.equal(startDate, null, "startDate in dxForm is null");
     assert.equal(endDate, null, "endDate in dxForm is null");
-    assert.equal(scheduler.appointmentPopup.isVisible(), true, "Popup is rendered");
+    assert.ok(scheduler.appointmentPopup.isVisible(), "Popup is rendered");
     assert.equal($startDate[0].value, "", "rendered startDate datebox is empty");
     assert.equal($endDate[0].value, "", "rendered endDate datebox is empty");
 });
