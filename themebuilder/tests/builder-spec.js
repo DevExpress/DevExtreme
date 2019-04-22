@@ -79,7 +79,7 @@ describe("Builder - testing exported function", () => {
         });
     }).timeout(5000);
 
-    it("Theme builded without parameters is the same that in distribution (generic)", () => {
+    it("Theme built without parameters is the same that in distribution (generic)", () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
@@ -94,7 +94,7 @@ describe("Builder - testing exported function", () => {
         });
     }).timeout(5000);
 
-    it("Theme builded without parameters is the same that in distribution (material)", () => {
+    it("Theme built without parameters is the same that in distribution (material)", () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
