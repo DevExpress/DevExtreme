@@ -5511,15 +5511,6 @@ declare module DevExpress.ui {
         /** @name dxAccordionItem.title */
         title?: string;
     }
-    /** @name dxActionButton */
-    export interface dxActionButton {
-        /** @name dxActionButton.location */
-        location?: 'after' | 'before';
-        /** @name dxActionButton.name */
-        name?: string;
-        /** @name dxActionButton.options */
-        options?: dxButtonOptions;
-    }
     /** @name dxActionSheet.Options */
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /** @name dxActionSheet.Options.cancelText */
@@ -8441,7 +8432,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<'clear' | 'spins' | 'dropDown' | dxActionButton>;
+        buttons?: Array<'clear' | 'spins' | 'dropDown' | dxTextEditorButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */
@@ -8509,6 +8500,15 @@ declare module DevExpress.ui {
         focus(): void;
         /** @name dxTextEditor.getButton(name) */
         getButton(name: string): dxButton | undefined;
+    }
+    /** @name dxTextEditorButton */
+    export interface dxTextEditorButton {
+        /** @name dxTextEditorButton.location */
+        location?: 'after' | 'before';
+        /** @name dxTextEditorButton.name */
+        name?: string;
+        /** @name dxTextEditorButton.options */
+        options?: dxButtonOptions;
     }
     /** @name dxTileView.Options */
     export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {

@@ -832,7 +832,7 @@
  */
 
 /**
- * @typedef {string} Enums.ActionButtonLocation
+ * @typedef {string} Enums.TextEditorButtonLocation
  * @enum {'after'|'before'}
  */
 
