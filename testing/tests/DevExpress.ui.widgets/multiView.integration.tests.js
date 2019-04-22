@@ -47,11 +47,9 @@ function() {
         assert.equal($element.length, 1, `'#${itemText}' was found, checkItemBoundingClientRect('${itemText}')`);
 
         const rect = $element[0].getBoundingClientRect();
-        assert.ok(Math.abs(expectedRect.left - rect.left) < 10, `expectedRect.left: ${expectedRect.left}, elementRect.left: ${rect.left}, checkItemBoundingClientRect('${itemText}')`);
-        assert.ok(Math.abs(expectedRect.width - rect.width) < 10, `expectedRect.width: ${expectedRect.width}, elementRect.width: ${rect.width}, checkItemBoundingClientRect('${itemText}')`);
+        assert.ok(Math.abs(expectedRect.left - rect.left) < 10, `expected left: ${expectedRect.left}, left: ${rect.left}, checkItemBoundingClientRect('${itemText}')`);
+        assert.ok(Math.abs(expectedRect.width - rect.width) < 10, `expected width: ${expectedRect.width}, width: ${rect.width}, checkItemBoundingClientRect('${itemText}')`);
     }
-
-    // TODO: check "[false, true].forEach(deferRendering => {"
 
     [false, true].forEach(deferRendering => {
         [false, true].forEach(rtlEnabled => {
@@ -62,9 +60,7 @@ function() {
                 function createMultiView(options) {
                     options.deferRendering = deferRendering;
                     options.rtlEnabled = rtlEnabled;
-                    if(height !== undefined) {
-                        options.height = height;
-                    }
+                    options.height = height;
                     options.width = 200;
                     options.animationEnabled = false;
                     options.itemTemplate = (itemData) => `<div id='${getElementId(itemData)}'>${itemData}</div>`;
