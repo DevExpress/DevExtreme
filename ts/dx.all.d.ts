@@ -3830,6 +3830,8 @@ declare module DevExpress.viz {
         label?: dxPolarChartArgumentAxisLabel;
         /** @name dxPolarChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
+        /** @name dxPolarChart.Options.argumentAxis.minorTick */
+        minorTick?: dxPolarChartArgumentAxisMinorTick;
         /** @name dxPolarChart.Options.argumentAxis.minorTickCount */
         minorTickCount?: number;
         /** @name dxPolarChart.Options.argumentAxis.minorTickInterval */
@@ -3842,6 +3844,8 @@ declare module DevExpress.viz {
         startAngle?: number;
         /** @name dxPolarChart.Options.argumentAxis.strips */
         strips?: Array<dxPolarChartArgumentAxisStrips>;
+        /** @name dxPolarChart.Options.argumentAxis.tick */
+        tick?: dxPolarChartArgumentAxisTick;
         /** @name dxPolarChart.Options.argumentAxis.tickInterval */
         tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxPolarChart.Options.argumentAxis.type */
@@ -3872,6 +3876,11 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.argumentAxis.label.format */
         format?: DevExpress.ui.format;
     }
+    /** @name dxPolarChart.Options.argumentAxis.minorTick */
+    export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxisSettingsMinorTick {
+        /** @name dxPolarChart.Options.argumentAxis.minorTick.shift */
+        shift?: number;
+    }
     /** @name dxPolarChart.Options.argumentAxis.strips */
     export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
         /** @name dxPolarChart.Options.argumentAxis.strips.color */
@@ -3887,6 +3896,11 @@ declare module DevExpress.viz {
     export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
         /** @name dxPolarChart.Options.argumentAxis.strips.label.text */
         text?: string;
+    }
+    /** @name dxPolarChart.Options.argumentAxis.tick */
+    export interface dxPolarChartArgumentAxisTick extends dxPolarChartCommonAxisSettingsTick {
+        /** @name dxPolarChart.Options.argumentAxis.tick.shift */
+        shift?: number;
     }
     /** @name dxPolarChart.Options.commonAxisSettings */
     export interface dxPolarChartCommonAxisSettings {
@@ -3909,7 +3923,7 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.commonAxisSettings.minorGrid */
         minorGrid?: { color?: string, opacity?: number, visible?: boolean, width?: number };
         /** @name dxPolarChart.Options.commonAxisSettings.minorTick */
-        minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number };
+        minorTick?: dxPolarChartCommonAxisSettingsMinorTick;
         /** @name dxPolarChart.Options.commonAxisSettings.opacity */
         opacity?: number;
         /** @name dxPolarChart.Options.commonAxisSettings.stripStyle */
@@ -3949,6 +3963,19 @@ declare module DevExpress.viz {
         overlappingBehavior?: 'none' | 'hide';
         /** @name dxPolarChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
+    }
+    /** @name dxPolarChart.Options.commonAxisSettings.minorTick */
+    export interface dxPolarChartCommonAxisSettingsMinorTick {
+        /** @name dxPolarChart.Options.commonAxisSettings.minorTick.color */
+        color?: string;
+        /** @name dxPolarChart.Options.commonAxisSettings.minorTick.length */
+        length?: number;
+        /** @name dxPolarChart.Options.commonAxisSettings.minorTick.opacity */
+        opacity?: number;
+        /** @name dxPolarChart.Options.commonAxisSettings.minorTick.visible */
+        visible?: boolean;
+        /** @name dxPolarChart.Options.commonAxisSettings.minorTick.width */
+        width?: number;
     }
     /** @name dxPolarChart.Options.commonAxisSettings.stripStyle */
     export interface dxPolarChartCommonAxisSettingsStripStyle {

@@ -230,7 +230,7 @@ circularAxes = polarAxes.circular = {
         return _math.abs(angles[0] - angles[1]);
     },
 
-    _getTickMarkPoints: function(coords, length) {
+    _getTickMarkPoints: function(coords, length, { shift = 0 }) {
         var center = this.getCenter(),
             corrections = {
                 inside: -1,
@@ -239,9 +239,9 @@ circularAxes = polarAxes.circular = {
             },
             radiusWithTicks = this.getRadius() + length * corrections[this._options.tickOrientation || "center"];
         return [
-            center.x + radiusWithTicks,
+            center.x + radiusWithTicks + shift,
             center.y,
-            center.x + radiusWithTicks + length,
+            center.x + radiusWithTicks + length + shift,
             center.y
         ];
     },
