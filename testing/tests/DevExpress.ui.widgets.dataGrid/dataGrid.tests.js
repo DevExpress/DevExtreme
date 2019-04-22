@@ -13285,6 +13285,41 @@ QUnit.test("DataGrid should not paginate to the already loaded page if it is not
     assert.deepEqual(visibleRow0.key, dataGrid.getController("data").getVisibleRows()[0].key, "Compare first visible row");
 });
 
+// T731090
+QUnit.test("DataGrid should hide load panel after filtering to no data if focused row is enabled", function(assert) {
+    // arrange
+    var generateDataSource = function(count) {
+            var result = [];
+            for(var i = 1; i <= count; ++i) {
+                result.push({ id: i });
+            }
+            return result;
+        },
+        dataGrid = createDataGrid({
+            height: 100,
+            dataSource: generateDataSource(100),
+            keyExpr: "id",
+            focusedRowEnabled: true,
+            focusedRowKey: 1,
+            scrolling: {
+                mode: "virtual"
+            }
+        });
+
+    this.clock.tick();
+
+    dataGrid.pageIndex(5);
+    this.clock.tick();
+
+    // act
+    dataGrid.filter(["id", "=", 666]);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no rows");
+    assert.strictEqual(dataGrid.getController("data").isLoading(), false, "no loading");
+});
+
 // T558189
 QUnit.test("Band columns should be displayed correctly after state is reset", function(assert) {
     // arrange
