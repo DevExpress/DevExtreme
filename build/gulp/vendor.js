@@ -40,18 +40,6 @@ const VENDORS = [
         base: '/globalize/dist/'
     },
     {
-        path: '/quill/dist/quill.js'
-    },
-    {
-        path: '/exceljs/dist/exceljs.js'
-    },
-    {
-        path: '/showdown/dist/showdown.js'
-    },
-    {
-        path: '/turndown/lib/turndown.browser.umd.js'
-    },
-    {
         path: '/devexpress-diagram/dx.diagram.js'
     },
     {
