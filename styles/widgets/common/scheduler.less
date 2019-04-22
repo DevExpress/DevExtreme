@@ -4,13 +4,13 @@
 @SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
 
 .dx-scheduler-appointment-popup {
-    .dx-popup-content {	
-        padding-top: 0;	
-        padding-bottom: 0;	
-    }	
+    .dx-popup-content {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 
-     .dx-scrollable-content {	
-        padding-top: @SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING;	
+     .dx-scrollable-content {
+        padding-top: @SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING;
     }
 
     .dx-scheduler-recurrence-rule-item.dx-field-item {
@@ -188,6 +188,11 @@
 }
 
 .dx-scheduler-adaptive {
+    .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell {
+        white-space: pre-wrap;
+        line-height: 1.3;
+    }
+
     .dx-scheduler-dropdown-appointments {
         margin: 0;
 
