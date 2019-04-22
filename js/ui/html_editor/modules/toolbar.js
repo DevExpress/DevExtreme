@@ -58,6 +58,7 @@ class ToolbarModule extends BaseModule {
         this._formatHandlers = this._getFormatHandlers();
 
         if(isDefined(options.items)) {
+            this._editorInstance.addCleanCallback(this.clean.bind(this));
             this._renderToolbar();
 
             this.quill.on('editor-change', (eventName) => {

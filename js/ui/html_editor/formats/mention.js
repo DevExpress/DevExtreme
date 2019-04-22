@@ -14,6 +14,8 @@ class Mention extends Embed {
         node.setAttribute("spellcheck", false);
         node.dataset.marker = data.marker;
         node.dataset.mentionValue = data.value;
+        node.dataset.id = data.id;
+
         this.renderContent(node, data);
 
         return node;
@@ -22,12 +24,23 @@ class Mention extends Embed {
     static value(node) {
         return {
             marker: node.dataset.marker,
+            id: node.dataset.id,
             value: node.dataset.mentionValue
         };
     }
 
     static renderContent(node, data) {
-        this._renderContentImpl(node, data);
+        const template = this._templates.get(data.marker);
+
+        if(template) {
+            template.render({
+                model: data,
+                container: node
+            });
+        } else {
+            this.baseContentRender(node, data);
+        }
+
     }
 
     static baseContentRender(node, data) {
@@ -38,18 +51,18 @@ class Mention extends Embed {
             .append(data.value);
     }
 
-    static restoreContentRender() {
-        this._renderContentImpl = this.baseContentRender;
+    static addTemplate(marker, template) {
+        this._templates.set(marker, template);
     }
 
-    static setContentRender(renderer) {
-        this._renderContentImpl = renderer;
+    static removeTemplate(marker) {
+        this._templates.delete(marker);
     }
 }
 
-Mention._renderContentImpl = Mention.baseContentRender;
 Mention.blotName = "mention";
 Mention.tagName = "span";
 Mention.className = MENTION_CLASS;
+Mention._templates = new Map();
 
 export default Mention;

@@ -67,6 +67,7 @@ const simpleModuleConfig = {
         this.options = {
             editorInstance: {
                 NAME: "dxHtmlEditor",
+                addCleanCallback: noop,
                 $element: () => {
                     return this.$element;
                 },
@@ -114,6 +115,7 @@ const dialogModuleConfig = {
         this.options = {
             editorInstance: {
                 NAME: "dxHtmlEditor",
+                addCleanCallback: noop,
                 $element: () => {
                     return this.$element;
                 },

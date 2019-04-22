@@ -79,6 +79,7 @@ const moduleConfig = {
                 dataSource: ["Alex", "John", "Freddy", "Sam"]
             }],
             editorInstance: {
+                addCleanCallback: noop,
                 $element: () => {
                     return this.$element;
                 },
@@ -126,27 +127,30 @@ QUnit.module("Mention format", () => {
     test("Create an element by data", (assert) => {
         const data = {
             value: "John Smith",
-            marker: "@"
+            marker: "@",
+            id: "JohnSm"
         };
         const element = MentionFormat.create(data);
 
         assert.strictEqual(element.dataset.marker, "@", "correct marker");
         assert.strictEqual(element.dataset.mentionValue, "John Smith", "correct value");
+        assert.strictEqual(element.dataset.id, "JohnSm", "correct id");
         assert.strictEqual(element.innerText, "@John Smith", "correct inner text");
     });
 
     test("Get data from element", (assert) => {
-        const markup = "<span class='dx-mention' data-marker=@ data-mention-value='John Smith'><span>@</span>John Smith</span>";
+        const markup = "<span class='dx-mention' data-marker=@ data-mention-value='John Smith' data-id='JohnSm'><span>@</span>John Smith</span>";
         const element = $(markup).get(0);
         const data = MentionFormat.value(element);
 
-        assert.deepEqual(data, { value: "John Smith", marker: "@" }, "Correct data");
+        assert.deepEqual(data, { value: "John Smith", marker: "@", id: "JohnSm" }, "Correct data");
     });
 
     test("Change default marker", (assert) => {
         const data = {
             value: "John Smith",
-            marker: "#"
+            marker: "#",
+            id: "JohnSm"
         };
 
         const element = MentionFormat.create(data);
@@ -156,18 +160,22 @@ QUnit.module("Mention format", () => {
     test("Change default content renderer", (assert) => {
         const data = {
             value: "John Smith",
-            marker: "@"
+            marker: "@",
+            id: "JohnSm"
         };
 
-        MentionFormat.setContentRender((node, mentionData) => {
-            node.innerText = "test";
-            assert.deepEqual(mentionData, data);
+        MentionFormat.addTemplate("@", {
+            render: ({ container, model: mentionData }) => {
+                container.innerText = "test";
+                assert.deepEqual(mentionData, data);
+            }
         });
+
         let element = MentionFormat.create(data);
 
         assert.strictEqual(element.innerText, "test");
 
-        MentionFormat.restoreContentRender();
+        MentionFormat.removeTemplate("@");
         element = MentionFormat.create(data);
 
         assert.strictEqual(element.innerText, "@John Smith");

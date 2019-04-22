@@ -7,6 +7,7 @@ import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
+import Callbacks from "../../core/utils/callbacks";
 
 import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
@@ -226,6 +227,11 @@ const HtmlEditor = Editor.inherit({
             * @type_function_return string|Node|jQuery
             */
         });
+    },
+
+    _init: function() {
+        this.callBase();
+        this.cleanCallback = Callbacks();
     },
 
     _getAnonymousTemplateName: function() {
@@ -542,13 +548,12 @@ const HtmlEditor = Editor.inherit({
 
     _clean: function() {
         if(this._quillInstance) {
-            const toolbar = this._quillInstance.getModule("toolbar");
-
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
-            toolbar && toolbar.clean();
+            this.cleanCallback.fire();
         }
 
         this._abortUpdateContentTask();
+        this.cleanCallback.empty();
         this.callBase();
     },
 
@@ -569,6 +574,10 @@ const HtmlEditor = Editor.inherit({
         if(this._quillInstance && this._quillInstance.history) {
             this._quillInstance.history[methodName]();
         }
+    },
+
+    addCleanCallback(callback) {
+        this.cleanCallback.add(callback);
     },
 
     /**
