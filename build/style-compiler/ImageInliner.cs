@@ -59,18 +59,13 @@ namespace StyleCompiler
 
         static string GetEncodedUrl(byte[] fileContent, string mime)
         {
-            var isSvgImage = mime == "image/svg+xml";
-            var content = "data:" + mime;
-            content += isSvgImage ? ";charset=UTF-8," : ";base64,";
-            content += isSvgImage ?
-                HttpUtility.UrlEncode(fileContent).Replace("+", "%20") : // encodeUriComponent
-                Convert.ToBase64String(fileContent);
-
-            if(isSvgImage) {
-                content = "\"" + content + "\"";
+             if (mime == "image/svg+xml") {
+                var content = HttpUtility.UrlEncode(fileContent).Replace("+", "%20");
+                return $@"""data:{mime};charset=UTF-8,{content}""";
+            } else {
+                var content = Convert.ToBase64String(fileContent);
+                return $"data:{mime};base64,{content}";
             }
-
-            return content;
         }
 
         static string GenerateDataUrl(string path)
