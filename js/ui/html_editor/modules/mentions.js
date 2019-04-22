@@ -353,7 +353,7 @@ class MentionModule extends PopupModule {
             my: "top left",
             at: "top left",
             collision: {
-                y: "flip",
+                y: "none",
                 x: "flipfit"
             }
         };
@@ -361,6 +361,7 @@ class MentionModule extends PopupModule {
 
     _getPopupConfig() {
         return extend(super._getPopupConfig(), {
+            closeOnTargetScroll: false,
             onShown: () => {
                 this._isMentionActive = true;
                 this._hasSearch = false;

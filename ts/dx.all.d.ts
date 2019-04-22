@@ -159,13 +159,6 @@ interface JQuery {
     dxFilterBuilder(options: DevExpress.ui.dxFilterBuilderOptions): JQuery;
 }
 interface JQuery {
-    dxFloatingActionButton(): JQuery;
-    dxFloatingActionButton(options: "instance"): DevExpress.ui.dxFloatingActionButton;
-    dxFloatingActionButton(options: string): any;
-    dxFloatingActionButton(options: string, ...params: any[]): any;
-    dxFloatingActionButton(options: DevExpress.ui.dxFloatingActionButtonOptions): JQuery;
-}
-interface JQuery {
     dxForm(): JQuery;
     dxForm(options: "instance"): DevExpress.ui.dxForm;
     dxForm(options: string): any;
@@ -360,6 +353,13 @@ interface JQuery {
     dxSlider(options: string): any;
     dxSlider(options: string, ...params: any[]): any;
     dxSlider(options: DevExpress.ui.dxSliderOptions): JQuery;
+}
+interface JQuery {
+    dxSpeedDialAction(): JQuery;
+    dxSpeedDialAction(options: "instance"): DevExpress.ui.dxSpeedDialAction;
+    dxSpeedDialAction(options: string): any;
+    dxSpeedDialAction(options: string, ...params: any[]): any;
+    dxSpeedDialAction(options: DevExpress.ui.dxSpeedDialActionOptions): JQuery;
 }
 interface JQuery {
     dxSwitch(): JQuery;
@@ -6084,6 +6084,8 @@ declare module DevExpress.ui {
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
+        /** @name dxDiagram.Options.export */
+        export?: { fileName?: string, proxyUrl?: string };
         /** @name dxDiagram.Options.layout */
         layout?: 'tree' | 'sugiyama';
         /** @name dxDiagram.Options.nodes */
@@ -6507,18 +6509,6 @@ declare module DevExpress.ui {
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
         /** @name dxFilterBuilderField.trueText */
         trueText?: string;
-    }
-    /** @name dxFloatingActionButton.Options */
-    export interface dxFloatingActionButtonOptions extends WidgetOptions<dxFloatingActionButton> {
-        /** @name dxFloatingActionButton.Options.icon */
-        icon?: string;
-        /** @name dxFloatingActionButton.Options.onClick */
-        onClick?: ((e: { event?: event, component?: dxFloatingActionButton, element?: DevExpress.core.dxElement }) => any);
-    }
-    /** @name dxFloatingActionButton */
-    export class dxFloatingActionButton extends Widget {
-        constructor(element: Element, options?: dxFloatingActionButtonOptions)
-        constructor(element: JQuery, options?: dxFloatingActionButtonOptions)
     }
     /** @name dxForm.Options */
     export interface dxFormOptions extends WidgetOptions<dxForm> {
@@ -8253,6 +8243,18 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
+    /** @name dxSpeedDialAction.Options */
+    export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
+        /** @name dxSpeedDialAction.Options.icon */
+        icon?: string;
+        /** @name dxSpeedDialAction.Options.onClick */
+        onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement }) => any);
+    }
+    /** @name dxSpeedDialAction */
+    export class dxSpeedDialAction extends Widget {
+        constructor(element: Element, options?: dxSpeedDialActionOptions)
+        constructor(element: JQuery, options?: dxSpeedDialActionOptions)
+    }
     /** @name dxSwitch.Options */
     export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
         /** @name dxSwitch.Options.activeStateEnabled */
@@ -9276,7 +9278,7 @@ declare module DevExpress {
         /** @name globalConfig.editorStylingMode */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** @name globalConfig.floatingActionButtonConfig */
-        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxActionButtonCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
+        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
         /** @name globalConfig.forceIsoDateParsing */
         forceIsoDateParsing?: boolean;
         /** @name globalConfig.oDataFilterToLower */
@@ -9330,8 +9332,6 @@ declare module DevExpress {
         /** @name positionConfig.offset */
         offset?: string | { x?: number, y?: number };
     }
-    /** @name processHardwareBackButton() */
-    export function processHardwareBackButton(): void;
     /** @name registerComponent(name, componentClass) */
     export function registerComponent(name: string, componentClass: any): void;
     /** @name registerComponent(name, namespace, componentClass) */

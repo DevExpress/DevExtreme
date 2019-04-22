@@ -57,7 +57,8 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
-            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar)
+            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            export: this.option("export")
         });
     }
 
@@ -317,7 +318,26 @@ class Diagram extends Widget {
              * @type Enums.DiagramAutoLayout
              * @default 0
              */
-            layout: "tree"
+            layout: "tree",
+
+            /**
+             * @name dxDiagramOptions.export
+             * @type object
+             */
+            "export": {
+                /**
+                 * @name dxDiagramOptions.export.fileName
+                 * @type string
+                 * @default "Diagram"
+                 */
+                fileName: "Diagram",
+                /**
+                 * @name dxDiagramOptions.export.proxyUrl
+                 * @type string
+                 * @default undefined
+                 */
+                proxyUrl: undefined
+            }
         });
     }
 
@@ -379,6 +399,9 @@ class Diagram extends Widget {
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();
+                break;
+            case "export":
+                this._toolbarInstance.option("export", this.option("export"));
                 break;
             default:
                 super._optionChanged(args);

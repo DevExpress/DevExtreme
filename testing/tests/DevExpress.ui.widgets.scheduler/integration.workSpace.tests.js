@@ -1739,7 +1739,7 @@ QUnit.test("Focused cells cash should be correct (T640466)", function(assert) {
 
 QUnit.test("Scheduler timeline workweek should contain two spans in header panel cell in Material theme", function(assert) {
     var origIsMaterial = themes.isMaterial;
-    themes.isMaterial = function() { return true; };
+    themes.isMaterial = () => true;
 
     this.createInstance({
         views: [ "week" ],

@@ -1,14 +1,16 @@
 @SCHEDULER_DROP_DOWN_MARGIN: 3px;
 @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT: 20px;
 
-.dx-scheduler-appointment-popup {
-    .dx-popup-content {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
+@SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
 
-    .dx-scrollable-content {
-        padding-top: 20px;
+.dx-scheduler-appointment-popup {
+    .dx-popup-content {	
+        padding-top: 0;	
+        padding-bottom: 0;	
+    }	
+
+     .dx-scrollable-content {	
+        padding-top: @SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING;	
     }
 
     .dx-scheduler-recurrence-rule-item.dx-field-item {

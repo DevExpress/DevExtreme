@@ -318,7 +318,7 @@ testComponentDefaults(DropDownButton, {}, {
     keyExpr: "this",
     displayExpr: "this",
     useSelectMode: false,
-    splitButton: true,
+    splitButton: false,
     selectedItemKey: null,
     focusStateEnabled: true,
     hoverStateEnabled: true,
@@ -1176,7 +1176,7 @@ testComponentDefaults(Scheduler,
         _appointmentTooltipOpenButtonText: null,
         _dropDownButtonIcon: "chevrondown",
         _appointmentCountPerCell: 1,
-        _appointmentGroupButtonOffset: 20,
+        _collectorOffset: 20,
         _appointmentOffset: 30
     },
     function() {

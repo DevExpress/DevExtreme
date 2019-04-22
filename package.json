@@ -100,7 +100,7 @@
     "webpack": "^3.10.0",
     "webpack-stream": "^3.2.0",
     "yargs": "^4.6.0",
-    "devexpress-diagram": "^0.0.4"
+    "devexpress-diagram": "^0.0.6"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
@@ -114,8 +114,7 @@
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
-    "test-env": "node testing/launch",
-    "update-ts": "node ./build/update-ts.js"
+    "test-env": "node testing/launch"
   },
   "browserslist": [
     "last 2 versions",
@@ -123,8 +122,5 @@
     "ie > 10",
     "> 1%"
   ],
-  "pre-commit": [
-    "lint-staged",
-    "update-ts"
-  ]
+  "pre-commit": "lint-staged"
 }

@@ -2,20 +2,20 @@ import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
-import { initAction, disposeAction } from "./action_button_base";
+import { initAction, disposeAction } from "./speed_dial_main_item";
 
-const FloatingActionButton = Widget.inherit({
+const SpeedDialAction = Widget.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
-            * @name dxFloatingActionButtonOptions.icon
+            * @name dxSpeedDialActionOptions.icon
             * @type string
             * @default ""
             */
             icon: "",
 
             /**
-            * @name dxFloatingActionButtonOptions.onClick
+            * @name dxSpeedDialActionOptions.onClick
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field1 event:event
@@ -27,26 +27,26 @@ const FloatingActionButton = Widget.inherit({
             onClick: null,
 
             /**
-            * @name dxFloatingActionButtonOptions.visible
+            * @name dxSpeedDialActionOptions.visible
             * @hidden
             * @inheritdoc
             */
             visible: false,
 
             /**
-            * @name dxFloatingActionButtonOptions.width
+            * @name dxSpeedDialActionOptions.width
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxFloatingActionButtonOptions.height
+            * @name dxSpeedDialActionOptions.height
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxFloatingActionButtonOptions.disabled
+            * @name dxSpeedDialActionOptions.disabled
             * @hidden
             * @inheritdoc
             */
@@ -107,7 +107,7 @@ const FloatingActionButton = Widget.inherit({
     }
 });
 
-registerComponent("dxFloatingActionButton", FloatingActionButton);
+registerComponent("dxSpeedDialAction", SpeedDialAction);
 
-module.exports = FloatingActionButton;
+module.exports = SpeedDialAction;
 
