@@ -1014,7 +1014,7 @@ QUnit.test("The second appointment in recurring series in Week view should be re
     });
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
-        $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+        $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.equal($appointments.length, 2, "Two appointments are rendered");
     assert.equal($dropDown.length, 0, "There is no dropDown appointment");
@@ -1037,7 +1037,7 @@ QUnit.test("The second weekend appointment in recurring series in Week view shou
     });
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
-        $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+        $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.equal($appointments.length, 1, "One appointment is rendered");
     assert.equal($dropDown.length, 0, "There is no dropDown appointment");
@@ -1045,7 +1045,7 @@ QUnit.test("The second weekend appointment in recurring series in Week view shou
     this.instance.option("currentDate", new Date(2019, 9, 26));
 
     $appointments = this.instance.$element().find(".dx-scheduler-appointment");
-    $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.equal($appointments.length, 1, "One appointment is rendered");
     assert.equal($dropDown.length, 0, "There is no dropDown appointment");

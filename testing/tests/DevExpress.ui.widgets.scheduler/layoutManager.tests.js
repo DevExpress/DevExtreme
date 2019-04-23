@@ -1001,7 +1001,7 @@ QUnit.test("Grouped appointments schould have correct colors", function(assert) 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     assert.equal($appointment.length, 2, "Cloned appointments are grouped");
 
-    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-appointment-collector");
 
     assert.equal(new Color($dropDownMenu.css("backgroundColor")).toHex(), "#0000ff", "ddAppointment is rendered");
 });
@@ -1051,7 +1051,7 @@ QUnit.test("Grouped appointments schould have correct colors when resourses stor
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     assert.equal($appointment.length, 2, "Cloned appointments are grouped");
 
-    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-appointment-collector");
     this.clock.tick(300);
     assert.equal(new Color($dropDownMenu.css("backgroundColor")).toHex(), "#0000ff", "ddAppointment is rendered");
 });
@@ -1074,7 +1074,7 @@ QUnit.test("Grouped appointments should be reinitialized if datasource is change
     );
     items.push({ text: "a", startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1) });
     this.instance.option("dataSource", items);
-    var $dropDownMenu = $(this.instance.$element().find(".dx-scheduler-dropdown-appointments"));
+    var $dropDownMenu = $(this.instance.$element().find(".dx-scheduler-appointment-collector"));
 
     assert.equal($dropDownMenu.length, 1, "DropDown appointments are refreshed");
 });
@@ -2148,7 +2148,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         }
     );
 
-    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-appointment-collector").trigger("dxclick"),
         dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
@@ -2645,7 +2645,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentHeight, tableCellHeight / 4, 1.5, "appointment is full-size");
     }
 
-    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-appointment-collector");
 
     assert.equal($dropDownMenu.length, 0, "ddAppointment isn't rendered");
 });
@@ -2830,7 +2830,7 @@ QUnit.test("DropDown appointments button should have correct width on week view"
         }
     );
 
-    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-appointment-collector");
 
     assert.roughEqual($dropDownMenu.outerWidth(), 24, 0.5, "ddAppointment has correct width");
 });
@@ -2864,7 +2864,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentWidth, tableCellWidth / 4, 1.5, "appointment is full-size");
     }
 
-    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-appointment-collector");
 
     assert.equal($dropDownMenu.length, 0, "ddAppointment isn't rendered");
 });

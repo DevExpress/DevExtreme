@@ -55,7 +55,7 @@ export class SchedulerTestWrapper {
             },
 
             compact: {
-                getButtons: () => $(".dx-scheduler-dropdown-appointments"),
+                getButtons: () => $(".dx-scheduler-appointment-collector"),
                 getButtonCount: () => this.appointments.compact.getButtons().length,
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
@@ -137,7 +137,7 @@ export const appointmentsHelper = {
     },
 
     compact: {
-        getButtons: () => $(".dx-scheduler-dropdown-appointments"),
+        getButtons: () => $(".dx-scheduler-appointment-collector"),
         getButtonCount: () => appointmentsHelper.compact.getButtons().length,
         getButton: (index = 0) => $(appointmentsHelper.compact.getButtons().get(index)),
         getButtonText: (index = 0) => appointmentsHelper.compact.getButton(index).find("span").text(),
