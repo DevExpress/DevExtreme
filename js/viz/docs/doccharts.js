@@ -2907,6 +2907,7 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.argumentAxis.tick
         * @type object
+        * @inheritdoc
         */
         tick: {
             /**
@@ -2919,6 +2920,7 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.argumentAxis.minorTick
         * @type object
+        * @inheritdoc
         */
         minorTick: {
             /**
