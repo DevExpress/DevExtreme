@@ -3,6 +3,8 @@ import Widget from "../widget/ui.widget";
 import Drawer from "../drawer";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
+import typeUtils from '../../core/utils/type';
+import dataCoreUtils from '../../core/utils/data';
 import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramToolbox from "./ui.diagram.toolbox";
 import DiagramOptions from "./ui.diagram.options";
@@ -11,7 +13,6 @@ import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
 import { getDiagram } from "./diagram_importer";
 import { hasWindow } from "../../core/utils/window";
-import { compileGetter, compileSetter } from "../../core/utils/data";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
@@ -166,6 +167,20 @@ class Diagram extends Widget {
         this._edges = edges;
         this._bindDiagramData();
     }
+    _createOptionGetter(optionName) {
+        var expr = this.option(optionName);
+
+        return dataCoreUtils.compileGetter(expr);
+    }
+    _createOptionSetter(optionName) {
+        var expr = this.option(optionName);
+
+        if(typeUtils.isFunction(expr)) {
+            return expr;
+        }
+
+        return dataCoreUtils.compileSetter(expr);
+    }
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
@@ -174,23 +189,23 @@ class Diagram extends Widget {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
             nodeDataImporter: {
-                getKey: compileGetter(this.option("nodes.keyExpr")),
-                setKey: compileSetter(this.option("nodes.keyExpr")),
-                getText: compileGetter(this.option("nodes.textExpr")),
-                setText: compileSetter(this.option("nodes.textExpr")),
-                getType: compileGetter(this.option("nodes.typeExpr")),
-                setType: compileSetter(this.option("nodes.typeExpr")),
+                getKey: this._createOptionGetter("nodes.keyExpr"),
+                setKey: this._createOptionSetter("nodes.keyExpr"),
+                getText: this._createOptionGetter("nodes.textExpr"),
+                setText: this._createOptionSetter("nodes.textExpr"),
+                getType: this._createOptionGetter("nodes.typeExpr"),
+                setType: this._createOptionSetter("nodes.typeExpr"),
 
-                getParentKey: compileGetter(this.option("nodes.parentKeyExpr")),
-                getItems: compileGetter(this.option("nodes.itemsExpr"))
+                getParentKey: this._createOptionGetter("nodes.parentKeyExpr"),
+                getItems: this._createOptionGetter("nodes.itemsExpr")
             },
             edgeDataImporter: {
-                getKey: compileGetter(this.option("edges.keyExpr")),
-                setKey: compileSetter(this.option("edges.keyExpr")),
-                getFrom: compileGetter(this.option("edges.fromExpr")),
-                setFrom: compileSetter(this.option("edges.fromExpr")),
-                getTo: compileGetter(this.option("edges.toExpr")),
-                setTo: compileSetter(this.option("edges.toExpr"))
+                getKey: this._createOptionGetter("edges.keyExpr"),
+                setKey: this._createOptionSetter("edges.keyExpr"),
+                getFrom: this._createOptionGetter("edges.fromExpr"),
+                setFrom: this._createOptionSetter("edges.fromExpr"),
+                getTo: this._createOptionGetter("edges.toExpr"),
+                setTo: this._createOptionSetter("edges.toExpr")
             },
             layoutType: this._getDataLayoutType()
         };
