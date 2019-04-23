@@ -21,7 +21,7 @@
     @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_LEFT_BORDER: 3px solid transparent;
     @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 2px solid transparent;
 
-    @GENERIC_SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -88px;
+    @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -88px;
     @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET: 5px;
 }
 
@@ -48,7 +48,7 @@
     @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_LEFT_BORDER: 2px solid transparent;
     @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 1px solid transparent;
 
-    @GENERIC_SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -80px;
+    @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -80px;
     @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET: 3px;
 }
 
@@ -71,8 +71,8 @@
 
 @SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
 
-@GENERIC_SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
-@GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP: 10px;
+@SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
+@SCHEDULER_RECURRENCE_BORDER_COLOR: @base-border-color;
 
 .scheduler-mixin(100px);
 
@@ -388,46 +388,6 @@
         .dx-rtl & {
             margin-left: 4px;
             margin-right: 0;
-        }
-    }
-
-    .dx-recurrence-repeat-end-container {
-        margin: 0;
-    }
-
-    .dx-recurrence-radiogroup-repeat-type-label,
-    .dx-recurrence-repeat-end-label {
-        line-height: @GENERIC_BASE_INLINE_WIDGET_HEIGHT;
-        width: @GENERIC_SCHEDULER_REPEAT_END_LABEL_WIDTH;
-    }
-
-    .dx-scheduler-recurrence-rule-item.dx-field-item {
-        border-top: 1px solid @scheduler-appointment-form-separator-color;
-
-        .dx-recurrence-numberbox-interval-label,
-        .dx-recurrence-repeat-on-label,
-        .dx-recurrence-repeat-end-container-label {
-            // NOTE: labels allignment in recurrence editor with the base offset
-            left: @GENERIC_SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET - 2px;
-        }
-
-        .dx-recurrence-radiogroup-repeat-type {
-            left: @GENERIC_SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET;
-        }
-
-        .dx-field-item-label:first-child {
-            padding-top: @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET;
-        }
-
-        &.dx-label-h-align {
-            .dx-recurrence-repeat-on-week {
-                padding-top: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
-                padding-bottom: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
-            }
-
-            .dx-recurrence-repeat-end-container.dx-field {
-                padding-top: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP;
-            }
         }
     }
 }

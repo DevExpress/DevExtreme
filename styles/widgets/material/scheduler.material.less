@@ -41,6 +41,7 @@
     @MATERIAL_TOOLTIP_MARKER_DIMENSION: 24px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP: 4px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP: 1px;
+    @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -88px;
 }
 
 .dx-size-compact() {
@@ -86,6 +87,8 @@
     @MATERIAL_TOOLTIP_MARKER_DIMENSION: 18px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP: 3px;
     @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP: 2px;
+
+    @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET: -80px;
 }
 
 @MATERIAL_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT: @MATERIAL_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;
@@ -99,6 +102,8 @@
 @SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
 
 @MATERIAL_SCHEDULER_COMPACT_APPOINTMENT_BUTTON_BORDER_RADIUS: 12px;
+@SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
+@SCHEDULER_RECURRENCE_BORDER_COLOR: @base-border-color;
 
 .scheduler-mixin(65px);
 
@@ -683,34 +688,8 @@
         }
     }
 
-    .dx-scheduler-recurrence-rule-item.dx-field-item {
-        .dx-recurrence-numberbox-interval-label,
-        .dx-recurrence-repeat-on-label,
-        .dx-recurrence-repeat-end-container-label {
-            position: relative;
-            left: 0px;
-        }
-
-        .dx-recurrence-repeat-end-container-label,
-        .dx-recurrence-repeat-end-container {
-            padding-top: 0px;
-        }
-
-        .dx-recurrence-radiogroup-repeat-type {
-            left: 0px;
-            top: 0px;
-        }
-
-        .dx-recurrence-repeat-end-container {
-            margin: 0;
-        }
-
-        .dx-recurrence-radiogroup-repeat-type-label,
-        .dx-recurrence-numberbox-interval-label,
-        .dx-recurrence-repeat-on-label,
-        .dx-recurrence-repeat-end-container-label {
-            line-height: @MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
-        }
+    .dx-layout-manager .dx-label-h-align .dx-field-item-content .dx-switch-wrapper {
+        padding-top: 30px;
     }
 }
 

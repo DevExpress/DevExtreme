@@ -1,9 +1,9 @@
-@RECURRENCE_EDITOR_CONTAINER_pADDING_TOP: 17px;
+@RECURRENCE_EDITOR_CONTAINER_PADDING_TOP: 17px;
 @RECURRENCE_EDITOR_CONTAINER_MARGIN_BOTTOM: 21px;
 
 .dx-scheduler-recurrence-rule-item.dx-label-v-align {
     .dx-recurrence-editor-container {
-        padding-top: @RECURRENCE_EDITOR_CONTAINER_pADDING_TOP;
+        padding-top: @RECURRENCE_EDITOR_CONTAINER_PADDING_TOP;
     }
 }
 
@@ -11,3 +11,14 @@
     position: relative;
     margin-bottom: @RECURRENCE_EDITOR_CONTAINER_MARGIN_BOTTOM;
 }
+
+.dx-recurrence-repeat-end-container {
+    margin: 0;
+}
+
+.dx-recurrence-radiogroup-repeat-type-label,
+.dx-recurrence-repeat-end-label {
+    line-height: @GENERIC_BASE_INLINE_WIDGET_HEIGHT;
+    width: @GENERIC_SCHEDULER_REPEAT_END_LABEL_WIDTH;
+}
+
