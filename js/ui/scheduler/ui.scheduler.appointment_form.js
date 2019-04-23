@@ -20,9 +20,9 @@ const SchedulerAppointmentForm = {
     _appointmentForm: {},
 
     _validateAppointmentFormDate: function(editor, value, previousValue) {
-        var isCorrectDate = !!value;
-
-        if(!isCorrectDate) {
+        var isCurrentDateCorrect = !!value;
+        var isPreviousDateCorrect = !!previousValue;
+        if(!isCurrentDateCorrect && isPreviousDateCorrect) {
             editor.option("value", previousValue);
         }
     },
@@ -98,7 +98,7 @@ const SchedulerAppointmentForm = {
                             endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
                             endValue = dateSerialization.deserializeDate(endDateEditor.option("value"));
 
-                        if(endValue < value) {
+                        if(!!endValue && endValue < value) {
                             var duration = endValue.getTime() - previousValue.getTime();
                             endDateEditor.option("value", new Date(value.getTime() + duration));
                         }
