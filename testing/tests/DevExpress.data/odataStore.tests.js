@@ -1810,6 +1810,27 @@ QUnit.test("error handlers (check params)", function(assert) {
     }, done, assert);
 });
 
+QUnit.test("non HTTP failure", function(assert) {
+    var done = assert.async();
+    ajaxMock.setup({
+        url: "odata.org/get",
+        status: 0
+    });
+
+    var store = new ODataStore({
+        url: "odata.org/get"
+    });
+
+    store.load()
+        .fail((e) => {
+            assert.equal(e.httpStatus, 0);
+        })
+        .done(() => {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
 QUnit.test("error handlers (query evaluation)", function(assert) {
     var done = assert.async();
 
