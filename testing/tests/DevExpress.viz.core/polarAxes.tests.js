@@ -600,6 +600,15 @@ QUnit.test("draw, not visible", function(assert) {
     assert.equal(this.renderer.stub("circle").callCount, 0);
 });
 
+QUnit.test("draw ticks. Shift = 10", function(assert) {
+    this.createDrawnAxis({ visible: true, tick: { visible: true, length: 20, shift: 10 } });
+
+    assert.equal(this.renderer.path.callCount, 4);
+    for(var i = 0; i < this.renderer.path.callCount; i++) {
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [40, 50, 60, 50], opacity: 1 });
+    }
+});
+
 QUnit.test("draw ticks. Orientation = center", function(assert) {
     this.createDrawnAxis({ visible: true, tick: { visible: true, length: 20 } });
 

@@ -2903,7 +2903,31 @@ var dxPolarChart = {
         * @type Enums.ArgumentAxisHoverMode
         * @default 'none'
         */
-        hoverMode: 'none'
+        hoverMode: 'none',
+        /**
+        * @name dxPolarChartOptions.argumentAxis.tick
+        * @type object
+        */
+        tick: {
+            /**
+            * @name dxPolarChartOptions.argumentAxis.tick.shift
+            * @type number
+            * @default 3
+            */
+            shift: 3
+        },
+        /**
+        * @name dxPolarChartOptions.argumentAxis.minorTick
+        * @type object
+        */
+        minorTick: {
+            /**
+            * @name dxPolarChartOptions.argumentAxis.minorTick.shift
+            * @type number
+            * @default 3
+            */
+           shift: 3
+        }
     },
     /**
     * @name dxPolarChartOptions.valueAxis
