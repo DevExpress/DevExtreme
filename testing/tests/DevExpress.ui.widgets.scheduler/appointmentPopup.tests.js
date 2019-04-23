@@ -1,18 +1,29 @@
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    SchedulerTimezoneEditor = require("ui/scheduler/timezones/ui.scheduler.timezone_editor"),
-    fx = require("animation/fx"),
-    DataSource = require("data/data_source/data_source").DataSource;
+import { SchedulerTestWrapper } from "./helpers.js";
 
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
+import $ from "jquery";
+import devices from "core/devices";
+import SchedulerTimezoneEditor from "ui/scheduler/timezones/ui.scheduler.timezone_editor";
+import fx from "animation/fx";
+import { DataSource } from "data/data_source/data_source";
+
+import "ui/scheduler/ui.scheduler";
+import "ui/switch";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
+
+const createInstance = function(options) {
+    const defaultOption = {
+        dataSource: [],
+        maxAppointmentsPerCell: null
+    };
+    const instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 var moduleOptions = {
     beforeEach: function() {
@@ -992,4 +1003,24 @@ QUnit.test("Multiple showing appointment popup for recurrence appointments shoul
 
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
+});
+
+QUnit.test("Appointment popup will render even if no appointmentData is provided (T734413)", function(assert) {
+    const scheduler = createInstance();
+    scheduler.instance.showAppointmentPopup({}, true);
+    scheduler.instance.hideAppointmentPopup(true);
+    scheduler.instance.showAppointmentPopup({}, true);
+    const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
+    const appointmentPopup = scheduler.appointmentPopup;
+
+    assert.equal(startDate, null, "startDate has null in the dxForm ");
+    assert.equal(endDate, null, "endDate has null in the dxForm");
+    assert.ok(appointmentPopup.isVisible(), "Popup is rendered");
+
+    const $popup = appointmentPopup.getPopup();
+    const $startDate = $popup.find("input[name='startDate']")[0];
+    const $endDate = $popup.find("input[name='endDate']")[0];
+
+    assert.equal($startDate.value, "", "startDate is rendered empty");
+    assert.equal($endDate.value, "", "endDate is rendered empty");
 });
