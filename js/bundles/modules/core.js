@@ -11,6 +11,7 @@ if(DevExpress._DEVEXTREME_BUNDLE_INITIALIZED) {
 DevExpress._DEVEXTREME_BUNDLE_INITIALIZED = true;
 
 DevExpress.clientExporter = require("../../exporter");
+DevExpress.excelExporter = require("../../exporter/exceljs/excelExporter");
 
 DevExpress.VERSION = require("../../core/version");
 
