@@ -667,7 +667,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             column = options.columns[columnIndex];
 
         if(options.isFixed) {
-            return column.fixed && (result || column.fixedPosition === "right") || column.command === "edit";
+            return column.fixed && (result || column.fixedPosition === "right");
         }
 
         return result && !column.fixed;
