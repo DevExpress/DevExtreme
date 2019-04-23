@@ -43,7 +43,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
         {
             initViews: true,
             controllers: {
@@ -2044,6 +2044,64 @@ function createGridView(options, userOptions) {
         // assert
         $colElements = $testElement.find(".dx-datagrid-rowsview").find("col");
         assert.strictEqual($colElements.get(0).style.width, "30px", "width of the expand column");
+    });
+
+    // T734245
+    QUnit.test("Group columns with summary should have the correct width when there are fixed columns and custom button column", function(assert) {
+        // arrange
+        var $colElements,
+            $fixedGroupRowElement,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3", field4: "test4" }],
+                columnFixing: { enabled: true },
+                selection: { mode: "multiple", showCheckBoxesMode: "always" },
+                grouping: { autoExpandAll: true },
+                columns: [
+                    {
+                        fixedPosition: "left",
+                        caption: "More Info",
+                        type: "buttons",
+                        alignment: "center",
+                        allowResizing: false,
+                        width: 45,
+                        buttons: [{
+                            text: "Get information",
+                            icon: "comment",
+                        }]
+                    },
+                    { dataField: "field1", groupIndex: 0 },
+                    { dataField: "field2", groupIndex: 1 },
+                    { dataField: "field3" },
+                    { dataField: "field4" }
+                ],
+                summary: {
+                    groupItems: [{
+                        column: "field2",
+                        summaryType: "count",
+                        showInGroupFooter: false,
+                        alignByColumn: true
+                    }],
+                    texts: {
+                        count: "Count={0}"
+                    }
+                }
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-rowsview").find("col");
+        assert.strictEqual($colElements.get(0).style.width, "70px", "width of the select column");
+        assert.strictEqual($colElements.get(1).style.width, "30px", "width of the expand column");
+        assert.strictEqual($colElements.get(2).style.width, "30px", "width of the expand column");
+        assert.strictEqual($colElements.get(3).style.width, "45px", "width of the button column");
+
+        $fixedGroupRowElement = $(this.getRowElement(0)[1]);
+        assert.strictEqual($fixedGroupRowElement.children().length, 3, "cell count in the group row on the first level");
     });
 }());
 
