@@ -72,7 +72,8 @@ export class SchedulerTestWrapper {
                 const popupConfig = this.instance._popupConfig;
                 this.instance._popupConfig = appointmentData => {
                     const config = popupConfig.call(this.instance, appointmentData);
-                    return Object.assign(config, { width: width });
+                    config.width = width;
+                    return config;
                 };
             },
             setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width)
