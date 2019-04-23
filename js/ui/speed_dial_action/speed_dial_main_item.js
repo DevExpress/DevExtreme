@@ -52,7 +52,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    indent: 80,
+                    indent: 72,
                     childIndent: 56
                 }
             }
