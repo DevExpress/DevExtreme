@@ -295,6 +295,13 @@ class FileManager extends Widget {
     }
 
     _getFileProvider() {
+        const getterOptions = {
+            nameExpr: this.option("nameExpr"),
+            isFolderExpr: this.option("isFolderExpr"),
+            sizeExpr: this.option("sizeExpr"),
+            dateModifiedExpr: this.option("dateModifiedExpr"),
+            thumbnailExpr: this.option("thumbnailExpr")
+        };
         let fileProvider = this.option("fileProvider");
 
         if(!fileProvider) {
@@ -302,11 +309,11 @@ class FileManager extends Widget {
         }
 
         if(Array.isArray(fileProvider)) {
-            return new ArrayFileProvider(fileProvider);
+            return new ArrayFileProvider(extend(getterOptions, { data: fileProvider }));
         }
 
         if(typeof fileProvider === "string") {
-            return new AjaxFileProvider({ url: fileProvider });
+            return new AjaxFileProvider(extend(getterOptions, { url: fileProvider }));
         }
 
         if(fileProvider instanceof FileProvider) {
@@ -322,7 +329,7 @@ class FileManager extends Widget {
             }
         }
 
-        return new ArrayFileProvider([]);
+        return new ArrayFileProvider(getterOptions);
     }
 
     _getItemThumbnail(item) {
@@ -464,7 +471,38 @@ class FileManager extends Widget {
                  * @default false
                  */
                 upload: false
-            }
+            },
+
+            /**
+             * @name dxFileManagerOptions.nameExpr
+             * @type string|function(fileItem)
+             * @default 'name'
+             */
+            nameExpr: "name",
+            /**
+             * @name dxFileManagerOptions.isFolderExpr
+             * @type string|function(fileItem)
+             * @default 'isFolder'
+             */
+            isFolderExpr: "isFolder",
+            /**
+             * @name dxFileManagerOptions.sizeExpr
+             * @type string|function(fileItem)
+             * @default 'size'
+             */
+            sizeExpr: "size",
+            /**
+             * @name dxFileManagerOptions.dateModifiedExpr
+             * @type string|function(fileItem)
+             * @default 'dateModified'
+             */
+            dateModifiedExpr: "dateModifiedExpr",
+            /**
+             * @name dxFileManagerOptions.thumbnailExpr
+             * @type string|function(fileItem)
+             * @default 'thumbnail'
+             */
+            thumbnailExpr: "thumbnail"
         });
     }
 
@@ -477,6 +515,11 @@ class FileManager extends Widget {
             case "itemView":
             case "customizeThumbnail":
             case "permissions":
+            case "nameExpr":
+            case "isFolderExpr":
+            case "sizeExpr":
+            case "dateModifiedExpr":
+            case "thumbnailExpr":
                 this.repaint();
                 break;
             default:
