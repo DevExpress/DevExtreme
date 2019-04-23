@@ -30,7 +30,6 @@ function coreAnnotation(options, draw) {
             const annotationGroup = widget._renderer.g().append(group);
             this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
             this.plaque.draw(this.anchor);
-            applyClipPath(annotationGroup, widget, this._pane);
 
             if(options.draggable) {
                 annotationGroup
@@ -51,10 +50,6 @@ function coreAnnotation(options, draw) {
             return { x, y };
         }
     };
-}
-
-function applyClipPath(elem, widget, pane) {
-    isDefined(pane) && elem.attr({ "clip-path": widget._getElementsClipRectID(pane) });
 }
 
 function labelAnnotation(options) {
@@ -134,23 +129,25 @@ const chartPlugin = {
             const argAxis = this.getArgumentAxis();
             let axis = this.getValueAxis(annotation.axis);
             let series;
+            let pane = isDefined(axis) ? axis.pane : undefined;
 
-            annotation._pane = annotation.axis && isDefined(axis) ? axis.pane : undefined;
             if(annotation.series) {
                 series = this.series.filter(s => s.name === annotation.series)[0];
                 axis = series && series.getValueAxis();
-                isDefined(axis) && (annotation._pane = axis.pane);
+                isDefined(axis) && (pane = axis.pane);
             }
 
             if(isDefined(argument)) {
                 coords[argCoordName] = argAxis.getTranslator().translate(argument);
-                !isDefined(annotation._pane) && (annotation._pane = argAxis.pane);
+                !isDefined(pane) && (pane = argAxis.pane);
             }
 
             if(isDefined(value)) {
                 coords[valCoordName] = axis && axis.getTranslator().translate(value);
-                !isDefined(annotation._pane) && isDefined(axis) && (annotation._pane = axis.pane);
+                !isDefined(pane) && isDefined(axis) && (pane = axis.pane);
             }
+
+            coords.canvas = this._getCanvasForPane(pane);
 
             if(isDefined(coords[argCoordName]) && !isDefined(value)) {
                 if(!isDefined(axis) && !isDefined(series)) {
