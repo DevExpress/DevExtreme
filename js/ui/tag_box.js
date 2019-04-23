@@ -728,6 +728,8 @@ var TagBox = SelectBox.inherit({
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
+        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
+
         this._renderInputSize();
         this._renderTags().always((function() {
             this._popup && this._popup.refreshPosition();
