@@ -1010,16 +1010,17 @@ QUnit.test("Appointment popup will render even if no appointmentData is provided
     scheduler.instance.showAppointmentPopup({}, true);
     scheduler.instance.hideAppointmentPopup(true);
     scheduler.instance.showAppointmentPopup({}, true);
-
     const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
     const appointmentPopup = scheduler.appointmentPopup;
-    const $popup = appointmentPopup.getPopup();
-    const $startDate = $popup.find("input[name='startDate']").first();
-    const $endDate = $popup.find("input[name='endDate']").first();
 
     assert.equal(startDate, null, "startDate has null in the dxForm ");
     assert.equal(endDate, null, "endDate has null in the dxForm");
     assert.ok(appointmentPopup.isVisible(), "Popup is rendered");
+
+    const $popup = appointmentPopup.getPopup();
+    const $startDate = $popup.find("input[name='startDate']")[0];
+    const $endDate = $popup.find("input[name='endDate']")[0];
+
     assert.equal($startDate.value, "", "startDate is rendered empty");
     assert.equal($endDate.value, "", "endDate is rendered empty");
 });
