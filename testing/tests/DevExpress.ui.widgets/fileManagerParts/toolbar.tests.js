@@ -70,12 +70,13 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
 
         $elements = this.wrapper.getToolbarElements();
-        assert.equal($elements.length, 4, "has buttons");
+        assert.equal($elements.length, 5, "has buttons");
 
-        assert.ok($elements.eq(0).text().indexOf("Delete") !== -1, "delete button displayed");
-        assert.ok($elements.eq(1).text().indexOf("Move") !== -1, "move displayed");
-        assert.ok($elements.eq(2).text().indexOf("Copy") !== -1, "copy displayed");
-        assert.ok($elements.eq(3).text().indexOf("Rename") !== -1, "rename displayed");
+        assert.ok($elements.eq(0).text().indexOf("Move") !== -1, "move displayed");
+        assert.ok($elements.eq(1).text().indexOf("Copy") !== -1, "copy displayed");
+        assert.ok($elements.eq(2).text().indexOf("Rename") !== -1, "rename displayed");
+        assert.ok($elements.eq(3).text().indexOf("Delete") !== -1, "delete button displayed");
+        assert.ok($elements.eq(4).text().indexOf("Clear selection") !== -1, "clear selection button displayed");
     });
 
     test("toolbar updated after folder changing in thumbnails view mode", function(assert) {
@@ -123,12 +124,13 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
 
         $elements = this.wrapper.getToolbarElements();
-        assert.equal($elements.length, 4, "has buttons");
+        assert.equal($elements.length, 5, "has buttons");
 
-        assert.ok($elements.eq(0).text().indexOf("Delete") !== -1, "delete button displayed");
-        assert.ok($elements.eq(1).text().indexOf("Move") !== -1, "move displayed");
-        assert.ok($elements.eq(2).text().indexOf("Copy") !== -1, "copy displayed");
-        assert.ok($elements.eq(3).text().indexOf("Rename") !== -1, "rename displayed");
+        assert.ok($elements.eq(0).text().indexOf("Move") !== -1, "move displayed");
+        assert.ok($elements.eq(1).text().indexOf("Copy") !== -1, "copy displayed");
+        assert.ok($elements.eq(2).text().indexOf("Rename") !== -1, "rename displayed");
+        assert.ok($elements.eq(3).text().indexOf("Delete") !== -1, "delete button displayed");
+        assert.ok($elements.eq(4).text().indexOf("Clear selection") !== -1, "clear selection button displayed");
     });
 
     test("toolbar updated after folder changing in details view mode", function(assert) {
@@ -179,6 +181,23 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         assert.ok($toolbar.hasClass(Consts.GENERAL_TOOLBAR_CLASS), "general toolbar displayed");
         assert.ok(!$toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar hidden");
+    });
+
+    test("separator for hidden group is not visible", function(assert) {
+        createFileManager(true);
+        this.clock.tick(400);
+
+        let $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.GENERAL_TOOLBAR_CLASS), "general toolbar displayed");
+        assert.equal(this.wrapper.getToolbarSeparators().length, 1, "specified separator visible");
+
+        const $item = this.wrapper.findThumbnailsItem("File 1.txt");
+        $item.trigger("click");
+        this.clock.tick(400);
+
+        $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
+        assert.equal(this.wrapper.getToolbarSeparators().length, 1, "specified separator visible");
     });
 
 });

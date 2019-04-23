@@ -17,7 +17,7 @@ const DEFAULT_TOOLBAR_FILE_ITEMS = [
         location: "before"
     },
     {
-        commandName: "delete",
+        commandName: "separator",
         location: "before"
     },
     {
@@ -31,6 +31,18 @@ const DEFAULT_TOOLBAR_FILE_ITEMS = [
     {
         commandName: "rename",
         location: "before"
+    },
+    {
+        commandName: "separator",
+        location: "before"
+    },
+    {
+        commandName: "delete",
+        location: "before"
+    },
+    {
+        commandName: "clear",
+        location: "after"
     }
 ];
 
@@ -78,14 +90,16 @@ class FileManagerToolbar extends Widget {
 
     _createToolbar(items, hidden) {
         const toolbarItems = this._getToolbarItems(items);
-        const $generalToolbar = $("<div>").appendTo(this.$element());
-        return this._createComponent($generalToolbar, Toolbar, {
+        const $toolbar = $("<div>").appendTo(this.$element());
+        return this._createComponent($toolbar, Toolbar, {
             items: toolbarItems,
             visible: !hidden
         });
     }
 
     _getToolbarItems(items) {
+        let groupHasItems = false;
+
         return items.map(item => {
             const commandName = isString(item) ? item : item.commandName;
             const config = this._getItemConfigByCommandName(commandName);
@@ -94,7 +108,17 @@ class FileManagerToolbar extends Widget {
                 item = { commandName };
             }
 
-            return extend(true, config, item);
+            const preparedItem = extend(true, config, item);
+
+            if(commandName === "separator") {
+                preparedItem.visible = groupHasItems;
+                groupHasItems = false;
+            } else {
+                const itemVisible = ensureDefined(preparedItem.visible, true);
+                groupHasItems = groupHasItems || itemVisible;
+            }
+
+            return preparedItem;
         });
     }
 
@@ -159,22 +183,25 @@ class FileManagerToolbar extends Widget {
     }
 
     _getGeneralToolbarDefaultItems() {
-        let result = [ ];
-        for(let i = 0; i < DEFAULT_TOOLBAR_GENERAL_ITEMS.length; i++) {
-            const item = DEFAULT_TOOLBAR_GENERAL_ITEMS[i];
-            if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(item.commandName) > -1 || this._commandManager.isCommandAvailable(item.commandName)) {
-                result.push(item);
-            }
-        }
-        return result;
+        return DEFAULT_TOOLBAR_GENERAL_ITEMS.filter(item => this._isCommandAvailable(item.commandName));
     }
 
     _updateFileToolbar(fileItems) {
+        let groupHasItems = false;
         const items = this._fileToolbar.option("items");
+
         items.forEach(({ visible, commandName }, index) => {
             const itemVisible = ensureDefined(visible, true);
 
-            const showItem = this._commandManager.isCommandAvailable(commandName, fileItems);
+            let showItem = false;
+            if(commandName === "separator") {
+                showItem = groupHasItems;
+                groupHasItems = false;
+            } else {
+                showItem = this._isCommandAvailable(commandName, fileItems);
+                groupHasItems = groupHasItems || showItem;
+            }
+
             if(showItem !== itemVisible) {
                 const optionName = `items[${index}].visible`;
                 this._fileToolbar.option(optionName, showItem);
@@ -182,8 +209,17 @@ class FileManagerToolbar extends Widget {
         });
     }
 
+    _fileToolbarHasEffectiveItems() {
+        const items = this._fileToolbar.option("items");
+        return items.some(item => item.commandName !== "clear" && ensureDefined(item.visible, true));
+    }
+
     _executeCommand(command) {
         this._commandManager.executeCommand(command);
+    }
+
+    _isCommandAvailable(commandName, fileItems) {
+        return ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(commandName) > -1 || this._commandManager.isCommandAvailable(commandName, fileItems);
     }
 
     _getDefaultOptions() {
@@ -211,7 +247,7 @@ class FileManagerToolbar extends Widget {
 
         this._updateFileToolbar(fileItems);
 
-        const showGeneralToolbar = fileItems.length === 0 || !this._fileToolbar.option("items").some(i => ensureDefined(i.visible, true));
+        const showGeneralToolbar = fileItems.length === 0 || !this._fileToolbarHasEffectiveItems();
         if(this._generalToolbarVisible !== showGeneralToolbar) {
             this._generalToolbar.option("visible", showGeneralToolbar);
             this._fileToolbar.option("visible", !showGeneralToolbar);
