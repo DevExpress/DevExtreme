@@ -97,7 +97,7 @@ QUnit.module("Common", {
 
 QUnit.test("DropDown menu should be rendered with right class", function(assert) {
     var $dropDownMenu = this.renderDropDownAppointmentsContainer();
-    assert.ok($dropDownMenu.hasClass("dx-scheduler-dropdown-appointments"), "Container is rendered");
+    assert.ok($dropDownMenu.hasClass("dx-scheduler-appointment-collector"), "Container is rendered");
     assert.ok($dropDownMenu.dxButton("instance"), "Container is button");
 });
 
@@ -123,7 +123,7 @@ QUnit.test("DropDown menu should not be painted if items have different colors",
 
 QUnit.test("DropDown menu should have a correct markup", function(assert) {
     var $button = this.renderDropDownAppointmentsContainer(),
-        $dropDownAppointmentsContent = $button.find(".dx-scheduler-dropdown-appointments-content");
+        $dropDownAppointmentsContent = $button.find(".dx-scheduler-appointment-collector-content");
 
     assert.equal($dropDownAppointmentsContent.length, 1, "Content is OK");
     assert.equal($dropDownAppointmentsContent.html().toLowerCase(), "<span>1 more</span>", "Markup is OK");

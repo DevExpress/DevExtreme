@@ -5,9 +5,9 @@ import messageLocalization from "../../localization/message";
 import FunctionTemplate from "../widget/function_template";
 import deferredUtils from "../../core/utils/deferred";
 
-const DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
-    COMPACT_DROPDOWN_APPOINTMENTS_CLASS = DROPDOWN_APPOINTMENTS_CLASS + "-compact",
-    DROPDOWN_APPOINTMENTS_CONTENT_CLASS = "dx-scheduler-dropdown-appointments-content";
+const APPOINTMENT_COLLECTOR_CLASS = "dx-scheduler-appointment-collector",
+    COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-compact",
+    APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-content";
 
 const WEEK_VIEW_BUTTON_OFFSET = 5;
 
@@ -110,8 +110,8 @@ export class CompactAppointmentsHelper {
 
     _createCompactButtonElement($container, width, isCompact, applyOffset, coordinates) {
         const result = $("<div>")
-            .addClass(DROPDOWN_APPOINTMENTS_CLASS)
-            .toggleClass(COMPACT_DROPDOWN_APPOINTMENTS_CLASS, isCompact)
+            .addClass(APPOINTMENT_COLLECTOR_CLASS)
+            .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
         const offset = applyOffset ? this._getButtonOffset(width) : 0;
@@ -148,6 +148,6 @@ export class CompactAppointmentsHelper {
 
         return element
             .append($("<span>").text(text))
-            .addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
+            .addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
     }
 }

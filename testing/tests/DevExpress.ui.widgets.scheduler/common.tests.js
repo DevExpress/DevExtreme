@@ -3523,7 +3523,7 @@ QUnit.testStart(function() {
         var $workSpace = this.instance.getWorkSpace().$element(),
             keyboard = keyboardMock($workSpace);
 
-        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments")).trigger("dxclick");
+        $(this.instance.$element().find(".dx-scheduler-appointment-collector")).trigger("dxclick");
 
         keyboard.keyDown("down");
         keyboard.keyDown("up");
@@ -4206,7 +4206,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
+        $(this.instance.$element().find(".dx-scheduler-appointment-collector").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");
@@ -4246,7 +4246,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
+        $(this.instance.$element().find(".dx-scheduler-appointment-collector").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");

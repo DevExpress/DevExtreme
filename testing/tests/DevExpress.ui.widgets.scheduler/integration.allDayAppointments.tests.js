@@ -772,12 +772,12 @@ QUnit.test("DropDown appointment should be removed correctly when needed", funct
 
     this.instance.option("dataSource", items);
 
-    var $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    var $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
     assert.equal($dropDown.length, 1, "Dropdown appointment was rendered");
 
     this.instance.deleteAppointment(items[7]);
 
-    $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
     assert.equal($dropDown.length, 0, "Dropdown appointment was removed");
 });
 
@@ -1419,7 +1419,7 @@ QUnit.test("dropDown appointment should have correct container & position", func
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
     ]);
 
-    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-appointment-collector").eq(0);
 
     assert.equal($dropDown.parent().get(0), $(this.instance.$element()).find(".dx-scheduler-all-day-appointments").get(0), "Container is OK");
     assert.roughEqual(translator.locate($dropDown).left, 228, 1.001, "Appointment position is OK");
@@ -1446,9 +1446,9 @@ QUnit.test("dropDown appointment should not have compact class on allDay panel",
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
     ]);
 
-    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-appointment-collector").eq(0);
 
-    assert.notOk($dropDown.hasClass("dx-scheduler-dropdown-appointments-compact"), "class is ok");
+    assert.notOk($dropDown.hasClass("dx-scheduler-appointment-collector-compact"), "class is ok");
 });
 
 QUnit.test("AllDay appointments should have correct height, groupOrientation = vertical", function(assert) {

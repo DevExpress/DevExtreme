@@ -1,7 +1,7 @@
 import { CompactAppointmentsStrategyBase } from "./compactAppointmentsStrategyBase";
 import $ from "../../../core/renderer";
 
-const appointmentClassName = "dx-scheduler-dropdown-appointments dx-scheduler-dropdown-appointments-compact";
+const appointmentClassName = "dx-scheduler-appointment-collector dx-scheduler-appointment-collector-compact";
 
 export class CompactAppointmentsMobileStrategy extends CompactAppointmentsStrategyBase {
     renderCore(options) {
