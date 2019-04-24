@@ -10,6 +10,7 @@ const DIAGRAM_TOOLBOX_CLASS = "dx-diagram-toolbox";
 class DiagramToolbox extends Widget {
     _init() {
         super._init();
+        this._showCustomShapes = this.option("showCustomShapes");
         this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
     }
     _initMarkup() {
@@ -26,13 +27,19 @@ class DiagramToolbox extends Widget {
         this._renderAccordion($accordion);
     }
     _renderAccordion($container) {
+        var categories = ShapeCategories.load(this._showCustomShapes);
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,
             displayExpr: "title",
-            dataSource: ShapeCategories.load(),
+            dataSource: categories,
             itemTemplate: (data, index, $element) => this._onShapeCategoryRenderedAction({ category: data.category, $element })
         });
+        // TODO option for expanded item
+        if(this._showCustomShapes) {
+            this._accordionInstance.collapseItem(0);
+            this._accordionInstance.expandItem(categories.length - 1);
+        }
     }
 }
 

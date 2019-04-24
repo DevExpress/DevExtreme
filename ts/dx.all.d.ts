@@ -689,6 +689,21 @@ declare module DevExpress.ui {
         /** @name CustomRule.validationCallback */
         validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any }) => boolean);
     }
+    /** @name CustomShapeItem */
+    export interface CustomShapeItem {
+        /** @name CustomShapeItem.allowHasText */
+        allowHasText?: boolean;
+        /** @name CustomShapeItem.defaultHeight */
+        defaultHeight?: number;
+        /** @name CustomShapeItem.defaultWidth */
+        defaultWidth?: number;
+        /** @name CustomShapeItem.id */
+        id?: number;
+        /** @name CustomShapeItem.svgUrl */
+        svgUrl?: string;
+        /** @name CustomShapeItem.title */
+        title?: string;
+    }
     /** @name DataExpressionMixin.Options */
     export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
         /** @name DataExpressionMixin.Options.dataSource */
@@ -1981,6 +1996,8 @@ declare module DevExpress.ui {
     }
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
+        /** @name dxDiagram.Options.customShapes */
+        customShapes?: Array<CustomShapeItem>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */

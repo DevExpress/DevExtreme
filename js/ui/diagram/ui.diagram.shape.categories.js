@@ -1,9 +1,9 @@
 import { getDiagram } from "./diagram_importer";
 
 const ShapeCategories = {
-    load: function() {
+    load: function(showCustomShapes) {
         const ShapeCategory = getDiagram().ShapeCategory;
-        return [
+        var result = [
             {
                 category: ShapeCategory.General,
                 title: 'General'
@@ -13,6 +13,13 @@ const ShapeCategories = {
                 title: 'Flow Chart'
             }
         ];
+        if(showCustomShapes) {
+            result.push({
+                category: ShapeCategory.Custom,
+                title: 'Custom'
+            });
+        }
+        return result;
     }
 };
 
