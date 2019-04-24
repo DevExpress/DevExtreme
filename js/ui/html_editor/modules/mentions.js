@@ -191,6 +191,7 @@ class MentionModule extends PopupModule {
             itemTemplate: this.options.itemTemplate,
             onContentReady: () => {
                 if(this._hasSearch) {
+                    this._popup.repaint();
                     this._focusFirstElement();
                     this._hasSearch = false;
                 }
