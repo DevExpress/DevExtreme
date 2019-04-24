@@ -542,4 +542,17 @@ QUnit.module("Mentions module", moduleConfig, () => {
 
         assert.ok(mention._popup.option("visible"), "popup is visible after scrolling");
     });
+
+    test("popup should update position after search", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+        const popupRepaintSpy = sinon.spy(mention._popup, "repaint");
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+        this.clock.tick();
+        mention.onTextChange({ ops: [{ insert: "A" }] }, {}, "user");
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+        assert.ok(popupRepaintSpy.calledOnce, "popup has been repainted after search");
+    });
 });
