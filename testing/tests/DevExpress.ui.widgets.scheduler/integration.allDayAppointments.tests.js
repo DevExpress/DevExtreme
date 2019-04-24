@@ -200,7 +200,7 @@ QUnit.test("All-day appointment startDate should be correct after resize when st
     var cellWidth = $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-left").eq(0)).start();
-    pointer.dragStart().drag(-cellWidth, 0).dragEnd();
+    pointer.dragStart().drag(-(cellWidth - 10), 0).dragEnd();
 
     assert.deepEqual(this.instance.option("dataSource")[0].startDate, new Date(2015, 1, 9), "Start date is OK");
 });
