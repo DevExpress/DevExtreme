@@ -1055,7 +1055,9 @@ var dxChart = AdvancedChart.inherit({
 
         _each(that._getStackPoints(), function(_, stacks) {
             _each(stacks, function(_, points) {
-                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, shiftDirection);
+                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, shiftDirection, (a, b) => {
+                    return a.value() - b.value() * (a.labels[0].getPoint().series.getValueAxis().getTranslator().isInverted() ? -1 : 1);
+                });
             });
         });
     },
