@@ -1,13 +1,45 @@
 import ajax from "../../../core/utils/ajax";
 import { Deferred } from "../../../core/utils/deferred";
+import { extend } from "../../../core/utils/extend";
 import { FileProvider } from "./file_provider";
 import ArrayFileProvider from "./array";
 
+/**
+* @name AjaxFileProvider
+* @inherits FileProvider
+* @type object
+* @module ui/file_manager/file_provider/ajax
+* @export default
+*/
 class AjaxFileProvider extends FileProvider {
 
     constructor(options) {
-        super();
-        this._url = options.url;
+        super(options);
+        /**
+         * @name AjaxFileProviderOptions.url
+         * @type string
+         */
+        /**
+         * @name AjaxFileProviderOptions.nameExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name AjaxFileProviderOptions.isFolderExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name AjaxFileProviderOptions.sizeExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name AjaxFileProviderOptions.dateModifiedExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name AjaxFileProviderOptions.thumbnailExpr
+         * @type string|function(fileItem)
+         */
+        this._options = options;
         this._provider = null;
     }
 
@@ -61,12 +93,15 @@ class AjaxFileProvider extends FileProvider {
         }
 
         return this._getData()
-            .done(data => { this._provider = new ArrayFileProvider(data); });
+            .done(data => {
+                const arrayOptions = extend(this._options, { data });
+                this._provider = new ArrayFileProvider(arrayOptions);
+            });
     }
 
     _getData() {
         return ajax.sendRequest({
-            url: this._url,
+            url: this.options.url,
             dataType: "json",
             cache: false
         });

@@ -1,4 +1,7 @@
+import { compileGetter } from "../../../core/utils/data";
 import { pathCombine, getFileExtension, getParentPath, getName } from "../ui.file_manager.utils";
+import { deserializeDate } from "../../../core/utils/date_serialization";
+import { each } from "../../../core/utils/iterator";
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
@@ -10,6 +13,14 @@ const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 * @hidden
 */
 class FileProvider {
+
+    constructor(options) {
+        this._nameGetter = compileGetter(options.nameExpr || "name");
+        this._isFolderGetter = compileGetter(options.isFolderExpr || "isFolder");
+        this._sizeGetter = compileGetter(options.sizeExpr || "size");
+        this._dateModifiedGetter = compileGetter(options.dateModifiedExpr || "dateModified");
+        this._thumbnailGetter = compileGetter(options.thumbnailExpr || "thumbnail");
+    }
 
     getFolders(path) {
         return this.getItems(path, "folder");
@@ -58,6 +69,35 @@ class FileProvider {
         return this.getItems(path).filter(item => item.isFolder === folders);
     }
 
+    _convertDataObjectsToFileItems(entries, path, itemType) {
+        const useFolders = itemType === "folder";
+        const result = [];
+        each(entries, (_, entry) => {
+            const fileItem = this._createFileItem(entry, path);
+            if(!itemType || fileItem.isFolder === useFolders) {
+                result.push(fileItem);
+            }
+        });
+        return result;
+    }
+    _createFileItem(dataObj, path) {
+        let fileItem = new FileManagerItem(path, this._nameGetter(dataObj), !!this._isFolderGetter(dataObj));
+
+        fileItem.size = this._sizeGetter(dataObj);
+        if(fileItem.size === undefined) {
+            fileItem.size = 0;
+        }
+
+        fileItem.dateModified = deserializeDate(this._dateModifiedGetter(dataObj));
+        if(fileItem.dateModified === undefined) {
+            fileItem.dateModified = new Date();
+        }
+
+        fileItem.thumbnail = this._thumbnailGetter(dataObj) || "";
+        fileItem.dataItem = dataObj; // TODO remove if do not need
+        return fileItem;
+    }
+
 }
 
 class FileManagerItem {
@@ -67,8 +107,8 @@ class FileManagerItem {
         this.relativeName = pathCombine(this.parentPath, name);
         this.isFolder = isFolder || false;
 
-        this.length = 0;
-        this.lastWriteTime = new Date();
+        this.size = 0;
+        this.dateModified = new Date();
 
         this.thumbnail = "";
         this.tooltipText = "";
@@ -96,8 +136,8 @@ class FileManagerItem {
 
     createClone() {
         const result = new FileManagerItem(this.parentPath, this.name, this.isFolder);
-        result.length = this.length;
-        result.lastWriteTime = this.lastWriteTime;
+        result.size = this.size;
+        result.dateModified = this.dateModified;
         result.thumbnail = this.thumbnail;
         result.tooltipText = this.tooltipText;
         return result;

@@ -49,18 +49,18 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                     cellTemplate: this._createNameColumnCell.bind(this)
                 },
                 {
-                    dataField: "lastWriteTime",
+                    dataField: "dateModified",
                     caption: "Date Modified",
                     minWidth: 200,
                     width: "25%"
                 },
                 {
-                    dataField: "length",
+                    dataField: "size",
                     caption: "File Size",
                     minWidth: 100,
                     width: "10%",
                     alignment: "right",
-                    calculateCellValue: this._calculateLengthColumnCellValue.bind(this)
+                    calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
                 }
             ],
             onRowPrepared: this._onRowPrepared.bind(this),
@@ -148,8 +148,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _calculateLengthColumnCellValue(rowData) {
-        return rowData.isFolder ? "" : getDisplayFileSize(rowData.length);
+    _calculateSizeColumnCellValue(rowData) {
+        return rowData.isFolder ? "" : getDisplayFileSize(rowData.size);
     }
 
     _ensureItemSelected(item) {

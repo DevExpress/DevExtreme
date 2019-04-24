@@ -159,9 +159,9 @@ class FileManagerToolbar extends Widget {
     }
 
     _getGeneralToolbarDefaultItems() {
-        var result = [ ];
+        let result = [ ];
         for(let i = 0; i < DEFAULT_TOOLBAR_GENERAL_ITEMS.length; i++) {
-            var item = DEFAULT_TOOLBAR_GENERAL_ITEMS[i];
+            const item = DEFAULT_TOOLBAR_GENERAL_ITEMS[i];
             if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(item.commandName) > -1 || this._commandManager.isCommandAvailable(item.commandName)) {
                 result.push(item);
             }

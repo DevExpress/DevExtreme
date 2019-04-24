@@ -158,7 +158,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
     test("Display only general toolbar if file toolbar doesn't have items", function(assert) {
         createFileManager(false);
 
-        var fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("permissions", {
             create: false,
             copy: false,
