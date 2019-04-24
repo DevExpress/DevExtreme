@@ -3031,7 +3031,7 @@ const Scheduler = Widget.inherit({
         var startDate = this.fire("getField", "startDate", currentAppointmentData || appointmentData);
 
         this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
-            if(createNewAppointment) {
+            if(createNewAppointment || typeUtils.isEmptyObject(appointmentData)) {
                 delete this._editAppointmentData;
                 this._editing.allowAdding && this._showAppointmentPopup(appointmentData, true, false);
             } else {
