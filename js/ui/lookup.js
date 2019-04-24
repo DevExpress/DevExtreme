@@ -469,6 +469,11 @@ var Lookup = DropDownList.inherit({
             * @inheritdoc
             */
             /**
+            * @name dxLookupOptions.buttons
+            * @hidden
+            * @inheritdoc
+            */
+            /**
             * @name dxLookupOptions.applyValueMode
             * @type Enums.EditorApplyValueMode
             * @hidden false
