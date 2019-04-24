@@ -3887,7 +3887,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.scrollToTime(hours, minutes, date) */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
         /** @name dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) */
-        showAppointmentPopup(appointmentData: any, createNewAppointment?: boolean, currentAppointmentData?: any): void;
+        showAppointmentPopup(appointmentData?: any, createNewAppointment?: boolean, currentAppointmentData?: any): void;
         /** @name dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData) */
         showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
         /** @name dxScheduler.updateAppointment(target, appointment) */

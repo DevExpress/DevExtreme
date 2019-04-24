@@ -3022,7 +3022,7 @@ const Scheduler = Widget.inherit({
     /**
         * @name dxSchedulerMethods.showAppointmentPopup
         * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
-        * @param1 appointmentData:Object
+        * @param1 appointmentData:Object|undefined
         * @param2 createNewAppointment:Boolean|undefined
         * @param3 currentAppointmentData:Object|undefined
         */
@@ -3031,7 +3031,7 @@ const Scheduler = Widget.inherit({
         var startDate = this.fire("getField", "startDate", currentAppointmentData || appointmentData);
 
         this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
-            if(createNewAppointment) {
+            if(createNewAppointment || typeUtils.isEmptyObject(appointmentData)) {
                 delete this._editAppointmentData;
                 this._editing.allowAdding && this._showAppointmentPopup(appointmentData, true, false);
             } else {
