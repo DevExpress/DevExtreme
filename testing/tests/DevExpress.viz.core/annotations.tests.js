@@ -9,16 +9,16 @@ const environment = {
 
         this.widget = {
             _renderer: this.renderer,
-            _getAnnotationCoords: sinon.stub().returns({ x: 100, y: 200 })
+            _getAnnotationCoords: sinon.stub().returns({ x: 100, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } })
         };
     }
 };
 
 QUnit.module("Image annotation", environment);
 
-QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
+QUnit.test("Do not draw annotation if cannot get coords, or coords out of canvas", function(assert) {
     const testCase = (anchor, coords, message) => {
-        this.widget._getAnnotationCoords.returns(anchor);
+        this.widget._getAnnotationCoords.returns($.extend({ canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } }, anchor));
         const annotation = createAnnotations([$.extend({ type: "image", image: { url: "some_url" } }, coords)], {})[0];
 
         annotation.draw(this.widget, this.group);
@@ -30,6 +30,11 @@ QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     testCase({ x: null, y: null }, { x: null, y: null }, "No anchor, no coords");
     testCase({ x: undefined, y: undefined }, { x: 100, y: undefined }, "Only x is defined");
     testCase({ x: undefined, y: undefined }, { x: undefined, y: 100 }, "Only y is defined");
+
+    testCase({ x: 30, y: 200 }, { x: undefined, y: undefined });
+    testCase({ x: 470, y: 200 }, { x: undefined, y: undefined });
+    testCase({ x: 200, y: 30 }, { x: undefined, y: undefined });
+    testCase({ x: 200, y: 470 }, { x: undefined, y: undefined });
 });
 
 QUnit.test("Image params", function(assert) {
@@ -183,7 +188,7 @@ QUnit.test("Draw image inside a plaque without borders", function(assert) {
 });
 
 QUnit.test("Draw annotation with anchor and x/y", function(assert) {
-    this.widget._getAnnotationCoords.returns({ x: 290, y: 200 });
+    this.widget._getAnnotationCoords.returns({ x: 290, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } });
     const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
@@ -209,7 +214,7 @@ QUnit.test("Draw annotation with anchor and x/y", function(assert) {
 });
 
 QUnit.test("Draw annotation with anchor and only x", function(assert) {
-    this.widget._getAnnotationCoords.returns({ x: 290, y: 200 });
+    this.widget._getAnnotationCoords.returns({ x: 290, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } });
     const annotation = createAnnotations([{ x: 300, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
@@ -779,6 +784,170 @@ QUnit.test("Arrow on the bottom, center. Arrow width is bigger than annotation w
 
     const contentGroup = this.renderer.g.getCall(2).returnValue;
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 160 - 10]);
+});
+
+QUnit.module("Check plaque path on pane bounds", environment);
+
+QUnit.test("Out of right bound - draw plaque from right border", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 440, y: 200, canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } });
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [410, 140, 450, 140, 450, 180, 450, 180, 440, 200, 430, 180, 410, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [430 - 10, 160 - 10]);
+});
+
+QUnit.test("Out of left bound - draw plaque from left border", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 60, y: 200, canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } });
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [50, 140, 90, 140, 90, 180, 70, 180, 60, 200, 50, 180, 50, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [70 - 10, 160 - 10]);
+});
+
+QUnit.test("Plaque width more than canvas - draw plaque in center", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 5, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 20, height: 500 } });
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [-10, 140, 30, 140, 30, 180, 15, 180, 5, 200, -5, 180, -10, 180]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [10 - 10, 160 - 10]);
+});
+
+QUnit.test("Out of top bound - draw plaque under anchor", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 200, y: 90, canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } });
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [180, 110, 190, 110, 200, 90, 210, 110, 220, 110, 220, 150, 180, 150]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [200 - 10, 130 - 10]);
+});
+
+QUnit.test("Out of top bound, but does not fit under anchor - draw plaque from top border", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 200, y: 50, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 90 } });
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [180, 0, 220, 0, 220, 40, 210, 40, 200, 50, 190, 40, 180, 40]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [200 - 10, 20 - 10]);
+});
+
+QUnit.test("Plaque height more than canvas - draw plaque from top border", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 200, y: 10, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 30 } });
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 20,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    assert.deepEqual(plaque.attr.lastCall.args, [{
+        points: [180, 0, 220, 0, 220, 40, 180, 40]
+    }]);
+
+    const contentGroup = this.renderer.g.getCall(2).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [200 - 10, 20 - 10]);
 });
 
 QUnit.module("Text annotaion", environment);

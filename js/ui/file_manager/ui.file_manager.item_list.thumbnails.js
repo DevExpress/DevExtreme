@@ -366,11 +366,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             return item.tooltipText;
         }
 
-        var text = `${item.name}\r\n`;
+        let text = `${item.name}\r\n`;
         if(!item.isFolder) {
-            text += `Size: ${getDisplayFileSize(item.length)}\r\n`;
+            text += `Size: ${getDisplayFileSize(item.size)}\r\n`;
         }
-        text += `Date Modified: ${item.lastWriteTime}`;
+        text += `Date Modified: ${item.dateModified}`;
         return text;
     }
 

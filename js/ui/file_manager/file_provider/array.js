@@ -1,13 +1,51 @@
 import { ensureDefined } from "../../../core/utils/common";
 import { each } from "../../../core/utils/iterator";
+import { errors } from "../../../data/errors";
 
-import { FileProvider, FileManagerItem } from "./file_provider";
+import { FileProvider } from "./file_provider";
 
+/**
+* @name ArrayFileProvider
+* @inherits FileProvider
+* @type object
+* @module ui/file_manager/file_provider/array
+* @export default
+*/
 class ArrayFileProvider extends FileProvider {
 
-    constructor(data) {
-        super();
-        this._data = data || [];
+    constructor(options) {
+        super(options);
+
+        const initialArray = options.data;
+        if(initialArray && !Array.isArray(initialArray)) {
+            throw errors.Error("E4006");
+        }
+
+        /**
+         * @name ArrayFileProviderOptions.data
+         * @type Array<any>
+         */
+        /**
+         * @name ArrayFileProviderOptions.nameExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name ArrayFileProviderOptions.isFolderExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name ArrayFileProviderOptions.sizeExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name ArrayFileProviderOptions.dateModifiedExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name ArrayFileProviderOptions.thumbnailExpr
+         * @type string|function(fileItem)
+         */
+        this._data = initialArray || [ ];
     }
 
     getItems(path, itemType) {
@@ -84,12 +122,12 @@ class ArrayFileProvider extends FileProvider {
 
     _getItems(path, itemType) {
         if(path === "") {
-            return this._getItemsInternal(path, this._data, itemType);
+            return this._convertDataObjectsToFileItems(this._data, path, itemType);
         }
 
         const folderEntry = this._findItem(path);
         const entries = folderEntry && folderEntry.children || [];
-        return this._getItemsInternal(path, entries, itemType);
+        return this._convertDataObjectsToFileItems(entries, path, itemType);
     }
 
     _findItem(path) {
@@ -114,23 +152,6 @@ class ArrayFileProvider extends FileProvider {
             }
         }
 
-        return result;
-    }
-
-    _getItemsInternal(path, data, itemType) {
-        const useFolders = itemType === "folder";
-        const result = [];
-        each(data, (_, entry) => {
-            const isFolder = !!entry.isFolder;
-            if(!itemType || isFolder === useFolders) {
-                const item = new FileManagerItem(path, entry.name, isFolder);
-                item.length = entry.length !== undefined ? entry.length : 0;
-                item.lastWriteTime = entry.lastWriteTime !== undefined ? entry.lastWriteTime : new Date();
-                item.thumbnail = entry.thumbnail;
-                item.dataItem = entry; // TODO remove if do not need
-                result.push(item);
-            }
-        });
         return result;
     }
 
