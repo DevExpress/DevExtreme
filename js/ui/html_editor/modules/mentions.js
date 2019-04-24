@@ -3,6 +3,7 @@ import { compileGetter } from "../../../core/utils/data";
 import { isString } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 import { getPublicElement } from "../../../core/utils/dom";
+import { Event as dxEvent } from "../../../events";
 
 import PopupModule from "./popup";
 import Mention from "../formats/mention";
@@ -332,18 +333,22 @@ class MentionModule extends PopupModule {
 
     get _popupPosition() {
         const position = this.getPosition();
-        const mentionBounds = this.quill.getBounds(position ? position - 1 : position);
+        const { left: mentionLeft, top: mentionTop, height: mentionHeight } = this.quill.getBounds(position ? position - 1 : position);
+        const { left: leftOffset, top: topOffset } = $(this.quill.root).offset();
+        const positionEvent = dxEvent("positionEvent", {
+            pageX: leftOffset + mentionLeft,
+            pageY: topOffset + mentionTop
+        });
 
         return {
-            of: this.quill.root,
+            of: positionEvent,
             offset: {
-                h: mentionBounds.left,
-                v: mentionBounds.bottom
+                v: mentionHeight
             },
             my: "top left",
             at: "top left",
             collision: {
-                y: "none",
+                y: "flip",
                 x: "flipfit"
             }
         };
