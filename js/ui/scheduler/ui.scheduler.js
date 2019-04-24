@@ -3022,7 +3022,7 @@ const Scheduler = Widget.inherit({
     /**
         * @name dxSchedulerMethods.showAppointmentPopup
         * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
-        * @param1 appointmentData:Object
+        * @param1 appointmentData:Object|undefined
         * @param2 createNewAppointment:Boolean|undefined
         * @param3 currentAppointmentData:Object|undefined
         */
