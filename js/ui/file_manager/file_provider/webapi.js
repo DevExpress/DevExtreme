@@ -4,9 +4,8 @@ import Guid from "../../../core/guid";
 import { getWindow } from "../../../core/utils/window";
 import { each } from "../../../core/utils/iterator";
 import { Deferred } from "../../../core/utils/deferred";
-import { deserializeDate } from "../../../core/utils/date_serialization";
 
-import { FileProvider, FileManagerItem } from "./file_provider";
+import { FileProvider } from "./file_provider";
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
@@ -21,12 +20,32 @@ const FILE_CHUNK_BLOB_NAME = "chunk";
 class WebApiFileProvider extends FileProvider {
 
     constructor(options) {
-        super();
+        super(options);
         /**
          * @name WebApiFileProviderOptions.endpointUrl
          * @type string
          */
-        this._options = options;
+        this._endpointUrl = options.endpointUrl;
+        /**
+         * @name WebApiFileProviderOptions.nameExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name WebApiFileProviderOptions.isFolderExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name WebApiFileProviderOptions.sizeExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name WebApiFileProviderOptions.dateModifiedExpr
+         * @type string|function(fileItem)
+         */
+        /**
+         * @name WebApiFileProviderOptions.thumbnailExpr
+         * @type string|function(fileItem)
+         */
     }
 
     getItems(path, itemType) {
@@ -88,7 +107,7 @@ class WebApiFileProvider extends FileProvider {
 
         const deferred = new Deferred();
         ajax.sendRequest({
-            url: this._options.endpointUrl,
+            url: this._endpointUrl,
             method: "POST",
             dataType: "json",
             data: formData,
@@ -111,7 +130,7 @@ class WebApiFileProvider extends FileProvider {
 
     _getItems(path, itemType) {
         return this._getEntriesByPath(path)
-            .then(result => this._convertEntriesToItems(result.result, path, itemType));
+            .then(result => this._convertDataObjectsToFileItems(result.result, path, itemType));
     }
 
     _getItemsIds(items) {
@@ -130,7 +149,7 @@ class WebApiFileProvider extends FileProvider {
 
         const deferred = new Deferred();
         ajax.sendRequest({
-            url: this._options.endpointUrl + "?" + queryString,
+            url: this._endpointUrl + "?" + queryString,
             dataType: "json",
             cache: false
         }).then(result => {
@@ -176,21 +195,6 @@ class WebApiFileProvider extends FileProvider {
 
     _getQueryStringPair(key, value) {
         return encodeURIComponent(key) + "=" + encodeURIComponent(value);
-    }
-
-    _convertEntriesToItems(entries, path, itemType) {
-        const useFolders = itemType === "folder";
-        const result = [];
-        each(entries, (_, entry) => {
-            const isFolder = !!entry.isFolder;
-            if(!itemType || isFolder === useFolders) {
-                const item = new FileManagerItem(path, entry.name, isFolder);
-                item.length = entry.size || 0;
-                item.lastWriteTime = deserializeDate(entry.lastWriteTime);
-                result.push(item);
-            }
-        });
-        return result;
     }
 
 }

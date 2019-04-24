@@ -1,9 +1,8 @@
 import ajax from "../../../core/utils/ajax";
 import { Deferred } from "../../../core/utils/deferred";
 import { noop } from "../../../core/utils/common";
-import { each } from "../../../core/utils/iterator";
 
-import { FileProvider, FileManagerItem } from "./file_provider";
+import { FileProvider } from "./file_provider";
 
 const REQUIRED_ITEM_FIELDS = "id,name,folder,lastModifiedDateTime,size,parentReference";
 const REST_API_URL = "https://graph.microsoft.com/";
@@ -20,8 +19,11 @@ const APP_ROOT_URL = DRIVE_API_URL + "/special/approot";
 class OneDriveFileProvider extends FileProvider {
 
     constructor(options) {
-        super();
         options = options || {};
+        options.dateModifiedExpr = "lastModifiedDateTime";
+        options.isFolderExpr = "folder";
+        super(options);
+
         this._getAccessTokenUrl = options.getAccessTokenUrl || "";
 
         this._accessToken = "";
@@ -61,7 +63,7 @@ class OneDriveFileProvider extends FileProvider {
     _getItems(path, itemType) {
         return this._ensureAccessTokenAcquired()
             .then(() => this._getEntriesByPath(path))
-            .then(entries => this._convertEntriesToItems(entries, path, itemType));
+            .then(entries => this._convertDataObjectsToFileItems(entries.children, path, itemType));
     }
 
     _ensureAccessTokenAcquired() {
@@ -167,21 +169,6 @@ class OneDriveFileProvider extends FileProvider {
                 "Authorization": this._authorizationString
             }
         });
-    }
-
-    _convertEntriesToItems(entries, path, itemType) {
-        const useFolders = itemType === "folder";
-        const result = [];
-        each(entries.children, (_, entry) => {
-            const isFolder = entry.hasOwnProperty("folder");
-            if(!itemType || isFolder === useFolders) {
-                const item = new FileManagerItem(path, entry.name, isFolder);
-                item.length = entry.size;
-                item.lastWriteTime = entry.lastModifiedDateTime;
-                result.push(item);
-            }
-        });
-        return result;
     }
 
     _prepareItemRelativePath(path) {
