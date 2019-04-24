@@ -121,27 +121,6 @@ QUnit.test("Phantom appointment should be rendered after tooltip item dragStart"
     assert.ok(renderStub.calledOnce, "Item was rendered");
 });
 
-QUnit.test("Phantom appointment position should be correct after dragStart", function(assert) {
-    this.createInstance();
-
-    var $dropDown = this.getAppointmentsDropDownElement(),
-        dropDown = this.getAppointmentsDropDown();
-
-    dropDown.open();
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown);
-
-    var pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.getPhantomAppointment(),
-        phantomPosition = translator.locate($phantomAppointment),
-        menuPosition = translator.locate($dropDown);
-
-    assert.roughEqual(phantomPosition.left, menuPosition.left, 1.5, "Phantom left is OK");
-    assert.roughEqual(phantomPosition.top, menuPosition.top, 1.5, "Phantom top is OK");
-
-    pointer.dragEnd();
-});
-
-
 QUnit.test("Phantom appointment should have correct appointmentData", function(assert) {
     this.createInstance();
 
@@ -202,48 +181,10 @@ QUnit.test("Phantom appointment position should be corrected during dragging too
 
     assert.ok(correctCoordinatesStub.calledOnce, "Observers are notified");
     var args = correctCoordinatesStub.getCall(0).args;
-    assert.deepEqual(args[1].coordinates, { left: initialPhantomPosition.left + 30, top: initialPhantomPosition.top + 60 }, "Arguments are OK");
+    assert.deepEqual(args[1].coordinates, { left: initialPhantomPosition.left + 60, top: initialPhantomPosition.top + 120 }, "Arguments are OK");
     assert.deepEqual(args[1].allDay, undefined, "Arguments are OK");
 
     pointer.dragEnd();
-});
-
-QUnit.test("Recurrence appointment dragging should work correctly", function(assert) {
-    var tasks = [
-        {
-            text: "Task 1",
-            startDate: new Date(2015, 1, 9, 1, 0),
-            endDate: new Date(2015, 1, 9, 2, 0)
-        },
-        {
-            text: "Task 2",
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 12, 0)
-        },
-        {
-            text: "Task 3",
-            startDate: new Date(2015, 1, 7, 13, 0),
-            endDate: new Date(2015, 1, 7, 14, 0),
-            recurrenceRule: "FREQ=DAILY"
-        }
-    ];
-    this.createInstance();
-    this.instance.option("dataSource", tasks);
-
-    var stub = sinon.stub(this.instance, "_checkRecurringAppointment");
-
-    var dropDown = this.getAppointmentsDropDown();
-    dropDown.open();
-
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown),
-        pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.getPhantomAppointment();
-
-    assert.deepEqual($phantomAppointment.data("dxAppointmentSettings").startDate, new Date(2015, 1, 9, 13), "Date of phantom recurrence part is OK");
-
-    pointer.drag(0, -100).dragEnd();
-
-    assert.deepEqual(stub.getCall(0).args[2], new Date(2015, 1, 9, 0), "_checkRecurringAppointment has a right exceptionDate");
 });
 
 QUnit.test("Phantom appointment should have correct template", function(assert) {
