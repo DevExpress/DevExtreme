@@ -19,6 +19,16 @@
 .dx-recurrence-radiogroup-repeat-type-label,
 .dx-recurrence-repeat-end-label {
     line-height: @GENERIC_BASE_INLINE_WIDGET_HEIGHT;
-    width: @GENERIC_SCHEDULER_REPEAT_END_LABEL_WIDTH;
 }
 
+.dx-recurrence-repeat-end-wrapper {
+    .dx-field-value {
+        &.dx-recurrence-datebox-until-date {
+            margin-left: 23px;
+        }
+
+        &.dx-recurrence-numberbox-repeat-count {
+            margin-left: 11px;
+        }
+    }
+}
