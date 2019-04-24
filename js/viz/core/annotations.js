@@ -1,12 +1,18 @@
 import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
-import { events } from "../components/consts";
 import { patchFontOptions } from "./utils";
 import { Plaque } from "./plaque";
+import pointerEvents from "../../events/pointer";
+import dragEvents from "../../events/drag";
 
-const MOVE_EVENT = events["mousemove"] + ".annotations";
 const ANNOTATION_DATA = "annotation-data";
+
+const EVENTS_NS = ".annotations";
+const MOVE_EVENT = pointerEvents.move + EVENTS_NS;
+
+const DRAG_START_EVENT_NAME = dragEvents.start + EVENTS_NS;
+const DRAG_EVENT_NAME = dragEvents.move + EVENTS_NS;
 
 function coreAnnotation(options, draw) {
     return {
@@ -22,9 +28,19 @@ function coreAnnotation(options, draw) {
         draw: function(widget, group) {
             this.anchor = widget._getAnnotationCoords(this);
             const annotationGroup = widget._renderer.g().append(group);
-            const plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
-            plaque.draw(this.anchor);
-            applyClipPath(annotationGroup, widget, this._pane);
+            this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
+            this.plaque.draw(this.anchor);
+
+            if(options.draggable) {
+                annotationGroup
+                    .on(DRAG_START_EVENT_NAME, { immediate: true }, e => {
+                        this._dragOffsetX = this.plaque.x - e.pageX;
+                        this._dragOffsetY = this.plaque.y - e.pageY;
+                    })
+                    .on(DRAG_EVENT_NAME, e => {
+                        this.plaque.move(e.pageX + this._dragOffsetX, e.pageY + this._dragOffsetY);
+                    });
+            }
         },
         getTooltipFormatObject() {
             return extend({ valueText: this.options.description }, this.options);
@@ -36,25 +52,31 @@ function coreAnnotation(options, draw) {
     };
 }
 
-function applyClipPath(elem, widget, pane) {
-    isDefined(pane) && elem.attr({ "clip-path": widget._getElementsClipRectID(pane) });
-}
-
 function labelAnnotation(options) {
-    return coreAnnotation(options, function(widget, group) {
-        widget._renderer
+    return coreAnnotation(options, function(widget, group, { width, height }) {
+        const text = widget._renderer
             .text(options.text)
             .data({ [ANNOTATION_DATA]: this })
             .css(patchFontOptions(options.font))
             .append(group);
+
+        if(isDefined(width) || isDefined(height)) {
+            text.setMaxSize(width, height, {
+                wordWrap: options.wordWrap,
+                textOverflow: options.textOverflow
+            });
+        }
     });
 }
 
 function imageAnnotation(options) {
     const { width, height, url, location } = options.image || {};
-    return coreAnnotation(options, function(widget, group) {
+    return coreAnnotation(options, function(widget, group, { width: outerWidth, height: outerHeight }) {
+        const imageWidth = outerWidth > 0 ? Math.min(width, outerWidth) : width;
+        const imageHeight = outerHeight > 0 ? Math.min(height, outerHeight) : height;
+
         widget._renderer
-            .image(0, 0, width, height, url, location || "center")
+            .image(0, 0, imageWidth, imageHeight, url, location || "center")
             .data({ [ANNOTATION_DATA]: this })
             .append(group);
     });
@@ -107,23 +129,25 @@ const chartPlugin = {
             const argAxis = this.getArgumentAxis();
             let axis = this.getValueAxis(annotation.axis);
             let series;
+            let pane = isDefined(axis) ? axis.pane : undefined;
 
-            annotation._pane = annotation.axis && isDefined(axis) ? axis.pane : undefined;
             if(annotation.series) {
                 series = this.series.filter(s => s.name === annotation.series)[0];
                 axis = series && series.getValueAxis();
-                isDefined(axis) && (annotation._pane = axis.pane);
+                isDefined(axis) && (pane = axis.pane);
             }
 
             if(isDefined(argument)) {
                 coords[argCoordName] = argAxis.getTranslator().translate(argument);
-                !isDefined(annotation._pane) && (annotation._pane = argAxis.pane);
+                !isDefined(pane) && (pane = argAxis.pane);
             }
 
             if(isDefined(value)) {
                 coords[valCoordName] = axis && axis.getTranslator().translate(value);
-                !isDefined(annotation._pane) && isDefined(axis) && (annotation._pane = axis.pane);
+                !isDefined(pane) && isDefined(axis) && (pane = axis.pane);
             }
+
+            coords.canvas = this._getCanvasForPane(pane);
 
             if(isDefined(coords[argCoordName]) && !isDefined(value)) {
                 if(!isDefined(axis) && !isDefined(series)) {

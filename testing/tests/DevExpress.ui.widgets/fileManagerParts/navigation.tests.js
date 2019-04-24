@@ -1,18 +1,18 @@
-/* global internals, createTestFileSystem */
-
 import $ from "jquery";
 const { test } = QUnit;
 import "ui/file_manager";
 import fx from "animation/fx";
+import { FileManagerWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
 
 const moduleConfig = {
-    beforeEach: () => {
+
+    beforeEach: function() {
         const fileSystem = createTestFileSystem();
 
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
-        $("#fileManager").dxFileManager({
+        this.$element = $("#fileManager").dxFileManager({
             fileProvider: fileSystem,
             itemView: {
                 mode: "thumbnails"
@@ -27,111 +27,83 @@ const moduleConfig = {
             }
         });
 
+        this.wrapper = new FileManagerWrapper(this.$element);
+
         this.clock.tick(400);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.tick(5000);
 
         this.clock.restore();
         fx.off = false;
     }
-};
 
-const getFolderNode = ($element, index) => {
-    return $element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`).eq(index);
-};
-
-const getFolderToggle = ($element, index) => {
-    return $element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`).eq(index);
-};
-
-const getFocusedItemText = $element => {
-    return $element.find(`.${internals.CONTAINER_CLASS} .${internals.FOCUSED_ITEM_CLASS}`).text();
-};
-
-const getToolbarButton = ($element, text) => {
-    return $element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}[aria-label=${text}]`);
-};
-
-const getBreadcrumbsPath = $element => {
-    let result = "";
-    const $elements = $element.find(`.${internals.BREADCRUMBS_CLASS} .${internals.MENU_ITEM_WITH_TEXT_CLASS}`);
-    $elements.each((_, element) => {
-        const name = $(element).text();
-        result = result ? `${result}/${name}` : name;
-    });
-    return result;
-};
-
-const findThumbnailsItem = ($element, itemName) => {
-    return $element.find(`.${internals.THUMBNAILS_ITEM_CLASS}:contains('${itemName}')`);
 };
 
 QUnit.module("Navigation operations", moduleConfig, () => {
 
-    test("keep selection and expanded state during refresh", assert => {
-        assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files", "breadcrumbs refrers to the root");
+    test("keep selection and expanded state during refresh", function(assert) {
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root");
 
-        let $folderToggle = getFolderToggle(this.$element, 1);
+        let $folderToggle = this.wrapper.getFolderToggle(1);
         $folderToggle.trigger("dxclick");
         this.clock.tick(400);
 
-        assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files", "breadcrumbs refrers to the root");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root");
 
-        $folderToggle = getFolderToggle(this.$element, 2);
+        $folderToggle = this.wrapper.getFolderToggle(2);
         $folderToggle.trigger("dxclick");
         this.clock.tick(400);
 
-        assert.equal(getFocusedItemText(this.$element), "Files", "root folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files", "breadcrumbs refrers to the root");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root");
 
-        let $folderNode = getFolderNode(this.$element, 2);
+        let $folderNode = this.wrapper.getFolderNode(2);
         $folderNode.trigger("dxclick");
 
-        assert.equal(getFocusedItemText(this.$element), "Folder 1.1", "descendant folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files/Folder 1/Folder 1.1", "breadcrumbs refrers to the descendant folder");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1", "descendant folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 1/Folder 1.1", "breadcrumbs refrers to the descendant folder");
 
-        const $commandButton = getToolbarButton(this.$element, "Refresh");
+        const $commandButton = this.wrapper.getToolbarButton("Refresh");
         $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
-        assert.equal(getFocusedItemText(this.$element), "Folder 1.1", "descendant folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files/Folder 1/Folder 1.1", "breadcrumbs refrers to the descendant folder");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1", "descendant folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 1/Folder 1.1", "breadcrumbs refrers to the descendant folder");
     });
 
-    test("navigate by folders in item view", assert => {
-        let $item = findThumbnailsItem(this.$element, "Folder 1");
+    test("navigate by folders in item view", function(assert) {
+        let $item = this.wrapper.findThumbnailsItem("Folder 1");
         $item.trigger("dxdblclick");
         this.clock.tick(400);
 
-        assert.equal(getFocusedItemText(this.$element), "Folder 1", "descendant folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files/Folder 1", "breadcrumbs refrers to the descendant folder");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1", "descendant folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 1", "breadcrumbs refrers to the descendant folder");
 
-        $item = findThumbnailsItem(this.$element, "Folder 1.1");
+        $item = this.wrapper.findThumbnailsItem("Folder 1.1");
         $item.trigger("dxdblclick");
         this.clock.tick(400);
 
-        assert.equal(getFocusedItemText(this.$element), "Folder 1.1", "descendant folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files/Folder 1/Folder 1.1", "breadcrumbs refrers to the descendant folder");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1", "descendant folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 1/Folder 1.1", "breadcrumbs refrers to the descendant folder");
 
-
-        $item = findThumbnailsItem(this.$element, "..");
+        $item = this.wrapper.findThumbnailsItem("..");
         $item.trigger("dxdblclick");
         this.clock.tick(400);
 
-        assert.equal(getFocusedItemText(this.$element), "Folder 1", "descendant folder selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files/Folder 1", "breadcrumbs refrers to the descendant folder");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1", "descendant folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 1", "breadcrumbs refrers to the descendant folder");
 
 
-        $item = findThumbnailsItem(this.$element, "..");
+        $item = this.wrapper.findThumbnailsItem("..");
         $item.trigger("dxdblclick");
         this.clock.tick(400);
 
-        assert.equal(getFocusedItemText(this.$element), "Files", "root selected");
-        assert.equal(getBreadcrumbsPath(this.$element), "Files", "breadcrumbs refrers to the root");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root");
     });
 
 });

@@ -53,7 +53,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getFileUploaderController() {
-        const destinationFolder = this._model.getCurrentFolder();
+        const destinationFolder = this._uploadFolder;
         const that = this;
         return {
             chunkSize: this._provider.getFileUploadChunkSize(),
@@ -111,7 +111,7 @@ class FileManagerEditingControl extends Widget {
                 dialog: this._renameItemDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: ([item], { name }) => this._provider.renameItem(item, name),
-                getSuccessMessage: items => "Items deleted",
+                getSuccessMessage: items => "Item renamed",
                 getErrorMessage: ([{ name }], info) => `Rename operation failed for the ${name} item`,
             },
 
@@ -119,7 +119,7 @@ class FileManagerEditingControl extends Widget {
                 dialog: this._confirmationDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: (items, arg) => this._provider.deleteItems(items),
-                getSuccessMessage: items => "Item renamed",
+                getSuccessMessage: items => "Items deleted",
                 getErrorMessage: (items, { index }) => `Delete operation failed for the ${items[index].name} item`
             },
 
@@ -148,28 +148,31 @@ class FileManagerEditingControl extends Widget {
 
         each(this._editActions, (name, action) => {
             if(this._editActions.hasOwnProperty(name)) {
-                result[name] = () => this._executeAction(name);
+                result[name] = arg => this._executeAction(name, arg);
             }
         });
 
         return result;
     }
 
-    _executeAction(actionName) {
+    _executeAction(actionName, arg) {
         const action = this._editActions[actionName];
         if(!action) {
             return;
         }
 
         if(isFunction(action)) {
-            action();
+            action(arg);
         } else {
-            this._tryEditAction(action);
+            this._tryEditAction(action, arg);
         }
     }
 
-    _tryEditAction(action) {
-        const items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
+    _tryEditAction(action, arg) {
+        let items = arg;
+        if(!items) {
+            items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
+        }
         const onlyFiles = !action.affectsAllItems && items.every(item => !item.isFolder);
         const dialogArgumentGetter = action.getDialogArgument || noop;
 
@@ -182,7 +185,8 @@ class FileManagerEditingControl extends Widget {
             });
     }
 
-    _tryUpload() {
+    _tryUpload(destinationFolder) {
+        this._uploadFolder = destinationFolder && destinationFolder[0] || this._model.getCurrentFolder();
         this._fileUploader.tryUpload();
     }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StyleCompiler.ThemeBuilder
 {
@@ -14,6 +15,7 @@ namespace StyleCompiler.ThemeBuilder
 
         public static ThemeBuilderItem Get(string sourcePath, ThemeId theme, string[] lessPaths)
         {
+            lessPaths = lessPaths.Distinct().ToArray();
             var lessParser = new ThemeBuilderLessParser(ThemeBuilderLessFilesReader.ReadPaths(lessPaths));
             var meta = lessParser.GenerateThemeBuilderMetadata();
 

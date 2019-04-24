@@ -8,29 +8,30 @@ import { deserializeDate } from "core/utils/date_serialization";
 
 const { test } = QUnit;
 
-const createFileManagerItem = (parentPath, name, isFolder, lastWriteTimeString, length) => {
-    const result = new FileManagerItem(parentPath, name, isFolder);
-    result.lastWriteTime = deserializeDate(lastWriteTimeString);
-    result.length = length;
-    return result;
+const createFileManagerItem = (parentPath, dataObj) => {
+    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isFolder);
+    item.dateModified = deserializeDate(dataObj.dateModified);
+    item.size = dataObj.size;
+    item.dataItem = dataObj;
+    return item;
 };
 
 const FOLDER_COUNT = 3;
 
 const itemData = [
-    { id: "Root\\Files\\Documents", name: "Documents", lastWriteTime: "2019-02-14T07:44:15.4265625Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Images", name: "Images", lastWriteTime: "2019-02-14T07:44:15.4885105Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Music", name: "Music", lastWriteTime: "2019-02-14T07:44:15.4964648Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Description.rtf", name: "Description.rtf", lastWriteTime: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 },
-    { id: "Root\\Files\\Article.txt", name: "Article.txt", lastWriteTime: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 }
+    { id: "Root\\Files\\Documents", name: "Documents", dateModified: "2019-02-14T07:44:15.4265625Z", isFolder: true, size: 0 },
+    { id: "Root\\Files\\Images", name: "Images", dateModified: "2019-02-14T07:44:15.4885105Z", isFolder: true, size: 0 },
+    { id: "Root\\Files\\Music", name: "Music", dateModified: "2019-02-14T07:44:15.4964648Z", isFolder: true, size: 0 },
+    { id: "Root\\Files\\Description.rtf", name: "Description.rtf", dateModified: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 },
+    { id: "Root\\Files\\Article.txt", name: "Article.txt", dateModified: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 }
 ];
 
 const fileManagerItems = [
-    createFileManagerItem("Root/Files", "Documents", true, "2019-02-14T07:44:15.4265625Z", 0),
-    createFileManagerItem("Root/Files", "Images", true, "2019-02-14T07:44:15.4885105Z", 0),
-    createFileManagerItem("Root/Files", "Music", true, "2019-02-14T07:44:15.4964648Z", 0),
-    createFileManagerItem("Root/Files", "Description.rtf", false, "2017-02-09T09:38:46.3772529Z", 1),
-    createFileManagerItem("Root/Files", "Article.txt", false, "2017-02-09T09:38:46.3772529Z", 1)
+    createFileManagerItem("Root/Files", itemData[0]),
+    createFileManagerItem("Root/Files", itemData[1]),
+    createFileManagerItem("Root/Files", itemData[2]),
+    createFileManagerItem("Root/Files", itemData[3]),
+    createFileManagerItem("Root/Files", itemData[4])
 ];
 
 const fileManagerFolders = fileManagerItems.slice(0, FOLDER_COUNT);
@@ -38,7 +39,7 @@ const fileManagerFiles = fileManagerItems.slice(FOLDER_COUNT);
 
 const moduleConfig = {
 
-    beforeEach: () => {
+    beforeEach: function() {
         this.options = {
             endpointUrl: "/api/endpoint"
         };
@@ -46,7 +47,7 @@ const moduleConfig = {
         this.provider = new WebApiFileProvider(this.options);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         ajaxMock.clear();
     }
 
@@ -54,7 +55,7 @@ const moduleConfig = {
 
 QUnit.module("Web API Provider", moduleConfig, () => {
 
-    test("get folders test", (assert) => {
+    test("get folders test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -72,7 +73,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("get files test", (assert) => {
+    test("get files test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -90,7 +91,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("create folder test", (assert) => {
+    test("create folder test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -108,7 +109,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("rename item test", (assert) => {
+    test("rename item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -126,7 +127,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("delete item test", (assert) => {
+    test("delete item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -145,7 +146,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("move item test", (assert) => {
+    test("move item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -165,7 +166,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("copy item test", (assert) => {
+    test("copy item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({

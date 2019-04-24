@@ -17,6 +17,7 @@ import CustomStore from "data/custom_store";
 import dataUtils from "core/element_data";
 import dateSerialization from "core/utils/date_serialization";
 import { tooltipHelper, appointmentsHelper } from "./helpers.js";
+import themes from "ui/themes";
 
 import "ui/scheduler/ui.scheduler";
 import "ui/switch";
@@ -2451,19 +2452,50 @@ QUnit.test("DropDown appointment button should have correct coordinates", functi
         { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
     ]);
 
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    var $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.equal($dropDownButton.length, 0, "DropDown button has not been rendered yet");
 
     this.instance.addAppointment({ startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) });
 
-    $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
     var buttonCoordinates = translator.locate($dropDownButton),
         expectedCoordinates = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(9).position();
 
     assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
     assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left, 1.001, "Left coordinate is OK");
     assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+});
+
+QUnit.test("Collector should have correct size in material theme", function(assert) {
+    const origIsMaterial = themes.isMaterial;
+    themes.isMaterial = () => true;
+
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: ["month"],
+        width: 840,
+        currentView: "month",
+        firstDayOfWeek: 1
+    });
+
+    sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(2);
+
+    this.instance.option("dataSource", [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
+    ]);
+
+    var $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
+
+    assert.roughEqual($dropDownButton.get(0).getBoundingClientRect().width, 63, 1, "Collector width is ok");
+    assert.roughEqual($dropDownButton.get(0).getBoundingClientRect().height, 20, 1, "Collector height is ok");
+
+    themes.isMaterial = origIsMaterial;
 });
 
 QUnit.test("DropDown appointment button should have correct coordinates on weekView, not in allDay panel", function(assert) {
@@ -2481,7 +2513,7 @@ QUnit.test("DropDown appointment button should have correct coordinates on weekV
         { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) }
     ]);
 
-    let $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    let $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
     let buttonWidth = $dropDownButton.outerWidth();
     let buttonCoordinates = translator.locate($dropDownButton);
     let $cell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(2);
@@ -2515,13 +2547,13 @@ QUnit.test("DropDown appointment button should have correct size when intervalCo
     ]);
 
     var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
-        $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+        $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 60, 1.5, "DropDown button has correct width");
 
     this.instance.option("views", ["month"]);
 
-    $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 36, 1.5, "DropDown button has correct width");
     assert.roughEqual($dropDownButton.outerHeight(), 20, 1.5, "DropDown button has correct height");
@@ -2545,7 +2577,7 @@ QUnit.test("DropDown appointment buttons should have correct quantity with multi
         { text: 'f', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) }
     ]);
 
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    var $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.equal($dropDownButton.length, 3, "There are 3 drop down buttons");
 });
@@ -2628,7 +2660,7 @@ QUnit.test("DropDown appointment button should have correct coordinates: rtl mod
         { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
     ]);
 
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments"),
+    var $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector"),
         buttonCoordinates = translator.locate($dropDownButton),
         $relatedCell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(9),
         expectedCoordinates = $relatedCell.position(),
@@ -2657,7 +2689,7 @@ QUnit.test("DropDown appointment buttons should have correct quantity with multi
         { text: 'f', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) }
     ]);
 
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    var $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector");
 
     assert.equal($dropDownButton.length, 3, "There are 3 drop down buttons");
 });
@@ -3128,7 +3160,7 @@ QUnit.test("DropDown button should be rendered correctly when appointmentCollect
         }
     });
 
-    var $dropDown = $(".dx-scheduler-dropdown-appointments").eq(0);
+    var $dropDown = $(".dx-scheduler-appointment-collector").eq(0);
 
     assert.equal($dropDown.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
 });
@@ -3558,7 +3590,7 @@ QUnit.test("DropDown appointment button should have correct width on timeline vi
     ]);
 
     var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
-        $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0);
+        $dropDownButton = this.instance.$element().find(".dx-scheduler-appointment-collector").eq(0);
 
     assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 4, 1.5, "DropDown button has correct width");
 });

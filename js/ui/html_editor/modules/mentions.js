@@ -8,6 +8,7 @@ import PopupModule from "./popup";
 import Mention from "../formats/mention";
 
 const USER_ACTION = "user";
+const SILENT_ACTION = "silent";
 const DEFAULT_MARKER = "@";
 
 const KEY_CODES = {
@@ -55,16 +56,24 @@ class MentionModule extends PopupModule {
     constructor(quill, options) {
         super(quill, options);
         this._mentions = {};
+        this.editorInstance = options.editorInstance;
 
         options.mentions.forEach((item) => {
-            if(!item.marker) {
-                item.marker = DEFAULT_MARKER;
+            let { marker, template } = item;
+            if(!marker) {
+                item.marker = marker = DEFAULT_MARKER;
             }
 
-            this._mentions[item.marker] = extend({}, this._getDefaultOptions(), item);
+            if(template) {
+                const preparedTemplate = this.editorInstance._getTemplate(template);
+                preparedTemplate && Mention.addTemplate(marker, preparedTemplate);
+            }
+
+            this._mentions[marker] = extend({}, this._getDefaultOptions(), item);
         });
 
         this._attachKeyboardHandlers();
+        this.editorInstance.addCleanCallback(this.clean.bind(this));
         this.quill.on("text-change", this.onTextChange.bind(this));
     }
 
@@ -202,9 +211,10 @@ class MentionModule extends PopupModule {
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, textLength, "silent");
+            this.quill.deleteText(startIndex, textLength, SILENT_ACTION);
             this.quill.insertEmbed(startIndex, "mention", value);
-            this.quill.setSelection(startIndex + 1);
+            this.quill.insertText(startIndex + 1, ' ', SILENT_ACTION);
+            this.quill.setSelection(startIndex + 2);
         }.bind(this));
     }
 
@@ -247,31 +257,11 @@ class MentionModule extends PopupModule {
         this._activeMentionConfig = this._mentions[insert];
 
         if(this._activeMentionConfig) {
-            this._updateMentionTemplate(this._activeMentionConfig);
             this._updateList(this._activeMentionConfig);
             this.savePosition(caret.index);
             this._popup.option("position", this._popupPosition);
             this._searchValue = "";
             this._popup.show();
-        }
-    }
-
-    _updateMentionTemplate({ template }) {
-        let preparedTemplate;
-
-        if(template) {
-            preparedTemplate = this.options.editorInstance._getTemplate(template);
-        }
-
-        if(preparedTemplate) {
-            Mention.setContentRender(function(node, data) {
-                preparedTemplate.render({
-                    model: data,
-                    container: node
-                });
-            });
-        } else {
-            Mention.restoreContentRender();
         }
     }
 
@@ -353,7 +343,7 @@ class MentionModule extends PopupModule {
             my: "top left",
             at: "top left",
             collision: {
-                y: "flip",
+                y: "none",
                 x: "flipfit"
             }
         };
@@ -361,6 +351,7 @@ class MentionModule extends PopupModule {
 
     _getPopupConfig() {
         return extend(super._getPopupConfig(), {
+            closeOnTargetScroll: false,
             onShown: () => {
                 this._isMentionActive = true;
                 this._hasSearch = false;
@@ -378,6 +369,14 @@ class MentionModule extends PopupModule {
 
     get _activeListItems() {
         return this._list.itemElements().filter(`:not(.${DISABLED_STATE_CLASS})`);
+    }
+
+    clean() {
+        Object.keys(this._mentions).forEach((marker) => {
+            if(this._mentions[marker].template) {
+                Mention.removeTemplate(marker);
+            }
+        });
     }
 }
 

@@ -3,6 +3,8 @@ import Widget from "../widget/ui.widget";
 import Drawer from "../drawer";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
+import typeUtils from '../../core/utils/type';
+import dataCoreUtils from '../../core/utils/data';
 import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramToolbox from "./ui.diagram.toolbox";
 import DiagramOptions from "./ui.diagram.options";
@@ -24,7 +26,6 @@ class Diagram extends Widget {
 
         super._init();
         this._initDiagram();
-        this._refreshDataSources();
     }
     _initMarkup() {
         super._initMarkup();
@@ -42,7 +43,9 @@ class Diagram extends Widget {
 
         const $mainElement = this._renderMainElement($contentWrapper);
 
+        var customShapes = this.option("customShapes");
         this._createComponent($toolbox, DiagramToolbox, {
+            showCustomShapes: Array.isArray(customShapes) && customShapes.length,
             onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category)
         });
 
@@ -56,7 +59,8 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
-            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar)
+            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            export: this.option("export")
         });
     }
 
@@ -106,6 +110,15 @@ class Diagram extends Widget {
         const { DiagramControl } = getDiagram();
         this._diagramInstance = new DiagramControl();
         this._diagramInstance.onChanged = this._raiseDataChangeAction.bind(this);
+        this._diagramInstance.onEdgeInserted = this._raiseEdgeInsertedAction.bind(this);
+        this._diagramInstance.onEdgeUpdated = this._raiseEdgeUpdatedAction.bind(this);
+        this._diagramInstance.onEdgeRemoved = this._raiseEdgeRemovedAction.bind(this);
+        this._diagramInstance.onNodeInserted = this._raiseNodeInsertedAction.bind(this);
+        this._diagramInstance.onNodeUpdated = this._raiseNodeUpdatedAction.bind(this);
+        this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
+
+        this._updateCustomShapes(this.option("customShapes"));
+        this._refreshDataSources();
     }
     _refreshDataSources() {
         this._beginUpdateDiagram();
@@ -158,6 +171,20 @@ class Diagram extends Widget {
         this._edges = edges;
         this._bindDiagramData();
     }
+    _createOptionGetter(optionName) {
+        var expr = this.option(optionName);
+
+        return dataCoreUtils.compileGetter(expr);
+    }
+    _createOptionSetter(optionName) {
+        var expr = this.option(optionName);
+
+        if(typeUtils.isFunction(expr)) {
+            return expr;
+        }
+
+        return dataCoreUtils.compileSetter(expr);
+    }
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
@@ -165,15 +192,24 @@ class Diagram extends Widget {
         const data = {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
-            nodeMapping: {
-                idField: this.option("nodes.idExpr"),
-                textField: this.option("nodes.textExpr"),
-                typeField: this.option("nodes.typeExpr")
+            nodeDataImporter: {
+                getKey: this._createOptionGetter("nodes.keyExpr"),
+                setKey: this._createOptionSetter("nodes.keyExpr"),
+                getText: this._createOptionGetter("nodes.textExpr"),
+                setText: this._createOptionSetter("nodes.textExpr"),
+                getType: this._createOptionGetter("nodes.typeExpr"),
+                setType: this._createOptionSetter("nodes.typeExpr"),
+
+                getParentKey: this._createOptionGetter("nodes.parentKeyExpr"),
+                getItems: this._createOptionGetter("nodes.itemsExpr")
             },
-            edgeMapping: {
-                idField: this.option("edges.idExpr"),
-                fromField: this.option("edges.fromExpr"),
-                toField: this.option("edges.toExpr")
+            edgeDataImporter: {
+                getKey: this._createOptionGetter("edges.keyExpr"),
+                setKey: this._createOptionSetter("edges.keyExpr"),
+                getFrom: this._createOptionGetter("edges.fromExpr"),
+                setFrom: this._createOptionSetter("edges.fromExpr"),
+                getTo: this._createOptionGetter("edges.toExpr"),
+                setTo: this._createOptionSetter("edges.toExpr")
             },
             layoutType: this._getDataLayoutType()
         };
@@ -198,6 +234,31 @@ class Diagram extends Widget {
         this._updateDiagramLockCount = Math.max(this._updateDiagramLockCount - 1, 0);
         if(!this._updateDiagramLockCount) {
             this._bindDiagramData();
+        }
+    }
+
+    _updateCustomShapes(customShapes, prevCustomShapes) {
+        if(Array.isArray(prevCustomShapes)) {
+            this._diagramInstance.removeCustomShapes(customShapes.map(
+                function(s) {
+                    return s.id;
+                }
+            ));
+        }
+
+        if(Array.isArray(customShapes)) {
+            this._diagramInstance.addCustomShapes(customShapes.map(
+                function(s) {
+                    return {
+                        id: s.id,
+                        title: s.title,
+                        svgUrl: s.svgUrl,
+                        defaultWidth: s.defaultWidth,
+                        defaultHeight: s.defaultHeight,
+                        allowHasText: s.allowHasText,
+                    };
+                }
+            ));
         }
     }
 
@@ -236,58 +297,143 @@ class Diagram extends Widget {
             * @type Object
             * @default null
             */
-            /**
-            * @name dxDiagramOptions.nodes.dataSource
-            * @type Array<Object>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxDiagramOptions.nodes.idExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.nodes.textExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.nodes.typeExpr
-            * @type string
-            * @default undefined
-            */
+            nodes: {
+                /**
+                * @name dxDiagramOptions.nodes.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxDiagramOptions.nodes.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: "id",
+                /**
+                * @name dxDiagramOptions.nodes.textExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "text"
+                */
+                textExpr: "text",
+                /**
+                * @name dxDiagramOptions.nodes.typeExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "type"
+                */
+                typeExpr: "type",
+                /**
+                * @name dxDiagramOptions.nodes.parentKeyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "parentId"
+                */
+                parentKeyExpr: "parentId",
+                /**
+                * @name dxDiagramOptions.nodes.itemsExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "items"
+                */
+                itemsExpr: "items"
+            },
             /**
             * @name dxDiagramOptions.edges
             * @type Object
             * @default null
             */
-            /**
-            * @name dxDiagramOptions.edges.dataSource
-            * @type Array<Object>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxDiagramOptions.edges.idExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.edges.fromExpr
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.edges.toExpr
-            * @type string
-            * @default undefined
-            */
-
+            edges: {
+                /**
+                * @name dxDiagramOptions.edges.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxDiagramOptions.edges.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: "id",
+                /**
+                * @name dxDiagramOptions.edges.fromExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "from"
+                */
+                fromExpr: "from",
+                /**
+                * @name dxDiagramOptions.edges.toExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "to"
+                */
+                toExpr: "to"
+            },
             /**
              * @name dxDiagramOptions.layout
              * @type Enums.DiagramAutoLayout
              * @default 0
              */
-            layout: "tree"
+            layout: "tree",
+
+            /**
+            * @name dxDiagramOptions.customShapes
+            * @type Array<CustomShapeItem>
+            * @default null
+            */
+            customShapes: [],
+            /**
+            * @name CustomShapeItem
+            * @type object
+            */
+            /**
+            * @name CustomShapeItem.id
+            * @type Number
+            */
+            /**
+            * @name CustomShapeItem.title
+            * @type String
+            */
+            /**
+            * @name CustomShapeItem.svgUrl
+            * @type String
+            */
+            /**
+            * @name CustomShapeItem.defaultWidth
+            * @type Number
+            */
+            /**
+            * @name CustomShapeItem.defaultHeight
+            * @type Number
+            */
+            /**
+            * @name CustomShapeItem.allowHasText
+            * @type Boolean
+            */
+
+            /**
+             * @name dxDiagramOptions.export
+             * @type object
+             */
+            "export": {
+                /**
+                 * @name dxDiagramOptions.export.fileName
+                 * @type string
+                 * @default "Diagram"
+                 */
+                fileName: "Diagram",
+                /**
+                 * @name dxDiagramOptions.export.proxyUrl
+                 * @type string
+                 * @default undefined
+                 */
+                proxyUrl: undefined
+            }
         });
     }
 
@@ -304,6 +450,36 @@ class Diagram extends Widget {
             data: this.getData()
         });
     }
+    _raiseEdgeInsertedAction(data, callback) {
+        if(this._edgesOption) {
+            this._edgesOption.insert(data, callback);
+        }
+    }
+    _raiseEdgeUpdatedAction(key, data, callback) {
+        if(this._edgesOption) {
+            this._edgesOption.update(key, data, callback);
+        }
+    }
+    _raiseEdgeRemovedAction(key, callback) {
+        if(this._edgesOption) {
+            this._edgesOption.remove(key, callback);
+        }
+    }
+    _raiseNodeInsertedAction(data, callback) {
+        if(this._nodesOption) {
+            this._nodesOption.insert(data, callback);
+        }
+    }
+    _raiseNodeUpdatedAction(key, data, callback) {
+        if(this._nodesOption) {
+            this._nodesOption.update(key, data, callback);
+        }
+    }
+    _raiseNodeRemovedAction(key, callback) {
+        if(this._nodesOption) {
+            this._nodesOption.remove(key, callback);
+        }
+    }
 
     _optionChanged(args) {
         switch(args.name) {
@@ -316,8 +492,15 @@ class Diagram extends Widget {
             case "layout":
                 this._refreshDataSources();
                 break;
+            case "customShapes":
+                this._updateCustomShapes(args.value, args.previousValue);
+                this._invalidate();
+                break;
             case "onDataChanged":
                 this._createDataChangeAction();
+                break;
+            case "export":
+                this._toolbarInstance.option("export", this.option("export"));
                 break;
             default:
                 super._optionChanged(args);

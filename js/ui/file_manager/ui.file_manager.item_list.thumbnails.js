@@ -5,6 +5,7 @@ import iconUtils from "../../core/utils/icon";
 import eventsEngine from "../../events/core/events_engine";
 import { addNamespace } from "../../events/utils";
 import { name as contextMenuEventName } from "../../events/contextmenu";
+import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
 
@@ -166,12 +167,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenu(e) {
+        e.preventDefault();
         this._onClick(e);
 
-        this._ensureContextMenu();
-        const item = this._getFocusedItem();
-        this._contextMenu.option("dataSource", this._createContextMenuItems(item));
-        this._displayContextMenu(e.target, e.offsetX, e.offsetY);
+        const items = this.getSelectedItems();
+        this._showContextMenu(items, e.target, e);
     }
 
     _selectItemByItemElement($item, e) {
@@ -362,7 +362,16 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _getTooltipText(item) {
-        return item.tooltipText || `${item.name}\r\nSize: ${item.length}\r\nDate modified: ${item.lastWriteTime}`;
+        if(item.tooltipText) {
+            return item.tooltipText;
+        }
+
+        let text = `${item.name}\r\n`;
+        if(!item.isFolder) {
+            text += `Size: ${getDisplayFileSize(item.size)}\r\n`;
+        }
+        text += `Date Modified: ${item.dateModified}`;
+        return text;
     }
 
     _getUniqueId() {

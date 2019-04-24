@@ -193,15 +193,9 @@
     }
   },
   {
-    "name": "mobile/process_hardware_back_button",
+    "name": "ui/speed_dial_action",
     "exports": {
-      "default": { "path": "processHardwareBackButton" }
-    }
-  },
-  {
-    "name": "ui/floating_action_button",
-    "exports": {
-      "default": { "path": "ui.dxFloatingActionButton", "isWidget": true }
+      "default": { "path": "ui.dxSpeedDialAction", "isWidget": true }
     }
   },
   {

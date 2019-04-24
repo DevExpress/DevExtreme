@@ -55,7 +55,7 @@ export class SchedulerTestWrapper {
             },
 
             compact: {
-                getButtons: () => $(".dx-scheduler-dropdown-appointments"),
+                getButtons: () => $(".dx-scheduler-appointment-collector"),
                 getButtonCount: () => this.appointments.compact.getButtons().length,
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
@@ -65,8 +65,18 @@ export class SchedulerTestWrapper {
 
         this.appointmentPopup = {
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
+            getPopupInstance: () => $(".dx-scheduler-appointment-popup.dx-widget").dxPopup("instance"),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
+            setInitialWidth: width => {
+                const popupConfig = this.instance._popupConfig;
+                this.instance._popupConfig = appointmentData => {
+                    const config = popupConfig.call(this.instance, appointmentData);
+                    config.width = width;
+                    return config;
+                };
+            },
+            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width)
         };
 
         this.appointmentForm = {
@@ -128,7 +138,7 @@ export const appointmentsHelper = {
     },
 
     compact: {
-        getButtons: () => $(".dx-scheduler-dropdown-appointments"),
+        getButtons: () => $(".dx-scheduler-appointment-collector"),
         getButtonCount: () => appointmentsHelper.compact.getButtons().length,
         getButton: (index = 0) => $(appointmentsHelper.compact.getButtons().get(index)),
         getButtonText: (index = 0) => appointmentsHelper.compact.getButton(index).find("span").text(),

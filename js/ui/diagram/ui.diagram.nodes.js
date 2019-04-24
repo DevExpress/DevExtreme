@@ -1,15 +1,9 @@
-import Component from "../../core/component";
-import DataHelperMixin from "../../data_helper";
+import ItemsOption from "./ui.diagram.items";
 
-class NodesOption extends Component {
-    constructor(diagramWidget) {
-        super();
-        this._diagramWidget = diagramWidget;
-    }
+class NodesOption extends ItemsOption {
     _dataSourceChangedHandler(newItems, e) {
         this._diagramWidget._nodesDataSourceChanged(newItems);
     }
 }
-NodesOption.include(DataHelperMixin);
 
 module.exports = NodesOption;

@@ -1,4 +1,7 @@
 import { getDiagram } from "./diagram_importer";
+import { fileSaver } from "../../exporter/file_saver";
+import { isFunction } from "../../core/utils/type";
+import { getWindow } from "../../core/utils/window";
 
 const DiagramCommands = {
     getToolbar: function() {
@@ -7,12 +10,14 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.Undo,
                 hint: 'Undo',
-                icon: "undo"
+                icon: "undo",
+                text: "Undo",
             },
             {
                 command: DiagramCommand.Redo,
                 hint: "Redo",
-                icon: "redo"
+                icon: "redo",
+                text: "Redo",
             },
             {
                 command: DiagramCommand.FontName,
@@ -28,16 +33,19 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.Bold,
                 hint: "Bold",
+                text: "Bold",
                 icon: "bold"
             },
             {
                 command: DiagramCommand.Italic,
                 hint: "Italic",
+                text: "Italic",
                 icon: "italic"
             },
             {
                 command: DiagramCommand.Underline,
                 hint: "Underline",
+                text: "Underline",
                 icon: "underline"
             },
             {
@@ -53,17 +61,20 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.TextLeftAlign,
                 hint: "Align Left",
+                text: "Align Left",
                 icon: "alignleft",
                 beginGroup: true
             },
             {
                 command: DiagramCommand.TextCenterAlign,
-                hint: "Center",
+                hint: "Align Center",
+                text: "Center",
                 icon: "aligncenter"
             },
             {
                 command: DiagramCommand.TextRightAlign,
                 hint: "Align Right",
+                text: "Align Right",
                 icon: "alignright"
             },
             {
@@ -101,10 +112,40 @@ const DiagramCommands = {
             },
             {
                 widget: "dxButton",
-                text: "Auto Layout",
+                icon: "export",
+                text: "Export",
                 items: [
-                    { command: DiagramCommand.AutoLayoutTree, text: "Tree" },
-                    { command: DiagramCommand.AutoLayoutFlow, text: "Layered" }
+                    {
+                        command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to SVG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to PNG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to JPEG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
+                        }
+                    }
+                ]
+            },
+            {
+                widget: "dxButton",
+                text: "Auto Layout",
+                showText: "always",
+                items: [
+                    { command: DiagramCommand.AutoLayoutTreeVertical, text: "Tree (vertical)" },
+                    { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Layered (vertical)" },
+                    { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Layered (horizontal)" }
                 ]
             }
         ];
@@ -234,6 +275,24 @@ const DiagramCommands = {
                 text: "Send to Back"
             }
         ];
+    },
+    _exportTo(widget, dataURI, format, mimeString) {
+        const window = getWindow();
+        if(window && window.atob && isFunction(window.Blob)) {
+            const blob = this._getBlobByDataURI(window, dataURI, mimeString);
+            const options = widget.option("export");
+            fileSaver.saveAs(options.fileName || "foo", format, blob, options.proxyURL);
+        }
+    },
+    _getBlobByDataURI(window, dataURI, mimeString) {
+        var byteString = window.atob(dataURI.split(',')[1]);
+        var arrayBuffer = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(arrayBuffer);
+        for(var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        var dataView = new DataView(arrayBuffer);
+        return new window.Blob([dataView], { type: mimeString });
     }
 };
 

@@ -1922,6 +1922,7 @@ var dxChart = {
     /**
     * @name dxChartOptions.annotations
     * @type Array<dxChartAnnotationConfig,object>
+    * @inherits dxChartOptions.commonAnnotationSettings
     */
     annotations: [{}],
     /**
@@ -2902,7 +2903,33 @@ var dxPolarChart = {
         * @type Enums.ArgumentAxisHoverMode
         * @default 'none'
         */
-        hoverMode: 'none'
+        hoverMode: 'none',
+        /**
+        * @name dxPolarChartOptions.argumentAxis.tick
+        * @type object
+        * @inheritdoc
+        */
+        tick: {
+            /**
+            * @name dxPolarChartOptions.argumentAxis.tick.shift
+            * @type number
+            * @default 3
+            */
+            shift: 3
+        },
+        /**
+        * @name dxPolarChartOptions.argumentAxis.minorTick
+        * @type object
+        * @inheritdoc
+        */
+        minorTick: {
+            /**
+            * @name dxPolarChartOptions.argumentAxis.minorTick.shift
+            * @type number
+            * @default 3
+            */
+           shift: 3
+        }
     },
     /**
     * @name dxPolarChartOptions.valueAxis
@@ -3647,9 +3674,20 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     * @notUsedInTheme
     */
-    customizeTooltip: undefined
+    customizeTooltip: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.wordWrap
+    * @type Enums.VizWordWrap
+    * @default "normal"
+    */
+    wordWrap: "normal",
+    /**
+    * @name dxChartCommonAnnotationConfig.textOverflow
+    * @type Enums.VizTextOverflow
+    * @default "ellipsis"
+    */
+    textOverflow: "ellipsis"
 };
-
 /**
 * @name dxChartAnnotationConfig
 * @type object

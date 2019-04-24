@@ -35,15 +35,15 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         assert.notOk(undoButton.option("disabled"));
     });
     test("should activate items on diagram request", (assert) => {
-        assert.ok(findToolbarItem(this.$element, "aligncenter").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
-        assert.notOk(findToolbarItem(this.$element, "alignleft").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.ok(findToolbarItem(this.$element, "center").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.notOk(findToolbarItem(this.$element, "left").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).execute(true);
-        assert.notOk(findToolbarItem(this.$element, "aligncenter").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
-        assert.ok(findToolbarItem(this.$element, "alignleft").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.notOk(findToolbarItem(this.$element, "center").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.ok(findToolbarItem(this.$element, "left").hasClass(TOOLBAR_ITEM_ACTIVE_CLASS));
     });
     test("button should raise diagram commands", (assert) => {
         assert.notOk(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
-        findToolbarItem(this.$element, "alignleft").trigger("dxclick");
+        findToolbarItem(this.$element, "left").trigger("dxclick");
         assert.ok(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
     });
     test("selectBox should raise diagram commands", (assert) => {
@@ -77,5 +77,7 @@ QUnit.module("Context Menu", moduleConfig, () => {
 });
 
 function findToolbarItem($diagram, label) {
-    return $diagram.find(TOOLBAR_SELECTOR).find(`[aria-label='${label}']`);
+    return $diagram.find(TOOLBAR_SELECTOR).find(".dx-widget").filter(function() {
+        return $(this).text().toLowerCase().indexOf(label) >= 0;
+    });
 }

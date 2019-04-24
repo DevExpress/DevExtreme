@@ -7320,6 +7320,54 @@ QUnit.test("Cell mode - The editCellTemplate of the column should not be called 
     assert.strictEqual(editCellTemplate.callCount, 1);
 });
 
+// T725319
+QUnit.test("Load panel should be hidden when changing loadPanel.enabled while loading", function(assert) {
+    // arrange
+    fx.off = true;
+
+    try {
+        var that = this,
+            $testElement = $("#container");
+
+        that.options.editing = {
+            mode: "row",
+            allowUpdating: true,
+            allowDeleting: true,
+            texts: {
+                confirmDeleteMessage: "",
+                editRow: ""
+            }
+        };
+        that.options.loadPanel = {
+            enabled: true
+        };
+        that.options.onRowRemoving = function(e) {
+            setTimeout(() => {
+                that.option("loadPanel.enabled", false);
+                that.rowsView.beginUpdate();
+                that.rowsView.optionChanged({ name: "loadPanel", fullName: "loadPanel.enabled" });
+                that.rowsView.endUpdate();
+            }, 10);
+            e.cancel = $.Deferred().promise();
+        };
+        that.isReady = function() {
+            that.dataController.isReady();
+        };
+
+        that.rowsView.render($testElement);
+        that.editingController.optionChanged({ name: "onRowRemoving" });
+
+        // act
+        that.deleteRow(0);
+        that.clock.tick(10);
+
+        // assert
+        assert.notOk(that.rowsView._loadPanel, "hasn't loadPanel");
+    } finally {
+        fx.off = false;
+    }
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
@@ -13277,6 +13325,54 @@ QUnit.test("Edit form when form items are specified with editorType", function(a
 
     this.options.editing.form = {
         items: [{ dataField: "name", editorType: "dxAutocomplete" }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when group form items are specified and simple form items have editor type", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ itemType: "group", items: [{ dataField: "name", editorType: "dxAutocomplete" }] }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when tabbed form items are specified and simple form items have editor type", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ itemType: "tabbed", tabs: [ { items: [{ dataField: "name", editorType: "dxAutocomplete" }] }] }]
     };
 
     this.setupModules(this);

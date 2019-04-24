@@ -39,9 +39,7 @@ var TAGBOX_CLASS = "dx-tagbox",
     TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content",
     TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template",
     TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template",
-    NATIVE_CLICK_CLASS = "dx-native-click",
-
-    TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container";
+    NATIVE_CLICK_CLASS = "dx-native-click";
 
 var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -726,10 +724,11 @@ var TagBox = SelectBox.inherit({
     _renderMultiSelect: function() {
         var d = new Deferred();
 
-        this._$tagsContainer = this.$element()
-            .find("." + TEXTEDITOR_CONTAINER_CLASS)
+        this._$tagsContainer = this._$textEditorInputContainer
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
+
+        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
         this._renderTags().always((function() {
@@ -921,7 +920,7 @@ var TagBox = SelectBox.inherit({
         this.option("selectedItems", this._selectedItems.slice());
         this._cleanTags();
 
-        var $multiTag = this._multiTagRequired() && this._renderMultiTag(this._$textEditorInputContainer),
+        var $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input()),
             showMultiTagOnly = this.option("showMultiTagOnly"),
             maxDisplayedTags = this.option("maxDisplayedTags");
 
@@ -929,7 +928,7 @@ var TagBox = SelectBox.inherit({
             if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxDisplayedTags >= -1)) {
                 return false;
             }
-            this._renderTag(item, $multiTag || this._$textEditorInputContainer);
+            this._renderTag(item, $multiTag || this._input());
         }.bind(this));
 
         this._scrollContainer("end");
