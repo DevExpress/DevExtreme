@@ -26,7 +26,6 @@ class Diagram extends Widget {
 
         super._init();
         this._initDiagram();
-        this._refreshDataSources();
     }
     _initMarkup() {
         super._initMarkup();
@@ -44,7 +43,9 @@ class Diagram extends Widget {
 
         const $mainElement = this._renderMainElement($contentWrapper);
 
+        var customShapes = this.option("customShapes");
         this._createComponent($toolbox, DiagramToolbox, {
+            showCustomShapes: Array.isArray(customShapes) && customShapes.length,
             onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category)
         });
 
@@ -115,6 +116,9 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeInserted = this._raiseNodeInsertedAction.bind(this);
         this._diagramInstance.onNodeUpdated = this._raiseNodeUpdatedAction.bind(this);
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
+
+        this._updateCustomShapes(this.option("customShapes"));
+        this._refreshDataSources();
     }
     _refreshDataSources() {
         this._beginUpdateDiagram();
@@ -230,6 +234,31 @@ class Diagram extends Widget {
         this._updateDiagramLockCount = Math.max(this._updateDiagramLockCount - 1, 0);
         if(!this._updateDiagramLockCount) {
             this._bindDiagramData();
+        }
+    }
+
+    _updateCustomShapes(customShapes, prevCustomShapes) {
+        if(Array.isArray(prevCustomShapes)) {
+            this._diagramInstance.removeCustomShapes(customShapes.map(
+                function(s) {
+                    return s.id;
+                }
+            ));
+        }
+
+        if(Array.isArray(customShapes)) {
+            this._diagramInstance.addCustomShapes(customShapes.map(
+                function(s) {
+                    return {
+                        id: s.id,
+                        title: s.title,
+                        svgUrl: s.svgUrl,
+                        defaultWidth: s.defaultWidth,
+                        defaultHeight: s.defaultHeight,
+                        allowHasText: s.allowHasText,
+                    };
+                }
+            ));
         }
     }
 
@@ -353,6 +382,41 @@ class Diagram extends Widget {
             layout: "tree",
 
             /**
+            * @name dxDiagramOptions.customShapes
+            * @type Array<CustomShapeItem>
+            * @default null
+            */
+            customShapes: [],
+            /**
+            * @name CustomShapeItem
+            * @type object
+            */
+            /**
+            * @name CustomShapeItem.id
+            * @type Number
+            */
+            /**
+            * @name CustomShapeItem.title
+            * @type String
+            */
+            /**
+            * @name CustomShapeItem.svgUrl
+            * @type String
+            */
+            /**
+            * @name CustomShapeItem.defaultWidth
+            * @type Number
+            */
+            /**
+            * @name CustomShapeItem.defaultHeight
+            * @type Number
+            */
+            /**
+            * @name CustomShapeItem.allowHasText
+            * @type Boolean
+            */
+
+            /**
              * @name dxDiagramOptions.export
              * @type object
              */
@@ -417,7 +481,6 @@ class Diagram extends Widget {
         }
     }
 
-
     _optionChanged(args) {
         switch(args.name) {
             case "nodes":
@@ -428,6 +491,10 @@ class Diagram extends Widget {
                 break;
             case "layout":
                 this._refreshDataSources();
+                break;
+            case "customShapes":
+                this._updateCustomShapes(args.value, args.previousValue);
+                this._invalidate();
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();
