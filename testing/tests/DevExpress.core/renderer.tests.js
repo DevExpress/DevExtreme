@@ -186,6 +186,12 @@ QUnit.test("class should not be set when class name empty", function(assert) {
     assert.notOk(element.hasClass("someClass"));
 });
 
+QUnit.test("should get class on element", function(assert) {
+    var element = renderer(document.createElementNS("http://www.w3.org/2000/svg", "circle"));
+
+    assert.notOk(element.hasClass("someClass"));
+});
+
 QUnit.test("class should be removed from SVG", function(assert) {
     var element = renderer(document.createElementNS("http://www.w3.org/2000/svg", "circle"));
     element.addClass("someClass");
