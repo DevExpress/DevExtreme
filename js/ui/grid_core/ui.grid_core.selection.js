@@ -842,11 +842,13 @@ module.exports = {
                                     // T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
-                                        isSelected = change.items[index].isSelected;
-                                        $row
-                                            .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
-                                            .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
-                                        that.setAria("selected", isSelected, $row);
+                                        if($row.length) {
+                                            isSelected = change.items[index].isSelected;
+                                            $row
+                                                .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
+                                                .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
+                                            that.setAria("selected", isSelected, $row);
+                                        }
                                     }
                                 });
                             });

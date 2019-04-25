@@ -1107,3 +1107,42 @@ QUnit.test("dataSource change with columns should force one loading only", funct
     assert.equal(loadingSpy.callCount, 1, "loading called once");
     assert.equal(treeList.getVisibleRows().length, 3, "visible row count");
 });
+
+QUnit.test("Should not generate exception when selection mode is multiple and focusedRowKey is set for the nested node (T735585)", function(assert) {
+    var options = {
+        dataSource: [
+            { id: 0, parentId: -1, c0: "C0_0", c1: "c1_0" },
+            { id: 1, parentId: 0, c0: "C0_0", c1: "c1_0" }
+        ],
+        keyExpr: "id",
+        parentIdExpr: "parentId",
+        selection: { mode: "single" },
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        expandedRowKeys: [1],
+        onFocusedRowChanged: e => {
+            if(e.row && e.row.data) {
+                e.component.selectRows([e.row.key], true);
+            }
+        }
+    };
+
+    try {
+        // act
+        createTreeList(options);
+        this.clock.tick();
+
+        // arrange
+        options.selection.mode = "multiple";
+
+        // act
+        createTreeList(options);
+        this.clock.tick();
+    } catch(e) {
+        // assert
+        assert.ok(false, e.message);
+    }
+
+    // assert
+    assert.ok(true, "No exceptions");
+});
