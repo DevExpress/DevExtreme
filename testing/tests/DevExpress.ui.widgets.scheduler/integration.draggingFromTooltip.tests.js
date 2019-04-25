@@ -5,7 +5,7 @@ import "ui/scheduler/ui.scheduler";
 import fx from "animation/fx";
 import pointerMock from "../../helpers/pointerMock.js";
 import translator from "animation/translator";
-import { appointmentsHelper, tooltipHelper } from "./helpers.js";
+import { SchedulerTestWrapper } from "./helpers.js";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -44,21 +44,23 @@ QUnit.module("Integration: Dragging from Tooltip", {
                 dataSource: this.tasks,
                 currentDate: new Date(2015, 1, 9)
             }, options)).dxScheduler("instance");
+
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
 
         this.clock = sinon.useFakeTimers();
     },
 
     getCompactAppointmentButton: function() {
-        return appointmentsHelper.compact.getButton();
+        return this.scheduler.appointments.compact.getButton();
     },
 
     showTooltip: function() {
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
     },
 
     getTooltipListItem: function() {
-        return tooltipHelper.getItemElement();
+        return this.scheduler.tooltip.getItemElement();
     },
 
     getPhantomAppointment: function() {
@@ -192,7 +194,7 @@ QUnit.test("Phantom appointment should have correct template", function(assert) 
         currentDate: new Date(2015, 1, 9)
     }).dxScheduler("instance");
 
-    var $ddAppointment = tooltipHelper.getItemElement();
+    var $ddAppointment = this.scheduler.tooltip.getItemElement();
     var pointer = pointerMock($ddAppointment).start().dragStart(),
         $phantomAppointment = instance.$element().find(".dx-scheduler-appointment").eq(0);
 
