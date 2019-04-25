@@ -245,6 +245,41 @@ const DiagramCommands = {
                 command: DiagramCommand.SnapToGrid,
                 text: "Snap to Grid",
                 widget: "dxCheckBox"
+            },
+            {
+                command: DiagramCommand.ZoomLevel,
+                text: "Zoom Level",
+                widget: "dxSelectBox",
+                items: [
+                    {
+                        value: 0.5,
+                        title: "50%"
+                    },
+                    {
+                        value: 0.75,
+                        title: "75%"
+                    },
+                    {
+                        value: 1,
+                        title: "100%"
+                    },
+                    {
+                        value: 1.25,
+                        title: "125%"
+                    },
+                    {
+                        value: 1.5,
+                        title: "150%"
+                    },
+                    {
+                        value: 2,
+                        title: "200%"
+                    },
+                    {
+                        value: 3,
+                        title: "300%"
+                    }
+                ]
             }
         ];
     },
