@@ -44,7 +44,7 @@
     "cldr-core": "latest",
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
-    "devexpress-diagram": "0.0.9",
+    "devexpress-diagram": "0.0.10",
     "dot": "1.1.2",
     "eslint": "^5.9.0",
     "eslint-plugin-spellcheck": "0.0.11",
