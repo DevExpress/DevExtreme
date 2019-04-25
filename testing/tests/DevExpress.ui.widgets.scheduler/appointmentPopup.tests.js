@@ -273,7 +273,7 @@ QUnit.test("startDateBox value should be valid", function(assert) {
     var form = this.instance.getAppointmentDetailsForm(),
         startDateBox = form.getEditor("startDate");
 
-    startDateBox.option("value", null);
+    startDateBox.option("value", undefined);
 
     assert.deepEqual(startDateBox.option("value"), new Date(2015, 1, 1), "startDate value is initial value");
 });
@@ -315,7 +315,7 @@ QUnit.test("endDateBox value should be valid", function(assert) {
     var form = this.instance.getAppointmentDetailsForm(),
         endDateBox = form.getEditor("endDate");
 
-    endDateBox.option("value", null);
+    endDateBox.option("value", undefined);
 
     assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 3), "endDate value is initial value");
 });

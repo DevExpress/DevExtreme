@@ -20,8 +20,8 @@ const SchedulerAppointmentForm = {
     _appointmentForm: {},
 
     _validateAppointmentFormDate: function(editor, value, previousValue) {
-        var isCurrentDateCorrect = !!value;
-        var isPreviousDateCorrect = !!previousValue;
+        var isCurrentDateCorrect = (value === null) || !!value;
+        var isPreviousDateCorrect = (previousValue === null) || !!previousValue;
         if(!isCurrentDateCorrect && isPreviousDateCorrect) {
             editor.option("value", previousValue);
         }
