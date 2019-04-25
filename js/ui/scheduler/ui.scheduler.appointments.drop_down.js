@@ -24,7 +24,8 @@ const DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENT_DATE_CLASS = "dx-scheduler-dropdown-appointment-date",
     DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-remove-button",
     DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-info-block",
-    DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block";
+    DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block",
+    ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
 
 const DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, "dropDownAppointments"),
     DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, "dropDownAppointments"),
@@ -187,8 +188,8 @@ let dropDownAppointments = Class.inherit({
             itemData = args.itemData,
             settings = itemData.settings;
 
-        eventsEngine.on($item, DRAG_START_EVENT_NAME, () => {
-            this._onAppointmentDragStart($item, itemData, settings, $menu);
+        eventsEngine.on($item, DRAG_START_EVENT_NAME, (e) => {
+            this._onAppointmentDragStart(e, itemData, settings);
         });
 
         eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (e) => {
@@ -201,7 +202,7 @@ let dropDownAppointments = Class.inherit({
         });
     },
 
-    _onAppointmentDragStart: function($item, itemData, settings, $menu, e) {
+    _onAppointmentDragStart: function(eventArgs, itemData, settings) {
         const appointmentInstance = this.instance.getAppointmentsInstance(),
             appointmentIndex = appointmentInstance.option("items").length;
 
@@ -220,7 +221,7 @@ let dropDownAppointments = Class.inherit({
         const $items = appointmentInstance._findItemElementByItem(itemData);
 
         if($items.length > 0) {
-            this._prepareDragItem($menu, $items, appointmentData.settings);
+            this._prepareDragItem(eventArgs, $items, appointmentData.settings);
         }
     },
 
@@ -263,17 +264,24 @@ let dropDownAppointments = Class.inherit({
         return data;
     },
 
-    _prepareDragItem: function($menu, $items, settings) {
+    _prepareDragItem: function(eventArgs, $items, settings) {
+        var scheduler = this.instance;
+        const dragContainerOffset = this._getDragContainerOffset();
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
-
-        const menuPosition = translator.locate($menu);
+        const scrollTop = this._$draggedItem.hasClass(ALL_DAY_PANEL_APPOINTMENT_CLASS)
+            ? scheduler._workSpace.getAllDayHeight()
+            : scheduler._workSpace.getScrollableScrollTop();
         this._startPosition = {
-            top: menuPosition.top,
-            left: menuPosition.left
+            top: eventArgs.pageY - dragContainerOffset.top - (this._$draggedItem.height() / 2) + scrollTop,
+            left: eventArgs.pageX - dragContainerOffset.left - (this._$draggedItem.width() / 2)
         };
 
         translator.move(this._$draggedItem, this._startPosition);
         eventsEngine.trigger(this._$draggedItem, "dxdragstart");
+    },
+
+    _getDragContainerOffset: function() {
+        return this.instance._$element.find('.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper').offset();
     },
 
     _getRecurrencePart: function(appointments, startDate) {

@@ -606,30 +606,13 @@ var BaseRenderingStrategy = Class.inherit({
 
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
-
-        if(coordinates.allDay) {
-            var dateTableOffset = this.instance.fire("getTimePanelWidth");
-
-            var convertedSizes = this.convertToPercents(width, dateTableOffset);
-            var convertedPositions = this.convertToPercents(left - dateTableOffset, dateTableOffset);
-            var leftOffset = dateTableOffset - convertedPositions.x * dateTableOffset / 100;
-
-            return {
-                height: appointmentHeight,
-                width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x * dateTableOffset / 100 + "px)",
-                top: top,
-                left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
-                empty: this._isAppointmentEmpty(height, width)
-            };
-        } else {
-            return {
-                height: appointmentHeight,
-                width: width,
-                top: top,
-                left: left,
-                empty: this._isAppointmentEmpty(height, width)
-            };
-        }
+        return {
+            height: appointmentHeight,
+            width: width,
+            top: top,
+            left: left,
+            empty: this._isAppointmentEmpty(height, width)
+        };
     },
 
     convertToPercents: function(x, offset) {
