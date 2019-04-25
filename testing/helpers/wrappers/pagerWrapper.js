@@ -1,6 +1,6 @@
-import { wrapperBase } from './wrapperBase.js';
+import { WrapperBase } from './wrapperBase.js';
 
-export class pagerWrapper extends wrapperBase {
+export class PagerWrapper extends WrapperBase {
     getPagerPageSizeElements() {
         return this.getContainer().find(".dx-datagrid-pager .dx-page-sizes > .dx-page-size");
     }

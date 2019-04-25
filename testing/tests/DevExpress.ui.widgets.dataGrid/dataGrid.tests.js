@@ -70,8 +70,8 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { pagerWrapper } from "./wrappers/pagerWrapper.js";
-import { filterPanelWrapper } from "./wrappers/filterPanelWrapper.js";
+import { PagerWrapper } from "../../helpers/wrappers/pagerWrapper.js";
+import { FilterPanelWrapper } from "../../helpers/wrappers/filterPanelWrapper.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -221,8 +221,8 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
         getGlobalColumnIdSelector = function(index) {
             return "[id=dx-col-" + index + "]";
         },
-        filterPanel = new filterPanelWrapper(".dx-datagrid"),
-        pager = new pagerWrapper(".dx-datagrid");
+        filterPanel = new FilterPanelWrapper(".dx-datagrid"),
+        pager = new PagerWrapper(".dx-datagrid");
 
     createDataGrid({
         columns: ["field1", "field2"],

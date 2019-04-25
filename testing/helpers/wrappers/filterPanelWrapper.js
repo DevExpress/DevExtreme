@@ -1,6 +1,6 @@
-import { wrapperBase } from './wrapperBase.js';
+import { WrapperBase } from './wrapperBase.js';
 
-export class filterPanelWrapper extends wrapperBase {
+export class FilterPanelWrapper extends WrapperBase {
     getIconFilter() {
         return this.getContainer().find(".dx-datagrid-filter-panel .dx-icon-filter");
     }

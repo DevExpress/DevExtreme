@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-export class wrapperBase {
+export class WrapperBase {
     constructor(containerSelector) {
         this.containerSelector = containerSelector;
     }
