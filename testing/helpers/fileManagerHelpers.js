@@ -15,6 +15,8 @@ export const Consts = {
     BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
+    CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
+    TOOLBAR_SEPARATOR_ITEM: "dx-filemanager-toolbar-separator-item",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
     BUTTON_TEXT_CLASS: "dx-button-text",
@@ -83,6 +85,14 @@ export class FileManagerWrapper {
 
     getToolbarButton(text) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
+    }
+
+    getToolbarSeparators() {
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
+    }
+
+    getCustomThumbnails() {
+        return this._$element.find(`.${Consts.CUSTOM_THUMBNAIL_CLASS}`);
     }
 
     findThumbnailsItem(itemName) {

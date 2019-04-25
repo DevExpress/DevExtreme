@@ -38,7 +38,7 @@ export class FileManagerCommandManager {
             {
                 name: "delete",
                 text: "Delete",
-                icon: "remove",
+                icon: "trash",
                 enabled: this._permissions.remove,
             },
             {
@@ -72,6 +72,12 @@ export class FileManagerCommandManager {
                 text: "Details View",
                 enabled: true,
                 noFileItemRequired: true
+            },
+            {
+                name: "clear",
+                text: "Clear selection",
+                icon: "remove",
+                enabled: true
             }
         ];
 

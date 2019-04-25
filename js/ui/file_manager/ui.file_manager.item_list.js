@@ -2,6 +2,7 @@ import { extend } from "../../core/utils/extend";
 import { name as dblClickName } from "../../events/double_click";
 import { addNamespace } from "../../events/utils";
 import eventsEngine from "../../events/core/events_engine";
+import { getImageContainer } from "../../core/utils/icon";
 
 import Widget from "../widget/ui.widget";
 
@@ -80,7 +81,24 @@ class FileManagerItemListBase extends Widget {
 
     _getItemThumbnail(item) {
         const itemThumbnailGetter = this.option("getItemThumbnail");
-        return itemThumbnailGetter ? itemThumbnailGetter(item) : "";
+        return itemThumbnailGetter ? itemThumbnailGetter(item) : { thumbnail: "" };
+    }
+
+    _getItemThumbnailContainer(item) {
+        const { thumbnail, cssClass } = this._getItemThumbnail(item);
+
+        const $itemThumbnail = getImageContainer(thumbnail)
+            .addClass(this._getItemThumbnailCssClass());
+
+        if(cssClass) {
+            $itemThumbnail.addClass(cssClass);
+        }
+
+        return $itemThumbnail;
+    }
+
+    _getItemThumbnailCssClass() {
+        return "";
     }
 
     _getItemSelector() {
