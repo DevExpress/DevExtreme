@@ -241,7 +241,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1057
     */
-    E1057: "The 'buttons' item must have unique name, but the \"{0}\" value has dublicates",
+    E1057: "The 'buttons' item must have unique name, but the \"{0}\" value has duplicates",
 
     /**
     * @name ErrorsUIWidgets.E1058
