@@ -176,7 +176,7 @@ QUnit.test("Phantom appointment position should be corrected during dragging too
 });
 
 QUnit.test("Phantom appointment should have correct template", function(assert) {
-    var instance = $("#scheduler").dxScheduler({
+    this.createInstance({
         editing: true,
         height: 600,
         views: [{ type: "timelineDay", maxAppointmentsPerCell: 1 }],
@@ -192,11 +192,11 @@ QUnit.test("Phantom appointment should have correct template", function(assert) 
             endDate: new Date(2015, 1, 9, 2, 0)
         }],
         currentDate: new Date(2015, 1, 9)
-    }).dxScheduler("instance");
+    });
 
     var $ddAppointment = this.scheduler.tooltip.getItemElement();
     var pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = instance.$element().find(".dx-scheduler-appointment").eq(0);
+        $phantomAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
     assert.equal($phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), "1:00 AM", "Appointment start is correct");
     assert.equal($phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), "2:00 AM", "Appointment edn is correct");
