@@ -83,7 +83,7 @@ function findAndKillSmallValue(rollingStocks) {
 
     smallestObject = rollingStocks.reduce(function(prev, rollingStock, index) {
         if(!rollingStock) return prev;
-        var value = rollingStock.getLabels()[0].getData().value;
+        var value = rollingStock.value();
         return value < prev.value ? {
             value: value,
             rollingStock: rollingStock,
@@ -121,7 +121,7 @@ function checkStackOverlap(rollingStocks) {
     return overlap;
 }
 
-function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction) {
+function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction, customSorting = () => 0) {
     var rollingStocks = [],
         stubCanvas = {
             start: isRotated ? canvas.left : canvas.top,
@@ -143,7 +143,7 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     } else {
         var rollingStocksTmp = rollingStocks.slice();
         rollingStocks.sort(function(a, b) {
-            return (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
+            return customSorting(a, b) || (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
         });
     }
 
@@ -273,6 +273,9 @@ RollingStock.prototype = {
     },
     getLabels: function() {
         return this.labels;
+    },
+    value() {
+        return this.labels[0].getData().value;
     },
     getInitialPosition: function() {
         return this._initialPosition;

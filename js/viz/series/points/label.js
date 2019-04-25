@@ -485,6 +485,10 @@ Label.prototype = {
         return this._point.hideInsideLabel(this, coords);
     },
 
+    getPoint() {
+        return this._point;
+    },
+
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
     shift: function(x, y) {
         var that = this;
