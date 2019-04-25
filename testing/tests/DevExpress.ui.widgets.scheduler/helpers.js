@@ -11,6 +11,8 @@ export class SchedulerTestWrapper {
                 return this.isAdaptivity() ? $(".dx-scheduler-overlay-panel") : $(".dx-scheduler-appointment-tooltip-wrapper.dx-overlay-wrapper .dx-list");
             },
 
+            hasScrollbar: () => this.tooltip.getContentElement().find(".dx-scrollable-scrollbar").is(':visible'),
+
             getItemElements: () => this.tooltip.getContentElement().find('.dx-list-item'),
             getItemElement: (index = 0) => $(this.tooltip.getItemElements().get(index)),
             checkItemElementHtml: (index = 0, template) => this.tooltip.getItemElement(index).html().indexOf(template) !== -1,
@@ -57,6 +59,7 @@ export class SchedulerTestWrapper {
             compact: {
                 getButtons: () => $(".dx-scheduler-appointment-collector"),
                 getButtonCount: () => this.appointments.compact.getButtons().length,
+                getLastButtonIndex: () => this.appointments.compact.getButtonCount() - 1,
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
