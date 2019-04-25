@@ -21,7 +21,8 @@ var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENT_DATE_CLASS = "dx-scheduler-dropdown-appointment-date",
     DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-remove-button",
     DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-info-block",
-    DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block";
+    DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block",
+    ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
 
 var DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, "dropDownAppointments"),
     DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, "dropDownAppointments"),
@@ -231,16 +232,23 @@ var dropDownAppointments = Class.inherit({
         }
 
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, appointmentData.settings[0].startDate) : $items[0];
-
-        var menuPosition = translator.locate($menu);
-
+        var scheduler = this.instance;
+        const dragContainerOffset = this._getDragContainerOffset();
+        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
+        const scrollTop = this._$draggedItem.hasClass(ALL_DAY_PANEL_APPOINTMENT_CLASS)
+            ? scheduler._workSpace.getAllDayHeight()
+            : scheduler._workSpace.getScrollableScrollTop();
         this._startPosition = {
-            top: menuPosition.top,
-            left: menuPosition.left
+            top: e.pageY - dragContainerOffset.top - (this._$draggedItem.height() / 2) + scrollTop,
+            left: e.pageX - dragContainerOffset.left - (this._$draggedItem.width() / 2)
         };
 
         translator.move(this._$draggedItem, this._startPosition);
         eventsEngine.trigger(this._$draggedItem, "dxdragstart");
+    },
+
+    _getDragContainerOffset: function() {
+        return this.instance._$element.find('.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper').offset();
     },
 
     _dragHandler: function(e, allDay) {
