@@ -10,7 +10,7 @@ import "common.css!";
 import "generic_light.css!";
 import "ui/scheduler/ui.scheduler";
 
-const { testStart, test, skip, module } = QUnit;
+const { testStart, test, module } = QUnit;
 
 testStart(function() {
     $("#qunit-fixture").html(
@@ -45,6 +45,17 @@ const moduleConfig = {
 };
 
 module("Mobile tooltip", moduleConfig, () => {
+    test("Tooltip should be render scroll, if count of items in list is a lot", function(assert) {
+        const scheduler = createInstance();
+        assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
+
+        scheduler.appointments.compact.click();
+        assert.notOk(scheduler.tooltip.hasScrollbar(), "Tooltip contained 3 items shouldn't render scroll bar");
+
+        scheduler.appointments.compact.click(scheduler.appointments.compact.getLastButtonIndex());
+        assert.ok(scheduler.tooltip.hasScrollbar(), "Tooltip contained 4 items should render scroll bar");
+    });
+
     test("Title in mobile tooltip should equals title of cell appointments in month view", function(assert) {
         const scheduler = createInstance();
         assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
@@ -56,13 +67,13 @@ module("Mobile tooltip", moduleConfig, () => {
         }
     });
 
-    skip("Tooltip should hide after execute actions", function(assert) {
+    test("Tooltip should hide after execute actions", function(assert) {
         const scheduler = createInstance();
         const initialDataCount = scheduler.instance.option("dataSource").length;
 
         assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
-        scheduler.appointments.click();
+        scheduler.appointments.compact.click();
         assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
 
         scheduler.tooltip.clickOnItem();
@@ -71,7 +82,7 @@ module("Mobile tooltip", moduleConfig, () => {
         assert.notOk(scheduler.tooltip.isVisible(), "Tooltip should be hide after showing Appointment popup");
 
         scheduler.appointmentPopup.hide();
-        scheduler.appointments.click();
+        scheduler.appointments.compact.click();
         assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
 
         scheduler.tooltip.clickOnDeleteButton();
@@ -80,17 +91,11 @@ module("Mobile tooltip", moduleConfig, () => {
         assert.equal(scheduler.instance.option("dataSource").length, initialDataCount - 1, "Appointment should delete form dataSource after click on delete button in tooltip");
     });
 
-    skip("appointmentTooltipTemplate method should pass valid arguments and render valid html markup", function(assert) {
+    test("appointmentTooltipTemplate method should pass valid arguments and render valid html markup", function(assert) {
         let templateCallCount = 0;
         const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = "appointment-tooltip-template-marker";
-        const scheduler = createInstance();
 
-        const checkItemTemplate = (index) => {
-            assert.ok(scheduler.tooltip.checkItemElementHtml(index, `<div class="${TOOLTIP_TEMPLATE_MARKER_CLASS_NAME}">`), "Template should contain valid custom css class ");
-            assert.ok(scheduler.tooltip.checkItemElementHtml(index, `template item index - ${index}`), "Template should render valid content dependent on item index");
-        };
-
-        this.createInstance({
+        const scheduler = createInstance({
             appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
                 assert.equal(targetedAppointmentData.text, appointmentData.text, "targetedAppointmentData should be not empty");
                 assert.equal(index, templateCallCount, "Index should be correct pass in template callback");
@@ -100,15 +105,24 @@ module("Mobile tooltip", moduleConfig, () => {
             }
         });
 
-        scheduler.appointments.click();
-        checkItemTemplate(0);
-        assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
-        templateCallCount = 0;
+        const checkItemTemplate = (index) => {
+            assert.ok(scheduler.tooltip.checkItemElementHtml(index, `<div class="${TOOLTIP_TEMPLATE_MARKER_CLASS_NAME}">`), "Template should contain valid custom css class ");
+            assert.ok(scheduler.tooltip.checkItemElementHtml(index, `template item index - ${index}`), "Template should render valid content dependent on item index");
+        };
 
-        const buttonCount = scheduler.appointments.compact.getButtonCount();
-        scheduler.appointments.compact.click(buttonCount - 1);
+        scheduler.appointments.compact.click();
         checkItemTemplate(0);
         checkItemTemplate(1);
+        checkItemTemplate(2);
+        assert.ok(scheduler.tooltip.isVisible(), "Tooltip should be visible after click on appointment");
+
+        templateCallCount = 0;
+
+        scheduler.appointments.compact.click(scheduler.appointments.compact.getLastButtonIndex());
+        checkItemTemplate(0);
+        checkItemTemplate(1);
+        checkItemTemplate(2);
+        checkItemTemplate(3);
     });
 });
 
