@@ -38,6 +38,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     }
 
     _onShowing() {
+        this.tooltip.option('height', 'auto');
         const height = this.list.$element().outerHeight();
         this.tooltip.option('height', height > MAX_OVERLAY_HEIGHT ? MAX_OVERLAY_HEIGHT : 'auto');
     }
