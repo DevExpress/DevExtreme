@@ -17,13 +17,13 @@ function checkButtonInfo(buttonInfo) {
         const { location } = buttonInfo;
 
         if("location" in buttonInfo && location !== "after" && location !== "before") {
-            throw errors.Error("E1054");
+            buttonInfo.location = "after";
         }
     };
 
     const checkNameIsDefined = () => {
         if(!("name" in buttonInfo)) {
-            throw errors.Error("E1055");
+            throw errors.Error("E1054");
         }
     };
 
@@ -31,7 +31,7 @@ function checkButtonInfo(buttonInfo) {
         const { name } = buttonInfo;
 
         if(typeof name !== "string") {
-            throw errors.Error("E1056");
+            throw errors.Error("E1055");
         }
     };
 
@@ -43,7 +43,7 @@ function checkButtonInfo(buttonInfo) {
 
 function checkNamesUniqueness(existingNames, newName) {
     if(existingNames.indexOf(newName) !== -1) {
-        throw errors.Error("E1057", newName);
+        throw errors.Error("E1055", newName);
     }
 
     existingNames.push(newName);
@@ -51,12 +51,6 @@ function checkNamesUniqueness(existingNames, newName) {
 
 function isPredefinedButtonName(name, predefinedButtonsInfo) {
     return !!(find(predefinedButtonsInfo, (info) => info.name === name));
-}
-
-function checkExcessOptions(button) {
-    if(typeof button === "object" && (button.location || button.options)) {
-        throw errors.Error("E1058", button.name);
-    }
 }
 
 export default class TextEditorButtonCollection {
@@ -78,11 +72,10 @@ export default class TextEditorButtonCollection {
             const isDefaultButton = isStringButton || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
 
             if(isDefaultButton) {
-                checkExcessOptions(button);
                 const defaultButtonInfo = find(this.defaultButtonsInfo, ({ name }) => name === button || name === button.name);
 
                 if(!defaultButtonInfo) {
-                    throw errors.Error("E1059", button);
+                    throw errors.Error("E1056", this.editor.NAME, button);
                 }
 
                 checkNamesUniqueness(names, button);

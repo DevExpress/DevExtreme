@@ -58,7 +58,7 @@ var CONTROL_KEYS = [
 
 function checkButtonsOptionType(buttons) {
     if(isDefined(buttons) && !Array.isArray(buttons)) {
-        throw errors.Error("E1060");
+        throw errors.Error("E1053");
     }
 }
 
@@ -461,7 +461,7 @@ var TextEditorBase = Editor.inherit({
         each(this.option("buttons"), function(_, buttonOptions) {
             if(buttonOptions.options && !buttonOptions.options.stylingMode) {
                 var buttonInstance = that.getButton(buttonOptions.name);
-                buttonInstance.option("stylingMode", editorStylingMode === "underlined" ? "text" : "contained");
+                buttonInstance.option && buttonInstance.option("stylingMode", editorStylingMode === "underlined" ? "text" : "contained");
             }
         });
     },

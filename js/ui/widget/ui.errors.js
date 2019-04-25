@@ -221,42 +221,22 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1053
     */
-    E1053: "The 'buttons' option must include an object or a string items only",
+    E1053: "The \"buttons\" option accepts an array that contain only objects or string values",
 
     /**
     * @name ErrorsUIWidgets.E1054
     */
-    E1054: "Text Editor button's 'location' property can be 'after' or 'before' only",
+    E1054: "All text editor buttons must have names",
 
     /**
     * @name ErrorsUIWidgets.E1055
     */
-    E1055: "Text Editor button must have a name",
+    E1055: "One or several text editor buttons have invalid or non-unique \"name\" values.",
 
     /**
     * @name ErrorsUIWidgets.E1056
     */
-    E1056: "Text Editor button's 'name' field must be a string",
-
-    /**
-    * @name ErrorsUIWidgets.E1057
-    */
-    E1057: "The 'buttons' item must have unique name, but the \"{0}\" value has duplicates",
-
-    /**
-    * @name ErrorsUIWidgets.E1058
-    */
-    E1058: "The predefined '{0}' button must have no 'location' or 'options' fields in the configuration",
-
-    /**
-    * @name ErrorsUIWidgets.E1059
-    */
-    E1059: "Editor does not support '{0}' action button",
-
-    /**
-    * @name ErrorsUIWidgets.E1060
-    */
-    E1060: "The 'buttons' option must be an array",
+    E1056: "The {0} widget does not support buttons of the \"{1}\" type",
 
     /**
     * @name ErrorsUIWidgets.W1001
