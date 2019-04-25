@@ -456,7 +456,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(itemIndex, keys);
+            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys);
         },
 
         focusedItemIndex: function(itemIndex) {
