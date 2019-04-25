@@ -31,6 +31,7 @@ QUnit.module("Integration: Appointment tooltip", {
         fx.off = true;
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
 
         this.clock = sinon.useFakeTimers();
