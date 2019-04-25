@@ -6,6 +6,7 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
+import "./fileManagerParts/markup.tests.js";
 import "./fileManagerParts/contextMenu.tests.js";
 import "./fileManagerParts/detailsView.tests.js";
 import "./fileManagerParts/toolbar.tests.js";

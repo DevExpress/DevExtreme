@@ -31,6 +31,7 @@ const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator"
 const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + "-inactive-area";
 const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-editing-container";
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
+const FILE_MANAGER_ITEM_CUSTOM_THUMBNAIL_CLASS = FILE_MANAGER_CLASS + "-item-custom-thumbnail";
 
 class FileManager extends Widget {
 
@@ -126,7 +127,7 @@ class FileManager extends Widget {
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onSelectedItemOpened: ({ item }) => this._tryOpen(item),
-            getItemThumbnail: this._getItemThumbnail.bind(this)
+            getItemThumbnail: this._getItemThumbnailInfo.bind(this)
         };
 
         viewMode = viewMode || itemViewOptions.mode;
@@ -140,7 +141,7 @@ class FileManager extends Widget {
         this._breadcrumbs = this._createComponent($("<div>"), FileManagerBreadcrumbs, {
             path: "",
             onPathChanged: e => this.setCurrentFolderPath(e.newPath),
-            onOutsideClick: () => this._itemView.clearSelection()
+            onOutsideClick: () => this._clearSelection()
         });
     }
 
@@ -155,7 +156,8 @@ class FileManager extends Widget {
         const actions = extend(this._editing.getCommandActions(), {
             refresh: () => this._refreshData(),
             thumbnails: () => this._switchView("thumbnails"),
-            details: () => this._switchView("details")
+            details: () => this._switchView("details"),
+            clear: () => this._clearSelection()
         });
         this._commandManager.registerActions(actions);
     }
@@ -190,7 +192,7 @@ class FileManager extends Widget {
         $inactiveArea.addClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
 
         if(!active) {
-            this._itemView.clearSelection();
+            this._clearSelection();
         }
     }
 
@@ -224,6 +226,10 @@ class FileManager extends Widget {
     _disposeWidget(widget) {
         widget.dispose();
         widget.$element().remove();
+    }
+
+    _clearSelection() {
+        this._itemView.clearSelection();
     }
 
     _getMultipleSelectedItems() {
@@ -332,10 +338,18 @@ class FileManager extends Widget {
         return new ArrayFileProvider(getterOptions);
     }
 
-    _getItemThumbnail(item) {
+    _getItemThumbnailInfo(item) {
         const func = this.option("customizeThumbnail");
         const thumbnail = typeUtils.isFunction(func) ? func(item) : item.thumbnail;
-        return thumbnail || this._getPredefinedThumbnail(item);
+        if(thumbnail) {
+            return {
+                thumbnail,
+                cssClass: FILE_MANAGER_ITEM_CUSTOM_THUMBNAIL_CLASS
+            };
+        }
+        return {
+            thumbnail: this._getPredefinedThumbnail(item)
+        };
     }
 
     _getPredefinedThumbnail(item) {
