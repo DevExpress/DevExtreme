@@ -219,6 +219,46 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1052: '{0} should have the "dataSource" option specified',
 
     /**
+    * @name ErrorsUIWidgets.E1053
+    */
+    E1053: "The 'buttons' option must include an object or a string items only",
+
+    /**
+    * @name ErrorsUIWidgets.E1054
+    */
+    E1054: "Text Editor button's 'location' property can be 'after' or 'before' only",
+
+    /**
+    * @name ErrorsUIWidgets.E1055
+    */
+    E1055: "Text Editor button must have a name",
+
+    /**
+    * @name ErrorsUIWidgets.E1056
+    */
+    E1056: "Text Editor button's 'name' field must be a string",
+
+    /**
+    * @name ErrorsUIWidgets.E1057
+    */
+    E1057: "The 'buttons' item must have unique name, but the \"{0}\" value has dublicates",
+
+    /**
+    * @name ErrorsUIWidgets.E1058
+    */
+    E1058: "The predefined '{0}' button must have no 'location' or 'options' fields in the configuration",
+
+    /**
+    * @name ErrorsUIWidgets.E1059
+    */
+    E1059: "Editor does not support '{0}' action button",
+
+    /**
+    * @name ErrorsUIWidgets.E1060
+    */
+    E1060: "The 'buttons' option must be an array",
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",

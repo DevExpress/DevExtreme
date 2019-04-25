@@ -5,6 +5,7 @@ import 'generic_light.css!';
 import "ui/text_box";
 import "ui/select_box";
 import "ui/number_box";
+import errors from "ui/widget/ui.errors";
 
 const { module, test } = QUnit;
 
@@ -45,12 +46,11 @@ module("button collection", () => {
     });
 
     test("should be an array", (assert) => {
-        const error = new TypeError("'buttons' option must be an array");
         const checkException = (value) => {
             const textBox = $("<div>").dxTextBox({}).dxTextBox("instance");
 
-            assert.throws(() => $("<div>").dxTextBox({ buttons: value }), error);
-            assert.throws(() => textBox.option("buttons", value), error);
+            assert.throws(() => $("<div>").dxTextBox({ buttons: value }), errors.Error("E1060"));
+            assert.throws(() => textBox.option("buttons", value), errors.Error("E1060"));
         };
 
         ["string", {}, 2, true].forEach(checkException);
@@ -58,47 +58,39 @@ module("button collection", () => {
 
     module("button", () => {
         test("should be a string or an object only", (assert) => {
-            const error = new TypeError("'buttons' option must include an object or a string items only");
             const checkException = (value) => {
                 const textBox = $("<div>").dxTextBox({}).dxTextBox("instance");
 
-                assert.throws(() => $("<div>").dxTextBox({ buttons: [value] }), error);
-                assert.throws(() => textBox.option("buttons", [value]), error);
+                assert.throws(() => $("<div>").dxTextBox({ buttons: [value] }), errors.Error("E1053"));
+                assert.throws(() => textBox.option("buttons", [value]), errors.Error("E1053"));
             };
 
             [0, [], true, null, void 0].forEach(checkException);
         });
 
         test("should not have buttons with same names", (assert) => {
-            const error = new Error("'buttons' option item must have unique name");
-
-            assert.throws(() => $("<div>").dxTextBox({ buttons: ["clear", "clear"] }), error);
-            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "name" }, { name: "name" }] }), error);
+            assert.throws(() => $("<div>").dxTextBox({ buttons: ["clear", "clear"] }), errors.Error("E1057", "clear"));
+            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "name" }, { name: "name" }] }), errors.Error("E1057", "name"));
         });
 
         module("fields", () => {
             test("'name' filed should be defined for custom buttons", (assert) => {
-                const error = new Error("action button must have a name");
-
-                assert.throws(() => $("<div>").dxTextBox({ buttons: [{}] }), error);
+                assert.throws(() => $("<div>").dxTextBox({ buttons: [{}] }), errors.Error("E1055"));
             });
 
             test("'name' filed should be a string", (assert) => {
-                const error = new TypeError("action button's 'name' field must be a string");
                 const checkException = (value) => {
                     const textBox = $("<div>").dxTextBox({}).dxTextBox("instance");
 
-                    assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: value }] }), error);
-                    assert.throws(() => textBox.option("buttons", [{ name: value }]), error);
+                    assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: value }] }), errors.Error("E1056"));
+                    assert.throws(() => textBox.option("buttons", [{ name: value }]), errors.Error("E1056"));
                 };
 
                 [1, [], {}, false, null, void 0].forEach(checkException);
             });
 
             test("'location' field should be 'after' or 'before' string only", (assert) => {
-                const error = new TypeError("action button's 'location' property can be 'after' or 'before' only");
-
-                assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "name", location: "incorrect" }] }), error);
+                assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "name", location: "incorrect" }] }), errors.Error("E1054"));
             });
 
             test("'options' and 'location' fields should not be required", (assert) => {
@@ -207,16 +199,12 @@ module("rendering", () => {
         });
 
         test("should have only 'clear' predefined button", (assert) => {
-            const error = new Error("editor does not have 'fakeButtonName' action button");
-
-            assert.throws(() => $("<div>").dxTextBox({ buttons: ["fakeButtonName"] }), error);
+            assert.throws(() => $("<div>").dxTextBox({ buttons: ["fakeButtonName"] }), errors.Error("E1059", "fakeButtonName"));
         });
 
         test("predefined button should not have 'location' or 'options' fields in predefined button configuration", (assert) => {
-            const error = new Error("Predefined 'clear' button must have no 'location' or 'options' fields in the configuration");
-
-            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "clear", location: "after" }] }), error);
-            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "clear", options: {} }] }), error);
+            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "clear", location: "after" }] }), errors.Error("E1058", "clear"));
+            assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "clear", options: {} }] }), errors.Error("E1058", "clear"));
         });
 
         test("custom button with location 'before' should be rendered", (assert) => {
@@ -320,16 +308,12 @@ module("rendering", () => {
         });
 
         test("should have only 'clear', 'spins' predefined buttons", (assert) => {
-            const error = new Error("editor does not have 'fakeButtonName' action button");
-
-            assert.throws(() => $("<div>").dxNumberBox({ buttons: ["fakeButtonName"] }), error);
+            assert.throws(() => $("<div>").dxNumberBox({ buttons: ["fakeButtonName"] }), errors.Error("E1059", "fakeButtonName"));
         });
 
         test("predefined buttons should not have 'location' or 'options' fields in predefined button configuration", (assert) => {
-            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "clear", location: "after", options: {} }] }),
-                new Error("Predefined 'clear' button must have no 'location' or 'options' fields in the configuration"));
-            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "spins", location: "after", options: {} }] }),
-                new Error("Predefined 'spins' button must have no 'location' or 'options' fields in the configuration"));
+            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "clear", location: "after", options: {} }] }), errors.Error("E1058", "clear"));
+            assert.throws(() => $("<div>").dxNumberBox({ buttons: [{ name: "spins", location: "after", options: {} }] }), errors.Error("E1058", "spins"));
         });
     });
 
@@ -386,16 +370,12 @@ module("rendering", () => {
         });
 
         test("should have only 'clear', 'dropDown' predefined button", (assert) => {
-            const error = new Error("editor does not have 'fakeButtonName' action button");
-
-            assert.throws(() => $("<div>").dxSelectBox({ buttons: ["fakeButtonName"] }), error);
+            assert.throws(() => $("<div>").dxSelectBox({ buttons: ["fakeButtonName"] }), errors.Error("E1059", "fakeButtonName"));
         });
 
         test("predefined buttons should not have 'location' or 'options' fields in predefined button configuration", (assert) => {
-            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "clear", location: "after", options: {} }] }),
-                new Error("Predefined 'clear' button must have no 'location' or 'options' fields in the configuration"));
-            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "dropDown", location: "after", options: {} }] }),
-                new Error("Predefined 'dropDown' button must have no 'location' or 'options' fields in the configuration"));
+            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "clear", location: "after", options: {} }] }), errors.Error("E1058", "clear"));
+            assert.throws(() => $("<div>").dxSelectBox({ buttons: [{ name: "dropDown", location: "after", options: {} }] }), errors.Error("E1058", "dropDown"));
         });
 
         test("buttons is rendered with fieldTemplate", (assert) => {
