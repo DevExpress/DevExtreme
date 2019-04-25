@@ -334,10 +334,10 @@ Store.create = function(alias, options) {
 };
 
 Store.registerClass = function(type, alias) {
-    if (alias) {
-        storeImpl[alias] = type
+    if(alias) {
+        storeImpl[alias] = type;
     }
-    return type
+    return type;
 };
 
 Store.inherit = function(inheritor) {
@@ -345,7 +345,7 @@ Store.inherit = function(inheritor) {
         var type = inheritor.apply(this, [members]);
         Store.registerClass(type, alias);
         return type;
-    }
+    };
 }(Store.inherit);
 
 module.exports = Store;
