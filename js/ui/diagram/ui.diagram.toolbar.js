@@ -16,7 +16,8 @@ const WIDGET_COMMANDS = [
     {
         command: "options",
         icon: "preferences",
-        hint: "Show Page Properties"
+        hint: "Show Page Properties",
+        text: "Page Properties",
     }
 ];
 
