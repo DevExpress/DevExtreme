@@ -204,3 +204,62 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 }
+
+module("Appointment popup", moduleConfig, () => {
+    test("Buttons location of the top toolbar for the iOs device", function(assert) {
+        this.realDeviceMock = sinon.stub(devices, "current").returns({ platform: "ios" });
+        try {
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            const popup = scheduler.appointmentPopup;
+            assert.ok(popup.hasToolbarButtonsInSection("top", "before", ["cancel"]), "the 'Cancel' button is located inside the 'before' section");
+            assert.ok(popup.hasToolbarButtonsInSection("top", "after", ["done"]), "the 'Done' button is located inside the 'after' section");
+        } finally {
+            this.realDeviceMock.restore();
+        }
+    });
+
+    test("Buttons location of the top toolbar for the desktop", function(assert) {
+        this.realDeviceMock = sinon.stub(devices, "current").returns({ platform: "generic" });
+        try {
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            const popup = scheduler.appointmentPopup;
+            assert.ok(popup.hasToolbarButtonsInSection("bottom", "after", ["done", "cancel"]), "the 'Cancel' and 'Done' buttons are located in the 'after' section");
+        } finally {
+            this.realDeviceMock.restore();
+        }
+    });
+
+    test("Buttons location of the top toolbar for the android device", function(assert) {
+        this.realDeviceMock = sinon.stub(devices, "current").returns({ platform: "android" });
+        try {
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            const popup = scheduler.appointmentPopup;
+            assert.ok(popup.hasToolbarButtonsInSection("bottom", "after", ["cancel", "done"]), "the 'Cancel' and 'Done' buttons are located in the 'after' section");
+        } finally {
+            this.realDeviceMock.restore();
+        }
+    });
+
+    test("The title of the popup doesn't show for the android device", function(assert) {
+        this.realDeviceMock = sinon.stub(devices, "current").returns({ android: true });
+        try {
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+            assert.notOk(popup.option("showTitle"), "The title of the popup doesn't show");
+        } finally {
+            this.realDeviceMock.restore();
+        }
+    });
+});

@@ -76,7 +76,13 @@ export class SchedulerTestWrapper {
                     return config;
                 };
             },
-            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width)
+            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width),
+            getToolbarElementByLocation: location => this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${location === "top" ? "title" : "bottom"}`),
+            hasToolbarButtonsInSection: (toolBarLocation, sectionName, buttonNames) => {
+                const $toolbar = this.appointmentPopup.getToolbarElementByLocation(toolBarLocation);
+                const $buttons = $toolbar.find(`.dx-toolbar-${sectionName} .dx-button`);
+                return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
+            }
         };
 
         this.appointmentForm = {

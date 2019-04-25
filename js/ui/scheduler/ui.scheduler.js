@@ -2274,6 +2274,12 @@ const Scheduler = Widget.inherit({
                     options: {
                         fullScreen: true
                     }
+                },
+                {
+                    device: () => devices.current().android,
+                    options: {
+                        showTitle: false
+                    }
                 }
             ]
         };
@@ -2290,9 +2296,17 @@ const Scheduler = Widget.inherit({
     },
 
     _getPopupToolbarItems: function() {
+        const isIOs = devices.current().platform === "ios";
         return [
-            { shortcut: "done", location: "after", onClick: this._doneButtonClickHandler.bind(this) },
-            { shortcut: "cancel", location: "after" }
+            {
+                shortcut: "done",
+                location: "after",
+                onClick: this._doneButtonClickHandler.bind(this)
+            },
+            {
+                shortcut: "cancel",
+                location: isIOs ? "before" : "after"
+            }
         ];
     },
 
