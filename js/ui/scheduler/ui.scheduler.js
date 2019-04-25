@@ -56,15 +56,18 @@ const Deferred = deferredUtils.Deferred;
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const WIDGET_CLASS = "dx-scheduler",
-    WIDGET_SMALL_CLASS = "dx-scheduler-small",
-    WIDGET_ADAPTIVE_CLASS = "dx-scheduler-adaptive",
-    WIDGET_READONLY_CLASS = "dx-scheduler-readonly",
-    APPOINTMENT_POPUP_CLASS = "dx-scheduler-appointment-popup",
-    RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item",
-    RECURRENCE_EDITOR_OPENED_ITEM_CLASS = "dx-scheduler-recurrence-rule-item-opened",
-    WIDGET_SMALL_WIDTH = 400,
-    APPOINTEMENT_POPUP_WIDTH = 610;
+const WIDGET_CLASS = "dx-scheduler";
+const WIDGET_SMALL_CLASS = "dx-scheduler-small";
+const WIDGET_ADAPTIVE_CLASS = "dx-scheduler-adaptive";
+const WIDGET_READONLY_CLASS = "dx-scheduler-readonly";
+const APPOINTMENT_POPUP_CLASS = "dx-scheduler-appointment-popup";
+const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
+const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = "dx-scheduler-recurrence-rule-item-opened";
+const WIDGET_SMALL_WIDTH = 400;
+const APPOINTMENT_POPUP_WIDTH = 610;
+
+const TOOLBAR_ITEM_AFTER_LOCATION = "after";
+const TOOLBAR_ITEM_BEFORE_LOCATION = "before";
 
 var FULL_DATE_FORMAT = "yyyyMMddTHHmmss",
     UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + "Z";
@@ -2251,7 +2254,7 @@ const Scheduler = Widget.inherit({
         var template = this._getTemplateByOption("appointmentPopupTemplate");
 
         return {
-            maxWidth: APPOINTEMENT_POPUP_WIDTH,
+            maxWidth: APPOINTMENT_POPUP_WIDTH,
             height: 'auto',
             maxHeight: this._popupMaxHeight(),
             onHiding: (function() {
@@ -2300,12 +2303,12 @@ const Scheduler = Widget.inherit({
         return [
             {
                 shortcut: "done",
-                location: "after",
+                location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: this._doneButtonClickHandler.bind(this)
             },
             {
                 shortcut: "cancel",
-                location: isIOs ? "before" : "after"
+                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
             }
         ];
     },

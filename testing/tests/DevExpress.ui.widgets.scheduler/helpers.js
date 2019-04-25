@@ -1,5 +1,8 @@
 import $ from "jquery";
 
+export const TOOLBAR_TOP_LOCATION = "top";
+export const TOOLBAR_BOTTOM_LOCATION = "bottom";
+
 export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
@@ -77,7 +80,10 @@ export class SchedulerTestWrapper {
                 };
             },
             setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width),
-            getToolbarElementByLocation: location => this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${location === "top" ? "title" : "bottom"}`),
+            getToolbarElementByLocation: location => {
+                const toolbarName = location === TOOLBAR_TOP_LOCATION ? "title" : TOOLBAR_BOTTOM_LOCATION;
+                return this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${toolbarName}`);
+            },
             hasToolbarButtonsInSection: (toolBarLocation, sectionName, buttonNames) => {
                 const $toolbar = this.appointmentPopup.getToolbarElementByLocation(toolBarLocation);
                 const $buttons = $toolbar.find(`.dx-toolbar-${sectionName} .dx-button`);

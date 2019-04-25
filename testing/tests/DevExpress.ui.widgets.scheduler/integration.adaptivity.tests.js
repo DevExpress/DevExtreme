@@ -1,6 +1,6 @@
 import $ from "jquery";
 import fx from "animation/fx";
-import { SchedulerTestWrapper } from "./helpers.js";
+import { SchedulerTestWrapper, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from "./helpers.js";
 import { getSimpleDataArray } from './data.js';
 import resizeCallbacks from "core/utils/resize_callbacks";
 import devices from "core/devices";
@@ -12,7 +12,7 @@ import "ui/scheduler/ui.scheduler";
 
 const { testStart, test, skip, module } = QUnit;
 
-testStart(function() {
+testStart(() => {
     $("#qunit-fixture").html(
         `<div id="scheduler">
             <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
@@ -206,6 +206,11 @@ if(devices.real().deviceType === "desktop") {
 }
 
 module("Appointment popup", moduleConfig, () => {
+    const SECTION_AFTER = "after";
+    const SECTION_BEFORE = "before";
+    const DONE_BUTTON = "done";
+    const CANCEL_BUTTON = "cancel";
+
     test("Buttons location of the top toolbar for the iOs device", function(assert) {
         this.realDeviceMock = sinon.stub(devices, "current").returns({ platform: "ios" });
         try {
@@ -214,8 +219,8 @@ module("Appointment popup", moduleConfig, () => {
             scheduler.tooltip.clickOnItem();
 
             const popup = scheduler.appointmentPopup;
-            assert.ok(popup.hasToolbarButtonsInSection("top", "before", ["cancel"]), "the 'Cancel' button is located inside the 'before' section");
-            assert.ok(popup.hasToolbarButtonsInSection("top", "after", ["done"]), "the 'Done' button is located inside the 'after' section");
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_TOP_LOCATION, SECTION_BEFORE, [CANCEL_BUTTON]), "the 'Cancel' button is located inside the 'before' section");
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_TOP_LOCATION, SECTION_AFTER, [DONE_BUTTON]), "the 'Done' button is located inside the 'after' section");
         } finally {
             this.realDeviceMock.restore();
         }
@@ -229,7 +234,7 @@ module("Appointment popup", moduleConfig, () => {
             scheduler.tooltip.clickOnItem();
 
             const popup = scheduler.appointmentPopup;
-            assert.ok(popup.hasToolbarButtonsInSection("bottom", "after", ["done", "cancel"]), "the 'Cancel' and 'Done' buttons are located in the 'after' section");
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_BOTTOM_LOCATION, SECTION_AFTER, [DONE_BUTTON, CANCEL_BUTTON]), "the 'Cancel' and 'Done' buttons are located in the 'after' section");
         } finally {
             this.realDeviceMock.restore();
         }
@@ -243,7 +248,7 @@ module("Appointment popup", moduleConfig, () => {
             scheduler.tooltip.clickOnItem();
 
             const popup = scheduler.appointmentPopup;
-            assert.ok(popup.hasToolbarButtonsInSection("bottom", "after", ["cancel", "done"]), "the 'Cancel' and 'Done' buttons are located in the 'after' section");
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_BOTTOM_LOCATION, SECTION_AFTER, [CANCEL_BUTTON, DONE_BUTTON]), "the 'Cancel' and 'Done' buttons are located in the 'after' section");
         } finally {
             this.realDeviceMock.restore();
         }
