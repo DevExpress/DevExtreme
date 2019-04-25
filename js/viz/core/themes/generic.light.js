@@ -708,37 +708,6 @@ registerTheme({
             },
             constantLines: []
         },
-        commonAnnotationSettings: {
-            font: {
-                color: "#333333"
-            },
-            tooltipEnabled: true,
-            border: {
-                width: 1,
-                color: "#dddddd",
-                dashStyle: SOLID,
-                visible: true
-            },
-            color: WHITE,
-            opacity: 0.9,
-            arrowLength: 14,
-            arrowWidth: 14,
-            paddingLeftRight: 10,
-            paddingTopBottom: 10,
-            shadow: {
-                opacity: 0.15,
-                offsetX: 0,
-                offsetY: 1,
-                blur: 4,
-                color: BLACK
-            },
-            image: {
-                width: 30,
-                height: 30
-            },
-            wordWrap: "normal",
-            textOverflow: "ellipsis"
-        },
         argumentAxis: {
             endOnTick: false,
             workWeek: [1, 2, 3, 4, 5]
@@ -788,6 +757,37 @@ registerTheme({
             panKey: "shift",
             allowMouseWheel: true,
             allowTouchGestures: true
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: "#333333"
+            },
+            tooltipEnabled: true,
+            border: {
+                width: 1,
+                color: "#dddddd",
+                dashStyle: SOLID,
+                visible: true
+            },
+            color: WHITE,
+            opacity: 0.9,
+            arrowLength: 14,
+            arrowWidth: 14,
+            paddingLeftRight: 10,
+            paddingTopBottom: 10,
+            shadow: {
+                opacity: 0.15,
+                offsetX: 0,
+                offsetY: 1,
+                blur: 4,
+                color: BLACK
+            },
+            image: {
+                width: 30,
+                height: 30
+            },
+            wordWrap: "normal",
+            textOverflow: "ellipsis"
         }
     },
     pie: {

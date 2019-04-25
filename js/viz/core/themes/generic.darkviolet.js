@@ -75,6 +75,15 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: "#575e6b" }
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: TITLE_COLOR
+            },
+            border: {
+                color: "#414152"
+            },
+            color: BACKGROUND_COLOR
         }
     },
     funnel: {

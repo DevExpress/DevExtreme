@@ -63,7 +63,7 @@ registerTheme({
         location: "edge",
         color: "#616161",
         font: {
-            color: "#fff"
+            color: WHITE
         }
     },
 
@@ -76,6 +76,22 @@ registerTheme({
                 font: {
                     size: 11
                 }
+            }
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: WHITE
+            },
+            border: {
+                color: "#616161"
+            },
+            color: "#616161",
+            arrowLength: 14,
+            arrowWidth: 0,
+            shadow: {
+                opacity: 0.08,
+                offsetY: 4,
+                blur: 8
             }
         }
     },
@@ -254,6 +270,12 @@ registerTheme({
             dragBoxStyle: {
                 color: WHITE
             }
+        },
+        commonAnnotationSettings: {
+            border: {
+                color: "#000"
+            },
+            color: "#000"
         }
     },
     gauge: {
