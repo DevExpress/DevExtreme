@@ -594,8 +594,8 @@ polarAxes.linear = {
 
     _checkAlignmentConstantLineLabels: _noop,
 
-    _rotateTick: function(element, coords) {
-        element.rotate(coords.angle + HALF_PI_ANGLE, coords.x, coords.y);
+    _rotateTick: function(element, coords, isGridLine) {
+        !isGridLine && element.rotate(coords.angle + HALF_PI_ANGLE, coords.x, coords.y);
     },
 
     _validateOverlappingMode: circularAxes._validateOverlappingMode,

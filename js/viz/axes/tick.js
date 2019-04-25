@@ -66,7 +66,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 skippedCategory = category;
             },
 
-            _updateLine(lineElement, settings, storedSettings, animate) {
+            _updateLine(lineElement, settings, storedSettings, animate, isGridLine) {
                 if(!lineElement) {
                     return;
                 }
@@ -91,14 +91,15 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     });
                 }
 
-                this.coords.angle && axis._rotateTick(lineElement, this.coords);
+                this.coords.angle && axis._rotateTick(lineElement, this.coords, isGridLine);
             },
 
             updateTickPosition: function(animate) {
                 this._updateLine(this.mark,
                     { points: axis._getTickMarkPoints(tick.coords, tickOptions.length) },
                     this._storedCoords && { points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length) },
-                    animate);
+                    animate,
+                    false);
             },
             drawLabel: function(range) {
                 const labelIsVisible = labelOptions.visible
@@ -222,7 +223,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this._updateLine(this.grid,
                     axis._getGridPoints(tick.coords),
                     this._storedCoords && axis._getGridPoints(this._storedCoords),
-                    animate);
+                    animate, true);
             },
 
             removeLabel() {

@@ -750,6 +750,26 @@ QUnit.test("Update grid on second draw", function(assert) {
     assert.deepEqual(grid.rotate.lastCall.args, [33, 465, 200]);
 });
 
+// T734840
+QUnit.test("Do not rotated grid for Linear polar axis", function(assert) {
+    this.generatedTicks = [500];
+    this.renderSettings.drawingType = "linear";
+
+    const axis = this.createDrawnAxis({ rotationAngle: 90, grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
+    const grid = this.renderer.circle.lastCall.returnValue;
+
+    axis.draw({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 400,
+        width: 1000
+    });
+
+    assert.strictEqual(grid.rotate.callCount, undefined);
+});
+
 QUnit.test("create strips", function(assert) {
     this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }] });
     assert.ok(this.renderer.arc.called);
