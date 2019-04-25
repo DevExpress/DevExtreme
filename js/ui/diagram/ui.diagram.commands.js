@@ -59,6 +59,11 @@ const DiagramCommands = {
                 widget: "dxColorBox"
             },
             {
+                command: DiagramCommand.FillColor,
+                text: "Fill Color",
+                widget: "dxColorBox"
+            },
+            {
                 command: DiagramCommand.TextLeftAlign,
                 hint: "Align Left",
                 text: "Align Left",
