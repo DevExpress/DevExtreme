@@ -8,11 +8,16 @@ import dragEvents from "events/drag";
 import { DataSource } from "data/data_source/data_source";
 import subscribes from "ui/scheduler/ui.scheduler.subscribes";
 import dataUtils from "core/element_data";
-import { appointmentsHelper, tooltipHelper } from "./helpers.js";
+import { SchedulerTestWrapper } from "./helpers.js";
 
 import "common.css!";
 import "generic_light.css!";
 import "ui/scheduler/ui.scheduler";
+
+const createInstance = function(options) {
+    const instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -1356,7 +1361,7 @@ QUnit.test("DropDown appointment should be rendered correctly when timezone is s
             }
         ];
 
-        this.createInstance({
+        const scheduler = createInstance({
             dataSource: data,
             views: ["month"],
             currentView: "month",
@@ -1368,8 +1373,8 @@ QUnit.test("DropDown appointment should be rendered correctly when timezone is s
             textExpr: "schedule"
         });
 
-        appointmentsHelper.compact.click();
-        assert.equal(tooltipHelper.getDateText(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getDateText(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
     } finally {
         tzOffsetStub.restore();
     }
