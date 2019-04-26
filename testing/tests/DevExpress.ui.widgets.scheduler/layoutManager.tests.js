@@ -17,7 +17,7 @@ import Color from "color";
 import dataUtils from "core/element_data";
 import devices from "core/devices";
 import CustomStore from "data/custom_store";
-import { appointmentsHelper, tooltipHelper } from './helpers.js';
+import { SchedulerTestWrapper } from './helpers.js';
 
 const APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
@@ -46,6 +46,7 @@ const moduleOptions = {
     beforeEach: function() {
         this.createInstance = options => {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { editing: true, maxAppointmentsPerCell: null })).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
     },
     afterEach: function() {
@@ -67,6 +68,8 @@ const renderLayoutModuleOptions = {
                 width: 1300,
                 editing: true,
             })).dxScheduler("instance");
+
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
 
         this.markAppointments = function() {
@@ -960,10 +963,10 @@ QUnit.test("More than 3 cloned appointments should be grouped", function(assert)
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     assert.equal($appointment.length, 2, "Cloned appointments are grouped");
 
-    appointmentsHelper.compact.click();
-    assert.equal(appointmentsHelper.compact.getButtonText(), "8 more", "DropDown menu has correct text");
-    assert.roughEqual(appointmentsHelper.compact.getButton().outerWidth(), 106, 1, "DropDownMenu button width is OK");
-    assert.equal(tooltipHelper.getItemCount(), 8, "DropDown menu has correct items");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "8 more", "DropDown menu has correct text");
+    assert.roughEqual(this.scheduler.appointments.compact.getButton().outerWidth(), 106, 1, "DropDownMenu button width is OK");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 8, "DropDown menu has correct items");
 });
 
 QUnit.test("Grouped appointments schould have correct colors", function(assert) {
@@ -2085,10 +2088,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
     }
 
-    appointmentsHelper.compact.click();
-    assert.ok(tooltipHelper.isVisible(), "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 1, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.ok(this.scheduler.tooltip.isVisible(), "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 1, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "1 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'auto' mode", function(assert) {
@@ -2116,9 +2119,9 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
     assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
 
-    appointmentsHelper.compact.click();
-    assert.equal(tooltipHelper.isVisible(), 1, "ddAppointment is rendered");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "2 more", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.tooltip.isVisible(), 1, "ddAppointment is rendered");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "2 more", "DropDown menu has correct text");
 
     this.instance.option("height", 900);
     $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
@@ -2342,10 +2345,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentHeight, (tableCellHeight - 30) / 3, 1.5, "appointment is full-size");
     }
 
-    appointmentsHelper.compact.click();
-    assert.ok(tooltipHelper.isVisible(), "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 1, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.ok(this.scheduler.tooltip.isVisible(), "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 1, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "1 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Day view, 'auto' mode", function(assert) {
@@ -2380,10 +2383,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentHeight, (tableCellHeight - 24) / 2, 1.5, "appointment is full-size");
     }
 
-    appointmentsHelper.compact.click();
-    assert.ok(tooltipHelper.isVisible(), "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 3, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "3 more", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.ok(this.scheduler.tooltip.isVisible(), "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 3, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "3 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Appointment should have an unchangeable height, Day view, 'auto' mode", function(assert) {
@@ -2530,10 +2533,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentHeight, (tableCellHeight - 26) / 2, 1.5, "appointment is full-size");
     }
 
-    appointmentsHelper.compact.click();
-    assert.equal(appointmentsHelper.compact.getButtonCount(), 2, "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 2, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "2 more", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 2, "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 2, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "2 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'auto' mode", function(assert) {
@@ -2566,10 +2569,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentHeight, (tableCellHeight - 26) / 3, 1.5, "appointment is full-size");
     }
 
-    appointmentsHelper.compact.click();
-    assert.equal(appointmentsHelper.compact.getButtonCount(), 4, "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 1, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 4, "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 1, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "1 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'auto' mode, narrow height", function(assert) {
@@ -2602,10 +2605,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentHeight, (tableCellHeight - 26), 1.5, "appointment is full-size");
     }
 
-    appointmentsHelper.compact.click();
-    assert.equal(appointmentsHelper.compact.getButtonCount(), 8, "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 3, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "3 more", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 8, "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 3, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "3 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'unlimited' mode", function(assert) {
@@ -2694,10 +2697,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         }
     );
 
-    appointmentsHelper.compact.click();
-    assert.ok(tooltipHelper.isVisible(), "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 1, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "1", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.ok(this.scheduler.tooltip.isVisible(), "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 1, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "1", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'numeric' mode", function(assert) {
@@ -2729,10 +2732,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         assert.roughEqual(appointmentWidth, (tableCellWidth - 26) / 3, 1.5, "appointment is full-size");
     }
 
-    appointmentsHelper.compact.click();
-    assert.ok(tooltipHelper.isVisible(), "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 1, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "1", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.ok(this.scheduler.tooltip.isVisible(), "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 1, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "1", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment should have correct size, 'auto' mode", function(assert) {
@@ -2790,10 +2793,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     }
 
 
-    appointmentsHelper.compact.click();
-    assert.ok(tooltipHelper.isVisible(), "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 1, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "1", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.ok(this.scheduler.tooltip.isVisible(), "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 1, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "1", "DropDown menu has correct text");
 
     this.instance.option("width", 900);
 
@@ -2803,10 +2806,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
 
     assert.roughEqual(appointmentWidth, tableCellWidth - 26, 1.5, "One appointment is full-size");
 
-    appointmentsHelper.compact.click();
-    assert.ok(tooltipHelper.isVisible(), "ddAppointment is rendered");
-    assert.equal(tooltipHelper.getItemCount(), 3, "DropDown menu has correct items");
-    assert.equal(appointmentsHelper.compact.getButtonText(), "3", "DropDown menu has correct text");
+    this.scheduler.appointments.compact.click();
+    assert.ok(this.scheduler.tooltip.isVisible(), "ddAppointment is rendered");
+    assert.equal(this.scheduler.tooltip.getItemCount(), 3, "DropDown menu has correct items");
+    assert.equal(this.scheduler.appointments.compact.getButtonText(), "3", "DropDown menu has correct text");
 });
 
 QUnit.test("DropDown appointments button should have correct width on week view", function(assert) {

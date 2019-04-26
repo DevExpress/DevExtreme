@@ -71,7 +71,7 @@ var FilterPanelView = modules.View.inherit({
 
         eventsEngine.on($element, "click", () => that._showFilterBuilder());
 
-        registerKeyboardAction(that, $element, undefined, () => that._showFilterBuilder());
+        registerKeyboardAction("filterPanel", that, $element, undefined, () => that._showFilterBuilder());
 
         that._addTabIndexToElement($element);
 
@@ -105,7 +105,7 @@ var FilterPanelView = modules.View.inherit({
 
         eventsEngine.on($textElement, "click", () => that._showFilterBuilder());
 
-        registerKeyboardAction(that, $textElement, undefined, () => that._showFilterBuilder());
+        registerKeyboardAction("filterPanel", that, $textElement, undefined, () => that._showFilterBuilder());
 
         that._addTabIndexToElement($textElement);
 
@@ -125,7 +125,7 @@ var FilterPanelView = modules.View.inherit({
 
         eventsEngine.on($element, "click", clearFilterValue);
 
-        registerKeyboardAction(this, $element, undefined, clearFilterValue);
+        registerKeyboardAction("filterPanel", this, $element, undefined, clearFilterValue);
 
         that._addTabIndexToElement($element);
 

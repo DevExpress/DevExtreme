@@ -1,5 +1,8 @@
 import $ from "jquery";
 
+export const TOOLBAR_TOP_LOCATION = "top";
+export const TOOLBAR_BOTTOM_LOCATION = "bottom";
+
 export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
@@ -10,6 +13,8 @@ export class SchedulerTestWrapper {
             getContentElement: () => {
                 return this.isAdaptivity() ? $(".dx-scheduler-overlay-panel") : $(".dx-scheduler-appointment-tooltip-wrapper.dx-overlay-wrapper .dx-list");
             },
+
+            hasScrollbar: () => this.tooltip.getContentElement().find(".dx-scrollable-scrollbar").is(':visible'),
 
             getItemElements: () => this.tooltip.getContentElement().find('.dx-list-item'),
             getItemElement: (index = 0) => $(this.tooltip.getItemElements().get(index)),
@@ -54,9 +59,14 @@ export class SchedulerTestWrapper {
                 this.clock.restore();
             },
 
+            dblclick: (index = 0) => {
+                this.appointments.getAppointment(index).trigger("dxdblclick");
+            },
+
             compact: {
                 getButtons: () => $(".dx-scheduler-appointment-collector"),
                 getButtonCount: () => this.appointments.compact.getButtons().length,
+                getLastButtonIndex: () => this.appointments.compact.getButtonCount() - 1,
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
@@ -76,7 +86,16 @@ export class SchedulerTestWrapper {
                     return config;
                 };
             },
-            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width)
+            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width),
+            getToolbarElementByLocation: location => {
+                const toolbarName = location === TOOLBAR_TOP_LOCATION ? "title" : TOOLBAR_BOTTOM_LOCATION;
+                return this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${toolbarName}`);
+            },
+            hasToolbarButtonsInSection: (toolBarLocation, sectionName, buttonNames) => {
+                const $toolbar = this.appointmentPopup.getToolbarElementByLocation(toolBarLocation);
+                const $buttons = $toolbar.find(`.dx-toolbar-${sectionName} .dx-button`);
+                return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
+            }
         };
 
         this.appointmentForm = {
@@ -100,53 +119,3 @@ export class SchedulerTestWrapper {
         return this.instance.option("adaptivityEnabled");
     }
 }
-
-export const tooltipHelper = {
-    getContentElement: () => $(".dx-scheduler-appointment-tooltip-wrapper.dx-overlay-wrapper .dx-list"),
-    getItemElements: () => tooltipHelper.getContentElement().find('.dx-list-item'),
-    getItemElement: (index = 0) => $(tooltipHelper.getItemElements().get(index)),
-    getTitleElement: (index = 0) => tooltipHelper.getItemElement(index).find('.dx-tooltip-appointment-item-content-subject'),
-    getDateElement: (index = 0) => tooltipHelper.getItemElement(index).find('.dx-tooltip-appointment-item-content-date'),
-    getDeleteButton: (index = 0) => tooltipHelper.getItemElement(index).find('.dx-tooltip-appointment-item-delete-button'),
-
-    getMarkers: () => tooltipHelper.getItemElements().find('.dx-tooltip-appointment-item-marker-body'),
-
-    getDateText: (index = 0) => tooltipHelper.getDateElement(index).text(),
-    getTitleText: (index = 0) => tooltipHelper.getTitleElement(index).text(),
-
-    getItemCount: () => tooltipHelper.getItemElements().length,
-
-    clickOnDeleteButton: (index = 0) => tooltipHelper.getDeleteButton(index).trigger("dxclick"),
-    clickOnItem: (index = 0) => tooltipHelper.getItemElement(index).trigger("dxclick"),
-
-    hasDeleteButton: (index = 0) => tooltipHelper.getDeleteButton(index).length !== 0,
-
-    isVisible: () => tooltipHelper.getContentElement().length > 0
-};
-
-export const appointmentsHelper = {
-    getAppointments: () => $(".dx-scheduler-appointment"),
-    getAppointmentCount: () => appointmentsHelper.getAppointments().length,
-    getAppointment: (index = 0) => appointmentsHelper.getAppointments().eq(index),
-    getTitleText: (index = 0) => appointmentsHelper.getAppointment(index).find(".dx-scheduler-appointment-title").text(),
-
-    click: (index = 0) => {
-        this.clock = sinon.useFakeTimers();
-        appointmentsHelper.getAppointment(index).trigger("dxclick");
-        this.clock.tick(300);
-        this.clock.restore();
-    },
-
-    compact: {
-        getButtons: () => $(".dx-scheduler-appointment-collector"),
-        getButtonCount: () => appointmentsHelper.compact.getButtons().length,
-        getButton: (index = 0) => $(appointmentsHelper.compact.getButtons().get(index)),
-        getButtonText: (index = 0) => appointmentsHelper.compact.getButton(index).find("span").text(),
-        click: (index = 0) => appointmentsHelper.compact.getButton(index).trigger("dxclick"),
-    }
-};
-// TODO: Don't use
-export const appointmentPopupHelper = {
-    getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
-    hide: () => appointmentPopupHelper.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick")
-};

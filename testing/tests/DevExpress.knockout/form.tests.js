@@ -420,6 +420,28 @@ QUnit.test("Form is not crashed when numberbox is used (T369550)", function(asse
     assert.ok(true, "error is not threw");
 });
 
+
+QUnit.test("Form items should have correct model", function(assert) {
+    assert.expect(1);
+    var viewModel = {
+        formData: {},
+        items: [{
+            itemType: "button",
+            buttonOptions: {
+                text: "Register",
+                onClick: function(e) {
+                    assert.deepEqual(e.model, viewModel, "model is defined");
+                }
+            }
+        }]
+    };
+
+    var $form = $("#formWithItems");
+
+    ko.applyBindings(viewModel, $form.get(0));
+    $form.find(".dx-button").trigger("dxclick");
+});
+
 QUnit.test("Editor doesn't update the field data if it's already up to date", function(assert) {
     // arrange
     var viewModel = {
