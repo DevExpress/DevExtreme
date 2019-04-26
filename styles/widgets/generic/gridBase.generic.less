@@ -712,7 +712,7 @@
             &.dx-data-row:not(.dx-edit-row) {
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
-                & .dx-command-edit:not(.dx-focused) .dx-link:not(:focus) {
+                & .dx-command-edit:not(.dx-focused) .dx-link {
                     background-color: ~"@{@{widgetName}-row-focused-bg}";
                     color: ~"@{@{widgetName}-row-focused-color}";
 
@@ -731,7 +731,7 @@
                     }
                 }
 
-                & .dx-command-edit:not(.dx-focused) .dx-link:focus {
+                & .dx-command-edit .dx-link:focus {
                     background-color: ~"@{@{widgetName}-base-background-color}";
                     color: ~"@{@{widgetName}-base-color}";
                 }
