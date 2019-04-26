@@ -46,14 +46,26 @@ const moduleConfig = {
 
 module("Mobile tooltip", moduleConfig, () => {
     test("Tooltip should be render scroll, if count of items in list is a lot", function(assert) {
-        const scheduler = createInstance();
-        assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
+        const MAX_TOOLTIP_HEIGHT = 250;
+        const isDesktop = devices.real().deviceType === "desktop";
 
-        scheduler.appointments.compact.click();
-        assert.notOk(scheduler.tooltip.hasScrollbar(), "Tooltip contained 3 items shouldn't render scroll bar");
+        const { tooltip, appointments } = createInstance();
 
-        scheduler.appointments.compact.click(scheduler.appointments.compact.getLastButtonIndex());
-        assert.ok(scheduler.tooltip.hasScrollbar(), "Tooltip contained 4 items should render scroll bar");
+        assert.notOk(tooltip.isVisible(), "On page load tooltip should be invisible");
+
+        appointments.compact.click();
+        if(isDesktop) {
+            assert.notOk(tooltip.hasScrollbar(), "Tooltip contained 3 items shouldn't render scroll bar");
+        } else {
+            assert.ok(tooltip.getOverlayContentElement().height() < MAX_TOOLTIP_HEIGHT, "Tooltip contained 3 items shouldn't render scroll bar");
+        }
+
+        appointments.compact.click(appointments.compact.getLastButtonIndex());
+        if(isDesktop) {
+            assert.ok(tooltip.hasScrollbar(), "Tooltip contained 4 items should render scroll bar");
+        } else {
+            assert.equal(tooltip.getOverlayContentElement().height(), MAX_TOOLTIP_HEIGHT, "Tooltip contained 3 items shouldn't render scroll bar");
+        }
     });
 
     test("Title in mobile tooltip should equals title of cell appointments in month view", function(assert) {
