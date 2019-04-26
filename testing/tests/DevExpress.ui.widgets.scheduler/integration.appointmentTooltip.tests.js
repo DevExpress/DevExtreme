@@ -10,7 +10,7 @@ import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import devices from "core/devices";
 import dataUtils from "core/element_data";
-import { SchedulerTestWrapper, tooltipHelper, appointmentsHelper, appointmentPopupHelper } from './helpers.js';
+import { SchedulerTestWrapper } from './helpers.js';
 import { getSimpleDataArray } from './data.js';
 
 import "common.css!";
@@ -31,6 +31,7 @@ QUnit.module("Integration: Appointment tooltip", {
         fx.off = true;
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
 
         this.clock = sinon.useFakeTimers();
@@ -66,7 +67,7 @@ QUnit.module("Integration: Appointment tooltip", {
             }
         });
 
-        appointmentsHelper.click(0);
+        this.scheduler.appointments.click(0);
         this.clock.tick(300);
     }
 });
@@ -86,13 +87,14 @@ QUnit.test("There is no need to check recurring appointment if editing.allowUpda
         }]
     });
 
-    const $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
+
+    const $appointment = this.scheduler.appointments.getAppointment(0),
         itemData = dataUtils.data($appointment[0], "dxItemData");
 
-    this.instance.showAppointmentTooltip(itemData, $appointment);
+    this.scheduler.instance.showAppointmentTooltip(itemData, $appointment);
 
-    tooltipHelper.clickOnItem();
-    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered instead of recurrence tooltip");
+    this.scheduler.tooltip.clickOnItem();
+    assert.ok(this.scheduler.appointmentPopup.isVisible(), "Popup is rendered instead of recurrence tooltip");
 });
 
 QUnit.test("Delete button should not exist if editing.allowUpdating is false", function(assert) {
@@ -109,11 +111,11 @@ QUnit.test("Delete button should not exist if editing.allowUpdating is false", f
         }]
     });
 
-    const $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
+    const $appointment = this.scheduler.appointments.getAppointment(0),
         itemData = dataUtils.data($appointment[0], "dxItemData");
 
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-    assert.notOk(tooltipHelper.hasDeleteButton(), "Delete button should not exist");
+    this.scheduler.instance.showAppointmentTooltip(itemData, $appointment);
+    assert.notOk(this.scheduler.tooltip.hasDeleteButton(), "Delete button should not exist");
 });
 
 QUnit.test("Click on appointment should call scheduler.showAppointmentTooltip", function(assert) {
@@ -124,8 +126,7 @@ QUnit.test("Click on appointment should call scheduler.showAppointmentTooltip", 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     var stub = sinon.stub(this.instance, "showAppointmentTooltip");
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
     assert.deepEqual(stub.getCall(0).args[0],
         {
@@ -151,8 +152,7 @@ QUnit.test("Click on disabled appointment should not call scheduler.showAppointm
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     var stub = sinon.stub(this.instance, "showAppointmentTooltip");
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click();
 
     assert.notOk(stub.called, "showAppointmentTooltip doesn't called");
 
@@ -167,8 +167,7 @@ QUnit.test("Click on appointment should not call scheduler.showAppointmentToolti
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, disabled: true });
     var stub = sinon.stub(this.instance, "showAppointmentTooltip");
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
     assert.equal(stub.calledOnce, false, "Observer was not notified");
 });
@@ -213,8 +212,7 @@ QUnit.test("'rtlEnabled' option value should be passed to appointmentTooltip", f
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true });
     this.clock.tick();
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
     assert.equal(Tooltip.getInstance($(".dx-tooltip")).option("rtlEnabled"), true, "rtlEnabled for tooltip was set to true");
 
@@ -228,13 +226,12 @@ QUnit.test("Scheduler appointment tooltip should has right content", function(as
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
-    assert.ok(tooltipHelper.getContentElement().length, 1, "one tooltip was shown");
-    assert.equal(tooltipHelper.getTitleText(), "Task 2", "tooltip title is correct");
-    assert.equal(tooltipHelper.getDateElement().length, 1, "dates container was rendered");
-    assert.equal(tooltipHelper.hasDeleteButton(), 1, "buttons container was rendered");
+    assert.ok(this.scheduler.tooltip.getContentElement().length, 1, "one tooltip was shown");
+    assert.equal(this.scheduler.tooltip.getTitleText(), "Task 2", "tooltip title is correct");
+    assert.equal(this.scheduler.tooltip.getDateElement().length, 1, "dates container was rendered");
+    assert.equal(this.scheduler.tooltip.hasDeleteButton(), 1, "buttons container was rendered");
 });
 
 QUnit.test("Scheduler appointment tooltip should has right content when appointmentTooltipTemplate is used", function(assert) {
@@ -252,8 +249,7 @@ QUnit.test("Scheduler appointment tooltip should has right content when appointm
         }
     });
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
     var $tooltip = $(".new-scheduler-tooltip-template");
 
@@ -269,10 +265,9 @@ QUnit.test("Scheduler appointment tooltip dates are displayed with right format,
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
-    assert.equal(tooltipHelper.getDateText(), "11:00 AM - 12:00 PM", "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), "11:00 AM - 12:00 PM", "dates and time were displayed correctly");
 });
 
 QUnit.test("Scheduler tooltip should be closed after call hideAppointmentTooltip", function(assert) {
@@ -282,15 +277,14 @@ QUnit.test("Scheduler tooltip should be closed after call hideAppointmentTooltip
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
-    assert.ok(tooltipHelper.isVisible(), "tooltip is shown");
+    assert.ok(this.scheduler.tooltip.isVisible(), "tooltip is shown");
 
     this.instance.hideAppointmentTooltip();
 
     this.clock.tick(300);
-    assert.notOk(tooltipHelper.isVisible(), "tooltip is hidden");
+    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip is hidden");
 });
 
 QUnit.test("Appointment Tooltip on Day view should have a right dates", function(assert) {
@@ -306,10 +300,9 @@ QUnit.test("Appointment Tooltip on Day view should have a right dates", function
         cellDuration: 60
     });
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click();
 
-    assert.equal(tooltipHelper.getDateText(), "October 5, 11:30 PM - October 6, 1:00 AM", "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), "October 5, 11:30 PM - October 6, 1:00 AM", "dates and time were displayed correctly");
     tooltip.hide();
 });
 
@@ -327,13 +320,12 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when custom t
     var deltaTz = getDeltaTz(5, startDate);
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: 5 });
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click();
 
     const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"),
         expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime");
 
-    assert.equal(tooltipHelper.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
 });
 
 QUnit.test("Scheduler appointment tooltip dates should be correct, when custom timeZone is set as string", function(assert) {
@@ -356,7 +348,7 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when custom t
     const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"),
         expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime");
 
-    assert.equal(tooltipHelper.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
 });
 
 QUnit.test("Scheduler appointment tooltip dates should be correct, when appointment timeZone is set", function(assert) {
@@ -374,14 +366,13 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when appointm
         currentView: "week"
     });
 
-    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
-
+    var $appointment = this.scheduler.appointments.getAppointment();
     this.instance.showAppointmentTooltip(appointment, $appointment);
 
     const expectedStartDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
         expectedEndDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text();
 
-    assert.equal(tooltipHelper.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
 });
 
 QUnit.test("Scheduler appointment tooltip dates should be correct, when appointment timeZone and scheduler timeZone was set", function(assert) {
@@ -400,13 +391,13 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when appointm
         timeZone: "Asia/Qyzylorda"
     });
 
-    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
+    var $appointment = this.scheduler.appointments.getAppointment();
     this.instance.showAppointmentTooltip(appointment, $appointment);
 
     const expectedStartDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
         expectedEndDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text();
 
-    assert.equal(tooltipHelper.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
 });
 
 QUnit.test("Scheduler appointment tooltip dates are displayed with right format, month view", function(assert) {
@@ -416,10 +407,10 @@ QUnit.test("Scheduler appointment tooltip dates are displayed with right format,
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "month", maxAppointmentsPerCell: null });
 
-    appointmentsHelper.click(1);
+    this.scheduler.appointments.click(1);
     this.clock.tick(300);
 
-    assert.equal(tooltipHelper.getDateText(), "February 9, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), "February 9, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
 });
 
 QUnit.test("Click on tooltip-edit button should call scheduler.showAppointmentPopup and hide tooltip", function(assert) {
@@ -434,10 +425,8 @@ QUnit.test("Click on tooltip-edit button should call scheduler.showAppointmentPo
 
     var stub = sinon.stub(this.instance, "showAppointmentPopup");
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
-
-    tooltipHelper.clickOnItem();
+    this.scheduler.appointments.click(1);
+    this.scheduler.tooltip.clickOnItem();
 
     var args = stub.getCall(0).args;
 
@@ -450,7 +439,7 @@ QUnit.test("Click on tooltip-edit button should call scheduler.showAppointmentPo
 
     assert.equal(args[1], false, "showAppointmentPopup has a right 'createNewAppointment' arg");
 
-    assert.notOk(tooltipHelper.isVisible(), "tooltip was hidden");
+    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
 });
 
 QUnit.test("Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip", function(assert) {
@@ -461,10 +450,8 @@ QUnit.test("Click on tooltip-remove button should call scheduler.deleteAppointme
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     var stub = sinon.stub(this.instance, "deleteAppointment");
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
-
-    tooltipHelper.clickOnDeleteButton();
+    this.scheduler.appointments.click(1);
+    this.scheduler.tooltip.clickOnDeleteButton();
 
     assert.deepEqual(stub.getCall(0).args[0],
         {
@@ -474,7 +461,7 @@ QUnit.test("Click on tooltip-remove button should call scheduler.deleteAppointme
         },
         "deleteAppointment has a right arguments");
 
-    assert.notOk(tooltipHelper.isVisible(), "tooltip was hidden");
+    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
 });
 
 QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointment and hide tooltip, if recurrenceRuleExpr and recurrenceExceptionExpr is set", function(assert) {
@@ -496,10 +483,8 @@ QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointme
     });
     var stub = sinon.stub(this.instance, "_updateAppointment");
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
-
-    tooltipHelper.clickOnDeleteButton();
+    this.scheduler.appointments.click(1);
+    this.scheduler.tooltip.clickOnDeleteButton();
 
     var exceptionDate = new Date(2018, 6, 31, 10, 0, 0, 0),
         exceptionString = dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
@@ -514,7 +499,7 @@ QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointme
         },
         "updateAppointment has a right arguments");
 
-    assert.notOk(tooltipHelper.isVisible(), "tooltip was hidden");
+    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
 
 });
 
@@ -564,7 +549,7 @@ QUnit.test("showAppointmentTooltip should be called after click on arrow icon an
     this.clock.tick(300);
     $arrowIcon.trigger("dxpointerleave");
 
-    assert.ok(tooltipHelper.isVisible(), "Appointment tooltip is shown");
+    assert.ok(this.scheduler.tooltip.isVisible(), "Appointment tooltip is shown");
 });
 
 QUnit.test("Tooltip of allDay appointment should display right dates", function(assert) {
@@ -582,10 +567,9 @@ QUnit.test("Tooltip of allDay appointment should display right dates", function(
         }]
     });
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click();
 
-    assert.equal(tooltipHelper.getDateText(), dateLocalization.format(startDate, "monthAndDay") + " - " + dateLocalization.format(endDate, "monthAndDay"), "dates were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "monthAndDay") + " - " + dateLocalization.format(endDate, "monthAndDay"), "dates were displayed correctly");
     tooltip.hide();
 });
 
@@ -604,10 +588,9 @@ QUnit.test("Tooltip of allDay appointment with startDate = endDate should displa
         }]
     });
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click();
 
-    assert.equal(tooltipHelper.getDateText(), dateLocalization.format(startDate, "monthAndDay"), "date was displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "monthAndDay"), "date was displayed correctly");
 });
 
 QUnit.test("Tooltip of multiday appointment should display date & time for usual view", function(assert) {
@@ -624,10 +607,10 @@ QUnit.test("Tooltip of multiday appointment should display date & time for usual
         }]
     });
 
-    appointmentsHelper.click(0);
+    this.scheduler.appointments.click(0);
     this.clock.tick(300);
 
-    assert.equal(tooltipHelper.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
     tooltip.hide();
 });
 
@@ -645,10 +628,9 @@ QUnit.test("Tooltip of multiday appointment should display date & time for month
         }]
     });
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(0);
 
-    assert.equal(tooltipHelper.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
 });
 
 QUnit.test("Tooltip of appointment part after midnight should display right date & time", function(assert) {
@@ -665,10 +647,9 @@ QUnit.test("Tooltip of appointment part after midnight should display right date
         }]
     });
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
-    assert.equal(tooltipHelper.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
 });
 
 QUnit.test("Tooltip of recurrence appointment part after midnight should display right date & time", function(assert) {
@@ -686,10 +667,9 @@ QUnit.test("Tooltip of recurrence appointment part after midnight should display
         }]
     });
 
-    appointmentsHelper.click(2);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(2);
 
-    assert.equal(tooltipHelper.getDateText(), "May 30, 11:00 PM - May 31, 1:15 AM", "dates were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), "May 30, 11:00 PM - May 31, 1:15 AM", "dates were displayed correctly");
     tooltip.hide();
 });
 
@@ -709,10 +689,9 @@ QUnit.test("Tooltip for recurrence appointment should display right dates(T38418
         }]
     });
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 
-    assert.equal(tooltipHelper.getDateText(), "February 6, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
+    assert.equal(this.scheduler.tooltip.getDateText(), "February 6, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
     tooltip.hide();
 });
 
@@ -728,12 +707,11 @@ QUnit.test("Tooltip should hide when window was resized", function(assert) {
         }]
     });
 
-    appointmentsHelper.click();
-    this.clock.tick(300);
+    this.scheduler.appointments.click();
 
-    assert.ok(tooltipHelper.isVisible(), "tooltip was shown");
+    assert.ok(this.scheduler.tooltip.isVisible(), "tooltip was shown");
     resizeCallbacks.fire();
-    assert.notOk(tooltipHelper.isVisible(), "tooltip was hidden");
+    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
 });
 
 QUnit.test("Appointment tooltip should be hidden after immediately delete key pressing", function(assert) {
@@ -774,8 +752,7 @@ QUnit.test("Tooltip should has right boundary in timeline view if appointment is
         currentDate: new Date(2018, 8, 24)
     });
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(0);
 
     var tooltip = Tooltip.getInstance($(".dx-tooltip")),
         tooltipBoundary = tooltip.option("position").boundary.get(0),
@@ -808,8 +785,7 @@ QUnit.test("the targetedAppointmentData parameter appends to arguments of the ap
         }
     });
 
-    appointmentsHelper.click(1);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(1);
 });
 
 QUnit.test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a non-recurrence rule", function(assert) {
@@ -832,8 +808,7 @@ QUnit.test("the targetedAppointmentData parameter appends to arguments of the ap
         }
     });
 
-    appointmentsHelper.click(0);
-    this.clock.tick(300);
+    this.scheduler.appointments.click(0);
 });
 
 QUnit.test("The appointmentData argument of the appointment tooltip template is should be instance of the data source", function(assert) {
@@ -889,11 +864,11 @@ const moduleConfig = {
 QUnit.module("New common tooltip for compact and cell appointments", moduleConfig, function() {
     QUnit.test("Title in tooltip should equals title of cell appointments in month view", function(assert) {
         this.createInstance();
-        assert.notOk(tooltipHelper.isVisible(), "On page load tooltip should be invisible");
+        assert.notOk(this.scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
-        for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
-            appointmentsHelper.click(i);
-            assert.equal(tooltipHelper.getTitleText(), appointmentsHelper.getTitleText(i), "Title in tooltip should be equal with appointment");
+        for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
+            this.scheduler.appointments.click(i);
+            assert.equal(this.scheduler.tooltip.getTitleText(), this.scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
         }
 
         const compactAppointmentSample = [
@@ -904,27 +879,27 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             ["Upgrade Server Hardware", "Submit New Website Design"]
         ];
 
-        for(let i = 0; i < appointmentsHelper.compact.getButtonCount(); i++) {
+        for(let i = 0; i < this.scheduler.appointments.compact.getButtonCount(); i++) {
             const compactAppointmentSampleItem = compactAppointmentSample[i];
-            appointmentsHelper.compact.click(i);
+            this.scheduler.appointments.compact.click(i);
 
-            assert.equal(appointmentsHelper.compact.getButtonText(i), `${compactAppointmentSampleItem.length} more`, "Count of compact appointments in button is match of count real appointments");
+            assert.equal(this.scheduler.appointments.compact.getButtonText(i), `${compactAppointmentSampleItem.length} more`, "Count of compact appointments in button is match of count real appointments");
 
             compactAppointmentSampleItem.forEach((sampleTitle, index) => {
-                assert.equal(tooltipHelper.getTitleText(index), sampleTitle, "Title in tooltip should be equal with sample data");
+                assert.equal(this.scheduler.tooltip.getTitleText(index), sampleTitle, "Title in tooltip should be equal with sample data");
             });
         }
     });
 
     QUnit.test("Title in tooltip should equals title of cell appointments in other views", function(assert) {
         this.createInstance();
-        assert.notOk(tooltipHelper.isVisible(), "On page load tooltip should be invisible");
+        assert.notOk(this.scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
         const views = ["week", "day", "workWeek", "agenda"];
         const testTitles = () => {
-            for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
-                appointmentsHelper.click(i);
-                assert.equal(tooltipHelper.getTitleText(), appointmentsHelper.getTitleText(i), "Title in tooltip should be equal with appointment");
+            for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
+                this.scheduler.appointments.click(i);
+                assert.equal(this.scheduler.tooltip.getTitleText(), this.scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
             }
         };
 
@@ -939,80 +914,80 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             editing: false
         });
 
-        for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
-            appointmentsHelper.click(i);
-            assert.notOk(tooltipHelper.hasDeleteButton(), "Delete button shouldn't render");
+        for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
+            this.scheduler.appointments.click(i);
+            assert.notOk(this.scheduler.tooltip.hasDeleteButton(), "Delete button shouldn't render");
         }
 
-        for(let i = 0; i < appointmentsHelper.compact.getButtonCount(); i++) {
-            appointmentsHelper.compact.click(i);
-            assert.notOk(tooltipHelper.hasDeleteButton(), "Delete button shouldn't render for compact appointments");
+        for(let i = 0; i < this.scheduler.appointments.compact.getButtonCount(); i++) {
+            this.scheduler.appointments.compact.click(i);
+            assert.notOk(this.scheduler.tooltip.hasDeleteButton(), "Delete button shouldn't render for compact appointments");
         }
 
         this.instance.option("editing", true);
 
-        for(let i = 0; i < appointmentsHelper.getAppointmentCount(); i++) {
-            appointmentsHelper.click(i);
-            assert.ok(tooltipHelper.hasDeleteButton(), "Delete button should be render");
+        for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
+            this.scheduler.appointments.click(i);
+            assert.ok(this.scheduler.tooltip.hasDeleteButton(), "Delete button should be render");
         }
     });
 
     QUnit.test("Compact button should hide or show after change in data source", function(assert) {
         this.createInstance();
 
-        assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "Value on init should be correct");
-        assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
+        assert.equal(this.scheduler.appointments.compact.getButtonText(), "1 more", "Value on init should be correct");
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
 
         this.instance.deleteAppointment(this.data[0]);
-        assert.equal(appointmentsHelper.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
 
         this.instance.addAppointment({
             text: "Temp appointment",
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         });
-        assert.equal(appointmentsHelper.compact.getButtonText(), "1 more", "Count of compact buttons should be increase after add appointment");
-        assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons should be increase after add appointment");
+        assert.equal(this.scheduler.appointments.compact.getButtonText(), "1 more", "Count of compact buttons should be increase after add appointment");
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons should be increase after add appointment");
 
         this.instance.addAppointment({
             text: "Temp appointment 2",
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         });
-        assert.equal(appointmentsHelper.compact.getButtonText(), "2 more", "Count of compact buttons should be increase after add appointment");
-        assert.equal(appointmentsHelper.compact.getButtonCount(), 5, "Count of compact buttons shouldn't change");
+        assert.equal(this.scheduler.appointments.compact.getButtonText(), "2 more", "Count of compact buttons should be increase after add appointment");
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons shouldn't change");
     });
 
     QUnit.test("Tooltip should hide after perform action", function(assert) {
         this.createInstance();
 
-        appointmentsHelper.click();
-        assert.ok(tooltipHelper.isVisible(), "Tooltip should visible");
+        this.scheduler.appointments.click();
+        assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should visible");
 
-        tooltipHelper.clickOnItem();
-        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+        this.scheduler.tooltip.clickOnItem();
+        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
 
-        appointmentPopupHelper.hide();
+        this.scheduler.appointmentPopup.hide();
 
-        appointmentsHelper.compact.click(appointmentsHelper.compact.getButtonCount() - 1);
-        assert.ok(tooltipHelper.isVisible(), "Tooltip should visible");
+        this.scheduler.appointments.compact.click(this.scheduler.appointments.compact.getButtonCount() - 1);
+        assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should visible");
 
-        tooltipHelper.clickOnItem(1);
-        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+        this.scheduler.tooltip.clickOnItem(1);
+        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
 
-        appointmentPopupHelper.hide();
+        this.scheduler.appointmentPopup.hide();
 
-        appointmentsHelper.compact.click(appointmentsHelper.compact.getButtonCount() - 1);
-        assert.equal(tooltipHelper.getItemCount(), 2, "Count of items in tooltip should be equal 2");
+        this.scheduler.appointments.compact.click(this.scheduler.appointments.compact.getButtonCount() - 1);
+        assert.equal(this.scheduler.tooltip.getItemCount(), 2, "Count of items in tooltip should be equal 2");
 
-        tooltipHelper.clickOnDeleteButton(1);
-        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+        this.scheduler.tooltip.clickOnDeleteButton(1);
+        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
 
-        appointmentsHelper.compact.click(appointmentsHelper.compact.getButtonCount() - 1);
-        assert.equal(tooltipHelper.getItemCount(), 1, "Count of items in tooltip should be equal 1");
+        this.scheduler.appointments.compact.click(this.scheduler.appointments.compact.getButtonCount() - 1);
+        assert.equal(this.scheduler.tooltip.getItemCount(), 1, "Count of items in tooltip should be equal 1");
 
-        tooltipHelper.clickOnDeleteButton();
-        assert.notOk(tooltipHelper.isVisible(), "Tooltip shouldn't visible");
+        this.scheduler.tooltip.clickOnDeleteButton();
+        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
     });
 
     QUnit.test("Tooltip should work correct in week view", function(assert) {
@@ -1022,7 +997,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             width: 600
         });
 
-        assert.equal(appointmentsHelper.compact.getButtonCount(), 0, "Compact button shouldn't render on init");
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, "Compact button shouldn't render on init");
 
         this.instance.addAppointment({
             text: DEFAULT_TEXT,
@@ -1030,12 +1005,12 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             endDate: new Date(2017, 4, 22, 11, 30)
         });
 
-        assert.equal(appointmentsHelper.compact.getButtonCount(), 1, "Compact button should render");
-        appointmentsHelper.compact.click();
-        assert.equal(tooltipHelper.getTitleText(), DEFAULT_TEXT, "Title in tooltip should equal text in appointment cell");
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, "Compact button should render");
+        this.scheduler.appointments.compact.click();
+        assert.equal(this.scheduler.tooltip.getTitleText(), DEFAULT_TEXT, "Title in tooltip should equal text in appointment cell");
 
-        tooltipHelper.clickOnDeleteButton();
-        assert.equal(appointmentsHelper.compact.getButtonCount(), 0, "Compact button shouldn't render after click delete button");
+        this.scheduler.tooltip.clickOnDeleteButton();
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, "Compact button shouldn't render after click delete button");
     });
 
     QUnit.test("Templates should valid markup", function(assert) {
@@ -1043,25 +1018,25 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         const DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME = "drop-down-appointment-template";
 
         const hasElementInTooltipItem = (className) => {
-            return tooltipHelper.getItemElement().html().indexOf(`<div class="${className}">`) !== -1;
+            return this.scheduler.tooltip.getItemElement().html().indexOf(`<div class="${className}">`) !== -1;
         };
 
         this.createInstance({
             appointmentTooltipTemplate: () => $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME)
         });
 
-        appointmentsHelper.click();
+        this.scheduler.appointments.click();
         assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), "'appointmentTooltipTemplate' should render for cell appointment");
 
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
         assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), "'appointmentTooltipTemplate' should render for compact appointment");
 
         this.instance.option("dropDownAppointmentTemplate", () => $('<div />').addClass(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME));
 
-        appointmentsHelper.click();
+        this.scheduler.appointments.click();
         assert.notOk(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' shouldn't render for cell appointment");
 
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
         assert.ok(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' should render for compact appointment");
     });
 

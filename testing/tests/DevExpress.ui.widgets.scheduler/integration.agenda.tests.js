@@ -9,7 +9,7 @@ import { DataSource } from "data/data_source/data_source";
 import CustomStore from "data/custom_store";
 import subscribes from "ui/scheduler/ui.scheduler.subscribes";
 import dataUtils from "core/element_data";
-import { appointmentsHelper, tooltipHelper } from "./helpers.js";
+import { SchedulerTestWrapper } from "./helpers.js";
 
 import "common.css!";
 import "generic_light.css!";
@@ -26,6 +26,11 @@ function getDeltaTz(schedulerTz) {
     var defaultTz = -10800000;
     return schedulerTz * 3600000 + defaultTz;
 }
+
+const createInstance = function(options) {
+    const instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 QUnit.module("Integration: Agenda", {
     beforeEach: function() {
@@ -893,7 +898,7 @@ QUnit.test("Grouped appointments should have a right offsets", function(assert) 
 });
 
 QUnit.test("Tooltip should appear by appointment click", function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         views: ["agenda"],
         currentView: "agenda",
         currentDate: new Date(2016, 1, 24),
@@ -902,9 +907,8 @@ QUnit.test("Tooltip should appear by appointment click", function(assert) {
         ]
     });
 
-    appointmentsHelper.click();
-    this.clock.tick(300);
-    assert.ok(tooltipHelper.isVisible(), "Tooltip is rendered");
+    scheduler.appointments.click();
+    assert.ok(scheduler.tooltip.isVisible(), "Tooltip is rendered");
 });
 
 QUnit.test("Agenda should be rerendered when data source is changed", function(assert) {
