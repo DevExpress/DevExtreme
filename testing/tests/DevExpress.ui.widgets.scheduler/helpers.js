@@ -8,7 +8,9 @@ export class SchedulerTestWrapper {
         this.instance = instance;
 
         this.tooltip = {
-            getDesktopOverlayContentElement: () => $(".dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content"),
+            getOverlayContentElement: () => {
+                return this.isAdaptivity() ? this.tooltip.getContentElement().find(".dx-overlay-content") : $(".dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content");
+            },
 
             getContentElement: () => {
                 return this.isAdaptivity() ? $(".dx-scheduler-overlay-panel") : $(".dx-scheduler-appointment-tooltip-wrapper.dx-overlay-wrapper .dx-list");
