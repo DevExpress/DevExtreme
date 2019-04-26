@@ -431,6 +431,12 @@ Label.prototype = {
         that._bBox = bBox;
     },
 
+    getFigureCenter() {
+        const figure = this._figure;
+        const strategy = this._strategy || selectStrategy(figure);
+        return strategy.getFigureCenter(figure);
+    },
+
     _getConnectorPoints: function() {
         var that = this,
             figure = that._figure,
@@ -444,7 +450,7 @@ Label.prototype = {
 
         if(!strategy.isLabelInside(bBox, figure, options.position !== "inside")) {
             isHorizontal = strategy.isHorizontal(bBox, figure);
-            var figureCenter = strategy.getFigureCenter(figure);
+            var figureCenter = that.getFigureCenter();
             points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0, figureCenter);
             labelPoint = getClosestCoord(figureCenter, points);
             points = strategy.findFigurePoint(figure, labelPoint, isHorizontal);
