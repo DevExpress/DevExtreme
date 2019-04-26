@@ -55,7 +55,7 @@ export class SchedulerTestWrapper {
             },
 
             dblclick: (index = 0) => {
-                this.appointments.getAppointment(index).trigger("dblclick");
+                this.appointments.getAppointment(index).trigger("dxdblclick");
             },
 
             compact: {
