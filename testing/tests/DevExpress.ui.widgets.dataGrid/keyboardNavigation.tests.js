@@ -5,7 +5,6 @@ QUnit.testStart(function() {
 </div>';
 
     $("#qunit-fixture").html(markup);
-    // $(markup).appendTo("body");
 });
 
 import "common.css!";
