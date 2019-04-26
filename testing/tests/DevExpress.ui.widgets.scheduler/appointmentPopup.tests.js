@@ -1063,15 +1063,15 @@ QUnit.test("Appointment form will have right dates on multiple openings (T727713
         currentDate: new Date(2017, 4, 1),
     });
     scheduler.instance.showAppointmentPopup(appointments[1], false);
-    const { oldStartDate, oldEndDate } = scheduler.appointmentForm.getFormInstance().option('formData');
+    var formData = scheduler.appointmentForm.getFormInstance().option('formData');
 
-    assert.deepEqual(oldStartDate, appointments[1].startDate, "First opening appointment form has right startDate");
-    assert.deepEqual(oldEndDate, appointments[1].endDate, "First opening appointment form has right endDate");
+    assert.deepEqual(formData.startDate, appointments[1].startDate, "First opening appointment form has right startDate");
+    assert.deepEqual(formData.endDate, appointments[1].endDate, "First opening appointment form has right endDate");
 
     scheduler.instance.hideAppointmentPopup();
     scheduler.appointments.getAppointment(0).trigger('dxdblclick');
-    const { newStartDate, newEndDate } = scheduler.appointmentForm.getFormInstance().option('formData');
+    formData = scheduler.appointmentForm.getFormInstance().option('formData');
 
-    assert.deepEqual(newStartDate, appointments[0].startDate, "Second opening appointment form has right startDate");
-    assert.deepEqual(newEndDate, appointments[0].endDate, "Second opening appointment form has right endDate");
+    assert.deepEqual(formData.startDate, appointments[0].startDate, "Second opening appointment form has right startDate");
+    assert.deepEqual(formData.endDate, appointments[0].endDate, "Second opening appointment form has right endDate");
 });
