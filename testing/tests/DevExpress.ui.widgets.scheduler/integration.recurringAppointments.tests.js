@@ -7,7 +7,7 @@ import dragEvents from "events/drag";
 import { DataSource } from "data/data_source/data_source";
 import subscribes from "ui/scheduler/ui.scheduler.subscribes";
 import dateSerialization from "core/utils/date_serialization";
-import { appointmentsHelper, tooltipHelper } from './helpers.js';
+import { SchedulerTestWrapper } from './helpers.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -25,6 +25,7 @@ QUnit.module("Integration: Recurring Appointments", {
         fx.off = true;
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
         this.getAppointmentColor = function($task) {
             return new Color($task.css("backgroundColor")).toHex();
@@ -455,10 +456,10 @@ QUnit.test("Recurrent Task deleting, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    appointmentsHelper.click(1);
+    this.scheduler.appointments.click(1);
     this.clock.tick(300);
 
-    tooltipHelper.clickOnDeleteButton();
+    this.scheduler.tooltip.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedRecurringItem = this.instance.option("dataSource").items()[0],
@@ -487,9 +488,9 @@ QUnit.test("Recurrent Task editing, confirmation tooltip should be shown after t
         firstDayOfWeek: 1
     });
 
-    appointmentsHelper.click(2);
+    this.scheduler.appointments.click(2);
     this.clock.tick(300);
-    tooltipHelper.clickOnItem();
+    this.scheduler.tooltip.clickOnItem();
 
     assert.ok($(".dx-dialog.dx-overlay-modal").length, "Dialog was shown");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
@@ -522,9 +523,9 @@ QUnit.test("Recurrent Task editing, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    appointmentsHelper.click(2);
+    this.scheduler.appointments.click(2);
     this.clock.tick(300);
-    tooltipHelper.clickOnItem();
+    this.scheduler.tooltip.clickOnItem();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $title = $(".dx-textbox").eq(0),
@@ -1172,10 +1173,10 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone after 
         timeZone: "Australia/Sydney"
     });
 
-    appointmentsHelper.click();
+    this.scheduler.appointments.click();
     this.clock.tick(300);
 
-    tooltipHelper.clickOnDeleteButton();
+    this.scheduler.tooltip.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
@@ -1197,10 +1198,10 @@ QUnit.test("Recurrence exception should be adjusted by appointment timezone afte
         currentDate: new Date(2018, 3, 1)
     });
 
-    appointmentsHelper.click();
+    this.scheduler.appointments.click();
     this.clock.tick(300);
 
-    tooltipHelper.clickOnDeleteButton();
+    this.scheduler.tooltip.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),

@@ -16,7 +16,7 @@ import { DataSource } from "data/data_source/data_source";
 import CustomStore from "data/custom_store";
 import dataUtils from "core/element_data";
 import dateSerialization from "core/utils/date_serialization";
-import { tooltipHelper, appointmentsHelper } from "./helpers.js";
+import { SchedulerTestWrapper } from "./helpers.js";
 import themes from "ui/themes";
 
 import "ui/scheduler/ui.scheduler";
@@ -53,6 +53,8 @@ QUnit.module("Integration: Appointments", {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
             this.clock.tick(300);
             this.instance.focus();
+
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || "backgroundColor";
@@ -88,7 +90,7 @@ QUnit.module("Integration: Appointments", {
                 assert.ok(dataSource.indexOf(itemData) > -1, "appointment data contains in the data source");
             }
         });
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
     }
 });
 
@@ -693,9 +695,9 @@ QUnit.test("Appointment dates should not be normalized before sending to the det
 
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    appointmentsHelper.click();
+    this.scheduler.appointments.click();
     this.clock.tick(300);
-    tooltipHelper.clickOnItem();
+    this.scheduler.tooltip.clickOnItem();
 
     try {
         var args = spy.getCall(0).args[0];
@@ -2603,8 +2605,8 @@ QUnit.test("Many dropDown appts with one multi day task should be grouped correc
         { text: 'long appt', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 31, 1) }
     ]);
 
-    appointmentsHelper.compact.click();
-    assert.equal(tooltipHelper.getItemCount(), 7, "There are 7 drop down appts");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.tooltip.getItemCount(), 7, "There are 7 drop down appts");
 });
 
 QUnit.test("Many dropDown appts should be grouped correctly with one multi day task which started before dropDown (T525443)", function(assert) {
@@ -2634,8 +2636,8 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
         { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) }
     ]);
 
-    appointmentsHelper.compact.click();
-    assert.equal(tooltipHelper.getItemCount(), 13, "There are 13 drop down appts");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.tooltip.getItemCount(), 13, "There are 13 drop down appts");
 });
 
 QUnit.test("DropDown appointment button should have correct coordinates: rtl mode", function(assert) {
@@ -2734,9 +2736,9 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
         sinon.stub(instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
 
         instance.option("dataSource", appointments);
-        appointmentsHelper.compact.click();
-        tooltipItemElement = tooltipHelper.getItemElement(2).get(0);
-        tooltipHelper.clickOnItem(2);
+        this.scheduler.appointments.compact.click();
+        tooltipItemElement = this.scheduler.tooltip.getItemElement(2).get(0);
+        this.scheduler.tooltip.clickOnItem(2);
 
     } finally {
         this.instance.showAppointmentPopup = showAppointmentPopup;
@@ -2772,8 +2774,8 @@ QUnit.test("DropDown appointment should process the onAppointmentClick event cor
 
         instance.option("dataSource", appointments);
 
-        appointmentsHelper.compact.click();
-        tooltipHelper.clickOnItem(2);
+        this.scheduler.appointments.compact.click();
+        this.scheduler.tooltip.clickOnItem(2);
 
         assert.notOk(spy.calledOnce, "showAppointmentPopup wasn't called");
     } finally {
@@ -2822,8 +2824,8 @@ QUnit.test("DropDown appointment should be painted depend on resource color", fu
 
     this.instance.option("dataSource", appointments);
 
-    appointmentsHelper.compact.click();
-    tooltipHelper.getMarkers().each((index, element) => {
+    this.scheduler.appointments.compact.click();
+    this.scheduler.tooltip.getMarkers().each((index, element) => {
         assert.equal(this.getAppointmentColor($(element)), colors[index], "Appointment color is OK");
     });
 });
@@ -2881,8 +2883,8 @@ QUnit.test("DropDown appointment should be painted depend on resource color when
     this.instance.option("dataSource", appointments);
     this.clock.tick(300);
 
-    appointmentsHelper.compact.click();
-    tooltipHelper.getMarkers().each((index, element) => {
+    this.scheduler.appointments.compact.click();
+    this.scheduler.tooltip.getMarkers().each((index, element) => {
         assert.equal(this.getAppointmentColor($(element)), colors[index], "Appointment color is OK");
     });
 });
@@ -2910,8 +2912,8 @@ QUnit.test("DropDown appointments should not be duplicated when items option cha
         endDate: new Date(2016, 8, 12, 1)
     });
 
-    appointmentsHelper.compact.click();
-    assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.tooltip.getItemCount(), 3, "There are 3 drop down appts");
 });
 
 QUnit.test("Recurrence appointment should be rendered correctly when currentDate was changed: month view", function(assert) {
@@ -3123,8 +3125,8 @@ QUnit.test("DropDown appointment should be rendered correctly with expressions o
         }
     });
 
-    appointmentsHelper.compact.click();
-    assert.equal(tooltipHelper.getItemElement().find(".custom-title").text(), "Item 2", "Text is correct on init");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.tooltip.getItemElement().find(".custom-title").text(), "Item 2", "Text is correct on init");
 });
 
 QUnit.test("DropDown button should be rendered correctly when appointmentCollectorTemplate is used", function(assert) {
@@ -3245,8 +3247,8 @@ QUnit.test("dxScheduler should render dropDownAppointment appointment template w
         }
     });
 
-    appointmentsHelper.compact.click();
-    assert.equal(tooltipHelper.getItemElement().text(), "text", "Text is correct on init");
+    this.scheduler.appointments.compact.click();
+    assert.equal(this.scheduler.tooltip.getItemElement().text(), "text", "Text is correct on init");
 });
 
 QUnit.test("Appointment should have right position, if it's startDate time less than startDayHour option value", function(assert) {

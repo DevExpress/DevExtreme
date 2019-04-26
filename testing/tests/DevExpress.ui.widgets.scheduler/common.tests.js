@@ -21,7 +21,7 @@ import SchedulerTimezones from "ui/scheduler/timezones/ui.scheduler.timezones";
 import dataUtils from "core/element_data";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import themes from "ui/themes";
-import { appointmentsHelper } from "./helpers.js";
+import { SchedulerTestWrapper } from "./helpers.js";
 
 import "ui/scheduler/ui.scheduler";
 import "common.css!";
@@ -37,6 +37,8 @@ QUnit.testStart(function() {
             this.clock = sinon.useFakeTimers();
 
             this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
+
             this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
                 assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + "Hours're OK");
                 assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + "Minutes're OK");
@@ -3402,6 +3404,7 @@ QUnit.testStart(function() {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
             fx.off = true;
@@ -3486,13 +3489,13 @@ QUnit.testStart(function() {
             focusStateEnabled: false
         });
 
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
         assert.notOk(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
 
         this.instance._appointmentTooltip.hide();
 
         this.instance.option("focusStateEnabled", true);
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
         assert.ok(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
     });
 
