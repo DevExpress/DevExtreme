@@ -12,6 +12,16 @@ const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + "-content";
 
+/**
+ * @name dxDiagramOptions.onDataChanged
+ * @extends Action
+ * @type function(e)
+ * @type_function_param1 e:object
+ * @type_function_param1_field4 data:string
+ * @action
+ * @hidden
+ */
+
 class Diagram extends Widget {
     _init() {
         super._init();

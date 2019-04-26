@@ -4,7 +4,6 @@ var $ = require("../../core/renderer"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
     support = require("../../core/utils/support"),
     extend = require("../../core/utils/extend").extend,
-    themes = require("../themes"),
     dateUtils = require("./ui.date_utils"),
     messageLocalization = require("../../localization/message");
 
@@ -24,7 +23,6 @@ var DateViewStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(config) {
-        var themeName = themes.current();
 
         return {
             showTitle: true,
@@ -46,14 +44,6 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                     },
                     options: {
                         animation: null
-                    }
-                },
-                {
-                    device: function() {
-                        return themes.isWin8(themeName);
-                    },
-                    options: {
-                        fullScreen: true
                     }
                 },
                 {
@@ -89,15 +79,6 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                         position: {
                             collision: "flipfit flip"
                         }
-                    }
-                },
-                {
-                    device: function(device) {
-                        return device.phone && themes.isWin10(themeName);
-                    },
-                    options: {
-                        width: 333,
-                        height: "auto"
                     }
                 },
                 {

@@ -1,15 +1,16 @@
 import "ui/file_manager";
 import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
-import WebApiFileProvider from "ui/file_manager/file_provider/file_provider.webapi";
+import WebApiFileProvider from "ui/file_manager/file_provider/webapi";
 import ajaxMock from "../../../helpers/ajaxMock.js";
 import { when } from "core/utils/deferred";
+import { deserializeDate } from "core/utils/date_serialization";
 
 const { test } = QUnit;
 
 const createFileManagerItem = (parentPath, name, isFolder, lastWriteTimeString, length) => {
     const result = new FileManagerItem(parentPath, name, isFolder);
-    result.lastWriteTime = lastWriteTimeString; // TODO make conversion to 'Date' type
+    result.lastWriteTime = deserializeDate(lastWriteTimeString);
     result.length = length;
     return result;
 };

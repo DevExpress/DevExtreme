@@ -14,7 +14,6 @@ import messageLocalization from "localization/message";
 import pointerMock from "../../helpers/pointerMock.js";
 import renderer from "core/renderer";
 import support from "core/utils/support";
-import themes from "ui/themes";
 import typeUtils from "core/utils/type";
 import uiDateUtils from "ui/date_box/ui.date_utils";
 import { noop } from "core/utils/common";
@@ -2514,29 +2513,6 @@ QUnit.module("datebox w/ calendar", {
         assert.equal($calendarViews.eq(2).position().left, viewWidth, "after view is at the right");
     });
 
-    QUnit.test("List picker popup should be positioned correctly for Android devices", assert => {
-        const origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = () => {
-            return true;
-        };
-
-        const $dateBox = $("#dateBox").dxDateBox({
-            type: "time",
-            pickerType: "list",
-            opened: true
-        });
-
-        const popup = $dateBox.find(".dx-popup").dxPopup("instance");
-        const position = popup.option("position");
-
-        assert.equal(position.at, "left bottom", "correct postion.at property");
-        assert.equal(position.my, "left top", "correct postion.my property");
-        assert.equal(position.offset.v, -10, "correct postion.offset.v property");
-        assert.equal(position.offset.h, -16, "correct postion.offset.h property");
-
-        themes.isAndroid5 = origIsAndroid5;
-    });
-
     QUnit.test("Popup with calendar strategy should be use 'flipfit flip' strategy", assert => {
         const $dateBox = $("#dateBox").dxDateBox({
             type: "date",
@@ -3040,30 +3016,6 @@ QUnit.module("datebox w/ time list", {
         this.dateBox.option("width", "153px");
         this.dateBox.option("opened", true);
         assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
-    });
-
-    QUnit.test("width option test for Android theme", (assert) => {
-        const origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = () => {
-            return true;
-        };
-
-        const extraWidth = 32;
-
-        this.dateBox.option("opened", false);
-        this.dateBox.option("width", "auto");
-        this.dateBox.option("opened", true);
-
-        const popup = this.$dateBox.find(".dx-popup").dxPopup("instance");
-
-        assert.equal(this.$dateBox.outerWidth() + extraWidth, popup.option("width"), "timebox popup has equal width with timebox with option width 'auto'");
-
-        this.dateBox.option("opened", false);
-        this.dateBox.option("width", "153px");
-        this.dateBox.option("opened", true);
-        assert.equal(this.$dateBox.outerWidth() + extraWidth, popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
-
-        themes.isAndroid5 = origIsAndroid5;
     });
 
     QUnit.test("list should contain correct values if min/max does not specified", (assert) => {

@@ -1,7 +1,7 @@
 import $ from "jquery";
 import config from "core/config";
 
-import "ui/floating_action_button";
+import "ui/speed_dial_action";
 import "common.css!";
 import "generic_light.css!";
 
@@ -23,8 +23,8 @@ const FAB_MAIN_CLASS = "dx-fa-button-main";
 QUnit.module("create one action", () => {
     test("check rendering", (assert) => {
         this.instance = $("#fab-one")
-            .dxFloatingActionButton()
-            .dxFloatingActionButton("instance");
+            .dxSpeedDialAction()
+            .dxSpeedDialAction("instance");
 
         const $fabElement = $("." + FAB_CLASS);
         const $fabContent = $fabElement.find(".dx-overlay-content");
@@ -51,7 +51,7 @@ QUnit.module("create one action", () => {
 });
 
 
-QUnit.module("maxActionButtonCount option", () => {
+QUnit.module("maxSpeedDialActionCount option", () => {
     test("check action buttons count", (assert) => {
         const $container = $("#fabs");
         const fabInstances = [];
@@ -60,8 +60,8 @@ QUnit.module("maxActionButtonCount option", () => {
             try {
                 fabInstances.push($("<div>")
                     .appendTo($container)
-                    .dxFloatingActionButton({ icon: "favorites" })
-                    .dxFloatingActionButton("instance"));
+                    .dxSpeedDialAction({ icon: "favorites" })
+                    .dxSpeedDialAction("instance"));
             } catch(error) {}
         }
 
@@ -76,16 +76,16 @@ QUnit.module("create multiple actions", (hooks) => {
     let secondInstance;
 
     hooks.beforeEach(() => {
-        const firstElement = $("#fab-one").dxFloatingActionButton({
+        const firstElement = $("#fab-one").dxSpeedDialAction({
             icon: "arrowdown",
             hint: "Arrow down"
         });
-        const secondElement = $("#fab-two").dxFloatingActionButton({
+        const secondElement = $("#fab-two").dxSpeedDialAction({
             icon: "arrowup",
             hint: "Arrow up"
         });
-        firstInstance = firstElement.dxFloatingActionButton("instance");
-        secondInstance = secondElement.dxFloatingActionButton("instance");
+        firstInstance = firstElement.dxSpeedDialAction("instance");
+        secondInstance = secondElement.dxSpeedDialAction("instance");
     }),
 
     test("check rendering", (assert) => {
@@ -127,8 +127,8 @@ QUnit.module("create multiple actions", (hooks) => {
 
 QUnit.module("modify global action button config", (hooks) => {
     hooks.afterEach(() => {
-        $("#fab-one").dxFloatingActionButton("instance").dispose();
-        $("#fab-two").dxFloatingActionButton("instance").dispose();
+        $("#fab-one").dxSpeedDialAction("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
     }),
 
     test("check main fab rendering", (assert) => {
@@ -140,8 +140,8 @@ QUnit.module("modify global action button config", (hooks) => {
             }
         });
 
-        $("#fab-one").dxFloatingActionButton();
-        $("#fab-two").dxFloatingActionButton();
+        $("#fab-one").dxSpeedDialAction();
+        $("#fab-two").dxSpeedDialAction();
 
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
@@ -157,8 +157,8 @@ QUnit.module("modify global action button config", (hooks) => {
             floatingActionButtonConfig: { }
         });
 
-        $("#fab-one").dxFloatingActionButton({ icon: "home" });
-        $("#fab-two").dxFloatingActionButton({ icon: "square" });
+        $("#fab-one").dxSpeedDialAction({ icon: "home" });
+        $("#fab-two").dxSpeedDialAction({ icon: "square" });
 
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
@@ -170,22 +170,22 @@ QUnit.module("modify global action button config", (hooks) => {
 
 QUnit.module("add or remove action buttons", (hooks) => {
     hooks.afterEach(() => {
-        $("#fab-one").dxFloatingActionButton("instance").dispose();
-        $("#fab-two").dxFloatingActionButton("instance").dispose();
+        $("#fab-one").dxSpeedDialAction("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
     }),
 
     test("check main fab rendering", (assert) => {
-        $("#fab-one").dxFloatingActionButton({
+        $("#fab-one").dxSpeedDialAction({
             icon: "plus",
             hint: "Add a Row"
         });
 
-        $("#fab-two").dxFloatingActionButton({
+        $("#fab-two").dxSpeedDialAction({
             icon: "trash",
             hint: "Delete Selected Rows"
         });
 
-        $("#fab-two").dxFloatingActionButton("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
 
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
@@ -196,12 +196,12 @@ QUnit.module("add or remove action buttons", (hooks) => {
         assert.equal($fabElement.length, 1, "one action button");
         assert.equal($fabMainContent.find(".dx-icon-plus").length, 1, "use icon by option");
 
-        $("#fab-one").dxFloatingActionButton("instance").option("icon", "favorites");
+        $("#fab-one").dxSpeedDialAction("instance").option("icon", "favorites");
 
         assert.equal($fabMainContent.find(".dx-icon-favorites").length, 1, "use icon after change icon option");
         assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position after change icon option");
 
-        $("#fab-two").dxFloatingActionButton({
+        $("#fab-two").dxSpeedDialAction({
             icon: "trash",
             hint: "Delete Selected Rows"
         });
@@ -213,17 +213,17 @@ QUnit.module("add or remove action buttons", (hooks) => {
 
 QUnit.module("check action buttons position", (hooks) => {
     hooks.afterEach(() => {
-        $("#fab-one").dxFloatingActionButton("instance").dispose();
-        $("#fab-two").dxFloatingActionButton("instance").dispose();
+        $("#fab-one").dxSpeedDialAction("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
     }),
 
     test("if container is window", (assert) => {
 
-        $("#fab-one").dxFloatingActionButton({
+        $("#fab-one").dxSpeedDialAction({
             icon: "plus"
         });
 
-        $("#fab-two").dxFloatingActionButton({
+        $("#fab-two").dxSpeedDialAction({
             icon: "trash"
         });
 
@@ -251,11 +251,11 @@ QUnit.module("check action buttons position", (hooks) => {
             }
         });
 
-        $("#fab-one").dxFloatingActionButton({
+        $("#fab-one").dxSpeedDialAction({
             icon: "plus"
         });
 
-        $("#fab-two").dxFloatingActionButton({
+        $("#fab-two").dxSpeedDialAction({
             icon: "trash"
         });
 

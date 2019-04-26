@@ -164,13 +164,6 @@ interface JQuery {
     dxFilterBuilder(options: DevExpress.ui.dxFilterBuilderOptions): JQuery;
 }
 interface JQuery {
-    dxFloatingActionButton(): JQuery;
-    dxFloatingActionButton(options: "instance"): DevExpress.ui.dxFloatingActionButton;
-    dxFloatingActionButton(options: string): any;
-    dxFloatingActionButton(options: string, ...params: any[]): any;
-    dxFloatingActionButton(options: DevExpress.ui.dxFloatingActionButtonOptions): JQuery;
-}
-interface JQuery {
     dxForm(): JQuery;
     dxForm(options: "instance"): DevExpress.ui.dxForm;
     dxForm(options: string): any;
@@ -365,6 +358,13 @@ interface JQuery {
     dxSlider(options: string): any;
     dxSlider(options: string, ...params: any[]): any;
     dxSlider(options: DevExpress.ui.dxSliderOptions): JQuery;
+}
+interface JQuery {
+    dxSpeedDialAction(): JQuery;
+    dxSpeedDialAction(options: "instance"): DevExpress.ui.dxSpeedDialAction;
+    dxSpeedDialAction(options: string): any;
+    dxSpeedDialAction(options: string, ...params: any[]): any;
+    dxSpeedDialAction(options: DevExpress.ui.dxSpeedDialActionOptions): JQuery;
 }
 interface JQuery {
     dxSwitch(): JQuery;
@@ -1451,7 +1451,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.size */
         size?: BaseWidgetSize;
         /** @name BaseWidget.Options.theme */
-        theme?: 'android5.light' | 'generic.dark' | 'generic.light' | 'generic.contrast' | 'ios7.default' | 'win10.black' | 'win10.white' | 'win8.black' | 'win8.white' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
+        theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'ios7.default' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
         /** @name BaseWidget.Options.title */
         title?: BaseWidgetTitle | string;
         /** @name BaseWidget.Options.tooltip */
@@ -5353,6 +5353,8 @@ declare module DevExpress.ui {
         /** @name NumericRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
+    /** @name OneDriveFileProvider */
+    export type OneDriveFileProvider = any;
     /** @name PatternRule */
     export interface PatternRule {
         /** @name PatternRule.ignoreEmptyValue */
@@ -6162,23 +6164,31 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.deferRendering */
         deferRendering?: boolean;
         /** @name dxDropDownButton.Options.displayExpr */
-        displayExpr?: string | ((itemData: any) => any);
+        displayExpr?: string | ((itemData: any) => string);
+        /** @name dxDropDownButton.Options.dropDownContentTemplate */
+        dropDownContentTemplate?: template | ((data: Array<string | number | any> | DevExpress.data.DataSource, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
+        /** @name dxDropDownButton.Options.focusStateEnabled */
+        focusStateEnabled?: boolean;
+        /** @name dxDropDownButton.Options.hoverStateEnabled */
+        hoverStateEnabled?: boolean;
         /** @name dxDropDownButton.Options.icon */
         icon?: string;
         /** @name dxDropDownButton.Options.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.items */
         items?: Array<CollectionWidgetItem | any>;
         /** @name dxDropDownButton.Options.keyExpr */
-        keyExpr?: string | ((itemData: any) => any);
+        keyExpr?: string;
         /** @name dxDropDownButton.Options.noDataText */
         noDataText?: string;
-        /** @name dxDropDownButton.Options.onActionButtonClick */
-        onActionButtonClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.onButtonClick */
+        onButtonClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.onItemClick */
+        onItemClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
         /** @name dxDropDownButton.Options.onSelectionChanged */
-        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
+        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
@@ -6198,8 +6208,13 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxDropDownButtonOptions)
         /** @name dxDropDownButton.close() */
         close(): Promise<void> & JQueryPromise<void>;
+
+        /** @name DataHelperMixin.getDataSource() */
+        getDataSource(): DevExpress.data.DataSource;
         /** @name dxDropDownButton.open() */
         open(): Promise<void> & JQueryPromise<void>;
+        /** @name dxDropDownButton.toggle() */
+        toggle(): Promise<void> & JQueryPromise<void>;
         /** @name dxDropDownButton.toggle(visibility) */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
     }
@@ -6488,18 +6503,6 @@ declare module DevExpress.ui {
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
         /** @name dxFilterBuilderField.trueText */
         trueText?: string;
-    }
-    /** @name dxFloatingActionButton.Options */
-    export interface dxFloatingActionButtonOptions extends WidgetOptions<dxFloatingActionButton> {
-        /** @name dxFloatingActionButton.Options.icon */
-        icon?: string;
-        /** @name dxFloatingActionButton.Options.onClick */
-        onClick?: ((e: { event?: event, component?: dxFloatingActionButton, element?: DevExpress.core.dxElement }) => any);
-    }
-    /** @name dxFloatingActionButton */
-    export class dxFloatingActionButton extends Widget {
-        constructor(element: Element, options?: dxFloatingActionButtonOptions)
-        constructor(element: JQuery, options?: dxFloatingActionButtonOptions)
     }
     /** @name dxForm.Options */
     export interface dxFormOptions extends WidgetOptions<dxForm> {
@@ -8234,6 +8237,18 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
+    /** @name dxSpeedDialAction.Options */
+    export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
+        /** @name dxSpeedDialAction.Options.icon */
+        icon?: string;
+        /** @name dxSpeedDialAction.Options.onClick */
+        onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement }) => any);
+    }
+    /** @name dxSpeedDialAction */
+    export class dxSpeedDialAction extends Widget {
+        constructor(element: Element, options?: dxSpeedDialActionOptions)
+        constructor(element: JQuery, options?: dxSpeedDialActionOptions)
+    }
     /** @name dxSwitch.Options */
     export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
         /** @name dxSwitch.Options.activeStateEnabled */
@@ -9257,7 +9272,7 @@ declare module DevExpress {
         /** @name globalConfig.editorStylingMode */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** @name globalConfig.floatingActionButtonConfig */
-        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxActionButtonCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
+        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
         /** @name globalConfig.forceIsoDateParsing */
         forceIsoDateParsing?: boolean;
         /** @name globalConfig.oDataFilterToLower */

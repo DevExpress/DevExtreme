@@ -5,8 +5,6 @@ var $ = require("jquery"),
 require("viz/core/themes/generic.light");
 require("viz/core/themes/generic.dark");
 require("viz/core/themes/ios");
-require("viz/core/themes/android");
-require("viz/core/themes/win");
 
 QUnit.moduleStart(function() {
     $.each([
@@ -317,20 +315,6 @@ QUnit.test("currentTheme return registered default theme", function(assert) {
     var currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, "custom default theme");
-});
-
-QUnit.module("currentTheme method. deprecated arguments");
-
-QUnit.test("Set custom theme (with colorScheme)", function(assert) {
-    themeModule.currentTheme("win8", "light");
-
-    assert.strictEqual(themeModule.currentTheme(), "win8.white", "valid custom theme");
-});
-
-QUnit.test("Set custom theme with wrong colorScheme", function(assert) {
-    themeModule.currentTheme("win8", "dark");
-
-    assert.strictEqual(themeModule.currentTheme(), "win8.black", "valid custom theme");
 });
 
 QUnit.test("Invalid input data", function(assert) {

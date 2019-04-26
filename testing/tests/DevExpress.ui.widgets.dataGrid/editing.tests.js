@@ -13227,6 +13227,54 @@ QUnit.test("Edit form when form items are specified with editorType", function(a
     assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
 });
 
+QUnit.test("Edit form when group form items are specified and simple form items have editor type", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ itemType: "group", items: [{ dataField: "name", editorType: "dxAutocomplete" }] }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when tabbed form items are specified and simple form items have editor type", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ itemType: "tabbed", tabs: [ { items: [{ dataField: "name", editorType: "dxAutocomplete" }] }] }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
 QUnit.test("Edit form when formItem is specified with editorType in the column", function(assert) {
     // arrange
     var $editorElement;
