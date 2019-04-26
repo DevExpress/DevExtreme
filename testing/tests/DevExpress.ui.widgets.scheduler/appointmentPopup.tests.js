@@ -1063,7 +1063,7 @@ QUnit.test("Appointment form will have right dates on multiple openings (T727713
         currentDate: new Date(2017, 4, 1),
     });
     scheduler.instance.showAppointmentPopup(appointments[1], false);
-    var formData = scheduler.appointmentForm.getFormInstance().option('formData');
+    let formData = scheduler.appointmentForm.getFormInstance().option('formData');
 
     assert.deepEqual(formData.startDate, appointments[1].startDate, "First opening appointment form has right startDate");
     assert.deepEqual(formData.endDate, appointments[1].endDate, "First opening appointment form has right endDate");
