@@ -11919,6 +11919,37 @@ QUnit.test("Change pageIndex and pageSize via state if scrolling mode is virtual
     assert.equal(dataGrid.pageSize(), 2, "pageSize");
 });
 
+// T735143
+QUnit.test("Apply state with paging and filtering if filterPanel is visible", function(assert) {
+    var dataGrid = createDataGrid({
+        columns: ["id"],
+        dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+        paging: {
+            pageSize: 2,
+            pageIndex: 1
+        },
+        filterPanel: {
+            visible: true
+        },
+        headerFilter: {
+            visible: true
+        },
+        filterRow: {
+            visible: true
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.state({ pageIndex: 1, pageSize: 2, filterValue: ["id", "<>", 1] });
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 1, "pageIndex is applied");
+    assert.equal(dataGrid.getVisibleRows().length, 1, "rows are filtered");
+});
+
 // T414555
 QUnit.test("Apply state when search text and grouping are changed", function(assert) {
     var loadingCount = 0,
