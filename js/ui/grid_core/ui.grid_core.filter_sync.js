@@ -145,7 +145,10 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         _initSync: function() {
-            let columns = this.getController("columns").getColumns();
+            let columns = this.getController("columns").getColumns(),
+                dataController = this.getController("data"),
+                pageIndex = dataController.pageIndex();
+
             checkForErrors(columns);
             if(!this.option("filterValue")) {
                 let filteringColumns = this.getController("columns").getFilteringColumns(),
@@ -153,6 +156,8 @@ var FilterSyncController = modules.Controller.inherit((function() {
                 this.option("filterValue", filterValue);
             }
             this.syncFilterValue();
+
+            dataController.pageIndex(pageIndex);
         },
 
         init: function() {
