@@ -513,6 +513,9 @@ var ResizingController = modules.ViewController.inherit({
                 if(that._dataController.isLoaded()) {
                     that._synchronizeColumns();
                 }
+                // IE11
+                that._resetGroupElementHeight();
+
                 commonUtils.deferUpdate(function() {
                     commonUtils.deferRender(function() {
                         commonUtils.deferUpdate(function() {
@@ -524,6 +527,13 @@ var ResizingController = modules.ViewController.inherit({
         });
 
         return result.promise();
+    },
+    _resetGroupElementHeight: function() {
+        let groupElement = this.component.$element().children().get(0);
+
+        if(groupElement.style.height) {
+            groupElement.style.height = "";
+        }
     },
     _checkSize: function(checkSize) {
         var $rootElement = this.component.$element();

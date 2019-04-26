@@ -4374,7 +4374,7 @@ QUnit.test("height from style after updateDimensions when rendering to container
     assert.equal($("#dataGrid").find(".dx-datagrid").height(), 298);
 });
 
-// T362517
+// T362517, T734767
 QUnit.test("max-height from styles", function(assert) {
     // arrange, act
     var $dataGrid = $("#dataGrid").css("maxHeight", 400).dxDataGrid({
@@ -4398,11 +4398,7 @@ QUnit.test("max-height from styles", function(assert) {
 
     // assert
     assert.equal(dataGrid.totalCount(), 0, "no items");
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        assert.equal($dataGrid.find(".dx-datagrid").height(), 400, "height is equals max-height in IE11");
-    } else {
-        assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
-    }
+    assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
 });
 
 // T412035
