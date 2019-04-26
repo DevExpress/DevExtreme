@@ -406,8 +406,8 @@ var Resizable = DOMComponent.inherit({
         if(isElement) {
             var areaElement = $(area)[0];
             if(typeUtils.isWindow(areaElement)) {
-                scrollOffset.scrollX = areaElement.scrollX;
-                scrollOffset.scrollY = areaElement.scrollY;
+                scrollOffset.scrollX = areaElement.pageXOffset;
+                scrollOffset.scrollY = areaElement.pageYOffset;
             }
         }
 

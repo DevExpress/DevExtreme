@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    translator = require("animation/translator"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    domUtils = require("core/utils/dom");
+import $ from "jquery";
+import translator from "animation/translator";
+import pointerMock from "../../helpers/pointerMock.js";
+import domUtils from "core/utils/dom";
 
-require("common.css!");
-require("ui/resizable");
+import "common.css!";
+import "ui/resizable";
 
 QUnit.testStart(function() {
     var markup =
