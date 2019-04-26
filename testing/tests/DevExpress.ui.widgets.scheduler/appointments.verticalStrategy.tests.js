@@ -2,21 +2,11 @@ import $ from "jquery";
 import dataCoreUtils from "core/utils/data";
 import typeUtils from "core/utils/type";
 import fx from "animation/fx";
-import { SchedulerTestWrapper } from './helpers.js';
+
 import "ui/scheduler/ui.scheduler";
 
 const compileGetter = dataCoreUtils.compileGetter;
 const compileSetter = dataCoreUtils.compileSetter;
-
-const createInstance = function(options) {
-    const defaultOption = {
-        dataSource: [],
-        maxAppointmentsPerCell: null
-    };
-    const instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
-    return new SchedulerTestWrapper(instance);
-};
-
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-appointments"></div>\
@@ -253,26 +243,4 @@ QUnit.test("Scheduler appointments should have specific allDay class if needed",
 
     $appointment = $("#allDayContainer .dx-scheduler-appointment").eq(0);
     assert.ok($appointment.hasClass("dx-scheduler-all-day-appointment"), "Appointment has allDay class");
-});
-
-QUnit.test("Scheduler recurrent appointments render right if began before startDayHour (T735635)", function(assert) {
-    const appointments = [
-        {
-            text: "Website Re-Design Plan",
-            startDate: new Date(2019, 3, 22, 7, 30),
-            endDate: new Date(2019, 3, 22, 11, 30),
-            recurrenceRule: "FREQ=DAILY"
-        }
-    ];
-    const options = {
-        dataSource: appointments,
-        views: ["week", "month"],
-        currentView: "week",
-        startDayHour: 10,
-        endDayHour: 16,
-        height: 600
-    };
-    const scheduler = createInstance(options);
-    let k = scheduler.appointments.getAppointment(1);
-    assert.equal(k || true, true, "Recurrent appointment cell has right height");
 });
