@@ -219,6 +219,26 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1052: '{0} should have the "dataSource" option specified',
 
     /**
+    * @name ErrorsUIWidgets.E1053
+    */
+    E1053: "The \"buttons\" option accepts an array that contains only objects or string values",
+
+    /**
+    * @name ErrorsUIWidgets.E1054
+    */
+    E1054: "All text editor buttons must have names",
+
+    /**
+    * @name ErrorsUIWidgets.E1055
+    */
+    E1055: "One or several text editor buttons have invalid or non-unique \"name\" values",
+
+    /**
+    * @name ErrorsUIWidgets.E1056
+    */
+    E1056: "The {0} widget does not support buttons of the \"{1}\" type",
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",

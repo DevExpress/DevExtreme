@@ -2,13 +2,14 @@ import $ from "../../../core/renderer";
 import CustomButton from "./custom";
 import { extend } from "../../../core/utils/extend";
 import { find } from "../../../core/utils/array";
+import errors from "../../widget/ui.errors";
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
 
 function checkButtonInfo(buttonInfo) {
     const checkButtonType = () => {
         if(!buttonInfo || typeof buttonInfo !== "object" || Array.isArray(buttonInfo)) {
-            throw new TypeError("'buttons' option must include an object or a string items only");
+            throw errors.Error("E1053");
         }
     };
 
@@ -16,13 +17,13 @@ function checkButtonInfo(buttonInfo) {
         const { location } = buttonInfo;
 
         if("location" in buttonInfo && location !== "after" && location !== "before") {
-            throw new TypeError("action button's 'location' property can be 'after' or 'before' only");
+            buttonInfo.location = "after";
         }
     };
 
     const checkNameIsDefined = () => {
         if(!("name" in buttonInfo)) {
-            throw new Error("action button must have a name");
+            throw errors.Error("E1054");
         }
     };
 
@@ -30,7 +31,7 @@ function checkButtonInfo(buttonInfo) {
         const { name } = buttonInfo;
 
         if(typeof name !== "string") {
-            throw new TypeError("action button's 'name' field must be a string");
+            throw errors.Error("E1055");
         }
     };
 
@@ -42,7 +43,7 @@ function checkButtonInfo(buttonInfo) {
 
 function checkNamesUniqueness(existingNames, newName) {
     if(existingNames.indexOf(newName) !== -1) {
-        throw new Error("'buttons' option item must have unique name");
+        throw errors.Error("E1055", newName);
     }
 
     existingNames.push(newName);
@@ -50,12 +51,6 @@ function checkNamesUniqueness(existingNames, newName) {
 
 function isPredefinedButtonName(name, predefinedButtonsInfo) {
     return !!(find(predefinedButtonsInfo, (info) => info.name === name));
-}
-
-function checkExcessOptions(button) {
-    if(typeof button === "object" && (button.location || button.options)) {
-        throw new Error(`Predefined '${button.name}' button must have no 'location' or 'options' fields in the configuration`);
-    }
 }
 
 export default class TextEditorButtonCollection {
@@ -77,11 +72,10 @@ export default class TextEditorButtonCollection {
             const isDefaultButton = isStringButton || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
 
             if(isDefaultButton) {
-                checkExcessOptions(button);
                 const defaultButtonInfo = find(this.defaultButtonsInfo, ({ name }) => name === button || name === button.name);
 
                 if(!defaultButtonInfo) {
-                    throw new Error(`editor does not have '${button}' action button`);
+                    throw errors.Error("E1056", this.editor.NAME, button);
                 }
 
                 checkNamesUniqueness(names, button);
