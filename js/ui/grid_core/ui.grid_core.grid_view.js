@@ -529,9 +529,10 @@ var ResizingController = modules.ViewController.inherit({
         return result.promise();
     },
     _resetGroupElementHeight: function() {
-        let groupElement = this.component.$element().children().get(0);
+        let groupElement = this.component.$element().children().get(0),
+            scrollable = this._rowsView.getScrollable();
 
-        if(groupElement.style.height) {
+        if(groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
             groupElement.style.height = "";
         }
     },
