@@ -1151,6 +1151,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             }
             labels.forEach(l => {
                 l.getPoint.returns({ series });
+                l.getFigureCenter.returns([0, 0]);
             });
             return series;
         },
@@ -1303,6 +1304,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 labels = this.createStubLabels(bBoxes);
             labels.forEach(l => {
                 l.getPoint.returns({ series });
+                l.getFigureCenter.returns([0, 0]);
             });
 
             seriesMockData.series.push(series);
@@ -1816,6 +1818,46 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.deepEqual(this.labels[1].shift.lastCall.args, [5, 30]);
     });
 
+    QUnit.test("Do not sort labels by value is they have different figure center", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 0, width: 10, height: 30, value: 20 },
+            { x: 5, y: 20, width: 10, height: 30, value: 0 }
+        ]);
+
+        this.labels[0].getFigureCenter.returns([0, 1]);
+        this.labels[1].getFigureCenter.returns([1, 1]);
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }],
+            size: { width: 100, height: 100 }
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(this.labels[1].shift.called);
+        assert.deepEqual(this.labels[1].shift.lastCall.args, [5, 30]);
+    });
+
+    QUnit.test("Do not sort labels by value is they have different figure center. Rotated", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 96, width: 23, height: 24, value: 15 },
+            { x: 35, y: 96, width: 23, height: 24, value: 5 }
+        ], { argument: 10 });
+
+        this.labels[0].getFigureCenter.returns([1, 0]);
+        this.labels[1].getFigureCenter.returns([1, 1]);
+
+        this.createChart({
+            rotated: true,
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }],
+            size: { width: 100, height: 100 }
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[1].shift.called);
+    });
+
     QUnit.module("resolveLabelOverlapping. stack. range series", $.extend({}, commons.environment, {
         beforeEach: function() {
             commons.environment.beforeEach.apply(this, arguments);
@@ -1831,6 +1873,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 that.labels = that.labels.concat(labels);
                 labels.forEach(l => {
                     l.getPoint.returns({ series });
+                    l.getFigureCenter.returns([0, 0]);
                 });
                 return {
                     series: series,
