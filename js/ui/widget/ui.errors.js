@@ -221,7 +221,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1053
     */
-    E1053: "The \"buttons\" option accepts an array that contain only objects or string values",
+    E1053: "The \"buttons\" option accepts an array that contains only objects or string values",
 
     /**
     * @name ErrorsUIWidgets.E1054
@@ -231,7 +231,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1055
     */
-    E1055: "One or several text editor buttons have invalid or non-unique \"name\" values.",
+    E1055: "One or several text editor buttons have invalid or non-unique \"name\" values",
 
     /**
     * @name ErrorsUIWidgets.E1056
