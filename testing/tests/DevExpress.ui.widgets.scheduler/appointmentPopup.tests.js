@@ -1043,3 +1043,35 @@ QUnit.test("Appointment popup will render on showAppointmentPopup with no argume
     assert.equal($endDate.value, "", "endDate is rendered empty");
 });
 
+QUnit.test("Appointment form will have right dates on multiple openings (T727713)", function(assert) {
+    const scheduler = createInstance();
+    const appointments = [
+        {
+            text: "Appointment1",
+            startDate: new Date(2017, 4, 2, 8, 30),
+            endDate: new Date(2017, 4, 2, 11),
+        }, {
+            text: "Appointment2",
+            startDate: new Date(2017, 4, 1, 10),
+            endDate: new Date(2017, 4, 1, 11),
+        }
+    ];
+    scheduler.instance.option({
+        dataSource: appointments,
+        currentView: "week",
+        views: ["week"],
+        currentDate: new Date(2017, 4, 1),
+    });
+    scheduler.instance.showAppointmentPopup(appointments[1], false);
+    const { oldStartDate, oldEndDate } = scheduler.appointmentForm.getFormInstance().option('formData');
+
+    assert.deepEqual(oldStartDate, appointments[1].startDate, "First opening appointment form has right startDate");
+    assert.deepEqual(oldEndDate, appointments[1].endDate, "First opening appointment form has right endDate");
+
+    scheduler.instance.hideAppointmentPopup();
+    scheduler.appointments.getAppointment(0).trigger('dxdblclick');
+    const { newStartDate, newEndDate } = scheduler.appointmentForm.getFormInstance().option('formData');
+
+    assert.deepEqual(newStartDate, appointments[0].startDate, "Second opening appointment form has right startDate");
+    assert.deepEqual(newEndDate, appointments[0].endDate, "Second opening appointment form has right endDate");
+});
