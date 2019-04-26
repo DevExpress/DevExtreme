@@ -1069,7 +1069,7 @@ QUnit.test("Appointment form will have right dates on multiple openings (T727713
     assert.deepEqual(formData.endDate, appointments[1].endDate, "First opening appointment form has right endDate");
 
     scheduler.instance.hideAppointmentPopup();
-    scheduler.appointments.getAppointment(0).trigger('dxdblclick');
+    scheduler.appointments.dblclick(0);
     formData = scheduler.appointmentForm.getFormInstance().option('formData');
 
     assert.deepEqual(formData.startDate, appointments[0].startDate, "Second opening appointment form has right startDate");

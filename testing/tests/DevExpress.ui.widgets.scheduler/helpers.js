@@ -54,6 +54,10 @@ export class SchedulerTestWrapper {
                 this.clock.restore();
             },
 
+            dblclick: (index = 0) => {
+                this.appointments.getAppointment(index).trigger("dblclick");
+            },
+
             compact: {
                 getButtons: () => $(".dx-scheduler-appointment-collector"),
                 getButtonCount: () => this.appointments.compact.getButtons().length,
