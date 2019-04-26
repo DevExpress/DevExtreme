@@ -4,14 +4,15 @@ import eventUtils from "../../events/utils";
 
 const FOCUS_STATE_CLASS = "dx-state-focused",
     FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    DATA_ROW_SELECTOR = ".dx-datagrid-rowsview .dx-datagrid-content .dx-data-row",
+    GRID_CELL_SELECTOR = ".dx-datagrid-rowsview .dx-datagrid-content .dx-row > td",
+    TREELIST_CELL_SELECTOR = ".dx-treelist-rowsview .dx-treelist-content .dx-row > td",
     viewItemSelectorMap = {
-        headerColumns: [".dx-datagrid-headers .dx-header-row > td.dx-datagrid-action"],
-        filterRow: [".dx-datagrid-headers .dx-datagrid-filter-row .dx-editor-cell input"],
-        rowsView: [`${DATA_ROW_SELECTOR} > td[tabindex]`, `${DATA_ROW_SELECTOR} > td`],
-        footer: [".dx-datagrid-total-footer .dx-datagrid-summary-item"],
-        filterPanel: [".dx-datagrid-filter-panel .dx-icon-filter"],
-        pager: [".dx-datagrid-pager [tabindex]", ".dx-datagrid-pager .dx-selection"]
+        columnHeaders: [".dx-datagrid-headers .dx-header-row > td.dx-datagrid-action", ".dx-treelist-headers .dx-header-row > td.dx-treelist-action"],
+        filterRow: [".dx-datagrid-headers .dx-datagrid-filter-row .dx-editor-cell input", ".dx-treelist-headers .dx-treelist-filter-row .dx-editor-cell input"],
+        rowsView: [`${GRID_CELL_SELECTOR}[tabindex]`, `${GRID_CELL_SELECTOR}`, `${TREELIST_CELL_SELECTOR}[tabindex]`, `${TREELIST_CELL_SELECTOR}`],
+        footer: [".dx-datagrid-total-footer .dx-datagrid-summary-item", ".dx-treelist-total-footer .dx-treelist-summary-item"],
+        filterPanel: [".dx-datagrid-filter-panel .dx-icon-filter", ".dx-treelist-filter-panel .dx-icon-filter"],
+        pager: [".dx-datagrid-pager [tabindex]", ".dx-treelist-pager [tabindex]"]
     };
 
 var isMouseDown = false,
@@ -29,15 +30,10 @@ function processKeyDown(viewName, instance, event, action, $mainElement) {
     }
 }
 
-function findFocusedViewElement(instance, viewSelectors) {
+function findFocusedViewElement(viewSelectors) {
     for(let index in viewSelectors) {
-        let componentName = instance.component && instance.component.NAME,
-            selector = viewSelectors[index],
+        let selector = viewSelectors[index],
             $focusViewElement;
-
-        if(componentName === "dxTreeList") {
-            selector = selector.replace(/dx-datagrid/g, "dx-treelist");
-        }
 
         $focusViewElement = $(selector).first();
 
@@ -85,7 +81,7 @@ module.exports = {
                 viewItemIndex = keyName === "upArrow" ? --viewItemIndex : ++viewItemIndex;
                 let viewName = viewNames[viewItemIndex],
                     viewSelectors = viewItemSelectorMap[viewName],
-                    $focusViewElement = findFocusedViewElement(instance, viewSelectors);
+                    $focusViewElement = findFocusedViewElement(viewSelectors);
                 if($focusViewElement && $focusViewElement.length) {
                     $focusViewElement.attr("tabindex", instance.option("tabindex") || 0);
                     eventsEngine.trigger($focusViewElement, "focus");
