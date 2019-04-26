@@ -439,7 +439,7 @@ QUnit.test("Form items should have correct model", function(assert) {
     var $form = $("#formWithItems");
 
     ko.applyBindings(viewModel, $form.get(0));
-    $form.find(".dx-button").click();
+    $form.find(".dx-button").trigger("dxclick");
 });
 
 QUnit.test("Editor doesn't update the field data if it's already up to date", function(assert) {
