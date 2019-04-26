@@ -2578,14 +2578,14 @@ const Scheduler = Widget.inherit({
         return updatedData;
     },
 
-    _getCoordinates: function(dates, appointmentResources, allDay) {
+    _getCoordinates: function(initialDates, dates, appointmentResources, allDay) {
         var result = [];
 
         for(var i = 0; i < dates.length; i++) {
             var currentCoords = this._workSpace.getCoordinatesByDateInGroup(dates[i], appointmentResources, allDay);
 
             for(var j = 0; j < currentCoords.length; j++) {
-                extend(currentCoords[j], { startDate: dates[i] });
+                extend(currentCoords[j], { startDate: dates[i], initialStartDate: initialDates[i] });
             }
             result = result.concat(currentCoords);
         }

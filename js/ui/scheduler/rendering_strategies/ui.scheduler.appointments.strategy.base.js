@@ -488,7 +488,7 @@ var BaseRenderingStrategy = Class.inherit({
             viewStartDate = this.startDate(appointment, false, position);
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            var recurrencePartStartDate = position ? position.startDate : realStartDate,
+            var recurrencePartStartDate = position ? position.initialStartDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
 
             fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
