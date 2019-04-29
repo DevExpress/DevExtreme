@@ -4000,6 +4000,41 @@ define(function(require) {
             .always(done);
     });
 
+    QUnit.test("Skip and take rows if expand and if oppositePath", function(assert) {
+        var done = assert.async();
+        this.store.load({
+            area: "column",
+            headerName: "columns",
+            path: ["&[2003]"],
+            oppositePath: ["&[4]"], // Accessories
+            rows: [{
+                dataField: "[Product].[Category]",
+            }, {
+                dataField: "[Customer].[Customer]",
+            }],
+            columns: [{
+                dataField: "[Ship Date].[Calendar Year]"
+            }, {
+                dataField: "[Ship Date].[Month of Year]"
+            }],
+            values: [{ dataField: "[Measures].[Customer Count]" }],
+            rowSkip: 0,
+            rowTake: 3
+        }).done(function(data) {
+            assert.strictEqual(data.rows.length, 18484);
+            assert.strictEqual(data.rows[0].value, "Aaron A. Allen");
+            assert.strictEqual(data.rows[1].value, "Aaron A. Hayes");
+            assert.strictEqual(data.rows[2].value, "Aaron A. Zhang");
+            assert.strictEqual(data.rows[3].value, undefined);
+
+            assert.strictEqual(getValue(data, data.rows[0]), null), "Aaron A. Allen 2003";
+            assert.strictEqual(getValue(data, data.rows[1]), null), "Aaron A. Hayes 2003";
+            assert.strictEqual(getValue(data, data.rows[2]), 1), "Aaron A. Zhang 2003";
+            assert.strictEqual(getValue(data, data.rows[2], data.columns[10]), 1), "Aaron A. Zhang 2003 October";
+        }).fail(getFailCallBack(assert))
+            .always(done);
+    });
+
     QUnit.test("Skip and take columns", function(assert) {
         var done = assert.async();
         this.store.load({
