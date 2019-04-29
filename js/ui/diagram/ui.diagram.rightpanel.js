@@ -23,20 +23,23 @@ class DiagramRightPanel extends Widget {
 
         this._renderAccordion($accordion);
     }
-    _getDataSource() {
+    _getDataSources() {
+        return this.option("dataSources") || {};
+    }
+    _getAccordionDataSource() {
         var result = [{
             title: "Page Properties",
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
-        var dataToolboxes = this.option("dataToolboxes");
-        var hasDataToolboxes = false;
-        for(var key in dataToolboxes) {
-            if(dataToolboxes.hasOwnProperty(key)) {
-                hasDataToolboxes = true;
+        var dataSources = this._getDataSources();
+        var hasDataSources = false;
+        for(var key in dataSources) {
+            if(dataSources.hasOwnProperty(key)) {
+                hasDataSources = true;
                 break;
             }
         }
-        if(hasDataToolboxes) {
+        if(hasDataSources) {
             result.push({
                 title: "Data Source",
                 onTemplate: (widget, $element) => {
@@ -52,7 +55,7 @@ class DiagramRightPanel extends Widget {
             multiple: true,
             collapsible: true,
             displayExpr: "title",
-            dataSource: this._getDataSource(),
+            dataSource: this._getAccordionDataSource(),
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element)
         });
     }
@@ -118,9 +121,9 @@ class DiagramRightPanel extends Widget {
     }
 
     _renderDataSources($container) {
-        var dataToolboxes = this.option("dataToolboxes");
-        for(var key in dataToolboxes) {
-            if(dataToolboxes.hasOwnProperty(key)) {
+        var dataSources = this._getDataSources();
+        for(var key in dataSources) {
+            if(dataSources.hasOwnProperty(key)) {
                 $("<div>")
                     .appendTo($container)
                     .attr("data-key", key);

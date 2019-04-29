@@ -46,20 +46,24 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_CONTENT_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        const $toolbox = $("<div>")
+        this._renderLeftPanel($contentWrapper);
+
+        const $drawerWrapper = $("<div>")
+            .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
             .appendTo($contentWrapper);
 
-        const $mainElement = this._renderMainElement($contentWrapper);
+        const $drawer = $("<div>")
+            .appendTo($drawerWrapper);
 
-        var customShapes = this.option("customShapes");
-        this._createComponent($toolbox, DiagramLeftPanel, {
-            showCustomShapes: Array.isArray(customShapes) && customShapes.length,
-            onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category)
-        });
+        const $content = $("<div>")
+            .addClass(DIAGRAM_CONTENT_CLASS)
+            .appendTo($drawer);
 
-        this._renderContextMenu($mainElement);
+        this._renderRightPanel($drawer);
 
-        !isServerSide && this._diagramInstance.createDocument($mainElement[0]);
+        this._renderContextMenu($content);
+
+        !isServerSide && this._diagramInstance.createDocument($content[0]);
     }
 
     _renderToolbar() {
@@ -71,35 +75,35 @@ class Diagram extends Widget {
             export: this.option("export")
         });
     }
-
-    _renderMainElement($parent) {
+    _renderLeftPanel($parent) {
         const isServerSide = !hasWindow();
-        const dataToolboxes = this.option("dataToolboxes");
-
-        const $drawerWrapper = $("<div>")
-            .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
+        const $leftPanel = $("<div>")
             .appendTo($parent);
 
-        const $drawer = $("<div>")
-            .appendTo($drawerWrapper);
+        var customShapes = this.option("customShapes");
+        this._createComponent($leftPanel, DiagramLeftPanel, {
+            showCustomShapes: Array.isArray(customShapes) && customShapes.length,
+            onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category)
+        });
+    }
 
-        const $content = $("<div>")
-            .addClass(DIAGRAM_CONTENT_CLASS)
-            .appendTo($drawer);
+    _renderRightPanel($parent) {
+        const dataSources = this._getDataSources();
+        const isServerSide = !hasWindow();
 
-        const drawer = this._createComponent($drawer, Drawer, {
+        const drawer = this._createComponent($parent, Drawer, {
             closeOnOutsideClick: true,
             openedStateMode: "overlap",
             position: "right",
             template: ($options) => {
                 this._createComponent($options, DiagramRightPanel, {
-                    dataToolboxes,
+                    dataSources,
                     onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
                     onDataToolboxRendered: (e) => {
                         if(isServerSide) return;
 
-                        for(var key in dataToolboxes) {
-                            if(dataToolboxes.hasOwnProperty(key)) {
+                        for(var key in dataSources) {
+                            if(dataSources.hasOwnProperty(key)) {
                                 var $toolbox = e.$element.children("[data-key='" + key + "']");
                                 this._diagramInstance.createDataSourceToolbox(key, $toolbox[0]);
                             }
@@ -114,8 +118,6 @@ class Diagram extends Widget {
                 drawer.toggle();
             }
         });
-
-        return $content;
     }
 
     _renderContextMenu($mainElement) {
@@ -213,12 +215,12 @@ class Diagram extends Widget {
                 getTo: this._createGetter(options.edges.toExpr || DIAGRAM_TO_FIELD),
                 setTo: this._createSetter(options.edges.toExpr || DIAGRAM_TO_FIELD)
             },
-            layoutType: this._getDataToolboxLayoutType(options.layout)
+            layoutType: this._getDataSourceLayoutType(options.layout)
         };
-        this._addDiagramDataToolbox(key, data);
+        this._addDiagramDataSource(key, data);
         this._importDiagramDataSource(key);
     }
-    _getDataToolboxLayoutType(layout) {
+    _getDataSourceLayoutType(layout) {
         const { DataLayoutType } = getDiagram();
         switch(layout) {
             case "tree":
@@ -227,20 +229,20 @@ class Diagram extends Widget {
                 return DataLayoutType.Sugiyama;
         }
     }
-    _getDataToolboxes() {
-        return this.option("dataToolboxes") || {};
+    _getDataSources() {
+        return this.option("dataSources") || {};
     }
-    _addDiagramDataToolbox(key, data) {
-        var dataToolboxes = this._getDataToolboxes();
-        dataToolboxes[key] = data;
-        this.option("dataToolboxes", dataToolboxes);
+    _addDiagramDataSource(key, data) {
+        var dataSources = this._getDataSources();
+        dataSources[key] = data;
+        this.option("dataSources", dataSources);
     }
     _importDiagramDataSource(key) {
         const { DiagramCommand } = getDiagram();
 
-        var dataToolboxes = this._getDataToolboxes();
-        if(dataToolboxes[key]) {
-            this._diagramInstance.commandManager.getCommand(DiagramCommand.ImportDataSource).execute(dataToolboxes[key]);
+        var dataSources = this._getDataSources();
+        if(dataSources[key]) {
+            this._diagramInstance.commandManager.getCommand(DiagramCommand.ImportDataSource).execute(dataSources[key]);
         }
     }
     _deleteDiagramDataSource(key) {
@@ -250,15 +252,15 @@ class Diagram extends Widget {
     _closeDiagramDataSource(key) {
         const { DiagramCommand } = getDiagram();
 
-        var dataToolboxes = this._getDataToolboxes();
-        if(dataToolboxes[key]) {
+        var dataSources = this._getDataSources();
+        if(dataSources[key]) {
             this._diagramInstance.commandManager.getCommand(DiagramCommand.CloseDataSource).execute(key);
         }
     }
     _removeDiagramDataSource(key) {
-        var dataToolboxes = this._getDataToolboxes();
-        delete dataToolboxes[key];
-        this.option("dataToolboxes", dataToolboxes);
+        var dataSources = this._getDataSources();
+        delete dataSources[key];
+        this.option("dataSources", dataSources);
     }
 
     _nodesDataSourceChanged(nodes) {
@@ -699,7 +701,7 @@ class Diagram extends Widget {
             case "onDataChanged":
                 this._createDataChangeAction();
                 break;
-            case "dataToolboxes":
+            case "dataSources":
                 this._invalidate();
                 break;
             case "export":
