@@ -1124,12 +1124,12 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             ]
         });
 
-        const { getItemCount, getItemElement, getDesktopOverlayContentElement } = scheduler.tooltip;
+        const { getItemCount, getItemElement, getOverlayContentElement } = scheduler.tooltip;
 
         scheduler.appointments.compact.click();
         assert.equal(getItemCount(), 4, "Tooltip should render 4 items");
 
-        assert.ok(getItemElement().outerHeight() * 4 > getDesktopOverlayContentElement().outerHeight(), "Tooltip height should less then list height");
+        assert.ok(getItemElement().outerHeight() * 4 > getOverlayContentElement().outerHeight(), "Tooltip height should less then list height");
 
         scheduler.instance.option("dataSource", [
             {
@@ -1149,6 +1149,6 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
 
         scheduler.appointments.compact.click();
         assert.equal(getItemCount(), 1, "Tooltip should render 1 item");
-        assert.roughEqual(getItemElement().outerHeight(), getDesktopOverlayContentElement().outerHeight(), 10, "Tooltip height should equals then list height");
+        assert.roughEqual(getItemElement().outerHeight(), getOverlayContentElement().outerHeight(), 10, "Tooltip height should equals then list height");
     });
 });
