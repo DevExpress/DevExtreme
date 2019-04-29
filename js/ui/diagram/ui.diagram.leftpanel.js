@@ -5,9 +5,9 @@ import Accordion from "../accordion";
 import ScrollView from "../scroll_view";
 import ShapeCategories from "./ui.diagram.shape.categories";
 
-const DIAGRAM_TOOLBOX_CLASS = "dx-diagram-toolbox";
+const DIAGRAM_LEFT_PANEL_CLASS = "dx-diagram-left-panel";
 
-class DiagramToolbox extends Widget {
+class DiagramLeftPanel extends Widget {
     _init() {
         super._init();
         this._showCustomShapes = this.option("showCustomShapes");
@@ -15,7 +15,7 @@ class DiagramToolbox extends Widget {
     }
     _initMarkup() {
         super._initMarkup();
-        this.$element().addClass(DIAGRAM_TOOLBOX_CLASS);
+        this.$element().addClass(DIAGRAM_LEFT_PANEL_CLASS);
         const $scrollViewWrapper = $("<div>")
             .appendTo(this.$element());
 
@@ -43,4 +43,4 @@ class DiagramToolbox extends Widget {
     }
 }
 
-module.exports = DiagramToolbox;
+module.exports = DiagramLeftPanel;

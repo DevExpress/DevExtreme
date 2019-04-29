@@ -6,34 +6,56 @@ import DiagramCommands from "./ui.diagram.commands";
 import { extend } from "../../core/utils/extend";
 import DiagramBar from "./diagram_bar";
 
-const DIAGRAM_OPTIONS_CLASS = "dx-diagram-options";
-const OPTIONS = [
-    {
-        title: "Page Properties",
-        onTemplate: (widget, $element) => widget._renderOptions($element)
-    }
-];
+const DIAGRAM_RIGHT_PANEL_CLASS = "dx-diagram-right-panel";
 
-class DiagramOptions extends Widget {
+class DiagramRightPanel extends Widget {
     _init() {
         super._init();
         this.bar = new OptionsDiagramBar(this);
         this._valueConverters = {};
+        this._onDataToolboxRenderedAction = this._createActionByOption("onDataToolboxRendered");
     }
     _initMarkup() {
         super._initMarkup();
-        this.$element().addClass(DIAGRAM_OPTIONS_CLASS);
+        this.$element().addClass(DIAGRAM_RIGHT_PANEL_CLASS);
         const $accordion = $("<div>")
             .appendTo(this.$element());
 
         this._renderAccordion($accordion);
+    }
+    _getDataSources() {
+        return this.option("dataSources") || {};
+    }
+    _getAccordionDataSource() {
+        var result = [{
+            title: "Page Properties",
+            onTemplate: (widget, $element) => widget._renderOptions($element)
+        }];
+        var dataSources = this._getDataSources();
+        var hasDataSources = false;
+        for(var key in dataSources) {
+            if(dataSources.hasOwnProperty(key)) {
+                hasDataSources = true;
+                break;
+            }
+        }
+        if(hasDataSources) {
+            result.push({
+                title: "Data Source",
+                onTemplate: (widget, $element) => {
+                    widget._renderDataSources($element);
+                    this._onDataToolboxRenderedAction({ $element });
+                }
+            });
+        }
+        return result;
     }
     _renderAccordion($container) {
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,
             displayExpr: "title",
-            dataSource: OPTIONS,
+            dataSource: this._getAccordionDataSource(),
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element)
         });
     }
@@ -97,6 +119,17 @@ class DiagramOptions extends Widget {
             container: null
         });
     }
+
+    _renderDataSources($container) {
+        var dataSources = this._getDataSources();
+        for(var key in dataSources) {
+            if(dataSources.hasOwnProperty(key)) {
+                $("<div>")
+                    .appendTo($container)
+                    .attr("data-key", key);
+            }
+        }
+    }
 }
 
 class OptionsDiagramBar extends DiagramBar {
@@ -111,4 +144,4 @@ class OptionsDiagramBar extends DiagramBar {
     }
 }
 
-module.exports = DiagramOptions;
+module.exports = DiagramRightPanel;
