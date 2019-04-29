@@ -191,29 +191,31 @@ class Diagram extends Widget {
     _createDiagramDataSource(options) {
         const key = options.key || "0";
         const name = options.name || "Data Source";
+        const nodes = options.nodes || {};
+        const edges = options.edges || {};
 
         const data = {
             key, name,
-            nodeDataSource: options.nodes.dataSource,
-            edgeDataSource: options.edges.dataSource,
+            nodeDataSource: nodes.dataSource,
+            edgeDataSource: edges.dataSource,
             nodeDataImporter: {
-                getKey: this._createGetter(options.nodes.keyExpr || DIAGRAM_KEY_FIELD),
-                setKey: this._createSetter(options.nodes.keyExpr || DIAGRAM_KEY_FIELD),
-                getText: this._createGetter(options.nodes.textExpr || DIAGRAM_TEXT_FIELD),
-                setText: this._createSetter(options.nodes.textExpr || DIAGRAM_TEXT_FIELD),
-                getType: this._createGetter(options.nodes.typeExpr || DIAGRAM_TYPE_FIELD),
-                setType: this._createSetter(options.nodes.typeExpr || DIAGRAM_TYPE_FIELD),
+                getKey: this._createGetter(nodes.keyExpr || DIAGRAM_KEY_FIELD),
+                setKey: this._createSetter(nodes.keyExpr || DIAGRAM_KEY_FIELD),
+                getText: this._createGetter(nodes.textExpr || DIAGRAM_TEXT_FIELD),
+                setText: this._createSetter(nodes.textExpr || DIAGRAM_TEXT_FIELD),
+                getType: this._createGetter(nodes.typeExpr || DIAGRAM_TYPE_FIELD),
+                setType: this._createSetter(nodes.typeExpr || DIAGRAM_TYPE_FIELD),
 
-                getParentKey: this._createGetter(options.nodes.parentKeyExpr || DIAGRAM_PARENT_KEY_FIELD),
-                getItems: this._createGetter(options.nodes.itemsExpr || DIAGRAM_ITEMS_FIELD)
+                getParentKey: this._createGetter(nodes.parentKeyExpr || DIAGRAM_PARENT_KEY_FIELD),
+                getItems: this._createGetter(nodes.itemsExpr || DIAGRAM_ITEMS_FIELD)
             },
             edgeDataImporter: {
-                getKey: this._createGetter(options.edges.keyExpr || DIAGRAM_KEY_FIELD),
-                setKey: this._createSetter(options.edges.keyExpr || DIAGRAM_KEY_FIELD),
-                getFrom: this._createGetter(options.edges.fromExpr || DIAGRAM_FROM_FIELD),
-                setFrom: this._createSetter(options.edges.fromExpr || DIAGRAM_FROM_FIELD),
-                getTo: this._createGetter(options.edges.toExpr || DIAGRAM_TO_FIELD),
-                setTo: this._createSetter(options.edges.toExpr || DIAGRAM_TO_FIELD)
+                getKey: this._createGetter(edges.keyExpr || DIAGRAM_KEY_FIELD),
+                setKey: this._createSetter(edges.keyExpr || DIAGRAM_KEY_FIELD),
+                getFrom: this._createGetter(edges.fromExpr || DIAGRAM_FROM_FIELD),
+                setFrom: this._createSetter(edges.fromExpr || DIAGRAM_FROM_FIELD),
+                getTo: this._createGetter(edges.toExpr || DIAGRAM_TO_FIELD),
+                setTo: this._createSetter(edges.toExpr || DIAGRAM_TO_FIELD)
             },
             layoutType: this._getDataSourceLayoutType(options.layout)
         };
