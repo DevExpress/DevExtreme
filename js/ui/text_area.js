@@ -258,7 +258,7 @@ var TextArea = TextBox.inherit({
             default:
                 this.callBase(args);
         }
-    },
+    }
 
     /**
     * @name dxTextAreaMethods.getButton

@@ -1277,7 +1277,7 @@ var Lookup = DropDownList.inherit({
 
     field: function() {
         return this._$field;
-    },
+    }
 
     /**
     * @name dxLookupMethods.getButton
