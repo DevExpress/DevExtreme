@@ -331,7 +331,7 @@ module.exports = {
                 canvas = this._getCanvasStartEnd();
 
             this._axisElement.attr({
-                points: this._isHorizontal ? [canvas.start, axisCoord, canvas.end, axisCoord] : [axisCoord, canvas.start, axisCoord, canvas.end]
+                points: this._isHorizontal ? [canvas.start, axisCoord, canvas.end + 1, axisCoord] : [axisCoord, canvas.start + 1, axisCoord, canvas.end]
             });
         },
 
@@ -341,9 +341,11 @@ module.exports = {
 
         _initAxisPositions: function() {
             var that = this,
-                position = that._options.position;
+                position = that._options.position,
+                width = that._options.width,
+                shift = width % 2 === 0 && (position === "left" || position === "top") ? 1 : 0;
 
-            that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
+            that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"] + shift;
         },
 
         _getTickMarkPoints: function(coords, length, tickOptions) {
