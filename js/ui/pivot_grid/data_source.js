@@ -1333,6 +1333,7 @@ module.exports = Class.inherit((function() {
                 skipField = area + "Skip",
                 values = this._data.values,
                 items = this._data[area + "s"],
+                oppositeArea = area === "row" ? "column" : "row",
                 indices = [];
 
             if(options.path && options.area === area) {
@@ -1342,6 +1343,14 @@ module.exports = Class.inherit((function() {
                     return false;
                 }
             }
+            if(options.oppositePath && options.area === oppositeArea) {
+                let headerItem = findHeaderItem(items, options.oppositePath);
+                items = headerItem && headerItem.children;
+                if(!items) {
+                    return false;
+                }
+            }
+
 
             for(let i = options[skipField]; i < options[skipField] + options[takeField]; i++) {
                 if(items[i]) {
@@ -1372,6 +1381,11 @@ module.exports = Class.inherit((function() {
                     let headerItem = findHeaderItem(items, options.path);
                     items = headerItem && headerItem.children || [];
                 }
+                if(options.oppositePath && options.area === oppositeArea) {
+                    let headerItem = findHeaderItem(items, options.oppositePath);
+                    items = headerItem && headerItem.children || [];
+                }
+
                 do {
                     item = items[options[skipField]];
                     if(item && item.index !== undefined) {
@@ -1459,7 +1473,7 @@ module.exports = Class.inherit((function() {
                             isLast = i === results.length - 1;
 
                         if(options.path) {
-                            that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false);
+                            that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false, options.oppositePath);
                         } else if(paginate && !reload && isDataExists(that._data)) {
                             that.mergePartialDataSource(data, isLast ? deferred : false);
                         } else {
@@ -1668,11 +1682,13 @@ module.exports = Class.inherit((function() {
             }
         },
 
-        applyPartialDataSource: function(area, path, dataSource, deferred) {
+        applyPartialDataSource: function(area, path, dataSource, deferred, oppositePath) {
             var that = this,
                 loadedData = that._data,
                 headerItems = area === 'column' ? loadedData.columns : loadedData.rows,
                 headerItem,
+                oppositeHeaderItems = area === 'column' ? loadedData.rows : loadedData.columns,
+                oppositeHeaderItem,
                 newRowItemIndexesToCurrent,
                 newColumnItemIndexesToCurrent;
 
@@ -1680,13 +1696,22 @@ module.exports = Class.inherit((function() {
                 dataSource.rows = dataSource.rows || [];
                 dataSource.columns = dataSource.columns || [];
                 headerItem = findHeaderItem(headerItems, path);
+                oppositeHeaderItem = oppositePath && findHeaderItem(oppositeHeaderItems, oppositePath);
                 if(headerItem) {
                     if(area === 'column') {
                         newColumnItemIndexesToCurrent = updateHeaderItemChildren(headerItems, headerItem, dataSource.columns, loadedData.grandTotalColumnIndex);
-                        newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalRowIndex);
+                        if(oppositeHeaderItem) {
+                            newRowItemIndexesToCurrent = updateHeaderItemChildren(oppositeHeaderItems, oppositeHeaderItem, dataSource.rows, loadedData.grandTotalRowIndex);
+                        } else {
+                            newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalRowIndex);
+                        }
                     } else {
                         newRowItemIndexesToCurrent = updateHeaderItemChildren(headerItems, headerItem, dataSource.rows, loadedData.grandTotalRowIndex);
-                        newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
+                        if(oppositeHeaderItem) {
+                            newColumnItemIndexesToCurrent = updateHeaderItemChildren(oppositeHeaderItems, oppositeHeaderItem, dataSource.columns, loadedData.grandTotalColumnIndex);
+                        } else {
+                            newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
+                        }
                     }
                     when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent).done(function(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
                         if(area === "row" && newRowItemIndexesToCurrent.length || area === "column" && newColumnItemIndexesToCurrent.length) {

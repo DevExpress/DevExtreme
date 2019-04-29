@@ -191,6 +191,8 @@ exports.getExpandedLevel = function(options, axisName) {
 
     if(options.headerName === axisName) {
         expandLevel = options.path.length;
+    } else if(options.headerName && options.headerName !== axisName && options.oppositePath) {
+        expandLevel = options.oppositePath.length;
     } else {
         iteratorUtils.each(expandedPaths, function(_, path) {
             expandLevel = Math.max(expandLevel, path.length);
