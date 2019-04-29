@@ -855,14 +855,15 @@ exports.DataController = Class.inherit((function() {
 
             for(var i = 0; i < expandedPaths.length; i++) {
                 if(expandedTakes[i]) {
-                    storeLoadOptions.push(extend({}, options, {
+                    var isOppositeArea = options.area && options.area !== area;
+
+                    storeLoadOptions.push(extend({
                         area: area,
-                        headerName: area + "s",
-                        rows: options.rows.slice(0, area === "row" ? expandedPaths[i].length + 1 : 1),
-                        columns: options.columns.slice(0, area === "column" ? expandedPaths[i].length + 1 : 1),
-                        path: expandedPaths[i],
+                        headerName: area + "s"
+                    }, options, {
                         [area + "Skip"]: expandedSkips[i],
-                        [area + "Take"]: expandedTakes[i]
+                        [area + "Take"]: expandedTakes[i],
+                        [isOppositeArea ? "oppositePath" : "path"]: expandedPaths[i]
                     }));
                 }
             }
@@ -878,13 +879,11 @@ exports.DataController = Class.inherit((function() {
                 if(options.headerName === "rows") {
                     options.rowSkip = 0;
                     options.rowTake = rowPageSize;
-                    options.rows = options.rows.slice(0, options.path.length + 1);
                     options.rowExpandedPaths = [];
                 } else {
                     options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
                     options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
                     this._processPagingForExpandedPaths(options, "row", storeLoadOptions, reload);
-                    options.rows = options.rows.slice(0, 1);
                 }
             }
 
@@ -892,18 +891,17 @@ exports.DataController = Class.inherit((function() {
 
             if(this._dataSource.paginate() && columnsScrollController) {
                 var columnPageSize = columnsScrollController._dataSource.pageSize();
-
-                if(options.headerName === "columns") {
-                    options.columnSkip = 0;
-                    options.columnTake = columnPageSize;
-                    options.columns = options.columns.slice(0, options.path.length + 1);
-                    options.columnExpandedPaths = [];
-                } else {
-                    options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
-                    options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
-                    this._processPagingForExpandedPaths(options, "column", storeLoadOptions, reload);
-                    options.columns = options.columns.slice(0, 1);
-                }
+                storeLoadOptions.forEach((options, index) => {
+                    if(options.headerName === "columns") {
+                        options.columnSkip = 0;
+                        options.columnTake = columnPageSize;
+                        options.columnExpandedPaths = [];
+                    } else {
+                        options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
+                        options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                        this._processPagingForExpandedPaths(options, "column", storeLoadOptions, reload);
+                    }
+                });
             }
         },
 

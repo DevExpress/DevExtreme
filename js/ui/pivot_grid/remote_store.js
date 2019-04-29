@@ -316,14 +316,20 @@ function getFiltersForDimension(fields) {
 }
 
 function getExpandedIndex(options, axis) {
-    if(axis === options.headerName) {
-        return options.path.length;
+    if(options.headerName) {
+        if(axis === options.headerName) {
+            return options.path.length;
+        } else if(options.oppositePath) {
+            return options.oppositePath.length;
+        }
     }
     return 0;
 }
 
 function getFiltersForExpandedDimension(options) {
-    return getFiltersByPath(options[options.headerName], options.path);
+    return getFiltersByPath(options[options.headerName], options.path).concat(
+        getFiltersByPath(options[options.headerName === "rows" ? "columns" : "rows"], options.oppositePath || [])
+    );
 }
 
 function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapsedFieldIndex) {

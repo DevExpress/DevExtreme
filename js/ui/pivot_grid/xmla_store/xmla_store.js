@@ -242,6 +242,9 @@ exports.XmlaStore = Class.inherit((function() {
             if(options.headerName === axisName) {
                 path = options.path;
                 expandIndex = path.length;
+            } else if(options.headerName && options.oppositePath) {
+                path = options.oppositePath;
+                expandIndex = path.length;
             } else {
                 expandedPaths = (axisName === "columns" ? options.columnExpandedPaths : options.rowExpandedPaths) || expandedPaths;
             }
@@ -369,6 +372,15 @@ exports.XmlaStore = Class.inherit((function() {
         });
     }
 
+    function addSlices(slices, options, headerName, path) {
+        each(path, function(index, value) {
+            var dimension = options[headerName][index];
+            if(!dimension.hierarchyName || dimension.hierarchyName !== options[headerName][index + 1].hierarchyName) {
+                slices.push(dimension.dataField + "." + preparePathValue(value, dimension.dataField));
+            }
+        });
+    }
+
     function generateMDX(options, cubeName, parseOptions) {
         var columns = options.columns || [],
             rows = options.rows || [],
@@ -382,12 +394,11 @@ exports.XmlaStore = Class.inherit((function() {
         parseOptions.visibleLevels = {};
 
         if(options.headerName && options.path) {
-            each(options.path, function(index, value) {
-                var dimension = options[options.headerName][index];
-                if(!dimension.hierarchyName || dimension.hierarchyName !== options[options.headerName][index + 1].hierarchyName) {
-                    slice.push(dimension.dataField + "." + preparePathValue(value, dimension.dataField));
-                }
-            });
+            addSlices(slice, options, options.headerName, options.path);
+        }
+
+        if(options.headerName && options.oppositePath) {
+            addSlices(slice, options, options.headerName === "rows" ? "columns" : "rows", options.oppositePath);
         }
 
         if(columns.length || dataFields.length) {
