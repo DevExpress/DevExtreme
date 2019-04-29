@@ -3196,7 +3196,7 @@ var BaseChart = {
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field4 target:basePointObject
+    * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
     * @notUsedInTheme
     * @action
     */
@@ -3206,7 +3206,7 @@ var BaseChart = {
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field4 target:basePointObject
+    * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
     * @notUsedInTheme
     * @action
     */

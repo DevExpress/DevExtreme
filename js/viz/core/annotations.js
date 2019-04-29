@@ -41,15 +41,12 @@ function coreAnnotation(options, draw) {
                     });
             }
         },
-        getTooltipFormatObject() {
-            return this.options;
-        },
         hitTest(x, y) {
             return this.plaque.hitTest(x, y);
         },
         showTooltip(tooltip, { x, y }) {
             if(tooltip.annotation !== this) {
-                tooltip.show(this.getTooltipFormatObject(), { x, y }, { target: this }, this.options.customizeTooltip);
+                tooltip.show(this.options, { x, y }, { target: this.options }, this.options.customizeTooltip);
                 tooltip.annotation = this;
             } else {
                 tooltip.move(x, y);
