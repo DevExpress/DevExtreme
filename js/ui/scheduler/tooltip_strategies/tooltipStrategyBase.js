@@ -32,7 +32,6 @@ export class TooltipStrategyBase {
 
     show(target, dataList, isSingleItemBehavior) {
         if(this._canShowTooltip(target, dataList)) {
-            this.hide();
             this._showCore(target, dataList, isSingleItemBehavior);
         }
     }
