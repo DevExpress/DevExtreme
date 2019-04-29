@@ -260,6 +260,12 @@ var TextArea = TextBox.inherit({
         }
     }
 
+    /**
+    * @name dxTextAreaMethods.getButton
+    * @publicName getButton(name)
+    * @hidden
+    * @inheritdoc
+    */
 });
 
 registerComponent("dxTextArea", TextArea);
