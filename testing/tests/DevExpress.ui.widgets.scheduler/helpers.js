@@ -47,7 +47,7 @@ export class SchedulerTestWrapper {
         };
 
         this.appointments = {
-            getAppointments: () => this.instance.$element().find(".dx-scheduler-appointment"),
+            getAppointments: () => $(".dx-scheduler-appointment"),
             getAppointmentCount: () => this.appointments.getAppointments().length,
             getAppointment: (index = 0) => this.appointments.getAppointments().eq(index),
             getTitleText: (index = 0) => this.appointments.getAppointment(index).find(".dx-scheduler-appointment-title").text(),

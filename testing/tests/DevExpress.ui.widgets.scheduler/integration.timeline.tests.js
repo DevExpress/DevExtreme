@@ -299,7 +299,7 @@ QUnit.test("Appointments should have a right order on timeline month(lots of app
 });
 
 QUnit.test("Appointments should have a right order on timeline month", assert => {
-    let scheduler = createInstance({
+    createInstance({
         currentDate: new Date(2016, 1, 2),
         dataSource: new DataSource([
             {
@@ -318,8 +318,10 @@ QUnit.test("Appointments should have a right order on timeline month", assert =>
         width: 800
     });
 
-    assert.equal(scheduler.appointments.getAppointment(0).data("dxItemData").text, "b", "Appointment data is OK");
-    assert.equal(scheduler.appointments.getAppointment(1).data("dxItemData").text, "a", "Appointment data is OK");
+    let $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.eq(0).data("dxItemData").text, "b", "Appointment data is OK");
+    assert.equal($appointments.eq(1).data("dxItemData").text, "a", "Appointment data is OK");
 });
 
 QUnit.test("Scheduler timeline dateTable should have right height after changing size if crossScrollingEnabled = true (T644407)", assert => {
