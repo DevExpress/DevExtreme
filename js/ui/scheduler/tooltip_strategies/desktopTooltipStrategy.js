@@ -9,22 +9,14 @@ import { extendFromObject } from "../../../core/utils/extend";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
+const SCROLLABLE_WRAPPER_CLASS_NAME = '.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper';
+
 const MAX_TOOLTIP_HEIGHT = 200;
 
 class TooltipBehaviorBase {
     constructor(scheduler, target) {
         this.scheduler = scheduler;
         this.target = target;
-    }
-
-    getTooltipPosition(dataList) {
-        return {
-            my: "bottom",
-            at: "top",
-            of: this.target,
-            collision: "fit flipfit",
-            offset: this.scheduler.option("_appointmentTooltipOffset")
-        };
     }
 
     onListItemRendered(e) {
@@ -47,25 +39,8 @@ class TooltipBehaviorBase {
 }
 
 class TooltipSingleAppointmentBehavior extends TooltipBehaviorBase {
-    getTooltipPosition(dataList) {
-        const result = super.getTooltipPosition();
-        result.boundary = this._getBoundary(dataList);
-        return result;
-    }
-
-    _getBoundary(dataList) {
-        return this._isAppointmentInAllDayPanel(dataList[0].data) ? this.scheduler.$element() : this.scheduler.getWorkSpaceScrollableContainer();
-    }
-
     onListItemClick(e) {
         this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
-    }
-
-    _isAppointmentInAllDayPanel(appointmentData) {
-        const workSpace = this.scheduler._workSpace,
-            itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
-
-        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option("showAllDayPanel");
     }
 }
 
@@ -203,7 +178,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     _getDragContainerOffset() {
-        return this.scheduler._$element.find('.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper').offset();
+        return this.scheduler._$element.find(SCROLLABLE_WRAPPER_CLASS_NAME).offset();
     }
 
     _getRecurrencePart(appointments, startDate) {
@@ -223,7 +198,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     _showCore(target, dataList, isSingleBehavior) {
         this.behavior = this._createBehavior(isSingleBehavior, target);
         super._showCore(target, dataList, isSingleBehavior);
-        this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
+        this.tooltip.option("position", this._getTooltipPosition(dataList));
         this.list.focus();
         this.list.option("focusedElement", null);
     }
@@ -231,6 +206,28 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     _createBehavior(isSingleBehavior, target) {
         return isSingleBehavior ? new TooltipSingleAppointmentBehavior(this.scheduler, target)
             : new TooltipManyAppointmentsBehavior(this.scheduler, target);
+    }
+
+    _getTooltipPosition(dataList) {
+        return {
+            my: "bottom",
+            at: "top",
+            of: this.target,
+            collision: "fit flipfit",
+            boundary: this._getBoundary(dataList),
+            offset: this.scheduler.option("_appointmentTooltipOffset")
+        };
+    }
+
+    _getBoundary(dataList) {
+        return this._isAppointmentInAllDayPanel(dataList[0].data) ? this.scheduler.$element() : this.scheduler.getWorkSpaceScrollableContainer();
+    }
+
+    _isAppointmentInAllDayPanel(appointmentData) {
+        const workSpace = this.scheduler._workSpace,
+            itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
+
+        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option("showAllDayPanel");
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
