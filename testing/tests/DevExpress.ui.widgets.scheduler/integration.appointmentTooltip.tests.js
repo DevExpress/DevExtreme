@@ -838,7 +838,7 @@ const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
 
-        this.createInstance = function(options) {
+        this.createScheduler = function(options) {
             this.data = getSimpleDataArray();
             const defaultOption = {
                 dataSource: this.data,
@@ -848,8 +848,7 @@ const moduleConfig = {
                 startDayHour: 9,
                 height: 600,
             };
-            this.instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
-            this.scheduler = new SchedulerTestWrapper(this.instance);
+            return new SchedulerTestWrapper($("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance"));
         };
 
         this.clock = sinon.useFakeTimers();
@@ -863,12 +862,12 @@ const moduleConfig = {
 
 QUnit.module("New common tooltip for compact and cell appointments", moduleConfig, function() {
     QUnit.test("Title in tooltip should equals title of cell appointments in month view", function(assert) {
-        this.createInstance();
-        assert.notOk(this.scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
+        const scheduler = this.createScheduler();
+        assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
-        for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
-            this.scheduler.appointments.click(i);
-            assert.equal(this.scheduler.tooltip.getTitleText(), this.scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
+        for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+            scheduler.appointments.click(i);
+            assert.equal(scheduler.tooltip.getTitleText(), scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
         }
 
         const compactAppointmentSample = [
@@ -879,138 +878,138 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             ["Upgrade Server Hardware", "Submit New Website Design"]
         ];
 
-        for(let i = 0; i < this.scheduler.appointments.compact.getButtonCount(); i++) {
+        for(let i = 0; i < scheduler.appointments.compact.getButtonCount(); i++) {
             const compactAppointmentSampleItem = compactAppointmentSample[i];
-            this.scheduler.appointments.compact.click(i);
+            scheduler.appointments.compact.click(i);
 
-            assert.equal(this.scheduler.appointments.compact.getButtonText(i), `${compactAppointmentSampleItem.length} more`, "Count of compact appointments in button is match of count real appointments");
+            assert.equal(scheduler.appointments.compact.getButtonText(i), `${compactAppointmentSampleItem.length} more`, "Count of compact appointments in button is match of count real appointments");
 
             compactAppointmentSampleItem.forEach((sampleTitle, index) => {
-                assert.equal(this.scheduler.tooltip.getTitleText(index), sampleTitle, "Title in tooltip should be equal with sample data");
+                assert.equal(scheduler.tooltip.getTitleText(index), sampleTitle, "Title in tooltip should be equal with sample data");
             });
         }
     });
 
     QUnit.test("Title in tooltip should equals title of cell appointments in other views", function(assert) {
-        this.createInstance();
-        assert.notOk(this.scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
+        const scheduler = this.createScheduler();
+        assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
         const views = ["week", "day", "workWeek", "agenda"];
         const testTitles = () => {
-            for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
-                this.scheduler.appointments.click(i);
-                assert.equal(this.scheduler.tooltip.getTitleText(), this.scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
+            for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+                scheduler.appointments.click(i);
+                assert.equal(scheduler.tooltip.getTitleText(), scheduler.appointments.getTitleText(i), "Title in tooltip should be equal with appointment");
             }
         };
 
         views.forEach(viewValue => {
-            this.instance.option("currentView", viewValue);
+            scheduler.instance.option("currentView", viewValue);
             testTitles();
         });
     });
 
     QUnit.test("Delete button in tooltip shouldn't render if editing = false", function(assert) {
-        this.createInstance({
+        const scheduler = this.createScheduler({
             editing: false
         });
 
-        for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
-            this.scheduler.appointments.click(i);
-            assert.notOk(this.scheduler.tooltip.hasDeleteButton(), "Delete button shouldn't render");
+        for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+            scheduler.appointments.click(i);
+            assert.notOk(scheduler.tooltip.hasDeleteButton(), "Delete button shouldn't render");
         }
 
-        for(let i = 0; i < this.scheduler.appointments.compact.getButtonCount(); i++) {
-            this.scheduler.appointments.compact.click(i);
-            assert.notOk(this.scheduler.tooltip.hasDeleteButton(), "Delete button shouldn't render for compact appointments");
+        for(let i = 0; i < scheduler.appointments.compact.getButtonCount(); i++) {
+            scheduler.appointments.compact.click(i);
+            assert.notOk(scheduler.tooltip.hasDeleteButton(), "Delete button shouldn't render for compact appointments");
         }
 
-        this.instance.option("editing", true);
+        scheduler.instance.option("editing", true);
 
-        for(let i = 0; i < this.scheduler.appointments.getAppointmentCount(); i++) {
-            this.scheduler.appointments.click(i);
-            assert.ok(this.scheduler.tooltip.hasDeleteButton(), "Delete button should be render");
+        for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+            scheduler.appointments.click(i);
+            assert.ok(scheduler.tooltip.hasDeleteButton(), "Delete button should be render");
         }
     });
 
     QUnit.test("Compact button should hide or show after change in data source", function(assert) {
-        this.createInstance();
+        const scheduler = this.createScheduler();
 
-        assert.equal(this.scheduler.appointments.compact.getButtonText(), "1 more", "Value on init should be correct");
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
+        assert.equal(scheduler.appointments.compact.getButtonText(), "1 more", "Value on init should be correct");
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons on init should be correct");
 
-        this.instance.deleteAppointment(this.data[0]);
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
+        scheduler.instance.deleteAppointment(this.data[0]);
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 4, "Count of compact buttons should be reduce after delete appointment");
 
-        this.instance.addAppointment({
+        scheduler.instance.addAppointment({
             text: "Temp appointment",
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         });
-        assert.equal(this.scheduler.appointments.compact.getButtonText(), "1 more", "Count of compact buttons should be increase after add appointment");
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons should be increase after add appointment");
+        assert.equal(scheduler.appointments.compact.getButtonText(), "1 more", "Count of compact buttons should be increase after add appointment");
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons should be increase after add appointment");
 
-        this.instance.addAppointment({
+        scheduler.instance.addAppointment({
             text: "Temp appointment 2",
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         });
-        assert.equal(this.scheduler.appointments.compact.getButtonText(), "2 more", "Count of compact buttons should be increase after add appointment");
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons shouldn't change");
+        assert.equal(scheduler.appointments.compact.getButtonText(), "2 more", "Count of compact buttons should be increase after add appointment");
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons shouldn't change");
     });
 
     QUnit.test("Tooltip should hide after perform action", function(assert) {
-        this.createInstance();
+        const scheduler = this.createScheduler();
 
-        this.scheduler.appointments.click();
-        assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should visible");
+        scheduler.appointments.click();
+        assert.ok(scheduler.tooltip.isVisible(), "Tooltip should visible");
 
-        this.scheduler.tooltip.clickOnItem();
-        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
+        scheduler.tooltip.clickOnItem();
+        assert.notOk(scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
 
-        this.scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.hide();
 
-        this.scheduler.appointments.compact.click(this.scheduler.appointments.compact.getButtonCount() - 1);
-        assert.ok(this.scheduler.tooltip.isVisible(), "Tooltip should visible");
+        scheduler.appointments.compact.click(scheduler.appointments.compact.getButtonCount() - 1);
+        assert.ok(scheduler.tooltip.isVisible(), "Tooltip should visible");
 
-        this.scheduler.tooltip.clickOnItem(1);
-        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
+        scheduler.tooltip.clickOnItem(1);
+        assert.notOk(scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
 
-        this.scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.hide();
 
-        this.scheduler.appointments.compact.click(this.scheduler.appointments.compact.getButtonCount() - 1);
-        assert.equal(this.scheduler.tooltip.getItemCount(), 2, "Count of items in tooltip should be equal 2");
+        scheduler.appointments.compact.click(scheduler.appointments.compact.getButtonCount() - 1);
+        assert.equal(scheduler.tooltip.getItemCount(), 2, "Count of items in tooltip should be equal 2");
 
-        this.scheduler.tooltip.clickOnDeleteButton(1);
-        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
+        scheduler.tooltip.clickOnDeleteButton(1);
+        assert.notOk(scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
 
-        this.scheduler.appointments.compact.click(this.scheduler.appointments.compact.getButtonCount() - 1);
-        assert.equal(this.scheduler.tooltip.getItemCount(), 1, "Count of items in tooltip should be equal 1");
+        scheduler.appointments.compact.click(scheduler.appointments.compact.getButtonCount() - 1);
+        assert.equal(scheduler.tooltip.getItemCount(), 1, "Count of items in tooltip should be equal 1");
 
-        this.scheduler.tooltip.clickOnDeleteButton();
-        assert.notOk(this.scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
+        scheduler.tooltip.clickOnDeleteButton();
+        assert.notOk(scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
     });
 
     QUnit.test("Tooltip should work correct in week view", function(assert) {
         const DEFAULT_TEXT = "Temp appointment";
-        this.createInstance({
+        const scheduler = this.createScheduler({
             currentView: "week",
             width: 600
         });
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, "Compact button shouldn't render on init");
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 0, "Compact button shouldn't render on init");
 
-        this.instance.addAppointment({
+        scheduler.instance.addAppointment({
             text: DEFAULT_TEXT,
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         });
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, "Compact button should render");
-        this.scheduler.appointments.compact.click();
-        assert.equal(this.scheduler.tooltip.getTitleText(), DEFAULT_TEXT, "Title in tooltip should equal text in appointment cell");
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, "Compact button should render");
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getTitleText(), DEFAULT_TEXT, "Title in tooltip should equal text in appointment cell");
 
-        this.scheduler.tooltip.clickOnDeleteButton();
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, "Compact button shouldn't render after click delete button");
+        scheduler.tooltip.clickOnDeleteButton();
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 0, "Compact button shouldn't render after click delete button");
     });
 
     QUnit.test("Templates should valid markup", function(assert) {
@@ -1018,31 +1017,31 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         const DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME = "drop-down-appointment-template";
 
         const hasElementInTooltipItem = (className) => {
-            return this.scheduler.tooltip.getItemElement().html().indexOf(`<div class="${className}">`) !== -1;
+            return scheduler.tooltip.getItemElement().html().indexOf(`<div class="${className}">`) !== -1;
         };
 
-        this.createInstance({
+        const scheduler = this.createScheduler({
             appointmentTooltipTemplate: () => $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME)
         });
 
-        this.scheduler.appointments.click();
+        scheduler.appointments.click();
         assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), "'appointmentTooltipTemplate' should render for cell appointment");
 
-        this.scheduler.appointments.compact.click();
+        scheduler.appointments.compact.click();
         assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), "'appointmentTooltipTemplate' should render for compact appointment");
 
-        this.instance.option("dropDownAppointmentTemplate", () => $('<div />').addClass(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME));
+        scheduler.instance.option("dropDownAppointmentTemplate", () => $('<div />').addClass(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME));
 
-        this.scheduler.appointments.click();
+        scheduler.appointments.click();
         assert.notOk(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' shouldn't render for cell appointment");
 
-        this.scheduler.appointments.compact.click();
+        scheduler.appointments.compact.click();
         assert.ok(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' should render for compact appointment");
     });
 
     QUnit.test("appointmentTooltipTemplate method should pass valid arguments", function(assert) {
         let templateCallCount = 0;
-        this.createInstance({
+        const scheduler = this.createScheduler({
             appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
                 assert.ok($(contentElement).hasClass("dx-list-item-content"), "Content element should be list item");
                 assert.equal(targetedAppointmentData.text, appointmentData.text, "targetedAppointmentData should be not empty");
@@ -1053,38 +1052,36 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             }
         });
 
-        this.scheduler.appointments.click();
-        this.clock.tick(300);
-        assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index`);
+        scheduler.appointments.click();
+        assert.ok(scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index`);
 
         templateCallCount = 0;
 
-        const buttonCount = this.scheduler.appointments.compact.getButtonCount();
-        this.scheduler.appointments.compact.click(buttonCount - 1);
-        this.clock.tick(300);
+        const buttonCount = scheduler.appointments.compact.getButtonCount();
+        scheduler.appointments.compact.click(buttonCount - 1);
 
-        assert.ok(this.scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index. Compact appointments`);
-        assert.ok(this.scheduler.tooltip.checkItemElementHtml(1, `template item index - ${1}`), `Template should render content contains ${1} item index. Compact appointments`);
+        assert.ok(scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index. Compact appointments`);
+        assert.ok(scheduler.tooltip.checkItemElementHtml(1, `template item index - ${1}`), `Template should render content contains ${1} item index. Compact appointments`);
     });
 
     if(devices.current().deviceType === "desktop") {
         QUnit.test("Keyboard navigation in tooltip", function(assert) {
-            this.createInstance();
+            const scheduler = this.createScheduler();
             const ITEM_FOCUSED_STATE_CLASS_NAME = "dx-state-focused";
 
-            const checkFocusedState = index => this.scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
+            const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
 
-            this.scheduler.appointments.click();
+            scheduler.appointments.click();
 
             assert.notOk(checkFocusedState(0), "On first show tooltip, list item shouldn't focused");
 
-            const keyboard = keyboardMock(this.scheduler.tooltip.getContentElement());
+            const keyboard = keyboardMock(scheduler.tooltip.getContentElement());
             keyboard.keyDown("down");
 
             assert.ok(checkFocusedState(0), "After press key down, list item should focused");
 
-            const buttonCount = this.scheduler.appointments.compact.getButtonCount();
-            this.scheduler.appointments.compact.click(buttonCount - 1);
+            const buttonCount = scheduler.appointments.compact.getButtonCount();
+            scheduler.appointments.compact.click(buttonCount - 1);
 
             assert.notOk(checkFocusedState(0), "After tooltip showed, list item shouldn't focused");
 
@@ -1097,7 +1094,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
     }
 
     QUnit.test("Tooltip should crop list, if list has many items", function(assert) {
-        this.createInstance({
+        const scheduler = this.createScheduler({
             dataSource: [
                 {
                     text: "Prepare 2015 Marketing Plan",
@@ -1127,14 +1124,14 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             ]
         });
 
-        const { getItemCount, getItemElement, getOverlayContentElement } = this.scheduler.tooltip;
+        const { getItemCount, getItemElement, getOverlayContentElement } = scheduler.tooltip;
 
-        this.scheduler.appointments.compact.click();
+        scheduler.appointments.compact.click();
         assert.equal(getItemCount(), 4, "Tooltip should render 4 items");
 
         assert.ok(getItemElement().outerHeight() * 4 > getOverlayContentElement().outerHeight(), "Tooltip height should less then list height");
 
-        this.scheduler.instance.option("dataSource", [
+        scheduler.instance.option("dataSource", [
             {
                 text: "Prepare 2015 Marketing Plan",
                 startDate: new Date(2017, 4, 25, 11, 0),
@@ -1150,7 +1147,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             }
         ]);
 
-        this.scheduler.appointments.compact.click();
+        scheduler.appointments.compact.click();
         assert.equal(getItemCount(), 1, "Tooltip should render 1 item");
         assert.roughEqual(getItemElement().outerHeight(), getOverlayContentElement().outerHeight(), 10, "Tooltip height should equals then list height");
     });
