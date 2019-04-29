@@ -127,7 +127,8 @@ class FileManager extends Widget {
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onSelectedItemOpened: ({ item }) => this._tryOpen(item),
-            getItemThumbnail: this._getItemThumbnailInfo.bind(this)
+            getItemThumbnail: this._getItemThumbnailInfo.bind(this),
+            customizeDetailColumns: this.option("customizeDetailColumns")
         };
 
         viewMode = viewMode || itemViewOptions.mode;
@@ -445,6 +446,14 @@ class FileManager extends Widget {
             customizeThumbnail: null,
 
             /**
+            * @name dxFileManagerOptions.customizeDetailColumns
+            * @type function
+            * @type_function_param1 columns:object
+            * @type_function_return object
+            */
+            customizeDetailColumns: null,
+
+            /**
              * @name dxFileManagerOptions.permissions
              * @type object
              */
@@ -528,6 +537,7 @@ class FileManager extends Widget {
             case "selectionMode":
             case "itemView":
             case "customizeThumbnail":
+            case "customizeDetailColumns":
             case "permissions":
             case "nameExpr":
             case "isFolderExpr":

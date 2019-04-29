@@ -23,22 +23,26 @@ const moduleConfig = {
                 {
                     name: "1.txt",
                     isFolder: false,
-                    size: 0
+                    size: 0,
+                    owner: "Admin"
                 },
                 {
                     name: "2.txt",
                     isFolder: false,
-                    size: 200
+                    size: 200,
+                    owner: "Admin"
                 },
                 {
                     name: "3.txt",
                     isFolder: false,
-                    size: 1024
+                    size: 1024,
+                    owner: "Guest"
                 },
                 {
                     name: "4.txt",
                     isFolder: false,
-                    size: 1300
+                    size: 1300,
+                    owner: "Max"
                 }
             ]
         });
@@ -103,6 +107,21 @@ QUnit.module("Details View", moduleConfig, () => {
         assert.ok(getCellValueInDetailsView(this.$element, 2, 2).indexOf("Title") === 0);
         assert.equal(getCellValueInDetailsView(this.$element, 2, 3).trim(), "1/1/2000");
         assert.equal(getCellValueInDetailsView(this.$element, 2, 4).trim(), "55 B");
+    });
+
+    test("Add additional columns to details view", function(assert) {
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("customizeDetailColumns", columns => {
+            columns.push({ dataField: "owner" });
+            return columns;
+        });
+        this.clock.tick(400);
+
+        assert.equal(getCellValueInDetailsView(this.$element, 1, 5).trim(), "");
+        assert.equal(getCellValueInDetailsView(this.$element, 2, 5), "Admin");
+        assert.equal(getCellValueInDetailsView(this.$element, 3, 5), "Admin");
+        assert.equal(getCellValueInDetailsView(this.$element, 4, 5), "Guest");
+        assert.equal(getCellValueInDetailsView(this.$element, 5, 5), "Max");
     });
 
 });
