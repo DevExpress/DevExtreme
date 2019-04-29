@@ -1515,7 +1515,6 @@ QUnit.test("Long appointments should be rendered correctly in vertical grouped w
 });
 
 QUnit.test("Scheduler recurrent appointments render right if began before startDayHour (T735635)", function(assert) {
-    let scheduler = createInstance();
     const appointments = [
         {
             text: "Website Re-Design Plan",
@@ -1533,7 +1532,7 @@ QUnit.test("Scheduler recurrent appointments render right if began before startD
         height: 600,
         currentDate: new Date(2019, 3, 21),
     };
-    scheduler.instance.option(options);
+    let scheduler = createInstance(options);
 
     const initialAppointmentHeight = scheduler.appointments.getAppointmentHeight(0);
     const recurrentAppointmentHeight = scheduler.appointments.getAppointmentHeight(1);
