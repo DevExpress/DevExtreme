@@ -32,7 +32,6 @@ var DIST_GLOBS = [
     'artifacts/**/*.*',
     '!' + context.TRANSPILED_PATH + "/**/*.*",
     '!artifacts/npm/**/*.*',
-    '!artifacts/js/dx.aspnet.mvc.js',
     '!artifacts/js/angular**/*.*',
     '!artifacts/js/angular*',
     '!artifacts/js/knockout*',
