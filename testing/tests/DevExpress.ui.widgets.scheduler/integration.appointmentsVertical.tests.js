@@ -1,4 +1,4 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -7,27 +7,27 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
 
-var translator = require("animation/translator"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    Color = require("color"),
-    devices = require("core/devices"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dataUtils = require("core/element_data");
+import translator from "animation/translator";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import Color from "color";
+import devices from "core/devices";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dataUtils from "core/element_data";
 
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
+import "ui/scheduler/ui.scheduler";
+import "ui/switch";
 
-var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
+const DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
 
-var APPOINTMENT_DEFAULT_OFFSET = 25,
+const APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
 
 function getOffset() {
@@ -1505,3 +1505,26 @@ QUnit.test("Long appointments should be rendered correctly in vertical grouped w
     assert.roughEqual($appointments.eq(1).position().left, cellWidth * 2 + dateTableLeftOffset, 1.1, "correct left position of appointment part");
 });
 
+QUnit.test("Scheduler recurrent appointments render right if began before startDayHour (T735635)", function(assert) {
+    const data = [
+        {
+            text: "Website Re-Design Plan",
+            startDate: new Date(2019, 3, 22, 7, 30),
+            endDate: new Date(2019, 3, 22, 11, 30),
+            recurrenceRule: "FREQ=DAILY"
+        }
+    ];
+    this.createInstance({
+        dataSource: data,
+        views: ["week", "month"],
+        currentView: "week",
+        startDayHour: 10,
+        endDayHour: 16,
+        height: 600,
+        currentDate: new Date(2019, 3, 21),
+    });
+    const appointments = $(this.instance.$element).find(".dx-scheduler-appointment");
+    const initialAppointmentHeight = appointments.eq(0).height();
+    const recurrentAppointmentHeight = appointments.eq(1).height();
+    assert.equal(initialAppointmentHeight, recurrentAppointmentHeight, "Appointment cells have equal heights (both initial and recurrent)");
+});
