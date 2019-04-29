@@ -43,7 +43,7 @@ class DiagramRightPanel extends Widget {
             result.push({
                 title: "Data Source",
                 onTemplate: (widget, $element) => {
-                    widget._renderDataSources($element, key);
+                    widget._renderDataSources($element);
                     this._onDataToolboxRenderedAction({ $element });
                 }
             });
