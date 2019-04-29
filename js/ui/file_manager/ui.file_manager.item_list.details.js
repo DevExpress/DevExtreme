@@ -1,4 +1,5 @@
 import $ from "../../core/renderer";
+import typeUtils from "../../core/utils/type";
 
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
@@ -10,6 +11,7 @@ import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
+const PREDEFINED_COLUMN_NAMES = [ "name", "isFolder", "size", "thumbnail", "dateModified" ];
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -35,31 +37,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             },
             showColumnLines: false,
             showRowLines: false,
-            columns: [
-                {
-                    dataField: "thumbnail",
-                    caption: "",
-                    width: 64,
-                    alignment: "center",
-                    cellTemplate: this._createThumbnailColumnCell.bind(this)
-                },
-                {
-                    dataField: "name",
-                    cellTemplate: this._createNameColumnCell.bind(this)
-                },
-                {
-                    dataField: "dateModified",
-                    caption: "Date Modified",
-                    width: 110
-                },
-                {
-                    dataField: "size",
-                    caption: "File Size",
-                    width: 90,
-                    alignment: "right",
-                    calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
-                }
-            ],
+            columns: this._createColumns(),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._raiseSelectionChanged.bind(this)
@@ -83,6 +61,44 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._filesView.option("dataSource", {
             "store": this._createFilesViewStore()
         });
+    }
+
+    _createColumns() {
+        let columns = [
+            {
+                dataField: "thumbnail",
+                caption: "",
+                width: 64,
+                alignment: "center",
+                cellTemplate: this._createThumbnailColumnCell.bind(this)
+            },
+            {
+                dataField: "name",
+                cellTemplate: this._createNameColumnCell.bind(this)
+            },
+            {
+                dataField: "dateModified",
+                caption: "Date Modified",
+                width: 110
+            },
+            {
+                dataField: "size",
+                caption: "File Size",
+                width: 90,
+                alignment: "right",
+                calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
+            }
+        ];
+        const customizeDetailColumns = this.option("customizeDetailColumns");
+        if(typeUtils.isFunction(customizeDetailColumns)) {
+            columns = customizeDetailColumns(columns);
+            for(let i = 0; i < columns.length; i++) {
+                if(PREDEFINED_COLUMN_NAMES.indexOf(columns[i].dataField) < 0) {
+                    columns[i].dataField = "dataItem." + columns[i].dataField;
+                }
+            }
+        }
+        return columns;
     }
 
     _onFileItemActionButtonClick({ component, element, event }) {
