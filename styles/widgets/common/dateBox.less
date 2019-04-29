@@ -10,6 +10,12 @@
     .dx-texteditor-buttons-container {
         pointer-events: none;
     }
+
+    &.dx-state-focused.dx-texteditor-empty {
+        .dx-placeholder {
+            display: none;
+        }
+    }
 }
 
 .dx-datebox {
@@ -26,10 +32,6 @@
     }
 
     &.dx-state-focused {
-        .dx-placeholder {
-            display: none;
-        }
-
         input::-webkit-datetime-edit {
             color: inherit;
         }
