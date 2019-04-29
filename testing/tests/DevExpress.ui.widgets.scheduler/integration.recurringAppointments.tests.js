@@ -1013,10 +1013,8 @@ QUnit.test("The second appointment in recurring series in Week view should be re
         startDayHour: 9,
         height: 600
     });
-
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
         $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
-
     assert.equal($appointments.length, 2, "Two appointments are rendered");
     assert.equal($dropDown.length, 0, "There is no dropDown appointment");
 });

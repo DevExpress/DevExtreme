@@ -2,6 +2,7 @@ import $ from "jquery";
 import dataCoreUtils from "core/utils/data";
 import typeUtils from "core/utils/type";
 import fx from "animation/fx";
+
 import "ui/scheduler/ui.scheduler";
 
 const compileGetter = dataCoreUtils.compileGetter;
@@ -243,4 +244,3 @@ QUnit.test("Scheduler appointments should have specific allDay class if needed",
     $appointment = $("#allDayContainer .dx-scheduler-appointment").eq(0);
     assert.ok($appointment.hasClass("dx-scheduler-all-day-appointment"), "Appointment has allDay class");
 });
-
