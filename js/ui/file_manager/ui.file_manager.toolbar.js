@@ -10,6 +10,7 @@ const FILE_MANAGER_TOOLBAR_CLASS = "dx-filemanager-toolbar";
 const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = "dx-filemanager-general-toolbar";
 const FILE_MANAGER_FILE_TOOLBAR_CLASS = "dx-filemanager-file-toolbar";
 const FILE_MANAGER_TOOLBAR_SEPARATOR_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-separator-item";
+const FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-viewmode-item";
 
 const DEFAULT_TOOLBAR_FILE_ITEMS = [
     {
@@ -167,6 +168,7 @@ class FileManagerToolbar extends Widget {
         const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 0 : 1;
 
         return {
+            cssClass: FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS,
             widget: "dxSelectBox",
             options: {
                 items: commandItems,

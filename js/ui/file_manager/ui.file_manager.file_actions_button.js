@@ -21,6 +21,7 @@ class FileManagerFileActionsButton extends Widget {
 
         this._button = this._createComponent($button, Button, {
             text: "&vellip;",
+            stylingMode: "text",
             onClick: e => this._raiseClick(e),
             template: () => {
                 return $("<i>").html("&vellip;");

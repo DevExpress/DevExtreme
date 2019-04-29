@@ -45,21 +45,17 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 },
                 {
                     dataField: "name",
-                    minWidth: 200,
-                    width: "65%",
                     cellTemplate: this._createNameColumnCell.bind(this)
                 },
                 {
                     dataField: "dateModified",
                     caption: "Date Modified",
-                    minWidth: 200,
-                    width: "25%"
+                    width: 110
                 },
                 {
                     dataField: "size",
                     caption: "File Size",
-                    minWidth: 100,
-                    width: "10%",
+                    width: 90,
                     alignment: "right",
                     calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
                 }
