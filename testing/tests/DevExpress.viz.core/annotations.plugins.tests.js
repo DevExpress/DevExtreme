@@ -662,8 +662,8 @@ QUnit.module("Tooltip", {
                 paddingTopBottom: 0
             },
             annotations: [
-                { x: 30, y: 30, name: "annotation1", description: "d1", tooltipEnabled: true },
-                { x: 70, y: 70, name: "annotation2", description: "d2", tooltipEnabled: true }
+                { x: 30, y: 30, name: "annotation1", description: "d1", tooltipEnabled: true, someOption: "option1" },
+                { x: 70, y: 70, name: "annotation2", description: "d2", tooltipEnabled: true, someOption: "option2" }
             ]
         }, options)).dxChart("instance");
 
@@ -708,10 +708,10 @@ QUnit.module("Tooltip", {
         assert.equal(chart.clearHover.callCount, 1);
         assert.equal(tooltip.show.callCount, 1);
 
-        assert.equal(tooltip.show.getCall(0).args[0].name, "annotation1");
+        assert.equal(tooltip.show.getCall(0).args[0].someOption, "option1");
         assert.equal(tooltip.show.getCall(0).args[0].description, "d1");
         assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 23, y: 30 });
-        assert.equal(tooltip.show.getCall(0).args[2].target.name, "annotation1");
+        assert.equal(tooltip.show.getCall(0).args[2].target, tooltip.show.getCall(0).args[0]);
         assert.equal(tooltip.show.getCall(0).args[3], customizeTooltip);
     });
 
@@ -735,10 +735,10 @@ QUnit.module("Tooltip", {
         assert.equal(chart.clearHover.callCount, 1);
         assert.equal(tooltip.show.callCount, 1);
 
-        assert.equal(tooltip.show.getCall(0).args[0].name, "annotation2");
+        assert.equal(tooltip.show.getCall(0).args[0].someOption, "option2");
         assert.equal(tooltip.show.getCall(0).args[0].description, "d2");
         assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 83, y: 80 });
-        assert.equal(tooltip.show.getCall(0).args[2].target.name, "annotation2");
+        assert.equal(tooltip.show.getCall(0).args[2].target, tooltip.show.getCall(0).args[0]);
         assert.equal(tooltip.show.getCall(0).args[3], customizeTooltip);
     });
 

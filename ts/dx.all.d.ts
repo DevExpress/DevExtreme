@@ -5631,9 +5631,9 @@ declare module DevExpress.viz {
         /** @name BaseChart.Options.onPointSelectionChanged */
         onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
         /** @name BaseChart.Options.onTooltipHidden */
-        onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject }) => any);
+        onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
         /** @name BaseChart.Options.onTooltipShown */
-        onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject }) => any);
+        onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
         /** @name BaseChart.Options.palette */
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** @name BaseChart.Options.paletteExtensionMode */
