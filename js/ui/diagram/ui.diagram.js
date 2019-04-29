@@ -383,10 +383,11 @@ class Diagram extends Widget {
         this._setDiagramData(data, keepExistingItems);
         this._raiseDataChangeAction();
     }
+
     /**
     * @name dxDiagramMethods.createDataSource
     * @publicName createDataSource(options)
-    * @param1 options:DataSourceOptions
+    * @param1 options:object
     */
     createDataSource(options) {
         this._createDiagramDataSource(options);
@@ -399,89 +400,6 @@ class Diagram extends Widget {
     deleteDataSource(key) {
         this._deleteDiagramDataSource(key);
     }
-
-    /**
-     * @name DataSourceOptions
-     * @type object
-     */
-    /**
-    * @name DataSourceOptions.key
-    * @type string
-    * @default null
-    */
-    /**
-    * @name DataSourceOptions.name
-    * @type string
-    * @default null
-    */
-    /**
-    * @name DataSourceOptions.nodes.dataSource
-    * @type Array<Object>|DataSource|DataSourceOptions
-    * @default null
-    */
-    /**
-    * @name DataSourceOptions.nodes.keyExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "id"
-    */
-    /**
-    * @name DataSourceOptions.nodes.textExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "text"
-    */
-    /**
-    * @name DataSourceOptions.nodes.typeExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "type"
-    */
-    /**
-    * @name DataSourceOptions.nodes.parentKeyExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "parentId"
-    */
-    /**
-    * @name DataSourceOptions.nodes.itemsExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "items"
-    */
-    /**
-    * @name DataSourceOptions.edges
-    * @type Object
-    * @default null
-    */
-    /**
-    * @name DataSourceOptions.edges.dataSource
-    * @type Array<Object>|DataSource|DataSourceOptions
-    * @default null
-    */
-    /**
-    * @name DataSourceOptions.edges.keyExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "id"
-    */
-    /**
-    * @name DataSourceOptions.edges.fromExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "from"
-    */
-    /**
-    * @name DataSourceOptions.edges.toExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "to"
-    */
-    /**
-     * @name DataSourceOptions.layout
-     * @type Enums.DiagramAutoLayout
-     * @default undefined
-     */
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
@@ -585,36 +503,36 @@ class Diagram extends Widget {
 
             /**
             * @name dxDiagramOptions.customShapes
-            * @type Array<CustomShapeItem>
+            * @type Array<DiagramCustomShapeItem>
             * @default null
             */
             customShapes: [],
             /**
-            * @name CustomShapeItem
+            * @name DiagramCustomShapeItem
             * @type object
             */
             /**
-            * @name CustomShapeItem.id
+            * @name DiagramCustomShapeItem.id
             * @type Number
             */
             /**
-            * @name CustomShapeItem.title
+            * @name DiagramCustomShapeItem.title
             * @type String
             */
             /**
-            * @name CustomShapeItem.svgUrl
+            * @name DiagramCustomShapeItem.svgUrl
             * @type String
             */
             /**
-            * @name CustomShapeItem.defaultWidth
+            * @name DiagramCustomShapeItem.defaultWidth
             * @type Number
             */
             /**
-            * @name CustomShapeItem.defaultHeight
+            * @name DiagramCustomShapeItem.defaultHeight
             * @type Number
             */
             /**
-            * @name CustomShapeItem.allowHasText
+            * @name DiagramCustomShapeItem.allowHasText
             * @type Boolean
             */
 
