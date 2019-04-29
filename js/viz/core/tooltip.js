@@ -151,7 +151,7 @@ Tooltip.prototype = {
             }
         }
         if(!("text" in state) && !("html" in state)) {
-            state.text = formatObject.valueText || "";
+            state.text = formatObject.valueText || formatObject.description || "";
         }
         state.color = customize.color || options.color;
         state.borderColor = customize.borderColor || (options.border || {}).color;

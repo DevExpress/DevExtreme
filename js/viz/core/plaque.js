@@ -161,4 +161,9 @@ export class Plaque {
         this._cloud.attr({ points: getCloudPoints(this._size, x, y, this.anchorX, this.anchorY, this.options) });
         this._contentGroup.move(x - this._contentBBox.x - this._contentBBox.width / 2, y - this._contentBBox.y - this._contentBBox.height / 2);
     }
+
+    hitTest(x, y) {
+        const { width, height } = this._size;
+        return Math.abs(x - this.x) <= width / 2 && Math.abs(y - this.y) <= height / 2;
+    }
 }

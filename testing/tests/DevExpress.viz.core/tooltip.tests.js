@@ -644,6 +644,33 @@ QUnit.test("Show preparations. W/o customize, w/ text", function(assert) {
     assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
+QUnit.test("Show preparations. W/o customize, w/ text from 'description' filed", function(assert) {
+    this.options.customizeTooltip = null;
+    this.tooltip.update(this.options);
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._state = { a: "b" };
+
+    var result = this.tooltip.show({ description: "some-text" }, { x: 100, y: 200, offset: 300 });
+    delete this.tooltip._state.contentSize;
+
+    assert.strictEqual(result, true);
+    assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
+
+    assert.deepEqual(this.tooltip._state, {
+        color: "#ffffff",
+        borderColor: "#252525",
+        textColor: "#939393",
+        text: "some-text",
+        tc: {}
+    }, "state");
+
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
+    assert.equal(this.tooltip.move.callCount, 1);
+    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
+});
+
 QUnit.test("Show preparations. W/ customize empty text, empty text", function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { text: "", color: "cColor1", borderColor: "cColor2", fontColor: "cColor3", someAnotherProperty: "some-value" }; });
     this.tooltip.update(this.options);

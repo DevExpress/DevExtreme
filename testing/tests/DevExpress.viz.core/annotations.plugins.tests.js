@@ -1,8 +1,9 @@
 import $ from "jquery";
 import { __test_utils } from "viz/core/annotations";
 import rendererModule from "viz/core/renderers/renderer";
-import vizMocks from "../../helpers/vizMocks.js";
 import TooltipModule from "viz/core/tooltip";
+import vizMocks from "../../helpers/vizMocks.js";
+import pointerMock from "../../helpers/pointerMock.js";
 
 import "viz/chart";
 
@@ -618,23 +619,21 @@ QUnit.module("Lifecycle", environment, function() {
     });
 });
 
-QUnit.module("Tooltip", function(hooks) {
-    hooks.beforeEach(() => {
-        environment.beforeEach.apply(this, arguments);
+QUnit.module("Tooltip", {
+    beforeEach() {
+        this.renderer = new vizMocks.Renderer();
+        rendererModule.Renderer = sinon.spy(() => this.renderer);
+
         TooltipModule.Tooltip = (options) => {
             this.tooltip = new vizMocks.Tooltip(options);
             this.tooltip.show = sinon.spy();
-
+            this.tooltip.hide = sinon.spy();
+            this.tooltip.move = sinon.spy();
             return this.tooltip;
         };
-    });
-
-    hooks.afterEach(function() {
-        environment.afterEach.apply(this, arguments);
-    });
-
-    function createChart(commonAnnotationSettings, annotations) {
-        return $('<div>').appendTo("#qunit-fixture").dxChart({
+    },
+    createChart(options) {
+        const chart = $('<div>').appendTo("#qunit-fixture").dxChart($.extend(true, {
             size: {
                 width: 100,
                 height: 100
@@ -646,134 +645,181 @@ QUnit.module("Tooltip", function(hooks) {
                 grid: { visible: false },
                 label: { visible: false }
             },
-            synchronizeMultiAxes: false,
             valueAxis: [
-                { name: "a1", visualRange: [100, 200] },
-                { name: "a2", visualRange: [200, 300] }
+                { name: "a1", visualRange: [0, 100] }
             ],
             argumentAxis: {
                 visualRange: [0, 100]
             },
-            commonAnnotationSettings,
-            annotations
-        }).dxChart("instance");
-    }
+            commonAnnotationSettings: {
+                tooltipEnabled: false,
+                type: "image",
+                image: {
+                    width: 20,
+                    height: 10
+                },
+                paddingLeftRight: 0,
+                paddingTopBottom: 0
+            },
+            annotations: [
+                { x: 30, y: 30, name: "annotation1", description: "d1", tooltipEnabled: true },
+                { x: 70, y: 70, name: "annotation2", description: "d2", tooltipEnabled: true }
+            ]
+        }, options)).dxChart("instance");
 
-    QUnit.test("Create", assert => {
-        createChart({
-            some: "options"
-        }, [
-            { x: 100, y: 200, },
-            { value: 1, argument: 2 }
-        ]);
+        return chart;
+    }
+}, function() {
+    QUnit.test("Create - use chart toltip options, but remove customize callback", function(assert) {
+        this.createChart({
+            tooltip: {
+                enabled: false,
+                otherCommonOption: "option",
+                customizeTooltip() { return "my tooltip"; }
+            }
+        });
 
         assert.equal(this.tooltip.ctorArgs[0].cssClass, "dxc-annotation-tooltip", "tooltip should be have right css class");
         assert.equal(this.tooltip.setRendererOptions.callCount, 1, "tooltip.setRendererOptions should be called");
         assert.equal(this.tooltip.update.callCount, 1, "tooltip.update should be called");
+
+        assert.strictEqual(this.tooltip.update.getCall(0).args[0].enabled, false);
+        assert.strictEqual(this.tooltip.update.getCall(0).args[0].otherCommonOption, "option");
+        assert.strictEqual(this.tooltip.update.getCall(0).args[0].customizeTooltip, undefined);
     });
 
-    QUnit.test("Show", assert => {
-        const chart = createChart({
-            some: "options"
-        }, [
-            { x: 100, y: 200, },
-            { value: 1, argument: 2 }
-        ]);
-
-        const tooltipFormatObject = { format: "tooltip for annotation" };
-        const customizeTooltip = () => { };
-        const point = {
-            getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
-            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; }),
-            options: {
-                customizeTooltip,
-                tooltipEnabled: true
+    QUnit.test("Show on pointer down", function(assert) {
+        const customizeTooltip = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                customizeTooltip
             }
-        };
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
 
         chart.hideTooltip = sinon.spy();
         chart.clearHover = sinon.spy();
 
+        pointer.start({ x: 20 + 3, y: 25 + 5 }).down();
+
         const tooltip = this.tooltip;
-
-        assert.equal(this.renderer.root.on.lastCall.args[0], "dxpointermove.annotations", "renderer root should be subscribe on dxpointermove");
-        this.renderer.root.on.lastCall.args[1]({ target: { "annotation-data": point } });
-
         assert.equal(chart.hideTooltip.callCount, 1);
         assert.equal(chart.clearHover.callCount, 1);
         assert.equal(tooltip.show.callCount, 1);
 
-        assert.equal(tooltip.show.firstCall.args[0], tooltipFormatObject);
-        assert.deepEqual(tooltip.show.firstCall.args[1], { x: 4, y: 6 });
-        assert.equal(tooltip.show.firstCall.args[2].target, point);
-        assert.equal(tooltip.show.firstCall.args[3], customizeTooltip);
+        assert.equal(tooltip.show.getCall(0).args[0].name, "annotation1");
+        assert.equal(tooltip.show.getCall(0).args[0].description, "d1");
+        assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 23, y: 30 });
+        assert.equal(tooltip.show.getCall(0).args[2].target.name, "annotation1");
+        assert.equal(tooltip.show.getCall(0).args[3], customizeTooltip);
     });
 
-    QUnit.test("Do not show tooltip if it is disabled", assert => {
-        createChart({
-            some: "options"
-        }, [
-            { x: 100, y: 200, },
-            { value: 1, argument: 2 }
-        ]);
-
-        const tooltipFormatObject = { format: "tooltip for annotation" };
-        const customizeTooltip = () => { };
-        const point = {
-            getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
-            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; }),
-            options: {
-                customizeTooltip,
-                tooltipEnabled: false
+    QUnit.test("Show on pointer move", function(assert) {
+        const customizeTooltip = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                customizeTooltip
             }
-        };
+        });
 
-        const tooltip = this.tooltip;
-        this.renderer.root.on.lastCall.args[1]({ target: { "annotation-data": point } });
-
-        assert.equal(tooltip.show.callCount, 0);
-
-    });
-
-    QUnit.test("Hide", assert => {
-        const chart = createChart({
-            some: "options"
-        }, [
-            { x: 100, y: 200, },
-            { value: 1, argument: 2 }
-        ]);
-
-        const tooltipFormatObject = { format: "tooltip for annotation" };
-        const point = {
-            getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
-            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; })
-        };
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
 
         chart.hideTooltip = sinon.spy();
         chart.clearHover = sinon.spy();
 
+        pointer.start({ x: 80 + 3, y: 75 + 5 }).move();
+
         const tooltip = this.tooltip;
+        assert.equal(chart.hideTooltip.callCount, 1);
+        assert.equal(chart.clearHover.callCount, 1);
+        assert.equal(tooltip.show.callCount, 1);
 
-        this.renderer.root.on.lastCall.args[1]({ target: { "series-data": point } });
-
-        assert.equal(tooltip.hide.callCount, 1);
-
-        assert.equal(chart.hideTooltip.callCount, 0);
-        assert.equal(chart.clearHover.callCount, 0);
-
-        assert.equal(tooltip.show.callCount, 0);
+        assert.equal(tooltip.show.getCall(0).args[0].name, "annotation2");
+        assert.equal(tooltip.show.getCall(0).args[0].description, "d2");
+        assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 83, y: 80 });
+        assert.equal(tooltip.show.getCall(0).args[2].target.name, "annotation2");
+        assert.equal(tooltip.show.getCall(0).args[3], customizeTooltip);
     });
 
-    QUnit.test("Dispose", assert => {
-        const chart = createChart({
+    QUnit.test("Show tooltip only once then move it", function(assert) {
+        const customizeTooltip = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                customizeTooltip
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        pointer.start({ x: 70, y: 70 }).move().move(3, 3);
+
+        const tooltip = this.tooltip;
+        assert.equal(tooltip.show.callCount, 1);
+        assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 70, y: 70 });
+
+        assert.equal(tooltip.move.callCount, 1);
+        assert.deepEqual(tooltip.move.getCall(0).args, [73, 73]);
+    });
+
+    QUnit.test("Hide tooltip on pointer down outside annotation", function(assert) {
+        const customizeTooltip = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                customizeTooltip
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+        const rootPointer = pointerMock(chart._renderer.root.element).start();
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        pointer.start({ x: 30, y: 30 }).down().up();
+        rootPointer.start().down(40, 40);
+
+        const tooltip = this.tooltip;
+
+        assert.equal(tooltip.show.callCount, 1);
+        assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 30, y: 30 });
+
+        assert.equal(tooltip.hide.callCount, 1);
+        assert.ok(tooltip.hide.getCall(0).calledAfter(tooltip.show.getCall(0)));
+    });
+
+    QUnit.test("Do not show tooltip if it is disabled", function(assert) {
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                tooltipEnabled: true
+            },
+            annotations: [
+                { x: 30, y: 30, name: "annotation1", description: "d1", tooltipEnabled: false },
+                { x: 70, y: 70, name: "annotation2", description: "d2", tooltipEnabled: false }
+            ]
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+        pointer.start({ x: 20 + 3, y: 25 + 5 }).down();
+
+        assert.equal(this.tooltip.show.callCount, 0);
+    });
+
+    QUnit.test("Dispose", function(assert) {
+        const chart = this.createChart({
             some: "options"
         }, [
             { x: 100, y: 200, },
             { value: 1, argument: 2 }
         ]);
+        const annotationsGroup = chart._annotationsGroup;
         chart.dispose();
 
         assert.equal(this.tooltip.dispose.callCount, 1);
-        assert.equal(this.renderer.root.off.getCall(3).args[0], "dxpointermove.annotations");
+        assert.equal(this.renderer.root.off.getCall(3).args[0], "dxpointerdown.annotations dxpointermove.annotations");
+        assert.equal(annotationsGroup.off.lastCall.args[0], "dxpointerdown.annotations dxpointermove.annotations");
     });
 });
