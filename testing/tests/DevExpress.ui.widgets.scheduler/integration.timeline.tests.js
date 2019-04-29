@@ -1,4 +1,4 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -7,14 +7,20 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-var translator = require("animation/translator"),
-    fx = require("animation/fx"),
-    DataSource = require("data/data_source/data_source").DataSource;
+import translator from "animation/translator";
+import fx from "animation/fx";
+import { DataSource } from "data/data_source/data_source";
 
-require("ui/scheduler/ui.scheduler");
+import "ui/scheduler/ui.scheduler";
+import { SchedulerTestWrapper } from './helpers.js';
+
+const createInstance = function(options) {
+    const instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 QUnit.module("Integration: Timeline", {
     beforeEach: function() {
@@ -42,7 +48,7 @@ QUnit.test("Special classes should be applied in grouped timeline", function(ass
             { text: "Five", id: 6 }
         ];
 
-        this.createInstance({
+        let scheduler = createInstance({
             views: ["timelineWeek"],
             currentView: "timelineWeek",
             crossScrollingEnabled: true,
@@ -54,35 +60,32 @@ QUnit.test("Special classes should be applied in grouped timeline", function(ass
             height: 500
         });
 
-        let $groupTableCells = this.instance.$element().find(".dx-scheduler-group-header");
-
-        assert.roughEqual($groupTableCells.eq(1).outerHeight(), 100, 3.001, "Cell height is OK");
+        assert.roughEqual(scheduler.grouping.getGroupHeaderHeight(), 100, 3.001, "Cell height is OK");
     } finally {
         $style.remove();
     }
 });
 
 QUnit.test("Scheduler should have a right timeline work space", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
         currentView: "timelineDay"
     });
-    var $element = this.instance.$element();
 
-    assert.ok($element.find(".dx-scheduler-work-space").dxSchedulerTimelineDay("instance"), "Work space is timelineDay on init");
+    assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineDay("instance"), "Work space is timelineDay on init");
 
-    this.instance.option("currentView", "timelineWeek");
-    assert.ok($element.find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"), "Work space is timelineWeek after change option ");
+    scheduler.instance.option("currentView", "timelineWeek");
+    assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek("instance"), "Work space is timelineWeek after change option ");
 
-    this.instance.option("currentView", "timelineWorkWeek");
-    assert.ok($element.find(".dx-scheduler-work-space").dxSchedulerTimelineWorkWeek("instance"), "Work space is timelineWorkWeek after change option ");
+    scheduler.instance.option("currentView", "timelineWorkWeek");
+    assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWorkWeek("instance"), "Work space is timelineWorkWeek after change option ");
 
-    this.instance.option("currentView", "timelineMonth");
-    assert.ok($element.find(".dx-scheduler-work-space").dxSchedulerTimelineMonth("instance"), "Work space is timelineMonth after change option ");
+    scheduler.instance.option("currentView", "timelineMonth");
+    assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth("instance"), "Work space is timelineMonth after change option ");
 });
 
 QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline day view ", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
             store: []
@@ -92,12 +95,12 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
     });
 
     var appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineDay("instance"),
+        workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineDay("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
-        this.instance.showAppointmentPopup(appointment);
-        $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+        scheduler.instance.showAppointmentPopup(appointment);
+        scheduler.appointmentPopup.clickDoneButton();
 
         assert.notOk(scrollToTimeSpy.calledOnce, "scrollToTime was not called");
     } finally {
@@ -106,7 +109,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
 });
 
 QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline week view ", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -118,16 +121,16 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable("instance");
     scrollable.scrollTo({ left: 10000 });
 
     var appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"),
+        workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
-        this.instance.showAppointmentPopup(appointment);
-        $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+        scheduler.instance.showAppointmentPopup(appointment);
+        scheduler.appointmentPopup.clickDoneButton();
 
         assert.notOk(scrollToTimeSpy.calledOnce, "scrollToTime was not called");
     } finally {
@@ -136,7 +139,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
 });
 
 QUnit.test("Scheduler should update scroll position if appointment is not visible, timeline week view ", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -148,16 +151,16 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable("instance");
     scrollable.scrollTo({ left: 2000 });
 
     var appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"),
+        workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
-        this.instance.showAppointmentPopup(appointment);
-        $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+        scheduler.instance.showAppointmentPopup(appointment);
+        scheduler.appointmentPopup.clickDoneButton();
 
         assert.ok(scrollToTimeSpy.calledOnce, "scrollToTime was called");
     } finally {
@@ -166,20 +169,20 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
 });
 
 QUnit.test("getEndViewDate should return correct value on timelineMonth view DST date (T720694)", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         currentDate: new Date(2019, 2, 5),
         views: ["timelineMonth"],
         currentView: "timelineMonth",
         dataSource: []
     });
 
-    var workSpace = this.instance.getWorkSpace();
+    var workSpace = scheduler.instance.getWorkSpace();
 
     assert.deepEqual(workSpace.getEndViewDate(), new Date(2019, 2, 31, 23, 59), "End view date is OK");
 });
 
 QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline month view ", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -191,16 +194,16 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable("instance");
     scrollable.scrollTo({ left: 12000 });
 
     var appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineMonth("instance"),
+        workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
-        this.instance.showAppointmentPopup(appointment);
-        $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+        scheduler.instance.showAppointmentPopup(appointment);
+        scheduler.appointmentPopup.clickDoneButton();
 
         assert.notOk(scrollToTimeSpy.calledOnce, "scrollToTime was not called");
     } finally {
@@ -209,7 +212,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
 });
 
 QUnit.test("Scheduler should update scroll position if appointment is not visible, timeline month view ", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -221,16 +224,16 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable("instance");
     scrollable.scrollTo({ left: 1000 });
 
     var appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineMonth("instance"),
+        workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
-        this.instance.showAppointmentPopup(appointment);
-        $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+        scheduler.instance.showAppointmentPopup(appointment);
+        scheduler.appointmentPopup.clickDoneButton();
 
         assert.ok(scrollToTimeSpy.calledOnce, "scrollToTime was called");
     } finally {
@@ -239,7 +242,7 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
 });
 
 QUnit.test("Appointments should have a right order on timeline month(lots of appts)", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         currentDate: new Date(2016, 1, 2),
         maxAppointmentsPerCell: null,
         dataSource: new DataSource([
@@ -299,16 +302,14 @@ QUnit.test("Appointments should have a right order on timeline month(lots of app
         width: 800
     });
 
-    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
-
-    assert.roughEqual(translator.locate($appointments.eq(0)).top, 0, 2.001, "Appointment position is OK");
-    assert.roughEqual(translator.locate($appointments.eq(1)).top, 100, 2.001, "Appointment position is OK");
-    assert.roughEqual(translator.locate($appointments.eq(2)).top, 200, 2.001, "Appointment position is OK");
-    assert.roughEqual(translator.locate($appointments.eq(3)).top, 300, 2.001, "Appointment position is OK");
+    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(0)).top, 0, 2.001, "Appointment position is OK");
+    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(1)).top, 100, 2.001, "Appointment position is OK");
+    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(2)).top, 200, 2.001, "Appointment position is OK");
+    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(3)).top, 300, 2.001, "Appointment position is OK");
 });
 
 QUnit.test("Appointments should have a right order on timeline month", function(assert) {
-    this.createInstance({
+    let scheduler = createInstance({
         currentDate: new Date(2016, 1, 2),
         dataSource: new DataSource([
             {
@@ -327,10 +328,8 @@ QUnit.test("Appointments should have a right order on timeline month", function(
         width: 800
     });
 
-    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
-
-    assert.equal($appointments.eq(0).data("dxItemData").text, "b", "Appointment data is OK");
-    assert.equal($appointments.eq(1).data("dxItemData").text, "a", "Appointment data is OK");
+    assert.equal(scheduler.appointments.getAppointment(0).data("dxItemData").text, "b", "Appointment data is OK");
+    assert.equal(scheduler.appointments.getAppointment(1).data("dxItemData").text, "a", "Appointment data is OK");
 });
 
 QUnit.test("Scheduler timeline dateTable should have right height after changing size if crossScrollingEnabled = true (T644407)", function(assert) {
@@ -342,7 +341,7 @@ QUnit.test("Scheduler timeline dateTable should have right height after changing
         { text: "Five", id: 6 }
     ];
 
-    this.createInstance({
+    let scheduler = createInstance({
         dataSource: [],
         views: ["timelineDay"],
         currentView: "timelineDay",
@@ -358,14 +357,13 @@ QUnit.test("Scheduler timeline dateTable should have right height after changing
         }]
     });
 
-    var $element = this.instance.$element(),
-        $firstRowCell = $element.find(".dx-scheduler-date-table-cell").first(),
+    var $firstRowCell = scheduler.workSpace.getCell(0),
         cellHeight = $firstRowCell.height();
 
-    this.instance.option("width", 500);
-    this.instance.option("width", 1000);
+    scheduler.instance.option("width", 500);
+    scheduler.instance.option("width", 1000);
 
-    assert.equal($element.find(".dx-scheduler-date-table-cell").first().height(), cellHeight, "Cells has correct height");
+    assert.equal(scheduler.workSpace.getCell(0).height(), cellHeight, "Cells has correct height");
 });
 
 QUnit.test("Scheduler timeline groupTable should have right height if widget has auto-height", function(assert) {
@@ -377,7 +375,7 @@ QUnit.test("Scheduler timeline groupTable should have right height if widget has
         { text: "Five", id: 6 }
     ];
 
-    this.createInstance({
+    let scheduler = createInstance({
         dataSource: [],
         views: ["timelineDay"],
         currentView: "timelineDay",
@@ -393,11 +391,8 @@ QUnit.test("Scheduler timeline groupTable should have right height if widget has
         }]
     });
 
-    var $element = this.instance.$element(),
-        $groupTable = $element.find(".dx-scheduler-group-table").first(),
-        groupHeight = $groupTable.height(),
-        $dateTable = $element.find(".dx-scheduler-date-table").first(),
-        dateTableHeight = $dateTable.height();
+    var groupHeight = scheduler.grouping.getGroupTableHeight(),
+        dateTableHeight = scheduler.workSpace.getDateTableHeight();
 
     assert.roughEqual(groupHeight, dateTableHeight, 1.5, "Group table has correct height");
 });
