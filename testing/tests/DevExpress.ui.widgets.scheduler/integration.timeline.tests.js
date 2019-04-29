@@ -318,7 +318,7 @@ QUnit.test("Appointments should have a right order on timeline month", assert =>
         width: 800
     });
 
-    let $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+    let $appointments = this.scheduler.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.eq(0).data("dxItemData").text, "b", "Appointment data is OK");
     assert.equal($appointments.eq(1).data("dxItemData").text, "a", "Appointment data is OK");
