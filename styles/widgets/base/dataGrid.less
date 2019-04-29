@@ -38,6 +38,25 @@
         .dx-icon-sortdown;
     }
 
+    .dx-datagrid-header-panel {
+        .dx-group-panel-item,
+        .dx-header-filter {
+            outline: none;
+        }
+
+        &.dx-state-focused .dx-datagrid-group-panel {
+            .dx-group-panel-item:focus,
+            .dx-header-filter:focus {
+                outline: 2px solid @datagrid-focused-border-color;
+                outline-offset: -2px;
+            }
+
+            .dx-header-filter:focus {
+                outline-offset: 2px;
+            }
+        }
+    }
+
     .dx-datagrid-headers {
         .dx-header-row > td,
         .dx-header-filter {
@@ -48,12 +67,10 @@
             td:focus,
             td .dx-header-filter:focus {
                 outline: 2px solid @datagrid-focused-border-color;
+                outline-offset: 2px;
             }
             td:focus {
                 outline-offset: -2px;
-            }
-            td .dx-header-filter:focus {
-                outline-offset: 2px;
             }
         }
     }
