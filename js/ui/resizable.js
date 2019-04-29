@@ -263,12 +263,14 @@ var Resizable = DOMComponent.inherit({
             handleWidth = $handle.outerWidth(),
             handleHeight = $handle.outerHeight(),
             handleOffset = $handle.offset(),
-            areaOffset = area.offset;
+            areaOffset = area.offset,
+            scrollOffset = this._getAreaScrollOffset();
 
-        e.maxLeftOffset = handleOffset.left - areaOffset.left;
-        e.maxRightOffset = areaOffset.left + area.width - handleOffset.left - handleWidth;
-        e.maxTopOffset = handleOffset.top - areaOffset.top;
-        e.maxBottomOffset = areaOffset.top + area.height - handleOffset.top - handleHeight;
+
+        e.maxLeftOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
+        e.maxRightOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
+        e.maxTopOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
+        e.maxBottomOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
     },
 
     _getBorderWidth: function($element, direction) {
@@ -395,6 +397,21 @@ var Resizable = DOMComponent.inherit({
         }
 
         return this._getAreaFromElement(area);
+    },
+
+    _getAreaScrollOffset: function() {
+        var area = this.option("area");
+        var isElement = !isFunction(area) && !isPlainObject(area);
+        var scrollOffset = { scrollY: 0, scrollX: 0 };
+        if(isElement) {
+            var areaElement = $(area)[0];
+            if(typeUtils.isWindow(areaElement)) {
+                scrollOffset.scrollX = areaElement.pageXOffset;
+                scrollOffset.scrollY = areaElement.pageYOffset;
+            }
+        }
+
+        return scrollOffset;
     },
 
     _getAreaFromObject: function(area) {
