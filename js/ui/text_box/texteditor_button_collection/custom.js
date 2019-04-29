@@ -11,13 +11,13 @@ export default class CustomButton extends TextEditorButton {
     _attachEvents(instance, $element) {
         const { editor } = this;
 
-        eventsEngine.on($element, hoverEvents.start, function() {
+        eventsEngine.on($element, hoverEvents.start, () => {
             editor.$element().addClass(CUSTOM_BUTTON_HOVERED_CLASS);
         });
-        eventsEngine.on($element, hoverEvents.end, function() {
+        eventsEngine.on($element, hoverEvents.end, () => {
             editor.$element().removeClass(CUSTOM_BUTTON_HOVERED_CLASS);
         });
-        eventsEngine.on($element, clickEvent.name, function(e) {
+        eventsEngine.on($element, clickEvent.name, (e) => {
             e.stopPropagation();
         });
     }
