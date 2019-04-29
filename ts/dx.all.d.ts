@@ -2007,7 +2007,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.nodes */
         nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
-        onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
+        onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
     }
     /** @name dxDiagram */
     export class dxDiagram extends Widget {
