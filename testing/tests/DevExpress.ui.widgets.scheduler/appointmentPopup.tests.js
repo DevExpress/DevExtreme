@@ -980,3 +980,20 @@ QUnit.test("Multiple showing appointment popup for recurrence appointments shoul
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
 });
+
+QUnit.test("Recurrent appointment editing options dialog text is showing right (T726931)", function(assert) {
+    this.instance._showRecurrenceChangeConfirm(false);
+
+    const $popup = $('.dx-dialog-wrapper');
+    assert.ok($popup.length === 1, 'Dialog is open');
+
+    const popupText = $popup.find(".dx-dialog-message").text();
+    const recurrenceChangePopupText = 'Do you want to edit only this appointment or the whole series?';
+    assert.equal(popupText, recurrenceChangePopupText, "Text in dialog equals config text");
+
+    const $closeButton = $popup.find(".dx-closebutton");
+    assert.ok($closeButton.length === 1, "Dialog has a closeButton in recurrence editing options dialog");
+
+    $closeButton.trigger('dxclick');
+    assert.ok($('.dx-dialog-wrapper').length === 0, 'Dialog is closed');
+});
