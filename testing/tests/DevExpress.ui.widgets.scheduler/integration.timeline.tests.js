@@ -299,7 +299,7 @@ QUnit.test("Appointments should have a right order on timeline month(lots of app
 });
 
 QUnit.test("Appointments should have a right order on timeline month", assert => {
-    createInstance({
+    let scheduler = createInstance({
         currentDate: new Date(2016, 1, 2),
         dataSource: new DataSource([
             {
@@ -318,7 +318,7 @@ QUnit.test("Appointments should have a right order on timeline month", assert =>
         width: 800
     });
 
-    let $appointments = this.scheduler.instance.$element().find(".dx-scheduler-appointment");
+    let $appointments = scheduler.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.eq(0).data("dxItemData").text, "b", "Appointment data is OK");
     assert.equal($appointments.eq(1).data("dxItemData").text, "a", "Appointment data is OK");
