@@ -70,6 +70,8 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
+import { PagerWrapper } from "../../helpers/wrappers/pagerWrapper.js";
+import { FilterPanelWrapper } from "../../helpers/wrappers/filterPanelWrapper.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -218,7 +220,9 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
         $headers,
         getGlobalColumnIdSelector = function(index) {
             return "[id=dx-col-" + index + "]";
-        };
+        },
+        filterPanel = new FilterPanelWrapper(".dx-datagrid"),
+        pager = new PagerWrapper(".dx-datagrid");
 
     createDataGrid({
         columns: ["field1", "field2"],
@@ -228,7 +232,16 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
         filterPanel: {
             visible: true
         },
-        filterValue: ["field1", "=", "1"]
+        filterValue: ["field1", "=", "1"],
+        pager: {
+            visible: true,
+            allowedPageSizes: [1, 2, 3, 4, 5],
+            showPageSizeSelector: true,
+            showNavigationButtons: true
+        },
+        paging: {
+            pageSize: 2,
+        },
     });
 
     clock.tick();
@@ -260,9 +273,25 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
 
     assert.equal($(".dx-context-menu").attr("role"), "presentation");
 
-    assert.equal($(".dx-datagrid-filter-panel .dx-icon-filter").attr("tabindex"), 0, "Filter panel icon tabindex");
-    assert.equal($(".dx-datagrid-filter-panel .dx-datagrid-filter-panel-text").attr("tabindex"), 0, "Filter panel text tabindex");
-    assert.equal($(".dx-datagrid-filter-panel .dx-datagrid-filter-panel-clear-filter").attr("tabindex"), 0, "Filter panel clear button tabindex");
+    // assert
+    assert.equal(filterPanel.getIconFilter().attr("tabindex"), 0, "Filter panel icon tabindex");
+    assert.equal(filterPanel.getPanelText().attr("tabindex"), 0, "Filter panel text tabindex");
+    assert.equal(filterPanel.getClearFilterButton().attr("tabindex"), 0, "Filter panel clear button tabindex");
+
+    // arrange, assert
+    var $pageSizes = pager.getPagerPageSizeElements();
+    assert.equal($pageSizes.length, 5, "pageSize count");
+    $pageSizes.each((_, pageSize) => assert.equal($(pageSize).attr("tabindex"), 0, "pagesize tabindex"));
+
+    // arrange, assert
+    var $pages = pager.getPagerPagesElements();
+    assert.equal($pages.length, 1, "pages count");
+    assert.equal($pages.attr("tabindex"), 0, "page tabindex");
+
+    // arrange, assert
+    var $buttons = pager.getPagerButtonsElements();
+    assert.equal($buttons.length, 2, "buttons count");
+    $buttons.each((_, button) => assert.equal($(button).attr("tabindex"), 0, "button tabindex"));
 
     clock.restore();
 });
@@ -4382,7 +4411,7 @@ QUnit.test("height from style after updateDimensions when rendering to container
     assert.equal($("#dataGrid").find(".dx-datagrid").height(), 298);
 });
 
-// T362517
+// T362517, T734767
 QUnit.test("max-height from styles", function(assert) {
     // arrange, act
     var $dataGrid = $("#dataGrid").css("maxHeight", 400).dxDataGrid({
@@ -4406,11 +4435,7 @@ QUnit.test("max-height from styles", function(assert) {
 
     // assert
     assert.equal(dataGrid.totalCount(), 0, "no items");
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        assert.equal($dataGrid.find(".dx-datagrid").height(), 400, "height is equals max-height in IE11");
-    } else {
-        assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
-    }
+    assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
 });
 
 // T412035
@@ -11888,6 +11913,37 @@ QUnit.test("Change pageIndex and pageSize via state if scrolling mode is virtual
     // assert
     assert.equal(dataGrid.pageIndex(), 0, "pageIndex");
     assert.equal(dataGrid.pageSize(), 2, "pageSize");
+});
+
+// T735143
+QUnit.test("Apply state with paging and filtering if filterPanel is visible", function(assert) {
+    var dataGrid = createDataGrid({
+        columns: ["id"],
+        dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+        paging: {
+            pageSize: 2,
+            pageIndex: 1
+        },
+        filterPanel: {
+            visible: true
+        },
+        headerFilter: {
+            visible: true
+        },
+        filterRow: {
+            visible: true
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.state({ pageIndex: 1, pageSize: 2, filterValue: ["id", "<>", 1] });
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 1, "pageIndex is applied");
+    assert.equal(dataGrid.getVisibleRows().length, 1, "rows are filtered");
 });
 
 // T414555

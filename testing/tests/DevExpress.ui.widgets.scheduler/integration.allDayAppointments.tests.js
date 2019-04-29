@@ -10,7 +10,7 @@ import CustomStore from "data/custom_store";
 import Query from "data/query";
 import dataUtils from "core/element_data";
 import devices from "core/devices";
-import { appointmentsHelper, tooltipHelper } from "./helpers.js";
+import { SchedulerTestWrapper } from "./helpers.js";
 
 import "common.css!";
 import "generic_light.css!";
@@ -33,6 +33,11 @@ function getOffset() {
         return APPOINTMENT_DEFAULT_OFFSET;
     }
 }
+
+const createInstance = function(options) {
+    const instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 QUnit.module("Integration: allDay appointments", {
     beforeEach: function() {
@@ -716,7 +721,7 @@ QUnit.test("All-day appointment inside grouped view should have a right resizabl
 });
 
 QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489535)", function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         currentDate: new Date(2015, 4, 25),
         views: ["week"],
         currentView: "week",
@@ -732,7 +737,7 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
         ]
     });
 
-    this.instance.option("dataSource", [
+    scheduler.instance.option("dataSource", [
         { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
         { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
         { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
@@ -745,11 +750,11 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 }
     ]);
 
-    appointmentsHelper.compact.click();
-    assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts in 1st group");
+    scheduler.appointments.compact.click();
+    assert.equal(scheduler.tooltip.getItemCount(), 3, "There are 3 drop down appts in 1st group");
 
-    appointmentsHelper.compact.click(1);
-    assert.equal(tooltipHelper.getItemCount(), 3, "There are 3 drop down appts in 2d group");
+    scheduler.appointments.compact.click(1);
+    assert.equal(scheduler.tooltip.getItemCount(), 3, "There are 3 drop down appts in 2d group");
 });
 
 QUnit.test("DropDown appointment should be removed correctly when needed", function(assert) {

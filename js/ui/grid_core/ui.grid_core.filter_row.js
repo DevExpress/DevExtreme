@@ -10,6 +10,7 @@ import messageLocalization from "../../localization/message";
 import Editor from "../editor/editor";
 import Overlay from "../overlay";
 import Menu from "../menu";
+import { selectView } from "../shared/accessibility";
 
 var OPERATION_ICONS = {
     "=": "filter-operation-equals",
@@ -347,6 +348,10 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
             if(row.rowType === "filter") {
                 $row.addClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
+
+                if(!this.option("useLegacyKeyboardNavigation")) {
+                    eventsEngine.on($row, "keydown", event => selectView("filterRow", this, event));
+                }
             }
 
             return $row;

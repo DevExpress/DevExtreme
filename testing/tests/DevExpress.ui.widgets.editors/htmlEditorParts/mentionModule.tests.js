@@ -6,6 +6,7 @@ import Mentions from "ui/html_editor/modules/mentions";
 import { noop } from "core/utils/common";
 import devices from "core/devices";
 import browser from "core/utils/browser";
+import { Event as dxEvent } from "events";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
@@ -517,15 +518,18 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.deepEqual(this.log[2], { operation: "getContents", index: 0, length: 1 });
     });
 
-    test("popup position collision", (assert) => {
+    test("popup position config", (assert) => {
         const mention = new Mentions(this.quillMock, this.options);
         mention.savePosition(0);
-        const { collision } = mention._popupPosition;
+        const { collision, offset, of: positionTarget } = mention._popupPosition;
 
         assert.deepEqual(collision, {
             x: "flipfit",
-            y: "none"
+            y: "flip"
         }, "Check popup position collision resolve strategy");
+        assert.ok(positionTarget instanceof dxEvent, "mention positioned by event's pageX and pageY");
+        assert.notOk(offset.hasOwnProperty("h"), "it hasn't a horizontal offset");
+        assert.ok(offset.hasOwnProperty("v"), "it has a vertical offset");
     });
 
     test("popup shouldn't close on target scroll", (assert) => {
@@ -537,5 +541,18 @@ QUnit.module("Mentions module", moduleConfig, () => {
         $("#qunit-fixture").triggerHandler("scroll");
 
         assert.ok(mention._popup.option("visible"), "popup is visible after scrolling");
+    });
+
+    test("popup should update position after search", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+        const popupRepaintSpy = sinon.spy(mention._popup, "repaint");
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+        this.clock.tick();
+        mention.onTextChange({ ops: [{ insert: "A" }] }, {}, "user");
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+        assert.ok(popupRepaintSpy.calledOnce, "popup has been repainted after search");
     });
 });

@@ -1,7 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { when } from "../../core/utils/deferred";
-import iconUtils from "../../core/utils/icon";
 import eventsEngine from "../../events/core/events_engine";
 import { addNamespace } from "../../events/utils";
 import { name as contextMenuEventName } from "../../events/contextmenu";
@@ -179,6 +178,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._selectItemByIndex(index, false, e);
     }
 
+    _getItemThumbnailCssClass() {
+        return FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS;
+    }
+
     _getItemSelector() {
         return `.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`;
     }
@@ -343,9 +346,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
 
-        const $itemThumbnail = iconUtils.getImageContainer(this._getItemThumbnail(item))
-            .addClass(FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS);
-
+        const $itemThumbnail = this._getItemThumbnailContainer(item);
         eventsEngine.on($itemThumbnail, "dragstart", this._disableDragging);
 
         const $itemSpacer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);

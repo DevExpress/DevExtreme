@@ -14,6 +14,7 @@ var $ = require("../../core/renderer"),
     ClearButton = require("./ui.text_editor.clear").default,
     TextEditorButtonCollection = require("./texteditor_button_collection/index").default,
     config = require("../../core/config"),
+    errors = require("../widget/ui.errors"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var TEXTEDITOR_CLASS = "dx-texteditor",
@@ -57,7 +58,7 @@ var CONTROL_KEYS = [
 
 function checkButtonsOptionType(buttons) {
     if(isDefined(buttons) && !Array.isArray(buttons)) {
-        throw new TypeError("'buttons' option must be an array");
+        throw errors.Error("E1053");
     }
 }
 
@@ -460,7 +461,7 @@ var TextEditorBase = Editor.inherit({
         each(this.option("buttons"), function(_, buttonOptions) {
             if(buttonOptions.options && !buttonOptions.options.stylingMode) {
                 var buttonInstance = that.getButton(buttonOptions.name);
-                buttonInstance.option("stylingMode", editorStylingMode === "underlined" ? "text" : "contained");
+                buttonInstance.option && buttonInstance.option("stylingMode", editorStylingMode === "underlined" ? "text" : "contained");
             }
         });
     },

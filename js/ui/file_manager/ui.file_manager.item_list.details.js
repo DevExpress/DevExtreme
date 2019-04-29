@@ -1,5 +1,4 @@
 import $ from "../../core/renderer";
-import { getImageContainer } from "../../core/utils/icon";
 
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
@@ -34,6 +33,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             scrolling: {
                 mode: "virtual"
             },
+            showColumnLines: false,
+            showRowLines: false,
             columns: [
                 {
                     dataField: "thumbnail",
@@ -44,21 +45,17 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 },
                 {
                     dataField: "name",
-                    minWidth: 200,
-                    width: "65%",
                     cellTemplate: this._createNameColumnCell.bind(this)
                 },
                 {
                     dataField: "dateModified",
                     caption: "Date Modified",
-                    minWidth: 200,
-                    width: "25%"
+                    width: 110
                 },
                 {
                     dataField: "size",
                     caption: "File Size",
-                    minWidth: 100,
-                    width: "10%",
+                    width: 90,
                     alignment: "right",
                     calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
                 }
@@ -104,6 +101,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _getItemThumbnailCssClass() {
+        return FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS;
+    }
+
     _getItemSelector() {
         return `.${DATA_GRID_DATA_ROW_CLASS}`;
     }
@@ -133,10 +134,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
-        const thumbnail = this._getItemThumbnail(cellInfo.data);
-        getImageContainer(thumbnail)
-            .addClass(FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS)
-            .appendTo(container);
+        this._getItemThumbnailContainer(cellInfo.data).appendTo(container);
     }
 
     _createNameColumnCell(container, cellInfo) {

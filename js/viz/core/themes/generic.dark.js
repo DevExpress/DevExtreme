@@ -9,7 +9,8 @@ var themeModule = require("../../themes"),
     AREA_LAYER_COLOR = "#686868",
     LINE_COLOR = "#c7c7c7",
     TARGET_COLOR = "#8e8e8e",
-    POSITIVE_COLOR = "#b8b8b8";
+    POSITIVE_COLOR = "#b8b8b8",
+    BORDER_COLOR = "#494949";
 
 registerTheme({
     name: "generic.dark",
@@ -53,7 +54,7 @@ registerTheme({
     tooltip: {
         color: SOME_GREY,
         border: {
-            color: "#494949"
+            color: BORDER_COLOR
         },
         font: {
             color: "#929292"
@@ -63,7 +64,7 @@ registerTheme({
         commonSeriesSettings: {
             label: {
                 border: {
-                    color: "#494949"
+                    color: BORDER_COLOR
                 }
             },
             valueErrorBar: {
@@ -79,7 +80,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: "#494949"
+                color: BORDER_COLOR
             }
         },
         commonAxisSettings: {
@@ -90,6 +91,20 @@ registerTheme({
         zoomAndPan: {
             dragBoxStyle: {
                 color: WHITE
+            }
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: "#929292"
+            },
+            border: {
+                color: BORDER_COLOR
+            },
+            color: SOME_GREY,
+            shadow: {
+                opacity: 0.008,
+                offsetY: 4,
+                blur: 8
             }
         }
     },

@@ -1,14 +1,11 @@
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    commons = require("./chartParts/commons.js"),
-    errors = require("viz/core/errors_warnings"),
-    seriesModule = require("viz/series/base_series"),
-    dxErrors = errors.ERROR_MESSAGES,
-    dataValidatorModule = require("viz/components/data_validator"),
-    chartMocks = require("../../helpers/chartMocks.js"),
-    MockSeries = chartMocks.MockSeries,
-    categories = chartMocks.categories;
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import commons from "./chartParts/commons.js";
+import { ERROR_MESSAGES as dxErrors } from "viz/core/errors_warnings";
+import seriesModule from "viz/series/base_series";
+import dataValidatorModule from "viz/components/data_validator";
+import { MockSeries, categories, seriesMockData, MockTranslator } from "../../helpers/chartMocks.js";
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
@@ -25,7 +22,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     }));
 
     QUnit.test("Apply chart theme", function(assert) {
-        chartMocks.seriesMockData.series.push(new MockSeries({}), new MockSeries({}));
+        seriesMockData.series.push(new MockSeries({}), new MockSeries({}));
         this.themeManager.getOptions.withArgs("series").resetBehavior();
         this.themeManager.getOptions.withArgs("series").returns({
             fromTheme: true,
@@ -42,7 +39,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("dxChart with single named series do not loose its name", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
 
         // act
         var chart = this.createChart({
@@ -66,7 +63,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries = new MockSeries({});
 
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
         // act
         var chart = this.createChart({
@@ -83,7 +80,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("dxChart with single series, series type is unknown in option series", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
 
         // act
@@ -101,8 +98,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries1);
-        chartMocks.seriesMockData.series.push(stubSeries2);
+        seriesMockData.series.push(stubSeries1);
+        seriesMockData.series.push(stubSeries2);
         // act
         var chart = this.createChart({
             valueAxis: {
@@ -125,24 +122,24 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.equal(chart.series[1], stubSeries2);
         assert.equal(chart.series[0].index, 0);
         assert.equal(chart.series[1].index, 1);
-        assert.equal(chartMocks.seriesMockData.args[0].length, 2);
-        assert.equal(chartMocks.seriesMockData.args[0][0].renderer, chart._renderer, "Renderer passed");
-        assert.equal(chartMocks.seriesMockData.args[0][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
-        assert.equal(chartMocks.seriesMockData.args[0][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
-        assert.ok(chartMocks.seriesMockData.args[0][1], "Options passed");
-        assert.equal(chartMocks.seriesMockData.args[1].length, 2);
-        assert.equal(chartMocks.seriesMockData.args[1][0].renderer, chart._renderer, "Renderer passed");
-        assert.equal(chartMocks.seriesMockData.args[1][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
-        assert.equal(chartMocks.seriesMockData.args[1][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
-        assert.ok(chartMocks.seriesMockData.args[1][1], "Options passed");
+        assert.equal(seriesMockData.args[0].length, 2);
+        assert.equal(seriesMockData.args[0][0].renderer, chart._renderer, "Renderer passed");
+        assert.equal(seriesMockData.args[0][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
+        assert.equal(seriesMockData.args[0][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
+        assert.ok(seriesMockData.args[0][1], "Options passed");
+        assert.equal(seriesMockData.args[1].length, 2);
+        assert.equal(seriesMockData.args[1][0].renderer, chart._renderer, "Renderer passed");
+        assert.equal(seriesMockData.args[1][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
+        assert.equal(seriesMockData.args[1][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
+        assert.ok(seriesMockData.args[1][1], "Options passed");
     });
 
     QUnit.test("Actions sequence after visibilityChanged is triggered", function(assert) {
         // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries1);
-        chartMocks.seriesMockData.series.push(stubSeries2);
+        seriesMockData.series.push(stubSeries1);
+        seriesMockData.series.push(stubSeries2);
         // act
         var chart = this.createChart({
                 valueAxis: {
@@ -161,7 +158,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             renderSpy = sinon.spy(chart, "_doRender");
         chart._renderer.stopAllAnimations.reset();
 
-        chartMocks.seriesMockData.args[0][1].visibilityChanged(chart.getAllSeries()[0]);
+        seriesMockData.args[0][1].visibilityChanged(chart.getAllSeries()[0]);
 
         // assert
         assert.ok(processSeriesFamilySpy.calledOnce);
@@ -176,7 +173,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("dxChart with single series request default type without category Axis", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createChart({
             series: { type: "line" }
@@ -186,10 +183,10 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
         assert.equal(chart.series[0].index, 0);
-        assert.equal(chartMocks.seriesMockData.args[0].length, 2);
-        assert.equal(chartMocks.seriesMockData.args[0][0].renderer, chart._renderer, "Renderer passed");
-        assert.equal(chartMocks.seriesMockData.args[0][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
-        assert.equal(chartMocks.seriesMockData.args[0][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
+        assert.equal(seriesMockData.args[0].length, 2);
+        assert.equal(seriesMockData.args[0][0].renderer, chart._renderer, "Renderer passed");
+        assert.equal(seriesMockData.args[0][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
+        assert.equal(seriesMockData.args[0][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
     });
 
     QUnit.test("Series index", function(assert) {
@@ -198,7 +195,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             stubSeries2 = new MockSeries({ isUpdated: false }),
             stubSeries3 = new MockSeries({});
 
-        chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+        seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
 
 
         // act
@@ -233,7 +230,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("dxChart with single series request - rotated", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createChart({
             rotated: true,
@@ -252,18 +249,18 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
         assert.equal(chart.series[0].index, 0);
-        assert.equal(chartMocks.seriesMockData.args[0].length, 2);
-        assert.equal(chartMocks.seriesMockData.args[0][0].renderer, chart._renderer, "Renderer passed");
-        assert.equal(chartMocks.seriesMockData.args[0][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
-        assert.equal(chartMocks.seriesMockData.args[0][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
-        assert.ok(chartMocks.seriesMockData.args[0][1], "Options passed");
-        assert.ok(chartMocks.seriesMockData.args[0][1].rotated, "Rotated");
+        assert.equal(seriesMockData.args[0].length, 2);
+        assert.equal(seriesMockData.args[0][0].renderer, chart._renderer, "Renderer passed");
+        assert.equal(seriesMockData.args[0][0].seriesGroup, chart._seriesGroup, "seriesGroup passed");
+        assert.equal(seriesMockData.args[0][0].labelsGroup, chart._labelsGroup, "labelsGroup passed");
+        assert.ok(seriesMockData.args[0][1], "Options passed");
+        assert.ok(seriesMockData.args[0][1].rotated, "Rotated");
     });
 
     QUnit.test("dxChart with single series request with data coming from Data Source", function(assert) {
         // arrange
         var stubSeries = new MockSeries({ argumentField: "arg" });
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         var data = [{ arg: 1, val: 1 }, { arg: 2, val: 2 }, { arg: 3, val: 3 }, { arg: 4, val: 4 }, { arg: 5, val: 5 }];
         // act
         var chart = this.createChart({
@@ -276,7 +273,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
-        assert.equal(chartMocks.seriesMockData.args[0].length, 2);
+        assert.equal(seriesMockData.args[0].length, 2);
         assert.deepEqual(chart.series[0].reinitializedData, data);
 
     });
@@ -284,7 +281,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("Theme was applied to single series", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createChart({
             argumentAxis: {
@@ -298,13 +295,13 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
-        assert.equal(chartMocks.seriesMockData.args[0].length, 2);
-        assert.ok(chartMocks.seriesMockData.args[0][1], "Options passed");
+        assert.equal(seriesMockData.args[0].length, 2);
+        assert.ok(seriesMockData.args[0][1], "Options passed");
     });
 
     QUnit.test("Pass series count to themeManager", function(assert) {
         // arrange
-        chartMocks.seriesMockData.series.push(new MockSeries({}), new MockSeries({}));
+        seriesMockData.series.push(new MockSeries({}), new MockSeries({}));
         // act
         this.createChart({
             series: [{
@@ -323,8 +320,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries1);
-        chartMocks.seriesMockData.series.push(stubSeries2);
+        seriesMockData.series.push(stubSeries1);
+        seriesMockData.series.push(stubSeries2);
         // act
         var chart = this.createChart({
             argumentAxis: {
@@ -355,8 +352,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries1);
-        chartMocks.seriesMockData.series.push(stubSeries2);
+        seriesMockData.series.push(stubSeries1);
+        seriesMockData.series.push(stubSeries2);
         // act
         var chart = this.createChart({
             argumentAxis: {
@@ -617,8 +614,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries1);
-        chartMocks.seriesMockData.series.push(stubSeries2);
+        seriesMockData.series.push(stubSeries1);
+        seriesMockData.series.push(stubSeries2);
         // act
         var chart = this.createChart({
             rotated: true,
@@ -663,7 +660,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("tracker repaired tooltip. after series rendering", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
 
         // act
         this.createChart({
@@ -679,7 +676,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("tracker repaired tooltip. after data updating", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
 
         // act
         var chart = this.createChart({
@@ -717,7 +714,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         var stubSeries2 = new MockSeries({ range: { minX: 15, maxX: 80, minY: -1, maxY: 10 } });
         var stubSeries3 = new MockSeries({ range: { minX: 15, maxX: 80, minY: -1, maxY: 10 } });
 
-        chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+        seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
 
         var chart = this.createChart({
             dataSource: [{ series1: "s1", x: 1, y: 1 }, { series1: "s2", x: 2, y: 2 }, { series1: "s3", x: 3, y: 3 }],
@@ -752,8 +749,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 stubSeries2 = new MockSeries({
                     name: "Second series"
                 });
-            chartMocks.seriesMockData.series.push(stubSeries1);
-            chartMocks.seriesMockData.series.push(stubSeries2);
+            seriesMockData.series.push(stubSeries1);
+            seriesMockData.series.push(stubSeries2);
 
         },
         afterEach: function() {
@@ -994,7 +991,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries = new MockSeries({});
 
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
         // act
         var chart = this.createChart({
@@ -1018,7 +1015,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries = new MockSeries({});
 
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
         // act
         var chart = this.createChart({
@@ -1042,7 +1039,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // arrange
         var stubSeries = new MockSeries({});
 
-        chartMocks.seriesMockData.series.push(stubSeries);
+        seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
 
         // act
@@ -1111,7 +1108,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
     QUnit.test("Series. Series with invalid axis", function(assert) {
         // arrange
-        chartMocks.seriesMockData.series.push(new MockSeries({}));
+        seriesMockData.series.push(new MockSeries({}));
         // act
         var chart = commons.createChartInstance({
                 series: [{
@@ -1146,7 +1143,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             var series = new MockSeries(),
                 labels = this.createStubLabels(bBoxes);
 
-            chartMocks.seriesMockData.series.push(series);
+            seriesMockData.series.push(series);
             if(!isRange) {
                 series.getVisiblePoints = function() {
                     return $.map(labels, function(label) {
@@ -1158,6 +1155,10 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     return [{ getLabels: sinon.stub().returns(labels) }];
                 };
             }
+            labels.forEach(l => {
+                l.getPoint.returns({ series });
+                l.getFigureCenter.returns([0, 0]);
+            });
             return series;
         },
         createStubLabels: function(bBoxes) {
@@ -1193,7 +1194,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
     QUnit.test("two overlapping label, series not visible", function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 5, y: 10, width: 10, height: 10 }]);
 
-        chartMocks.seriesMockData.series[0].isVisible = sinon.stub().returns(false);
+        seriesMockData.series[0].isVisible = sinon.stub().returns(false);
         this.createChart({
             resolveLabelOverlapping: "hide",
             series: [{ type: "mockType" }]
@@ -1307,8 +1308,12 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         createFakeSeriesWithLabels: function(bBoxes, seriesOptions) {
             var series = new MockSeries(seriesOptions),
                 labels = this.createStubLabels(bBoxes);
+            labels.forEach(l => {
+                l.getPoint.returns({ series });
+                l.getFigureCenter.returns([0, 0]);
+            });
 
-            chartMocks.seriesMockData.series.push(series);
+            seriesMockData.series.push(series);
             series.getPoints = function() {
                 return $.map(labels, function(label) {
                     return {
@@ -1452,7 +1457,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             { x: 5, y: 8, width: 10, height: 10 },
             { x: 5, y: 12, width: 10, height: 10 }]);
 
-        chartMocks.seriesMockData.series[0].isVisible = sinon.stub().returns(false);
+        seriesMockData.series[0].isVisible = sinon.stub().returns(false);
         this.createChart({
             resolveLabelOverlapping: "stack",
             series: [{ type: "mockType" }]
@@ -1603,10 +1608,10 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             size: { width: 100, height: 100 }
         });
 
-        this.checkLabelPosition(assert, this.labels[0], [5, 0]);
-        this.checkLabelPosition(assert, this.labels[1], [5, 25]);
-        this.checkLabelPosition(assert, this.labels[2], [5, 50]);
-        this.checkLabelPosition(assert, this.labels[3], [5, 75]);
+        this.checkLabelPosition(assert, this.labels[3], [5, 0]);
+        this.checkLabelPosition(assert, this.labels[2], [5, 25]);
+        this.checkLabelPosition(assert, this.labels[1], [5, 50]);
+        this.checkLabelPosition(assert, this.labels[0], [5, 75]);
         assert.deepEqual(this.labels[4].draw.lastCall.args, [false]);
         assert.deepEqual(this.labels[5].draw.lastCall.args, [false]);
     });
@@ -1777,6 +1782,88 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(!this.labels[1].shift.called);
     });
 
+    QUnit.test("Sort series label by value", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 0, width: 10, height: 30, value: 20 },
+            { x: 5, y: 20, width: 10, height: 30, value: 0 }
+        ]);
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }],
+            size: { width: 100, height: 100 }
+        });
+
+        assert.ok(this.labels[0].shift.called);
+        assert.deepEqual(this.labels[0].shift.lastCall.args, [5, 50]);
+        assert.ok(!this.labels[1].shift.called);
+    });
+
+    QUnit.test("Sort series label by value. Inverted", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 0, width: 10, height: 30, value: 20 },
+            { x: 5, y: 20, width: 10, height: 30, value: 0 }
+        ]);
+
+        const translator = new MockTranslator({});
+        translator.isInverted = function() {
+            return true;
+        };
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }],
+            size: { width: 100, height: 100 },
+            valueAxis: {
+                mockTranslator: translator
+            }
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(this.labels[1].shift.called);
+        assert.deepEqual(this.labels[1].shift.lastCall.args, [5, 30]);
+    });
+
+    QUnit.test("Do not sort labels by value is they have different figure center", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 0, width: 10, height: 30, value: 20 },
+            { x: 5, y: 20, width: 10, height: 30, value: 0 }
+        ]);
+
+        this.labels[0].getFigureCenter.returns([0, 1]);
+        this.labels[1].getFigureCenter.returns([1, 1]);
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }],
+            size: { width: 100, height: 100 }
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(this.labels[1].shift.called);
+        assert.deepEqual(this.labels[1].shift.lastCall.args, [5, 30]);
+    });
+
+    QUnit.test("Do not sort labels by value is they have different figure center. Rotated", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 96, width: 23, height: 24, value: 15 },
+            { x: 35, y: 96, width: 23, height: 24, value: 5 }
+        ], { argument: 10 });
+
+        this.labels[0].getFigureCenter.returns([1, 0]);
+        this.labels[1].getFigureCenter.returns([1, 1]);
+
+        this.createChart({
+            rotated: true,
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }],
+            size: { width: 100, height: 100 }
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[1].shift.called);
+    });
+
     QUnit.module("resolveLabelOverlapping. stack. range series", $.extend({}, commons.environment, {
         beforeEach: function() {
             commons.environment.beforeEach.apply(this, arguments);
@@ -1790,7 +1877,10 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             var points = $.map(bBoxPairs, function(bBoxes) {
                 var labels = that.createStubLabels(bBoxes);
                 that.labels = that.labels.concat(labels);
-
+                labels.forEach(l => {
+                    l.getPoint.returns({ series });
+                    l.getFigureCenter.returns([0, 0]);
+                });
                 return {
                     series: series,
                     getLabels: sinon.stub().returns([labels[0], labels[1]]),
@@ -1798,7 +1888,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     originalMinValue: labels[0].getBoundingRect().value,
                 };
             });
-            chartMocks.seriesMockData.series.push(series);
+            seriesMockData.series.push(series);
             series.getPoints = function() { return points; };
         },
         createStubLabels: function(bBoxes) {

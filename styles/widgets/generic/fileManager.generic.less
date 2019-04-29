@@ -2,14 +2,20 @@
     border-color: @filemanager-border-color;
     
     .dx-filemanager-toolbar {
+        background: @base-bg;
 
         &.dx-filemanager-file-toolbar,
         &.dx-filemanager-file-toolbar .dx-toolbar {
             background: @filemanager-file-toolbar-bg;
         }
-        
+
         .dx-filemanager-toolbar-separator-item {
+            height: @FILEMANAGER_TOOLBAR_SEPARATOR_HEIGHT;
             background: @filemanager-border-color;
+        }
+
+        .dx-filemanager-toolbar-viewmode-item .dx-texteditor {
+            width: @FILEMANAGER_TOOLBAR_VIEWMODE_WIDTH;
         }
 
         .dx-texteditor.dx-editor-filled {
@@ -75,29 +81,31 @@
         }
 
         .dx-filemanager-thumbnails-item {
-            
+
             &.dx-filemanager-item-selected {
-                color: @base-bg;
-                background: @base-accent;
+                color: @filemanager-file-item-select-color;
+                background: @filemanager-file-item-select-bg;
             }
 
             &.dx-filemanager-item-focused {
                 border-color: @base-text-color;
             }
 
-            .dx-filemanager-thumbnails-item-thumbnail {
-
-                &.dx-icon-image {
-                    color: @filemanager-thumbnails-image-icon-color;
-                }
+            .dx-filemanager-item-custom-thumbnail {
+                color: @filemanager-custom-thumbnail-color;
             }
         }
     }
+
+    .dx-filemanager-files-view {
+        background: @base-bg;
+    }
+
 }
 
 .dx-filemanager-dirs-tree.dx-treeview {
     .dx-state-focused > .dx-treeview-item {
-        background: transparent;
+        background: @base-bg;
         
         &.dx-state-hover {
             background: @filemanager-dirs-tree-item-focus-bg;
@@ -114,5 +122,12 @@
         & * {
             color: @filemanager-dirs-tree-item-focus-color;
         }
+    }
+}
+
+.dx-filemanager-file-actions-button {
+    .dx-button {
+        min-width: @FILEMANAGER_FILE_ACTIONS_BUTTON_WIDTH;
+        height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT;
     }
 }
