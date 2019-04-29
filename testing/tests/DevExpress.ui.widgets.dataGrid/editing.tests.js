@@ -2681,6 +2681,33 @@ QUnit.test("Batch mode - Closing edited cell should work on click when startEdit
     assert.strictEqual(getInputElements($testElement).length, 0, "hasn't input");
 });
 
+QUnit.test("Batch mode - Clicking on the edited cell should not close it when startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    rowsView.render($testElement);
+
+    $testElement.find("td").first().trigger("dxdblclick");
+
+    // assert
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+
+    // act
+    $testElement.find("td").first().trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
