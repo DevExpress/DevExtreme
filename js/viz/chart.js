@@ -145,8 +145,8 @@ var prepareSegmentRectPoints = function(left, top, width, height, borderOptions)
     width = width - newSW;
     height = height - newSW;
 
-    var right = left + width,
-        bottom = top + height,
+    var right = left + width + 1,
+        bottom = top + height + 1,
         points = [],
         segments = [],
         segmentSequence,
