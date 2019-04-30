@@ -29,7 +29,7 @@ QUnit.module("Integration: Timeline", {
 });
 
 QUnit.test("Special classes should be applied in grouped timeline", function(assert) {
-    let $style = $("<style>").text('#scheduler .dx-scheduler-cell-sizes-vertical {height: 100px } ');
+    let $style = $("<style>").text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 100px } ');
 
     try {
         $style.appendTo("head");
