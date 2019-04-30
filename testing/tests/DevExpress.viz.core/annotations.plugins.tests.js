@@ -9,20 +9,6 @@ import { getDocument } from "core/dom_adapter";
 
 import "viz/chart";
 
-const environment = {
-    beforeEach() {
-        this.renderer = new vizMocks.Renderer();
-        rendererModule.Renderer = sinon.spy(() => this.renderer);
-
-        this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy() }]);
-        __test_utils.stub_createAnnotations(this.createAnnotationStub);
-    },
-    afterEach() {
-        __test_utils.restore_createAnnotations();
-        rendererModule.Renderer.reset();
-    }
-};
-
 QUnit.module("Coordinates calculation. Chart plugin", {
     p1Canvas: { width: 100, height: 210, top: 0, bottom: 110, left: 0, right: 0, originalTop: 0, originalBottom: 110, originalLeft: 0, originalRight: 0 },
     p2Canvas: { width: 100, height: 210, top: 110, bottom: 0, left: 0, right: 0, originalTop: 110, originalBottom: 0, originalLeft: 0, originalRight: 0 },
@@ -95,6 +81,28 @@ QUnit.module("Coordinates calculation. Chart plugin", {
 
         this.checkCoords(assert, chart, { argument: 50 }, { x: 50, y: 100 }, this.p1Canvas);
         this.checkCoords(assert, chart, { argument: 50, axis: "a2" }, { x: 50, y: 210 }, this.p2Canvas);
+    });
+
+    QUnit.test("Get coordinates from axes, convert arg/val to axis types", function(assert) {
+        const chart = this.getChartForSeriesTests({
+            size: {
+                width: 100,
+                height: 100
+            },
+            panes: [{ name: "p1" }],
+            series: [{ }],
+            argumentAxis: {
+                argumentType: "datetime",
+                visualRange: [new Date(2018, 1, 1), new Date(2018, 1, 3)]
+            },
+            valueAxis: [{
+                valueType: "datetime",
+                axisType: "discrete",
+                categories: [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4), new Date(2018, 1, 5)]
+            }]
+        });
+
+        this.checkCoords(assert, chart, { argument: "2018-2-2", value: "2018-2-2" }, { x: 50, y: 75 });
     });
 
     QUnit.test("Get coordinates from series. Line series", function(assert) {
@@ -434,9 +442,43 @@ QUnit.module("Coordinates calculation. Chart plugin", {
         this.checkCoords(assert, chart, { x: 50, y: 50, series: "s1", axis: "a2" }, { x: undefined, y: undefined });
         this.checkCoords(assert, chart, { value: 150, axis: "wrongaxis" }, { x: undefined, y: undefined });
     });
+
+    QUnit.test("Can't convert arg/val to axis types", function(assert) {
+        const chart = this.getChartForSeriesTests({
+            size: {
+                width: 100,
+                height: 100
+            },
+            panes: [{ name: "p1" }],
+            series: [{ }],
+            argumentAxis: {
+                argumentType: "datetime",
+                visualRange: [new Date(2018, 1, 1), new Date(2018, 1, 3)]
+            },
+            valueAxis: [{
+                valueType: "datetime",
+                axisType: "discrete",
+                categories: [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4), new Date(2018, 1, 5)]
+            }]
+        });
+
+        this.checkCoords(assert, chart, { argument: "December", value: "Monday" }, { x: undefined, y: undefined });
+    });
 });
 
-QUnit.module("Lifecycle", environment, function() {
+QUnit.module("Lifecycle", {
+    beforeEach() {
+        this.renderer = new vizMocks.Renderer();
+        rendererModule.Renderer = sinon.spy(() => this.renderer);
+
+        this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy() }]);
+        __test_utils.stub_createAnnotations(this.createAnnotationStub);
+    },
+    afterEach() {
+        __test_utils.restore_createAnnotations();
+        rendererModule.Renderer.reset();
+    }
+}, function() {
     QUnit.module("Chart plugin", {
         beforeEach() {
             this.onDrawn = sinon.spy();

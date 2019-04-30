@@ -128,9 +128,8 @@ const chartPlugin = {
             const coords = { };
             const argCoordName = this._options.rotated ? "y" : "x";
             const valCoordName = this._options.rotated ? "x" : "y";
-            const argument = annotation.argument;
-            const value = annotation.value;
             const argAxis = this.getArgumentAxis();
+            const argument = argAxis.validateUnit(annotation.argument);
             let axis = this.getValueAxis(annotation.axis);
             let series;
             let pane = isDefined(axis) ? axis.pane : undefined;
@@ -146,6 +145,7 @@ const chartPlugin = {
                 !isDefined(pane) && (pane = argAxis.pane);
             }
 
+            const value = axis && axis.validateUnit(annotation.value);
             if(isDefined(value)) {
                 coords[valCoordName] = axis && axis.getTranslator().translate(value);
                 !isDefined(pane) && isDefined(axis) && (pane = axis.pane);
