@@ -102,7 +102,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             }]
         });
 
-        this.checkCoords(assert, chart, { argument: "2018-2-2", value: "2018-2-2" }, { x: 50, y: 75 });
+        this.checkCoords(assert, chart, { argument: "2018-02-02", value: "2018-02-02" }, { x: 50, y: 75 });
     });
 
     QUnit.test("Get coordinates from series. Line series", function(assert) {
