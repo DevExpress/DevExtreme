@@ -1297,49 +1297,49 @@ QUnit.module("Panes border preparations", $.extend({}, commons.environment, {
 QUnit.test("full rect", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: true, bottom: true, left: true });
 
-    assert.deepEqual(params.points, [1, 2, 32, 2, 32, 43, 1, 43, 1, 2], "top right bottom left");
+    assert.deepEqual(params.points, [1, 2, 31, 2, 31, 42, 1, 42, 1, 2], "top right bottom left");
     assert.deepEqual(params.pathType, "area", "Close path");
 });
 
 QUnit.test("w/o top", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: false, right: true, bottom: true, left: true });
 
-    assert.deepEqual(params.points, [32, 2, 32, 43, 1, 43, 1, 2], "right bottom left");
+    assert.deepEqual(params.points, [31, 2, 31, 42, 1, 42, 1, 2], "right bottom left");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
 QUnit.test("w/o right", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: false, bottom: true, left: true });
 
-    assert.deepEqual(params.points, [32, 43, 1, 43, 1, 2, 32, 2], "bottom left top");
+    assert.deepEqual(params.points, [31, 42, 1, 42, 1, 2, 31, 2], "bottom left top");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
 QUnit.test("w/o bottom", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: true, bottom: false, left: true });
 
-    assert.deepEqual(params.points, [1, 43, 1, 2, 32, 2, 32, 43], "left top right");
+    assert.deepEqual(params.points, [1, 42, 1, 2, 31, 2, 31, 42], "left top right");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
 QUnit.test("w/o left", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: true, bottom: true, left: false });
 
-    assert.deepEqual(params.points, [1, 2, 32, 2, 32, 43, 1, 43], "top right bottom");
+    assert.deepEqual(params.points, [1, 2, 31, 2, 31, 42, 1, 42], "top right bottom");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
 QUnit.test("w/o top & right", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: false, right: false, bottom: true, left: true });
 
-    assert.deepEqual(params.points, [32, 43, 1, 43, 1, 2], "bottom left");
+    assert.deepEqual(params.points, [31, 42, 1, 42, 1, 2], "bottom left");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
 QUnit.test("w/o right & bottom", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: false, bottom: false, left: true });
 
-    assert.deepEqual(params.points, [1, 43, 1, 2, 32, 2], "left top");
+    assert.deepEqual(params.points, [1, 42, 1, 2, 31, 2], "left top");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
@@ -1353,37 +1353,37 @@ QUnit.test("w/o top & right & bottom & left", function(assert) {
 QUnit.test("w/o top & bottom", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: false, right: true, bottom: false, left: true });
 
-    assert.deepEqual(params.points[0], [32, 2, 32, 43], "right");
-    assert.deepEqual(params.points[1], [1, 43, 1, 2], "left");
+    assert.deepEqual(params.points[0], [31, 2, 31, 42], "right");
+    assert.deepEqual(params.points[1], [1, 42, 1, 2], "left");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
 QUnit.test("w/o left & right", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: false, bottom: true, left: false });
 
-    assert.deepEqual(params.points[0], [1, 2, 32, 2], "top");
-    assert.deepEqual(params.points[1], [32, 43, 1, 43], "bottom");
+    assert.deepEqual(params.points[0], [1, 2, 31, 2], "top");
+    assert.deepEqual(params.points[1], [31, 42, 1, 42], "bottom");
     assert.deepEqual(params.pathType, "line", "Open path");
 });
 
 QUnit.test("full rect. odd border width", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: true, bottom: true, left: true, width: 1 });
 
-    assert.deepEqual(params.points, [1.5, 2.5, 31.5, 2.5, 31.5, 42.5, 1.5, 42.5, 1.5, 2.5], "top right bottom left");
+    assert.deepEqual(params.points, [1.5, 2.5, 30.5, 2.5, 30.5, 41.5, 1.5, 41.5, 1.5, 2.5], "top right bottom left");
     assert.deepEqual(params.pathType, "area", "Close path");
 });
 
 QUnit.test("full rect. odd border width (5)", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: true, bottom: true, left: true, width: 5 });
 
-    assert.deepEqual(params.points, [3.5, 4.5, 29.5, 4.5, 29.5, 40.5, 3.5, 40.5, 3.5, 4.5], "top right bottom left");
+    assert.deepEqual(params.points, [3.5, 4.5, 28.5, 4.5, 28.5, 39.5, 3.5, 39.5, 3.5, 4.5], "top right bottom left");
     assert.deepEqual(params.pathType, "area", "Close path");
 });
 
 QUnit.test("full rect. even border width (4)", function(assert) {
     var params = this.prepareSegmentRectPoints(1, 2, 30, 40, { top: true, right: true, bottom: true, left: true, width: 4 });
 
-    assert.deepEqual(params.points, [3, 4, 30, 4, 30, 41, 3, 41, 3, 4], "top right bottom left");
+    assert.deepEqual(params.points, [3, 4, 29, 4, 29, 40, 3, 40, 3, 4], "top right bottom left");
     assert.deepEqual(params.pathType, "area", "Close path");
 });
 
