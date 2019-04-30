@@ -40,7 +40,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             columns: this._createColumns(),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
-            onSelectionChanged: this._raiseSelectionChanged.bind(this),
+            onSelectionChanged: this._raiseSelectionChanged.bind(this)
         });
 
         this.$element()

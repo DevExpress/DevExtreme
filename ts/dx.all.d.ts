@@ -2286,15 +2286,15 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.customizeThumbnail */
         customizeThumbnail?: ((fileItem: any) => string);
         /** @name dxFileManager.Options.dateModifiedExpr */
-        dateModifiedExpr?: string | Function;
+        dateModifiedExpr?: string | ((fileItem: any) => any);
         /** @name dxFileManager.Options.fileProvider */
         fileProvider?: any;
         /** @name dxFileManager.Options.isFolderExpr */
-        isFolderExpr?: string | Function;
+        isFolderExpr?: string | ((fileItem: any) => any);
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.nameExpr */
-        nameExpr?: string | Function;
+        nameExpr?: string | ((fileItem: any) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
@@ -2302,9 +2302,9 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
         /** @name dxFileManager.Options.sizeExpr */
-        sizeExpr?: string | Function;
+        sizeExpr?: string | ((fileItem: any) => any);
         /** @name dxFileManager.Options.thumbnailExpr */
-        thumbnailExpr?: string | Function;
+        thumbnailExpr?: string | ((fileItem: any) => any);
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {

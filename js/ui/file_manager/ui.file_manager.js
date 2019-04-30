@@ -513,30 +513,35 @@ class FileManager extends Widget {
             /**
              * @name dxFileManagerOptions.nameExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'name'
              */
             nameExpr: "name",
             /**
              * @name dxFileManagerOptions.isFolderExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'isFolder'
              */
             isFolderExpr: "isFolder",
             /**
              * @name dxFileManagerOptions.sizeExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'size'
              */
             sizeExpr: "size",
             /**
              * @name dxFileManagerOptions.dateModifiedExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'dateModified'
              */
             dateModifiedExpr: "dateModifiedExpr",
             /**
              * @name dxFileManagerOptions.thumbnailExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'thumbnail'
              */
             thumbnailExpr: "thumbnail"
