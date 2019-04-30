@@ -127,6 +127,7 @@ class FileManager extends Widget {
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onSelectedItemOpened: ({ item }) => this._tryOpen(item),
+            onSelectedFileOpened: this._createActionByOption("onSelectedFileOpened"),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option("customizeDetailColumns")
         };
@@ -454,6 +455,17 @@ class FileManager extends Widget {
             customizeDetailColumns: null,
 
             /**
+            * @name dxFileManagerOptions.onSelectedFileOpened
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e: object
+            * @type_function_param1_field1 fileItem:object
+            * @default null
+            * @action
+            */
+            onSelectedFileOpened: null,
+
+            /**
              * @name dxFileManagerOptions.permissions
              * @type object
              */
@@ -538,6 +550,7 @@ class FileManager extends Widget {
             case "itemView":
             case "customizeThumbnail":
             case "customizeDetailColumns":
+            case "onSelectedFileOpened":
             case "permissions":
             case "nameExpr":
             case "isFolderExpr":
@@ -582,6 +595,10 @@ class FileManager extends Widget {
 
     getSelectedItems() {
         return this._itemView.getSelectedItems();
+    }
+
+    _fireSelectedFileOpenedEvent(dataItem) {
+        this._createActionByOption("onSelectedFileOpened")({ dataItem });
     }
 
 }

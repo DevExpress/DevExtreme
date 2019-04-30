@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { when } from "../../core/utils/deferred";
+import typeUtils from "../../core/utils/type";
 import eventsEngine from "../../events/core/events_engine";
 import { addNamespace } from "../../events/utils";
 import { name as contextMenuEventName } from "../../events/contextmenu";
@@ -50,8 +51,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         const clickEvent = addNamespace("click", FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
+        const dblClickEvent = addNamespace("dblclick", FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
         eventsEngine.on(this.$element(), clickEvent, this._onClick.bind(this));
+        eventsEngine.on(this.$element(), dblClickEvent, this._onDblClick.bind(this));
 
         this._loadItems();
     }
@@ -162,6 +165,17 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             this._selectItemByItemElement($item, e);
         } else {
             this.clearSelection();
+        }
+    }
+
+    _onDblClick(e) {
+        const itemIndex = $(e.target)
+            .closest(this._getItemSelector())
+            .data("index");
+
+        if(typeUtils.isNumeric(itemIndex) && itemIndex >= 0 && itemIndex < this._items.length) {
+            const fileItem = this._items[itemIndex];
+            !fileItem.isFolder && this.option("onSelectedFileOpened")({ dataItem: e.data });
         }
     }
 

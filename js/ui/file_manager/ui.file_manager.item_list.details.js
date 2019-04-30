@@ -40,7 +40,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             columns: this._createColumns(),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
-            onSelectionChanged: this._raiseSelectionChanged.bind(this)
+            onSelectionChanged: this._raiseSelectionChanged.bind(this),
+            onRowDblClick: this._onRowDblClick.bind(this)
         });
 
         this.$element()
@@ -147,6 +148,15 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         e.items = this._contextMenu.createContextMenuItems(fileItems);
+    }
+
+    _onRowDblClick(e) {
+        if(e.data.isFolder) {
+            return;
+        }
+
+        const onSelectedFileOpened = this.option("onSelectedFileOpened");
+        onSelectedFileOpened({ dataItem: e.data });
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
