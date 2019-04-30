@@ -159,7 +159,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
             verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
-            verticalOffset += this._workSpace.getCellHeight() * (i + 1);
+            verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
         }
 
         $indicator.css("left", horizontalOffset + tableOffset);
