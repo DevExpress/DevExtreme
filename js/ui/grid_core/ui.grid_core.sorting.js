@@ -106,9 +106,7 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
         const $item = that.callBase(...arguments);
 
         eventsEngine.on($item, addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(() => {
-            setTimeout(() => {
-                that.getController("columns").changeSortOrder(groupColumn.index);
-            });
+            that._processGroupItemAction(groupColumn.index);
         }));
 
         that._applyColumnState({
@@ -123,6 +121,10 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
         });
 
         return $item;
+    },
+
+    _processGroupItemAction(groupColumnIndex) {
+        setTimeout(() => this.getController("columns").changeSortOrder(groupColumnIndex));
     },
 
     optionChanged(args) {
