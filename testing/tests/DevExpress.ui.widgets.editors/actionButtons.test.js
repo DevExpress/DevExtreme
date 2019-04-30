@@ -8,6 +8,7 @@ import "ui/number_box";
 import errors from "ui/widget/ui.errors";
 
 const { module, test } = QUnit;
+const CUSTOM_BUTTON_HOVERED_CLASS = "dx-custom-button-hovered";
 
 function getTextEditorButtons($editor) {
     return {
@@ -889,5 +890,54 @@ module("collection updating", () => {
             $after = getTextEditorButtons($selectBox).$after;
             assert.ok(isDropDownButton($after.eq(0)));
         });
+    });
+});
+
+
+module("events", () => {
+    test("should use CUSTOM_BUTTON_HOVERED_CLASS to prevent predefined button hover styling while custom button is hovered", (assert) => {
+        const $textBox = $("<div>").dxTextBox({
+            value: "text",
+            buttons: [{
+                name: "custom",
+                location: "after",
+                options: {
+                    text: "custom"
+                }
+            }]
+        });
+        const textBox = $textBox.dxTextBox("instance");
+        const $customButton = $(textBox.getButton("custom").$element());
+
+        $textBox.trigger("dxhoverstart");
+        assert.notOk($textBox.hasClass(CUSTOM_BUTTON_HOVERED_CLASS));
+
+        $customButton.trigger("dxhoverstart");
+        assert.ok($textBox.hasClass(CUSTOM_BUTTON_HOVERED_CLASS));
+
+        $customButton.trigger("dxhoverend");
+        assert.notOk($textBox.hasClass(CUSTOM_BUTTON_HOVERED_CLASS));
+    });
+
+    test("should not open dropDown editor after custom button click", (assert) => {
+        const spy = sinon.spy();
+        const selectBox = $("<div>").dxSelectBox({
+            items: ["1", "2"],
+            buttons: [{
+                name: "custom",
+                location: "after",
+                options: {
+                    text: "custom",
+                    onClick: spy
+                }
+            }, "dropDown"],
+            opened: false
+        }).dxSelectBox("instance");
+
+        const $customButton = $(selectBox.getButton("custom").$element());
+        $customButton.trigger("dxclick");
+
+        assert.notOk(selectBox.option("opened"));
+        assert.strictEqual(spy.callCount, 1);
     });
 });
