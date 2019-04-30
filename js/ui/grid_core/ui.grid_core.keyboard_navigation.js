@@ -176,7 +176,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var rowIndex = this.getVisibleRowIndex(),
             row = this._dataController.items()[rowIndex];
 
-        return this._editingController.allowUpdating({ row: row });
+        return this._editingController.allowUpdating({ row: row }, "click");
     },
 
     _clickTargetCellHandler: function(event, $cell) {

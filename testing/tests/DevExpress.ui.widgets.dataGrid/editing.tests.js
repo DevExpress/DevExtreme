@@ -2708,6 +2708,28 @@ QUnit.test("Batch mode - Clicking on the edited cell should not close it when st
     assert.strictEqual(getInputElements($testElement).length, 1, "has input");
 });
 
+QUnit.test("Batch mode - The allowUpdating callback should not be called on click when startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container"),
+        allowUpdating = sinon.spy();
+
+    that.options.editing = {
+        allowUpdating: allowUpdating,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    rowsView.render($testElement);
+    allowUpdating.reset();
+
+    // act
+    $testElement.find("td").first().trigger("click");
+
+    // assert
+    assert.strictEqual(allowUpdating.callCount, 0, "allowUpdating isn't called");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
