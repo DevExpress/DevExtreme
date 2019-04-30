@@ -494,6 +494,17 @@ QUnit.module("public methods", {
         assert.strictEqual(popup.option("visible"), false, "popup is closed");
         assert.ok(typeUtils.isPromise(closePromise), "close should return promise");
     });
+
+    QUnit.test("opened option", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            opened: true
+        });
+
+        assert.ok(getPopup(dropDownButton).option("visible"), "popup is opened");
+
+        dropDownButton.option("opened", false);
+        assert.notOk(getPopup(dropDownButton).option("visible"), "popup is closed");
+    });
 });
 
 QUnit.module("data expressions", {
