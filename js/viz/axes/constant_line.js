@@ -24,7 +24,7 @@ export default function createConstantLine(axis, options) {
 
         getParsedValue() {
             if(!valueIsParsed) {
-                parsedValue = axis._validateUnit(options.value, "E2105", "constantLine");
+                parsedValue = axis.validateUnit(options.value, "E2105", "constantLine");
                 valueIsParsed = true;
                 return parsedValue;
             }
