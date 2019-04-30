@@ -97,7 +97,9 @@ export class SchedulerTestWrapper {
                 const $toolbar = this.appointmentPopup.getToolbarElementByLocation(toolBarLocation);
                 const $buttons = $toolbar.find(`.dx-toolbar-${sectionName} .dx-button`);
                 return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
-            }
+            },
+            getDoneButton: () => this.appointmentPopup.getPopup().find(".dx-popup-done"),
+            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger("dxclick")
         };
 
         this.appointmentForm = {
@@ -106,6 +108,10 @@ export class SchedulerTestWrapper {
         };
 
         this.workSpace = {
+            getWorkSpace: () => $(".dx-scheduler-work-space"),
+            getDateTableScrollable: () => $(".dx-scheduler-date-table-scrollable"),
+            getDateTable: () => $(".dx-scheduler-date-table"),
+            getDateTableHeight: () => this.workSpace.getDateTable().height(),
             getCells: () => $(".dx-scheduler-date-table-cell"),
             getCell: (index) => this.workSpace.getCells().eq(index),
             getAllDayCells: () => $(".dx-scheduler-all-day-table-cell"),
@@ -114,6 +120,14 @@ export class SchedulerTestWrapper {
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight()
+        };
+
+        this.grouping = {
+            getGroupHeaders: () => $(".dx-scheduler-group-header"),
+            getGroupHeader: (index = 0) => this.grouping.getGroupHeaders().eq(index),
+            getGroupHeaderHeight: () => this.grouping.getGroupHeader(0).outerHeight(),
+            getGroupTable: () => $(".dx-scheduler-group-table"),
+            getGroupTableHeight: () => this.grouping.getGroupTable().height()
         };
     }
 
