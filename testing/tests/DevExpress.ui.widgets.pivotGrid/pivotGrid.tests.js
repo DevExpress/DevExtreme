@@ -1711,7 +1711,6 @@ QUnit.test("Sorting by Summary context menu with zero value", function(assert) {
 QUnit.test("Sorting by Summary should not be allowd if paginate is true", function(assert) {
     var contextMenuArgs = [],
         dataSourceInstance = new PivotGridDataSource({
-            paginate: true,
             fields: [
                 { dataField: "field1", area: "row" },
                 { dataField: "field2", area: "data", summaryType: "sum" }
@@ -1730,6 +1729,10 @@ QUnit.test("Sorting by Summary should not be allowd if paginate is true", functi
         allowSortingBySummary: true,
         dataSource: dataSourceInstance
     }, assert);
+
+    dataSourceInstance.paginate = function() {
+        return true;
+    };
 
     this.clock.tick(500);
 
@@ -2261,9 +2264,8 @@ QUnit.test("expand All items", function(assert) {
 QUnit.test("expand All should not be allowed if paginate true", function(assert) {
     var contextMenuArgs = [];
 
-    createPivotGrid({
+    var pivotGrid = createPivotGrid({
         dataSource: {
-            paginate: true,
             fields: [
                 { format: 'decimal', area: "column", allowExpandAll: true, expanded: false, index: 0 },
                 { dataField: "d", area: "row" },
@@ -2293,6 +2295,10 @@ QUnit.test("expand All should not be allowed if paginate true", function(assert)
             contextMenuArgs.push(e);
         }
     }, assert);
+
+    pivotGrid.getDataSource().paginate = function() {
+        return true;
+    };
 
     // act
     $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers .dx-pivotgrid-collapsed').trigger('dxcontextmenu');
