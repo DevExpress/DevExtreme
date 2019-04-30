@@ -2129,6 +2129,8 @@ declare module DevExpress.ui {
         onItemClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
         /** @name dxDropDownButton.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.opened */
+        opened?: boolean;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
