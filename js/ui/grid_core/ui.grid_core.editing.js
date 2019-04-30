@@ -2052,8 +2052,17 @@ var EditingController = modules.ViewController.inherit((function() {
             return allowEditAction;
         },
 
-        allowUpdating: function(options) {
-            return this._allowEditAction("allowUpdating", options);
+        allowUpdating: function(options, eventName) {
+            let needToCallback,
+                startEditAction = this.option("editing.startEditAction");
+
+            ///#DEBUG
+            startEditAction = startEditAction || "click"; // For tests
+            ///#ENDDEBUG
+
+            needToCallback = arguments.length > 1 ? startEditAction === eventName : true;
+
+            return needToCallback && this._allowEditAction("allowUpdating", options);
         },
 
         allowDeleting: function(options) {
@@ -2594,7 +2603,7 @@ module.exports = {
                         $targetElement = $(e.event.target),
                         columnIndex = that._getColumnIndexByElement($targetElement),
                         row = that._dataController.items()[e.rowIndex],
-                        allowUpdating = editingController.allowUpdating({ row: row }) || row && row.inserted,
+                        allowUpdating = editingController.allowUpdating({ row: row }, eventName) || row && row.inserted,
                         column = that._columnsController.getVisibleColumns()[columnIndex],
                         allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex)),
                         startEditAction = that.option("editing.startEditAction") || "click";
