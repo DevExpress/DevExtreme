@@ -13,7 +13,6 @@ class DiagramRightPanel extends Widget {
         super._init();
         this.bar = new OptionsDiagramBar(this);
         this._valueConverters = {};
-        this._onDataToolboxRenderedAction = this._createActionByOption("onDataToolboxRendered");
     }
     _initMarkup() {
         super._initMarkup();
@@ -23,32 +22,11 @@ class DiagramRightPanel extends Widget {
 
         this._renderAccordion($accordion);
     }
-    _getDataSources() {
-        return this.option("dataSources") || {};
-    }
     _getAccordionDataSource() {
-        var result = [{
+        return [{
             title: "Page Properties",
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
-        var dataSources = this._getDataSources();
-        var hasDataSources = false;
-        for(var key in dataSources) {
-            if(dataSources.hasOwnProperty(key)) {
-                hasDataSources = true;
-                break;
-            }
-        }
-        if(hasDataSources) {
-            result.push({
-                title: "Data Source",
-                onTemplate: (widget, $element) => {
-                    widget._renderDataSources($element);
-                    this._onDataToolboxRenderedAction({ $element });
-                }
-            });
-        }
-        return result;
     }
     _renderAccordion($container) {
         this._accordionInstance = this._createComponent($container, Accordion, {
@@ -118,17 +96,6 @@ class DiagramRightPanel extends Widget {
         return extend(super._getDefaultOptions(), {
             container: null
         });
-    }
-
-    _renderDataSources($container) {
-        var dataSources = this._getDataSources();
-        for(var key in dataSources) {
-            if(dataSources.hasOwnProperty(key)) {
-                $("<div>")
-                    .appendTo($container)
-                    .attr("data-key", key);
-            }
-        }
     }
 }
 
