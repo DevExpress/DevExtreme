@@ -111,7 +111,7 @@ QUnit.test("drawer should preserve content", assert => {
     assert.equal($content[0], $element.find("#content")[0]);
 });
 
-QUnit.test("drawer shouldn't lose its transpiled content after repaint (T731771)", assert => {
+QUnit.test("drawer shouldn't lose its content after repaint (T731771)", assert => {
     let $button = $("#button").dxButton();
 
     const $element = $("#drawerWithContent").dxDrawer();
