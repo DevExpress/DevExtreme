@@ -70,6 +70,8 @@ var EDIT_FORM_CLASS = "edit-form",
 
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
 
+    DEFAULT_START_EDIT_ACTION = "click",
+
     EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL],
@@ -2053,16 +2055,10 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         allowUpdating: function(options, eventName) {
-            let needToCallback,
-                startEditAction = this.option("editing.startEditAction");
+            let startEditAction = this.option("editing.startEditAction") || DEFAULT_START_EDIT_ACTION,
+                needCallback = arguments.length > 1 ? startEditAction === eventName : true;
 
-            ///#DEBUG
-            startEditAction = startEditAction || "click"; // For tests
-            ///#ENDDEBUG
-
-            needToCallback = arguments.length > 1 ? startEditAction === eventName : true;
-
-            return needToCallback && this._allowEditAction("allowUpdating", options);
+            return needCallback && this._allowEditAction("allowUpdating", options);
         },
 
         allowDeleting: function(options) {
