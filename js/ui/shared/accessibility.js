@@ -7,6 +7,7 @@ const FOCUS_STATE_CLASS = "dx-state-focused",
     GRID_CELL_SELECTOR = ".dx-datagrid-rowsview .dx-datagrid-content .dx-row > td",
     TREELIST_CELL_SELECTOR = ".dx-treelist-rowsview .dx-treelist-content .dx-row > td",
     viewItemSelectorMap = {
+        groupPanel: [".dx-datagrid-group-panel .dx-group-panel-item[tabindex]"],
         columnHeaders: [".dx-datagrid-headers .dx-header-row > td.dx-datagrid-action", ".dx-treelist-headers .dx-header-row > td.dx-treelist-action"],
         filterRow: [".dx-datagrid-headers .dx-datagrid-filter-row .dx-editor-cell input", ".dx-treelist-headers .dx-treelist-filter-row .dx-editor-cell input"],
         rowsView: [`${GRID_CELL_SELECTOR}[tabindex]`, `${GRID_CELL_SELECTOR}`, `${TREELIST_CELL_SELECTOR}[tabindex]`, `${TREELIST_CELL_SELECTOR}`],

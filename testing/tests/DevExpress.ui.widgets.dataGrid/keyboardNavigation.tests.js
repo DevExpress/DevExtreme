@@ -8614,7 +8614,8 @@ QUnit.module("Keyboard navigation accessibility", {
         }, this.options);
 
         setupDataGridModules(this,
-            ["data", "columns", "columnHeaders", "sorting", "pager", "headerFilter", "filterSync", "filterPanel", "filterRow", "rows", "editorFactory", "gridView", "editing", "selection", "focus", "keyboardNavigation", "validating", "masterDetail"],
+            ["data", "columns", "columnHeaders", "sorting", "grouping", "headerPanel", "pager", "headerFilter", "filterSync", "filterPanel", "filterRow",
+                "rows", "editorFactory", "gridView", "editing", "selection", "focus", "keyboardNavigation", "validating", "masterDetail"],
             { initViews: true }
         );
     },
@@ -8992,12 +8993,19 @@ QUnit.module("Keyboard navigation accessibility", {
             headerFilter: { visible: true },
             filterRow: { visible: true },
             filterPanel: { visible: true },
+            groupPanel: { visible: true },
             pager: {
                 allowedPageSizes: [1, 2],
                 showPageSizeSelector: true,
                 showNavigationButtons: true,
                 visible: true
-            }
+            },
+            columns: [
+                { dataField: "name", allowSorting: true, allowFiltering: true },
+                { dataField: "date", dataType: "date" },
+                { dataField: "room", dataType: "number", groupIndex: 0 },
+                { dataField: "phone", dataType: "number" }
+            ]
         };
 
         // arrange
@@ -9006,10 +9014,16 @@ QUnit.module("Keyboard navigation accessibility", {
         this.clock.tick();
 
         // act
-        $element = $(".dx-datagrid-headers .dx-header-row > td").first();
+        $element = $(".dx-datagrid-group-panel .dx-group-panel-item").first();
         $element.focus();
+        fireKeyDown($(":focus"), "ArrowDown", true);
+        // assert
+        assert.ok($(":focus").is(".dx-datagrid-headers .dx-header-row > td"), "focused element");
+        assert.equal($(":focus").index(), 0, "focused element index");
 
         // act
+        $element = $(".dx-datagrid-headers .dx-header-row > td").first();
+        $element.focus();
         fireKeyDown($(":focus"), "ArrowDown", true);
         // assert
         assert.ok($(":focus").is(".dx-datagrid-filter-row .dx-texteditor-input"), "focused element");
@@ -9025,8 +9039,17 @@ QUnit.module("Keyboard navigation accessibility", {
         // act
         fireKeyDown($(":focus"), "ArrowUp", true);
         // assert
-        assert.ok($(":focus").is(".dx-header-row > td"), "focused element");
-        assert.equal($(":focus").index(), 0, "focused element index");
+        assert.ok($(".dx-header-row > td").first().is(":focus"), "focused element");
+
+        // act
+        fireKeyDown($(":focus"), "ArrowUp", true);
+        // assert
+        assert.ok($(".dx-datagrid-group-panel .dx-group-panel-item").first().is(":focus"), "focused element");
+
+        // act
+        fireKeyDown($(":focus"), "ArrowDown", true);
+        // assert
+        assert.ok($(".dx-datagrid-headers .dx-header-row > td").first().is(":focus"), "focused element");
 
         // act
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
