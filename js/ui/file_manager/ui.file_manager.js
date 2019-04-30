@@ -41,6 +41,8 @@ class FileManager extends Widget {
     _initMarkup() {
         super._initMarkup();
 
+        this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
+
         this._provider = this._getFileProvider();
         this._currentFolder = null;
 
@@ -126,7 +128,8 @@ class FileManager extends Widget {
             getItems: this._getItemViewItems.bind(this),
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
-            onSelectedItemOpened: ({ item }) => this._tryOpen(item),
+            onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
+            onSelectedFileOpened: this._createActionByOption("onSelectedFileOpened"),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option("customizeDetailColumns")
         };
@@ -454,6 +457,17 @@ class FileManager extends Widget {
             customizeDetailColumns: null,
 
             /**
+            * @name dxFileManagerOptions.onSelectedFileOpened
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 fileItem:object
+            * @default null
+            * @action
+            */
+            onSelectedFileOpened: null,
+
+            /**
              * @name dxFileManagerOptions.permissions
              * @type object
              */
@@ -499,30 +513,35 @@ class FileManager extends Widget {
             /**
              * @name dxFileManagerOptions.nameExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'name'
              */
             nameExpr: "name",
             /**
              * @name dxFileManagerOptions.isFolderExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'isFolder'
              */
             isFolderExpr: "isFolder",
             /**
              * @name dxFileManagerOptions.sizeExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'size'
              */
             sizeExpr: "size",
             /**
              * @name dxFileManagerOptions.dateModifiedExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'dateModified'
              */
             dateModifiedExpr: "dateModifiedExpr",
             /**
              * @name dxFileManagerOptions.thumbnailExpr
              * @type string|function(fileItem)
+             * @type_function_param1 fileItem:object
              * @default 'thumbnail'
              */
             thumbnailExpr: "thumbnail"
@@ -545,6 +564,9 @@ class FileManager extends Widget {
             case "dateModifiedExpr":
             case "thumbnailExpr":
                 this.repaint();
+                break;
+            case "onSelectedFileOpened":
+                this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
                 break;
             default:
                 super._optionChanged(args);
@@ -582,6 +604,13 @@ class FileManager extends Widget {
 
     getSelectedItems() {
         return this._itemView.getSelectedItems();
+    }
+
+    _onSelectedItemOpened({ item }) {
+        if(!item.isFolder) {
+            this._onSelectedFileOpenedAction({ fileItem: item });
+        }
+        this._tryOpen(item);
     }
 
 }

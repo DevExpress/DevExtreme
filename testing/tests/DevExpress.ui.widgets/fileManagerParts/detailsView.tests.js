@@ -61,9 +61,12 @@ const moduleConfig = {
 const getFileSizeCellValueInDetailsView = ($element, rowIndex) => getCellValueInDetailsView($element, rowIndex, 4);
 
 const getCellValueInDetailsView = ($element, rowIndex, columnIndex) => {
+    return getCellInDetailsView($element, rowIndex, columnIndex).text();
+};
+
+const getCellInDetailsView = ($element, rowIndex, columnIndex) => {
     return $element.find(`tr.${Consts.GRID_DATA_ROW_CLASS}[aria-rowindex=${rowIndex}] td`)
-        .eq(columnIndex)
-        .text();
+        .eq(columnIndex);
 };
 
 QUnit.module("Details View", moduleConfig, () => {
@@ -122,6 +125,22 @@ QUnit.module("Details View", moduleConfig, () => {
         assert.equal(getCellValueInDetailsView(this.$element, 3, 5), "Admin");
         assert.equal(getCellValueInDetailsView(this.$element, 4, 5), "Guest");
         assert.equal(getCellValueInDetailsView(this.$element, 5, 5), "Max");
+    });
+
+    test("Raise the  SelectedFileOpened event", function(assert) {
+        let eventCounter = 0;
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("onSelectedFileOpened", e => {
+            eventCounter++;
+        });
+
+        getCellInDetailsView(this.$element, 2, 2).trigger("dxdblclick");
+        this.clock.tick(800);
+        assert.equal(eventCounter, 1);
+
+        getCellInDetailsView(this.$element, 1, 2).trigger("dxdblclick");
+        this.clock.tick(800);
+        assert.equal(eventCounter, 1);
     });
 
 });
