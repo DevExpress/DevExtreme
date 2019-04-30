@@ -539,7 +539,7 @@ module.exports = Class.inherit((function() {
             return this._dataSource.filter.apply(this._dataSource, arguments);
         },
 
-        supportSorting: function() {
+        supportPaging: function() {
             return false;
         },
 

@@ -1497,7 +1497,7 @@ module.exports = Class.inherit((function() {
         },
 
         paginate: function() {
-            return this._paginate;
+            return this._paginate && this._store && this._store.supportPaging();
         },
 
         isEmpty: function() {

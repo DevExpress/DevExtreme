@@ -520,7 +520,7 @@ exports.LocalStore = Class.inherit((function() {
             return dataSource.filter.apply(dataSource, arguments);
         },
 
-        supportSorting: function() {
+        supportPaging: function() {
             return false;
         },
 
