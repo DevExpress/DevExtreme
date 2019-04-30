@@ -188,11 +188,11 @@ class Diagram extends Widget {
         });
     }
 
-    _createDiagramDataSource(options) {
-        const key = options.key || "0";
-        const name = options.name || "Data Source";
-        const nodes = options.nodes || {};
-        const edges = options.edges || {};
+    _createDiagramDataSource(parameters) {
+        const key = parameters.key || "0";
+        const name = parameters.name || "Data Source";
+        const nodes = parameters.nodes || {};
+        const edges = parameters.edges || {};
 
         const data = {
             key, name,
@@ -217,7 +217,7 @@ class Diagram extends Widget {
                 getTo: this._createGetter(edges.toExpr || DIAGRAM_TO_FIELD),
                 setTo: this._createSetter(edges.toExpr || DIAGRAM_TO_FIELD)
             },
-            layoutType: this._getDataSourceLayoutType(options.layout)
+            layoutType: this._getDataSourceLayoutType(parameters.layout)
         };
         this._addDiagramDataSource(key, data);
         this._importDiagramDataSource(key);
@@ -387,12 +387,99 @@ class Diagram extends Widget {
     }
 
     /**
-    * @name dxDiagramMethods.createDataSource
-    * @publicName createDataSource(options)
-    * @param1 options:object
+     * @name DiagramDataSourceParameters
+     * @type object
+     */
+    /**
+    * @name DiagramDataSourceParameters.key
+    * @type string
+    * @default null
     */
-    createDataSource(options) {
-        this._createDiagramDataSource(options);
+    /**
+    * @name DiagramDataSourceParameters.name
+    * @type string
+    * @default null
+    */
+    /**
+    * @name DiagramDataSourceParameters.nodes
+    * @type object
+    * @default null
+    */
+    /**
+    * @name DiagramDataSourceParameters.nodes.dataSource
+    * @type Array<Object>|DataSource|DataSourceOptions
+    * @default null
+    */
+    /**
+    * @name DiagramDataSourceParameters.nodes.keyExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "id"
+    */
+    /**
+    * @name DiagramDataSourceParameters.nodes.textExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "text"
+    */
+    /**
+    * @name DiagramDataSourceParameters.nodes.typeExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "type"
+    */
+    /**
+    * @name DiagramDataSourceParameters.nodes.parentKeyExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "parentId"
+    */
+    /**
+    * @name DiagramDataSourceParameters.nodes.itemsExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "items"
+    */
+    /**
+    * @name DiagramDataSourceParameters.edges
+    * @type Object
+    * @default null
+    */
+    /**
+    * @name DiagramDataSourceParameters.edges.dataSource
+    * @type Array<Object>|DataSource|DataSourceOptions
+    * @default null
+    */
+    /**
+    * @name DiagramDataSourceParameters.edges.keyExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "id"
+    */
+    /**
+    * @name DiagramDataSourceParameters.edges.fromExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "from"
+    */
+    /**
+    * @name DiagramDataSourceParameters.edges.toExpr
+    * @type string|function(data)
+    * @type_function_param1 data:object
+    * @default "to"
+    */
+    /**
+     * @name DiagramDataSourceParameters.layout
+     * @type Enums.DiagramAutoLayout
+     * @default undefined
+     */
+    /**
+    * @name dxDiagramMethods.createDataSource
+    * @publicName createDataSource(parameters)
+    * @param1 parameters:DiagramDataSourceParameters
+    */
+    createDataSource(parameters) {
+        this._createDiagramDataSource(parameters);
     }
     /**
     * @name dxDiagramMethods.deleteDataSource
