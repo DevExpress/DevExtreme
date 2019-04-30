@@ -169,6 +169,8 @@ const Drawer = Widget.inherit({
         this._whenPanelRefreshed = undefined;
 
         this._initHideTopOverlayHandler();
+
+        this._initContentMarkup();
     },
 
     _initStrategy() {
@@ -186,6 +188,14 @@ const Drawer = Widget.inherit({
         }
 
         this._strategy = new Strategy(this);
+    },
+
+    _initContentMarkup() {
+        this._$wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
+
+        this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
+        this._$wrapper.append(this._$contentWrapper);
+        this.$element().append(this._$wrapper);
     },
 
     _getDefaultStrategy() {
@@ -231,7 +241,7 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         this._toggleVisibleClass(this.option("opened"));
-        this._renderMarkup();
+        this._renderPanelElement();
 
         this._refreshModeClass();
         this._refreshRevealModeClass();
@@ -265,15 +275,6 @@ const Drawer = Widget.inherit({
 
             this._renderPosition(this.option("opened"), false);
         });
-    },
-
-    _renderMarkup() {
-        this._$wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
-        this._renderPanelElement();
-
-        this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
-        this._$wrapper.append(this._$contentWrapper);
-        this.$element().append(this._$wrapper);
     },
 
     _renderPanelElement() {
@@ -491,6 +492,12 @@ const Drawer = Widget.inherit({
         $(this.viewContent()).css("paddingLeft", 0);
         $(this.viewContent()).css("left", 0);
         $(this.viewContent()).css("transform", "translate(0px, 0px)");
+    },
+
+    _clean() {
+        this._cleanFocusState();
+
+        this._cleanPanel();
     },
 
     _cleanPanel() {

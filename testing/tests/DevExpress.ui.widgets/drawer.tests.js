@@ -6,6 +6,7 @@ import config from "core/config";
 import typeUtils from "core/utils/type";
 import { animation } from "ui/drawer/ui.drawer.rendering.strategy";
 import Overlay from "ui/overlay";
+import Button from "ui/button";
 
 import "common.css!";
 import "ui/drawer";
@@ -66,6 +67,9 @@ QUnit.testStart(() => {
     <div id="drawer">\
         <div id="content">Test Content</div>\
     </div>\
+    <div id="drawerWithContent">\
+        <div id="content"><div id="button"></div></div>\
+    </div>\
     <div id="outerDrawer">\
         <div id="innerDrawer"></div>\
     </div>\
@@ -102,9 +106,33 @@ QUnit.test("defaults", assert => {
 
 QUnit.test("drawer should preserve content", assert => {
     const $content = $("#drawer #content"),
-        $element = $("#drawer").dxDrawer({});
+        $element = $("#drawer").dxDrawer();
 
     assert.equal($content[0], $element.find("#content")[0]);
+});
+
+QUnit.test("drawer shouldn't lose its content after repaint (T731771)", assert => {
+    let $button = $("#button").dxButton();
+
+    const $element = $("#drawerWithContent").dxDrawer();
+    const instance = $element.dxDrawer("instance");
+
+    instance.repaint();
+
+    $button = $element.find(".dx-button");
+
+    const buttonInstance = $button.dxButton("instance");
+
+    assert.ok(buttonInstance instanceof Button, "button into drawer content wasn't clean after repaint");
+});
+
+QUnit.test("drawer tabIndex should be removed after _clean", assert => {
+    const $element = $("#drawer").dxDrawer();
+    const instance = $element.dxDrawer("instance");
+
+    instance._clean();
+
+    assert.equal($element.attr("tabIndex"), undefined, "tabIndex was removed");
 });
 
 QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
