@@ -28,6 +28,42 @@ QUnit.module("Integration: Timeline", {
     }
 });
 
+QUnit.test("Special classes should be applied in grouped timeline", function(assert) {
+    let $style = $("<style>").text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 100px } ');
+
+    try {
+        $style.appendTo("head");
+
+        let resourcesData = [
+            { text: "One", id: 2 },
+            { text: "Two", id: 3 },
+            { text: "Three", id: 4 },
+            { text: "Four", id: 5 },
+            { text: "Five", id: 6 }
+        ];
+
+        this.createInstance({
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            crossScrollingEnabled: true,
+            groups: ["ownerId"],
+            resources: [{
+                fieldExpr: "ownerId",
+                dataSource: resourcesData
+            }],
+            height: 500
+        });
+
+        let $groupTable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable .dx-scheduler-group-table"),
+            $groupRows = $groupTable.find(".dx-scheduler-group-row"),
+            $firstRowCells = $groupRows.eq(0).find(".dx-scheduler-group-header");
+
+        assert.roughEqual($firstRowCells.eq(0).outerHeight(), 100, 3.001, "Cell height is OK");
+    } finally {
+        $style.remove();
+    }
+});
+
 QUnit.test("Scheduler should have a right timeline work space", function(assert) {
     this.createInstance({
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
