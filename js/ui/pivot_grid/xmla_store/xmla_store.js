@@ -1039,7 +1039,8 @@ exports.XmlaStore = Class.inherit((function() {
 
             return result;
         },
-        supportSorting: function() {
+
+        supportPaging: function() {
             return true;
         },
 
