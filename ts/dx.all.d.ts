@@ -725,6 +725,19 @@ declare module DevExpress.ui {
         /** @name DiagramCustomShapeItem.title */
         title?: string;
     }
+    /** @name DiagramDataSourceParameters */
+    export interface DiagramDataSourceParameters {
+        /** @name DiagramDataSourceParameters.edges */
+        edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
+        /** @name DiagramDataSourceParameters.key */
+        key?: string;
+        /** @name DiagramDataSourceParameters.layout */
+        layout?: 'tree' | 'sugiyama';
+        /** @name DiagramDataSourceParameters.name */
+        name?: string;
+        /** @name DiagramDataSourceParameters.nodes */
+        nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
+    }
     /** @name Editor.Options */
     export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
         /** @name Editor.Options.isValid */
@@ -2013,8 +2026,8 @@ declare module DevExpress.ui {
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
         constructor(element: JQuery, options?: dxDiagramOptions)
-        /** @name dxDiagram.createDataSource(options) */
-        createDataSource(options: any): void;
+        /** @name dxDiagram.createDataSource(parameters) */
+        createDataSource(parameters: DiagramDataSourceParameters): void;
         /** @name dxDiagram.deleteDataSource(key) */
         deleteDataSource(key: string): void;
         /** @name dxDiagram.getData() */
