@@ -2129,6 +2129,8 @@ declare module DevExpress.ui {
         onItemClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
         /** @name dxDropDownButton.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.opened */
+        opened?: boolean;
         /** @name dxDropDownButton.Options.selectedItem */
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
@@ -2165,6 +2167,8 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxDropDownEditor.Options.applyValueMode */
         applyValueMode?: 'instantly' | 'useButtons';
+        /** @name dxDropDownEditor.Options.buttons */
+        buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
         /** @name dxDropDownEditor.Options.deferRendering */
         deferRendering?: boolean;
         /** @name dxDropDownEditor.Options.dropDownButtonTemplate */
@@ -3281,6 +3285,8 @@ declare module DevExpress.ui {
     }
     /** @name dxNumberBox.Options */
     export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
+        /** @name dxNumberBox.Options.buttons */
+        buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
         /** @name dxNumberBox.Options.format */
         format?: format;
         /** @name dxNumberBox.Options.invalidValueMessage */
@@ -4382,7 +4388,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<'clear' | 'spins' | 'dropDown' | dxTextEditorButton>;
+        buttons?: Array<'clear' | dxTextEditorButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */
