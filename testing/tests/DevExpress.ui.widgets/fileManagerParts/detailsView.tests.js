@@ -134,16 +134,12 @@ QUnit.module("Details View", moduleConfig, () => {
             eventCounter++;
         });
 
-        getCellInDetailsView(this.$element, 1, 3).trigger("dxdblclick");
-        this.clock.tick(400);
-        assert.equal(eventCounter, 0);
-
-        getCellInDetailsView(this.$element, 2, 3).trigger("dxdblclick");
-        this.clock.tick(400);
+        getCellInDetailsView(this.$element, 2, 2).trigger("dxdblclick");
+        this.clock.tick(800);
         assert.equal(eventCounter, 1);
 
-        getCellInDetailsView(this.$element, 0, 3).trigger("dxdblclick");
-        this.clock.tick(400);
+        getCellInDetailsView(this.$element, 1, 2).trigger("dxdblclick");
+        this.clock.tick(800);
         assert.equal(eventCounter, 1);
     });
 
