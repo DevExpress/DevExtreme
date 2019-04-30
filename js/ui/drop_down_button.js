@@ -161,6 +161,13 @@ let DropDownButton = Widget.inherit({
             onItemClick: null,
 
             /**
+             * @name dxDropDownButtonOptions.opened
+             * @type boolean
+             * @default false
+             */
+            opened: false,
+
+            /**
              * @name dxDropDownButtonOptions.items
              * @type Array<CollectionWidgetItem, object>
              * @default null
@@ -268,7 +275,7 @@ let DropDownButton = Widget.inherit({
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._loadSelectedItem().done(this._updateActionButton.bind(this));
-        if(!this.option("deferRendering")) {
+        if(!this.option("deferRendering") || this.option("opened")) {
             this._renderPopup();
         }
     },
@@ -406,6 +413,7 @@ let DropDownButton = Widget.inherit({
             width: "auto",
             height: "auto",
             shading: false,
+            visible: this.option("opened"),
             position: {
                 of: this.$element(),
                 collision: "flipfit",
@@ -590,6 +598,9 @@ let DropDownButton = Widget.inherit({
                 break;
             case "dropDownOptions":
                 this._innerOptionChanged(this._popup, args);
+                break;
+            case "opened":
+                this.toggle(value);
                 break;
             case "focusStateEnabled":
             case "hoverStateEnabled":
