@@ -448,8 +448,8 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerOptions.customizeDetailColumns
             * @type function
-            * @type_function_param1 columns:object
-            * @type_function_return object
+            * @type_function_param1 columns:Array<dxDataGridColumn>
+            * @type_function_return Array<dxDataGridColumn>
             */
             customizeDetailColumns: null,
 
