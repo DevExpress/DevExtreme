@@ -1,7 +1,4 @@
-import $ from "../../core/renderer";
-import devices from "../../core/devices";
 import { getDocument } from "../../core/dom_adapter";
-import { getWindow } from "../../core/utils/window";
 import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
@@ -223,7 +220,6 @@ const corePlugin = {
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
-        this._toggleParentsScrollSubscription();
         eventsEngine.off(getDocument(), DOT_EVENT_NS);
         this._annotationsGroup.off(DOT_EVENT_NS);
         this._annotations.tooltip && this._annotations.tooltip.dispose();
@@ -261,22 +257,6 @@ const corePlugin = {
             this._annotations.items = createAnnotations(items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
             this._annotationsGroup.on(POINTER_ACTION, this._annotationsPointerEventHandler.bind(this));
             eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
-            this._toggleParentsScrollSubscription(true);
-        },
-        _toggleParentsScrollSubscription: function(subscribe) {
-            var $parents = $(this._renderer.root.element).parents(),
-                scrollEvents = addNamespace("scroll", EVENT_NS);
-
-            if(devices.real().platform === "generic") {
-                $parents = $parents.add(getWindow());
-            }
-
-            eventsEngine.off($().add(this._$prevRootParents), scrollEvents);
-
-            if(subscribe) {
-                eventsEngine.on($parents, scrollEvents, () => this._annotations.hideTooltip());
-                this._$prevRootParents = $parents;
-            }
         },
         _getAnnotationCoords() { return {}; }
     },

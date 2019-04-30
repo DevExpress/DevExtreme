@@ -6,7 +6,6 @@ import vizMocks from "../../helpers/vizMocks.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import eventsEngine from "events/core/events_engine";
 import { getDocument } from "core/dom_adapter";
-import devices from "core/devices";
 
 import "viz/chart";
 
@@ -818,69 +817,6 @@ QUnit.module("Tooltip", {
 
         assert.equal(tooltip.hide.callCount, 1);
         assert.ok(tooltip.hide.getCall(0).calledAfter(tooltip.show.getCall(0)));
-    });
-
-    QUnit.test("Hide tooltip on parent scroll", function(assert) {
-        var originalPlatform = devices.real().platform;
-
-        try {
-            devices.real({ platform: "generic" });
-            const customizeTooltip = sinon.spy();
-            const chart = this.createChart({
-                commonAnnotationSettings: {
-                    customizeTooltip
-                }
-            });
-
-            const pointer = pointerMock(chart._annotationsGroup.element).start();
-
-            chart.hideTooltip = sinon.spy();
-            chart.clearHover = sinon.spy();
-
-            pointer.start({ x: 30, y: 30 }).down().up();
-            eventsEngine.trigger($("#qunit-fixture").parent(), "scroll");
-
-            const tooltip = this.tooltip;
-
-            assert.equal(tooltip.show.callCount, 1);
-            assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 30, y: 30 });
-
-            assert.equal(tooltip.hide.callCount, 1);
-            assert.ok(tooltip.hide.getCall(0).calledAfter(tooltip.show.getCall(0)));
-        } finally {
-            devices.real({ platform: originalPlatform });
-        }
-    });
-
-    QUnit.test("Do not hide tooltip on parent scroll on mobile", function(assert) {
-        var originalPlatform = devices.real().platform;
-
-        try {
-            devices.real({ platform: "ios" });
-            const customizeTooltip = sinon.spy();
-            const chart = this.createChart({
-                commonAnnotationSettings: {
-                    customizeTooltip
-                }
-            });
-
-            const pointer = pointerMock(chart._annotationsGroup.element).start();
-
-            chart.hideTooltip = sinon.spy();
-            chart.clearHover = sinon.spy();
-
-            pointer.start({ x: 30, y: 30 }).down().up();
-            eventsEngine.trigger($("#qunit-fixture").parent(), "scroll");
-
-            const tooltip = this.tooltip;
-
-            assert.equal(tooltip.show.callCount, 1);
-            assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 30, y: 30 });
-
-            assert.equal(tooltip.hide.callCount, 0);
-        } finally {
-            devices.real({ platform: originalPlatform });
-        }
     });
 
     QUnit.test("Do not show tooltip if it is disabled", function(assert) {
