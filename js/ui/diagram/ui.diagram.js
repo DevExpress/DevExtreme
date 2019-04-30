@@ -77,38 +77,27 @@ class Diagram extends Widget {
     }
     _renderLeftPanel($parent) {
         const isServerSide = !hasWindow();
+        const dataSources = this._getDataSources();
         const $leftPanel = $("<div>")
             .appendTo($parent);
 
         var customShapes = this.option("customShapes");
         this._createComponent($leftPanel, DiagramLeftPanel, {
-            showCustomShapes: Array.isArray(customShapes) && customShapes.length,
-            onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category)
+            dataSources,
+            showCustomShapes: Array.isArray(customShapes) && customShapes.length > 0,
+            onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category),
+            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0])
         });
     }
 
     _renderRightPanel($parent) {
-        const dataSources = this._getDataSources();
-        const isServerSide = !hasWindow();
-
         const drawer = this._createComponent($parent, Drawer, {
             closeOnOutsideClick: true,
             openedStateMode: "overlap",
             position: "right",
             template: ($options) => {
                 this._createComponent($options, DiagramRightPanel, {
-                    dataSources,
-                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
-                    onDataToolboxRendered: (e) => {
-                        if(isServerSide) return;
-
-                        for(var key in dataSources) {
-                            if(dataSources.hasOwnProperty(key)) {
-                                var $toolbox = e.$element.children("[data-key='" + key + "']");
-                                this._diagramInstance.createDataSourceToolbox(key, $toolbox[0]);
-                            }
-                        }
-                    }
+                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar)
                 });
             }
         });
@@ -190,12 +179,12 @@ class Diagram extends Widget {
 
     _createDiagramDataSource(parameters) {
         const key = parameters.key || "0";
-        const name = parameters.name || "Data Source";
+        const title = parameters.title || "Data Source";
         const nodes = parameters.nodes || {};
         const edges = parameters.edges || {};
 
         const data = {
-            key, name,
+            key, title,
             nodeDataSource: nodes.dataSource,
             edgeDataSource: edges.dataSource,
             nodeDataImporter: {
@@ -396,7 +385,7 @@ class Diagram extends Widget {
     * @default null
     */
     /**
-    * @name DiagramDataSourceParameters.name
+    * @name DiagramDataSourceParameters.title
     * @type string
     * @default null
     */
