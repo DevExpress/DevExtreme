@@ -4824,3 +4824,36 @@ QUnit.testInActiveWindow("DataGrid should normalize the focused row index on pag
     assert.equal(this.option("focusedRowIndex"), 1, "focusedRowIndex is normalized");
     assert.equal(this.option("focusedRowKey"), 7, "focusedRowKey is correct");
 });
+
+QUnit.testInActiveWindow("Highlight cell on click when startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var focusedCellChangingCount = 0;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+            e.isHighlighted = true;
+        },
+        editing: {
+            mode: "batch",
+            allowUpdating: true,
+            startEditAction: "dblClick"
+        }
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    $(this.getCellElement(0, 0)).trigger("dxpointerdown").click();
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
+    assert.ok($("#container .dx-datagrid-focus-overlay:visible").length, "has focus overlay");
+});
