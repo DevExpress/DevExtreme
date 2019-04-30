@@ -496,7 +496,6 @@ const Drawer = Widget.inherit({
 
     _clean() {
         this._cleanFocusState();
-        this._resetActiveState();
 
         this._cleanPanel();
     },

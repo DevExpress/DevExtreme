@@ -126,6 +126,15 @@ QUnit.test("drawer shouldn't lose its content after repaint (T731771)", assert =
     assert.ok(buttonInstance instanceof Button, "button into drawer content wasn't clean after repaint");
 });
 
+QUnit.test("drawer tabIndex should be removed after _clean", assert => {
+    const $element = $("#drawer").dxDrawer();
+    const instance = $element.dxDrawer("instance");
+
+    instance._clean();
+
+    assert.equal($element.attr("tabIndex"), undefined, "tabIndex was removed");
+});
+
 QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: false
