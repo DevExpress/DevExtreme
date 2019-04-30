@@ -2280,7 +2280,7 @@ declare module DevExpress.ui {
     /** @name dxFileManager.Options */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
         /** @name dxFileManager.Options.customizeDetailColumns */
-        customizeDetailColumns?: ((columns: any) => any);
+        customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
         customizeThumbnail?: ((fileItem: any) => string);
         /** @name dxFileManager.Options.dateModifiedExpr */
