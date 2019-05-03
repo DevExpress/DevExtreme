@@ -93,7 +93,7 @@ var compareDateWithStartDayHour = function(startDate, endDate, startDayHour, all
     return result;
 };
 
-var compareDateWithEndDayHour = function(startDate, endDate, startDayHour, endDayHour, allDay, min, max) {
+var compareDateWithEndDayHour = function(startDate, endDate, startDayHour, endDayHour, allDay, max) {
     var hiddenInterval = (24 - endDayHour + startDayHour) * toMs("hour"),
         apptDuration = endDate.getTime() - startDate.getTime(),
         delta = (hiddenInterval - apptDuration) / toMs("hour"),
@@ -103,8 +103,7 @@ var compareDateWithEndDayHour = function(startDate, endDate, startDayHour, endDa
 
     var endTime = dateUtils.dateTimeFromDecimal(endDayHour);
 
-    result = endDate >= min &&
-        ((apptStartHour < endTime.hours) || (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) || allDay && startDate <= max);
+    result = (apptStartHour < endTime.hours) || (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) || allDay && startDate <= max;
 
     if(apptDuration < hiddenInterval) {
         if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
@@ -274,7 +273,7 @@ var AppointmentModel = Class.inherit({
             }
 
             if(result && endDayHour !== undefined) {
-                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, min, max);
+                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, max);
             }
 
             if(result && useRecurrence && !recurrenceRule) {
