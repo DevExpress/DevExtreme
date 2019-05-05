@@ -3351,17 +3351,22 @@ QUnit.test("Rival long appointments should have right position on timeline month
     assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
 });
 
-QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
+QUnit.test("Long appointment part should have right width on timeline month view (T678380)", function(assert) {
     var appointment = {
-        startDate: new Date(2016, 1, 25, 8, 0),
-        endDate: new Date(2016, 2, 1, 8, 0)
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
     };
 
     this.createInstance({
-        currentDate: new Date(2016, 2, 1),
+        currentDate: new Date(2019, 3, 2),
         currentView: "timelineMonth",
+        views: ["timelineMonth"],
+        recurrenceRuleExpr: null,
         startDayHour: 8,
         firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
         dataSource: [appointment]
     });
 
