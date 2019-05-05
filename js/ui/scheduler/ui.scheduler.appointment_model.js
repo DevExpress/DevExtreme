@@ -282,7 +282,7 @@ var AppointmentModel = Class.inherit({
                 }
             }
 
-            if(result && (appointmentTakesAllDay || appointmentTakesSeveralDays)) {
+            if(result && (appointmentTakesAllDay || appointmentTakesSeveralDays) && !isAllDay && (!useRecurrence || (useRecurrence && !recurrenceRule))) {
                 if(comparableEndDate < min) {
                     result = false;
                 }
