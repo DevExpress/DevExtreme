@@ -120,7 +120,7 @@ var BaseRenderingStrategy = Class.inherit({
             isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
 
         for(var j = 0; j < position.length; j++) {
-            var height = this.calculateAppointmentHeight(item, position[j]),
+            var height = this.calculateAppointmentHeight(item, position[j], isRecurring),
                 width = this.calculateAppointmentWidth(item, position[j], isRecurring),
                 resultWidth = width,
                 appointmentReduced = null,
@@ -497,7 +497,7 @@ var BaseRenderingStrategy = Class.inherit({
             endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()));
 
             if(isRecurring) {
-                endDate = new Date(endDate + fullDuration);
+                endDate = new Date(endDate.getTime() + fullDuration);
             }
 
             if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartCroppedByViewStartDate.getTime() < viewStartDate.getTime()) {
