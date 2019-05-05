@@ -281,6 +281,13 @@ var AppointmentModel = Class.inherit({
                     result = false;
                 }
             }
+
+            if(result && (appointmentTakesAllDay || appointmentTakesSeveralDays)) {
+                if(comparableEndDate < min) {
+                    result = false;
+                }
+            }
+
             return result;
         }]];
     },
