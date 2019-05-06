@@ -530,7 +530,7 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test("Date table cells shoud have right cellData, groupByDate = true without groups", function(assert) {
+    QUnit.test("Date table cells should have right cellData, groupByDate = true without groups", function(assert) {
         this.instance.option("groups", []);
         var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
 
