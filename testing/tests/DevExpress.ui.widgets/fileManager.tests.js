@@ -12,4 +12,6 @@ import "./fileManagerParts/detailsView.tests.js";
 import "./fileManagerParts/toolbar.tests.js";
 import "./fileManagerParts/navigation.tests.js";
 import "./fileManagerParts/editing.tests.js";
+
 import "./fileManagerParts/webAPIProvider.tests.js";
+import "./fileManagerParts/arrayProvider.tests.js";

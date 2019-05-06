@@ -93,9 +93,17 @@ class FileProvider {
             fileItem.dateModified = new Date();
         }
 
+        if(fileItem.isFolder) {
+            fileItem.hasSubDirs = this._hasSubDirs(dataObj);
+        }
+
         fileItem.thumbnail = this._thumbnailGetter(dataObj) || "";
-        fileItem.dataItem = dataObj; // TODO remove if do not need
+        fileItem.dataItem = dataObj;
         return fileItem;
+    }
+
+    _hasSubDirs(dataObj) {
+        return true;
     }
 
 }

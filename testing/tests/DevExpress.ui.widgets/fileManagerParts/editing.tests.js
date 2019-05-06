@@ -195,7 +195,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal($folderNodes.eq(2).find("span").text(), "Folder 3", "second folder is not target folder");
 
         const $folderToggles = this.wrapper.getFolderToggles();
-        $folderToggles.eq(2).trigger("dxclick");
+        $folderToggles.eq(1).trigger("dxclick");
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes();
@@ -236,7 +236,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal($folderNodes.eq(2).find("span").text(), "Folder 2", "second folder is not target folder");
 
         const $folderToggles = this.wrapper.getFolderToggles();
-        $folderToggles.eq(3).trigger("dxclick");
+        $folderToggles.eq(2).trigger("dxclick");
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes();
