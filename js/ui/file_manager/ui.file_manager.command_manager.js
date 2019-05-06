@@ -78,6 +78,12 @@ export class FileManagerCommandManager {
                 text: "Clear selection",
                 icon: "remove",
                 enabled: true
+            },
+            {
+                name: "showDirsPanel",
+                icon: "menu",
+                enabled: false,
+                noFileItemRequired: true
             }
         ];
 
@@ -94,6 +100,13 @@ export class FileManagerCommandManager {
         const action = this._actions[commandName];
         if(action) {
             action(arg);
+        }
+    }
+
+    setCommandEnabled(commandName, enabled) {
+        const command = this.getCommandByName(commandName);
+        if(command) {
+            command.enabled = enabled;
         }
     }
 
