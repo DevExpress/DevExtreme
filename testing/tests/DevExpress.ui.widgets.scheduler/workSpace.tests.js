@@ -530,6 +530,35 @@ QUnit.testStart(function() {
         });
     });
 
+    QUnit.test("Date table cells should have right cellData, groupByDate = true without groups", function(assert) {
+        this.instance.option("groups", []);
+        var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+        assert.deepEqual($cells.eq(0).data("dxCellData"), {
+            startDate: new Date(2018, 2, 1),
+            endDate: new Date(2018, 2, 1, 0, 30),
+            allDay: false
+        });
+
+        assert.deepEqual($cells.eq(1).data("dxCellData"), {
+            startDate: new Date(2018, 2, 2),
+            endDate: new Date(2018, 2, 2, 0, 30),
+            allDay: false
+        });
+
+        assert.deepEqual($cells.eq(2).data("dxCellData"), {
+            startDate: new Date(2018, 2, 1, 0, 30),
+            endDate: new Date(2018, 2, 1, 1, 0),
+            allDay: false
+        });
+
+        assert.deepEqual($cells.eq(3).data("dxCellData"), {
+            startDate: new Date(2018, 2, 2, 0, 30),
+            endDate: new Date(2018, 2, 2, 1, 0),
+            allDay: false
+        });
+    });
+
     QUnit.test("Date table cells should have right cellData, groupByDate = true", function(assert) {
         var $groupRow = this.instance.$element().find(".dx-scheduler-group-row"),
             $groupHeaderCells = $groupRow.find(".dx-scheduler-group-header");

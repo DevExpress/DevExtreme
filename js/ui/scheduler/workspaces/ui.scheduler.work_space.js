@@ -1821,7 +1821,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _patchCellIndex: function(cellIndex) {
-        if(this.option("groupByDate")) {
+        if(this.isGroupedByDate()) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
         }
 
@@ -2110,7 +2110,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     isGroupedByDate: function() {
-        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace();
+        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace() && this._getGroupCount() > 0;
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {
