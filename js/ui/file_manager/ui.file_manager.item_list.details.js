@@ -37,6 +37,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             },
             showColumnLines: false,
             showRowLines: false,
+            columnHidingEnabled: true,
             columns: this._createColumns(),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
@@ -79,13 +80,15 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             {
                 dataField: "dateModified",
                 caption: "Date Modified",
-                width: 110
+                width: 110,
+                hidingPriority: 1,
             },
             {
                 dataField: "size",
                 caption: "File Size",
                 width: 90,
                 alignment: "right",
+                hidingPriority: 0,
                 calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
             }
         ];
