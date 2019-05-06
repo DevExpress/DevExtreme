@@ -200,6 +200,7 @@ var DropDownEditor = TextBox.inherit({
             * @name dxDropDownEditorOptions.buttons
             * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
             * @default undefined
+            * @inheritdoc
             */
             buttons: void 0,
 

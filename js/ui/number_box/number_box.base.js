@@ -99,6 +99,7 @@ var NumberBoxBase = TextEditor.inherit({
             * @name dxNumberBoxOptions.buttons
             * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
             * @default undefined
+            * @inheritdoc
             */
             buttons: void 0,
 
