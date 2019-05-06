@@ -627,7 +627,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _isAppointmentEmpty: function(height, width) {
-        return height < this._getAppointmentDefaultHeight() || width < this._getAppointmentDefaultWidth();
+        return height < this._getAppointmentMinHeight() || width < this._getAppointmentMinWidth();
     },
 
     _calculateGeometryConfig: function(coordinates) {
@@ -722,12 +722,20 @@ var BaseRenderingStrategy = Class.inherit({
         return this._getAppointmentHeightByTheme();
     },
 
+    _getAppointmentMinHeight: function() {
+        return this._getAppointmentDefaultHeight();
+    },
+
     _getAppointmentHeightByTheme: function() {
         return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
     },
 
     _getAppointmentDefaultWidth: function() {
         return APPOINTMENT_DEFAULT_WIDTH;
+    },
+
+    _getAppointmentMinWidth: function() {
+        return this._getAppointmentDefaultWidth();
     },
 
     _needVerticalGroupBounds: function() {

@@ -2918,3 +2918,20 @@ QUnit.test("Appointments should not have specific class if maxAppointmentsPerCel
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     assert.ok(!$appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
 });
+
+QUnit.test("_isAppointmentEmpty should work correctly in defferent strategies", function(assert) {
+    this.createInstance({
+        views: ["timelineDay", "week"],
+        currentView: "timelineDay"
+    });
+
+    let renderingStrategy = this.instance.getRenderingStrategyInstance();
+
+    assert.ok(renderingStrategy._isAppointmentEmpty(34, 41), "Appointment is empty");
+    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), "Appointment isn't empty");
+
+    this.instance.option("currentView", "week");
+
+    assert.ok(renderingStrategy._isAppointmentEmpty(34, 39), "Appointment is empty");
+    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), "Appointment isn't empty");
+});
