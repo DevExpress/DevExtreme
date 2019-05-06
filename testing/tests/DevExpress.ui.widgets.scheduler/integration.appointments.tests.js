@@ -3319,7 +3319,9 @@ QUnit.test("Long appointment part should not be rendered on timeline month view 
         dataSource: [appointment]
     });
 
-    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "appointment-part was not rendered");
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    assert.equal($appointment.length, 0, "appointment-part was not rendered");
 });
 
 QUnit.test("Long appointment part should not be rendered on timeline workWeek view (T678380)", function(assert) {
@@ -3341,7 +3343,9 @@ QUnit.test("Long appointment part should not be rendered on timeline workWeek vi
         dataSource: [appointment]
     });
 
-    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "appointment-part was not rendered");
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    assert.equal($appointment.length, 0, "appointment-part was not rendered");
 });
 
 QUnit.test("Appointment should have right width on timeline week view", function(assert) {
