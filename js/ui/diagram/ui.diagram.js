@@ -136,6 +136,8 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeInserted = this._raiseNodeInsertedAction.bind(this);
         this._diagramInstance.onNodeUpdated = this._raiseNodeUpdatedAction.bind(this);
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
+        this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
+        this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -670,6 +672,16 @@ class Diagram extends Widget {
     _raiseNodeRemovedAction(key, callback) {
         if(this._nodesOption) {
             this._nodesOption.remove(key, callback);
+        }
+    }
+    _raiseToolboxDragStart() {
+        if(this._leftPanel) {
+            this._leftPanel.$element().addClass("dx-skip-gesture-event");
+        }
+    }
+    _raiseToolboxDragEnd() {
+        if(this._leftPanel) {
+            this._leftPanel.$element().removeClass("dx-skip-gesture-event");
         }
     }
 
