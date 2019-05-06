@@ -3351,7 +3351,7 @@ QUnit.test("Rival long appointments should have right position on timeline month
     assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
 });
 
-QUnit.test("Long appointment part should  not be rendered on timeline month view (T678380)", function(assert) {
+QUnit.test("Long appointment part should not be rendered on timeline month view (T678380)", function(assert) {
     var appointment = {
         "text": "Ends april 1st at 7:59 am",
         "startDate": new Date(2019, 2, 20, 9, 0),
@@ -3362,6 +3362,30 @@ QUnit.test("Long appointment part should  not be rendered on timeline month view
         currentDate: new Date(2019, 3, 2),
         currentView: "timelineMonth",
         views: ["timelineMonth"],
+        recurrenceRuleExpr: null,
+        startDayHour: 8,
+        firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
+        dataSource: [appointment]
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    assert.equal($appointment.length, 0, "appointment-part was not rendered");
+});
+
+QUnit.test("Long appointment part should not be rendered on timeline workWeek view (T678380)", function(assert) {
+    var appointment = {
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2019, 3, 2),
+        currentView: "timelineWorkWeek",
+        views: ["timelineWorkWeek"],
         recurrenceRuleExpr: null,
         startDayHour: 8,
         firstDayOfWeek: 0,
