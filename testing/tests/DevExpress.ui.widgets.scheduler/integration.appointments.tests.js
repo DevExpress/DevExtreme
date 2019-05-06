@@ -1683,8 +1683,7 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
     });
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-        dragDistance = 150,
-        timePanelWidth = this.instance.$element().find(".dx-scheduler-time-panel").outerWidth(true);
+        dragDistance = 150;
 
 
     var pointer = pointerMock($appointment).start(),
@@ -1693,8 +1692,7 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
     pointer.dragStart().drag(dragDistance, 0);
 
     var currentPosition = translator.locate($appointment);
-
-    assert.equal(startPosition.left, currentPosition.left - dragDistance + timePanelWidth, "Appointment position is correct");
+    assert.equal(startPosition.left, currentPosition.left - dragDistance, "Appointment position is correct");
     pointer.dragEnd();
 });
 

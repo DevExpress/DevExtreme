@@ -352,11 +352,10 @@ const subscribes = {
             allDayPanelTopOffset = !isAllDay ? this.getWorkSpaceAllDayOffset() : 0,
             headerHeight = this.getWorkSpaceHeaderPanelHeight(),
             scrollLeft = this.getWorkSpaceScrollableScrollLeft(),
-            tableLeftOffset = this.getWorkSpaceDateTableOffset();
+            tableLeftOffset = 0;
 
         let topOffset = -scrollTop + allDayPanelTopOffset + headerHeight,
             leftOffset = -scrollLeft - tableLeftOffset;
-
         options.callback({
             top: options.coordinates.top + containerSign * topOffset,
             left: options.coordinates.left + containerSign * leftOffset

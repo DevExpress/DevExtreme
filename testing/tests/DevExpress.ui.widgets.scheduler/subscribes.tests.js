@@ -139,7 +139,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + allDayPanelHeight + headerPanelHeight, 2, "new top is correct");
-    assert.equal(updatedCoordinates.left, 0, "new left is correct");
+    assert.equal(updatedCoordinates.left, 100, "new left is correct");
 });
 
 QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinates during drag, allDay = true ", function(assert) {
@@ -165,7 +165,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
     });
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + headerPanelHeight, 2, "new top is correct");
-    assert.equal(updatedCoordinates.left, 0, "new left is correct");
+    assert.equal(updatedCoordinates.left, 100, "new left is correct");
 });
 
 QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinates during drag, RTL mode ", function(assert) {
