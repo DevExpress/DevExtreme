@@ -197,12 +197,14 @@ module.exports = Class.inherit((function() {
                     if(headerItem && headerItem.index >= 0) {
                         applyingItemIndexesToCurrent[newItem.index] = headerItem.index;
                     } else if(emptyIndex) {
-                        headerItem = findHeaderItem(headerItems, createPath(newItems.slice(1)));
+                        var path = createPath(newItems.slice(1));
+                        headerItem = findHeaderItem(headerItems, path);
 
-                        var parentItems = headerItem && headerItem.children || headerItems;
-
-                        parentItems[index] = newItem;
-                        newItem.index = applyingItemIndexesToCurrent[newItem.index] = emptyIndex++;
+                        var parentItems = path.length ? headerItem && headerItem.children : headerItems;
+                        if(parentItems) {
+                            parentItems[index] = newItem;
+                            newItem.index = applyingItemIndexesToCurrent[newItem.index] = emptyIndex++;
+                        }
                     }
                 }
             })).done(function() {
