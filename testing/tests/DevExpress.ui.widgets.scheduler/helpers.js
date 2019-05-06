@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { extend } from "core/utils/extend";
 
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
@@ -77,15 +78,18 @@ export class SchedulerTestWrapper {
 
         this.appointmentPopup = {
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
+            hasVerticalScroll: () => {
+                const scrollableContainer = this.appointmentPopup.getPopup().find(".dx-scrollable-container").get(0);
+                return scrollableContainer.scrollHeight > scrollableContainer.clientHeight;
+            },
             getPopupInstance: () => $(".dx-scheduler-appointment-popup.dx-widget").dxPopup("instance"),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
-            setInitialWidth: width => {
+            setInitialPopupSize: (size) => {
                 const popupConfig = this.instance._popupConfig;
                 this.instance._popupConfig = appointmentData => {
                     const config = popupConfig.call(this.instance, appointmentData);
-                    config.width = width;
-                    return config;
+                    return extend(config, size);
                 };
             },
             setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width),
