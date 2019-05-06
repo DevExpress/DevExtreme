@@ -222,6 +222,14 @@ const ButtonGroup = Widget.inherit({
             .appendTo(this.$element());
 
         const selectedItems = this.option("selectedItems");
+        let selectionRequired = false;
+
+        if(this.option("selectedItemKeys").length || selectedItems.length) {
+            if(this.option("selectionMode") === "single") {
+                selectionRequired = true;
+            }
+        }
+
         const options = {
             selectionMode: this.option("selectionMode"),
             items: this.option("items"),
@@ -233,12 +241,13 @@ const ButtonGroup = Widget.inherit({
             accessKey: this.option("accessKey"),
             tabIndex: this.option("tabIndex"),
             noDataText: "",
-            selectionRequired: this.option("selectionMode") === "single",
+            selectionRequired: selectionRequired,
             onItemRendered: e => {
                 const width = this.option("width");
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
             },
             onSelectionChanged: e => {
+                this._buttonsCollection._setOptionSilent("selectionRequired", this.option("selectionMode") === "single");
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
             },

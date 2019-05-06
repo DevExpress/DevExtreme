@@ -5,6 +5,7 @@ import devices from "core/devices";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import typeUtils from "core/utils/type";
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import "common.css!";
 
@@ -68,57 +69,6 @@ QUnit.module("option changed", {
         const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
         assert.equal(buttons[0].option("text"), "left", "text of first button");
         assert.equal(buttons[1].option("text"), "right", "text of second button");
-    });
-
-    QUnit.test("change selection via the selectedItems in the single mode", function(assert) {
-        this.buttonGroup.option("selectedItems", [{ text: "button 2" }]);
-
-        const $buttons = this.$buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is not selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(this.buttonGroup.option("selectedItemKeys"), ["button 2"], "selectedItemKeys");
-    });
-
-    QUnit.test("change selection via the selectedItems in the multiple mode", function(assert) {
-        const $buttonGroup = $("#widget").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            selectionMode: "multiple"
-        });
-
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        buttonGroup.option("selectedItems", [{ text: "button 1" }, { text: "button 2" }]);
-
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1", "button 2"], "selectedItemKeys");
-    });
-
-    QUnit.test("change selection via the selectedItemKeys in the single mode", function(assert) {
-        this.buttonGroup.option("selectedItemKeys", ["button 2"]);
-
-        const $buttons = this.$buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is not selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(this.buttonGroup.option("selectedItems"), [{ text: "button 2" }], "selectedItems");
-    });
-
-    QUnit.test("change selection via the selectedItemKeys in the multiple mode", function(assert) {
-        this.buttonGroup.option("selectionMode", "multiple");
-        this.buttonGroup.option("selectedItemKeys", ["button 1", "button 2"]);
-
-        const $buttons = this.$buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(this.buttonGroup.option("selectedItems"), [{ text: "button 1" }, { text: "button 2" }], "selectedItems");
-    });
-
-    QUnit.test("change the onSelectionChanged event", function(assert) {
-        const stub = sinon.stub();
-        this.buttonGroup.option("onSelectionChanged", stub);
-        this.buttonGroup.option("selectedItemKeys", ["button 2"]);
-
-        assert.equal(stub.callCount, 1);
     });
 
     QUnit.test("change the width option", function(assert) {
@@ -192,7 +142,6 @@ QUnit.module("option changed", {
 
 
 QUnit.module("Events", () => {
-
     class ButtonGroupEventsTestHelper {
         constructor(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
             this.handler = sinon.spy();
@@ -277,201 +226,321 @@ if(devices.current().deviceType === "desktop") {
     registerKeyHandlerTestHelper.runTests(QUnit, "dxButtonGroup");
 }
 
-QUnit.module("selection", () => {
-    QUnit.test("change selection in the single by click", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }]
-        });
+QUnit.module("Single/Multiple mode", () => {
+    class ButtonGroupSelectionTestHelper {
+        constructor(onInitialOption, selectionMode) {
+            this.handler = sinon.spy();
+            this.onInitialOption = onInitialOption;
+            this.selectionMode = selectionMode;
+        }
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
+        createButtonGroup(options) {
+            if(this.onInitialOption) {
+                let config = $.extend({
+                    items: [{ text: "btn1" }, { text: "btn2" }],
+                    selectionMode: this.selectionMode,
+                    onSelectionChanged: (e) => {
+                        this.selectedItems = {
+                            addedItems: e.addedItems,
+                            removedItems: e.removedItems
+                        };
+                        this.handler();
+                    }
+                }, options);
 
-        $buttons.eq(0).trigger("dxclick");
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1"], "selectedItemKeys");
+                this.buttonGroup = $("#widget").dxButtonGroup(config).dxButtonGroup("instance");
+            } else {
+                this.buttonGroup = $("#widget").dxButtonGroup({
+                    items: options && options.items ? options.items : [{ text: "btn1" }, { text: "btn2" }]
+                }).dxButtonGroup("instance");
 
-        $buttons.eq(1).trigger("dxclick");
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 2" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 2"], "selectedItemKeys");
-    });
+                this.buttonGroup.option("onSelectionChanged", (e) => {
+                    this.selectedItems = {
+                        addedItems: e.addedItems,
+                        removedItems: e.removedItems
+                    };
+                    this.handler();
+                });
 
-    QUnit.test("deselect does not happen for the single selection mode", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }]
-        });
+                this.buttonGroup.option("selectionMode", this.selectionMode);
+                if(options.keyExpr) this.buttonGroup.option("keyExpr", options.keyExpr);
+                if(options.selectedItemKeys) this.buttonGroup.option("selectedItemKeys", options.selectedItemKeys);
+                if(options.selectedItems) this.buttonGroup.option("selectedItems", options.selectedItems);
+            }
+        }
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-        const $button = $buttonGroup.find(`.${BUTTON_CLASS}`).first();
+        _getButtonGroupItem(index) {
+            return this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(index);
+        }
 
-        $button.trigger("dxclick");
-        $button.trigger("dxclick");
+        triggerButtonClick(itemIndex) {
+            eventsEngine.trigger(this._getButtonGroupItem(itemIndex), "dxclick");
+        }
 
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1"], "selectedItemKeys");
-    });
+        checkAsserts(expectedSelectedItems, expectedSelectedItemKeys, expectedSelectionChangeCallCount) {
+            QUnit.assert.strictEqual(this.handler.callCount, expectedSelectionChangeCallCount, "handler.callCount");
+            QUnit.assert.deepEqual(this.buttonGroup.option("selectedItems"), expectedSelectedItems || [], "selectedItems");
+            QUnit.assert.deepEqual(this.buttonGroup.option("selectedItemKeys"), expectedSelectedItemKeys || [], "selectedItemKeys");
+        }
 
-    QUnit.test("change election in the multiple mode by click", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            selectionMode: "multiple"
-        });
+        checkSelectionChangeArgs(expectedAddedItems, expectedRemovedItems) {
+            if(typeUtils.isDefined(this.selectedItems)) {
+                QUnit.assert.deepEqual(this.selectedItems.addedItems || [], expectedAddedItems || [], "addedItems");
+                QUnit.assert.deepEqual(this.selectedItems.removedItems || [], expectedRemovedItems || [], "removedItems");
+            }
+        }
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
+        checkSelectedItems(indexes) {
+            this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).each((index)=> {
+                const isItemSelected = indexes.indexOf(index) !== -1;
 
-        $buttons.eq(0).trigger("dxclick");
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1"], "selectedItemKeys");
+                QUnit.assert.equal(this._getButtonGroupItem(index).hasClass(DX_ITEM_SELECTED_CLASS), isItemSelected, `item ${index} is ${isItemSelected ? "" : "not" } selected`);
+            });
+        }
+    }
 
-        $buttons.eq(1).trigger("dxclick");
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }, { text: "button 2" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1", "button 2"], "selectedItemKeys");
-    });
+    ["single", "multiple"].forEach((selectionMode) => {
+        let config = ` ,selectionMode=${selectionMode}`;
 
-    QUnit.test("deselect all buttons in the multiple mode", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            selectedItemKeys: ["button 1", "button 2"],
-            selectionMode: "multiple"
-        });
+        [true, false].forEach((onInitialOption) => {
+            config = ` ,onInitial=${onInitialOption}, selectionMode=${selectionMode}`;
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
+            QUnit.test("Selection by default" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({});
+                helper.checkAsserts([], [], 0);
+                helper.checkSelectedItems([]);
+            });
 
-        $buttons.eq(0).trigger("dxclick");
-        $buttons.eq(1).trigger("dxclick");
+            QUnit.test("Change via selectedItemKeys: [] -> ['btn2']" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({ selectedItemKeys: [ "btn2" ] });
 
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), [], "selectedItemKeys");
-    });
+                helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 0 : 1);
+                helper.checkSelectionChangeArgs([{ "text": "btn2" }], []);
+                helper.checkSelectedItems([1]);
+            });
 
-    QUnit.test("сheck a selection with the custom keyExpr", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{
-                icon: "leftIcon",
-                alignment: "left"
-            },
-            {
-                icon: "centerIcon",
-                alignment: "center"
-            },
-            {
-                icon: "rightIcon",
-                alignment: "right"
-            }],
-            keyExpr: "alignment",
-            selectionMode: "multiple"
-        });
+            QUnit.test("Change via selectedItems: [] -> [{ 'text': 'btn2' }]" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({ selectedItems: [ { "text": "btn2" } ] });
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
+                helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 0 : 1);
+                helper.checkSelectedItems([1]);
+                helper.checkSelectionChangeArgs([{ "text": "btn2" }], []);
+            });
 
-        $buttons.eq(0).trigger("dxclick");
-        $buttons.eq(2).trigger("dxclick");
+            QUnit.test("Change selection: [] -> ['btn2']" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({});
 
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(2).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{
-            icon: "leftIcon",
-            alignment: "left"
-        }, {
-            icon: "rightIcon",
-            alignment: "right"
-        }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["left", "right"], "selectedItemKeys");
-    });
+                helper.triggerButtonClick(1);
 
-    QUnit.test("сheck a selection with the default keyExpr", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{
-                icon: "leftIcon",
-                text: "left"
-            },
-            {
-                icon: "centerIcon",
-                text: "center"
-            },
-            {
-                icon: "rightIcon",
-                text: "right"
-            }],
-            selectionMode: "multiple"
-        });
+                helper.checkAsserts([{ "text": "btn2" }], ["btn2"], 1);
+                helper.checkSelectedItems([1]);
+                helper.checkSelectionChangeArgs([{ "text": "btn2" }], []);
+            });
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
+            QUnit.test("Change selection: ['btn2'] -> ['btn1'] - ['btn1', 'btn2']" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({ selectedItemKeys: ["btn2"] });
 
-        $buttons.eq(0).trigger("dxclick");
-        $buttons.eq(2).trigger("dxclick");
+                helper.triggerButtonClick(0);
 
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(2).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [
-            { icon: "leftIcon", text: "left" },
-            { icon: "rightIcon", text: "right" }
-        ], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["left", "right"], "selectedItemKeys");
-    });
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn1" }], ["btn1"], onInitialOption ? 1 : 2);
+                    helper.checkSelectedItems([0]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn1" }], [{ "text": "btn2" }]);
+                } else {
+                    helper.checkAsserts([{ "text": "btn1" }, { "text": "btn2" }], ["btn1", "btn2"], onInitialOption ? 1 : 2);
+                    helper.checkSelectedItems([0, 1]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn1" }], []);
+                }
+            });
 
-    QUnit.test("onSelectedChanged event", function(assert) {
-        let selectedItems;
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{
-                text: "button 1",
-                icon: "icon 1"
-            }, {
-                text: "button 2",
-                icon: "icon 2"
-            }],
-            onSelectionChanged: (e) => {
-                selectedItems = {
-                    addedItems: e.addedItems,
-                    removedItems: e.removedItems
-                };
-            },
-            selectionMode: "multiple"
-        });
+            QUnit.test("Change selection: [] -> ['btn1'] -> ['btn2'] - ['btn1', 'btn2']" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({});
 
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
+                helper.triggerButtonClick(0);
 
-        $buttons.eq(0).trigger("dxclick");
-        assert.deepEqual(selectedItems, {
-            addedItems: [{
-                text: "button 1",
-                icon: "icon 1"
-            }],
-            removedItems: []
-        });
+                helper.checkAsserts([{ "text": "btn1" }], ["btn1"], 1);
+                helper.checkSelectedItems([0]);
+                helper.checkSelectionChangeArgs([{ "text": "btn1" }], []);
 
-        $buttons.eq(1).trigger("dxclick");
-        assert.deepEqual(selectedItems, {
-            addedItems: [{
-                text: "button 2",
-                icon: "icon 2"
-            }],
-            removedItems: []
-        });
+                helper.triggerButtonClick(1);
 
-        $buttons.eq(1).trigger("dxclick");
-        assert.deepEqual(selectedItems, {
-            addedItems: [],
-            removedItems: [{
-                text: "button 2",
-                icon: "icon 2"
-            }]
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn2" }], ["btn2"], 2);
+                    helper.checkSelectedItems([1]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn2" }], [{ "text": "btn1" }]);
+                } else {
+                    helper.checkAsserts([{ "text": "btn1" }, { "text": "btn2" }], ["btn1", "btn2"], 2);
+                    helper.checkSelectedItems([0, 1]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn2" }], []);
+                }
+            });
+
+            QUnit.test("Deselect: selectedItemKeys ['btn2'] -> ['btn2'] - []" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({ selectedItemKeys: ["btn2"] });
+
+                helper.triggerButtonClick(1);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 0 : 1);
+                    helper.checkSelectedItems([1]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn2" }], []);
+                }
+
+                if(selectionMode === "multiple") {
+                    helper.checkAsserts([], [], onInitialOption ? 1 : 2);
+                    helper.checkSelectedItems([]);
+                    helper.checkSelectionChangeArgs([], [{ "text": "btn2" }]);
+                }
+            });
+
+            QUnit.test("Deselect: selectedItems {'text': 'btn2' } -> ['btn2'] - []" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({ selectedItems: [{ "text": "btn2" }] });
+
+                helper.triggerButtonClick(1);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 0 : 1);
+                    helper.checkSelectedItems([1]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn2" }], []);
+                }
+
+                if(selectionMode === "multiple") {
+                    helper.checkAsserts([], [], onInitialOption ? 1 : 2);
+                    helper.checkSelectedItems([]);
+                    helper.checkSelectionChangeArgs([], [{ "text": "btn2" }]);
+                }
+            });
+
+            QUnit.test("Deselect: ['btn1'] - ['btn1', 'btn2'] -> ['btn2'] - ['btn1'] -> ['btn1'] - []" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({ selectedItemKeys: ["btn1", "btn2"] });
+
+                helper.triggerButtonClick(1);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 1 : 3);
+                    helper.checkSelectedItems([1]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn2" }], [{ "text": "btn1" }]);
+                } else {
+                    helper.checkAsserts([{ "text": "btn1" }], ["btn1"], onInitialOption ? 1 : 2);
+                    helper.checkSelectedItems([0]);
+                    helper.checkSelectionChangeArgs([], [{ "text": "btn2" }]);
+                }
+
+                helper.triggerButtonClick(0);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn1" }], ["btn1"], onInitialOption ? 2 : 4);
+                    helper.checkSelectedItems([0]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn1" }], [{ "text": "btn2" }]);
+                } else {
+                    helper.checkAsserts([], [], onInitialOption ? 2 : 3);
+                    helper.checkSelectedItems([]);
+                    helper.checkSelectionChangeArgs([], [{ "text": "btn1" }]);
+                }
+            });
+
+            QUnit.test("Deselect: ['btn1'] - ['btn1', 'btn2'] -> ['btn2'] - ['btn1'] -> ['btn1'] - []" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({ selectedItems: [{ "text": "btn1" }, { "text": "btn2" }] });
+
+                helper.triggerButtonClick(1);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 1 : 2);
+                    helper.checkSelectedItems([1]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn2" }], [{ "text": "btn1" }]);
+                } else {
+                    helper.checkAsserts([{ "text": "btn1" }], ["btn1"], onInitialOption ? 1 : 2);
+                    helper.checkSelectedItems([0]);
+                    helper.checkSelectionChangeArgs([], [{ "text": "btn2" }]);
+                }
+
+                helper.triggerButtonClick(0);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ "text": "btn1" }], ["btn1"], onInitialOption ? 2 : 3);
+                    helper.checkSelectedItems([0]);
+                    helper.checkSelectionChangeArgs([{ "text": "btn1" }], [{ "text": "btn2" }]);
+                } else {
+                    helper.checkAsserts([], [], onInitialOption ? 2 : 3);
+                    helper.checkSelectedItems([]);
+                    helper.checkSelectionChangeArgs([], [{ "text": "btn1" }]);
+                }
+            });
+
+            QUnit.test("KeyExpr: default, [] -> ['left'] -> ['left'] - ['left', 'right']" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({
+                    items: [
+                        { icon: "leftIcon", text: "left" },
+                        { icon: "centerIcon", text: "center" },
+                        { icon: "rightIcon", text: "right" }
+                    ],
+                });
+
+                helper.triggerButtonClick(0);
+
+                helper.checkAsserts([{ icon: "leftIcon", text: "left" }], ["left"], 1);
+                helper.checkSelectedItems([0]);
+                helper.checkSelectionChangeArgs([{ icon: "leftIcon", text: "left" }], []);
+
+                helper.triggerButtonClick(2);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ icon: "rightIcon", text: "right" }], ["right"], 2);
+                    helper.checkSelectedItems([2]);
+                    helper.checkSelectionChangeArgs([{ icon: "rightIcon", text: "right" }], [{ icon: "leftIcon", text: "left" }]);
+                } else {
+                    helper.checkAsserts([{ icon: "leftIcon", text: "left" }, { icon: "rightIcon", text: "right" }], ["left", "right"], 2);
+                    helper.checkSelectedItems([0, 2]);
+                    helper.checkSelectionChangeArgs([{ icon: "rightIcon", text: "right" }], []);
+                }
+            });
+
+            QUnit.test("KeyExpr: custom, [] -> ['left'] -> ['left'] - ['left', 'right']" + config, () => {
+                let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                helper.createButtonGroup({
+                    items: [
+                        { icon: "leftIcon", alignment: "left" },
+                        { icon: "centerIcon", alignment: "center" },
+                        { icon: "rightIcon", alignment: "right" }
+                    ],
+                    keyExpr: "alignment"
+                });
+
+                helper.triggerButtonClick(0);
+
+                helper.checkAsserts([{ icon: "leftIcon", alignment: "left" }], ["left"], 1);
+                helper.checkSelectedItems([0]);
+                helper.checkSelectionChangeArgs([{ icon: "leftIcon", alignment: "left" }], []);
+
+                helper.triggerButtonClick(2);
+
+                if(selectionMode === "single") {
+                    helper.checkAsserts([{ icon: "rightIcon", alignment: "right" }], ["right"], 2);
+                    helper.checkSelectedItems([2]);
+                    helper.checkSelectionChangeArgs(
+                        [{ icon: "rightIcon", alignment: "right" }],
+                        [{ icon: "leftIcon", alignment: "left" }]
+                    );
+                } else {
+                    helper.checkAsserts([
+                        { icon: "leftIcon", alignment: "left" },
+                        { icon: "rightIcon", alignment: "right" }
+                    ], ["left", "right"], 2);
+                    helper.checkSelectedItems([0, 2]);
+                    helper.checkSelectionChangeArgs([{ icon: "rightIcon", alignment: "right" }], []);
+                }
+            });
         });
     });
 });
