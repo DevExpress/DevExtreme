@@ -12,7 +12,6 @@ import DiagramContextMenu from "./ui.diagram.contextmenu";
 import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
 import { getDiagram } from "./diagram_importer";
-import { getWindow } from "../../core/utils/window";
 import { hasWindow } from "../../core/utils/window";
 
 const DIAGRAM_CLASS = "dx-diagram";
@@ -676,12 +675,14 @@ class Diagram extends Widget {
         }
     }
     _raiseToolboxDragStart() {
-        const body = getWindow().document.body;
-        body.className += " dx-skip-gesture-event";
+        if(this._leftPanel) {
+            this._leftPanel.$element().addClass("dx-skip-gesture-event");
+        }
     }
     _raiseToolboxDragEnd() {
-        const body = getWindow().document.body;
-        body.className = body.className.replace(" dx-skip-gesture-event", "");
+        if(this._leftPanel) {
+            this._leftPanel.$element().removeClass("dx-skip-gesture-event");
+        }
     }
 
     _optionChanged(args) {
