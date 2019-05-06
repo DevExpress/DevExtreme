@@ -450,6 +450,31 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
     });
 
+    QUnit.test("DateTimeIndicator should have correct positions, Day view with groups and allDay customization, verticalGrouping (T737095)", function(assert) {
+        let $style = $("<style>").text('.dx-scheduler-work-space-vertical-grouped .dx-scheduler-all-day-table-row { height: 150px } .dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-day .dx-scheduler-all-day-title { height: 150px !important } ');
+
+        try {
+            $style.appendTo("head");
+
+            this.instance.option({
+                shadeUntilCurrentTime: false,
+                indicatorTime: new Date(2017, 8, 5, 12, 45)
+            });
+
+            this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+            var $element = this.instance.$element(),
+                $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+                cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).get(0).getBoundingClientRect().height;
+
+            assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight + 150, "Indicator top is 9.5 cells + allDay panel height");
+
+            assert.equal($indicators.eq(1).position().top, 21.5 * cellHeight + 2 * 150, "Second indicator top is 21.5 cells + two allDay panel height");
+        } finally {
+            $style.remove();
+        }
+    });
+
     QUnit.test("DateTimeIndicator should have correct positions, Day view with groups without allDay panels, verticalGrouping", function(assert) {
         this.instance.option({
             showAllDayPanel: false,
