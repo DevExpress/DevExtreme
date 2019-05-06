@@ -432,7 +432,7 @@ Axis.prototype = {
         }
 
         if(isDefined(startValue)) {
-            startValue = this._validateUnit(startValue, "E2105", "strip");
+            startValue = this.validateUnit(startValue, "E2105", "strip");
             start = this._getTranslatedCoord(startValue, -1);
             if(!isDefined(start) && isContinuous) {
                 start = (startValue < min) ? canvasStart : canvasEnd;
@@ -442,7 +442,7 @@ Axis.prototype = {
         }
 
         if(isDefined(endValue)) {
-            endValue = this._validateUnit(endValue, "E2105", "strip");
+            endValue = this.validateUnit(endValue, "E2105", "strip");
             end = this._getTranslatedCoord(endValue, 1);
             if(!isDefined(end) && isContinuous) {
                 end = (endValue > min) ? canvasEnd : canvasStart;
@@ -772,7 +772,7 @@ Axis.prototype = {
         return margins;
     },
 
-    _validateUnit: function(unit, idError, parameters) {
+    validateUnit: function(unit, idError, parameters) {
         var that = this;
         unit = that.parser(unit);
         if(unit === undefined && idError) {
@@ -1960,11 +1960,11 @@ Axis.prototype = {
     _validateVisualRange(visualRange) {
         const range = getVizRangeObject(visualRange);
         if(range.startValue !== undefined) {
-            range.startValue = this._validateUnit(range.startValue);
+            range.startValue = this.validateUnit(range.startValue);
         }
 
         if(range.endValue !== undefined) {
-            range.endValue = this._validateUnit(range.endValue);
+            range.endValue = this.validateUnit(range.endValue);
         }
 
         return convertVisualRangeObject(range, visualRange);
@@ -1974,10 +1974,10 @@ Axis.prototype = {
         const that = this;
 
         if(options.min !== undefined) {
-            options.min = that._validateUnit(options.min, "E2106");
+            options.min = that.validateUnit(options.min, "E2106");
         }
         if(options.max !== undefined) {
-            options.max = that._validateUnit(options.max, "E2106");
+            options.max = that.validateUnit(options.max, "E2106");
         }
 
         options.wholeRange = that._validateVisualRange(options.wholeRange);

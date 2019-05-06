@@ -125,7 +125,7 @@ circularAxes = polarAxes.circular = {
         const period = options.period;
 
         if(isDefined(originValue)) {
-            originValue = that._validateUnit(originValue);
+            originValue = that.validateUnit(originValue);
         }
 
         if(period > 0 && options.argumentType === constants.numeric) {
