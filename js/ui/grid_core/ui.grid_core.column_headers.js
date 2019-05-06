@@ -89,24 +89,18 @@ module.exports = {
                 },
 
                 _getDefaultTemplate: function(column) {
-                    var that = this,
-                        template;
+                    var that = this;
 
-                    if(column.command) {
-                        template = function($container, options) {
-                            var column = options.column;
+                    return function($container, options) {
+                        var $content = column.command ? $container : createCellContent(that, $container, options),
+                            caption = !isDefined(column.groupIndex) && column.caption;
 
+                        if(caption) {
+                            $content.text(caption);
+                        } else if(column.command) {
                             $container.html("&nbsp;");
-                            $container.addClass(column.cssClass);
-                        };
-                    } else {
-                        template = function($container, options) {
-                            var $content = createCellContent(that, $container, options);
-                            $content.text(column.caption);
-                        };
-                    }
-
-                    return template;
+                        }
+                    };
                 },
 
                 _getHeaderTemplate: function(column) {
