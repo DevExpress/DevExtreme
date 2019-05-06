@@ -235,34 +235,24 @@ QUnit.module("Single/Multiple mode", () => {
         }
 
         createButtonGroup(options) {
-            if(this.onInitialOption) {
-                let config = $.extend({
-                    items: [{ text: "btn1" }, { text: "btn2" }],
-                    selectionMode: this.selectionMode,
-                    onSelectionChanged: (e) => {
-                        this.selectedItems = {
-                            addedItems: e.addedItems,
-                            removedItems: e.removedItems
-                        };
-                        this.handler();
-                    }
-                }, options);
-
-                this.buttonGroup = $("#widget").dxButtonGroup(config).dxButtonGroup("instance");
-            } else {
-                this.buttonGroup = $("#widget").dxButtonGroup({
-                    items: options && options.items ? options.items : [{ text: "btn1" }, { text: "btn2" }]
-                }).dxButtonGroup("instance");
-
-                this.buttonGroup.option("onSelectionChanged", (e) => {
+            let config = {
+                selectionMode: this.selectionMode,
+                onSelectionChanged: (e) => {
                     this.selectedItems = {
                         addedItems: e.addedItems,
                         removedItems: e.removedItems
                     };
                     this.handler();
-                });
+                }
+            };
 
-                this.buttonGroup.option("selectionMode", this.selectionMode);
+            if(this.onInitialOption) {
+                this.buttonGroup = $("#widget").dxButtonGroup($.extend(config, options)).dxButtonGroup("instance");
+            } else {
+                this.buttonGroup = $("#widget").dxButtonGroup({}).dxButtonGroup("instance");
+                this.buttonGroup.option("onSelectionChanged", config.onSelectionChanged);
+                this.buttonGroup.option("selectionMode", config.selectionMode);
+                this.buttonGroup.option("items", options.items);
                 if(options.keyExpr) this.buttonGroup.option("keyExpr", options.keyExpr);
                 if(options.selectedItemKeys) this.buttonGroup.option("selectedItemKeys", options.selectedItemKeys);
                 if(options.selectedItems) this.buttonGroup.option("selectedItems", options.selectedItems);
@@ -307,14 +297,14 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Selection by default" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({});
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }] });
                 helper.checkAsserts([], [], 0);
                 helper.checkSelectedItems([]);
             });
 
             QUnit.test("Change via selectedItemKeys: [] -> ['btn2']" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({ selectedItemKeys: [ "btn2" ] });
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }], selectedItemKeys: [ "btn2" ] });
 
                 helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 0 : 1);
                 helper.checkSelectionChangeArgs([{ "text": "btn2" }], []);
@@ -323,7 +313,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Change via selectedItems: [] -> [{ 'text': 'btn2' }]" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({ selectedItems: [ { "text": "btn2" } ] });
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }], selectedItems: [ { "text": "btn2" } ] });
 
                 helper.checkAsserts([{ "text": "btn2" }], ["btn2"], onInitialOption ? 0 : 1);
                 helper.checkSelectedItems([1]);
@@ -332,7 +322,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Change selection: [] -> ['btn2']" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({});
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }] });
 
                 helper.triggerButtonClick(1);
 
@@ -343,7 +333,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Change selection: ['btn2'] -> ['btn1'] - ['btn1', 'btn2']" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({ selectedItemKeys: ["btn2"] });
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }], selectedItemKeys: ["btn2"] });
 
                 helper.triggerButtonClick(0);
 
@@ -360,7 +350,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Change selection: [] -> ['btn1'] -> ['btn2'] - ['btn1', 'btn2']" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({});
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }] });
 
                 helper.triggerButtonClick(0);
 
@@ -383,7 +373,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Deselect: selectedItemKeys ['btn2'] -> ['btn2'] - []" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({ selectedItemKeys: ["btn2"] });
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }], selectedItemKeys: ["btn2"] });
 
                 helper.triggerButtonClick(1);
 
@@ -402,7 +392,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Deselect: selectedItems {'text': 'btn2' } -> ['btn2'] - []" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({ selectedItems: [{ "text": "btn2" }] });
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }], selectedItems: [{ "text": "btn2" }] });
 
                 helper.triggerButtonClick(1);
 
@@ -421,7 +411,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Deselect: ['btn1'] - ['btn1', 'btn2'] -> ['btn2'] - ['btn1'] -> ['btn1'] - []" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({ selectedItemKeys: ["btn1", "btn2"] });
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }], selectedItemKeys: ["btn1", "btn2"] });
 
                 helper.triggerButtonClick(1);
 
@@ -450,7 +440,7 @@ QUnit.module("Single/Multiple mode", () => {
 
             QUnit.test("Deselect: ['btn1'] - ['btn1', 'btn2'] -> ['btn2'] - ['btn1'] -> ['btn1'] - []" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                helper.createButtonGroup({ selectedItems: [{ "text": "btn1" }, { "text": "btn2" }] });
+                helper.createButtonGroup({ items: [{ text: "btn1" }, { text: "btn2" }], selectedItems: [{ "text": "btn1" }, { "text": "btn2" }] });
 
                 helper.triggerButtonClick(1);
 
