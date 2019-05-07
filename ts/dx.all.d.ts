@@ -2167,6 +2167,8 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxDropDownEditor.Options.applyValueMode */
         applyValueMode?: 'instantly' | 'useButtons';
+        /** @name dxDropDownEditor.Options.buttons */
+        buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
         /** @name dxDropDownEditor.Options.deferRendering */
         deferRendering?: boolean;
         /** @name dxDropDownEditor.Options.dropDownButtonTemplate */
@@ -3285,6 +3287,8 @@ declare module DevExpress.ui {
     }
     /** @name dxNumberBox.Options */
     export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
+        /** @name dxNumberBox.Options.buttons */
+        buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
         /** @name dxNumberBox.Options.format */
         format?: format;
         /** @name dxNumberBox.Options.invalidValueMessage */
@@ -4386,7 +4390,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<'clear' | 'spins' | 'dropDown' | dxTextEditorButton>;
+        buttons?: Array<string | 'clear' | dxTextEditorButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */

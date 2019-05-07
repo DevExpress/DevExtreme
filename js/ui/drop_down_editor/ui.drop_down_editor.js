@@ -196,6 +196,14 @@ var DropDownEditor = TextBox.inherit({
              */
             showDropDownButton: true,
 
+            /**
+            * @name dxDropDownEditorOptions.buttons
+            * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
+            * @default undefined
+            * @inheritdoc
+            */
+            buttons: void 0,
+
             dropDownOptions: {},
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
