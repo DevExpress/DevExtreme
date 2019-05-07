@@ -3646,7 +3646,7 @@ declare module DevExpress.ui {
         /** @name dxPopup.Options.toolbarItems.visible */
         visible?: boolean;
         /** @name dxPopup.Options.toolbarItems.widget */
-        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup';
+        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
     }
     /** @name dxPopup */
     export class dxPopup extends dxOverlay {
@@ -4573,7 +4573,7 @@ declare module DevExpress.ui {
         /** @name dxToolbarItem.showText */
         showText?: 'always' | 'inMenu';
         /** @name dxToolbarItem.widget */
-        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup';
+        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
     }
     /** @name dxTooltip.Options */
     export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
