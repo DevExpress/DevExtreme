@@ -10964,6 +10964,33 @@ QUnit.test("Animate label to the new position on second drawing", function(asser
     });
 });
 
+QUnit.test("Update hint on axis redrawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        visible: false,
+        label: {
+            customizeHint() {
+                return "hint";
+            },
+            visible: true,
+        }
+    });
+    this.generatedTicks = [1];
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    const label = renderer.text.lastCall.returnValue;
+    label.setTitle.reset();
+    // act
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+    assert.equal(label.setTitle.callCount, 1);
+    assert.equal(label.setTitle.lastCall.args[0], "hint");
+});
+
 QUnit.test("Fade in new label on second drawing", function(assert) {
     // arrange
     var renderer = this.renderer;
