@@ -837,8 +837,18 @@
  */
 
 /**
- * @typedef {string} Enums.TextEditorButtonName
- * @enum {'clear'|'spins'|'dropDown'}
+ * @typedef {string} Enums.TextBoxButtonName
+ * @enum {'clear'}
+ */
+
+/**
+ * @typedef {string} Enums.NumberBoxButtonName
+ * @enum {'clear'|'spins'}
+ */
+
+/**
+ * @typedef {string} Enums.DropDownEditorButtonName
+ * @enum {'clear'|'dropDown'}
  */
 
 /**

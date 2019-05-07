@@ -106,7 +106,7 @@ var TextEditorBase = Editor.inherit({
 
             /**
             * @name dxTextEditorOptions.buttons
-            * @type Array<Enums.TextEditorButtonName,dxTextEditorButton>
+            * @type Array<string, Enums.TextBoxButtonName, dxTextEditorButton>
             * @default undefined
             */
             buttons: void 0,
