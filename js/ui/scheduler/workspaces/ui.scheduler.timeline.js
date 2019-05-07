@@ -219,7 +219,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
                     var templateOptions = {
                         model: {
                             text: text,
-                            date: firstViewDate
+                            date: new Date(firstViewDate)
                         },
                         container: $th,
                         index: i
