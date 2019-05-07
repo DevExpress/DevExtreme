@@ -5467,6 +5467,17 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.strictEqual(hasEllipsis, true);
         });
 
+        QUnit.test("Apply ellipsis with an empty line do not throw exceptions (T735141)", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "Multiline chart with \n\n an empty line" }),
+                hasEllipsis;
+
+            text.element.getBBox = sinon.stub().returns({ width: 300 });
+            this.prepareRenderBeforeEllipsis();
+            hasEllipsis = text.applyEllipsis(105);
+
+            assert.strictEqual(hasEllipsis, true);
+        });
+
         QUnit.test("Apply ellipsis. Single line, big max width", function(assert) {
             var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test text for checking ellipsis with single line" }),
                 hasEllipsis;
