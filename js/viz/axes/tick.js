@@ -28,6 +28,13 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
         return fontStyle;
     }
 
+    function createLabelHint(tick, range) {
+        const labelHint = axis.formatHint(tick.value, labelOptions, range);
+        if(isDefined(labelHint) && labelHint !== "") {
+            tick.label.setTitle(labelHint);
+        }
+    }
+
     return function(value) {
         var tick = {
             value: value,
@@ -118,6 +125,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 if(this.label) {
                     this.label.attr({ text, rotate: 0 }).append(elementsGroup);
+                    createLabelHint(this, range);
                     this.updateLabelPosition();
                     return;
                 }
@@ -133,10 +141,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                     this.updateLabelPosition();
 
-                    const labelHint = axis.formatHint(this.value, labelOptions, range);
-                    if(isDefined(labelHint) && labelHint !== "") {
-                        this.label.setTitle(labelHint);
-                    }
+                    createLabelHint(this, range);
                 }
             },
 
