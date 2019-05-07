@@ -175,6 +175,10 @@ class OneDriveFileProvider extends FileProvider {
         return path === "" ? "" : `:/${path}:`;
     }
 
+    _hasSubDirs(dataObj) {
+        return dataObj.hasOwnProperty("folder") && dataObj.folder.childCount > 0;
+    }
+
 }
 
 module.exports = OneDriveFileProvider;

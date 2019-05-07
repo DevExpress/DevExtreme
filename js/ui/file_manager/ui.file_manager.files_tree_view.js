@@ -42,6 +42,7 @@ class FileManagerFilesTreeView extends Widget {
             rootValue: "",
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
             itemTemplate: this._createFilesTreeViewItemTemplate.bind(this),
+            hasItemsExpr: "dataItem.hasSubDirs",
             onItemClick: this._onFilesTreeViewItemClick.bind(this),
             onItemExpanded: ({ itemData }) => this._model.changeItemExpandState(itemData, true),
             onItemCollapsed: ({ itemData }) => this._model.changeItemExpandState(itemData, false),

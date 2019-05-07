@@ -39,6 +39,10 @@ class AjaxFileProvider extends FileProvider {
          * @name AjaxFileProviderOptions.thumbnailExpr
          * @type string|function(fileItem)
          */
+        /**
+         * @name AjaxFileProviderOptions.itemsExpr
+         * @type string|function(fileItem)
+         */
         this._options = options;
         this._provider = null;
     }

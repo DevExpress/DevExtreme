@@ -13,6 +13,9 @@ const createFileManagerItem = (parentPath, dataObj) => {
     item.dateModified = deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;
+    if(dataObj.isFolder) {
+        item.hasSubDirs = true;
+    }
     return item;
 };
 

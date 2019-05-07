@@ -565,6 +565,8 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name AjaxFileProvider.Options.isFolderExpr */
         isFolderExpr?: string | Function;
+        /** @name AjaxFileProvider.Options.itemsExpr */
+        itemsExpr?: string | Function;
         /** @name AjaxFileProvider.Options.nameExpr */
         nameExpr?: string | Function;
         /** @name AjaxFileProvider.Options.sizeExpr */
@@ -586,6 +588,8 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name ArrayFileProvider.Options.isFolderExpr */
         isFolderExpr?: string | Function;
+        /** @name ArrayFileProvider.Options.itemsExpr */
+        itemsExpr?: string | Function;
         /** @name ArrayFileProvider.Options.nameExpr */
         nameExpr?: string | Function;
         /** @name ArrayFileProvider.Options.sizeExpr */
@@ -1351,6 +1355,8 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name WebApiFileProvider.Options.endpointUrl */
         endpointUrl?: string;
+        /** @name WebApiFileProvider.Options.hasSubDirectoriesExpr */
+        hasSubDirectoriesExpr?: string | Function;
         /** @name WebApiFileProvider.Options.isFolderExpr */
         isFolderExpr?: string | Function;
         /** @name WebApiFileProvider.Options.nameExpr */
