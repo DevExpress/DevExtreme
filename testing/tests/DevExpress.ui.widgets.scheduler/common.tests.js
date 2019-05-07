@@ -3198,57 +3198,6 @@ QUnit.testStart(function() {
         assert.equal(args.form, this.instance.getAppointmentDetailsForm(), "Appointment form is OK");
     });
 
-    QUnit.test("'_setPopupContentMaxHeight' should be called while opening popup", function(assert) {
-        this.createInstance({
-            currentDate: new Date(2015, 1, 1),
-            currentView: "day",
-            dataSource: []
-        });
-
-        var setPopupMaxHeight = sinon.stub(this.instance, "_setPopupContentMaxHeight");
-
-        this.instance.fire("showAddAppointmentPopup", {
-            startDate: new Date(2015, 1, 1),
-            endDate: new Date(2015, 1, 1, 1),
-            allDay: true
-        });
-
-        assert.ok(setPopupMaxHeight.called, "method has been called");
-    });
-
-    QUnit.test("Popup content should have correct height on a small screen", function(assert) {
-        let realClientHeight = document.documentElement.clientHeight;
-
-        try {
-            Object.defineProperty(document.documentElement, 'clientHeight', {
-                get: () => 500,
-                configurable: true
-            });
-
-            this.createInstance({
-                currentDate: new Date(2015, 1, 1),
-                currentView: "day",
-                dataSource: []
-            });
-
-            this.instance.fire("showAddAppointmentPopup", {
-                startDate: new Date(2015, 1, 1),
-                endDate: new Date(2015, 1, 1, 1),
-                allDay: true
-            });
-            this.clock.tick(300);
-
-            let $popupContent = this.instance._popup.$content();
-            let $scrollable = $popupContent.find(".dx-scrollable-content");
-
-            assert.equal($scrollable.get(0).getBoundingClientRect().height, $popupContent.height(), "Height is correct");
-        } finally {
-            Object.defineProperty(document.documentElement, 'clientHeight', {
-                get: () => realClientHeight
-            });
-        }
-    });
-
     QUnit.test("Option changed", function(assert) {
         this.createInstance();
 
