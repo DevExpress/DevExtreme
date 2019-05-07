@@ -13,6 +13,8 @@ const moduleConfig = {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
+        const that = this;
+
         this.currentWidth = 400;
         this.currentHeight = 300;
 
@@ -20,12 +22,18 @@ const moduleConfig = {
         this.originalHeight = renderer.fn.height;
 
         renderer.fn.width = function() {
-            return this.currentWidth;
-        }.bind(this);
+            if(this[0] && this[0] instanceof Window) {
+                return that.currentWidth;
+            }
+            return that.originalWidth.apply(renderer.fn, arguments);
+        };
 
         renderer.fn.height = function() {
-            return this.currentHeight;
-        }.bind(this);
+            if(this[0] && this[0] instanceof Window) {
+                return that.currentHeight;
+            }
+            return that.originalHeight.apply(renderer.fn, arguments);
+        };
 
         this.$element = $("#fileManager")
             .css("width", 350)
@@ -78,6 +86,26 @@ QUnit.module("Adaptivity", moduleConfig, () => {
 
         folders = this.wrapper.getFolderNodes().filter(":visible");
         assert.ok(folders.length > 3, "dirs tree visible");
+    });
+
+    test("dialog size corrent on different window size", function(assert) {
+        this.wrapper.getToolbarButton("Copy").trigger("dxclick");
+        this.clock.tick(400);
+
+        let $dialog = $(".dx-filemanager-dialog-folder-chooser:visible");
+        assert.equal($dialog.length, 1, "dialog is shown");
+
+        const dialogWidth = $dialog.get(0).offsetWidth;
+        const dialogHeight = $dialog.get(0).offsetHeight;
+
+        this.currentWidth = 100;
+        this.currentHeight = 100;
+
+        resizeCallbacks.fire();
+        this.clock.tick(400);
+
+        assert.ok($dialog.get(0).offsetWidth <= dialogWidth, "dialog width decreased");
+        assert.ok($dialog.get(0).offsetHeight <= dialogHeight, "dialog height decreased");
     });
 
 });
