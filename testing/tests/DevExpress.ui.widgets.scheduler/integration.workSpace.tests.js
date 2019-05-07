@@ -1130,7 +1130,7 @@ QUnit.test("dateCellTemplate should have unique date in data (T732376)", functio
             }
         ],
         dateCellTemplate: function(data, index, element) {
-            let d = Object.assign({}, data);
+            let d = data;
             $("<div>").appendTo(element).dxButton({
                 text: "Test",
                 onClick: function(e) {
