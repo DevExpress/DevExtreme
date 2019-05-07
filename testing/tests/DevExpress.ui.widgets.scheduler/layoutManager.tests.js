@@ -2894,7 +2894,7 @@ QUnit.test("Appointments should not have specific class if maxAppointmentsPerCel
     assert.ok(!$appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
 });
 
-QUnit.test("_isAppointmentEmpty should work correctly in defferent strategies", function(assert) {
+QUnit.test("_isAppointmentEmpty should work correctly in different strategies", function(assert) {
     this.createInstance({
         views: ["timelineDay", "week"],
         currentView: "timelineDay"
@@ -2908,5 +2908,10 @@ QUnit.test("_isAppointmentEmpty should work correctly in defferent strategies", 
     this.instance.option("currentView", "week");
 
     assert.ok(renderingStrategy._isAppointmentEmpty(34, 39), "Appointment is empty");
+    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), "Appointment isn't empty");
+
+    this.instance.option("currentView", "month");
+
+    assert.ok(renderingStrategy._isAppointmentEmpty(19, 50), "Appointment is empty");
     assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), "Appointment isn't empty");
 });

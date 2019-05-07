@@ -84,6 +84,10 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return this._getAppointmentHeightByTheme();
     },
 
+    _getAppointmentMinHeight: function() {
+        return this._getAppointmentDefaultHeight();
+    },
+
     _checkLongCompactAppointment: function(item, result) {
         this._splitLongCompactAppointment(item, result);
 
