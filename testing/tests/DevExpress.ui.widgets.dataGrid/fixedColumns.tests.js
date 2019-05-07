@@ -3144,3 +3144,37 @@ QUnit.test("The cells option of row should be correct when there are fixed colum
     assert.deepEqual($(cells[0].cellElement)[0], cellElements[0], "first cell element");
     assert.strictEqual(cells[1].column.command, "transparent", "transparent cell");
 });
+
+// T737955
+QUnit.test("The vertical position of the fixed table should be correct after scrolling when scrolling.useNative is true", function(assert) {
+    // arrange
+    var that = this,
+        scrollable,
+        $fixedTableElement,
+        $testElement = $("#container").width(400);
+
+    that.options.scrolling = {
+        useNative: true
+    };
+    that.options.columns = [
+        { dataField: "field1", fixed: true, width: 200 },
+        { dataField: "field2", width: 200 },
+        { dataField: "field3", width: 200 },
+        { dataField: "field4", width: 200 }
+    ];
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.height(400);
+    that.rowsView.resize();
+
+    scrollable = that.rowsView.getScrollable();
+
+    // act
+    scrollable.scrollTo({ x: 10 });
+    $(scrollable._container()).trigger("scroll");
+
+    // assert
+    $fixedTableElement = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    assert.strictEqual(translator.getTranslate($fixedTableElement).y, 0, "scroll top");
+});
