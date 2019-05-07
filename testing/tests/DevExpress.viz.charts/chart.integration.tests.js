@@ -1865,6 +1865,7 @@ function checkOrder(assert, groups, order) {
 
 var VALIDATE_GROUPS = [
     "dxc-background",
+    "dxc-title",
     "dxc-strips-group",
     "dxc-grids-group",
     "dxc-axes-group",
@@ -1875,14 +1876,15 @@ var VALIDATE_GROUPS = [
     "dxc-scale-breaks",
     "dxc-labels-group",
     "dxc-crosshair-cursor",
-    // "dxc-title",
-    "dxc-legend"
+    "dxc-legend",
+    "dx-export-menu"
 ];
 
 QUnit.test("Legend inside position", function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
+            title: "test title",
             legend: {
                 position: "inside"
             },
@@ -1890,6 +1892,9 @@ QUnit.test("Legend inside position", function(assert) {
                 enabled: true
             },
             crosshair: {
+                enabled: true
+            },
+            "export": {
                 enabled: true
             }
         }),
@@ -1904,6 +1909,7 @@ QUnit.test("Legend inside position. Zooming", function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
+            title: "test title",
             legend: {
                 position: "inside"
             },
@@ -1911,6 +1917,9 @@ QUnit.test("Legend inside position. Zooming", function(assert) {
                 enabled: true
             },
             crosshair: {
+                enabled: true
+            },
+            "export": {
                 enabled: true
             }
         }),
@@ -1931,6 +1940,7 @@ QUnit.test("Legend outside position", function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
+            title: "test title",
             legend: {
                 position: "outside"
             },
@@ -1938,6 +1948,9 @@ QUnit.test("Legend outside position", function(assert) {
                 enabled: true
             },
             crosshair: {
+                enabled: true
+            },
+            "export": {
                 enabled: true
             }
         }),
@@ -1952,6 +1965,7 @@ QUnit.test("Legend outside position. Zooming", function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
+            title: "test title",
             legend: {
                 position: "outside"
             },
@@ -1959,6 +1973,9 @@ QUnit.test("Legend outside position. Zooming", function(assert) {
                 enabled: true
             },
             crosshair: {
+                enabled: true
+            },
+            "export": {
                 enabled: true
             }
         }),
@@ -1979,6 +1996,7 @@ QUnit.test("ScrollBar", function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
+            title: "test title",
             legend: {
                 position: "inside"
             },
@@ -1990,13 +2008,44 @@ QUnit.test("ScrollBar", function(assert) {
             },
             scrollBar: {
                 visible: true
+            },
+            "export": {
+                enabled: true
             }
         }),
         root = $(chart._renderer.root.element),
         groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g",
         groups = root.find(">" + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS.concat("dxc-scroll-bar"));
+    var expectedGroups = VALIDATE_GROUPS.slice();
+    expectedGroups.splice(-1, 0, "dxc-scroll-bar");
+    checkOrder(assert, groups, expectedGroups);
+});
+
+QUnit.test("Loading indicator should be the last", function(assert) {
+    var chart = this.createChart({
+            dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
+            series: {},
+            title: "test title",
+            legend: {
+                position: "inside"
+            },
+            tooltip: {
+                enabled: true
+            },
+            crosshair: {
+                enabled: true
+            },
+            "export": {
+                enabled: true
+            }
+        }),
+        root = $(chart._renderer.root.element),
+        groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g";
+
+    chart.showLoadingIndicator();
+
+    checkOrder(assert, root.find(">" + groupTag), VALIDATE_GROUPS.concat("dx-loading-indicator"));
 });
 
 QUnit.module("Private functions", {
