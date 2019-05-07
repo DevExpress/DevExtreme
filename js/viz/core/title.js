@@ -42,7 +42,7 @@ function checkRect(rect, boundingRect) {
 }
 function Title(params) {
     this._params = params;
-    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.root || params.renderer.root, { name: "title", after: "peripheral" });
+    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.root || params.renderer.root, "title");
     this._hasText = false;
 }
 
@@ -280,7 +280,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     changeLink: function(root) {
         this._group.linkRemove();
-        this._group.linkOn(root, { name: "title", after: "peripheral" });
+        this._group.linkOn(root, "title");
     }
     // BaseWidget_layout_implementation
 });
