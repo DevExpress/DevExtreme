@@ -791,7 +791,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 translator.move($appointment, coordinates);
             };
-
         this.notifyObserver("getDraggableAppointmentArea", {
             callback: function(result) {
                 if(result) {
