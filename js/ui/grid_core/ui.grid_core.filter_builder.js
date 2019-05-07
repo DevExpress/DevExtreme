@@ -5,6 +5,7 @@ import FilterBuilder from "./../filter_builder";
 import messageLocalization from "../../localization/message";
 import ScrollView from "./../scroll_view";
 import Popup from "./../popup";
+import { restoreFocus } from "../shared/accessibility";
 
 var FilterBuilderView = modules.View.inherit({
     _renderCore: function() {
@@ -44,9 +45,10 @@ var FilterBuilderView = modules.View.inherit({
                     that.option("filterBuilderPopup.visible", args.value);
                 }
             },
-            toolbarItems: that._getPopupToolbarItems(),
+            toolbarItems: that._getPopupToolbarItems()
         }, that.option("filterBuilderPopup"), {
             onHidden: function(e) {
+                restoreFocus(that);
                 that._disposePopup();
             }
         }));

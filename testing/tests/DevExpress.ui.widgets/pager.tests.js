@@ -637,12 +637,8 @@ QUnit.test("Next page index via navigate button", function(assert) {
 
 QUnit.test("Focus selected page", function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }),
-        event = document.createEvent('Event');
+        $pages = $pager.find(".dx-pages > .dx-page");
 
-    event.initEvent('focus', true, true);
-    $pager.find(".dx-pages .dx-selection")[0].dispatchEvent(event);
-
-    let $pages = $pager.find(".dx-pages > .dx-page");
     for(let i = 0; i < $pages.length; ++i) {
         assert.equal($($pages[i]).attr("tabindex"), 0, "page tabindex");
     }
