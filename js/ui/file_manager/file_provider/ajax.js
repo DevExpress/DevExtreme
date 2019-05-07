@@ -101,7 +101,7 @@ class AjaxFileProvider extends FileProvider {
 
     _getData() {
         return ajax.sendRequest({
-            url: this.options.url,
+            url: this._options.url,
             dataType: "json",
             cache: false
         });
