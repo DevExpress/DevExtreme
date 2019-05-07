@@ -28,7 +28,7 @@ const moduleConfig = {
         }.bind(this);
 
         this.$element = $("#fileManager")
-            .width(350)
+            .css("width", 350)
             .dxFileManager({
                 fileProvider: createTestFileSystem(),
                 permissions: {
