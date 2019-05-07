@@ -372,6 +372,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                     if(!indexExists(selectedItemIndex)) {
                         return this._syncSelectionOptions("selectedIndex");
+                    } else if(this.option("selectionMode") === "single") {
+                        return this._selection.setSelection(selectedItemKeys[0]);
                     }
                 }
 
