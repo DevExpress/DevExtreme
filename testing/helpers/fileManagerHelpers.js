@@ -143,11 +143,11 @@ export const createTestFileSystem = () => {
         {
             name: "Folder 1",
             isFolder: true,
-            children: [
+            items: [
                 {
                     name: "Folder 1.1",
                     isFolder: true,
-                    children: [
+                    items: [
                         {
                             name: "File 1-1.txt",
                             isFolder: false
@@ -181,7 +181,7 @@ export const createTestFileSystem = () => {
         {
             name: "Folder 2",
             isFolder: true,
-            children: [
+            items: [
                 {
                     name: "File 2-1.jpg",
                     isFolder: false

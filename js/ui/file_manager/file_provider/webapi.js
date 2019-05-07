@@ -6,6 +6,7 @@ import { each } from "../../../core/utils/iterator";
 import { Deferred } from "../../../core/utils/deferred";
 
 import { FileProvider } from "./file_provider";
+import { compileGetter } from "../../../core/utils/data";
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
@@ -46,6 +47,11 @@ class WebApiFileProvider extends FileProvider {
          * @name WebApiFileProviderOptions.thumbnailExpr
          * @type string|function(fileItem)
          */
+        /**
+         * @name WebApiFileProviderOptions.hasSubDirectoriesExpr
+         * @type string|function(fileItem)
+         */
+        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
     }
 
     getItems(path, itemType) {
@@ -195,6 +201,11 @@ class WebApiFileProvider extends FileProvider {
 
     _getQueryStringPair(key, value) {
         return encodeURIComponent(key) + "=" + encodeURIComponent(value);
+    }
+
+    _hasSubDirs(dataObj) {
+        const hasSubDirs = this._hasSubDirsGetter(dataObj);
+        return typeof hasSubDirs === "boolean" ? hasSubDirs : true;
     }
 
 }
