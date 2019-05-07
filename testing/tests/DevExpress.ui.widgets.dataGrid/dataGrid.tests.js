@@ -11385,6 +11385,58 @@ QUnit.test("Cancel editing should works correctly if editing mode is form and ma
     assert.ok($(dataGrid.getRowElement(2)).hasClass("dx-data-row"), "row 2 is data row");
 });
 
+// T736360
+QUnit.test("Editing should be started without errors if update form items in contentReady", function(assert) {
+    // arrange
+    var items = [{ firstName: "Alex", lastName: "Black" }, { firstName: "John", lastName: "Dow" }];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+            form: {
+                items: [{
+                    itemType: "tabbed",
+                    tabs: [{
+                        title: "First Name",
+                        items: [{
+                            dataField: "firstName"
+                        }]
+                    }, {
+                        title: "Last Name",
+                        items: [{
+                            dataField: "lastName"
+                        }]
+                    }]
+                }]
+            }
+        },
+        dataSource: items,
+        columns: [{
+            dataField: "firstName",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "lastName",
+            validationRules: [{ type: "required" }]
+        }],
+        onContentReady: function(e) {
+            var $tabPanel = $(e.element).find(".dx-tabpanel");
+            if($tabPanel.length) {
+                var tabPanel = $tabPanel.dxTabPanel("instance");
+                tabPanel.option("items", tabPanel.option("items"));
+                tabPanel.option("selectedIndex", 1);
+            }
+        }
+    });
+
+    // act
+    dataGrid.editRow(0);
+
+    assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
+    assert.ok(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
+});
+
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
