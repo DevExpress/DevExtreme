@@ -142,7 +142,7 @@ if(devices.real().deviceType === "desktop") {
     module("Appointment form", moduleConfig, () => {
         test("Label location is left when the form's width > 610px on first show", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(700);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 700 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -152,7 +152,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Label location is top when the form's width < 610px on first show", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(600);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 600 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -162,7 +162,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Items has layout has one column when the form's width < 460px on first show", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(400);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 400 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -171,7 +171,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Items has layout has non-one column when the form's width > 460px on first show", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(463);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 463 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -180,7 +180,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Label location is left when the form's width > 610px on window resizing", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(400);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 400 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -193,7 +193,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Label location is top when the form's width < 610px on window resizing", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(700);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 700 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -207,7 +207,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Items has layout has one column when the form's width < 460px on window resizing", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(500);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 500 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -219,7 +219,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Items has layout has non-one column when the form's width > 460px on window resizing", function(assert) {
             const scheduler = createInstance();
-            scheduler.appointmentPopup.setInitialWidth(460);
+            scheduler.appointmentPopup.setInitialPopupSize({ width: 460 });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 

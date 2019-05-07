@@ -8,6 +8,7 @@ import devices from "core/devices";
 import SchedulerTimezoneEditor from "ui/scheduler/timezones/ui.scheduler.timezone_editor";
 import fx from "animation/fx";
 import { DataSource } from "data/data_source/data_source";
+import resizeCallbacks from "core/utils/resize_callbacks";
 
 import "ui/scheduler/ui.scheduler";
 import "ui/switch";
@@ -151,13 +152,7 @@ QUnit.test("popup should have right height", function(assert) {
     var popup = this.instance.getAppointmentPopup();
 
     assert.equal(popup.option("height"), 'auto', "popup has correct height");
-
-    // NOTE: popup maxHeight depends on device.
-    if(devices.current().generic) {
-        assert.equal(popup.option("maxHeight"), $(window).height() * 0.8, "popup has correct max-height");
-    } else {
-        assert.equal(popup.option("maxHeight"), $(window).height(), "popup has correct max-height");
-    }
+    assert.equal(popup.option("maxHeight"), "100%", "popup has correct max-height");
 });
 
 QUnit.test("showAppointmentPopup should render a popup content only once", function(assert) {
@@ -1074,4 +1069,45 @@ QUnit.test("Appointment form will have right dates on multiple openings (T727713
 
     assert.deepEqual(formData.startDate, appointments[0].startDate, "Second opening appointment form has right startDate");
     assert.deepEqual(formData.endDate, appointments[0].endDate, "Second opening appointment form has right endDate");
+});
+
+QUnit.test("The vertical scroll bar is shown when an appointment popup fill to a small window's height", function(assert) {
+    const scheduler = createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: []
+    });
+
+    const popup = scheduler.appointmentPopup;
+    popup.setInitialPopupSize({ height: 300 });
+
+    scheduler.instance.fire("showAddAppointmentPopup", {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    });
+
+    assert.ok(popup.hasVerticalScroll(), "The popup has the vertical scrolling");
+});
+
+QUnit.test("The resize event of appointment popup is triggered the the window is resize", function(assert) {
+    const scheduler = createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: []
+    });
+
+    scheduler.instance.fire("showAddAppointmentPopup", {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    });
+
+    const $popup = scheduler.appointmentPopup.getPopupInstance().$element();
+    let isResizeEventTriggered;
+    $($popup).on("dxresize", () => {
+        isResizeEventTriggered = true;
+    });
+    resizeCallbacks.fire();
+    assert.ok(isResizeEventTriggered, "The resize event of popup is triggered");
 });

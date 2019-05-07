@@ -413,7 +413,6 @@ var EditingController = modules.ViewController.inherit((function() {
                     buttons;
 
                 if(options.rowType === "data") {
-                    $container.css("textAlign", "center");
                     options.rtlEnabled = this.option("rtlEnabled");
                     buttons = this._getEditingButtons(options);
 
@@ -1494,6 +1493,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 visible: isEditColumnVisible,
                 cssClass: cssClass,
                 width: "auto",
+                alignment: "center",
                 cellTemplate: that._getEditCommandCellTemplate(),
                 fixedPosition: "right"
             });

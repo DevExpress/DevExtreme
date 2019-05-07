@@ -14,5 +14,6 @@ import "./fileManagerParts/navigation.tests.js";
 import "./fileManagerParts/editing.tests.js";
 import "./fileManagerParts/adaptivity.tests.js";
 
-import "./fileManagerParts/webAPIProvider.tests.js";
+import "./fileManagerParts/ajaxProvider.tests.js";
 import "./fileManagerParts/arrayProvider.tests.js";
+import "./fileManagerParts/webAPIProvider.tests.js";

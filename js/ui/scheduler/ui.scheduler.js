@@ -1538,6 +1538,7 @@ const Scheduler = Widget.inherit({
         }
 
         this.hideAppointmentTooltip();
+        this.resizePopup();
     },
 
     _clean: function() {
@@ -2158,9 +2159,10 @@ const Scheduler = Widget.inherit({
         this._popup = this._createComponent(this._$popup, Popup, this._popupConfig(appointmentData));
     },
 
-    _popupContent: function(appointmentData, processTimeZone) {
-        var $popupContent = this._popup.$content();
-        this._createOrUpdateForm(appointmentData, processTimeZone, $popupContent);
+    _popupContent(appointmentData, processTimeZone) {
+        const $popupContent = this._popup.$content();
+        const $form = $("<div>").appendTo($popupContent);
+        this._createOrUpdateForm(appointmentData, processTimeZone, $form);
 
         return $popupContent;
     },
@@ -2250,25 +2252,19 @@ const Scheduler = Widget.inherit({
         });
     },
 
-    _popupConfig: function(appointmentData) {
-        var template = this._getTemplateByOption("appointmentPopupTemplate");
-
+    _popupConfig(appointmentData) {
+        const template = this._getTemplateByOption("appointmentPopupTemplate");
         return {
             maxWidth: APPOINTMENT_POPUP_WIDTH,
-            height: 'auto',
-            maxHeight: this._popupMaxHeight(),
-            onHiding: (function() {
-                this.focus();
-            }).bind(this),
-            contentTemplate: new FunctionTemplate(function(options) {
-                return template.render({
+            height: "auto",
+            maxHeight: "100%",
+            onHiding: () => this.focus(),
+            contentTemplate: new FunctionTemplate(options =>
+                template.render({
                     model: appointmentData,
                     container: options.container
-                });
-            }),
-            onShown: () => {
-                this._setPopupContentMaxHeight();
-            },
+                })
+            ),
             defaultOptionsRules: [
                 {
                     device: function() {
@@ -2286,16 +2282,6 @@ const Scheduler = Widget.inherit({
                 }
             ]
         };
-    },
-
-    _popupMaxHeight: function() {
-        let windowHeight = $(windowUtils.getWindow()).height();
-
-        if(this._popup && this._popup.option("fullScreen")) {
-            return windowHeight;
-        }
-
-        return windowHeight * 0.8;
     },
 
     _getPopupToolbarItems: function() {
@@ -2928,32 +2914,10 @@ const Scheduler = Widget.inherit({
         }
     },
 
-    resizePopup: function() {
-        domUtils.triggerResizeEvent(this._popup.$element());
-
-        // NOTE: WA because of T731123
-        this._setPopupContentMaxHeight();
-    },
-
-    _setPopupContentMaxHeight: function() {
-        let popupContent = this._popup.$content();
-        let $scrollable = popupContent.find(".dx-scrollable-content");
-
-        $scrollable.css("height", "initial");
-
-        if($scrollable.length && $scrollable.get(0).getBoundingClientRect().height > this._getMaxPopupContentHeight()) {
-            $scrollable.outerHeight(popupContent.height());
+    resizePopup() {
+        if(this.getAppointmentPopup()) {
+            domUtils.triggerResizeEvent(this.getAppointmentPopup().$element());
         }
-    },
-
-    _getMaxPopupContentHeight: function() {
-        let $bottom = this._popup.bottomToolbar();
-        let $top = this._popup.topToolbar();
-        let bottomHeight = $bottom && $bottom.length ? $bottom.get(0).getBoundingClientRect().height : 0;
-        let topHeight = $top && $top.length ? $top.get(0).getBoundingClientRect().height : 0;
-
-        return this._popupMaxHeight() - bottomHeight - topHeight;
-
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

@@ -2173,6 +2173,8 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxDropDownEditor.Options.applyValueMode */
         applyValueMode?: 'instantly' | 'useButtons';
+        /** @name dxDropDownEditor.Options.buttons */
+        buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
         /** @name dxDropDownEditor.Options.deferRendering */
         deferRendering?: boolean;
         /** @name dxDropDownEditor.Options.dropDownButtonTemplate */
@@ -3291,6 +3293,8 @@ declare module DevExpress.ui {
     }
     /** @name dxNumberBox.Options */
     export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
+        /** @name dxNumberBox.Options.buttons */
+        buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
         /** @name dxNumberBox.Options.format */
         format?: format;
         /** @name dxNumberBox.Options.invalidValueMessage */
@@ -3652,7 +3656,7 @@ declare module DevExpress.ui {
         /** @name dxPopup.Options.toolbarItems.visible */
         visible?: boolean;
         /** @name dxPopup.Options.toolbarItems.widget */
-        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup';
+        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
     }
     /** @name dxPopup */
     export class dxPopup extends dxOverlay {
@@ -4392,7 +4396,7 @@ declare module DevExpress.ui {
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
-        buttons?: Array<'clear' | 'spins' | 'dropDown' | dxTextEditorButton>;
+        buttons?: Array<string | 'clear' | dxTextEditorButton>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */
@@ -4579,7 +4583,7 @@ declare module DevExpress.ui {
         /** @name dxToolbarItem.showText */
         showText?: 'always' | 'inMenu';
         /** @name dxToolbarItem.widget */
-        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup';
+        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
     }
     /** @name dxTooltip.Options */
     export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
