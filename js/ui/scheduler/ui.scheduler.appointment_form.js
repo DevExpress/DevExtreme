@@ -54,7 +54,7 @@ const SchedulerAppointmentForm = {
             colCount: 2,
             showColonAfterLabel: false,
             screenByWidth: () => {
-                const formWidth = $container.outerWidth();
+                const formWidth = $container.parent().outerWidth();
                 this._updateLabelLocation(formWidth);
                 return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? "xs" : "lg";
             }

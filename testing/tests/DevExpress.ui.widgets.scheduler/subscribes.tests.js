@@ -551,26 +551,6 @@ QUnit.test("'resizePopup' should trigger dxresize event for appointment popup", 
     assert.ok(resizeHandler.called, "event has been triggered");
 });
 
-QUnit.test("'resizePopup' should trigger setPopupMaxHeight for appointment popup", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 1),
-        currentView: "day",
-        dataSource: []
-    });
-
-    var setPopupMaxHeight = sinon.stub(this.instance, "_setPopupContentMaxHeight");
-
-    this.instance.fire("showAddAppointmentPopup", {
-        startDate: new Date(2015, 1, 1),
-        endDate: new Date(2015, 1, 1, 1),
-        allDay: true
-    });
-
-    this.instance.fire("resizePopup");
-
-    assert.ok(setPopupMaxHeight.called, "event has been triggered");
-});
-
 QUnit.test("'appointmentFocused' should fire restoreScrollTop", function(assert) {
     this.createInstance();
 
