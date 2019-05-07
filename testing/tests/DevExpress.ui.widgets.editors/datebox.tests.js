@@ -57,6 +57,7 @@ const LIST_ITEM_SELECTOR = ".dx-list-item";
 const DATEBOX_ADAPTIVITY_MODE_CLASS = "dx-datebox-adaptivity-mode";
 const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 const STATE_FOCUSED_CLASS = "dx-state-focused";
+const TODAY_CELL_CLASS = "dx-calendar-today";
 const widgetName = "dxDateBox";
 
 const getShortDate = date => {
@@ -2972,6 +2973,21 @@ QUnit.module("datebox with time component", {
         assert.ok(hourEditor.hasClass("dx-editor-underlined"));
         assert.ok(minuteEditor.hasClass("dx-editor-underlined"));
         assert.ok(amPmEditor.hasClass("dx-editor-underlined"));
+    });
+
+    QUnit.test("datebox with the 'datetime' type should have an 'event' parameter of the ValueChanged event", assert => {
+        $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            onValueChanged: ({ event }) => {
+                assert.ok(event, "event field is exist");
+                assert.strictEqual(event.type, "dxclick", "it's a 'dxclick' event");
+            },
+            opened: true
+        });
+
+        $(`.${TODAY_CELL_CLASS}`).trigger("dxclick");
+        $(".dx-popup-done.dx-button").trigger("dxclick");
     });
 });
 
