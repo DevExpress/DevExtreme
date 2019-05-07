@@ -473,6 +473,23 @@
 
 .dx-scheduler-appointment-collector {
     height: @GENERIC_SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+
+    .dx-scheduler-appointment-collector-content {
+        span:last-child {
+            line-height: @GENERIC_SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT / 1.5;
+            height: @GENERIC_SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+        }
+    }
+
+    &.dx-state-hover {
+        &:before {
+            border-radius: @GENERIC_SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+        }
+    }
+
+    &.dx-button.dx-button-default {
+        border-radius: @GENERIC_SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT;
+    }
 }
 
 .dx-scheduler-appointment {
