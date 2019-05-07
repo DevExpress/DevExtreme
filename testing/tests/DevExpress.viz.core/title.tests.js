@@ -43,37 +43,37 @@ var environment = {
 QUnit.module("Clip Rect", environment);
 
 QUnit.test("Clip rect, placeholderSize is specify, top position", function(assert) {
-    this.createTitle().draw().shift();
+    this.createTitle().draw(100).shift();
 
     assert.ok(this.renderer.clipRect.calledOnce);
     assert.ok(this.renderer.clipRect.returnValues[0].attr.calledOnce);
     assert.deepEqual(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0], {
         x: 1,
-        y: 24,
-        width: 40,
-        height: 5
+        y: 2,
+        width: 100,
+        height: 27
     });
 });
 
 QUnit.test("Clip rect, placeholderSize is specify, shifted", function(assert) {
     this.options.placeholderSize = 10;
-    this.createTitle().draw().shift(50, 60);
+    this.createTitle().draw(100).shift(50, 60);
 
     assert.ok(this.renderer.clipRect.returnValues[0].attr.calledOnce);
     assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].x, 1);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 24);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 40);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 10);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 2);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 100);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 32);
 });
 
 QUnit.test("Clip rect, placeholderSize is not specify, shifted", function(assert) {
-    this.createTitle().draw().shift(50, 60);
+    this.createTitle().draw(100).shift(50, 60);
 
     assert.ok(this.renderer.clipRect.returnValues[0].attr.calledOnce);
     assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].x, 1);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 24);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 40);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 5);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 2);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 100);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 27);
 });
 
 QUnit.module("Alignment options parsing", environment);
