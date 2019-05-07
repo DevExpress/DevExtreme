@@ -194,6 +194,9 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         }
 
         that._updateBoundingRect();
+
+        var bBox = this.getLayoutOptions();
+        this._clipRect.attr({ x: bBox.x, y: bBox.y - this._baseLineCorrection, width: width, height: bBox.height + this._baseLineCorrection });
     },
 
     getLayoutOptions: function() {
@@ -207,17 +210,9 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     shift: function(x, y) {
         var that = this,
             box = that.getLayoutOptions();
-
         that._group.move(x - box.x, y - box.y);
-        that._setClipRectSettings();
 
         return that;
-    },
-
-    _setClipRectSettings: function() {
-        var bBox = this.getLayoutOptions();
-
-        this._clipRect.attr({ x: bBox.x, y: bBox.y, width: bBox.width, height: bBox.height });
     },
 
     _updateBoundingRect: function() {
