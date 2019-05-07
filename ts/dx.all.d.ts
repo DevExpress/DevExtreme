@@ -565,12 +565,12 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name AjaxFileProvider.Options.isFolderExpr */
         isFolderExpr?: string | Function;
+        /** @name AjaxFileProvider.Options.itemsExpr */
+        itemsExpr?: string | Function;
         /** @name AjaxFileProvider.Options.nameExpr */
         nameExpr?: string | Function;
         /** @name AjaxFileProvider.Options.sizeExpr */
         sizeExpr?: string | Function;
-        /** @name AjaxFileProvider.Options.subFileItemsExpr */
-        subFileItemsExpr?: string | Function;
         /** @name AjaxFileProvider.Options.thumbnailExpr */
         thumbnailExpr?: string | Function;
         /** @name AjaxFileProvider.Options.url */
@@ -588,12 +588,12 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name ArrayFileProvider.Options.isFolderExpr */
         isFolderExpr?: string | Function;
+        /** @name ArrayFileProvider.Options.itemsExpr */
+        itemsExpr?: string | Function;
         /** @name ArrayFileProvider.Options.nameExpr */
         nameExpr?: string | Function;
         /** @name ArrayFileProvider.Options.sizeExpr */
         sizeExpr?: string | Function;
-        /** @name ArrayFileProvider.Options.subFileItemsExpr */
-        subFileItemsExpr?: string | Function;
         /** @name ArrayFileProvider.Options.thumbnailExpr */
         thumbnailExpr?: string | Function;
     }
@@ -1355,8 +1355,8 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name WebApiFileProvider.Options.endpointUrl */
         endpointUrl?: string;
-        /** @name WebApiFileProvider.Options.hasSubDirsExpr */
-        hasSubDirsExpr?: string | Function;
+        /** @name WebApiFileProvider.Options.hasSubDirectoriesExpr */
+        hasSubDirectoriesExpr?: string | Function;
         /** @name WebApiFileProvider.Options.isFolderExpr */
         isFolderExpr?: string | Function;
         /** @name WebApiFileProvider.Options.nameExpr */

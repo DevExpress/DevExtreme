@@ -40,7 +40,7 @@ class AjaxFileProvider extends FileProvider {
          * @type string|function(fileItem)
          */
         /**
-         * @name AjaxFileProviderOptions.subFileItemsExpr
+         * @name AjaxFileProviderOptions.itemsExpr
          * @type string|function(fileItem)
          */
         this._options = options;

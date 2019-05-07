@@ -11,7 +11,7 @@ const moduleConfig = {
                 {
                     name: "F1",
                     isFolder: true,
-                    children: [
+                    items: [
                         {
                             name: "F1.1",
                             isFolder: true
@@ -19,7 +19,7 @@ const moduleConfig = {
                         {
                             name: "F1.2",
                             isFolder: true,
-                            children: [
+                            items: [
                                 {
                                     name: "File1.2.txt"
                                 }
@@ -28,7 +28,7 @@ const moduleConfig = {
                         {
                             name: "F1.3",
                             isFolder: true,
-                            children: [
+                            items: [
                                 {
                                     name: "F1.3.1",
                                     isFolder: true

@@ -15,8 +15,8 @@ const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 class FileProvider {
 
     constructor(options) {
-        this._nameGetter = compileGetter(options.nameExpr || "name");
-        this._isFolderGetter = compileGetter(options.isFolderExpr || "isFolder");
+        this._nameGetter = compileGetter(this._getNameExpr(options));
+        this._isFolderGetter = compileGetter(this._getIsFolderExpr(options));
         this._sizeGetter = compileGetter(options.sizeExpr || "size");
         this._dateModifiedGetter = compileGetter(options.dateModifiedExpr || "dateModified");
         this._thumbnailGetter = compileGetter(options.thumbnailExpr || "thumbnail");
@@ -104,6 +104,14 @@ class FileProvider {
 
     _hasSubDirs(dataObj) {
         return true;
+    }
+
+    _getNameExpr(options) {
+        return options.nameExpr || "name";
+    }
+
+    _getIsFolderExpr(options) {
+        return options.isFolderExpr || "isFolder";
     }
 
 }

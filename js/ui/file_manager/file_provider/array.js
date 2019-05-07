@@ -48,12 +48,18 @@ class ArrayFileProvider extends FileProvider {
          * @type string|function(fileItem)
          */
         /**
-         * @name ArrayFileProviderOptions.subFileItemsExpr
+         * @name ArrayFileProviderOptions.itemsExpr
          * @type string|function(fileItem)
          */
-        const subFileItemsExpr = options.subFileItemsExpr || "children";
-        this._subFileItemsGetter = compileGetter(subFileItemsExpr);
-        this._subFileItemsSetter = typeUtils.isFunction(subFileItemsExpr) ? subFileItemsExpr : compileSetter(subFileItemsExpr);
+        const itemsExpr = options.itemsExpr || "items";
+        this._subFileItemsGetter = compileGetter(itemsExpr);
+        this._subFileItemsSetter = typeUtils.isFunction(itemsExpr) ? itemsExpr : compileSetter(itemsExpr);
+
+        const nameExpr = this._getNameExpr(options);
+        this._nameSetter = typeUtils.isFunction(nameExpr) ? nameExpr : compileSetter(nameExpr);
+
+        const isFolderExpr = this._getIsFolderExpr(options);
+        this._getIsFolderSetter = typeUtils.isFunction(isFolderExpr) ? isFolderExpr : compileSetter(isFolderExpr);
 
         this._data = initialArray || [ ];
     }
@@ -95,20 +101,21 @@ class ArrayFileProvider extends FileProvider {
         });
     }
 
-    _createCopy({ name, children, isFolder }) {
-        const result = {
-            name,
-            isFolder
-        };
-        if(children) {
-            let childrenCopy = [];
-            each(children, (_, childItem) => {
+    _createCopy(dataObj) {
+        let copyObj = { };
+        this._nameSetter(copyObj, this._nameGetter(dataObj));
+        this._getIsFolderSetter(copyObj, this._isFolderGetter(dataObj));
+
+        const items = this._subFileItemsGetter(dataObj);
+        if(Array.isArray(items)) {
+            let itemsCopy = [];
+            each(items, (_, childItem) => {
                 const childCopy = this._createCopy(childItem);
-                childrenCopy.push(childCopy);
+                itemsCopy.push(childCopy);
             });
-            this._subFileItemsSetter(result, childrenCopy);
+            this._subFileItemsSetter(copyObj, itemsCopy);
         }
-        return result;
+        return copyObj;
     }
 
     _deleteItem({ parentPath, dataItem }) {

@@ -48,10 +48,10 @@ class WebApiFileProvider extends FileProvider {
          * @type string|function(fileItem)
          */
         /**
-         * @name WebApiFileProviderOptions.hasSubDirsExpr
+         * @name WebApiFileProviderOptions.hasSubDirectoriesExpr
          * @type string|function(fileItem)
          */
-        this._hasSubDirsGetter = compileGetter(options.hasSubDirsExpr || "hasSubDirs");
+        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
     }
 
     getItems(path, itemType) {
