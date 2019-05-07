@@ -1490,6 +1490,7 @@ module.exports = {
 
                 dispose: function() {
                     clearTimeout(this._hideLoadingTimeoutID);
+                    this._scrollable && this._scrollable.dispose();
                 },
 
                 setScrollerSpacing: function() { }
