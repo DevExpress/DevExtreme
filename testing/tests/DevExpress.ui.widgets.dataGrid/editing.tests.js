@@ -2637,7 +2637,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
             initViews: true
         });
 
@@ -7283,6 +7283,38 @@ QUnit.test("Load panel should be hidden when changing loadPanel.enabled while lo
     } finally {
         fx.off = false;
     }
+});
+
+// T737789
+QUnit.test("The command column caption should be applied", function(assert) {
+    // arrange
+    var that = this,
+        $commandCellElement,
+        columnHeadersView = that.columnHeadersView,
+        $testElement = $('#container');
+
+    that.options.showColumnHeaders = true;
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: "buttons",
+        caption: "Command Column",
+        alignment: "right",
+        buttons: ["edit", "delete"]
+    });
+    that.columnsController.reset();
+
+    // act
+    columnHeadersView.render($testElement);
+
+    // assert
+    $commandCellElement = $(columnHeadersView.getCellElement(0, 5));
+    assert.ok($commandCellElement.hasClass("dx-command-edit"), "has command column");
+    assert.strictEqual($commandCellElement.text(), "Command Column", "caption");
+    assert.strictEqual($commandCellElement.css("textAlign"), "right", "alignment");
 });
 
 
