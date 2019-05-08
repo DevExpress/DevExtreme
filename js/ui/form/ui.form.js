@@ -1520,6 +1520,7 @@ var Form = Widget.inherit({
         var currentScreenFactor = this._getCurrentScreenFactor();
 
         if(this._cachedScreenFactor !== currentScreenFactor) {
+            this._currentScreenFactor = currentScreenFactor;
             if(this._isColCountChanged(this._cachedScreenFactor, currentScreenFactor)) {
                 this._refresh();
             }

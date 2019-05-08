@@ -436,12 +436,17 @@ var LayoutManager = Widget.inherit({
     },
 
     _getColCount: function() {
-        var colCount = this.option("colCount"),
+        var screenFactor, currentColCount,
+            colCount = this.option("colCount"),
             colCountByScreen = this.option("colCountByScreen");
 
         if(colCountByScreen) {
-            var screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg",
-                currentColCount = colCountByScreen[screenFactor];
+            if(this.option("form")._currentScreenFactor) {
+                screenFactor = this.option("form")._currentScreenFactor;
+            } else {
+                screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
+            }
+            currentColCount = colCountByScreen[screenFactor];
             colCount = currentColCount || colCount;
         }
 
