@@ -70,7 +70,7 @@ function raiseTo(base) {
 
 function correctValueByInterval(post, round, getValue) {
     return function(value, interval) {
-        return post(adjust(round(adjust(getValue(value) / interval)) * interval));
+        return adjust(post(round(adjust(getValue(value) / interval)) * interval));
     };
 }
 
