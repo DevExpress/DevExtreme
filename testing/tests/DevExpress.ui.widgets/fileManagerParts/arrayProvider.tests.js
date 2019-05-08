@@ -10,15 +10,15 @@ const moduleConfig = {
             data: [
                 {
                     name: "F1",
-                    isFolder: true,
+                    isDirectory: true,
                     items: [
                         {
                             name: "F1.1",
-                            isFolder: true
+                            isDirectory: true
                         },
                         {
                             name: "F1.2",
-                            isFolder: true,
+                            isDirectory: true,
                             items: [
                                 {
                                     name: "File1.2.txt"
@@ -27,11 +27,11 @@ const moduleConfig = {
                         },
                         {
                             name: "F1.3",
-                            isFolder: true,
+                            isDirectory: true,
                             items: [
                                 {
                                     name: "F1.3.1",
-                                    isFolder: true
+                                    isDirectory: true
                                 }
                             ]
                         }
@@ -39,7 +39,7 @@ const moduleConfig = {
                 },
                 {
                     name: "F2",
-                    isFolder: true
+                    isDirectory: true
                 }
             ]
         };

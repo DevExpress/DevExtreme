@@ -18,29 +18,29 @@ const moduleConfig = {
             fileProvider: [
                 {
                     name: "Folder 1",
-                    isFolder: true
+                    isDirectory: true
                 },
                 {
                     name: "1.txt",
-                    isFolder: false,
+                    isDirectory: false,
                     size: 0,
                     owner: "Admin"
                 },
                 {
                     name: "2.txt",
-                    isFolder: false,
+                    isDirectory: false,
                     size: 200,
                     owner: "Admin"
                 },
                 {
                     name: "3.txt",
-                    isFolder: false,
+                    isDirectory: false,
                     size: 1024,
                     owner: "Guest"
                 },
                 {
                     name: "4.txt",
-                    isFolder: false,
+                    isDirectory: false,
                     size: 1300,
                     owner: "Max"
                 }
@@ -80,27 +80,27 @@ QUnit.module("Details View", moduleConfig, () => {
     });
 
     test("Using custom formats of JSON files", function(assert) {
-        const fileSystem = [
-            {
-                title: "Folder",
-                noFolder: true,
-                myDate: "2/2/2000"
-            },
-            {
-                title: "Title",
-                noFolder: false,
-                myDate: "1/1/2000",
-                count: 55
-            }
-        ];
-        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
-        fileManagerInstance.option({
-            "fileProvider": fileSystem,
-            "nameExpr": "title",
-            "isFolderExpr": "noFolder",
-            "dateModifiedExpr": "myDate",
-            "sizeExpr": "count"
-        });
+        $("#fileManager")
+            .dxFileManager("instance")
+            .option("fileProvider", {
+                data: [
+                    {
+                        title: "Folder",
+                        noFolder: true,
+                        myDate: "2/2/2000"
+                    },
+                    {
+                        title: "Title",
+                        noFolder: false,
+                        myDate: "1/1/2000",
+                        count: 55
+                    }
+                ],
+                nameExpr: "title",
+                isDirectoryExpr: "noFolder",
+                dateModifiedExpr: "myDate",
+                sizeExpr: "count"
+            });
         this.clock.tick(400);
 
         assert.ok(getCellValueInDetailsView(this.$element, 1, 2).indexOf("Folder") === 0);

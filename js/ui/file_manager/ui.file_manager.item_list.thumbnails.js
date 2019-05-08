@@ -368,7 +368,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
 
         let text = `${item.name}\r\n`;
-        if(!item.isFolder) {
+        if(!item.isDirectory) {
             text += `Size: ${getDisplayFileSize(item.size)}\r\n`;
         }
         text += `Date Modified: ${item.dateModified}`;

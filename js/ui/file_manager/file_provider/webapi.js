@@ -1,5 +1,5 @@
 import ajax from "../../../core/utils/ajax";
-import { noop } from "../../../core/utils/common";
+import { ensureDefined, noop } from "../../../core/utils/common";
 import Guid from "../../../core/guid";
 import { getWindow } from "../../../core/utils/window";
 import { each } from "../../../core/utils/iterator";
@@ -21,32 +21,13 @@ const FILE_CHUNK_BLOB_NAME = "chunk";
 class WebApiFileProvider extends FileProvider {
 
     constructor(options) {
+        options = ensureDefined(options, { });
         super(options);
         /**
          * @name WebApiFileProviderOptions.endpointUrl
          * @type string
          */
         this._endpointUrl = options.endpointUrl;
-        /**
-         * @name WebApiFileProviderOptions.nameExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name WebApiFileProviderOptions.isFolderExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name WebApiFileProviderOptions.sizeExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name WebApiFileProviderOptions.dateModifiedExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name WebApiFileProviderOptions.thumbnailExpr
-         * @type string|function(fileItem)
-         */
         /**
          * @name WebApiFileProviderOptions.hasSubDirectoriesExpr
          * @type string|function(fileItem)

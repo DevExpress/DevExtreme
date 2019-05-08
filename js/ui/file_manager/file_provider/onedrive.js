@@ -19,9 +19,30 @@ const APP_ROOT_URL = DRIVE_API_URL + "/special/approot";
 class OneDriveFileProvider extends FileProvider {
 
     constructor(options) {
+        /**
+         * @name OneDriveFileProvider.nameExpr
+         * @hidden
+         */
+        /**
+         * @name OneDriveFileProvider.isDirectoryExpr
+         * @hidden
+         */
+        /**
+         * @name OneDriveFileProvider.sizeExpr
+         * @hidden
+         */
+        /**
+         * @name OneDriveFileProvider.dateModifiedExpr
+         * @hidden
+         */
+        /**
+         * @name OneDriveFileProvider.thumbnailExpr
+         * @hidden
+         */
+
         options = options || {};
         options.dateModifiedExpr = "lastModifiedDateTime";
-        options.isFolderExpr = "folder";
+        options.isDirectoryExpr = "folder";
         super(options);
 
         this._getAccessTokenUrl = options.getAccessTokenUrl || "";
