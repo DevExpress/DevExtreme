@@ -162,9 +162,6 @@ const chartPlugin = {
                     if(series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
                         coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
                     }
-                    if(!isDefined(coords[valCoordName])) {
-                        coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
-                    }
                 }
             }
 

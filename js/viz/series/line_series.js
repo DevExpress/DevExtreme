@@ -200,7 +200,53 @@ var lineMethods = {
         var settings = this._getTrackerSettings(segment);
         settings.points = this._getMainPointsFromSegment(segment);
         element.attr(settings);
-    }
+    },
+
+    checkSeriesViewportCoord(axis, coord) {
+        if(this._points.length === 0) {
+            return false;
+        }
+        const range = axis.isArgumentAxis ? this.getArgumentRange() : this.getViewport();
+        const min = axis.getTranslator().translate(range.categories ? range.categories[0] : range.min);
+        const max = axis.getTranslator().translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
+        const rotated = this.getOptions().rotated;
+        const inverted = axis.getOptions().inverted;
+
+        return (axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted) ||
+            !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)) ?
+            coord >= min && coord <= max : coord >= max && coord <= min;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        const that = this;
+        let oppositeCoord = null;
+        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+        const needValueCoord = isArgument && !that._options.rotated || !isArgument && that._options.rotated;
+
+        for(let i = 0; i < nearestPoints.length; i++) {
+            const p = nearestPoints[i];
+            const k = (p[1].vy - p[0].vy) / (p[1].vx - p[0].vx);
+            const b = p[0].vy - p[0].vx * k;
+            let tmpCoord;
+
+            if(p[1].vx - p[0].vx === 0) {
+                tmpCoord = needValueCoord ? p[0].vy : p[0].vx;
+            } else {
+                tmpCoord = needValueCoord ? k * coord + b : (coord - b) / k;
+            }
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return this.autoHidePointMarkersEnabled();
+    },
 };
 
 var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods);

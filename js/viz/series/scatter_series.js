@@ -587,6 +587,10 @@ var baseScatterMethods = {
         options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal["stroke-width"] : 2;
 
         return options;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return true;
     }
 };
 
@@ -623,21 +627,6 @@ exports.chart = _extend({}, baseScatterMethods, {
         that._trackersTranslator = that.groupPointsByCoords(rotated);
     },
 
-    checkSeriesViewportCoord(axis, coord) {
-        if(this._points.length === 0) {
-            return false;
-        }
-        const range = axis.isArgumentAxis ? this.getArgumentRange() : this.getViewport();
-        const min = axis.getTranslator().translate(range.categories ? range.categories[0] : range.min);
-        const max = axis.getTranslator().translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
-        const rotated = this.getOptions().rotated;
-        const inverted = axis.getOptions().inverted;
-
-        return (axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted) ||
-            !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)) ?
-            coord >= min && coord <= max : coord >= max && coord <= min;
-    },
-
     checkAxisVisibleAreaCoord(isArgument, coord) {
         const axis = isArgument ? this.getArgumentAxis() : this.getValueAxis();
         const visibleArea = axis.getVisibleArea();
@@ -645,23 +634,20 @@ exports.chart = _extend({}, baseScatterMethods, {
         return _isDefined(coord) && visibleArea[0] <= coord && visibleArea[1] >= coord;
     },
 
-    getSeriesPairCoord(coord, isArgument) {
-        const that = this;
-        let oppositeCoord;
-        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
-        const needValueCoord = isArgument && !that._options.rotated || !isArgument && that._options.rotated;
+    checkSeriesViewportCoord(axis, coord) {
+        return true;
+    },
 
-        for(let i = 0; i < nearestPoints.length; i++) {
-            const p = nearestPoints[i];
-            const k = (p[1].vy - p[0].vy) / (p[1].vx - p[0].vx);
-            const b = p[0].vy - p[0].vx * k;
-            let tmpCoord;
+    getShapePairCoord(coord, isArgument, getPointClearance) {
+        let oppositeCoord = null;
+        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
+        const coordName = !isOpposite ? "vx" : "vy";
+        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const points = this.getVisiblePoints();
 
-            if(p[1].vx - p[0].vx === 0) {
-                tmpCoord = needValueCoord ? p[0].vy : p[0].vx;
-            } else {
-                tmpCoord = needValueCoord ? k * coord + b : (coord - b) / k;
-            }
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            const tmpCoord = Math.abs(p[coordName] - coord) <= getPointClearance(p) ? p[oppositeCoordName] : undefined;
 
             if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;
@@ -670,6 +656,12 @@ exports.chart = _extend({}, baseScatterMethods, {
         }
 
         return oppositeCoord;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        return this.getShapePairCoord(coord, isArgument, () => {
+            return this._options.point.size / 2;
+        });
     },
 
     getNearestPointsByCoord(coord, isArgument) {
