@@ -290,7 +290,9 @@ class Diagram extends Widget {
                 setType: this._createOptionSetter("nodes.typeExpr"),
 
                 getParentKey: this._createOptionGetter("nodes.parentKeyExpr"),
-                getItems: this._createOptionGetter("nodes.itemsExpr")
+                setParentKey: this._createOptionSetter("nodes.parentKeyExpr"),
+                getItems: this._createOptionGetter("nodes.itemsExpr"),
+                setItems: this._createOptionSetter("nodes.itemsExpr")
             },
             edgeDataImporter: {
                 getKey: this._createOptionGetter("edges.keyExpr"),
