@@ -167,6 +167,34 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
 
+    test("delete file from subfolder in items area", function(assert) {
+        this.wrapper.getFolderNodes().eq(1).trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1", "sub folder selected");
+
+        let $rows = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`);
+        const initialCount = $rows.length;
+
+        const $cell = $rows.find("td").eq(1);
+        assert.equal($cell.get(0).childNodes[0].textContent, "File 1-1.txt", "has target file");
+
+        $cell.trigger("dxclick");
+        this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
+        this.clock.tick(400);
+
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('Delete')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        $rows = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`);
+        assert.equal($rows.length, initialCount - 1, "files count decreased");
+        assert.ok($rows.eq(0).text().indexOf("File 1-1.txt") === -1, "first folder is not target folder");
+        assert.ok($rows.eq(1).text().indexOf("File 1-1.txt") === -1, "second folder is not target folder");
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1", "sub folder selected");
+    });
+
     test("move folder in folders area", function(assert) {
         let $folderNodes = this.wrapper.getFolderNodes();
         const initialCount = $folderNodes.length;
