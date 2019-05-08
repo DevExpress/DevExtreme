@@ -1586,6 +1586,29 @@ QUnit.testStart(function() {
         }, "Arguments are OK");
     });
 
+    QUnit.test("Workspace should pass cellData with select through enter/space key", function(assert) {
+        var updateSpy = sinon.spy(noop),
+            $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                dataSource: [{
+                    text: "Helen",
+                    startDate: new Date(2015, 3, 2, 9, 30),
+                    endDate: new Date(2015, 3, 2, 11, 30)
+                }],
+                focusStateEnabled: true,
+                firstDayOfWeek: 1,
+                currentDate: new Date(2015, 3, 1),
+                onCellClick: updateSpy,
+            }),
+            keyboard = keyboardMock($element);
+
+        $($element).trigger("focusin");
+        keyboard.keyDown("enter");
+        const cellData = updateSpy.getCall(0).args[0].cellData;
+        assert.notOk(cellData === {}, 'cellData is not empty');
+        assert.deepEqual(cellData.startDate, new Date(2015, 2, 30), 'cellData startDate is passing right');
+        assert.deepEqual(cellData.endDate, new Date(2015, 2, 31), 'cellData endDate is passing right');
+    });
+
     QUnit.test("Workspace should handle enter/space key correctly if e.cancel=true", function(assert) {
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
                 focusStateEnabled: true,
