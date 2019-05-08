@@ -5870,6 +5870,30 @@ QUnit.test("contentReady should not be raised on row click if focusedRowEnabled"
     assert.strictEqual(dataGrid.option("focusedRowKey"), 1, "focusedRowKey is assigned");
 });
 
+QUnit.test("onFocusedRowChanged event should fire once if changed via API (T729593)", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        focusedRowChangedCallCount = 0,
+        dataGrid = createDataGrid({
+            onFocusedRowChanged: function() {
+                focusedRowChangedCallCount++;
+            },
+            focusedRowEnabled: true,
+            keyExpr: "id",
+            dataSource: [{ id: 1 }]
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.option("focusedRowKey", 1);
+    clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCallCount, 1, "focusedRowChangedCallCount");
+
+    clock.restore();
+});
+
 QUnit.test("Click by the first row on the next page should focus it without grid refresh if scrolling.mode is virtual and focusedRowEnabled is true (T722879)", function(assert) {
     var dataGrid = createDataGrid({
             focusedRowEnabled: true,
