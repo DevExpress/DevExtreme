@@ -734,7 +734,21 @@ var dxRangeSelector = {
         * @type Enums.VizPaletteExtensionMode
         * @default 'blend'
         */
-        paletteExtensionMode: 'blend'
+        paletteExtensionMode: 'blend',
+        /**
+        * @name dxRangeSelectorOptions.chart.minBubbleSize
+        * @default 12
+        * @type number
+        * @propertyOf dxChartSeriesTypes.BubbleSeries
+        */
+        minBubbleSize: 12,
+        /**
+        * @name dxRangeSelectorOptions.chart.maxBubbleSize
+        * @default 0.2
+        * @type number
+        * @propertyOf dxChartSeriesTypes.BubbleSeries
+        */
+        maxBubbleSize: 0.2
     },
     /**
     * @name dxRangeSelectorOptions.dataSource
