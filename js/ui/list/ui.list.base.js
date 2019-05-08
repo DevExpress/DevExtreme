@@ -40,6 +40,7 @@ var LIST_CLASS = "dx-list",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
     SELECT_ALL_SELECTOR = ".dx-list-select-all",
+    DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button-container",
 
     LIST_ITEM_DATA_KEY = "dxListItemData",
     LIST_FEEDBACK_SHOW_TIMEOUT = 70;
@@ -569,6 +570,9 @@ var ListBase = CollectionWidget.inherit({
     },
 
     deleteItem: function(itemElement) {
+        var $item = this._editStrategy.getItemElement(itemElement);
+        $item.children("." + DELETE_BUTTON_CONTAINER_CLASS).detach();
+
         var promise = this.callBase(itemElement);
 
         return promise.done(function() {
