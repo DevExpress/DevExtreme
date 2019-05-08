@@ -694,21 +694,6 @@ declare module DevExpress.ui {
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
-    /** @name DiagramCustomShapeItem */
-    export interface DiagramCustomShapeItem {
-        /** @name DiagramCustomShapeItem.allowHasText */
-        allowHasText?: boolean;
-        /** @name DiagramCustomShapeItem.defaultHeight */
-        defaultHeight?: number;
-        /** @name DiagramCustomShapeItem.defaultWidth */
-        defaultWidth?: number;
-        /** @name DiagramCustomShapeItem.id */
-        id?: number;
-        /** @name DiagramCustomShapeItem.svgUrl */
-        svgUrl?: string;
-        /** @name DiagramCustomShapeItem.title */
-        title?: string;
-    }
     /** @name DiagramDataSourceParameters */
     export interface DiagramDataSourceParameters {
         /** @name DiagramDataSourceParameters.edges */
@@ -2002,7 +1987,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.customShapes */
-        customShapes?: Array<DiagramCustomShapeItem>;
+        customShapes?: Array<{ allowHasText?: boolean, defaultHeight?: number, defaultWidth?: number, id?: number, svgUrl?: string, title?: string }>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
@@ -2024,8 +2009,8 @@ declare module DevExpress.ui {
         deleteDataSource(key: string): void;
         /** @name dxDiagram.getData() */
         getData(): string;
-        /** @name dxDiagram.setData(data, keepExistingItems) */
-        setData(data: string, keepExistingItems: boolean): void;
+        /** @name dxDiagram.setData(data, updateExistingItemsOnly) */
+        setData(data: string, updateExistingItemsOnly: boolean): void;
     }
     /** @name dxDrawer.Options */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
