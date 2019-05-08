@@ -297,7 +297,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
         });
 
         this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 0, y: 50 });
-        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: 100 });
+        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: null });
         this.checkCoords(assert, chart, { argument: 50, series: "s1" }, { x: 50, y: 0 });
 
         // TODO
@@ -358,7 +358,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
         });
 
         this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 0, y: 50 });
-        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: 100 });
+        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: null });
         this.checkCoords(assert, chart, { argument: 50, series: "s1" }, { x: 50, y: 0 });
 
         this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
@@ -393,7 +393,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             series: [{ name: "s1", type: "bubble" }]
         });
 
-        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 25, y: 100 });
+        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 25, y: null });
         this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 0, y: 50 });
         this.checkCoords(assert, chart, { argument: 48, series: "s1" }, { x: 48, y: 0 });
 
@@ -413,7 +413,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
 
         this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: 50 });
         this.checkCoords(assert, chart, { argument: 90, series: "s1" }, { x: 90, y: 70 });
-        this.checkCoords(assert, chart, { argument: 40, series: "s1" }, { x: 40, y: 100 });
+        this.checkCoords(assert, chart, { argument: 40, series: "s1" }, { x: 40, y: null });
 
         this.checkCoords(assert, chart, { value: 140, series: "s1" }, { x: 10, y: 60 });
     });

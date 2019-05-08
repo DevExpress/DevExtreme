@@ -59,21 +59,7 @@ seriesNS.mixins = {
     polar: {}
 };
 
-seriesNS.mixins.chart.scatter = _extend({}, scatterSeries.chart, {
-    usePointsToDefineAutoHiding() {
-        return true;
-    },
-
-    checkSeriesViewportCoord(axis, coord) {
-        return true;
-    },
-
-    getSeriesPairCoord(coord, isArgument) {
-        return bubbleSeries.chart["bubble"].getShapePairCoord.call(this, coord, isArgument, () => {
-            return this._options.point.size / 2;
-        });
-    }
-});
+seriesNS.mixins.chart.scatter = scatterSeries.chart;
 seriesNS.mixins.polar.scatter = scatterSeries.polar;
 
 _extend(seriesNS.mixins.pie, pieSeries);
@@ -429,9 +415,7 @@ Series.prototype = {
         return false;
     },
 
-    usePointsToDefineAutoHiding() {
-        return this.autoHidePointMarkersEnabled();
-    },
+    usePointsToDefineAutoHiding: _noop,
 
     createPoints(useAllAggregatedPoints) {
         this._normalizeUsingAllAggregatedPoints(useAllAggregatedPoints);

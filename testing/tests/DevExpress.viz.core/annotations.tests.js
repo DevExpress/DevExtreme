@@ -27,6 +27,7 @@ QUnit.test("Do not draw annotation if cannot get coords, or coords out of canvas
     };
 
     testCase({ x: undefined, y: undefined }, { x: undefined, y: undefined }, "No anchor, no coords");
+    testCase({ x: 50, y: undefined }, { x: undefined, y: undefined }, "Only anchor x, no coords");
     testCase({ x: null, y: null }, { x: null, y: null }, "No anchor, no coords");
     testCase({ x: undefined, y: undefined }, { x: 100, y: undefined }, "Only x is defined");
     testCase({ x: undefined, y: undefined }, { x: undefined, y: 100 }, "Only y is defined");

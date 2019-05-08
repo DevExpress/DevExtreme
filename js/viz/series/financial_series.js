@@ -255,7 +255,7 @@ exports.stock = _extend({}, scatterSeries, {
     },
 
     getSeriesPairCoord(coord, isArgument) {
-        let oppositeCoord;
+        let oppositeCoord = null;
         const points = this.getVisiblePoints();
 
         for(let i = 0; i < points.length; i++) {

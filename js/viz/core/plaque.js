@@ -78,7 +78,7 @@ export class Plaque {
             height: canvas.height - canvas.bottom - canvas.top
         };
 
-        if(!isDefined(anchorX) && (!isDefined(x) || !isDefined(y))) {
+        if(!(isDefined(anchorX) && isDefined(anchorY)) && !(isDefined(x) && isDefined(y))) {
             return;
         }
 
