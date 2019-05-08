@@ -44,7 +44,7 @@ QUnit.module("Selection", () => {
             }
         }
 
-        resetSelectedChangedHandled() {
+        resetSelectedChangedSpy() {
             this.selectionChangedHandler.reset();
         }
 
@@ -65,16 +65,26 @@ QUnit.module("Selection", () => {
                 QUnit.assert.deepEqual(this.buttonGroup.option("selectedItemKeys"), options.selectedItemKeys, "selectedItemKeys");
             }
 
-            if(options.selectionChanged) {
+            if(!options.selectionChanged) {
+                QUnit.assert.strictEqual(this.selectionChangedHandler.callCount, 0, "handler.callCount");
+            } else {
                 QUnit.assert.strictEqual(this.selectionChangedHandler.callCount, 1, "handler.callCount");
                 QUnit.assert.deepEqual(this.selectionChangedHandler.firstCall.args[0].addedItems, options.selectionChanged.addedItems, "addedItems");
                 QUnit.assert.deepEqual(this.selectionChangedHandler.firstCall.args[0].removedItems, options.selectionChanged.removedItems, "removedItems");
             }
         }
 
-        checkSelectedItems(indexes) {
-            indexes.forEach((index) => {
-                QUnit.assert.equal(this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(index).hasClass(DX_ITEM_SELECTED_CLASS), true, `item ${index} is selected`);
+        checkSelectedItems(selectedIndexes) {
+            let $buttons = this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+
+            selectedIndexes.forEach((index) => {
+                QUnit.assert.equal($buttons.eq(index).hasClass(DX_ITEM_SELECTED_CLASS), true, `item ${index} is selected`);
+            });
+
+            $buttons.each((index) => {
+                if(selectedIndexes.indexOf(index) === -1) {
+                    QUnit.assert.equal($buttons.eq(index).hasClass(DX_ITEM_SELECTED_CLASS), false, `item ${index} is not selected`);
+                }
             });
         }
     }
@@ -119,7 +129,7 @@ QUnit.module("Selection", () => {
                             helper.createButtonGroup({ items: [], selectedItemKeys: selectedItemKeysValue });
                             helper.checkAsserts({
                                 selectedItems: [],
-                                selectedItemKeys: onInitialOption && selectionMode !== "multiple" ? [] : selectedItemKeysValue,
+                                selectedItemKeys: selectionMode !== "multiple" && onInitialOption ? [] : selectedItemKeysValue,
                             });
                         }
                     });
@@ -154,6 +164,7 @@ QUnit.module("Selection", () => {
 
                     if(onInitialOption) {
                         helper.checkAsserts({
+
                             selectedItems: [items[0]],
                             selectedItemKeys: [items[0].text]
                         });
@@ -270,7 +281,7 @@ QUnit.module("Selection", () => {
                     }
 
                     helper.triggerButtonClick(items[0].id);
-                    helper.resetSelectedChangedHandled();
+                    helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[1].id);
 
                     if(selectionMode === "single") {
@@ -298,7 +309,7 @@ QUnit.module("Selection", () => {
                     } else {
                         helper.createButtonGroup({ items: items, selectedItemKeys: [items[1].text ] });
                     }
-                    helper.resetSelectedChangedHandled();
+                    helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[0].id);
 
                     if(selectionMode === "single") {
@@ -327,7 +338,7 @@ QUnit.module("Selection", () => {
                         helper.createButtonGroup({ items: items, selectedItemKeys: [items[1].text] });
                     }
 
-                    helper.resetSelectedChangedHandled();
+                    helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[1].id);
 
                     if(selectionMode === "single") {
@@ -356,7 +367,7 @@ QUnit.module("Selection", () => {
                     }
 
                     helper.triggerButtonClick(items[0].id);
-                    helper.resetSelectedChangedHandled();
+                    helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[1].id);
 
                     if(selectionMode === "single") {
@@ -385,7 +396,7 @@ QUnit.module("Selection", () => {
                         helper.createButtonGroup({ items: items, selectedItemKeys: [items[0].text, items[1].text] });
                     }
 
-                    helper.resetSelectedChangedHandled();
+                    helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[0].id);
 
                     if(selectionMode === "single") {
@@ -407,7 +418,7 @@ QUnit.module("Selection", () => {
                     } else {
                         helper.createButtonGroup({ items: items, selectedItemKeys: [items[0].text, items[1].text] });
                     }
-                    helper.resetSelectedChangedHandled();
+                    helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[1].id);
 
                     if(selectionMode === "single") {
@@ -435,7 +446,7 @@ QUnit.module("Selection", () => {
                     }
 
                     helper.triggerButtonClick(items[0].id);
-                    helper.resetSelectedChangedHandled();
+                    helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[1].id);
 
                     if(selectionMode === "single") {
@@ -453,7 +464,6 @@ QUnit.module("Selection", () => {
                     }
                 });
             });
-
 
             QUnit.test("KeyExpr: custom, set items: [], selectedItems[], click(btn1) -> click(btn3)" + config, () => {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
@@ -474,7 +484,7 @@ QUnit.module("Selection", () => {
                     selectedItemKeys: ["left"]
                 });
                 helper.checkSelectedItems([0]);
-                helper.resetSelectedChangedHandled();
+                helper.resetSelectedChangedSpy();
                 helper.triggerButtonClick(2);
 
                 if(selectionMode === "single") {
