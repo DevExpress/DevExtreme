@@ -115,6 +115,41 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     });
                 });
 
+                QUnit.test(`${selectedOption}: ['notExist']` + config, () => {
+                    let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+
+                    if(selectedOption === "selectedItems") {
+                        helper.createButtonGroup({ items: items, selectedItems: ["notExist"] });
+                    } else {
+                        helper.createButtonGroup({ items: items, selectedItemKeys: ["notExist"] });
+                    }
+
+                    if(selectionMode === "single") {
+                        helper.checkAsserts({
+                            selectionChanged: onInitialOption ? null : { addedItems: [items[0]], removedItems: [] },
+                            selectedItems: [items[0]],
+                            selectedItemKeys: [items[0].text]
+                        });
+
+                        helper.checkSelectedItems([items[0].id]);
+                    } else {
+                        if(selectedOption === "selectedItems") {
+                            helper.checkAsserts({
+                                selectedItems: ["notExist"],
+                                selectedItemKeys: onInitialOption ? [undefined] : []
+                            });
+                        } else {
+                            helper.checkAsserts({
+                                selectedItems: [],
+                                selectedItemKeys: ["notExist"]
+                            });
+                        }
+
+                        helper.checkSelectedItems([]);
+                    }
+                });
+
+
                 QUnit.test(`${selectedOption}: ['btn1']` + config, () => {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
