@@ -890,26 +890,6 @@ QUnit.test("focus is called on popup hiding", function(assert) {
     assert.ok(spy.calledOnce, "focus is called");
 });
 
-QUnit.test("Appointment popup should have correct 'fullScreen' option", function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-    var popup = this.instance.getAppointmentPopup();
-
-    if(!devices.current().generic) {
-        assert.ok(popup.option("fullScreen"), "the fullScreen option is OK");
-    } else {
-        assert.notOk(popup.option("fullScreen"), "the fullScreen option is OK");
-    }
-});
-
-QUnit.test("Appointment popup should have correct 'maxWidth' option", function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-    var popup = this.instance.getAppointmentPopup();
-
-    assert.equal(popup.option("maxWidth"), 610, "the maxWidth option is OK");
-});
-
 QUnit.test("Popup should has close button in mobile theme when allowUpdating: false", function(assert) {
     this.instance.option({
         editing: {
