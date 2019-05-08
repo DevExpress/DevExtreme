@@ -173,7 +173,7 @@ class FileManagerEditingControl extends Widget {
         if(!items) {
             items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
         }
-        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isFolder);
+        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isDirectory);
         const dialogArgumentGetter = action.getDialogArgument || noop;
 
         this._showDialog(action.dialog, dialogArgumentGetter(items))

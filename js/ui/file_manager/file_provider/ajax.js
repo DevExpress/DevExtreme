@@ -1,4 +1,5 @@
 import ajax from "../../../core/utils/ajax";
+import { ensureDefined } from "../../../core/utils/common";
 import { Deferred } from "../../../core/utils/deferred";
 import { extend } from "../../../core/utils/extend";
 import { FileProvider } from "./file_provider";
@@ -14,30 +15,12 @@ import ArrayFileProvider from "./array";
 class AjaxFileProvider extends FileProvider {
 
     constructor(options) {
+        options = ensureDefined(options, { });
         super(options);
+
         /**
          * @name AjaxFileProviderOptions.url
          * @type string
-         */
-        /**
-         * @name AjaxFileProviderOptions.nameExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name AjaxFileProviderOptions.isFolderExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name AjaxFileProviderOptions.sizeExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name AjaxFileProviderOptions.dateModifiedExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name AjaxFileProviderOptions.thumbnailExpr
-         * @type string|function(fileItem)
          */
         /**
          * @name AjaxFileProviderOptions.itemsExpr

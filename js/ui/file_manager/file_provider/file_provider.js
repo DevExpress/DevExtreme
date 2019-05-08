@@ -1,5 +1,6 @@
 import { compileGetter } from "../../../core/utils/data";
 import { pathCombine, getFileExtension, getParentPath, getName } from "../ui.file_manager.utils";
+import { ensureDefined } from "../../../core/utils/common";
 import { deserializeDate } from "../../../core/utils/date_serialization";
 import { each } from "../../../core/utils/iterator";
 
@@ -15,10 +16,32 @@ const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 class FileProvider {
 
     constructor(options) {
+        options = ensureDefined(options, {});
+
+        /**
+         * @name FileProviderOptions.nameExpr
+         * @type string|function(fileItem)
+         */
         this._nameGetter = compileGetter(this._getNameExpr(options));
-        this._isFolderGetter = compileGetter(this._getIsFolderExpr(options));
+        /**
+         * @name FileProviderOptions.isDirectoryExpr
+         * @type string|function(fileItem)
+         */
+        this._isDirGetter = compileGetter(this._getIsDirExpr(options));
+        /**
+         * @name FileProviderOptions.sizeExpr
+         * @type string|function(fileItem)
+         */
         this._sizeGetter = compileGetter(options.sizeExpr || "size");
+        /**
+         * @name FileProviderOptions.dateModifiedExpr
+         * @type string|function(fileItem)
+         */
         this._dateModifiedGetter = compileGetter(options.dateModifiedExpr || "dateModified");
+        /**
+         * @name FileProviderOptions.thumbnailExpr
+         * @type string|function(fileItem)
+         */
         this._thumbnailGetter = compileGetter(options.thumbnailExpr || "thumbnail");
     }
 
@@ -66,7 +89,7 @@ class FileProvider {
     }
 
     _getItemsByType(path, folders) {
-        return this.getItems(path).filter(item => item.isFolder === folders);
+        return this.getItems(path).filter(item => item.isDirectory === folders);
     }
 
     _convertDataObjectsToFileItems(entries, path, itemType) {
@@ -74,14 +97,14 @@ class FileProvider {
         const result = [];
         each(entries, (_, entry) => {
             const fileItem = this._createFileItem(entry, path);
-            if(!itemType || fileItem.isFolder === useFolders) {
+            if(!itemType || fileItem.isDirectory === useFolders) {
                 result.push(fileItem);
             }
         });
         return result;
     }
     _createFileItem(dataObj, path) {
-        let fileItem = new FileManagerItem(path, this._nameGetter(dataObj), !!this._isFolderGetter(dataObj));
+        let fileItem = new FileManagerItem(path, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
 
         fileItem.size = this._sizeGetter(dataObj);
         if(fileItem.size === undefined) {
@@ -93,7 +116,7 @@ class FileProvider {
             fileItem.dateModified = new Date();
         }
 
-        if(fileItem.isFolder) {
+        if(fileItem.isDirectory) {
             fileItem.hasSubDirs = this._hasSubDirs(dataObj);
         }
 
@@ -110,18 +133,18 @@ class FileProvider {
         return options.nameExpr || "name";
     }
 
-    _getIsFolderExpr(options) {
-        return options.isFolderExpr || "isFolder";
+    _getIsDirExpr(options) {
+        return options.isDirectoryExpr || "isDirectory";
     }
 
 }
 
 class FileManagerItem {
-    constructor(parentPath, name, isFolder) {
+    constructor(parentPath, name, isDirectory) {
         this.parentPath = parentPath;
         this.name = name;
         this.relativeName = pathCombine(this.parentPath, name);
-        this.isFolder = isFolder || false;
+        this.isDirectory = isDirectory || false;
 
         this.size = 0;
         this.dateModified = new Date();
@@ -131,7 +154,7 @@ class FileManagerItem {
     }
 
     getExtension() {
-        return this.isFolder ? "" : getFileExtension(this.name);
+        return this.isDirectory ? "" : getFileExtension(this.name);
     }
 
     getParent() {
@@ -151,7 +174,7 @@ class FileManagerItem {
     }
 
     createClone() {
-        const result = new FileManagerItem(this.parentPath, this.name, this.isFolder);
+        const result = new FileManagerItem(this.parentPath, this.name, this.isDirectory);
         result.size = this.size;
         result.dateModified = this.dateModified;
         result.thumbnail = this.thumbnail;

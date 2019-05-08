@@ -51,7 +51,7 @@ QUnit.module("Markup rendering", moduleConfig, () => {
 
         this.prepareFileManager({
             customizeThumbnail: item => {
-                if(item.isFolder) {
+                if(item.isDirectory) {
                     return "";
                 }
                 counter++;

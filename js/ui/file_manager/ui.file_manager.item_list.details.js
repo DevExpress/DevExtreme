@@ -11,7 +11,7 @@ import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
-const PREDEFINED_COLUMN_NAMES = [ "name", "isFolder", "size", "thumbnail", "dateModified" ];
+const PREDEFINED_COLUMN_NAMES = [ "name", "isDirectory", "size", "thumbnail", "dateModified" ];
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -166,7 +166,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _calculateSizeColumnCellValue(rowData) {
-        return rowData.isFolder ? "" : getDisplayFileSize(rowData.size);
+        return rowData.isDirectory ? "" : getDisplayFileSize(rowData.size);
     }
 
     _ensureItemSelected(item) {
