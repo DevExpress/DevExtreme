@@ -869,7 +869,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 
         !this._texts.length && (this._texts = null);
 
-        textChanged = true;{
+        textChanged = true;
         if(this._texts) {
             locateTextNodes(this);
         } else {
