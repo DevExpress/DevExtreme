@@ -2,6 +2,7 @@ import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
 import eventsEngine from "events/core/events_engine";
+import { isDefined } from "core/utils/type";
 import "common.css!";
 
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
@@ -95,29 +96,16 @@ QUnit.module("Selection", () => {
             ["selectedItems", "selectedItemKeys"].forEach((selectedOption) => {
                 config = ` ,onInitial=${onInitialOption}, selectionMode=${selectionMode}`;
 
-                [null, undefined, []].forEach((selectedOptionValue) => {
-                    QUnit.test(`Set items: []: ${selectedOption}: ${selectedOptionValue}` + config, () => {
-                        let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-
-                        if(selectedOption === "selectedItems") {
-                            helper.createButtonGroup({ items: [], selectedItems: selectedOptionValue });
-                        } else {
-                            helper.createButtonGroup({ items: [], selectedItemKeys: selectedOptionValue });
-                        }
-
-                        helper.checkAsserts({
-                            selectedItems: [],
-                            selectedItemKeys: selectedOptionValue
-                        });
-                    });
-                });
-
-                [[], ["btn1"], ["btn2"], ["btn1", "btn2"]].forEach((selectedItemKeysValue) => {
+                [[], null, undefined, ["btn1"], ["btn2"], ["btn1", "btn2"]].forEach((selectedItemKeysValue) => {
                     QUnit.test(`Set items: []: ${selectedOption}: ["${selectedItemKeysValue}"]` + config, () => {
                         let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-                        let selectedItemsValue = selectedItemKeysValue.map((value) => {
-                            return { "text": value };
-                        });
+                        let selectedItemsValue = selectedItemKeysValue;
+
+                        if(isDefined(selectedItemKeysValue)) {
+                            selectedItemsValue = selectedItemKeysValue.map((value) => {
+                                return { "text": value };
+                            });
+                        }
 
                         if(selectedOption === "selectedItems") {
                             helper.createButtonGroup({ items: [], selectedItems: selectedItemsValue });
@@ -129,7 +117,7 @@ QUnit.module("Selection", () => {
                             helper.createButtonGroup({ items: [], selectedItemKeys: selectedItemKeysValue });
                             helper.checkAsserts({
                                 selectedItems: [],
-                                selectedItemKeys: selectionMode !== "multiple" && onInitialOption ? [] : selectedItemKeysValue,
+                                selectedItemKeys: selectionMode !== "multiple" && onInitialOption && selectedItemKeysValue !== null ? [] : selectedItemKeysValue,
                             });
                         }
                     });
@@ -162,19 +150,11 @@ QUnit.module("Selection", () => {
                         helper.createButtonGroup({ items: items, selectedItemKeys: [items[0].text] });
                     }
 
-                    if(onInitialOption) {
-                        helper.checkAsserts({
-
-                            selectedItems: [items[0]],
-                            selectedItemKeys: [items[0].text]
-                        });
-                    } else {
-                        helper.checkAsserts({
-                            selectionChanged: { addedItems: [items[0]], removedItems: [] },
-                            selectedItems: [items[0]],
-                            selectedItemKeys: [items[0].text]
-                        });
-                    }
+                    helper.checkAsserts({
+                        selectionChanged: onInitialOption ? null : { addedItems: [items[0]], removedItems: [] },
+                        selectedItems: [items[0]],
+                        selectedItemKeys: [items[0].text]
+                    });
 
                     helper.checkSelectedItems([items[0].id]);
                 });
@@ -188,18 +168,11 @@ QUnit.module("Selection", () => {
                         helper.createButtonGroup({ items: items, selectedItemKeys: [ items[1].text ] });
                     }
 
-                    if(onInitialOption) {
-                        helper.checkAsserts({
-                            selectedItems: [items[1]],
-                            selectedItemKeys: [items[1].text]
-                        });
-                    } else {
-                        helper.checkAsserts({
-                            selectionChanged: { addedItems: [items[1]], removedItems: [] },
-                            selectedItems: [items[1]],
-                            selectedItemKeys: [ items[1].text]
-                        });
-                    }
+                    helper.checkAsserts({
+                        selectionChanged: onInitialOption ? null : { addedItems: [items[1]], removedItems: [] },
+                        selectedItems: [items[1]],
+                        selectedItemKeys: [ items[1].text]
+                    });
 
                     helper.checkSelectedItems([items[1].id]);
                 });
@@ -218,18 +191,12 @@ QUnit.module("Selection", () => {
                         helper.createButtonGroup({ items: items, selectedItemKeys: [items[0].text, items[1].text ] });
                     }
 
-                    if(onInitialOption) {
-                        helper.checkAsserts({
-                            selectedItems: [ items[0], items[1]],
-                            selectedItemKeys: [ items[0].text, items[1].text ]
-                        });
-                    } else {
-                        helper.checkAsserts({
-                            selectionChanged: { addedItems: [ items[0], items[1]], removedItems: [] },
-                            selectedItems: [ items[0], items[1]],
-                            selectedItemKeys: [ items[0].text, items[1].text]
-                        });
-                    }
+                    helper.checkAsserts({
+                        selectionChanged: onInitialOption ? null : { addedItems: [ items[0], items[1]], removedItems: [] },
+                        selectedItems: [ items[0], items[1]],
+                        selectedItemKeys: [ items[0].text, items[1].text]
+                    });
+
                     helper.checkSelectedItems([items[0].id, items[1].id]);
                 });
 
