@@ -81,55 +81,23 @@ QUnit.module("Selection", () => {
                 config = ` ,onInitial=${onInitialOption}, selectionMode=${selectionMode}`;
 
                 QUnit.module("Set items: null/undefined/[]", () => {
-                    QUnit.test(`${selectedOption}: null` + config, () => {
-                        let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+                    [null, undefined, []].forEach((selectedOptionValue) => {
+                        QUnit.test(`${selectedOption}: ${selectedOptionValue}` + config, () => {
+                            let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
-                        if(selectedOption === "selectedItems") {
-                            helper.createButtonGroup({ items: [], selectedItems: null });
-                        } else {
-                            helper.createButtonGroup({ items: [], selectedItemKeys: null });
-                        }
+                            if(selectedOption === "selectedItems") {
+                                helper.createButtonGroup({ items: [], selectedItems: selectedOptionValue });
+                            } else {
+                                helper.createButtonGroup({ items: [], selectedItemKeys: selectedOptionValue });
+                            }
 
-                        helper.checkAsserts({
-                            selectionChanged: { count: 0, addedItems: [], removedItems: [] },
-                            selectedItems: [],
-                            selectedItemKeys: []
+                            helper.checkAsserts({
+                                selectionChanged: { count: 0, addedItems: [], removedItems: [] },
+                                selectedItems: [],
+                                selectedItemKeys: []
+                            });
+                            helper.checkSelectedItems([]);
                         });
-                        helper.checkSelectedItems([]);
-                    });
-
-                    QUnit.test(`${selectedOption}: undefined` + config, () => {
-                        let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-
-                        if(selectedOption === "selectedItems") {
-                            helper.createButtonGroup({ items: [], selectedItems: undefined });
-                        } else {
-                            helper.createButtonGroup({ items: [], selectedItemKeys: undefined });
-                        }
-
-                        helper.checkAsserts({
-                            selectionChanged: { count: 0, addedItems: [], removedItems: [] },
-                            selectedItems: [],
-                            selectedItemKeys: []
-                        });
-                        helper.checkSelectedItems([]);
-                    });
-
-                    QUnit.test(`${selectedOption}: []` + config, () => {
-                        let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
-
-                        if(selectedOption === "selectedItems") {
-                            helper.createButtonGroup({ items: [], selectedItems: [] });
-                        } else {
-                            helper.createButtonGroup({ items: [], selectedItemKeys: [] });
-                        }
-
-                        helper.checkAsserts({
-                            selectionChanged: { count: 0, addedItems: [], removedItems: [] },
-                            selectedItems: [],
-                            selectedItemKeys: []
-                        });
-                        helper.checkSelectedItems([]);
                     });
 
                     QUnit.test(`${selectedOption}: ['btn1']` + config, () => {
