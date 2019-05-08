@@ -1857,7 +1857,7 @@ const Scheduler = Widget.inherit({
     },
 
     _isLoaded: function() {
-        return typeUtils.isDefined(this._loadedResources) && this._dataSource.isLoaded() && this._loaded;
+        return typeUtils.isDefined(this._loadedResources) && this._dataSource && this._dataSource.isLoaded() && this._loaded;
     },
 
     _render: function() {
