@@ -102,8 +102,8 @@ class ArrayFileProvider extends FileProvider {
     _deleteItem({ parentPath, dataItem }) {
         let array = this._data;
         if(parentPath !== "") {
-            const { children } = this._findItem(parentPath);
-            array = children;
+            const folder = this._findItem(parentPath);
+            array = this._subFileItemsGetter(folder);
         }
         const index = array.indexOf(dataItem);
         array.splice(index, 1);

@@ -186,4 +186,34 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems(true).length > 0, "context menu is shown");
     });
 
+    test('root folder context menu has restricted items', function(assert) {
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderNode(0).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItems(true);
+        assert.equal($items.length, 3, "context menu is shown");
+
+        assert.ok($items.eq(0).text().indexOf("New folder") > -1, "create folder item shown");
+        assert.ok($items.eq(1).text().indexOf("Upload files") > -1, "upload files item shown");
+        assert.ok($items.eq(2).text().indexOf("Refresh") > -1, "refresh item shown");
+    });
+
+    test('root folder action button menu has restricted items', function(assert) {
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getContextMenuItems().length, 0, "context menu is hidden");
+
+        this.wrapper.getFolderActionButton(0).trigger("dxclick");
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItems(true);
+        assert.equal($items.length, 3, "context menu is shown");
+
+        assert.ok($items.eq(0).text().indexOf("New folder") > -1, "create folder item shown");
+        assert.ok($items.eq(1).text().indexOf("Upload files") > -1, "upload files item shown");
+        assert.ok($items.eq(2).text().indexOf("Refresh") > -1, "refresh item shown");
+    });
+
 });
