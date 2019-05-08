@@ -149,7 +149,7 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     },
 
     getSeriesPairCoord(coord, isArgument) {
-        let oppositeCoord;
+        let oppositeCoord = null;
         const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
         const coordName = !isOpposite ? "vx" : "vy";
         const minCoordName = !this._options.rotated ? "minY" : "minX";
