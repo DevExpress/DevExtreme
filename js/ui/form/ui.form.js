@@ -1519,9 +1519,14 @@ var Form = Widget.inherit({
     _dimensionChanged: function() {
         var currentScreenFactor = this._getCurrentScreenFactor();
 
-        if(this._currentScreenFactor !== currentScreenFactor && this._isColCountChanged(this._currentScreenFactor, currentScreenFactor)) {
+        if(this._cachedScreenFactor !== currentScreenFactor) {
             this._currentScreenFactor = currentScreenFactor;
-            this._refresh();
+            if(this._isColCountChanged(this._cachedScreenFactor, currentScreenFactor)) {
+                this._refresh();
+            }
+
+            this._cachedScreenFactor = currentScreenFactor;
+            return;
         }
     },
 
