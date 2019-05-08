@@ -2485,6 +2485,31 @@ QUnit.module("keyboard navigation", {
         assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
     });
 
+    QUnit.test("focusing next item after 'down' pressing if selectAll checkbox is focused", assert => {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+        assert.expect(2);
+
+        const $element = $("#list").dxList({
+            showSelectionControls: true,
+            selectionMode: "all",
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4]
+        });
+
+        const $selectAllCheckBox = $element.find(".dx-list-select-all-checkbox");
+        const keyboard = keyboardMock($selectAllCheckBox);
+        const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+
+        $selectAllCheckBox.trigger("focusin");
+        keyboard.keyDown("down");
+        this.clock.tick();
+
+        assert.notOk($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is not focused");
+        assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
+    });
+
     QUnit.test("list does not scroll to item after click on it", assert => {
         assert.expect(2);
 
