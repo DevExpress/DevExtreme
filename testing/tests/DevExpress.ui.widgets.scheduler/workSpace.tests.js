@@ -1603,7 +1603,10 @@ QUnit.testStart(function() {
 
         $($element).trigger("focusin");
         keyboard.keyDown("enter");
-        assert.notOk(updateSpy.getCall(0).args[0].cellData === {}, 'cellData is not empty');
+        const cellData = updateSpy.getCall(0).args[0].cellData;
+        assert.notOk(cellData === {}, 'cellData is not empty');
+        assert.deepEqual(cellData.startDate, new Date(2015, 2, 30), 'cellData startDate is passing right');
+        assert.deepEqual(cellData.endDate, new Date(2015, 2, 31), 'cellData endDate is passing right');
     });
 
     QUnit.test("Workspace should handle enter/space key correctly if e.cancel=true", function(assert) {
