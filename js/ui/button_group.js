@@ -249,14 +249,17 @@ const ButtonGroup = Widget.inherit({
             }
         };
 
-        if(selectedItems.length) {
+        if(isDefined(selectedItems) && selectedItems.length) {
             options.selectedItems = selectedItems;
         }
         this._buttonsCollection = this._createComponent($buttons, ButtonCollection, options);
     },
 
     _needSelectionRequired() {
-        if(this.option("selectedItemKeys").length || this.option("selectedItems").length) {
+        let selectedItemKeys = this.option("selectedItemKeys");
+        let selectedItems = this.option("selectedItems");
+
+        if(isDefined(selectedItemKeys) && selectedItemKeys.length || isDefined(selectedItems) && selectedItems.length) {
             return this.option("selectionMode") === "single";
         }
     },
