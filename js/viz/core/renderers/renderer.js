@@ -867,8 +867,10 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
             return t;
         });
 
+        !this._texts.length && (this._texts = null);
+
         textChanged = true;
-        if(this._texts.length) {
+        if(this._texts) {
             locateTextNodes(this);
         } else {
             this.element.textContent = "";
