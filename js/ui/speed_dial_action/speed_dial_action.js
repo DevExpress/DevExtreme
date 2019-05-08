@@ -56,10 +56,11 @@ const SpeedDialAction = Widget.inherit({
             animation: {
                 show: {
                     type: "pop",
-                    duration: 150,
-                    easing: "linear",
+                    duration: 200,
+                    delay: 30,
+                    easing: "cubic-bezier(0.4, 0, 0.2, 1)",
                     from: {
-                        scale: 0.3,
+                        scale: 0,
                         opacity: 0
                     },
                     to: {
@@ -69,13 +70,16 @@ const SpeedDialAction = Widget.inherit({
                 },
                 hide: {
                     type: "pop",
-                    duration: 100,
-                    easing: "linear",
+                    duration: 200,
+                    delay: 30,
+                    easing: "cubic-bezier(0.4, 0, 0.2, 1)",
                     from: {
-                        scale: 1
+                        scale: 1,
+                        opacity: 1
                     },
                     to: {
-                        scale: 0
+                        scale: 0,
+                        opacity: 0
                     }
                 }
             },
