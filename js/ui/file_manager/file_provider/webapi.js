@@ -67,7 +67,7 @@ class WebApiFileProvider extends FileProvider {
     copyItems(items, destinationFolder) {
         return items.map(item => this._executeRequest("Copy", {
             sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName
+            destinationId: destinationFolder.relativeName + "/" + item.name
         }));
     }
 
@@ -134,9 +134,12 @@ class WebApiFileProvider extends FileProvider {
             arguments: JSON.stringify(args)
         });
 
+        const method = command === "GetDirContents" ? "GET" : "POST";
+
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._endpointUrl + "?" + queryString,
+            method,
             dataType: "json",
             cache: false
         }).then(result => {
