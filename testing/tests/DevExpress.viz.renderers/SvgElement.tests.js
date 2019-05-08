@@ -4736,10 +4736,14 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.strictEqual(text.element.tagName, "text", "tag name");
             assert.equal(text.element.getAttribute("x"), position.x, "x attribute");
             assert.equal(text.element.getAttribute("y"), position.y, "y attribute");
-            assert.strictEqual(text.element.childNodes.length, 1, "child nodes count");
-            assert.strictEqual(text.element.childNodes[0].nodeName, "#text", "child is text node");
-            assert.strictEqual(text.element.childNodes[0].wholeText, expected.text, "text of the #text node");
-            assert.strictEqual(text.element.textContent, expected.text, "text content");
+            if(expected) {
+                assert.strictEqual(text.element.childNodes.length, 1, "child nodes count");
+                assert.strictEqual(text.element.childNodes[0].nodeName, "#text", "child is text node");
+                assert.strictEqual(text.element.childNodes[0].wholeText, expected.text, "text of the #text node");
+                assert.strictEqual(text.element.textContent, expected.text, "text content");
+            } else {
+                assert.strictEqual(text.element.childNodes.length, 0, "child nodes count");
+            }
         },
         checkTspans: function(assert, text, expectedData, position, strokeData) {
             assert.strictEqual(text.element.tagName, "text", "tag name");
@@ -6144,6 +6148,23 @@ function checkDashStyle(assert, elem, result, style, value) {
                 { x: 35, y: 100, text: "Text" },
                 { x: 35, dy: 12, text: "Text Text Text 1..." },
             ], { x: 35, y: 100 });
+        });
+
+        // T732389
+        QUnit.test("textOverflow hide. Can apply x attr on hidden text", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There is test text for checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(110, 20, {
+                wordWrap: "normal",
+                textOverflow: "hide"
+            });
+
+            text.attr({ x: 45 });
+            this.checkSimple(assert, text, undefined, { x: 45, y: 100 });
         });
     }
 })();
