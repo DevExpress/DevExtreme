@@ -234,13 +234,13 @@ const ButtonGroup = Widget.inherit({
             accessKey: this.option("accessKey"),
             tabIndex: this.option("tabIndex"),
             noDataText: "",
-            selectionRequired: this._getSelectionRequiredValued(),
+            selectionRequired: this._getSelectionRequiredValue(),
             onItemRendered: e => {
                 const width = this.option("width");
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
             },
             onSelectionChanged: e => {
-                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValued());
+                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValue());
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
             },
@@ -255,7 +255,7 @@ const ButtonGroup = Widget.inherit({
         this._buttonsCollection = this._createComponent($buttons, ButtonCollection, options);
     },
 
-    _getSelectionRequiredValued() {
+    _getSelectionRequiredValue() {
         let selectedItemKeys = this.option("selectedItemKeys");
         let selectedItems = this.option("selectedItems");
 
@@ -284,7 +284,7 @@ const ButtonGroup = Widget.inherit({
                 break;
             case "selectedItemKeys":
             case "selectedItems":
-                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValued());
+                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValue());
                 this._buttonsCollection.option(args.name, args.value);
                 break;
             case "onItemClick":
