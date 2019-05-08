@@ -134,8 +134,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 }
             };
 
-            action._options.animation.show.delay = action._options.animation.show.duration * i;
-            action._options.animation.hide.delay = action._options.animation.hide.duration * (lastActionIndex - i);
+            action._options.animation.show.delay = action._options.animation.show.delay * i;
+            action._options.animation.hide.delay = action._options.animation.hide.delay * (lastActionIndex - i);
 
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
         }
