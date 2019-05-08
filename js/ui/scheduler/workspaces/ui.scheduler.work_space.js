@@ -109,12 +109,12 @@ var SchedulerWorkSpace = Widget.inherit({
                 e.stopPropagation();
 
                 if(this._focusedCells && this._focusedCells.length) {
-                    var $itemElement = $(this.option("focusedElement"));
+                    var $itemElement = $(this.option("focusedElement")),
+                        $cellElement = $itemElement.length ? $itemElement : this._focusedCells;
 
                     e.target = this._focusedCells;
                     this._showPopup = true;
-
-                    this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($itemElement) });
+                    this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($cellElement) });
                 }
             },
             arrowPressHandler = function(e, cell) {
