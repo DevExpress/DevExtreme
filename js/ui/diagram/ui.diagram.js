@@ -364,12 +364,12 @@ class Diagram extends Widget {
     }
     /**
     * @name dxDiagramMethods.setData
-    * @publicName setData(data, keepExistingItems)
+    * @publicName setData(data, updateExistingItemsOnly)
     * @param1 data:string
-    * @param2 keepExistingItems:boolean
+    * @param2 updateExistingItemsOnly:boolean
     */
-    setData(data, keepExistingItems) {
-        this._setDiagramData(data, keepExistingItems);
+    setData(data, updateExistingItemsOnly) {
+        this._setDiagramData(data, updateExistingItemsOnly);
         this._raiseDataChangeAction();
     }
 
@@ -579,39 +579,35 @@ class Diagram extends Widget {
 
             /**
             * @name dxDiagramOptions.customShapes
-            * @type Array<DiagramCustomShapeItem>
-            * @default null
+            * @type Array<Object>
+            * @default []
             */
-            customShapes: [],
-            /**
-            * @name DiagramCustomShapeItem
-            * @type object
-            */
-            /**
-            * @name DiagramCustomShapeItem.id
-            * @type Number
-            */
-            /**
-            * @name DiagramCustomShapeItem.title
-            * @type String
-            */
-            /**
-            * @name DiagramCustomShapeItem.svgUrl
-            * @type String
-            */
-            /**
-            * @name DiagramCustomShapeItem.defaultWidth
-            * @type Number
-            */
-            /**
-            * @name DiagramCustomShapeItem.defaultHeight
-            * @type Number
-            */
-            /**
-            * @name DiagramCustomShapeItem.allowHasText
-            * @type Boolean
-            */
-
+            customShapes: [
+                /**
+                * @name dxDiagramOptions.customShapes.id
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.title
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.svgUrl
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.defaultWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.defaultHeight
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.allowHasText
+                * @type Boolean
+                */
+            ],
             /**
              * @name dxDiagramOptions.export
              * @type object
