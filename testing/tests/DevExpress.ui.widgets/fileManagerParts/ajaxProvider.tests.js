@@ -6,12 +6,12 @@ import AjaxFileProvider from "ui/file_manager/file_provider/ajax";
 const fileItems = [
     {
         name: "F1",
-        isFolder: true,
+        isDirectory: true,
         children: [ { name: "File1.1.txt" } ]
     },
     {
         name: "F2",
-        isFolder: true
+        isDirectory: true
     }
 ];
 
@@ -42,9 +42,9 @@ QUnit.module("Ajax File Provider", moduleConfig, () => {
             .done(folders => {
                 assert.equal(folders.length, 2);
                 assert.equal(folders[0].name, "F1");
-                assert.ok(folders[0].isFolder);
+                assert.ok(folders[0].isDirectory);
                 assert.equal(folders[1].name, "F2");
-                assert.ok(folders[1].isFolder);
+                assert.ok(folders[1].isDirectory);
                 done();
             });
     });

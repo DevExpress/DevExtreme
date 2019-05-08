@@ -560,45 +560,25 @@ interface JQuery {
 /* #EndJQueryAugmentation */
 declare module DevExpress.ui {
     /** @name AjaxFileProvider.Options */
-    export interface AjaxFileProviderOptions {
-        /** @name AjaxFileProvider.Options.dateModifiedExpr */
-        dateModifiedExpr?: string | Function;
-        /** @name AjaxFileProvider.Options.isFolderExpr */
-        isFolderExpr?: string | Function;
+    export interface AjaxFileProviderOptions extends FileProviderOptions<AjaxFileProvider> {
         /** @name AjaxFileProvider.Options.itemsExpr */
         itemsExpr?: string | Function;
-        /** @name AjaxFileProvider.Options.nameExpr */
-        nameExpr?: string | Function;
-        /** @name AjaxFileProvider.Options.sizeExpr */
-        sizeExpr?: string | Function;
-        /** @name AjaxFileProvider.Options.thumbnailExpr */
-        thumbnailExpr?: string | Function;
         /** @name AjaxFileProvider.Options.url */
         url?: string;
     }
     /** @name AjaxFileProvider */
-    export class AjaxFileProvider {
+    export class AjaxFileProvider extends FileProvider {
         constructor(options?: AjaxFileProviderOptions)
     }
     /** @name ArrayFileProvider.Options */
-    export interface ArrayFileProviderOptions {
+    export interface ArrayFileProviderOptions extends FileProviderOptions<ArrayFileProvider> {
         /** @name ArrayFileProvider.Options.data */
         data?: Array<any>;
-        /** @name ArrayFileProvider.Options.dateModifiedExpr */
-        dateModifiedExpr?: string | Function;
-        /** @name ArrayFileProvider.Options.isFolderExpr */
-        isFolderExpr?: string | Function;
         /** @name ArrayFileProvider.Options.itemsExpr */
         itemsExpr?: string | Function;
-        /** @name ArrayFileProvider.Options.nameExpr */
-        nameExpr?: string | Function;
-        /** @name ArrayFileProvider.Options.sizeExpr */
-        sizeExpr?: string | Function;
-        /** @name ArrayFileProvider.Options.thumbnailExpr */
-        thumbnailExpr?: string | Function;
     }
     /** @name ArrayFileProvider */
-    export class ArrayFileProvider {
+    export class ArrayFileProvider extends FileProvider {
         constructor(options?: ArrayFileProviderOptions)
     }
     /** @name ColCountResponsible */
@@ -773,8 +753,23 @@ declare module DevExpress.ui {
         /** @name EmailRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
+    /** @name FileProvider.Options */
+    export interface FileProviderOptions<T = FileProvider> {
+        /** @name FileProvider.Options.dateModifiedExpr */
+        dateModifiedExpr?: string | Function;
+        /** @name FileProvider.Options.isDirectoryExpr */
+        isDirectoryExpr?: string | Function;
+        /** @name FileProvider.Options.nameExpr */
+        nameExpr?: string | Function;
+        /** @name FileProvider.Options.sizeExpr */
+        sizeExpr?: string | Function;
+        /** @name FileProvider.Options.thumbnailExpr */
+        thumbnailExpr?: string | Function;
+    }
     /** @name FileProvider */
-    export type FileProvider = any;
+    export class FileProvider {
+        constructor(options?: FileProviderOptions)
+    }
     /** @name GridBase.Options */
     export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
         /** @name GridBase.Options.allowColumnReordering */
@@ -1279,7 +1274,8 @@ declare module DevExpress.ui {
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
     /** @name OneDriveFileProvider */
-    export type OneDriveFileProvider = any;
+    export interface OneDriveFileProvider extends FileProvider {
+    }
     /** @name PatternRule */
     export interface PatternRule {
         /** @name PatternRule.ignoreEmptyValue */
@@ -1350,24 +1346,14 @@ declare module DevExpress.ui {
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
     /** @name WebApiFileProvider.Options */
-    export interface WebApiFileProviderOptions {
-        /** @name WebApiFileProvider.Options.dateModifiedExpr */
-        dateModifiedExpr?: string | Function;
+    export interface WebApiFileProviderOptions extends FileProviderOptions<WebApiFileProvider> {
         /** @name WebApiFileProvider.Options.endpointUrl */
         endpointUrl?: string;
         /** @name WebApiFileProvider.Options.hasSubDirectoriesExpr */
         hasSubDirectoriesExpr?: string | Function;
-        /** @name WebApiFileProvider.Options.isFolderExpr */
-        isFolderExpr?: string | Function;
-        /** @name WebApiFileProvider.Options.nameExpr */
-        nameExpr?: string | Function;
-        /** @name WebApiFileProvider.Options.sizeExpr */
-        sizeExpr?: string | Function;
-        /** @name WebApiFileProvider.Options.thumbnailExpr */
-        thumbnailExpr?: string | Function;
     }
     /** @name WebApiFileProvider */
-    export class WebApiFileProvider {
+    export class WebApiFileProvider extends FileProvider {
         constructor(options?: WebApiFileProviderOptions)
     }
     /** @name Widget.Options */
@@ -2293,26 +2279,16 @@ declare module DevExpress.ui {
         customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
         customizeThumbnail?: ((fileItem: any) => string);
-        /** @name dxFileManager.Options.dateModifiedExpr */
-        dateModifiedExpr?: string | ((fileItem: any) => any);
         /** @name dxFileManager.Options.fileProvider */
         fileProvider?: any;
-        /** @name dxFileManager.Options.isFolderExpr */
-        isFolderExpr?: string | ((fileItem: any) => any);
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
-        /** @name dxFileManager.Options.nameExpr */
-        nameExpr?: string | ((fileItem: any) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
         permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
-        /** @name dxFileManager.Options.sizeExpr */
-        sizeExpr?: string | ((fileItem: any) => any);
-        /** @name dxFileManager.Options.thumbnailExpr */
-        thumbnailExpr?: string | ((fileItem: any) => any);
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {
