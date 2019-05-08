@@ -65,6 +65,7 @@ const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
 const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = "dx-scheduler-recurrence-rule-item-opened";
 const WIDGET_SMALL_WIDTH = 400;
 const APPOINTMENT_POPUP_WIDTH = 610;
+const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 768;
 
 const TOOLBAR_ITEM_AFTER_LOCATION = "after";
 const TOOLBAR_ITEM_BEFORE_LOCATION = "before";
@@ -1539,6 +1540,7 @@ const Scheduler = Widget.inherit({
 
         this.hideAppointmentTooltip();
         this.resizePopup();
+        this._updatePopupFullScreenMode();
     },
 
     _clean: function() {
@@ -2252,10 +2254,27 @@ const Scheduler = Widget.inherit({
         });
     },
 
+    _isPopupFullScreenNeeded() {
+        if(windowUtils.hasWindow()) {
+            const window = windowUtils.getWindow();
+            return $(window).width() < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH;
+        }
+        return false;
+    },
+
+    _updatePopupFullScreenMode() {
+        if(this._popup && this._popup.option("visible")) {
+            const isFullScreen = this._isPopupFullScreenNeeded();
+            this._popup.option({
+                maxWidth: isFullScreen ? "100%" : APPOINTMENT_POPUP_WIDTH,
+                fullScreen: isFullScreen
+            });
+        }
+    },
+
     _popupConfig(appointmentData) {
         const template = this._getTemplateByOption("appointmentPopupTemplate");
         return {
-            maxWidth: APPOINTMENT_POPUP_WIDTH,
             height: "auto",
             maxHeight: "100%",
             onHiding: () => this.focus(),
@@ -2265,15 +2284,8 @@ const Scheduler = Widget.inherit({
                     container: options.container
                 })
             ),
+            onShowing: () => this._updatePopupFullScreenMode(),
             defaultOptionsRules: [
-                {
-                    device: function() {
-                        return !devices.current().generic;
-                    },
-                    options: {
-                        fullScreen: true
-                    }
-                },
                 {
                     device: () => devices.current().android,
                     options: {

@@ -1855,15 +1855,6 @@ QUnit.testStart(function() {
         assert.ok(repaintStub.calledOnce, "Sheduler was repainted");
     });
 
-    QUnit.test("Appointment popup should have right defaultOptionsRules", function(assert) {
-        this.createInstance();
-        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-        var popupDefaultOptions = this.instance.getAppointmentPopup().option("defaultOptionsRules")[0].options;
-
-        assert.deepEqual(popupDefaultOptions, { fullScreen: true }, "Popup has right default");
-    });
-
     QUnit.test("Filter options should be updated when dataSource is changed", function(assert) {
         this.createInstance({
             currentDate: new Date(2016, 2, 15),
