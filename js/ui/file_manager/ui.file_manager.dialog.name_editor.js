@@ -5,6 +5,7 @@ import TextBox from "../text_box";
 import FileManagerDialogBase from "./ui.file_manager.dialog.js";
 
 const FILE_MANAGER_DIALOG_NAME_EDITOR = "dx-filemanager-dialog-name-editor";
+const FILE_MANAGER_DIALOG_NAME_EDITOR_POPUP = "dx-filemanager-dialog-name-editor-popup";
 
 class FileManagerNameEditorDialog extends FileManagerDialogBase {
 
@@ -22,10 +23,10 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
 
     _getDialogOptions() {
         return extend(super._getDialogOptions(), {
-            width: 340,
-            height: 180,
             title: this.option("title"),
-            buttonText: this.option("buttonText")
+            buttonText: this.option("buttonText"),
+            contentCssClass: FILE_MANAGER_DIALOG_NAME_EDITOR,
+            popupCssClass: FILE_MANAGER_DIALOG_NAME_EDITOR_POPUP
         });
     }
 
@@ -43,10 +44,6 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
     _getDialogResult() {
         const nameValue = this._nameTextBox.option("value");
         return nameValue ? { name: nameValue } : null;
-    }
-
-    _getCssClass() {
-        return FILE_MANAGER_DIALOG_NAME_EDITOR;
     }
 
     _getDefaultOptions() {
