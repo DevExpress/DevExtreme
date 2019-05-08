@@ -1857,7 +1857,15 @@ const Scheduler = Widget.inherit({
     },
 
     _isLoaded: function() {
-        return typeUtils.isDefined(this._loadedResources) && this._dataSource && this._dataSource.isLoaded() && this._loaded;
+        return this._isResourcesLoaded() && this._isDataSourceLoaded();
+    },
+
+    _isResourcesLoaded: function() {
+        return typeUtils.isDefined(this._loadedResources);
+    },
+
+    _isDataSourceLoaded: function() {
+        return this._dataSource && this._dataSource.isLoaded();
     },
 
     _render: function() {
@@ -1865,12 +1873,6 @@ const Scheduler = Widget.inherit({
         this._toggleSmallClass();
 
         this._toggleAdaptiveClass();
-
-        this.callBase();
-    },
-
-    repaint: function repaint() {
-        this._loaded = true;
 
         this.callBase();
     },
