@@ -208,7 +208,9 @@ class Diagram extends Widget {
                 setType: this._createSetter(nodes.typeExpr || DIAGRAM_TYPE_FIELD),
 
                 getParentKey: this._createGetter(nodes.parentKeyExpr || DIAGRAM_PARENT_KEY_FIELD),
-                getItems: this._createGetter(nodes.itemsExpr || DIAGRAM_ITEMS_FIELD)
+                setParentKey: this._createSetter(nodes.parentKeyExpr || DIAGRAM_PARENT_KEY_FIELD),
+                getItems: this._createGetter(nodes.itemsExpr || DIAGRAM_ITEMS_FIELD),
+                setItems: this._createSetter(nodes.itemsExpr || DIAGRAM_ITEMS_FIELD)
             },
             edgeDataImporter: {
                 getKey: this._createGetter(edges.keyExpr || DIAGRAM_KEY_FIELD),
