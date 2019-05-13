@@ -1158,6 +1158,7 @@ const Scheduler = Widget.inherit({
             case "currentDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
+                this.option("selectedCellData", []);
                 this._workSpace.option(name, new Date(value));
                 this._header.option(name, new Date(value));
                 this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
