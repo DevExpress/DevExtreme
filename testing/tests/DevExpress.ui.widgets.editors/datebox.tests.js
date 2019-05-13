@@ -3805,6 +3805,7 @@ QUnit.module("datebox validation", {}, () => {
     QUnit.test("required validator should not block valuechange in datetime strategy", (assert) => {
         const $dateBox = $("#dateBox").dxDateBox({
             type: "datetime",
+            pickerType: "calendar",
             opened: true,
             value: null
         }).dxValidator({
