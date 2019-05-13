@@ -893,6 +893,21 @@ const TagBox = SelectBox.inherit({
         }
     },
 
+    _isGroupedData: function() {
+        return this.option("grouped") && !this._dataSource.group();
+    },
+
+    _getFilteredGroupedItems: function(values) {
+        var selectedItems = [];
+        values.forEach(function(value) {
+            var item = this._getItemFromPlain(value);
+            if(isDefined(item)) {
+                selectedItems.push(item);
+            }
+        }.bind(this));
+        return selectedItems;
+    },
+
     _loadTagsData: function() {
         const values = this._getValue();
         const tagData = new Deferred();
@@ -901,6 +916,9 @@ const TagBox = SelectBox.inherit({
 
         this._getFilteredItems(values)
             .done((filteredItems) => {
+                if(!filteredItems.length && this._isGroupedData()) {
+                    filteredItems = this._getFilteredGroupedItems(values);
+                }
                 const items = this._createTagsData(values, filteredItems);
                 items.always(function(data) {
                     tagData.resolve(data);
