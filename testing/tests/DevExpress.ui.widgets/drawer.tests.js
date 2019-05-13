@@ -1052,11 +1052,11 @@ QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl
     const $panelContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
     assert.equal($panel.position().left, -150, "panel has correct left when minSize and max size are set");
-    assert.equal($panelContent.position().left, 0, "panel has correct left when minSize and max size are set");
+    assert.equal($panelContent.position().left, 500, "panel has correct left when minSize and max size are set");
     drawer.toggle();
 
     assert.equal($panel.position().left, 100, "panel has correct left when minSize and max size are set");
-    assert.equal($panelContent.position().left, 0, "panel has correct left when minSize and max size are set");
+    assert.equal($panelContent.position().left, 500, "panel has correct left when minSize and max size are set");
 
     fx.off = false;
 });
@@ -1081,7 +1081,7 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
 
     resizeCallbacks.fire();
 
-    assert.equal($panelOverlayContent.css("transform"), "matrix(1, 0, 0, 1, 0, 0)", "panel overlay content position is OK");
+    assert.equal($panelOverlayContent.css("transform"), "matrix(1, 0, 0, 1, 1000, 0)", "panel overlay content position is OK");
 
     fx.off = false;
 });
