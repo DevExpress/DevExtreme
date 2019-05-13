@@ -32,8 +32,8 @@ var browserFromUA = function(ua) {
             browserVersion = browserVersion && browserVersion[1];
         } else if(ua.indexOf("chrome") >= 0) {
             browserName = "chrome";
-            result.chromeVersion = /Chrome\/(\d+\.\d+)/i.exec(ua);
-            result.chromeVersion = result.chromeVersion && result.chromeVersion[1];
+            browserVersion = /Chrome\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
         }
     }
 

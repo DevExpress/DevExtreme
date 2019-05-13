@@ -1083,8 +1083,8 @@ testComponentDefaults(Tabs,
 );
 
 [
-    { name: "chrome", chromeVersion: "65.9", mode: "number" },
-    { name: "chrome", chromeVersion: "66.0", mode: "text" },
+    { name: "chrome", version: "65.9", mode: "number" },
+    { name: "chrome", version: "66.0", mode: "text" },
     { name: "msie", version: "74.9", mode: "number" },
     { name: "msie", version: "75.0", mode: "text" },
     { name: "safari", version: "11.9", mode: "number" },
@@ -1101,7 +1101,6 @@ testComponentDefaults(Tabs,
             delete browser.safari;
             delete browser.msie;
             browser.version = item.version;
-            browser.chromeVersion = item.chromeVersion;
             browser[item.name] = true;
 
             devices.real({ platform: "ios" });

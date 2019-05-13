@@ -164,7 +164,7 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    var version = parseFloat(browser.chromeVersion || browser.version);
+                    var version = parseFloat(browser.version);
                     return devices.real().platform !== "generic"
                         && !(
                             browser.chrome && version >= 66
