@@ -386,19 +386,16 @@ let DropDownButton = Widget.inherit({
             height: this.option("height"),
             stylingMode: this.option("stylingMode"),
             selectionMode: "none",
-            buttonTemplate: (buttonData, buttonContent) => {
+            buttonTemplate: ({ text, icon }, buttonContent) => {
                 if(this.option("splitButton") || !this.option("showArrowIcon")) {
                     return "content";
                 }
 
-                var $firstIcon = getImageContainer(buttonData && buttonData.icon),
-                    $textContainer = buttonData && buttonData.text ? $("<span>").text(buttonData.text).addClass("dx-button-text") : undefined,
-                    $secondIcon = getImageContainer("spindown").addClass(DX_ICON_RIGHT_CLASS);
+                const $firstIcon = getImageContainer(icon);
+                const $textContainer = text ? $("<span>").text(text).addClass("dx-button-text") : undefined;
+                const $secondIcon = getImageContainer("spindown").addClass(DX_ICON_RIGHT_CLASS);
 
-                $(buttonContent)
-                    .append($firstIcon)
-                    .append($textContainer)
-                    .append($secondIcon);
+                $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
             }
         }, this._getInnerOptionsCache("buttonGroupOptions"));
     },
@@ -599,6 +596,13 @@ let DropDownButton = Widget.inherit({
         });
     },
 
+    _actionButtonOptionChanged({ name, value }) {
+        const newConfig = {};
+        newConfig[name] = value;
+        this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), newConfig));
+        this._popup && this._popup.repaint();
+    },
+
     _optionChanged(args) {
         const { name, value } = args;
         switch(args.name) {
@@ -641,16 +645,8 @@ let DropDownButton = Widget.inherit({
                 this._loadSelectedItem().done(this._updateActionButton.bind(this));
                 break;
             case "icon":
-                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
-                    icon: value
-                }));
-                this._popup && this._popup.repaint();
-                break;
             case "text":
-                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
-                    text: value
-                }));
-                this._popup && this._popup.repaint();
+                this._actionButtonOptionChanged(args);
                 break;
             case "showArrowIcon":
                 this._buttonGroup.repaint();
