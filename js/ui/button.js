@@ -142,6 +142,7 @@ var Button = Widget.inherit({
             useSubmitBehavior: false,
 
             useInkRipple: false,
+            _templateData: {},
 
             /**
             * @name dxButtonOptions.stylingMode
@@ -288,11 +289,11 @@ var Button = Widget.inherit({
 
         const transclude = this._getAnonymousTemplateName() === this.option("template"),
             template = this._getTemplateByOption("template"),
-            $result = $(template.render({
+            $result = $(template.render(extend({
                 model: data,
                 container: domUtils.getPublicElement(this._$content),
                 transclude
-            }));
+            }, this.option("contentTemplateArgs"))));
 
         if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
             this._$content.replaceWith($result);
@@ -336,10 +337,10 @@ var Button = Widget.inherit({
             icon = "back";
         }
 
-        return {
+        return extend(this.option("_templateData"), {
             icon: icon,
             text: text
-        };
+        });
     },
 
     _renderClick: function() {
