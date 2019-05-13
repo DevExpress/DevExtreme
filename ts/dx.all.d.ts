@@ -2100,7 +2100,7 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.itemTemplate */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.items */
-        items?: Array<CollectionWidgetItem | any>;
+        items?: Array<dxDropDownButtonItem | any>;
         /** @name dxDropDownButton.Options.keyExpr */
         keyExpr?: string;
         /** @name dxDropDownButton.Options.noDataText */
@@ -2144,6 +2144,10 @@ declare module DevExpress.ui {
         toggle(): Promise<void> & JQueryPromise<void>;
         /** @name dxDropDownButton.toggle(visibility) */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
+    }
+
+    /** @name dxDropDownButtonItem */
+    export interface dxDropDownButtonItem extends dxListItem {
     }
     /** @name dxDropDownEditor.Options */
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
