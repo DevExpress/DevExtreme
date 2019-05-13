@@ -36,6 +36,20 @@ let DropDownButton = Widget.inherit({
         return extend(this.callBase(), {
 
             /**
+             * @name dxDropDownButtonItem
+             * @inherits dxListItem
+             * @type object
+             */
+            /**
+             * @name dxDropDownButtonItem.key
+             * @hidden
+             */
+            /**
+             * @name dxDropDownButtonItem.showChevron
+             * @hidden
+             */
+
+            /**
              * @name dxDropDownButtonOptions.itemTemplate
              * @type template|function
              * @default "item"
