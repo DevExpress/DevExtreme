@@ -137,6 +137,12 @@ var DropDownBox = DropDownEditor.inherit({
              * @default "change"
              */
 
+            /**
+             * @name dxDropDownBoxOptions.valueFormat
+             * @type function(value)
+             * @type_function_param1 value:string|Array<any>
+             * @type_function_return string
+             */
             valueFormat: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
             },
