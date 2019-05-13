@@ -48,7 +48,7 @@ QUnit.module("default", {
         assert.deepEqual(getOptionValue("selectedItemKeys"), [], "selectedItemKeys");
         assert.strictEqual(getOptionValue("keyExpr"), "text", "keyExpr");
         assert.deepEqual(getOptionValue("items"), [], "items");
-        assert.strictEqual(getOptionValue("itemTemplate"), "item", "itemTemplate");
+        assert.strictEqual(getOptionValue("itemTemplate"), "content", "itemTemplate");
         assert.strictEqual(getOptionValue("onSelectionChanged"), null, "onSelectionChanged");
         assert.strictEqual(getOptionValue("stylingMode"), "contained", "stylingMode");
     });
