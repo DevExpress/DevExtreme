@@ -2074,6 +2074,8 @@ declare module DevExpress.ui {
         acceptCustomValue?: boolean;
         /** @name dxDropDownBox.Options.contentTemplate */
         contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxDropDownBox.Options.displayValueFormatter */
+        displayValueFormatter?: ((value: string | Array<any>) => string);
         /** @name dxDropDownBox.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
         /** @name dxDropDownBox.Options.fieldTemplate */
@@ -2082,8 +2084,6 @@ declare module DevExpress.ui {
         openOnFieldClick?: boolean;
         /** @name dxDropDownBox.Options.valueChangeEvent */
         valueChangeEvent?: string;
-        /** @name dxDropDownBox.Options.valueFormatter */
-        valueFormatter?: ((value: string | Array<any>) => string);
     }
     /** @name dxDropDownBox */
     export class dxDropDownBox extends dxDropDownEditor {
