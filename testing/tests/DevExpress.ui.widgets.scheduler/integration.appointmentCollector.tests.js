@@ -16,6 +16,7 @@ QUnit.testStart(() => {
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
 const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
+const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
 
 QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
     beforeEach: () => {
@@ -174,7 +175,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, "Height is OK");
     });
 
-    QUnit.test("Adaptive dropDown appointment button should have correct coordinates on week view", (assert) => {
+    QUnit.test("Adaptive collector should have correct coordinates on week view", (assert) => {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
@@ -182,11 +183,29 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
 
         let $collector = this.scheduler.appointments.compact.getButton(0);
 
-        let buttonCoordinates = translator.locate($collector);
+        let collectorCoordinates = translator.locate($collector);
         let expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, "Left coordinate is OK");
-        assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, "Left coordinate is OK");
+        assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+    });
+
+    QUnit.test("Adaptive collector should have correct coordinates coordinates on week view in compact theme", (assert) => {
+        try {
+            this.themeMock = sinon.stub(themes, "current").returns("generic.light.compact");
+            this.createInstance();
+            this.instance.option("currentView", "week");
+
+            let $collector = this.scheduler.appointments.compact.getButton(0);
+
+            let collectorCoordinates = translator.locate($collector);
+            let expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+
+            assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, "Left coordinate is OK");
+            assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+        } finally {
+            this.themeMock.restore();
+        }
     });
 
     QUnit.test("Adaptive collector should have correct sizes on week view", (assert) => {

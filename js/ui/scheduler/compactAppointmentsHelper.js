@@ -9,7 +9,8 @@ const APPOINTMENT_COLLECTOR_CLASS = "dx-scheduler-appointment-collector",
     COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-compact",
     APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-content";
 
-const WEEK_VIEW_BUTTON_OFFSET = 5;
+const WEEK_VIEW_COLLECTOR_OFFSET = 5;
+const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 
 export class CompactAppointmentsHelper {
     constructor(instance) {
@@ -55,8 +56,12 @@ export class CompactAppointmentsHelper {
         this.instance.showAppointmentTooltipCore($button, $button.data("items"));
     }
 
-    _getButtonOffset(width) {
-        return this.instance.fire("getCellWidth") - width - WEEK_VIEW_BUTTON_OFFSET;
+    _getCollectorOffset(width) {
+        return this.instance.fire("getCellWidth") - width - this._getCollectorRightOffset();
+    }
+
+    _getCollectorRightOffset() {
+        return this.instance.getRenderingStrategyInstance()._isCompactTheme() ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET : WEEK_VIEW_COLLECTOR_OFFSET;
     }
 
     _makeBackgroundDarker(button) {
@@ -114,7 +119,7 @@ export class CompactAppointmentsHelper {
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = applyOffset ? this._getButtonOffset(width) : 0;
+        const offset = applyOffset ? this._getCollectorOffset(width) : 0;
         this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
 
         return result;
