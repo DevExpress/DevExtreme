@@ -152,6 +152,17 @@ var NumberBoxBase = TextEditor.inherit({
         return this.callBase().concat([{ name: "spins", Ctor: SpinButtons }]);
     },
 
+    _isMobileSupportInputMode: function() {
+        var version = parseFloat(browser.version);
+
+        return devices.real().platform !== "generic"
+            && !(
+                browser.chrome && version >= 66
+                || browser.safari && version >= 12
+                || browser.msie && version >= 75
+            );
+    },
+
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
@@ -163,15 +174,7 @@ var NumberBoxBase = TextEditor.inherit({
                 }
             },
             {
-                device: function() {
-                    var version = parseFloat(browser.version);
-                    return devices.real().platform !== "generic"
-                        && !(
-                            browser.chrome && version >= 66
-                            || browser.safari && version >= 12
-                            || browser.msie && version >= 75
-                        );
-                },
+                device: this._isMobileSupportInputMode.bind(this),
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
@@ -191,7 +194,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _applyInputAttributes: function($input, customAttributes) {
-        $input.attr("inputmode", "numeric");
+        $input.attr("inputmode", "decimal");
         this.callBase($input, customAttributes);
     },
 
