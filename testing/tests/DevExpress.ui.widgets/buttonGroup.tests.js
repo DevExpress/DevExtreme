@@ -113,6 +113,23 @@ QUnit.module("option changed", {
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
     });
 
+    QUnit.test("itemTemplate property should be passed to all inner dxButtons", function(assert) {
+        const buttonGroup = this.createButtonGroup({
+            items: [{ text: "button 1" }],
+            itemTemplate: () => {
+                return "Template";
+            }
+        });
+        const $buttonGroup = buttonGroup.$element();
+
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "Template", "template has been applied");
+
+        buttonGroup.option("itemTemplate", function() {
+            return "New Template";
+        });
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
+    });
+
     QUnit.test("it should be possible to set full set of options for each button", assert => {
         const $element = $("#widget").dxButtonGroup({
             items: [{ text: "button 1", width: 24, elementAttr: { class: "test" }, customOption: "Test option" }]
