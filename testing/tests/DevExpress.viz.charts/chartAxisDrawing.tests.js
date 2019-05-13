@@ -2852,6 +2852,7 @@ QUnit.test("Stop all current animations on adaptive layout", function(assert) {
     assert.equal(valAxisStub.updateSize.callCount, 4);
 
     assert.ok(this.renderer.stopAllAnimations.lastCall.calledBefore(valAxisStub.updateSize.lastCall));
+    assert.strictEqual(valAxisStub.updateSize.getCall(1).args[1], false);
 });
 
 QUnit.module("Wrap axis title", environment);
