@@ -529,7 +529,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
     });
 
-    QUnit.test("removing of value should be possible when min is specified and stubs are in the format", (assert) => {
+    QUnit.test("value removing should be possible when min is specified and stubs are in the format", (assert) => {
         this.instance.option({
             format: "#,##0 d",
             min: 5,
