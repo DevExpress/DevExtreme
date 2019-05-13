@@ -4689,6 +4689,27 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         this.clock.tick(0);
         assert.ok(load.called, "load has been called after the search only");
     });
+
+    QUnit.test("map function should correctly applies to the widget datasource with the default value", (assert) => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            dataSource: new DataSource({
+                store: [
+                    { ID: 1, Name: "Test1" },
+                    { ID: 2, Name: "Test2" }
+                ],
+                map: (item) => {
+                    item.Name += " changed";
+                    return item;
+                }
+            }),
+            displayExpr: "Name",
+            valueExpr: "ID",
+            value: [1]
+        });
+
+        const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+        assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
+    });
 });
 
 QUnit.module("performance", () => {
