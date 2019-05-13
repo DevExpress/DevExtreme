@@ -1440,9 +1440,9 @@ QUnit.test("Appointment should be dragged correctly in grouped timeline (T739132
         "priority": 1
     };
 
-    this.scheduler.appointments.getAppointment(0).trigger(dragEvents.start);
-    this.scheduler.workSpace.getCell(0).trigger(dragEvents.enter);
-    this.scheduler.appointments.getAppointment().trigger(dragEvents.end);
+    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).trigger(dragEvents.enter);
+    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.end);
 
     let dataSourceItem = this.instance.option("dataSource").items()[0];
 
