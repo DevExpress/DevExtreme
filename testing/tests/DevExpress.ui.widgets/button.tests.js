@@ -93,6 +93,15 @@ QUnit.module("options changed callbacks", {
         assert.ok(this.element.hasClass("dx-state-disabled"));
     });
 
+    QUnit.test("_templateData", (assert) => {
+        const template = sinon.stub().returns("TPL");
+        this.instance.option("template", template);
+        this.instance.option("_templateData", { custom: 1 });
+        this.instance.repaint();
+
+        assert.strictEqual(template.getCall(1).args[0].custom, 1, "custom field is correct");
+    });
+
     QUnit.test("readOnly validator should be excluded for the click action", (assert) => {
         const clickHandler = sinon.spy();
 

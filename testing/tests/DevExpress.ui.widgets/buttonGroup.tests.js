@@ -132,13 +132,14 @@ QUnit.module("option changed", {
 
     QUnit.test("custom item property should be passed to buttonTemplate function", function(assert) {
         const templateMock = sinon.stub().returns("Template");
+        const item = { text: "button 1", icon: "box", custom: 1 };
         this.createButtonGroup({
-            items: [{ text: "button 1", custom: 1 }],
+            items: [item],
             buttonTemplate: templateMock
         });
 
         assert.strictEqual(templateMock.callCount, 1, "template method was called");
-        assert.strictEqual(templateMock.getCall(0).args[0].custom, 1, "custom field was successfully passed");
+        assert.deepEqual(templateMock.getCall(0).args[0], item, "full item should be passed to the template");
     });
 
     QUnit.test("item.template should have higher priority than the buttonTemplate option", function(assert) {
