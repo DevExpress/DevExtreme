@@ -459,19 +459,16 @@ var SelectBox = DropDownList.inherit({
             ? new Deferred().resolve()
             : this._dataSource.load();
 
-        var isLastPage = this._dataSource.isLastPage();
-
         dataSourceIsLoaded.done((function() {
             var selectedIndex = this._getSelectedIndex(),
-                currentPage = this._dataSource.pageIndex(),
+                isLastPage = this._dataSource.isLastPage(),
                 isLastItem = selectedIndex === this._items().length - 1;
 
             if(!isLastPage && isLastItem && step > 0) {
-                this._dataSource.pageIndex(currentPage + 1);
                 if(!this._popup) {
                     this._createPopup();
                 }
-                this._dataSource.load().done(this._setNextItem.bind(this, step));
+                this._list._loadNextPage().done(this._setNextItem.bind(this, step));
             } else {
                 this._setNextItem(step);
             }
