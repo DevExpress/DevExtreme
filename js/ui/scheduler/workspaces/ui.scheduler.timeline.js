@@ -566,6 +566,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return 0;
     },
 
+    getWorkSpaceLeftOffset: function() {
+        return 0;
+    },
+
     scrollToTime: function(hours, minutes, date) {
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable(),
