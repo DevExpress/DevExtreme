@@ -173,15 +173,14 @@ const ButtonGroup = Widget.inherit({
             items: [],
 
             /**
-             * @name dxButtonGroupOptions.itemTemplate
+             * @name dxButtonGroupOptions.buttonTemplate
              * @type template|function
              * @default "content"
-             * @type_function_param1 itemData:object
-             * @type_function_param2 itemIndex:number
-             * @type_function_param3 itemElement:dxElement
+             * @type_function_param1 buttonData:object
+             * @type_function_param2 buttonContent:dxElement
              * @type_function_return string|Node|jQuery
              */
-            itemTemplate: "content",
+            buttonTemplate: "content",
 
             /**
              * @name dxButtonGroupOptions.onSelectionChanged
@@ -243,7 +242,7 @@ const ButtonGroup = Widget.inherit({
             selectionMode: this.option("selectionMode"),
             items: this.option("items"),
             keyExpr: this.option("keyExpr"),
-            buttonTemplate: this.option("itemTemplate"),
+            buttonTemplate: this.option("buttonTemplate"),
             scrollingEnabled: false,
             selectedItemKeys: this.option("selectedItemKeys"),
             focusStateEnabled: this.option("focusStateEnabled"),
@@ -283,7 +282,7 @@ const ButtonGroup = Widget.inherit({
             case "stylingMode":
             case "selectionMode":
             case "keyExpr":
-            case "itemTemplate":
+            case "buttonTemplate":
             case "items":
             case "activeStateEnabled":
             case "focusStateEnabled":

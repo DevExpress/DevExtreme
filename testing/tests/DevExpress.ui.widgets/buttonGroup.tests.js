@@ -84,7 +84,7 @@ QUnit.module("option changed", {
     QUnit.test("change the width option when item has template", function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{ text: "button 1" }, { text: "button 2" }],
-            itemTemplate: () => "<div/>",
+            buttonTemplate: () => "<div/>",
         });
 
         buttonGroup.option("width", 500);
@@ -113,10 +113,10 @@ QUnit.module("option changed", {
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
     });
 
-    QUnit.test("itemTemplate property should be passed to all inner dxButtons", function(assert) {
+    QUnit.test("buttonTemplate property should be passed to all inner dxButtons", function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{ text: "button 1" }],
-            itemTemplate: () => {
+            buttonTemplate: () => {
                 return "Template";
             }
         });
@@ -124,21 +124,21 @@ QUnit.module("option changed", {
 
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "Template", "template has been applied");
 
-        buttonGroup.option("itemTemplate", function() {
+        buttonGroup.option("buttonTemplate", function() {
             return "New Template";
         });
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
     });
 
-    QUnit.test("item.template should have higher priority than the itemTemplate option", function(assert) {
+    QUnit.test("item.template should have higher priority than the buttonTemplate option", function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{
                 text: "button 1", template: () => {
                     return "item.template";
                 }
             }],
-            itemTemplate: () => {
-                return "ItemTemplate";
+            buttonTemplate: () => {
+                return "buttonTemplate";
             }
         });
         const $buttonGroup = buttonGroup.$element();
