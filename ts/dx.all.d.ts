@@ -2640,6 +2640,8 @@ declare module DevExpress.ui {
         items?: Array<string | dxGalleryItem | any>;
         /** @name dxGallery.Options.loop */
         loop?: boolean;
+        /** @name dxGallery.Options.noDataText */
+        noDataText?: string;
         /** @name dxGallery.Options.selectedIndex */
         selectedIndex?: number;
         /** @name dxGallery.Options.showIndicator */
