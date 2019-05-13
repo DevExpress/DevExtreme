@@ -5,6 +5,7 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     devices = require("core/devices"),
     DOMComponent = require("core/dom_component"),
+    DomComponentWithTemplate = require("core/dom_component_with_template"),
     domUtils = require("core/utils/dom"),
     publicComponentUtils = require("core/utils/public_component"),
     nameSpace = {},
@@ -454,6 +455,30 @@ QUnit.test("'templatesRenderAsynchronously' option is passed to createComponent"
         secondInstance = firstInstance.createComponent($secondElement, "TestComponent", {});
 
     assert.ok(secondInstance.option("templatesRenderAsynchronously"), true);
+});
+
+QUnit.test("it should be possible to define aliases for integration templates", function(assert) {
+    var instance = new DomComponentWithTemplate("#component", {
+        template: "name1",
+        integrationOptions: {
+            templates: {
+                name1: {
+                    render: function() {
+                        return "Markup for name 1";
+                    }
+                },
+                name2: {
+                    render: function() {
+                        return "Markup for name 2";
+                    }
+                }
+            }
+        },
+        defaultTemplatesMap: { "name1": "name2" }
+    });
+
+    var template = instance._getTemplateByOption("template");
+    assert.strictEqual(template.render(), "Markup for name 2", "Markup is correct");
 });
 
 QUnit.test("option 'rtl'", function(assert) {
