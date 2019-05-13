@@ -1508,7 +1508,7 @@ QUnit.test("fullText updated, if pasted text is accepted", function(assert) {
         mask: "xy",
         maskRules: {
             "x": "x",
-            "y": (char, index, fullText) => {
+            "y": function(char, index, fullText) {
                 if(firstTimeCall) {
                     assert.equal(fullText, "x_", "x is accepted");
                 }
