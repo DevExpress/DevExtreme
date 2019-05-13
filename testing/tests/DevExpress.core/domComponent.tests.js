@@ -24,6 +24,16 @@ const RTL_CLASS = "dx-rtl";
 
 QUnit.module("default", {
     beforeEach: () => {
+        this.TestComponentWithTemplate = DomComponentWithTemplate.inherit({
+            _initTemplates() {
+                this.callBase();
+                this._defaultTemplates["content"] = {
+                    render() {
+                        return "Default content markup";
+                    }
+                };
+            }
+        });
         this.TestComponent = DOMComponent.inherit({
 
             ctor(element, options) {
@@ -143,6 +153,7 @@ QUnit.module("default", {
         });
 
         registerComponent("TestComponent", nameSpace, this.TestComponent);
+        registerComponent("TestComponentWithTemplate", nameSpace, this.TestComponentWithTemplate);
     },
 
     afterEach: () => {
@@ -478,7 +489,25 @@ QUnit.module("default", {
         });
 
         const template = instance._getTemplateByOption("template");
-        assert.strictEqual(template.render(), "Markup for name 2", "Markup is correct");
+        assert.strictEqual(template.render(), "Markup for name 2", "name2 is found in integration options. Use it");
+    });
+
+    QUnit.test("integrationOptions.template should not be used when it is remapped to another name", (assert) => {
+        const instance = new this.TestComponentWithTemplate("#component", {
+            integrationOptions: {
+                templates: {
+                    content: {
+                        render() {
+                            return "Markup for content";
+                        }
+                    }
+                }
+            },
+            defaultTemplatesMap: { "content": "name1" }
+        });
+
+        const template = instance._getTemplate("content");
+        assert.strictEqual(template.render(), "Default content markup", "name1 is not found in integrationOptions. Use the default");
     });
 
     QUnit.test("option 'rtl'", (assert) => {
