@@ -836,6 +836,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
     var that = this,
         lines = [],
         textChanged = false,
+        textIsEmpty = false,
         ellipsis,
         ellipsisWidth,
         ellipsisMaxWidth = maxWidth;
@@ -874,13 +875,14 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
             locateTextNodes(this);
         } else {
             this.element.textContent = "";
+            textIsEmpty = true;
         }
     }
 
     ellipsis.remove();
     that._hasEllipsis = textChanged;
 
-    return { rowCount: lines.length, textChanged };
+    return { rowCount: lines.length, textChanged, textIsEmpty };
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {

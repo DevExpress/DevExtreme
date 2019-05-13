@@ -1361,6 +1361,20 @@ QUnit.test("Label's fit. rowCount = 0 ", function(assert) {
     assert.strictEqual(label.fit(31), false);
 });
 
+QUnit.test("Hide background when text is empty", function(assert) {
+    this.options.background = { fill: "red" };
+    const label = this.createAndDrawLabel();
+    const background = this.renderer.rect.getCall(0).returnValue;
+
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { textIsEmpty: true };
+    };
+    label.shift(-7, -2);
+    label.fit(31);
+
+    assert.strictEqual(background.dispose.callCount, 1);
+});
+
 QUnit.test("resetEllipsis", function(assert) {
     this.options.background = { fill: "red" };
 
