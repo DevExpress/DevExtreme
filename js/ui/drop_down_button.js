@@ -21,6 +21,7 @@ const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
+const DX_BUTTON_TEXT_CLASS = "dx-button-text";
 const DX_ICON_RIGHT_CLASS = "dx-icon-right";
 
 /**
@@ -392,7 +393,7 @@ let DropDownButton = Widget.inherit({
                 }
 
                 const $firstIcon = getImageContainer(icon);
-                const $textContainer = text ? $("<span>").text(text).addClass("dx-button-text") : undefined;
+                const $textContainer = text ? $("<span>").text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
                 const $secondIcon = getImageContainer("spindown").addClass(DX_ICON_RIGHT_CLASS);
 
                 $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
