@@ -1499,20 +1499,28 @@ QUnit.test("custom function get fullText and current index", function(assert) {
     });
 });
 
-QUnit.test("fullText updated, if pasted text is accepted", function(assert) {
-    var $textEditor = $("#texteditor").dxTextEditor({
+QUnit.test("fullText updated, if pasted text is accepted", (assert) => {
+    // Fix blinking on blur in MS Edge (https://trello.com/c/HyC0Shoz)
+    assert.expect(1);
+    let firstTimeCall = true;
+
+    const $textEditor = $("#texteditor").dxTextEditor({
         mask: "xy",
         maskRules: {
             "x": "x",
-            "y": function(char, index, fullText) {
-                assert.equal(fullText, "x_", "x is accepted");
+            "y": (char, index, fullText) => {
+                if(firstTimeCall) {
+                    assert.equal(fullText, "x_", "x is accepted");
+                }
+
+                firstTimeCall = false;
                 return char === "y";
             }
         }
     });
 
-    var $input = $textEditor.find(".dx-texteditor-input");
-    var keyboard = keyboardMock($input, true);
+    const $input = $textEditor.find(".dx-texteditor-input");
+    const keyboard = keyboardMock($input, true);
 
     keyboard.caret(0).paste("xy");
 });
