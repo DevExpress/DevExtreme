@@ -829,11 +829,7 @@ var Form = Widget.inherit({
         this._renderLayout();
         this._renderValidationSummary();
 
-        if(this._targetScreenFactor) {
-            this._lastMarkupScreenFactor = this._targetScreenFactor;
-        } else {
-            this._lastMarkupScreenFactor = this._getCurrentScreenFactor();
-        }
+        this._lastMarkupScreenFactor = this._targetScreenFactor || this._getCurrentScreenFactor();
     },
 
     _getCurrentScreenFactor: function() {
