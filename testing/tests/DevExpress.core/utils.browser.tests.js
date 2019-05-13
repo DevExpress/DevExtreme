@@ -66,4 +66,6 @@ QUnit.test("chrome is webkit but not safari", function(assert) {
 
     assert.notOk(browserObject.safari, "chrome is not safari");
     assert.ok(browserObject.webkit, "chrome is webkit browser");
+    assert.ok(browserObject.chrome, "chrome is true");
+    assert.strictEqual(browserObject.version, "56.0", "chrome version is correct");
 });
