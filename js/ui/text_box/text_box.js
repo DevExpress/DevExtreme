@@ -72,9 +72,9 @@ var TextBox = TextEditor.inherit({
     },
 
     _renderMaxLengthHandlers: function() {
-        if(this._isAndroid() || browser.msie) {
-            eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownAndroidHandler.bind(this));
-            eventsEngine.on(this._input(), eventUtils.addNamespace("change", this.NAME), this._onChangeAndroidHandler.bind(this));
+        if(this._isAndroidOrIE()) {
+            eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownCutOffHandler.bind(this));
+            eventsEngine.on(this._input(), eventUtils.addNamespace("change", this.NAME), this._onChangeCutOffHandler.bind(this));
         }
     },
 
@@ -84,7 +84,7 @@ var TextBox = TextEditor.inherit({
     },
 
     _toggleMaxLengthProp: function() {
-        if(this._isAndroid()) {
+        if(this._isAndroidOrIE()) {
             return;
         }
 
@@ -135,7 +135,7 @@ var TextBox = TextEditor.inherit({
         }
     },
 
-    _onKeyDownAndroidHandler: function(e) {
+    _onKeyDownCutOffHandler: function(e) {
         var maxLength = this.option("maxLength");
         if(maxLength) {
             var $input = $(e.target),
@@ -151,7 +151,7 @@ var TextBox = TextEditor.inherit({
         }
     },
 
-    _onChangeAndroidHandler: function(e) {
+    _onChangeCutOffHandler: function(e) {
         var $input = $(e.target);
         if(this.option("maxLength")) {
             this._cutOffExtraChar($input);
@@ -166,10 +166,10 @@ var TextBox = TextEditor.inherit({
         }
     },
 
-    _isAndroid: function() {
+    _isAndroidOrIE: function() {
         var realDevice = devices.real();
         var version = realDevice.version.join(".");
-        return realDevice.platform === "android" && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
+        return browser.msie || realDevice.platform === "android" && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
     }
 });
 
