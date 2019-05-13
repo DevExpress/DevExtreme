@@ -152,15 +152,14 @@ var NumberBoxBase = TextEditor.inherit({
         return this.callBase().concat([{ name: "spins", Ctor: SpinButtons }]);
     },
 
-    _isMobileSupportInputMode: function() {
+    _isSupportInputMode: function() {
         var version = parseFloat(browser.version);
 
-        return devices.real().platform !== "generic"
-            && !(
-                browser.chrome && version >= 66
-                || browser.safari && version >= 12
-                || browser.msie && version >= 75
-            );
+        return (
+            browser.chrome && version >= 66
+            || browser.safari && version >= 12
+            || browser.msie && version >= 75
+        );
     },
 
     _defaultOptionsRules: function() {
@@ -174,7 +173,9 @@ var NumberBoxBase = TextEditor.inherit({
                 }
             },
             {
-                device: this._isMobileSupportInputMode.bind(this),
+                device: function() {
+                    return devices.real().platform !== "generic" && this._isSupportInputMode();
+                }.bind(this),
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
