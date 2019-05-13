@@ -250,6 +250,22 @@ QUnit.module("popup integration", {
         }
     });
 
+    QUnit.test("popup width should be recalculated when button dimension changed", function(assert) {
+        const instance = new DropDownButton("#dropDownButton2", {
+            deferRendering: false,
+            opened: true
+        });
+        const repaintMock = sinon.spy(getPopup(instance), "repaint");
+
+        instance.option({
+            icon: "box",
+            text: "Test",
+            showArrowIcon: false
+        });
+
+        assert.strictEqual(repaintMock.callCount, 3, "popup has been repainted 3 times");
+    });
+
     QUnit.test("a user can redefine dropdown options", (assert) => {
         const instance = new DropDownButton("#dropDownButton2", {
             deferRendering: false,
