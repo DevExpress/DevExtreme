@@ -347,7 +347,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return undefined;
         }
 
-        if(editedText === "") {
+        if(this._removeStubs(editedText) === "") {
             parsed = 0;
         }
 

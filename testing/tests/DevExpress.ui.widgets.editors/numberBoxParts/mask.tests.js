@@ -529,6 +529,24 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
     });
 
+    QUnit.test("removing of value should be possible when min is specified and stubs are in the format", (assert) => {
+        this.instance.option({
+            format: "#,##0 d",
+            min: 5,
+            value: 6,
+            max: 10
+        });
+
+        this.keyboard
+            .caret(1)
+            .press("backspace")
+            .type("7")
+            .press("enter");
+
+        assert.strictEqual(this.input.val(), "7 d", "text is correct");
+        assert.strictEqual(this.instance.option("value"), 7, "value is correct");
+    });
+
     QUnit.test("changing min limit should lead to value change in masked numberbox", (assert) => {
         this.instance.option({
             format: "$ #0",
