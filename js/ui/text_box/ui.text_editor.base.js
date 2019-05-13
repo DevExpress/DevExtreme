@@ -805,6 +805,8 @@ var TextEditorBase = Editor.inherit({
                 if(args.fullName === args.name) {
                     checkButtonsOptionType(args.value);
                 }
+                this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
+                this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
                 this._buttonCollection.clean();
                 this._renderButtonContainers();
                 break;
