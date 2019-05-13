@@ -495,8 +495,8 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
 
     $selectedItem = $list.find(FOCUSED_STATE_SELECTOR);
     assert.equal(isRenderer(instance._list.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
-    assert.equal($selectedItem.text(), "item 2", "when we 6 times press 'key_down', we select 'item 2'");
-    assert.equal($lastScrolledItem.text(), "item 2", "when we 6 times press 'key_down', we scroll to 'item 2'");
+    assert.equal($selectedItem.text(), "item 3", "when we 6 times press 'key_down', we select 'item 3'");
+    assert.equal($lastScrolledItem.text(), "item 3", "when we 6 times press 'key_down', we scroll to 'item 3'");
 
     keyboard
         .keyDown(KEY_UP)
@@ -513,6 +513,37 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
     assert.equal($selectedItem.text(), "item 2", "when we press 'key_up', we select 'item 2'");
 });
 
+QUnit.test("down arrow should move focus through the groups", function(assert) {
+    var $element = $("#widget").dxAutocomplete({
+            searchExpr: "text",
+            value: null,
+            searchTimeout: 0,
+            valueExpr: "text",
+            dataSource: [{
+                key: "Group 1",
+                items: [
+                    { "Id": 1, "text": "Item 1" }
+                ]
+            }, {
+                key: "Group 2",
+                items: [
+                    { "Id": 3, "text": "Item 2" },
+                ]
+            }],
+            grouped: true,
+            focusStateEnabled: true
+        }),
+        instance = $element.dxAutocomplete("instance"),
+        keyboard = keyboardMock($element.find("." + TEXTEDITOR_INPUT_CLASS));
+
+    keyboard
+        .type("i")
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_TAB);
+
+    assert.equal(instance.option("value"), "Item 2", "value is correct");
+});
 QUnit.testInActiveWindow("key_tab for autocomplete current value", function(assert) {
     if(devices.real().platform !== "generic") {
         assert.ok(true, "test does not actual for mobile devices");
