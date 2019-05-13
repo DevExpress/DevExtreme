@@ -28,6 +28,8 @@ After installation, the following NPM scripts are available:
 - `npm run build` - Builds DevExtreme in the Debug mode
 - `npm run build-dist` - Builds DevExtreme in the Release mode
 - `npm run build-themes` - Use this script to rebuild CSS themes only
+- `npm run validate-declarations` - Validates DevExtreme declarations
+- `npm run update-ts` - Updates dx.all.d.ts according to DevExtreme declarations
 
 Build results are stored in the "artifacts" directory.
 
