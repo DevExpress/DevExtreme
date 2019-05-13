@@ -130,6 +130,22 @@ QUnit.module("option changed", {
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
     });
 
+    QUnit.test("item.template should have higher priority than the itemTemplate option", function(assert) {
+        const buttonGroup = this.createButtonGroup({
+            items: [{
+                text: "button 1", template: () => {
+                    return "item.template";
+                }
+            }],
+            itemTemplate: () => {
+                return "ItemTemplate";
+            }
+        });
+        const $buttonGroup = buttonGroup.$element();
+
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "item.template", "template is correct");
+    });
+
     QUnit.test("it should be possible to set full set of options for each button", assert => {
         const $element = $("#widget").dxButtonGroup({
             items: [{ text: "button 1", width: 24, elementAttr: { class: "test" }, customOption: "Test option" }]
