@@ -386,6 +386,13 @@ var SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
+    _setNextItem: function(step) {
+        var item = this._calcNextItem(step),
+            value = this._valueGetter(item);
+
+        this._setValue(value);
+    },
+
     _setNextValue: function(step) {
         var dataSourceIsLoaded = this._dataSource.isLoaded()
             ? new Deferred().resolve()
