@@ -650,7 +650,7 @@ var Popover = Popup.inherit({
     * @name dxPopoverMethods.show
     * @publicName show(target)
     * @param1 target:string|Node|jQuery
-     * @return Promise<boolean>
+    * @return Promise<boolean>
     */
     show: function(target) {
         if(target) {

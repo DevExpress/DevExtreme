@@ -1513,7 +1513,7 @@ var Overlay = Widget.inherit({
     * @name dxOverlaymethods.toggle
     * @publicName toggle(showing)
     * @param1 showing:boolean
-     * @return Promise<boolean>
+    * @return Promise<boolean>
     */
     toggle: function(showing) {
         showing = showing === undefined ? !this.option("visible") : showing;
@@ -1542,7 +1542,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods.show
     * @publicName show()
-     * @return Promise<boolean>
+    * @return Promise<boolean>
     */
     show: function() {
         return this.toggle(true);
@@ -1551,7 +1551,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods.hide
     * @publicName hide()
-     * @return Promise<boolean>
+    * @return Promise<boolean>
     */
     hide: function() {
         return this.toggle(false);
