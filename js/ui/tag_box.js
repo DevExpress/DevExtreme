@@ -817,15 +817,17 @@ var TagBox = SelectBox.inherit({
         if(selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            var dataSourceFilter = this._dataSource.filter();
+            var dataSource = this._dataSource;
+            var dataSourceFilter = dataSource.filter();
             var filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter);
             var filterLength = encodeURI(JSON.stringify(filterExpr)).length;
             var filter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
-            var loadOptions = this._dataSource.loadOptions();
+            var loadOptions = dataSource.loadOptions();
             var customQueryParams = loadOptions.customQueryParams;
 
-            this._dataSource.store().load({ filter, customQueryParams }).done(function(items) {
-                d.resolve(items.filter(clientFilterFunction));
+            dataSource.store().load({ filter, customQueryParams }).done(function(items) {
+                var mappedItems = dataSource._applyMapFunction(items);
+                d.resolve(mappedItems.filter(clientFilterFunction));
             });
 
             return d.promise();
