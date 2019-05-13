@@ -2176,6 +2176,8 @@ declare module DevExpress.ui {
         showDropDownButton?: boolean;
         /** @name dxDropDownEditor.Options.value */
         value?: any;
+        /** @name dxDropDownEditor.Options.valueChangeEvent */
+        valueChangeEvent?: string;
     }
     /** @name dxDropDownEditor */
     export class dxDropDownEditor extends dxTextBox {
@@ -4370,6 +4372,8 @@ declare module DevExpress.ui {
         minHeight?: number | string;
         /** @name dxTextArea.Options.spellcheck */
         spellcheck?: boolean;
+        /** @name dxTextArea.Options.valueChangeEvent */
+        valueChangeEvent?: string;
     }
     /** @name dxTextArea */
     export class dxTextArea extends dxTextBox {
