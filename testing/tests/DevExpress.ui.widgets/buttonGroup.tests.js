@@ -9,6 +9,7 @@ import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHe
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
+    BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + "-item-has-width";
@@ -97,13 +98,19 @@ QUnit.module("option changed", {
     QUnit.test("template property of the item should be passed to the inner dxButton", function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{
-                text: "button 1", template: function() {
+                text: "button 1", template: () => {
                     return "Template";
                 }
             }]
         });
+        const $buttonGroup = buttonGroup.$element();
 
-        assert.strictEqual(buttonGroup.$element().find(".dx-button-content").text(), "Template", "template has been applied");
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "Template", "template has been applied");
+
+        buttonGroup.option("items[0].template", function() {
+            return "New Template";
+        });
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
     });
 
     QUnit.test("it should be possible to set full set of options for each button", assert => {
