@@ -16,6 +16,12 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     SHAPE_STANDARD_CLASS = "dx-shape-standard";
 
 const ButtonCollection = CollectionWidget.inherit({
+    _getDefaultOptions: function _getDefaultOptions() {
+        return extend(this.callBase(), {
+            itemTemplateProperty: null
+        });
+    },
+
     _renderItemContent(options) {
         options.container = $(options.container).parent();
         this.callBase(options);

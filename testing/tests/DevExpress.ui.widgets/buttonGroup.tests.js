@@ -94,6 +94,18 @@ QUnit.module("option changed", {
         assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
     });
 
+    QUnit.test("template property of the item should be passed to the inner dxButton", function(assert) {
+        const buttonGroup = this.createButtonGroup({
+            items: [{
+                text: "button 1", template: function() {
+                    return "Template";
+                }
+            }]
+        });
+
+        assert.strictEqual(buttonGroup.$element().find(".dx-button-content").text(), "Template", "template has been applied");
+    });
+
     QUnit.test("it should be possible to set full set of options for each button", assert => {
         const $element = $("#widget").dxButtonGroup({
             items: [{ text: "button 1", width: 24, elementAttr: { class: "test" }, customOption: "Test option" }]
