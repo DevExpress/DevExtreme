@@ -284,7 +284,8 @@ testComponentDefaults(TextEditor,
 testComponentDefaults(TextEditor,
     {},
     {
-        showMaskMode: "always"
+        showMaskMode: "always",
+        valueChangeEvent: "change focusout"
     }
 );
 
@@ -293,6 +294,7 @@ testComponentDefaults(DropDownEditor,
         { platform: "generic" }
     ],
     {
+        valueChangeEvent: "change",
         popupPosition: {
             offset: { h: 0, v: 0 },
             my: "left top",

@@ -60,7 +60,14 @@ var TextArea = TextBox.inherit({
             * @type boolean
             * @default false
             */
-            autoResizeEnabled: false
+            autoResizeEnabled: false,
+
+            /**
+             * @name dxTextAreaOptions.valueChangeEvent
+             * @type string
+             * @default "change"
+             */
+            valueChangeEvent: "change",
 
             /**
             * @name dxTextAreaOptions.mask

@@ -202,6 +202,13 @@ var DropDownEditor = TextBox.inherit({
             */
             buttons: void 0,
 
+            /**
+             * @name dxDropDownEditorOptions.valueChangeEvent
+             * @type string
+             * @default "change"
+             */
+            valueChangeEvent: "change",
+
             dropDownOptions: {},
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,

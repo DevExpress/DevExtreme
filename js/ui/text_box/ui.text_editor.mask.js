@@ -74,6 +74,13 @@ var TextEditorMask = TextEditorBase.inherit({
             mask: "",
 
             /**
+             * @name dxTextEditorOptions.valueChangeEvent
+             * @type string
+             * @default "change focusout"
+             */
+            valueChangeEvent: "change focusout",
+
+            /**
                 * @name dxTextEditorOptions.maskChar
                 * @type string
                 * @default "_"
