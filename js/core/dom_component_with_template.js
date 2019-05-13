@@ -233,10 +233,14 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         }
 
         if(typeof templateSource === "string") {
-            var defaultTemplatesMap = this.option("defaultTemplatesMap") || {};
-            var integrationTemplateName = defaultTemplatesMap[templateSource] || templateSource;
+            var nonIntegrationTemplates = this.option("integrationOptions.skipTemplates") || [];
+            var integrationTemplate = null;
 
-            return this._renderIntegrationTemplate(integrationTemplateName)
+            if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
+                integrationTemplate = this._renderIntegrationTemplate(templateSource);
+            }
+
+            return integrationTemplate
             || this._defaultTemplates[templateSource]
             || createTemplate(templateSource);
         }

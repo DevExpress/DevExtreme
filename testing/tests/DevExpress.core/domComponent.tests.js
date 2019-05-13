@@ -468,42 +468,44 @@ QUnit.module("default", {
         assert.ok(secondInstance.option("templatesRenderAsynchronously"), true);
     });
 
-    QUnit.test("it should be possible to define aliases for integration templates", (assert) => {
+    QUnit.test("custom template should not be taken from integrationOptions when it is skipped", (assert) => {
         const instance = new DomComponentWithTemplate("#component", {
-            template: "name1",
+            template: "customTemplate",
             integrationOptions: {
-                templates: {
-                    name1: {
+                skipTemplates: ["customTemplate"],
+                createTemplate() {
+                    return {
                         render() {
-                            return "Markup for name 1";
+                            return "Created custom template";
                         }
-                    },
-                    name2: {
+                    };
+                },
+                templates: {
+                    customTemplate: {
                         render() {
-                            return "Markup for name 2";
+                            return "Integration content";
                         }
                     }
                 }
-            },
-            defaultTemplatesMap: { "name1": "name2" }
+            }
         });
 
         const template = instance._getTemplateByOption("template");
-        assert.strictEqual(template.render(), "Markup for name 2", "name2 is found in integration options. Use it");
+        assert.strictEqual(template.render(), "Created custom template", "name2 is found in integration options. Use it");
     });
 
-    QUnit.test("integrationOptions.template should not be used when it is remapped to another name", (assert) => {
+    QUnit.test("default template should not be taken from integrationOptions when it is skipped", (assert) => {
         const instance = new this.TestComponentWithTemplate("#component", {
             integrationOptions: {
+                skipTemplates: ["content"],
                 templates: {
                     content: {
                         render() {
-                            return "Markup for content";
+                            return "Integration content";
                         }
                     }
                 }
-            },
-            defaultTemplatesMap: { "content": "name1" }
+            }
         });
 
         const template = instance._getTemplate("content");
