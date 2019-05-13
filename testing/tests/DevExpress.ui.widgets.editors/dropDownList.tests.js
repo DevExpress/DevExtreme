@@ -349,6 +349,54 @@ QUnit.test("all items", function(assert) {
     assert.deepEqual($dropDownList.dxDropDownList("option", "items"), items, "rendered all items");
 });
 
+QUnit.test("calcNextItem private method should work", function(assert) {
+    var $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1, 2, 3, 4],
+            opened: true,
+            value: 2
+        }),
+        dropDownList = $dropDownList.dxDropDownList("instance");
+
+    assert.strictEqual(dropDownList._calcNextItem(1), 3, "step forward");
+    assert.strictEqual(dropDownList._calcNextItem(-1), 1, "step backward");
+});
+
+QUnit.test("items private method should work", function(assert) {
+    var $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1, 2, 3, 4],
+            opened: true,
+            value: 2
+        }),
+        dropDownList = $dropDownList.dxDropDownList("instance");
+
+    assert.deepEqual(dropDownList._items(), [1, 2, 3, 4], "items are correct");
+});
+
+QUnit.test("fitIntoRange private method should work", function(assert) {
+    var $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1, 2, 3, 4],
+            opened: true,
+            value: 2
+        }),
+        dropDownList = $dropDownList.dxDropDownList("instance");
+
+    assert.deepEqual(dropDownList._fitIntoRange(1, 2, 4), 4, "smaller than min");
+    assert.deepEqual(dropDownList._fitIntoRange(3, 2, 4), 3, "in range");
+    assert.deepEqual(dropDownList._fitIntoRange(5, 2, 4), 2, "larger than max");
+});
+
+QUnit.test("getSelectedIndex private method should work", function(assert) {
+    var $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            opened: true,
+            valueExpr: "id",
+            value: 2
+        }),
+        dropDownList = $dropDownList.dxDropDownList("instance");
+
+    assert.deepEqual(dropDownList._getSelectedIndex(), 1, "index is correct");
+});
+
 QUnit.test("widget should be openable if dataSource is null", function(assert) {
     var dropDownList = $("#dropDownList").dxDropDownList({
         dataSource: [1]
