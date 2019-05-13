@@ -190,7 +190,7 @@ let DropDownButton = Widget.inherit({
 
             /**
              * @name dxDropDownButtonOptions.items
-             * @type Array<CollectionWidgetItem, object>
+             * @type Array<dxDropDownButtonItem, object>
              * @default null
              */
             items: null,
