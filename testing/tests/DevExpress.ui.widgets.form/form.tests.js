@@ -2176,6 +2176,7 @@ QUnit.test("Column count ignores hide/show scroller when rerendering if screen f
     var originalGetDocumentElement = domAdapter.getDocumentElement;
     try {
         var largeScreenWidth = 1200,
+            mediumScreenWidth = 1199,
             width = largeScreenWidth,
             height = 300,
             scrollerWidth = 17;
@@ -2200,7 +2201,7 @@ QUnit.test("Column count ignores hide/show scroller when rerendering if screen f
                     name: "f1", editorType: "dxTextBox",
                     editorOptions: {
                         onDisposing: function() {
-                            width = largeScreenWidth - 1 + scrollerWidth;
+                            width = mediumScreenWidth + scrollerWidth;
                         }
                     }
                 },
@@ -2209,9 +2210,9 @@ QUnit.test("Column count ignores hide/show scroller when rerendering if screen f
         });
 
         assert.equal($form.find(".dx-col-0").length, 1, "(.dx-col-0).length initial");
-        assert.equal($form.find(".dx-col-1").length, 1, "(.dx-col-0).length initial");
+        assert.equal($form.find(".dx-col-1").length, 1, "(.dx-col-1).length initial");
 
-        width = largeScreenWidth - 1;
+        width = mediumScreenWidth;
         resizeCallbacks.fire();
 
         assert.equal($form.find(".dx-col-0").length, 2, "(.dx-col-0).length current");
