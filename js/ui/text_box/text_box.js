@@ -2,6 +2,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     window = windowUtils.getWindow(),
     navigator = windowUtils.getNavigator(),
+    browser = require("../../core/utils/browser"),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     inArray = require("../../core/utils/array").inArray,
@@ -71,7 +72,7 @@ var TextBox = TextEditor.inherit({
     },
 
     _renderMaxLengthHandlers: function() {
-        if(this._isAndroid()) {
+        if(this._isAndroid() || browser.msie) {
             eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownAndroidHandler.bind(this));
             eventsEngine.on(this._input(), eventUtils.addNamespace("change", this.NAME), this._onChangeAndroidHandler.bind(this));
         }
