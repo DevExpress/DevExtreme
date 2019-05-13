@@ -31,7 +31,7 @@ export default class CustomButton extends TextEditorButton {
 
         const instance = editor._createComponent($element, Button, extend({}, this.options, {
             disabled: this._isDisabled(),
-            defaultTemplatesMap: { content: "textEditorButtonContent" }
+            defaultTemplatesMap: { content: "customButtonContent" }
         }));
 
         return {

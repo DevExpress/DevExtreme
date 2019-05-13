@@ -112,7 +112,7 @@ module("button collection", () => {
                 const buttons = getTextEditorButtons($textBox);
                 const button = buttons.$after.eq(0).dxButton("instance");
 
-                assert.equal(button.option("defaultTemplatesMap.content"), "textEditorButtonContent", "template name was redefined");
+                assert.equal(button.option("defaultTemplatesMap.content"), "customButtonContent", "template name was redefined");
             });
         });
     });
