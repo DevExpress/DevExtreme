@@ -987,7 +987,7 @@
  */
 
 /**
- * @typedef {string} Enums.HtmlEditorToolbarFormatName
+ * @typedef {string} Enums.HtmlEditorFormat
  * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'size'|'strike'|'script'|'underline'|'blockquote'|'header'|'indent'|'list'|'align'|'code-block'}
  */
 
