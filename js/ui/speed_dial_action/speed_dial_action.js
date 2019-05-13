@@ -57,7 +57,6 @@ const SpeedDialAction = Widget.inherit({
                 show: {
                     type: "pop",
                     duration: 200,
-                    delay: 30,
                     easing: "cubic-bezier(0.4, 0, 0.2, 1)",
                     from: {
                         scale: 0,
@@ -71,7 +70,6 @@ const SpeedDialAction = Widget.inherit({
                 hide: {
                     type: "pop",
                     duration: 200,
-                    delay: 30,
                     easing: "cubic-bezier(0.4, 0, 0.2, 1)",
                     from: {
                         scale: 1,
