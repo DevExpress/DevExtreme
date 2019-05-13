@@ -393,6 +393,13 @@ var SelectBox = DropDownList.inherit({
         return value;
     },
 
+    _setNextItem: function(step) {
+        var item = this._calcNextItem(step),
+            value = this._valueGetter(item);
+
+        this._setValue(value);
+    },
+
     _setNextValue: function(step) {
         var dataSourceIsLoaded = this._dataSource.isLoaded()
             ? new Deferred().resolve()
@@ -403,20 +410,13 @@ var SelectBox = DropDownList.inherit({
         dataSourceIsLoaded.done((function() {
             var selectedIndex = this._getSelectedIndex(),
                 currentPage = this._dataSource.pageIndex(),
-                isLastItem = selectedIndex === this._items().length - 1,
-                item, value;
+                isLastItem = selectedIndex === this._items().length - 1;
 
             if(!isLastPage && isLastItem && step > 0) {
                 this._dataSource.pageIndex(currentPage + 1);
-                this._dataSource.load().done(function() {
-                    item = this._calcNextItem(step);
-                    value = this._valueGetter(item);
-                    this._setValue(value);
-                }.bind(this));
+                this._dataSource.load().done(this._setNextItem.bind(this, step));
             } else {
-                item = this._calcNextItem(step);
-                value = this._valueGetter(item);
-                this._setValue(value);
+                this._setNextItem(step);
             }
         }).bind(this));
     },
