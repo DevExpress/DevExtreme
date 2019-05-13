@@ -872,19 +872,21 @@ testModule("position", moduleConfig, () => {
 
 
 testModule("shading", moduleConfig, () => {
-    test("shading should be present", (assert) => {
-        const overlay = $("#overlay").dxOverlay({
-            shading: true,
-            visible: true
-        }).dxOverlay("instance");
-        const $wrapper = $(overlay.$content().parent());
+    [true, false].forEach((value) => {
+        test("render shading", (assert) => {
+            const overlay = $("#overlay").dxOverlay({
+                shading: value,
+                visible: true
+            }).dxOverlay("instance");
+            const $wrapper = $(overlay.$content().parent());
 
-        assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
-        assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, "auto", "shading wrapper have auto pointer-events");
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, value ? "auto" : "none", "shading wrapper have correct pointer-events");
 
-        overlay.option("shading", false);
-        assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
-        assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, "none", "no-shading wrapper have disabled pointer-events");
+            overlay.option("shading", !value);
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), !value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, !value ? "auto" : "none", "shading wrapper have correct pointer-events");
+        });
     });
 
     test("shading height should change after container resize (B237292)", (assert) => {
