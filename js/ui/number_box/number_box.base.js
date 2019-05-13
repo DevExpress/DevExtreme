@@ -166,7 +166,7 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    return devices.real().platform !== "generic" && this._isSupportInputMode();
+                    return devices.real().platform !== "generic" && !this._isSupportInputMode();
                 }.bind(this),
                 options: {
                     /**
