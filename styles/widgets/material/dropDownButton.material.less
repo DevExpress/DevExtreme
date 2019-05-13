@@ -1,3 +1,13 @@
+.dx-size-default() {
+    @MATERIAL_BUTTON_HORIZONTAL_PADDING: 8px;
+    @MATERIAL_BUTTON_ICON_SIZE: 24px;
+}
+
+.dx-size-compact() {
+    @MATERIAL_BUTTON_HORIZONTAL_PADDING: 8px;
+    @MATERIAL_BUTTON_ICON_SIZE: 18px;
+}
+
 .dx-dropdownbutton-toggle {
     &.dx-button {
         min-width: auto;
@@ -7,16 +17,16 @@
 .dx-dropdownbutton {
     .dx-button-has-icon.dx-button-has-text {
         .dx-button-content {
-            padding-left: 8px;
+            padding-left: @MATERIAL_BUTTON_HORIZONTAL_PADDING;
             padding-right: 0px;
         }
 
         .dx-icon {
-            margin-right: 8px;
+            margin-right: @MATERIAL_BUTTON_HORIZONTAL_PADDING;
         }
 
         .dx-icon-spindown {
-            .dx-icon-sizing(24px);
+            .dx-icon-sizing(@MATERIAL_BUTTON_ICON_SIZE);
             margin-right: 0px;
             margin-left: 0px;
         }
