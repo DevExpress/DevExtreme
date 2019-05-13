@@ -191,10 +191,12 @@ QUnit.module("options changing", {
 
     QUnit.test("'maxLength' option", (assert) => {
         const originalDevices = devices.real();
+        const originalIE = browser.msie;
         devices.real({
-            platform: "not android",
+            platform: "not android and not IE",
             version: ["24"]
         });
+        browser.msie = false;
 
         try {
             this.instance.option("maxLength", 5);
@@ -207,6 +209,7 @@ QUnit.module("options changing", {
             assert.equal(this.input.attr("maxLength"), 3);
         } finally {
             devices.real(originalDevices);
+            browser.msie = originalIE;
         }
     });
 
