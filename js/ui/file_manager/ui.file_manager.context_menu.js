@@ -5,6 +5,8 @@ import { isObject, isString } from "../../core/utils/type";
 import Widget from "../widget/ui.widget";
 import ContextMenu from "../context_menu/ui.context_menu";
 
+const FILEMANAGER_CONTEXT_MEMU_CLASS = "dx-filemanager-context-menu";
+
 const DEFAULT_CONTEXT_MENU_ITEMS = [
     "create",
     "upload",
@@ -27,6 +29,7 @@ class FileManagerContextMenu extends Widget {
 
         const $menu = $("<div>").appendTo(this.$element());
         this._contextMenu = this._createComponent($menu, ContextMenu, {
+            cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: "",
             onItemClick: ({ itemData: { commandName } }) => this._onContextMenuItemClick(commandName),
             onHidden: () => this._onContextMenuHidden()
