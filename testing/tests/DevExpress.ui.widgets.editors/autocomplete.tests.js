@@ -517,6 +517,7 @@ QUnit.test("down arrow should move focus through the groups", function(assert) {
     var $element = $("#widget").dxAutocomplete({
             searchExpr: "text",
             value: null,
+            searchTimeout: 0,
             valueExpr: "text",
             dataSource: [{
                 key: "Group 1",
