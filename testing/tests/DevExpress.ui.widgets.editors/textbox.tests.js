@@ -1,6 +1,7 @@
 var $ = require("jquery"),
     TextBox = require("ui/text_box"),
     devices = require("core/devices"),
+    browser = require("core/utils/browser"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 
 require("common.css!");
@@ -70,6 +71,27 @@ QUnit.test("'maxLength' option on android 2.3 and 4.1", function(assert) {
     } finally {
         devices.real(originalDevices);
         internals.uaAccessor(originalUA);
+    }
+});
+
+QUnit.test("'maxLength' option on IE", function(assert) {
+    var originalIE = browser.msie;
+
+    try {
+        browser.msie = true;
+        var $element = $("#textbox").dxTextBox({ maxLength: 1 }),
+            $input = $element.find("." + INPUT_CLASS),
+            event = $.Event("keydown", { key: "1" });
+
+        $input.trigger(event);
+        $input.val("1");
+        assert.ok(!event.isDefaultPrevented());
+
+        event = $.Event("keydown", { key: "2" });
+        $input.trigger(event);
+        assert.ok(event.isDefaultPrevented());
+    } finally {
+        browser.msie = originalIE;
     }
 });
 
