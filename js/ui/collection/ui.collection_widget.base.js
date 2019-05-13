@@ -567,6 +567,7 @@ var CollectionWidget = Widget.inherit({
             case "items":
             case "_itemAttributes":
             case "itemTemplateProperty":
+            case "showItemDataTitle":
                 this._cleanRenderedItems();
                 this._invalidate();
                 break;
