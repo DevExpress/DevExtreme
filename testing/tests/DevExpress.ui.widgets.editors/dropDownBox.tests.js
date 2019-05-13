@@ -200,6 +200,19 @@ QUnit.test("anonymous content template should work", function(assert) {
     assert.equal($content.find("#inner")[0], $inner[0], "Markup is equal by the link");
 });
 
+QUnit.test("anonymous template should not be passed to the custom button", function(assert) {
+    var instance = new DropDownBox($("#dropDownBoxAnonymous"), {
+            buttons: [
+                { name: "test", location: "after", options: { text: "Button text" } }
+            ],
+            opened: true
+        }),
+        $content = $(instance.content());
+
+    assert.equal($content.text(), "Test", "Anonymous template works");
+    assert.equal($("#dropDownBoxAnonymous").find(".dx-button").text(), "Button text", "Button text is correct");
+});
+
 QUnit.test("popup and editor width should be equal", function(assert) {
     var instance = new DropDownBox(this.$element, {
         items: this.simpleItems,
