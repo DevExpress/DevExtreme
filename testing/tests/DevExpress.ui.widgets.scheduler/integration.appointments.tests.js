@@ -1393,6 +1393,67 @@ QUnit.test("Appointment should have correct position while vertical dragging, cr
     pointer.dragEnd();
 });
 
+QUnit.test("Appointment should be dragged correctly in grouped timeline (T739132)", function(assert) {
+    let data = new DataSource({
+        store: [{
+            "text": "Google AdWords Strategy",
+            "ownerId": [2],
+            "startDate": new Date(2017, 4, 2, 9, 0),
+            "endDate": new Date(2017, 4, 2, 10, 30),
+            "priority": 1
+        }]
+    });
+
+    let priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2017, 4, 1),
+        startDayHour: 8,
+        endDayHour: 20,
+        cellDuration: 60,
+        groups: ["priority"],
+        resources: [{
+            fieldExpr: "priority",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }]
+    });
+
+    this.clock.tick();
+
+    let updatedItem = {
+        "text": "Google AdWords Strategy",
+        "ownerId": [2],
+        "startDate": new Date(2017, 4, 1, 8, 0),
+        "endDate": new Date(2017, 4, 1, 9, 30),
+        "priority": 1
+    };
+
+    this.scheduler.appointments.getAppointment(0).trigger(dragEvents.start);
+    this.scheduler.workSpace.getCell(0).trigger(dragEvents.enter);
+    this.scheduler.appointments.getAppointment().trigger(dragEvents.end);
+
+    let dataSourceItem = this.instance.option("dataSource").items()[0];
+
+    this.clock.tick();
+    assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, "New data is correct");
+    assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, "New data is correct");
+});
+
 QUnit.test("Appointment should have correct position while dragging from group", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),
