@@ -540,7 +540,7 @@ QUnit.test("validator should validate value passed in the validation request", f
 
     adapter.getValue.returns("123");
     adapter.validationRequestsCallbacks.fire({
-        value: "1"
+        value: ""
     });
 
     assert.strictEqual(validatedHandler.firstCall.args[0].isValid, false, "empty value should be validated");
