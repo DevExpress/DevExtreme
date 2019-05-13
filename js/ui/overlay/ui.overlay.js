@@ -1284,7 +1284,7 @@ var Overlay = Widget.inherit({
             positionOf = null;
 
         if(!container && position) {
-            var isEvent = !!(position.of && position.of.type === "positionEvent");
+            var isEvent = !!(position.of && position.of.preventDefault);
             positionOf = isEvent ? window : (position.of || window);
         }
 

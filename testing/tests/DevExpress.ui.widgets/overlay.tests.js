@@ -880,9 +880,11 @@ testModule("shading", moduleConfig, () => {
         const $wrapper = $(overlay.$content().parent());
 
         assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
+        assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, "auto", "shading wrapper have auto pointer-events");
 
         overlay.option("shading", false);
         assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
+        assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, "none", "no-shading wrapper have disabled pointer-events");
     });
 
     test("shading height should change after container resize (B237292)", (assert) => {
