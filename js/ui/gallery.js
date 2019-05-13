@@ -194,7 +194,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.noDataText
-            * @hidden
             * @inheritdoc
             */
 
