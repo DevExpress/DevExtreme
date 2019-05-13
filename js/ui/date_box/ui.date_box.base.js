@@ -49,16 +49,6 @@ var STRATEGY_CLASSES = {
     List: require("./ui.date_box.strategy.list")
 };
 
-var isRealWidthSet = function($element) {
-    var explicitWidth = $element[0].style.width;
-
-    if(explicitWidth && explicitWidth !== "auto" && explicitWidth !== "inherit") {
-        return true;
-    }
-
-    return false;
-};
-
 var DateBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {
@@ -393,12 +383,6 @@ var DateBox = DropDownEditor.inherit({
         this._strategy.renderInputMinMax(this._input());
     },
 
-    _render: function() {
-        this.callBase();
-
-        this._updateSize();
-    },
-
     _renderDimensions: function() {
         this.callBase();
         this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option("width"));
@@ -434,25 +418,6 @@ var DateBox = DropDownEditor.inherit({
         return this._$submitElement;
     },
 
-    _updateSize: function() {
-        var $element = this.$element(),
-            widthOption = this.option("width"),
-            isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
-            pickerType = this._pickerType,
-            // NOTE: no calculateWidth if type is rollers, why?
-            shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === "generic";
-
-        if(!windowUtils.hasWindow() || isWidthSet || !(shouldCalculateWidth && $element.is(":visible"))) {
-            return;
-        }
-
-        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
-            longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
-
-        $element.width(this._calculateWidth(longestValue));
-        this._isSizeUpdatable = true;
-    },
-
     _calculateWidth: function(value) {
         var IE_ROUNDING_ERROR = 10;
         var NATIVE_BUTTONS_WIDTH = 48;
@@ -472,13 +437,9 @@ var DateBox = DropDownEditor.inherit({
         });
 
         $longestValueElement.appendTo(this.$element());
-        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
-            rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
-            leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft),
-            beforeButtonsWidth = this._$beforeButtonsContainer ? parseFloat(window.getComputedStyle(this._$beforeButtonsContainer.get(0)).width) : 0,
-            afterButtonsWidth = this._$afterButtonsContainer ? parseFloat(window.getComputedStyle(this._$afterButtonsContainer.get(0)).width) : 0;
+        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
 
-        var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + beforeButtonsWidth + afterButtonsWidth + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
+        var width = elementWidth + IE_ROUNDING_ERROR + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
         $longestValueElement.remove();
 
         return width;
@@ -540,12 +501,6 @@ var DateBox = DropDownEditor.inherit({
     _popupHiddenHandler: function() {
         this.callBase();
         this._strategy.popupHiddenHandler();
-    },
-
-    _visibilityChanged: function(visible) {
-        if(visible) {
-            this._updateSize();
-        }
     },
 
     _clearValueHandler: function(e) {
@@ -756,10 +711,6 @@ var DateBox = DropDownEditor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "showClearButton":
-                this.callBase.apply(this, arguments);
-                this._updateSize();
-                break;
             case "pickerType":
                 this._updatePickerOptions({ pickerType: args.value });
                 this._refreshStrategy();
@@ -771,7 +722,6 @@ var DateBox = DropDownEditor.inherit({
                 this._refreshStrategy();
                 this._refreshFormatClass();
                 this._renderPopupWrapper();
-                this._updateSize();
                 break;
             case "placeholder":
                 this._renderPlaceholder();
@@ -809,13 +759,7 @@ var DateBox = DropDownEditor.inherit({
                 this._strategy.textChangedHandler(args.value);
                 this.callBase.apply(this, arguments);
                 break;
-            case "isValid":
-                this.callBase.apply(this, arguments);
-                this._updateSize();
-                break;
             case "showDropDownButton":
-                this._updateSize();
-                break;
             case "invalidDateMessage":
             case "dateOutOfRangeMessage":
             case "adaptivityEnabled":

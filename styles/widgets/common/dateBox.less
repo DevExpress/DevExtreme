@@ -19,7 +19,12 @@
 }
 
 .dx-datebox {
-    max-width: 100%;
+
+    &.dx-show-clear-button {
+        min-width: 150px;
+    }
+
+    display: inline-block;
 
     .dx-texteditor-input::-webkit-datetime-edit {
         .dx-overflow();

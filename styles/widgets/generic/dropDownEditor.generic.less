@@ -95,13 +95,29 @@
 
 .invalid-dropdowneditor-input-padding() {
     .dx-texteditor-input {
-        padding-right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+        min-width: 50px;
+    }
+
+    &, &.dx-invalid, .dx-show-clear-button:not(.dx-texteditor-empty) {
+        .dx-texteditor-input {
+            padding-right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+        }
+    }
+
+    &.dx-invalid.dx-show-clear-button.dx-texteditor-empty {
+        .dx-texteditor-input {
+            padding-right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+        }
     }
 
     &.dx-rtl {
         .dx-texteditor-input {
             padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
             padding-left: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+
+            &, .dx-show-clear-button.dx-texteditor-empty & {
+                padding-left: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+            }
         }
     }
 }
