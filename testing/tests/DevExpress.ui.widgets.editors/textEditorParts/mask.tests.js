@@ -971,6 +971,31 @@ QUnit.test("valueChangeEvent=change should fire change on blur", function(assert
     assert.equal(valueChangedFired, 1, "change fired once on blur");
 });
 
+QUnit.test("valueChangeEvent=change should fire change on blur after removing", function(assert) {
+    var valueChangedHandler = sinon.spy();
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "9",
+            valueChangeEvent: "change",
+            onValueChanged: valueChangedHandler
+        }),
+        textEditor = $textEditor.dxTextEditor("instance");
+
+    textEditor.option("value", "1");
+    valueChangedHandler.reset();
+
+    var $input = $textEditor.find(".dx-texteditor-input");
+    var keyboard = keyboardMock($input);
+
+    caretWorkaround($input);
+
+    keyboard.press("del");
+
+    // NOTE: triggerHandler instead of trigger due to IE blur async firing
+    $input.triggerHandler("focusout");
+
+    assert.equal(valueChangedHandler.callCount, 1, "change fired once on blur");
+});
+
 QUnit.test("valueChangeEvent=change should fire change on beforedeactivate (ie raises blur in wrong time)", function(assert) {
     var valueChangedFired = 0;
 
