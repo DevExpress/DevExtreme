@@ -2333,11 +2333,11 @@ testModule("API", moduleConfig, () => {
         });
         const overlay = $overlay.dxOverlay("instance");
 
-        overlay.toggle().done((isVivible) => {
-            assert.strictEqual(isVivible, true, "visibility is true");
+        overlay.toggle().done((isVisible) => {
+            assert.strictEqual(isVisible, true, "visibility is true");
 
-            overlay.toggle().done((isVivible) => {
-                assert.strictEqual(isVivible, false, "visibility is false");
+            overlay.toggle().done((isVisible) => {
+                assert.strictEqual(isVisible, false, "visibility is false");
                 done();
             });
         });
