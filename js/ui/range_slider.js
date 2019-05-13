@@ -348,6 +348,10 @@ var RangeSlider = Slider.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
+                if(args.value[0] === args.previousValue[0] && args.value[1] === args.previousValue[1]) {
+                    break;
+                }
+
                 this._setOptionSilent("start", args.value[0]);
                 this._setOptionSilent("end", args.value[1]);
 
