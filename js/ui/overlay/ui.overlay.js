@@ -1093,7 +1093,7 @@ var Overlay = Widget.inherit({
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
-            validate: function(e) {
+            validate: function() {
                 return true;
             },
             getDirection: function() {
