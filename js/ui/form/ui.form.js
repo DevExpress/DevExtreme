@@ -829,7 +829,11 @@ var Form = Widget.inherit({
         this._renderLayout();
         this._renderValidationSummary();
 
-        this._cachedScreenFactor = this._getCurrentScreenFactor();
+        if(this._targetScreenFactor) {
+            this._markupScreenFactor = this._targetScreenFactor;
+        } else {
+            this._markupScreenFactor = this._getCurrentScreenFactor();
+        }
     },
 
     _getCurrentScreenFactor: function() {
@@ -855,7 +859,7 @@ var Form = Widget.inherit({
         this.callBase();
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
-        delete this._cachedScreenFactor;
+        delete this._markupScreenFactor;
     },
 
     _renderScrollable: function() {
@@ -1519,14 +1523,14 @@ var Form = Widget.inherit({
     _dimensionChanged: function() {
         var currentScreenFactor = this._getCurrentScreenFactor();
 
-        if(this._cachedScreenFactor !== currentScreenFactor) {
-            this._currentScreenFactor = currentScreenFactor;
-            if(this._isColCountChanged(this._cachedScreenFactor, currentScreenFactor)) {
+        if(this._markupScreenFactor !== currentScreenFactor) {
+            if(this._isColCountChanged(this._markupScreenFactor, currentScreenFactor)) {
+                this._targetScreenFactor = currentScreenFactor;
                 this._refresh();
+                this._targetScreenFactor = undefined;
             }
 
-            this._cachedScreenFactor = currentScreenFactor;
-            return;
+            this._markupScreenFactor = currentScreenFactor;
         }
     },
 
@@ -1716,6 +1720,10 @@ var Form = Widget.inherit({
 
     getItemID: function(name) {
         return "dx_" + this.option("formID") + "_" + (name || new Guid());
+    },
+
+    getTargetScreenFactor: function() {
+        return this._targetScreenFactor;
     }
 });
 

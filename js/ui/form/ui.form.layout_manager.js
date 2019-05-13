@@ -441,8 +441,9 @@ var LayoutManager = Widget.inherit({
             colCountByScreen = this.option("colCountByScreen");
 
         if(colCountByScreen) {
-            if(this.option("form")._currentScreenFactor) {
-                screenFactor = this.option("form")._currentScreenFactor;
+            var formTargetScreenFactor = this.option("form").getTargetScreenFactor();
+            if(formTargetScreenFactor) {
+                screenFactor = formTargetScreenFactor;
             } else {
                 screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
             }

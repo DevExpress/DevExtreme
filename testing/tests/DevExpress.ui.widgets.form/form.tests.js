@@ -2173,10 +2173,12 @@ QUnit.test("Column count may depend on screen factor", function(assert) {
 });
 
 QUnit.test("Column count ignores hide/show scroller when rerendering if screen factor changed", function(assert) {
-    var originalDocumentElementGetter = domAdapter.getDocumentElement;
+    var originalGetDocumentElement = domAdapter.getDocumentElement;
     try {
-        var width = 1200;
-        var height = 300;
+        var largeScreenWidth = 1200,
+            width = largeScreenWidth,
+            height = 300,
+            scrollerWidth = 17;
 
         domAdapter.getDocumentElement = function() {
             return {
@@ -2197,7 +2199,9 @@ QUnit.test("Column count ignores hide/show scroller when rerendering if screen f
                 {
                     name: "f1", editorType: "dxTextBox",
                     editorOptions: {
-                        onDisposing: function() { width = 1199 + 17; }
+                        onDisposing: function() {
+                            width = largeScreenWidth - 1 + scrollerWidth;
+                        }
                     }
                 },
                 "f2"
@@ -2207,13 +2211,13 @@ QUnit.test("Column count ignores hide/show scroller when rerendering if screen f
         assert.equal($form.find(".dx-col-0").length, 1, "(.dx-col-0).length initial");
         assert.equal($form.find(".dx-col-1").length, 1, "(.dx-col-0).length initial");
 
-        width = 1199;
+        width = largeScreenWidth - 1;
         resizeCallbacks.fire();
 
         assert.equal($form.find(".dx-col-0").length, 2, "(.dx-col-0).length current");
         assert.equal($form.find(".dx-col-1").length, 0, "(.dx-col-1).length current");
     } finally {
-        domAdapter.getDocumentElement = originalDocumentElementGetter;
+        domAdapter.getDocumentElement = originalGetDocumentElement;
     }
 });
 
