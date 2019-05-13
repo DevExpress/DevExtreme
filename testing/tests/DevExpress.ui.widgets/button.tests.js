@@ -97,9 +97,10 @@ QUnit.module("options changed callbacks", {
         const template = sinon.stub().returns("TPL");
         this.instance.option("template", template);
         this.instance.option("_templateData", { custom: 1 });
+        template.reset();
         this.instance.repaint();
 
-        assert.strictEqual(template.getCall(1).args[0].custom, 1, "custom field is correct");
+        assert.strictEqual(template.firstCall.args[0].custom, 1, "custom field is correct");
     });
 
     QUnit.test("readOnly validator should be excluded for the click action", (assert) => {
