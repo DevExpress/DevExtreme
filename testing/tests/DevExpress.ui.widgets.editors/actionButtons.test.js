@@ -106,6 +106,14 @@ module("button collection", () => {
                 assert.notOk($before.length);
                 assert.strictEqual($after.length, 2);
             });
+
+            test("custom button should have defaultTemplatesMap option to resolve template name conflict", (assert) => {
+                const $textBox = $("<div>").dxTextBox({ buttons: [{ name: "name1" }] });
+                const buttons = getTextEditorButtons($textBox);
+                const button = buttons.$after.eq(0).dxButton("instance");
+
+                assert.equal(button.option("defaultTemplatesMap.content"), "textEditorButtonContent", "template name was redefined");
+            });
         });
     });
 });
