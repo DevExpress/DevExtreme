@@ -782,6 +782,15 @@ QUnit.module("templates support", {}, () => {
     const TestContainer = Widget.inherit({
         NAME: "TestContainer",
 
+        _initTemplates() {
+            this.callBase();
+            this._defaultTemplates["content"] = {
+                render() {
+                    return "Default content markup";
+                }
+            };
+        },
+
         _renderContentImpl() {
             if(this.option("integrationOptions.templates").template) {
                 this.option("integrationOptions.templates").template.render({ container: this.$element() });
@@ -907,6 +916,50 @@ QUnit.module("templates support", {}, () => {
 
         assert.equal(renderResult, "template result", "render method should have correct context");
         assert.equal(onRenderedHandler.callCount, 1, "onRendered has been called");
+    });
+
+    QUnit.test("custom template should not be taken from integrationOptions when it is skipped", (assert) => {
+        const instance = new TestContainer("#container", {
+            template: "customTemplate",
+            integrationOptions: {
+                skipTemplates: ["customTemplate"],
+                createTemplate() {
+                    return {
+                        render() {
+                            return "Created custom template";
+                        }
+                    };
+                },
+                templates: {
+                    customTemplate: {
+                        render() {
+                            return "Integration content";
+                        }
+                    }
+                }
+            }
+        });
+
+        const template = instance._getTemplateByOption("template");
+        assert.strictEqual(template.render(), "Created custom template", "name2 is found in integration options. Use it");
+    });
+
+    QUnit.test("default template should not be taken from integrationOptions when it is skipped", (assert) => {
+        const instance = new TestContainer("#container", {
+            integrationOptions: {
+                skipTemplates: ["content"],
+                templates: {
+                    content: {
+                        render() {
+                            return "Integration content";
+                        }
+                    }
+                }
+            }
+        });
+
+        const template = instance._getTemplate("content");
+        assert.strictEqual(template.render(), "Default content markup", "name1 is not found in integrationOptions. Use the default");
     });
 
     QUnit.test("shared external template as script element", (assert) => {
