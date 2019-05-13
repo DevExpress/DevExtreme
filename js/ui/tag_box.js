@@ -897,15 +897,28 @@ const TagBox = SelectBox.inherit({
         return this.option("grouped") && !this._dataSource.group();
     },
 
-    _getFilteredGroupedItems: function(values) {
-        var selectedItems = [];
+    _getItemsByValues: function(values) {
+        var resultItems = [];
         values.forEach(function(value) {
             var item = this._getItemFromPlain(value);
             if(isDefined(item)) {
-                selectedItems.push(item);
+                resultItems.push(item);
             }
         }.bind(this));
-        return selectedItems;
+        return resultItems;
+    },
+
+    _getFilteredGroupedItems: function(values) {
+        var selectedItems = new Deferred();
+        if(!this._dataSource.items().length) {
+            this._dataSource.load().done(function() {
+                selectedItems.resolve(this._getItemsByValues(values));
+            }.bind(this)).fail(selectedItems.resolve([]));
+        } else {
+            selectedItems.resolve(this._getItemsByValues(values));
+        }
+
+        return selectedItems.promise();
     },
 
     _loadTagsData: function() {
@@ -914,11 +927,10 @@ const TagBox = SelectBox.inherit({
 
         this._selectedItems = [];
 
-        this._getFilteredItems(values)
+        var filteredItemsPromise = this._isGroupedData() ? this._getFilteredGroupedItems(values) : this._getFilteredItems(values);
+
+        filteredItemsPromise
             .done((filteredItems) => {
-                if(!filteredItems.length && this._isGroupedData()) {
-                    filteredItems = this._getFilteredGroupedItems(values);
-                }
                 const items = this._createTagsData(values, filteredItems);
                 items.always(function(data) {
                     tagData.resolve(data);
