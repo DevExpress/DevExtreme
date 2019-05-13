@@ -237,7 +237,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($(instance.content()).outerWidth(), 700, "width are equal after option change");
     });
 
-    QUnit.test("popup and editor width should be equal when container resizes after runtime width change", function(assert) {
+    QUnit.test("popup and editor width should be equal when container resizes after runtime width change", (assert) => {
         const instance = new DropDownBox(this.$element, {
             width: "100%",
             opened: true
