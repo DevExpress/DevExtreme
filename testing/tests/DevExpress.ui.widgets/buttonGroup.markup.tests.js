@@ -6,7 +6,6 @@ import "common.css!";
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
     BUTTON_CLASS = "dx-button",
-    DX_ITEM_SELECTED_CLASS = "dx-item-selected",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
     BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-last-item",
@@ -203,59 +202,5 @@ QUnit.module("default", {
 
         const $lastButton = $buttonGroup.find(`.${BUTTON_CLASS}`).last();
         assert.ok($lastButton.hasClass(BUTTON_GROUP_LAST_ITEM_CLASS));
-    });
-});
-
-QUnit.module("selection", () => {
-    QUnit.test("single selection with selectedItems", function(assert) {
-        $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "item 1" }, { text: "item 2" }],
-            selectedItems: [{ text: "item 2" }]
-        });
-
-        const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
-
-        assert.notOk($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-    });
-
-    QUnit.test("multiple selection with selectedItems", function(assert) {
-        $("#buttonGroup").dxButtonGroup({
-            selectionMode: "multiple",
-            items: [{ text: "item 1" }, { text: "item 2" }],
-            selectedItems: [{ text: "item 1" }, { text: "item 2" }]
-        });
-
-        const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
-
-        assert.ok($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-    });
-
-    QUnit.test("single selection with selectedItemKeys", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ alignment: "left" }, { alignment: "right" }],
-            keyExpr: "alignment",
-            selectedItemKeys: ["right"]
-        });
-
-        const $items = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
-
-        assert.notOk($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-    });
-
-    QUnit.test("multiple selection with selectedItemKeys", function(assert) {
-        $("#buttonGroup").dxButtonGroup({
-            selectionMode: "multiple",
-            items: [{ alignment: "left" }, { alignment: "right" }],
-            keyExpr: "alignment",
-            selectedItemKeys: ["left", "right"]
-        });
-
-        const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
-
-        assert.ok($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
     });
 });
