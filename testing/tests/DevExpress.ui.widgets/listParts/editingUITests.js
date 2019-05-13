@@ -1,26 +1,25 @@
-require("ui/action_sheet");
+import $ from "jquery";
+import renderer from "core/renderer";
+import fx from "animation/fx";
+import errors from "ui/widget/ui.errors";
+import translator from "animation/translator";
+import animationFrame from "animation/frame";
+import holdEvent from "events/hold";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import pointerMock from "../../../helpers/pointerMock.js";
+import contextMenuEvent from "events/contextmenu";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import decoratorRegistry from "ui/list/ui.list.edit.decorator_registry";
+import SwitchableEditDecorator from "ui/list/ui.list.edit.decorator.switchable";
+import SwitchableButtonEditDecorator from "ui/list/ui.list.edit.decorator.switchable.button";
+import themes from "ui/themes";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
 
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    fx = require("animation/fx"),
-    errors = require("ui/widget/ui.errors"),
-    translator = require("animation/translator"),
-    animationFrame = require("animation/frame"),
-    holdEvent = require("events/hold"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    pointerMock = require("../../../helpers/pointerMock.js"),
-    contextMenuEvent = require("events/contextmenu"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    decoratorRegistry = require("ui/list/ui.list.edit.decorator_registry"),
-    SwitchableEditDecorator = require("ui/list/ui.list.edit.decorator.switchable"),
-    SwitchableButtonEditDecorator = require("ui/list/ui.list.edit.decorator.switchable.button"),
-    themes = require("ui/themes"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store");
-
-require("ui/list");
-require("common.css!");
+import "ui/action_sheet";
+import "ui/list";
+import "common.css!";
 
 var LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_ICON_CONTAINER_CLASS = "dx-list-item-icon-container",
@@ -284,7 +283,7 @@ var SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button
     SWITCHABLE_DELETE_BUTTON_CLASS = "dx-list-switchable-delete-button";
 
 QUnit.module("switchable button delete decorator", {
-    beforeEach: function() {
+    beforeEach: () => {
         fx.off = true;
 
         var testDecorator = SwitchableButtonEditDecorator.inherit({
@@ -302,7 +301,7 @@ QUnit.module("switchable button delete decorator", {
         });
         decoratorRegistry.register("menu", "test", testDecorator);
     },
-    afterEach: function() {
+    afterEach: () => {
         fx.off = false;
 
         delete decoratorRegistry.registry.menu.test;
@@ -367,7 +366,30 @@ QUnit.test("delete button click should delete list item", function(assert) {
     $deleteButton.trigger("dxclick");
 });
 
-var TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
+const TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
+
+QUnit.test("switchable delete button should has button content on the second deleting", (assert) => {
+    var $list = $("#templated-list").dxList({
+        items: ["0", "1", "2"],
+        allowItemDeleting: true,
+        itemDeleteMode: "toggle"
+    });
+
+    let $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+    let $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+
+    $deleteToggle.trigger("dxclick");
+
+    let $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
+
+    $deleteButton.trigger("dxclick");
+    $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+    $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+    $deleteToggle.trigger("dxclick");
+    $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
+
+    assert.strictEqual($deleteButton.children(".dx-button-content").length, 1, "button container has content");
+});
 
 QUnit.module("toggle delete decorator");
 

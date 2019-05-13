@@ -195,6 +195,10 @@ registerDecorator(
             };
         },
 
+        _getDeleteButtonContainer: function() {
+            return this._$buttonsContainer;
+        },
+
         _getCurrentPositions: function() {
             return {
                 content: translator.locate(this._$cachedContent).left,
