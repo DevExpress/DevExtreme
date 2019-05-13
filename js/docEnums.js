@@ -992,6 +992,11 @@
  */
 
 /**
+ * @typedef {string} Enums.HtmlEditorToolbarFormatName
+ * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'size'|'strike'|'script'|'underline'|'blockquote'|'header'|'indent'|'list'|'align'|'code-block'}
+ */
+
+/**
  * @typedef {string} Enums.EditorStylingMode
  * @enum {'outlined'|'underlined'|'filled'}
  */
