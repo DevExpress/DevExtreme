@@ -413,7 +413,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             isDesktop = devices.real().deviceType === "desktop";
 
         if(this._useMaskBehavior() && isNumberType) {
-            this._setInputType(isDesktop || this._isMobileSupportInputMode() ? "text" : "tel");
+            this._setInputType(isDesktop || this._isSupportInputMode() ? "text" : "tel");
         } else {
             this.callBase();
         }
