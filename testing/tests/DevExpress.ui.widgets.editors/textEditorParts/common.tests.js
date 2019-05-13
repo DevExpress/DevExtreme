@@ -268,6 +268,18 @@ QUnit.test("dxTextEditor reset value after click on clearButton", function(asser
     assert.equal($textEditor.dxTextEditor("option", "value"), "", "value reset");
 });
 
+QUnit.test("dxTextEditor should save focus after buttons option changed", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({ value: "text" }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input");
+
+    $input.focus();
+    assert.ok($textEditor.hasClass("dx-state-focused"), "input is focused");
+
+    textEditor.option("buttons", [{ name: "custom", location: "after", options: { icon: "box" } }]);
+    assert.ok($textEditor.hasClass("dx-state-focused"), "input is still focused");
+});
+
 QUnit.test("T220209 - the 'valueFormat' option", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         value: "First",
