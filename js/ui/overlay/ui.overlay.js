@@ -1261,17 +1261,11 @@ var Overlay = Widget.inherit({
     },
 
     _renderShadingDimensions: function() {
-        var wrapperWidth, wrapperHeight;
+        var wrapperWidth, wrapperHeight,
+            $container = this._getContainer();
 
-        if(this.option("shading")) {
-            var $container = this._getContainer();
-
-            wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth(),
-            wrapperHeight = this._isWindow($container) ? "100%" : $container.outerHeight();
-        } else {
-            wrapperWidth = "";
-            wrapperHeight = "";
-        }
+        wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth(),
+        wrapperHeight = this._isWindow($container) ? "100%" : $container.outerHeight();
 
         this._$wrapper.css({
             width: wrapperWidth,
