@@ -173,6 +173,12 @@ const ButtonGroup = Widget.inherit({
             items: [],
 
             /**
+             * @name dxButtonGroupOptions.itemTemplate
+             * @type template|function
+             * @deprecated dxButtonGroupOptions.buttonTemplate
+             */
+
+            /**
              * @name dxButtonGroupOptions.buttonTemplate
              * @type template|function
              * @default "content"
@@ -205,6 +211,14 @@ const ButtonGroup = Widget.inherit({
             * @action
             */
             onItemClick: null
+        });
+    },
+
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            "itemTemplate": { since: "19.2", alias: "buttonTemplate" }
         });
     },
 

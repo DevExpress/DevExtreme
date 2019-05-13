@@ -1560,6 +1560,9 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** @name dxButtonGroup.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
+        /** @deprecated */
+        /** @name dxButtonGroup.Options.itemTemplate */
+        itemTemplate?: template | Function;
         /** @name dxButtonGroup.Options.items */
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
