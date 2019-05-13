@@ -855,7 +855,7 @@ var Form = Widget.inherit({
         this.callBase();
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
-        delete this._lastMarkupScreenFactor;
+        this._lastMarkupScreenFactor = undefined;
     },
 
     _renderScrollable: function() {
