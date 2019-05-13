@@ -2147,7 +2147,6 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.toggle(visibility) */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxDropDownButtonItem */
     export interface dxDropDownButtonItem extends dxListItem {
     }
