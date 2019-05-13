@@ -4052,7 +4052,7 @@ QUnit.module("datebox validation", {}, () => {
         assert.ok(dateBox.option("isValid"), "datebox is valid");
     });
 
-    QUnit.test("required validator should not be triggered when another validation rule has been changed", function(assert) {
+    QUnit.test("required validator should not be triggered when another validation rule has been changed", (assert) => {
         const dateBox = $("#dateBox").dxDateBox({
             min: new Date(2015, 6, 14),
             value: null,
