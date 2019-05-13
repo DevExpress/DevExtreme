@@ -554,7 +554,18 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _readOnlyPropValue: function() {
-        return this.callBase() && !this._isNativeType() || this._pickerType === PICKER_TYPE.rollers;
+        if(this._pickerType === PICKER_TYPE.rollers) {
+            return true;
+        }
+
+        var platform = devices.real().platform,
+            isCustomValueDisabled = this._isNativeType() && (platform === "ios" || platform === "android");
+
+        if(isCustomValueDisabled) {
+            return this.option("readOnly");
+        }
+
+        return this.callBase();
     },
 
     _isClearButtonVisible: function() {
