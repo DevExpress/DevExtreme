@@ -86,7 +86,8 @@ export class Plaque {
             return;
         }
 
-        const shadow = renderer.shadowFilter().attr(extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow));
+        const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
+        const shadow = renderer.shadowFilter().attr(shadowSettings);
 
         let cloudSettings = { opacity: options.opacity, filter: shadow.id, "stroke-width": 0, fill: options.color };
         let borderOptions = options.border || {};
@@ -120,11 +121,19 @@ export class Plaque {
             height: max(contentHeight, bBox.height) + options.paddingTopBottom * 2
         };
 
+        const xOff = shadowSettings.offsetX;
+        const yOff = shadowSettings.offsetY;
+        const blur = shadowSettings.blur + 1;
+        const lm = max(blur - xOff, 0); // left margin
+        const rm = max(blur + xOff, 0); // right margin
+        const tm = max(blur - yOff, 0); // top margin
+        const bm = max(blur + yOff, 0); // bottom margin
+
         if(!isDefined(x)) {
             if(bounds.width < size.width) {
                 x = round(bounds.xl + bounds.width / 2);
             } else {
-                x = min(max(anchorX, Math.ceil(bounds.xl + size.width / 2)), Math.floor(bounds.xr - size.width / 2));
+                x = min(max(anchorX, Math.ceil(bounds.xl + size.width / 2 + lm)), Math.floor(bounds.xr - size.width / 2 - rm));
             }
         } else if(!isDefined(anchorX)) {
             anchorX = x;
@@ -136,8 +145,8 @@ export class Plaque {
 
             if(bounds.height < size.height + options.arrowLength) {
                 y = round(bounds.yt + size.height / 2);
-            } else if(y_top - size.height / 2 < bounds.yt) {
-                if(y_bottom + size.height / 2 < bounds.yb) {
+            } else if(y_top - size.height / 2 - tm < bounds.yt) {
+                if(y_bottom + size.height / 2 + bm < bounds.yb) {
                     y = y_bottom;
                 } else {
                     y = round(bounds.yt + size.height / 2);
