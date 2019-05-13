@@ -468,11 +468,7 @@ var BaseRenderingStrategy = Class.inherit({
 
             fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
 
-            endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()));
-
-            if(isRecurring) {
-                endDate = new Date(endDate.getTime() + fullDuration);
-            }
+            endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()) + fullDuration);
 
             if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate.getTime() < viewStartDate.getTime()) {
                 var headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartStartDate.getTime(),
