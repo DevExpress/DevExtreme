@@ -414,6 +414,9 @@ var SelectBox = DropDownList.inherit({
 
             if(!isLastPage && isLastItem && step > 0) {
                 this._dataSource.pageIndex(currentPage + 1);
+                if(!this._popup) {
+                    this._createPopup();
+                }
                 this._dataSource.load().done(this._setNextItem.bind(this, step));
             } else {
                 this._setNextItem(step);
