@@ -2786,7 +2786,7 @@ declare module DevExpress.ui {
     /** @name dxHtmlEditorToolbarItem */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /** @name dxHtmlEditorToolbarItem.formatName */
-        formatName?: string;
+        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
         /** @name dxHtmlEditorToolbarItem.formatValues */
         formatValues?: Array<string | number | boolean>;
         /** @name dxHtmlEditorToolbarItem.location */
