@@ -55,6 +55,12 @@ module.exports = Class.inherit({
         return commonUtils.equalByValue(key1, key2);
     },
 
+    nonDisabled: function(items) {
+        return items.filter(function(item) {
+            return !item.disabled;
+        });
+    },
+
     _clearSelection: function(keys, preserve, isDeselect, isSelectAll) {
         keys = keys || [];
         keys = Array.isArray(keys) ? keys : [keys];
@@ -138,7 +144,7 @@ module.exports = Class.inherit({
     },
 
     _getVisibleSelectAllState: function() {
-        var items = this.options.plainItems(),
+        var items = this.nonDisabled(this.options.plainItems()),
             hasSelectedItems = false,
             hasUnselectedItems = false;
 
