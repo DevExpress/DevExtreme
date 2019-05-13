@@ -536,7 +536,8 @@ QUnit.test("down arrow should move focus through the groups", function(assert) {
         keyboard = keyboardMock($element.find("." + TEXTEDITOR_INPUT_CLASS));
 
     keyboard
-        .type("e")
+        .type("i")
+        .keyDown(KEY_DOWN)
         .keyDown(KEY_DOWN)
         .keyDown(KEY_TAB);
 
