@@ -332,7 +332,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         // assert
         assert.equal(result, elem);
         assert.deepEqual(elem.attr.callCount, 1);
-        assert.deepEqual(elem.attr.firstCall.args, [{ sharp: true }]);
+        assert.deepEqual(elem.attr.firstCall.args, [{ sharp: true, sharpDirection: undefined }]);
     });
 
     QUnit.test("Sharp with parameter", function(assert) {
@@ -345,12 +345,12 @@ function checkDashStyle(assert, elem, result, style, value) {
         elem.attr = sinon.spy(function() { return this; });
 
         // act
-        result = elem.sharp("h");
+        result = elem.sharp("h", -1);
 
         // assert
         assert.equal(result, elem);
         assert.deepEqual(elem.attr.callCount, 1);
-        assert.deepEqual(elem.attr.firstCall.args, [{ sharp: "h" }]);
+        assert.deepEqual(elem.attr.firstCall.args, [{ sharp: "h", sharpDirection: -1 }]);
     });
 
     QUnit.test("Data, object", function(assert) {
