@@ -14,6 +14,7 @@ import { animation } from "./ui.drawer.rendering.strategy";
 import clickEvent from "../../events/click";
 import fx from "../../animation/fx";
 import { Deferred } from "../../core/utils/deferred";
+import { triggerResizeEvent } from "../../core/utils/dom";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -433,6 +434,8 @@ const Drawer = Widget.inherit({
     },
 
     _animationCompleteHandler() {
+        triggerResizeEvent(this.viewContent());
+
         if(this._animationPromise) {
             this._animationPromise.resolve();
             this._animations = [];
