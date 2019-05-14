@@ -1424,6 +1424,7 @@ QUnit.test("Appointment should be dragged correctly in grouped timeline (T739132
         startDayHour: 8,
         endDayHour: 20,
         cellDuration: 60,
+        editing: true,
         groups: ["priority"],
         resources: [{
             fieldExpr: "priority",
