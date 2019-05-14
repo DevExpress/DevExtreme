@@ -51,7 +51,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this._storedCoords = this.coords;
                 this._storedLabelsCoords = this.labelCoords;
             },
-            drawMark: function(options) {
+            drawMark(options) {
                 if(!tickOptions.visible || skippedCategory === value) {
                     return;
                 }
@@ -64,7 +64,9 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     this.mark.append(lineGroup);
                     this.updateTickPosition(options);
                 } else {
-                    this.mark = axis._createPathElement([], tickStyle).append(lineGroup);
+                    const axisCanvas = axis._getCanvasStartEnd();
+                    const maxAxisCoord = Math.max(axisCanvas.start, axisCanvas.end);
+                    this.mark = axis._createPathElement([], tickStyle, this.coords.angle ? 0 : (maxAxisCoord !== this.coords[(axis._isHorizontal ? "x" : "y")] ? 1 : -1)).append(lineGroup);
                     this.updateTickPosition(options);
                 }
             },

@@ -285,8 +285,8 @@ const Axis = exports.Axis = function(renderSettings) {
 Axis.prototype = {
     constructor: Axis,
 
-    _drawAxis: function() {
-        var options = this._options;
+    _drawAxis() {
+        const options = this._options;
 
         if(!options.visible) {
             return;
@@ -296,12 +296,12 @@ Axis.prototype = {
         this._updateAxisElementPosition();
 
         this._axisElement.attr({ "stroke-width": options.width, stroke: options.color, "stroke-opacity": options.opacity })
-            .sharp(this._getSharpParam(true))
+            .sharp(this._getSharpParam(true), options.position === TOP || options.position === LEFT ? 1 : -1)
             .append(this._axisLineGroup);
     },
 
-    _createPathElement: function(points, attr) {
-        return this._renderer.path(points, "line").attr(attr).sharp(this._getSharpParam());
+    _createPathElement(points, attr, sharpDirection = 1) {
+        return this._renderer.path(points, "line").attr(attr).sharp(this._getSharpParam(), sharpDirection);
     },
 
     _getGridLineDrawer: function(borderOptions) {

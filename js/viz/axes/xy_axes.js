@@ -346,10 +346,10 @@ module.exports = {
             that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickMarkPoints: function(coords, length, tickOptions) {
+        _getTickMarkPoints(coords, length, tickOptions) {
             const isHorizontal = this._isHorizontal;
             const options = this._options;
-            var tickStartCoord;
+            let tickStartCoord;
 
             if(isDefined(options.tickOrientation)) {
                 tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
@@ -359,8 +359,9 @@ module.exports = {
                     shift = -shift;
                 }
                 tickStartCoord = shift + (length % 2 === 1 ?
-                    (options.width % 2 === 0 && (options.position === "left" || options.position === "top") ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
-                    (-length / 2 + (options.position === "bottom" || options.position === "right" || options.width % 2 === 0 ? 0 : 1)));
+                    (options.width % 2 === 0 && (options.position === "left" || options.position === "top") ||
+                    options.width % 2 === 1 && (options.position === "right" || options.position === "bottom") ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
+                    (-length / 2 + (options.width % 2 === 0 ? 0 : (options.position === "bottom" || options.position === "right" ? -1 : 1))));
             }
             return [
                 coords.x + (isHorizontal ? 0 : tickStartCoord),

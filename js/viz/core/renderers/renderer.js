@@ -488,7 +488,7 @@ function baseAttr(that, attrs) {
         } else if(value && (key === "fill" || key === "clip-path" || key === "filter") && value.indexOf("DevExpress") !== -1) {
             that._addFixIRICallback();
             value = getFuncIri(value, renderer.pathModified);
-        } else if(/^(translate(X|Y)|rotate[XY]?|scale(X|Y)|sharp)$/i.test(key)) {
+        } else if(/^(translate(X|Y)|rotate[XY]?|scale(X|Y)|sharp|sharpDirection)$/i.test(key)) {
             hasTransformations = true;
             continue;
         } else if(/^(x|y|d)$/i.test(key)) {
@@ -1534,21 +1534,22 @@ SvgElement.prototype = {
         return baseAnimate(this, params, options, complete);
     },
 
-    sharp: function(pos) {
-        return this.attr({ sharp: pos || true });
+    sharp(pos, sharpDirection) {
+        return this.attr({ sharp: pos || true, sharpDirection });
     },
 
-    _applyTransformation: function() {
-        var tr = this._settings,
-            scaleXDefined,
-            scaleYDefined,
-            transformations = [],
-            rotateX,
-            rotateY,
-            sharpMode = tr.sharp,
-            strokeOdd = tr[KEY_STROKE_WIDTH] % 2,
-            correctionX = (strokeOdd && (sharpMode === "h" || sharpMode === true)) ? SHARPING_CORRECTION : 0,
-            correctionY = (strokeOdd && (sharpMode === "v" || sharpMode === true)) ? SHARPING_CORRECTION : 0;
+    _applyTransformation() {
+        const tr = this._settings;
+        let scaleXDefined;
+        let scaleYDefined;
+        let rotateX;
+        let rotateY;
+        const transformations = [];
+        const sharpMode = tr.sharp;
+        const trDirection = tr.sharpDirection || 1;
+        const strokeOdd = tr[KEY_STROKE_WIDTH] % 2;
+        const correctionX = (strokeOdd && (sharpMode === "h" || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
+        const correctionY = (strokeOdd && (sharpMode === "v" || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
 
         transformations.push("translate(" + ((tr.translateX || 0) + correctionX) + "," + ((tr.translateY || 0) + correctionY) + ")");
 
