@@ -1158,6 +1158,7 @@ const Scheduler = Widget.inherit({
             case "currentDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
+                this.option("selectedCellData", []);
                 this._workSpace.option(name, new Date(value));
                 this._header.option(name, new Date(value));
                 this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
@@ -1195,8 +1196,6 @@ const Scheduler = Widget.inherit({
                 break;
             case "currentView":
                 this._processCurrentView();
-
-                this.option("selectedCellData", []);
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
@@ -2101,6 +2100,8 @@ const Scheduler = Widget.inherit({
         this._appointments.$element().detach();
         this._workSpace._dispose();
         this._workSpace.$element().remove();
+
+        this.option("selectedCellData", []);
     },
 
     getWorkSpaceScrollable: function() {
