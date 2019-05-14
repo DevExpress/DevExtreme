@@ -7,12 +7,17 @@
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
     @MATERIAL_TAGBOX_TAG_MARGIN: 8px;
+    @MATERIAL_TAGBOX_TAG_HEIGHT: 32px;
 }
 
 .dx-tagbox {
+    .dx-texteditor-input {
+        height: @MATERIAL_TAGBOX_TAG_HEIGHT;
+    }
     &.dx-editor-filled, &.dx-editor-outlined {
         .dx-texteditor-input {
             padding: 0;
+            margin-top: @MATERIAL_TAGBOX_TAG_MARGIN;
         }
 
         .dx-tag-container {
@@ -28,6 +33,7 @@
     }
     .dx-texteditor-input {
         padding-left: 0;
+        margin-top: @MATERIAL_TAGBOX_TAG_MARGIN;
 
         .dx-rtl &,
         .dx-rtl& {
