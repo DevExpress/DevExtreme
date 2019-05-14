@@ -179,6 +179,8 @@ class FileManagerItem {
         result.dateModified = this.dateModified;
         result.thumbnail = this.thumbnail;
         result.tooltipText = this.tooltipText;
+        result.hasSubDirs = this.hasSubDirs;
+        result.dataItem = this.dataItem;
         return result;
     }
 }
