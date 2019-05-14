@@ -274,7 +274,7 @@ const SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS = "dx-list-switchable-delete-
 const SWITCHABLE_DELETE_BUTTON_CLASS = "dx-list-switchable-delete-button";
 
 QUnit.module("switchable button delete decorator", {
-    beforeEach: function() {
+    beforeEach: () => {
         fx.off = true;
 
         const testDecorator = SwitchableButtonEditDecorator.inherit({
@@ -292,7 +292,7 @@ QUnit.module("switchable button delete decorator", {
         });
         decoratorRegistry.register("menu", "test", testDecorator);
     },
-    afterEach: function() {
+    afterEach: () => {
         fx.off = false;
 
         delete decoratorRegistry.registry.menu.test;
@@ -356,7 +356,7 @@ QUnit.test("delete button click should delete list item", (assert) => {
     $deleteButton.trigger("dxclick");
 });
 
-var TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
+const TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
 
 QUnit.test("switchable delete button should has button content on the second deleting", (assert) => {
     const $list = $("#templated-list").dxList({
