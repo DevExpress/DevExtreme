@@ -1286,7 +1286,6 @@ QUnit.testStart(function() {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
-                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
         },
@@ -1919,9 +1918,9 @@ QUnit.testStart(function() {
         });
 
         var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
-            cell = this.scheduler.workSpace.getCell(7);
+            cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
 
-        pointerMock(cell).start().click();
+        pointerMock(cells.eq(7)).start().click();
         keyboard.keyDown("down", { shiftKey: true });
 
         assert.deepEqual(this.instance.option("selectedCellData"), [{
@@ -1947,9 +1946,9 @@ QUnit.testStart(function() {
         });
 
         var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
-            cell = this.scheduler.workSpace.getCell(7);
+            cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
 
-        pointerMock(cell).start().click();
+        pointerMock(cells.eq(7)).start().click();
         keyboard.keyDown("down", { shiftKey: true });
 
         assert.deepEqual(this.instance.option("selectedCellData"), [{
