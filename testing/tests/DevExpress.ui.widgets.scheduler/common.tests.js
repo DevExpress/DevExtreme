@@ -1289,6 +1289,7 @@ QUnit.testStart(function() {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
         },
@@ -1899,9 +1900,9 @@ QUnit.testStart(function() {
         });
 
         var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
-            cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+            cell = this.scheduler.workSpace.getCell(7);
 
-        pointerMock(cells.eq(7)).start().click();
+        pointerMock(cell).start().click();
         keyboard.keyDown("down", { shiftKey: true });
 
         assert.deepEqual(this.instance.option("selectedCellData"), [{
@@ -1915,7 +1916,35 @@ QUnit.testStart(function() {
         }], "correct cell data");
 
         this.instance.option("currentView", "month");
-        assert.deepEqual(this.instance.option("selectedCellData"), []);
+        assert.deepEqual(this.instance.option("selectedCellData"), [], "selectedCellData was cleared");
+    });
+
+    QUnit.test("selectedCellData option should be updated after currentDate changing", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2018, 4, 10),
+            views: ["week", "month"],
+            currentView: "week",
+            focusStateEnabled: true
+        });
+
+        var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
+            cell = this.scheduler.workSpace.getCell(7);
+
+        pointerMock(cell).start().click();
+        keyboard.keyDown("down", { shiftKey: true });
+
+        assert.deepEqual(this.instance.option("selectedCellData"), [{
+            startDate: new Date(2018, 4, 6, 0, 30),
+            endDate: new Date(2018, 4, 6, 1),
+            allDay: false
+        }, {
+            startDate: new Date(2018, 4, 6, 1),
+            endDate: new Date(2018, 4, 6, 1, 30),
+            allDay: false
+        }], "correct cell data");
+
+        this.instance.option("currentDate", new Date(2018, 5, 10));
+        assert.deepEqual(this.instance.option("selectedCellData"), [], "selectedCellData was cleared");
     });
 
     QUnit.test("Multiple reloading should be avoided after some options changing (T656320)", function(assert) {
