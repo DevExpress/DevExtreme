@@ -499,8 +499,6 @@ QUnit.test("Get options rect with placeholder", function(assert) {
 QUnit.test("Get options rect if nothing drawn", function(assert) {
     this.options = { subtitle: {}, placeholderSize: 10 };
 
-    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 0, height: 0, isEmpty: true };
-
     var box = this.createTitle().getLayoutOptions();
 
     assert.deepEqual(box, {

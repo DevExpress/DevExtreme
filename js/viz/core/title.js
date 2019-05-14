@@ -225,7 +225,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             boundingRect = that._boundingRect,
             box;
 
-        box = that._group.getBBox();
+        box = that._hasText ? that._group.getBBox() : { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
 
         if(!box.isEmpty) {
             box.height += margin.top + margin.bottom - that._baseLineCorrection;
