@@ -1830,22 +1830,43 @@ const Scheduler = Widget.inherit({
 
         this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
 
-        this._loadResources().done((function(resources) {
-            this._readyToRenderAppointments = windowUtils.hasWindow();
+        if(this._isLoaded()) {
+            this._initMarkupCore(this._loadedResources);
+            this._dataSourceChangedHandler(this._dataSource.items());
+        } else {
+            this._loadResources().done((function(resources) {
+                this._initMarkupCore(resources);
+                this._reloadDataSource();
+            }).bind(this));
+        }
+    },
 
-            this._workSpace && this._cleanWorkspace();
+    _initMarkupCore: function(resources) {
+        this._readyToRenderAppointments = windowUtils.hasWindow();
 
-            this._renderWorkSpace(resources);
-            this._appointments.option({
-                fixedContainer: this._workSpace.getFixedContainer(),
-                allDayContainer: this._workSpace.getAllDayContainer()
-            });
-            this._waitAsyncTemplates(() => {
-                this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
-            });
-            this._filterAppointmentsByDate();
-            this._reloadDataSource();
-        }).bind(this));
+        this._workSpace && this._cleanWorkspace();
+
+        this._renderWorkSpace(resources);
+        this._appointments.option({
+            fixedContainer: this._workSpace.getFixedContainer(),
+            allDayContainer: this._workSpace.getAllDayContainer()
+        });
+        this._waitAsyncTemplates(() => {
+            this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
+        });
+        this._filterAppointmentsByDate();
+    },
+
+    _isLoaded: function() {
+        return this._isResourcesLoaded() && this._isDataSourceLoaded();
+    },
+
+    _isResourcesLoaded: function() {
+        return typeUtils.isDefined(this._loadedResources);
+    },
+
+    _isDataSourceLoaded: function() {
+        return this._dataSource && this._dataSource.isLoaded();
     },
 
     _render: function() {
