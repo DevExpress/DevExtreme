@@ -1968,6 +1968,24 @@ QUnit.testStart(function() {
         assert.equal(counter, 2, "Data source was reloaded one more time after some options changing");
     });
 
+    QUnit.test("Multiple reloading should be avoided after repaint (T737181)", function(assert) {
+        var counter = 0;
+
+        this.createInstance();
+
+        this.instance.option("dataSource", new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    counter++;
+                    return [];
+                }
+            })
+        }));
+        assert.equal(counter, 1, "Data source was reloaded after dataSource option changing");
+        this.instance.repaint();
+        assert.equal(counter, 1, "Data source wasn't reloaded after repaint");
+    });
+
     QUnit.test("Multiple reloading should be avoided after some currentView options changing (T656320)", function(assert) {
         var counter = 0,
             resourceCounter = 0;
