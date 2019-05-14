@@ -305,10 +305,12 @@ class FilesTreeViewModel {
         item.expanded = expanded;
     }
 
-    getItemByDataItem(dataItem) {
+    getItemByDataItem(dataItem, updateIfExists) {
         let result = this._itemMap[dataItem.relativeName];
         if(!result) {
             result = this._createItem(dataItem);
+        } else if(updateIfExists) {
+            result.dataItem = dataItem;
         }
         return result;
     }
@@ -374,7 +376,7 @@ class FilesTreeViewModel {
             .then(dataItems => {
                 item.children = [];
                 dataItems.forEach(dataItem => {
-                    const childItem = this.getItemByDataItem(dataItem);
+                    const childItem = this.getItemByDataItem(dataItem, true);
                     item.children.push(childItem);
                     this._onItemLoaded(childItem);
                 });
