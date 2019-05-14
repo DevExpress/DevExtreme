@@ -142,17 +142,19 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             options = extend(true, {}, themeOptions, processTitleOptions(userOptions)),
             _hasText = hasText(options.text),
             isLayoutChanged = _hasText || _hasText !== that._hasText;
+
+        that._baseLineCorrection = 0;
+
+        that._updateOptions(options);
+        that._boundingRect = {};
         if(_hasText) {
-            that._updateOptions(options);
             that._updateStructure();
             that._updateTexts();
-            that._boundingRect = {};
-            that._updateBoundingRect();
-            that._updateBoundingRectAlignment();
         } else {
             that._group.linkRemove();
-            that._boundingRect = null;
         }
+        that._updateBoundingRect();
+        that._updateBoundingRectAlignment();
         that._hasText = _hasText;
         return isLayoutChanged;
     },
@@ -160,11 +162,13 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     draw: function(width, height) {
         var that = this;
 
-        that._group.linkAppend();
-        that._correctTitleLength(width);
+        if(that._hasText) {
+            that._group.linkAppend();
+            that._correctTitleLength(width);
 
-        if(that._group.getBBox().height > height) {
-            this.freeSpace();
+            if(that._group.getBBox().height > height) {
+                this.freeSpace();
+            }
         }
 
         return that;
@@ -172,7 +176,6 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     probeDraw: function(width, height) {
         this.draw(width, height);
-
         return this;
     },
 
@@ -224,10 +227,12 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
         box = that._group.getBBox();
 
-        box.height += margin.top + margin.bottom - that._baseLineCorrection;
-        box.width += margin.left + margin.right;
-        box.x -= margin.left;
-        box.y += that._baseLineCorrection - margin.top;
+        if(!box.isEmpty) {
+            box.height += margin.top + margin.bottom - that._baseLineCorrection;
+            box.width += margin.left + margin.right;
+            box.x -= margin.left;
+            box.y += that._baseLineCorrection - margin.top;
+        }
 
         if(options.placeholderSize > 0) {
             box.height = options.placeholderSize;

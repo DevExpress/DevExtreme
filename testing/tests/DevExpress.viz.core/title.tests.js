@@ -262,7 +262,6 @@ QUnit.test("Update to empty text", function(assert) {
 
     assert.ok(title);
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
-    assert.strictEqual(title.getLayoutOptions(), null);
 });
 
 QUnit.test("Update to empty subtitle text", function(assert) {
@@ -498,11 +497,26 @@ QUnit.test("Get options rect with placeholder", function(assert) {
 });
 
 QUnit.test("Get options rect if nothing drawn", function(assert) {
-    this.options = { subtitle: {} };
+    this.options = { subtitle: {}, placeholderSize: 10 };
+
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 0, height: 0, isEmpty: true };
 
     var box = this.createTitle().getLayoutOptions();
 
-    assert.strictEqual(box, null, "layout options should be null");
+    assert.deepEqual(box, {
+        cutLayoutSide: "top",
+        cutSide: "vertical",
+        height: 10,
+        horizontalAlignment: "center",
+        position: {
+            horizontal: "center",
+            vertical: "top"
+        },
+        verticalAlignment: "top",
+        width: 0,
+        x: 0,
+        y: 0
+    }, "layout options should be null");
 });
 
 QUnit.test("shift title", function(assert) {
@@ -517,7 +531,11 @@ QUnit.test("shift title", function(assert) {
 
 QUnit.test("layoutOptions - without text", function(assert) {
     this.title.update({ text: null });
-    assert.strictEqual(this.title.layoutOptions(), null);
+    assert.deepEqual(this.title.layoutOptions(), {
+        horizontalAlignment: "center",
+        priority: 0,
+        verticalAlignment: "top"
+    });
 });
 
 QUnit.test("layoutOptions", function(assert) {
