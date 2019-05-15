@@ -232,7 +232,8 @@ QUnit.test("Horizontal top", function(assert) {
     assert.deepEqual(renderer.path.lastCall.args, [[], "line"], "Path points");
     assert.deepEqual(renderer.path.lastCall.returnValue.attr.getCall(0).args[0], { points: [10, 30, 90, 30] });
     assert.deepEqual(renderer.path.lastCall.returnValue.attr.getCall(1).args[0], { "stroke-width": 4, "stroke-opacity": 0.3, "stroke": "#123456" }, "Path style");
-    assert.deepEqual(renderer.path.lastCall.returnValue.sharp.lastCall.args[0], "v", "Path sharp params");
+    assert.equal(renderer.path.lastCall.returnValue.sharp.lastCall.args[0], "v", "Path sharp params");
+    assert.equal(renderer.path.lastCall.returnValue.sharp.lastCall.args[1], 1, "Sharp direction");
     assert.deepEqual(renderer.path.lastCall.returnValue.append.lastCall.args, [renderer.g.getCall(4).returnValue]);
 });
 
@@ -254,6 +255,7 @@ QUnit.test("Horizontal bottom", function(assert) {
 
     // assert
     assert.deepEqual(renderer.path.lastCall.returnValue.attr.getCall(0).args[0], { points: [10, 70, 90, 70] }, "Path points");
+    assert.equal(renderer.path.lastCall.returnValue.sharp.lastCall.args[1], -1, "Sharp direction");
 });
 
 QUnit.test("Vertical left", function(assert) {
@@ -274,7 +276,8 @@ QUnit.test("Vertical left", function(assert) {
 
     // assert
     assert.deepEqual(renderer.path.lastCall.returnValue.attr.getCall(0).args[0], { points: [10, 70, 10, 30] }, "Path points");
-    assert.deepEqual(renderer.path.lastCall.returnValue.sharp.lastCall.args[0], "h", "Path sharp params");
+    assert.equal(renderer.path.lastCall.returnValue.sharp.lastCall.args[0], "h", "Path sharp params");
+    assert.equal(renderer.path.lastCall.returnValue.sharp.lastCall.args[1], 1, "Sharp direction");
 });
 
 QUnit.test("Vertical right", function(assert) {
@@ -295,6 +298,7 @@ QUnit.test("Vertical right", function(assert) {
 
     // assert
     assert.deepEqual(renderer.path.lastCall.returnValue.attr.getCall(0).args[0], { points: [90, 70, 90, 30] }, "Path points");
+    assert.equal(renderer.path.lastCall.returnValue.sharp.lastCall.args[1], -1, "Sharp direction");
 });
 
 QUnit.module("XY linear axis. Draw. Check axis line. Inverted", environment);
@@ -405,8 +409,8 @@ QUnit.test("Horizontal top", function(assert) {
     this.generatedTicks = [1, 2, 3];
 
     this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
+    this.translator.stub("translate").withArgs(2).returns(60);
+    this.translator.stub("translate").withArgs(3).returns(90);
 
     // act
     this.axis.draw(this.canvas);
@@ -425,8 +429,11 @@ QUnit.test("Horizontal top", function(assert) {
     assert.deepEqual(path.getCall(2).returnValue.append.getCall(0).args[0], group);
 
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 30 - 5, 30, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 30 - 5, 50, 30 + 5], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [60, 30 - 5, 60, 30 + 5], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [90, 30 - 5, 90, 30 + 5], opacity: 1 });
+
+    assert.equal(this.renderer.path.firstCall.returnValue.sharp.lastCall.args[1], 1, "Positive sharp direction");
+    assert.equal(this.renderer.path.lastCall.returnValue.sharp.lastCall.args[1], -1, "Negative sharp direction");
 });
 
 QUnit.test("Horizontal bottom", function(assert) {
@@ -457,6 +464,7 @@ QUnit.test("Horizontal bottom", function(assert) {
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 69 - 5, 30, 69 + 5], opacity: 1 });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 69 - 5, 50, 69 + 5], opacity: 1 });
     assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 69 - 5, 70, 69 + 5], opacity: 1 });
+    assert.equal(this.renderer.path.lastCall.returnValue.sharp.lastCall.args[1], 1, "Sharp direction");
 });
 
 QUnit.test("Vertical left", function(assert) {
@@ -6806,8 +6814,8 @@ QUnit.test("Horizontal. Major grids", function(assert) {
     this.generatedTicks = [1, 2, 3];
 
     this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
+    this.translator.stub("translate").withArgs(2).returns(60);
+    this.translator.stub("translate").withArgs(3).returns(90);
 
     // act
     this.axis.draw(this.canvas);
@@ -6816,8 +6824,8 @@ QUnit.test("Horizontal. Major grids", function(assert) {
         group = this.renderer.g.getCall(2).returnValue;
     assert.equal(path.callCount, 3);
     assert.deepEqual(path.getCall(0).args, [[30, 30, 30, 70], "line"]);
-    assert.deepEqual(path.getCall(1).args, [[50, 30, 50, 70], "line"]);
-    assert.deepEqual(path.getCall(2).args, [[70, 30, 70, 70], "line"]);
+    assert.deepEqual(path.getCall(1).args, [[60, 30, 60, 70], "line"]);
+    assert.deepEqual(path.getCall(2).args, [[90, 30, 90, 70], "line"]);
     assert.deepEqual(path.getCall(0).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(1).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(2).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
@@ -6825,6 +6833,9 @@ QUnit.test("Horizontal. Major grids", function(assert) {
     assert.deepEqual(path.getCall(0).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(path.getCall(1).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(path.getCall(2).returnValue.append.getCall(0).args[0], group);
+
+    assert.equal(this.renderer.path.firstCall.returnValue.sharp.lastCall.args[1], 1, "Positive sharp direction");
+    assert.equal(this.renderer.path.lastCall.returnValue.sharp.lastCall.args[1], -1, "Negative sharp direction");
 });
 
 QUnit.test("Horizontal. Minor grids", function(assert) {
@@ -6893,6 +6904,8 @@ QUnit.test("Vertical. Major grids", function(assert) {
     assert.deepEqual(path.getCall(0).args, [[10, 40, 90, 40], "line"]);
     assert.deepEqual(path.getCall(1).args, [[10, 50, 90, 50], "line"]);
     assert.deepEqual(path.getCall(2).args, [[10, 60, 90, 60], "line"]);
+
+    assert.equal(this.renderer.path.lastCall.returnValue.sharp.lastCall.args[1], 1, "Sharp direction");
 });
 
 QUnit.test("Vertical. Major grids", function(assert) {
