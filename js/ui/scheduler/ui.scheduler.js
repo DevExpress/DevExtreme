@@ -1531,6 +1531,7 @@ const Scheduler = Widget.inherit({
         if(!this._isAgenda() && filteredItems && this._isVisible()) {
             this._workSpace._cleanAllowedPositions();
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
+            this._workSpace._dimensionChanged();
 
             var appointments = this._layoutManager.createAppointmentsMap(filteredItems);
 

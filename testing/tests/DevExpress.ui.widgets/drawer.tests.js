@@ -165,7 +165,7 @@ QUnit.test("dxresize event should be fired for content at the end of animation",
 
     try {
         fx.off = true;
-        domUtils.triggerResizeEvent = function($element) {
+        domUtils.triggerResizeEvent = ($element) => {
             assert.ok(true, "event was triggered");
             assert.equal($element, instance.viewContent(), "Event was triggered for right element");
         };

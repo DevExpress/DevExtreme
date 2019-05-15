@@ -874,7 +874,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellWidth = this.getCellMinWidth();
         }
 
-        var minWidth = this._groupedStrategy.getWorkSpaceMinWidth(),
+        var minWidth = this.getWorkSpaceMinWidth(),
             $headerCells = this._$headerPanel
                 .find("tr")
                 .last()
@@ -895,6 +895,10 @@ var SchedulerWorkSpace = Widget.inherit({
         if(this._isVerticalGroupedWorkSpace()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
+    },
+
+    getWorkSpaceMinWidth: function() {
+        return this._groupedStrategy.getWorkSpaceMinWidth();
     },
 
     _dimensionChanged: function() {
