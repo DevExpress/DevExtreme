@@ -98,14 +98,6 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     getWorkSpaceMinWidth: function() {
         return this._workSpace.$element().get(0).getBoundingClientRect().width - this._workSpace.getTimePanelWidth();
-        // var minWidth = this._workSpace._getWorkSpaceWidth(),
-        //     workspaceContainerWidth = this._workSpace.$element().get(0).getBoundingClientRect().width - this._workSpace.getTimePanelWidth();
-
-        // if(minWidth < workspaceContainerWidth) {
-        //     minWidth = workspaceContainerWidth;
-        // }
-
-        // return minWidth;
     },
 
     getAllDayOffset: function() {
