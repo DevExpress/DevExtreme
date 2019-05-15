@@ -1158,6 +1158,7 @@ const Scheduler = Widget.inherit({
             case "currentDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
+                this.option("selectedCellData", []);
                 this._workSpace.option(name, new Date(value));
                 this._header.option(name, new Date(value));
                 this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
@@ -1195,8 +1196,6 @@ const Scheduler = Widget.inherit({
                 break;
             case "currentView":
                 this._processCurrentView();
-
-                this.option("selectedCellData", []);
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
@@ -1831,22 +1830,43 @@ const Scheduler = Widget.inherit({
 
         this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
 
-        this._loadResources().done((function(resources) {
-            this._readyToRenderAppointments = windowUtils.hasWindow();
+        if(this._isLoaded()) {
+            this._initMarkupCore(this._loadedResources);
+            this._dataSourceChangedHandler(this._dataSource.items());
+        } else {
+            this._loadResources().done((function(resources) {
+                this._initMarkupCore(resources);
+                this._reloadDataSource();
+            }).bind(this));
+        }
+    },
 
-            this._workSpace && this._cleanWorkspace();
+    _initMarkupCore: function(resources) {
+        this._readyToRenderAppointments = windowUtils.hasWindow();
 
-            this._renderWorkSpace(resources);
-            this._appointments.option({
-                fixedContainer: this._workSpace.getFixedContainer(),
-                allDayContainer: this._workSpace.getAllDayContainer()
-            });
-            this._waitAsyncTemplates(() => {
-                this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
-            });
-            this._filterAppointmentsByDate();
-            this._reloadDataSource();
-        }).bind(this));
+        this._workSpace && this._cleanWorkspace();
+
+        this._renderWorkSpace(resources);
+        this._appointments.option({
+            fixedContainer: this._workSpace.getFixedContainer(),
+            allDayContainer: this._workSpace.getAllDayContainer()
+        });
+        this._waitAsyncTemplates(() => {
+            this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
+        });
+        this._filterAppointmentsByDate();
+    },
+
+    _isLoaded: function() {
+        return this._isResourcesLoaded() && this._isDataSourceLoaded();
+    },
+
+    _isResourcesLoaded: function() {
+        return typeUtils.isDefined(this._loadedResources);
+    },
+
+    _isDataSourceLoaded: function() {
+        return this._dataSource && this._dataSource.isLoaded();
     },
 
     _render: function() {
@@ -2101,6 +2121,8 @@ const Scheduler = Widget.inherit({
         this._appointments.$element().detach();
         this._workSpace._dispose();
         this._workSpace.$element().remove();
+
+        this.option("selectedCellData", []);
     },
 
     getWorkSpaceScrollable: function() {
@@ -3168,7 +3190,7 @@ const Scheduler = Widget.inherit({
     /**
         * @name dxSchedulerMethods.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
-        * hidden
+        * @hidden
         * @inheritdoc
         */
 

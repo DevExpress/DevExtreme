@@ -123,6 +123,56 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
 
+    test("create sub-folder for new folder", function(assert) {
+        this.$element.dxFileManager("option", {
+            itemView: {
+                showParentFolder: true,
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getFolderNodes().eq(2).trigger("dxclick");
+        let togglesCount = this.wrapper.getFolderToggles().length;
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 2", "sub folder selected");
+        assert.ok(togglesCount >= 2, "specfied toggles shown");
+
+        this.wrapper.getToolbarButton("New folder").trigger("dxclick");
+        this.clock.tick(400);
+
+        $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`).val("test 111").trigger("change");
+        $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Create')`).trigger("dxclick");
+        this.clock.tick(400);
+
+        let $cell = this.wrapper.findDetailsItem("test 111");
+        assert.equal($cell.length, 1, "new folder created");
+        assert.equal(this.wrapper.getFolderToggles().length, ++togglesCount, "new folder toggle shown");
+
+        $cell.trigger("dxdblclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "test 111", "new folder selected");
+        assert.equal(this.wrapper.getFolderToggles().length, togglesCount, "toggle count is not changed");
+
+        this.wrapper.getToolbarButton("New folder").trigger("dxclick");
+        this.clock.tick(400);
+
+        $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`).val("test 222").trigger("change");
+        $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Create')`).trigger("dxclick");
+        this.clock.tick(400);
+
+        $cell = this.wrapper.findDetailsItem("test 222");
+        assert.equal($cell.length, 1, "new folder created");
+        assert.equal(this.wrapper.getFolderToggles().length, ++togglesCount, "new folder toggle shown");
+
+        $cell.trigger("dxdblclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "test 222", "new folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 2/test 111/test 222", "correct path shown");
+        assert.equal(this.wrapper.getFolderToggles().length, togglesCount, "toggle count is not changed");
+    });
+
     test("delete folder in folders area", function(assert) {
         let $folderNodes = this.wrapper.getFolderNodes();
         const initialCount = $folderNodes.length;

@@ -139,6 +139,10 @@ registerDecorator(
             $itemElement.wrapInner($slideMenuContent);
         },
 
+        _getDeleteButtonContainer: function() {
+            return this._$buttonsContainer;
+        },
+
         handleClick: function(_, e) {
             if($(e.target).closest("." + SLIDE_MENU_CONTENT_CLASS).length) {
                 return this.callBase.apply(this, arguments);
