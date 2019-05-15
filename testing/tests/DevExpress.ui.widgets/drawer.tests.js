@@ -178,6 +178,29 @@ QUnit.test("dxresize event should be fired for content at the end of animation",
     }
 });
 
+QUnit.test("dxresize event should be fired if there is no any animation", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        position: "right"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    var triggerFunction = domUtils.triggerResizeEvent;
+    assert.expect(2);
+
+    try {
+        domUtils.triggerResizeEvent = function($element) {
+            assert.ok(true, "event was triggered");
+            assert.equal($element, instance.viewContent(), "Event was triggered for right element");
+        };
+
+        instance.option("position", "left");
+
+    } finally {
+        domUtils.triggerResizeEvent = triggerFunction;
+    }
+});
+
 QUnit.test("incomplete animation should be stopped after toggling visibility", assert => {
     let origFxStop = fx.stop,
         panelStopCalls = 0,
