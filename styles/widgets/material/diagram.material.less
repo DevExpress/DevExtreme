@@ -16,6 +16,14 @@
             .dx-accordion-item:first-of-type {
                 border-top: none;
             }
+            .dx-state-focused {
+                &.dx-accordion-item {
+                    border-color: @accordion-item-border-color;
+                }
+                &.dx-accordion-item-closed:not(:last-of-type) {
+                    border-bottom-color: transparent;
+                }
+            }
         }
     }
 
@@ -57,5 +65,11 @@
     
     .dx-diagram-toolbar-menu-separator {
         border-top-color: @diagram-toolbar-border-color;
+    }
+
+    .dx-format-sm {
+        .dx-texteditor {
+            width: 110px;
+        }
     }
 }
