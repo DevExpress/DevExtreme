@@ -217,8 +217,8 @@ const ButtonGroup = Widget.inherit({
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
             },
             onSelectionChanged: e => {
-                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValue());
                 this._syncSelectionOptions();
+                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValue());
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
             }
         };
