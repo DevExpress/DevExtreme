@@ -22,6 +22,7 @@ import dataUtils from "core/element_data";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import themes from "ui/themes";
 import { SchedulerTestWrapper } from "./helpers.js";
+import resizeCallbacks from "core/utils/resize_callbacks";
 
 import "ui/scheduler/ui.scheduler";
 import "common.css!";
@@ -3383,6 +3384,28 @@ QUnit.testStart(function() {
         });
 
         this.instance.deleteAppointment(appointment);
+    });
+
+    QUnit.test("Workspace dimension changing should be called before appointment repainting, when scheduler was resized (T739866)", function(assert) {
+        let appointment = {
+            startDate: new Date(2016, 2, 15, 1).toString(),
+            endDate: new Date(2016, 2, 15, 2).toString()
+        };
+
+        this.createInstance({
+            currentDate: new Date(2016, 2, 15),
+            views: ["day"],
+            currentView: "day",
+            width: 800,
+            dataSource: [appointment]
+        });
+
+        let workspaceSpy = sinon.spy(this.instance._workSpace, "_dimensionChanged");
+        let appointmentsSpy = sinon.spy(this.instance._appointments, "_repaintAppointments");
+
+        resizeCallbacks.fire();
+
+        assert.ok(appointmentsSpy.calledAfter(workspaceSpy), "workSpace dimension changing was called before appointments repainting");
     });
 })("Events");
 

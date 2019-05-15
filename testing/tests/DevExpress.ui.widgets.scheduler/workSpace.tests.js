@@ -195,6 +195,16 @@ QUnit.testStart(function() {
             "Exception messages should be correct"
         );
     });
+
+    QUnit.test("getWorkSpaceMinWidth should work correctly after width changing", function(assert) {
+        this.instance.option("crossScrollingEnabled", true);
+
+        this.instance.option("width", 400);
+        assert.equal(this.instance.getWorkSpaceMinWidth(), 300, "minWidth is ok");
+
+        this.instance.option("width", 900);
+        assert.equal(this.instance.getWorkSpaceMinWidth(), 800, "minWidth is ok");
+    });
 })("Work Space Base");
 
 (function() {
