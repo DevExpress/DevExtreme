@@ -20,23 +20,23 @@ class OneDriveFileProvider extends FileProvider {
 
     constructor(options) {
         /**
-         * @name OneDriveFileProvider.nameExpr
+         * @name OneDriveFileProviderOptions.nameExpr
          * @hidden
          */
         /**
-         * @name OneDriveFileProvider.isDirectoryExpr
+         * @name OneDriveFileProviderOptions.isDirectoryExpr
          * @hidden
          */
         /**
-         * @name OneDriveFileProvider.sizeExpr
+         * @name OneDriveFileProviderOptions.sizeExpr
          * @hidden
          */
         /**
-         * @name OneDriveFileProvider.dateModifiedExpr
+         * @name OneDriveFileProviderOptions.dateModifiedExpr
          * @hidden
          */
         /**
-         * @name OneDriveFileProvider.thumbnailExpr
+         * @name OneDriveFileProviderOptions.thumbnailExpr
          * @hidden
          */
 

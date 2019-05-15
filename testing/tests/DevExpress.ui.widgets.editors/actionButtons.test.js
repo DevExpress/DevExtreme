@@ -257,6 +257,25 @@ module("rendering", () => {
             assert.strictEqual($after.length, 1);
             assert.strictEqual($before.length, 0);
         });
+
+        test("custom button should not change the widget height", (assert) => {
+            const $textBox = $("<div>").appendTo("#qunit-fixture").dxTextBox({
+                value: "text",
+                stylingMode: "underlined"
+            });
+            const startHeight = $textBox.height();
+            const textBox = $textBox.dxTextBox("instance");
+
+            textBox.option("buttons", [{
+                name: "custom",
+                location: "after",
+                options: {
+                    text: "custom"
+                }
+            }]);
+
+            assert.strictEqual($textBox.height(), startHeight);
+        });
     });
 
     module("numberBox", () => {

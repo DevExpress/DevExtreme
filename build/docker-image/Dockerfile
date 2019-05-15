@@ -11,7 +11,7 @@ RUN apt-get purge -y --allow-remove-essential init systemd
 RUN apt-get install -y ca-certificates curl
 
 # Build-time utils
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core gnupg localepurge
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gnupg localepurge
 
 # Node
 RUN curl -L https://deb.nodesource.com/setup_10.x | bash -
@@ -38,10 +38,11 @@ RUN rm -r /usr/share/dotnet/shared/Microsoft.AspNetCore.*
 RUN find /usr/share/dotnet -type f -name '*.resources.dll' -delete
 RUN find /usr/share/dotnet -type f -wholename '**/runtimes/win*/**' -delete
 
-# Chrome, see https://stackoverflow.com/a/36906724
-RUN curl -L http://www.slimjetbrowser.com/chrome/files/70.0.3538.77/google-chrome-stable_current_amd64.deb > chrome.deb
-RUN gdebi -n ./chrome.deb
-RUN unlink ./chrome.deb
+# Chrome
+RUN curl -L https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google.gpg
+RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get update
+RUN apt-get install -y google-chrome-stable
 RUN rm -rf /opt/google/chrome/swiftshader /opt/google/chrome/libwidevinecdm.so
 RUN find /opt/google/chrome/locales -type f ! -name 'en-US.pak' -delete
 
@@ -74,7 +75,7 @@ RUN localepurge
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
 # Remove build-time utils
-RUN apt-get purge -y apt-transport-https gdebi-core gnupg localepurge
+RUN apt-get purge -y apt-transport-https gnupg localepurge
 
 # Clean APT
 RUN apt-get autoremove -y --purge

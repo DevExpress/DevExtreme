@@ -222,6 +222,7 @@ const ButtonGroup = Widget.inherit({
             .appendTo(this.$element());
 
         const selectedItems = this.option("selectedItems");
+
         const options = {
             selectionMode: this.option("selectionMode"),
             items: this.option("items"),
@@ -233,12 +234,13 @@ const ButtonGroup = Widget.inherit({
             accessKey: this.option("accessKey"),
             tabIndex: this.option("tabIndex"),
             noDataText: "",
-            selectionRequired: this.option("selectionMode") === "single",
+            selectionRequired: this._getSelectionRequiredValue(),
             onItemRendered: e => {
                 const width = this.option("width");
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
             },
             onSelectionChanged: e => {
+                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValue());
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
             },
@@ -247,10 +249,19 @@ const ButtonGroup = Widget.inherit({
             }
         };
 
-        if(selectedItems.length) {
+        if(isDefined(selectedItems) && selectedItems.length) {
             options.selectedItems = selectedItems;
         }
         this._buttonsCollection = this._createComponent($buttons, ButtonCollection, options);
+    },
+
+    _getSelectionRequiredValue() {
+        let selectedItemKeys = this.option("selectedItemKeys");
+        let selectedItems = this.option("selectedItems");
+
+        if(isDefined(selectedItemKeys) && selectedItemKeys.length || isDefined(selectedItems) && selectedItems.length) {
+            return this.option("selectionMode") === "single";
+        }
     },
 
     _syncSelectionOptions() {
@@ -273,6 +284,7 @@ const ButtonGroup = Widget.inherit({
                 break;
             case "selectedItemKeys":
             case "selectedItems":
+                this._buttonsCollection._setOptionSilent("selectionRequired", this._getSelectionRequiredValue());
                 this._buttonsCollection.option(args.name, args.value);
                 break;
             case "onItemClick":
