@@ -14,7 +14,8 @@ function run_lint {
 
 function run_ts {
     npm i
-    npx gulp ts-check npm-dts-check
+    npm run update-ts
+    npx gulp ts-check npm-dts-check ts-up-to-date ts-compilation
 }
 
 function run_test {
