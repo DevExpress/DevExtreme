@@ -409,6 +409,10 @@ const Drawer = Widget.inherit({
         this._$panel.css("zIndex", zIndex);
     },
 
+    resizeContent() {
+        triggerResizeEvent(this.viewContent());
+    },
+
     _isInvertedPosition() {
         const position = this.getDrawerPosition();
 
@@ -434,7 +438,7 @@ const Drawer = Widget.inherit({
     },
 
     _animationCompleteHandler() {
-        triggerResizeEvent(this.viewContent());
+        this.resizeContent();
 
         if(this._animationPromise) {
             this._animationPromise.resolve();
