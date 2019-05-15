@@ -7,6 +7,7 @@ import typeUtils from "core/utils/type";
 import { animation } from "ui/drawer/ui.drawer.rendering.strategy";
 import Overlay from "ui/overlay";
 import Button from "ui/button";
+import domUtils from "core/utils/dom";
 
 import "common.css!";
 import "ui/drawer";
@@ -151,6 +152,53 @@ QUnit.test("subscribe on toggle function should fired at the end of animation", 
     });
 
     assert.equal(count, 0, "callback not fired at animation start");
+});
+
+QUnit.test("dxresize event should be fired for content at the end of animation", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: false
+    });
+
+    const instance = $element.dxDrawer("instance");
+    var triggerFunction = domUtils.triggerResizeEvent;
+    assert.expect(2);
+
+    try {
+        fx.off = true;
+        domUtils.triggerResizeEvent = function($element) {
+            assert.ok(true, "event was triggered");
+            assert.equal($element, instance.viewContent(), "Event was triggered for right element");
+        };
+
+        instance.toggle();
+
+    } finally {
+        fx.off = false;
+        domUtils.triggerResizeEvent = triggerFunction;
+    }
+});
+
+QUnit.test("dxresize event should be fired if there is no any animation", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        position: "right"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    var triggerFunction = domUtils.triggerResizeEvent;
+    assert.expect(2);
+
+    try {
+        domUtils.triggerResizeEvent = function($element) {
+            assert.ok(true, "event was triggered");
+            assert.equal($element, instance.viewContent(), "Event was triggered for right element");
+        };
+
+        instance.option("position", "left");
+
+    } finally {
+        domUtils.triggerResizeEvent = triggerFunction;
+    }
 });
 
 QUnit.test("incomplete animation should be stopped after toggling visibility", assert => {
