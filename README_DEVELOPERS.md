@@ -33,7 +33,7 @@ Build results are stored in the "artifacts" directory.
 
 ## API Declarations
 
-We use jsdoc-like syntax to declare the DevExtreme public API. The API declarations are then used to generate the API reference, the TypeScript declaration file (dx.all.d.ts), and integrate with 3-rd party frameworks  ([Angular](https://github.com/devexpress/DevExtreme-angular), [React](https://github.com/devexpress/DevExtreme-react), [Vue](https://github.com/devexpress/DevExtreme-vue), and [ASP.NET](https://js.devexpress.com/Overview/Mvc/)).
+We use [JSDoc](https://en.wikipedia.org/wiki/JSDoc)-like syntax to declare the DevExtreme public API. The API declarations are then used to generate the API reference, the TypeScript declaration file (dx.all.d.ts), and integrate with 3rd party frameworks ([Angular](https://github.com/devexpress/devextreme-angular), [React](https://github.com/devexpress/devextreme-react), [Vue](https://github.com/devexpress/devextreme-vue), and [ASP.NET](https://js.devexpress.com/Overview/Mvc/)).
 
 To modify API declarations, use the following NPM scripts:
 
