@@ -300,18 +300,22 @@ Axis.prototype = {
             .append(this._axisLineGroup);
     },
 
-    _createPathElement(points, attr, sharpDirection = 1) {
-        return this._renderer.path(points, "line").attr(attr).sharp(this._getSharpParam(), sharpDirection);
+    _createPathElement(points, attr, sharpDirection) {
+        return this.sharp(this._renderer.path(points, "line").attr(attr), sharpDirection);
     },
 
-    _getGridLineDrawer: function(borderOptions) {
+    sharp(svgElement, sharpDirection = 1) {
+        return svgElement.sharp(this._getSharpParam(), sharpDirection);
+    },
+
+    _getGridLineDrawer: function() {
         var that = this;
 
         return function(tick, gridStyle) {
             var grid = that._getGridPoints(tick.coords);
 
             if(grid.points) {
-                return that._createPathElement(grid.points, gridStyle);
+                return that._createPathElement(grid.points, gridStyle, tick.getSharpDirection());
             }
             return null;
         };
