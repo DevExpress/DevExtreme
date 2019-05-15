@@ -3,6 +3,9 @@ import { fileSaver } from "../../exporter/file_saver";
 import { isFunction } from "../../core/utils/type";
 import { getWindow } from "../../core/utils/window";
 
+const SEPARATOR = { widget: "separator" };
+const SIZING = { sm: "sm" };
+
 const DiagramCommands = {
     getToolbar: function() {
         const { DiagramCommand } = getDiagram();
@@ -19,6 +22,7 @@ const DiagramCommands = {
                 icon: "redo",
                 text: "Redo",
             },
+            SEPARATOR,
             {
                 command: DiagramCommand.FontName,
                 beginGroup: true,
@@ -28,8 +32,10 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.FontSize,
                 widget: "dxSelectBox",
-                items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"]
+                items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"],
+                sizing: SIZING.sm
             },
+            SEPARATOR,
             {
                 command: DiagramCommand.Bold,
                 hint: "Bold",
@@ -48,6 +54,7 @@ const DiagramCommands = {
                 text: "Underline",
                 icon: "underline"
             },
+            SEPARATOR,
             {
                 command: DiagramCommand.FontColor,
                 text: "Text Color",
@@ -63,6 +70,7 @@ const DiagramCommands = {
                 text: "Fill Color",
                 widget: "dxColorBox"
             },
+            SEPARATOR,
             {
                 command: DiagramCommand.TextLeftAlign,
                 hint: "Align Left",
@@ -82,6 +90,7 @@ const DiagramCommands = {
                 text: "Align Right",
                 icon: "alignright"
             },
+            SEPARATOR,
             {
                 command: DiagramCommand.ConnectorLineOption,
                 widget: "dxSelectBox",
@@ -97,6 +106,7 @@ const DiagramCommands = {
                 command: DiagramCommand.ConnectorStartLineEnding,
                 widget: "dxSelectBox",
                 text: "Start Line Ending",
+                sizing: SIZING.sm,
                 items: [
                     { name: "None", value: 0 },
                     { name: "Arrow", value: 1 }
@@ -113,8 +123,10 @@ const DiagramCommands = {
                     { name: "Arrow", value: 1 }
                 ],
                 displayExpr: "name",
+                sizing: SIZING.sm,
                 valueExpr: "value"
             },
+            SEPARATOR,
             {
                 widget: "dxButton",
                 icon: "export",
@@ -300,15 +312,18 @@ const DiagramCommands = {
             },
             {
                 command: DiagramCommand.SelectAll,
-                text: "Select All"
+                text: "Select All",
+                beginGroup: true
             },
             {
                 command: DiagramCommand.Delete,
-                text: "Delete"
+                text: "Delete",
+                beginGroup: true
             },
             {
                 command: DiagramCommand.BringToFront,
-                text: "Bring to Front"
+                text: "Bring to Front",
+                beginGroup: true
             },
             {
                 command: DiagramCommand.SendToBack,
