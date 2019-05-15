@@ -15,7 +15,13 @@ function run_lint {
 function run_ts {
     npm i
     npm run update-ts
-    npx gulp ts-check npm-dts-check ts-up-to-date ts-compilation
+
+    if [git status --porcelain ]; then
+        echo "ts/dx.all.d.ts is outdated"
+        exit 1
+    fi
+
+    npx gulp ts-check npm-dts-check ts-compilation
 }
 
 function run_test {
