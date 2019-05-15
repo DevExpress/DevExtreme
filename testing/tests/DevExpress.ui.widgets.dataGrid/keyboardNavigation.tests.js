@@ -8666,6 +8666,69 @@ QUnit.module("Keyboard navigation accessibility", {
         this.clock.tick();
     });
 
+    testInDesktop("Focus command elements if row editing", function(assert) {
+        // arrange
+        var counter = 0;
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        var _editingCellTabHandler = this.keyboardNavigationController._editingCellTabHandler;
+        this.keyboardNavigationController._editingCellTabHandler = (eventArgs, direction) => {
+            var $target = $(eventArgs.originalEvent.target),
+                result = _editingCellTabHandler.bind(this.keyboardNavigationController)(eventArgs, direction);
+
+            if($target.hasClass("dx-link")) {
+                assert.equal(result, eventArgs.shift ? $target.index() === 0 : $target.index() === 1, "need default behavior");
+                ++counter;
+            }
+        };
+
+        // act
+        this.editRow(1);
+        this.clock.tick();
+        $(this.getCellElement(1, 1)).focus().trigger("dxclick");
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 1)));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(":focus").hasClass("dx-link"), "focused element");
+        assert.equal($(":focus").index(), 0, "focused element index");
+
+        // act
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 2)).find(".dx-link").first());
+
+        // assert
+        assert.equal(counter, 1, "_editingCellTabHandler counter");
+
+        // act
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(1, 2)).find(".dx-link").last());
+
+        // assert
+        assert.equal(counter, 2, "_editingCellTabHandler counter");
+        assert.ok($(":focus").is("input"), "focused element");
+        assert.equal($(":focus").closest("td").index(), 3, "focused element index");
+
+        // act
+        this.triggerKeyDown("tab", false, true, $(":focus"));
+
+        // assert
+        assert.ok($(":focus").hasClass("dx-link"), "focused element");
+        assert.equal($(":focus").index(), 1, "focused element index");
+
+        // act
+        this.triggerKeyDown("tab", false, true, $(this.getCellElement(1, 2)).find(".dx-link").last());
+
+        // assert
+        assert.equal(counter, 3, "_editingCellTabHandler counter");
+
+        // act
+        this.triggerKeyDown("tab", false, true, $(this.getCellElement(1, 2)).find(".dx-link").first());
+
+        // assert
+        assert.equal(counter, 4, "_editingCellTabHandler counter");
+    });
+
     testInDesktop("Command column should not focused if batch editing mode", function(assert) {
         // arrange
         this.options = {
