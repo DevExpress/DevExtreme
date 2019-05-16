@@ -51,7 +51,8 @@ QUnit.test("Cancel exporting via onExporting", function(assert) {
     var exportingActionStub = sinon.spy(function(e) {
             e.cancel = true;
         }),
-        exportedActionStub = sinon.spy();
+        exportedActionStub = sinon.spy(),
+        done = assert.async();
 
     // act
     clientExporter.export({}, {
@@ -59,7 +60,7 @@ QUnit.test("Cancel exporting via onExporting", function(assert) {
         format: "EXCEL",
         exportingAction: exportingActionStub,
         exportedAction: exportedActionStub
-    }, defaultGetBlob);
+    }, defaultGetBlob).then(done);
 
     // assert
     assert.equal(exportedActionStub.callCount, 0, "onExported event");

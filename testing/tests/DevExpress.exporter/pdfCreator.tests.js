@@ -29,8 +29,7 @@ QUnit.test("PDF 'main page' populated with correct size in pt", function(assert)
     getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
         // assert
         assert.ok(data.indexOf("/MediaBox[0 0 465.08 315.15]/") !== -1);
-        done();
-    });
+    }).done(done);
 });
 
 QUnit.test("PDF 'content stream' populated with correct size in pt", function(assert) {

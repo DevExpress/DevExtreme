@@ -20,7 +20,7 @@ QUnit.module("Export", {
         var exportMenu = this.exportMenu = new vizMocks.ExportMenu();
         exportModule.ExportMenu = sinon.spy(function() { return exportMenu; });
 
-        sinon.stub(clientExporter, "export");
+        sinon.stub(clientExporter, "export").returns(new Deferred());
 
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
         this.toDataURLStub.returnsArg(0);
@@ -53,7 +53,7 @@ QUnit.test('Export method. Defined options', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.$element().css("backgroundСolor", "#ff0000");
+    widget.$element().css("backgroundColor", "#ff0000");
 
     // act
     widget.exportTo("testName", "jpeg");
@@ -95,8 +95,6 @@ QUnit.test('Export method. PNG format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.$element().css("backgroundСolor", "#ff0000");
-
     // act
     widget.exportTo("testName", "png");
 
@@ -120,8 +118,6 @@ QUnit.test('Export method. JPEG format', function(assert) {
             onExported: exportedStub,
             onFileSaving: fileSavingStub
         });
-
-    widget.$element().css("backgroundСolor", "#ff0000");
 
     // act
     widget.exportTo("testName", "jpeg");
@@ -147,8 +143,6 @@ QUnit.test('Export method. GIF format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.$element().css("backgroundСolor", "#ff0000");
-
     // act
     widget.exportTo("testName", "gif");
 
@@ -173,8 +167,6 @@ QUnit.test('Export method. SVG format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.$element().css("backgroundСolor", "#ff0000");
-
     // act
     widget.exportTo("testName", "svg");
 
@@ -198,8 +190,6 @@ QUnit.test('Export method. PDF format', function(assert) {
             onExported: exportedStub,
             onFileSaving: fileSavingStub
         });
-
-    widget.$element().css("backgroundСolor", "#ff0000");
 
     // act
     widget.exportTo("testName", "pdf");
@@ -226,8 +216,6 @@ QUnit.test('Export method. invalid format', function(assert) {
             onFileSaving: fileSavingStub,
             onIncidentOccurred: incidentOccurred
         });
-
-    widget.$element().css("backgroundСolor", "#ff0000");
 
     // act
     widget.exportTo("testName", "abc");
@@ -258,8 +246,6 @@ QUnit.test('Export method. unsopported image format', function(assert) {
             onIncidentOccurred: incidentOccurred
         });
 
-    widget.$element().css("backgroundСolor", "#ff0000");
-
     // act
     widget.exportTo("testName", "jpeg");
 
@@ -277,8 +263,6 @@ QUnit.test('Export method. Undefined options', function(assert) {
     var exportFunc = clientExporter.export,
         widget = this.createWidget();
 
-    widget.$element().css("backgroundСolor", "rgba(0, 0, 0, 0)");
-
     // act
     widget.exportTo();
 
@@ -288,6 +272,76 @@ QUnit.test('Export method. Undefined options', function(assert) {
     assert.equal(firstExportCall.args[1].fileName, "file", "fileName");
     assert.equal(firstExportCall.args[1].format, "PNG", "format");
     assert.equal(firstExportCall.args[1].proxyUrl, undefined, "proxyUrl");
+});
+
+QUnit.test('Disable pointer events while exporting', function(assert) {
+    // arrange
+    var widget = this.createWidget({
+        "export": {
+            backgroundColor: "#ff0000",
+            proxyUrl: "testProxy",
+            margin: 40
+        }
+    });
+
+    // act
+    widget.exportTo("testName", "jpeg");
+
+    assert.equal(widget._renderer.root.attr("pointer-events"), "none");
+});
+
+QUnit.test('Restore pointer events after export', function(assert) {
+    // arrange
+    clientExporter.export.returns(new Deferred().resolve());
+    var widget = this.createWidget({
+        "export": {
+            backgroundColor: "#ff0000",
+            proxyUrl: "testProxy",
+            margin: 40
+        }
+    });
+
+    widget._renderer.root.attr({ "pointer-events": "all" });
+
+    // act
+    widget.exportTo("testName", "jpeg");
+
+    assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+});
+
+QUnit.test('Disable pointer events while printing', function(assert) {
+    // arrange
+    var widget = this.createWidget({
+        "export": {
+            backgroundColor: "#ff0000",
+            proxyUrl: "testProxy",
+            margin: 40
+        }
+    });
+
+    // act
+    widget.print();
+
+    assert.equal(widget._renderer.root.attr("pointer-events"), "none");
+});
+
+QUnit.test('Restore pointer events after printing', function(assert) {
+    // arrange
+    clientExporter.export.returns(new Deferred().resolve());
+    var widget = this.createWidget({
+        "export": {
+            backgroundColor: "#ff0000",
+            proxyUrl: "testProxy",
+            margin: 40
+        }
+    });
+
+    widget._renderer.root.attr({ "pointer-events": "all" });
+
+    // act
+    widget.print();
+
+    assert.equal(widget._renderer.root.attr("pointer-events"), "all");
 });
 
 QUnit.test('Export menu creation', function(assert) {
