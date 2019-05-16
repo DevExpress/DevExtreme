@@ -376,11 +376,22 @@ let DateBoxMask = DateBoxBase.inherit({
     _partIncrease(step) {
         this._setNewDateIfEmpty();
 
-        let limits = this._getActivePartLimits(),
-            newValue = step + this._getActivePartValue();
+        const limits = this._getActivePartLimits();
 
-        newValue = newValue > limits.max ? limits.min + (limits.max - limits.min) % (newValue - limits.max) : newValue;
-        newValue = newValue < limits.min ? limits.max - (limits.max - limits.min) % (limits.min - newValue) : newValue;
+        let limitDelta = limits.max - limits.min;
+        if(limitDelta === 1) {
+            limitDelta++;
+        }
+
+        let newValue = step + this._getActivePartValue();
+
+        if(newValue > limits.max) {
+            const delta = (newValue - limits.max) % limitDelta;
+            newValue = delta ? limits.min + delta - 1 : limits.max;
+        } else if(newValue < limits.min) {
+            const delta = (limits.min - newValue) % limitDelta;
+            newValue = delta ? limits.max - delta + 1 : limits.min;
+        }
 
         this._setActivePartValue(newValue);
     },
