@@ -1102,6 +1102,27 @@ QUnit.test("scrollable should have correct scrollPosition when content is croppe
     assert.equal($scrollable.dxScrollable("instance").scrollLeft(), 50);
 });
 
+QUnit.test("scrollable prevents anchor events", function(assert) {
+    var $input = $("<input>").css("height", "40px");
+    var scrollable = $("#scrollable")
+        .append($input)
+        .dxScrollable({
+            useNative: false
+        })
+        .dxScrollable("instance");
+
+    $input
+        .focus()
+        .css("height", "auto");
+    var scrollPosition = scrollable.scrollTop();
+
+    $input
+        .parent()
+        .append($("<input>"));
+
+    assert.strictEqual(scrollable.scrollTop(), scrollPosition, "Scrollable save content position");
+});
+
 
 QUnit.module("horizontal direction", moduleConfig);
 
