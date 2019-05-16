@@ -1,4 +1,5 @@
-var noop = require("../../core/utils/common").noop,
+var $ = require("../../core/renderer"),
+    noop = require("../../core/utils/common").noop,
     windowUtils = require("../../core/utils/window"),
     domAdapter = require("../../core/dom_adapter"),
     typeUtils = require("../../core/utils/type"),
@@ -19,6 +20,9 @@ var noop = require("../../core/utils/common").noop,
     rendererModule = require("./renderers/renderer"),
 
     _Layout = require("./layout"),
+
+    devices = require("../../core/devices"),
+    eventsEngine = require("../../events/core/events_engine"),
 
     OPTION_RTL_ENABLED = "rtlEnabled",
 
@@ -177,6 +181,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         linkTarget && linkTarget.enableLinks().virtualLink("core").virtualLink("peripheral");
         that._renderVisibilityChange();
         that._attachVisibilityChangeHandlers();
+        that._toggleParentsScrollSubscription(this._isVisible());
         that._initEventTrigger();
         that._incidentOccurred = createIncidentOccurred(that.NAME, that._eventTrigger);
         that._layout = new _Layout();
@@ -352,15 +357,37 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     render: function() {
         this._requestChange(["CONTAINER_SIZE"]);
-        this._onRender();
+
+        const visible = this._isVisible();
+        this._toggleParentsScrollSubscription(visible);
+        !visible && this._stopCurrentHandling();
     },
 
-    // This is actually added only to make tooltip pluggable. This is bad but much better than entire tooltip in BaseWidget.
-    _onRender: noop,
+    _toggleParentsScrollSubscription: function(subscribe) {
+        var $parents = $(this._renderer.root.element).parents(),
+            scrollEvents = "scroll.viz_widgets";
+
+        if(devices.real().platform === "generic") {
+            $parents = $parents.add(windowUtils.getWindow());
+        }
+
+        this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
+            || (function() { this._stopCurrentHandling(); }).bind(this);
+
+        eventsEngine.off($().add(this._$prevRootParents), scrollEvents, this._proxiedTargetParentsScrollHandler);
+
+        if(subscribe) {
+            eventsEngine.on($parents, scrollEvents, this._proxiedTargetParentsScrollHandler);
+            this._$prevRootParents = $parents;
+        }
+    },
+
+    _stopCurrentHandling: noop,
 
     _dispose: function() {
         var that = this;
         that.callBase.apply(that, arguments);
+        that._toggleParentsScrollSubscription(false);
         that._removeResizeHandler();
         that._layout.dispose();
         that._eventTrigger.dispose();

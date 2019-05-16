@@ -59,3 +59,13 @@ QUnit.test("Depends on theme", function(assert) {
     assert.strictEqual(this.tooltip.update.callCount, 1, "tooltip");
     assert.strictEqual(this.tooltip.setRendererOptions.callCount, 1, "renderer");
 });
+
+// T279734
+QUnit.test("hide tooltip on render after hide container", function(assert) {
+    var widget = this.createWidget();
+    this.$container.hide();
+
+    widget.render();
+
+    assert.deepEqual(this.tooltip.hide.lastCall.args, []);
+});
