@@ -308,6 +308,21 @@ QUnit.test("w/ options - itemTemplate", function(assert) {
     assert.equal(this.$list.find(".dx-list-item").text(), "Item0Item1Item2");
 });
 
+QUnit.test("custom item template can return default template name", function(assert) {
+    this.ddMenu.option({
+        items: [1, 2],
+        itemTemplate: function() {
+            return "item";
+        }
+    });
+    this.toggleMenu();
+
+    var $items = this.list.itemElements();
+
+    assert.strictEqual($items.eq(0).text(), "1", "default item template was applied");
+    assert.strictEqual($items.eq(1).text(), "2", "default item template was applied");
+});
+
 QUnit.test("the 'buttonWidth' option should be passed to the menu button", function(assert) {
     this.ddMenu.option("buttonWidth", 200);
     assert.ok(this.button.option("width"), 200);
