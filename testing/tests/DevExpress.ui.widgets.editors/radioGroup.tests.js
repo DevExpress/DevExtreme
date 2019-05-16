@@ -91,6 +91,18 @@ module("nested radio group", moduleConfig, () => {
         const firstNestedItemElement2 = $(nestedRadioGroup2.itemElements()).first();
         assert.notOk(firstNestedItemElement2.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of second nested radio group is not changed");
     });
+
+    QUnit.test("item template can return default template name", (assert) => {
+        const instance = $("#radioGroup").dxRadioGroup({
+            items: [1, 2, 3],
+            itemTemplate: function() {
+                return "item";
+            }
+        }).dxRadioGroup("instance");
+
+        assert.strictEqual(instance.itemElements().eq(0).text(), "1", "Default item template was rendered");
+        assert.strictEqual(instance.itemElements().eq(1).text(), "2", "Default item template was rendered");
+    });
 });
 
 module("buttons group rendering", () => {
