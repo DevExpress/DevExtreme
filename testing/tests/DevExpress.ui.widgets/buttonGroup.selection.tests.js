@@ -129,7 +129,6 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-
                 QUnit.test(`${selectedOption}: ['btn1']` + config, () => {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
@@ -154,13 +153,13 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     if(selectedOption === "selectedItems") {
                         helper.createButtonGroup({ items: items, selectedItems: [items[1]] });
                     } else {
-                        helper.createButtonGroup({ items: items, selectedItemKeys: [ items[1].text ] });
+                        helper.createButtonGroup({ items: items, selectedItemKeys: [items[1].text] });
                     }
 
                     helper.checkAsserts({
                         selectionChanged: onInitialOption ? null : { addedItems: [items[1]], removedItems: [] },
                         selectedItems: [items[1]],
-                        selectedItemKeys: [ items[1].text]
+                        selectedItemKeys: [items[1].text]
                     });
 
                     helper.checkSelectedItems([items[1].id]);
@@ -177,13 +176,13 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     if(selectedOption === "selectedItems") {
                         helper.createButtonGroup({ items: items, selectedItems: [items[0], items[1]] });
                     } else {
-                        helper.createButtonGroup({ items: items, selectedItemKeys: [items[0].text, items[1].text ] });
+                        helper.createButtonGroup({ items: items, selectedItemKeys: [items[0].text, items[1].text] });
                     }
 
                     helper.checkAsserts({
-                        selectionChanged: onInitialOption ? null : { addedItems: [ items[0], items[1]], removedItems: [] },
-                        selectedItems: [ items[0], items[1]],
-                        selectedItemKeys: [ items[0].text, items[1].text]
+                        selectionChanged: onInitialOption ? null : { addedItems: [items[0], items[1]], removedItems: [] },
+                        selectedItems: [items[0], items[1]],
+                        selectedItemKeys: [items[0].text, items[1].text]
                     });
 
                     helper.checkSelectedItems([items[0].id, items[1].id]);
@@ -222,7 +221,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     helper.checkAsserts({
                         selectionChanged: { addedItems: [items[1]], removedItems: [] },
                         selectedItems: [items[1]],
-                        selectedItemKeys: [ items[1].text]
+                        selectedItemKeys: [items[1].text]
                     });
                     helper.checkSelectedItems([items[1].id]);
                 });
@@ -242,18 +241,47 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
 
                     if(selectionMode === "single") {
                         helper.checkAsserts({
-                            selectionChanged: { addedItems: [items[1]], removedItems: [ items[0]] },
+                            selectionChanged: { addedItems: [items[1]], removedItems: [items[0]] },
                             selectedItems: [items[1]],
-                            selectedItemKeys: [ items[1].text]
+                            selectedItemKeys: [items[1].text]
                         });
                         helper.checkSelectedItems([items[1].id]);
                     } else {
                         helper.checkAsserts({
                             selectionChanged: { addedItems: [items[1]], removedItems: [] },
-                            selectedItems: [ items[0], items[1]],
-                            selectedItemKeys: [ items[0].text, items[1].text]
+                            selectedItems: [items[0], items[1]],
+                            selectedItemKeys: [items[0].text, items[1].text]
                         });
                         helper.checkSelectedItems([items[0].id, items[1].id]);
+                    }
+                });
+
+                QUnit.test(`${selectedOption}: [], click(btn1, btn1)` + config, () => {
+                    let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+
+                    if(selectedOption === "selectedItems") {
+                        helper.createButtonGroup({ items: items, selectedItems: [] });
+                    } else {
+                        helper.createButtonGroup({ items: items, selectedItemKeys: [] });
+                    }
+
+                    helper.triggerButtonClick(items[0].id);
+                    helper.resetSelectedChangedSpy();
+                    helper.triggerButtonClick(items[0].id);
+
+                    if(selectionMode === "single") {
+                        helper.checkAsserts({
+                            selectedItems: [items[0]],
+                            selectedItemKeys: [items[0].text]
+                        });
+                        helper.checkSelectedItems([items[0].id]);
+                    } else {
+                        helper.checkAsserts({
+                            selectionChanged: { addedItems: [], removedItems: [items[0]] },
+                            selectedItems: [],
+                            selectedItemKeys: []
+                        });
+                        helper.checkSelectedItems([]);
                     }
                 });
 
@@ -263,7 +291,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     if(selectedOption === "selectedItems") {
                         helper.createButtonGroup({ items: items, selectedItems: [items[1]] });
                     } else {
-                        helper.createButtonGroup({ items: items, selectedItemKeys: [items[1].text ] });
+                        helper.createButtonGroup({ items: items, selectedItemKeys: [items[1].text] });
                     }
                     helper.resetSelectedChangedSpy();
                     helper.triggerButtonClick(items[0].id);
@@ -319,7 +347,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     if(selectedOption === "selectedItems") {
                         helper.createButtonGroup({ items: items, selectedItems: [items[1]] });
                     } else {
-                        helper.createButtonGroup({ items: items, selectedItemKeys: [ items[1].text ] });
+                        helper.createButtonGroup({ items: items, selectedItemKeys: [items[1].text] });
                     }
 
                     helper.triggerButtonClick(items[0].id);
@@ -328,7 +356,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
 
                     if(selectionMode === "single") {
                         helper.checkAsserts({
-                            selectionChanged: { addedItems: [items[1]], removedItems: [ items[0]] },
+                            selectionChanged: { addedItems: [items[1]], removedItems: [items[0]] },
                             selectedItems: [items[1]],
                             selectedItemKeys: [items[1].text]
                         });
@@ -359,7 +387,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                         assert.ok("skip");
                     } else {
                         helper.checkAsserts({
-                            selectionChanged: { addedItems: [], removedItems: [ items[0]] },
+                            selectionChanged: { addedItems: [], removedItems: [items[0]] },
                             selectedItems: [items[1]],
                             selectedItemKeys: [items[1].text] });
                         helper.checkSelectedItems([items[1].id]);
