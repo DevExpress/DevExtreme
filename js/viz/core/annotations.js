@@ -209,11 +209,22 @@ const corePlugin = {
     init() {
         this._annotations = {
             items: [],
+            tooltip: new Tooltip({
+                cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
+                eventTrigger: this._eventTrigger,
+                widgetRoot: this.element()
+            }),
             hideTooltip() {
                 this.tooltip.annotation = null;
                 this.tooltip.hide();
             }
         };
+
+        this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
+        const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
+
+        tooltipOptions.customizeTooltip = undefined;
+        this._annotations.tooltip.update(tooltipOptions);
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
@@ -224,10 +235,15 @@ const corePlugin = {
     extenders: {
         _createHtmlStructure() {
             this._annotationsGroup = this._renderer.g().attr({ "class": `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, "annotations").linkAppend();
+            eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
+            this._annotationsGroup.on(POINTER_ACTION, this._annotationsPointerEventHandler.bind(this));
         },
         _renderExtraElements() {
             this._annotationsGroup.clear();
             this._annotations.items.forEach(item => item.draw(this, this._annotationsGroup));
+        },
+        _stopCurrentHandling() {
+            this._annotations.hideTooltip();
         }
     },
     members: {
@@ -238,22 +254,7 @@ const corePlugin = {
             if(!items || !items.length) {
                 return;
             }
-
-            this._annotations.tooltip = new Tooltip({
-                cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
-                eventTrigger: this._eventTrigger,
-                widgetRoot: this.element()
-            });
-
-            this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-            const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
-
-            tooltipOptions.customizeTooltip = undefined;
-            this._annotations.tooltip.update(tooltipOptions);
-
             this._annotations.items = createAnnotations(items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
-            this._annotationsGroup.on(POINTER_ACTION, this._annotationsPointerEventHandler.bind(this));
-            eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
         },
         _getAnnotationCoords() { return {}; }
     },

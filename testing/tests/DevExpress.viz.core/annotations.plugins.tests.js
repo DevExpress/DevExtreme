@@ -707,6 +707,7 @@ QUnit.module("Tooltip", {
                 paddingTopBottom: 0
             },
             annotations: [
+                { x: undefined, y: undefined, name: "annotation0", description: "d0", tooltipEnabled: true, someOption: "option0" },
                 { x: 30, y: 30, name: "annotation1", description: "d1", tooltipEnabled: true, someOption: "option1" },
                 { x: 70, y: 70, name: "annotation2", description: "d2", tooltipEnabled: true, someOption: "option2" }
             ]
@@ -851,6 +852,34 @@ QUnit.module("Tooltip", {
         pointer.start({ x: 30, y: 30 }).down().up();
         rootPointer.start().down(40, 40);
         eventsEngine.trigger(getDocument(), "dxpointerdown");
+
+        const tooltip = this.tooltip;
+
+        assert.equal(tooltip.show.callCount, 1);
+        assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 30, y: 30 });
+
+        assert.equal(tooltip.hide.callCount, 1);
+        assert.ok(tooltip.hide.getCall(0).calledAfter(tooltip.show.getCall(0)));
+    });
+
+    QUnit.test("Hide tooltip on container scroll", function(assert) {
+        const customizeTooltip = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                customizeTooltip
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+        const rootPointer = pointerMock(chart._renderer.root.element).start();
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        pointer.start({ x: 30, y: 30 }).down().up();
+        rootPointer.start().down(40, 40);
+
+        eventsEngine.trigger($("#qunit-fixture"), "scroll");
 
         const tooltip = this.tooltip;
 

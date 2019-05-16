@@ -47,12 +47,12 @@ QUnit.test("Show when container is not visible", function(assert) {
 
 QUnit.test("Notification callback / true", function(assert) {
     var widget = this.createWidget(),
-        spy = widget._hideTooltip = sinon.spy();
+        spy = widget._stopCurrentHandling = sinon.spy();
 
     module.LoadingIndicator.lastCall.args[0].notify(true);
 
     assert.strictEqual(widget.option("loadingIndicator.show"), true, "option state");
-    assert.deepEqual(spy.lastCall.args, [], "tooltip is hidden");
+    assert.deepEqual(spy.lastCall.args, [], "current handlings are stopped");
 });
 
 QUnit.test("Notification callback / false", function(assert) {

@@ -4,6 +4,7 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     rendererModule = require("viz/core/renderers/renderer"),
     baseSparkline = require("viz/sparklines/base_sparkline"),
+    eventsEngine = require("events/core/events_engine"),
     DEFAULT_EVENTS_DELAY = 100;
 
 require("viz/sparkline");
@@ -179,7 +180,7 @@ QUnit.test('Hide tooltip on mousewheel without delay', function(assert) {
         assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 0, 'Hide timeout set 1 time');
     };
     that.trigger('mouseover', tracker);
-    that.trigger('dxmousewheel', tracker);
+    eventsEngine.trigger(sparkline.$element(), "scroll");
 });
 
 QUnit.test('B252494 - Tooltip exception', function(assert) {

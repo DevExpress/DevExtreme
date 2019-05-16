@@ -172,7 +172,7 @@ export class Plaque {
     }
 
     hitTest(x, y) {
-        const { width, height } = this._size;
+        const { width, height } = this._size || {};
         return Math.abs(x - this.x) <= width / 2 && Math.abs(y - this.y) <= height / 2;
     }
 }

@@ -9,7 +9,6 @@ var eventsEngine = require("../../events/core/events_engine"),
     DEFAULT_EVENTS_DELAY = 100,
 
     eventUtils = require("../../events/utils"),
-    wheelEvent = require("../../events/core/wheel"),
     translator2DModule = require("../translators/translator2d"),
 
     _extend = extend,
@@ -181,10 +180,14 @@ var BaseSparkline = BaseWidget.inherit({
         that._disposeCallbacks = function() {
             that = that._showTooltipCallback = that._hideTooltipCallback = that._disposeCallbacks = null;
         };
-        that._tooltipTracker.on(mouseEvents, data).on(touchEvents, data).on(mouseWheelEvents, data);
+        that._tooltipTracker.on(mouseEvents, data).on(touchEvents, data);
 
         // for ie11
         that._tooltipTracker.on(menuEvents);
+    },
+
+    _stopCurrentHandling() {
+        this._hideTooltip();
     },
 
     _disposeTooltipEvents: function() {
@@ -236,11 +239,6 @@ var mouseEvents = {
         widget._tooltipTracker.off(mouseMoveEvents);
         widget._hideTooltip(DEFAULT_EVENTS_DELAY);
     }
-};
-
-var mouseWheelEvents = {};
-mouseWheelEvents[wheelEvent.name + ".sparkline-tooltip"] = function(event) {
-    event.data.widget._hideTooltip();
 };
 
 var mouseMoveEvents = {

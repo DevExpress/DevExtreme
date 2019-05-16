@@ -262,7 +262,7 @@ module.exports = {
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
-            chart._tracker.stopCurrentHandling();
+            chart._stopCurrentHandling();
         }
 
         const zoomAndPan = {

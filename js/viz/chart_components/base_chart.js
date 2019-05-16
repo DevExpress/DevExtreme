@@ -1415,6 +1415,10 @@ var BaseChart = BaseWidget.inherit({
 
     _change_INIT() {
         this._reinit();
+    },
+
+    _stopCurrentHandling: function() {
+        this._tracker.stopCurrentHandling();
     }
 });
 
