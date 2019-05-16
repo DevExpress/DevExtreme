@@ -458,6 +458,12 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("text"), "10, 2044", "text is correct");
         });
 
+        test("search value should be cleared if number was entered after the letter", (assert) => {
+            this.instance.option("displayFormat", "dd-MMM-yyyy");
+            this.keyboard.type("11m12y2015");
+            assert.strictEqual(this.instance.option("text"), "11-Dec-2015", "date is correct");
+        });
+
         test("search value should be cleared after part is reverted when all text is selected", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
