@@ -3975,9 +3975,10 @@ QUnit.testInActiveWindow("DataGrid should not focus adaptive rows", function(ass
     assert.equal(focusedRowChangedCount, 0, "No focused row changed");
 });
 
-QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowKey is set to undefined", function(assert) {
+QUnit.testInActiveWindow("DataGrid should reset focused row if focusedRowKey is set to undefined", function(assert) {
     // arrange
-    var rowsView;
+    var rowsView,
+        focusedRowChangedCallsCount = 0;
 
     this.$element = function() {
         return $("#container");
@@ -3986,7 +3987,10 @@ QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowKey
     this.options = {
         keyExpr: "name",
         focusedRowEnabled: true,
-        focusedRowIndex: 1
+        focusedRowIndex: 1,
+        onFocusedRowChanged: () => {
+            ++focusedRowChangedCallsCount;
+        }
     };
 
     this.setupModule();
@@ -3997,12 +4001,34 @@ QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowKey
     // assert
     rowsView = this.gridView.getView("rowsView");
     assert.ok($(rowsView.getRow(1)).hasClass("dx-row-focused"), "focused row");
+    assert.equal(focusedRowChangedCallsCount, 0, "Focused row calls count");
 
     // act
     this.option("focusedRowKey", undefined);
+    // assert
+    assert.equal(focusedRowChangedCallsCount, 1, "Focused row calls count");
 
     // assert
     assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
+    assert.equal(this.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // act
+    this.option("focusedRowIndex", 1);
+    // assert
+    assert.equal(focusedRowChangedCallsCount, 2, "Focused row calls count");
+
+    // assert
+    assert.ok($(rowsView.getRow(1)).hasClass("dx-row-focused"), "focused row");
+    assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey");
+
+    // act
+    this.option("focusedRowIndex", -1);
+    // assert
+    assert.equal(focusedRowChangedCallsCount, 3, "Focused row calls count");
+
+    // assert
+    assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
+    assert.equal(this.option("focusedRowKey"), undefined, "focusedRowKey");
     assert.equal(this.option("focusedRowIndex"), -1, "focusedRowIndex");
 });
 

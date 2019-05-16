@@ -1398,12 +1398,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanged: function($rowElement) {
         var row,
             dataController,
-            focusedRowKey = this.option("focusedRowKey"),
             focusedRowIndex = this.option("focusedRowIndex");
 
-        if(focusedRowKey !== undefined && this.option("focusedRowEnabled")) {
-            dataController = this.getController("data");
-            row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
+        if(this.option("focusedRowEnabled")) {
+            if(focusedRowIndex >= 0) {
+                dataController = this.getController("data");
+                row = focusedRowIndex >= 0 && dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
+            }
             this.executeAction("onFocusedRowChanged", {
                 rowElement: $rowElement,
                 rowIndex: focusedRowIndex,
