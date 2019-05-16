@@ -379,8 +379,8 @@ let DateBoxMask = DateBoxBase.inherit({
         let limits = this._getActivePartLimits(),
             newValue = step + this._getActivePartValue();
 
-        newValue = newValue > limits.max ? newValue - limits.max : newValue;
-        newValue = newValue < limits.min ? limits.max - newValue : newValue;
+        newValue = newValue > limits.max ? limits.min + (limits.max - limits.min) % (newValue - limits.max) : newValue;
+        newValue = newValue < limits.min ? limits.max - (limits.max - limits.min) % (limits.min - newValue) : newValue;
 
         this._setActivePartValue(newValue);
     },
