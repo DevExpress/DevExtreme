@@ -990,43 +990,47 @@ QUnit.test("CheckBox mode - Update a selection state when column visibility is c
     this.columnChooserView.hideColumnChooser();
 });
 
-QUnit.test("CheckBox mode - scroll position after selecting an last item", function(assert) {
-    // arrange
-    var $columnChooser,
-        $lastItemElement,
-        scrollableInstance,
-        $testElement = $("#container");
+["select", "dragAndDrop"].forEach(mode => {
+    var modeName = (mode === "select" ? "CheckBox" : "T739323: DragAndDrop");
+    QUnit.test(modeName + " mode - scroll position after selecting an last item", function(assert) {
+        // arrange
+        var $columnChooser,
+            $lastItemElement,
+            scrollableInstance,
+            $testElement = $("#container");
 
-    this.options.columnChooser.mode = "select";
-    this.options.columnChooser.height = 200;
-    this.columns.push(
-        { caption: "Column 1", index: 0, visible: true, showInColumnChooser: true },
-        { caption: "Column 2", index: 1, visible: true, showInColumnChooser: true },
-        { caption: "Column 3", index: 2, visible: true, showInColumnChooser: true },
-        { caption: "Column 4", index: 3, visible: true, showInColumnChooser: true },
-        { caption: "Column 5", index: 4, visible: true, showInColumnChooser: true },
-        { caption: "Column 6", index: 5, visible: true, showInColumnChooser: true },
-        { caption: "Column 7", index: 6, visible: true, showInColumnChooser: true },
-        { caption: "Column 8", index: 7, visible: true, showInColumnChooser: true }
-    );
+        this.options.columnChooser.mode = mode;
+        this.options.columnChooser.height = 200;
+        this.columns.push(
+            { caption: "Column 1", index: 0, visible: false, showInColumnChooser: true },
+            { caption: "Column 2", index: 1, visible: false, showInColumnChooser: true },
+            { caption: "Column 3", index: 2, visible: false, showInColumnChooser: true },
+            { caption: "Column 4", index: 3, visible: false, showInColumnChooser: true },
+            { caption: "Column 5", index: 4, visible: false, showInColumnChooser: true },
+            { caption: "Column 6", index: 5, visible: false, showInColumnChooser: true },
+            { caption: "Column 7", index: 6, visible: false, showInColumnChooser: true },
+            { caption: "Column 8", index: 7, visible: false, showInColumnChooser: true }
+        );
 
-    this.setTestElement($testElement);
-    this.columnChooserView.showColumnChooser();
-    this.clock.tick(1000);
+        this.setTestElement($testElement);
+        this.columnChooserView.showColumnChooser();
+        this.clock.tick(1000);
 
-    $columnChooser = $("body").children(".dx-datagrid-column-chooser");
-    $lastItemElement = $columnChooser.find(".dx-treeview-item").last();
-    scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
-    scrollableInstance.scrollToElement($lastItemElement);
+        $columnChooser = $("body").children(".dx-datagrid-column-chooser");
+        $lastItemElement = $columnChooser.find(".dx-treeview-item").last();
+        scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
+        scrollableInstance.scrollToElement($lastItemElement);
 
-    // act
-    this.columnsController.columnOption(7, "visible", false);
-    this.columnChooserView.render($testElement, "full");
+        // act
+        this.columnsController.columnOption(7, "visible", true);
+        this.columnChooserView.render($testElement, "full");
 
-    // assert
-    scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
-    assert.ok(scrollableInstance.scrollTop() > 0, "scroll position");
+        // assert
+        scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
+        assert.ok(scrollableInstance.scrollTop() > 0, "scroll position");
+    });
 });
+
 
 // T535738
 QUnit.test("CheckBox mode - update treeview when changing the column options", function(assert) {
