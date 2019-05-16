@@ -17,14 +17,14 @@ function run_ts {
 
     cp ./ts/dx.all.d.ts ./ts/dx.all.d.ts.current
     npm run update-ts
-    difference=$(diff ./ts/dx.all.d.ts ./ts/dx.all.d.ts.current -U 5)
+    difference=$(diff ./ts/dx.all.d.ts.current ./ts/dx.all.d.ts -U 5 | sed '2d') || true
 
     if [ -n "${difference}" ]; then
-        echo "./ts/dx.all.d.ts is outdated:"
+        echo "FAIL: ./ts/dx.all.d.ts is outdated:"
         echo "${difference}"
         exit 1
     else
-        echo "./ts/dx.all.d.ts is up-to-date"
+        echo "TS is up-to-date"
     fi
 
     npx gulp ts-compilation-check ts-jquery-check npm-ts-modules-check
