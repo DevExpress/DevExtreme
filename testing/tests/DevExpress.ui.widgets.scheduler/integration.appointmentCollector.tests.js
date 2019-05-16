@@ -3,6 +3,9 @@ import translator from "animation/translator";
 import fx from "animation/fx";
 import { SchedulerTestWrapper } from "./helpers.js";
 import themes from "ui/themes";
+import { CompactAppointmentsHelper } from "ui/scheduler/compactAppointmentsHelper";
+import Widget from "ui/widget/ui.widget";
+import Color from "color";
 
 import "ui/scheduler/ui.scheduler";
 import "common.css!";
@@ -17,6 +20,78 @@ const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
 const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
 const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
+
+QUnit.module("Integration: Appointments Collector Base Tests", {
+    beforeEach: () => {
+        fx.off = true;
+
+        this.editing = true;
+        this.rtlEnabled = false;
+        this.buttonWidth = 200;
+        this.color;
+
+        this.widgetMock = new (Widget.inherit({
+            option: function(options) {
+                if(options === "appointmentCollectorTemplate") {
+                    return "appointmentCollector";
+                }
+                return this.callBase(options);
+            },
+            _getAppointmentTemplate: function(template) {
+                return this._getTemplateByOption(template);
+            }
+        }))($("<div>"));
+
+        this.renderDropDownAppointmentsContainer = function(items, options) {
+            const helper = new CompactAppointmentsHelper(this.widgetMock);
+            items = items || { data: [{ text: "a", startDate: new Date(2015, 1, 1) }], colors: [] };
+            return helper.render($.extend(options, {
+                $container: $("#ddAppointments"),
+                coordinates: { top: 0, left: 0 },
+                items: items,
+                buttonWidth: this.buttonWidth,
+                buttonColor: $.Deferred().resolve(this.color)
+            }));
+        };
+    },
+    afterEach: () => {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test("Appointment collector should be rendered with right class", (assert) => {
+        var $dropDownMenu = this.renderDropDownAppointmentsContainer();
+        assert.ok($dropDownMenu.hasClass("dx-scheduler-appointment-collector"), "Container is rendered");
+        assert.ok($dropDownMenu.dxButton("instance"), "Container is button");
+    });
+
+    QUnit.test("Appointment collector should be painted", (assert) => {
+        this.color = "#0000ff";
+        var $dropDownMenu = this.renderDropDownAppointmentsContainer();
+
+        assert.equal(new Color($dropDownMenu.css("backgroundColor")).toHex(), this.color, "Color is OK");
+    });
+
+    QUnit.test("Appointment collector should not be painted if items have different colors", (assert) => {
+        this.color = "#0000ff";
+        var $dropDownMenu = this.renderDropDownAppointmentsContainer({
+            data: [
+                { text: "a", startDate: new Date(2015, 1, 1) },
+                { text: "b", startDate: new Date(2015, 1, 1) }
+            ],
+            colors: ["#fff000", "#000fff"]
+        });
+
+        assert.notEqual(new Color($dropDownMenu.css("backgroundColor")).toHex(), this.color, "Color is OK");
+    });
+
+    QUnit.test("Appointment collector should have a correct markup", (assert) => {
+        var $button = this.renderDropDownAppointmentsContainer(),
+            $dropDownAppointmentsContent = $button.find(".dx-scheduler-appointment-collector-content");
+
+        assert.equal($dropDownAppointmentsContent.length, 1, "Content is OK");
+        assert.equal($dropDownAppointmentsContent.html().toLowerCase(), "<span>1 more</span>", "Markup is OK");
+    });
+});
 
 QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
     beforeEach: () => {
