@@ -1,11 +1,11 @@
 /* global stripFunctions */
 
-var $ = require("jquery"),
-    CustomStore = require("data/custom_store"),
-    ArrayStore = require("data/array_store");
+import $ from "jquery";
+import CustomStore from "data/custom_store";
+import ArrayStore from "data/array_store";
 
-require("common.css!");
-require("ui/tree_view");
+import "common.css!";
+import "ui/tree_view";
 
 QUnit.testStart(function() {
     var markup =
@@ -192,23 +192,23 @@ window.makeSlowDataSource = function(data) {
     };
 };
 
-require("generic_light.css!");
+import "generic_light.css!";
 
-require("./treeViewParts/accessibility.js");
-require("./treeViewParts/animation.js");
-require("./treeViewParts/checkboxes.js");
-require("./treeViewParts/events.js");
-require("./treeViewParts/expandedItems.js");
-require("./treeViewParts/focusing.js");
-require("./treeViewParts/initialization.js");
-require("./treeViewParts/keyboardNavigation.js");
-require("./treeViewParts/lazyRendering.js");
-require("./treeViewParts/optionChanged.js");
-require("./treeViewParts/regression.js");
-require("./treeViewParts/rendering.js");
-require("./treeViewParts/selection.js");
-require("./treeViewParts/selectAllMode.js");
-require("./treeViewParts/selectAllWithSelectNodesRecursiveFalse.js");
-require("./treeViewParts/selectNodesRecursiveTrue.js");
-require("./treeViewParts/usageWithoutKeys.js");
-require("./treeViewParts/virtualMode.js");
+import "./treeViewParts/accessibility.js";
+import "./treeViewParts/animation.js";
+import "./treeViewParts/checkboxes.js";
+import "./treeViewParts/events.js";
+import "./treeViewParts/expandedItems.js";
+import "./treeViewParts/focusing.js";
+import "./treeViewParts/initialization.js";
+import "./treeViewParts/keyboardNavigation.js";
+import "./treeViewParts/lazyRendering.js";
+import "./treeViewParts/optionChanged.js";
+import "./treeViewParts/regression.js";
+import "./treeViewParts/rendering.js";
+import "./treeViewParts/selection.js";
+import "./treeViewParts/selectAllMode.js";
+import "./treeViewParts/selectAllWithSelectNodesRecursiveFalse.js";
+import "./treeViewParts/selectNodesRecursiveTrue.js";
+import "./treeViewParts/usageWithoutKeys.js";
+import "./treeViewParts/virtualMode.js";

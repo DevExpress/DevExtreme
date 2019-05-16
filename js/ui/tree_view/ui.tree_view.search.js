@@ -1,22 +1,21 @@
-var registerComponent = require("../../core/component_registrator"),
-    searchBoxMixin = require("../widget/ui.search_box_mixin"),
-    extend = require("../../core/utils/extend").extend,
-    TreeViewBase = require("./ui.tree_view.base");
+import registerComponent from "../../core/component_registrator";
+import searchBoxMixin from "../widget/ui.search_box_mixin";
+import { extend } from "../../core/utils/extend";
+import TreeViewBase from "./ui.tree_view.base";
 
-var NODE_CONTAINER_CLASS = "dx-treeview-node-container";
+const NODE_CONTAINER_CLASS = "dx-treeview-node-container";
 
-var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
-    _addWidgetPrefix: function(className) {
+class TreeViewSearch extends TreeViewBase.include(searchBoxMixin) {
+    _addWidgetPrefix(className) {
         return "dx-treeview-" + className;
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "searchValue":
                 if(this._showCheckboxes() && this._isRecursiveSelection()) {
                     this._removeSelection();
                 }
-
                 this._initDataAdapter();
                 this._updateSearch();
                 this._repaintContainer();
@@ -32,32 +31,32 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
             default:
                 this.callBase(args);
         }
-    },
+    }
 
-    _updateDataAdapter: function() {
+    _updateDataAdapter() {
         this._setOptionSilent("expandNodesRecursive", false);
 
         this._initDataAdapter();
 
         this._setOptionSilent("expandNodesRecursive", true);
-    },
+    }
 
-    _getDataAdapterOptions: function() {
+    _getDataAdapterOptions() {
         return extend(this.callBase(), {
             searchValue: this.option("searchValue"),
             searchMode: this.option("searchMode") || "contains",
             searchExpr: this.option("searchExpr")
         });
-    },
+    }
 
-    _updateSearch: function() {
+    _updateSearch() {
         if(this._searchEditor) {
             var editorOptions = this._getSearchEditorOptions();
             this._searchEditor.option(editorOptions);
         }
-    },
+    }
 
-    _repaintContainer: function() {
+    _repaintContainer() {
         var $container = this.$element().find("." + NODE_CONTAINER_CLASS).first(),
             rootNodes;
 
@@ -68,26 +67,24 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
             this._renderItems($container, rootNodes);
             this._fireContentReadyAction();
         }
-    },
+    }
 
-    _focusTarget: function() {
+    _focusTarget() {
         if(this.option("searchEnabled")) {
             return this._scrollableContainer.$element();
         }
-
         return this.callBase();
-    },
+    }
 
-    _addWidgetClass: function() {
+    _addWidgetClass() {
         this.$element().addClass(this._widgetClass());
-    },
+    }
 
-    _clean: function() {
+    _clean() {
         this.callBase();
         this._removeSearchBox();
     }
-});
+}
 
 registerComponent("dxTreeView", TreeViewSearch);
-
 module.exports = TreeViewSearch;

@@ -1,12 +1,12 @@
 /* global DATA, data2, internals, initTree, makeSlowDataSource */
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    fx = require("animation/fx"),
-    devices = require("core/devices"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import fx from "animation/fx";
+import devices from "core/devices";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {

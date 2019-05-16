@@ -1,50 +1,46 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    messageLocalization = require("../../localization/message"),
-    clickEvent = require("../../events/click"),
-    commonUtils = require("../../core/utils/common"),
-    windowUtils = require("../../core/utils/window"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    CheckBox = require("../check_box"),
-    HierarchicalCollectionWidget = require("../hierarchical_collection/ui.hierarchical_collection_widget"),
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    dblclickEvent = require("../../events/double_click"),
-    fx = require("../../animation/fx"),
-    Scrollable = require("../scroll_view/ui.scrollable"),
-    LoadIndicator = require("../load_indicator"),
-    deferredUtils = require("../../core/utils/deferred"),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import messageLocalization from "../../localization/message";
+import clickEvent from "../../events/click";
+import commonUtils from "../../core/utils/common";
+import windowUtils from "../../core/utils/window";
+import typeUtils from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { getPublicElement } from "../../core/utils/dom";
+import CheckBox from "../check_box";
+import HierarchicalCollectionWidget from "../hierarchical_collection/ui.hierarchical_collection_widget";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import dblclickEvent from "../../events/double_click";
+import fx from "../../animation/fx";
+import Scrollable from "../scroll_view/ui.scrollable";
+import LoadIndicator from "../load_indicator";
+import { Deferred, when, fromPromise } from "../../core/utils/deferred";
 
-var WIDGET_CLASS = "dx-treeview",
-    NODE_CONTAINER_CLASS = "dx-treeview-node-container",
-    OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened",
-    NODE_CLASS = "dx-treeview-node",
-    ITEM_CLASS = "dx-treeview-item",
-    ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
-    ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
-    ITEM_DATA_KEY = "dx-treeview-item-data",
-    IS_LEAF = "dx-treeview-node-is-leaf",
-    EXPAND_EVENT_NAMESPACE = "dxTreeView_expand",
-    TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility",
-    LOAD_INDICATOR_CLASS = "dx-treeview-loadindicator",
-    LOAD_INDICATOR_WRAPPER_CLASS = "dx-treeview-loadindicator-wrapper",
-    NODE_LOAD_INDICATOR_CLASS = "dx-treeview-node-loadindicator",
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = "dx-treeview-toggle-item-visibility-opened",
-    SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
-    DISABLED_STATE_CLASS = "dx-state-disabled",
-    SELECTED_ITEM_CLASS = "dx-state-selected",
+const WIDGET_CLASS = "dx-treeview";
+const NODE_CONTAINER_CLASS = "dx-treeview-node-container";
+const OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened";
+const NODE_CLASS = "dx-treeview-node";
+const ITEM_CLASS = "dx-treeview-item";
+const ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox";
+const ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox";
+const ITEM_DATA_KEY = "dx-treeview-item-data";
+const IS_LEAF = "dx-treeview-node-is-leaf";
+const EXPAND_EVENT_NAMESPACE = "dxTreeView_expand";
+const TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility";
+const LOAD_INDICATOR_CLASS = "dx-treeview-loadindicator";
+const LOAD_INDICATOR_WRAPPER_CLASS = "dx-treeview-loadindicator-wrapper";
+const NODE_LOAD_INDICATOR_CLASS = "dx-treeview-node-loadindicator";
+const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = "dx-treeview-toggle-item-visibility-opened";
+const SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
+const DISABLED_STATE_CLASS = "dx-state-disabled";
+const SELECTED_ITEM_CLASS = "dx-state-selected";
+const DATA_ITEM_ID = "data-item-id";
 
-    DATA_ITEM_ID = "data-item-id";
-
-var TreeViewBase = HierarchicalCollectionWidget.inherit({
-
-    _supportedKeys: function(e) {
+class TreeViewBase extends HierarchicalCollectionWidget {
+    _supportedKeys(e) {
         var click = function(e) {
             var $itemElement = $(this.option("focusedElement"));
 
@@ -92,17 +88,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             asterisk: toggleExpandedNestedItems.bind(this, true),
             minus: toggleExpandedNestedItems.bind(this, false)
         });
-    },
+    }
 
-    _changeCheckBoxState: function($element) {
+    _changeCheckBoxState($element) {
         var checkboxInstance = this._getCheckBoxInstance($element),
             currentState = checkboxInstance.option("value");
         if(!checkboxInstance.option("disabled")) {
             this._updateItemSelection(!currentState, $element.find("." + ITEM_CLASS).get(0), true, $element);
         }
-    },
+    }
 
-    _toggleExpandedNestedItems: function(items, state) {
+    _toggleExpandedNestedItems(items, state) {
         if(!items) {
             return;
         }
@@ -114,9 +110,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._toggleExpandedState(node, state);
             this._toggleExpandedNestedItems(item.items, state);
         }
-    },
+    }
 
-    _getNodeElement: function(node, cache) {
+    _getNodeElement(node, cache) {
         var normalizedKey = commonUtils.normalizeKey(node.internalFields.key);
         if(cache) {
             if(!cache.$nodeByKey) {
@@ -130,15 +126,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return cache.$nodeByKey[normalizedKey] || $();
         }
         return this.$element().find("[" + DATA_ITEM_ID + "='" + normalizedKey + "']");
-    },
+    }
 
-    _activeStateUnit: "." + ITEM_CLASS,
-
-    _widgetClass: function() {
+    _widgetClass() {
         return WIDGET_CLASS;
-    },
+    }
 
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
             * @name dxTreeViewOptions.items
@@ -440,32 +434,28 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @default undefined
             */
         });
-    },
+    }
 
-    // TODO: implement these functions
-    _initSelectedItems: commonUtils.noop,
-    _syncSelectionOptions: commonUtils.asyncNoop,
-
-    _fireSelectionChanged: function() {
+    _fireSelectionChanged() {
         var selectionChangePromise = this._selectionChangePromise;
-        when(selectionChangePromise).done((function() {
+        when(selectionChangePromise).done(() => {
             this._createActionByOption("onSelectionChanged", {
                 excludeValidators: ["disabled", "readOnly"]
             })();
-        }).bind(this));
-    },
+        });
+    }
 
-    _createSelectAllValueChangedAction: function() {
+    _createSelectAllValueChangedAction() {
         this._selectAllValueChangedAction = this._createActionByOption("onSelectAllValueChanged", {
             excludeValidators: ["disabled", "readOnly"]
         });
-    },
+    }
 
-    _fireSelectAllValueChanged: function(value) {
+    _fireSelectAllValueChanged(value) {
         this._selectAllValueChangedAction({ value: value });
-    },
+    }
 
-    _checkBoxModeChange: function(value, previousValue) {
+    _checkBoxModeChange(value, previousValue) {
         if(previousValue === "none" || value === "none") {
             this.repaint();
             return;
@@ -483,9 +473,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
                 break;
         }
-    },
+    }
 
-    _removeSelection: function() {
+    _removeSelection() {
         var that = this;
 
         each(this._dataAdapter.getFullData(), function(_, node) {
@@ -495,9 +485,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             that._dataAdapter.toggleSelection(node.internalFields.key, false, true);
         });
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         var name = args.name,
             value = args.value,
             previousValue = args.previousValue;
@@ -553,22 +543,22 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             default:
                 this.callBase(args);
         }
-    },
+    }
 
-    _initDataSource: function() {
+    _initDataSource() {
         if(this._useCustomChildrenLoader()) {
-            this._loadChildrenByCustomLoader(null).done(function(newItems) {
+            this._loadChildrenByCustomLoader(null).done((newItems) => {
                 if(newItems && newItems.length) {
                     this.option("items", newItems);
                 }
-            }.bind(this));
+            });
         } else {
             this.callBase();
             this._isVirtualMode() && this._initVirtualMode();
         }
-    },
+    }
 
-    _initVirtualMode: function() {
+    _initVirtualMode() {
         var that = this,
             filter = that._filter;
 
@@ -579,13 +569,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!filter.internal) {
             filter.internal = [that.option("parentIdExpr"), that.option("rootValue")];
         }
-    },
+    }
 
-    _useCustomChildrenLoader: function() {
+    _useCustomChildrenLoader() {
         return typeUtils.isFunction(this.option("createChildren")) && this._isDataStructurePlain();
-    },
+    }
 
-    _loadChildrenByCustomLoader: function(parentNode) {
+    _loadChildrenByCustomLoader(parentNode) {
         var invocationResult = this.option("createChildren").call(this, parentNode);
 
         if(Array.isArray(invocationResult)) {
@@ -593,52 +583,55 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(invocationResult && typeUtils.isFunction(invocationResult.then)) {
-            return deferredUtils.fromPromise(invocationResult);
+            return fromPromise(invocationResult);
         }
 
         return new Deferred().resolve([]).promise();
-    },
+    }
 
-    _combineFilter: function() {
+    _combineFilter() {
         if(!this._filter.custom || !this._filter.custom.length) {
             return this._filter.internal;
         }
 
         return [this._filter.custom, this._filter.internal];
-    },
+    }
 
-    _dataSourceLoadErrorHandler: function() {
+    _dataSourceLoadErrorHandler() {
         this._renderEmptyMessage();
-    },
+    }
 
-    _init: function() {
+    _init() {
         this._filter = {};
+        this._activeStateUnit = `.${ITEM_CLASS}`;
+        this._initSelectedItems = commonUtils.noop;
+        this._syncSelectionOptions = commonUtils.asyncNoop;
         this.callBase();
 
         this._initStoreChangeHandlers();
-    },
+    }
 
-    _dataSourceChangedHandler: function(newItems) {
+    _dataSourceChangedHandler(newItems) {
         if(this._initialized && this._isVirtualMode() && this.option("items").length) {
             return;
         }
 
         this.option("items", newItems);
-    },
+    }
 
-    _removeTreeViewLoadIndicator: function() {
+    _removeTreeViewLoadIndicator() {
         if(!this._treeViewLoadIndicator) return;
         this._treeViewLoadIndicator.remove();
         this._treeViewLoadIndicator = null;
-    },
+    }
 
-    _createTreeViewLoadIndicator: function() {
+    _createTreeViewLoadIndicator() {
         this._treeViewLoadIndicator = $("<div>").addClass(LOAD_INDICATOR_CLASS);
         this._createComponent(this._treeViewLoadIndicator, LoadIndicator, {});
         return this._treeViewLoadIndicator;
-    },
+    }
 
-    _dataSourceLoadingChangedHandler: function(isLoading) {
+    _dataSourceLoadingChangedHandler(isLoading) {
         var resultFilter;
 
         if(this._isVirtualMode()) {
@@ -661,9 +654,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         } else {
             this._removeTreeViewLoadIndicator();
         }
-    },
+    }
 
-    _initStoreChangeHandlers: function() {
+    _initStoreChangeHandlers() {
         if(this.option("dataStructure") !== "plain") {
             return;
         }
@@ -690,9 +683,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 that._dataAdapter.removeItem(removedKey);
                 that._updateLevel(that._parentIdGetter(node));
             });
-    },
+    }
 
-    _markChildrenItemsToRemove: function(node) {
+    _markChildrenItemsToRemove(node) {
         var that = this,
             keys = node.internalFields.childrenKeys;
 
@@ -700,9 +693,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             that.option("items")[that._dataAdapter.getIndexByKey(key)] = 0;
             that._markChildrenItemsToRemove(that._dataAdapter.getNodeByKey(key));
         });
-    },
+    }
 
-    _removeItems: function() {
+    _removeItems() {
         var that = this,
             counter = 0,
             items = extend(true, [], this.option("items"));
@@ -712,15 +705,15 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 counter++;
             }
         });
-    },
+    }
 
-    _updateLevel: function(parentId) {
+    _updateLevel(parentId) {
         var $container = this._getContainerByParentKey(parentId);
 
         this._renderItems($container, this._dataAdapter.getChildrenNodes(parentId));
-    },
+    }
 
-    _getOldContainer: function($itemElement) {
+    _getOldContainer($itemElement) {
         if($itemElement.length) {
             return $itemElement.children("." + NODE_CONTAINER_CLASS);
         }
@@ -730,9 +723,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         return $();
-    },
+    }
 
-    _getContainerByParentKey: function(parentId) {
+    _getContainerByParentKey(parentId) {
         var $container,
             node = this._dataAdapter.getNodeByKey(parentId),
             $itemElement = node ? this._getNodeElement(node) : [];
@@ -746,17 +739,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         return $container;
-    },
+    }
 
-    _isRootLevel: function(parentId) {
+    _isRootLevel(parentId) {
         return parentId === this.option("rootValue");
-    },
+    }
 
-    _getAccessors: function() {
+    _getAccessors() {
         return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems"];
-    },
+    }
 
-    _getDataAdapterOptions: function() {
+    _getDataAdapterOptions() {
         return {
             rootValue: this.option("rootValue"),
             multipleSelection: !this._isSingleSelection(),
@@ -766,16 +759,16 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             dataType: this.option("dataStructure"),
             sort: this._dataSource && this._dataSource.sort()
         };
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._renderScrollableContainer();
         this._renderEmptyMessage(this._dataAdapter.getRootNodes());
         this.callBase();
         this.setAria("role", "tree");
-    },
+    }
 
-    _renderContentImpl: function() {
+    _renderContentImpl() {
         var $nodeContainer = this._renderNodeContainer();
 
         this._scrollableContainer.$content().append($nodeContainer);
@@ -791,32 +784,32 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._createSelectAllValueChangedAction();
             this._renderSelectAllItem($nodeContainer);
         }
-    },
+    }
 
-    _isVirtualMode: function() {
+    _isVirtualMode() {
         return this.option("virtualModeEnabled") && this._isDataStructurePlain() && !!this.option("dataSource");
-    },
+    }
 
-    _isDataStructurePlain: function() {
+    _isDataStructurePlain() {
         return this.option("dataStructure") === "plain";
-    },
+    }
 
-    _fireContentReadyAction: function() {
+    _fireContentReadyAction() {
         this.callBase();
 
         if(this._scrollableContainer && windowUtils.hasWindow()) {
             this._scrollableContainer.update();
         }
-    },
+    }
 
-    _renderScrollableContainer: function() {
+    _renderScrollableContainer() {
         this._scrollableContainer = this._createComponent($("<div>").appendTo(this.$element()), Scrollable, {
             direction: this.option("scrollDirection"),
             useKeyboard: false
         });
-    },
+    }
 
-    _renderNodeContainer: function($parent) {
+    _renderNodeContainer($parent) {
         var $container = $("<ul>").addClass(NODE_CONTAINER_CLASS);
 
         this.setAria("role", "group", $container);
@@ -831,9 +824,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             $container.appendTo($parent);
         }
         return $container;
-    },
+    }
 
-    _createDOMElement: function($nodeContainer, node) {
+    _createDOMElement($nodeContainer, node) {
         var $node = $("<li>")
             .addClass(NODE_CLASS)
             .attr(DATA_ITEM_ID, commonUtils.normalizeKey(node.internalFields.key))
@@ -847,22 +840,22 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }, $node);
 
         return $node;
-    },
+    }
 
-    _getLevel: function($nodeContainer) {
+    _getLevel($nodeContainer) {
         var parent = $nodeContainer.parent();
         return parent.hasClass("dx-scrollable-content") ? 1 : parseInt(parent.attr("aria-level")) + 1;
-    },
+    }
 
-    _showCheckboxes: function() {
+    _showCheckboxes() {
         return this.option("showCheckBoxesMode") !== "none";
-    },
+    }
 
-    _selectAllEnabled: function() {
+    _selectAllEnabled() {
         return this.option("showCheckBoxesMode") === "selectAll" && !this._isSingleSelection();
-    },
+    }
 
-    _renderItems: function($nodeContainer, nodes) {
+    _renderItems($nodeContainer, nodes) {
         var length = nodes.length - 1;
 
         for(var i = length; i >= 0; i--) {
@@ -870,9 +863,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._renderFocusTarget();
-    },
+    }
 
-    _renderItem: function(node, $nodeContainer) {
+    _renderItem(node, $nodeContainer) {
         var $node = this._createDOMElement($nodeContainer, node),
             nodeData = node.internalFields,
             showCheckBox = this._showCheckboxes();
@@ -888,9 +881,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);
         }
-    },
+    }
 
-    _renderChildren: function($node, node) {
+    _renderChildren($node, node) {
         if(!this._hasChildren(node)) {
             this._addLeafClass($node);
             return;
@@ -906,21 +899,21 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         that._loadSublevel(node).done(function(childNodes) {
             that._renderSublevel($node, that._getActualNode(node), childNodes);
         });
-    },
+    }
 
-    _getActualNode: function(cachedNode) {
+    _getActualNode(cachedNode) {
         return this._dataAdapter.getNodeByKey(cachedNode.internalFields.key);
-    },
+    }
 
-    _hasChildren: function(node) {
+    _hasChildren(node) {
         if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
             return this._hasItemsGetter(node.internalFields.item) !== false;
         }
 
         return this.callBase(node);
-    },
+    }
 
-    _loadSublevel: function(node) {
+    _loadSublevel(node) {
         var deferred = new Deferred(),
             that = this,
             childrenNodes = that._getChildNodes(node);
@@ -934,9 +927,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         return deferred.promise();
-    },
+    }
 
-    _renderSublevel: function($node, node, childNodes) {
+    _renderSublevel($node, node, childNodes) {
         var $nestedNodeContainer = this._renderNodeContainer($node, node);
 
         this._renderItems($nestedNodeContainer, childNodes);
@@ -951,9 +944,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(node.internalFields.expanded) {
             $nestedNodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
         }
-    },
+    }
 
-    _executeItemRenderAction: function(key, itemData, itemElement) {
+    _executeItemRenderAction(key, itemData, itemElement) {
         var node = this._dataAdapter.getNodeByKey(key);
 
         this._getItemRenderAction()({
@@ -962,35 +955,35 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             itemData: itemData,
             node: node
         });
-    },
+    }
 
-    _addLeafClass: function($node) {
+    _addLeafClass($node) {
         $node.addClass(IS_LEAF);
-    },
+    }
 
-    _expandEventHandler: function(e) {
+    _expandEventHandler(e) {
         var $nodeElement = $(e.currentTarget.parentNode);
 
         if(!$nodeElement.hasClass(IS_LEAF)) {
             this._toggleExpandedState(e.currentTarget, undefined, e);
         }
-    },
+    }
 
-    _initExpandEvent: function() {
+    _initExpandEvent() {
         var expandedEventName = this._getEventNameByOption(this.option("expandEvent")),
             $itemsContainer = this._itemContainer(),
             itemSelector = this._itemSelector();
 
         eventsEngine.off($itemsContainer, "." + EXPAND_EVENT_NAMESPACE, itemSelector);
         eventsEngine.on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
-    },
+    }
 
-    _getEventNameByOption: function(name) {
+    _getEventNameByOption(name) {
         var event = name === "click" ? clickEvent : dblclickEvent;
         return eventUtils.addNamespace(event.name, EXPAND_EVENT_NAMESPACE);
-    },
+    }
 
-    _getNode: function(identifier) {
+    _getNode(identifier) {
         if(!typeUtils.isDefined(identifier)) {
             return null;
         }
@@ -1013,16 +1006,16 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         return this._dataAdapter.getNodeByItem(itemElement);
-    },
+    }
 
-    _getNodeByElement: function(itemElement) {
+    _getNodeByElement(itemElement) {
         var $node = $(itemElement).closest("." + NODE_CLASS),
             key = commonUtils.denormalizeKey($node.attr(DATA_ITEM_ID));
 
         return this._dataAdapter.getNodeByKey(key);
-    },
+    }
 
-    _toggleExpandedState: function(itemElement, state, e) {
+    _toggleExpandedState(itemElement, state, e) {
         var node = this._getNode(itemElement),
             currentState = node.internalFields.expanded;
 
@@ -1043,9 +1036,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._updateExpandedItemsUI(node, state, e);
-    },
+    }
 
-    _createLoadIndicator: function($node) {
+    _createLoadIndicator($node) {
         var $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS),
             $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS);
 
@@ -1055,9 +1048,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._createComponent($("<div>").addClass(NODE_LOAD_INDICATOR_CLASS), LoadIndicator, {}).$element().appendTo($node);
         $icon.hide();
-    },
+    }
 
-    _renderToggleItemVisibilityIcon: function($node, node) {
+    _renderToggleItemVisibilityIcon($node, node) {
         var $icon = $("<div>")
             .addClass(TOGGLE_ITEM_VISIBILITY_CLASS)
             .appendTo($node);
@@ -1072,9 +1065,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._renderToggleItemVisibilityIconClick($icon, node);
-    },
+    }
 
-    _renderToggleItemVisibilityIconClick: function($icon, node) {
+    _renderToggleItemVisibilityIconClick($icon, node) {
         var that = this;
         var eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
 
@@ -1082,9 +1075,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         eventsEngine.on($icon, eventName, function(e) {
             that._toggleExpandedState(node.internalFields.key, undefined, e);
         });
-    },
+    }
 
-    _updateExpandedItemsUI: function(node, state, e) {
+    _updateExpandedItemsUI(node, state, e) {
         var $node = this._getNodeElement(node),
             isHiddenNode = !$node.length || state && $node.is(':hidden');
 
@@ -1116,9 +1109,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
         this._updateExpandedItem(node, state, e);
-    },
+    }
 
-    _loadNestedItemsWithUpdate: function(node, state, e) {
+    _loadNestedItemsWithUpdate(node, state, e) {
         var that = this,
             $node = this._getNodeElement(node);
 
@@ -1133,9 +1126,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             that._fireContentReadyAction();
             that._updateExpandedItem(actualNodeData, state, e);
         });
-    },
+    }
 
-    _loadNestedItems: function(node) {
+    _loadNestedItems(node) {
         var that = this;
 
         if(that._useCustomChildrenLoader()) {
@@ -1159,25 +1152,25 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 that._appendItems(newItems);
             }
         });
-    },
+    }
 
-    _areNodesExists: function(newItems, items) {
+    _areNodesExists(newItems, items) {
         var keyOfRootItem = this.keyOf(newItems[0]),
             fullData = this._dataAdapter.getFullData();
 
         return !!this._dataAdapter.getNodeByKey(keyOfRootItem, fullData);
-    },
+    }
 
-    _appendItems: function(newItems) {
+    _appendItems(newItems) {
         this.option().items = this.option("items").concat(newItems);
         this._initDataAdapter();
-    },
+    }
 
-    _updateExpandedItem: function(node, state, e) {
+    _updateExpandedItem(node, state, e) {
         this._animateNodeContainer(node, state, e);
-    },
+    }
 
-    _animateNodeContainer: function(node, state, e) {
+    _animateNodeContainer(node, state, e) {
         var $node = this._getNodeElement(node),
             $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS),
             nodeHeight;
@@ -1196,17 +1189,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             to: {
                 "maxHeight": state ? nodeHeight : 0
             },
-            complete: (function() {
+            complete: () => {
                 $nodeContainer.css("maxHeight", "none");
                 $nodeContainer.toggleClass(OPENED_NODE_CONTAINER_CLASS, state);
                 this.setAria("expanded", state, $node);
                 this._scrollableContainer.update();
                 this._fireExpandedStateUpdatedEvent(state, node, e);
-            }).bind(this)
+            }
         });
-    },
+    }
 
-    _fireExpandedStateUpdatedEvent: function(isExpanded, node, e) {
+    _fireExpandedStateUpdatedEvent(isExpanded, node, e) {
         var optionName = isExpanded ? "onItemExpanded" : "onItemCollapsed",
             target;
 
@@ -1220,9 +1213,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             target = this._getNodeElement(node);
             this._itemEventHandler(target, optionName, { event: e, node: this._dataAdapter.getPublicNode(node) });
         }
-    },
+    }
 
-    _normalizeIconState: function($node, hasNewItems) {
+    _normalizeIconState($node, hasNewItems) {
         var $loadIndicator = $node.find(".dx-loadindicator"),
             $icon;
 
@@ -1236,22 +1229,22 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         $node.find("." + TOGGLE_ITEM_VISIBILITY_CLASS).removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
         $node.addClass(IS_LEAF);
-    },
+    }
 
-    _emptyMessageContainer: function() {
+    _emptyMessageContainer() {
         return this._scrollableContainer ? this._scrollableContainer.content() : this.callBase();
-    },
+    }
 
-    _renderContent: function() {
+    _renderContent() {
         var items = this.option("items");
         if(items && items.length) {
             this._contentAlreadyRendered = true;
         }
 
         this.callBase();
-    },
+    }
 
-    _renderSelectAllItem: function($container) {
+    _renderSelectAllItem($container) {
         $container = $container || this.$element().find("." + NODE_CONTAINER_CLASS).first();
 
         this._$selectAllItem = $("<div>").addClass(SELECT_ALL_ITEM_CLASS);
@@ -1260,24 +1253,24 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
             text: this.option("selectAllText"),
-            onValueChanged: function(args) {
+            onValueChanged: (args) => {
                 this._toggleSelectAll(args);
                 this._fireSelectAllValueChanged(args.value);
-            }.bind(this)
+            }
         });
 
         this._toggleSelectedClass(this._$selectAllItem, value);
 
         $container.before(this._$selectAllItem);
-    },
+    }
 
-    _toggleSelectAll: function(args) {
+    _toggleSelectAll(args) {
         this._dataAdapter.toggleSelectAll(args.value);
         this._updateItemsUI();
         this._fireSelectionChanged();
-    },
+    }
 
-    _renderCheckBox: function($node, node) {
+    _renderCheckBox($node, node) {
         var $checkbox = $("<div>").appendTo($node);
 
         this._createComponent($checkbox, CheckBox, {
@@ -1286,13 +1279,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             focusStateEnabled: false,
             disabled: this._disabledGetter(node)
         });
-    },
+    }
 
-    _toggleSelectedClass: function($node, value) {
+    _toggleSelectedClass($node, value) {
         $node.toggleClass(SELECTED_ITEM_CLASS, !!value);
-    },
+    }
 
-    _toggleNodeDisabledState: function(node, state) {
+    _toggleNodeDisabledState(node, state) {
         var $node = this._getNodeElement(node),
             $item = $node.find("." + ITEM_CLASS).eq(0);
 
@@ -1305,9 +1298,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             checkbox.option("disabled", !!state);
         }
-    },
+    }
 
-    _itemOptionChanged: function(item, property, value) {
+    _itemOptionChanged(item, property, value) {
         var node = this._dataAdapter.getNodeByItem(item);
 
         switch(property) {
@@ -1315,9 +1308,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._toggleNodeDisabledState(node, value);
                 break;
         }
-    },
+    }
 
-    _changeCheckboxValue: function(e) {
+    _changeCheckboxValue(e) {
         var $node = $(e.element).parent("." + NODE_CLASS),
             $item = $node.children("." + ITEM_CLASS),
             item = this._getItemData($item),
@@ -1329,17 +1322,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._updateItemSelection(value, item, e.event);
-    },
+    }
 
-    _isSingleSelection: function() {
+    _isSingleSelection() {
         return this.option("selectionMode") === "single";
-    },
+    }
 
-    _isRecursiveSelection: function() {
+    _isRecursiveSelection() {
         return this.option("selectNodesRecursive") && this.option("selectionMode") !== "single";
-    },
+    }
 
-    _isLastSelectedBranch: function(publicNode, selectedNodesKeys, deep) {
+    _isLastSelectedBranch(publicNode, selectedNodesKeys, deep) {
         var keyIndex = selectedNodesKeys.indexOf(publicNode.key);
 
         if(keyIndex >= 0) {
@@ -1347,9 +1340,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(deep) {
-            each(publicNode.children, function(_, childNode) {
+            each(publicNode.children, (_, childNode) => {
                 this._isLastSelectedBranch(childNode, selectedNodesKeys, true);
-            }.bind(this));
+            });
         }
 
         if(publicNode.parent) {
@@ -1357,9 +1350,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         return selectedNodesKeys.length === 0;
-    },
+    }
 
-    _isLastRequired: function(node) {
+    _isLastRequired(node) {
         var selectionRequired = this.option("selectionRequired"),
             isSingleMode = this._isSingleSelection(),
             selectedNodesKeys = this.getSelectedNodesKeys();
@@ -1374,9 +1367,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return this._isLastSelectedBranch(node.internalFields.publicNode, selectedNodesKeys.slice(), true);
         }
 
-    },
+    }
 
-    _updateItemSelection: function(value, itemElement, dxEvent) {
+    _updateItemSelection(value, itemElement, dxEvent) {
         var that = this,
             node = that._getNode(itemElement);
 
@@ -1413,13 +1406,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         that._fireSelectionChanged();
-    },
+    }
 
-    _getCheckBoxInstance: function($node) {
+    _getCheckBoxInstance($node) {
         return $node.children(".dx-checkbox").dxCheckBox("instance");
-    },
+    }
 
-    _updateItemsUI: function() {
+    _updateItemsUI() {
         var that = this,
             cache = {};
 
@@ -1443,9 +1436,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox("instance").option("value", this._dataAdapter.isAllSelected());
         }
-    },
+    }
 
-    _updateParentsState: function(node, $node) {
+    _updateParentsState(node, $node) {
         var parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey);
 
         if(!$node) {
@@ -1464,37 +1457,37 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._updateParentsState(parentNode, $parentNode);
         }
 
-    },
+    }
 
-    _itemEventHandlerImpl: function(initiator, action, actionArgs) {
+    _itemEventHandlerImpl(initiator, action, actionArgs) {
         var $itemElement = $(initiator).closest("." + NODE_CLASS).children("." + ITEM_CLASS);
 
         return action(extend(this._extendActionArgs($itemElement), actionArgs));
-    },
+    }
 
-    _itemContextMenuHandler: function(e) {
+    _itemContextMenuHandler(e) {
         this._createEventHandler("onItemContextMenu", e);
-    },
+    }
 
-    _itemHoldHandler: function(e) {
+    _itemHoldHandler(e) {
         this._createEventHandler("onItemHold", e);
-    },
+    }
 
-    _createEventHandler: function(eventName, e) {
+    _createEventHandler(eventName, e) {
         var node = this._getNodeByElement(e.currentTarget);
 
         this._itemDXEventHandler(e, eventName, { node: this._dataAdapter.getPublicNode(node) });
-    },
+    }
 
-    _itemClass: function() {
+    _itemClass() {
         return ITEM_CLASS;
-    },
+    }
 
-    _itemDataKey: function() {
+    _itemDataKey() {
         return ITEM_DATA_KEY;
-    },
+    }
 
-    _attachClickEvent: function() {
+    _attachClickEvent() {
         var that = this;
         var clickSelector = "." + that._itemClass();
         var pointerDownSelector = "." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS;
@@ -1510,9 +1503,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         eventsEngine.on($itemContainer, pointerDownEvent, pointerDownSelector, function(e) {
             that._itemPointerDownHandler(e);
         });
-    },
+    }
 
-    _itemClickHandler: function(e, $item) {
+    _itemClickHandler(e, $item) {
         var itemData = this._getItemData($item),
             node = this._getNodeByElement($item);
 
@@ -1521,9 +1514,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(this.option("selectByClick") && !e.isDefaultPrevented()) {
             this._updateItemSelection(!node.internalFields.selected, itemData, e);
         }
-    },
+    }
 
-    _updateSelectionToFirstItem: function($items, startIndex) {
+    _updateSelectionToFirstItem($items, startIndex) {
         var itemIndex = startIndex;
 
         while(itemIndex >= 0) {
@@ -1531,9 +1524,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._updateItemSelection(true, $item.find("." + ITEM_CLASS).get(0));
             itemIndex--;
         }
-    },
+    }
 
-    _updateSelectionToLastItem: function($items, startIndex) {
+    _updateSelectionToLastItem($items, startIndex) {
         var itemIndex = startIndex,
             length = $items.length;
 
@@ -1542,9 +1535,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._updateItemSelection(true, $item.find("." + ITEM_CLASS).get(0));
             itemIndex++;
         }
-    },
+    }
 
-    _focusInHandler: function(e) {
+    _focusInHandler(e) {
         var that = this;
 
         that._updateFocusState(e, true);
@@ -1561,9 +1554,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         var $activeItem = that._getActiveItem();
         that.option("focusedElement", getPublicElement($activeItem.closest("." + NODE_CLASS)));
-    },
+    }
 
-    _setFocusedItem: function($target) {
+    _setFocusedItem($target) {
         if(!$target || !$target.length) {
             return;
         }
@@ -1573,9 +1566,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._scrollableContainer.scrollToElement($target.find("." + ITEM_CLASS).first());
-    },
+    }
 
-    _itemPointerDownHandler: function(e) {
+    _itemPointerDownHandler(e) {
         if(!this.option("focusStateEnabled")) {
             return;
         }
@@ -1588,15 +1581,15 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         var itemElement = $target.hasClass(DISABLED_STATE_CLASS) ? null : $target;
         this.option("focusedElement", getPublicElement(itemElement));
-    },
+    }
 
-    _findNonDisabledNodes: function($nodes) {
+    _findNonDisabledNodes($nodes) {
         return $nodes.not(function() {
             return $(this).children("." + ITEM_CLASS).hasClass(DISABLED_STATE_CLASS);
         });
-    },
+    }
 
-    _moveFocus: function(location, e) {
+    _moveFocus(location, e) {
         var FOCUS_UP = "up",
             FOCUS_DOWN = "down",
             FOCUS_FIRST = "first",
@@ -1659,15 +1652,15 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.callBase.apply(this, arguments);
                 return;
         }
-    },
+    }
 
-    _nodeElements: function() {
+    _nodeElements() {
         return this.$element()
             .find("." + NODE_CLASS)
             .not(":hidden");
-    },
+    }
 
-    _expandFocusedContainer: function() {
+    _expandFocusedContainer() {
         var $focusedNode = $(this.option("focusedElement"));
         if(!$focusedNode.length || $focusedNode.hasClass(IS_LEAF)) {
             return;
@@ -1683,17 +1676,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         var node = this._getNodeByElement($focusedNode.children("." + ITEM_CLASS));
         this._toggleExpandedState(node, true);
-    },
+    }
 
-    _getClosestNonDisabledNode: function($node) {
+    _getClosestNonDisabledNode($node) {
         do {
             $node = $node.parent().closest("." + NODE_CLASS);
         } while($node.children(".dx-treeview-item.dx-state-disabled").length);
 
         return $node;
-    },
+    }
 
-    _collapseFocusedContainer: function() {
+    _collapseFocusedContainer() {
         var $focusedNode = $(this.option("focusedElement"));
 
         if(!$focusedNode.length) {
@@ -1709,14 +1702,14 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             var collapsedNode = this._getClosestNonDisabledNode($focusedNode);
             collapsedNode.length && this.option("focusedElement", getPublicElement(collapsedNode));
         }
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.updateDimensions
     * @publicName updateDimensions()
     * @return Promise<void>
     */
-    updateDimensions: function() {
+    updateDimensions() {
         var that = this,
             deferred = new Deferred();
 
@@ -1729,7 +1722,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         return deferred.promise();
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.selectItem
@@ -1746,9 +1739,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName selectItem(key)
     * @param1 key:any
     */
-    selectItem: function(itemElement) {
+    selectItem(itemElement) {
         this._updateItemSelection(true, itemElement);
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.unselectItem
@@ -1765,9 +1758,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName unselectItem(key)
     * @param1 key:any
     */
-    unselectItem: function(itemElement) {
+    unselectItem(itemElement) {
         this._updateItemSelection(false, itemElement);
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.expandItem
@@ -1784,9 +1777,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName expandItem(key)
     * @param1 key:any
     */
-    expandItem: function(itemElement) {
+    expandItem(itemElement) {
         this._toggleExpandedState(itemElement, true);
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.collapseItem
@@ -1803,9 +1796,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName collapseItem(key)
     * @param1 key:any
     */
-    collapseItem: function(itemElement) {
+    collapseItem(itemElement) {
         this._toggleExpandedState(itemElement, false);
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.getNodes
@@ -1856,58 +1849,58 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
          * @type string
          */
 
-    getNodes: function() {
+    getNodes() {
         return this._dataAdapter.getTreeNodes();
-    },
+    }
 
-    getSelectedNodesKeys: function() {
+    getSelectedNodesKeys() {
         return this._dataAdapter.getSelectedNodesKeys();
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.selectAll
     * @publicName selectAll()
     */
-    selectAll: function() {
+    selectAll() {
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox("instance").option("value", true);
         } else {
             this._toggleSelectAll({ value: true });
         }
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.unselectAll
     * @publicName unselectAll()
     */
-    unselectAll: function() {
+    unselectAll() {
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox("instance").option("value", false);
         } else {
             this._toggleSelectAll({ value: false });
         }
-    },
+    }
 
     /**
     * @name dxTreeViewMethods.expandAll
     * @publicName expandAll()
     */
-    expandAll: function() {
-        each(this._dataAdapter.getData(), (function(_, node) {
+    expandAll() {
+        each(this._dataAdapter.getData(), (_, node) => {
             this._toggleExpandedState(node.internalFields.key, true);
-        }).bind(this));
-    },
+        });
+    }
 
     /**
      * @name dxTreeViewMethods.collapseAll
      * @publicName collapseAll()
      */
-    collapseAll: function() {
-        each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
+    collapseAll() {
+        each(this._dataAdapter.getExpandedNodesKeys(), (_, key) => {
             this._toggleExpandedState(key, false);
-        }).bind(this));
+        });
     }
 
-});
+}
 
 module.exports = TreeViewBase;

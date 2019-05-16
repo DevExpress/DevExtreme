@@ -6,7 +6,7 @@ import fx from "animation/fx";
 import { DataSource } from "data/data_source/data_source";
 import ArrayStore from "data/array_store";
 import CustomStore from "data/custom_store";
-import dblclickEvent from "events/dblclick";
+import dblclickEvent from "events/double_click";
 import TreeView from "ui/tree_view";
 
 import "common.css!";

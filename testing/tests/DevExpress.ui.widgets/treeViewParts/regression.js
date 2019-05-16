@@ -1,6 +1,6 @@
 /* global internals */
 
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.module("Regression");
 

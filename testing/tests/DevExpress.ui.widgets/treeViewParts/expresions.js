@@ -1,6 +1,6 @@
 /* global DATA, dataID, internals, initTree */
 
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.module("Custom item template via expressions");
 

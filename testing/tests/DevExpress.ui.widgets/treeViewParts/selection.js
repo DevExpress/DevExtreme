@@ -1,9 +1,9 @@
 /* global initTree */
 
-var $ = require("jquery"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+import $ from "jquery";
+import keyboardMock from "../../../helpers/keyboardMock.js";
 
-QUnit.module("selection common");
+QUnit.module("Selection common");
 
 QUnit.test("selection should work without checkboxes on init", function(assert) {
     var items = [{ text: "item 1", selected: true }, { text: "item 2" }],
@@ -199,7 +199,6 @@ QUnit.test("should not fire an error when item contains 'nodeType' field", funct
         assert.step("Test completed");
     }
 });
-
 
 QUnit.module("selection single");
 
