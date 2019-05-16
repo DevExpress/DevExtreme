@@ -176,9 +176,9 @@ QUnit.test("Header panel, all-day panel, date table should always take all work 
         allDayTableWidth = $element.find(".dx-scheduler-all-day-table").outerWidth(),
         dateTableWidth = $element.find(".dx-scheduler-date-table").outerWidth();
 
-    assert.roughEqual(headerPanelWidth, 896, 4, "Width is OK");
-    assert.roughEqual(allDayTableWidth, 896, 4, "Width is OK");
-    assert.roughEqual(dateTableWidth, 896, 4, "Width is OK");
+    assert.roughEqual(headerPanelWidth, 896, 5, "Width is OK");
+    assert.roughEqual(allDayTableWidth, 896, 5, "Width is OK");
+    assert.roughEqual(dateTableWidth, 896, 5, "Width is OK");
 });
 
 QUnit.test("Workspace tables width should not be less than element width", function(assert) {
