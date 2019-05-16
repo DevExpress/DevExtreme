@@ -351,7 +351,7 @@ QUnit.test("format should compare values which don't exist in segments", functio
     });
     assert.equal(uri, "View2/hi/1", "View2/hi/1");
 });
-QUnit.test("B236385 '\' symbol in route arguments", function(assert) {
+QUnit.test("B236385 '\\' symbol in route arguments", function(assert) {
     var router = new Router(),
         uri;
     router.register(":view/:item", { view: 'View1', item: undefined });

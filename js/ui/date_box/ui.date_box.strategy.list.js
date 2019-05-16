@@ -7,8 +7,7 @@ var $ = require("../../core/renderer"),
     isDate = require("../../core/utils/type").isDate,
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("./ui.date_utils"),
-    dateLocalization = require("../../localization/date"),
-    uiDateUtils = require("./ui.date_utils");
+    dateLocalization = require("../../localization/date");
 
 var BOUNDARY_VALUES = {
     "min": new Date(0, 0, 0, 0, 0),
@@ -238,21 +237,27 @@ var ListStrategy = DateBoxStrategy.inherit({
     _listItemClickHandler: function(e) {
         this.dateBox.option("opened", false);
 
-        var date = this.dateBox.option("value");
+        let date = this.dateBox.option("value");
+        const { itemData } = e;
+        const hours = itemData.getHours();
+        const minutes = itemData.getMinutes();
+        const seconds = itemData.getSeconds();
+        const year = itemData.getFullYear();
+        const month = itemData.getMonth();
+        const day = itemData.getDate();
 
         if(date) {
             date = new Date(date);
-        } else {
-            date = new Date();
-            uiDateUtils.normalizeTime(date);
-        }
 
-        date.setHours(e.itemData.getHours());
-        date.setMinutes(e.itemData.getMinutes());
-        date.setSeconds(e.itemData.getSeconds());
-        date.setFullYear(e.itemData.getFullYear());
-        date.setMonth(e.itemData.getMonth());
-        date.setDate(e.itemData.getDate());
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            date.setSeconds(seconds);
+            date.setFullYear(year);
+            date.setMonth(month);
+            date.setDate(day);
+        } else {
+            date = new Date(year, month, day, hours, minutes, 0, 0);
+        }
 
         this.dateBoxValue(date);
     },

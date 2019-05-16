@@ -600,7 +600,8 @@ QUnit.testStart(function() {
     QUnit.test("Add new item when timezone doesn't equal to the default value and set as string", function(assert) {
         this.clock.restore();
         var data = [],
-            deltaTz = getDeltaTz(4);
+            deltaTz = getDeltaTz(4),
+            daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
 
         this.createInstance({
             currentDate: new Date(2015, 1, 9),
@@ -610,8 +611,8 @@ QUnit.testStart(function() {
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17) });
 
-        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz), "Start date is OK");
-        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz), "End date is OK");
+        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz + daylightOffset), "Start date is OK");
+        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz + daylightOffset), "End date is OK");
     });
 
     QUnit.test("Update item", function(assert) {

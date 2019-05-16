@@ -1,6 +1,8 @@
+var $ = require("jquery");
 var eventsEngine = require("events/core/events_engine");
 var keyboardMock = require("../../helpers/keyboardMock.js");
 var registerEvent = require("events/core/event_registrator");
+var compareVersion = require("core/utils/version").compare;
 
 QUnit.module("base");
 
@@ -302,6 +304,49 @@ QUnit.test("Should not fire event when relatedTarget is children of a target", f
     eventsEngine.trigger(div, event);
 
     assert.equal(fired, 0);
+});
+
+QUnit.test("On/trigger/off event listeners", function(assert) {
+    if(compareVersion($.fn.jquery, [1], 1) === 0) {
+        assert.expect(0);
+        return;
+    }
+
+    var eventNames = ["mouseover", "mouseout", "pointerover", "pointerout"].concat(eventsEngine.forcePassiveFalseEventNames),
+        div = document.createElement("div"),
+        callbackIsCalled;
+
+    document.body.appendChild(div);
+
+    var addListener = sinon.spy(HTMLElement.prototype, "addEventListener");
+    var removeListener = sinon.spy(HTMLElement.prototype, "removeEventListener");
+
+    eventNames.forEach(function(eventName) {
+        addListener.reset();
+        removeListener.reset();
+        eventsEngine.on(div, eventName, function(e) {
+            callbackIsCalled = true;
+        });
+        assert.deepEqual(addListener.callCount, 1, eventName + ": addListener.callCount, 1");
+        if(eventsEngine.forcePassiveFalseEventNames.indexOf(eventName) > -1) {
+            assert.deepEqual(addListener.getCall(0).args[2].passive, false, eventName + ": passive, false");
+        } else {
+            assert.deepEqual(addListener.getCall(0).args[2], undefined, eventName + ": addListener.options is undefined");
+        }
+
+        callbackIsCalled = false;
+        eventsEngine.trigger(div, eventName);
+        assert.ok(callbackIsCalled, eventName + ": callbackIsCalled");
+
+        eventsEngine.off(div, eventName);
+        assert.deepEqual(removeListener.callCount, 1, eventName + ": removeListener.callCount, 1");
+        callbackIsCalled = false;
+        eventsEngine.trigger(div, eventName);
+        assert.ok(!callbackIsCalled, eventName + ": off.callbackIsCalled");
+    });
+
+    addListener.restore();
+    removeListener.restore();
 });
 
 QUnit.test("'on' signatures", function(assert) {

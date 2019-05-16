@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { DataSource } from "data/data_source/data_source";
 import { isRenderer } from "core/utils/type";
+import ajaxMock from "../../helpers/ajaxMock.js";
 import browser from "core/utils/browser";
 import config from "core/config";
 import dataQuery from "data/query";
@@ -12,6 +13,7 @@ import messageLocalization from "localization/message";
 import pointerMock from "../../helpers/pointerMock.js";
 import ArrayStore from "data/array_store";
 import CustomStore from "data/custom_store";
+import ODataStore from "data/odata/store";
 import TagBox from "ui/tag_box";
 
 import "common.css!";
@@ -2953,6 +2955,27 @@ QUnit.test("filter should be reset after the search value clearing (T385456)", f
 
     var $listItems = instance._list.$element().find(".dx-list-item");
     assert.equal($listItems.length, items.length, "list items count is correct");
+});
+
+QUnit.test("filtering operation should pass 'customQueryParams' to the data source (T683047)", (assert) => {
+    const done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata4.org(param='value')",
+        callback: ({ data }) => {
+            assert.deepEqual(data, { $filter: "this eq '1'" });
+            ajaxMock.clear();
+            done();
+        }
+    });
+
+    $("#tagBox").dxTagBox({
+        value: ["1"],
+        dataSource: new DataSource({
+            customQueryParams: { param: "value" },
+            store: new ODataStore({ version: 4, url: "odata4.org" })
+        })
+    });
 });
 
 QUnit.testInActiveWindow("input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)", function(assert) {

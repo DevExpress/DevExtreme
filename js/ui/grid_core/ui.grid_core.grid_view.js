@@ -214,6 +214,7 @@ var ResizingController = modules.ViewController.inherit({
             isColumnWidthsCorrected = false,
             resultWidths = [],
             focusedElement,
+            isFocusOutsideWindow,
             selectionRange,
             normalizeWidthsByExpandColumns = function() {
                 var expandColumnWidth;
@@ -281,10 +282,13 @@ var ResizingController = modules.ViewController.inherit({
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
                 if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
-                    if(browser.msie) {
-                        setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
-                    } else {
-                        restoreFocus(focusedElement, selectionRange);
+                    isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
+                    if(!isFocusOutsideWindow) {
+                        if(browser.msie) {
+                            setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
+                        } else {
+                            restoreFocus(focusedElement, selectionRange);
+                        }
                     }
                 }
             }
@@ -375,7 +379,7 @@ var ResizingController = modules.ViewController.inherit({
                 totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth < contentWidth) {
-                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns);
+                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths);
 
                 if(lastColumnIndex >= 0) {
                     resultWidths[lastColumnIndex] = "auto";

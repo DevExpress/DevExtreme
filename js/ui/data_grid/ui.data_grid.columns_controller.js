@@ -11,7 +11,7 @@ gridCore.registerModule("columns", {
             * @default true
             */
             commonColumnSettings: {
-	            allowExporting: true
+                allowExporting: true
             }
         });
     },

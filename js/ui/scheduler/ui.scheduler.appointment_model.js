@@ -232,6 +232,7 @@ var AppointmentModel = Class.inherit({
                 startDate = new Date(dataAccessors.getter.startDate(appointment)),
                 endDate = new Date(dataAccessors.getter.endDate(appointment)),
                 appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, startDayHour, endDayHour),
+                appointmentIsLong = that.appointmentTakesSeveralDays(appointment) || appointmentTakesAllDay,
                 isAllDay = dataAccessors.getter.allDay(appointment),
                 useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule),
                 recurrenceRule;
@@ -263,6 +264,11 @@ var AppointmentModel = Class.inherit({
                 endDateTimeZone = dataAccessors.getter.endDateTimeZone(appointment),
                 comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone),
                 comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
+
+            // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min
+            if(result && comparableEndDate < min && appointmentIsLong && !isAllDay && (!useRecurrence || (useRecurrence && !recurrenceRule))) {
+                result = false;
+            }
 
             if(result && startDayHour !== undefined) {
                 result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay);

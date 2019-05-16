@@ -135,8 +135,7 @@ var environment = {
                 }
             }, options);
             $.each(options || {}, function(k, v) {
-                if(k === "valueAxis" || k === "argumentAxis" || k === "series") {
-                } else if(k === "commonPaneSettings") {
+                if(k === "commonPaneSettings") {
                     that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
                         backgroundColor: "none",
                         border: {
@@ -148,7 +147,7 @@ var environment = {
                             dashStyle: "solid"
                         }
                     }, v));
-                } else {
+                } else if(k !== "valueAxis" && k !== "argumentAxis" && k !== "series") {
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }
             });

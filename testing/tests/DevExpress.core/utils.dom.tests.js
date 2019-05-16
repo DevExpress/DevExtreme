@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    domUtils = require("core/utils/dom"),
-    support = require("core/utils/support"),
-    styleUtils = require("core/utils/style"),
-    devices = require("core/devices"),
-    initMobileViewport = require("mobile/init_mobile_viewport"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import domUtils from "core/utils/dom";
+import support from "core/utils/support";
+import styleUtils from "core/utils/style";
+import devices from "core/devices";
+import initMobileViewport from "mobile/init_mobile_viewport";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
 QUnit.module("createMarkup");
 

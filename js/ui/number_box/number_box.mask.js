@@ -164,18 +164,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(e);
         }
 
-        var text = this._getInputVal(),
+        var normalizedText = this._getInputVal(),
             caret = this._caret();
 
         var enteredChar = this._lastKey === MINUS ? "" : this._lastKey,
-            newValue = this._tryParse(text, caret, enteredChar);
+            newValue = this._tryParse(normalizedText, caret, enteredChar);
 
         if(newValue === undefined) {
             if(this._lastKey !== MINUS) {
                 e.originalEvent.preventDefault();
             }
 
-            if(this._shouldMoveCaret(text, caret)) {
+            if(this._shouldMoveCaret(normalizedText, caret)) {
                 this._moveCaret(1);
             }
         } else {
@@ -199,14 +199,26 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.key;
 
-        if(caret.start === caret.end) {
-            this._isDeleteKey(e.key) ? end++ : start--;
+        var isDeleteKey = this._isDeleteKey(e.key);
+        var isBackspaceKey = !isDeleteKey;
+
+        if(start === end) {
+            var caretPosition = start;
+            var canDelete = isBackspaceKey && caretPosition > 0 || isDeleteKey && caretPosition < text.length;
+
+            if(canDelete) {
+                isDeleteKey && end++;
+                isBackspaceKey && start--;
+            } else {
+                e.preventDefault();
+                return;
+            }
         }
 
         var char = text.slice(start, end);
 
         if(this._isStub(char)) {
-            this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+            this._moveCaret(isDeleteKey ? 1 : -1);
             if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
                 this._revertSign(e);
                 this._setTextByParsedValue();
@@ -219,7 +231,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(char === decimalSeparator) {
             var decimalSeparatorIndex = text.indexOf(decimalSeparator);
             if(this._isNonStubAfter(decimalSeparatorIndex + 1)) {
-                this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+                this._moveCaret(isDeleteKey ? 1 : -1);
                 e.preventDefault();
             }
             return;
@@ -275,7 +287,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return format;
         } else {
             return getLDMLFormat(function(value) {
-                return this._format(value, format);
+                var text = this._format(value, format);
+                return number.convertDigits(text, true);
             }.bind(this));
         }
     },
@@ -293,7 +306,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var format = this._getFormatForSign(text),
             thousandsSeparator = number.getThousandsSeparator(),
             stubs = format.replace(/[#0.,]/g, ""),
-            regExp = new RegExp("[\-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
+            regExp = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
 
         return text.replace(regExp, "");
     },
@@ -384,10 +397,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _setInputText: function(text) {
-        var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern()),
-            newValue = number.convertDigits(text);
+        var normalizedText = number.convertDigits(text, true),
+            newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), normalizedText, this._caret(), this._getFormatPattern());
 
-        this._input().val(newValue);
+        this._input().val(text);
         this._toggleEmptinessEventHandler();
         this._formattedValue = text;
 
@@ -566,24 +579,24 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _formatValue: function() {
-        var text = this._getInputVal(),
+        var normalizedText = this._getInputVal(),
             caret = this._caret(),
-            textWithoutMinus = this._removeMinusFromText(text, caret),
-            wasMinusRemoved = textWithoutMinus !== text;
+            textWithoutMinus = this._removeMinusFromText(normalizedText, caret),
+            wasMinusRemoved = textWithoutMinus !== normalizedText;
 
-        text = textWithoutMinus;
+        normalizedText = textWithoutMinus;
 
         if(this._isValueIncomplete(textWithoutMinus)) {
-            this._formattedValue = text;
+            this._formattedValue = normalizedText;
             if(wasMinusRemoved) {
                 this._setTextByParsedValue();
             }
             return;
         }
 
-        var textWasChanged = this._formattedValue !== text;
+        var textWasChanged = number.convertDigits(this._formattedValue, true) !== normalizedText;
         if(textWasChanged) {
-            var value = this._tryParse(text, caret, "");
+            var value = this._tryParse(normalizedText, caret, "");
             if(typeUtils.isDefined(value)) {
                 this._parsedValue = value;
             }

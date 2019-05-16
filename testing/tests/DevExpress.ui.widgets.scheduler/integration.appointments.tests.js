@@ -1,5 +1,4 @@
-var $ = require("jquery"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+var $ = require("jquery");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -12,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
+var noop = require("core/utils/common").noop,
     errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     dateLocalization = require("localization/date"),
@@ -4856,24 +4854,81 @@ QUnit.test("Rival appointments should have right position on timeline month view
     });
 });
 
-QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
+QUnit.test("Rival long appointments should have right position on timeline month view", function(assert) {
+    var data = [{
+        "id": "1",
+        "text": "Long event",
+        "startDate": new Date(2018, 11, 1, 9, 0),
+        "endDate": new Date(2018, 11, 5, 10, 30)
+    },
+    {
+        "id": "2",
+        "text": "Some event",
+        "startDate": new Date(2018, 11, 4, 9, 0),
+        "endDate": new Date(2018, 11, 4, 10, 29),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 11, 3),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    var $secondAppointment = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(1);
+
+    assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
+});
+
+QUnit.test("Long appointment part should not be rendered on timeline month view (T678380)", function(assert) {
     var appointment = {
-        startDate: new Date(2016, 1, 25, 8, 0),
-        endDate: new Date(2016, 2, 1, 8, 0)
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
     };
 
     this.createInstance({
-        currentDate: new Date(2016, 2, 1),
+        currentDate: new Date(2019, 3, 2),
+        views: ["timelineMonth"],
+        recurrenceRuleExpr: null,
         currentView: "timelineMonth",
         startDayHour: 8,
         firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
         dataSource: [appointment]
     });
 
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).get(0),
-        $cell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0);
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
 
-    assert.roughEqual($appointment.getBoundingClientRect().width, $cell.getBoundingClientRect().width, 1.1, "appointment-part width is correct");
+    assert.equal($appointments.length, 0, "appointment-part was not rendered");
+});
+
+QUnit.test("Long appointment part should not be rendered on timeline workWeek view (T678380)", function(assert) {
+    var appointment = {
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2019, 3, 2),
+        currentView: "timelineWorkWeek",
+        views: ["timelineWorkWeek"],
+        recurrenceRuleExpr: null,
+        startDayHour: 8,
+        firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
+        dataSource: [appointment]
+    });
+
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 0, "appointment-part was not rendered");
 });
 
 QUnit.test("Appointment should have right width on timeline week view", function(assert) {

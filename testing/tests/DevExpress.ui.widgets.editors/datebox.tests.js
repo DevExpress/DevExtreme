@@ -176,6 +176,16 @@ QUnit.test("T204185 - dxDateBox input should be editable when pickerType is 'cal
     assert.ok(!$input.prop("readOnly"), "correct readOnly value");
 });
 
+QUnit.test("readonly property should not be applied to the native picker", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            pickerType: "native",
+            acceptCustomValue: false
+        }),
+        $input = $dateBox.find(".dx-texteditor-input");
+
+    assert.ok(!$input.prop("readOnly"), "correct readOnly value");
+});
+
 QUnit.test("T204179 - dxDateBox should not render dropDownButton only for generic device when pickerType is 'native'", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
             pickerType: "native"
@@ -1859,7 +1869,7 @@ QUnit.test("dateBox should not reposition the calendar icon in RTL mode", functi
     assert.strictEqual(iconRepositionCount, 0);
 });
 
-QUnit.test("dateBox must apply the wrapper class with appropriate picker typ\ to the drop-down overlay wrapper", function(assert) {
+QUnit.test("dateBox must apply the wrapper class with appropriate picker type to the drop-down overlay wrapper", function(assert) {
     var dateBox = this.fixture.dateBox;
     dateBox.open();
     assert.ok(this.fixture.dateBox._popup._wrapper().hasClass(DATEBOX_WRAPPER_CLASS + "-" + dateBox.option("pickerType")));
@@ -3551,6 +3561,58 @@ QUnit.test("validation should be correct when max value is chosen (T266206)", fu
     assert.ok(dateBox.option("isValid"), "datebox is valid");
 });
 
+QUnit.test("datebox should create validation error if user set isValid = false", function(assert) {
+    var dateBox = $("#widthRootStyle").dxDateBox({
+        type: "datetime",
+        isValid: false,
+        value: null
+    }).dxDateBox("instance");
+
+    assert.notOk(dateBox.option("isValid"), "on init");
+
+    dateBox.option("value", new Date(2018, 1, 1));
+    assert.ok(dateBox.option("isValid"), "valid after valid value is setted");
+
+    dateBox.option("isValid", false);
+    assert.notOk(dateBox.option("isValid"), "set isValid = false by API");
+});
+
+QUnit.test("datebox should be invalid after out of range value was setted", function(assert) {
+    var dateBox = $("#widthRootStyle").dxDateBox({
+        type: "datetime",
+        min: new Date(2019, 1, 1),
+        value: null
+    }).dxDateBox("instance");
+
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+
+    dateBox.option("value", new Date(2018, 0, 1));
+    assert.notOk(dateBox.option("isValid"), "widget is invalid");
+
+    dateBox.option("value", new Date(2019, 1, 2));
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+});
+
+QUnit.test("datebox should change validation state if value was changed by keyboard", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+        type: "date",
+        value: null,
+        pickerType: "calendar"
+    }).dxValidator({
+        validationRules: [{
+            type: "required"
+        }]
+    });
+    var dateBox = $dateBox.dxDateBox("instance");
+    var keyboard = keyboardMock($dateBox.find("." + TEXTEDITOR_INPUT_CLASS));
+
+    keyboard
+        .type("10/10/2014")
+        .change();
+
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+});
+
 QUnit.test("widget is still valid after drop down is opened", function(assert) {
     var startDate = new Date(2015, 1, 1, 8, 12);
 
@@ -3579,7 +3641,7 @@ QUnit.test("widget is still valid after drop down is opened", function(assert) {
     assert.ok(dateBox.option("isValid"), "value is valid too");
 });
 
-QUnit.test("datebox with 'date' type should ignore time in min\max options", function(assert) {
+QUnit.test("datebox with 'date' type should ignore time in min/max options", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         value: new Date(2015, 0, 31, 10),
         focusStateEnabled: true,

@@ -4,7 +4,7 @@ QUnit.module("Lazy rendering");
 
 QUnit.test("Render treeView with special symbols in id", function(assert) {
     var $treeView = initTree({
-            items: [{ id: "!/#$%&'()*+,./:;<=>?@[\]^`{|}~", text: "Item 1" }]
+            items: [{ id: "!/#$%&'()*+,./:;<=>?@[\\]^`{|}~", text: "Item 1" }]
         }),
         $item = $treeView.find("." + internals.NODE_CLASS),
         item = $treeView.dxTreeView("option", "items")[0];

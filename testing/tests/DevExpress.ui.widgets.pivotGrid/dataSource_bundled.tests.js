@@ -22,8 +22,6 @@ function createDataSource(options) {
     return dataSource;
 }
 
-var executeAsyncMock = DevExpress.testing.executeAsyncMock;
-
 function prepareFields(fields) {
     $.each(fields, function(index, field) {
         delete field.index;

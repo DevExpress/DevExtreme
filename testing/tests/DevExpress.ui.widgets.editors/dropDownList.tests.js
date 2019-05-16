@@ -1,19 +1,22 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    devices = require("core/devices"),
-    Template = require("ui/widget/jquery.template"),
-    Guid = require("core/guid"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    browser = require("core/utils/browser"),
-    fx = require("animation/fx"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import devices from "core/devices";
+import Template from "ui/widget/jquery.template";
+import Guid from "core/guid";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import browser from "core/utils/browser";
+import fx from "animation/fx";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import ajaxMock from "../../helpers/ajaxMock.js";
 
-require("ui/drop_down_editor/ui.drop_down_list");
+import "ui/drop_down_editor/ui.drop_down_list";
+
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -959,9 +962,6 @@ QUnit.test("skip gesture event class attach only when popup is opened", function
 });
 
 QUnit.test("After load new page scrollTop should not be changed", function(assert) {
-    require("common.css!");
-    require("generic_light.css!");
-
     this.clock.restore();
 
     var data = [],
@@ -1007,9 +1007,6 @@ QUnit.testInActiveWindow("After search and load new page scrollTop should not be
         assert.ok(true, "test does not actual for IE");
         return;
     }
-
-    require("common.css!");
-    require("generic_light.css!");
 
     this.clock.restore();
 
@@ -1070,6 +1067,20 @@ QUnit.test("popup should be configured with templatesRenderAsynchronously=false 
     var popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
 
     assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
+});
+
+QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", (assert) => {
+    const data = ["item-1"];
+
+    $("#dropDownList").dxDropDownList({
+        dataSource: new DataSource(data),
+        value: data[0],
+        opened: true
+    });
+
+    const popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
+
+    assert.strictEqual(popup.option("autoResizeEnabled"), false, "autoResizeEnabled should have false value");
 });
 
 

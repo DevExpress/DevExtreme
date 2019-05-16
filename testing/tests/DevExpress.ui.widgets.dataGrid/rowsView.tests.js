@@ -668,7 +668,7 @@ QUnit.test('Highlight searchText for a cell template (T656969)', function(assert
     assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 2');
 });
 function getNormalizeMarkup($element) {
-    var quoteRE = new RegExp('\"', 'g'),
+    var quoteRE = new RegExp('"', 'g'),
         spanRE = new RegExp('span', 'gi');
     return $element.html().replace(quoteRE, '').replace(spanRE, "span");
 }
@@ -6585,7 +6585,7 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
-    if(browser.msie && browser.version === "18.17763") {
+    if(browser.msie && browser.version === "18.18362") {
         assert.ok(true);
         return;
     }
