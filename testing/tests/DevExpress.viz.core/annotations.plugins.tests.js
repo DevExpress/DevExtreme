@@ -6,6 +6,7 @@ import vizMocks from "../../helpers/vizMocks.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import eventsEngine from "events/core/events_engine";
 import { getDocument } from "core/dom_adapter";
+import devices from "core/devices";
 
 import "viz/chart";
 
@@ -863,31 +864,31 @@ QUnit.module("Tooltip", {
     });
 
     QUnit.test("Hide tooltip on container scroll", function(assert) {
-        const customizeTooltip = sinon.spy();
-        const chart = this.createChart({
-            commonAnnotationSettings: {
-                customizeTooltip
-            }
-        });
+        var originalPlatform = devices.real().platform;
 
-        const pointer = pointerMock(chart._annotationsGroup.element).start();
-        const rootPointer = pointerMock(chart._renderer.root.element).start();
+        try {
+            devices.real({ platform: "generic" });
+            const chart = this.createChart();
 
-        chart.hideTooltip = sinon.spy();
-        chart.clearHover = sinon.spy();
+            const pointer = pointerMock(chart._annotationsGroup.element).start();
 
-        pointer.start({ x: 30, y: 30 }).down().up();
-        rootPointer.start().down(40, 40);
+            chart.hideTooltip = sinon.spy();
+            chart.clearHover = sinon.spy();
 
-        eventsEngine.trigger($("#qunit-fixture"), "scroll");
+            pointer.start({ x: 30, y: 30 }).down().up();
 
-        const tooltip = this.tooltip;
+            eventsEngine.trigger($("#qunit-fixture"), "scroll");
 
-        assert.equal(tooltip.show.callCount, 1);
-        assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 30, y: 30 });
+            const tooltip = this.tooltip;
 
-        assert.equal(tooltip.hide.callCount, 1);
-        assert.ok(tooltip.hide.getCall(0).calledAfter(tooltip.show.getCall(0)));
+            assert.equal(tooltip.show.callCount, 1);
+            assert.deepEqual(tooltip.show.getCall(0).args[1], { x: 30, y: 30 });
+
+            assert.equal(tooltip.hide.callCount, 1);
+            assert.ok(tooltip.hide.getCall(0).calledAfter(tooltip.show.getCall(0)));
+        } finally {
+            devices.real({ platform: originalPlatform });
+        }
     });
 
     QUnit.test("Do not show tooltip if it is disabled", function(assert) {
