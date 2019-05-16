@@ -11,6 +11,7 @@ import "../color_box";
 import "../check_box";
 
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
+const SIZING_FORMAT_CLASS_PREFIX = "dx-format-";
 const TOOLBAR_CLASS = "dx-diagram-toolbar";
 const WIDGET_COMMANDS = [
     {
@@ -20,6 +21,8 @@ const WIDGET_COMMANDS = [
         text: "Properties",
     }
 ];
+const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";
+const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-diagram-toolbar-menu-separator";
 
 class DiagramToolbar extends Widget {
     _init() {
@@ -48,6 +51,7 @@ class DiagramToolbar extends Widget {
 
     _prepareToolbarItems(items, location, actionHandler) {
         return items.map(item => extend(true,
+            { location: location, locateInMenu: "auto" },
             this._createItem(item, location, actionHandler),
             this._createItemOptions(item),
             this._createItemActionOptions(item, actionHandler)
@@ -55,11 +59,21 @@ class DiagramToolbar extends Widget {
     }
 
     _createItem(item, location, actionHandler) {
+        if(item.widget === "separator") {
+            return {
+                template: (data, index, element) => {
+                    $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
+                },
+                menuItemTemplate: (data, index, element) => {
+                    $(element).addClass(TOOLBAR_MENU_SEPARATOR_CLASS);
+                }
+            };
+        }
         return {
             widget: item.widget || "dxButton",
-            location: location,
-            locateInMenu: "auto",
+            cssClass: item.sizing && (SIZING_FORMAT_CLASS_PREFIX + item.sizing),
             options: {
+                stylingMode: "text",
                 text: item.text,
                 hint: item.hint,
                 icon: item.icon,
@@ -72,9 +86,16 @@ class DiagramToolbar extends Widget {
         if(widget === "dxSelectBox") {
             return {
                 options: {
+                    stylingMode: "filled",
                     items,
                     valueExpr,
                     displayExpr
+                }
+            };
+        } else if(widget === "dxColorBox") {
+            return {
+                options: {
+                    stylingMode: "filled"
                 }
             };
         } else if(!widget || widget === "dxButton") {
