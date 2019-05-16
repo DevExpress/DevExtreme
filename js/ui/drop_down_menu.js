@@ -276,7 +276,6 @@ var DropDownMenu = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
         this._defaultTemplates["content"] = new ChildDefaultTemplate("content", this);
     },
 
@@ -415,7 +414,7 @@ var DropDownMenu = Widget.inherit({
             pageLoadMode: "scrollBottom",
             indicateLoading: false,
             noDataText: "",
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            itemTemplate: this.option("itemTemplate"),
             onItemClick: (function(e) {
                 if(this.option("closeOnClick")) {
                     this.option("opened", false);
