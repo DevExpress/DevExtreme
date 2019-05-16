@@ -1,3 +1,4 @@
+var fs = require('fs');
 var gulp = require('gulp');
 var file = require('gulp-file');
 var concat = require('gulp-concat');
@@ -82,11 +83,11 @@ gulp.task('ts-compilation', function() {
 
 gulp.task('ts-up-to-date', function() {
 
-    var diff = shell.exec(`git diff ${TS_PATH}`, {
-        silent: true
-    }).trim();
+    const current = fs.readFileSync(TS_PATH).toString();
+    shell.exec(`npm run update-ts`);
+    const generated = fs.readFileSync(TS_PATH).toString();
 
-    if(diff) {
+    if(current !== generated) {
         console.log("dx.all.d.ts is outdated");
         shell.exit(1);
     }
