@@ -703,7 +703,7 @@ exports.imageCreator = {
 };
 
 exports.getData = function(data, options, callback) {
-    exports.imageCreator.getData(data, options).then(callback);
+    return exports.imageCreator.getData(data, options).then(callback);
 };
 
 exports.testFormats = function(formats) {

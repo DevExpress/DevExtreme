@@ -328,7 +328,7 @@ QUnit.module("Svg to image to canvas", {
 
 QUnit.test("toDataURL ImageQuality", function(assert) {
     var done = assert.async(),
-        imageBlob = imageCreator.getData(testingMarkupStart + testingMarkupEnd, { format: "png" });
+        imageBlob = exporter.image.getData(testingMarkupStart + testingMarkupEnd, { format: "png" });
 
     assert.expect(2);
     $.when(imageBlob).done(function() {
