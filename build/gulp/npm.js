@@ -63,7 +63,7 @@ var addDefaultExport = lazyPipe().pipe(function() {
     });
 });
 
-gulp.task('npm-sources', ['npm-dts-generator'], function() {
+gulp.task('npm-sources', ['npm-ts-modules-generator'], function() {
     return merge(
 
         gulp.src(TRANSPILED_GLOBS)
@@ -99,7 +99,7 @@ var widgetNameByPath = require("./ts").widgetNameByPath;
 var generateJQueryAugmentation = require("./ts").generateJQueryAugmentation;
 var getAugmentationOptionsPath = require("./ts").getAugmentationOptionsPath;
 
-gulp.task('npm-dts-generator', ['ts-sources'], function() {
+gulp.task('npm-ts-modules-generator', ['ts-sources'], function() {
     var tsModules = MODULES.map(function(moduleMeta) {
         var relPath = path.relative(path.dirname(moduleMeta.name), 'bundles/dx.all').replace(/\\/g, '/');
         if(!relPath.startsWith('../')) relPath = './' + relPath;
@@ -168,7 +168,7 @@ gulp.task('npm-dts-generator', ['ts-sources'], function() {
     );
 });
 
-gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
+gulp.task('npm-ts-modules-check', ['npm-ts-modules-generator'], function() {
     var content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
@@ -205,6 +205,6 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
         }, ts.reporter.fullReporter()));
 });
 
-gulp.task('npm-check', ['npm-dts-check']);
+gulp.task('npm-check', ['npm-ts-modules-check']);
 
 gulp.task('npm', ['npm-sources', 'npm-check']);

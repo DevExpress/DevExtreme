@@ -14,7 +14,8 @@ function run_lint {
 
 function run_ts {
     npm i
-    npx gulp ts-check npm-dts-check ts-up-to-date ts-compilation
+
+    npx gulp ts-up-to-date ts-compilation-check ts-jquery-check npm-ts-modules-check
 }
 
 function run_test {

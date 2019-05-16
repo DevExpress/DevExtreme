@@ -47,7 +47,7 @@ gulp.task('ts-sources', function() {
         .pipe(gulp.dest(OUTPUT_DIR));
 });
 
-gulp.task('ts-check', ['ts-sources'], function() {
+gulp.task('ts-jquery-check', ['ts-sources'], function() {
     var content = `/// <reference path="${TS_PATH}" />\n`;
 
     content += MODULES
@@ -68,13 +68,14 @@ gulp.task('ts-check', ['ts-sources'], function() {
             }).join('');
         }).join('\n');
 
+
     return file('artifacts/globals.ts', content, { src: true })
         .pipe(ts({
             noEmitOnError: true
         }, ts.reporter.fullReporter()));
 });
 
-gulp.task('ts-compilation', function() {
+gulp.task('ts-compilation-check', function() {
     return gulp.src(TS_PATH)
         .pipe(ts({
             noEmitOnError: true
@@ -93,4 +94,4 @@ gulp.task('ts-up-to-date', function() {
     }
 });
 
-gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-check', 'ts-up-to-date', 'ts-compilation' ]);
+gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-up-to-date', 'ts-compilation-check' ]);
