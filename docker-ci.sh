@@ -17,7 +17,7 @@ function run_ts {
 
     cp ./ts/dx.all.d.ts ./ts/dx.all.d.ts.current
     npm run update-ts
-    difference=$(diff ./ts/dx.all.d.ts.current ./ts/dx.all.d.ts -U 5 | sed '2d') || true
+    difference=$(diff ./ts/dx.all.d.ts.current ./ts/dx.all.d.ts -U 5 | sed '1,2d') || true
 
     if [ -n "${difference}" ]; then
         echo "FAIL: ./ts/dx.all.d.ts is outdated:"
