@@ -1,8 +1,6 @@
-var fs = require('fs');
 var gulp = require('gulp');
 var file = require('gulp-file');
 var concat = require('gulp-concat');
-var shell = require("shelljs");
 var ts = require('gulp-typescript');
 
 var headerPipes = require('./header-pipes.js');
@@ -82,16 +80,4 @@ gulp.task('ts-compilation-check', function() {
         }, ts.reporter.fullReporter()));
 });
 
-gulp.task('ts-up-to-date', function() {
-
-    const current = fs.readFileSync(TS_PATH).toString();
-    shell.exec(`npm run update-ts`);
-    const generated = fs.readFileSync(TS_PATH).toString();
-
-    if(current !== generated) {
-        console.error("dx.all.d.ts is outdated");
-        shell.exit(1);
-    }
-});
-
-gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-up-to-date', 'ts-compilation-check' ]);
+gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-compilation-check' ]);

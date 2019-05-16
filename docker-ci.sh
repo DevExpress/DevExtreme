@@ -15,7 +15,19 @@ function run_lint {
 function run_ts {
     npm i
 
-    npx gulp ts-up-to-date ts-compilation-check ts-jquery-check npm-ts-modules-check
+    cp ./ts/dx.all.d.ts ./ts/dx.all.d.ts.current
+    npm run update-ts
+    difference=$(diff ./ts/dx.all.d.ts ./ts/dx.all.d.ts.current -U 5)
+
+    if [ -n "${difference}" ]; then
+        echo "./ts/dx.all.d.ts is outdated:"
+        echo "${difference}"
+        exit 1
+    else
+        echo "./ts/dx.all.d.ts is up-to-date"
+    fi
+
+    npx gulp ts-compilation-check ts-jquery-check npm-ts-modules-check
 }
 
 function run_test {
