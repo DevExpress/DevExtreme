@@ -118,7 +118,7 @@ exports.plugin = {
             that.option("loadingIndicator", { show: state });
             that._skipLoadingIndicatorOptions = false;
             if(state) {
-                that._hideTooltip && that._hideTooltip();
+                that._stopCurrentHandling();
             }
         }
     },
