@@ -142,66 +142,66 @@ export const createTestFileSystem = () => {
     return [
         {
             name: "Folder 1",
-            isFolder: true,
-            children: [
+            isDirectory: true,
+            items: [
                 {
                     name: "Folder 1.1",
-                    isFolder: true,
-                    children: [
+                    isDirectory: true,
+                    items: [
                         {
                             name: "File 1-1.txt",
-                            isFolder: false
+                            isDirectory: false
                         },
                         {
                             name: "File 1-2.txt",
-                            isFolder: false
+                            isDirectory: false
                         },
                         {
                             name: "File 1-3.png",
-                            isFolder: false
+                            isDirectory: false
                         },
                         {
                             name: "File 1-4.jpg",
-                            isFolder: false
+                            isDirectory: false
                         }]
                 },
                 {
                     name: "Folder 1.2",
-                    isFolder: true
+                    isDirectory: true
                 },
                 {
                     name: "File 1-1.txt",
-                    isFolder: false
+                    isDirectory: false
                 },
                 {
                     name: "File 1-2.jpg",
-                    isFolder: false
+                    isDirectory: false
                 }]
         },
         {
             name: "Folder 2",
-            isFolder: true,
-            children: [
+            isDirectory: true,
+            items: [
                 {
                     name: "File 2-1.jpg",
-                    isFolder: false
+                    isDirectory: false
                 }]
         },
         {
             name: "Folder 3",
-            isFolder: true
+            isDirectory: true
         },
         {
             name: "File 1.txt",
-            isFolder: false
+            isDirectory: false
         },
         {
             name: "File 2.jpg",
-            isFolder: false
+            isDirectory: false
         },
         {
             name: "File 3.xml",
-            isFolder: false
+            isDirectory: false
         }
     ];
 };

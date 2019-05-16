@@ -9,21 +9,24 @@ import { deserializeDate } from "core/utils/date_serialization";
 const { test } = QUnit;
 
 const createFileManagerItem = (parentPath, dataObj) => {
-    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isFolder);
+    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
     item.dateModified = deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;
+    if(dataObj.isDirectory) {
+        item.hasSubDirs = true;
+    }
     return item;
 };
 
 const FOLDER_COUNT = 3;
 
 const itemData = [
-    { id: "Root\\Files\\Documents", name: "Documents", dateModified: "2019-02-14T07:44:15.4265625Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Images", name: "Images", dateModified: "2019-02-14T07:44:15.4885105Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Music", name: "Music", dateModified: "2019-02-14T07:44:15.4964648Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Description.rtf", name: "Description.rtf", dateModified: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 },
-    { id: "Root\\Files\\Article.txt", name: "Article.txt", dateModified: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 }
+    { id: "Root\\Files\\Documents", name: "Documents", dateModified: "2019-02-14T07:44:15.4265625Z", isDirectory: true, size: 0 },
+    { id: "Root\\Files\\Images", name: "Images", dateModified: "2019-02-14T07:44:15.4885105Z", isDirectory: true, size: 0 },
+    { id: "Root\\Files\\Music", name: "Music", dateModified: "2019-02-14T07:44:15.4964648Z", isDirectory: true, size: 0 },
+    { id: "Root\\Files\\Description.rtf", name: "Description.rtf", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1 },
+    { id: "Root\\Files\\Article.txt", name: "Article.txt", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1 }
 ];
 
 const fileManagerItems = [
@@ -63,7 +66,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             responseText: {
                 result: itemData,
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "GET")
         });
 
         this.provider.getFolders("Root/Files")
@@ -81,7 +85,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             responseText: {
                 success: true,
                 result: itemData
-            }
+            },
+            callback: request => assert.equal(request.method, "GET")
         });
 
         this.provider.getFiles("Root/Files")
@@ -98,7 +103,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             url: this.options.endpointUrl + "?command=CreateDir&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const parentFolder = new FileManagerItem("Root/Files", "Documents");
@@ -116,7 +122,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             url: this.options.endpointUrl + "?command=Rename&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -134,7 +141,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             url: this.options.endpointUrl + "?command=Remove&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -153,7 +161,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             url: this.options.endpointUrl + "?command=Move&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -170,10 +179,11 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.endpointUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%22%7D",
+            url: this.options.endpointUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");

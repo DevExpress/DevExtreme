@@ -42,6 +42,7 @@ class FileManagerFilesTreeView extends Widget {
             rootValue: "",
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
             itemTemplate: this._createFilesTreeViewItemTemplate.bind(this),
+            hasItemsExpr: "dataItem.hasSubDirs",
             onItemClick: this._onFilesTreeViewItemClick.bind(this),
             onItemExpanded: ({ itemData }) => this._model.changeItemExpandState(itemData, true),
             onItemCollapsed: ({ itemData }) => this._model.changeItemExpandState(itemData, false),
@@ -304,10 +305,12 @@ class FilesTreeViewModel {
         item.expanded = expanded;
     }
 
-    getItemByDataItem(dataItem) {
+    getItemByDataItem(dataItem, updateIfExists) {
         let result = this._itemMap[dataItem.relativeName];
         if(!result) {
             result = this._createItem(dataItem);
+        } else if(updateIfExists) {
+            result.dataItem = dataItem;
         }
         return result;
     }
@@ -373,7 +376,7 @@ class FilesTreeViewModel {
             .then(dataItems => {
                 item.children = [];
                 dataItems.forEach(dataItem => {
-                    const childItem = this.getItemByDataItem(dataItem);
+                    const childItem = this.getItemByDataItem(dataItem, true);
                     item.children.push(childItem);
                     this._onItemLoaded(childItem);
                 });

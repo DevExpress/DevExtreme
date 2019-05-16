@@ -1938,6 +1938,70 @@ QUnit.test("Apply partial dataController with empty data. Update rows", function
     ]);
 });
 
+// T737140
+QUnit.test("Apply partial dataController by rows after column collapsing", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" }, { area: "row" },
+                { area: "column" }, { area: "column" },
+                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [
+                { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
+                { value: 'C', index: 3 }
+            ],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    });
+
+    dataController.collapseHeaderItem('column', ['A']);
+
+    dataController.applyPartialDataSource('row', ['Piter'], {
+        columns: [
+            { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
+            { value: 'C', index: 3 }
+        ],
+        rows: [
+            { value: "T1", index: 0 }
+        ],
+        values: [
+            [1, 2, 3, 6, 12]
+        ]
+    });
+
+    assert.deepEqual(prepareLoadedData(dataController.getData().rows), [
+        { value: 'Vasya', index: 0 },
+        { value: 'Piter', index: 1, children: [{
+            value: "T1",
+            index: 3
+        }] }
+    ]);
+
+    assert.deepEqual(prepareLoadedData(dataController.getData().columns), [
+        { value: 'A', index: 2 },
+        { value: 'C', index: 3 }
+    ]);
+
+    var cells = [];
+    $.each(dataController.getCellsInfo(), function() {
+        cells.push($.map(this, function(cell) {
+            return cell && cell.text;
+        }));
+    });
+    assert.deepEqual(cells, [
+        ['3', '6', '12'],
+        ['3', '6', '12'],
+        ['4', '9', '18'],
+        ['7', '15', '30']
+    ]);
+});
+
 QUnit.test("Apply partial dataController with empty data. Update Rows", function(assert) {
     var dataController = new DataController({
         dataSource: {

@@ -8,8 +8,14 @@
     .dx-diagram-left-panel,
     .dx-diagram-right-panel {
         background: @overlay-content-bg;
-        .dx-accordion .dx-accordion-item {
-            border: none;
+        .dx-accordion {
+            .dx-accordion-item {
+                border-left: none;
+                border-right: none;
+            }
+            .dx-accordion-item:first-of-type {
+                border-top: none;
+            }
         }
     }
     .dx-diagram-left-panel {

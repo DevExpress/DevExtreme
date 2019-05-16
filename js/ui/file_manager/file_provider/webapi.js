@@ -1,11 +1,12 @@
 import ajax from "../../../core/utils/ajax";
-import { noop } from "../../../core/utils/common";
+import { ensureDefined, noop } from "../../../core/utils/common";
 import Guid from "../../../core/guid";
 import { getWindow } from "../../../core/utils/window";
 import { each } from "../../../core/utils/iterator";
 import { Deferred } from "../../../core/utils/deferred";
 
 import { FileProvider } from "./file_provider";
+import { compileGetter } from "../../../core/utils/data";
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
@@ -20,6 +21,7 @@ const FILE_CHUNK_BLOB_NAME = "chunk";
 class WebApiFileProvider extends FileProvider {
 
     constructor(options) {
+        options = ensureDefined(options, { });
         super(options);
         /**
          * @name WebApiFileProviderOptions.endpointUrl
@@ -27,25 +29,10 @@ class WebApiFileProvider extends FileProvider {
          */
         this._endpointUrl = options.endpointUrl;
         /**
-         * @name WebApiFileProviderOptions.nameExpr
+         * @name WebApiFileProviderOptions.hasSubDirectoriesExpr
          * @type string|function(fileItem)
          */
-        /**
-         * @name WebApiFileProviderOptions.isFolderExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name WebApiFileProviderOptions.sizeExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name WebApiFileProviderOptions.dateModifiedExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name WebApiFileProviderOptions.thumbnailExpr
-         * @type string|function(fileItem)
-         */
+        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
     }
 
     getItems(path, itemType) {
@@ -80,7 +67,7 @@ class WebApiFileProvider extends FileProvider {
     copyItems(items, destinationFolder) {
         return items.map(item => this._executeRequest("Copy", {
             sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName
+            destinationId: destinationFolder.relativeName + "/" + item.name
         }));
     }
 
@@ -147,9 +134,12 @@ class WebApiFileProvider extends FileProvider {
             arguments: JSON.stringify(args)
         });
 
+        const method = command === "GetDirContents" ? "GET" : "POST";
+
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._endpointUrl + "?" + queryString,
+            method,
             dataType: "json",
             cache: false
         }).then(result => {
@@ -195,6 +185,11 @@ class WebApiFileProvider extends FileProvider {
 
     _getQueryStringPair(key, value) {
         return encodeURIComponent(key) + "=" + encodeURIComponent(value);
+    }
+
+    _hasSubDirs(dataObj) {
+        const hasSubDirs = this._hasSubDirsGetter(dataObj);
+        return typeof hasSubDirs === "boolean" ? hasSubDirs : true;
     }
 
 }

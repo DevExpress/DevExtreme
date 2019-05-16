@@ -598,7 +598,7 @@
 
 /**
  * @typedef {string} Enums.ToolbarItemWidget
- * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'}
+ * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'|'dxDropDownButton'}
  */
 
 /**
@@ -837,8 +837,18 @@
  */
 
 /**
- * @typedef {string} Enums.TextEditorButtonName
- * @enum {'clear'|'spins'|'dropDown'}
+ * @typedef {string} Enums.TextBoxButtonName
+ * @enum {'clear'}
+ */
+
+/**
+ * @typedef {string} Enums.NumberBoxButtonName
+ * @enum {'clear'|'spins'}
+ */
+
+/**
+ * @typedef {string} Enums.DropDownEditorButtonName
+ * @enum {'clear'|'dropDown'}
  */
 
 /**

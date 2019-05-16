@@ -23,26 +23,24 @@ class FileManagerEditingControl extends Widget {
 
         this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
         this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
-        this._chooseFolderDialog = this._createComponent($("<div>"), FileManagerFolderChooserDialog, {
+
+        const $chooseFolderDialog = $("<div>").appendTo(this.$element());
+        this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
             provider: this._provider,
             getItems: this._model.getFolders,
             onClosed: this._onDialogClosed.bind(this)
         });
+
         this._confirmationDialog = this._createConfirmationDialog();
 
         this._fileUploader = this._createFileUploader();
-
-        this.$element()
-            .append(this._renameItemDialog.$element())
-            .append(this._createFolderDialog.$element())
-            .append(this._chooseFolderDialog.$element())
-            .append(this._fileUploader.$element());
 
         this._createEditActions();
     }
 
     _createFileUploader() {
-        return this._createComponent($("<div>"), FileManagerFileUploader, {
+        const $fileUploader = $("<div>").appendTo(this.$element());
+        return this._createComponent($fileUploader, FileManagerFileUploader, {
             getController: this._getFileUploaderController.bind(this),
             onFilesUploaded: result => this._raiseOnSuccess("Files uploaded", true),
             onErrorOccurred: ({ info }) => {
@@ -78,7 +76,8 @@ class FileManagerEditingControl extends Widget {
     }
 
     _createEnterNameDialog(title, buttonText) {
-        return this._createComponent($("<div>"), FileManagerNameEditorDialog, {
+        const $dialog = $("<div>").appendTo(this.$element());
+        return this._createComponent($dialog, FileManagerNameEditorDialog, {
             title: title,
             buttonText: buttonText,
             onClosed: this._onDialogClosed.bind(this)
@@ -173,7 +172,7 @@ class FileManagerEditingControl extends Widget {
         if(!items) {
             items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
         }
-        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isFolder);
+        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isDirectory);
         const dialogArgumentGetter = action.getDialogArgument || noop;
 
         this._showDialog(action.dialog, dialogArgumentGetter(items))

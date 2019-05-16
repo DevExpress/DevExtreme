@@ -44,14 +44,14 @@
 
     }
 
-    .dx-filemanager-view-separator {
-        background: @filemanager-border-color;
-    }
-
     .dx-filemanager-container {
         border-top-color: @filemanager-border-color;
     }
-    
+
+    .dx-filemanager-dirs-panel {
+        border-right-color: @filemanager-border-color;
+    }
+
     .dx-filemanager-breadcrumbs {
         border-bottom-color: @filemanager-border-color;
 
@@ -152,4 +152,8 @@
             padding: 2px 6px;
          }
     }
+}
+
+.dx-filemanager-context-menu .dx-menu-item-has-text:not(.dx-menu-item-has-icon) .dx-menu-item-text {
+    margin-left: @FILEMANAGER_CONTEXTMENU_TEXT_ITEM_LEFT_MARGIN;
 }

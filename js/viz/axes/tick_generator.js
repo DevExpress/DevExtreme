@@ -66,7 +66,7 @@ function discreteGenerator(options) {
 const getValue = value => value;
 const getLogValue = base => value => getLog(value, base);
 const raiseTo = base => value => mathPow(base, value);
-const correctValueByInterval = (post, round, getValue) => (value, interval) => post(adjust(round(adjust(getValue(value) / interval)) * interval));
+const correctValueByInterval = (post, round, getValue) => (value, interval) => adjust(post(round(adjust(getValue(value) / interval)) * interval));
 
 function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOnTick) {
     if(isDefined(endOnTick)) {

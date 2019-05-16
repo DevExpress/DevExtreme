@@ -123,6 +123,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             });
 
             const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * i;
+            const actionAnimationDelay = 30;
 
             action._options.position = {
                 of: this.$content(),
@@ -134,8 +135,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 }
             };
 
-            action._options.animation.show.delay = action._options.animation.show.duration * i;
-            action._options.animation.hide.delay = action._options.animation.hide.duration * (lastActionIndex - i);
+            action._options.animation.show.delay = actionAnimationDelay * i;
+            action._options.animation.hide.delay = actionAnimationDelay * (lastActionIndex - i);
 
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
         }

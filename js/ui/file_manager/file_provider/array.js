@@ -1,5 +1,7 @@
 import { ensureDefined } from "../../../core/utils/common";
+import { compileGetter, compileSetter } from "../../../core/utils/data";
 import { each } from "../../../core/utils/iterator";
+import typeUtils from "../../../core/utils/type";
 import { errors } from "../../../data/errors";
 
 import { FileProvider } from "./file_provider";
@@ -14,6 +16,7 @@ import { FileProvider } from "./file_provider";
 class ArrayFileProvider extends FileProvider {
 
     constructor(options) {
+        options = ensureDefined(options, { });
         super(options);
 
         const initialArray = options.data;
@@ -26,25 +29,19 @@ class ArrayFileProvider extends FileProvider {
          * @type Array<any>
          */
         /**
-         * @name ArrayFileProviderOptions.nameExpr
+         * @name ArrayFileProviderOptions.itemsExpr
          * @type string|function(fileItem)
          */
-        /**
-         * @name ArrayFileProviderOptions.isFolderExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name ArrayFileProviderOptions.sizeExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name ArrayFileProviderOptions.dateModifiedExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name ArrayFileProviderOptions.thumbnailExpr
-         * @type string|function(fileItem)
-         */
+        const itemsExpr = options.itemsExpr || "items";
+        this._subFileItemsGetter = compileGetter(itemsExpr);
+        this._subFileItemsSetter = typeUtils.isFunction(itemsExpr) ? itemsExpr : compileSetter(itemsExpr);
+
+        const nameExpr = this._getNameExpr(options);
+        this._nameSetter = typeUtils.isFunction(nameExpr) ? nameExpr : compileSetter(nameExpr);
+
+        const isDirExpr = this._getIsDirExpr(options);
+        this._getIsDirSetter = typeUtils.isFunction(isDirExpr) ? isDirExpr : compileSetter(isDirExpr);
+
         this._data = initialArray || [ ];
     }
 
@@ -57,10 +54,10 @@ class ArrayFileProvider extends FileProvider {
     }
 
     createFolder(parentFolder, name) {
-        const newItem = {
-            name,
-            isFolder: true
-        };
+        let newItem = { };
+        this._nameSetter(newItem, name);
+        this._getIsDirSetter(newItem, true);
+
         const array = this._getChildrenArray(parentFolder.dataItem);
         array.push(newItem);
     }
@@ -70,7 +67,7 @@ class ArrayFileProvider extends FileProvider {
     }
 
     moveItems(items, destinationFolder) {
-        const array = this._getChildrenArray(destinationFolder.dataItem);
+        let array = this._getChildrenArray(destinationFolder.dataItem);
         each(items, (_, item) => {
             this._deleteItem(item);
             array.push(item.dataItem);
@@ -85,48 +82,53 @@ class ArrayFileProvider extends FileProvider {
         });
     }
 
-    _createCopy({ name, children, isFolder }) {
-        const result = {
-            name,
-            isFolder
-        };
-        if(children) {
-            result.children = [];
-            each(children, (_, childItem) => {
+    _createCopy(dataObj) {
+        let copyObj = { };
+        this._nameSetter(copyObj, this._nameGetter(dataObj));
+        this._getIsDirSetter(copyObj, this._isDirGetter(dataObj));
+
+        const items = this._subFileItemsGetter(dataObj);
+        if(Array.isArray(items)) {
+            let itemsCopy = [];
+            each(items, (_, childItem) => {
                 const childCopy = this._createCopy(childItem);
-                result.children.push(childCopy);
+                itemsCopy.push(childCopy);
             });
+            this._subFileItemsSetter(copyObj, itemsCopy);
         }
-        return result;
+        return copyObj;
     }
 
     _deleteItem({ parentPath, dataItem }) {
         let array = this._data;
         if(parentPath !== "") {
-            const { children } = this._findItem(parentPath);
-            array = children;
+            const folder = this._findItem(parentPath);
+            array = this._subFileItemsGetter(folder);
         }
         const index = array.indexOf(dataItem);
         array.splice(index, 1);
     }
 
     _getChildrenArray(dataItem) {
-        let array = null;
         if(!dataItem) {
-            array = this._data;
-        } else {
-            array = dataItem.children = ensureDefined(dataItem.children, []);
+            return this._data;
         }
-        return array;
+
+        let subItems = this._subFileItemsGetter(dataItem);
+        if(!Array.isArray(subItems)) {
+            subItems = [];
+            this._subFileItemsSetter(dataItem, subItems);
+        }
+        return subItems;
     }
 
     _getItems(path, itemType) {
-        if(path === "") {
-            return this._convertDataObjectsToFileItems(this._data, path, itemType);
+        if(path === "" || path === undefined) {
+            return this._convertDataObjectsToFileItems(this._data, "", itemType);
         }
 
         const folderEntry = this._findItem(path);
-        const entries = folderEntry && folderEntry.children || [];
+        const entries = folderEntry && this._subFileItemsGetter(folderEntry) || [];
         return this._convertDataObjectsToFileItems(entries, path, itemType);
     }
 
@@ -140,10 +142,11 @@ class ArrayFileProvider extends FileProvider {
         const parts = path.split("/");
         for(let i = 0; i < parts.length; i++) {
             const part = parts[i];
-            result = data.filter(entry => entry.isFolder && entry.name === part)[0];
+            result = data.filter(entry => this._isDirGetter(entry) && this._nameGetter(entry) === part)[0];
             if(result) {
-                if(result.children) {
-                    data = result.children;
+                const children = this._subFileItemsGetter(result);
+                if(children) {
+                    data = children;
                 } else if(i !== parts.length - 1) {
                     return null;
                 }
@@ -153,6 +156,21 @@ class ArrayFileProvider extends FileProvider {
         }
 
         return result;
+    }
+
+    _hasSubDirs(dataObj) {
+        const subItems = ensureDefined(this._subFileItemsGetter(dataObj), []);
+
+        if(!Array.isArray(subItems)) {
+            return true;
+        }
+
+        for(let i = 0; i < subItems.length; i++) {
+            if(this._isDirGetter(subItems[i]) === true) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

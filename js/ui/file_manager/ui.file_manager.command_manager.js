@@ -78,6 +78,12 @@ export class FileManagerCommandManager {
                 text: "Clear selection",
                 icon: "remove",
                 enabled: true
+            },
+            {
+                name: "showDirsPanel",
+                icon: "menu",
+                enabled: false,
+                noFileItemRequired: true
             }
         ];
 
@@ -97,6 +103,13 @@ export class FileManagerCommandManager {
         }
     }
 
+    setCommandEnabled(commandName, enabled) {
+        const command = this.getCommandByName(commandName);
+        if(command) {
+            command.enabled = enabled;
+        }
+    }
+
     getCommandByName(name) {
         return this._commandMap[name];
     }
@@ -106,8 +119,16 @@ export class FileManagerCommandManager {
         if(!command || !command.enabled) {
             return false;
         }
+
+        if(command.noFileItemRequired) {
+            return true;
+        }
+
         const itemsLength = items && items.length || 0;
-        return command.noFileItemRequired || itemsLength > 0 && (!command.isSingleFileItemCommand || itemsLength === 1);
+        if(itemsLength === 0 || items.some(item => item.isRoot() || item.isParentFolder)) {
+            return false;
+        }
+        return !command.isSingleFileItemCommand || itemsLength === 1;
     }
 
 }
