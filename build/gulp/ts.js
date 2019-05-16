@@ -66,7 +66,6 @@ gulp.task('ts-jquery-check', ['ts-sources'], function() {
             }).join('');
         }).join('\n');
 
-
     return file('artifacts/globals.ts', content, { src: true })
         .pipe(ts({
             noEmitOnError: true
