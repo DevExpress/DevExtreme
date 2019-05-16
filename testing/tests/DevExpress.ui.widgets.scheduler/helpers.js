@@ -73,6 +73,8 @@ export class SchedulerTestWrapper {
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
+                getButtonWidth: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().width,
+                getButtonHeight: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().height,
             }
         };
 
