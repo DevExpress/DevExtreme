@@ -88,7 +88,7 @@ gulp.task('ts-up-to-date', function() {
     const generated = fs.readFileSync(TS_PATH).toString();
 
     if(current !== generated) {
-        console.log("dx.all.d.ts is outdated");
+        console.error("dx.all.d.ts is outdated");
         shell.exit(1);
     }
 });
