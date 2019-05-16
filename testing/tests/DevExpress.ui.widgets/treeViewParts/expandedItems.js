@@ -472,4 +472,108 @@ module("Expanded items", {
         assert.notOk(nodes[0].items[0].expanded, "item 11");
         assert.notOk(nodes[0].items[0].items[0].expanded, "item 111");
     });
+
+    test("Content ready event is thrown once when the expandAll is called", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const $treeView = initTree({
+            items: [{
+                text: "1",
+                id: 1,
+                items: [{
+                    text: "11",
+                    id: 11,
+                    items: [{
+                        text: "111",
+                        id: 111
+                    }]
+                }]
+            }],
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        treeView.expandAll();
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
+    });
+
+    test("Content ready event is thrown once when the expandAll is called with the slow data source", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const $treeView = initTree({
+            dataSource: makeSlowDataSource($.extend(true, [],
+                [
+                    { id: 1, parentId: 0, text: "Animals" },
+                    { id: 2, parentId: 1, text: "Cat" },
+                    { id: 3, parentId: 2, text: "Dog" },
+                    { id: 4, parentId: 3, text: "Cow" }
+                ]
+            )),
+            dataStructure: "plain",
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        this.clock.tick(400);
+
+        treeView.expandAll();
+
+        this.clock.tick(400);
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
+    });
+
+    test("Content ready event is thrown once when the expandAll is called with the slow data source and the virtual mode", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const $treeView = initTree({
+            dataSource: makeSlowDataSource($.extend(true, [],
+                [
+                    { id: 1, parentId: 0, text: "Animals" },
+                    { id: 2, parentId: 1, text: "Cat" },
+                    { id: 3, parentId: 2, text: "Dog" },
+                    { id: 4, parentId: 3, text: "Cow" }
+                ]
+            )),
+            dataStructure: "plain",
+            virtualModeEnabled: true,
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        this.clock.tick(400);
+
+        treeView.expandAll();
+
+        this.clock.tick(400);
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown once");
+    });
+
+    test("Content ready event is thrown once when the expandAll is called with load data on demand", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const data = [
+            { id: 1, parentID: 0, text: "Animals" },
+            { id: 2, parentID: 1, text: "Cat" },
+            { id: 21, parentID: 1, text: "Pussy Cat", hasItems: false },
+            { id: 3, parentID: 2, text: "Dog" },
+            { id: 4, parentID: 3, text: "Cow", hasItems: false }
+        ];
+        const $treeView = initTree({
+            createChildren: parent => {
+                const parentID = parent ? parent.itemData.id : 0;
+                return data.filter(item => item.parentID === parentID);
+            },
+            rootValue: 1,
+            dataStructure: "plain",
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        this.clock.tick(400);
+
+        treeView.expandAll();
+
+        this.clock.tick(400);
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
+    });
 });
