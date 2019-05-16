@@ -268,10 +268,6 @@ QUnit.test("getOptions", function(assert) {
 
 QUnit.module("draw legend", environment);
 
-QUnit.test('draw without set options', function(assert) {
-    assert.ok(this.createLegend({}, null, null).draw());
-});
-
 QUnit.test("visible = false", function(assert) {
     this.options.visible = false;
     this.createSimpleLegend();
@@ -2085,15 +2081,13 @@ var titleEnvironment = $.extend({}, environment, {
         environment.beforeEach.apply(that, arguments);
 
         var titleConstructor = module.Title;
-        that.titleLayout = { height: 10, width: 20, x: 4, y: 5 };
+
+        that.titleLayout = { height: 17, width: 20, x: 4, y: 5 };
         module.Title = function(params) {
             that.title = new titleConstructor(params);
 
             that.title.getLayoutOptions = sinon.stub();
             that.title.getLayoutOptions.returns(that.titleLayout);
-
-            that.title.getTrueSize = sinon.stub();
-            that.title.getTrueSize.returns(that.titleLayout);
 
             that.title.shift = sinon.spy();
 

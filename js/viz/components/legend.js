@@ -629,14 +629,11 @@ extend(legendPrototype, {
         }
     },
 
-    _getTitleBBox: function() {
-        return this._title.hasText() ? this._title.getTrueSize() : { x: 0, y: 0, height: 0, width: 0 };
-    },
 
     _applyItemPosition: function(lines, layoutOptions) {
         var that = this,
             position = { x: 0, y: 0 },
-            titleX = this._getTitleBBox().x,
+            titleX = this._title.getLayoutOptions().x,
             maxLineLength = getMaxLineLength(lines, layoutOptions);
 
         lines.forEach(line => {
@@ -785,14 +782,12 @@ extend(legendPrototype, {
 
     _calculateTotalBox: function() {
         const markerBox = this._markersGroup.getBBox();
-        const titleBox = this._getTitleBBox();
+        const titleBox = this._title.getLayoutOptions();
         const box = this._insideLegendGroup.getBBox();
 
         const verticalPadding = this._background ? 2 * this._options.paddingTopBottom : 0;
-        const titleOptions = this._title.getOptions() || { margin: { top: 0, bottom: 0 } };
-        const titleMargins = titleOptions.margin.top + titleOptions.margin.bottom;
 
-        box.height = markerBox.height + titleBox.height + verticalPadding + titleMargins;
+        box.height = markerBox.height + titleBox.height + verticalPadding;
 
         return box;
     },
@@ -884,7 +879,7 @@ extend(legendPrototype, {
     },
 
     _shiftMarkers: function() {
-        const titleBox = this._getTitleBBox();
+        const titleBox = this._title.getLayoutOptions();
         const markerBox = this._markersGroup.getBBox();
         const titleOptions = this._title.getOptions() || {};
         let center = 0;
@@ -895,7 +890,7 @@ extend(legendPrototype, {
         }
 
         if(titleOptions.verticalAlignment === TOP) {
-            y = titleBox.height + titleOptions.margin.bottom + titleOptions.margin.top;
+            y = titleBox.height;
         }
 
         if(center !== 0 || y !== 0) {
