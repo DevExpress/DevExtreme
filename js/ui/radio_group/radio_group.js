@@ -4,7 +4,6 @@ import devices from "../../core/devices";
 import inkRipple from "../widget/utils.ink_ripple";
 import registerComponent from "../../core/component_registrator";
 import themes from "../themes";
-import ChildDefaultTemplate from "../widget/child_default_template";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
 import DataExpressionMixin from "../editor/ui.data_expression";
 import Editor from "../editor/editor";
@@ -221,11 +220,6 @@ class RadioGroup extends Editor {
         super._initMarkup();
     }
 
-    _initTemplates() {
-        super._initTemplates();
-        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
-    }
-
     _itemClickHandler({ itemElement, event, itemData }) {
         if(this.itemElements().is(itemElement)) {
             const newValue = this._getItemValue(itemData);
@@ -309,7 +303,7 @@ class RadioGroup extends Editor {
             accessKey: this.option("accessKey"),
             dataSource: this._dataSource,
             focusStateEnabled: this.option("focusStateEnabled"),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            itemTemplate: this.option("itemTemplate"),
             keyExpr: this._getCollectionKeyExpr(),
             noDataText: "",
             onContentReady: () => this._fireContentReadyAction(true),
