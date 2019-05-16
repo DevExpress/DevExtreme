@@ -206,10 +206,6 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         return this._boundingRect || null;
     },
 
-    getTrueSize: function() {
-        return this._group ? this._group.getBBox() : null;
-    },
-
     shift: function(x, y) {
         var that = this,
             box = that.getLayoutOptions();
