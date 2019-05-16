@@ -58,7 +58,7 @@ var Calendar = Editor.inherit({
         return extend(this.callBase(), {
 
             /**
-            * @name dxCalendarOptions.hoverStateEnabled
+            * @name dxCalendarOptions.hoverStateEnabled22
             * @type boolean
             * @default true
             * @inheritdoc
