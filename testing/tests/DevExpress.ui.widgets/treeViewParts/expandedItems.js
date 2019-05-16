@@ -1,4 +1,4 @@
-/* global DATA, internals, initTree */
+/* global DATA, internals, initTree, makeSlowDataSource */
 
 import $ from "jquery";
 import { noop } from "core/utils/common";
