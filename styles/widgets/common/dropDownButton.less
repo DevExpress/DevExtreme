@@ -17,6 +17,10 @@
         padding-left: 0px;
         padding-right: 0px;
     }
+
+    .dx-rtl & {
+        border-right-width: 0;
+    }
 }
 
 .dx-dropdownbutton-action {
@@ -26,16 +30,34 @@
     }
 
     &.dx-button-has-text .dx-icon.dx-icon-right {
+        margin-left: 0;
         margin-right: -6px;
+
+        .dx-rtl & {
+            margin-left: -6px;
+            margin-right: 0;
+        }
     }
 }
 
 .dx-dropdownbutton-action:not(.dx-buttongroup-last-item) {
     &.dx-button .dx-button-content {
+        padding-left: 10px;
         padding-right: 4px;
+
+        .dx-rtl & {
+            padding-left: 4px;
+            padding-right: 10px;
+        }
     }
 
     &.dx-button {
-        border-right: none;
+        border-right-width: 0;
+        border-left-width: 1px;
+
+        .dx-rtl & {
+            border-right-width: 1px;
+            border-left-width: 0;
+        }
     }
 }
