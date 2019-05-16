@@ -51,14 +51,25 @@ let DateBoxMask = DateBoxBase.inherit({
                 e.preventDefault();
             },
             upArrow: (e) => {
-                this._partIncrease(FORWARD);
+                this._upDownArrowHandler(FORWARD);
                 e.preventDefault();
             },
             downArrow: (e) => {
-                this._partIncrease(BACKWARD);
+                this._upDownArrowHandler(BACKWARD);
                 e.preventDefault();
             },
         });
+    },
+
+    _upDownArrowHandler(step) {
+        this._setNewDateIfEmpty();
+
+        const originalValue = this._getActivePartValue(this._initialMaskValue);
+        const currentValue = this._getActivePartValue();
+        const delta = currentValue - originalValue;
+
+        this._loadMaskValue(this._initialMaskValue);
+        this._partIncrease(delta + step);
     },
 
     _getDefaultOptions() {
@@ -131,6 +142,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _setNewDateIfEmpty() {
         if(!this._maskValue) {
             this._maskValue = new Date();
+            this._initialMaskValue = new Date();
             this._renderDateParts();
         }
     },
@@ -169,7 +181,8 @@ let DateBoxMask = DateBoxBase.inherit({
             endLimit = limits.max - limits.min;
 
         for(let i = 0; i <= endLimit; i++) {
-            this._partIncrease(1);
+            this._loadMaskValue(this._initialMaskValue);
+            this._partIncrease(i + 1);
             if(this._getActivePartProp("text").toLowerCase().indexOf(startString) === 0) {
                 this._searchValue = startString;
                 return;
@@ -272,6 +285,10 @@ let DateBoxMask = DateBoxBase.inherit({
             return;
         }
 
+        if(step) {
+            this._initialMaskValue = new Date(this._maskValue);
+        }
+
         let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
             let isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
@@ -332,13 +349,14 @@ let DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
-    _loadMaskValue() {
-        const value = this.dateOption("value");
+    _loadMaskValue(value = this.dateOption("value")) {
         this._maskValue = value && new Date(value);
+        this._initialMaskValue = value && new Date(value);
     },
 
     _saveMaskValue() {
         const value = this._maskValue && new Date(this._maskValue);
+        this._initialMaskValue = new Date(value);
         this.dateOption("value", value);
     },
 
@@ -361,8 +379,8 @@ let DateBoxMask = DateBoxBase.inherit({
         let limits = this._getActivePartLimits(),
             newValue = step + this._getActivePartValue();
 
-        newValue = newValue > limits.max ? limits.min : newValue;
-        newValue = newValue < limits.min ? limits.max : newValue;
+        newValue = newValue > limits.max ? newValue - limits.max : newValue;
+        newValue = newValue < limits.min ? limits.max - newValue : newValue;
 
         this._setActivePartValue(newValue);
     },
