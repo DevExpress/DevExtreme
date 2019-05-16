@@ -107,5 +107,5 @@ exports.svgCreator = {
 };
 
 exports.getData = function(data, options, callback) {
-    exports.svgCreator.getData(data, options).done(callback);
+    return exports.svgCreator.getData(data, options).done(callback);
 };
