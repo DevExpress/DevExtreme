@@ -3051,7 +3051,7 @@ QUnit.test("Horizontal axis.", function(assert) {
 
     this.translator.stub("translate").withArgs(1).returns(40);
     this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(60);
+    this.translator.stub("translate").withArgs(3).returns(90);
     this.axis.parser = function(value) {
         return value;
     };
@@ -3065,16 +3065,19 @@ QUnit.test("Horizontal axis.", function(assert) {
     assert.deepEqual(renderer.path.getCall(0).args, [[40, 30, 40, 70], "line"], "args");
     assert.deepEqual(renderer.path.getCall(0).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#111111", "stroke-width": 3 }, "attr");
     assert.deepEqual(renderer.path.getCall(0).returnValue.sharp.getCall(0).args[0], "h", "sharp");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.sharp.getCall(0).args[1], 1, "sharp direction");
     assert.deepEqual(renderer.path.getCall(0).returnValue.append.getCall(0).args[0], insideGroup);
 
-    assert.deepEqual(renderer.path.getCall(1).args, [[60, 30, 60, 70], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(1).args, [[90, 30, 90, 70], "line"], "args");
     assert.deepEqual(renderer.path.getCall(1).returnValue.attr.getCall(0).args[0], { dashStyle: "dash", stroke: "#333333", "stroke-width": 5 }, "attr");
     assert.deepEqual(renderer.path.getCall(1).returnValue.sharp.getCall(0).args[0], "h", "sharp");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.sharp.getCall(0).args[1], -1, "sharp direction");
     assert.deepEqual(renderer.path.getCall(1).returnValue.append.getCall(0).args[0], insideGroup);
 
     assert.deepEqual(renderer.path.getCall(2).args, [[50, 30, 50, 70], "line"], "args");
     assert.deepEqual(renderer.path.getCall(2).returnValue.attr.getCall(0).args[0], { dashStyle: "dotdash", stroke: "#222222", "stroke-width": 4 }, "attr");
     assert.deepEqual(renderer.path.getCall(2).returnValue.sharp.getCall(0).args[0], "h", "sharp");
+    assert.deepEqual(renderer.path.getCall(2).returnValue.sharp.getCall(0).args[1], 1, "sharp direction");
     assert.deepEqual(renderer.path.getCall(2).returnValue.append.getCall(0).args[0], insideGroup);
 });
 
@@ -3114,7 +3117,7 @@ QUnit.test("Vertical axis. Only outside constant lines are rendered", function(a
 
     this.translator.stub("translate").withArgs(1).returns(40);
     this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(60);
+    this.translator.stub("translate").withArgs(3).returns(70);
     this.axis.parser = function(value) {
         return value;
     };
@@ -3125,12 +3128,15 @@ QUnit.test("Vertical axis. Only outside constant lines are rendered", function(a
     assert.equal(renderer.path.callCount, 3, "path");
     assert.deepEqual(renderer.path.getCall(0).args, [[10, 40, 90, 40], "line"], "args");
     assert.deepEqual(renderer.path.getCall(0).returnValue.sharp.getCall(0).args[0], "v", "sharp");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.sharp.getCall(0).args[1], 1, "sharp direction");
 
-    assert.deepEqual(renderer.path.getCall(1).args, [[10, 60, 90, 60], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(1).args, [[10, 70, 90, 70], "line"], "args");
     assert.deepEqual(renderer.path.getCall(1).returnValue.sharp.getCall(0).args[0], "v", "sharp");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.sharp.getCall(0).args[1], -1, "sharp direction");
 
     assert.deepEqual(renderer.path.getCall(2).args, [[10, 50, 90, 50], "line"], "args");
     assert.deepEqual(renderer.path.getCall(2).returnValue.sharp.getCall(0).args[0], "v", "sharp");
+    assert.deepEqual(renderer.path.getCall(2).returnValue.sharp.getCall(0).args[1], 1, "sharp direction");
 });
 
 QUnit.test("Horizontal axis. Value is out of range", function(assert) {
