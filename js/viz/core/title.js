@@ -75,11 +75,14 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         // Looks like the following "laziness" is only to avoid unnecessary DOM content creation -
         // for example when widget is created without "title" option.
         if(!that._titleElement) {
-            that._titleElement = renderer.text().attr(alignObj).append(group);
-            that._subtitleElement = renderer.text().attr(alignObj);
+            that._titleElement = renderer.text().append(group);
+            that._subtitleElement = renderer.text();
             that._clipRect = renderer.clipRect();
             group.attr({ "clip-path": that._clipRect.id });
         }
+
+        that._titleElement.attr(alignObj);
+        that._subtitleElement.attr(alignObj);
 
         group.linkAppend();
         hasText(that._options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();

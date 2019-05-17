@@ -239,6 +239,8 @@ QUnit.test("Update", function(assert) {
         right: 20
     });
     assert.equal(title.DEBUG_getOptions().subtitle.text, "subtitle");
+    assert.strictEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(4).args[0].align, "left");
+    assert.strictEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(2).args[0].align, "left");
 });
 
 QUnit.test("Update to empty text", function(assert) {
