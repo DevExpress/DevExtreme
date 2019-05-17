@@ -486,7 +486,7 @@ module.exports = {
                             }
                         });
                     } else if(paging) {
-                        if(!isVirtualScrolling) {
+                        if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
                             focusController._focusRowByIndex();
                         }
                     } else {
