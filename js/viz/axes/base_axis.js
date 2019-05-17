@@ -378,7 +378,14 @@ Axis.prototype = {
     },
 
     _createConstantLine: function(value, attr) {
-        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr);
+        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, this._getConstantLineSharpDirection(value));
+    },
+
+    _getConstantLineSharpDirection(coord) {
+        const axisCanvas = this._getCanvasStartEnd();
+        const maxAxisCoord = Math.max(axisCanvas.start, axisCanvas.end);
+
+        return maxAxisCoord !== coord ? 1 : -1;
     },
 
     _drawConstantLineLabelText: function(text, x, y, constantLineLabelOptions, group) {
