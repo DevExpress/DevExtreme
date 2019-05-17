@@ -108,7 +108,10 @@ export class SchedulerTestWrapper {
 
         this.appointmentForm = {
             getFormInstance: () => this.appointmentPopup.getPopup().find(".dx-form").dxForm("instance"),
-            hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs")
+            getEditor: name => this.appointmentForm.getFormInstance().getEditor(name),
+            setSubject: (value) => this.appointmentForm.getEditor("text").option("value", value),
+
+            hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs"),
         };
 
         this.workSpace = {
