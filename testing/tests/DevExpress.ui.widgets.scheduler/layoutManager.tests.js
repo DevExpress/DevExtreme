@@ -6,6 +6,7 @@ import $ from "jquery";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import translator from "animation/translator";
+import fx from "animation/fx";
 import { DataSource } from "data/data_source/data_source";
 
 import SchedulerLayoutManager from "ui/scheduler/ui.scheduler.appointments.layout_manager";
@@ -21,8 +22,6 @@ import { SchedulerTestWrapper } from './helpers.js';
 
 const APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
-
-const APPOINTMENT_CLASS_NAME = ".dx-scheduler-appointment";
 
 const getOffset = () => {
     if(devices.current().deviceType !== "desktop") {
@@ -56,41 +55,39 @@ const moduleOptions = {
 const renderLayoutModuleOptions = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-
-        this.createInstance = (view, dataSource, options) => {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, {
-                views: ["week", "month", "agenda"],
-                currentView: view,
-                dataSource: dataSource,
-                currentDate: new Date(2017, 4, 25),
-                startDayHour: 9,
-                height: 600,
-                width: 1300,
-                editing: true,
-            })).dxScheduler("instance");
-
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-
-        this.markAppointments = function() {
-            $(APPOINTMENT_CLASS_NAME).data("mark", true);
-        };
-
-        this.getUnmarkedAppointments = function() {
-            return $(APPOINTMENT_CLASS_NAME).filter(function() {
-                return !!$(this).data("mark") === false;
-            });
-        };
-
-        this.getAppointments = function() { return document.querySelectorAll(APPOINTMENT_CLASS_NAME); };
+        fx.off = true;
     },
     afterEach: function() {
         this.clock.restore();
+        fx.off = false;
     }
 };
 
 
 QUnit.module("Render layout", renderLayoutModuleOptions, function() {
+    const createScheduler = (view, dataSource, options) => {
+        const instance = $("#scheduler").dxScheduler($.extend(options, {
+            views: ["week", "month", "agenda"],
+            currentView: view,
+            dataSource: dataSource,
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 600,
+            width: 1300,
+            editing: true,
+        })).dxScheduler("instance");
+
+        return new SchedulerTestWrapper(instance);
+    };
+
+    const markAppointments = (scheduler) => scheduler.appointments.getAppointments().data("mark", true);
+
+    const getUnmarkedAppointments = (scheduler) => {
+        return scheduler.appointments.getAppointments().filter(function() {
+            return !!$(this).data("mark") === false;
+        });
+    };
+
     const defaultData = [
         {
             id: 0,
@@ -165,7 +162,7 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
         }
     ];
 
-    this.createDataSource = (list = defaultData) => {
+    const createDataSource = (list = defaultData) => {
         return new DataSource({
             store: {
                 type: "array",
@@ -176,18 +173,18 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
     };
 
     QUnit.test("Scheduler should render appointments only for appointments that need redraw", function(assert) {
-        const dataSource = this.createDataSource();
-        this.createInstance("week", dataSource);
+        const dataSource = createDataSource();
+        const scheduler = createScheduler("week", dataSource);
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([
             { type: "update", key: 0, data: { text: "updated-1" } },
             { type: "update", key: 1, data: { text: "updated-2" } }
         ]);
         dataSource.load();
-        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
+        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered only two updated appointments");
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
             id: 15,
             text: "Fake",
@@ -195,19 +192,19 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: new Date(2017, 4, 27, 16, 30)
         } }]);
         dataSource.load();
-        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only inserted appointment");
+        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only inserted appointment");
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().remove(0);
         dataSource.load();
-        assert.equal(0, this.getUnmarkedAppointments().length, "Html element should removed and should not redrawing another appointments");
+        assert.equal(0, getUnmarkedAppointments(scheduler).length, "Html element should removed and should not redrawing another appointments");
     });
 
     QUnit.test("Scheduler should render only necessary appointments in crossing appointments case", function(assert) {
-        const dataSource = this.createDataSource();
-        this.createInstance("week", dataSource);
+        const dataSource = createDataSource();
+        const scheduler = createScheduler("week", dataSource);
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
             id: 14,
             text: "Fake_key_14",
@@ -215,9 +212,9 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: defaultData[0].endDate
         } }]);
         dataSource.load();
-        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered inserted appointment and update appointment");
+        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered inserted appointment and update appointment");
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
             id: 15,
             text: "Fake_key_15",
@@ -225,22 +222,21 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: defaultData[1].endDate
         } }]);
         dataSource.load();
-        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered inserted appointment and 2 updated appointment");
+        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered inserted appointment and 2 updated appointment");
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().remove(15);
         dataSource.load();
-        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
+        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only two updated appointments");
     });
 
     QUnit.test("Scheduler should throw onAppointmentRendered event only for appointments that need redraw", function(assert) {
-        const dataSource = this.createDataSource();
+        const dataSource = createDataSource();
         const fakeHandler = {
             onAppointmentRendered: () => { }
         };
         const renderedStub = sinon.stub(fakeHandler, "onAppointmentRendered");
-
-        this.createInstance("week", dataSource, { onAppointmentRendered: fakeHandler.onAppointmentRendered });
+        createScheduler("week", dataSource, { onAppointmentRendered: fakeHandler.onAppointmentRendered });
 
         renderedStub.reset();
         dataSource.store().push([{ type: "insert", data: {
@@ -277,18 +273,18 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
     });
 
     QUnit.test("Scheduler should render appointments only for appointments that need redraw in Month view", function(assert) {
-        const dataSource = this.createDataSource();
-        this.createInstance("month", dataSource);
+        const dataSource = createDataSource();
+        const scheduler = createScheduler("month", dataSource);
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([
             { type: "update", key: 0, data: { text: "updated-1" } },
             { type: "update", key: 1, data: { text: "updated-2" } }
         ]);
         dataSource.load();
-        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
+        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered only two updated appointments");
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
             id: 15,
             text: "Fake",
@@ -296,45 +292,45 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: new Date(2017, 4, 28, 16, 30)
         } }]);
         dataSource.load();
-        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only inserted appointment");
+        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only inserted appointment");
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().remove(0);
         dataSource.load();
 
         // TODO: in future this case should be optimized - redraw in this case can escape
-        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment");
+        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only one appointment");
     });
 
     QUnit.test("Scheduler should render appointments only for appointments that need redraw. Use scheduler API", function(assert) {
-        this.createInstance("week", defaultData);
+        const scheduler = createScheduler("week", defaultData);
 
-        this.markAppointments();
-        this.instance.updateAppointment(defaultData[0], { text: "updated" });
-        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment");
+        markAppointments(scheduler);
+        scheduler.instance.updateAppointment(defaultData[0], { text: "updated" });
+        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only one appointment");
 
-        this.markAppointments();
-        this.instance.updateAppointment(defaultData[9], { text: "updated" });
-        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment from intersecting appointments");
+        markAppointments(scheduler);
+        scheduler.instance.updateAppointment(defaultData[9], { text: "updated" });
+        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only one appointment from intersecting appointments");
 
-        this.markAppointments();
-        this.instance.deleteAppointment(defaultData[0]);
-        assert.equal(0, this.getUnmarkedAppointments().length, "Nothing should be redrawing");
+        markAppointments(scheduler);
+        scheduler.instance.deleteAppointment(defaultData[0]);
+        assert.equal(0, getUnmarkedAppointments(scheduler).length, "Nothing should be redrawing");
     });
 
-    QUnit.test("Scheduler should render all appointments in Agenda view case", function(assert) {
-        const dataSource = this.createDataSource();
-        this.createInstance("agenda", dataSource);
+    QUnit.test("Scheduler should re-render all appointments in Agenda view case", function(assert) {
+        const dataSource = createDataSource();
+        const scheduler = createScheduler("agenda", dataSource);
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([
             { type: "update", key: 8, data: { text: "updated-1" } },
             { type: "update", key: 10, data: { text: "updated-2" } }
         ]);
         dataSource.load();
-        assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
+        assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, "Should rendered all appointments");
 
-        this.markAppointments();
+        markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
             id: 15,
             text: "Fake",
@@ -342,8 +338,33 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: new Date(2017, 4, 27, 16, 30)
         } }]);
         dataSource.load();
+        assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, "Should rendered all appointments");
+    });
 
-        assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
+    QUnit.test("Scheduler should re-render appointments in Agenda view, if data source loading data", function(assert) {
+        const items = [
+            { id: 0, startDate: new Date(2017, 4, 25, 9), endDate: new Date(2017, 4, 25, 9, 30), text: "a" },
+            { id: 1, startDate: new Date(2017, 4, 27, 15), endDate: new Date(2017, 4, 27, 15, 30), text: "b" }
+        ];
+
+        const dataSource = {
+            store: new CustomStore({
+                key: "id",
+                load: () => items,
+                update: (key, values) => items[parseInt(key)] = values
+            })
+        };
+        const scheduler = createScheduler("agenda", dataSource);
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, "Should render 2 appointments");
+        markAppointments(scheduler);
+
+        scheduler.appointments.click();
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentForm.setSubject("new text");
+        scheduler.appointmentPopup.clickDoneButton();
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, "Should render 2 appointments");
+        assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, "Should re-rendered all appointments");
     });
 });
 
