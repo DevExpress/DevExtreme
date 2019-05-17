@@ -13,8 +13,21 @@ function run_lint {
 }
 
 function run_ts {
+    target=./ts/dx.all.d.ts
+    cp $target $target.current
+
     npm i
-    npx gulp ts-check npm-dts-check
+    npm run update-ts
+
+    if ! diff $target.current $target -U 5 > $target.diff; then
+        echo "FAIL: $target is outdated:"
+        cat $target.diff | sed "1,2d"
+        exit 1
+    else
+        echo "TS is up-to-date"
+    fi
+
+    npx gulp ts-compilation-check ts-jquery-check npm-ts-modules-check
 }
 
 function run_test {

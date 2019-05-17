@@ -7,6 +7,7 @@ var headerPipes = require('./header-pipes.js');
 
 var OUTPUT_DIR = 'artifacts/ts';
 var MODULES = require('./modules_metadata.json');
+var TS_PATH = './ts/dx.all.d.ts';
 
 var widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
     if(widgetPath.startsWith('ui.dx') || widgetPath.startsWith('viz.dx')) {
@@ -38,14 +39,14 @@ gulp.task('ts-vendor', function() {
 });
 
 gulp.task('ts-sources', function() {
-    return gulp.src(['./ts/dx.all.d.ts', './ts/aliases.d.ts'])
+    return gulp.src([TS_PATH, './ts/aliases.d.ts'])
         .pipe(concat("dx.all.d.ts"))
         .pipe(headerPipes.bangLicense())
         .pipe(gulp.dest(OUTPUT_DIR));
 });
 
-gulp.task('ts-check', ['ts-sources'], function() {
-    var content = '/// <reference path="./ts/dx.all.d.ts" />\n';
+gulp.task('ts-jquery-check', ['ts-sources'], function() {
+    var content = `/// <reference path="${TS_PATH}" />\n`;
 
     content += MODULES
         .map(function(moduleMeta) {
@@ -71,4 +72,11 @@ gulp.task('ts-check', ['ts-sources'], function() {
         }, ts.reporter.fullReporter()));
 });
 
-gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-check' ]);
+gulp.task('ts-compilation-check', function() {
+    return gulp.src(TS_PATH)
+        .pipe(ts({
+            noEmitOnError: true
+        }, ts.reporter.fullReporter()));
+});
+
+gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-compilation-check' ]);
