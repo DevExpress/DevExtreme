@@ -1258,8 +1258,12 @@ declare module DevExpress.ui {
         /** @name NumericRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
+    /** @name OneDriveFileProvider.Options */
+    export interface OneDriveFileProviderOptions extends FileProviderOptions<OneDriveFileProvider> {
+    }
     /** @name OneDriveFileProvider */
-    export interface OneDriveFileProvider extends FileProvider {
+    export class OneDriveFileProvider extends FileProvider {
+        constructor(options?: OneDriveFileProviderOptions)
     }
     /** @name PatternRule */
     export interface PatternRule {
@@ -3893,8 +3897,6 @@ declare module DevExpress.ui {
         hideAppointmentPopup(saveChanges?: boolean): void;
         /** @name dxScheduler.hideAppointmentTooltip() */
         hideAppointmentTooltip(): void;
-        /** @name dxScheduler.registerKeyHandler(key, handler) */
-        registerKeyHandler(): void;
         /** @name dxScheduler.scrollToTime(hours, minutes, date) */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
         /** @name dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) */
