@@ -6,6 +6,8 @@ import themes from "ui/themes";
 import { CompactAppointmentsHelper } from "ui/scheduler/compactAppointmentsHelper";
 import Widget from "ui/widget/ui.widget";
 import Color from "color";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
 
 import "ui/scheduler/ui.scheduler";
 import "common.css!";
@@ -106,6 +108,25 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             { startDate: new Date(2019, 2, 4), text: "e", endDate: new Date(2019, 2, 4, 0, 30) },
             { startDate: new Date(2019, 2, 4), text: "f", endDate: new Date(2019, 2, 4, 0, 30) }
         ];
+        this.getAppointmentColor = ($task, checkedProperty) => {
+            checkedProperty = checkedProperty || "backgroundColor";
+            return new Color($task.css(checkedProperty)).toHex();
+        };
+
+        this.checkItemDataInDropDownTemplate = (assert, dataSource, currentDate) => {
+            this.createInstance({
+                dataSource: dataSource,
+                height: 600,
+                maxAppointmentsPerCell: 1,
+                currentDate: currentDate,
+                currentView: "month",
+                views: ["month"],
+                dropDownAppointmentTemplate: function(itemData) {
+                    assert.ok(dataSource.indexOf(itemData) > -1, "appointment data contains in the data source");
+                }
+            });
+            this.scheduler.appointments.compact.click();
+        };
         this.createInstance = (options) => {
             this.instance = $("#scheduler").dxScheduler($.extend({
                 dataSource: this.tasks,
@@ -305,6 +326,438 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         this.clock.tick(300);
         assert.equal(this.scheduler.tooltip.getItemCount(), 13, "There are 13 drop down appts");
     });
+
+    QUnit.test("Appointment collector should have correct coordinates: rtl mode", (assert) =>{
+        this.createInstance({
+            currentDate: new Date(2019, 2, 4),
+            views: ["month"],
+            width: 840,
+            height: 500,
+            currentView: "month",
+            firstDayOfWeek: 1,
+            rtlEnabled: true
+        });
+        let $collector = this.scheduler.appointments.compact.getButton(0);
+
+        let collectorCoordinates = translator.locate($collector);
+        let expectedCoordinates = this.scheduler.workSpace.getCell(7).position();
+        let rtlOffset = this.scheduler.workSpace.getCell(7).outerWidth() - 36;
+
+        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, "Left coordinate is OK");
+        assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+    });
+
+    QUnit.test("Collapsed appointment should raise the onAppointmentClick event", (assert) => {
+        let tooltipItemElement = null;
+        const spy = sinon.spy();
+        const appointments = [
+            { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
+        ];
+        this.createInstance({
+            currentDate: new Date(2015, 2, 4),
+            views: ["month"],
+            width: 840,
+            height: 500,
+            currentView: "month",
+            firstDayOfWeek: 1,
+            onAppointmentClick: function(args) {
+                assert.equal(args.component, instance, "dxScheduler is 'component'");
+                assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
+                assert.deepEqual(args.appointmentData, appointments[3], "Appointment data is OK");
+
+                assert.equal($(args.appointmentElement).get(0), tooltipItemElement, "Appointment element is OK");
+                assert.ok(args.event instanceof $.Event, "Event is OK");
+
+                assert.notOk(args.hasOwnProperty('itemData'));
+                assert.notOk(args.hasOwnProperty('itemIndex'));
+                assert.notOk(args.hasOwnProperty('itemElement'));
+            }
+        });
+
+        var showAppointmentPopup = this.instance.showAppointmentPopup;
+        this.instance.showAppointmentPopup = spy;
+        try {
+            var instance = this.instance;
+
+            instance.option("dataSource", appointments);
+            this.scheduler.appointments.compact.click();
+            tooltipItemElement = this.scheduler.tooltip.getItemElement(2).get(0);
+            this.scheduler.tooltip.clickOnItem(2);
+
+        } finally {
+            this.instance.showAppointmentPopup = showAppointmentPopup;
+        }
+    });
+
+    QUnit.test("Collapse appointment should process the onAppointmentClick event correctly if e.cancel = true", (assert) => {
+        var spy = sinon.spy();
+        this.createInstance({
+            currentDate: new Date(2015, 2, 4),
+            views: ["month"],
+            width: 840,
+            height: 500,
+            currentView: "month",
+            firstDayOfWeek: 1,
+            onAppointmentClick: function(e) {
+                e.cancel = true;
+            }
+        });
+        var showAppointmentPopup = this.instance.showAppointmentPopup;
+        this.instance.showAppointmentPopup = spy;
+        try {
+            var appointments = [
+                { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+                { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+                { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
+                { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
+                { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
+                { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
+                { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
+            ];
+
+            var instance = this.instance;
+
+            instance.option("dataSource", appointments);
+
+            this.scheduler.appointments.compact.click();
+            this.scheduler.tooltip.clickOnItem(2);
+
+            assert.notOk(spy.calledOnce, "showAppointmentPopup wasn't called");
+        } finally {
+            this.instance.showAppointmentPopup = showAppointmentPopup;
+        }
+    });
+
+    QUnit.test("Appointment collector should be painted depend on resource color", (assert) => {
+        const colors = [
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff"
+        ];
+
+        var appointments = [
+            { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+            { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+
+            { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+            { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+            { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
+            { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
+            { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
+        ];
+
+        this.createInstance({
+            currentDate: new Date(2015, 2, 4),
+            views: ["month"],
+            width: 840,
+            height: 500,
+            currentView: "month",
+            firstDayOfWeek: 1,
+            resources: [
+                {
+                    field: "roomId",
+                    dataSource: [
+                        { id: 1, color: "#ff0000" },
+                        { id: 2, color: "#0000ff" }
+                    ]
+                }
+            ]
+        });
+
+        this.instance.option("dataSource", appointments);
+
+        this.scheduler.appointments.compact.click();
+        this.scheduler.tooltip.getMarkers().each((index, element) => {
+            assert.equal(this.getAppointmentColor($(element)), colors[index], "Appointment color is OK");
+        });
+    });
+
+    QUnit.test("Appointment collector should be painted depend on resource color when resourses store is asynchronous", (assert) => {
+        const colors = [
+            "#ff0000",
+            "#ff0000",
+            "#ff0000",
+            "#0000ff",
+            "#0000ff",
+            "#0000ff"
+        ];
+
+        var appointments = [
+            { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+            { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+
+            { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+            { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+            { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
+            { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
+            { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
+        ];
+        this.createInstance({
+            currentDate: new Date(2015, 2, 4),
+            views: ["month"],
+            width: 840,
+            height: 500,
+            currentView: "month",
+            firstDayOfWeek: 1,
+            resources: [
+                {
+                    field: "roomId",
+                    allowMultiple: true,
+                    dataSource: new DataSource({
+                        store: new CustomStore({
+                            load: function() {
+                                var d = $.Deferred();
+                                setTimeout(function() {
+                                    d.resolve([
+                                        { id: 1, text: "Room 1", color: "#ff0000" },
+                                        { id: 2, text: "Room 2", color: "#0000ff" }
+                                    ]);
+                                }, 300);
+
+                                return d.promise();
+                            }
+                        })
+                    })
+                }
+            ]
+        });
+
+        this.instance.option("dataSource", appointments);
+        this.clock.tick(300);
+
+        this.scheduler.appointments.compact.click();
+        this.scheduler.tooltip.getMarkers().each((index, element) => {
+            assert.equal(this.getAppointmentColor($(element)), colors[index], "Appointment color is OK");
+        });
+    });
+
+    QUnit.test("Collapsed appointments should not be duplicated when items option change (T503748)", (assert) => {
+        this.createInstance({
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2016, 8, 20),
+            dataSource: [
+                { text: 'a', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
+                { text: 'b', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
+                { text: 'c', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
+                { text: 'd', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
+                { text: 'e', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
+                { text: 'f', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 12, 2) }
+            ],
+            width: 470,
+            height: 650
+        });
+
+        this.instance.addAppointment({
+            text: "g",
+            startDate: new Date(2016, 8, 12),
+            endDate: new Date(2016, 8, 12, 1)
+        });
+
+        this.scheduler.appointments.compact.click();
+        assert.equal(this.scheduler.tooltip.getItemCount(), 2, "There are 3 drop down appts");
+    });
+
+    QUnit.test("Collapsed appointment should be rendered correctly with expressions on custom template", (assert) => {
+        var startDate = new Date(2015, 1, 4, 1),
+            endDate = new Date(2015, 1, 4, 2);
+        var appointments = [{
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 1"
+        }, {
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 2"
+        }, {
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 3"
+        }];
+
+        this.createInstance({
+            currentDate: new Date(2015, 1, 4),
+            views: ["month"],
+            currentView: "month",
+            firstDayOfWeek: 1,
+            dataSource: appointments,
+            startDateExpr: "Start",
+            endDateExpr: "End",
+            textExpr: "Text",
+            height: 500,
+            maxAppointmentsPerCell: "auto",
+            dropDownAppointmentTemplate: function(data) {
+                return "<div class='custom-title'>" + data.Text + "</div>";
+            }
+        });
+
+        this.scheduler.appointments.compact.click();
+        assert.equal(this.scheduler.tooltip.getItemElement().find(".custom-title").text(), "Item 2", "Text is correct on init");
+    });
+
+
+    QUnit.test("Appointment collector should be rendered correctly when appointmentCollectorTemplate is used", (assert) => {
+        var startDate = new Date(2015, 1, 4, 1),
+            endDate = new Date(2015, 1, 4, 2);
+        var appointments = [{
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 1"
+        }, {
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 2"
+        }, {
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 3"
+        }];
+
+        this.createInstance({
+            currentDate: new Date(2015, 1, 4),
+            views: ["month"],
+            currentView: "month",
+            firstDayOfWeek: 1,
+            dataSource: appointments,
+            startDateExpr: "Start",
+            endDateExpr: "End",
+            textExpr: "Text",
+            height: 500,
+            maxAppointmentsPerCell: "auto",
+            appointmentCollectorTemplate: function(data) {
+                return "<div class='button-title'>Appointment count is " + data.appointmentCount + "</div>";
+            }
+        });
+
+        let $collector = this.scheduler.appointments.compact.getButton(0);
+
+        assert.equal($collector.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
+    });
+
+    QUnit.test("dxScheduler should render dropDownAppointment appointment template with render function that returns dom node", (assert) => {
+        var startDate = new Date(2015, 1, 4, 1),
+            endDate = new Date(2015, 1, 4, 2);
+        var appointments = [{
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 1"
+        }, {
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 2"
+        }, {
+            Start: startDate.getTime(),
+            End: endDate.getTime(),
+            Text: "Item 3"
+        }];
+
+        this.createInstance({
+            currentDate: new Date(2015, 1, 4),
+            views: ["month"],
+            currentView: "month",
+            firstDayOfWeek: 1,
+            dataSource: appointments,
+            startDateExpr: "Start",
+            endDateExpr: "End",
+            textExpr: "Text",
+            height: 500,
+            maxAppointmentsPerCell: "auto",
+            dropDownAppointmentTemplate: "dropDownAppointmentTemplate",
+            integrationOptions: {
+                templates: {
+                    "dropDownAppointmentTemplate": {
+                        render: function(args) {
+                            var $element = $("<span>")
+                                .addClass("dx-template-wrapper")
+                                .text("text");
+
+                            return $element.get(0);
+                        }
+                    }
+                }
+            }
+        });
+
+        this.scheduler.appointments.compact.click();
+        assert.equal(this.scheduler.tooltip.getItemElement().text(), "text", "Text is correct on init");
+    });
+
+    QUnit.test("Appointment collector should have correct width on timeline view", (assert) => {
+        this.createInstance({
+            currentDate: new Date(2015, 2, 4),
+            views: [{ type: "timelineDay", name: "timelineDay" }],
+            width: 850,
+            maxAppointmentsPerCell: 2,
+            currentView: "timelineDay"
+        });
+
+        this.instance.option("dataSource", [
+            { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
+        ]);
+
+        let collectorWidth = this.scheduler.appointments.compact.getButtonWidth(0);
+        let cellWidth = this.scheduler.workSpace.getCell(0).outerWidth();
+
+        assert.roughEqual(collectorWidth, cellWidth - 4, 1.5, "DropDown button has correct width");
+    });
+
+    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source", (assert) => {
+        var dataSource = [{
+            startDate: new Date(2015, 4, 24, 9),
+            endDate: new Date(2015, 4, 24, 11),
+            allDay: true,
+            text: "Task 1"
+        }, {
+            startDate: new Date(2015, 4, 24, 15),
+            endDate: new Date(2015, 4, 24, 20),
+            allDay: true,
+            text: "Task 2"
+        }, {
+            startDate: new Date(2015, 4, 24, 45),
+            endDate: new Date(2015, 4, 24, 55),
+            allDay: true,
+            text: "Task 3"
+        }];
+        this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+    });
+
+    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule", (assert) => {
+        var dataSource = [{
+            startDate: new Date(2015, 4, 24, 9),
+            endDate: new Date(2015, 4, 24, 11),
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            allDay: true,
+            text: "Task 1"
+        }, {
+            startDate: new Date(2015, 4, 24, 19),
+            endDate: new Date(2015, 4, 24, 31),
+            allDay: true,
+            recurrenceRule: "FREQ=DAILY;COUNT=2",
+            text: "Task 2"
+        }, {
+            startDate: new Date(2015, 4, 24, 24),
+            endDate: new Date(2015, 4, 24, 34),
+            allDay: true,
+            recurrenceRule: "FREQ=DAILY;COUNT=4",
+            text: "Task 3"
+        }];
+        this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+    });
+
 });
 
 QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
