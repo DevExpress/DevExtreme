@@ -262,7 +262,7 @@ QUnit.test("render with label, emptyRange", function(assert) {
 
 QUnit.test("show", function(assert) {
     var crosshair = this.createCrosshair({}, {}),
-        dataForShow = getDataForShowCrosshair({ x: 100, y: 30, xValue: "x100", yValue: "y30", axis: "defaultAxisName" }, 6);
+        dataForShow = getDataForShowCrosshair({ x: 100, y: 720, xValue: "x100", yValue: "y30", axis: "defaultAxisName" }, 6);
 
     dataForShow.x = "someX";
     dataForShow.y = "someY";
@@ -279,7 +279,7 @@ QUnit.test("show", function(assert) {
     assert.equal(crosshair._circle.attr.callCount, 2);
     assert.equal(crosshair._circle.attr.getCall(1).args[0].r, 9);
     assert.equal(crosshair._circle.attr.getCall(1).args[0].cx, 100);
-    assert.equal(crosshair._circle.attr.getCall(1).args[0].cy, 30);
+    assert.equal(crosshair._circle.attr.getCall(1).args[0].cy, 720);
     assert.equal(crosshair._circle.attr.getCall(1).args[0]["clip-path"], "clipRect");
 
     assert.equal(crosshair._horizontal.lines[0].attr.callCount, 2);
@@ -287,8 +287,15 @@ QUnit.test("show", function(assert) {
     assert.deepEqual(crosshair._horizontal.lines[1].attr.getCall(1).args[0].points, [109, 10, 710, 10]);
 
     assert.equal(crosshair._vertical.lines[0].attr.callCount, 2);
-    assert.deepEqual(crosshair._vertical.lines[0].attr.getCall(1).args[0].points, [80, 10, 80, 21]);
-    assert.deepEqual(crosshair._vertical.lines[1].attr.getCall(1).args[0].points, [80, 39, 80, 720]);
+    assert.deepEqual(crosshair._vertical.lines[0].attr.getCall(1).args[0].points, [80, 10, 80, 711]);
+    assert.deepEqual(crosshair._vertical.lines[1].attr.getCall(1).args[0].points, [80, 729, 80, 729]);
+
+    assert.equal(this.renderer.path.getCall(0).returnValue.sharp.callCount, 2);
+    assert.equal(this.renderer.path.getCall(2).returnValue.sharp.callCount, 2);
+    assert.deepEqual(this.renderer.path.getCall(0).returnValue.sharp.secondCall.args, ["h", 1]);
+    assert.deepEqual(this.renderer.path.getCall(1).returnValue.sharp.secondCall.args, ["h", 1]);
+    assert.deepEqual(this.renderer.path.getCall(2).returnValue.sharp.secondCall.args, ["v", -1]);
+    assert.deepEqual(this.renderer.path.getCall(3).returnValue.sharp.secondCall.args, ["v", -1]);
 });
 
 QUnit.test("T255239. Show when vertical and horizontal lines are invisible", function(assert) {
