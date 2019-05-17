@@ -358,7 +358,7 @@ extend(legendPrototype, {
         return this._options;
     },
 
-    update: function(data, options, themeManagerTitleOptions) {
+    update: function(data, options, themeManagerTitleOptions = {}) {
         const that = this;
         options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
         that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
@@ -376,7 +376,7 @@ extend(legendPrototype, {
         if(that._title) {
             const titleOptions = options.title;
 
-            titleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
+            themeManagerTitleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
             that._title.update(themeManagerTitleOptions, titleOptions);
         }
 
