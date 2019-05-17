@@ -133,12 +133,12 @@ exports.custom = function(options) {
         });
     });
 
+    const showTitle = options.showTitle === undefined ? true : options.showTitle;
+
     const popupInstance = new Popup($element, extend({
         title: options.title || exports.title,
-        showTitle: function() {
-            const isTitle = options.showTitle === undefined ? true : options.showTitle;
-            return isTitle;
-        }(),
+        dragEnabled: showTitle,
+        showTitle: showTitle,
         height: "auto",
         width: function() {
             const isPortrait = $(window).height() > $(window).width(),
