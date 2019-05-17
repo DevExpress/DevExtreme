@@ -4,4 +4,6 @@
 * @module ui/tree_view
 * @export default
 */
-module.exports = require("./tree_view/ui.tree_view.search");
+import TreeViewSearch from "./tree_view/ui.tree_view.search";
+
+module.exports = TreeViewSearch;

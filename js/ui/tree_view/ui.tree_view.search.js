@@ -10,7 +10,13 @@ class TreeViewSearch extends TreeViewBase.include(searchBoxMixin) {
         return "dx-treeview-" + className;
     }
 
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), this._searchBoxMixinDefaultOptions());
+    }
+
     _optionChanged(args) {
+        this._searchBoxMixinOptionChanged(args);
+
         switch(args.name) {
             case "searchValue":
                 if(this._showCheckboxes() && this._isRecursiveSelection()) {
@@ -29,8 +35,14 @@ class TreeViewSearch extends TreeViewBase.include(searchBoxMixin) {
                 this.repaint();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
+    }
+
+    _initMarkup() {
+        this._searchBoxMixinInitMarkup();
+
+        super._initMarkup();
     }
 
     _updateDataAdapter() {
@@ -42,7 +54,7 @@ class TreeViewSearch extends TreeViewBase.include(searchBoxMixin) {
     }
 
     _getDataAdapterOptions() {
-        return extend(this.callBase(), {
+        return extend(super._getDataAdapterOptions(), {
             searchValue: this.option("searchValue"),
             searchMode: this.option("searchMode") || "contains",
             searchExpr: this.option("searchExpr")
@@ -73,7 +85,27 @@ class TreeViewSearch extends TreeViewBase.include(searchBoxMixin) {
         if(this.option("searchEnabled")) {
             return this._scrollableContainer.$element();
         }
-        return this.callBase();
+
+        return super._focusTarget();
+    }
+
+    _getAreaTarget() {
+        return this._searchBoxMixinGetAriaTarget();
+    }
+
+    _updateFocusState(e, isFocused) {
+        this._searchBoxMixinUpdateFocusState(isFocused);
+
+        super._updateFocusState(e, isFocused);
+    }
+
+    focus() {
+        if(!this.option("focusedElement") && this.option("searchEnabled")) {
+            this._searchEditor && this._searchEditor.focus();
+            return;
+        }
+
+        super.focus();
     }
 
     _addWidgetClass() {
@@ -81,8 +113,16 @@ class TreeViewSearch extends TreeViewBase.include(searchBoxMixin) {
     }
 
     _clean() {
-        this.callBase();
+        super._clean();
         this._removeSearchBox();
+    }
+
+    _refresh() {
+        if(this._valueChangeDeferred) {
+            this._valueChangeDeferred.resolve();
+        }
+
+        super._refresh();
     }
 }
 

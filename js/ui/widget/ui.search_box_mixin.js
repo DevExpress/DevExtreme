@@ -13,8 +13,8 @@ var $ = require("../../core/renderer"),
 */
 
 module.exports = {
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _searchBoxMixinDefaultOptions: function() {
+        return {
             /**
             * @name SearchBoxMixinOptions.searchMode
             * @type Enums.CollectionSearchMode
@@ -55,12 +55,11 @@ module.exports = {
             * @type number
             * @default undefined
             */
-        });
+        };
     },
 
-    _initMarkup: function() {
+    _searchBoxMixinInitMarkup: function() {
         this._renderSearch();
-        this.callBase();
     },
 
     _renderSearch: function() {
@@ -123,30 +122,21 @@ module.exports = {
         }, userEditorOptions);
     },
 
-    _getAriaTarget: function() {
+    _searchBoxMixinGetAriaTarget: function() {
         return this.$element();
     },
 
-    _focusTarget: function() {
-        if(this.option("searchEnabled")) {
-            return this._itemContainer();
-        }
-
-        return this.callBase();
-    },
-
-    _updateFocusState: function(e, isFocused) {
+    _searchBoxMixinUpdateFocusState: function(isFocused) {
         if(this.option("searchEnabled")) {
             this._toggleFocusClass(isFocused, this.$element());
         }
-        this.callBase(e, isFocused);
     },
 
     getOperationBySearchMode: function(searchMode) {
         return searchMode === "equals" ? "=" : searchMode;
     },
 
-    _optionChanged: function(args) {
+    _searchBoxMixinOptionChanged: function(args) {
         switch(args.name) {
             case "searchEnabled":
             case "searchEditorOptions":
@@ -168,12 +158,10 @@ module.exports = {
                 break;
             case "searchTimeout":
                 break;
-            default:
-                this.callBase(args);
         }
     },
 
-    focus: function() {
+    searchBoxMixinFocus: function() {
         if(!this.option("focusedElement") && this.option("searchEnabled")) {
             this._searchEditor && this._searchEditor.focus();
             return;
@@ -182,7 +170,7 @@ module.exports = {
         this.callBase();
     },
 
-    _refresh: function() {
+    _searchBoxMixinRefresh: function() {
         if(this._valueChangeDeferred) {
             this._valueChangeDeferred.resolve();
         }

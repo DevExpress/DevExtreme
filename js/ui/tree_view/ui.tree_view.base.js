@@ -82,7 +82,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
             this._toggleExpandedNestedItems([rootItem], state);
         };
 
-        return extend(this.callBase(), {
+        return extend(super._supportedKeys(), {
             enter: this._showCheckboxes() ? select : click,
             space: this._showCheckboxes() ? select : click,
             asterisk: toggleExpandedNestedItems.bind(this, true),
@@ -133,7 +133,9 @@ class TreeViewBase extends HierarchicalCollectionWidget {
     }
 
     _getDefaultOptions() {
-        return extend(this.callBase(), {
+        const defaultOptions = super._getDefaultOptions();
+
+        return extend(defaultOptions, {
             /**
             * @name dxTreeViewOptions.items
             * @type Array<dxTreeViewItem>
@@ -506,10 +508,10 @@ class TreeViewBase extends HierarchicalCollectionWidget {
                 break;
             case "items":
                 delete this._$selectAllItem;
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             case "dataSource":
-                this.callBase(args);
+                super._optionChanged(args);
                 this._initDataAdapter();
                 this._filter = {};
                 break;
@@ -541,7 +543,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
                 this.repaint();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
 
@@ -553,7 +555,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
                 }
             });
         } else {
-            this.callBase();
+            super._initDataSource();
             this._isVirtualMode() && this._initVirtualMode();
         }
     }
@@ -606,7 +608,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
         this._activeStateUnit = `.${ITEM_CLASS}`;
         this._initSelectedItems = commonUtils.noop;
         this._syncSelectionOptions = commonUtils.asyncNoop;
-        this.callBase();
+        super._init();
 
         this._initStoreChangeHandlers();
     }
@@ -764,7 +766,8 @@ class TreeViewBase extends HierarchicalCollectionWidget {
     _initMarkup() {
         this._renderScrollableContainer();
         this._renderEmptyMessage(this._dataAdapter.getRootNodes());
-        this.callBase();
+
+        super._initMarkup();
         this.setAria("role", "tree");
     }
 
@@ -795,7 +798,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
     }
 
     _fireContentReadyAction() {
-        this.callBase();
+        super._fireContentReadyAction();
 
         if(this._scrollableContainer && windowUtils.hasWindow()) {
             this._scrollableContainer.update();
@@ -876,7 +879,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
         this.setAria("selected", nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
 
-        this.callBase(nodeData.key, nodeData.item, $node);
+        super._renderItem(nodeData.key, nodeData.item, $node);
 
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);
@@ -910,7 +913,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
             return this._hasItemsGetter(node.internalFields.item) !== false;
         }
 
-        return this.callBase(node);
+        return super._hasChildren(node);
     }
 
     _loadSublevel(node) {
@@ -1232,7 +1235,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
     }
 
     _emptyMessageContainer() {
-        return this._scrollableContainer ? this._scrollableContainer.content() : this.callBase();
+        return this._scrollableContainer ? this._scrollableContainer.content() : super._emptyMessageContainer();
     }
 
     _renderContent() {
@@ -1241,7 +1244,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
             this._contentAlreadyRendered = true;
         }
 
-        this.callBase();
+        super._renderContent();
     }
 
     _renderSelectAllItem($container) {
@@ -1562,7 +1565,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
         }
 
         if(!$target.children().hasClass(DISABLED_STATE_CLASS)) {
-            this.callBase($target);
+            super._setFocusedItem($target);
         }
 
         this._scrollableContainer.scrollToElement($target.find("." + ITEM_CLASS).first());
@@ -1649,7 +1652,7 @@ class TreeViewBase extends HierarchicalCollectionWidget {
                 this._collapseFocusedContainer();
                 break;
             default:
-                this.callBase.apply(this, arguments);
+                super._moveFocus(this, arguments);
                 return;
         }
     }
