@@ -17,27 +17,21 @@ class TreeViewTestWrapper {
     constructor(instance) {
         this.instance = instance;
     }
-
     getElement() {
         return this.instance._$element;
     }
-
     getNodes() {
         return this.getElement().find(`.${NODE_CLASS}`);
     }
-
     getItems() {
         return this.getElement().find(`.${ITEM_CLASS}`);
     }
-
     getSelectedNodes() {
         return this.getElement().find(`.${NODE_CLASS}.${SELECTED_ITEM_CLASS}`);
     }
-
     getCheckBoxes() {
         return this.getElement().find(`.${CHECK_BOX_CLASS}`);
     }
-
     getAllSelectedCheckboxes() {
         return this.getElement().find(`.${CHECK_BOX_CHECKED_CLASS}`);
     }
