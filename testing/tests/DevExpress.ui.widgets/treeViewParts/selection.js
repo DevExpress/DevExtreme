@@ -4,7 +4,7 @@ import $ from "jquery";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 import eventsEngine from "events/core/events_engine";
 
-let { module, test } = QUnit;
+let { module, test, assert } = QUnit;
 
 const WIDGET_CLASS = "dx-treeview";
 const NODE_CLASS = "dx-treeview-node";
@@ -41,6 +41,20 @@ class TreeViewTestWrapper {
     getAllSelectedCheckboxes() {
         return this.getElement().find(`.${CHECK_BOX_CHECKED_CLASS}`);
     }
+
+    checkSelectedNodes(selectedIndexes, items) {
+        selectedIndexes.forEach((index) => {
+            assert.equal(this.getNodes().eq(index).hasClass(SELECTED_ITEM_CLASS), true, `item ${index} has selected class`);
+            items && assert.equal(items[index].selected, true, `item ${index} is selected`);
+        });
+
+        this.getNodes().each((index) => {
+            if(selectedIndexes.indexOf(index) === -1) {
+                assert.equal(this.getNodes().eq(index).hasClass(SELECTED_ITEM_CLASS), false, `item ${index} has no selected class`);
+                items && assert.equal(!!items[index].selected, false, `item ${index} is not selected`);
+            }
+        });
+    }
 }
 
 const createInstance = function(options) {
@@ -57,11 +71,7 @@ module("selection common", () => {
             showCheckBoxesMode: "none"
         });
 
-        assert.ok(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "node should be selected");
-        assert.ok(items[0].selected, "item should be selected");
-
-        assert.notOk(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "node should not be selected");
-        assert.notOk(items[1].selected, "item should not be selected");
+        treeView.checkSelectedNodes([0], items);
     });
 
     test("selection methods should work with item keys", function(assert) {
@@ -71,12 +81,10 @@ module("selection common", () => {
         });
 
         treeView.instance.unselectItem(1);
-        assert.notOk(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "node should not be selected");
-        assert.notOk(items[0].selected, "item should not be selected");
+        treeView.checkSelectedNodes([], items);
 
         treeView.instance.selectItem(2);
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "node should be selected");
-        assert.ok(items[1].selected, "item should be selected");
+        treeView.checkSelectedNodes([1], items);
     });
 
     test("selection methods should work with itemElements", function(assert) {
@@ -86,12 +94,10 @@ module("selection common", () => {
         });
 
         treeView.instance.unselectItem(treeView.getNodes().eq(0).find(`.${ITEM_CLASS}`).eq(0));
-        assert.notOk(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "node should not be selected");
-        assert.notOk(items[0].selected, "item should not be selected");
+        treeView.checkSelectedNodes([], items);
 
         treeView.instance.selectItem(treeView.getNodes().eq(1).find(`.${ITEM_CLASS}`).eq(0));
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "node should be selected");
-        assert.ok(items[1].selected, "item should be selected");
+        treeView.checkSelectedNodes([1], items);
     });
 
     test("selection methods should work with dom itemElements", function(assert) {
@@ -101,12 +107,10 @@ module("selection common", () => {
         });
 
         treeView.instance.unselectItem(treeView.getNodes().eq(0).find(`.${ITEM_CLASS}`).eq(0).get(0));
-        assert.notOk(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "node should not be selected");
-        assert.notOk(items[0].selected, "item should not be selected");
+        treeView.checkSelectedNodes([], items);
 
         treeView.instance.selectItem(treeView.getNodes().eq(1).find(`.${ITEM_CLASS}`).eq(0).get(0));
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "node should be selected");
-        assert.ok(items[1].selected, "item should be selected");
+        treeView.checkSelectedNodes([1], items);
     });
 
     test("selectionChanged should fire only when selection was changed", function(assert) {
@@ -122,6 +126,7 @@ module("selection common", () => {
         treeView.instance.selectItem(2);
         treeView.instance.unselectItem(1);
 
+        treeView.checkSelectedNodes([1], items);
         assert.equal(selectionChangedHandler.callCount, 2, "selectionChanged should call twice");
     });
 
@@ -135,7 +140,6 @@ module("selection common", () => {
         treeView.instance.selectItem(2);
 
         assert.equal(itemSelectionChangedHandler.callCount, 1, "selection was changed once");
-
         // note: other parameters are redundant but they were saved in the code to prevent a BC
         assert.equal(itemSelectionChangedHandler.getCall(0).args[0].component.NAME, treeView.instance.NAME, "component is correct");
         assert.ok($(itemSelectionChangedHandler.getCall(0).args[0].element).hasClass(WIDGET_CLASS), "element is correct");
@@ -145,25 +149,31 @@ module("selection common", () => {
 
     test("itemSelected should fire when select", function(assert) {
         let itemSelectionChangedHandler = sinon.spy();
+
+        const items = [{ text: "item 1", selected: true }, { text: "item 2" }];
         const treeView = createInstance({
-            items: [{ text: "item 1", selected: true }, { text: "item 2" }],
+            items: items,
             onItemSelectionChanged: itemSelectionChangedHandler
         });
 
         treeView.instance.selectItem(2);
 
+        treeView.checkSelectedNodes([0, 1], items);
         assert.equal(itemSelectionChangedHandler.callCount, 1, "event was fired");
     });
 
     test("itemSelected should not fire when selection was not changed", function(assert) {
         let itemSelectionChangedHandler = sinon.spy();
+
+        const items = [{ text: "item 1", selected: true }, { text: "item 2" }];
         const treeView = createInstance({
-            items: [{ text: "item 1", selected: true }, { text: "item 2" }],
+            items: items,
             onItemSelectionChanged: itemSelectionChangedHandler
         });
 
         treeView.instance.selectItem(1);
 
+        treeView.checkSelectedNodes([0], items);
         assert.equal(itemSelectionChangedHandler.callCount, 0, "event was not fired");
     });
 
@@ -175,13 +185,10 @@ module("selection common", () => {
         });
 
         treeView.instance.selectItem(1);
-        assert.ok(items[0].selected, "item should be selected");
+        treeView.checkSelectedNodes([0, 1], items);
 
         treeView.instance.unselectItem(1);
-        assert.notOk(items[0].selected, "item should not be selected");
-
-        assert.ok(items[1].selected, "item should be selected");
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "item should be selected");
+        treeView.checkSelectedNodes([1], items);
     });
 
     test("all nodes should have selected class if they have selected property", function(assert) {
@@ -191,6 +198,7 @@ module("selection common", () => {
             showCheckBoxesMode: "none"
         });
 
+        treeView.checkSelectedNodes([0, 1, 2]);
         assert.equal(treeView.getSelectedNodes().length, 3, "all nodes should have selected class");
     });
 
@@ -221,7 +229,7 @@ module("selection common", () => {
 });
 
 module("Selection mode", () => {
-    test("Items: [{ text: 'item 1', selected: true }, { text: 'item 2' }], single -> multiple, click(item 2)", (assert) => {
+    test("Selected: [node 1], single -> multiple, click(node 2), selected: [node 1, node 2]", (assert) => {
         const items = [{ text: "item 1", selected: true }, { text: "item 2" }];
         const treeView = createInstance({
             items: items,
@@ -230,17 +238,15 @@ module("Selection mode", () => {
             showCheckBoxesMode: "normal"
         });
 
-        assert.equal(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), true, "node is selected");
-        assert.equal(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), false, "node is selected");
+        treeView.checkSelectedNodes([0], items);
 
         treeView.instance.option("selectionMode", "multiple");
         eventsEngine.trigger(treeView.getItems().eq(1), "dxclick");
 
-        assert.equal(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), true, "node is selected");
-        assert.equal(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), true, "node is selected");
+        treeView.checkSelectedNodes([0, 1], items);
     });
 
-    test("Items: [{ text: 'item 1'}, { text: 'item 2' }], multiple -> single, click(item1, item 2)", (assert) => {
+    test("Selected: [], multiple -> single, click(node 2), selected: [node 2]", (assert) => {
         const items = [{ text: "item 1" }, { text: "item 2" }];
         const treeView = createInstance({
             items: items,
@@ -251,14 +257,82 @@ module("Selection mode", () => {
 
         eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
 
-        assert.equal(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), true, "node is selected");
-        assert.equal(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), false, "node is selected");
+        treeView.checkSelectedNodes([0], items);
 
         treeView.instance.option("selectionMode", "single");
         eventsEngine.trigger(treeView.getItems().eq(1), "dxclick");
 
-        assert.equal(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), false, "node is selected");
-        assert.equal(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), true, "node is selected");
+        treeView.checkSelectedNodes([1], items);
+    });
+
+    test("Selected: [node 2], single -> multiple, click(node 1), selected: [node 1, node 2], selectNodesRecursive: false", (assert) => {
+        const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12" }] }];
+        const treeView = createInstance({
+            items: items,
+            selectionMode: "single",
+            selectByClick: true,
+            showCheckBoxesMode: "normal",
+            selectNodesRecursive: false
+        });
+
+        treeView.checkSelectedNodes([1]);
+
+        treeView.instance.option("selectionMode", "multiple");
+        eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
+
+        treeView.checkSelectedNodes([0, 1]);
+    });
+
+    test("Selected: [node 2], single -> multiple, click(node 1), selected: [node 1, node 2, node 3], selectNodesRecursive: true", (assert) => {
+        const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12" }] }];
+        const treeView = createInstance({
+            items: items,
+            selectionMode: "single",
+            selectByClick: true,
+            showCheckBoxesMode: "normal",
+            selectNodesRecursive: true
+        });
+
+        treeView.checkSelectedNodes([1]);
+
+        treeView.instance.option("selectionMode", "multiple");
+        eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
+
+        treeView.checkSelectedNodes([0, 1, 2]);
+    });
+
+    test("Selected nodes: [node 2, node 3], multiple -> single, selected: [node 3], selectNodesRecursive: false", (assert) => {
+        const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12", selected: true }] }];
+        const treeView = createInstance({
+            items: items,
+            selectionMode: "multiple",
+            selectByClick: true,
+            showCheckBoxesMode: "normal",
+            selectNodesRecursive: false
+        });
+
+        treeView.checkSelectedNodes([1, 2]);
+
+        treeView.instance.option("selectionMode", "single");
+
+        treeView.checkSelectedNodes([2]);
+    });
+
+    test("Selected nodes: [node 1, node 2, node 3], multiple -> single, selected: [node 3], selectNodesRecursive: true", (assert) => {
+        const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12", selected: true }] }];
+        const treeView = createInstance({
+            items: items,
+            selectionMode: "multiple",
+            selectByClick: true,
+            showCheckBoxesMode: "normal",
+            selectNodesRecursive: true
+        });
+
+        treeView.checkSelectedNodes([0, 1, 2]);
+
+        treeView.instance.option("selectionMode", "single");
+
+        treeView.checkSelectedNodes([2]);
     });
 });
 
@@ -267,8 +341,7 @@ module("selection single", () => {
         const items = [{ text: "item 1", selected: true }, { text: "item 2", selected: true }];
         const treeView = createInstance({ items: items, selectionMode: "single" });
 
-        assert.notOk(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "node should not be selected");
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "node should be selected");
+        treeView.checkSelectedNodes([1], items);
     });
 
     test("only one node should be selected on selection change", function(assert) {
@@ -277,13 +350,13 @@ module("selection single", () => {
 
         treeView.instance.selectItem(2);
 
-        assert.notOk(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "node should not be selected");
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "node should be selected");
+        treeView.checkSelectedNodes([1], items);
     });
 
     test("last item should not be deselected when selectionRequired is used with checkboxes", function(assert) {
+        const items = [{ id: 1, text: "item 1", selected: true }];
         const treeView = createInstance({
-            items: [{ id: 1, text: "item 1", selected: true }],
+            items: items,
             showCheckBoxesMode: "normal",
             selectionMode: "single",
             selectionRequired: true
@@ -293,14 +366,15 @@ module("selection single", () => {
 
         eventsEngine.trigger($checkBox, "dxclick");
 
-        assert.ok(treeView.getNodes().hasClass(SELECTED_ITEM_CLASS), "node is selected");
+        treeView.checkSelectedNodes([0], items);
         assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1], "node was not removed from selected nodes array");
         assert.ok($checkBox.dxCheckBox("instance").option("value"), "node's checkbox is still checked");
     });
 
     test("last item should not be deselected when selectionRequired is used without checkboxes", function(assert) {
+        const items = [{ id: 1, text: "item 1", selected: true }];
         const treeView = createInstance({
-            items: [{ id: 1, text: "item 1", selected: true }],
+            items: items,
             showCheckBoxesMode: "none",
             selectionMode: "single",
             selectByClick: true,
@@ -311,13 +385,14 @@ module("selection single", () => {
 
         eventsEngine.trigger($item, "dxclick");
 
-        assert.ok(treeView.getNodes().hasClass(SELECTED_ITEM_CLASS), "node is selected");
+        treeView.checkSelectedNodes([0], items);
         assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1], "node was not removed from selected nodes array");
     });
 
     test("last item should not be deselected when selectionRequired is used with api", function(assert) {
+        const items = [{ id: 1, text: "item 1", selected: true }];
         const treeView = createInstance({
-            items: [{ id: 1, text: "item 1", selected: true }],
+            items: items,
             showCheckBoxesMode: "none",
             selectionMode: "single",
             selectionRequired: true
@@ -325,30 +400,33 @@ module("selection single", () => {
 
         treeView.instance.unselectItem(1);
 
-        assert.ok(treeView.getNodes().hasClass(SELECTED_ITEM_CLASS), "node is selected");
+        treeView.checkSelectedNodes([0], items);
         assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1], "node was not removed from selected nodes array");
     });
 
     test("last item should not be deselected when selectionRequired is used with multiple selection", function(assert) {
+        const items = [{ id: 1, text: "item 1", selected: true }, { id: 2, text: "item 2", selected: true }];
         const treeView = createInstance({
-            items: [{ id: 1, text: "item 1", selected: true }, { id: 2, text: "item 2", selected: true }],
+            items: items,
             showCheckBoxesMode: "none",
             selectionMode: "multiple",
             selectionRequired: true
         });
 
         treeView.instance.unselectItem(1);
-        assert.notOk(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "node is not selected");
+
+        treeView.checkSelectedNodes([1]);
         assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [2], "node was removed from selected nodes array");
 
         treeView.instance.unselectItem(2);
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "node is selected");
+        treeView.checkSelectedNodes([1]);
         assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [2], "node was not removed from selected nodes array");
     });
 
     test("last item should not be deselected when selectionRequired is used with recursive selection", function(assert) {
+        const items = [{ id: 1, text: "item 1", selected: true, expanded: true, items: [{ id: 11, text: "Item 11" }] }];
         const treeView = createInstance({
-            items: [{ id: 1, text: "item 1", selected: true, expanded: true, items: [{ id: 11, text: "Item 11" }] }],
+            items: items,
             showCheckBoxesMode: "none",
             selectionMode: "multiple",
             selectNodesRecursive: true,
@@ -356,29 +434,22 @@ module("selection single", () => {
         });
 
         treeView.instance.unselectItem(1);
-        assert.ok(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "root node is selected");
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "leaf node is selected");
+        treeView.checkSelectedNodes([0, 1]);
         assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [1, 11], "all nodes are still in the selected array");
     });
 
     test("last item should not be deselected when selectionRequired is used with select all", function(assert) {
+        const items = [{ id: 1, text: "item 1", selected: true, expanded: true, items: [{ id: 11, text: "Item 11" }] }, { id: 2, text: "Item 2", selected: true }];
         const treeView = createInstance({
-            items: [{
-                id: 1,
-                text: "item 1",
-                selected: true,
-                expanded: true,
-                items: [{ id: 11, text: "Item 11" }]
-            }, { id: 2, text: "Item 2", selected: true }],
+            items: items,
             selectionMode: "multiple",
             selectNodesRecursive: true,
             selectionRequired: true
         });
 
         treeView.instance.unselectAll();
-        assert.notOk(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "first node is not selected");
-        assert.notOk(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "child node is not selected");
-        assert.ok(treeView.getNodes().eq(2).hasClass(SELECTED_ITEM_CLASS), "last node is selected");
+
+        treeView.checkSelectedNodes([2]);
         assert.deepEqual(treeView.instance.getSelectedNodesKeys(), [2], "last noder is still in the selected array");
     });
 
@@ -393,7 +464,7 @@ module("selection single", () => {
         treeView.instance.option("selectByClick", true);
         eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
 
-        assert.ok(items[0].selected, "item was selected");
+        treeView.checkSelectedNodes([0], items);
     });
 
     test("selectByClick option should unselect item  by second click", function(assert) {
@@ -407,7 +478,7 @@ module("selection single", () => {
         eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
         eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
 
-        assert.notOk(items[0].selected, "item was unselected");
+        treeView.checkSelectedNodes([], items);
     });
 
     test("selection can be prevented on itemClick", function(assert) {
@@ -422,8 +493,7 @@ module("selection single", () => {
         });
 
         eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
-
-        assert.notOk(items[0].selected, "item selection has been prevented");
+        treeView.checkSelectedNodes([], items);
     });
 
     test("selectNodesRecursive should be ignored when single selection is enabled", function(assert) {
@@ -436,8 +506,7 @@ module("selection single", () => {
 
         eventsEngine.trigger(treeView.getItems().eq(0), "dxclick");
 
-        assert.ok(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "root node should be selected");
-        assert.notOk(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "nested node should not be selected");
+        treeView.checkSelectedNodes([0]);
     });
 
     test("selectNodesRecursive should work correct on option changing", function(assert) {
@@ -448,9 +517,7 @@ module("selection single", () => {
         });
 
         treeView.instance.option("selectNodesRecursive", true);
-
-        assert.ok(treeView.getNodes().eq(0).hasClass(SELECTED_ITEM_CLASS), "root node should be selected");
-        assert.ok(treeView.getNodes().eq(1).hasClass(SELECTED_ITEM_CLASS), "nested node should be selected");
+        treeView.checkSelectedNodes([0, 1]);
     });
 
     test("onItemSelectionChanged event should be fired on unselect previosly selected item", function(assert) {
@@ -486,6 +553,7 @@ module("selection single", () => {
         treeView.instance.option("searchValue", "");
 
         assert.equal(treeView.getAllSelectedCheckboxes().length, 1, "There is only one checked checkBox");
+        treeView.checkSelectedNodes([0]);
         assert.ok(treeView.getCheckBoxes().eq(0).hasClass(CHECK_BOX_CHECKED_CLASS), "Correct checkbox checked");
     });
 

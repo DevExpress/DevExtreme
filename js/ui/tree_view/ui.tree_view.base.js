@@ -545,6 +545,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 break;
             case "selectionMode":
                 this._initDataAdapter();
+                this._invalidate();
                 break;
             case "onSelectAllValueChanged":
                 this._createSelectAllValueChangedAction();
