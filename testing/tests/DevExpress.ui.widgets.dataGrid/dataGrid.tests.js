@@ -5894,6 +5894,35 @@ QUnit.test("onFocusedRowChanged event should fire once if changed via API (T7295
     clock.restore();
 });
 
+QUnit.test("onFocusedRowChanged event should fire only once if paging and init phase", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        focusedRowChangedCallCount = 0;
+
+    createDataGrid({
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        focusedRowKey: 3,
+        paging: {
+            pageSize: 2
+        },
+        onFocusedRowChanged: e => {
+            ++focusedRowChangedCallCount;
+            assert.ok(e.row, "Row object should exist");
+        },
+        dataSource: [
+            { id: 1 }, { id: 2 },
+            { id: 3 }, { id: 4 }
+        ]
+    });
+
+    clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCallCount, 1, "focusedRowChangedCallCount");
+
+    clock.restore();
+});
+
 QUnit.test("onFocusedRowChanged event should not fire on init if focusedRowEnabled is true and focusedRowIndex, focusedRowKey aren't set", function(assert) {
     var clock = sinon.useFakeTimers(),
         focusedRowChangedCallCount = 0,
