@@ -62,21 +62,21 @@ QUnit.module("Integration: Appointments Collector Base Tests", {
     }
 }, () => {
     QUnit.test("Appointment collector should be rendered with right class", (assert) => {
-        var $collector = this.renderAppointmentsCollectorContainer();
+        const $collector = this.renderAppointmentsCollectorContainer();
         assert.ok($collector.hasClass("dx-scheduler-appointment-collector"), "Container is rendered");
         assert.ok($collector.dxButton("instance"), "Container is button");
     });
 
     QUnit.test("Appointment collector should be painted", (assert) => {
         this.color = "#0000ff";
-        var $collector = this.renderAppointmentsCollectorContainer();
+        const $collector = this.renderAppointmentsCollectorContainer();
 
         assert.equal(new Color($collector.css("backgroundColor")).toHex(), this.color, "Color is OK");
     });
 
     QUnit.test("Appointment collector should not be painted if items have different colors", (assert) => {
         this.color = "#0000ff";
-        var $collector = this.renderAppointmentsCollectorContainer({
+        const $collector = this.renderAppointmentsCollectorContainer({
             data: [
                 { text: "a", startDate: new Date(2015, 1, 1) },
                 { text: "b", startDate: new Date(2015, 1, 1) }
@@ -88,8 +88,8 @@ QUnit.module("Integration: Appointments Collector Base Tests", {
     });
 
     QUnit.test("Appointment collector should have a correct markup", (assert) => {
-        var $button = this.renderAppointmentsCollectorContainer(),
-            $collectorContent = $button.find(".dx-scheduler-appointment-collector-content");
+        const $button = this.renderAppointmentsCollectorContainer();
+        const $collectorContent = $button.find(".dx-scheduler-appointment-collector-content");
 
         assert.equal($collectorContent.length, 1, "Content is OK");
         assert.equal($collectorContent.html().toLowerCase(), "<span>1 more</span>", "Markup is OK");
@@ -380,7 +380,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             }
         });
 
-        var showAppointmentPopup = this.instance.showAppointmentPopup;
+        const showAppointmentPopup = this.instance.showAppointmentPopup;
         this.instance.showAppointmentPopup = spy;
         try {
             var instance = this.instance;
@@ -396,7 +396,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
     });
 
     QUnit.test("Collapse appointment should process the onAppointmentClick event correctly if e.cancel = true", (assert) => {
-        var spy = sinon.spy();
+        const spy = sinon.spy();
         this.createInstance({
             currentDate: new Date(2015, 2, 4),
             views: ["month"],
@@ -408,10 +408,10 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                 e.cancel = true;
             }
         });
-        var showAppointmentPopup = this.instance.showAppointmentPopup;
+        const showAppointmentPopup = this.instance.showAppointmentPopup;
         this.instance.showAppointmentPopup = spy;
         try {
-            var appointments = [
+            const appointments = [
                 { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
                 { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
                 { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
@@ -421,7 +421,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                 { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
             ];
 
-            var instance = this.instance;
+            const instance = this.instance;
 
             instance.option("dataSource", appointments);
 
@@ -444,7 +444,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             "#0000ff"
         ];
 
-        var appointments = [
+        const appointments = [
             { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
             { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
 
@@ -491,7 +491,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             "#0000ff"
         ];
 
-        var appointments = [
+        const appointments = [
             { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
             { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
 
@@ -515,7 +515,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                     dataSource: new DataSource({
                         store: new CustomStore({
                             load() {
-                                var d = $.Deferred();
+                                const d = $.Deferred();
                                 setTimeout(() => {
                                     d.resolve([
                                         { id: 1, text: "Room 1", color: "#ff0000" },
@@ -568,9 +568,9 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
     });
 
     QUnit.test("Collapsed appointment should be rendered correctly with expressions on custom template", (assert) => {
-        var startDate = new Date(2015, 1, 4, 1),
-            endDate = new Date(2015, 1, 4, 2);
-        var appointments = [{
+        const startDate = new Date(2015, 1, 4, 1);
+        const endDate = new Date(2015, 1, 4, 2);
+        const appointments = [{
             Start: startDate.getTime(),
             End: endDate.getTime(),
             Text: "Item 1"
@@ -606,9 +606,9 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
 
 
     QUnit.test("Appointment collector should be rendered correctly when appointmentCollectorTemplate is used", (assert) => {
-        var startDate = new Date(2015, 1, 4, 1),
-            endDate = new Date(2015, 1, 4, 2);
-        var appointments = [{
+        const startDate = new Date(2015, 1, 4, 1);
+        const endDate = new Date(2015, 1, 4, 2);
+        const appointments = [{
             Start: startDate.getTime(),
             End: endDate.getTime(),
             Text: "Item 1"
@@ -644,9 +644,9 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
     });
 
     QUnit.test("dxScheduler should render dropDownAppointment appointment template with render function that returns dom node", (assert) => {
-        var startDate = new Date(2015, 1, 4, 1),
-            endDate = new Date(2015, 1, 4, 2);
-        var appointments = [{
+        const startDate = new Date(2015, 1, 4, 1);
+        const endDate = new Date(2015, 1, 4, 2);
+        const appointments = [{
             Start: startDate.getTime(),
             End: endDate.getTime(),
             Text: "Item 1"
@@ -676,7 +676,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                 templates: {
                     "dropDownAppointmentTemplate": {
                         render(args) {
-                            var $element = $("<span>")
+                            const $element = $("<span>")
                                 .addClass("dx-template-wrapper")
                                 .text("text");
 
@@ -716,7 +716,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
     });
 
     QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source", (assert) => {
-        var dataSource = [{
+        const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
             allDay: true,
@@ -736,7 +736,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
     });
 
     QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule", (assert) => {
-        var dataSource = [{
+        const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
             recurrenceRule: "FREQ=DAILY;COUNT=3",
