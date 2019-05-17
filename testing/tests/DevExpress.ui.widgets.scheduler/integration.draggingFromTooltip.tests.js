@@ -5,6 +5,7 @@ import "ui/scheduler/ui.scheduler";
 import fx from "animation/fx";
 import pointerMock from "../../helpers/pointerMock.js";
 import translator from "animation/translator";
+import { SchedulerTestWrapper } from "./helpers.js";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -43,21 +44,23 @@ QUnit.module("Integration: Dragging from Tooltip", {
                 dataSource: this.tasks,
                 currentDate: new Date(2015, 1, 9)
             }, options)).dxScheduler("instance");
+
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
 
         this.clock = sinon.useFakeTimers();
     },
 
-    getAppointmentsDropDownElement: function() {
-        return this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    getCompactAppointmentButton: function() {
+        return this.scheduler.appointments.compact.getButton();
     },
 
-    getAppointmentsDropDown: function() {
-        return this.getAppointmentsDropDownElement().dxDropDownMenu("instance");
+    showTooltip: function() {
+        this.scheduler.appointments.compact.click();
     },
 
-    getFirstItemFromDropDown: function(dropDown) {
-        return $(dropDown._list.$element().find(".dx-list-item").eq(0));
+    getTooltipListItem: function() {
+        return this.scheduler.tooltip.getItemElement();
     },
 
     getPhantomAppointment: function() {
@@ -72,11 +75,9 @@ QUnit.module("Integration: Dragging from Tooltip", {
 
 QUnit.test("Phantom appointment should be removed after stop dragging under current cell", function(assert) {
     this.createInstance();
+    this.showTooltip();
 
-    const dropDown = this.getAppointmentsDropDown();
-    dropDown.open();
-
-    const $ddAppointment = this.getFirstItemFromDropDown(dropDown);
+    const $ddAppointment = this.getTooltipListItem();
     const pointer = pointerMock($ddAppointment).start().dragStart();
 
     assert.equal(this.getPhantomAppointment().length, 1, "Phantom appointment created after start drag appointment in tooltip");
@@ -94,10 +95,8 @@ QUnit.test("DropDownAppointment shouldn't be draggable if editing.allowDragging 
         }
     });
 
-    var dropDown = this.getAppointmentsDropDown();
-
-    dropDown.open();
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown);
+    this.showTooltip();
+    var $ddAppointment = this.getTooltipListItem();
 
     var apptsInstance = this.instance.getAppointmentsInstance(),
         renderStub = sinon.stub(apptsInstance, "_renderItem");
@@ -109,10 +108,8 @@ QUnit.test("DropDownAppointment shouldn't be draggable if editing.allowDragging 
 QUnit.test("Phantom appointment should be rendered after tooltip item dragStart", function(assert) {
     this.createInstance();
 
-    var dropDown = this.getAppointmentsDropDown();
-
-    dropDown.open();
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown);
+    this.showTooltip();
+    var $ddAppointment = this.getTooltipListItem();
 
     var apptsInstance = this.instance.getAppointmentsInstance(),
         renderStub = sinon.stub(apptsInstance, "_renderItem");
@@ -121,35 +118,11 @@ QUnit.test("Phantom appointment should be rendered after tooltip item dragStart"
     assert.ok(renderStub.calledOnce, "Item was rendered");
 });
 
-QUnit.test("Phantom appointment position should be correct after dragStart", function(assert) {
-    this.createInstance();
-
-    var $dropDown = this.getAppointmentsDropDownElement(),
-        dropDown = this.getAppointmentsDropDown();
-
-    dropDown.open();
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown);
-
-    var pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.getPhantomAppointment(),
-        phantomPosition = translator.locate($phantomAppointment),
-        menuPosition = translator.locate($dropDown);
-
-    assert.roughEqual(phantomPosition.left, menuPosition.left, 1.5, "Phantom left is OK");
-    assert.roughEqual(phantomPosition.top, menuPosition.top, 1.5, "Phantom top is OK");
-
-    pointer.dragEnd();
-});
-
-
 QUnit.test("Phantom appointment should have correct appointmentData", function(assert) {
     this.createInstance();
+    this.showTooltip();
 
-    var dropDown = this.getAppointmentsDropDown();
-
-    dropDown.open();
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown);
-
+    var $ddAppointment = this.getTooltipListItem();
     var apptsInstance = this.instance.getAppointmentsInstance(),
         renderStub = sinon.stub(apptsInstance, "_renderItem");
 
@@ -163,12 +136,9 @@ QUnit.test("Phantom appointment should have correct appointmentData", function(a
 
 QUnit.test("Phantom appointment position should be recalculated during dragging tooltip item", function(assert) {
     this.createInstance();
+    this.showTooltip();
 
-    var dropDown = this.getAppointmentsDropDown();
-
-    dropDown.open();
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown);
-
+    var $ddAppointment = this.getTooltipListItem();
     var pointer = pointerMock($ddAppointment).start().dragStart(),
         $phantomAppointment = this.getPhantomAppointment(),
         initialPhantomPosition = translator.locate($phantomAppointment);
@@ -184,12 +154,9 @@ QUnit.test("Phantom appointment position should be recalculated during dragging 
 
 QUnit.test("Phantom appointment position should be corrected during dragging tooltip item", function(assert) {
     this.createInstance();
+    this.showTooltip();
 
-    var dropDown = this.getAppointmentsDropDown();
-
-    dropDown.open();
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown);
-
+    var $ddAppointment = this.getTooltipListItem();
     var pointer = pointerMock($ddAppointment).start().dragStart(),
         $phantomAppointment = this.getPhantomAppointment(),
         initialPhantomPosition = translator.locate($phantomAppointment);
@@ -202,52 +169,14 @@ QUnit.test("Phantom appointment position should be corrected during dragging too
 
     assert.ok(correctCoordinatesStub.calledOnce, "Observers are notified");
     var args = correctCoordinatesStub.getCall(0).args;
-    assert.deepEqual(args[1].coordinates, { left: initialPhantomPosition.left + 30, top: initialPhantomPosition.top + 60 }, "Arguments are OK");
+    assert.deepEqual(args[1].coordinates, { left: initialPhantomPosition.left + 60, top: initialPhantomPosition.top + 120 }, "Arguments are OK");
     assert.deepEqual(args[1].allDay, undefined, "Arguments are OK");
 
     pointer.dragEnd();
 });
 
-QUnit.test("Recurrence appointment dragging should work correctly", function(assert) {
-    var tasks = [
-        {
-            text: "Task 1",
-            startDate: new Date(2015, 1, 9, 1, 0),
-            endDate: new Date(2015, 1, 9, 2, 0)
-        },
-        {
-            text: "Task 2",
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 12, 0)
-        },
-        {
-            text: "Task 3",
-            startDate: new Date(2015, 1, 7, 13, 0),
-            endDate: new Date(2015, 1, 7, 14, 0),
-            recurrenceRule: "FREQ=DAILY"
-        }
-    ];
-    this.createInstance();
-    this.instance.option("dataSource", tasks);
-
-    var stub = sinon.stub(this.instance, "_checkRecurringAppointment");
-
-    var dropDown = this.getAppointmentsDropDown();
-    dropDown.open();
-
-    var $ddAppointment = this.getFirstItemFromDropDown(dropDown),
-        pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.getPhantomAppointment();
-
-    assert.deepEqual($phantomAppointment.data("dxAppointmentSettings").startDate, new Date(2015, 1, 9, 13), "Date of phantom recurrence part is OK");
-
-    pointer.drag(0, -100).dragEnd();
-
-    assert.deepEqual(stub.getCall(0).args[2], new Date(2015, 1, 9, 0), "_checkRecurringAppointment has a right exceptionDate");
-});
-
 QUnit.test("Phantom appointment should have correct template", function(assert) {
-    var instance = $("#scheduler").dxScheduler({
+    this.createInstance({
         editing: true,
         height: 600,
         views: [{ type: "timelineDay", maxAppointmentsPerCell: 1 }],
@@ -263,15 +192,11 @@ QUnit.test("Phantom appointment should have correct template", function(assert) 
             endDate: new Date(2015, 1, 9, 2, 0)
         }],
         currentDate: new Date(2015, 1, 9)
-    }).dxScheduler("instance");
+    });
 
-    var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
-    dropDown.open();
-
-    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
-
+    var $ddAppointment = this.scheduler.tooltip.getItemElement();
     var pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = instance.$element().find(".dx-scheduler-appointment").eq(0);
+        $phantomAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
     assert.equal($phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), "1:00 AM", "Appointment start is correct");
     assert.equal($phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), "2:00 AM", "Appointment edn is correct");

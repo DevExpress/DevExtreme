@@ -469,7 +469,8 @@
                         $.each(result, function(i) {
                             result[i] = createTouchByOptions(this);
                         });
-                        return document.createTouchList.apply(document, result);
+
+                        return result;
                     };
 
                     touches = createTouchListByArray(touches);
@@ -803,6 +804,7 @@
 
         return {
             eventMock: eventMock,
+            simulateEvent: simulateEvent,
 
             start: function() {
                 _x = 0;

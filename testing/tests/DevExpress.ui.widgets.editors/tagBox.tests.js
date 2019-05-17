@@ -4689,6 +4689,27 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         this.clock.tick(0);
         assert.ok(load.called, "load has been called after the search only");
     });
+
+    QUnit.test("map function should correctly applies to the widget datasource with the default value", (assert) => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            dataSource: new DataSource({
+                store: [
+                    { ID: 1, Name: "Test1" },
+                    { ID: 2, Name: "Test2" }
+                ],
+                map: (item) => {
+                    item.Name += " changed";
+                    return item;
+                }
+            }),
+            displayExpr: "Name",
+            valueExpr: "ID",
+            value: [1]
+        });
+
+        const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+        assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
+    });
 });
 
 QUnit.module("performance", () => {
@@ -5044,6 +5065,24 @@ QUnit.module("regression", {
         clock.tick();
         assert.ok(tagBox.option("selectedItems").length);
         clock.restore();
+    });
+
+    QUnit.test("should render function item template that returns default template's name (T726777)", (assert) => {
+        const tagBox = $("#tagBox").dxTagBox({
+            items: [{ text: "item1" }, { text: "item2" }],
+            itemTemplate: () => "item",
+            opened: true
+        }).dxTagBox("instance");
+        const checkItemsRender = () => {
+            const texts = ["item1", "item2"];
+            const listItems = tagBox._$list.find(".dx-list-item");
+
+            texts.forEach((text, index) => assert.strictEqual(listItems.eq(index).text(), text));
+        };
+
+        checkItemsRender();
+        tagBox.option("itemTemplate", () => "item");
+        checkItemsRender();
     });
 
     QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", (assert) => {

@@ -99,7 +99,7 @@ Tooltip.prototype = {
         that._textFontStyles.color = options.font.color;
         that._wrapper.css({ "zIndex": options.zIndex });
 
-        that._customizeTooltip = typeUtils.isFunction(options.customizeTooltip) ? options.customizeTooltip : null;
+        that._customizeTooltip = options.customizeTooltip;
         return that;
     },
 
@@ -135,12 +135,13 @@ Tooltip.prototype = {
         return this.setOptions(options).render();
     },
 
-    _prepare: function(formatObject, state) {
-        var options = this._options,
-            customize = {};
+    _prepare: function(formatObject, state, customizeTooltip = this._customizeTooltip) {
+        const options = this._options;
 
-        if(this._customizeTooltip) {
-            customize = this._customizeTooltip.call(formatObject, formatObject);
+        let customize = {};
+
+        if(typeUtils.isFunction(customizeTooltip)) {
+            customize = customizeTooltip.call(formatObject, formatObject);
             customize = typeUtils.isPlainObject(customize) ? customize : {};
             if("text" in customize) {
                 state.text = typeUtils.isDefined(customize.text) ? String(customize.text) : "";
@@ -150,7 +151,7 @@ Tooltip.prototype = {
             }
         }
         if(!("text" in state) && !("html" in state)) {
-            state.text = formatObject.valueText || "";
+            state.text = formatObject.valueText || formatObject.description || "";
         }
         state.color = customize.color || options.color;
         state.borderColor = customize.borderColor || (options.border || {}).color;
@@ -158,7 +159,7 @@ Tooltip.prototype = {
         return !!state.text || !!state.html;
     },
 
-    show: function(formatObject, params, eventData) {
+    show: function(formatObject, params, eventData, customizeTooltip) {
         var that = this,
             state = {},
             options = that._options,
@@ -174,7 +175,7 @@ Tooltip.prototype = {
             blur = ss.blur * 2 + 1,
             getComputedStyle = window.getComputedStyle;
 
-        if(!that._prepare(formatObject, state)) {
+        if(!that._prepare(formatObject, state, customizeTooltip)) {
             return false;
         }
 
@@ -471,19 +472,6 @@ exports.plugin = {
             this._tooltip.dispose();
             this._tooltip = null;
         },
-        _hideTooltip: function() {
-            this._tooltip.hide();
-        },
-        _onRender: function() {
-            // This is for cases when user somehow hides the widget container without triggering any "out" events -
-            // in such cases we advice user to call the `render` - to notify the widget about changing visibility of the container.
-            // Since from now on the widget does not care about the container visibility the only purpose of the `render` is to notify that container size is changed -
-            // hence calling the `render` when visibility is changed is redundant... If it were not for the tooltip.
-            // TODO: Find a way to remove the following code.
-            if(!this._$element.is(":visible")) {
-                this._hideTooltip();
-            }
-        },
         // The method exists only to be overridden in sparklines.
         _setTooltipRendererOptions: function() {
             this._tooltip.setRendererOptions(this._getRendererOptions());
@@ -491,6 +479,11 @@ exports.plugin = {
         // The method exists only to be overridden in sparklines and gauges.
         _setTooltipOptions: function() {
             this._tooltip.update(this._getOption("tooltip"));
+        }
+    },
+    extenders: {
+        _stopCurrentHandling() {
+            this._tooltip.hide();
         }
     },
     customize: function(constructor) {

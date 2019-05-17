@@ -1,0 +1,73 @@
+.dx-diagram {
+    border-color: @diagram-border-color;
+
+    .dx-diagram-toolbar-wrapper:first-child {
+        border-bottom: 1px solid @diagram-toolbar-border-color;
+    }
+
+    .dx-diagram-left-panel,
+    .dx-diagram-right-panel {
+        background: @overlay-content-bg;
+        .dx-accordion {
+            .dx-accordion-item {
+                border-left: none;
+                border-right: none;
+            }
+            .dx-accordion-item:first-of-type {
+                border-top: none;
+            }
+            .dx-state-focused {
+                &.dx-accordion-item {
+                    border-color: @accordion-item-border-color;
+                }
+                &.dx-accordion-item-closed:not(:last-of-type) {
+                    border-bottom-color: transparent;
+                }
+            }
+        }
+    }
+    .dx-diagram-left-panel {
+        border-right-color: @diagram-toolbar-border-color;
+    }
+    .dx-diagram-right-panel {
+        border-left-color: @diagram-toolbar-border-color;
+    }
+}
+
+.dx-diagram-toolbar {
+    background-color: transparent;
+
+    .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
+        background-color: @diagram-normal-format-active-bg;
+
+        &.dx-button-success {
+            background-color: @diagram-success-format-active-bg;
+        }
+
+        &.dx-button-default {
+            background-color: @diagram-default-format-active-bg;
+        }
+
+        &.dx-button-danger {
+            background-color: @diagram-danger-format-active-bg;
+        }
+    }
+
+    .dx-dropdowneditor.dx-editor-filled {
+        background-color: transparent;
+    }
+
+    .dx-diagram-toolbar-separator {
+        border-left-color: @diagram-toolbar-border-color;
+    }
+    
+    .dx-diagram-toolbar-menu-separator {
+        border-top-color: @diagram-toolbar-border-color;
+    }
+
+    .dx-format-sm {
+        .dx-texteditor {
+            width: 90px;
+        }
+    }
+}

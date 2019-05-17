@@ -76,8 +76,10 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         }
     },
 
-    usePointsToDefineAutoHiding() {
-        return true;
+    getSeriesPairCoord(coord, isArgument) {
+        return this.getShapePairCoord(coord, isArgument, (point) => {
+            return point.bubbleSize;
+        });
     },
 
     getValueFields: function() {

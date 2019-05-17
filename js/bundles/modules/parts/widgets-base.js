@@ -1,5 +1,6 @@
 var DevExpress = require("./core");
 require("./data");
+require("./file_providers");
 
 /// BUNDLER_PARTS
 /* UI core (dx.module-core.js) */
@@ -52,6 +53,7 @@ ui.dxResponsiveBox = require("../../../ui/responsive_box");
 ui.dxScrollView = require("../../../ui/scroll_view");
 ui.dxSelectBox = require("../../../ui/select_box");
 ui.dxSlider = require("../../../ui/slider");
+ui.dxSpeedDialAction = require("../../../ui/speed_dial_action");
 ui.dxSwitch = require("../../../ui/switch");
 ui.dxTabPanel = require("../../../ui/tab_panel");
 ui.dxTabs = require("../../../ui/tabs");

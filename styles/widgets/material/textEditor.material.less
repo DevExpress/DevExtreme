@@ -1,13 +1,22 @@
-@MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 12px;
-@MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING: 19px @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING 18px;
+.dx-size-default() {
+    @MATERIAL_TEXTEDITOR_FONT_SIZE: 16px;
+    @MATERIAL_TEXTEDITOR_CLEAR_ICON_SIZE: @MATERIAL_TEXTEDITOR_FONT_SIZE;
+    @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 12px;
+    @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING: 19px @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING 18px;
+    @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING: 7px @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING 6px;
+}
+.dx-size-compact() {
+    @MATERIAL_TEXTEDITOR_FONT_SIZE: 13px;
+    @MATERIAL_TEXTEDITOR_CLEAR_ICON_SIZE: 14px;
+    @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 8px;
+    @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING: 13px @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING 12px;
+    @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING: 6px @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING 5px;
+}
 
 @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 0;
-@MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING: 7px @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING 6px;
-
 @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE: @MATERIAL_BASE_ICON_SIZE - 2px;
 @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE: @MATERIAL_INVALID_BADGE_SIZE + 2 * @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
-@MATERIAL_TEXTEDITOR_FONT_SIZE: 16px;
-@MATERIAL_TEXTEDITOR_CLEAR_ICON_SIZE: @MATERIAL_TEXTEDITOR_FONT_SIZE;
+
 
 .dx-texteditor-icon() {
     position: absolute;
@@ -16,36 +25,48 @@
     .dx-icon-sizing(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }
 
-.validation-icon-position(@padding: 0) {
+.validation-icon-position() {
     &.dx-invalid {
         &.dx-editor-underlined {
             .dx-texteditor-input {
-                padding-right: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
-    
+
             &.dx-rtl .dx-texteditor-input {
                 padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
-                padding-left: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
         &.dx-editor-filled, &.dx-editor-outlined {
             .dx-texteditor-input {
-                padding-right: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
-    
+
             &.dx-rtl .dx-texteditor-input {
                 padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
-                padding-left: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
+
+            .dx-texteditor-input-container {
+                &:after {
+                    right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + 1px;
+
+                    .dx-rtl &,
+                    .dx-rtl& {
+                        left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + 1px;
+                        right: auto;
+                    }
+                }
             }
         }
 
-        .dx-texteditor-buttons-container {
+        .dx-texteditor-input-container {
             &:after {
-                right: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING + @padding;
+                right: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
                 .dx-rtl &,
                 .dx-rtl& {
-                    left: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING + @padding;
+                    left: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
                     right: auto;
                 }
             }
@@ -96,11 +117,11 @@
         }
         &.dx-show-clear-button {
             .dx-texteditor-input {
-                padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
                 .dx-rtl &,
                 .dx-rtl& {
                     padding: @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING;
-                    padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    padding-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
                 }
             }
         }
@@ -157,17 +178,6 @@
         &.dx-state-hover {
             &:after {
                 border-bottom: 2px solid @texteditor-hover-border-color;
-            }
-        }
-
-        &.dx-show-clear-button {
-            .dx-texteditor-input {
-                padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                .dx-rtl &,
-                .dx-rtl& {
-                    padding: @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING;
-                    padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                }
             }
         }
 
@@ -242,6 +252,7 @@
 .dx-show-clear-button {
     .dx-clear-button-area {
         width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+        min-width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
         right: 0;
     }
 
@@ -254,7 +265,7 @@
     }
 
     &:not(.dx-texteditor-empty) {
-        .validation-icon-position(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
+        .validation-icon-position();
     }
 }
 
@@ -286,9 +297,7 @@
         }
     }
 
-    .dx-texteditor-buttons-container {
-        width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        
+    .dx-texteditor-input-container {
         &:after {
             .dx-invalid-material-badge();
         }

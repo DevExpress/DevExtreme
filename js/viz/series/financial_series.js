@@ -252,6 +252,30 @@ exports.stock = _extend({}, scatterSeries, {
         options.sizePointNormalState = DEFAULT_FINANCIAL_POINT_SIZE;
 
         return options;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        let oppositeCoord = null;
+        const points = this.getVisiblePoints();
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            let tmpCoord;
+
+            if(isArgument) {
+                tmpCoord = Math.abs(p.vx - coord) <= p.width / 2 ? (p.openY + p.closeY) / 2 : undefined;
+            } else {
+                const coords = [Math.min(p.lowY, p.highY), Math.max(p.lowY, p.highY)];
+                tmpCoord = coord >= coords[0] && coord <= coords[1] ? p.vx : undefined;
+            }
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
     }
 });
 

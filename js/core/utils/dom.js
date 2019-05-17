@@ -1,9 +1,9 @@
 var $ = require("../../core/renderer"),
+    config = require("../../core/config"),
     domAdapter = require("../../core/dom_adapter"),
     windowUtils = require("./window"),
     window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
-    errors = require("../errors"),
     inArray = require("./array").inArray,
     typeUtils = require("./type"),
     isDefined = typeUtils.isDefined,
@@ -80,19 +80,9 @@ var uniqueId = (function() {
 var dataOptionsAttributeName = "data-options";
 
 var getElementOptions = function(element) {
-    var optionsString = $(element).attr(dataOptionsAttributeName) || "",
-        result;
+    var optionsString = $(element).attr(dataOptionsAttributeName) || "";
 
-    if(optionsString.trim().charAt(0) !== "{") {
-        optionsString = "{" + optionsString + "}";
-    }
-    try {
-        // eslint-disable-next-line no-new-func
-        result = (new Function("return " + optionsString))();
-    } catch(ex) {
-        throw errors.Error("E3018", ex, optionsString);
-    }
-    return result;
+    return config().optionsParser(optionsString);
 };
 
 var createComponents = function(elements, componentTypes) {

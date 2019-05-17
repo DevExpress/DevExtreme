@@ -93,7 +93,15 @@ var NumberBoxBase = TextEditor.inherit({
              * @type string
              * @default "Value must be a number"
              */
-            invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage")
+            invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage"),
+
+            /**
+            * @name dxNumberBoxOptions.buttons
+            * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
+            * @default undefined
+            * @inheritdoc
+            */
+            buttons: void 0,
 
             /**
              * @name dxNumberBoxOptions.mask

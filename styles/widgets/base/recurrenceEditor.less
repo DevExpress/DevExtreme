@@ -1,12 +1,13 @@
 @RECURRENCE_EDITOR_NUMBERBOX_WIDTH: 70px;
 @RECURRENCE_EDITOR_SELECTBOX_WIDTH: 120px;
 
+@GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP: 10px;
+
 .dx-recurrence-numberbox-interval,
 .dx-recurrence-numberbox-day-of-month,
 .dx-recurrence-selectbox-month-of-year,
 .dx-recurrence-numberbox-repeat-count,
-.dx-recurrence-datebox-until-date,
-.dx-recurrence-switch-repeat-end {
+.dx-recurrence-datebox-until-date {
     float: left;
     position: relative !important;
 
@@ -28,13 +29,8 @@
 .dx-recurrence-radiogroup-repeat-type-label,
 .dx-recurrence-repeat-end-label {
     display: inline-block;
-    padding-right: 5px;
+    padding: 0 5px;
     vertical-align: top;
-
-    &.dx-rtl {
-        padding-left: 5px;
-        padding-right: 0;
-    }
 }
 
 .dx-recurrence-repeat-end-label {
@@ -57,7 +53,7 @@
 .dx-recurrence-radiogroup-repeat-type {
     margin: 0;
 
-    .dx-item:first-child {
+    .dx-item {
         padding-bottom: 10px;
     }
 
@@ -86,4 +82,93 @@
         float: none;
     }
     
+}
+
+.dx-scheduler-appointment-popup {
+    .dx-scheduler-recurrence-rule-item.dx-field-item {
+        .dx-recurrence-selectbox-freq.dx-field-value {
+            width: 100%;
+        }
+    }
+
+    .dx-scheduler-recurrence-rule-item.dx-field-item.dx-label-v-align {
+        .dx-recurrence-interval-field {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .dx-recurrence-repeat-on {
+            display: block;
+            padding-top: 5px;
+
+            .dx-recurrence-repeat-on-label {
+                padding-top: 10px;
+            }
+        }
+
+        .dx-recurrence-numberbox-interval-label,
+        .dx-recurrence-repeat-on-label {
+            padding-bottom: 0;
+        }
+
+        .dx-recurrence-numberbox-interval-label,
+        .dx-recurrence-repeat-on-label,
+        .dx-recurrence-repeat-end-container-label,
+        .dx-recurrence-radiogroup-repeat-type{
+            left: 0;
+            position: inherit;
+        }
+
+        .dx-recurrence-numberbox-interval-label {
+            padding-top: 0;
+        }
+
+        .dx-recurrence-repeat-end-container-label {
+            padding-bottom: 2px;
+            padding-top: 0;
+        }
+
+        .dx-recurrence-freq-field {
+            margin-bottom: 0;
+        }
+
+        .dx-recurrence-repeat-end-container.dx-field {
+            padding-top: 0;
+            position: static;
+
+            .dx-recurrence-radiogroup-repeat-type {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+.dx-scheduler-recurrence-rule-item.dx-field-item {
+    border-top: 1px solid @SCHEDULER_RECURRENCE_BORDER_COLOR;
+
+    .dx-recurrence-numberbox-interval-label,
+    .dx-recurrence-repeat-on-label,
+    .dx-recurrence-repeat-end-container-label {
+        // NOTE: labels allignment in recurrence editor with the base offset
+        left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET - 2px;
+    }
+
+    .dx-recurrence-radiogroup-repeat-type {
+        left: @SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET;
+    }
+
+    .dx-field-item-label:first-child {
+        padding-top: @SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET;
+    }
+
+    &.dx-label-h-align {
+        .dx-recurrence-repeat-on-week {
+            padding-top: @SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
+            padding-bottom: @SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
+        }
+
+        .dx-recurrence-repeat-end-container.dx-field {
+            padding-top: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP;
+        }
+    }
 }

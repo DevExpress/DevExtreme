@@ -30,8 +30,6 @@ var LOOKUP_CLASS = "dx-lookup",
     LOOKUP_POPUP_SEARCH_CLASS = "dx-lookup-popup-search",
     LOOKUP_POPOVER_MODE = "dx-lookup-popover-mode",
     LOOKUP_EMPTY_CLASS = "dx-lookup-empty",
-    LOOKUP_POPUP_VALIDATION_MESSAGE = "dx-lookup-validation-message",
-    LOOKUP_POPUP_INVALID_CLASS = "dx-lookup-invalid",
     LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical";
 
 var POPUP_OPTION_MAP = {
@@ -471,6 +469,11 @@ var Lookup = DropDownList.inherit({
             * @inheritdoc
             */
             /**
+            * @name dxLookupOptions.buttons
+            * @hidden
+            * @inheritdoc
+            */
+            /**
             * @name dxLookupOptions.applyValueMode
             * @type Enums.EditorApplyValueMode
             * @hidden false
@@ -575,14 +578,6 @@ var Lookup = DropDownList.inherit({
                     * @inheritdoc
                     */
                     focusStateEnabled: true
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    useInkRipple: true
                 }
             },
             {
@@ -772,18 +767,6 @@ var Lookup = DropDownList.inherit({
     },
 
     _popupShowingHandler: function() {
-        var validationError;
-
-        if(this._$popupValidationMessage) {
-            validationError = this.option("validationError");
-            if(validationError && validationError.message) {
-                this._$popupValidationMessage.text(validationError.message);
-                this._popup.$content().addClass(LOOKUP_POPUP_INVALID_CLASS);
-            } else {
-                this._popup.$content().removeClass(LOOKUP_POPUP_INVALID_CLASS);
-            }
-        }
-
         this.callBase.apply(this, arguments);
 
         if(this.option("cleanSearchOnOpening")) {
@@ -1005,9 +988,6 @@ var Lookup = DropDownList.inherit({
     },
 
     _renderPopupContent: function() {
-        if(this._popup.NAME === "dxPopup") {
-            this._$popupValidationMessage = $("<div>").addClass(LOOKUP_POPUP_VALIDATION_MESSAGE).appendTo(this._popup.$content());
-        }
         this.callBase();
         this._renderSearch();
 
@@ -1298,6 +1278,13 @@ var Lookup = DropDownList.inherit({
     field: function() {
         return this._$field;
     }
+
+    /**
+    * @name dxLookupMethods.getButton
+    * @publicName getButton(name)
+    * @hidden
+    * @inheritdoc
+    */
 });
 
 registerComponent("dxLookup", Lookup);

@@ -82,11 +82,6 @@
 */
 @IOS7_INPUT_PLACEHOLDER: #c7c7cd;
 
-// Pivot Tabs
-@IOS7_PIVOTTABS_TEXT_COLOR: @IOS7_FONT_LIGHTEN;
-@IOS7_PIVOTTABS_SELECTED_TEXT_COLOR: @IOS7_FONT_COLOR;
-@IOS7_PIVOTTABS_HEIGHT: 66px;
-
 // ActionSheet
 /**
 * @name 10. Background color
@@ -395,7 +390,6 @@
 @IOS7_LOOKUP_ARROW_ACTIVE: #aeaeae;
 @IOS7_LOOKUP_FIELD_ACTIVE_BACKGROUND: @IOS7_LIST_ITEM_ACTIVE_BACKGROUND;
 @IOS7_LOOKUP_FIELD_TEXT: @IOS7_FONT_LIGHTEN;
-@IOS7_LOOKUP_VALIDATION_MESSAGE_BACKGROUND: #f8f8f8;
 /**
 * @name 30. Search box background color
 * @type color
@@ -759,6 +753,8 @@
 @datagrid-group-row-background-color: @IOS7_BACKGROUND;
 @datagrid-header-panel-padding-bottom: 10px;
 @datagrid-filter-operation-color: #969696;
+
+@base-focus-color: @datagrid-focus-color;
 /**
 * @name 100. Focused cell border color
 * @type color
@@ -766,6 +762,7 @@
 * @paletteColorOpacity 1
 */
 @datagrid-focus-color: #007aff;
+@datagrid-focused-border-color: @datagrid-focus-color;
 /**
 * @name 101. Editor background
 * @type color
@@ -908,6 +905,7 @@
 * @paletteColorOpacity 1
 */
 @treelist-focus-color: #007aff;
+@treelist-focused-border-color: @treelist-focus-color;
 /**
 * @name 101. Editor background
 * @type color
@@ -1171,16 +1169,8 @@
 @IOS7_COLORBOX_NOCOLOR_IMG: url(images/widgets/ios7/color-schemes/default/colorbox/nocolor.png);
 @IOS7_ATTENTION_IMAGE: url(images/widgets/ios7/color-schemes/default/attention.png);
 
-// SPA
-
 // Master-detail
 
-/**
-* @name 10. Splitter color
-* @type color
-* @group layouts.split
-*/
-@IOS7_SPLIT_LAYOUT_MASTER_PANE_SPLITTER_COLOR: #c8c8c8;
 @datagrid-master-detail-cell-background-color: #FAFAFA;
 
 // FilterBuilder

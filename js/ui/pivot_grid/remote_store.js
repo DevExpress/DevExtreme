@@ -62,6 +62,10 @@ function getFilterExpressionForFilterValue(field, filterValue) {
 function createFieldFilterExpressions(field, operation) {
     var fieldFilterExpressions = [];
 
+    if(field.searchValue) {
+        return [field.dataField, "contains", field.searchValue];
+    }
+
     if(field.filterType === "exclude") {
         operation = operation || "and";
     } else {
@@ -308,18 +312,24 @@ function parseResult(data, total, descriptions, result) {
 }
 
 function getFiltersForDimension(fields) {
-    return (fields || []).filter(f => f.filterValues && f.filterValues.length);
+    return (fields || []).filter(f => f.filterValues && f.filterValues.length || f.searchValue);
 }
 
 function getExpandedIndex(options, axis) {
-    if(axis === options.headerName) {
-        return options.path.length;
+    if(options.headerName) {
+        if(axis === options.headerName) {
+            return options.path.length;
+        } else if(options.oppositePath) {
+            return options.oppositePath.length;
+        }
     }
     return 0;
 }
 
 function getFiltersForExpandedDimension(options) {
-    return getFiltersByPath(options[options.headerName], options.path);
+    return getFiltersByPath(options[options.headerName], options.path).concat(
+        getFiltersByPath(options[options.headerName === "rows" ? "columns" : "rows"], options.oppositePath || [])
+    );
 }
 
 function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapsedFieldIndex) {
@@ -414,7 +424,9 @@ function getRequestsData(options) {
     columnTotalsOptions = getGrandTotalRequest(options, "columns", columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
 
     if(options.rows.length && options.columns.length) {
-        data = data.concat(columnTotalsOptions);
+        if(!options.headerName) {
+            data = data.concat(columnTotalsOptions);
+        }
 
         for(var i = rowExpandedIndex; i < rowExpandedLevel + 1; i++) {
             var rows = options.rows.slice(rowExpandedIndex, i + 1),
@@ -527,7 +539,7 @@ module.exports = Class.inherit((function() {
             return this._dataSource.filter.apply(this._dataSource, arguments);
         },
 
-        supportSorting: function() {
+        supportPaging: function() {
             return false;
         },
 

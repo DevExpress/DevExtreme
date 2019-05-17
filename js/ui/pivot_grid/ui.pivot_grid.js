@@ -201,7 +201,9 @@ var PivotGrid = Widget.inherit({
                  */
                 useNative: "auto",
 
-                removeInvisiblePages: true
+                removeInvisiblePages: true,
+                virtualRowHeight: 50,
+                virtualColumnWidth: 100
             },
             encodeHtml: true,
             /**
@@ -761,6 +763,12 @@ var PivotGrid = Widget.inherit({
                  */
                 allowSearch: false,
                 /**
+                 * @name dxPivotGridOptions.headerFilter.showRelevantValues
+                 * @type boolean
+                 * @default false
+                 */
+                showRelevantValues: false,
+                /**
                  * @name dxPivotGridOptions.headerFilter.searchTimeout
                  * @type number
                  * @default searchTimeout
@@ -1171,7 +1179,7 @@ var PivotGrid = Widget.inherit({
                 field = e.cell.path && areaFields[e.cell.path.length - 1],
                 dataSource = that.getDataSource();
 
-            if(field && field.allowExpandAll && e.cell.path.length < e[e.area + "Fields"].length) {
+            if(field && field.allowExpandAll && e.cell.path.length < e[e.area + "Fields"].length && !dataSource.paginate()) {
                 items.push({
                     beginGroup: true,
                     icon: "none",
@@ -1189,7 +1197,7 @@ var PivotGrid = Widget.inherit({
                 });
             }
 
-            if(e.cell.isLast) {
+            if(e.cell.isLast && !dataSource.paginate()) {
                 var sortingBySummaryItemCount = 0;
                 each(oppositeAreaFields, function(index, field) {
                     if(!field.allowSortingBySummary) {
@@ -1729,13 +1737,15 @@ var PivotGrid = Widget.inherit({
             rowsAreaWidth = 0,
             hasRowsScroll,
             hasColumnsScroll,
-            scrollBarInfo = getScrollBarInfo(that.option("scrolling.useNative")),
+            scrollingOptions = that.option("scrolling") || {},
+            scrollBarInfo = getScrollBarInfo(scrollingOptions.useNative),
             scrollBarWidth = scrollBarInfo.scrollBarWidth,
             dataAreaCell = tableElement.find("." + DATA_AREA_CELL_CLASS),
             rowAreaCell = tableElement.find("." + ROW_AREA_CELL_CLASS),
             columnAreaCell = tableElement.find("." + COLUMN_AREA_CELL_CLASS),
             descriptionCell = tableElement.find("." + DESCRIPTION_AREA_CELL_CLASS),
             filterHeaderCell = tableElement.find(".dx-filter-header"),
+            columnHeaderCell = tableElement.find(".dx-column-header"),
             elementWidth,
             columnsAreaHeight,
             descriptionCellHeight,
@@ -1794,7 +1804,7 @@ var PivotGrid = Widget.inherit({
             rowsAreaColumnWidths = rowsArea.getColumnsWidth();
 
             if(that._hasHeight) {
-                bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, tableElement.find(".dx-column-header"), filterHeaderCell], "height");
+                bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], "height");
                 groupHeight = that.$element().height() - filterHeaderCell.height() - tableElement.find(".dx-data-header").height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
@@ -1838,7 +1848,7 @@ var PivotGrid = Widget.inherit({
                 }
 
                 tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);
-
+                columnHeaderCell.children().css("maxWidth", groupWidth);
                 columnsArea.groupWidth(groupWidth);
                 columnsArea.processScrollBarSpacing(hasRowsScroll ? scrollBarWidth : 0);
                 columnsArea.setColumnsWidth(resultWidths);
@@ -1872,11 +1882,12 @@ var PivotGrid = Widget.inherit({
                     columnsArea.groupWidth(groupWidth - diff);
                 }
 
-                if(that.option("scrolling.mode") === "virtual" && !that._dataController.isEmpty()) {
-
+                if(scrollingOptions.mode === "virtual" && !that._dataController.isEmpty()) {
                     var virtualContentParams = that._dataController.calculateVirtualContentParams({
-                        contentWidth: totalWidth,
-                        contentHeight: totalHeight,
+                        virtualRowHeight: scrollingOptions.virtualRowHeight,
+                        virtualColumnWidth: scrollingOptions.virtualColumnWidth,
+                        itemWidths: resultWidths,
+                        itemHeights: resultHeights,
                         rowCount: resultHeights.length,
                         columnCount: resultWidths.length,
                         viewportWidth: groupWidth,

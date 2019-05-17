@@ -146,6 +146,23 @@ QUnit.test("Create XmlaStore", function(assert) {
     xmlaStore.XmlaStore.restore();
 });
 
+QUnit.test("Create XmlaStore with paginate", function(assert) {
+
+    sinon.spy(xmlaStore, "XmlaStore");
+
+    var dataSource = createDataSource({
+        paginate: true,
+        store: {
+            type: "xmla",
+            url: ""
+        }
+    });
+    assert.ok(dataSource.store() instanceof XmlaStore);
+    assert.ok(dataSource.paginate());
+
+    xmlaStore.XmlaStore.restore();
+});
+
 QUnit.test("Create XmlaStore by Instance", function(assert) {
 
     sinon.spy(DevExpress.data, "XmlaStore");
@@ -246,7 +263,7 @@ QUnit.test("Create store with load function and paginate", function(assert) {
         }
     });
 
-    assert.ok(dataSource.paginate(), "paginate");
+    assert.notOk(dataSource.paginate(), "no paginate");
     assert.ok(dataSource.store() instanceof RemoteStore, "PivotGrid store type is remote");
     assert.ok(dataSource.store()._dataSource.store() instanceof CustomStore, "inner store type is custom");
 });
@@ -436,7 +453,7 @@ QUnit.test("Load Field Values", function(assert) {
         },
         dataSource = createDataSource({
             fields: [
-                { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
+                { dataField: "[Product].[Category]", area: "filter", areaIndex: 0 },
                 { dataField: "[Ship Date].[Calendar Year]", area: "row", areaIndex: 0, customizeText: customizeFunction },
                 { dataField: "[Measures].[Customer Count]", caption: 'Count', area: "data", areaIndex: 0 }
             ],
@@ -485,6 +502,135 @@ QUnit.test("Load Field Values", function(assert) {
     assert.strictEqual(fieldValues[0].text, "customized2001");
     assert.strictEqual(fieldValues[1].text, "customized2002");
     assert.strictEqual(fieldValues[2].text, "customized2003");
+});
+
+QUnit.test("Load Field Values with paginate", function(assert) {
+    this.testStore.load.returns($.Deferred().reject());
+    // act
+    var dataSource = createDataSource({
+            fields: [
+                { dataField: "[Product].[Category]", area: "filter" }
+            ],
+            store: this.testStore
+
+        }),
+        loadResult = {
+            columns: [{}, { value: "cat2" }, { value: "cat3" }, {}, {}],
+            rows: [],
+            values: [],
+            grandTotalColumnIndex: 0,
+            grandTotalRowIndex: 0
+        };
+
+    this.testStore.load.returns($.Deferred().resolve(loadResult));
+
+
+    var fieldValues;
+
+    dataSource.getFieldValues(0, false, { skip: 1, take: 2, searchValue: "cat" }).done(function(data) {
+        fieldValues = data;
+    });
+
+    // assert
+    assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
+        columnSkip: 1,
+        columnTake: 2,
+        values: [],
+        columns: [
+            {
+                dataField: "[Product].[Category]",
+                area: "filter",
+                areaIndex: 0,
+                expanded: true,
+                filterValues: null,
+                sortBySummaryField: null,
+                sortOrder: "asc",
+                caption: "",
+                searchValue: "cat"
+            }
+        ],
+        rows: [],
+        filters: [],
+        skipValues: true
+    }], "load args");
+
+    assert.deepEqual(fieldValues, loadResult.columns);
+    assert.strictEqual(fieldValues.length, 2);
+    assert.strictEqual(fieldValues[0].text, "cat2");
+    assert.strictEqual(fieldValues[1].text, "cat3");
+});
+
+QUnit.test("Load Field Values with showRelevantValues", function(assert) {
+    this.testStore.load.returns($.Deferred().reject());
+    // act
+    var dataSource = createDataSource({
+            fields: [
+                { dataField: "[Ship Date].[Calendar Year]", area: "column", areaIndex: 0, filterValues: [2001] },
+                { dataField: "[Product].[Category]", area: "filter", areaIndex: 0, filterValues: ["Bikes"] },
+                { dataField: "[Product].[Subcategory]", area: "row", areaIndex: 0, filterValues: ["Bike 1"] }
+            ],
+            store: this.testStore
+
+        }),
+        loadResult = {
+            columns: [{ value: "Bike 1" }, { value: "Bike 2" }],
+            rows: [],
+            values: [],
+            grandTotalColumnIndex: 0,
+            grandTotalRowIndex: 0
+        };
+
+    this.testStore.load.returns($.Deferred().resolve(loadResult));
+
+
+    var fieldValues;
+    var showRelevantValues = true;
+
+    dataSource.getFieldValues(2, showRelevantValues).done(function(data) {
+        fieldValues = data;
+    });
+
+    // assert
+    assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
+        values: [],
+        columns: [
+            {
+                dataField: "[Product].[Subcategory]",
+                area: "row",
+                areaIndex: 0,
+                expanded: true,
+                filterValues: null,
+                sortBySummaryField: null,
+                sortOrder: "asc",
+                caption: ""
+            }
+        ],
+        rows: [],
+        filters: [
+            {
+                area: "column",
+                areaIndex: 0,
+                caption: "",
+                dataField: "[Ship Date].[Calendar Year]",
+                filterValues: [
+                    2001
+                ]
+            },
+            {
+                area: "filter",
+                areaIndex: 0,
+                caption: "",
+                dataField: "[Product].[Category]",
+                filterValues: ["Bikes"]
+            }
+        ],
+        skipValues: true
+    }], "load args");
+
+    assert.deepEqual(fieldValues, loadResult.columns);
+    assert.strictEqual(fieldValues.length, 2);
+    assert.strictEqual(fieldValues[0].text, "Bike 1");
+    assert.strictEqual(fieldValues[1].text, "Bike 2");
 });
 
 QUnit.test("Reload data", function(assert) {

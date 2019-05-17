@@ -216,6 +216,21 @@ var baseScatterMethods = {
         return errorBarOptions && this._errorBarsEnabled() && errorBarOptions.displayMode !== "none" && (isErrorBarTypeCorrect(_normalizeEnum(errorBarOptions.type)) || (_isDefined(errorBarOptions.lowValueField) || _isDefined(errorBarOptions.highValueField)));
     },
 
+    groupPointsByCoords(rotated) {
+        const cat = [];
+
+        _each(this.getVisiblePoints(), function(_, p) {
+            var pointCoord = parseInt(rotated ? p.vy : p.vx);
+            if(!cat[pointCoord]) {
+                cat[pointCoord] = p;
+            } else {
+                Array.isArray(cat[pointCoord]) ? cat[pointCoord].push(p) : (cat[pointCoord] = [cat[pointCoord], p]);
+            }
+        });
+
+        return cat;
+    },
+
     _createErrorBarGroup: function(animationEnabled) {
         var that = this,
             errorBarOptions = that._options.valueErrorBar,
@@ -572,6 +587,10 @@ var baseScatterMethods = {
         options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal["stroke-width"] : 2;
 
         return options;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return true;
     }
 };
 
@@ -581,8 +600,7 @@ exports.chart = _extend({}, baseScatterMethods, {
             trackers,
             trackersGroup,
             segments = that._segments || [],
-            rotated = that._options.rotated,
-            cat = [];
+            rotated = that._options.rotated;
 
         if(!that.isVisible()) {
             return;
@@ -606,13 +624,83 @@ exports.chart = _extend({}, baseScatterMethods, {
             });
         }
 
-        that._trackersTranslator = cat;
-        _each(that.getVisiblePoints(), function(_, p) {
-            var pointCoord = parseInt(rotated ? p.vy : p.vx);
-            if(!cat[pointCoord]) {
-                cat[pointCoord] = p;
+        that._trackersTranslator = that.groupPointsByCoords(rotated);
+    },
+
+    checkAxisVisibleAreaCoord(isArgument, coord) {
+        const axis = isArgument ? this.getArgumentAxis() : this.getValueAxis();
+        const visibleArea = axis.getVisibleArea();
+
+        return _isDefined(coord) && visibleArea[0] <= coord && visibleArea[1] >= coord;
+    },
+
+    checkSeriesViewportCoord(axis, coord) {
+        return true;
+    },
+
+    getShapePairCoord(coord, isArgument, getPointClearance) {
+        let oppositeCoord = null;
+        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
+        const coordName = !isOpposite ? "vx" : "vy";
+        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const points = this.getVisiblePoints();
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            const tmpCoord = Math.abs(p[coordName] - coord) <= getPointClearance(p) ? p[oppositeCoordName] : undefined;
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        return this.getShapePairCoord(coord, isArgument, () => {
+            return this._options.point.size / 2;
+        });
+    },
+
+    getNearestPointsByCoord(coord, isArgument) {
+        const that = this;
+        const rotated = that.getOptions().rotated;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
+        const coordName = isOpposite ? "vy" : "vx";
+        const points = that.getVisiblePoints();
+        const allPoints = that.getPoints();
+        const nearestPoints = [];
+
+        if(that.isVisible() && allPoints.length > 0) {
+            if(allPoints.length > 1) {
+                that.findNeighborPointsByCoord(coord, coordName, points.slice(0), allPoints, (point, nextPoint) => {
+                    nearestPoints.push([point, nextPoint]);
+                });
             } else {
-                Array.isArray(cat[pointCoord]) ? cat[pointCoord].push(p) : (cat[pointCoord] = [cat[pointCoord], p]);
+                if(allPoints[0][coordName] === coord) {
+                    nearestPoints.push([allPoints[0], allPoints[0]]);
+                }
+            }
+        }
+
+        return nearestPoints;
+    },
+
+    findNeighborPointsByCoord(coord, coordName, points, allPoints, pushNeighborPoints) {
+        let searchPoints = allPoints;
+
+        if(points.length > 0) {
+            points.splice(0, 0, allPoints[allPoints.indexOf(points[0]) - 1]);
+            points.splice(points.length, 0, allPoints[allPoints.indexOf(points[points.length - 1]) + 1]);
+            searchPoints = points;
+        }
+
+        searchPoints.forEach((p, i) => {
+            const np = searchPoints[i + 1];
+            if(p && np && (p[coordName] <= coord && np[coordName] >= coord || p[coordName] >= coord && np[coordName] <= coord)) {
+                pushNeighborPoints(p, np);
             }
         });
     },

@@ -1,9 +1,9 @@
 import $ from "jquery";
 import devices from "core/devices";
-import errors from "ui/widget/ui.errors";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "ui/radio_group";
 
@@ -91,6 +91,18 @@ module("nested radio group", moduleConfig, () => {
         const firstNestedItemElement2 = $(nestedRadioGroup2.itemElements()).first();
         assert.notOk(firstNestedItemElement2.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of second nested radio group is not changed");
     });
+
+    QUnit.test("item template can return default template name", (assert) => {
+        const instance = $("#radioGroup").dxRadioGroup({
+            items: [1, 2, 3],
+            itemTemplate: function() {
+                return "item";
+            }
+        }).dxRadioGroup("instance");
+
+        assert.strictEqual(instance.itemElements().eq(0).text(), "1", "Default item template was rendered");
+        assert.strictEqual(instance.itemElements().eq(1).text(), "2", "Default item template was rendered");
+    });
 });
 
 module("buttons group rendering", () => {
@@ -175,23 +187,6 @@ module("hidden input", () => {
 });
 
 module("value", moduleConfig, () => {
-    test("should not throw an error when the value is \"null\" or \"undefine\"", assert => {
-        const errorLogStub = sinon.stub(errors, "log");
-
-        createRadioGroup({
-            items: ['item1', 'item2', 'item3'],
-            value: void 0
-        });
-
-        createRadioGroup({
-            items: ['item1', 'item2', 'item3'],
-            value: null
-        });
-
-        assert.notOk(errorLogStub.called, "Exception was not thrown");
-        errorLogStub.restore();
-    });
-
     test("should have correct initialized selection", assert => {
         let radioGroupInstance = null;
         const isItemChecked = index => radioGroupInstance.itemElements().eq(index).hasClass(RADIO_BUTTON_CHECKED_CLASS);
@@ -216,6 +211,34 @@ module("value", moduleConfig, () => {
         assert.notOk(isItemChecked(0));
         assert.ok(isItemChecked(1));
         assert.notOk(isItemChecked(2));
+    });
+
+    QUnit.test("null item should be selectable", (assert) => {
+        const radioGroupInstance = getInstance(
+            createRadioGroup({
+                items: [
+                    { id: null, name: "null" },
+                    { id: false, name: "false" },
+                    { id: 0, name: "0" },
+                    { id: undefined, name: "undefined" }
+                ],
+                valueExpr: "id",
+                displayExpr: "name"
+            })
+        );
+        const $radioButtons = radioGroupInstance.$element().find(".dx-radiobutton");
+
+        radioGroupInstance.option("value", null);
+        assert.ok($radioButtons.eq(0).hasClass("dx-radiobutton-checked"), "null item is selected");
+
+        radioGroupInstance.option("value", false);
+        assert.ok($radioButtons.eq(1).hasClass("dx-radiobutton-checked"), "false item is selected");
+
+        radioGroupInstance.option("value", 0);
+        assert.ok($radioButtons.eq(2).hasClass("dx-radiobutton-checked"), "0 item is selected");
+
+        radioGroupInstance.option("value", undefined);
+        assert.ok($radioButtons.eq(3).hasClass("dx-radiobutton-checked"), "undefined item is selected");
     });
 
     test("repaint of widget shouldn't reset value option", assert => {
@@ -430,6 +453,10 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxRadioGroup");
+}
 
 module("focus policy", moduleConfig, () => {
     test("focused-state set up on radio group after focusing on any item", assert => {

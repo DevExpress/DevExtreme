@@ -28,6 +28,13 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
         return fontStyle;
     }
 
+    function createLabelHint(tick, range) {
+        const labelHint = axis.formatHint(tick.value, labelOptions, range);
+        if(isDefined(labelHint) && labelHint !== "") {
+            tick.label.setTitle(labelHint);
+        }
+    }
+
     return function(value) {
         var tick = {
             value: value,
@@ -44,7 +51,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this._storedCoords = this.coords;
                 this._storedLabelsCoords = this.labelCoords;
             },
-            drawMark: function(options) {
+            drawMark(options) {
                 if(!tickOptions.visible || skippedCategory === value) {
                     return;
                 }
@@ -55,18 +62,26 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 if(this.mark) {
                     this.mark.append(lineGroup);
+                    axis.sharp(this.mark, this.getSharpDirection());
                     this.updateTickPosition(options);
                 } else {
-                    this.mark = axis._createPathElement([], tickStyle).append(lineGroup);
+                    this.mark = axis._createPathElement([], tickStyle, this.getSharpDirection()).append(lineGroup);
                     this.updateTickPosition(options);
                 }
+            },
+
+            getSharpDirection() {
+                const axisCanvas = axis._getCanvasStartEnd();
+                const maxAxisCoord = Math.max(axisCanvas.start, axisCanvas.end);
+
+                return this.coords.angle ? 0 : (maxAxisCoord !== this.coords[(axis._isHorizontal ? "x" : "y")] ? 1 : -1);
             },
 
             setSkippedCategory(category) {
                 skippedCategory = category;
             },
 
-            _updateLine(lineElement, settings, storedSettings, animate) {
+            _updateLine(lineElement, settings, storedSettings, animate, isGridLine) {
                 if(!lineElement) {
                     return;
                 }
@@ -91,14 +106,15 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     });
                 }
 
-                this.coords.angle && axis._rotateTick(lineElement, this.coords);
+                this.coords.angle && axis._rotateTick(lineElement, this.coords, isGridLine);
             },
 
             updateTickPosition: function(options, animate) {
                 this._updateLine(this.mark,
                     { points: axis._getTickMarkPoints(tick.coords, tickOptions.length, options) },
                     this._storedCoords && { points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length, options) },
-                    animate);
+                    animate,
+                    false);
             },
             drawLabel: function(range) {
                 const labelIsVisible = labelOptions.visible
@@ -117,6 +133,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 if(this.label) {
                     this.label.attr({ text, rotate: 0 }).append(elementsGroup);
+                    createLabelHint(this, range);
                     this.updateLabelPosition();
                     return;
                 }
@@ -132,10 +149,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                     this.updateLabelPosition();
 
-                    const labelHint = axis.formatHint(this.value, labelOptions, range);
-                    if(isDefined(labelHint) && labelHint !== "") {
-                        this.label.setTitle(labelHint);
-                    }
+                    createLabelHint(this, range);
                 }
             },
 
@@ -210,6 +224,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 if(gridOptions.visible && skippedCategory !== this.value) {
                     if(this.grid) {
                         this.grid.append(axis._axisGridGroup);
+                        axis.sharp(this.grid, this.getSharpDirection());
                         this.updateGridPosition();
                     } else {
                         this.grid = drawLine(this, gridStyle);
@@ -222,7 +237,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this._updateLine(this.grid,
                     axis._getGridPoints(tick.coords),
                     this._storedCoords && axis._getGridPoints(this._storedCoords),
-                    animate);
+                    animate, true);
             },
 
             removeLabel() {

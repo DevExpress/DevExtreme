@@ -5,10 +5,12 @@ import messageLocalization from "../../localization/message";
 import { isDefined } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
+import { registerKeyboardAction } from "../shared/accessibility";
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
     NOWRAP_CLASS = "nowrap",
+    ROW_CLASS_SELECTOR = ".dx-row",
     HEADER_ROW_CLASS = "dx-header-row",
     COLUMN_LINES_CLASS = "dx-column-lines",
     CONTEXT_MENU_SORT_ASC_ICON = "context-menu-sort-asc",
@@ -18,6 +20,7 @@ var CELL_CONTENT_CLASS = "text-content",
     VISIBILITY_HIDDEN_CLASS = "dx-visibility-hidden",
     TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX = "dx-text-content-alignment-",
     SORT_INDICATOR_CLASS = "dx-sort-indicator",
+    HEADER_FILTER_CLASS_SELECTOR = ".dx-header-filter",
     HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator",
     MULTI_ROW_HEADER_CLASS = "dx-header-multi-row";
 
@@ -81,25 +84,23 @@ module.exports = {
                     return $table;
                 },
 
+                _isLegacyKeyboardNavigation() {
+                    return this.option("useLegacyKeyboardNavigation");
+                },
+
                 _getDefaultTemplate: function(column) {
-                    var that = this,
-                        template;
+                    var that = this;
 
-                    if(column.command) {
-                        template = function($container, options) {
-                            var column = options.column;
+                    return function($container, options) {
+                        var $content = column.command ? $container : createCellContent(that, $container, options),
+                            caption = !isDefined(column.groupIndex) && column.caption;
 
+                        if(caption) {
+                            $content.text(caption);
+                        } else if(column.command) {
                             $container.html("&nbsp;");
-                            $container.addClass(column.cssClass);
-                        };
-                    } else {
-                        template = function($container, options) {
-                            var $content = createCellContent(that, $container, options);
-                            $content.text(column.caption);
-                        };
-                    }
-
-                    return template;
+                        }
+                    };
                 },
 
                 _getHeaderTemplate: function(column) {
@@ -140,6 +141,11 @@ module.exports = {
 
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+                        if(!this._isLegacyKeyboardNavigation()) {
+                            if(options.column && !options.column.type) {
+                                $cell.attr("tabindex", this.option("tabindex") || 0);
+                            }
+                        }
                     }
 
                     return $cell;
@@ -163,9 +169,33 @@ module.exports = {
 
                     if(row.rowType === "header") {
                         $row.addClass(HEADER_ROW_CLASS);
+                        if(!this._isLegacyKeyboardNavigation()) {
+                            registerKeyboardAction("columnHeaders", this, $row, "td", this._handleActionKeyDown.bind(this));
+                        }
                     }
 
                     return $row;
+                },
+
+                _handleActionKeyDown: function(args) {
+                    var event = args.event,
+                        $target = $(event.target);
+
+                    this._lastActionElement = event.target;
+
+                    if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+                        let headerFilterController = this.getController("headerFilter"),
+                            $column = $target.closest("td"),
+                            columnIndex = this.getColumnIndexByElement($column);
+                        if(columnIndex >= 0) {
+                            headerFilterController.showHeaderFilterMenu(columnIndex, false);
+                        }
+                    } else {
+                        let $row = $target.closest(ROW_CLASS_SELECTOR);
+                        this._processHeaderAction(event, $row);
+                    }
+
+                    event.preventDefault();
                 },
 
                 _renderCore: function() {
@@ -190,6 +220,25 @@ module.exports = {
                     }
 
                     that.callBase.apply(that, arguments);
+
+                    if(!that._isLegacyKeyboardNavigation()) {
+                        that._restoreLastFocusedElement();
+                    }
+                },
+
+                _restoreLastFocusedElement: function() {
+                    var $table = this.element(),
+                        $headerCells = $table.find(`tr.${HEADER_ROW_CLASS} > td[tabindex]`);
+
+                    if($headerCells.length > 1) {
+                        let $firstCell = $headerCells.first();
+                        eventsEngine.on($firstCell, "focus", e => {
+                            if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
+                                $(this._lastActionElement).trigger("focus");
+                                this._lastActionElement = null;
+                            }
+                        });
+                    }
                 },
 
                 _renderRows: function() {
@@ -344,6 +393,15 @@ module.exports = {
                             return that.getCellElements(index || 0);
                         }
                     }
+                },
+
+                getColumnIndexByElement: function($cell) {
+                    let cellIndex = this.getCellIndex($cell),
+                        $row = $cell.closest(".dx-row"),
+                        rowIndex = $row[0].rowIndex,
+                        column = this.getColumns(rowIndex)[cellIndex];
+
+                    return column ? column.index : -1;
                 },
 
                 getVisibleColumnIndex: function(columnIndex, rowIndex) {

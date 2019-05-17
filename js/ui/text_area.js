@@ -95,6 +95,12 @@ var TextArea = TextBox.inherit({
              * @hidden
              * @inheritdoc
              */
+
+            /**
+            * @name dxTextAreaOptions.buttons
+            * @hidden
+            * @inheritdoc
+            */
         });
     },
 
@@ -254,6 +260,12 @@ var TextArea = TextBox.inherit({
         }
     }
 
+    /**
+    * @name dxTextAreaMethods.getButton
+    * @publicName getButton(name)
+    * @hidden
+    * @inheritdoc
+    */
 });
 
 registerComponent("dxTextArea", TextArea);

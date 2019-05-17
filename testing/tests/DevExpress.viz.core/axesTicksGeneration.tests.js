@@ -1540,6 +1540,23 @@ QUnit.test("Logarithmic ticks adjusting", function(assert) {
     assert.deepEqual(this.axis._majorTicks.map(value), [1e-9, 1e-8, 1e-7]);
 });
 
+QUnit.test("Values adjusting", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        tickInterval: 2
+    });
+
+    this.axis.setBusinessRange({ min: 0.0001, max: 10 });
+
+    // act
+    this.axis.createTicks(canvas(450));
+
+    assert.strictEqual(this.axis._majorTicks[0].value, 0.0001);
+});
+
 QUnit.module("Logarithmic. Minor ticks", environment);
 
 QUnit.test("minorTickInterval as exponent, but ticks not", function(assert) {

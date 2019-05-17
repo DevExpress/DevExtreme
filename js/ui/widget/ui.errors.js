@@ -219,6 +219,26 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1052: '{0} should have the "dataSource" option specified',
 
     /**
+    * @name ErrorsUIWidgets.E1053
+    */
+    E1053: "The \"buttons\" option accepts an array that contains only objects or string values",
+
+    /**
+    * @name ErrorsUIWidgets.E1054
+    */
+    E1054: "All text editor buttons must have names",
+
+    /**
+    * @name ErrorsUIWidgets.E1055
+    */
+    E1055: "One or several text editor buttons have invalid or non-unique \"name\" values",
+
+    /**
+    * @name ErrorsUIWidgets.E1056
+    */
+    E1056: "The {0} widget does not support buttons of the \"{1}\" type",
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",
@@ -276,5 +296,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1013
     */
-    W1013: "The \"message\" field in the dialog component was renamed to \"messageHtml\". Change your code correspondingly. In addition, if you used HTML code in the message, make sure that it is secure"
+    W1013: "The \"message\" field in the dialog component was renamed to \"messageHtml\". Change your code correspondingly. In addition, if you used HTML code in the message, make sure that it is secure",
+
+    /**
+    * @name ErrorsUIWidgets.W1014
+    */
+    W1014: "The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialActionCount option value in the global config."
 });

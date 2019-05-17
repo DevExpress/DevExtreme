@@ -1,0 +1,55 @@
+@TRANSPARENT_BORDER: 1px solid transparent;
+
+.dx-diagram {
+    border: @TRANSPARENT_BORDER;
+    display: flex;
+    flex-flow: column;
+    min-height: 400px;
+
+    .dx-diagram-toolbar-wrapper {
+        padding: 5px;
+        flex: 0;
+    }
+
+    .dx-diagram-content-wrapper {
+        display: flex;
+        flex: 1;
+        flex-basis: 0;
+    }
+
+    .dx-diagram-left-panel {
+        flex: 240px 0 0;
+        overflow-y: auto;
+        position: relative;
+        border-right: @TRANSPARENT_BORDER;
+    }
+    .dx-diagram-left-panel > * {
+        position: absolute;
+    }
+    .dx-diagram-drawer-wrapper {
+        flex: 1 0px;
+    }
+    .dx-diagram-content {
+        height: 100%;
+    }
+    .dx-diagram-right-panel {
+        border-left: @TRANSPARENT_BORDER;
+    }
+    .dx-diagram-right-panel .dx-accordion {
+        width: 280px;
+    }
+
+    .dx-diagram-toolbar-separator {
+        height: 100%;
+        border-left: @TRANSPARENT_BORDER;
+    }
+    
+    .dx-diagram-toolbar-menu-separator {
+        width: 100%;
+        border-top: @TRANSPARENT_BORDER;
+    
+        &::before {
+            content: none;
+        }
+    }
+}

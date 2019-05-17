@@ -70,10 +70,10 @@ var CollectionWidget = Widget.inherit({
                     return;
                 }
 
-                e.target = $itemElement;
-                e.currentTarget = $itemElement;
-
-                this._itemClickHandler(e);
+                this._itemClickHandler(extend({}, e, {
+                    target: $itemElement,
+                    currentTarget: $itemElement
+                }));
             },
             space = function(e) {
                 e.preventDefault();
@@ -337,11 +337,13 @@ var CollectionWidget = Widget.inherit({
 
     _prepareItemTemplate: function($item) {
         var templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
-        var templateOptions = "dxTemplate: { name: \"" + templateId + "\" }";
+        var $template = $item
+            .detach()
+            .clone()
+            .removeAttr("data-options")
+            .addClass(TEMPLATE_WRAPPER_CLASS);
 
-        $item.detach().clone()
-            .attr("data-options", templateOptions)
-            .data("options", templateOptions).appendTo(this.$element());
+        this._saveTemplate(templateId, $template);
 
         return templateId;
     },
@@ -1024,7 +1026,7 @@ var CollectionWidget = Widget.inherit({
     _createItemRenderAction: function() {
         return (this._itemRenderAction = this._createActionByOption("onItemRendered", {
             element: this.element(),
-            excludeValidators: ["designMode", "disabled", "readOnly"],
+            excludeValidators: ["disabled", "readOnly"],
             category: "rendering"
         }));
     },

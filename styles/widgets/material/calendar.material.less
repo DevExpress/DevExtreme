@@ -11,20 +11,27 @@
     @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING: 8px;
     @MATERIAL_NAV_BUTTON_WIDTH: 32px;
     @MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: 2px 15px 4px;
+    @MATERIAL_CALENDAR_CELL_WIDTH: 39px;
+    @MATERIAL_CALENDAR_CELL_DIAMETER: 32px;
+    @MATERIAL_CALENDAR_CELL_VERTICAL_PADDING: 4px;
 }
 
 .dx-size-compact() {
-    @MATERIAL_CALENDAR_CELL_FONT_SIZE: 13px;
-    @MATERIAL_CALENDAR_BODY_WIDTH: 232px;
-    @MATERIAL_CALENDAR_BODY_TOP: 42px;
-    @MATERIAL_CALENDAR_FOOTER_HEIGHT: 35px;
-    @MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 4px;
-    @MATERIAL_CALENDAR_NAVIGATOR_HEIGHT: 30px;
+    @MATERIAL_CALENDAR_CELL_FONT_SIZE: 12px;
+    @MATERIAL_CALENDAR_BODY_WIDTH: 250px;
+    @MATERIAL_CALENDAR_BODY_HEIGHT: 200px;
+    @MATERIAL_CALENDAR_BODY_TOP: 35px;
+    @MATERIAL_CALENDAR_FOOTER_HEIGHT: 45px;
+    @MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 9px;
+    @MATERIAL_CALENDAR_NAVIGATOR_HEIGHT: 28px;
 
-    @MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING: 2px;
-    @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING: 3px;
-    @MATERIAL_NAV_BUTTON_WIDTH: 24px;
-    @MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: 3px 3px;
+    @MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING: 10px;
+    @MATERIAL_CALENDAR_CELL_HORIZONTAL_PADDING: 8px;
+    @MATERIAL_NAV_BUTTON_WIDTH: 28px;
+    @MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING: 2px 15px 4px;
+    @MATERIAL_CALENDAR_CELL_WIDTH: 32px;
+    @MATERIAL_CALENDAR_CELL_DIAMETER: 28px;
+    @MATERIAL_CALENDAR_CELL_VERTICAL_PADDING: 0;
 }
 
 @MATERIAL_CALENDAR_NAVIGATOR_ICON_FONTSIZE: @MATERIAL_BASE_ICON_SIZE;
@@ -198,10 +205,10 @@
 
 .dx-calendar-cell {
     text-align: center;
-    padding: 4px 0;
+    padding: @MATERIAL_CALENDAR_CELL_VERTICAL_PADDING 0;
     color: @calendar-color;
     font-size: @MATERIAL_CALENDAR_CELL_FONT_SIZE;
-    width: 39px;
+    width: @MATERIAL_CALENDAR_CELL_WIDTH;
     border-radius: @calendar-cell-contoured-border-radius;
 
     .dx-calendar-view-decade &,
@@ -223,8 +230,8 @@
 
     span {
         display: inline-block;
-        width: 32px;
-        line-height: 32px;
+        width: @MATERIAL_CALENDAR_CELL_DIAMETER;
+        line-height: @MATERIAL_CALENDAR_CELL_DIAMETER;
         border-radius: 50%;
     }
 
@@ -278,7 +285,7 @@
     &.dx-calendar-selected-date {
         &, &.dx-calendar-today {
             span {
-                color: @base-selected-text-color;
+                color: @base-inverted-text-color;
                 background-color: @calendar-cell-selected-bg;
                 font-weight: normal;
             }

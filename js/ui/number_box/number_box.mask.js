@@ -68,16 +68,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _focusInHandler: function(e) {
         this.callBase(e);
-
-        var caret = this._caret();
-        if(caret.start !== caret.end) {
-            return;
-        }
-
         this.clearCaretTimeout();
         this._caretTimeout = setTimeout(function() {
             this._caretTimeout = null;
-            this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+            var caret = this._caret();
+
+            if(caret.start === caret.end) {
+                this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+            }
         }.bind(this), CARET_TIMEOUT_DURATION);
     },
 
@@ -152,7 +150,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var decimalSeparator = number.getDecimalSeparator(),
             isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator,
             isZeroNext = text.charAt(caret.end) === "0",
-            moveToFloat = this._lastKey === decimalSeparator && isDecimalSeparatorNext,
+            moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === ".") && isDecimalSeparatorNext,
             zeroToZeroReplace = this._lastKey === "0" && isZeroNext;
 
         return moveToFloat || zeroToZeroReplace;
@@ -349,8 +347,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return undefined;
         }
 
-        if(editedText === "") {
-            parsed = 0;
+        if(this._removeStubs(editedText) === "") {
+            parsed = this._parsedValue * 0;
         }
 
         if(isNaN(parsed)) {

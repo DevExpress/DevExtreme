@@ -1,4 +1,20 @@
-var $ = require("jquery");
+import $ from "jquery";
+import translator from "animation/translator";
+import dblclickEvent from "events/dblclick";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import Query from "data/query";
+import dataUtils from "core/element_data";
+import devices from "core/devices";
+import { SchedulerTestWrapper } from "./helpers.js";
+
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -6,24 +22,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-
-var translator = require("animation/translator"),
-    dblclickEvent = require("events/dblclick"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    Query = require("data/query"),
-    dataUtils = require("core/element_data"),
-    devices = require("core/devices");
-
-require("ui/scheduler/ui.scheduler");
 
 var APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
@@ -35,6 +33,11 @@ function getOffset() {
         return APPOINTMENT_DEFAULT_OFFSET;
     }
 }
+
+const createInstance = function(options) {
+    const instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 QUnit.module("Integration: allDay appointments", {
     beforeEach: function() {
@@ -200,7 +203,7 @@ QUnit.test("All-day appointment startDate should be correct after resize when st
     var cellWidth = $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-left").eq(0)).start();
-    pointer.dragStart().drag(-cellWidth, 0).dragEnd();
+    pointer.dragStart().drag(-(cellWidth - 10), 0).dragEnd();
 
     assert.deepEqual(this.instance.option("dataSource")[0].startDate, new Date(2015, 1, 9), "Start date is OK");
 });
@@ -718,7 +721,7 @@ QUnit.test("All-day appointment inside grouped view should have a right resizabl
 });
 
 QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489535)", function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         currentDate: new Date(2015, 4, 25),
         views: ["week"],
         currentView: "week",
@@ -734,7 +737,7 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
         ]
     });
 
-    this.instance.option("dataSource", [
+    scheduler.instance.option("dataSource", [
         { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
         { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
         { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 1 },
@@ -747,18 +750,11 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 }
     ]);
 
-    var firstGroupDropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance"),
-        secondGroupDropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(1).dxDropDownMenu("instance");
+    scheduler.appointments.compact.click();
+    assert.equal(scheduler.tooltip.getItemCount(), 3, "There are 3 drop down appts in 1st group");
 
-    firstGroupDropDown.open();
-    var firstDdAppointments = firstGroupDropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(firstDdAppointments.length, 3, "There are 3 drop down appts in 1st group");
-
-    secondGroupDropDown.open();
-    var secondDdAppointments = secondGroupDropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(secondDdAppointments.length, 3, "There are 3 drop down appts in 2d group");
+    scheduler.appointments.compact.click(1);
+    assert.equal(scheduler.tooltip.getItemCount(), 3, "There are 3 drop down appts in 2d group");
 });
 
 QUnit.test("DropDown appointment should be removed correctly when needed", function(assert) {
@@ -781,12 +777,12 @@ QUnit.test("DropDown appointment should be removed correctly when needed", funct
 
     this.instance.option("dataSource", items);
 
-    var $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    var $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
     assert.equal($dropDown.length, 1, "Dropdown appointment was rendered");
 
     this.instance.deleteAppointment(items[7]);
 
-    $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+    $dropDown = this.instance.$element().find(".dx-scheduler-appointment-collector");
     assert.equal($dropDown.length, 0, "Dropdown appointment was removed");
 });
 
@@ -1428,7 +1424,7 @@ QUnit.test("dropDown appointment should have correct container & position", func
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
     ]);
 
-    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-appointment-collector").eq(0);
 
     assert.equal($dropDown.parent().get(0), $(this.instance.$element()).find(".dx-scheduler-all-day-appointments").get(0), "Container is OK");
     assert.roughEqual(translator.locate($dropDown).left, 228, 1.001, "Appointment position is OK");
@@ -1455,9 +1451,9 @@ QUnit.test("dropDown appointment should not have compact class on allDay panel",
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
     ]);
 
-    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-appointment-collector").eq(0);
 
-    assert.notOk($dropDown.hasClass("dx-scheduler-dropdown-appointments-compact"), "class is ok");
+    assert.notOk($dropDown.hasClass("dx-scheduler-appointment-collector-compact"), "class is ok");
 });
 
 QUnit.test("AllDay appointments should have correct height, groupOrientation = vertical", function(assert) {

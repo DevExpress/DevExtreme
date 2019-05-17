@@ -1,18 +1,30 @@
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    SchedulerTimezoneEditor = require("ui/scheduler/timezones/ui.scheduler.timezone_editor"),
-    fx = require("animation/fx"),
-    DataSource = require("data/data_source/data_source").DataSource;
+import { SchedulerTestWrapper } from "./helpers.js";
 
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
+import $ from "jquery";
+import devices from "core/devices";
+import SchedulerTimezoneEditor from "ui/scheduler/timezones/ui.scheduler.timezone_editor";
+import fx from "animation/fx";
+import { DataSource } from "data/data_source/data_source";
+import resizeCallbacks from "core/utils/resize_callbacks";
+
+import "ui/scheduler/ui.scheduler";
+import "ui/switch";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
+
+const createInstance = function(options) {
+    const defaultOption = {
+        dataSource: [],
+        maxAppointmentsPerCell: null
+    };
+    const instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 var moduleOptions = {
     beforeEach: function() {
@@ -134,6 +146,15 @@ QUnit.test("showAppointmentPopup should render a popup form only once", function
     assert.equal($form.find(".dx-textbox").eq(0).dxTextBox("instance").option("text"), "appointment 2", "Form data is correct");
 });
 
+QUnit.test("popup should have right height", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
+
+    var popup = this.instance.getAppointmentPopup();
+
+    assert.equal(popup.option("height"), 'auto', "popup has correct height");
+    assert.equal(popup.option("maxHeight"), "100%", "popup has correct max-height");
+});
+
 QUnit.test("showAppointmentPopup should render a popup content only once", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
 
@@ -247,7 +268,7 @@ QUnit.test("startDateBox value should be valid", function(assert) {
     var form = this.instance.getAppointmentDetailsForm(),
         startDateBox = form.getEditor("startDate");
 
-    startDateBox.option("value", null);
+    startDateBox.option("value", undefined);
 
     assert.deepEqual(startDateBox.option("value"), new Date(2015, 1, 1), "startDate value is initial value");
 });
@@ -289,7 +310,7 @@ QUnit.test("endDateBox value should be valid", function(assert) {
     var form = this.instance.getAppointmentDetailsForm(),
         endDateBox = form.getEditor("endDate");
 
-    endDateBox.option("value", null);
+    endDateBox.option("value", undefined);
 
     assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 3), "endDate value is initial value");
 });
@@ -318,39 +339,40 @@ QUnit.test("Confirm dialog should be shown when showAppointmentPopup for recurre
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 });
 
-QUnit.test("Popup should contain switch to turning on of recurrence editor", function(assert) {
+QUnit.test("Popup should contain recurrence editor", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
-    assert.equal(repeatOnEditor.option("value"), false, "value is right");
+    assert.equal(freqEditor.option("value"), "never", "value is right");
 });
 
-QUnit.test("RepeatOn switch should be turned on if recurrence rule was set on init", function(assert) {
+QUnit.test("Recurrence Editor should have right freq editor value if recurrence rule was set on init", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a", recurrenceRule: "FREQ=WEEKLY" });
 
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
-    assert.equal(repeatOnEditor.option("value"), true, "switch is turned on");
+    assert.equal(freqEditor.option("value"), "weekly", "value is right");
 });
 
-QUnit.test("RepeatOn switch should change value if recurrence rule was changed", function(assert) {
+QUnit.test("Freq editor should change value if recurrence rule was changed", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a", recurrenceRule: "FREQ=WEEKLY" });
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
-    assert.equal(repeatOnEditor.option("value"), true, "switch is turned on");
+    assert.equal(freqEditor.option("value"), "weekly", "value is right");
 
-    var recurrenceEditor = form.getEditor("recurrenceRule");
-    recurrenceEditor.option("value", "");
-
-    assert.equal(repeatOnEditor.option("value"), true, "switch is turned on");
+    freqEditor.option("value", "daily");
+    recurrenceEditor.option("value", "FREQ=DAILY");
 });
 
 QUnit.test("Recurrence editor container should be visible if recurrence rule was set", function(assert) {
@@ -363,34 +385,38 @@ QUnit.test("Recurrence editor container should be visible if recurrence rule was
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
 });
 
-QUnit.test("Recurrence editor container should be visible after turn on switch", function(assert) {
+QUnit.test("Recurrence editor container should be visible after changing freq editor value", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        recurrenceEditor = form.getEditor("recurrenceRule");
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    var repeatOnEditor = form.getEditor("repeatOnOff");
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "daily");
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
+
+    freqEditor.option("value", "never");
+
+    assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 });
 
-QUnit.test("Recurrence editor container should be visible after turn on switch, if recurrenceRule expr is set", function(assert) {
+QUnit.test("Recurrence editor container should be visible after changing freq editor value, if recurrenceRule expr is set", function(assert) {
     this.instance.option("recurrenceRuleExpr", "RRule");
 
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        recurrenceEditor = form.getEditor("RRule");
+        recurrenceEditor = form.getEditor("RRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    var repeatOnEditor = form.getEditor("repeatOnOff");
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "daily");
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
 });
@@ -409,7 +435,7 @@ QUnit.test("Recurrence editor container should be visible after value option cha
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
 });
 
-QUnit.test("Popup should contain recurrence editor", function(assert) {
+QUnit.test("Popup should contain recurrence editor with right config", function(assert) {
     var startDate = new Date(2015, 1, 1, 1);
 
     this.instance.option("recurrenceEditMode", "series");
@@ -431,19 +457,18 @@ QUnit.test("Popup should contain recurrence editor", function(assert) {
     assert.equal($recurrenceEditor.dxRecurrenceEditor("instance").option("firstDayOfWeek"), 5, "firstDayOfWeek value is right");
 });
 
-QUnit.test("Recurrence editor should have default value if repeatOnOff editor turned on", function(assert) {
+QUnit.test("Recurrence editor should have default value if freq editor value changed", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor;
 
-    repeatOnEditor.option("value", true);
-
-    var recurrenceEditor = form.getEditor("recurrenceRule");
+    freqEditor.option("value", "daily");
 
     assert.equal(recurrenceEditor.option("value"), "FREQ=DAILY", "recEditor has right value");
 
-    repeatOnEditor.option("value", false);
+    freqEditor.option("value", "never");
 
     assert.equal(recurrenceEditor.option("value"), "", "recEditor has right value");
 });
@@ -865,26 +890,6 @@ QUnit.test("focus is called on popup hiding", function(assert) {
     assert.ok(spy.calledOnce, "focus is called");
 });
 
-QUnit.test("Appointment popup should have correct 'fullScreen' option", function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-    var popup = this.instance.getAppointmentPopup();
-
-    if(!devices.current().generic) {
-        assert.ok(popup.option("fullScreen"), "the fullScreen option is OK");
-    } else {
-        assert.notOk(popup.option("fullScreen"), "the fullScreen option is OK");
-    }
-});
-
-QUnit.test("Appointment popup should have correct 'maxWidth' option", function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-    var popup = this.instance.getAppointmentPopup();
-
-    assert.equal(popup.option("maxWidth"), 610, "the maxWidth option is OK");
-});
-
 QUnit.test("Popup should has close button in mobile theme when allowUpdating: false", function(assert) {
     this.instance.option({
         editing: {
@@ -905,21 +910,50 @@ QUnit.test("Popup should has default close button in current mobile theme", func
     assert.equal(popup.option("showCloseButton"), popup.initialOption("showCloseButton"), "popup has closeButton");
 });
 
-QUnit.test("Clicking on 'Repeat' label should toggle recurrence editor", function(assert) {
+QUnit.test("Clicking on 'Repeat' label should focus freq editor", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
     var popup = this.instance.getAppointmentPopup(),
-        editorLabel = $(popup.$content()).find(".dx-scheduler-recurrence-switch-item .dx-field-item-label");
+        editorLabel = $(popup.$content()).find(".dx-scheduler-recurrence-rule-item .dx-field-item-label");
 
     editorLabel.trigger("dxclick");
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
-        $recurrenceEditorContainer = $popupContent.find(".dx-recurrence-editor-container").eq(0);
+        $freqEditor = $popupContent.find(".dx-recurrence-selectbox-freq").eq(0);
 
-    assert.ok($recurrenceEditorContainer.is(':visible'), "Recurrence editor is visible");
+    assert.ok($freqEditor.hasClass("dx-state-focused"), "freq editor is focused");
+});
+
+QUnit.test("Clicking on 'Repeat' label should should focus freq editor, when recurrence part is opening (T722522) ", function(assert) {
+    var data = new DataSource({
+        store: [{
+            startDate: new Date(2017, 4, 25, 10),
+            endDate: new Date(2017, 4, 25, 12),
+            recurrenceRule: "FREQ=DAILY"
+        }]
+    });
+
+    this.instance.option({
+        startDayHour: 9,
+        view: ["week"],
+        currentView: "week",
+        dataSource: data,
+        currentDate: new Date(2017, 4, 25)
+    });
+
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(1);
+    $($appointment).trigger("dxdblclick");
+    $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
+
+    var popup = this.instance.getAppointmentPopup(),
+        editorLabel = $(popup.$content()).find(".dx-scheduler-recurrence-rule-item .dx-field-item-label");
 
     editorLabel.trigger("dxclick");
-    assert.ok($recurrenceEditorContainer.is(':hidden'), "Recurrence editor is hidden");
+
+    var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
+        $freqEditor = $popupContent.find(".dx-recurrence-selectbox-freq").eq(0);
+
+    assert.ok($freqEditor.hasClass("dx-state-focused"), "freq editor is focused");
 });
 
 QUnit.test("Multiple showing appointment popup for recurrence appointments should work correctly", function(assert) {
@@ -944,4 +978,116 @@ QUnit.test("Multiple showing appointment popup for recurrence appointments shoul
 
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
+});
+
+QUnit.test("Appointment popup will render even if no appointmentData is provided (T734413)", function(assert) {
+    const scheduler = createInstance();
+    scheduler.instance.showAppointmentPopup({}, true);
+    scheduler.instance.hideAppointmentPopup(true);
+    scheduler.instance.showAppointmentPopup({}, true);
+    const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
+    const appointmentPopup = scheduler.appointmentPopup;
+
+    assert.equal(startDate, null, "startDate has null in the dxForm");
+    assert.equal(endDate, null, "endDate has null in the dxForm");
+    assert.ok(appointmentPopup.isVisible(), "Popup is rendered");
+
+    const $popup = appointmentPopup.getPopup();
+    const $startDate = $popup.find("input[name='startDate']")[0];
+    const $endDate = $popup.find("input[name='endDate']")[0];
+
+    assert.equal($startDate.value, "", "startDate is rendered empty");
+    assert.equal($endDate.value, "", "endDate is rendered empty");
+});
+
+QUnit.test("Appointment popup will render on showAppointmentPopup with no arguments", function(assert) {
+    const scheduler = createInstance();
+    scheduler.instance.showAppointmentPopup();
+    const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
+    const appointmentPopup = scheduler.appointmentPopup;
+
+    assert.equal(startDate, null, "startDate has null in the dxForm");
+    assert.equal(endDate, null, "endDate has null in the dxForm");
+    assert.ok(appointmentPopup.isVisible(), "Popup is rendered");
+
+    const $popup = appointmentPopup.getPopup();
+    const $startDate = $popup.find("input[name='startDate']")[0];
+    const $endDate = $popup.find("input[name='endDate']")[0];
+
+    assert.equal($startDate.value, "", "startDate is rendered empty");
+    assert.equal($endDate.value, "", "endDate is rendered empty");
+});
+
+QUnit.test("Appointment form will have right dates on multiple openings (T727713)", function(assert) {
+    const scheduler = createInstance();
+    const appointments = [
+        {
+            text: "Appointment1",
+            startDate: new Date(2017, 4, 2, 8, 30),
+            endDate: new Date(2017, 4, 2, 11),
+        }, {
+            text: "Appointment2",
+            startDate: new Date(2017, 4, 1, 10),
+            endDate: new Date(2017, 4, 1, 11),
+        }
+    ];
+    scheduler.instance.option({
+        dataSource: appointments,
+        currentView: "week",
+        views: ["week"],
+        currentDate: new Date(2017, 4, 1),
+    });
+    scheduler.instance.showAppointmentPopup(appointments[1], false);
+    let formData = scheduler.appointmentForm.getFormInstance().option('formData');
+
+    assert.deepEqual(formData.startDate, appointments[1].startDate, "First opening appointment form has right startDate");
+    assert.deepEqual(formData.endDate, appointments[1].endDate, "First opening appointment form has right endDate");
+
+    scheduler.instance.hideAppointmentPopup();
+    scheduler.appointments.dblclick(0);
+    formData = scheduler.appointmentForm.getFormInstance().option('formData');
+
+    assert.deepEqual(formData.startDate, appointments[0].startDate, "Second opening appointment form has right startDate");
+    assert.deepEqual(formData.endDate, appointments[0].endDate, "Second opening appointment form has right endDate");
+});
+
+QUnit.test("The vertical scroll bar is shown when an appointment popup fill to a small window's height", function(assert) {
+    const scheduler = createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: []
+    });
+
+    const popup = scheduler.appointmentPopup;
+    popup.setInitialPopupSize({ height: 300 });
+
+    scheduler.instance.fire("showAddAppointmentPopup", {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    });
+
+    assert.ok(popup.hasVerticalScroll(), "The popup has the vertical scrolling");
+});
+
+QUnit.test("The resize event of appointment popup is triggered the the window is resize", function(assert) {
+    const scheduler = createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: []
+    });
+
+    scheduler.instance.fire("showAddAppointmentPopup", {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    });
+
+    const $popup = scheduler.appointmentPopup.getPopupInstance().$element();
+    let isResizeEventTriggered;
+    $($popup).on("dxresize", () => {
+        isResizeEventTriggered = true;
+    });
+    resizeCallbacks.fire();
+    assert.ok(isResizeEventTriggered, "The resize event of popup is triggered");
 });

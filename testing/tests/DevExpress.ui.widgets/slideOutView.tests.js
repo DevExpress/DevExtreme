@@ -332,27 +332,6 @@ QUnit.test("swipeEnabled option dynamic change", function(assert) {
     assert.equal(position($content), startPosition, "position won't changed");
 });
 
-QUnit.test("content container should not be moved in design mode", function(assert) {
-    config({ designMode: true });
-
-    try {
-        var $element = $("#slideOutView").dxSlideOutView({
-                swipeEnabled: true,
-                menuVisible: true
-            }),
-            instance = $element.dxSlideOutView("instance"),
-            $content = $(instance.content()),
-            pointer = pointerMock($content).start();
-
-        var startPosition = position($content);
-        pointer.swipeStart().swipe(-0.1);
-        assert.equal(position($content), startPosition, "content won't moved");
-
-    } finally {
-        config({ designMode: false });
-    }
-});
-
 
 QUnit.module("animation", {
     beforeEach: function() {

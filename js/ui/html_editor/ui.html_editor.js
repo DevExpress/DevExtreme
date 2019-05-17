@@ -1,12 +1,13 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isFunction } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import { executeAsync } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
+import Callbacks from "../../core/utils/callbacks";
 
 import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
@@ -82,13 +83,24 @@ const HtmlEditor = Editor.inherit({
             * @default null
             */
             variables: null,
-
             /**
-            * @name dxHtmlEditorOptions.resizing
-            * @type dxHtmlEditorResizing
+            * @name dxHtmlEditorOptions.mediaResizing
+            * @type dxHtmlEditorMediaResizing
             * @default null
             */
-            resizing: null,
+            mediaResizing: null,
+            /**
+            * @name dxHtmlEditorOptions.mentions
+            * @type Array<dxHtmlEditorMention>
+            * @default null
+            */
+            mentions: null,
+            /**
+             * @name dxHtmlEditorOptions.customizeModules
+             * @type function
+             * @type_function_param1 config:object
+             */
+            customizeModules: null,
 
             formDialogOptions: null
 
@@ -139,20 +151,87 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxHtmlEditorResizing
+            * @name dxHtmlEditorMediaResizing
             * @type object
             */
             /**
-            * @name dxHtmlEditorResizing.enabled
+            * @name dxHtmlEditorMediaResizing.enabled
             * @type boolean
             * @default false
             */
             /**
-            * @name dxHtmlEditorResizing.allowedTargets
+            * @name dxHtmlEditorMediaResizing.allowedTargets
             * @type Array<string>
             * @default ["images"]
             */
+
+            /**
+            * @name dxHtmlEditorMention
+            * @type object
+            */
+            /**
+            * @name dxHtmlEditorMention.dataSource
+            * @type Array<string>|DataSource|DataSourceOptions
+            * @default null
+            */
+            /**
+            * @name dxHtmlEditorMention.marker
+            * @type string
+            * @default "@"
+            */
+            /**
+            * @name dxHtmlEditorMention.minSearchLength
+            * @type number
+            * @default 0
+            */
+            /**
+            * @name dxHtmlEditorMention.searchTimeout
+            * @type number
+            * @default 500
+            */
+            /**
+            * @name dxHtmlEditorMention.itemTemplate
+            * @type template|function
+            * @default "item"
+            * @type_function_param1 itemData:object
+            * @type_function_param2 itemIndex:number
+            * @type_function_param3 itemElement:dxElement
+            * @type_function_return string|Node|jQuery
+            */
+            /**
+            * @name dxHtmlEditorMention.displayExpr
+            * @type string|function(item)
+            * @default "this"
+            * @type_function_param1 item:object
+            * @type_function_return string
+            */
+            /**
+            * @name dxHtmlEditorMention.searchExpr
+            * @type getter|Array<getter>
+            * @default "this"
+            */
+            /**
+            * @name dxHtmlEditorMention.valueExpr
+            * @type string|function
+            * @default "this"
+            */
+            /**
+            * @name dxHtmlEditorMention.template
+            * @type template|function
+            * @default null
+            * @type_function_param1 mentionData:object
+            * @type_function_param1_field1 marker:string
+            * @type_function_param1_field2 id:string|number
+            * @type_function_param1_field3 value:any
+            * @type_function_param2 contentElement:dxElement
+            * @type_function_return string|Node|jQuery
+            */
         });
+    },
+
+    _init: function() {
+        this.callBase();
+        this.cleanCallback = Callbacks();
     },
 
     _getAnonymousTemplateName: function() {
@@ -274,7 +353,12 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderHtmlEditor: function() {
+        const customizeModules = this.option("customizeModules");
         const modulesConfig = this._getModulesConfig();
+
+        if(isFunction(customizeModules)) {
+            customizeModules(modulesConfig);
+        }
 
         this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
@@ -304,7 +388,8 @@ const HtmlEditor = Editor.inherit({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
-            resizing: this._getModuleConfigByOption("resizing"),
+            resizing: this._getModuleConfigByOption("mediaResizing"),
+            mentions: this._getModuleConfigByOption("mentions"),
             clipboard: {
                 matchVisual: false,
                 matchers: [
@@ -319,13 +404,20 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModuleConfigByOption: function(userOptionName) {
-        let userConfig = this.option(userOptionName);
+        const optionValue = this.option(userOptionName);
+        let config = {};
 
-        if(!isDefined(userConfig)) {
+        if(!isDefined(optionValue)) {
             return undefined;
         }
 
-        return extend(this._getBaseModuleConfig(), userConfig);
+        if(Array.isArray(optionValue)) {
+            config[userOptionName] = optionValue;
+        } else {
+            config = optionValue;
+        }
+
+        return extend(this._getBaseModuleConfig(), config);
     },
 
     _getBaseModuleConfig: function() {
@@ -414,6 +506,8 @@ const HtmlEditor = Editor.inherit({
             case "placeholder":
             case "variables":
             case "toolbar":
+            case "mentions":
+            case "customizeModules":
                 this._invalidate();
                 break;
             case "valueType": {
@@ -435,7 +529,7 @@ const HtmlEditor = Editor.inherit({
             case "formDialogOptions":
                 this._renderFormDialog();
                 break;
-            case "resizing":
+            case "mediaResizing":
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
@@ -454,13 +548,12 @@ const HtmlEditor = Editor.inherit({
 
     _clean: function() {
         if(this._quillInstance) {
-            const toolbar = this._quillInstance.getModule("toolbar");
-
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
-            toolbar && toolbar.clean();
+            this.cleanCallback.fire();
         }
 
         this._abortUpdateContentTask();
+        this.cleanCallback.empty();
         this.callBase();
     },
 
@@ -483,24 +576,28 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    addCleanCallback(callback) {
+        this.cleanCallback.add(callback);
+    },
+
     /**
-    * @name dxHtmlEditorMethods.registerModules
-    * @publicName registerModules(modules)
+    * @name dxHtmlEditorMethods.register
+    * @publicName register(components)
     * @param1 modules:Object
     */
-    registerModules: function(modules) {
-        this._quillRegistrator.registerModules(modules);
+    register: function(components) {
+        this._quillRegistrator.registerModules(components);
 
         this.repaint();
     },
 
     /**
-    * @name dxHtmlEditorMethods.getModule
-    * @publicName getModule(modulePath)
-    * @param1 modulePath:string
+    * @name dxHtmlEditorMethods.get
+    * @publicName get(componentPath)
+    * @param1 componentPath:string
     * @return Object
     */
-    getModule: function(modulePath) {
+    get: function(modulePath) {
         return this._quillRegistrator.getQuill().import(modulePath);
     },
 

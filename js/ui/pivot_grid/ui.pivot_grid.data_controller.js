@@ -22,7 +22,8 @@ var Callbacks = require("../../core/utils/callbacks"),
     GRAND_TOTAL_TYPE = "GT",
     TOTAL_TYPE = "T",
     DATA_TYPE = "D",
-    NOT_AVAILABLE = "#N/A";
+    NOT_AVAILABLE = "#N/A",
+    CHANGING_DURATION_IF_PAGINATE = 300;
 
 var proxyMethod = function(instance, methodName, defaultResult) {
     if(!instance[methodName]) {
@@ -610,6 +611,10 @@ exports.DataController = Class.inherit((function() {
                 },
 
                 changingDuration: function() {
+                    var dataSource = dataController._dataSource;
+                    if(dataSource.paginate()) {
+                        return CHANGING_DURATION_IF_PAGINATE;
+                    }
                     return dataController._changingDuration || 0;
                 }
             }, dataAdapter));
@@ -739,21 +744,164 @@ exports.DataController = Class.inherit((function() {
             that._changingDuration = new Date() - startChanging;
         },
 
-        _handleCustomizeStoreLoadOptions: function(options) {
+        _correctSkipsTakes: function(rowIndex, rowSkip, rowSpan, levels, skips, takes) {
+            var endIndex = rowSpan ? rowIndex + rowSpan - 1 : rowIndex;
+            skips[levels.length] = skips[levels.length] || 0;
+            takes[levels.length] = takes[levels.length] || 0;
+            if(endIndex < rowSkip) {
+                skips[levels.length]++;
+            } else {
+                takes[levels.length]++;
+            }
+        },
+
+        _calculatePagingForRowExpandedPaths: function(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
+            var rows = this._rowsInfo,
+                rowCount = Math.min(options.rowSkip + options.rowTake, rows.length),
+                rowExpandedPaths = options.rowExpandedPaths,
+                levels = [],
+                expandedPathIndexes = {},
+                i, j,
+                path;
+
+            rowExpandedPaths.forEach((path, index) => {
+                expandedPathIndexes[path] = index;
+            });
+
+            for(i = 0; i < rowCount; i++) {
+                takes.length = skips.length = levels.length + 1;
+                for(j = 0; j < rows[i].length; j++) {
+                    var cell = rows[i][j];
+
+                    if(cell.type === "D") {
+                        this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
+
+                        path = cell.path || path;
+                        var expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, -1)] : -1;
+
+                        if(expandIndex >= 0) {
+                            rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
+                            rowExpandedTakes[expandIndex] = takes[levels.length] || 0;
+                        }
+
+                        if(cell.rowspan) {
+                            levels.push(cell.rowspan);
+                        }
+                    }
+                }
+                levels = levels.map(level => level - 1).filter(level => level > 0);
+            }
+        },
+
+        _calculatePagingForColumnExpandedPaths: function(options, skips, takes, expandedSkips, expandedTakes) {
+            var skipByPath = {},
+                takeByPath = {};
+
+            virtualColumnsCore.foreachColumnInfo(this._columnsInfo, function(columnInfo, columnIndex) {
+                if(columnInfo.type === "D" && columnInfo.path && columnInfo.dataIndex === undefined) {
+                    var colspan = columnInfo.colspan || 1,
+                        path = columnInfo.path.slice(0, -1).toString();
+
+                    skipByPath[path] = skipByPath[path] || 0;
+                    takeByPath[path] = takeByPath[path] || 0;
+
+                    if(columnIndex + colspan <= options.columnSkip) {
+                        skipByPath[path]++;
+                    } else if(columnIndex < options.columnSkip + options.columnTake) {
+                        takeByPath[path]++;
+                    }
+                }
+            });
+
+            skips[0] = skipByPath[[]];
+            takes[0] = takeByPath[[]];
+
+            options.columnExpandedPaths.forEach(function(path, index) {
+                var skip = skipByPath[path];
+                var take = takeByPath[path];
+
+                if(skip !== undefined) {
+                    expandedSkips[index] = skip;
+                }
+                if(take !== undefined) {
+                    expandedTakes[index] = take;
+                }
+            });
+        },
+
+        _processPagingForExpandedPaths: function(options, area, storeLoadOptions, reload) {
+            var expandedPaths = options[area + "ExpandedPaths"],
+                expandedSkips = expandedPaths.map(() => 0),
+                expandedTakes = expandedPaths.map(() => reload ? options.pageSize : 0),
+                skips = [],
+                takes = [];
+
+            if(!reload) {
+                if(area === "row") {
+                    this._calculatePagingForRowExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
+                } else {
+                    this._calculatePagingForColumnExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
+                }
+            }
+            this._savePagingForExpandedPaths(options, area, storeLoadOptions, skips[0], takes[0], expandedSkips, expandedTakes);
+        },
+
+        _savePagingForExpandedPaths: function(options, area, storeLoadOptions, skip, take, expandedSkips, expandedTakes) {
+            var expandedPaths = options[area + "ExpandedPaths"];
+
+            options[area + "ExpandedPaths"] = [];
+            options[area + "Skip"] = skip !== undefined ? skip : options[area + "Skip"];
+            options[area + "Take"] = take !== undefined ? take : options[area + "Take"];
+
+            for(var i = 0; i < expandedPaths.length; i++) {
+                if(expandedTakes[i]) {
+                    var isOppositeArea = options.area && options.area !== area;
+
+                    storeLoadOptions.push(extend({
+                        area: area,
+                        headerName: area + "s"
+                    }, options, {
+                        [area + "Skip"]: expandedSkips[i],
+                        [area + "Take"]: expandedTakes[i],
+                        [isOppositeArea ? "oppositePath" : "path"]: expandedPaths[i]
+                    }));
+                }
+            }
+        },
+
+        _handleCustomizeStoreLoadOptions: function(storeLoadOptions, reload) {
+            var options = storeLoadOptions[0];
             var rowsScrollController = this._rowsScrollController;
+
             if(this._dataSource.paginate() && rowsScrollController) {
                 var rowPageSize = rowsScrollController._dataSource.pageSize();
 
-                options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
-                options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+                if(options.headerName === "rows") {
+                    options.rowSkip = 0;
+                    options.rowTake = rowPageSize;
+                    options.rowExpandedPaths = [];
+                } else {
+                    options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
+                    options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+                    this._processPagingForExpandedPaths(options, "row", storeLoadOptions, reload);
+                }
             }
 
             var columnsScrollController = this._columnsScrollController;
+
             if(this._dataSource.paginate() && columnsScrollController) {
                 var columnPageSize = columnsScrollController._dataSource.pageSize();
-
-                options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
-                options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                storeLoadOptions.forEach((options, index) => {
+                    if(options.headerName === "columns") {
+                        options.columnSkip = 0;
+                        options.columnTake = columnPageSize;
+                        options.columnExpandedPaths = [];
+                    } else {
+                        options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
+                        options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                        this._processPagingForExpandedPaths(options, "column", storeLoadOptions, reload);
+                    }
+                });
             }
         },
 
@@ -777,40 +925,25 @@ exports.DataController = Class.inherit((function() {
         calculateVirtualContentParams: function(contentParams) {
             var that = this,
                 rowsScrollController = that._rowsScrollController,
-                columnsScrollController = that._columnsScrollController,
-                rowViewportItemSize = contentParams.contentHeight / contentParams.rowCount,
-                columnViewportItemSize = contentParams.contentWidth / contentParams.columnCount,
-                oldColumnViewportItemSize,
-                oldRowViewportItemSize,
-                newLeftPosition,
-                newTopPosition;
+                columnsScrollController = that._columnsScrollController;
 
             if(rowsScrollController && columnsScrollController) {
-                oldColumnViewportItemSize = columnsScrollController.viewportItemSize();
-                oldRowViewportItemSize = rowsScrollController.viewportItemSize();
-
-                rowsScrollController.viewportItemSize(rowViewportItemSize);
-                columnsScrollController.viewportItemSize(columnViewportItemSize);
-
+                rowsScrollController.viewportItemSize(contentParams.virtualRowHeight);
                 rowsScrollController.viewportSize(contentParams.viewportHeight / rowsScrollController.viewportItemSize());
-                rowsScrollController.setContentSize(contentParams.contentHeight);
+                rowsScrollController.setContentSize(contentParams.itemHeights);
 
+                columnsScrollController.viewportItemSize(contentParams.virtualColumnWidth);
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
-                columnsScrollController.setContentSize(contentParams.contentWidth);
+                columnsScrollController.setContentSize(contentParams.itemWidths);
 
                 commonUtils.deferUpdate(function() {
                     columnsScrollController.loadIfNeed();
                     rowsScrollController.loadIfNeed();
                 });
 
-                newLeftPosition = columnsScrollController.getViewportPosition() * columnViewportItemSize / oldColumnViewportItemSize;
-                newTopPosition = rowsScrollController.getViewportPosition() * rowViewportItemSize / oldRowViewportItemSize;
-
-                that.setViewportPosition(newLeftPosition, newTopPosition);
-
                 that.scrollChanged.fire({
-                    left: newLeftPosition,
-                    top: newTopPosition
+                    left: columnsScrollController.getViewportPosition(),
+                    top: rowsScrollController.getViewportPosition()
                 });
 
                 return {

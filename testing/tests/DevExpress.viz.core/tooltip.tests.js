@@ -298,7 +298,6 @@ QUnit.test("Set options. customizeTooltip", function(assert) {
     // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
-    assert.strictEqual(tooltip._customizeTooltip, null, "customizeTooltip");
 });
 
 QUnit.test("Set options. Two times", function(assert) {
@@ -374,7 +373,6 @@ QUnit.test("Set options. Two times", function(assert) {
     assert.equal(this.patchFontOptions.callCount, 2, "font");
     assert.deepEqual(this.patchFontOptions.lastCall.args, [options2.font]);
     assert.deepEqual(tooltip._textFontStyles, this.patchFontOptions.lastCall.returnValue);
-    assert.strictEqual(tooltip._customizeTooltip, null, "customizeTooltip");
 });
 
 QUnit.test("Set renderer options", function(assert) {
@@ -646,6 +644,33 @@ QUnit.test("Show preparations. W/o customize, w/ text", function(assert) {
     assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
+QUnit.test("Show preparations. W/o customize, w/ text from 'description' filed", function(assert) {
+    this.options.customizeTooltip = null;
+    this.tooltip.update(this.options);
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._state = { a: "b" };
+
+    var result = this.tooltip.show({ description: "some-text" }, { x: 100, y: 200, offset: 300 });
+    delete this.tooltip._state.contentSize;
+
+    assert.strictEqual(result, true);
+    assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
+
+    assert.deepEqual(this.tooltip._state, {
+        color: "#ffffff",
+        borderColor: "#252525",
+        textColor: "#939393",
+        text: "some-text",
+        tc: {}
+    }, "state");
+
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
+    assert.equal(this.tooltip.move.callCount, 1);
+    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
+});
+
 QUnit.test("Show preparations. W/ customize empty text, empty text", function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { text: "", color: "cColor1", borderColor: "cColor2", fontColor: "cColor3", someAnotherProperty: "some-value" }; });
     this.tooltip.update(this.options);
@@ -749,6 +774,22 @@ QUnit.test("Show preparations. W/ customize w/o text, w/ text", function(assert)
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is not added to dom");
     assert.equal(this.tooltip.move.callCount, 1);
+});
+
+QUnit.test("Show preparations. customizeTooltip is not function - use custom format", function(assert) {
+    this.options.customizeTooltip = {};
+    this.tooltip.update(this.options);
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._state = { a: "b" };
+
+    var formatObject = { valueText: "some-text" };
+
+    var result = this.tooltip.show(formatObject, {});
+    delete this.tooltip._state.contentSize;
+
+    assert.strictEqual(result, true);
+    assert.deepEqual(this.tooltip._state.text, "some-text");
 });
 
 QUnit.test("Show preparations. W/ customize w/ text, empty text", function(assert) {
@@ -1144,6 +1185,31 @@ QUnit.test("Show. W/o params. Html. T298249", function(assert) {
     } else {
         assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
     }
+});
+
+QUnit.test("Show preparations. Use external customizeText", function(assert) {
+    this.options.customizeTooltip = sinon.spy(function() {
+        return {
+            text: "some-customized-text"
+        };
+    });
+    this.tooltip.update(this.options);
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._state = { a: "b" };
+
+    var formatObject = { valueText: "" };
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, null, function() {
+        return {
+            text: "custom text from external customizeText"
+        };
+    });
+    delete this.tooltip._state.contentSize;
+
+    assert.strictEqual(result, true);
+    assert.equal(this.options.customizeTooltip.callCount, 0);
+    assert.deepEqual(this.tooltip._state.text, "custom text from external customizeText");
+
+    assert.equal(this.tooltip.move.callCount, 1);
 });
 
 QUnit.test("Show. W/ params", function(assert) {

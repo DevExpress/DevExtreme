@@ -14,8 +14,7 @@ var $ = require("../core/renderer"),
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
     dataQuery = require("../data/query"),
-    DropDownList = require("./drop_down_editor/ui.drop_down_list"),
-    themes = require("./themes");
+    DropDownList = require("./drop_down_editor/ui.drop_down_list");
 
 var DISABLED_STATE_SELECTOR = ".dx-state-disabled",
     SELECTBOX_CLASS = "dx-selectbox",
@@ -242,40 +241,6 @@ var SelectBox = DropDownList.inherit({
             _isAdaptablePopupPosition: false,
             useInkRipple: false
         });
-    },
-
-    _defaultOptionsRules: function() {
-        var themeName = themes.current();
-
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isWin8(themeName);
-                },
-                options: {
-                    _isAdaptablePopupPosition: true,
-                    popupPosition: {
-                        at: "left top",
-                        offset: { h: 0, v: 0 }
-                    }
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    _isAdaptablePopupPosition: true,
-                    popupPosition: {
-                        offset: {
-                            h: -16,
-                            v: -8
-                        }
-                    },
-                    useInkRipple: true
-                }
-            }
-        ]);
     },
 
     _init: function() {
@@ -569,8 +534,9 @@ var SelectBox = DropDownList.inherit({
 
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
+            var showDataImmediately = this.option("showDataBeforeSearch") || this.option("minSearchLength") === 0;
 
-            if(this.option("showDataBeforeSearch") || this.option("minSearchLength") === 0) {
+            if(showDataImmediately && this._dataSource) {
                 if(this._searchTimer) return;
 
                 var searchValue = this._getActualSearchValue();

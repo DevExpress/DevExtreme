@@ -408,7 +408,10 @@ export const MockTranslator = function(data) {
         checkMinBarSize: function() {
             return Math.abs(arguments[0]) < arguments[1] ? arguments[0] >= 0 ? arguments[1] : -arguments[1] : arguments[0];
         },
-        reinit: commonUtils.noop
+        reinit: commonUtils.noop,
+        isInverted() {
+            return false;
+        }
     };
 };
 
@@ -911,6 +914,10 @@ export const MockAxis = function(renderOptions) {
 
         updateCanvas: sinon.stub(),
 
+        hideTitle: sinon.spy(),
+
+        hideOuterElements: sinon.spy(),
+
         setPane: function(pane) {
             this.pane = pane;
             this._options.pane = pane;
@@ -921,6 +928,12 @@ export const MockAxis = function(renderOptions) {
         },
         getOptions: function() {
             return this._options;
+        },
+        getTitle: function() {
+            return this._title;
+        },
+        hasWrap: function() {
+            return false;
         },
         getRangeData: function() {
             return this._options.mockRange || {};

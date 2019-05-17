@@ -115,7 +115,7 @@ function applyMarkerState(id, idToIndexMap, items, stateName) {
     }
 }
 
-function parseOptions(options, textField) {
+function parseOptions(options, textField, allowInsidePosition) {
     if(!options) return null;
 
     ///#DEBUG
@@ -136,7 +136,7 @@ function parseOptions(options, textField) {
     options.verticalAlignment = parseVerticalAlignment(options.verticalAlignment, options.horizontalAlignment === CENTER ? BOTTOM : TOP);
     options.orientation = parseOrientation(options.orientation, options.horizontalAlignment === CENTER ? HORIZONTAL : VERTICAL);
     options.itemTextPosition = parseItemTextPosition(options.itemTextPosition, options.orientation === HORIZONTAL ? BOTTOM : RIGHT);
-    options.position = parsePosition(options.position, OUTSIDE);
+    options.position = allowInsidePosition ? parsePosition(options.position, OUTSIDE) : OUTSIDE;
     options.itemsAlignment = parseItemsAlignment(options.itemsAlignment, null);
     options.hoverMode = _normalizeEnum(options.hoverMode);
     options.customizeText = _isFunction(options.customizeText) ? options.customizeText : function() { return this[textField]; };
@@ -323,6 +323,20 @@ var getMarkerCreator = function(type) {
     return isCircle(type) ? createCircleMarker : createSquareMarker;
 };
 
+function getTitleHorizontalAlignment(options) {
+    if(options.horizontalAlignment === CENTER) {
+        return CENTER;
+    } else {
+        if(options.itemTextPosition === RIGHT) {
+            return LEFT;
+        } else if(options.itemTextPosition === LEFT) {
+            return RIGHT;
+        } else {
+            return CENTER;
+        }
+    }
+}
+
 var _Legend = exports.Legend = function(settings) {
     var that = this;
     that._renderer = settings.renderer;
@@ -332,6 +346,7 @@ var _Legend = exports.Legend = function(settings) {
     that._textField = settings.textField;
     that._getCustomizeObject = settings.getFormatObject;
     that._titleGroupClass = settings.titleGroupClass;
+    that._allowInsidePosition = settings.allowInsidePosition;
 };
 
 var legendPrototype = _Legend.prototype = clone(LayoutElement.prototype);
@@ -345,7 +360,7 @@ extend(legendPrototype, {
 
     update: function(data, options, themeManagerTitleOptions) {
         const that = this;
-        options = that._options = parseOptions(options, that._textField) || {};
+        options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
         that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
         that._boundingRect = {
             width: 0,
@@ -358,7 +373,12 @@ extend(legendPrototype, {
             that._title = new title.Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
         }
 
-        that._title && that._title.update(themeManagerTitleOptions, that._options.title);
+        if(that._title) {
+            const titleOptions = options.title;
+
+            titleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
+            that._title.update(themeManagerTitleOptions, titleOptions);
+        }
 
         return that;
     },
@@ -444,7 +464,7 @@ extend(legendPrototype, {
 
             bBox = getSizeItem(options, markerSize, labelBBox);
             maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
-            that._createHint(dataItem, label);
+            that._createHint(dataItem, label, marker);
 
             return {
                 label: label,
@@ -498,6 +518,8 @@ extend(legendPrototype, {
 
     _moveInInitialValues: function() {
         var that = this;
+
+        that._title.hasText() && that._title.move([0, 0]);
         that._legendGroup && that._legendGroup.move(0, 0);
         that._background && that._background.attr({ x: 0, y: 0, width: 0, height: 0 });
     },
@@ -528,11 +550,12 @@ extend(legendPrototype, {
             .append(group);
     },
 
-    _createHint: function(data, label) {
+    _createHint: function(data, label, marker) {
         var labelFormatObject = this._getCustomizeObject(data),
             text = this._options.customizeHint.call(labelFormatObject, labelFormatObject);
         if(_isDefined(text) && text !== "") {
             label.setTitle(text);
+            marker.setTitle(text);
         }
     },
 
@@ -627,14 +650,11 @@ extend(legendPrototype, {
         }
     },
 
-    _getTitleBBox: function() {
-        return this._title.hasText() ? this._title.getTrueSize() : { x: 0, y: 0, height: 0, width: 0 };
-    },
 
     _applyItemPosition: function(lines, layoutOptions) {
         var that = this,
             position = { x: 0, y: 0 },
-            titleX = this._getTitleBBox().x,
+            titleX = this._title.getLayoutOptions().x,
             maxLineLength = getMaxLineLength(lines, layoutOptions);
 
         lines.forEach(line => {
@@ -783,14 +803,12 @@ extend(legendPrototype, {
 
     _calculateTotalBox: function() {
         const markerBox = this._markersGroup.getBBox();
-        const titleBox = this._getTitleBBox();
+        const titleBox = this._title.getLayoutOptions();
         const box = this._insideLegendGroup.getBBox();
 
         const verticalPadding = this._background ? 2 * this._options.paddingTopBottom : 0;
-        const titleOptions = this._title.getOptions() || { margin: { top: 0, bottom: 0 } };
-        const titleMargins = titleOptions.margin.top + titleOptions.margin.bottom;
 
-        box.height = markerBox.height + titleBox.height + verticalPadding + titleMargins;
+        box.height = markerBox.height + titleBox.height + verticalPadding;
 
         return box;
     },
@@ -861,28 +879,34 @@ extend(legendPrototype, {
     },
 
     _shiftTitle: function(boxWidth) {
-        const title = this._title;
+        const that = this;
+        const title = that._title;
         const titleBox = title.getLayoutOptions();
         if(!titleBox || !title.hasText()) {
             return;
         }
 
-        const options = this._options,
-            paddingLeftRight = this._background ? 2 * options.paddingLeftRight : 0,
-            titleOptions = title.getOptions(),
-            width = boxWidth - paddingLeftRight,
-            titleX = options.horizontalAlignment === CENTER ? titleBox.x + (width / 2) - (titleBox.width / 2) : titleBox.x;
-
+        const { horizontalAlignment, paddingLeftRight, itemTextPosition } = that._options;
+        const width = boxWidth - (that._background ? 2 * paddingLeftRight : 0);
+        const titleOptions = title.getOptions();
         let titleY = titleBox.y + titleOptions.margin.top;
+        let titleX = titleBox.x;
+
         if(titleOptions.verticalAlignment === BOTTOM) {
-            titleY += this._markersGroup.getBBox().height;
+            titleY += that._markersGroup.getBBox().height;
         }
 
-        this._title.shift(titleX, titleY);
+        if(horizontalAlignment === CENTER || itemTextPosition === BOTTOM || itemTextPosition === TOP) {
+            titleX = titleBox.x + (width / 2) - (titleBox.width / 2);
+        } else if(itemTextPosition === LEFT) {
+            const box = that.getLayoutOptions();
+            titleX = 2 * box.x + box.width;
+        }
+        title.shift(titleX, titleY);
     },
 
     _shiftMarkers: function() {
-        const titleBox = this._getTitleBBox();
+        const titleBox = this._title.getLayoutOptions();
         const markerBox = this._markersGroup.getBBox();
         const titleOptions = this._title.getOptions() || {};
         let center = 0;
@@ -893,7 +917,7 @@ extend(legendPrototype, {
         }
 
         if(titleOptions.verticalAlignment === TOP) {
-            y = titleBox.height + titleOptions.margin.bottom + titleOptions.margin.top;
+            y = titleBox.height;
         }
 
         if(center !== 0 || y !== 0) {
@@ -945,7 +969,8 @@ extend(legendPrototype, {
             horizontalAlignment: this._options.horizontalAlignment,
             verticalAlignment: this._options.verticalAlignment,
             side: pos.cutSide,
-            priority: 1
+            priority: 1,
+            position: this.getPosition()
         };
     },
 

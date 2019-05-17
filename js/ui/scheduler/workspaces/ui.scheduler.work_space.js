@@ -109,12 +109,12 @@ var SchedulerWorkSpace = Widget.inherit({
                 e.stopPropagation();
 
                 if(this._focusedCells && this._focusedCells.length) {
-                    var $itemElement = $(this.option("focusedElement"));
+                    var $itemElement = $(this.option("focusedElement")),
+                        $cellElement = $itemElement.length ? $itemElement : this._focusedCells;
 
                     e.target = this._focusedCells;
                     this._showPopup = true;
-
-                    this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($itemElement) });
+                    this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($cellElement) });
                 }
             },
             arrowPressHandler = function(e, cell) {
@@ -874,7 +874,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellWidth = this.getCellMinWidth();
         }
 
-        var minWidth = this._groupedStrategy.getWorkSpaceMinWidth(),
+        var minWidth = this.getWorkSpaceMinWidth(),
             $headerCells = this._$headerPanel
                 .find("tr")
                 .last()
@@ -895,6 +895,10 @@ var SchedulerWorkSpace = Widget.inherit({
         if(this._isVerticalGroupedWorkSpace()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
+    },
+
+    getWorkSpaceMinWidth: function() {
+        return this._groupedStrategy.getWorkSpaceMinWidth();
     },
 
     _dimensionChanged: function() {
@@ -1821,7 +1825,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _patchCellIndex: function(cellIndex) {
-        if(this.option("groupByDate")) {
+        if(this.isGroupedByDate()) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
         }
 
@@ -2110,7 +2114,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     isGroupedByDate: function() {
-        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace();
+        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace() && this._getGroupCount() > 0;
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {
@@ -2310,11 +2314,19 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getEndViewDate: function() {
         var dateOfLastViewCell = this.getDateOfLastViewCell(),
-            endDateOfLastViewCell = new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
+            endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
 
-        var daylightDiff = this.invoke("getDaylightOffset", dateOfLastViewCell, endDateOfLastViewCell) * toMs("minute") || 0;
+        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+    },
 
-        endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() - daylightDiff);
+    calculateEndViewDate: function(dateOfLastViewCell) {
+        return new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
+    },
+
+    _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
+        var daylightDiff = this.invoke("getDaylightOffset", startDate, endDate) * toMs("minute") || 0;
+
+        var endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
         return new Date(endDateOfLastViewCell.getTime() - toMs("minute"));
     },
@@ -2486,13 +2498,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
-    getDateTableWidth: function() {
-        return this._$dateTable.get(0).getBoundingClientRect().width;
-    },
-
-    applyGroupButtonOffset: function() {
+    needApplyCollectorOffset: function() {
         return false;
     },
+
     _supportCompactDropDownAppointments: function() {
         return true;
     },

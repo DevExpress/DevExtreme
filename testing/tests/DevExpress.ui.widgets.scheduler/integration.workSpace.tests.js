@@ -1,6 +1,7 @@
-var $ = require("jquery"),
-    themes = require("ui/themes"),
-    dateLocalization = require("localization/date");
+import $ from "jquery";
+import themes from "ui/themes";
+import dateLocalization from "localization/date";
+import { SchedulerTestWrapper } from './helpers.js';
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -9,28 +10,29 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
 
-var eventsEngine = require("events/core/events_engine"),
-    renderer = require("core/renderer"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dragEvents = require("events/drag"),
-    CustomStore = require("data/custom_store"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import eventsEngine from "events/core/events_engine";
+import renderer from "core/renderer";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import dragEvents from "events/drag";
+import CustomStore from "data/custom_store";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
 
-require("ui/scheduler/ui.scheduler");
+import "ui/scheduler/ui.scheduler";
 
-var DATE_TABLE_CELL_BORDER = 1;
+const DATE_TABLE_CELL_BORDER = 1;
 
 QUnit.module("Integration: Work space", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
     },
     afterEach: function() {
@@ -1107,6 +1109,46 @@ QUnit.test("dateCellTemplate should work correctly", function(assert) {
 
     assert.ok($cell1.hasClass("custom-group-cell-class"), "first cell has right class");
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
+});
+
+QUnit.test("dateCellTemplate should have unique date in data (T732376)", function(assert) {
+    this.createInstance({
+        views: ["timelineWorkWeek"],
+        currentView: "timelineWorkWeek",
+        currentDate: new Date(2016, 8, 5),
+        dataSource: [],
+        firstDayOfWeek: 0,
+        startDayHour: 10,
+        endDayHour: 11,
+        cellDuration: 60,
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                dataSource: [
+                    { id: 1, text: "John" },
+                    { id: 2, text: "Mike" }
+                ]
+            }
+        ],
+        dateCellTemplate: function(data, index, element) {
+            let d = data;
+            $("<div>").appendTo(element).dxButton({
+                text: "Test",
+                onClick: function(e) {
+                    let expectedDate = new Date(2016, 8, 7, 10, 0);
+
+                    assert.equal(d.date.getTime(), expectedDate.getTime());
+                }
+            });
+
+            return element;
+        }
+    });
+
+    let $button = this.instance.$element().find(".dx-scheduler-header-panel-cell .dx-button").eq(2);
+
+    $($button).trigger("dxclick");
 });
 
 QUnit.test("dateCellTemplate should work correctly in workWeek view", function(assert) {

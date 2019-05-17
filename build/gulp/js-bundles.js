@@ -22,7 +22,6 @@ var namedDebug = lazyPipe()
 
 var BUNDLES = [
     '/bundles/dx.all.js',
-    '/bundles/dx.mobile.js',
     '/bundles/dx.web.js',
     '/bundles/dx.viz.js',
     '/bundles/dx.viz-web.js'

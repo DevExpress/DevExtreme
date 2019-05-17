@@ -4,6 +4,7 @@ var $ = require("../../../core/renderer"),
     stringFormat = require("../../../core/utils/string").format,
     errors = require("../../../data/errors").errors,
     noop = require("../../../core/utils/common").noop,
+    extend = require("../../../core/utils/extend").extend,
     typeUtils = require("../../../core/utils/type"),
     iteratorUtils = require("../../../core/utils/iterator"),
     inArray = require("../../../core/utils/array").inArray,
@@ -19,6 +20,8 @@ exports.XmlaStore = Class.inherit((function() {
         execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>',
         mdx = "SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS",
         mdxFilterSelect = "(SELECT {0} FROM {1})",
+        mdxSubset = "Subset({0}, {1}, {2})",
+        mdxOrder = "Order({0}, {1}, {2})",
         mdxWith = "{0} {1} as {2}",
         mdxSlice = "WHERE ({0})",
         mdxNonEmpty = "NonEmpty({0}, {1})",
@@ -97,7 +100,15 @@ exports.XmlaStore = Class.inherit((function() {
     }
 
     function getAllMembers(field) {
-        return field.dataField + ".allMembers";
+        var result = field.dataField + ".allMembers",
+            searchValue = field.searchValue;
+
+        if(searchValue) {
+            searchValue = searchValue.replace(/'/g, "''");
+            result = "Filter(" + result + ", instr(" + field.dataField + ".currentmember.member_caption,'" + searchValue + "') > 0)";
+        }
+
+        return result;
     }
 
     function crossJoinElements(elements) {
@@ -110,7 +121,7 @@ exports.XmlaStore = Class.inherit((function() {
         return elements.length > 1 ? "Union(" + elementsString + ")" : elementsString;
     }
 
-    function generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName) {
+    function generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName, take) {
         var crossJoinArgs = [],
             dimensions = options[axisName],
             dataField,
@@ -182,6 +193,10 @@ exports.XmlaStore = Class.inherit((function() {
             }
             if(arg) {
                 arg = stringFormat(mdxSet, arg);
+                if(take) {
+                    var sortBy = (field.hierarchyName || field.dataField) + (field.sortBy === "displayText" ? ".MEMBER_CAPTION" : ".MEMBER_VALUE");
+                    arg = stringFormat(mdxOrder, arg, sortBy, field.sortOrder === "desc" ? "DESC" : "ASC");
+                }
                 crossJoinArgs.push(arg);
             }
         }
@@ -189,7 +204,7 @@ exports.XmlaStore = Class.inherit((function() {
         return crossJoinElements(crossJoinArgs);
     }
 
-    function fillCrossJoins(crossJoins, path, expandLevel, expandIndex, slicePath, options, axisName, cellsString) {
+    function fillCrossJoins(crossJoins, path, expandLevel, expandIndex, slicePath, options, axisName, cellsString, take, totalsOnly) {
         var expandAllCount = -1,
             dimensions = options[axisName],
             dimensionIndex;
@@ -197,7 +212,11 @@ exports.XmlaStore = Class.inherit((function() {
         do {
             expandAllCount++;
             dimensionIndex = path.length + expandAllCount + expandIndex;
-            crossJoins.push(stringFormat(mdxNonEmpty, generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName), cellsString));
+            var crossJoin = generateCrossJoin(path, expandLevel, expandAllCount, expandIndex, slicePath, options, axisName, take);
+            if(!take && !totalsOnly) {
+                crossJoin = stringFormat(mdxNonEmpty, crossJoin, cellsString);
+            }
+            crossJoins.push(crossJoin);
         } while(dimensions[dimensionIndex] && dimensions[dimensionIndex + 1] && dimensions[dimensionIndex].expanded);
     }
 
@@ -223,12 +242,15 @@ exports.XmlaStore = Class.inherit((function() {
             if(options.headerName === axisName) {
                 path = options.path;
                 expandIndex = path.length;
+            } else if(options.headerName && options.oppositePath) {
+                path = options.oppositePath;
+                expandIndex = path.length;
             } else {
                 expandedPaths = (axisName === "columns" ? options.columnExpandedPaths : options.rowExpandedPaths) || expandedPaths;
             }
             expandLevel = pivotGridUtils.getExpandedLevel(options, axisName);
 
-            fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString);
+            fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString, axisName === "rows" ? options.rowTake : options.columnTake, options.totalsOnly);
             each(expandedPaths, function(_, expandedPath) {
                 fillCrossJoins(crossJoins, expandedPath, expandLevel, expandIndex, expandedPath, options, axisName, cellsString);
             });
@@ -242,7 +264,20 @@ exports.XmlaStore = Class.inherit((function() {
         }
 
         if(crossJoins.length) {
-            result.push(declare(union(crossJoins), withArray, "[" + "DX_" + axisName + "]"));
+            let expression = union(crossJoins);
+            if(axisName === "rows" && options.rowTake) {
+                expression = stringFormat(mdxSubset, expression, options.rowSkip > 0 ? options.rowSkip + 1 : 0, options.rowSkip > 0 ? options.rowTake : options.rowTake + 1);
+            }
+            if(axisName === "columns" && options.columnTake) {
+                expression = stringFormat(mdxSubset, expression, options.columnSkip > 0 ? options.columnSkip + 1 : 0, options.columnSkip > 0 ? options.columnTake : options.columnTake + 1);
+            }
+
+            const axisSet = `[DX_${axisName}]`;
+            result.push(declare(expression, withArray, axisSet));
+
+            if(options.totalsOnly) {
+                result.push(declare(`COUNT(${axisSet})`, withArray, `[DX_${axisName}_count]`, "member"));
+            }
         }
 
         if(axisName === "columns" && cells.length && !options.skipValues) {
@@ -301,14 +336,27 @@ exports.XmlaStore = Class.inherit((function() {
         return from;
     }
 
-    function generateMdxCore(axisStrings, withArray, columns, rows, filters, slice, cubeName) {
+    function generateMdxCore(axisStrings, withArray, columns, rows, filters, slice, cubeName, options = {}) {
         var mdxString = "",
             withString = (withArray.length ? "with " + withArray.join(" ") : "") + " ";
 
         if(axisStrings.length) {
+            let select;
+            if(options.totalsOnly) {
+                const countMembers = [];
+                if(rows.length) {
+                    countMembers.push("[DX_rows_count]");
+                }
+                if(columns.length) {
+                    countMembers.push("[DX_columns_count]");
+                }
+                select = `{${countMembers.join(",")}} on columns`;
+            } else {
+                select = axisStrings.join(",");
+            }
             mdxString = withString + stringFormat(mdx,
                 generateFrom(generateAxisFieldsFilter(columns), generateAxisFieldsFilter(rows), generateAxisFieldsFilter(filters || []), cubeName),
-                slice.length ? stringFormat(mdxSlice, slice.join(",")) : "", axisStrings.join(","));
+                slice.length ? stringFormat(mdxSlice, slice.join(",")) : "", select);
         }
 
         return mdxString;
@@ -321,6 +369,15 @@ exports.XmlaStore = Class.inherit((function() {
                 declare(cell.expression, withArray, cell.dataField, "member");
             }
             return cell.dataField;
+        });
+    }
+
+    function addSlices(slices, options, headerName, path) {
+        each(path, function(index, value) {
+            var dimension = options[headerName][index];
+            if(!dimension.hierarchyName || dimension.hierarchyName !== options[headerName][index + 1].hierarchyName) {
+                slices.push(dimension.dataField + "." + preparePathValue(value, dimension.dataField));
+            }
         });
     }
 
@@ -337,12 +394,11 @@ exports.XmlaStore = Class.inherit((function() {
         parseOptions.visibleLevels = {};
 
         if(options.headerName && options.path) {
-            each(options.path, function(index, value) {
-                var dimension = options[options.headerName][index];
-                if(!dimension.hierarchyName || dimension.hierarchyName !== options[options.headerName][index + 1].hierarchyName) {
-                    slice.push(dimension.dataField + "." + preparePathValue(value, dimension.dataField));
-                }
-            });
+            addSlices(slice, options, options.headerName, options.path);
+        }
+
+        if(options.headerName && options.oppositePath) {
+            addSlices(slice, options, options.headerName === "rows" ? "columns" : "rows", options.oppositePath);
         }
 
         if(columns.length || dataFields.length) {
@@ -353,7 +409,7 @@ exports.XmlaStore = Class.inherit((function() {
             axisStrings.push(generateAxisMdx(options, "rows", dataFields, withArray, parseOptions));
         }
 
-        return generateMdxCore(axisStrings, withArray, columns, rows, options.filters, slice, cubeName);
+        return generateMdxCore(axisStrings, withArray, columns, rows, options.filters, slice, cubeName, options);
     }
 
     function createDrillDownAxisSlice(slice, fields, path) {
@@ -808,6 +864,48 @@ exports.XmlaStore = Class.inherit((function() {
         return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog, getLocaleIdProperty()));
     }
 
+    function processTotalCount(data, options, totalCountXml) {
+        const axes = [];
+        const columnOptions = options.columns || [];
+        const rowOptions = options.rows || [];
+
+        if(columnOptions.length) {
+            axes.push({});
+        }
+        if(rowOptions.length) {
+            axes.push({});
+        }
+        const cells = parseCells(totalCountXml, [[{}], [{}, {}]], 1);
+        if(!columnOptions.length && rowOptions.length) {
+            data.rowCount = Math.max(cells[0][0][0] - 1, 0);
+        }
+        if(!rowOptions.length && columnOptions.length) {
+            data.columnCount = Math.max(cells[0][0][0] - 1, 0);
+        }
+
+        if(rowOptions.length && columnOptions.length) {
+            data.rowCount = Math.max(cells[0][0][0] - 1, 0);
+            data.columnCount = Math.max(cells[1][0][0] - 1, 0);
+        }
+        if(data.rowCount !== undefined && options.rowTake) {
+            data.rows = [...Array(options.rowSkip)].concat(data.rows);
+            data.rows.length = data.rowCount;
+
+            for(let i = 0; i < data.rows.length; i++) {
+                data.rows[i] = data.rows[i] || {};
+            }
+        }
+
+        if(data.columnCount !== undefined && options.columnTake) {
+            data.columns = [...Array(options.columnSkip)].concat(data.columns);
+            data.columns.length = data.columnCount;
+
+            for(let i = 0; i < data.columns.length; i++) {
+                data.columns[i] = data.columns[i] || {};
+            }
+        }
+    }
+
     /**
     * @name XmlaStore
     * @type object
@@ -896,28 +994,53 @@ exports.XmlaStore = Class.inherit((function() {
                 },
                 mdxString = generateMDX(options, storeOptions.cube, parseOptions);
 
-            if(mdxString) {
-                when(sendQuery(storeOptions, mdxString)).done(function(executeXml) {
-                    var error = checkError(executeXml);
-
-                    if(!error) {
-                        result.resolve(parseResult(executeXml, parseOptions));
-                    } else {
-                        result.reject(error);
-                    }
-                }).fail(result.reject);
-            } else {
-                result.resolve({
-                    columns: [],
-                    rows: [],
-                    values: [],
-                    grandTotalColumnIndex: 0,
-                    grandTotalRowIndex: 0
-                });
+            let rowCountMdx;
+            if(options.rowSkip || options.rowTake || options.columnTake || options.columnSkip) {
+                rowCountMdx = generateMDX(extend({}, options, {
+                    totalsOnly: true,
+                    rowSkip: null,
+                    rowTake: null,
+                    columnSkip: null,
+                    columnTake: null
+                }), storeOptions.cube, {});
             }
+
+            const load = () => {
+                if(mdxString) {
+                    when(sendQuery(storeOptions, mdxString), rowCountMdx && sendQuery(storeOptions, rowCountMdx)).done(function(executeXml, rowCountXml) {
+                        var error = checkError(executeXml) || rowCountXml && checkError(rowCountXml);
+                        if(!error) {
+                            const response = parseResult(executeXml, parseOptions);
+                            if(rowCountXml) {
+                                processTotalCount(response, options, rowCountXml);
+                            }
+
+                            result.resolve(response);
+                        } else {
+                            result.reject(error);
+                        }
+                    }).fail(result.reject);
+                } else {
+                    result.resolve({
+                        columns: [],
+                        rows: [],
+                        values: [],
+                        grandTotalColumnIndex: 0,
+                        grandTotalRowIndex: 0
+                    });
+                }
+            };
+
+            if(options.delay) {
+                setTimeout(load, options.delay);
+            } else {
+                load();
+            }
+
             return result;
         },
-        supportSorting: function() {
+
+        supportPaging: function() {
             return true;
         },
 

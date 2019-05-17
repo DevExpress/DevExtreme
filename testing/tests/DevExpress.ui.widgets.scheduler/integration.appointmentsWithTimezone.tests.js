@@ -1,4 +1,23 @@
-var $ = require("jquery");
+import $ from "jquery";
+import translator from "animation/translator";
+import dateLocalization from "localization/date";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import tooltip from "ui/tooltip/ui.tooltip";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dataUtils from "core/element_data";
+import { SchedulerTestWrapper } from "./helpers.js";
+
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
+
+const createInstance = function(options) {
+    const instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -7,24 +26,8 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
-
-
-var translator = require("animation/translator"),
-    dateLocalization = require("localization/date"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    tooltip = require("ui/tooltip/ui.tooltip"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dataUtils = require("core/element_data");
-
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
-
-require("ui/scheduler/ui.scheduler");
 
 function getDeltaTz(schedulerTz, date) {
     var defaultTz = date.getTimezoneOffset() * 60000;
@@ -1358,7 +1361,7 @@ QUnit.test("DropDown appointment should be rendered correctly when timezone is s
             }
         ];
 
-        this.createInstance({
+        const scheduler = createInstance({
             dataSource: data,
             views: ["month"],
             currentView: "month",
@@ -1370,12 +1373,8 @@ QUnit.test("DropDown appointment should be rendered correctly when timezone is s
             textExpr: "schedule"
         });
 
-        $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
-
-        var $appointment = $(".dx-dropdownmenu-list .dx-item").first(),
-            $dates = $appointment.find(".dx-scheduler-dropdown-appointment-date").first();
-
-        assert.equal($dates.text(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getDateText(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
     } finally {
         tzOffsetStub.restore();
     }

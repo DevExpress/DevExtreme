@@ -43,7 +43,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
         {
             initViews: true,
             controllers: {
@@ -75,6 +75,9 @@ function createGridView(options, userOptions) {
                 })
             };
             this.createGridView = createGridView;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 
@@ -975,6 +978,39 @@ function createGridView(options, userOptions) {
         // assert
         assert.ok(this.rowsView.element().hasClass("dx-scrollable"), "has scrollable");
     });
+
+    // T722415
+    QUnit.test("Header container should have padding-right when using editCellTemplate, native scrolling and setting the grid's max-height CSS attribute", function(assert) {
+        // arrange
+        var $testElement = $("#container").css("maxHeight", "200px");
+
+        var gridView = this.createGridView({
+            columnsController: new MockColumnsController([{
+                caption: 'Column 1',
+                dataField: "Column1",
+                visible: true,
+                showEditorAlways: true,
+                allowEditing: true,
+                editCellTemplate: (_, options) => {
+                    return $("<textarea/>").css("minHeight", "100px").val(options.value);
+                }
+            }]),
+            dataController: new MockDataController({
+                items: [{ values: [1], rowType: "data" }, { values: [2], rowType: "data" }, { values: [3], rowType: "data" }, { values: [4], rowType: "data" }]
+            })
+        }, {
+            scrolling: {
+                useNative: true
+            }
+        });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        assert.strictEqual(parseFloat($(this.columnHeadersView.element()).css("paddingRight")), this.rowsView.getScrollbarWidth(), "padding-right");
+    });
 }());
 
 // Synchronize columns module///
@@ -990,6 +1026,7 @@ function createGridView(options, userOptions) {
             this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
+            this.dispose();
             this.clock.restore();
         }
     });
@@ -1965,6 +2002,107 @@ function createGridView(options, userOptions) {
         assert.strictEqual($colElements.get(2).style.width, "100px", "width of the group column");
         assert.strictEqual($colElements.get(3).style.width, "100px", "width of the group column");
     });
+
+    // T729862
+    QUnit.test("Expand column width should be correct when the grouping and summary options are changed dynamically", function(assert) {
+        // arrange
+        var $colElements,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3" }],
+                columns: [
+                    { dataField: "field1" },
+                    { dataField: "field2" },
+                    { dataField: "field3" }
+                ],
+                summary: {
+                    totalItems: [{
+                        column: "field1",
+                        summaryType: "count"
+                    }],
+                    texts: {
+                        count: "Count={0}"
+                    }
+                }
+            });
+
+        gridView.render($testElement);
+        gridView.update();
+
+        // act
+        this.dataController.beginUpdate();
+        this.columnsController.beginUpdate();
+
+        this.option("summary", []);
+        this.dataController.optionChanged({ name: "summary", fullName: "summary", value: [] });
+        this.columnOption("field1", "groupIndex", 0);
+
+        this.columnsController.endUpdate();
+        this.dataController.endUpdate();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-rowsview").find("col");
+        assert.strictEqual($colElements.get(0).style.width, "30px", "width of the expand column");
+    });
+
+    // T734245
+    QUnit.test("Group columns with summary should have the correct width when there are fixed columns and custom button column", function(assert) {
+        // arrange
+        var $colElements,
+            $fixedGroupRowElement,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3", field4: "test4" }],
+                columnFixing: { enabled: true },
+                selection: { mode: "multiple", showCheckBoxesMode: "always" },
+                grouping: { autoExpandAll: true },
+                columns: [
+                    {
+                        fixedPosition: "left",
+                        caption: "More Info",
+                        type: "buttons",
+                        alignment: "center",
+                        allowResizing: false,
+                        width: 45,
+                        buttons: [{
+                            text: "Get information",
+                            icon: "comment",
+                        }]
+                    },
+                    { dataField: "field1", groupIndex: 0 },
+                    { dataField: "field2", groupIndex: 1 },
+                    { dataField: "field3" },
+                    { dataField: "field4" }
+                ],
+                summary: {
+                    groupItems: [{
+                        column: "field2",
+                        summaryType: "count",
+                        showInGroupFooter: false,
+                        alignByColumn: true
+                    }],
+                    texts: {
+                        count: "Count={0}"
+                    }
+                }
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-rowsview").find("col");
+        assert.strictEqual($colElements.get(0).style.width, "70px", "width of the select column");
+        assert.strictEqual($colElements.get(1).style.width, "30px", "width of the expand column");
+        assert.strictEqual($colElements.get(2).style.width, "30px", "width of the expand column");
+        assert.strictEqual($colElements.get(3).style.width, "45px", "width of the button column");
+
+        $fixedGroupRowElement = $(this.getRowElement(0)[1]);
+        assert.strictEqual($fixedGroupRowElement.children().length, 3, "cell count in the group row on the first level");
+    });
 }());
 
 // Fixed columns///
@@ -1980,6 +2118,9 @@ function createGridView(options, userOptions) {
                 })
             };
             this.createGridView = createGridView;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 

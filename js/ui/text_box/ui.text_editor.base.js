@@ -12,11 +12,13 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     ClearButton = require("./ui.text_editor.clear").default,
-    ActionButtonCollection = require("./action_button_collection/index").default,
+    TextEditorButtonCollection = require("./texteditor_button_collection/index").default,
     config = require("../../core/config"),
+    errors = require("../widget/ui.errors"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var TEXTEDITOR_CLASS = "dx-texteditor",
+    TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     TEXTEDITOR_INPUT_SELECTOR = "." + TEXTEDITOR_INPUT_CLASS,
     TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container",
@@ -54,17 +56,27 @@ var CONTROL_KEYS = [
     "downArrow",
 ];
 
+function checkButtonsOptionType(buttons) {
+    if(isDefined(buttons) && !Array.isArray(buttons)) {
+        throw errors.Error("E1053");
+    }
+}
+
 /**
 * @name dxTextEditor
 * @inherits Editor
 * @hidden
 */
 var TextEditorBase = Editor.inherit({
-    ctor: function() {
-        this._buttonCollection = new ActionButtonCollection(this, this._getDefaultButtons());
+    ctor: function(_, options) {
+        if(options) {
+            checkButtonsOptionType(options.buttons);
+        }
 
-        this.$beforeButtonsContainer = null;
-        this.$afterButtonsContainer = null;
+        this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
+
+        this._$beforeButtonsContainer = null;
+        this._$afterButtonsContainer = null;
 
         this.callBase.apply(this, arguments);
     },
@@ -72,18 +84,39 @@ var TextEditorBase = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+            * @name dxTextEditorButton
+            * @type object
+            */
+            /**
+            * @name dxTextEditorButton.name
+            * @type string
+            * @default undefined
+            */
+            /**
+            /**
+            * @name dxTextEditorButton.location
+            * @type Enums.TextEditorButtonLocation
+            * @default "after"
+            */
+            /**
+            * @name dxTextEditorButton.options
+            * @type dxButtonOptions
+            * @default undefined
+            */
+
+            /**
+            * @name dxTextEditorOptions.buttons
+            * @type Array<string, Enums.TextBoxButtonName, dxTextEditorButton>
+            * @default undefined
+            */
+            buttons: void 0,
+
+            /**
             * @name dxTextEditorOptions.value
             * @type any
             * @default ""
             */
             value: "",
-
-            /**
-            * @name dxTextEditorOptions.buttons
-            * @type Array<string>
-            * @default undefined
-            */
-            buttons: void 0,
 
             /**
             * @name dxTextEditorOptions.spellcheck
@@ -293,14 +326,6 @@ var TextEditorBase = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    validationMessageOffset: { v: -8 }
-                }
-            },
-            {
-                device: function() {
                     return themes.isMaterial(themeName);
                 },
                 options: {
@@ -320,10 +345,6 @@ var TextEditorBase = Editor.inherit({
 
     _isClearButtonVisible: function() {
         return this.option("showClearButton") && !this.option("readOnly");
-    },
-
-    getButton(name) {
-        return this._buttonCollection.getButton(name);
     },
 
     _input: function() {
@@ -348,9 +369,10 @@ var TextEditorBase = Editor.inherit({
 
     _renderStylingMode: function() {
         const optionName = "stylingMode";
+        const optionValue = this.option(optionName);
         ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
 
-        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + this.option(optionName);
+        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + optionValue;
 
         if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
             const defaultOptionValue = this._getDefaultOptions()[optionName];
@@ -359,14 +381,16 @@ var TextEditorBase = Editor.inherit({
         }
 
         this.$element().addClass(stylingModeClass);
+
+        this._updateButtonsStyling(optionValue);
     },
 
     _initMarkup: function() {
         this.$element()
             .addClass(TEXTEDITOR_CLASS);
-        this._renderStylingMode();
 
         this._renderInput();
+        this._renderStylingMode();
         this._renderInputType();
         this._renderPlaceholder();
 
@@ -389,19 +413,23 @@ var TextEditorBase = Editor.inherit({
 
     _renderInput: function() {
         const buttons = this.option("buttons");
-        const $testEditorContainer = $("<div>")
+        const $textEditorContainer = $("<div>")
             .addClass(TEXTEDITOR_CONTAINER_CLASS)
             .appendTo(this.$element());
 
-        this.$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $testEditorContainer);
-        $testEditorContainer.append(this._createInput());
-        this.$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $testEditorContainer);
+        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $textEditorContainer);
+
+        this._$textEditorInputContainer = $("<div>")
+            .addClass(TEXTEDITOR_INPUT_CONTAINER_CLASS)
+            .appendTo($textEditorContainer);
+        this._$textEditorInputContainer.append(this._createInput());
+        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $textEditorContainer);
     },
 
     _clean() {
         this._buttonCollection.clean();
-        this.$beforeButtonsContainer = null;
-        this.$afterButtonsContainer = null;
+        this._$beforeButtonsContainer = null;
+        this._$afterButtonsContainer = null;
         this.callBase();
     },
 
@@ -425,6 +453,17 @@ var TextEditorBase = Editor.inherit({
 
     _updateButtons: function(names) {
         this._buttonCollection.updateButtons(names);
+    },
+
+    _updateButtonsStyling: function(editorStylingMode) {
+        var that = this;
+
+        each(this.option("buttons"), function(_, buttonOptions) {
+            if(buttonOptions.options && !buttonOptions.options.stylingMode) {
+                var buttonInstance = that.getButton(buttonOptions.name);
+                buttonInstance.option && buttonInstance.option("stylingMode", editorStylingMode === "underlined" ? "text" : "contained");
+            }
+        });
     },
 
     _renderValue: function() {
@@ -756,8 +795,13 @@ var TextEditorBase = Editor.inherit({
             case "stylingMode":
                 this._renderStylingMode();
                 break;
-            case "valueFormat":
             case "buttons":
+                if(args.fullName === args.name) {
+                    checkButtonsOptionType(args.value);
+                }
+                this._invalidate();
+                break;
+            case "valueFormat":
                 this._invalidate();
                 break;
             default:
@@ -782,6 +826,16 @@ var TextEditorBase = Editor.inherit({
         } catch(e) {
             input.prop("type", "text");
         }
+    },
+
+    /**
+    * @name dxTextEditorMethods.getButton
+    * @publicName getButton(name)
+    * @param1 name:string
+    * @return dxButton | undefined
+    */
+    getButton(name) {
+        return this._buttonCollection.getButton(name);
     },
 
     /**

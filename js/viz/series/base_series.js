@@ -59,11 +59,7 @@ seriesNS.mixins = {
     polar: {}
 };
 
-seriesNS.mixins.chart.scatter = _extend({}, scatterSeries.chart, {
-    usePointsToDefineAutoHiding() {
-        return true;
-    }
-});
+seriesNS.mixins.chart.scatter = scatterSeries.chart;
 seriesNS.mixins.polar.scatter = scatterSeries.polar;
 
 _extend(seriesNS.mixins.pie, pieSeries);
@@ -109,7 +105,9 @@ function getLabelOptions(labelOptions, defaultColor) {
         background: backgroundAttr,
         position: opt.position,
         connector: connectorAttr,
-        rotationAngle: opt.rotationAngle
+        rotationAngle: opt.rotationAngle,
+        wordWrap: opt.wordWrap,
+        textOverflow: opt.textOverflow
     };
 }
 
@@ -417,9 +415,7 @@ Series.prototype = {
         return false;
     },
 
-    usePointsToDefineAutoHiding() {
-        return this.autoHidePointMarkersEnabled();
-    },
+    usePointsToDefineAutoHiding: _noop,
 
     createPoints(useAllAggregatedPoints) {
         this._normalizeUsingAllAggregatedPoints(useAllAggregatedPoints);

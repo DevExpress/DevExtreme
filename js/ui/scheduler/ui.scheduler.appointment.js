@@ -129,17 +129,10 @@ var Appointment = DOMComponent.inherit({
     _renderAppointmentGeometry: function() {
         var geometry = this.option("geometry"),
             $element = this.$element();
-        if(this.option("allDay")) {
-            $element.css("left", geometry.left);
-            translator.move($element, {
-                top: geometry.top
-            });
-        } else {
-            translator.move($element, {
-                top: geometry.top,
-                left: geometry.left
-            });
-        }
+        translator.move($element, {
+            top: geometry.top,
+            left: geometry.left
+        });
 
         $element.css({
             width: geometry.width < 0 ? 0 : geometry.width,

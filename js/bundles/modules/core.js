@@ -11,6 +11,7 @@ if(DevExpress._DEVEXTREME_BUNDLE_INITIALIZED) {
 DevExpress._DEVEXTREME_BUNDLE_INITIALIZED = true;
 
 DevExpress.clientExporter = require("../../exporter");
+DevExpress.excelExporter = require("../../exporter/exceljs/excelExporter");
 
 DevExpress.VERSION = require("../../core/version");
 
@@ -53,12 +54,11 @@ DevExpress.utils.date = require("../../core/utils/date");
 DevExpress.utils.browser = require("../../core/utils/browser");
 DevExpress.utils.inflector = require("../../core/utils/inflector");
 DevExpress.utils.iterator = require("../../core/utils/iterator");
+DevExpress.utils.readyCallbacks = require("../../core/utils/ready_callbacks");
 DevExpress.utils.resizeCallbacks = require("../../core/utils/resize_callbacks");
 DevExpress.utils.console = require("../../core/utils/console");
 DevExpress.utils.string = require("../../core/utils/string");
 DevExpress.utils.support = require("../../core/utils/support");
-
-DevExpress.processHardwareBackButton = require("../../mobile/process_hardware_back_button");
 
 DevExpress.viewPort = require("../../core/utils/view_port").value;
 

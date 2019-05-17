@@ -32,6 +32,7 @@ import nativePointerMock from "../../helpers/nativePointerMock.js";
 import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
 import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
 import dataUtils from "core/element_data";
+import translator from "animation/translator";
 
 var device = devices.real(),
     expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
@@ -2036,6 +2037,43 @@ QUnit.test("Updating position of the fixed table (when scrollbar at the bottom) 
     });
 });
 
+// T722330
+QUnit.test("Elastic scrolling should be applied for fixed table", function(assert) {
+    // arrange
+    var that = this,
+        $fixedTable,
+        $testElement = $("#container");
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.resize();
+    that.rowsView.height(50);
+
+    // act
+    that.rowsView._handleScroll({
+        component: that.rowsView.getScrollable(),
+        scrollOffset: {
+            top: 350
+        },
+        reachedBottom: true
+    });
+
+    // assert
+    $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 10);
+
+    // act
+    that.rowsView._handleScroll({
+        component: that.rowsView.getScrollable(),
+        scrollOffset: {
+            top: 10
+        }
+    });
+
+    // assert
+    assert.ok(!$fixedTable[0].style.transform);
+});
+
 QUnit.module("Headers reordering and resizing with fixed columns", {
     beforeEach: function() {
         var that = this;
@@ -3105,4 +3143,38 @@ QUnit.test("The cells option of row should be correct when there are fixed colum
     assert.strictEqual(cells[0].column.dataField, "field1", "first cell");
     assert.deepEqual($(cells[0].cellElement)[0], cellElements[0], "first cell element");
     assert.strictEqual(cells[1].column.command, "transparent", "transparent cell");
+});
+
+// T737955
+QUnit.test("The vertical position of the fixed table should be correct after scrolling when scrolling.useNative is true", function(assert) {
+    // arrange
+    var that = this,
+        scrollable,
+        $fixedTableElement,
+        $testElement = $("#container").width(400);
+
+    that.options.scrolling = {
+        useNative: true
+    };
+    that.options.columns = [
+        { dataField: "field1", fixed: true, width: 200 },
+        { dataField: "field2", width: 200 },
+        { dataField: "field3", width: 200 },
+        { dataField: "field4", width: 200 }
+    ];
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.height(400);
+    that.rowsView.resize();
+
+    scrollable = that.rowsView.getScrollable();
+
+    // act
+    scrollable.scrollTo({ x: 10 });
+    $(scrollable._container()).trigger("scroll");
+
+    // assert
+    $fixedTableElement = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    assert.strictEqual(translator.getTranslate($fixedTableElement).y, 0, "scroll top");
 });

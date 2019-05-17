@@ -437,11 +437,16 @@ extend(ExportMenu.prototype, {
 
     measure() {
         this._fillSpace();
-        return [BUTTON_SIZE + SHADOW_OFFSET, BUTTON_SIZE];
+        const margin = this._options.button.margin;
+        return [BUTTON_SIZE + margin.left + margin.right, BUTTON_SIZE + margin.top + margin.bottom];
     },
 
     move(rect) {
-        this._group.attr({ translateX: Math.round(rect[0]), translateY: Math.round(rect[1]) });
+        const margin = this._options.button.margin;
+        this._group.attr({
+            translateX: Math.round(rect[0]) + margin.left,
+            translateY: Math.round(rect[1]) + margin.top
+        });
     },
 
     _fillSpace() {
@@ -613,12 +618,30 @@ export const plugin = {
         _getExportMenuOptions() {
             return extend({}, this._getOption("export"), { rtl: this._getOption("rtlEnabled", true) });
         },
+
+        _disablePointerEvents() {
+            const pointerEventsValue = this._renderer.root.attr("pointer-events");
+
+            this._renderer.root.attr({
+                "pointer-events": "none"
+            });
+
+            return pointerEventsValue;
+        },
+
         exportTo(fileName, format) {
             const menu = this._exportMenu;
             const options = getExportOptions(this, this._getOption("export") || {}, fileName, format);
 
             menu && menu.hide();
-            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format));
+
+            const pointerEventsValue = this._disablePointerEvents();
+
+            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format)).done(() => {
+                this._renderer.root.attr({
+                    "pointer-events": pointerEventsValue
+                });
+            });
             menu && menu.show();
         },
         print() {
@@ -639,8 +662,14 @@ export const plugin = {
                 eventArgs.cancel = true;
             };
 
+            const pointerEventsValue = this._disablePointerEvents();
+
             menu && menu.hide();
-            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format));
+            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format)).done(() => {
+                this._renderer.root.attr({
+                    "pointer-events": pointerEventsValue
+                });
+            });
             menu && menu.show();
         }
     },

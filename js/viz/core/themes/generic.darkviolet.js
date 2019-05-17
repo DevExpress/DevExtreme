@@ -14,8 +14,8 @@ registerTheme({
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
     secondaryTitleColor: SUBTITLE_COLOR,
-    axisColor: BORDER_COLOR,
-    axisLabelColor: TEXT_COLOR,
+    gridColor: BORDER_COLOR,
+    axisColor: TEXT_COLOR,
     "export": {
         backgroundColor: BACKGROUND_COLOR,
         font: {
@@ -75,6 +75,15 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: "#575e6b" }
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: TITLE_COLOR
+            },
+            border: {
+                color: "#414152"
+            },
+            color: BACKGROUND_COLOR
         }
     },
     funnel: {

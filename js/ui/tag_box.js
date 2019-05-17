@@ -39,9 +39,7 @@ var TAGBOX_CLASS = "dx-tagbox",
     TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content",
     TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template",
     TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template",
-    NATIVE_CLICK_CLASS = "dx-native-click",
-
-    TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container";
+    NATIVE_CLICK_CLASS = "dx-native-click";
 
 var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -726,10 +724,11 @@ var TagBox = SelectBox.inherit({
     _renderMultiSelect: function() {
         var d = new Deferred();
 
-        this._$tagsContainer = this.$element()
-            .find("." + TEXTEDITOR_CONTAINER_CLASS)
+        this._$tagsContainer = this._$textEditorInputContainer
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
+
+        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
         this._renderTags().always((function() {
@@ -817,15 +816,17 @@ var TagBox = SelectBox.inherit({
         if(selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            var dataSourceFilter = this._dataSource.filter();
+            var dataSource = this._dataSource;
+            var dataSourceFilter = dataSource.filter();
             var filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter);
             var filterLength = encodeURI(JSON.stringify(filterExpr)).length;
             var filter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
-            var loadOptions = this._dataSource.loadOptions();
+            var loadOptions = dataSource.loadOptions();
             var customQueryParams = loadOptions.customQueryParams;
 
-            this._dataSource.store().load({ filter, customQueryParams }).done(function(items) {
-                d.resolve(items.filter(clientFilterFunction));
+            dataSource.store().load({ filter, customQueryParams }).done(function(items) {
+                var mappedItems = dataSource._applyMapFunction(items);
+                d.resolve(mappedItems.filter(clientFilterFunction));
             });
 
             return d.promise();

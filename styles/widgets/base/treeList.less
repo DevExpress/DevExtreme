@@ -16,6 +16,7 @@
         border-top-width: 0;
         border-left: @treelist-border;
         border-right: @treelist-border;
+        border-bottom: @treelist-border;
     }
 }
 
@@ -46,6 +47,26 @@
 
     .dx-sort-down {
         .dx-icon-sortdown;
+    }
+
+    .dx-treelist-headers {
+        .dx-header-row > td,
+        .dx-header-filter {
+            outline: none;
+        }
+
+        &.dx-state-focused .dx-header-row {
+            td:focus,
+            td .dx-header-filter:focus {
+                outline: 2px solid @treelist-focused-border-color;
+            }
+            td:focus {
+                outline-offset: -2px;
+            }
+            td .dx-header-filter:focus {
+                outline-offset: 2px;
+            }
+        }
     }
 
     .dx-header-filter {
@@ -87,6 +108,17 @@
         }
     }
 
+    .dx-treelist-rowsview.dx-state-focused .dx-data-row {
+        & > td.dx-command-edit > a.dx-link:focus {
+            outline: 2px solid @datagrid-focused-border-color;
+            outline-offset: 2px;
+        }
+        &.dx-row-focused > td.dx-command-edit > a.dx-link:focus {
+            outline-color: @base-focus-color;
+            outline-offset: 0;
+        }
+    }
+
     .dx-treelist-rowsview {
         .dx-treelist-edit-form {
             background-color: @treelist-base-background-color;
@@ -97,11 +129,7 @@
 
             &:before {
                 display: block;
-                position: absolute;
-                left: 7px;
-                right: 7px;
-                top: 0;
-                bottom: 0;
+                height: 100%;
                 content: '';
                 background-image: @treelist-text-stub-background-image-path;
                 background-repeat: no-repeat repeat;
@@ -132,6 +160,18 @@
 .dx-treelist-filter-panel {
     color: @treelist-base-color;
     border-top: @treelist-border;
+    .dx-icon-filter,
+    .dx-treelist-filter-panel-text,
+    .dx-treelist-filter-panel-clear-filter {
+        outline: none;
+    }
+    &.dx-state-focused {
+        .dx-icon-filter:focus,
+        .dx-treelist-filter-panel-text:focus,
+        .dx-treelist-filter-panel-clear-filter:focus {
+            outline: 2px solid @treelist-focused-border-color;
+        }
+    }
 }
 
 .dx-treelist-form-buttons-container {
@@ -183,6 +223,7 @@
         .dx-treelist-rowsview .dx-data-row, .dx-treelist-rowsview .dx-freespace-row, .dx-treelist-headers .dx-row {
             td.dx-pointer-events-none {
                 border-left: 2px solid @treelist-border-color;
+                border-right: 2px solid @treelist-border-color;
 
                 &.dx-first-cell {
                     border-right: none;

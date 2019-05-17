@@ -436,7 +436,7 @@ var VirtualScrollingRowsViewExtender = (function() {
         _addVirtualRow: function($table, isFixed, location, position) {
             if(!position) return;
 
-            var $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed).css("height", position);
+            var $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed, position);
 
             $virtualRow = this._wrapRowIfNeed($table, $virtualRow);
 
@@ -805,7 +805,7 @@ module.exports = {
                         that._visibleItems = [];
 
                         var isItemCountable = function(item) {
-                            return item.rowType === "data" || item.rowType === "group";
+                            return item.rowType === "data" || item.rowType === "group" && that._dataSource.isGroupItemCountable(item.data);
                         };
 
                         that._rowsScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
@@ -975,8 +975,8 @@ module.exports = {
                                 break;
                         }
                     },
-                    items: function() {
-                        return this._visibleItems || this._items;
+                    items: function(allItems) {
+                        return allItems ? this._items : (this._visibleItems || this._items);
                     },
                     getRowIndexDelta: function() {
                         var visibleItems = this._visibleItems,

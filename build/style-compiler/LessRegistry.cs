@@ -13,23 +13,18 @@ namespace StyleCompiler
             PUBLIC_NAME_DEFAULT = "DevExtreme";
 
         public const string
-            MODULE_FRAMEWORK = "framework",
             MODULE_WIDGETS_BASE = "widgets-base";
 
         public const string
             EULA_DEVEXTREME = "https://js.devexpress.com/Licensing/";
 
         public const string
-            CSS_DISTRIBUTION_DEFAULT = "",
-            CSS_DISTRIBUTION_SPA = "spa";
+            CSS_DISTRIBUTION_DEFAULT = "";
 
         public const string
             THEME_GENERIC = "generic",
             THEME_MATERIAL = "material",
-            THEME_IOS7 = "ios7",
-            THEME_ANDROID5 = "android5",
-            THEME_WIN8 = "win8",
-            THEME_WIN10 = "win10";
+            THEME_IOS7 = "ios7";
 
         public const string
             COLOR_SCHEME_DEFAULT = "default",
@@ -67,20 +62,12 @@ namespace StyleCompiler
                 new CssDistributionInfo {
                     LicenseInfo = EULA_DEVEXTREME,
                     Modules = new[] { MODULE_WIDGETS_BASE },
-                    SupportedThemes = new[] { THEME_GENERIC, THEME_MATERIAL, THEME_IOS7, THEME_ANDROID5, THEME_WIN8, THEME_WIN10 },
+                    SupportedThemes = new[] { THEME_GENERIC, THEME_MATERIAL, THEME_IOS7 },
 
                     SupportedSizeSchemes = new Dictionary<string,string[]> {
                         { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } },
-                        { THEME_MATERIAL, new[] { SIZE_SCHEME_DEFAULT } }
+                        { THEME_MATERIAL, new[] { SIZE_SCHEME_DEFAULT, SIZE_SCHEME_COMPACT } }
                     }
-                }
-            },
-            {
-                CSS_DISTRIBUTION_SPA,
-                new CssDistributionInfo {
-                    LicenseInfo = EULA_DEVEXTREME,
-                    Modules = new[] { MODULE_FRAMEWORK },
-                    UseCommonPostfix = false
                 }
             }
         };
@@ -92,16 +79,6 @@ namespace StyleCompiler
                 ColorSchemeNames = new [] { COLOR_SCHEME_DEFAULT }
             },
             new KnownThemeInfo {
-                Name = THEME_ANDROID5,
-                PublicName = THEME_ANDROID5,
-                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT }
-            },
-            new KnownThemeInfo {
-                Name = THEME_WIN8,
-                PublicName = THEME_WIN8,
-                ColorSchemeNames = new[] { COLOR_SCHEME_BLACK, COLOR_SCHEME_WHITE }
-            },
-            new KnownThemeInfo {
                 Name = THEME_GENERIC,
                 PublicName = string.Empty,
                 ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_GREENMIST, COLOR_SCHEME_CONTRAST }
@@ -111,11 +88,6 @@ namespace StyleCompiler
                 PublicName = THEME_MATERIAL,
                 ColorSchemeNames = new[] { COLOR_SCHEME_BLUE_LIGHT, COLOR_SCHEME_ORANGE_LIGHT, COLOR_SCHEME_LIME_LIGHT, COLOR_SCHEME_PURPLE_LIGHT, COLOR_SCHEME_TEAL_LIGHT, COLOR_SCHEME_BLUE_DARK, COLOR_SCHEME_ORANGE_DARK, COLOR_SCHEME_LIME_DARK, COLOR_SCHEME_PURPLE_DARK, COLOR_SCHEME_TEAL_DARK }
             },
-            new KnownThemeInfo {
-                Name = THEME_WIN10,
-                PublicName = THEME_WIN10,
-                ColorSchemeNames = new[] { COLOR_SCHEME_BLACK, COLOR_SCHEME_WHITE }
-            }
         }.ToDictionary(i => i.Name);
 
         static string[] GenerateWidgetsLessFileList(string themeName)
@@ -181,9 +153,6 @@ namespace StyleCompiler
                 "tagBox",
                 "radioButton",
                 "radioGroup",
-                "pivotTabs",
-                "pivot",
-                "panorama",
                 "accordion",
                 "slideOutView",
                 "slideOut",
@@ -207,12 +176,14 @@ namespace StyleCompiler
                 "timeView",
                 "scheduler",
                 "form",
-                "spa",
                 "filterBuilder",
                 "recurrenceEditor",
                 "drawer",
                 "card",
-                "htmlEditor"
+                "htmlEditor",
+                "floatingActionButton",
+                "fileManager",
+                "diagram"
             });
 
             // Non-themeable components that have only common styles
@@ -234,19 +205,6 @@ namespace StyleCompiler
         }
 
         static readonly Dictionary<string, ModuleInfo> Modules = new Dictionary<string, ModuleInfo> {
-            {
-                MODULE_FRAMEWORK,
-                new ModuleInfo {
-                    PublicName = PUBLIC_NAME_DEFAULT + " (Single Page App Framework)",
-                    LicenseInfo = EULA_DEVEXTREME,
-                    StyleInfo = new ModuleStyleInfo {
-                        LessRoot = "framework",
-                        CommonLessFiles = new[] {
-                            "framework.less"
-                        }
-                    }
-                }
-            },
             {
                 MODULE_WIDGETS_BASE,
                 new ModuleInfo {

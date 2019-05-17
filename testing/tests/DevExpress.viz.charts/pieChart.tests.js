@@ -445,7 +445,6 @@ var environment = {
     QUnit.test("Pie dxChart with single series request default type, dataSource", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        stubSeries.adjustLabels = sinon.stub();
         chartMocks.seriesMockData.series.push(stubSeries);
         sinon.spy(stubSeries, "arrangePoints");
         // act
@@ -471,7 +470,6 @@ var environment = {
     QUnit.test("Pie dxChart with single series request default type, data in series", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        stubSeries.adjustLabels = sinon.stub();
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createPieChart({
@@ -1044,8 +1042,6 @@ var environment = {
         assert.equal(updateArgs[1]._incidentOccurred, chart._incidentOccurred, "incidentOccurred");
         assert.ok(updateArgs[1].legendThemeApplied, "Theme was applied by theme manager");
 
-        assert.ok(chart.layoutManager.layoutElements.called, "legend and title layouted");
-        assert.ok(chart.layoutManager.layoutElements.calledWith([commons.getTitleStub(), legend], chart._canvas), "layout");
         assert.ok(chart.layoutManager.applyPieChartSeriesLayout.calledOnce, "layout for pie is called once");
 
         assert.equal(updateArgs[0].length, 3);
@@ -1470,54 +1466,6 @@ var environment = {
         assert.strictEqual(action.getCall(0).args[0], "resetItem", "first item");
         assert.strictEqual(action.getCall(1).args[0], "applySelected", "second item");
     });
-
-    QUnit.module("Layout manager. Position", environment);
-
-    QUnit.test("Elements. Canvas", function(assert) {
-        this.createPieChart({ legend: { visible: true }, title: { text: "chartTitle" } });
-
-        assert.equal(this.layoutManager.layoutElements.callCount, 1, "layout count");
-        assert.equal(this.layoutManager.layoutElements.getCall(0).args[0][0], commons.getTitleStub(), "title");
-        assert.equal(this.layoutManager.layoutElements.getCall(0).args[0][1], commons.getLegendStub(), "legend");
-        assert.equal(this.layoutManager.layoutElements.getCall(0).args[0][2], undefined, "layout args");
-        assert.deepEqual(this.layoutManager.layoutElements.getCall(0).args[1], {
-            bottom: 0,
-            height: 400,
-            left: 0,
-            originalBottom: 0,
-            originalLeft: 0,
-            originalRight: 0,
-            originalTop: 0,
-            right: 0,
-            top: 0,
-            width: 1000
-        }, "layout canvas");
-    });
-
-    QUnit.test("getLayoutTargets", function(assert) {
-        this.createPieChart();
-
-        assert.deepEqual(this.layoutManager.layoutElements.getCall(0).args[3], [{
-            canvas: {
-                bottom: 0,
-                height: 400,
-                left: 0,
-                originalBottom: 0,
-                originalLeft: 0,
-                originalRight: 0,
-                originalTop: 0,
-                right: 0,
-                top: 0,
-                width: 1000
-            }
-        }]);
-    });
-
-    QUnit.test("isRotated", function(assert) {
-        this.createPieChart();
-
-        assert.ok(!this.layoutManager.layoutElements.getCall(0).args[4]);
-    });
 }());
 
 (function dynamicTests() {
@@ -1545,8 +1493,6 @@ var environment = {
         });
         // assert
         assert.ok(chart._renderer.resize.called, "Canvas should be resized");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, "layout count");
         assert.strictEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.callCount, 2, "check free space - call count");
         assert.deepEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.getCall(0).args, [[{ canvas: chart.DEBUG_canvas }], undefined], "check free space - 1");
@@ -1576,8 +1522,6 @@ var environment = {
         chart.refresh();
         // assert
         assert.ok(chart._renderer.resize.called, "Canvas should be resized");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, "layout count");
         assert.strictEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.callCount, 2, "check free space - call count");
         assert.deepEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.getCall(0).args, [[{ canvas: chart.DEBUG_canvas }], undefined], "check free space - 1");
@@ -1861,8 +1805,6 @@ var environment = {
         var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
         assert.deepEqual(businessRange1, [1, 5]);
 
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart._canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2);
         assert.ok(chart.series[0].wasDrawn, "Series was drawn");
         assert.ok(!chart._seriesGroup.stub("linkRemove").called, "Series group should be detached");
@@ -1900,8 +1842,6 @@ var environment = {
         var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
         assert.deepEqual(businessRange1, [1, 5]);
 
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart._canvas, "legend and title layouted");
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, "apply layout count");
         assert.ok(chart.series[0].wasDrawn, "Series was drawn");
         assert.ok(!chart._seriesGroup.stub("linkRemove").called, "Series group should be detached");
@@ -1987,11 +1927,9 @@ var environment = {
     QUnit.test("Adjust labels only before overlapping resolve, without moving from center (T586419)", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
                 { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+            series = pie.getAllSeries()[0];
 
         assert.equal(series.adjustLabels.callCount, 1);
-        assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].draw.withArgs(false).lastCall));
         assert.deepEqual(series.adjustLabels.getCall(0).args, [false], "Do not move from center (T586419)");
     });
 
@@ -2095,33 +2033,26 @@ var environment = {
             points = series.getVisiblePoints();
 
         // assert
-        assert.equal(series.adjustLabels.callCount, 2);
-
+        assert.equal(series.adjustLabels.callCount, 5);
         assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].shift.lastCall));
         assert.deepEqual(series.adjustLabels.getCall(0).args, [true], "Move from center (T586419)");
-
-        assert.ok(series.adjustLabels.getCall(1).calledAfter(points[1].getLabels()[0].shift.lastCall));
         assert.deepEqual(series.adjustLabels.getCall(1).args, [true], "Move from center (T586419)");
     });
 
     QUnit.test("Do not Adjust labels after resolve overlapping in columns position", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
                 { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "columns"),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+            series = pie.getAllSeries()[0];
 
-        assert.equal(series.adjustLabels.callCount, 1);
-        assert.ok(!series.adjustLabels.lastCall.calledAfter(points[1].getLabels()[0].shift.lastCall));
+        assert.equal(series.adjustLabels.callCount, 5);
     });
 
     QUnit.test("Do not Adjust labels after resolve overlapping in inside position", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
                 { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "inside"),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+            series = pie.getAllSeries()[0];
 
-        assert.equal(series.adjustLabels.callCount, 1);
-        assert.ok(!series.adjustLabels.lastCall.calledAfter(points[1].getLabels()[0].shift.lastCall));
+        assert.equal(series.adjustLabels.callCount, 5);
     });
 
     QUnit.module("resolveLabelOverlapping. shift. multipie", $.extend({}, overlappingEnvironment, {

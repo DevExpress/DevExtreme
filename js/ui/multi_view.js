@@ -31,8 +31,10 @@ var position = function($element) {
     return translator.locate($element).left;
 };
 
-var move = function($element, position) {
-    translator.move($element, { left: position });
+var _translator = {
+    move: function($element, position) {
+        translator.move($element, { left: position });
+    }
 };
 
 var animation = {
@@ -232,6 +234,23 @@ var MultiView = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _afterItemElementDeleted: function($item, deletedActionArgs) {
+        this.callBase($item, deletedActionArgs);
+        if(this._deferredItems) {
+            this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
+            if(this.option("items")) {
+                for(var i = deletedActionArgs.itemIndex; i < this.option("items").length; i++) {
+                    var currentItem = this.option("items")[i];
+                    var $currentItem = this._findItemElementByItem(currentItem);
+                    if(!$currentItem.length) {
+                        break;
+                    }
+                    this._refreshItem($currentItem, currentItem);
+                }
+            }
+        }
+    },
+
     _renderItemContent: function(args) {
         var renderContentDeferred = new Deferred();
 
@@ -268,11 +287,13 @@ var MultiView = CollectionWidget.inherit({
 
     _updateItemsPosition: function(selectedIndex, newIndex) {
         var $itemElements = this._itemElements(),
-            positionSign = -this._animationDirection(newIndex, selectedIndex),
+            positionSign = isDefined(newIndex) ? -this._animationDirection(newIndex, selectedIndex) : undefined,
             $selectedItem = $itemElements.eq(selectedIndex);
 
-        move($selectedItem, 0);
-        move($itemElements.eq(newIndex), positionSign * 100 + "%");
+        _translator.move($selectedItem, 0);
+        if(isDefined(newIndex)) {
+            _translator.move($itemElements.eq(newIndex), positionSign * 100 + "%");
+        }
     },
 
     _updateItemsVisibility: function(selectedIndex, newIndex) {
@@ -320,7 +341,7 @@ var MultiView = CollectionWidget.inherit({
         var animationDirection = this._animationDirection(newIndex, prevIndex);
 
         this._animateItemContainer(animationDirection * this._itemWidth(), (function() {
-            move(this._$itemContainer, 0);
+            _translator.move(this._$itemContainer, 0);
             this._updateItems(newIndex);
 
             // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713)
@@ -379,7 +400,7 @@ var MultiView = CollectionWidget.inherit({
         var offset = e.offset,
             swipeDirection = mathUtils.sign(offset) * this._getRTLSignCorrection();
 
-        move(this._$itemContainer, offset * this._itemWidth());
+        _translator.move(this._$itemContainer, offset * this._itemWidth());
 
         if(swipeDirection !== this._swipeDirection) {
             this._swipeDirection = swipeDirection;
@@ -476,4 +497,5 @@ registerComponent("dxMultiView", MultiView);
 module.exports = MultiView;
 ///#DEBUG
 module.exports.animation = animation;
+module.exports._translator = _translator;
 ///#ENDDEBUG

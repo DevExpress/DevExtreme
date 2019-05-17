@@ -1,14 +1,17 @@
 import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
+import devices from "core/devices";
 import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
     BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
-    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + "-item-has-width",
-    DX_ITEM_SELECTED_CLASS = "dx-item-selected";
+    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + "-item-has-width";
 
 QUnit.testStart(() => {
     const markup = `
@@ -64,57 +67,6 @@ QUnit.module("option changed", {
         const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
         assert.equal(buttons[0].option("text"), "left", "text of first button");
         assert.equal(buttons[1].option("text"), "right", "text of second button");
-    });
-
-    QUnit.test("change selection via the selectedItems in the single mode", function(assert) {
-        this.buttonGroup.option("selectedItems", [{ text: "button 2" }]);
-
-        const $buttons = this.$buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is not selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(this.buttonGroup.option("selectedItemKeys"), ["button 2"], "selectedItemKeys");
-    });
-
-    QUnit.test("change selection via the selectedItems in the multiple mode", function(assert) {
-        const $buttonGroup = $("#widget").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            selectionMode: "multiple"
-        });
-
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        buttonGroup.option("selectedItems", [{ text: "button 1" }, { text: "button 2" }]);
-
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1", "button 2"], "selectedItemKeys");
-    });
-
-    QUnit.test("change selection via the selectedItemKeys in the single mode", function(assert) {
-        this.buttonGroup.option("selectedItemKeys", ["button 2"]);
-
-        const $buttons = this.$buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is not selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(this.buttonGroup.option("selectedItems"), [{ text: "button 2" }], "selectedItems");
-    });
-
-    QUnit.test("change selection via the selectedItemKeys in the multiple mode", function(assert) {
-        this.buttonGroup.option("selectionMode", "multiple");
-        this.buttonGroup.option("selectedItemKeys", ["button 1", "button 2"]);
-
-        const $buttons = this.$buttonGroup.find(`.${BUTTON_CLASS}`);
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is selected");
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
-        assert.deepEqual(this.buttonGroup.option("selectedItems"), [{ text: "button 1" }, { text: "button 2" }], "selectedItems");
-    });
-
-    QUnit.test("change the onSelectionChanged event", function(assert) {
-        const stub = sinon.stub();
-        this.buttonGroup.option("onSelectionChanged", stub);
-        this.buttonGroup.option("selectedItemKeys", ["button 2"]);
-
-        assert.equal(stub.callCount, 1);
     });
 
     QUnit.test("change the width option", function(assert) {
@@ -186,201 +138,88 @@ QUnit.module("option changed", {
     });
 });
 
-QUnit.module("selection", () => {
-    QUnit.test("change selection in the single by click", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }]
-        });
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
+QUnit.module("Events", () => {
+    class ButtonGroupEventsTestHelper {
+        constructor(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
+            this.handler = sinon.spy();
+            this.eventName = eventName;
+            this.isItemClickInInitialOption = isItemClickInInitialOption;
+            this.isDisabled = isDisabled;
+            this.isItemDisabled = isItemDisabled;
+            this.isKeyboardEvent = this.eventName === "space" || this.eventName === "enter";
+        }
 
-        $buttons.eq(0).trigger("dxclick");
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1"], "selectedItemKeys");
+        createButtonGroup() {
+            if(this.isItemClickInInitialOption) {
+                this.buttonGroup = $("#widget").dxButtonGroup({
+                    items: [{ text: "item1", disabled: this.isItemDisabled, custom: 1 }],
+                    disabled: this.isDisabled,
+                    onItemClick: this.handler
+                }).dxButtonGroup("instance");
+            } else {
+                this.buttonGroup = $("#widget").dxButtonGroup({
+                    items: [{ text: "item1", disabled: this.isItemDisabled, custom: 1 }],
+                    disabled: this.isDisabled
+                }).dxButtonGroup("instance");
 
-        $buttons.eq(1).trigger("dxclick");
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 2" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 2"], "selectedItemKeys");
-    });
+                this.buttonGroup.option("onItemClick", this.handler);
+            }
+        }
 
-    QUnit.test("deselect does not happen for the single selection mode", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }]
-        });
+        _getButtonGroupItem() {
+            return this.buttonGroup.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`).eq(0);
+        }
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-        const $button = $buttonGroup.find(`.${BUTTON_CLASS}`).first();
+        performAction() {
+            if(this.eventName === "click") {
+                eventsEngine.trigger(this._getButtonGroupItem(0), "dxclick");
+            } else if(this.eventName === "touch") {
+                pointerMock(this._getButtonGroupItem(0))
+                    .start("touch")
+                    .down()
+                    .up();
+            } else {
+                if(!this.isDisabled) keyboardMock(this.buttonGroup.$element()).press(this.eventName);
+            }
+        }
 
-        $button.trigger("dxclick");
-        $button.trigger("dxclick");
+        checkAsserts(assert) {
+            if((this.isDisabled || this.isItemDisabled)) {
+                assert.equal(this.handler.callCount, 0, "handler.callCount");
+            } else {
+                assert.strictEqual(this.handler.callCount, 1, "handler.callCount");
 
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1"], "selectedItemKeys");
-    });
+                const e = this.handler.getCall(0).args[0];
+                assert.strictEqual(Object.keys(e).length, 6, "Object.keys(e).length");
+                assert.strictEqual(e.component, this.buttonGroup, "e.component");
+                assert.strictEqual(e.element, this.buttonGroup.element(), "element is correct");
+                assert.strictEqual(e.event.type, this.isKeyboardEvent ? "keydown" : "dxclick", "e.event.type");
+                assert.deepEqual(e.itemData, { text: `item1`, disabled: this.isItemDisabled, custom: 1 }, "e.itemData");
+                assert.strictEqual(e.itemIndex, 0, "e.itemIndex");
+                assert.strictEqual($(e.itemElement).get(0), this._getButtonGroupItem(0).get(0), `$(e.itemElement).get(0)`);
+            }
+        }
+    }
 
-    QUnit.test("change election in the multiple mode by click", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            selectionMode: "multiple"
-        });
+    [true, false].forEach((isDisabled) => {
+        [true, false].forEach((isItemDisabled) => {
+            [true, false].forEach((isItemClickInInitialOption) => {
+                ["click", "touch", "space", "enter"].forEach((eventName) => {
+                    let config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ``}`;
 
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-
-        $buttons.eq(0).trigger("dxclick");
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1"], "selectedItemKeys");
-
-        $buttons.eq(1).trigger("dxclick");
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{ text: "button 1" }, { text: "button 2" }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1", "button 2"], "selectedItemKeys");
-    });
-
-    QUnit.test("deselect all buttons in the multiple mode", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            selectedItemKeys: ["button 1", "button 2"],
-            selectionMode: "multiple"
-        });
-
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-
-        $buttons.eq(0).trigger("dxclick");
-        $buttons.eq(1).trigger("dxclick");
-
-        assert.notOk($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.notOk($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), [], "selectedItemKeys");
-    });
-
-    QUnit.test("сheck a selection with the custom keyExpr", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{
-                icon: "leftIcon",
-                alignment: "left"
-            },
-            {
-                icon: "centerIcon",
-                alignment: "center"
-            },
-            {
-                icon: "rightIcon",
-                alignment: "right"
-            }],
-            keyExpr: "alignment",
-            selectionMode: "multiple"
-        });
-
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-
-        $buttons.eq(0).trigger("dxclick");
-        $buttons.eq(2).trigger("dxclick");
-
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(2).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [{
-            icon: "leftIcon",
-            alignment: "left"
-        }, {
-            icon: "rightIcon",
-            alignment: "right"
-        }], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["left", "right"], "selectedItemKeys");
-    });
-
-    QUnit.test("сheck a selection with the default keyExpr", function(assert) {
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{
-                icon: "leftIcon",
-                text: "left"
-            },
-            {
-                icon: "centerIcon",
-                text: "center"
-            },
-            {
-                icon: "rightIcon",
-                text: "right"
-            }],
-            selectionMode: "multiple"
-        });
-
-        const buttonGroup = $buttonGroup.dxButtonGroup("instance");
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-
-        $buttons.eq(0).trigger("dxclick");
-        $buttons.eq(2).trigger("dxclick");
-
-        assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.ok($buttons.eq(2).hasClass(DX_ITEM_SELECTED_CLASS));
-        assert.deepEqual(buttonGroup.option("selectedItems"), [
-            { icon: "leftIcon", text: "left" },
-            { icon: "rightIcon", text: "right" }
-        ], "selectedItems");
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["left", "right"], "selectedItemKeys");
-    });
-
-    QUnit.test("onSelectedChanged event", function(assert) {
-        let selectedItems;
-        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
-            items: [{
-                text: "button 1",
-                icon: "icon 1"
-            }, {
-                text: "button 2",
-                icon: "icon 2"
-            }],
-            onSelectionChanged: (e) => {
-                selectedItems = {
-                    addedItems: e.addedItems,
-                    removedItems: e.removedItems
-                };
-            },
-            selectionMode: "multiple"
-        });
-
-        const $buttons = $buttonGroup.find(`.${BUTTON_CLASS}`);
-
-        $buttons.eq(0).trigger("dxclick");
-        assert.deepEqual(selectedItems, {
-            addedItems: [{
-                text: "button 1",
-                icon: "icon 1"
-            }],
-            removedItems: []
-        });
-
-        $buttons.eq(1).trigger("dxclick");
-        assert.deepEqual(selectedItems, {
-            addedItems: [{
-                text: "button 2",
-                icon: "icon 2"
-            }],
-            removedItems: []
-        });
-
-        $buttons.eq(1).trigger("dxclick");
-        assert.deepEqual(selectedItems, {
-            addedItems: [],
-            removedItems: [{
-                text: "button 2",
-                icon: "icon 2"
-            }]
+                    QUnit.test("Check onItemClick for" + config, (assert) => {
+                        let helper = new ButtonGroupEventsTestHelper(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
+                        helper.createButtonGroup();
+                        helper.performAction();
+                        helper.checkAsserts(assert);
+                    });
+                });
+            });
         });
     });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxButtonGroup");
+}

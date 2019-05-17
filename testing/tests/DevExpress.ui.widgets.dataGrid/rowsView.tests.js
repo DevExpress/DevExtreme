@@ -1942,6 +1942,67 @@ QUnit.test('onCellClick event handling', function(assert) {
     assert.strictEqual(cellClickArgs.rowIndex, 0, 'rowIndex');
 });
 
+QUnit.test("onRowDblClick event handling", function(assert) {
+    var $rowElement,
+        dataController = new MockDataController({ items: this.items }),
+        rowsView = this.createRowsView(this.items, dataController),
+        $testElement = $('#container'),
+        rowDoubleClickArgs;
+
+    this.options.onRowDblClick = function(data) {
+        rowDoubleClickArgs = data;
+    };
+
+    rowsView.optionChanged({ name: 'onRowDblClick' });
+    rowsView.render($testElement);
+    $rowElement = $(rowsView.getRowElement(1));
+
+    // act
+    $rowElement.trigger("dxdblclick");
+
+    // assert
+    assert.equal(typeUtils.isRenderer(rowDoubleClickArgs.rowElement), !!config().useJQuery, "row element");
+    assert.deepEqual($(rowDoubleClickArgs.rowElement)[0], $rowElement[0], "row element");
+    assert.deepEqual(rowDoubleClickArgs.data, { name: 'test2', id: 2, date: new Date(2002, 1, 2) });
+    assert.equal(rowDoubleClickArgs.columns.length, 3, "count columns");
+    assert.equal(rowDoubleClickArgs.dataIndex, 1, "dataIndex");
+    assert.equal(rowDoubleClickArgs.rowIndex, 1, "rowIndex");
+    assert.strictEqual(rowDoubleClickArgs.rowType, "data", "rowType");
+    assert.deepEqual(rowDoubleClickArgs.values, ["test2", 2, "2/02/2002"], "values");
+    assert.strictEqual(rowDoubleClickArgs.event.type, "dxdblclick", "Event type");
+});
+
+QUnit.test("onCellDblClick event handling", function(assert) {
+    var $cellElement,
+        dataController = new MockDataController({ items: this.items }),
+        rowsView = this.createRowsView(this.items, dataController),
+        $testElement = $('#container'),
+        cellDoubleClickArgs;
+
+    this.options.onCellDblClick = function(options) {
+        cellDoubleClickArgs = options;
+    };
+
+    rowsView.optionChanged({ name: 'onCellDblClick' });
+    rowsView.render($testElement);
+    $cellElement = $(rowsView.getCellElement(0, 0));
+
+    // act
+    $cellElement.trigger("dxdblclick");
+
+    // assert
+    assert.equal(typeUtils.isRenderer(cellDoubleClickArgs.cellElement), !!config().useJQuery, "cellElement is correct");
+    assert.deepEqual($(cellDoubleClickArgs.cellElement)[0], $cellElement[0], 'Container');
+    assert.ok(cellDoubleClickArgs.event, 'event');
+    assert.deepEqual(cellDoubleClickArgs.event.target, $cellElement[0], 'event.target');
+    assert.strictEqual(cellDoubleClickArgs.value, 'test1', 'value');
+    assert.strictEqual(cellDoubleClickArgs.text, 'test1', 'text');
+    assert.strictEqual(cellDoubleClickArgs.isEditing, false, 'isEditing');
+    assert.strictEqual(cellDoubleClickArgs.columnIndex, 0, 'columnIndex');
+    assert.strictEqual(cellDoubleClickArgs.rowIndex, 0, 'rowIndex');
+    assert.strictEqual(cellDoubleClickArgs.event.type, "dxdblclick", "Event type");
+});
+
 // T182190
 QUnit.test('Horizontal scroll when no data', function(assert) {
     // arrange
@@ -4417,6 +4478,76 @@ QUnit.test('click expand/collapse group', function(assert) {
     assert.deepEqual(values, ['Alex'], 'changeRowExpand path');
 });
 
+QUnit.test('click expand/collapse group row if expandMode is rowClick', function(assert) {
+    var rowClickArgs;
+    this.options.columns = [{ dataField: 'name', groupIndex: 0, allowCollapsing: true }, 'age'];
+    this.options.onRowClick = function(e) {
+        rowClickArgs = e;
+    };
+    this.options.grouping = {
+        expandMode: "rowClick"
+    };
+
+    this.setupDataGridModules();
+    // arrange
+    var that = this,
+        values,
+        testElement = $('#container');
+
+    that.dataController.changeRowExpand = function(path) {
+        values = path;
+    };
+
+    that.rowsView.render(testElement);
+
+    // assert
+    var $groupRow = testElement.find('.' + "dx-group-row").first();
+    assert.ok($groupRow.length, 'group cell exist');
+
+    // act
+    $($groupRow).trigger("dxclick");
+
+    // assert
+    assert.ok(rowClickArgs, 'rowClick called');
+    assert.ok(rowClickArgs.handled, 'rowClick handled by grid');
+    assert.deepEqual(values, ['Alex'], 'changeRowExpand path');
+});
+
+// T734376
+QUnit.test('click expand/collapse group row if expandMode is rowClick and allowCollapsing is false', function(assert) {
+    var rowClickArgs;
+    this.options.columns = [{ dataField: 'name', groupIndex: 0, allowCollapsing: false }, 'age'];
+    this.options.onRowClick = function(e) {
+        rowClickArgs = e;
+    };
+    this.options.grouping = {
+        expandMode: "rowClick"
+    };
+
+    this.setupDataGridModules();
+    // arrange
+    var that = this,
+        expandPath,
+        testElement = $('#container');
+
+    that.dataController.changeRowExpand = function(path) {
+        expandPath = path;
+    };
+
+    that.rowsView.render(testElement);
+
+    // assert
+    var $groupRow = testElement.find('.' + "dx-group-row").first();
+    assert.ok($groupRow.length, 'group cell exist');
+
+    // act
+    $($groupRow).trigger("dxclick");
+
+    // assert
+    assert.ok(rowClickArgs, 'rowClick is called');
+    assert.strictEqual(expandPath, undefined, 'changeRowExpand is not called');
+});
+
 // B254492
 QUnit.test('free space row height when dataGrid without height and pageCount = 1', function(assert) {
     this.setupDataGridModules();
@@ -5389,7 +5520,8 @@ QUnit.test('Render rows with virtual items', function(assert) {
         },
         dataController = new MockDataController(options),
         rowsView = this.createRowsView(options.items, dataController),
-        testElement = $('#container');
+        testElement = $('#container'),
+        $virtualRows;
 
     // act
     this.options.scrolling = {
@@ -5409,9 +5541,15 @@ QUnit.test('Render rows with virtual items', function(assert) {
     assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
     assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
-    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * 10, 1);
-    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * 7, 1);
+
+    $virtualRows = content.children().eq(0).find(".dx-virtual-row");
+    assert.roughEqual($virtualRows.eq(0).height(), rowHeight * 10, 1);
+    assert.roughEqual($virtualRows.eq(1).height(), rowHeight * 7, 1);
     assert.equal(content.children().eq(1).find("." + "dx-datagrid-group-space").length, 0, "group space class");
+
+    // T720928
+    assert.roughEqual(parseFloat($virtualRows.eq(0).children().get(0).style.height), rowHeight * 10, 1);
+    assert.roughEqual(parseFloat($virtualRows.eq(1).children().get(0).style.height), rowHeight * 7, 1);
 });
 
 QUnit.test('Render rows if row rendering mode is virtual', function(assert) {
@@ -6693,7 +6831,7 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
-    if(browser.msie && browser.version === "18.17763") {
+    if(browser.msie && browser.version === "18.18362") {
         assert.ok(true);
         return;
     }

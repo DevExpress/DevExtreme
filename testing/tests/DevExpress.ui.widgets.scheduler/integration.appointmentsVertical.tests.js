@@ -1,4 +1,4 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -7,36 +7,45 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
+import "ui/scheduler/ui.scheduler";
+import "ui/switch";
 
-var translator = require("animation/translator"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    Color = require("color"),
-    devices = require("core/devices"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dataUtils = require("core/element_data");
+import { SchedulerTestWrapper } from './helpers.js';
 
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
+const createInstance = function(options) {
+    const defaultOption = {
+        maxAppointmentsPerCell: null
+    };
+    const instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
+    return new SchedulerTestWrapper(instance);
+};
 
-var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
-    APPOINTMENT_CLASS = "dx-scheduler-appointment";
+import translator from "animation/translator";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import Color from "color";
+import devices from "core/devices";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dataUtils from "core/element_data";
 
-var APPOINTMENT_DEFAULT_OFFSET = 25,
-    APPOINTMENT_MOBILE_OFFSET = 50;
+const DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell";
+const APPOINTMENT_CLASS = "dx-scheduler-appointment";
 
-function getOffset() {
+var APPOINTMENT_DEFAULT_OFFSET = 25;
+const APPOINTMENT_MOBILE_OFFSET = 50;
+
+const getOffset = () => {
     if(devices.current().deviceType !== "desktop") {
         return APPOINTMENT_MOBILE_OFFSET;
     } else {
         return APPOINTMENT_DEFAULT_OFFSET;
     }
-}
+};
 
 QUnit.module("Integration: Appointments on vertical views (day, week, workWeek)", {
     beforeEach: function() {
@@ -330,7 +339,7 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
-    assert.roughEqual($allDayAppts.eq(0).position().left, 100, 2.001, "Left position is OK");
+    assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
 
     assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
     assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
@@ -459,9 +468,9 @@ QUnit.test("dropDown appointment should not compact class on vertical view", fun
         { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) }
     ]);
 
-    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-appointment-collector").eq(0);
 
-    assert.ok($dropDown.hasClass("dx-scheduler-dropdown-appointments-compact"), "class is ok");
+    assert.ok($dropDown.hasClass("dx-scheduler-appointment-collector-compact"), "class is ok");
 });
 
 QUnit.test("Appointments should be rendered correctly, Day view with intervalCount", function(assert) {
@@ -783,7 +792,7 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
 
     assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.roughEqual($appointments.eq(0).position().left, 456, 1.1, "correct left position of allDay appointment");
+    assert.roughEqual(translator.locate($appointments.eq(0)).left, 456, 1.1, "correct left position of allDay appointment");
 
     assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
     assert.roughEqual($appointments.eq(1).position().left, 456, 1.1, "correct left position of appointment");
@@ -837,11 +846,11 @@ QUnit.test("Rival allDay appointments from different groups should be rendered c
 
     assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
+    assert.equal(translator.locate($appointments.eq(0)).left, 314, "correct left position of allDay appointment");
 
     assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.roughEqual($appointments.eq(1).position().left, 314, 1, "correct left position of allDay appointment");
+    assert.equal(translator.locate($appointments.eq(1)).left, 314, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
@@ -891,7 +900,7 @@ QUnit.test("Rival allDay appointments from same groups should be rendered correc
 
     assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
+    assert.equal(translator.locate($appointments.eq(0)).left, 314, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival appointments from one group should be rendered correctly in vertical grouped workspace Week", function(assert) {
@@ -1505,3 +1514,27 @@ QUnit.test("Long appointments should be rendered correctly in vertical grouped w
     assert.roughEqual($appointments.eq(1).position().left, cellWidth * 2 + dateTableLeftOffset, 1.1, "correct left position of appointment part");
 });
 
+QUnit.test("Scheduler recurrent appointments render right if began before startDayHour (T735635)", function(assert) {
+    const appointments = [
+        {
+            text: "Website Re-Design Plan",
+            startDate: new Date(2019, 3, 22, 7, 30),
+            endDate: new Date(2019, 3, 22, 11, 30),
+            recurrenceRule: "FREQ=DAILY"
+        }
+    ];
+    const options = {
+        dataSource: appointments,
+        views: ["week", "month"],
+        currentView: "week",
+        startDayHour: 10,
+        endDayHour: 16,
+        height: 600,
+        currentDate: new Date(2019, 3, 21),
+    };
+    let scheduler = createInstance(options);
+
+    const initialAppointmentHeight = scheduler.appointments.getAppointmentHeight(0);
+    const recurrentAppointmentHeight = scheduler.appointments.getAppointmentHeight(1);
+    assert.equal(initialAppointmentHeight, recurrentAppointmentHeight, "Appointment cells have equal heights (both initial and recurrent)");
+});

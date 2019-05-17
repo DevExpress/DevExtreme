@@ -27,7 +27,7 @@
 @base-success: #71C35E;
 @base-danger: #EE5959;
 @base-warning: #ffb277;
-@base-info: 80b9e4;
+@base-info: #80b9e4;
 
 /**
 * @name 10. Text color
@@ -64,13 +64,6 @@
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
 
 @validation-overlay-border-radius: @base-border-radius;
-
-/**
-* @name 20. Selected state text color
-* @type color
-* @group base.common
-*/
-@base-selected-text-color: @base-inverted-text-color;
 
 @datagrid-row-hovered-color: @base-text-color;
 /**
@@ -338,6 +331,14 @@
 
 @checkbox-icon-border-radius: @base-border-radius - 2px;
 
+// Diagram
+@diagram-border-color: @base-border-color;
+@diagram-toolbar-border-color: @base-border-color;
+@diagram-normal-format-active-bg: @base-bg;;
+@diagram-default-format-active-bg: @base-default;
+@diagram-danger-format-active-bg: @base-danger;
+@diagram-success-format-active-bg: @base-success;
+
 // Drawer
 /**
 * @name 10. Shader background color
@@ -424,6 +425,8 @@
 @htmleditor-variable-bg: fade(@base-accent, 15%);
 @htmleditor-resize-frame-border-color: @base-accent;
 @htmleditor-resize-handle-bg: @base-accent;
+@htmleditor-mention-bg: #fff - @base-bg;
+@htmleditor-mention-color: @base-inverted-text-color;
 
 // List
 /**
@@ -577,7 +580,6 @@
 // Lookup
 
 @lookup-icon-color: @base-icon-color;
-@lookup-validation-message-color: @base-invalid-color;
 
 // Selectbox
 /**
@@ -589,6 +591,7 @@
 @selectbox-shadow-color: @base-shadow-color;
 
 // Tabs
+@tabs-tab-color: @base-text-color;
 /**
 * @name 45. Bottom layer background color
 * @type color
@@ -669,6 +672,10 @@
 */
 @navbar-tab-selected-bg: #fff - @base-bg;
 @navbar-tab-focused-border-color: @base-focus-color;
+
+@navbar-tab-bg: @base-bg;
+@navbar-tab-color: @base-text-color;
+@navbar-tab-selected-color: @base-text-color;
 
 // Scrollable
 
@@ -867,10 +874,6 @@
 */
 @colorbox-overlay-bg: @base-bg;
 @colorbox-palette-cell-bg: @base-bg;
-
-//PivoTabs
-@pivottabs-tab-color: @base-text-color;
-@pivottabs-tab-selected-color: @base-text-color;
 
 // DataGrid
 /**
@@ -1365,12 +1368,13 @@
 @scheduler-header-bg: @base-bg;
 @scheduler-alldaypanel-bg: @base-bg;
 
-@scheduler-recurence-editor-bg: fade(@base-inverted-bg, 40%);
+@scheduler-appointment-form-separator-color: @base-border-color;
+
 @scheduler-tab-selected-bg: @base-inverted-bg;
 @scheduler-tab-selected-before-bg: transparent;
 
 @scheduler-tab-focused-border-color: @base-border-color;
-@scheduler-recurence-editor-border-color: fade(#fff - @base-border-color, 70%);
+
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: 1;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: true;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: fade(#3806ff, 60%);
@@ -1645,22 +1649,6 @@
 @colorbox-preview-empty-bg: url(images/widgets/generic/color-schemes/contrast/colorbox/nocolor.png);
 @calendar-cell-empty-bg: url(images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png) center center no-repeat;
 
-// SPA
-// Desktop
-
-@desktop-layout-main-menu-bg: @base-inverted-bg;
-
-@desktop-layout-menu-color: @base-text-color;
-@desktop-layout-menu-selected-bg: @base-inverted-bg;
-
-@desktop-layout-toolbar-border-color: @base-border-color;
-@desktop-layout-menu-hover-bg: @base-accent;
-@desktop-layout-copyright-color: @base-text-color;
-
-// Master-detail
-
-@desktop-splitlayout-border-color: @base-border-color;
-
 // Fieldset
 
 @fieldset-field-label-color: @base-label-color;
@@ -1738,3 +1726,15 @@
 * @group filterbuilder
 */
 @filterbuilder-menu-icon-color: @base-icon-color;
+
+// FileManager
+@filemanager-border-color: @base-border-color;
+@filemanager-file-toolbar-bg: darken(@base-bg, 3%);
+@filemanager-editor-active-bg: fade(@base-text-color, 10%);
+@filemanager-dirs-tree-item-focus-bg: @base-text-color;
+@filemanager-dirs-tree-item-focus-color: @base-bg;
+@filemanager-breadcrumbs-item-focus-bg: @base-border-color;
+@filemanager-breadcrumbs-item-focus-color: @base-text-color;
+@filemanager-custom-thumbnail-color: @base-border-color;
+@filemanager-file-item-select-color: @base-text-color;
+@filemanager-file-item-select-bg: @base-accent;

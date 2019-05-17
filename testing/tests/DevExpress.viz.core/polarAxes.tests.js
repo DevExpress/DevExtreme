@@ -600,6 +600,15 @@ QUnit.test("draw, not visible", function(assert) {
     assert.equal(this.renderer.stub("circle").callCount, 0);
 });
 
+QUnit.test("draw ticks. Shift = 10", function(assert) {
+    this.createDrawnAxis({ visible: true, tick: { visible: true, length: 20, shift: 10 } });
+
+    assert.equal(this.renderer.path.callCount, 4);
+    for(var i = 0; i < this.renderer.path.callCount; i++) {
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [40, 50, 60, 50], opacity: 1 });
+    }
+});
+
 QUnit.test("draw ticks. Orientation = center", function(assert) {
     this.createDrawnAxis({ visible: true, tick: { visible: true, length: 20 } });
 
@@ -611,7 +620,7 @@ QUnit.test("draw ticks. Orientation = center", function(assert) {
 
         assert.equal(this.renderer.path.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[1], "Created element attached to the group");
         assert.ok(this.renderer.path.getCall(i).returnValue.sharp.calledOnce);
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true]);
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true, 0]);
     }
 });
 
@@ -751,6 +760,26 @@ QUnit.test("Update grid on second draw", function(assert) {
     });
 
     assert.deepEqual(grid.rotate.lastCall.args, [33, 465, 200]);
+});
+
+// T734840
+QUnit.test("Do not rotated grid for Linear polar axis", function(assert) {
+    this.generatedTicks = [500];
+    this.renderSettings.drawingType = "linear";
+
+    const axis = this.createDrawnAxis({ rotationAngle: 90, grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
+    const grid = this.renderer.circle.lastCall.returnValue;
+
+    axis.draw({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 400,
+        width: 1000
+    });
+
+    assert.strictEqual(grid.rotate.callCount, undefined);
 });
 
 QUnit.test("create strips", function(assert) {
@@ -1046,7 +1075,7 @@ QUnit.test("draw ticks", function(assert) {
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [10, 50, 30, 50], opacity: 1 });
 
         assert.equal(this.renderer.path.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[1], "Created elements attached to the group");
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true], "sharped");
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true, 0], "sharped");
     }
 });
 

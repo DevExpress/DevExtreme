@@ -1,16 +1,12 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import ActionButton from "../text_box/action_button_collection/button";
+import TextEditorButton from "../text_box/texteditor_button_collection/button";
 import Button from "../button";
 
 const DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button";
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
 
-export default class ClearButton extends ActionButton {
-    constructor(editor, options) {
-        super("dropDown", editor, options);
-    }
-
+export default class ClearButton extends TextEditorButton {
     _attachEvents(instance) {
         const { editor } = this;
 

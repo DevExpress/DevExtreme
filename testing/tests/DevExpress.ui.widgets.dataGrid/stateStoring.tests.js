@@ -1540,7 +1540,7 @@ QUnit.test("ScrollTop should be correct after loading pageIndex from state", fun
         // assert
         scrollTop = that.getScrollable().scrollTop();
         assert.ok(scrollTop > 0, "scrollTop");
-        assert.ok($testElement.find(".dx-virtual-row").first().height() <= scrollTop, "scrollTop should be less than or equal to virtual row height");
+        assert.ok($testElement.find(".dx-virtual-row").first().children().first().height() <= scrollTop, "scrollTop should be less than or equal to virtual row height");
         done();
     });
 });

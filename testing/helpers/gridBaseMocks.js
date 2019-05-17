@@ -90,6 +90,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return 0;
             },
 
+            getRowIndexDelta: function() {
+                return 0;
+            },
+
             items: function() {
                 return options.items;
             },

@@ -8,13 +8,13 @@ const INPUT_CLASS = "dx-texteditor-input";
 const CONTAINER_CLASS = "dx-texteditor-container";
 const PLACEHOLDER_CLASS = "dx-placeholder";
 const STATE_INVISIBLE_CLASS = "dx-state-invisible";
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container";
 
 const { test, module } = QUnit;
 
 module("Basic markup", () => {
     test("basic init", (assert) => {
         const element = $("#texteditor").dxTextEditor();
-
         assert.ok(element.hasClass(TEXTEDITOR_CLASS));
         assert.equal(element.children().length, 1);
         assert.equal(element.find(`.${PLACEHOLDER_CLASS}`).length, 1);
@@ -22,13 +22,16 @@ module("Basic markup", () => {
         assert.equal(element.find(`.${CONTAINER_CLASS}`).length, 1);
     });
 
-    test("init with placeholder", (assert) => {
-        const element = $("#textbox").dxTextEditor({
+    test("init with placeholder in the input container", (assert) => {
+        const element = $("#texteditor").dxTextEditor({
             placeholder: "enter value"
         });
 
-        const placeholder = element.find(`.${PLACEHOLDER_CLASS}`);
+        const $inputContainer = element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
+        assert.strictEqual($inputContainer.length, 1, "input container is rendered");
 
+        const placeholder = $inputContainer.find(`.${PLACEHOLDER_CLASS}`);
+        assert.strictEqual(placeholder.length, 1, "placeholder is in the input container");
         assert.notOk(placeholder.hasClass(STATE_INVISIBLE_CLASS), "placeholder is visible when editor hasn't a value");
     });
 
@@ -86,6 +89,7 @@ module("Basic markup", () => {
     test("renderValue should return a promise that resolves after render input value", (assert) => {
         assert.expect(1);
 
+        const done = assert.async();
         const deferred = new Deferred();
         const editor = $("#texteditor").dxTextEditor({
             value: "test"
@@ -99,6 +103,7 @@ module("Basic markup", () => {
 
         promise.then(() => {
             assert.ok("Value has been rendered");
+            done();
         });
 
         deferred.resolve();

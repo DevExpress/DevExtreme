@@ -125,7 +125,7 @@ circularAxes = polarAxes.circular = {
         const period = options.period;
 
         if(isDefined(originValue)) {
-            originValue = that._validateUnit(originValue);
+            originValue = that.validateUnit(originValue);
         }
 
         if(period > 0 && options.argumentType === constants.numeric) {
@@ -230,7 +230,7 @@ circularAxes = polarAxes.circular = {
         return _math.abs(angles[0] - angles[1]);
     },
 
-    _getTickMarkPoints: function(coords, length) {
+    _getTickMarkPoints: function(coords, length, { shift = 0 }) {
         var center = this.getCenter(),
             corrections = {
                 inside: -1,
@@ -239,9 +239,9 @@ circularAxes = polarAxes.circular = {
             },
             radiusWithTicks = this.getRadius() + length * corrections[this._options.tickOrientation || "center"];
         return [
-            center.x + radiusWithTicks,
+            center.x + radiusWithTicks + shift,
             center.y,
-            center.x + radiusWithTicks + length,
+            center.x + radiusWithTicks + length + shift,
             center.y
         ];
     },
@@ -615,8 +615,8 @@ polarAxes.linear = {
 
     _checkAlignmentConstantLineLabels: _noop,
 
-    _rotateTick: function(element, coords) {
-        element.rotate(coords.angle + HALF_PI_ANGLE, coords.x, coords.y);
+    _rotateTick: function(element, coords, isGridLine) {
+        !isGridLine && element.rotate(coords.angle + HALF_PI_ANGLE, coords.x, coords.y);
     },
 
     _validateOverlappingMode: circularAxes._validateOverlappingMode,

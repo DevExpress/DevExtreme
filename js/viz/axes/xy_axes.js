@@ -346,10 +346,10 @@ module.exports = {
             that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickMarkPoints: function(coords, length, tickOptions) {
+        _getTickMarkPoints(coords, length, tickOptions) {
             const isHorizontal = this._isHorizontal;
             const options = this._options;
-            var tickStartCoord;
+            let tickStartCoord;
 
             if(isDefined(options.tickOrientation)) {
                 tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
@@ -358,7 +358,10 @@ module.exports = {
                 if(options.position === "left" || options.position === "top") {
                     shift = -shift;
                 }
-                tickStartCoord = shift - length / 2;
+                tickStartCoord = shift + (length % 2 === 1 ?
+                    (options.width % 2 === 0 && (options.position === "left" || options.position === "top") ||
+                    options.width % 2 === 1 && (options.position === "right" || options.position === "bottom") ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
+                    (-length / 2 + (options.width % 2 === 0 ? 0 : (options.position === "bottom" || options.position === "right" ? -1 : 1))));
             }
             return [
                 coords.x + (isHorizontal ? 0 : tickStartCoord),
@@ -370,15 +373,20 @@ module.exports = {
 
         _getTitleCoords: function() {
             var that = this,
+                horizontal = that._isHorizontal,
                 x = that._axisPosition,
                 y = that._axisPosition,
+                align = that._options.title.alignment,
                 canvas = that._getCanvasStartEnd(),
-                center = canvas.start + (canvas.end - canvas.start) / 2;
+                fromStartToEnd = horizontal || that._options.position === LEFT,
+                canvasStart = fromStartToEnd ? canvas.start : canvas.end,
+                canvasEnd = fromStartToEnd ? canvas.end : canvas.start,
+                coord = align === LEFT ? canvasStart : align === RIGHT ? canvasEnd : (canvas.start + (canvas.end - canvas.start) / 2);
 
-            if(that._isHorizontal) {
-                x = center;
+            if(horizontal) {
+                x = coord;
             } else {
-                y = center;
+                y = coord;
             }
             return { x: x, y: y };
         },
@@ -386,14 +394,13 @@ module.exports = {
         _drawTitleText: function(group, coords) {
             var options = this._options,
                 titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: "center" };
+                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment };
 
             if(!titleOptions.text || !group) {
                 return;
             }
 
             coords = coords || this._getTitleCoords();
-
             if(!this._isHorizontal) {
                 attrs.rotate = options.position === LEFT ? 270 : 90;
             }
@@ -402,6 +409,8 @@ module.exports = {
                 .css(vizUtils.patchFontOptions(titleOptions.font))
                 .attr(attrs)
                 .append(group);
+
+            this._checkTitleOverflow(text);
 
             return text;
         },
@@ -421,6 +430,9 @@ module.exports = {
 
         _measureTitle: function() {
             if(this._title) {
+                if(this._title.bBox && !this._title.originalSize) {
+                    this._title.originalSize = this._title.bBox;
+                }
                 this._title.bBox = this._title.element.getBBox();
             }
         },
@@ -919,19 +931,25 @@ module.exports = {
             title.element.attr(params);
         },
 
-        _checkTitleOverflow: function() {
-            if(!this._title) {
+        _checkTitleOverflow: function(titleElement) {
+            if(!this._title && !titleElement) {
                 return;
             }
 
             var canvasLength = this._getScreenDelta(),
-                title = this._title,
+                title = titleElement ? { bBox: titleElement.getBBox(), element: titleElement } : this._title,
+                titleOptions = this._options.title,
                 boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
-                title.element.applyEllipsis(canvasLength) && title.element.setTitle(this._options.title.text);
+                title.element.setMaxSize(canvasLength, undefined, {
+                    wordWrap: titleOptions.wordWrap || "none",
+                    textOverflow: titleOptions.textOverflow || "ellipsis"
+                });
+                this._wrapped = (titleOptions.wordWrap && titleOptions.wordWrap !== "none");
             } else {
-                title.element.restoreText();
+                const moreThanOriginalSize = title.originalSize && canvasLength > (this._isHorizontal ? title.originalSize.width : title.originalSize.height);
+                !this._wrapped && moreThanOriginalSize && title.element.restoreText();
             }
         },
 
@@ -994,6 +1012,13 @@ module.exports = {
                 minVisible: seriesData.minVisible,
                 maxVisible: seriesData.maxVisible
             }, that._series, that.isArgumentAxis);
+        },
+
+        hasWrap() {
+            return this._wrapped;
+        },
+        getAxisPosition() {
+            return this._axisPosition;
         },
 
         _getStick: function() {

@@ -253,9 +253,26 @@
     }
 }
 
+.dx-suggestion-list-wrapper {
+    .dx-list {
+        min-height: 35px;
+
+        .dx-scrollable-content {
+            margin: 0;
+        }
+    }
+}
+
 .dx-suggestion-list {
+    min-width: 50px;
+
     .dx-list-item {
         display: block;
+    }
+
+    .dx-list-item-icon {
+        border-radius: 50%;
+        vertical-align: text-bottom;
     }
 }
 
@@ -420,5 +437,19 @@
         .dx-touch-device& {
             bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
         }
+    }
+}
+
+.dx-mention {
+    padding: 1px 0;
+    border-radius: 2px;
+    
+    .dx-template-wrapper {
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    & > span {
+        margin: 0 2px;
     }
 }

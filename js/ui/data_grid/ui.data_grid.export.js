@@ -207,7 +207,7 @@ exports.DataProvider = Class.inherit({
         return result;
     },
 
-    getCellData: function(rowIndex, cellIndex) {
+    getCellData: function(rowIndex, cellIndex, isExcelJS) {
         const result = { cellSourceData: {}, value };
         var column,
             value,
@@ -243,11 +243,12 @@ exports.DataProvider = Class.inherit({
                                 result.cellSourceData.totalSummaryItemName = value.name;
                                 result.value = dataGridCore.getSummaryText(value, this._options.summaryTexts);
                             } else {
-                                result.cellSourceData = undefined;
+                                result.cellSourceData.value = undefined;
                             }
                         }
                         break;
                     case "group":
+                        result.cellSourceData.groupIndex = item.groupIndex;
                         if(cellIndex < 1) {
                             result.cellSourceData.column = this._options.groupColumns[item.groupIndex];
                             result.cellSourceData.value = item.key[item.groupIndex];
@@ -259,11 +260,11 @@ exports.DataProvider = Class.inherit({
                                 result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(summaryItems);
                                 value = "";
                                 for(i = 0; i < summaryItems.length; i++) {
-                                    value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
+                                    value += (i > 0 ? (isExcelJS ? "\n" : " \n ") : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
                                 }
                                 result.value = value;
                             } else {
-                                result.cellSourceData = undefined;
+                                result.cellSourceData.value = undefined;
                             }
                         }
                         break;
@@ -276,7 +277,6 @@ exports.DataProvider = Class.inherit({
                             result.cellSourceData.value = value;
                         }
                         result.cellSourceData.data = item.data;
-                        result.cellSourceData.rowType = item.rowType;
                 }
             }
         }

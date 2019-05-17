@@ -56,12 +56,8 @@
 
 /**
  * @typedef {string} Enums.VizTheme
- * @enum {'android5.light'|'generic.dark'|'generic.light'|'generic.contrast'|'ios7.default'|'win10.black'|'win10.white'|'win8.black'|'win8.white'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
- * @member 'win8.black' @deprecated 'generic.dark'
- * @member 'win8.white' @deprecated 'generic.light'
- * @member 'win10.black' @deprecated 'generic.dark'
- * @member 'win10.white' @deprecated 'generic.light'
- * @member 'android5.light' @deprecated 'material.blue.light'
+ * @enum {'generic.dark'|'generic.light'|'generic.contrast'|'ios7.default'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
+ * @member 'ios7.default' @deprecated 'generic.light'
  */
 
 /**
@@ -69,6 +65,16 @@
  * @enum {'Bright'|'Default'|'Harmony Light'|'Ocean'|'Pastel'|'Soft'|'Soft Pastel'|'Vintage'|'Violet'|'Carmine'|'Dark Moon'|'Dark Violet'|'Green Mist'|'Soft Blue'|'Material'|'Office'}
  * @member 'Default' @deprecated 'Material'
  */
+
+/**
+ * @typedef {string} Enums.VizWordWrap
+ * @enum {'normal'|'breakWord'|'none'}
+ */
+
+/**
+  * @typedef {string} Enums.VizTextOverflow
+  * @enum {'ellipsis'|'hide'|'none'}
+  */
 
 /**
  * @typedef {string} Enums.VizPaletteExtensionMode
@@ -198,6 +204,11 @@
 /**
  * @typedef {string} Enums.SeriesType
  * @enum {'area'|'bar'|'bubble'|'candlestick'|'fullstackedarea'|'fullstackedbar'|'fullstackedline'|'fullstackedspline'|'fullstackedsplinearea'|'line'|'rangearea'|'rangebar'|'scatter'|'spline'|'splinearea'|'stackedarea'|'stackedbar'|'stackedline'|'stackedspline'|'stackedsplinearea'|'steparea'|'stepline'|'stock'}
+ */
+
+/**
+ * @typedef {string} Enums.AnnotationType
+ * @enum {'text'|'image'}
  */
 
 /**
@@ -587,7 +598,7 @@
 
 /**
  * @typedef {string} Enums.ToolbarItemWidget
- * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'}
+ * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'|'dxDropDownButton'}
  */
 
 /**
@@ -821,6 +832,26 @@
  */
 
 /**
+ * @typedef {string} Enums.TextEditorButtonLocation
+ * @enum {'after'|'before'}
+ */
+
+/**
+ * @typedef {string} Enums.TextBoxButtonName
+ * @enum {'clear'}
+ */
+
+/**
+ * @typedef {string} Enums.NumberBoxButtonName
+ * @enum {'clear'|'spins'}
+ */
+
+/**
+ * @typedef {string} Enums.DropDownEditorButtonName
+ * @enum {'clear'|'dropDown'}
+ */
+
+/**
  * @typedef {string} Enums.SmallValuesGroupingMode
  * @enum {'none'|'smallValueThreshold'|'topN'}
  */
@@ -978,4 +1009,25 @@
 /**
  * @typedef {string} Enums.TreeListFilterMode
  * @enum {'fullBranch'|'withAncestors'}
+ */
+
+/**
+ * @typedef {string} Enums.GridStartEditAction
+ * @enum {'click'|'dblClick'}
+ */
+
+/**
+ * @typedef {string} Enums.FileManagerSelectionMode
+ * @enum {'multiple'|'single'}
+ */
+
+
+/**
+ * @typedef {string} Enums.FileManagerItemViewMode
+ * @enum {'details'|'thumbnails'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramAutoLayout
+ * @enum {'tree'|'sugiyama'}
  */

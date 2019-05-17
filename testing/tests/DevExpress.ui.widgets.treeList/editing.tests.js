@@ -773,7 +773,7 @@ QUnit.test("Edit cell - The editable cell should be closed after click on expand
     assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-texteditor").length, 1, "has editor");
 
     // act
-    $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxclick");
+    $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxpointerdown");
     this.clock.tick();
 
     // assert
@@ -832,6 +832,32 @@ QUnit.test("Selection should be updated correctly after deleting a nested node",
 
     // assert
     assert.strictEqual(this.isRowSelected(1), false, "first node is not selected");
+});
+
+QUnit.test("Batch mode - Editing should not work when double-clicking on the select checkbox (startEditAction is dblClick)", function(assert) {
+    // arrange
+    var $testElement = $('#treeList');
+
+    this.options.editing = {
+        mode: "batch",
+        allowUpdating: true,
+        startEditAction: "dblClick"
+    };
+    this.options.selection = {
+        mode: "multiple",
+        showCheckBoxesMode: "always"
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+    sinon.spy(this.editingController, "editCell");
+
+    // act
+    $(this.getCellElement(0, 0)).find(".dx-select-checkbox").trigger("dxdblclick");
+
+    // assert
+    assert.strictEqual(this.editingController.editCell.callCount, 0, "count call editCell");
+    assert.notOk($(this.getCellElement(0, 0)).hasClass("dx-editor-cell"), "cell isn't editable");
 });
 
 ["reshape", "repaint"].forEach(function(refreshMode) {

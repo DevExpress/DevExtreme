@@ -3,8 +3,7 @@
 var $ = require("jquery"),
     themes = require("ui/themes"),
     viewPortUtils = require("core/utils/view_port"),
-    viewPortChanged = viewPortUtils.changeCallback,
-    devices = require("core/devices");
+    viewPortChanged = viewPortUtils.changeCallback;
 
 require("style-compiler-test-server/known-css-files");
 
@@ -104,10 +103,6 @@ require("style-compiler-test-server/known-css-files");
     QUnit.module("Selector check");
 
     $.each(window.knownCssFiles, function(i, cssFileName) {
-        if(cssFileName === "dx.spa.css") {
-            // SPA styles can contain anything
-            return;
-        }
 
         var cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
 
@@ -159,17 +154,8 @@ require("style-compiler-test-server/known-css-files");
                 functionName: "isMaterial",
                 themeName: materialThemeName
             }, {
-                functionName: "isAndroid5",
-                themeName: "android5.light"
-            }, {
                 functionName: "isIos7",
                 themeName: "ios7.default"
-            }, {
-                functionName: "isWin8",
-                themeName: "win8.white"
-            }, {
-                functionName: "isWin10",
-                themeName: "win10.white"
             }];
 
         linksContainer.append("<link rel='dx-theme' href='style2.css' data-theme='" + materialThemeName + "' />");
@@ -576,41 +562,4 @@ require("style-compiler-test-server/known-css-files");
         assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [99] }));
         assert.equal("ios7", themeNameFromDevice({ platform: "ios" }));
     });
-
-    QUnit.test("themeNameFromDevice for Android", function(assert) {
-        var themeNameFromDevice = themes.themeNameFromDevice;
-
-        assert.equal("android5", themeNameFromDevice({ platform: "android", version: [1] }));
-        assert.equal("android5", themeNameFromDevice({ platform: "android", version: [4, 4] }));
-        assert.equal("android5", themeNameFromDevice({ platform: "android", version: [99] }));
-        assert.equal("android5", themeNameFromDevice({ platform: "android" }));
-    });
-
-    QUnit.test("themeNameFromDevice for Windows Phone", function(assert) {
-        var themeNameFromDevice = themes.themeNameFromDevice;
-        var origIsSimulator = devices.isSimulator;
-        var origIsForced = devices.isForced;
-
-        try {
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [1] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win" }));
-
-            devices.isForced = function() { return true; };
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
-
-            devices.isSimulator = function() { return true; };
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
-        } finally {
-            devices.isForced = origIsForced;
-            devices.isSimulator = origIsSimulator;
-        }
-    });
-
 })();

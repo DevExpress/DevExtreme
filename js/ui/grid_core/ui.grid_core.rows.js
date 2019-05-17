@@ -179,7 +179,7 @@ module.exports = {
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 values:Array<Object>
+            * @type_function_param1_field8 values:Array<any>
             * @type_function_param1_field9 columns:Array<Object>
             * @type_function_param1_field10 rowIndex:number
             * @type_function_param1_field11 rowType:string
@@ -199,7 +199,7 @@ module.exports = {
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
-            * @type_function_param1_field8 values:Array<Object>
+            * @type_function_param1_field8 values:Array<any>
             * @type_function_param1_field9 columns:Array<Object>
             * @type_function_param1_field10 rowIndex:number
             * @type_function_param1_field11 rowType:string
@@ -207,6 +207,8 @@ module.exports = {
             * @type_function_param1_field13 isExpanded:boolean
             * @type_function_param1_field14 rowElement:dxElement
             * @type_function_param1_field15 handled:boolean
+            * @type_function_param1_field16 node:dxTreeListNode
+            * @type_function_param1_field17 level:number
             * @extends Action
             * @action
             */
@@ -247,6 +249,79 @@ module.exports = {
             * @type_function_param1_field14 rowType:string
             * @type_function_param1_field15 cellElement:dxElement
             * @type_function_param1_field16 row:dxTreeListRowObject
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxDataGridOptions.onRowDblClick
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 values:Array<any>
+            * @type_function_param1_field8 columns:Array<dxDataGridColumn>
+            * @type_function_param1_field9 rowIndex:number
+            * @type_function_param1_field10 rowType:string
+            * @type_function_param1_field11 isSelected:boolean
+            * @type_function_param1_field12 isExpanded:boolean
+            * @type_function_param1_field13 groupIndex:number
+            * @type_function_param1_field14 rowElement:dxElement
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxTreeListOptions.onRowDblClick
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 values:Array<any>
+            * @type_function_param1_field8 columns:Array<dxTreeListColumn>
+            * @type_function_param1_field9 rowIndex:number
+            * @type_function_param1_field10 rowType:string
+            * @type_function_param1_field11 isSelected:boolean
+            * @type_function_param1_field12 isExpanded:boolean
+            * @type_function_param1_field13 rowElement:dxElement
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxDataGridOptions.onCellDblClick
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 value:any
+            * @type_function_param1_field8 displayValue:any
+            * @type_function_param1_field9 text:string
+            * @type_function_param1_field10 columnIndex:number
+            * @type_function_param1_field11 column:dxDataGridColumn
+            * @type_function_param1_field12 rowIndex:number
+            * @type_function_param1_field13 rowType:string
+            * @type_function_param1_field14 cellElement:dxElement
+            * @type_function_param1_field15 row:dxDataGridRowObject
+            * @extends Action
+            * @action
+            */
+            /**
+            * @name dxTreeListOptions.onCellDblClick
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @type_function_param1_field5 data:object
+            * @type_function_param1_field6 key:any
+            * @type_function_param1_field7 value:any
+            * @type_function_param1_field8 displayValue:any
+            * @type_function_param1_field9 text:string
+            * @type_function_param1_field10 columnIndex:number
+            * @type_function_param1_field11 column:dxTreeListColumn
+            * @type_function_param1_field12 rowIndex:number
+            * @type_function_param1_field13 rowType:string
+            * @type_function_param1_field14 cellElement:dxElement
+            * @type_function_param1_field15 row:dxTreeListRowObject
             * @extends Action
             * @action
             */
@@ -343,7 +418,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 values:Array<Object>
+             * @type_function_param1_field6 values:Array<any>
              * @type_function_param1_field7 columns:Array<dxDataGridColumn>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
@@ -360,13 +435,15 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 values:Array<Object>
+             * @type_function_param1_field6 values:Array<any>
              * @type_function_param1_field7 columns:Array<dxTreeListColumn>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 isSelected:boolean
              * @type_function_param1_field11 isExpanded:boolean
              * @type_function_param1_field12 rowElement:dxElement
+             * @type_function_param1_field13 node:dxTreeListNode
+             * @type_function_param1_field14 level:number
              * @extends Action
              * @action
              */
@@ -670,9 +747,10 @@ module.exports = {
                     }
                 },
 
-                _createEmptyRow: function(className, isFixed) {
+                _createEmptyRow: function(className, isFixed, height) {
                     var that = this,
                         i,
+                        $cell,
                         $row = that._createRow(),
                         columns = isFixed ? this.getFixedColumns() : this.getColumns();
 
@@ -681,7 +759,10 @@ module.exports = {
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
                     for(i = 0; i < columns.length; i++) {
-                        $row.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
+                        $cell = that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns });
+                        isNumeric(height) && $cell.css("height", height);
+
+                        $row.append($cell);
                     }
 
                     that.setAria("role", "presentation", $row);
@@ -780,6 +861,11 @@ module.exports = {
                             var getter = compileGetter(expr);
                             return getter(item.data);
                         } }, e, item));
+                },
+
+                _rowDblClick: function(e) {
+                    var item = this._dataController.items()[e.rowIndex] || {};
+                    this.executeAction("onRowDblClick", extend({}, e, item));
                 },
 
                 _getColumnsCountBeforeGroups: function(columns) {
@@ -1047,12 +1133,6 @@ module.exports = {
                             return $(rows[index]);
                         }
                     }
-                },
-
-                getCellIndex: function($cell) {
-                    var cellIndex = $cell.length ? $cell[0].cellIndex : -1;
-
-                    return cellIndex;
                 },
 
                 updateFreeSpaceRowHeight: function($table) {
@@ -1402,7 +1482,7 @@ module.exports = {
                             break;
                         case "loadPanel":
                             that._tableElement = null;
-                            that._invalidate(true, true);
+                            that._invalidate(true, args.fullName !== "loadPanel.enabled");
                             args.handled = true;
                             break;
                         case "noDataText":
@@ -1414,6 +1494,7 @@ module.exports = {
 
                 dispose: function() {
                     clearTimeout(this._hideLoadingTimeoutID);
+                    this._scrollable && this._scrollable.dispose();
                 },
 
                 setScrollerSpacing: function() { }

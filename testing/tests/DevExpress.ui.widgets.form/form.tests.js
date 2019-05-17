@@ -8,6 +8,7 @@ import domUtils from "core/utils/dom";
 import { __internals as internals } from "ui/form/ui.form";
 import themes from "ui/themes";
 import device from "core/devices";
+import domAdapter from "core/dom_adapter";
 
 import "ui/text_area";
 
@@ -2169,6 +2170,56 @@ QUnit.test("Column count may depend on screen factor", function(assert) {
 
     // assert
     assert.equal($form.find(".dx-first-col.dx-last-col").length, 4, "only one column exists");
+});
+
+QUnit.test("Column count ignores hide/show scroller when rerendering if screen factor changed", function(assert) {
+    var originalGetDocumentElement = domAdapter.getDocumentElement;
+    try {
+        var largeScreenWidth = 1200,
+            mediumScreenWidth = 1199,
+            width = largeScreenWidth,
+            height = 300,
+            scrollerWidth = 17;
+
+        domAdapter.getDocumentElement = function() {
+            return {
+                clientWidth: width,
+                clientHeight: height
+            };
+        };
+
+        var $form = $("#form");
+
+        $form.dxForm({
+            labelLocation: "left",
+            colCountByScreen: {
+                lg: 2,
+                md: 1
+            },
+            items: [
+                {
+                    name: "f1", editorType: "dxTextBox",
+                    editorOptions: {
+                        onDisposing: function() {
+                            width = mediumScreenWidth + scrollerWidth;
+                        }
+                    }
+                },
+                "f2"
+            ]
+        });
+
+        assert.equal($form.find(".dx-col-0").length, 1, "(.dx-col-0).length initial");
+        assert.equal($form.find(".dx-col-1").length, 1, "(.dx-col-1).length initial");
+
+        width = mediumScreenWidth;
+        resizeCallbacks.fire();
+
+        assert.equal($form.find(".dx-col-0").length, 2, "(.dx-col-0).length current");
+        assert.equal($form.find(".dx-col-1").length, 0, "(.dx-col-1).length current");
+    } finally {
+        domAdapter.getDocumentElement = originalGetDocumentElement;
+    }
 });
 
 QUnit.test("Form should repaint once when screen factor changed", function(assert) {

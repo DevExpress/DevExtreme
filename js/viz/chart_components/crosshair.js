@@ -245,7 +245,7 @@ Crosshair.prototype = {
                     [canvas.left, y + r, canvas.left, mathMax(coords.bottom, y + r)]
                 ];
         for(var i = 0; i < 2; i++) {
-            lines[i].attr({ points: points[i] });
+            lines[i].attr({ points: points[i] }).sharp(isHorizontal ? "v" : "h", isHorizontal ? (y === canvas.bottom ? -1 : 1) : (x === canvas.right ? -1 : 1));
         }
     },
 

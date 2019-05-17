@@ -6,6 +6,7 @@ var series = require("./scatter_series"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     vizUtils = require("../core/utils"),
+    mathUtils = require("../../core/utils/math"),
     normalizeAngle = vizUtils.normalizeAngle,
 
     DISCRETE = "discrete",
@@ -33,6 +34,15 @@ function getTangentPoint(point, prevPoint, centerPoint, tan, nextStepAngle) {
         y = centerPoint.y - (point.radius + tan * nextStepAngle) * cosSin.sin;
 
     return clonePoint(prevPoint, x, y, correctAngle);
+}
+
+function obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
+    const d = p0 - p;
+    const c = 3 * p1 - 3 * p0;
+    const b = 3 * p2 - 6 * p1 + 3 * p0;
+    const a = p3 - 3 * p2 + 3 * p1 - p0;
+
+    return mathUtils.solveCubicEquation(a, b, c, d);
 }
 
 var lineMethods = {
@@ -190,27 +200,73 @@ var lineMethods = {
         var settings = this._getTrackerSettings(segment);
         settings.points = this._getMainPointsFromSegment(segment);
         element.attr(settings);
-    }
+    },
+
+    checkSeriesViewportCoord(axis, coord) {
+        if(this._points.length === 0) {
+            return false;
+        }
+        const range = axis.isArgumentAxis ? this.getArgumentRange() : this.getViewport();
+        const min = axis.getTranslator().translate(range.categories ? range.categories[0] : range.min);
+        const max = axis.getTranslator().translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
+        const rotated = this.getOptions().rotated;
+        const inverted = axis.getOptions().inverted;
+
+        return (axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted) ||
+            !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)) ?
+            coord >= min && coord <= max : coord >= max && coord <= min;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        const that = this;
+        let oppositeCoord = null;
+        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+        const needValueCoord = isArgument && !that._options.rotated || !isArgument && that._options.rotated;
+
+        for(let i = 0; i < nearestPoints.length; i++) {
+            const p = nearestPoints[i];
+            const k = (p[1].vy - p[0].vy) / (p[1].vx - p[0].vx);
+            const b = p[0].vy - p[0].vx * k;
+            let tmpCoord;
+
+            if(p[1].vx - p[0].vx === 0) {
+                tmpCoord = needValueCoord ? p[0].vy : p[0].vx;
+            } else {
+                tmpCoord = needValueCoord ? k * coord + b : (coord - b) / k;
+            }
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return this.autoHidePointMarkersEnabled();
+    },
 };
 
 var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods);
 
 exports.chart["stepline"] = _extend({}, lineSeries, {
-    _calculateStepLinePoints: function(points) {
-        var segment = [];
+    _calculateStepLinePoints(points) {
+        const segment = [];
+        const coordName = this._options.rotated ? "x" : "y";
+
         _each(points, function(i, pt) {
-            var stepY,
-                point;
+            let point;
 
             if(!i) {
                 segment.push(pt);
                 return;
-
             }
-            stepY = segment[segment.length - 1].y;
-            if(stepY !== pt.y) {
+            const step = segment[segment.length - 1][coordName];
+            if(step !== pt[coordName]) {
                 point = objectUtils.clone(pt);
-                point.y = stepY;
+                point[coordName] = step;
                 segment.push(point);
             }
             segment.push(pt);
@@ -220,6 +276,27 @@ exports.chart["stepline"] = _extend({}, lineSeries, {
 
     _prepareSegment: function(points) {
         return lineSeries._prepareSegment(this._calculateStepLinePoints(points));
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        let oppositeCoord;
+        const rotated = this._options.rotated;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
+        const coordName = !isOpposite ? "vx" : "vy";
+        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+
+        for(let i = 0; i < nearestPoints.length; i++) {
+            const p = nearestPoints[i];
+            const tmpCoord = isArgument && coord !== p[1][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
     }
 });
 
@@ -335,6 +412,71 @@ exports.chart["spline"] = _extend({}, lineSeries, {
 
     _createMainElement: function(points, settings) {
         return this._renderer.path(points, "bezier").attr(settings).sharp();
+    },
+
+
+    getSeriesPairCoord(coord, isArgument) {
+        const that = this;
+        let oppositeCoord = null;
+        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
+        const coordName = !isOpposite ? "vx" : "vy";
+        const bezierCoordName = !isOpposite ? "x" : "y";
+        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const bezierOppositeCoordName = !isOpposite ? "y" : "x";
+        const axis = !isArgument ? that.getArgumentAxis() : that.getValueAxis();
+        const visibleArea = axis.getVisibleArea();
+        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+
+        for(let i = 0; i < nearestPoints.length; i++) {
+            const p = nearestPoints[i];
+            if(p.length === 1) {
+                (visibleArea[0] <= p[0][oppositeCoordName] && visibleArea[1] >= p[0][oppositeCoordName]) && (oppositeCoord = p[0][oppositeCoordName]);
+            } else {
+                const ts = obtainCubicBezierTCoef(coord, p[0][coordName], p[1][bezierCoordName], p[2][bezierCoordName], p[3][coordName]);
+
+                ts.forEach(t => {
+                    if(t >= 0 && t <= 1) {
+                        const tmpCoord = Math.pow((1 - t), 3) * p[0][oppositeCoordName] + 3 * Math.pow(1 - t, 2) * t * p[1][bezierOppositeCoordName] +
+                            3 * (1 - t) * t * t * p[2][bezierOppositeCoordName] + t * t * t * p[3][oppositeCoordName];
+                        if(visibleArea[0] <= tmpCoord && visibleArea[1] >= tmpCoord) {
+                            oppositeCoord = tmpCoord;
+                        }
+                    }
+                });
+            }
+
+            if(oppositeCoord !== null) {
+                break;
+            }
+        }
+
+        return oppositeCoord;
+    },
+
+    getNearestPointsByCoord(coord, isArgument) {
+        const that = this;
+        const rotated = that.getOptions().rotated;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
+        const coordName = isOpposite ? "vy" : "vx";
+        const points = that.getVisiblePoints();
+        const allPoints = that.getPoints();
+        const bezierPoints = that._segments.length > 0 ? that._segments.reduce((a, seg) => a.concat(seg.line), []) : [];
+        const nearestPoints = [];
+
+        if(that.isVisible() && allPoints.length > 0) {
+            if(allPoints.length > 1) {
+                that.findNeighborPointsByCoord(coord, coordName, points.slice(0), allPoints, (point, nextPoint) => {
+                    const index = bezierPoints.indexOf(point);
+                    nearestPoints.push([point, bezierPoints[index + 1], bezierPoints[index + 2], nextPoint]);
+                });
+            } else {
+                if(allPoints[0][coordName] === coord) {
+                    nearestPoints.push([allPoints[0]]);
+                }
+            }
+        }
+
+        return nearestPoints;
     }
 });
 
