@@ -13,9 +13,7 @@ export class SchedulerTestWrapper {
                 return this.isAdaptivity() ? this.tooltip.getContentElement().find(".dx-overlay-content") : $(".dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content");
             },
 
-            getContentElement: () => {
-                return this.isAdaptivity() ? $(".dx-scheduler-overlay-panel") : $(".dx-scheduler-appointment-tooltip-wrapper.dx-overlay-wrapper .dx-list");
-            },
+            getContentElement: () => $(".dx-scheduler-appointment-tooltip"),
 
             hasScrollbar: () => this.tooltip.getContentElement().find(".dx-scrollable-scrollbar").is(':visible'),
 
@@ -34,7 +32,7 @@ export class SchedulerTestWrapper {
             getItemCount: () => this.tooltip.getItemElements().length,
 
             clickOnDeleteButton: (index = 0) => this.tooltip.getDeleteButton(index).trigger("dxclick"),
-            clickOnItem: (index = 0) => this.tooltip.getItemElement(index).trigger("dxclick"),
+            clickOnItem: () => this.tooltip.getContentElement().find(".dx-scheduler-appointment-tooltip-open-button").trigger("dxclick"),
 
             hasDeleteButton: (index = 0) => this.tooltip.getDeleteButton(index).length !== 0,
 
