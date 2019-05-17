@@ -34,13 +34,13 @@ QUnit.module("Integration: Appointments Collector Base Tests", {
         this.color;
 
         this.widgetMock = new (Widget.inherit({
-            option: function(options) {
+            option(options) {
                 if(options === "appointmentCollectorTemplate") {
                     return "appointmentCollector";
                 }
                 return this.callBase(options);
             },
-            _getAppointmentTemplate: function(template) {
+            _getAppointmentTemplate(template) {
                 return this._getTemplateByOption(template);
             }
         }))($("<div>"));
@@ -121,7 +121,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                 currentDate: currentDate,
                 currentView: "month",
                 views: ["month"],
-                dropDownAppointmentTemplate: function(itemData) {
+                dropDownAppointmentTemplate(itemData) {
                     assert.ok(dataSource.indexOf(itemData) > -1, "appointment data contains in the data source");
                 }
             });
@@ -366,7 +366,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             height: 500,
             currentView: "month",
             firstDayOfWeek: 1,
-            onAppointmentClick: function(args) {
+            onAppointmentClick(args) {
                 assert.equal(args.component, instance, "dxScheduler is 'component'");
                 assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
                 assert.deepEqual(args.appointmentData, appointments[3], "Appointment data is OK");
@@ -404,7 +404,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             height: 500,
             currentView: "month",
             firstDayOfWeek: 1,
-            onAppointmentClick: function(e) {
+            onAppointmentClick(e) {
                 e.cancel = true;
             }
         });
@@ -514,9 +514,9 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                     allowMultiple: true,
                     dataSource: new DataSource({
                         store: new CustomStore({
-                            load: function() {
+                            load() {
                                 var d = $.Deferred();
-                                setTimeout(function() {
+                                setTimeout(() => {
                                     d.resolve([
                                         { id: 1, text: "Room 1", color: "#ff0000" },
                                         { id: 2, text: "Room 2", color: "#0000ff" }
@@ -595,7 +595,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             textExpr: "Text",
             height: 500,
             maxAppointmentsPerCell: "auto",
-            dropDownAppointmentTemplate: function(data) {
+            dropDownAppointmentTemplate(data) {
                 return "<div class='custom-title'>" + data.Text + "</div>";
             }
         });
@@ -633,7 +633,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             textExpr: "Text",
             height: 500,
             maxAppointmentsPerCell: "auto",
-            appointmentCollectorTemplate: function(data) {
+            appointmentCollectorTemplate(data) {
                 return "<div class='button-title'>Appointment count is " + data.appointmentCount + "</div>";
             }
         });
@@ -675,7 +675,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             integrationOptions: {
                 templates: {
                     "dropDownAppointmentTemplate": {
-                        render: function(args) {
+                        render(args) {
                             var $element = $("<span>")
                                 .addClass("dx-template-wrapper")
                                 .text("text");
