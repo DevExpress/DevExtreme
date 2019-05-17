@@ -63,33 +63,39 @@ function addChange(settings) {
 }
 
 function createChainExecutor() {
-    var chain = [];
-
-    executeChain.add = function(item) { chain.push(item); };
-    return executeChain;
-
-    function executeChain() {
+    var executeChain = function() {
         var i,
-            ii = chain.length,
+            ii = executeChain._chain.length,
             result;
         for(i = 0; i < ii; ++i) {
-            result = chain[i].apply(this, arguments);
+            result = executeChain._chain[i].apply(this, arguments);
         }
 
         return result;
-    }
+    };
+    executeChain._chain = [];
+    executeChain.add = function(item) { executeChain._chain.push(item); };
+    executeChain.copy = function(executor) { executeChain._chain = executor._chain.slice(); };
+
+    return executeChain;
 }
 
 function expand(target, name, expander) {
     var current = target[name];
     if(!current) {
         current = expander;
-    } else if(current.add) {
-        current.add(expander);
     } else {
-        current = createChainExecutor();
-        current.add(target[name]);
-        current.add(expander);
+        if(!current.add) {
+            current = createChainExecutor();
+            current.add(target[name]);
+            current.add(expander);
+        } else {
+            if(target.hasOwnProperty(name) === false) {
+                current = createChainExecutor();
+                current.copy(target[name]);
+            }
+            current.add(expander);
+        }
     }
     target[name] = current;
 }
