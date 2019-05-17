@@ -85,6 +85,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
 
             this.option("focusedRowKey", undefined);
+            this.getController("keyboardNavigation").setFocusedRowIndex(-1);
             this.option("focusedRowIndex", -1);
             this.getController("data").updateItems({
                 changeType: "updateFocusedRow",
@@ -118,7 +119,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return result.reject().promise();
             }
 
-            var rowIndexByKey = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
+            var rowIndexByKey = that._getFocusedRowIndexByKey(key);
 
             if(rowIndex >= 0 && rowIndex === rowIndexByKey) {
                 that._triggerUpdateFocusedRow(key, result);
@@ -130,7 +131,11 @@ exports.FocusController = core.ViewController.inherit((function() {
                     }
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
-                            that._triggerUpdateFocusedRow(key, result);
+                            if(that.isRowFocused(key)) {
+                                result.resolve(that._getFocusedRowIndexByKey(key));
+                            } else {
+                                that._triggerUpdateFocusedRow(key, result);
+                            }
                         }).fail(result.reject);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
@@ -145,8 +150,7 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         _triggerUpdateFocusedRow: function(key, result) {
             var dataController = this.getController("data"),
-                rowIndex = dataController.getRowIndexByKey(key),
-                focusedRowIndex = rowIndex + dataController.getRowIndexOffset();
+                focusedRowIndex = this._getFocusedRowIndexByKey(key);
 
             if(this._isValidFocusedRowIndex(focusedRowIndex)) {
                 this.getController("keyboardNavigation").setFocusedRowIndex(focusedRowIndex);
@@ -157,6 +161,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                         focusedRowKey: key
                     });
                 } else {
+                    let rowIndex = dataController.getRowIndexByKey(key);
                     this._scrollToFocusedRow(this.getView("rowsView").getRow(rowIndex));
                 }
 
@@ -164,6 +169,12 @@ exports.FocusController = core.ViewController.inherit((function() {
             } else {
                 result && result.resolve(-1);
             }
+        },
+
+        _getFocusedRowIndexByKey: function(key) {
+            var dataController = this.getController("data"),
+                rowIndex = dataController.getRowIndexByKey(key);
+            return rowIndex >= 0 ? rowIndex + dataController.getRowIndexOffset() : -1;
         },
 
         _focusRowByKeyOrIndex: function() {
@@ -181,8 +192,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                     keyboardController.setFocusedRowIndex(currentFocusedRowIndex);
                     this._triggerUpdateFocusedRow(focusedRowKey);
                 } else {
-                    this.navigateToRow(focusedRowKey).done(pageIndex => {
-                        if(currentFocusedRowIndex >= 0 && pageIndex < 0) {
+                    this.navigateToRow(focusedRowKey).done(focusedRowIndex => {
+                        if(currentFocusedRowIndex >= 0 && focusedRowIndex < 0) {
                             this._focusRowByIndex();
                         }
                     });
@@ -469,8 +480,8 @@ module.exports = {
 
                     this._prevPageIndex = this.pageIndex();
                     if(reload && focusedRowKey !== undefined) {
-                        focusController.navigateToRow(focusedRowKey).done(function(pageIndex) {
-                            if(pageIndex < 0) {
+                        focusController.navigateToRow(focusedRowKey).done(function(focusedRowIndex) {
+                            if(focusedRowIndex < 0) {
                                 focusController._focusRowByIndex();
                             }
                         });

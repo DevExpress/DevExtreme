@@ -5882,6 +5882,30 @@ QUnit.test("contentReady should not be raised on row click", function(assert) {
     assert.strictEqual(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey is not assigned");
 });
 
+QUnit.test("onFocusedRowChanged event should fire once if changed via API (T729593)", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        focusedRowChangedCallCount = 0,
+        dataGrid = createDataGrid({
+            onFocusedRowChanged: function() {
+                focusedRowChangedCallCount++;
+            },
+            focusedRowEnabled: true,
+            keyExpr: "id",
+            dataSource: [{ id: 1 }]
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.option("focusedRowKey", 1);
+    clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCallCount, 1, "focusedRowChangedCallCount");
+
+    clock.restore();
+});
+
 QUnit.test("contentReady should not be raised on row click if focusedRowEnabled", function(assert) {
     var contentReadyCallCount = 0,
         dataGrid = createDataGrid({
