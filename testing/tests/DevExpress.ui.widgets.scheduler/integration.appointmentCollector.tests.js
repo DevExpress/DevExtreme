@@ -13,7 +13,8 @@ import "generic_light.css!";
 
 QUnit.testStart(() => {
     $("#qunit-fixture").html(
-        '<div id="scheduler"></div>');
+        '<div id="ddAppointments"></div>\
+        <div id="scheduler"></div>');
 });
 
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
@@ -42,7 +43,7 @@ QUnit.module("Integration: Appointments Collector Base Tests", {
             }
         }))($("<div>"));
 
-        this.renderAppointmentsCollectorContainer = function(items, options) {
+        this.renderAppointmentsCollectorContainer = (items, options) => {
             const helper = new CompactAppointmentsHelper(this.widgetMock);
             items = items || { data: [{ text: "a", startDate: new Date(2015, 1, 1) }], colors: [] };
             return helper.render($.extend(options, {
@@ -112,11 +113,12 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                 width: 840,
                 currentView: "month",
                 height: 1000,
-                currentDate: new Date(2019, 2, 4)
+                currentDate: new Date(2019, 2, 4),
+                onContentReady: () => {
+                    this.scheduler = new SchedulerTestWrapper(this.instance);
+                }
             }, options)).dxScheduler("instance");
         };
-
-        this.scheduler = new SchedulerTestWrapper(this.instance);
     },
     afterEach: () => {
         fx.off = false;
@@ -220,6 +222,89 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.roughEqual(this.scheduler.appointments.compact.getButtonWidth(), cellWidth - 36, 1, "Collector width is ok");
         assert.roughEqual(this.scheduler.appointments.compact.getButtonHeight(), 20, 1, "Collector height is ok");
     });
+
+    QUnit.test("Appointment collector count should be ok when there are multiday appointments", (assert) => {
+        this.createInstance({
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2019, 8, 20),
+            width: 470,
+            height: 650
+        });
+
+        this.instance.option("dataSource", [
+            { text: 'a', startDate: new Date(2019, 8, 14), endDate: new Date(2019, 8, 15) },
+            { text: 'b', startDate: new Date(2019, 8, 14), endDate: new Date(2019, 8, 15) },
+            { text: 'c', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) },
+            { text: 'd', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) },
+            { text: 'e', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) },
+            { text: 'f', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) }
+        ]);
+
+        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 3, "Collectors count is ok");
+    });
+
+    QUnit.test("Many dropDown appts with one multi day task should be grouped correctly", (assert) => {
+        this.createInstance({
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2019, 4, 29),
+            width: 800,
+            height: 500
+        });
+        this.clock.tick(300);
+        this.instance.focus();
+
+        this.instance.option("dataSource", [
+            { text: '1', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: '2', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: '3', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: '4', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: '5', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: '6', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: '7', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: '8', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
+            { text: 'long appt', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 31, 1) }
+        ]);
+
+        this.scheduler.appointments.compact.click(0);
+        this.clock.tick(300);
+        assert.equal(this.scheduler.tooltip.getItemCount(), 8, "There are 8 collapsed appts");
+    });
+
+    QUnit.test("Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)", (assert) => {
+        this.createInstance({
+            views: ['month'],
+            currentView: 'month',
+            maxAppointmentsPerCell: 1,
+            currentDate: new Date(2019, 5, 25),
+            width: 800,
+            height: 950
+        });
+        this.clock.tick(300);
+        this.instance.focus();
+
+        this.instance.option("dataSource", [
+            { text: 'long appt', startDate: new Date(2019, 5, 8, 9, 0), endDate: new Date(2019, 5, 20, 9, 15) },
+            { text: '1', startDate: new Date(2019, 5, 11, 9, 30), endDate: new Date(2019, 5, 11, 11, 30) },
+            { text: '2', startDate: new Date(2019, 5, 11, 12, 0), endDate: new Date(2019, 5, 11, 13, 0) },
+            { text: '3', startDate: new Date(2019, 5, 11, 12, 0), endDate: new Date(2019, 5, 11, 13, 0) },
+            { text: '4', startDate: new Date(2019, 5, 11, 8, 0), endDate: new Date(2019, 5, 11, 23, 59) },
+            { text: '5', startDate: new Date(2019, 5, 11, 9, 45), endDate: new Date(2019, 5, 11, 11, 15) },
+            { text: '6', startDate: new Date(2019, 5, 11, 11, 0), endDate: new Date(2019, 5, 11, 12, 0) },
+            { text: '7', startDate: new Date(2019, 5, 11, 11, 0), endDate: new Date(2019, 5, 11, 13, 30) },
+            { text: '8', startDate: new Date(2019, 5, 11, 14, 0), endDate: new Date(2019, 5, 11, 15, 30) },
+            { text: '9', startDate: new Date(2019, 5, 11, 14, 0), endDate: new Date(2019, 5, 11, 15, 30) },
+            { text: '10', startDate: new Date(2019, 5, 11, 14, 0), endDate: new Date(2019, 5, 11, 15, 30) },
+            { text: '11', startDate: new Date(2019, 5, 11, 14, 0), endDate: new Date(2019, 5, 11, 15, 30) },
+            { text: '12', startDate: new Date(2019, 5, 11, 14, 0), endDate: new Date(2019, 5, 11, 15, 30) },
+            { text: '13', startDate: new Date(2019, 5, 11, 14, 30), endDate: new Date(2019, 5, 11, 16, 0) }
+        ]);
+
+        this.scheduler.appointments.compact.click(0);
+        this.clock.tick(300);
+        assert.equal(this.scheduler.tooltip.getItemCount(), 13, "There are 13 drop down appts");
+    });
 });
 
 QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
@@ -245,7 +330,6 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
                 currentDate: new Date(2019, 2, 4)
             })).dxScheduler("instance");
         };
-
         this.scheduler = new SchedulerTestWrapper(this.instance);
     },
     afterEach: () => {
