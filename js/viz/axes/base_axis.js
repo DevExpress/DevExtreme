@@ -256,6 +256,10 @@ function convertVisualRangeObject(visualRange, optionValue) {
     return vizUtils.convertVisualRangeObject(visualRange, !_isArray(optionValue));
 }
 
+function getConstantLineSharpDirection(coord, axisCanvas) {
+    return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
+}
+
 const Axis = exports.Axis = function(renderSettings) {
     var that = this;
 
@@ -378,14 +382,7 @@ Axis.prototype = {
     },
 
     _createConstantLine: function(value, attr) {
-        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, this._getConstantLineSharpDirection(value));
-    },
-
-    _getConstantLineSharpDirection(coord) {
-        const axisCanvas = this._getCanvasStartEnd();
-        const maxAxisCoord = Math.max(axisCanvas.start, axisCanvas.end);
-
-        return maxAxisCoord !== coord ? 1 : -1;
+        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, getConstantLineSharpDirection(value, this._getCanvasStartEnd()));
     },
 
     _drawConstantLineLabelText: function(text, x, y, constantLineLabelOptions, group) {
