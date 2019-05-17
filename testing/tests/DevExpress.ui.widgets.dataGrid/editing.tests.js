@@ -9059,6 +9059,45 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip is restored");
 });
 
+// T741739
+QUnit.testInActiveWindow("Tooltip should be positioned by left side if column dataType and alignment are not defined", function(assert) {
+    // arrange
+    var that = this,
+        tooltipInstance,
+        rowsView = that.rowsView,
+        $testElement = renderer("#container");
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: "test",
+                validationRules: [{ type: "required" }]
+            },
+            "lastName",
+            "age"
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 0, "");
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    // assert
+    tooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    assert.ok($testElement.find("tbody td").eq(0).hasClass("dx-datagrid-invalid"), "failed validation");
+    assert.ok(tooltipInstance.option("visible"), "tooltip is visible");
+    assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip");
+    assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip");
+});
+
 // T523770
 QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown for first column", function(assert) {
     // arrange
