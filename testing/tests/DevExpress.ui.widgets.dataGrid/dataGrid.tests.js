@@ -3076,9 +3076,9 @@ QUnit.test("Delete two added rows after selection", function(assert) {
     dataGrid.addRow();
     dataGrid.selectRows(1);
 
-    $dataGrid.find(".dx-link-delete").first().trigger("dxclick");
+    $dataGrid.find(".dx-link-delete").first().trigger("click");
     clock.tick();
-    $dataGrid.find(".dx-link-delete").first().trigger("dxclick");
+    $dataGrid.find(".dx-link-delete").first().trigger("click");
     clock.tick();
 
     // assert

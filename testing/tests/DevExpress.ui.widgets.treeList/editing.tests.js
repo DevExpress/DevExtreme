@@ -249,7 +249,7 @@ QUnit.test("Add row to child should call addRow method with parentId", function(
     this.editingController.addRow = sinon.spy();
 
     // act
-    $testElement.find(".dx-command-edit .dx-link-add").trigger("dxclick");
+    $testElement.find(".dx-command-edit .dx-link-add").trigger("click");
     this.clock.tick();
 
     // assert
