@@ -138,7 +138,7 @@ exports.custom = function(options) {
     const popupInstance = new Popup($element, extend({
         title: options.title || exports.title,
         dragEnabled: showTitle,
-        showTitle: showTitle,
+        showTitle,
         height: "auto",
         width: function() {
             const isPortrait = $(window).height() > $(window).width(),
