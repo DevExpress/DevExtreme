@@ -109,14 +109,18 @@ export class TooltipStrategyBase {
 
     _onListItemClick(e) {
         this.hide();
-        this._canRaiseClickEvent() && this._raiseClickEvent(e);
+        if(this._canRaiseClickEvent()) {
+            this._raiseClickEventAndShowAppointmentPopup(e);
+        } else {
+            this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
+        }
     }
 
     _canRaiseClickEvent() {
         return true;
     }
 
-    _raiseClickEvent(e) {
+    _raiseClickEventAndShowAppointmentPopup(e) {
         const config = {
             itemData: e.itemData.data,
             itemElement: e.itemElement
