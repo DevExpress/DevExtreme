@@ -7,6 +7,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import translator from "animation/translator";
 import { DataSource } from "data/data_source/data_source";
+import { SchedulerTestWrapper } from './helpers.js';
 
 import SchedulerLayoutManager from "ui/scheduler/ui.scheduler.appointments.layout_manager";
 import BaseAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.base";
@@ -87,6 +88,21 @@ const renderLayoutModuleOptions = {
 
 
 QUnit.module("Render layout", renderLayoutModuleOptions, function() {
+    const createScheduler = (view, dataSource, options) => {
+        const instance = $("#scheduler").dxScheduler($.extend(options, {
+            views: ["week", "month", "agenda"],
+            currentView: view,
+            dataSource: dataSource,
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 600,
+            width: 1300,
+            editing: true,
+        })).dxScheduler("instance");
+
+        return new SchedulerTestWrapper(instance);
+    };
+
     const defaultData = [
         {
             id: 0,
@@ -340,6 +356,32 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
         dataSource.load();
 
         assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
+    });
+
+    QUnit.test("Scheduler should re-render appointments in Agenda view, if data source loading data", function(assert) {
+        const items = [
+            { id: 0, startDate: new Date(2017, 4, 25, 9), endDate: new Date(2017, 4, 25, 9, 30), text: "a" },
+            { id: 1, startDate: new Date(2017, 4, 27, 15), endDate: new Date(2017, 4, 27, 15, 30), text: "b" }
+        ];
+
+        const dataSource = {
+            store: new CustomStore({
+                key: "id",
+                load: () => items,
+                update: (key, values) => items[parseInt(key)] = values
+            })
+        };
+        const scheduler = createScheduler("agenda", dataSource);
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, "Should render 2 appointments");
+        this.markAppointments();
+
+        scheduler.appointments.click();
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentForm.setSubject("new text");
+        scheduler.appointmentPopup.clickDoneButton();
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, "Should render 2 appointments");
+        assert.equal(scheduler.appointments.getAppointmentCount(), this.getUnmarkedAppointments().length, "Should re-rendered all appointments");
     });
 });
 
