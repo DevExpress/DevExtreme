@@ -92,7 +92,8 @@ QUnit.module('Editing', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            var event = $.Event("dxclick");
+            var isLink = $targetElement.hasClass("dx-link");
+            var event = $.Event(isLink ? "click" : "dxclick");
             $($targetElement).trigger(event);
             this.clock.tick();
             return event;
@@ -1360,7 +1361,7 @@ QUnit.test('Not remove row with message', function(assert) {
         assert.ok(!this.dataController.refreshed, 'not refreshed data');
 
         // act
-        testElement.find('tbody > tr').first().find('a').trigger('dxclick'); // show confirm
+        testElement.find('tbody > tr').first().find('a').trigger('click'); // show confirm
         this.clock.tick();
 
         // assert
@@ -2648,7 +2649,8 @@ QUnit.module('Editing with real dataController', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
     },
@@ -7680,7 +7682,7 @@ QUnit.test("Changing edit icon in the 'buttons' command column if repaintChanges
 QUnit.test("Custom button click should be prevented", function(assert) {
     // arrange
     var $linkElement,
-        event = $.Event("dxclick");
+        event = $.Event("click");
 
     this.options.columns = [
         {
@@ -11192,7 +11194,8 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
         // };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
 
@@ -12258,7 +12261,7 @@ QUnit.test("Edit link call editRow", function(assert) {
     // act
     var $links = testElement.find(".dx-row").eq(rowIndex).find(".dx-link-edit");
     assert.equal($links.length, 1, "edit links count");
-    $($links.eq(0)).trigger("dxclick");
+    $($links.eq(0)).trigger("click");
     this.clock.tick();
 
     // assert
