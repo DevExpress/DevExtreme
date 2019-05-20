@@ -265,8 +265,8 @@ QUnit.test("clear button press should save value change event", function(assert)
     assert.ok(onValueChanged.getCall(1).args[0].event, "event was saved");
 });
 
-QUnit.test("out of range value should not be marked as invalid on init", assert => {
-    const $dateBox = $("#widthRootStyle").dxDateBox({
+QUnit.test("out of range value should not be marked as invalid on init", function(assert) {
+    var $dateBox = $("#widthRootStyle").dxDateBox({
             value: new Date(2015, 3, 20),
             min: new Date(2014, 3, 20),
             max: new Date(2014, 4, 20)
@@ -3856,12 +3856,13 @@ QUnit.test("dxDateBox should validate value after change 'min' option", function
 });
 
 QUnit.testInActiveWindow("DateBox should validate value after remove an invalid characters", function(assert) {
-    const $element = $("#dateBox");
-    const dateBox = $element.dxDateBox({
-        value: new Date(2015, 6, 18)
+    var $element = $("#dateBox");
+    var dateBox = $element.dxDateBox({
+        value: new Date(2015, 6, 18),
+        pickerType: "calendar"
     }).dxDateBox("instance");
-    const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-    const keyboard = keyboardMock($input);
+    var $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+    var keyboard = keyboardMock($input);
 
     keyboard
         .caret(dateBox.option("text").length - 1)
