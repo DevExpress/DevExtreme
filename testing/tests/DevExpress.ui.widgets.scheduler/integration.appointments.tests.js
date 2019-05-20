@@ -1748,6 +1748,35 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
     pointer.dragEnd();
 });
 
+QUnit.test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", function(assert) {
+    this.createInstance({
+        height: 500,
+        editing: true,
+        currentDate: new Date(2015, 1, 9),
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 1),
+            endDate: new Date(2015, 1, 9, 1, 30)
+        }],
+        crossScrollingEnabled: true,
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        dragDistance = 150;
+
+
+    var pointer = pointerMock($appointment).start(),
+        startPosition = translator.locate($appointment);
+
+    pointer.dragStart().drag(dragDistance, 0);
+
+    var currentPosition = translator.locate($appointment);
+
+    assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
+    pointer.dragEnd();
+});
+
 QUnit.test("Appointment should have correct position while horizontal dragging in scrolled date table, crossScrollingEnabled = true", function(assert) {
     this.createInstance({
         height: 500,
