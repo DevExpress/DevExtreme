@@ -382,4 +382,42 @@ QUnit.module("Toolbar integration", {
             .change()
             .press("enter");
     });
+
+    test("link should be correctly set to an image", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+        const link = "http://test.com";
+        const expected = `<a href="${link}" target="_blank"><img src="${BLACK_PIXEL}"></a>`;
+        const instance = $container.dxHtmlEditor({
+            toolbar: { items: ["image", "link"] },
+            value: `<img src=${BLACK_PIXEL}>`,
+            onValueChanged: ({ value }) => {
+                assert.strictEqual(value, expected, "link was setted");
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.focus();
+        setTimeout(() => {
+            instance.setSelection(0, 1);
+        }, 100);
+
+        this.clock.tick(100);
+
+        $container
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .eq(1)
+            .trigger("dxclick");
+
+        const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+
+        $inputs
+            .first()
+            .val(link)
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+            .first()
+            .trigger("dxclick");
+    });
 });
