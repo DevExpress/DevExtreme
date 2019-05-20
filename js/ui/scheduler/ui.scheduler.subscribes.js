@@ -15,6 +15,8 @@ import { Deferred } from "../../core/utils/deferred";
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 
+const DATE_TABLE_SCROLLABLE_CLASS = ".dx-scheduler-date-table-scrollable";
+
 const subscribes = {
     isCurrentViewAgenda: function() {
         return this.option("currentView") === "agenda";
@@ -350,7 +352,8 @@ const subscribes = {
             allDayPanelTopOffset = !isAllDay ? this.getWorkSpaceAllDayOffset() : 0,
             headerHeight = this.getWorkSpaceHeaderPanelHeight(),
             scrollLeft = this.getWorkSpaceScrollableScrollLeft(),
-            tableLeftOffset = this.getWorkSpaceDateTableOffset();
+            hasCrossScrollingEnabled = this.option('crossScrollingEnabled'),
+            tableLeftOffset = this.getWorkSpaceDateTableOffset() - (hasCrossScrollingEnabled ? 0 : $(DATE_TABLE_SCROLLABLE_CLASS)[0].offsetLeft);
 
         let topOffset = -scrollTop + allDayPanelTopOffset + headerHeight,
             leftOffset = -scrollLeft - tableLeftOffset;
