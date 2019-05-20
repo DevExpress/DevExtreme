@@ -223,7 +223,7 @@ module("selection common", () => {
 });
 
 module("Selection mode", () => {
-    test("Selected: [node 1], single -> multiple, click(node 2), selected: [node 1, node 2]", (assert) => {
+    test("Selected: [node 1], single -> multiple, click(node 2)", (assert) => {
         const items = [{ text: "item 1", selected: true }, { text: "item 2" }];
         const treeView = createInstance({
             items: items,
@@ -240,7 +240,7 @@ module("Selection mode", () => {
         treeView.checkSelectedNodes([0, 1], items);
     });
 
-    test("Selected: [], multiple -> single, click(node 2), selected: [node 2]", (assert) => {
+    test("Selected: [], multiple -> single, click(node 2)", (assert) => {
         const items = [{ text: "item 1" }, { text: "item 2" }];
         const treeView = createInstance({
             items: items,
@@ -259,7 +259,7 @@ module("Selection mode", () => {
         treeView.checkSelectedNodes([1], items);
     });
 
-    test("Selected: [node 2], single -> multiple, click(node 1), selected: [node 1, node 2], selectNodesRecursive: false", (assert) => {
+    test("Selected: [node 2], single -> multiple, click(node 1), selectNodesRecursive: false", (assert) => {
         const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12" }] }];
         const treeView = createInstance({
             items: items,
@@ -277,7 +277,7 @@ module("Selection mode", () => {
         treeView.checkSelectedNodes([0, 1]);
     });
 
-    test("Selected: [node 2], single -> multiple, click(node 1), selected: [node 1, node 2, node 3], selectNodesRecursive: true", (assert) => {
+    test("Selected: [node 2], single -> multiple, click(node 1), selectNodesRecursive: true", (assert) => {
         const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12" }] }];
         const treeView = createInstance({
             items: items,
@@ -295,7 +295,7 @@ module("Selection mode", () => {
         treeView.checkSelectedNodes([0, 1, 2]);
     });
 
-    test("Selected nodes: [node 2, node 3], multiple -> single, selected: [node 3], selectNodesRecursive: false", (assert) => {
+    test("Selected nodes: [node 2, node 3], multiple -> single, selectNodesRecursive: false", (assert) => {
         const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12", selected: true }] }];
         const treeView = createInstance({
             items: items,
@@ -312,7 +312,7 @@ module("Selection mode", () => {
         treeView.checkSelectedNodes([2]);
     });
 
-    test("Selected nodes: [node 1, node 2, node 3], multiple -> single, selected: [node 3], selectNodesRecursive: true", (assert) => {
+    test("Selected nodes: [node 1, node 2, node 3], multiple -> single, selectNodesRecursive: true", (assert) => {
         const items = [{ id: 1, text: "item 1", expanded: true, items: [{ id: 11, text: "Item 11", selected: true }, { id: 12, text: "Item 12", selected: true }] }];
         const treeView = createInstance({
             items: items,
