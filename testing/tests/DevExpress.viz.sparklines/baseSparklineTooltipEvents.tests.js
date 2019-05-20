@@ -170,11 +170,14 @@ QUnit.test('Hide tooltip on scroll without delay', function(assert) {
 
     try {
         devices.real({ platform: "generic" });
-        assert.expect(1);
+        assert.expect(2);
         var sparkline = this.createSparkline({
                 dataSource: [4, 8, 6, 9, 5],
                 tooltip: {
                     enabled: true
+                },
+                onTooltipHidden: function() {
+                    assert.ok(true);
                 }
             }),
             tracker = sparkline._tooltipTracker,
@@ -185,6 +188,25 @@ QUnit.test('Hide tooltip on scroll without delay', function(assert) {
             assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 0, 'Hide timeout set 1 time');
         };
         that.trigger('mouseover', tracker);
+        eventsEngine.trigger(sparkline.$element(), "scroll");
+    } finally {
+        devices.real({ platform: originalPlatform });
+    }
+});
+
+QUnit.test("Should not crash on parent scroll if tooltip was not shown", function(assert) {
+    var originalPlatform = devices.real().platform;
+
+    try {
+        devices.real({ platform: "generic" });
+        assert.expect(0);
+        var sparkline = this.createSparkline({
+            dataSource: [4, 8, 6, 9, 5],
+            tooltip: {
+                enabled: true
+            }
+        });
+
         eventsEngine.trigger(sparkline.$element(), "scroll");
     } finally {
         devices.real({ platform: originalPlatform });
