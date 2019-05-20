@@ -4981,7 +4981,7 @@ declare module DevExpress.ui {
         /** @name ui.dialog.confirm(messageHtml,title) */
         static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
         /** @name ui.dialog.custom(options) */
-        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string }): any;
+        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
     }
     /** @name ui.themes */
     export class themes {
