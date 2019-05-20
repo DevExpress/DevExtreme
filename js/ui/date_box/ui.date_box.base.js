@@ -415,10 +415,6 @@ var DateBox = DropDownEditor.inherit({
 
         this.callBase();
 
-        if(this.option("isValid")) {
-            this._validateValue(this.dateOption("value"));
-        }
-
         this._refreshFormatClass();
         this._refreshPickerTypeClass();
 
