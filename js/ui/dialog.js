@@ -18,6 +18,8 @@ import messageLocalization from "../localization/message";
 import errors from "./widget/ui.errors";
 import Popup from "./popup";
 
+import { ensureDefined } from "../core/utils/common";
+
 const window = getWindow();
 
 const DEFAULT_BUTTON = {
@@ -136,8 +138,8 @@ exports.custom = function(options) {
 
     const popupInstance = new Popup($element, extend({
         title: options.title || exports.title,
-        showTitle: options.showTitle === undefined ? true : options.showTitle,
-        dragEnabled: options.dragEnabled === undefined ? true : options.dragEnabled,
+        showTitle: ensureDefined(options.showTitle, true),
+        dragEnabled: ensureDefined(options.dragEnabled, true),
         height: "auto",
         width: function() {
             const isPortrait = $(window).height() > $(window).width(),
