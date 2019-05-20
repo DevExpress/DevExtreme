@@ -483,7 +483,7 @@ exports.plugin = {
     },
     extenders: {
         _stopCurrentHandling() {
-            this._tooltip.hide();
+            this._tooltip && this._tooltip.hide();
         }
     },
     customize: function(constructor) {

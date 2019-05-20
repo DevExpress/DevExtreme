@@ -368,9 +368,7 @@ var environment = {
 
         try {
             devices.real({ platform: "generic" });
-            var chart = createPieChart.call(this, {});
-
-            chart.showLoadingIndicator();
+            createPieChart.call(this, {});
 
             eventsEngine.trigger($("#qunit-fixture"), "scroll");
             assert.expect(1);
