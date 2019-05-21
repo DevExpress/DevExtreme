@@ -19,6 +19,8 @@ import messageLocalization from "../localization/message";
 import errors from "./widget/ui.errors";
 import Popup from "./popup";
 
+import { ensureDefined } from "../core/utils/common";
+
 const window = getWindow();
 
 const DEFAULT_BUTTON = {
@@ -103,6 +105,7 @@ exports.title = "";
  * @param1_field3 buttons:Array<dxButtonOptions>
  * @param1_field4 showTitle:boolean
  * @param1_field5 message:String:deprecated(messageHtml)
+ * @param1_field6 dragEnabled:boolean
  * @static
  * @module ui/dialog
  * @export custom
@@ -160,10 +163,8 @@ exports.custom = function(options) {
 
     const popupInstance = new Popup($element, extend({
         title: options.title || exports.title,
-        showTitle: function() {
-            const isTitle = options.showTitle === undefined ? true : options.showTitle;
-            return isTitle;
-        }(),
+        showTitle: ensureDefined(options.showTitle, true),
+        dragEnabled: ensureDefined(options.dragEnabled, true),
         height: "auto",
         width: function() {
             const isPortrait = $(window).height() > $(window).width(),
