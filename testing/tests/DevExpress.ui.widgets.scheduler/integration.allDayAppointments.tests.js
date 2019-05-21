@@ -1,4 +1,4 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -7,23 +7,23 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
 
-var translator = require("animation/translator"),
-    dblclickEvent = require("events/dblclick"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    Query = require("data/query"),
-    dataUtils = require("core/element_data"),
-    devices = require("core/devices");
+import translator from "animation/translator";
+import dblclickEvent from "events/dblclick";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import Query from "data/query";
+import dataUtils from "core/element_data";
+import devices from "core/devices";
 
-require("ui/scheduler/ui.scheduler");
+import "ui/scheduler/ui.scheduler";
 
 var APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
@@ -1538,4 +1538,32 @@ QUnit.test("AllDay appointments should have correct position, groupOrientation =
 
     assert.roughEqual(firstPosition.top, firstAllDayRowPosition.top, 1.5, "Appointment has correct top");
     assert.roughEqual(secondPosition.top, secondAllDayRowPosition.top, 1.5, "Appointment has correct top");
+});
+
+QUnit.test("allDayPanel cell with custom dataCellTemplate must open appointment popup when double-clicked", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        views: ["week"],
+        currentView: "week",
+        firstDayOfWeek: 1,
+        startDayHour: 8,
+        endDayHour: 18,
+        height: 600,
+        dataCellTemplate: function(cellData, index, container) {
+            var wrapper = $("<div>").appendTo(container).addClass('dx-template-wrapper');
+            wrapper.append($("<div>").text(cellData.text).addClass("day-cell"));
+        }
+    });
+
+    this.instance.option("dataSource", [
+        { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
+        { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
+    ]);
+
+    var spy = sinon.spy(this.instance, "showAppointmentPopup");
+
+    var $allDayAppointment = $(this.instance.$element()).find(".dx-scheduler-all-day-appointment").eq(0);
+    $allDayAppointment.trigger('dxdblclick');
+
+    assert.ok(spy.calledOnce, "Method was called");
 });
