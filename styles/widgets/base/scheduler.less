@@ -855,7 +855,10 @@
     .dx-scheduler-date-table-cell {
         border-top: @SCHEDULER_BASE_BORDER;
         height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
-
+    }
+    
+    .dx-scheduler-date-table-cell, 
+    .dx-scheduler-all-day-table-cell {
         > div {
             pointer-events: none;
         }
@@ -922,10 +925,6 @@
     .dx-scheduler-all-day-table-cell {
         border-left: @SCHEDULER_BASE_BORDER;
         border-top: @SCHEDULER_BASE_BORDER;
-
-        > div {
-            pointer-events: none;
-        }
     }
 
     .dx-scheduler-work-space-day {
