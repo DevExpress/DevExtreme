@@ -579,7 +579,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         that._stuckSeries = null;
         that._hideCrosshair();
         that._resetTimer();
-        baseTrackerPrototype._pointerOut.call(that);
+        baseTrackerPrototype._pointerOut.apply(that, arguments);
     },
 
     _hoverArgumentAxis: function(x, y, e) {
