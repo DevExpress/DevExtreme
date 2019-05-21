@@ -237,7 +237,7 @@ exports.custom = function(options) {
  * @export alert
  */
 exports.alert = function(messageHtml, title, showTitle) {
-    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle };
+    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
     return exports.custom(options).show();
 };
@@ -262,7 +262,8 @@ exports.confirm = function(messageHtml, title, showTitle) {
             buttons: [
                 { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
                 { text: messageLocalization.format("No"), onClick: function() { return false; } }
-            ]
+            ],
+            dragEnabled: showTitle
         };
 
     return exports.custom(options).show();
