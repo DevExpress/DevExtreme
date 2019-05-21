@@ -562,4 +562,9 @@ require("style-compiler-test-server/known-css-files");
         assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [99] }));
         assert.equal("ios7", themeNameFromDevice({ platform: "ios" }));
     });
+
+    QUnit.test("themeNameFromDevice for removed mobile themes (breaking change BC4928)", function(assert) {
+        assert.equal(themes.themeNameFromDevice({ platform: "android" }), "generic");
+        assert.equal(themes.themeNameFromDevice({ platform: "win" }), "generic");
+    });
 })();
