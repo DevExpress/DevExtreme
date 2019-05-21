@@ -2453,7 +2453,6 @@ QUnit.test('Tooltip is disabled. Show tooltip on point, stopCurrentHandling, sho
     this.environment.options.seriesGroup.trigger(getEvent("showpointtooltip"), this.environment.point1);
 
     this.tracker.stopCurrentHandling();
-    this.tooltip.stub("hide").reset();
     this.tooltip.stub("show").reset();
 
     this.environment.options.seriesGroup.trigger(getEvent("showpointtooltip"), this.environment.point1);
