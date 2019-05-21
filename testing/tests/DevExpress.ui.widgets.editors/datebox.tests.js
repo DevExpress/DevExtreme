@@ -1361,7 +1361,7 @@ QUnit.module("widget sizing render", {}, () => {
         component.repaint();
         $parent.css("transform", "scale(1)");
 
-        assert.equal(component.$element().outerWidth(), initialWidth, "component has correct width");
+        assert.roughEqual(component.$element().outerWidth(), initialWidth, 0.001, "component has correct width");
     });
 
     QUnit.test("component width calculation should consider buttons containers element", assert => {
@@ -1377,7 +1377,7 @@ QUnit.module("widget sizing render", {}, () => {
         const instance = $element.dxDateBox("instance");
 
         instance.option("showDropDownButton", true);
-        assert.strictEqual(component.$element().outerWidth(), initialWidth + $(`.${BUTTONS_CONTAINER_CLASS}`).width());
+        assert.roughEqual(component.$element().outerWidth(), initialWidth + $(`.${BUTTONS_CONTAINER_CLASS}`).width(), 0.001);
     });
 
     QUnit.test("change width", assert => {
