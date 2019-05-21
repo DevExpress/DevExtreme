@@ -396,7 +396,14 @@ QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarBut
 });
 
 
-QUnit.module("dimensions");
+QUnit.module("dimensions", {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+});
 
 QUnit.test("content must not overlap bottom buttons", function(assert) {
     var $popup = $("#popup").dxPopup({
