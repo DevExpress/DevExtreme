@@ -4768,6 +4768,40 @@ QUnit.test("Remove row when set onRowRemoved", function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, "count rows");
 });
 
+// T741746
+QUnit.test("deleteRow should not work if adding is started", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row count");
+
+    // act
+    that.addRow();
+    that.deleteRow(2);
+
+    // assert
+    assert.ok(that.editingController.isEditing(), "editing is started");
+    assert.equal(testElement.find('.dx-data-row').length, 8, "row is not removed");
+
+    // act
+    that.cancelEditData();
+    that.deleteRow(2);
+
+    // assert
+    assert.notOk(that.editingController.isEditing(), "no editing");
+    assert.equal(testElement.find('.dx-data-row').length, 6, "row is removed");
+});
+
 // T100624
 QUnit.test('Edit Cell when the width of the columns in percent', function(assert) {
     // arrange

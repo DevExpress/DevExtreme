@@ -1151,9 +1151,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 showDialogTitle,
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
                 item = dataController.items()[rowIndex],
-                key = item && item.key;
+                key = item && item.key,
+                allowDeleting = isBatchMode || !this.isEditing(); // T741746
 
-            if(item) {
+            if(item && allowDeleting) {
                 removeByKey = function(key) {
                     that.refresh();
 
