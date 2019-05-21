@@ -135,6 +135,27 @@ module("dialog tests", {
         assert.equal(this.dialog().find(".dx-popup-title").length, 0, "Actual title is equal not expected.");
     });
 
+    test("popup drag enabled", (assert) => {
+        const testPopupDrag = (dialogDragEnabled, expectedPopupDragEnabled, message) => {
+            const options = {
+                title: this.title,
+                messageHtml: this.messageHtml,
+                dragEnabled: dialogDragEnabled
+            };
+            const instance = dialog.custom(options);
+
+            instance.show();
+
+            const popup = $(".dx-popup").dxPopup("instance");
+            assert.equal(popup.option("dragEnabled"), expectedPopupDragEnabled, message);
+            instance.hide();
+        };
+
+        testPopupDrag(true, true, "drag was not enabled");
+        testPopupDrag(false, false, "drag was not disabled");
+        testPopupDrag(undefined, true, "drag was not enabled");
+    });
+
     test("dialog buttons", (assert) => {
         let actual;
         const expected = "ButtonReturnValue#2";
