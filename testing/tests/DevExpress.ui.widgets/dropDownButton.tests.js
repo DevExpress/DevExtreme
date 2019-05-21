@@ -445,6 +445,23 @@ QUnit.module("common use cases", {
         assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
         assert.ok($icons.eq(1).hasClass("dx-icon-spindown"), "second icon is correct");
     });
+
+    QUnit.test("spindown secondary icon should not be rendered when showArrowIcon is false", (assert) => {
+        this.dropDownButton.option({
+            splitButton: false,
+            showArrowIcon: false
+        });
+
+        let $icons = getActionButton(this.dropDownButton).find(".dx-icon");
+        assert.strictEqual($icons.length, 1, "1 icon is rendered");
+        assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
+
+        this.dropDownButton.option("showArrowIcon", true);
+        $icons = getActionButton(this.dropDownButton).find(".dx-icon");
+        assert.strictEqual($icons.length, 2, "2 icons are rendered");
+        assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
+        assert.ok($icons.eq(1).hasClass("dx-icon-spindown"), "second icon is correct");
+    });
 });
 
 QUnit.module("public methods", {
