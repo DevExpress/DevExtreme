@@ -389,7 +389,7 @@ QUnit.module("Toolbar integration", {
         const link = "http://test.com";
         const expected = `<a href="${link}" target="_blank"><img src="${BLACK_PIXEL}"></a>`;
         const instance = $container.dxHtmlEditor({
-            toolbar: { items: ["image", "link"] },
+            toolbar: { items: ["link"] },
             value: `<img src=${BLACK_PIXEL}>`,
             onValueChanged: ({ value }) => {
                 assert.strictEqual(value, expected, "link was setted");
@@ -398,26 +398,18 @@ QUnit.module("Toolbar integration", {
         }).dxHtmlEditor("instance");
 
         instance.focus();
-        setTimeout(() => {
-            instance.setSelection(0, 1);
-        }, 100);
+        instance.setSelection(0, 1);
 
-        this.clock.tick(100);
+        const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+        $linkFormatButton.trigger("dxclick");
 
-        $container
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .eq(1)
-            .trigger("dxclick");
+        const $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+        const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
 
-        const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
-
-        $inputs
-            .first()
+        $urlInput
             .val(link)
             .change();
 
-        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
-            .first()
-            .trigger("dxclick");
+        $okDialogButton.trigger("dxclick");
     });
 });
