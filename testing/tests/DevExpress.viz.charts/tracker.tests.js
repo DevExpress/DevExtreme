@@ -2447,6 +2447,19 @@ QUnit.test('show Tooltip event. TooltipShown fired', function(assert) {
     assert.equal(this.tracker.pointAtShownTooltip, this.environment.point1);
 });
 
+QUnit.test('Tooltip is disabled. Show tooltip on point, stopCurrentHandling, show tooltip on same point. TooltipShown fired', function(assert) {
+    this.tooltip.stub("isEnabled").returns(false);
+
+    this.environment.options.seriesGroup.trigger(getEvent("showpointtooltip"), this.environment.point1);
+
+    this.tracker.stopCurrentHandling();
+    this.tooltip.stub("show").reset();
+
+    this.environment.options.seriesGroup.trigger(getEvent("showpointtooltip"), this.environment.point1);
+
+    assert.deepEqual(this.tooltip.stub("show").lastCall.args[2], { target: this.environment.point1 });
+});
+
 QUnit.test('show Tooltip event when there is tooltip on another point. TooltipHidden fired, TooltipShown fired', function(assert) {
     this.environment.options.seriesGroup.trigger(getEvent("showpointtooltip"), this.environment.point2);
     this.tooltip.stub("hide").reset();
