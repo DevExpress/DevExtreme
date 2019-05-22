@@ -2984,7 +2984,6 @@ QUnit.test("_isAppointmentEmpty should work correctly in different strategies", 
 });
 
 QUnit.test("Long term appoinment inflict index shift in other appointments (T737780)", function(assert) {
-
     var data = [
         {
             text: "Website Re-Design Plan",
