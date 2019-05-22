@@ -98,7 +98,7 @@ const SchedulerAppointmentForm = {
                             endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
                             endValue = dateSerialization.deserializeDate(endDateEditor.option("value"));
 
-                        if(!!endValue && endValue < value) {
+                        if(!!args.event && !!endValue && endValue < value) {
                             var duration = endValue.getTime() - previousValue.getTime();
                             endDateEditor.option("value", new Date(value.getTime() + duration));
                         }
@@ -141,7 +141,7 @@ const SchedulerAppointmentForm = {
                             startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
                             startValue = dateSerialization.deserializeDate(startDateEditor.option("value"));
 
-                        if(value && startValue > value) {
+                        if(!!args.event && !!value && startValue > value) {
                             var duration = previousValue ? previousValue.getTime() - startValue.getTime() : 0;
                             startDateEditor.option("value", new Date(value.getTime() - duration));
                         }
