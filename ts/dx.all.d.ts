@@ -4981,9 +4981,9 @@ declare module DevExpress.ui {
     /** @name ui.dialog */
     export class dialog {
         /** @name ui.dialog.alert(messageHtml,title) */
-        static alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+        static alert(messageHtml: string, title: string, showTitle: boolean): Promise<void> & JQueryPromise<void>;
         /** @name ui.dialog.confirm(messageHtml,title) */
-        static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+        static confirm(messageHtml: string, title: string, showTitle: boolean): Promise<boolean> & JQueryPromise<boolean>;
         /** @name ui.dialog.custom(options) */
         static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
     }

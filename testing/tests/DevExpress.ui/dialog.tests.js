@@ -34,6 +34,7 @@ module("dialog tests", {
                 .eq(index)
                 .trigger("dxclick");
         };
+        this.isPopupDraggable = () => $(".dx-popup").dxPopup("instance").option("dragEnabled");
     },
     afterEach: () => {
         fx.off = false;
@@ -146,9 +147,36 @@ module("dialog tests", {
 
             instance.show();
 
-            const popup = $(".dx-popup").dxPopup("instance");
-            assert.equal(popup.option("dragEnabled"), expectedPopupDragEnabled, message);
+            assert.equal(this.isPopupDraggable(), expectedPopupDragEnabled, message);
             instance.hide();
+        };
+
+        testPopupDrag(true, true, "drag was not enabled");
+        testPopupDrag(false, false, "drag was not disabled");
+        testPopupDrag(undefined, true, "drag was not enabled");
+    });
+
+    test("alert dialog without title should not be draggable", assert => {
+        const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
+            dialog.alert(this.messageHtml, "alert title", showTitle);
+
+            assert.equal(this.isPopupDraggable(), expectedPopupDragEnabled, message);
+
+            this.clickButton();
+        };
+
+        testPopupDrag(true, true, "drag was not enabled");
+        testPopupDrag(false, false, "drag was not disabled");
+        testPopupDrag(undefined, true, "drag was not enabled");
+    });
+
+    test("confirm dialog without title should not be draggable", assert => {
+        const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
+            dialog.confirm(this.messageHtml, "confirm title", showTitle);
+
+            assert.equal(this.isPopupDraggable(), expectedPopupDragEnabled, message);
+
+            this.clickButton();
         };
 
         testPopupDrag(true, true, "drag was not enabled");
