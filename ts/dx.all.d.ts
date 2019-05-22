@@ -5852,10 +5852,10 @@ declare module DevExpress.ui {
     /** An object that serves as a namespace for methods displaying a message in an application/site. */
     export class dialog {
         /** Displays an alert dialog with a message and OK button. */
-        static alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+        static alert(messageHtml: string, title: string, showTitle: boolean): Promise<void> & JQueryPromise<void>;
 
         /** Creates a confirmation dialog with a message and Yes and No buttons. */
-        static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+        static confirm(messageHtml: string, title: string, showTitle: boolean): Promise<boolean> & JQueryPromise<boolean>;
         /** Creates a dialog with custom buttons. */
         static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
     }
