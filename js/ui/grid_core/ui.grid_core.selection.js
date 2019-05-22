@@ -795,6 +795,7 @@ module.exports = {
                     this.getController("editorFactory").createEditor(groupElement, extend({}, options.column, {
                         parentType: "dataRow",
                         dataType: "boolean",
+                        lookup: null,
                         value: options.value,
                         tabIndex: -1,
                         setValue: function(value, e) {
