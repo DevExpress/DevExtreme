@@ -50,20 +50,53 @@ module("render", {
         assert.equal($.trim(this.element.children().eq(1).text()), "item 2");
     });
 
+    test("Default displayExpr: ", (assert) => {
+        createHierarchicalCollectionWidget({
+            items: [{ text: "item 1" }]
+        });
+
+        assert.equal($.trim(this.element.children().eq(0).text()), "item 1");
+    });
+
     test("create item by custom model using expressions set as functions", (assert) => {
-        var condition = false,
+        let condition = false,
             newItems = [{ name: "item 1" }],
             widget = createHierarchicalCollectionWidget({
                 displayExpr: () => condition ? "name" : "text",
                 items: [{ text: "first item" }]
             });
 
-        assert.equal($.trim(this.element.children().eq(0).text()), "first item");
+        assert.equal($.trim(this.element.children().eq(0).text()), "text");
 
         condition = true;
         widget.option("items", newItems);
 
-        assert.equal($.trim(this.element.children().eq(0).text()), "item 1");
+        assert.equal($.trim(this.element.children().eq(0).text()), "name");
+    });
+
+    test("DisplayExpr as function with parameter", (assert) => {
+        createHierarchicalCollectionWidget({
+            displayExpr: (itemData) => itemData && itemData.name + "!",
+            items: [{ name: "Item 1" }]
+        });
+
+        assert.equal($.trim(this.element.children().eq(0).text()), "Item 1!");
+    });
+
+    [null, undefined, ""].forEach((dataExprValue) => {
+        test(`DisplayExpr: ${dataExprValue}`, (assert) => {
+            try {
+                createHierarchicalCollectionWidget({
+                    displayExpr: dataExprValue,
+                    items: [{ name: "item 1" }]
+                });
+
+                let $item = $("#hcw").find(".dx-item").eq(0);
+                assert.equal($item.text(), "");
+            } catch(e) {
+                assert.ok(false, "Error has been raised");
+            }
+        });
     });
 
     test("Expressions should be reinitialized if *expr option was changed", (assert) => {

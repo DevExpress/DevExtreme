@@ -108,7 +108,7 @@ var DataConverter = Class.inherit({
         }
 
         var publicNode = {
-            text: this._dataAccessors.getters.display(node),
+            text: this._dataAccessors.getters.display ? this._dataAccessors.getters.display(node) : "",
             key: node.internalFields.key,
             selected: node.internalFields.selected,
             expanded: node.internalFields.expanded,
