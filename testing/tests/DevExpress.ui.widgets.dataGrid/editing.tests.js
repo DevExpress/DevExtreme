@@ -7485,6 +7485,53 @@ QUnit.test("The command column caption should be applied", function(assert) {
     assert.strictEqual($commandCellElement.css("textAlign"), "right", "alignment");
 });
 
+// T741679
+QUnit.test("A dependent cascading editor should be updated when a master cell value is changed if showEditorAlways is enabled in batch mode", function(assert) {
+    // arrange
+    var that = this,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+    that.options.dataSource.store = [{ StateID: 1, CityID: 1 }, { StateID: 2, CityID: 2 }];
+    that.options.columns = [{
+        dataField: "StateID",
+        showEditorAlways: true,
+        setCellValue: function(rowData, value) {
+            rowData.StateID = value;
+            rowData.CityID = value;
+        },
+        lookup: {
+            dataSource: [{ id: 1, name: "California" }, { id: 2, name: "Texas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }, {
+        dataField: "CityID",
+        lookup: {
+            dataSource: [{ id: 1, name: "Arcadia" }, { id: 2, name: "Dallas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }];
+    that.dataController.init();
+    that.columnsController.init();
+    rowsView.render($testElement);
+
+    selectBoxInstance = $(rowsView.getCellElement(0, 0)).find(".dx-selectbox").dxSelectBox("instance");
+    selectBoxInstance.option("value", 2);
+
+    // act
+    $(rowsView.getCellElement(1, 0)).trigger("dxclick");
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(0, 1)).text(), "Dallas", "text of the second column of the first row");
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
