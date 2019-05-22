@@ -220,25 +220,6 @@ module.exports = {
                     }
 
                     that.callBase.apply(that, arguments);
-
-                    if(!that._isLegacyKeyboardNavigation()) {
-                        that._restoreLastFocusedElement();
-                    }
-                },
-
-                _restoreLastFocusedElement: function() {
-                    var $table = this.element(),
-                        $headerCells = $table.find(`tr.${HEADER_ROW_CLASS} > td[tabindex]`);
-
-                    if($headerCells.length > 1) {
-                        let $firstCell = $headerCells.first();
-                        eventsEngine.on($firstCell, "focus", e => {
-                            if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
-                                $(this._lastActionElement).trigger("focus");
-                                this._lastActionElement = null;
-                            }
-                        });
-                    }
                 },
 
                 _renderRows: function() {

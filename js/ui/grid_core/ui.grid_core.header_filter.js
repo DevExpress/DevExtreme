@@ -14,6 +14,7 @@ import { normalizeDataSourceOptions } from "../../data/data_source/data_source";
 import dateLocalization from "../../localization/date";
 import { isWrapped } from "../../core/utils/variable_wrapper";
 import { Deferred } from "../../core/utils/deferred";
+import { restoreFocus } from "../shared/accessibility";
 
 var DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -286,7 +287,8 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
                             columnsController.columnOption(options.dataField, "headerFilter", headerFilterByColumn, true);
                         });
-                    }
+                    },
+                    onHidden: () => restoreFocus(this)
                 });
 
                 options.dataSource = that.getDataSource(options);

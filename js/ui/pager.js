@@ -579,6 +579,8 @@ var Pager = Widget.inherit({
         this._toggleVisibility(this.option("visible"));
         this._updatePageSizes(true);
         this._updatePages(true);
+
+        accessibility.restoreFocus(this);
     },
 
     _initMarkup: function() {
