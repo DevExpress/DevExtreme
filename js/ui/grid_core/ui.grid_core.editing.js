@@ -1625,7 +1625,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 $cellElement = $(options.cellElement),
                 editMode = getEditMode(that),
                 params,
-                columns;
+                columns,
+                isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
 
             if(rowKey === undefined) {
                 that._dataController.fireError("E1043");
@@ -1657,11 +1658,11 @@ var EditingController = modules.ViewController.inherit((function() {
                         return that.saveEditData();
                     } else if(editMode === EDIT_MODE_BATCH) {
                         columns = that._columnsController.getVisibleColumns();
-                        forceUpdateRow = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
+                        forceUpdateRow = isCustomSetCellValue || columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
                     }
                 }
 
-                if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
+                if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
                     that._updateEditRow(options.row, forceUpdateRow);
                 }
             }
