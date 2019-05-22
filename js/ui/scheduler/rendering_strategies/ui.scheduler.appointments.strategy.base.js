@@ -335,7 +335,7 @@ var BaseRenderingStrategy = Class.inherit({
         // NOTE: ie & ff pixels
         var result = first - second;
 
-        return isSomeEdge || Math.abs(result) > 0.5 ? result : 0;
+        return isSomeEdge || Math.abs(result) > 1 ? result : 0;
     },
 
     _getResultPositions: function(sortedArray) {
