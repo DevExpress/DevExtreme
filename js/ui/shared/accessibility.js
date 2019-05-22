@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
+import { extend } from "../../core/utils/extend";
 
 const FOCUS_STATE_CLASS = "dx-state-focused",
     FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
@@ -17,18 +18,44 @@ const FOCUS_STATE_CLASS = "dx-state-focused",
     };
 
 var isMouseDown = false,
-    isHiddenFocusing = false;
+    isHiddenFocusing = false,
+    focusedElementInfo = null;
 
 function processKeyDown(viewName, instance, event, action, $mainElement) {
     var keyName = eventUtils.normalizeKeyName(event);
 
     if(keyName === "enter" || keyName === "space") {
+        saveFocusedElementInfo(event.target, instance);
         action && action({ event: event });
     } else if(keyName === "tab") {
         $mainElement.addClass(FOCUS_STATE_CLASS);
     } else {
         module.exports.selectView(viewName, instance, event);
     }
+}
+
+function saveFocusedElementInfo(target, instance) {
+    var $target = $(target),
+        ariaLabel = $target.attr("aria-label"),
+        $activeElements = getActiveAccessibleElements(ariaLabel, instance.element()),
+        targetIndex = $activeElements.index($target);
+
+    focusedElementInfo = extend({},
+        { ariaLabel: ariaLabel, index: targetIndex },
+        { viewInstance: instance });
+}
+
+function getActiveAccessibleElements(ariaLabel, viewElement) {
+    var $viewElement = $(viewElement),
+        $activeElements;
+
+    if(ariaLabel) {
+        $activeElements = $viewElement.find(`[aria-label="${ariaLabel}"][tabindex]`);
+    } else {
+        $activeElements = $viewElement.find("[tabindex]");
+    }
+
+    return $activeElements;
 }
 
 function findFocusedViewElement(viewSelectors) {
@@ -67,8 +94,23 @@ module.exports = {
             if(!isMouseDown && !isHiddenFocusing) {
                 $mainElement.addClass(FOCUS_STATE_CLASS);
             }
+
             isMouseDown = false;
         });
+    },
+
+    restoreFocus: function(instance) {
+        if(!instance.option("useLegacyKeyboardNavigation") && focusedElementInfo) {
+            let viewInstance = focusedElementInfo.viewInstance;
+            if(viewInstance) {
+                let $activeElements = getActiveAccessibleElements(focusedElementInfo.ariaLabel, viewInstance.element()),
+                    $targetElement = $activeElements.eq(focusedElementInfo.index);
+
+                focusedElementInfo = null;
+
+                eventsEngine.trigger($targetElement, "focus");
+            }
+        }
     },
 
     selectView: function(viewName, instance, event) {
