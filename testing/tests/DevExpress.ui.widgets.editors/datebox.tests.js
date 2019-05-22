@@ -1362,7 +1362,6 @@ QUnit.module("widget sizing render", {}, () => {
         $parent.css("transform", "scale(1)");
         const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
 
-        assert.roughEqual(component.$element().outerWidth(), initialWidth, 0.001, "component has correct width");
         assert.strictEqual(actualWidth, initialWidth, "component has correct width");
     });
 
@@ -1379,7 +1378,6 @@ QUnit.module("widget sizing render", {}, () => {
         const instance = $element.dxDateBox("instance");
 
         instance.option("showDropDownButton", true);
-        assert.roughEqual(component.$element().outerWidth(), initialWidth + $(`.${BUTTONS_CONTAINER_CLASS}`).width(), 0.001);
         const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
         const { width: buttonWidth } = $(`.${BUTTONS_CONTAINER_CLASS}`).get(0).getBoundingClientRect();
 
