@@ -484,6 +484,34 @@ QUnit.test("Click on selectCheckBox shouldn't render editor, editing & selection
     assert.notOk($("#treeList").find(".dx-texteditor").length, "Editing textEditor wasn't rendered");
 });
 
+// T742147
+QUnit.test("Selection checkbox should be rendered if first column is lookup", function(assert) {
+    var treeList = createTreeList({
+        columns: [{
+            dataField: "nameId",
+            lookup: {
+                dataSource: [{ id: 1, name: "Name 1" }],
+                valueExpr: "id",
+                displayExpr: "name"
+            }
+        }, "age"],
+        selection: {
+            mode: 'multiple'
+        },
+        dataSource: [
+            { id: 1, parentId: 0, nameId: 1, age: 19 }
+        ]
+    });
+
+    // act
+    this.clock.tick();
+
+    // assert
+    var $firstDataCell = $(treeList.getCellElement(0, 0));
+    assert.equal($firstDataCell.find(".dx-select-checkbox.dx-checkbox").length, 1, "first cell contains select checkbox");
+    assert.equal($firstDataCell.find(".dx-treelist-text-content").text(), "Name 1", "first cell text");
+});
+
 QUnit.test("Filter row should not contains selection checkboxes", function(assert) {
     createTreeList({
         columns: ["name", "age"],
