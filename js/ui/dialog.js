@@ -231,13 +231,14 @@ exports.custom = function(options) {
  * @publicName alert(messageHtml,title)
  * @param1 messageHtml:string
  * @param2 title:string
+ * @param3 showTitle:boolean
  * @return Promise<void>
  * @static
  * @module ui/dialog
  * @export alert
  */
 exports.alert = function(messageHtml, title, showTitle) {
-    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle };
+    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
     return exports.custom(options).show();
 };
@@ -247,6 +248,7 @@ exports.alert = function(messageHtml, title, showTitle) {
  * @publicName confirm(messageHtml,title)
  * @param1 messageHtml:string
  * @param2 title:string
+ * @param3 showTitle:boolean
  * @return Promise<boolean>
  * @static
  * @module ui/dialog
@@ -262,7 +264,8 @@ exports.confirm = function(messageHtml, title, showTitle) {
             buttons: [
                 { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
                 { text: messageLocalization.format("No"), onClick: function() { return false; } }
-            ]
+            ],
+            dragEnabled: showTitle
         };
 
     return exports.custom(options).show();
