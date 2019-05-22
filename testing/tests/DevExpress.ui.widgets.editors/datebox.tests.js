@@ -1382,7 +1382,6 @@ QUnit.module("widget sizing render", {}, () => {
         const { width: buttonWidth } = $(`.${BUTTONS_CONTAINER_CLASS}`).get(0).getBoundingClientRect();
 
         assert.strictEqual(actualWidth, initialWidth + buttonWidth);
-
     });
 
     QUnit.test("change width", assert => {
