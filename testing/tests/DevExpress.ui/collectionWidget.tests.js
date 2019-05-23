@@ -16,7 +16,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 
 const ITEM_CLASS = "dx-item";
-const ITEM_CONTENT_CLASS = "dx-item-content";
+const ITEM_CONTENT_CLASS = `${ITEM_CLASS}-content`;
 const DEFAULT_EMPTY_TEXT = "No data to display";
 const EMPTY_MESSAGE_CLASS = "dx-empty-message";
 const COLLECTION_CLASS = "dx-collection";
@@ -25,34 +25,24 @@ const ACTIVE_ITEM_CLASS = "dx-state-active";
 
 const { module, test, testInActiveWindow } = QUnit;
 
-const TestComponent = CollectionWidget.inherit({
+class TestComponent extends CollectionWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.NAME = "TestComponent";
+        this._activeStateUnit = ".item";
+    }
 
-    NAME: "TestComponent",
-
-    _activeStateUnit: ".item",
-
-    _itemClass() {
-        return "item";
-    },
-
-    _itemDataKey() {
-        return "123";
-    },
-
-    _itemContainer() {
-        return this.$element();
-    },
-
-    _allowDynamicItemsAppend() {
-        return true;
-    },
+    _itemClass() { return "item"; }
+    _itemDataKey() { return "123"; }
+    _itemContainer() { return this.$element(); }
+    _allowDynamicItemsAppend() { return true; }
 
     _createActionByOption(optionName, config) {
+        this.__actionConfigs = !this.__actionConfigs ? {} : this.__actionConfigs;
         this.__actionConfigs[optionName] = config;
-        return this.callBase(...arguments);
-    },
-    __actionConfigs: {}
-});
+        return super._createActionByOption(...arguments);
+    }
+}
 
 QUnit.testStart(() => {
     const markup = `

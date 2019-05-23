@@ -12,36 +12,31 @@ const generateData = (count) => {
     return items;
 };
 
-const TestComponent = CollectionWidget.inherit({
+class TestComponent extends CollectionWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.NAME = "TestComponent";
+        this._activeStateUnit = ".item";
+    }
 
-    NAME: "TestComponent",
-
-    _activeStateUnit: ".item",
-
-    _itemClass: () => "item",
-
-    _itemDataKey: () => "123",
-
-    _itemContainer() {
-        return this.$element();
-    },
-
-    _shouldAppendItems: () => true,
+    _itemClass() { return "item"; }
+    _itemDataKey() { return "123"; }
+    _itemContainer() { return this.$element(); }
+    _shouldAppendItems() { return true; }
 
     reload() {
-        this.callBase();
+        super.reload();
         this.option("items", []);
         this._dataSource.pageIndex(0);
         this._dataSource.reload();
-    },
+    }
 
     loadNextPage() {
         const dataSource = this._dataSource;
         dataSource.pageIndex(1 + dataSource.pageIndex());
         dataSource.load();
     }
-
-});
+}
 
 class LiveUpdateTestHelper {
     constructor() {

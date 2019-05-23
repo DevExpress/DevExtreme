@@ -5,30 +5,23 @@ import ArrayStore from "data/array_store";
 import CustomStore from "data/custom_store";
 import executeAsyncMock from "../../../helpers/executeAsyncMock.js";
 
-const ITEM_CLASS = "item";
-const ITEM_SELECTED_CLASS = "dx-item-selected";
-const ITEM_RESPONSE_WAIT_CLASS = "dx-item-response-wait";
+const ITEM_CLASS = "dx-item";
+const ITEM_SELECTED_CLASS = `${ITEM_CLASS}-selected`;
+const ITEM_RESPONSE_WAIT_CLASS = `${ITEM_CLASS}-response-wait`;
 
 const { module, test } = QUnit;
 
-var TestComponent = CollectionWidget.inherit({
-
-    NAME: "TestComponent",
-
-    _activeStateUnit: ".item",
-
-    _itemClass: function() {
-        return "item";
-    },
-
-    _itemDataKey: function() {
-        return "123";
-    },
-
-    _itemContainer: function() {
-        return this.$element();
+class TestComponent extends CollectionWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.NAME = "TestComponent";
+        this._activeStateUnit = ".item";
     }
-});
+
+    _itemClass() { return "item"; }
+    _itemDataKey() { return "123"; }
+    _itemContainer() { return this.$element(); }
+}
 
 module("selecting of items", {
     beforeEach: function() {
@@ -1147,14 +1140,8 @@ module("selecting of items in single mode", () => {
 });
 
 module("selecting of items in multiple mode", {
-    beforeEach: function() {
-        this.TestComponent = TestComponent.inherit({
-            _getDefaultOptions: function() {
-                return $.extend(this.callBase(), {
-                    selectedIndex: 0
-                });
-            }
-        });
+    beforeEach() {
+        this.TestComponent = ($element, options) => new TestComponent($element, options);
     }
 }, () => {
     test("selectedItems should have precedence over selectedIndex if initialized with empty collection", function(assert) {
