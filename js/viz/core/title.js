@@ -201,8 +201,8 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
         that._updateBoundingRect();
 
-        var bBox = this.getLayoutOptions();
-        this._clipRect.attr({ x: bBox.x, y: bBox.y - this._baseLineCorrection, width: width, height: bBox.height + this._baseLineCorrection });
+        const { x, y, height } = this.getCorrectedLayoutOptions();
+        this._clipRect.attr({ x, y, width, height });
     },
 
     getLayoutOptions: function() {
@@ -241,6 +241,16 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         boundingRect.width = box.width;
         boundingRect.x = box.x;
         boundingRect.y = box.y;
+    },
+
+    getCorrectedLayoutOptions() {
+        const srcBox = this.getLayoutOptions();
+        const correction = this._baseLineCorrection;
+
+        return extend({}, srcBox, {
+            y: srcBox.y - correction,
+            height: srcBox.height + correction
+        });
     },
 
     // BaseWidget_layout_implementation
