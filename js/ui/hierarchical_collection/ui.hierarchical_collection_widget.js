@@ -210,7 +210,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             accessors.setters[newAccessor] = that[setterName];
         });
 
-        accessors.getters["display"] = this._displayGetter;
+        accessors.getters["display"] = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
 
         return accessors;
     },

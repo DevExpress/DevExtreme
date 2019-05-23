@@ -83,8 +83,31 @@ module("render", {
         assert.equal($.trim(this.element.children().eq(0).text()), "Item 1!");
     });
 
-    [null, undefined, ""].forEach((dataExprValue) => {
-        test(`DisplayExpr: ${dataExprValue}`, (assert) => {
+    test("DisplayExpr as non existing property", (assert) => {
+        createHierarchicalCollectionWidget({
+            displayExpr: "not exist",
+            items: [{ name: "Item 1" }]
+        });
+
+        assert.equal($.trim(this.element.children().eq(0).text()), "");
+    });
+
+    [null, undefined, "", {}].forEach((dataExprValue) => {
+        test(`DisplayExpr: ${dataExprValue}, items without 'text' property`, (assert) => {
+            try {
+                createHierarchicalCollectionWidget({
+                    displayExpr: dataExprValue,
+                    items: ["item 1", "item2"]
+                });
+
+                let $item = $("#hcw").find(".dx-item").eq(0);
+                assert.equal($item.text(), "");
+            } catch(e) {
+                assert.ok(false, "Error has been raised");
+            }
+        });
+
+        test(`DisplayExpr: ${dataExprValue}, items without 'text' property`, (assert) => {
             try {
                 createHierarchicalCollectionWidget({
                     displayExpr: dataExprValue,
@@ -93,6 +116,20 @@ module("render", {
 
                 let $item = $("#hcw").find(".dx-item").eq(0);
                 assert.equal($item.text(), "");
+            } catch(e) {
+                assert.ok(false, "Error has been raised");
+            }
+        });
+
+        test(`DisplayExpr: ${dataExprValue}, items with 'text' property`, (assert) => {
+            try {
+                createHierarchicalCollectionWidget({
+                    displayExpr: dataExprValue,
+                    items: [{ text: "item 1" }]
+                });
+
+                let $item = $("#hcw").find(".dx-item").eq(0);
+                assert.equal($item.text(), "item 1");
             } catch(e) {
                 assert.ok(false, "Error has been raised");
             }
