@@ -921,9 +921,9 @@ var BaseLegend = {
             /**
             * @name BaseLegend.title.margin.bottom
             * @type number
-            * @default 14
+            * @default 9
             */
-            bottom: 14
+            bottom: 9
         },
         /**
         * @name BaseLegend.title.font

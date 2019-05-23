@@ -576,6 +576,15 @@ QUnit.test("freeSpace", function(assert) {
     this.rendererElementsIsDispose(assert);
 });
 
+QUnit.test("getCorrectedLayoutOptions", function(assert) {
+    this.title.update(this.options);
+
+    const correctedLayout = this.title.getCorrectedLayoutOptions();
+    const layoutOptions = this.title.getLayoutOptions();
+
+    assert.deepEqual(correctedLayout, $.extend({}, layoutOptions, { y: -22, height: 22 }));
+});
+
 QUnit.module("Size changing notification", environment);
 
 QUnit.test("initial, no text", function(assert) {

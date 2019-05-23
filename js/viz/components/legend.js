@@ -803,7 +803,7 @@ extend(legendPrototype, {
 
     _calculateTotalBox: function() {
         const markerBox = this._markersGroup.getBBox();
-        const titleBox = this._title.getLayoutOptions();
+        const titleBox = this._title.getCorrectedLayoutOptions();
         const box = this._insideLegendGroup.getBBox();
 
         const verticalPadding = this._background ? 2 * this._options.paddingTopBottom : 0;
@@ -881,7 +881,7 @@ extend(legendPrototype, {
     _shiftTitle: function(boxWidth) {
         const that = this;
         const title = that._title;
-        const titleBox = title.getLayoutOptions();
+        const titleBox = title.getCorrectedLayoutOptions();
         if(!titleBox || !title.hasText()) {
             return;
         }
@@ -889,7 +889,7 @@ extend(legendPrototype, {
         const { horizontalAlignment, paddingLeftRight, itemTextPosition } = that._options;
         const width = boxWidth - (that._background ? 2 * paddingLeftRight : 0);
         const titleOptions = title.getOptions();
-        let titleY = titleBox.y + titleOptions.margin.top;
+        let titleY = titleBox.y;
         let titleX = titleBox.x;
 
         if(titleOptions.verticalAlignment === BOTTOM) {
