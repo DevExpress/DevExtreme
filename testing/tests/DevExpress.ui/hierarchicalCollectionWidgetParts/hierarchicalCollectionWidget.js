@@ -6,23 +6,21 @@ const DISABLED_STATE_CLASS = "dx-state-disabled";
 
 let { module, test } = QUnit;
 
-var TestComponent = HierarchicalCollectionWidget.inherit({
+class TestComponent extends HierarchicalCollectionWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.NAME = "TestComponent";
+        this._activeStateUnit = ".item";
+    }
+    _itemContainer() { return this.$element(); }
 
-    NAME: "TestComponent",
-
-    _activeStateUnit: ".item",
-
-    _itemContainer: function() {
-        return this.$element();
-    },
-
-    _createActionByOption: function(optionName, config) {
+    _createActionByOption(optionName, config) {
+        this.__actionConfigs = !this.__actionConfigs ? {} : this.__actionConfigs;
         this.__actionConfigs[optionName] = config;
-        return this.callBase.apply(this, arguments);
-    },
 
-    __actionConfigs: {}
-});
+        return super._createActionByOption(...arguments);
+    }
+}
 
 const createHierarchicalCollectionWidget = options => new TestComponent($("#hcw"), options);
 
