@@ -1023,6 +1023,9 @@ export const MockAxis = function(renderOptions) {
         getCategoriesSorter: function() {
             return this._options.categoriesSortingMethod;
         },
+        getAxisPosition: function() {
+            return 300;
+        },
         getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),
