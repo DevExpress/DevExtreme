@@ -355,8 +355,7 @@ const subscribes = {
             allDayPanelTopOffset = !isAllDay ? this.getWorkSpaceAllDayOffset() : 0,
             headerHeight = this.getWorkSpaceHeaderPanelHeight(),
             scrollLeft = this.getWorkSpaceScrollableScrollLeft(),
-            hasCrossScrollingEnabled = this.option('crossScrollingEnabled'),
-            tableLeftOffset = this.getWorkSpaceDateTableOffset() - (hasCrossScrollingEnabled ? 0 : $('.dx-scheduler-date-table-scrollable')[0].offsetLeft);
+            tableLeftOffset = this.getWorkSpaceDateTableOffset();
         let topOffset = -scrollTop + allDayPanelTopOffset + headerHeight,
             leftOffset = -scrollLeft - tableLeftOffset;
         options.callback({
