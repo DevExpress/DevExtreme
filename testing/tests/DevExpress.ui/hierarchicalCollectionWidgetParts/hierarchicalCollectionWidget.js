@@ -97,20 +97,6 @@ module("render", {
             try {
                 createHierarchicalCollectionWidget({
                     displayExpr: dataExprValue,
-                    items: ["item 1", "item2"]
-                });
-
-                let $item = $("#hcw").find(".dx-item").eq(0);
-                assert.equal($item.text(), "");
-            } catch(e) {
-                assert.ok(false, "Error has been raised");
-            }
-        });
-
-        test(`DisplayExpr: ${dataExprValue}, items without 'text' property`, (assert) => {
-            try {
-                createHierarchicalCollectionWidget({
-                    displayExpr: dataExprValue,
                     items: [{ name: "item 1" }]
                 });
 
