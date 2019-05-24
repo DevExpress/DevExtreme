@@ -55,5 +55,5 @@ QUnit.performanceTest("Accordion should force minimum relayout count on selectio
         $element.dxAccordion("option", "selectedIndex", 1);
     };
 
-    assert.measureStyleRecalculation(measureFunction, 5);
+    assert.measureStyleRecalculation(measureFunction, (value) => value < 6);
 });
