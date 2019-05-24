@@ -14,45 +14,35 @@ import List from "ui/list";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
-import editingTests from "./collectionWidgetParts/editingTests.js";
-import * as liveUpdateTests from "./collectionWidgetParts/liveUpdateTests.js";
 
 const ITEM_CLASS = "dx-item";
-const ITEM_CONTENT_CLASS = "dx-item-content";
+const ITEM_CONTENT_CLASS = `${ITEM_CLASS}-content`;
 const DEFAULT_EMPTY_TEXT = "No data to display";
 const EMPTY_MESSAGE_CLASS = "dx-empty-message";
 const COLLECTION_CLASS = "dx-collection";
 const FOCUSED_ITEM_CLASS = "dx-state-focused";
 const ACTIVE_ITEM_CLASS = "dx-state-active";
 
-const TestComponent = CollectionWidget.inherit({
+const { module, test, testInActiveWindow } = QUnit;
 
-    NAME: "TestComponent",
+class TestComponent extends CollectionWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.NAME = "TestComponent";
+        this._activeStateUnit = ".item";
+    }
 
-    _activeStateUnit: ".item",
-
-    _itemClass() {
-        return "item";
-    },
-
-    _itemDataKey() {
-        return "123";
-    },
-
-    _itemContainer() {
-        return this.$element();
-    },
-
-    _allowDynamicItemsAppend() {
-        return true;
-    },
+    _itemClass() { return "item"; }
+    _itemDataKey() { return "123"; }
+    _itemContainer() { return this.$element(); }
+    _allowDynamicItemsAppend() { return true; }
 
     _createActionByOption(optionName, config) {
+        this.__actionConfigs = !this.__actionConfigs ? {} : this.__actionConfigs;
         this.__actionConfigs[optionName] = config;
-        return this.callBase(...arguments);
-    },
-    __actionConfigs: {}
-});
+        return super._createActionByOption(...arguments);
+    }
+}
 
 QUnit.testStart(() => {
     const markup = `
@@ -88,10 +78,11 @@ QUnit.testStart(() => {
 
     $("#qunit-fixture").html(markup);
 });
-editingTests.run();
-liveUpdateTests.run();
 
-QUnit.module("render", {
+import "./collectionWidgetParts/editingTests.js";
+import "./collectionWidgetParts/liveUpdateTests.js";
+
+module("render", {
     beforeEach: () => {
         this.element = $("#cmp");
         this.clock = sinon.useFakeTimers();
@@ -102,14 +93,14 @@ QUnit.module("render", {
     }
 }, () => {
 
-    QUnit.test("markup init", assert => {
+    test("markup init", assert => {
         const element = this.element;
         new TestComponent(element, {});
 
         assert.ok(element.hasClass(COLLECTION_CLASS), "collection widget has dx-collection class");
     });
 
-    QUnit.test("item content should be wrapped", assert => {
+    test("item content should be wrapped", assert => {
         const element = this.element;
         const component = new TestComponent(element, { items: [1] });
 
@@ -124,7 +115,7 @@ QUnit.module("render", {
         assert.equal($itemContent.contents().text(), "1", "item content placed inside content");
     });
 
-    QUnit.test("custom render func, returns jquery", assert => {
+    test("custom render func, returns jquery", assert => {
         const element = this.element;
 
         new TestComponent("#cmp", {
@@ -145,7 +136,7 @@ QUnit.module("render", {
         assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: 2;");
     });
 
-    QUnit.test("custom render func, returns jquery", assert => {
+    test("custom render func, returns jquery", assert => {
         const element = this.element;
         new TestComponent("#cmp", {
             items: [{
@@ -165,7 +156,7 @@ QUnit.module("render", {
         assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
     });
 
-    QUnit.test("custom render func, returns dom node", assert => {
+    test("custom render func, returns dom node", assert => {
         const element = this.element;
         new TestComponent("#cmp", {
             integrationOptions: {
@@ -194,7 +185,7 @@ QUnit.module("render", {
         assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
     });
 
-    QUnit.test("custom render func, returns string", assert => {
+    test("custom render func, returns string", assert => {
         const element = this.element;
 
         new TestComponent("#cmp", {
@@ -214,7 +205,7 @@ QUnit.module("render", {
         assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: ;");
     });
 
-    QUnit.test("custom render func, returns numbers", assert => {
+    test("custom render func, returns numbers", assert => {
         const element = this.element;
 
         new TestComponent("#cmp", {
@@ -228,7 +219,7 @@ QUnit.module("render", {
         assert.equal($.trim(element.text()), "01");
     });
 
-    QUnit.test("itemTemplateProperty option", assert => {
+    test("itemTemplateProperty option", assert => {
         const $element = $("#cmp-with-template");
 
         const instance = new TestComponent(
@@ -241,13 +232,13 @@ QUnit.module("render", {
         assert.equal($.trim($item.text()), "First Template", "item has correct template");
     });
 
-    QUnit.test("item takes new template", assert => {
+    test("item takes new template", assert => {
         const componentWithTemplate = new TestComponent("#cmp-with-template", { itemTemplate: "testTemplate" });
         const component = new TestComponent("#cmp", { itemTemplate: componentWithTemplate._getTemplateByOption("itemTemplate") });
         assert.equal(component._getTemplateByOption("itemTemplate"), componentWithTemplate._getTemplateByOption("itemTemplate"));
     });
 
-    QUnit.test("anonymous item template", assert => {
+    test("anonymous item template", assert => {
         const $element = $("<div>").append($("<div>").addClass("test"));
 
         new TestComponent($element, {
@@ -257,7 +248,7 @@ QUnit.module("render", {
         assert.equal($element.find(".test").length, 2);
     });
 
-    QUnit.test("'itemTemplate' as DOM node", assert => {
+    test("'itemTemplate' as DOM node", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -270,7 +261,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    QUnit.test("'itemTemplate' as jQuery element", assert => {
+    test("'itemTemplate' as jQuery element", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -283,7 +274,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    QUnit.test("'itemTemplate' as jQuery element with custom template engine", assert => {
+    test("'itemTemplate' as jQuery element with custom template engine", assert => {
         setTemplateEngine({
             compile: noop,
             render() {
@@ -307,7 +298,7 @@ QUnit.module("render", {
         }
     });
 
-    QUnit.test("'itemTemplate' as function returning template name", assert => {
+    test("'itemTemplate' as function returning template name", assert => {
         const $element = $("#cmp-with-template");
 
         new TestComponent($element, {
@@ -322,7 +313,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "First Template");
     });
 
-    QUnit.test("'itemTemplate' as function returning template name that is not string", assert => {
+    test("'itemTemplate' as function returning template name that is not string", assert => {
         const $element = $("#cmp-with-zero-template");
 
         new TestComponent($element, {
@@ -335,7 +326,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "zero");
     });
 
-    QUnit.test("'itemTemplate' as function returning string", assert => {
+    test("'itemTemplate' as function returning string", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -348,7 +339,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "0");
     });
 
-    QUnit.test("'itemTemplate' as function returning template DOM node", assert => {
+    test("'itemTemplate' as function returning template DOM node", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -363,7 +354,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    QUnit.test("'itemTemplate' as function returning template jQuery element", assert => {
+    test("'itemTemplate' as function returning template jQuery element", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -376,7 +367,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).children().text()), "Test");
     });
 
-    QUnit.test("'itemTemplate' as script element", assert => {
+    test("'itemTemplate' as script element", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -387,7 +378,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).html()), "Test");
     });
 
-    QUnit.test("'itemTemplate' as script element (no root element)", assert => {
+    test("'itemTemplate' as script element (no root element)", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -400,7 +391,7 @@ QUnit.module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Outer text Test");
     });
 
-    QUnit.test("'itemTemplate' as script element (no root element) with string renderer in template engine (T161432)", assert => {
+    test("'itemTemplate' as script element (no root element) with string renderer in template engine (T161432)", assert => {
         setTemplateEngine({
             compile(element) {
                 return element.html();
@@ -426,7 +417,7 @@ QUnit.module("render", {
         }
     });
 
-    QUnit.test("itemTemplate should get correct index for second page", assert => {
+    test("itemTemplate should get correct index for second page", assert => {
         const itemTemplateMethod = sinon.spy();
         const $element = $("#cmp");
 
@@ -448,7 +439,7 @@ QUnit.module("render", {
         assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
     });
 
-    QUnit.test("data item indices should be recalculated after item delete", assert => {
+    test("data item indices should be recalculated after item delete", assert => {
         const component = new TestComponent($("#cmp"), {
             items: ["Item 1", "Item 2", "Item 3"]
         });
@@ -464,12 +455,12 @@ QUnit.module("render", {
         assert.equal($itemElements.eq(1).data("123"), "Item 3", "second item text is correct");
     });
 
-    QUnit.test("No data text message - no items and source", assert => {
+    test("No data text message - no items and source", assert => {
         const component = new TestComponent("#cmp", {});
         assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 1);
     });
 
-    QUnit.test("No data text message - empty items", assert => {
+    test("No data text message - empty items", assert => {
         const list = new List(this.element);
 
         list.option("items", null);
@@ -482,7 +473,7 @@ QUnit.module("render", {
         assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    QUnit.test("No data text message - empty dataSource", assert => {
+    test("No data text message - empty dataSource", assert => {
         executeAsyncMock.setup();
 
         new TestComponent("#cmp", {
@@ -502,12 +493,12 @@ QUnit.module("render", {
         assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    QUnit.test("No data text message - value", assert => {
+    test("No data text message - value", assert => {
         new TestComponent("#cmp");
         assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).text(), DEFAULT_EMPTY_TEXT);
     });
 
-    QUnit.test("No data text message - custom value", assert => {
+    test("No data text message - custom value", assert => {
         let noDataText = "noDataText";
 
         const component = new TestComponent("#cmp", {
@@ -521,7 +512,7 @@ QUnit.module("render", {
         assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
     });
 
-    QUnit.test("message element is not rendered if no data text is null, '', false", assert => {
+    test("message element is not rendered if no data text is null, '', false", assert => {
         const component = new TestComponent("#cmp", {
             noDataText: null
         });
@@ -535,7 +526,7 @@ QUnit.module("render", {
         assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    QUnit.test("No data message may contain HTML markup", assert => {
+    test("No data message may contain HTML markup", assert => {
         const component = new TestComponent("#cmp", {
             noDataText: "<div class=\"custom\">No data custom</div>"
         });
@@ -545,7 +536,7 @@ QUnit.module("render", {
         assert.equal($noDataContainer.find(".custom").length, 1, "custom HTML markup is present");
     });
 
-    QUnit.test("B235442 - 'No data to display' blinks while items loading ", assert => {
+    test("B235442 - 'No data to display' blinks while items loading ", assert => {
         const store = new ArrayStore([0, 1, 3, 4]);
         const source = new DataSource(store);
         const el = this.element;
@@ -557,7 +548,7 @@ QUnit.module("render", {
         assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    QUnit.test("B235884 - 'No data' no show ", assert => {
+    test("B235884 - 'No data' no show ", assert => {
         const deferred = $.Deferred();
         const el = this.element;
 
@@ -578,7 +569,7 @@ QUnit.module("render", {
         assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 1, "'No data' shown");
     });
 
-    QUnit.test("render items with multiple templates, jquery scenario", assert => {
+    test("render items with multiple templates, jquery scenario", assert => {
         const $element = $("#container-with-jq-template");
         const testSet = ["First Template", "Second Template", "eraser", "abc", "pencil", "First Template"];
         let $items;
@@ -619,7 +610,7 @@ QUnit.module("render", {
         });
     });
 
-    QUnit.test("onContentReady should be fired after if dataSource isn't empty", assert => {
+    test("onContentReady should be fired after if dataSource isn't empty", assert => {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -632,7 +623,7 @@ QUnit.module("render", {
         assert.equal(count, 1, "onContentReady fired after dataSource load");
     });
 
-    QUnit.test("onContentReady should be fired after if dataSource is empty", assert => {
+    test("onContentReady should be fired after if dataSource is empty", assert => {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -645,7 +636,7 @@ QUnit.module("render", {
         assert.equal(count, 1, "onContentReady fired after dataSource load");
     });
 
-    QUnit.test("onContentReady should be fired after if items isn't empty", assert => {
+    test("onContentReady should be fired after if items isn't empty", assert => {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -658,7 +649,7 @@ QUnit.module("render", {
         assert.equal(count, 1, "onContentReady fired");
     });
 
-    QUnit.test("onContentReady should be fired after if items is empty", assert => {
+    test("onContentReady should be fired after if items is empty", assert => {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -671,7 +662,7 @@ QUnit.module("render", {
         assert.equal(count, 1, "onContentReady fired");
     });
 
-    QUnit.test("item.visible property changing should not re-render whole item (T259051)", assert => {
+    test("item.visible property changing should not re-render whole item (T259051)", assert => {
         const instance = new TestComponent("#cmp", {
             items: [{ text: '1' }]
         });
@@ -682,7 +673,7 @@ QUnit.module("render", {
         assert.ok($item.is(instance.$element().find(".item")));
     });
 
-    QUnit.test("item.disabled property changing should not re-render whole item", assert => {
+    test("item.disabled property changing should not re-render whole item", assert => {
         const instance = new TestComponent("#cmp", {
             items: [{ text: '1' }]
         });
@@ -693,7 +684,7 @@ QUnit.module("render", {
         assert.ok($item.is(instance.$element().find(".item")));
     });
 
-    QUnit.test("_getSummaryItemsWidth function returns right values", assert => {
+    test("_getSummaryItemsWidth function returns right values", assert => {
         const instance = new TestComponent("#cmp", {
             items: [
                 { html: '<div class="test-width" style="width: 20px; padding-left: 7px"></div>' },
@@ -706,7 +697,7 @@ QUnit.module("render", {
     });
 });
 
-QUnit.module("events", {
+module("events", {
     beforeEach: () => {
         registerComponent("TestComponent", TestComponent);
         this.clock = sinon.useFakeTimers();
@@ -716,7 +707,7 @@ QUnit.module("events", {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("onItemClick should be fired when item is clicked", assert => {
+    test("onItemClick should be fired when item is clicked", assert => {
         let actionFired;
         let actionData;
 
@@ -740,7 +731,7 @@ QUnit.module("events", {
         assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
     });
 
-    QUnit.test("onItemClick should have correct item index when placed near another collection", assert => {
+    test("onItemClick should have correct item index when placed near another collection", assert => {
         let actionData;
 
         const $element = $("#cmp");
@@ -762,7 +753,7 @@ QUnit.module("events", {
         assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
     });
 
-    QUnit.test("item should not have active-state class after click, if it is disabled", assert => {
+    test("item should not have active-state class after click, if it is disabled", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -778,7 +769,7 @@ QUnit.module("events", {
         assert.ok(!$item.hasClass(ACTIVE_ITEM_CLASS), "active state was not toggled for disabled item");
     });
 
-    QUnit.test("item should not have focus-state class after focusin, if it is disabled", assert => {
+    test("item should not have focus-state class after focusin, if it is disabled", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -794,7 +785,7 @@ QUnit.module("events", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus state was not toggled for disabled item");
     });
 
-    QUnit.test("Action should be fired when item is held", assert => {
+    test("Action should be fired when item is held", assert => {
         let actionFired;
         let actionData;
 
@@ -816,7 +807,7 @@ QUnit.module("events", {
         assert.strictEqual("0", actionData.itemData, "correct element passed");
     });
 
-    QUnit.test("onItemHold should be fired when action changed dynamically", assert => {
+    test("onItemHold should be fired when action changed dynamically", assert => {
         let actionFired;
 
         const $element = $("#cmp");
@@ -834,7 +825,7 @@ QUnit.module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    QUnit.test("itemHold event should be fired", assert => {
+    test("itemHold event should be fired", assert => {
         let actionFired;
 
         const $element = $("#cmp");
@@ -852,7 +843,7 @@ QUnit.module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    QUnit.test("itemHoldTimeout should be passed to hold event", assert => {
+    test("itemHoldTimeout should be passed to hold event", assert => {
         let actionFired;
         const $element = $("#cmp");
 
@@ -873,7 +864,7 @@ QUnit.module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    QUnit.test("onItemContextMenu should be fired when item is held or right clicked", assert => {
+    test("onItemContextMenu should be fired when item is held or right clicked", assert => {
         let actionFired;
         let actionData;
 
@@ -895,7 +886,7 @@ QUnit.module("events", {
         assert.strictEqual("0", actionData.itemData, "correct element passed");
     });
 
-    QUnit.test("itemContextMenu event should be fired when item is held or right clicked", assert => {
+    test("itemContextMenu event should be fired when item is held or right clicked", assert => {
         let actionFired;
         let actionData;
         const $element = $("#cmp");
@@ -916,7 +907,7 @@ QUnit.module("events", {
         assert.strictEqual("0", actionData.itemData, "correct element passed");
     });
 
-    QUnit.test("onItemContextMenu should be fired when action changed dynamically", assert => {
+    test("onItemContextMenu should be fired when action changed dynamically", assert => {
         let actionFired;
 
         const $element = $("#cmp");
@@ -939,7 +930,7 @@ QUnit.module("events", {
         }
     });
 
-    QUnit.test("hold should not be handled if onItemHold or onItemContextMenu is not specified", assert => {
+    test("hold should not be handled if onItemHold or onItemContextMenu is not specified", assert => {
         let actionFired;
 
         const $element = $("#cmp");
@@ -960,7 +951,7 @@ QUnit.module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    QUnit.test("click on selected item does not fire option change if selectionRequired option is true", assert => {
+    test("click on selected item does not fire option change if selectionRequired option is true", assert => {
         let actionFired = false;
 
         const $element = $("#cmp");
@@ -985,7 +976,7 @@ QUnit.module("events", {
         assert.ok(!actionFired, "option does not change");
     });
 
-    QUnit.test("'onItemRendered' event should be fired with correct arguments", assert => {
+    test("'onItemRendered' event should be fired with correct arguments", assert => {
         const items = ["item 0"];
         let eventTriggered;
         let eventData;
@@ -1009,7 +1000,7 @@ QUnit.module("events", {
         assert.equal(instance.__actionConfigs.onItemRendered.category, "rendering", "action category is 'rendering'");
     });
 
-    QUnit.test("onClick option in item", assert => {
+    test("onClick option in item", assert => {
         let itemClicked = 0;
         const item = {
             text: 'test',
@@ -1036,8 +1027,8 @@ QUnit.module("events", {
     });
 });
 
-QUnit.module("option change", () => {
-    QUnit.test("changing onItemRendered should not fire refresh", assert => {
+module("option change", () => {
+    test("changing onItemRendered should not fire refresh", assert => {
         const instance = new TestComponent($("#cmp"), { items: [1, 2, 3] });
         let itemsReRendered = false;
 
@@ -1047,7 +1038,7 @@ QUnit.module("option change", () => {
         assert.ok(!itemsReRendered, "items does not refreshed");
     });
 
-    QUnit.test("user defined selectedItem with null value should be more important than default selected index", assert => {
+    test("user defined selectedItem with null value should be more important than default selected index", assert => {
         const TestCollection = CollectionWidget.inherit({
             NAME: "TestCollection",
             _getDefaultOptions() {
@@ -1069,7 +1060,7 @@ QUnit.module("option change", () => {
     });
 });
 
-QUnit.module("items via markup", {
+module("items via markup", {
     beforeEach: () => {
         registerComponent("dxTestComponent", TestComponent);
     },
@@ -1077,7 +1068,7 @@ QUnit.module("items via markup", {
         delete $.fn["dxTestComponent"];
     }
 }, () => {
-    QUnit.test("item property changing should not re-render whole widget", assert => {
+    test("item property changing should not re-render whole widget", assert => {
         const contentReadySpy = sinon.spy();
 
         const component = new TestComponent("#cmp", {
@@ -1089,7 +1080,7 @@ QUnit.module("items via markup", {
         assert.equal(contentReadySpy.callCount, 1);
     });
 
-    QUnit.test("dxItem should not be modified", assert => {
+    test("dxItem should not be modified", assert => {
         const $element = $("#cmp");
         const dxItemString = "dxItem: {}";
 
@@ -1101,7 +1092,7 @@ QUnit.module("items via markup", {
         assert.equal($innerItem.attr("data-options"), dxItemString, "item was not changed");
     });
 
-    QUnit.test("dxItem with custom parser", assert => {
+    test("dxItem with custom parser", assert => {
         const originalParser = config().optionsParser;
         config({ optionsParser: JSON.parse });
         const $element = $("#cmp");
@@ -1121,7 +1112,7 @@ QUnit.module("items via markup", {
     });
 });
 
-QUnit.module("keyboard navigation", {
+module("keyboard navigation", {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
     },
@@ -1129,7 +1120,7 @@ QUnit.module("keyboard navigation", {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("loopItemFocus option test", assert => {
+    test("loopItemFocus option test", assert => {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1152,7 +1143,7 @@ QUnit.module("keyboard navigation", {
         assert.ok(!$firstItem.hasClass(FOCUSED_ITEM_CLASS), "focus is not looping when option loopItemFocus set to false");
     });
 
-    QUnit.test("onItemClick fires on enter and space", assert => {
+    test("onItemClick fires on enter and space", assert => {
         assert.expect(2);
 
         let itemClicked = 0;
@@ -1178,7 +1169,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(itemClicked, 2, "press space on item call item click action");
     }),
 
-    QUnit.test("default page scroll should be prevented for space key", assert => {
+    test("default page scroll should be prevented for space key", assert => {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1197,7 +1188,7 @@ QUnit.module("keyboard navigation", {
         keyboardMock($element).keyDown("space");
     }),
 
-    QUnit.test("focused item changed after press right/left arrows", assert => {
+    test("focused item changed after press right/left arrows", assert => {
         assert.expect(3);
 
         const $element = $("#cmp");
@@ -1222,7 +1213,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on item change focused item on prev");
     }),
 
-    QUnit.test("focused item changed after press right/left arrows for rtl", assert => {
+    test("focused item changed after press right/left arrows for rtl", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1249,7 +1240,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
     }),
 
-    QUnit.test("focused item changed after press up/down arrows", assert => {
+    test("focused item changed after press up/down arrows", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1275,7 +1266,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press up arrow on item change focused item on prev");
     }),
 
-    QUnit.test("focused item changed on next not hidden item after press left/right", assert => {
+    test("focused item changed on next not hidden item after press left/right", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1304,7 +1295,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "next not hidden item has focused class after press right when next item is hidden");
     });
 
-    QUnit.test("focused item cycle", assert => {
+    test("focused item cycle", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1330,7 +1321,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press down arrow on last item change focused item on first");
     }),
 
-    QUnit.test("focused item changed after press pageUp/Down", assert => {
+    test("focused item changed after press pageUp/Down", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1356,7 +1347,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press pageUp on item change focused item on prev");
     }),
 
-    QUnit.test("focused item changed after press home/end", assert => {
+    test("focused item changed after press home/end", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1382,7 +1373,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press home on item change focused item on prev");
     }),
 
-    QUnit.test("focused item changed on last but one after press home/end if last is hidden", assert => {
+    test("focused item changed on last but one after press home/end if last is hidden", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1410,7 +1401,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has focused class after press home when first item is hidden");
     });
 
-    QUnit.test("focus attribute", assert => {
+    test("focus attribute", assert => {
         assert.expect(4);
 
         const $element = $("#cmp");
@@ -1438,7 +1429,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has id active after press down arrow key");
     });
 
-    QUnit.test("selectOnFocus test", assert => {
+    test("selectOnFocus test", assert => {
         assert.expect(9);
 
         const $element = $("#cmp");
@@ -1487,7 +1478,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(instance.option("selectedIndex"), 2, "loopItemFocus is working");
     });
 
-    QUnit.test("focused item should be changed asynchronous (T400886)", assert => {
+    test("focused item should be changed asynchronous (T400886)", assert => {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1505,7 +1496,7 @@ QUnit.module("keyboard navigation", {
         assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set after timeout");
     });
 
-    QUnit.testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", assert => {
+    testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", assert => {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1521,7 +1512,7 @@ QUnit.module("keyboard navigation", {
         assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus isn't set");
     });
 
-    QUnit.test("focused item should not be changed if pointerdown prevented (T400886)", assert => {
+    test("focused item should not be changed if pointerdown prevented (T400886)", assert => {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1539,7 +1530,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(instance.option("focusedElement"), null, "focus isn't set");
     });
 
-    QUnit.test("selectOnFocus test for widget with disabled items", assert => {
+    test("selectOnFocus test for widget with disabled items", assert => {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1564,7 +1555,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "correct item has an focused-state");
     });
 
-    QUnit.test("Item should not lose focus class when you use arrows with 'selectOnFocus' option", assert => {
+    test("Item should not lose focus class when you use arrows with 'selectOnFocus' option", assert => {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -1593,7 +1584,7 @@ QUnit.module("keyboard navigation", {
     });
 });
 
-QUnit.module("focus policy", {
+module("focus policy", {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
     },
@@ -1601,7 +1592,7 @@ QUnit.module("focus policy", {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("dx-state-focused is not set for item when focusStateEnabled is false by dxpoinerdown", assert => {
+    test("dx-state-focused is not set for item when focusStateEnabled is false by dxpoinerdown", assert => {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1618,7 +1609,7 @@ QUnit.module("focus policy", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    QUnit.test("dx-state-focused is not set for item when it is not closest focused target by dxpoinerdown", assert => {
+    test("dx-state-focused is not set for item when it is not closest focused target by dxpoinerdown", assert => {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1638,7 +1629,7 @@ QUnit.module("focus policy", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    QUnit.test("focusedElement is set for item when nested element selected by dxpoinerdown", assert => {
+    test("focusedElement is set for item when nested element selected by dxpoinerdown", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1659,7 +1650,7 @@ QUnit.module("focus policy", {
         assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set to first item");
     });
 
-    QUnit.test("dx-state-focused is not set for item when it is not closest focused target by focusin", assert => {
+    test("dx-state-focused is not set for item when it is not closest focused target by focusin", assert => {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1678,7 +1669,7 @@ QUnit.module("focus policy", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    QUnit.test("option focusOnSelectedItem", assert => {
+    test("option focusOnSelectedItem", assert => {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1695,7 +1686,7 @@ QUnit.module("focus policy", {
         assert.ok($element.find(".item").eq(0).hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    QUnit.test("option focusOnSelectedItem", assert => {
+    test("option focusOnSelectedItem", assert => {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1712,7 +1703,7 @@ QUnit.module("focus policy", {
         assert.ok($element.find(".item").eq(1).hasClass(FOCUSED_ITEM_CLASS), "focus set to selected item");
     });
 
-    QUnit.test("item is focused after setting focusedElement option", assert => {
+    test("item is focused after setting focusedElement option", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1733,7 +1724,7 @@ QUnit.module("focus policy", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused after setting focusedItem option");
     });
 
-    QUnit.test("first item  should be focused after setting focusedElement option to empty array", assert => {
+    test("first item  should be focused after setting focusedElement option to empty array", assert => {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1751,7 +1742,7 @@ QUnit.module("focus policy", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
     });
 
-    QUnit.test("item is focused after focusing on element", assert => {
+    test("item is focused after focusing on element", assert => {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1770,8 +1761,8 @@ QUnit.module("focus policy", {
     });
 });
 
-QUnit.module("isReady", () => {
-    QUnit.test("collection widget is ready when dataSource is loaded", assert => {
+module("isReady", () => {
+    test("collection widget is ready when dataSource is loaded", assert => {
         let isReadyBeforeLoaded;
         const deferred = $.Deferred();
 
@@ -1816,7 +1807,7 @@ const TestStore = Store.inherit({
     }
 });
 
-QUnit.module("Data layer integration", {
+module("Data layer integration", {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
     },
@@ -1824,7 +1815,7 @@ QUnit.module("Data layer integration", {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("data widget doesn't load already loaded datasource", assert => {
+    test("data widget doesn't load already loaded datasource", assert => {
         assert.expect(3);
 
         const store = new TestStore();
@@ -1847,7 +1838,7 @@ QUnit.module("Data layer integration", {
         this.clock.tick(1);
     });
 
-    QUnit.test("data widget should handle dataSource loading error", assert => {
+    test("data widget should handle dataSource loading error", assert => {
         const deferred = $.Deferred();
         let contentReadyFired = 0;
 
@@ -1868,12 +1859,12 @@ QUnit.module("Data layer integration", {
     });
 });
 
-QUnit.module("aria accessibility", {
+module("aria accessibility", {
     beforeEach: () => {
         this.items = [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }];
     }
 }, () => {
-    QUnit.test("aria-activedescendant should be refreshed when focused item changed", assert => {
+    test("aria-activedescendant should be refreshed when focused item changed", assert => {
         assert.expect(1);
 
         const widget = new TestWidget("#cmp", {
@@ -1895,7 +1886,7 @@ QUnit.module("aria accessibility", {
         }
     });
 
-    QUnit.test("aria-selected property", assert => {
+    test("aria-selected property", assert => {
         const $element = $("#cmp");
 
         new TestWidget($element, {
@@ -1911,7 +1902,7 @@ QUnit.module("aria accessibility", {
         assert.equal($item1.attr("aria-selected"), "true", "selected item has aria-selected property as false");
     });
 
-    QUnit.test("aria-label for empty collection", assert => {
+    test("aria-label for empty collection", assert => {
         const $element = $("#cmp");
 
         const instance = new TestWidget($element, {
@@ -1924,7 +1915,7 @@ QUnit.module("aria accessibility", {
         assert.equal($element.attr("aria-label"), undefined, "aria-label for not empty collection is correct");
     });
 
-    QUnit.test("onFocusedItemChanged option on init", assert => {
+    test("onFocusedItemChanged option on init", assert => {
         assert.expect(3);
 
         const $element = $("#cmp");
@@ -1952,7 +1943,7 @@ QUnit.module("aria accessibility", {
         instance.option("focusedElement", $item1);
     });
 
-    QUnit.test("getDataSource. dataSource is not defined", assert => {
+    test("getDataSource. dataSource is not defined", assert => {
         const $element = $("#cmp");
 
         const instance = new TestWidget($element, {
@@ -1962,7 +1953,7 @@ QUnit.module("aria accessibility", {
         assert.strictEqual(instance.getDataSource(), null);
     });
 
-    QUnit.test("getDataSource, dataSource is defined", assert => {
+    test("getDataSource, dataSource is defined", assert => {
         const $element = $("#cmp");
 
         const instance = new TestWidget($element, {
@@ -1973,7 +1964,7 @@ QUnit.module("aria accessibility", {
     });
 });
 
-QUnit.module("default template", {
+module("default template", {
     beforeEach: () => {
         this.prepareItemTest = (data) => {
             const testWidget = new TestWidget($("<div>"), {
@@ -1984,31 +1975,31 @@ QUnit.module("default template", {
         };
     }
 }, () => {
-    QUnit.test("template should be rendered correctly with text", assert => {
+    test("template should be rendered correctly with text", assert => {
         const $content = this.prepareItemTest("custom");
 
         assert.equal($content.text(), "custom");
     });
 
-    QUnit.test("template should be rendered correctly with boolean", assert => {
+    test("template should be rendered correctly with boolean", assert => {
         const $content = this.prepareItemTest(true);
 
         assert.equal($.trim($content.text()), "true");
     });
 
-    QUnit.test("template should be rendered correctly with number", assert => {
+    test("template should be rendered correctly with number", assert => {
         const $content = this.prepareItemTest(1);
 
         assert.equal($.trim($content.text()), "1");
     });
 
-    QUnit.test("template should be rendered correctly with text", assert => {
+    test("template should be rendered correctly with text", assert => {
         const $content = this.prepareItemTest({ text: "custom" });
 
         assert.equal($.trim($content.text()), "custom");
     });
 
-    QUnit.test("template should be rendered correctly with html", assert => {
+    test("template should be rendered correctly with html", assert => {
         const $content = this.prepareItemTest({ html: "<span>test</span>" });
 
         const $span = $content.is("span") ? $content : $content.children();
@@ -2016,13 +2007,13 @@ QUnit.module("default template", {
         assert.equal($span.text(), "test");
     });
 
-    QUnit.test("template should be rendered correctly with htmlstring", assert => {
+    test("template should be rendered correctly with htmlstring", assert => {
         const $content = this.prepareItemTest("<span>test</span>");
 
         assert.equal($content.text(), "<span>test</span>");
     });
 
-    QUnit.test("template should be rendered correctly with html & text", assert => {
+    test("template should be rendered correctly with html & text", assert => {
         const $content = this.prepareItemTest({ text: "text", html: "<span>test</span>" });
 
         const $span = $content.is("span") ? $content : $content.children();
@@ -2031,7 +2022,7 @@ QUnit.module("default template", {
         assert.equal($content.text(), "test");
     });
 
-    QUnit.test("displayExpr option should work", assert => {
+    test("displayExpr option should work", assert => {
         const $element = $("#cmp");
 
         const instance = new TestWidget($element, {
