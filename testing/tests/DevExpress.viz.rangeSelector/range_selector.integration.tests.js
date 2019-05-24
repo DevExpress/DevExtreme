@@ -9,6 +9,25 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
+QUnit.module("Render", function(hook) {
+    hook.beforeEach(function() {
+        this.rangeSelector = $("#container").dxRangeSelector({
+            scale: {
+                startValue: 1,
+                endValue: 11
+            }
+        }).dxRangeSelector("instance");
+    });
+
+    QUnit.test("Check scale sharp", function(assert) {
+        var lastTickIndex = this.rangeSelector._axis._axis._majorTicks.length - 1;
+        assert.equal(this.rangeSelector._axis._axis._axisElement._settings.sharp, "v");
+        assert.equal(this.rangeSelector._axis._axis._axisElement._settings.sharpDirection, 1);
+        assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharp, "h");
+        assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharpDirection, 1);
+    });
+});
+
 QUnit.module("Value", function(hook) {
     hook.beforeEach(function() {
         this.rangeSelector = $("#container").dxRangeSelector({
