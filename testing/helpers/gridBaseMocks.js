@@ -212,9 +212,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getCombinedFilter: commonUtils.noop,
+
             getRowIndexByKey: function() {
                 return -1;
             },
+
+            loadingOperationTypes: function() {
+                return {};
+            },
+
             skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),
