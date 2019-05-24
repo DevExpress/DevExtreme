@@ -200,6 +200,7 @@ import "./treeViewParts/animation.js";
 import "./treeViewParts/checkboxes.js";
 import "./treeViewParts/events.js";
 import "./treeViewParts/expandedItems.js";
+import "./treeViewParts/expresions.js";
 import "./treeViewParts/focusing.js";
 import "./treeViewParts/keyboardNavigation.js";
 import "./treeViewParts/lazyRendering.js";
