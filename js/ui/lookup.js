@@ -806,8 +806,13 @@ var Lookup = DropDownList.inherit({
         var flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(selectedIndex === -1 || flipped) return;
 
-        var selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS),
-            differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
+        var selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS);
+
+        if(selectedListItem.offset().top < 0) {
+            this._scrollToSelectedItem();
+        }
+
+        var differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
             popupContentParent = $(this._popup.content()).parent(),
             differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top,
             lookupTop = $(this.element()).offset().top,
