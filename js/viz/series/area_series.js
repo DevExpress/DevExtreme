@@ -127,15 +127,16 @@ var areaSeries = exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMe
         if(argAxis.getAxisPosition) {
             const argAxisPosition = argAxis.getAxisPosition();
             const axisOptions = argAxis.getOptions();
-            const edgeOffset = (!rotated ? -1 : 1) * (axisOptions ? Math.round(axisOptions.width / 2) : 1);
-
-            areaPoints.forEach((p, i) => {
-                if(p) {
-                    const index = points.length === 1 ? 0 : (i < points.length ? i : areaPoints.length - 1 - i);
-                    rotated && p.x === points[index].defaultX && p.x === argAxisPosition && (p.x += edgeOffset);
-                    !rotated && p.y === points[index].defaultY && p.y === argAxisPosition && (p.y += edgeOffset);
-                }
-            });
+            const edgeOffset = (!rotated ? -1 : 1) * Math.round(axisOptions.width / 2);
+            if(axisOptions.visible) {
+                areaPoints.forEach((p, i) => {
+                    if(p) {
+                        const index = points.length === 1 ? 0 : (i < points.length ? i : areaPoints.length - 1 - i);
+                        rotated && p.x === points[index].defaultX && p.x === argAxisPosition && (p.x += edgeOffset);
+                        !rotated && p.y === points[index].defaultY && p.y === argAxisPosition && (p.y += edgeOffset);
+                    }
+                });
+            }
         }
 
         return {
