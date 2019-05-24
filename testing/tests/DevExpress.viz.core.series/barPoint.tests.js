@@ -893,6 +893,24 @@ QUnit.test("Marker. Rotated chart", function(assert) {
     assert.deepEqual(this.renderer.stub("rect").firstCall.args, [12, 22, 43, 33]);
 });
 
+QUnit.test("Marker. Axis is invisible", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis()._options = { visible: false };
+    point.x = 11;
+    point.y = 22;
+    point.height = 33;
+    point.width = 44;
+    point.inVisibleArea = true;
+    point.minX = 300;
+    point.defaultX = 300;
+
+    point.draw(this.renderer, this.groups);
+
+    assert.ok(point.graphic);
+    assert.deepEqual(this.renderer.stub("rect").firstCall.args, [11, 22, 44, 33]);
+});
+
 QUnit.test("Marker. Range bar on axis", function(assert) {
     var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
 
