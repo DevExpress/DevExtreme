@@ -166,7 +166,7 @@ module("Focusing", () => {
 
         treeView.instance.focus();
 
-        assert.ok(treeView.getElement.children(`.${treeView.classes.SEARCH_CLASS}`).hasClass(`${this.classes.FOCUSED_ITEM_CLASS}`), "search editor is focused");
+        assert.ok(treeView.getElement().children(`.${treeView.classes.SEARCH_CLASS}`).hasClass(`${treeView.classes.FOCUSED_ITEM_CLASS}`), "search editor is focused");
     });
 
 });
