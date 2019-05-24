@@ -300,7 +300,7 @@ Axis.prototype = {
         this._updateAxisElementPosition();
 
         this._axisElement.attr({ "stroke-width": options.width, stroke: options.color, "stroke-opacity": options.opacity })
-            .sharp(this._getSharpParam(true), options.position === TOP || options.position === LEFT ? 1 : -1)
+            .sharp(this._getSharpParam(true), this.getAxisSharpDirection())
             .append(this._axisLineGroup);
     },
 
@@ -312,6 +312,18 @@ Axis.prototype = {
         return svgElement.sharp(this._getSharpParam(), sharpDirection);
     },
 
+    getAxisSharpDirection() {
+        const position = this._options.position;
+        return position === TOP || position === LEFT ? 1 : -1;
+    },
+
+    getSharpDirectionByCoords(coords) {
+        const canvas = this._getCanvasStartEnd();
+        const maxCoord = Math.max(canvas.start, canvas.end);
+
+        return this.getRadius ? 0 : (maxCoord !== coords[(this._isHorizontal ? "x" : "y")] ? 1 : -1);
+    },
+
     _getGridLineDrawer: function() {
         var that = this;
 
@@ -319,7 +331,7 @@ Axis.prototype = {
             var grid = that._getGridPoints(tick.coords);
 
             if(grid.points) {
-                return that._createPathElement(grid.points, gridStyle, tick.getSharpDirection());
+                return that._createPathElement(grid.points, gridStyle, that.getSharpDirectionByCoords(tick.coords));
             }
             return null;
         };

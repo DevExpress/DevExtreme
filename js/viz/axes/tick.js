@@ -62,19 +62,12 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 if(this.mark) {
                     this.mark.append(lineGroup);
-                    axis.sharp(this.mark, this.getSharpDirection());
+                    axis.sharp(this.mark, axis.getSharpDirectionByCoords(this.coords));
                     this.updateTickPosition(options);
                 } else {
-                    this.mark = axis._createPathElement([], tickStyle, this.getSharpDirection()).append(lineGroup);
+                    this.mark = axis._createPathElement([], tickStyle, axis.getSharpDirectionByCoords(this.coords)).append(lineGroup);
                     this.updateTickPosition(options);
                 }
-            },
-
-            getSharpDirection() {
-                const axisCanvas = axis._getCanvasStartEnd();
-                const maxAxisCoord = Math.max(axisCanvas.start, axisCanvas.end);
-
-                return this.coords.angle ? 0 : (maxAxisCoord !== this.coords[(axis._isHorizontal ? "x" : "y")] ? 1 : -1);
             },
 
             setSkippedCategory(category) {
@@ -224,7 +217,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 if(gridOptions.visible && skippedCategory !== this.value) {
                     if(this.grid) {
                         this.grid.append(axis._axisGridGroup);
-                        axis.sharp(this.grid, this.getSharpDirection());
+                        axis.sharp(this.grid, axis.getSharpDirectionByCoords(this.coords));
                         this.updateGridPosition();
                     } else {
                         this.grid = drawLine(this, gridStyle);

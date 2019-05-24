@@ -1034,8 +1034,17 @@ function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) 
     }
 }
 
+function getShiftDirection() {
+    return 1;
+}
+
+function getTickStartPositionShift(length) {
+    return length % 2 === 1 ? -Math.floor(length / 2) : -length / 2;
+}
+
 function AxisWrapper(params) {
-    this._axis = new axisModule.Axis({
+    const that = this;
+    that._axis = new axisModule.Axis({
         renderer: params.renderer,
         axesContainerGroup: params.root,
         scaleBreaksGroup: params.scaleBreaksGroup,
@@ -1047,7 +1056,9 @@ function AxisWrapper(params) {
         axisClass: "range-selector",
         isArgumentAxis: true
     });
-    this._updateSelectedRangeCallback = params.updateSelectedRange;
+    that._updateSelectedRangeCallback = params.updateSelectedRange;
+    that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getShiftDirection;
+    that._axis.getTickStartPositionShift = getTickStartPositionShift;
 }
 
 AxisWrapper.prototype = {
