@@ -283,6 +283,12 @@
         "dxHtmlEditor-dialogImageWidthField": "Width (px)",
         "dxHtmlEditor-dialogImageHeightField": "Height (px)",
         "dxHtmlEditor-heading": "Heading",
-        "dxHtmlEditor-normalText": "Normal text"
+        "dxHtmlEditor-normalText": "Normal text",
+
+        "dxFileManager-errorNoAccess": "Access denied. The operation cannot be completed.",
+        "dxFileManager-errorDirectoryExistsFormat": "Directory '{0}' already exists.",
+        "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",
+        "dxFileManager-errorFileNotFoundFormat": "File '{0}' not found",
+        "dxFileManager-errorDefault": "Unspecified error."
     }
 }

@@ -252,6 +252,12 @@
         "dxHtmlEditor-dialogImageWidthField": "幅 (px)",
         "dxHtmlEditor-dialogImageHeightField": "高さ (px)",
         "dxHtmlEditor-heading": "見出し",
-        "dxHtmlEditor-normalText": "標準テキスト"
+        "dxHtmlEditor-normalText": "標準テキスト",
+
+        "dxFileManager-errorNoAccess": "TODO!",
+        "dxFileManager-errorDirectoryExistsFormat": "TODO!",
+        "dxFileManager-errorFileExistsFormat": "TODO!",
+        "dxFileManager-errorFileNotFoundFormat": "TODO!",
+        "dxFileManager-errorDefault": "TODO!"
     }
 }
