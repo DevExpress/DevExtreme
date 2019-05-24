@@ -14,10 +14,10 @@ const whenSome = function(arg, onSuccess, onError) {
         };
     };
 
-    const createErrorInfo = function(index, error) {
+    const createErrorInfo = function(index, result) {
         return {
             index: index,
-            error: error
+            errorId: result.errorId,
         };
     };
 

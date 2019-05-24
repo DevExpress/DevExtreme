@@ -91,7 +91,7 @@ class FileManager extends Widget {
                 this._showSuccess(message);
                 this._refreshData(updatedOnlyFiles);
             },
-            onError: ({ title, details }) => this._showError(title + ": " + this._getErrorText(details)),
+            onError: ({ message }) => this._showError(message),
             onCreating: () => this._setItemsViewAreaActive(false)
         });
     }
@@ -255,14 +255,8 @@ class FileManager extends Widget {
         this._showNotification(message, true);
     }
 
-    _showError(error) {
-        const message = this._getErrorText(error);
+    _showError(message) {
         this._showNotification(message, false);
-    }
-
-    _getErrorText(error) {
-        const result = typeof error === "string" ? error : error.responseText;
-        return result || "General error";
     }
 
     _showNotification(message, isSuccess) {
