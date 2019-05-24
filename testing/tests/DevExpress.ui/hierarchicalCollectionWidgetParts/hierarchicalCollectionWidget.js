@@ -6,23 +6,21 @@ const DISABLED_STATE_CLASS = "dx-state-disabled";
 
 let { module, test } = QUnit;
 
-var TestComponent = HierarchicalCollectionWidget.inherit({
+class TestComponent extends HierarchicalCollectionWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.NAME = "TestComponent";
+        this._activeStateUnit = ".item";
+    }
+    _itemContainer() { return this.$element(); }
 
-    NAME: "TestComponent",
-
-    _activeStateUnit: ".item",
-
-    _itemContainer: function() {
-        return this.$element();
-    },
-
-    _createActionByOption: function(optionName, config) {
+    _createActionByOption(optionName, config) {
+        this.__actionConfigs = !this.__actionConfigs ? {} : this.__actionConfigs;
         this.__actionConfigs[optionName] = config;
-        return this.callBase.apply(this, arguments);
-    },
 
-    __actionConfigs: {}
-});
+        return super._createActionByOption(...arguments);
+    }
+}
 
 const createHierarchicalCollectionWidget = options => new TestComponent($("#hcw"), options);
 
@@ -50,20 +48,76 @@ module("render", {
         assert.equal($.trim(this.element.children().eq(1).text()), "item 2");
     });
 
+    test("Default displayExpr: ", (assert) => {
+        createHierarchicalCollectionWidget({
+            items: [{ text: "item 1" }]
+        });
+
+        assert.equal($.trim(this.element.children().eq(0).text()), "item 1");
+    });
+
     test("create item by custom model using expressions set as functions", (assert) => {
-        var condition = false,
+        let condition = false,
             newItems = [{ name: "item 1" }],
             widget = createHierarchicalCollectionWidget({
                 displayExpr: () => condition ? "name" : "text",
                 items: [{ text: "first item" }]
             });
 
-        assert.equal($.trim(this.element.children().eq(0).text()), "first item");
+        assert.equal($.trim(this.element.children().eq(0).text()), "text");
 
         condition = true;
         widget.option("items", newItems);
 
-        assert.equal($.trim(this.element.children().eq(0).text()), "item 1");
+        assert.equal($.trim(this.element.children().eq(0).text()), "name");
+    });
+
+    test("DisplayExpr as function with parameter", (assert) => {
+        createHierarchicalCollectionWidget({
+            displayExpr: (itemData) => itemData && itemData.name + "!",
+            items: [{ name: "Item 1" }]
+        });
+
+        assert.equal($.trim(this.element.children().eq(0).text()), "Item 1!");
+    });
+
+    test("DisplayExpr as non existing property", (assert) => {
+        createHierarchicalCollectionWidget({
+            displayExpr: "not exist",
+            items: [{ name: "Item 1" }]
+        });
+
+        assert.equal($.trim(this.element.children().eq(0).text()), "");
+    });
+
+    [null, undefined, "", {}].forEach((dataExprValue) => {
+        test(`DisplayExpr: ${dataExprValue}, items without 'text' property`, (assert) => {
+            try {
+                createHierarchicalCollectionWidget({
+                    displayExpr: dataExprValue,
+                    items: [{ name: "item 1" }]
+                });
+
+                let $item = $("#hcw").find(".dx-item").eq(0);
+                assert.equal($item.text(), "");
+            } catch(e) {
+                assert.ok(false, "Error has been raised");
+            }
+        });
+
+        test(`DisplayExpr: ${dataExprValue}, items with 'text' property`, (assert) => {
+            try {
+                createHierarchicalCollectionWidget({
+                    displayExpr: dataExprValue,
+                    items: [{ text: "item 1" }]
+                });
+
+                let $item = $("#hcw").find(".dx-item").eq(0);
+                assert.equal($item.text(), "item 1");
+            } catch(e) {
+                assert.ok(false, "Error has been raised");
+            }
+        });
     });
 
     test("Expressions should be reinitialized if *expr option was changed", (assert) => {

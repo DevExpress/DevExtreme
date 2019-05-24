@@ -153,10 +153,12 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         each(this._getAccessors(), function(_, accessor) {
             that._compileAccessor(accessor);
         });
+
+        this._compileDisplayGetter();
     },
 
     _getAccessors: function() {
-        return ["key", "display", "selected", "items", "disabled", "parentId", "expanded"];
+        return ["key", "selected", "items", "disabled", "parentId", "expanded"];
     },
 
     _getChildNodes: function(node) {
@@ -207,6 +209,8 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             accessors.getters[newAccessor] = that[getterName];
             accessors.setters[newAccessor] = that[setterName];
         });
+
+        accessors.getters["display"] = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
 
         return accessors;
     },
