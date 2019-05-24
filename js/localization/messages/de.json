@@ -252,6 +252,12 @@
         "dxHtmlEditor-dialogImageWidthField": "Breite (px)",
         "dxHtmlEditor-dialogImageHeightField": "Bildhöhe (px)",
         "dxHtmlEditor-heading": "Überschrift",
-        "dxHtmlEditor-normalText": "Normaler Text"
+        "dxHtmlEditor-normalText": "Normaler Text",
+
+        "dxFileManager-errorNoAccess": "TODO!",
+        "dxFileManager-errorDirectoryExistsFormat": "TODO!",
+        "dxFileManager-errorFileExistsFormat": "TODO!",
+        "dxFileManager-errorFileNotFoundFormat": "TODO!",
+        "dxFileManager-errorDefault": "TODO!"
     }
 }

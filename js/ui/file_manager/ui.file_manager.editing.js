@@ -11,6 +11,7 @@ import whenSome from "./ui.file_manager.common";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
 import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
 import FileManagerFileUploader from "./ui.file_manager.file_uploader";
+import { FileManagerMessages } from "./ui.file_manager.messages";
 
 class FileManagerEditingControl extends Widget {
 
@@ -180,7 +181,10 @@ class FileManagerEditingControl extends Widget {
             .then(result => {
                 whenSome(result,
                     () => this._raiseOnSuccess(action.getSuccessMessage(items), onlyFiles),
-                    info => this._raiseOnError(action.getErrorMessage(items, info), info.error));
+                    info => {
+                        const fileItem = items[info.index];
+                        this._raiseOnError(info.errorId, fileItem);
+                    });
             });
     }
 
@@ -247,11 +251,10 @@ class FileManagerEditingControl extends Widget {
         this._actions.onSuccess({ message, updatedOnlyFiles });
     }
 
-    _raiseOnError(errorTitle, errorDetails) {
-        this._actions.onError({
-            title: errorTitle,
-            details: errorDetails
-        });
+    _raiseOnError(errorId, fileItem) {
+        const fileItemName = fileItem ? fileItem.name : null;
+        const message = FileManagerMessages.get(errorId, fileItemName);
+        this._actions.onError({ message });
     }
 
 }
