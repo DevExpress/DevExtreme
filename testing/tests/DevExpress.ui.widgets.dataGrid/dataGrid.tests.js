@@ -3113,9 +3113,9 @@ QUnit.test("Delete two added rows after selection", function(assert) {
     dataGrid.addRow();
     dataGrid.selectRows(1);
 
-    $dataGrid.find(".dx-link-delete").first().trigger("dxclick");
+    $dataGrid.find(".dx-link-delete").first().trigger("click");
     clock.tick();
-    $dataGrid.find(".dx-link-delete").first().trigger("dxclick");
+    $dataGrid.find(".dx-link-delete").first().trigger("click");
     clock.tick();
 
     // assert
@@ -5882,6 +5882,30 @@ QUnit.test("contentReady should not be raised on row click", function(assert) {
     assert.strictEqual(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey is not assigned");
 });
 
+QUnit.test("onFocusedRowChanged event should fire once if changed via API (T729593)", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        focusedRowChangedCallCount = 0,
+        dataGrid = createDataGrid({
+            onFocusedRowChanged: function() {
+                focusedRowChangedCallCount++;
+            },
+            focusedRowEnabled: true,
+            keyExpr: "id",
+            dataSource: [{ id: 1 }]
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.option("focusedRowKey", 1);
+    clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCallCount, 1, "focusedRowChangedCallCount");
+
+    clock.restore();
+});
+
 QUnit.test("contentReady should not be raised on row click if focusedRowEnabled", function(assert) {
     var contentReadyCallCount = 0,
         dataGrid = createDataGrid({
@@ -5905,6 +5929,60 @@ QUnit.test("contentReady should not be raised on row click if focusedRowEnabled"
     assert.strictEqual(dataGrid.option("focusedRowIndex"), 0, "focusedRowIndex is assigned");
     assert.strictEqual(dataGrid.option("focusedColumnIndex"), 0, "focusedColumnIndex is assigned");
     assert.strictEqual(dataGrid.option("focusedRowKey"), 1, "focusedRowKey is assigned");
+});
+
+QUnit.test("onFocusedRowChanged event should fire only once if paging and init phase", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        focusedRowChangedCallCount = 0;
+
+    createDataGrid({
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        focusedRowKey: 3,
+        paging: {
+            pageSize: 2
+        },
+        onFocusedRowChanged: e => {
+            ++focusedRowChangedCallCount;
+            assert.ok(e.row, "Row object should exist");
+        },
+        dataSource: [
+            { id: 1 }, { id: 2 },
+            { id: 3 }, { id: 4 }
+        ]
+    });
+
+    clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCallCount, 1, "focusedRowChangedCallCount");
+
+    clock.restore();
+});
+
+QUnit.test("onFocusedRowChanged event should not fire on init if focusedRowEnabled is true and focusedRowIndex, focusedRowKey aren't set", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        focusedRowChangedCallCount = 0,
+        dataGrid = createDataGrid({
+            onFocusedRowChanged: function() {
+                focusedRowChangedCallCount++;
+            },
+            focusedRowEnabled: true,
+            keyExpr: "id",
+            dataSource: [{ id: 1 }]
+        });
+
+    clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCallCount, 0, "focusedRowChangedCallCount");
+
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    // assert
+    assert.equal(focusedRowChangedCallCount, 1, "focusedRowChangedCallCount");
+
+    clock.restore();
 });
 
 QUnit.test("Click by the first row on the next page should focus it without grid refresh if scrolling.mode is virtual and focusedRowEnabled is true (T722879)", function(assert) {

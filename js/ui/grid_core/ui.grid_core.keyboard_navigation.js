@@ -26,6 +26,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
+    COMMAND_CELL_SELECTOR = "[class^=dx-command]",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     DATEBOX_WIDGET_NAME = "dxDateBox",
     FOCUS_STATE_CLASS = "dx-state-focused",
@@ -900,10 +901,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
             eventTarget = eventArgs.originalEvent.target,
             column,
             row,
-            $cell,
+            $cell = this._getCellElementFromTarget(eventTarget),
             isEditingAllowed;
 
-        this._updateFocusedCellPosition(this._getCellElementFromTarget(eventTarget));
+        if($cell.is(COMMAND_CELL_SELECTOR)) {
+            return !this._targetCellTabHandler(eventArgs, direction);
+        }
+
+        this._updateFocusedCellPosition($cell);
         $cell = this._getNextCell(direction);
 
         if(!$cell || this._handleTabKeyOnMasterDetailCell($cell, direction)) {
@@ -1610,12 +1615,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanged: function($rowElement) {
         var row,
             dataController,
-            focusedRowKey = this.option("focusedRowKey"),
             focusedRowIndex = this.option("focusedRowIndex");
 
-        if(focusedRowKey !== undefined && this.option("focusedRowEnabled")) {
-            dataController = this.getController("data");
-            row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
+        if(this.option("focusedRowEnabled")) {
+            if(focusedRowIndex >= 0) {
+                dataController = this.getController("data");
+                row = focusedRowIndex >= 0 && dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
+            }
             this.executeAction("onFocusedRowChanged", {
                 rowElement: $rowElement,
                 rowIndex: focusedRowIndex,

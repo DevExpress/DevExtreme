@@ -92,7 +92,8 @@ QUnit.module('Editing', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            var event = $.Event("dxclick");
+            var isLink = $targetElement.hasClass("dx-link");
+            var event = $.Event(isLink ? "click" : "dxclick");
             $($targetElement).trigger(event);
             this.clock.tick();
             return event;
@@ -1360,7 +1361,7 @@ QUnit.test('Not remove row with message', function(assert) {
         assert.ok(!this.dataController.refreshed, 'not refreshed data');
 
         // act
-        testElement.find('tbody > tr').first().find('a').trigger('dxclick'); // show confirm
+        testElement.find('tbody > tr').first().find('a').trigger('click'); // show confirm
         this.clock.tick();
 
         // assert
@@ -2780,7 +2781,8 @@ QUnit.module('Editing with real dataController', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
     },
@@ -4766,6 +4768,40 @@ QUnit.test("Remove row when set onRowRemoved", function(assert) {
 
     // assert
     assert.equal(testElement.find('.dx-data-row').length, 6, "count rows");
+});
+
+// T741746
+QUnit.test("deleteRow should not work if adding is started", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row count");
+
+    // act
+    that.addRow();
+    that.deleteRow(2);
+
+    // assert
+    assert.ok(that.editingController.isEditing(), "editing is started");
+    assert.equal(testElement.find('.dx-data-row').length, 8, "row is not removed");
+
+    // act
+    that.cancelEditData();
+    that.deleteRow(2);
+
+    // assert
+    assert.notOk(that.editingController.isEditing(), "no editing");
+    assert.equal(testElement.find('.dx-data-row').length, 6, "row is removed");
 });
 
 // T100624
@@ -7449,6 +7485,53 @@ QUnit.test("The command column caption should be applied", function(assert) {
     assert.strictEqual($commandCellElement.css("textAlign"), "right", "alignment");
 });
 
+// T741679
+QUnit.test("A dependent cascading editor should be updated when a master cell value is changed if showEditorAlways is enabled in batch mode", function(assert) {
+    // arrange
+    var that = this,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+    that.options.dataSource.store = [{ StateID: 1, CityID: 1 }, { StateID: 2, CityID: 2 }];
+    that.options.columns = [{
+        dataField: "StateID",
+        showEditorAlways: true,
+        setCellValue: function(rowData, value) {
+            rowData.StateID = value;
+            rowData.CityID = value;
+        },
+        lookup: {
+            dataSource: [{ id: 1, name: "California" }, { id: 2, name: "Texas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }, {
+        dataField: "CityID",
+        lookup: {
+            dataSource: [{ id: 1, name: "Arcadia" }, { id: 2, name: "Dallas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }];
+    that.dataController.init();
+    that.columnsController.init();
+    rowsView.render($testElement);
+
+    selectBoxInstance = $(rowsView.getCellElement(0, 0)).find(".dx-selectbox").dxSelectBox("instance");
+    selectBoxInstance.option("value", 2);
+
+    // act
+    $(rowsView.getCellElement(1, 0)).trigger("dxclick");
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(0, 1)).text(), "Dallas", "text of the second column of the first row");
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
@@ -7812,7 +7895,7 @@ QUnit.test("Changing edit icon in the 'buttons' command column if repaintChanges
 QUnit.test("Custom button click should be prevented", function(assert) {
     // arrange
     var $linkElement,
-        event = $.Event("dxclick");
+        event = $.Event("click");
 
     this.options.columns = [
         {
@@ -9057,6 +9140,45 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     tooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
     assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip is restored");
     assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip is restored");
+});
+
+// T741739
+QUnit.testInActiveWindow("Tooltip should be positioned by left side if column dataType and alignment are not defined", function(assert) {
+    // arrange
+    var that = this,
+        tooltipInstance,
+        rowsView = that.rowsView,
+        $testElement = renderer("#container");
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: "test",
+                validationRules: [{ type: "required" }]
+            },
+            "lastName",
+            "age"
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 0, "");
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    // assert
+    tooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    assert.ok($testElement.find("tbody td").eq(0).hasClass("dx-datagrid-invalid"), "failed validation");
+    assert.ok(tooltipInstance.option("visible"), "tooltip is visible");
+    assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip");
+    assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip");
 });
 
 // T523770
@@ -11324,7 +11446,8 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
         // };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
 
@@ -12390,7 +12513,7 @@ QUnit.test("Edit link call editRow", function(assert) {
     // act
     var $links = testElement.find(".dx-row").eq(rowIndex).find(".dx-link-edit");
     assert.equal($links.length, 1, "edit links count");
-    $($links.eq(0)).trigger("dxclick");
+    $($links.eq(0)).trigger("click");
     this.clock.tick();
 
     // assert

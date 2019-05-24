@@ -239,6 +239,8 @@ QUnit.test("Update", function(assert) {
         right: 20
     });
     assert.equal(title.DEBUG_getOptions().subtitle.text, "subtitle");
+    assert.strictEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(4).args[0].align, "left");
+    assert.strictEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(2).args[0].align, "left");
 });
 
 QUnit.test("Update to empty text", function(assert) {
@@ -262,7 +264,6 @@ QUnit.test("Update to empty text", function(assert) {
 
     assert.ok(title);
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
-    assert.strictEqual(title.getLayoutOptions(), null);
 });
 
 QUnit.test("Update to empty subtitle text", function(assert) {
@@ -498,11 +499,24 @@ QUnit.test("Get options rect with placeholder", function(assert) {
 });
 
 QUnit.test("Get options rect if nothing drawn", function(assert) {
-    this.options = { subtitle: {} };
+    this.options = { subtitle: {}, placeholderSize: 10 };
 
     var box = this.createTitle().getLayoutOptions();
 
-    assert.strictEqual(box, null, "layout options should be null");
+    assert.deepEqual(box, {
+        cutLayoutSide: "top",
+        cutSide: "vertical",
+        height: 10,
+        horizontalAlignment: "center",
+        position: {
+            horizontal: "center",
+            vertical: "top"
+        },
+        verticalAlignment: "top",
+        width: 0,
+        x: 0,
+        y: 0
+    }, "layout options should be null");
 });
 
 QUnit.test("shift title", function(assert) {
@@ -517,7 +531,11 @@ QUnit.test("shift title", function(assert) {
 
 QUnit.test("layoutOptions - without text", function(assert) {
     this.title.update({ text: null });
-    assert.strictEqual(this.title.layoutOptions(), null);
+    assert.deepEqual(this.title.layoutOptions(), {
+        horizontalAlignment: "center",
+        priority: 0,
+        verticalAlignment: "top"
+    });
 });
 
 QUnit.test("layoutOptions", function(assert) {
@@ -556,6 +574,15 @@ QUnit.test("freeSpace", function(assert) {
     this.title.freeSpace();
 
     this.rendererElementsIsDispose(assert);
+});
+
+QUnit.test("getCorrectedLayoutOptions", function(assert) {
+    this.title.update(this.options);
+
+    const correctedLayout = this.title.getCorrectedLayoutOptions();
+    const layoutOptions = this.title.getLayoutOptions();
+
+    assert.deepEqual(correctedLayout, $.extend({}, layoutOptions, { y: -22, height: 22 }));
 });
 
 QUnit.module("Size changing notification", environment);

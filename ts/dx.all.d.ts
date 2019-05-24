@@ -1258,8 +1258,12 @@ declare module DevExpress.ui {
         /** @name NumericRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
+    /** @name OneDriveFileProvider.Options */
+    export interface OneDriveFileProviderOptions extends FileProviderOptions<OneDriveFileProvider> {
+    }
     /** @name OneDriveFileProvider */
-    export interface OneDriveFileProvider extends FileProvider {
+    export class OneDriveFileProvider extends FileProvider {
+        constructor(options?: OneDriveFileProviderOptions)
     }
     /** @name PatternRule */
     export interface PatternRule {
@@ -2112,6 +2116,8 @@ declare module DevExpress.ui {
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
         selectedItemKey?: string | number;
+        /** @name dxDropDownButton.Options.showArrowIcon */
+        showArrowIcon?: boolean;
         /** @name dxDropDownButton.Options.splitButton */
         splitButton?: boolean;
         /** @name dxDropDownButton.Options.stylingMode */
@@ -3893,8 +3899,6 @@ declare module DevExpress.ui {
         hideAppointmentPopup(saveChanges?: boolean): void;
         /** @name dxScheduler.hideAppointmentTooltip() */
         hideAppointmentTooltip(): void;
-        /** @name dxScheduler.registerKeyHandler(key, handler) */
-        registerKeyHandler(): void;
         /** @name dxScheduler.scrollToTime(hours, minutes, date) */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
         /** @name dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData) */
@@ -4617,11 +4621,11 @@ declare module DevExpress.ui {
         /** @name dxTreeList.Options.onNodesInitialized */
         onNodesInitialized?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeListNode }) => any);
         /** @name dxTreeList.Options.onRowClick */
-        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
+        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
         /** @name dxTreeList.Options.onRowDblClick */
         onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxTreeList.Options.onRowPrepared */
-        onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
+        onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, node?: dxTreeListNode, level?: number }) => any);
         /** @name dxTreeList.Options.paging */
         paging?: dxTreeListPaging;
         /** @name dxTreeList.Options.parentIdExpr */
@@ -4981,7 +4985,7 @@ declare module DevExpress.ui {
         /** @name ui.dialog.confirm(messageHtml,title) */
         static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
         /** @name ui.dialog.custom(options) */
-        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string }): any;
+        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
     }
     /** @name ui.themes */
     export class themes {

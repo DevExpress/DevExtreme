@@ -242,9 +242,12 @@ function current(options) {
 function themeNameFromDevice(device) {
     var themeName = device.platform;
 
-
-    if(themeName === "ios") {
-        themeName += "7";
+    switch(themeName) {
+        case "ios":
+            return "ios7";
+        case "android":
+        case "win":
+            return "generic";
     }
 
     return themeName;

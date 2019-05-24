@@ -265,7 +265,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.ok(onValueChanged.getCall(1).args[0].event, "event was saved");
     });
 
-    QUnit.test("out of range value should be marked as invalid on init", assert => {
+    QUnit.test("out of range value should not be marked as invalid on init", assert => {
         const $dateBox = $("#widthRootStyle").dxDateBox({
             value: new Date(2015, 3, 20),
             min: new Date(2014, 3, 20),
@@ -274,7 +274,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
 
         const dateBox = $dateBox.dxDateBox("instance");
 
-        assert.notOk(dateBox.option("isValid"), "widget is invalid");
+        assert.ok(dateBox.option("isValid"), "widget is valid on init");
     });
 
     QUnit.test("it shouild be impossible to set out of range time to dxDateBox using ui (T394206)", assert => {

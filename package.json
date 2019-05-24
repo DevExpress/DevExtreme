@@ -44,7 +44,8 @@
     "cldr-core": "latest",
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
-    "devexpress-diagram": "0.0.20",
+    "devexpress-diagram": "0.0.21",
+    "devextreme-internal-tools": "^1.0.3",
     "dot": "1.1.2",
     "eslint": "^5.9.0",
     "eslint-plugin-spellcheck": "0.0.11",
@@ -114,7 +115,9 @@
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
-    "test-env": "node testing/launch"
+    "test-env": "node testing/launch",
+    "update-ts": "dx-tools declaration-validator && dx-tools ts-generator",
+    "validate-declarations": "dx-tools declaration-validator"
   },
   "browserslist": [
     "last 2 versions",

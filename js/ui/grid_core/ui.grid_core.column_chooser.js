@@ -201,11 +201,11 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 searchTimeout: columnChooser.searchTimeout
             };
 
+        scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
+        scrollTop = scrollableInstance && scrollableInstance.scrollTop();
 
-        if(isSelectMode) {
-            scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
-            scrollTop = scrollableInstance && scrollableInstance.scrollTop();
-            !this._columnsController.isBandColumnsUsed() && $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
+        if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
+            $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
         }
 
         treeViewConfig.onContentReady = function(e) {

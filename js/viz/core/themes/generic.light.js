@@ -144,7 +144,7 @@ registerTheme({
             backgroundColor: WHITE,
             margin: {
                 left: 0,
-                bottom: 14,
+                bottom: 9,
                 right: 0,
                 top: 0
             },

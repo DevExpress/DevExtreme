@@ -136,16 +136,34 @@ module.exports = _extend({}, symbolPoint, {
         return this._options.label.showForZeroValues || this.initialValue;
     },
 
-    _drawMarker: function(renderer, group, animationEnabled) {
-        var that = this,
-            style = that._getStyle(),
-            x = that.x,
-            y = that.y,
-            width = that.width,
-            height = that.height,
-            r = that._options.cornerRadius;
+    _drawMarker(renderer, group, animationEnabled) {
+        const that = this;
+        const style = that._getStyle();
+        let x = that.x;
+        let y = that.y;
+        let width = that.width;
+        let height = that.height;
+        const r = that._options.cornerRadius;
+        const argAxis = that.series.getArgumentAxis();
+        const rotated = that._options.rotated;
+
+        if(argAxis.getAxisPosition) {
+            const axisOptions = argAxis.getOptions();
+            const edgeOffset = Math.round(axisOptions.width / 2);
+            const argAxisPosition = argAxis.getAxisPosition();
+            if(axisOptions.visible) {
+                if(!rotated) {
+                    height -= that.minY === that.defaultY && that.minY === argAxisPosition ? edgeOffset : 0;
+                } else {
+                    const isStartFromAxis = that.minX === that.defaultX && that.minX === argAxisPosition;
+                    x += isStartFromAxis ? edgeOffset : 0;
+                    width -= isStartFromAxis ? edgeOffset : 0;
+                }
+            }
+        }
+
         if(animationEnabled) {
-            if(that._options.rotated) {
+            if(rotated) {
                 width = 0;
                 x = that.defaultX;
             } else {

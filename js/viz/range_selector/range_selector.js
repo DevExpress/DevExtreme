@@ -527,6 +527,7 @@ function getPrecisionForSlider(startValue, endValue, screenDelta) {
 }
 
 var dxRangeSelector = require("../core/base_widget").inherit({
+    _toggleParentsScrollSubscription() {},
     _eventsMap: {
         "onValueChanged": { name: VALUE_CHANGED }
     },

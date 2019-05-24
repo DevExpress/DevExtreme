@@ -543,6 +543,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case "virtualModeEnabled":
             case "selectByClick":
                 break;
+            case "selectionMode":
+                this._initDataAdapter();
+                this.callBase(args);
+                break;
             case "onSelectAllValueChanged":
                 this._createSelectAllValueChangedAction();
                 break;
@@ -753,7 +757,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems"];
+        var accessors = this.callBase();
+
+        accessors.push("hasItems");
+
+        return accessors;
     },
 
     _getDataAdapterOptions: function() {

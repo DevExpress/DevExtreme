@@ -1,49 +1,39 @@
-var $ = require("jquery"),
-    CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
+import $ from "jquery";
+import CollectionWidget from "ui/collection/ui.collection_widget.edit";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import executeAsyncMock from "../../../helpers/executeAsyncMock.js";
 
-    executeAsyncMock = require("../../../helpers/executeAsyncMock.js");
+const ITEM_CLASS = "dx-item";
+const ITEM_SELECTED_CLASS = `${ITEM_CLASS}-selected`;
+const ITEM_RESPONSE_WAIT_CLASS = `${ITEM_CLASS}-response-wait`;
 
-var ITEM_CLASS = "item",
-    ITEM_SELECTED_CLASS = "dx-item-selected",
-    ITEM_RESPONSE_WAIT_CLASS = "dx-item-response-wait";
+const { module, test } = QUnit;
 
-var TestComponent = CollectionWidget.inherit({
-
-    NAME: "TestComponent",
-
-    _activeStateUnit: ".item",
-
-    _itemClass: function() {
-        return "item";
-    },
-
-    _itemDataKey: function() {
-        return "123";
-    },
-
-    _itemContainer: function() {
-        return this.$element();
+class TestComponent extends CollectionWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.NAME = "TestComponent";
+        this._activeStateUnit = ".item";
     }
 
-});
+    _itemClass() { return "item"; }
+    _itemDataKey() { return "123"; }
+    _itemContainer() { return this.$element(); }
+}
 
-var runTests = function() {
-
-    QUnit.module("selecting of items", {
-        beforeEach: function() {
-            this.items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
-            this.$element = $("#cmp");
-            this.instance = new TestComponent(this.$element, {
-                items: this.items,
-                selectionMode: "multiple"
-            });
-        }
-    });
-
-    QUnit.test("selectItem by node should add class to element", function(assert) {
+module("selecting of items", {
+    beforeEach: function() {
+        this.items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
+        this.$element = $("#cmp");
+        this.instance = new TestComponent(this.$element, {
+            items: this.items,
+            selectionMode: "multiple"
+        });
+    }
+}, () => {
+    test("selectItem by node should add class to element", function(assert) {
         var $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem($item);
@@ -51,7 +41,7 @@ var runTests = function() {
         assert.ok($item.hasClass(ITEM_SELECTED_CLASS), "class added");
     });
 
-    QUnit.test("selectItem by index should add class to element", function(assert) {
+    test("selectItem by index should add class to element", function(assert) {
         var $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(0);
@@ -59,7 +49,7 @@ var runTests = function() {
         assert.ok($item.hasClass(ITEM_SELECTED_CLASS), "class added");
     });
 
-    QUnit.test("selectItem by itemData should add class to element", function(assert) {
+    test("selectItem by itemData should add class to element", function(assert) {
         var $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(this.items[0]);
@@ -67,7 +57,7 @@ var runTests = function() {
         assert.ok($item.hasClass(ITEM_SELECTED_CLASS), "class added");
     });
 
-    QUnit.test("selectItem by itemData should not fail if itemData is a string with special chars", function(assert) {
+    test("selectItem by itemData should not fail if itemData is a string with special chars", function(assert) {
         var items = ["one.", "two.", "three.", "four."];
         this.instance.option("items", items);
 
@@ -81,7 +71,7 @@ var runTests = function() {
         }
     });
 
-    QUnit.test("Items should not be unwrapped if plain edit strategy is used", function(assert) {
+    test("Items should not be unwrapped if plain edit strategy is used", function(assert) {
         var items = [{ text: "Item 1", items: [1] }, { text: "Item 2", items: [2] }];
         this.instance.option({
             "items": items,
@@ -92,7 +82,7 @@ var runTests = function() {
         assert.ok($item.hasClass(ITEM_SELECTED_CLASS), "item was selected");
     });
 
-    QUnit.test("selectItem should add item to selectedItems", function(assert) {
+    test("selectItem should add item to selectedItems", function(assert) {
         var selection = [1, 5, 0, 6, 8],
             $items = this.instance.itemElements(),
             that = this;
@@ -114,18 +104,18 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("selectItem should not process item which is not presented", function(assert) {
+    test("selectItem should not process item which is not presented", function(assert) {
         this.instance.selectItem($("<div>"));
         assert.equal(this.instance.option("selectedItems").length, 0, "selection must be empty");
     });
 
-    QUnit.test("selectItem should not process already selected item", function(assert) {
+    test("selectItem should not process already selected item", function(assert) {
         this.instance.selectItem(0);
         this.instance.selectItem(0);
         assert.equal(this.instance.option("selectedItems").length, 1, "selection must contain only one item");
     });
 
-    QUnit.test("unselectItem by node should remove class from element", function(assert) {
+    test("unselectItem by node should remove class from element", function(assert) {
         var $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem($item);
@@ -134,7 +124,7 @@ var runTests = function() {
         assert.ok(!$item.hasClass(ITEM_SELECTED_CLASS), "class removed");
     });
 
-    QUnit.test("unselectItem by index should remove class from element", function(assert) {
+    test("unselectItem by index should remove class from element", function(assert) {
         var $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(0);
@@ -143,7 +133,7 @@ var runTests = function() {
         assert.ok(!$item.hasClass(ITEM_SELECTED_CLASS), "class removed");
     });
 
-    QUnit.test("unselectItem by itemData should remove class from element", function(assert) {
+    test("unselectItem by itemData should remove class from element", function(assert) {
         var $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(0);
@@ -152,7 +142,7 @@ var runTests = function() {
         assert.ok(!$item.hasClass(ITEM_SELECTED_CLASS), "class removed");
     });
 
-    QUnit.test("unselectItem should remove item from selectedItems", function(assert) {
+    test("unselectItem should remove item from selectedItems", function(assert) {
         var twiceClicking = [1, 5, 0, 6, 8],
             $items = this.instance.itemElements(),
             that = this;
@@ -172,21 +162,21 @@ var runTests = function() {
         assert.equal(this.instance.option("selectedItems").length, 0, "should not be selected elements");
     });
 
-    QUnit.test("unselectItem should not process item which is not presented", function(assert) {
+    test("unselectItem should not process item which is not presented", function(assert) {
         this.instance.option("selectedItems", [this.items[0]]);
 
         this.instance.unselectItem($("<div>"));
         assert.equal(this.instance.option("selectedItems").length, 1, "selection must contain only one item");
     });
 
-    QUnit.test("unselectItem should not process already selected item", function(assert) {
+    test("unselectItem should not process already selected item", function(assert) {
         this.instance.option("selectedItems", [this.items[0]]);
 
         this.instance.unselectItem(1);
         assert.equal(this.instance.option("selectedItems").length, 1, "selection must contain only one item");
     });
 
-    QUnit.test("isItemSelected by node should reflect current item state", function(assert) {
+    test("isItemSelected by node should reflect current item state", function(assert) {
         var $items = this.instance.itemElements();
 
         this.instance.selectItem($items.eq(0));
@@ -196,7 +186,7 @@ var runTests = function() {
         assert.equal(this.instance.isItemSelected($items.eq(0)), false, "isItemSelected return proper state");
     });
 
-    QUnit.test("isItemSelected by index should reflect current item state", function(assert) {
+    test("isItemSelected by index should reflect current item state", function(assert) {
         this.instance.selectItem(0);
         assert.equal(this.instance.isItemSelected(0), true, "isItemSelected return proper state");
 
@@ -204,7 +194,7 @@ var runTests = function() {
         assert.equal(this.instance.isItemSelected(0), false, "isItemSelected return proper state");
     });
 
-    QUnit.test("selection should be same when list refresh", function(assert) {
+    test("selection should be same when list refresh", function(assert) {
         var selection = [1, 5, 0, 6, 8],
             $items = this.instance.itemElements(),
             that = this;
@@ -231,7 +221,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("selection shouldn be correct after item property was changed", function(assert) {
+    test("selection shouldn be correct after item property was changed", function(assert) {
         var items = [{ a: 0, disabled: true }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -247,7 +237,7 @@ var runTests = function() {
         assert.equal($element.find("." + ITEM_SELECTED_CLASS).length, 1, "only one item is selected");
     });
 
-    QUnit.test("deleteItem should change selected items", function(assert) {
+    test("deleteItem should change selected items", function(assert) {
 
         var that = this;
 
@@ -263,7 +253,7 @@ var runTests = function() {
         assert.deepEqual(this.instance.option("selectedItems"), [{ a: 0 }, { a: 2 }], "item not deleted");
     });
 
-    QUnit.test("onItemSelect should not be fired on widget rendering", function(assert) {
+    test("onItemSelect should not be fired on widget rendering", function(assert) {
         assert.expect(0);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -280,7 +270,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("onSelectionChanged should be fired if selection changed", function(assert) {
+    test("onSelectionChanged should be fired if selection changed", function(assert) {
 
         this.instance.option("onSelectionChanged", function(args) {
             assert.ok(true, "select action triggered");
@@ -289,7 +279,7 @@ var runTests = function() {
         this.instance.option("selectedItems", [this.items[0]]);
     });
 
-    QUnit.test("onSelectionChanged should not be fired if selection not changed", function(assert) {
+    test("onSelectionChanged should not be fired if selection not changed", function(assert) {
         assert.expect(0);
 
         this.instance.option("onSelectionChanged", function(args) {
@@ -299,7 +289,7 @@ var runTests = function() {
         this.instance.option("selectedItems", []);
     });
 
-    QUnit.test("onSelectionChanged should be fired with correct added items", function(assert) {
+    test("onSelectionChanged should be fired with correct added items", function(assert) {
         var that = this;
 
         this.instance.option({
@@ -312,7 +302,7 @@ var runTests = function() {
         this.instance.option("selectedItems", [this.items[0]]);
     });
 
-    QUnit.test("onSelectionChanged should be fired with correct added and removed items when keyExpr or DataSource Store key is specified", function(assert) {
+    test("onSelectionChanged should be fired with correct added and removed items when keyExpr or DataSource Store key is specified", function(assert) {
         var items = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }],
             $element = $("<div>"),
             selectionChangedHandler = sinon.spy(),
@@ -334,7 +324,7 @@ var runTests = function() {
         assert.deepEqual(selectionChangedHandler.getCall(0).args[0].removedItems, [items[1]], "second item should be deselected");
     });
 
-    QUnit.test("onSelectionChanged should be fired with correct removed items", function(assert) {
+    test("onSelectionChanged should be fired with correct removed items", function(assert) {
         var that = this;
 
         this.instance.option({
@@ -347,7 +337,7 @@ var runTests = function() {
         this.instance.option("selectedItems", [this.items[1]]);
     });
 
-    QUnit.test("onSelectionChanged should be fired if widget disabled", function(assert) {
+    test("onSelectionChanged should be fired if widget disabled", function(assert) {
 
         this.instance.option({
             selectedItems: [this.items[0], this.items[1]],
@@ -360,7 +350,7 @@ var runTests = function() {
         this.instance.option("selectedItems", []);
     });
 
-    QUnit.test("changing selection should work inside onSelectionChanged handler", function(assert) {
+    test("changing selection should work inside onSelectionChanged handler", function(assert) {
         var that = this;
 
         this.instance.option({
@@ -377,7 +367,7 @@ var runTests = function() {
         assert.ok(!this.instance.isItemSelected(0), "selection changed");
     });
 
-    QUnit.test("selection should not be applied if selection mode is none", function(assert) {
+    test("selection should not be applied if selection mode is none", function(assert) {
         this.instance.option({
             selectedIndex: 0,
             selectionMode: "none"
@@ -391,7 +381,7 @@ var runTests = function() {
         assert.equal(this.instance.itemElements().filter(".dx-item-selected").length, 0, "there are no items selected");
     });
 
-    QUnit.test("select unexisting item by selectedItems option should restore previous selection", function(assert) {
+    test("select unexisting item by selectedItems option should restore previous selection", function(assert) {
         this.instance.option({
             selectionRequired: true,
             selectionMode: "single",
@@ -407,7 +397,7 @@ var runTests = function() {
         assert.ok(this.instance.itemElements().eq(2).hasClass("dx-item-selected"), "selected item class is on the correct item");
     });
 
-    QUnit.test("select unexisting item by selectedItem option should restore previous selection", function(assert) {
+    test("select unexisting item by selectedItem option should restore previous selection", function(assert) {
         this.instance.option({
             selectionRequired: true,
             selectionMode: "single",
@@ -423,7 +413,7 @@ var runTests = function() {
         assert.ok(this.instance.itemElements().eq(2).hasClass("dx-item-selected"), "selected item class is on the correct item");
     });
 
-    QUnit.test("select unexisting item by selectedIndex option should restore previous selection", function(assert) {
+    test("select unexisting item by selectedIndex option should restore previous selection", function(assert) {
         this.instance.option({
             selectionRequired: true,
             selectionMode: "single",
@@ -439,7 +429,7 @@ var runTests = function() {
         assert.ok(this.instance.itemElements().eq(2).hasClass("dx-item-selected"), "selected item class is on the correct item");
     });
 
-    QUnit.test("select unexisting item by selectedItemKeys option should restore previous selection", function(assert) {
+    test("select unexisting item by selectedItemKeys option should restore previous selection", function(assert) {
         this.instance.option({
             selectionRequired: true,
             selectionMode: "single",
@@ -455,7 +445,7 @@ var runTests = function() {
         assert.ok(this.instance.itemElements().eq(2).hasClass("dx-item-selected"), "selected item class is on the correct item");
     });
 
-    QUnit.test("select unexisting item by selectItem method should restore previous selection", function(assert) {
+    test("select unexisting item by selectItem method should restore previous selection", function(assert) {
         this.instance.option({
             selectionRequired: true,
             selectionMode: "single",
@@ -471,7 +461,7 @@ var runTests = function() {
         assert.ok(this.instance.itemElements().eq(2).hasClass("dx-item-selected"), "selected item class is on the correct item");
     });
 
-    QUnit.test("select should work when items are not equal by the link and store key is specified", function(assert) {
+    test("select should work when items are not equal by the link and store key is specified", function(assert) {
         var clock = sinon.useFakeTimers();
 
         try {
@@ -512,7 +502,7 @@ var runTests = function() {
         }
     });
 
-    QUnit.test("selection should work with custom store without filter implementation", function(assert) {
+    test("selection should work with custom store without filter implementation", function(assert) {
         var clock = sinon.useFakeTimers();
 
         try {
@@ -549,7 +539,7 @@ var runTests = function() {
         }
     });
 
-    QUnit.test("selectedItems should be cleared if datasource instance has been changed to null", function(assert) {
+    test("selectedItems should be cleared if datasource instance has been changed to null", function(assert) {
         var instance = new TestComponent($("<div>"), {
             selectionMode: "multiple",
             dataSource: [1, 2, 3],
@@ -567,7 +557,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
     });
 
-    QUnit.test("selectedItems should be cleared if datasource instance has been changed to empty array", function(assert) {
+    test("selectedItems should be cleared if datasource instance has been changed to empty array", function(assert) {
         var instance = new TestComponent($("<div>"), {
             selectionMode: "multiple",
             dataSource: [1, 2, 3],
@@ -585,7 +575,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
     });
 
-    QUnit.test("selectedItems should not be cleared if datasource instance has been changed", function(assert) {
+    test("selectedItems should not be cleared if datasource instance has been changed", function(assert) {
         var instance = new TestComponent($("<div>"), {
             selectionMode: "multiple",
             dataSource: [1, 2, 3],
@@ -604,7 +594,7 @@ var runTests = function() {
     });
 
     // T579731
-    QUnit.test("selectedItems should not be cleared if datasource instance has been changed to a dataSource config", function(assert) {
+    test("selectedItems should not be cleared if datasource instance has been changed to a dataSource config", function(assert) {
         var instance = new TestComponent($("<div>"), {
             selectionMode: "multiple",
             dataSource: [1, 2, 3],
@@ -622,7 +612,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItemKeys wasn't cleared");
     });
 
-    QUnit.test("option change should hsve correct arguments after deselecting a value", function(assert) {
+    test("option change should hsve correct arguments after deselecting a value", function(assert) {
         assert.expect(3);
 
         var instance = new TestComponent($("<div>"), {
@@ -639,25 +629,26 @@ var runTests = function() {
         instance.selectItem(1);
         instance.unselectItem(1);
     });
+});
 
-    QUnit.module("selecting of item keys", {
-        beforeEach: function() {
-            var items = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }];
-            this.items = items;
-            this.$element = $("#cmp");
-            this.instance = new TestComponent(this.$element, {
-                dataSource: new DataSource({
-                    store: new ArrayStore({
-                        key: "id",
-                        data: items
-                    })
-                }),
-                selectionMode: "multiple"
-            });
-        }
-    });
 
-    QUnit.test("selecting options should be synchronized when selectedItemKeys is set ", function(assert) {
+module("selecting of item keys", {
+    beforeEach: function() {
+        var items = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }];
+        this.items = items;
+        this.$element = $("#cmp");
+        this.instance = new TestComponent(this.$element, {
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    key: "id",
+                    data: items
+                })
+            }),
+            selectionMode: "multiple"
+        });
+    }
+}, () => {
+    test("selecting options should be synchronized when selectedItemKeys is set ", function(assert) {
         this.instance.option("selectedItemKeys", [1, 2]);
 
         assert.deepEqual(this.instance.option("selectedItems"), [ { id: 1 }, { id: 2 }], "selectedItems is correct");
@@ -666,7 +657,7 @@ var runTests = function() {
         assert.ok(this.$element.find("." + ITEM_CLASS).eq(1).hasClass("dx-item-selected"), "first item has selected class");
     });
 
-    QUnit.test("selecting options should be synchronized when selectedItemKeys is set with complex keys", function(assert) {
+    test("selecting options should be synchronized when selectedItemKeys is set with complex keys", function(assert) {
         var items = [
             { id: 1, key: "key1", text: "Item 1" },
             { id: 2, key: "key2", text: "Item 2" },
@@ -692,15 +683,15 @@ var runTests = function() {
         assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
         assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
     });
+});
 
 
-    QUnit.module("selecting of item keys", {
-        beforeEach: function() {
-            this.$element = $("#cmp");
-        }
-    });
-
-    QUnit.test("widget works fine if selectedItemKeys is null", function(assert) {
+module("selecting of item keys", {
+    beforeEach: function() {
+        this.$element = $("#cmp");
+    }
+}, () => {
+    test("widget works fine if selectedItemKeys is null", function(assert) {
         var items = [
             { id: 1, key: "key1", text: "Item 1" },
             { id: 2, key: "key2", text: "Item 2" },
@@ -720,7 +711,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedItemKeys"), null, "selectedItemKeys is correct");
     });
 
-    QUnit.test("selectedItemKeys should work when it is set on initialization", function(assert) {
+    test("selectedItemKeys should work when it is set on initialization", function(assert) {
         var items = [
             { id: 1, key: "key1", text: "Item 1" },
             { id: 2, key: "key2", text: "Item 2" },
@@ -742,7 +733,7 @@ var runTests = function() {
         assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
     });
 
-    QUnit.test("using keyExpr as primitive", function(assert) {
+    test("using keyExpr as primitive", function(assert) {
         var items = [
                 { key: "key1", text: "Item 1" },
                 { key: "key2", text: "Item 2" },
@@ -763,7 +754,7 @@ var runTests = function() {
         assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
     });
 
-    QUnit.test("changing keyExpr by option", function(assert) {
+    test("changing keyExpr by option", function(assert) {
         var items = [
                 { key: "key1", text: "Item 1" },
                 { key: "key2", text: "Item 2" },
@@ -785,7 +776,7 @@ var runTests = function() {
         assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
     });
 
-    QUnit.test("using keyExpr with dataSource", function(assert) {
+    test("using keyExpr with dataSource", function(assert) {
         var items = [
                 { key: "key1", text: "Item 1" },
                 { key: "key2", text: "Item 2" },
@@ -811,11 +802,11 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
         assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
     });
+});
 
 
-    QUnit.module("selecting of items with datasource");
-
-    QUnit.test("added and removed selection should be correct", function(assert) {
+module("selecting of items with datasource", () => {
+    test("added and removed selection should be correct", function(assert) {
         var items = [1, 2, 3, 4, 5];
         var ds = new DataSource({
             store: items,
@@ -838,7 +829,7 @@ var runTests = function() {
         instance.selectItem(0);
     });
 
-    QUnit.test("added and removed selection should be correct, if items are mapped", function(assert) {
+    test("added and removed selection should be correct, if items are mapped", function(assert) {
         var items = [{ id: 1, name: "alex" }, { id: 2, name: "john" }, { id: 3, name: "bob" }, { id: 4, name: "amanda" }];
 
         var ds = new DataSource({
@@ -863,7 +854,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedItems")[0].map, "1alex", "selectedItems is correct");
     });
 
-    QUnit.test("dynamically loaded items should be selected", function(assert) {
+    test("dynamically loaded items should be selected", function(assert) {
         var items = [1, 2, 3, 4];
         var ds = new DataSource({
             store: items,
@@ -887,7 +878,7 @@ var runTests = function() {
         ds.load();
     });
 
-    QUnit.test("selectItem should not remove not loaded items", function(assert) {
+    test("selectItem should not remove not loaded items", function(assert) {
         var items = [1, 2, 3, 4, 5];
         var ds = new DataSource({
             store: items,
@@ -906,7 +897,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), items, "selected items is correct");
     });
 
-    QUnit.test("it should not be possible to select multiple items in 'single' selection mode (T386482)", function(assert) {
+    test("it should not be possible to select multiple items in 'single' selection mode (T386482)", function(assert) {
         var items = [1, 3];
         var $element = $("#cmp"),
             instance = new TestComponent($element, {
@@ -919,7 +910,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedItems").length, 1, "only one item is selected");
     });
 
-    QUnit.test("unselectItem should remove only unselected item", function(assert) {
+    test("unselectItem should remove only unselected item", function(assert) {
         var items = [1, 2, 3, 4, 5];
         var ds = new DataSource({
             store: items,
@@ -938,7 +929,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), items.slice().splice(1, 4), "selected items is correct");
     });
 
-    QUnit.test("selectedIndex after initialization test", function(assert) {
+    test("selectedIndex after initialization test", function(assert) {
         var clock;
         try {
             clock = sinon.useFakeTimers();
@@ -970,7 +961,7 @@ var runTests = function() {
         }
     });
 
-    QUnit.test("selection should be applied with deferred dataSource if selectedItemKeys has value on init", function(assert) {
+    test("selection should be applied with deferred dataSource if selectedItemKeys has value on init", function(assert) {
         var clock;
 
         try {
@@ -1000,11 +991,10 @@ var runTests = function() {
             clock.restore();
         }
     });
+});
 
-
-    QUnit.module("selecting of items in single mode");
-
-    QUnit.test("selectedItem should select only one item", function(assert) {
+module("selecting of items in single mode", () => {
+    test("selectedItem should select only one item", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1023,7 +1013,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), [{ a: 1 }], "selected only one item");
     });
 
-    QUnit.test("selectedItems should accept only one item", function(assert) {
+    test("selectedItems should accept only one item", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1039,7 +1029,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), [{ a: 0 }], "selected only one item");
     });
 
-    QUnit.test("onSelectionChanged should not be fired on widget rendering after adjusting selected items", function(assert) {
+    test("onSelectionChanged should not be fired on widget rendering after adjusting selected items", function(assert) {
         assert.expect(0);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -1056,7 +1046,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("onSelectionChanged should be fired on widget rendering after adjusting selected items", function(assert) {
+    test("onSelectionChanged should be fired on widget rendering after adjusting selected items", function(assert) {
         assert.expect(0);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -1073,7 +1063,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("selectedItem is set on init", function(assert) {
+    test("selectedItem is set on init", function(assert) {
         var $element = $("#cmp"),
             items = [1, 2, 3],
             instance = new TestComponent($element, {
@@ -1086,7 +1076,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), [items[2]], "selectedItems option value is correct");
     });
 
-    QUnit.test("selectedIndex is set on init", function(assert) {
+    test("selectedIndex is set on init", function(assert) {
         var $element = $("#cmp"),
             items = [1, 2, 3],
             instance = new TestComponent($element, {
@@ -1099,7 +1089,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), [items[2]], "selectedItems option value is correct");
     });
 
-    QUnit.test("selectedItem and selectedIndex options should depend on each other", function(assert) {
+    test("selectedItem and selectedIndex options should depend on each other", function(assert) {
         var $element = $("#cmp"),
             items = [1, 2, 3],
             instance = new TestComponent($element, {
@@ -1116,7 +1106,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedIndex"), 1, "selectedIndex option value is correct after selectedItem change");
     });
 
-    QUnit.test("selectedItem and selectedItems options should depend on each other", function(assert) {
+    test("selectedItem and selectedItems options should depend on each other", function(assert) {
         var $element = $("#cmp"),
             items = [1, 2, 3],
             instance = new TestComponent($element, {
@@ -1131,7 +1121,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedItem"), items[1], "selectedItem option value is correct after selectedItems change");
     });
 
-    QUnit.test("selection change should not block other options change", function(assert) {
+    test("selection change should not block other options change", function(assert) {
         var $element = $("#cmp"),
             instance = new TestComponent($element, {
                 selectionMode: "single",
@@ -1147,21 +1137,14 @@ var runTests = function() {
         instance.option("selectedIndex", 1);
         assert.equal($element.text(), "23", "items changed correctly");
     });
+});
 
-
-    QUnit.module("selecting of items in multiple mode", {
-        beforeEach: function() {
-            this.TestComponent = TestComponent.inherit({
-                _getDefaultOptions: function() {
-                    return $.extend(this.callBase(), {
-                        selectedIndex: 0
-                    });
-                }
-            });
-        }
-    });
-
-    QUnit.test("selectedItems should have precedence over selectedIndex if initialized with empty collection", function(assert) {
+module("selecting of items in multiple mode", {
+    beforeEach() {
+        this.TestComponent = ($element, options) => new TestComponent($element, options);
+    }
+}, () => {
+    test("selectedItems should have precedence over selectedIndex if initialized with empty collection", function(assert) {
         var $element = $("#cmp"),
             instance = new this.TestComponent($element, {
                 selectionMode: "multiple",
@@ -1172,7 +1155,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), [], "selectedItems option value is correct after selectedItem change");
     });
 
-    QUnit.test("selectedItemKeys should have precedence over selectedIndex if initialized with empty collection", function(assert) {
+    test("selectedItemKeys should have precedence over selectedIndex if initialized with empty collection", function(assert) {
         var $element = $("#cmp"),
             instance = new this.TestComponent($element, {
                 selectionMode: "multiple",
@@ -1182,11 +1165,10 @@ var runTests = function() {
 
         assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItems option value is correct after selectedItem change");
     });
+});
 
-
-    QUnit.module("selection mode");
-
-    QUnit.test("selection mode option none", function(assert) {
+module("selection mode", () => {
+    test("selection mode option none", function(assert) {
         assert.expect(1);
 
         var $element = $("#cmp");
@@ -1203,7 +1185,7 @@ var runTests = function() {
         assert.ok(!$item.hasClass("dx-item-selected"), "selected class was not attached");
     });
 
-    QUnit.test("selection mode option single", function(assert) {
+    test("selection mode option single", function(assert) {
         assert.expect(3);
 
         var $element = $("#cmp"),
@@ -1223,11 +1205,10 @@ var runTests = function() {
 
         assert.ok($items.first().hasClass("dx-item-selected"), "selected class was attached");
     });
+});
 
-
-    QUnit.module("selection mode changing");
-
-    QUnit.test("selectedItems should be updated with one item", function(assert) {
+module("selection mode changing", () => {
+    test("selectedItems should be updated with one item", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1241,7 +1222,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), [{ a: 0 }], "selected only one item");
     });
 
-    QUnit.test("onItemSelect should not be fired", function(assert) {
+    test("onItemSelect should not be fired", function(assert) {
         assert.expect(0);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -1259,7 +1240,7 @@ var runTests = function() {
         instance.option("selectionMode", 'single');
     });
 
-    QUnit.test("onSelectionChanged should be fired", function(assert) {
+    test("onSelectionChanged should be fired", function(assert) {
         assert.expect(3);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -1278,11 +1259,10 @@ var runTests = function() {
 
         instance.option("selectionMode", 'single');
     });
+});
 
-
-    QUnit.module("selection required");
-
-    QUnit.test("first item should be selected if selection required", function(assert) {
+module("selection required", () => {
+    test("first item should be selected if selection required", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1296,7 +1276,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedIndex"), 0, "selection present");
     });
 
-    QUnit.test("selection should not be dropped if selection removed", function(assert) {
+    test("selection should not be dropped if selection removed", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1311,7 +1291,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedIndex"), 1, "previous selection present");
     });
 
-    QUnit.test("at least one item should be selected if 'selectionRequired' option changed to 'true'", function(assert) {
+    test("at least one item should be selected if 'selectionRequired' option changed to 'true'", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1328,7 +1308,7 @@ var runTests = function() {
         assert.equal(instance.option("selectedItems").length, 1, "one item is selected");
     });
 
-    QUnit.test("several items should be selected if 'selectionItemKeys' is set and 'selectionRequired' option is 'true'", function(assert) {
+    test("several items should be selected if 'selectionItemKeys' is set and 'selectionRequired' option is 'true'", function(assert) {
         var items = [{ key: 0 }, { key: 1 }, { key: 2 }];
 
         var $element = $("#cmp"),
@@ -1342,10 +1322,10 @@ var runTests = function() {
 
         assert.deepEqual(instance.option("selectedItems"), items.slice(1), "items is selected");
     });
+});
 
-    QUnit.module("deleting of items");
-
-    QUnit.test("deleteItem should remove item by node", function(assert) {
+module("deleting of items", () => {
+    test("deleteItem should remove item by node", function(assert) {
         var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
 
         var $element = $("#cmp"),
@@ -1359,7 +1339,7 @@ var runTests = function() {
         assert.equal(instance.option("items").length, 8, "item deleted from items");
     });
 
-    QUnit.test("deleteItem should remove item by index", function(assert) {
+    test("deleteItem should remove item by index", function(assert) {
         var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
 
         var $element = $("#cmp"),
@@ -1373,7 +1353,7 @@ var runTests = function() {
         assert.equal(instance.option("items").length, 8, "item deleted from items");
     });
 
-    QUnit.test("deleteItem should be resolved", function(assert) {
+    test("deleteItem should be resolved", function(assert) {
         assert.expect(1);
 
         var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
@@ -1388,7 +1368,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("deleteItem should trigger delete callback only once with correct itemData", function(assert) {
+    test("deleteItem should trigger delete callback only once with correct itemData", function(assert) {
         var item = "0",
             deleteActionFlag = 0,
             deletedItem = null;
@@ -1410,7 +1390,7 @@ var runTests = function() {
         assert.strictEqual(item, deletedItem, "item equals selected item");
     });
 
-    QUnit.test("deleteItem should not process item which is not presented", function(assert) {
+    test("deleteItem should not process item which is not presented", function(assert) {
         assert.expect(3);
 
         var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
@@ -1428,7 +1408,7 @@ var runTests = function() {
         assert.equal(instance.option("items").length, 9, "item not deleted");
     });
 
-    QUnit.test("deleteItem should not cause refresh", function(assert) {
+    test("deleteItem should not cause refresh", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1446,7 +1426,7 @@ var runTests = function() {
         assert.equal(item(0).data("rendered"), true, "item not deleted");
     });
 
-    QUnit.test("deleteItem should trigger onOptionChanged action", function(assert) {
+    test("deleteItem should trigger onOptionChanged action", function(assert) {
         assert.expect(2);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -1465,7 +1445,7 @@ var runTests = function() {
         instance.deleteItem(1);
     });
 
-    QUnit.test("item should not be deleted if 'cancel' flag in onItemDeleting is true", function(assert) {
+    test("item should not be deleted if 'cancel' flag in onItemDeleting is true", function(assert) {
         var instance = new TestComponent($("#cmp"), {
             items: [0],
             onItemDeleting: function(e) {
@@ -1480,7 +1460,7 @@ var runTests = function() {
         assert.equal($item.length, 1, "item not removed");
     });
 
-    QUnit.test("item should not be deleted if 'cancel' flag in onItemDeleting is resolved with true", function(assert) {
+    test("item should not be deleted if 'cancel' flag in onItemDeleting is resolved with true", function(assert) {
         var instance = new TestComponent($("#cmp"), {
             items: [0],
             onItemDeleting: function(e) {
@@ -1495,7 +1475,7 @@ var runTests = function() {
         assert.equal($item.length, 1, "item not removed");
     });
 
-    QUnit.test("item should be deleted if 'cancel' flag in onItemDeleting is resolved", function(assert) {
+    test("item should be deleted if 'cancel' flag in onItemDeleting is resolved", function(assert) {
         var instance = new TestComponent($("#cmp"), {
             dataSource: [0],
             onItemDeleting: function(e) {
@@ -1510,7 +1490,7 @@ var runTests = function() {
         assert.equal($item.length, 0, "item removed");
     });
 
-    QUnit.test("'cancel' flag in onItemDeleting option should support Promise/A+ standart", function(assert) {
+    test("'cancel' flag in onItemDeleting option should support Promise/A+ standart", function(assert) {
         var resolve;
         var promise = new Promise(function(onResolve) {
             resolve = onResolve;
@@ -1534,11 +1514,10 @@ var runTests = function() {
         resolve();
         return promise;
     });
+});
 
-
-    QUnit.module("deleting with confirmation");
-
-    QUnit.test("item should be deleted if confirmation resolved", function(assert) {
+module("deleting with confirmation", () => {
+    test("item should be deleted if confirmation resolved", function(assert) {
         var confirmation = $.Deferred(),
             itemDeleted = false;
 
@@ -1560,7 +1539,7 @@ var runTests = function() {
         assert.equal(itemDeleted, true, "item deleted");
     });
 
-    QUnit.test("item should be deleted if confirmation resolved with true", function(assert) {
+    test("item should be deleted if confirmation resolved with true", function(assert) {
         var confirmation = $.Deferred(),
             itemDeleted = false;
 
@@ -1582,7 +1561,7 @@ var runTests = function() {
         assert.equal(itemDeleted, true, "item deleted");
     });
 
-    QUnit.test("item should not be deleted if confirmation rejected", function(assert) {
+    test("item should not be deleted if confirmation rejected", function(assert) {
         var confirmation = $.Deferred(),
             itemDeleted = false;
 
@@ -1604,7 +1583,7 @@ var runTests = function() {
         assert.equal(itemDeleted, false, "item not deleted");
     });
 
-    QUnit.test("item should not be deleted if confirmation resolved with false", function(assert) {
+    test("item should not be deleted if confirmation resolved with false", function(assert) {
         var confirmation = $.Deferred(),
             itemDeleted = false;
 
@@ -1626,7 +1605,7 @@ var runTests = function() {
         assert.equal(itemDeleted, false, "item not deleted");
     });
 
-    QUnit.test("deleteItem should be resolved if confirmation pass", function(assert) {
+    test("deleteItem should be resolved if confirmation pass", function(assert) {
         var $element = $("#cmp"),
             instance = new TestComponent($element, {
                 items: ["0"],
@@ -1640,7 +1619,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("deleteItem should not be resolved if confirmation not pass", function(assert) {
+    test("deleteItem should not be resolved if confirmation not pass", function(assert) {
         var $element = $("#cmp"),
             instance = new TestComponent($element, {
                 items: ["0"],
@@ -1654,7 +1633,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("deleteItem should delete item without confirmation if item is already deleting", function(assert) {
+    test("deleteItem should delete item without confirmation if item is already deleting", function(assert) {
         var $element = $("#cmp"),
             instance = new TestComponent($element, {
                 items: ["0"],
@@ -1669,7 +1648,7 @@ var runTests = function() {
         instance.deleteItem(0);
     });
 
-    QUnit.test("deleteItem should not delete item without confirmation if previous confirmation fails", function(assert) {
+    test("deleteItem should not delete item without confirmation if previous confirmation fails", function(assert) {
         assert.expect(0);
 
         var $element = $("#cmp"),
@@ -1686,20 +1665,19 @@ var runTests = function() {
         instance.deleteItem(0);
         instance.deleteItem(0);
     });
+});
 
-
-    QUnit.module("deleting from dataSource", {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-            executeAsyncMock.setup();
-        },
-        afterEach: function() {
-            this.clock.restore();
-            executeAsyncMock.teardown();
-        }
-    });
-
-    QUnit.test("deleteItem should remove item", function(assert) {
+module("deleting from dataSource", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        executeAsyncMock.teardown();
+    }
+}, () => {
+    test("deleteItem should remove item", function(assert) {
         assert.expect(2);
 
         var store = new ArrayStore({
@@ -1724,7 +1702,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("deleteItem should not remove when error occurred", function(assert) {
+    test("deleteItem should not remove when error occurred", function(assert) {
         assert.expect(2);
 
         var store = new ArrayStore({
@@ -1752,7 +1730,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("deleteItem should fade deleting item when deleting and disable widget", function(assert) {
+    test("deleteItem should fade deleting item when deleting and disable widget", function(assert) {
         assert.expect(4);
 
         var deferred = $.Deferred();
@@ -1795,7 +1773,7 @@ var runTests = function() {
         deferred.resolve();
     });
 
-    QUnit.test("only needed items should be rendered after delete", function(assert) {
+    test("only needed items should be rendered after delete", function(assert) {
         assert.expect(1);
 
         var dataSource = new DataSource({
@@ -1814,7 +1792,7 @@ var runTests = function() {
         assert.equal($newItems.text(), "12", "element was not removed");
     });
 
-    QUnit.test("last item should not be duplicated after delete items", function(assert) {
+    test("last item should not be duplicated after delete items", function(assert) {
         var dataSource = new DataSource({
             store: [0, 1, 2, 3]
         });
@@ -1830,7 +1808,7 @@ var runTests = function() {
         assert.equal($newItems.text(), "123");
     });
 
-    QUnit.test("deleteItem should trigger delete callback only once with correct itemData even if items changed at runtime", function(assert) {
+    test("deleteItem should trigger delete callback only once with correct itemData even if items changed at runtime", function(assert) {
         var dataSource = new DataSource({
             store: new ArrayStore({
                 data: [0],
@@ -1855,7 +1833,7 @@ var runTests = function() {
         assert.strictEqual(args.itemIndex, 0, "item equals selected item");
     });
 
-    QUnit.test("deleteItem should trigger onOptionChanged action", function(assert) {
+    test("deleteItem should trigger onOptionChanged action", function(assert) {
         assert.expect(2);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -1874,7 +1852,7 @@ var runTests = function() {
         instance.deleteItem(1);
     });
 
-    QUnit.test("deleteItem should not trigger onOptionChanged action if instance of DataSource", function(assert) {
+    test("deleteItem should not trigger onOptionChanged action if instance of DataSource", function(assert) {
         assert.expect(0);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -1891,11 +1869,10 @@ var runTests = function() {
         });
         instance.deleteItem(1);
     });
+});
 
-
-    QUnit.module("reordering of items");
-
-    QUnit.test("reorderItem should swap items by index", function(assert) {
+module("reordering of items", () => {
+    test("reorderItem should swap items by index", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1915,7 +1892,7 @@ var runTests = function() {
         assert.equal(item1, item(0));
     });
 
-    QUnit.test("reorderItem should swap items by node", function(assert) {
+    test("reorderItem should swap items by node", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1935,7 +1912,7 @@ var runTests = function() {
         assert.equal(item1, item(0));
     });
 
-    QUnit.test("reorderItem should swap last with first items", function(assert) {
+    test("reorderItem should swap last with first items", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1955,7 +1932,7 @@ var runTests = function() {
         assert.equal(item1, item(0));
     });
 
-    QUnit.test("reorderItem should swap items in items option", function(assert) {
+    test("reorderItem should swap items in items option", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1968,7 +1945,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("items"), [{ a: 1 }, { a: 0 }], "items rearranged");
     });
 
-    QUnit.test("reorderItem should swap last with first items in items option", function(assert) {
+    test("reorderItem should swap last with first items in items option", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1981,7 +1958,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("items"), [{ a: 1 }, { a: 0 }], "items rearranged");
     });
 
-    QUnit.test("reorderItem should not cause refresh", function(assert) {
+    test("reorderItem should not cause refresh", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -1999,7 +1976,7 @@ var runTests = function() {
         assert.equal(item(1).data("rendered"), true, "item not deleted");
     });
 
-    QUnit.test("reorderItem should be resolved", function(assert) {
+    test("reorderItem should be resolved", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -2013,7 +1990,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("reorderItem should not be executed if items are equal", function(assert) {
+    test("reorderItem should not be executed if items are equal", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -2030,7 +2007,7 @@ var runTests = function() {
         });
     });
 
-    QUnit.test("onItemReordered should be fired if items reordered", function(assert) {
+    test("onItemReordered should be fired if items reordered", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -2050,7 +2027,7 @@ var runTests = function() {
         instance.reorderItem(item(0), item(1));
     });
 
-    QUnit.test("selection should be updated after items reordered", function(assert) {
+    test("selection should be updated after items reordered", function(assert) {
         var items = [{ a: 0 }, { a: 1 }];
 
         var $element = $("#cmp"),
@@ -2069,7 +2046,7 @@ var runTests = function() {
         assert.equal(instance.isItemSelected(item(1)), true, "selection changed");
     });
 
-    QUnit.test("deleteItem should trigger onOptionChanged action", function(assert) {
+    test("deleteItem should trigger onOptionChanged action", function(assert) {
         assert.expect(2);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -2087,11 +2064,10 @@ var runTests = function() {
         });
         instance.reorderItem(0, 1);
     });
+});
 
-
-    QUnit.module("reordering with dataSource");
-
-    QUnit.test("deleteItem should not trigger onOptionChanged action", function(assert) {
+module("reordering with dataSource", () => {
+    test("deleteItem should not trigger onOptionChanged action", function(assert) {
         assert.expect(0);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -2109,7 +2085,7 @@ var runTests = function() {
         instance.reorderItem(0, 1);
     });
 
-    QUnit.test("deleteItem should not trigger onOptionChanged action if instance of DataSource", function(assert) {
+    test("deleteItem should not trigger onOptionChanged action if instance of DataSource", function(assert) {
         assert.expect(0);
 
         var items = [{ a: 0 }, { a: 1 }];
@@ -2127,7 +2103,7 @@ var runTests = function() {
         instance.deleteItem(1);
     });
 
-    QUnit.test("items should update when datasource option changed", function(assert) {
+    test("items should update when datasource option changed", function(assert) {
         var widget = new TestComponent("#cmp", {
             dataSource: new DataSource({
                 store: new ArrayStore([{ text: "item 1" }])
@@ -2142,6 +2118,4 @@ var runTests = function() {
 
         assert.equal(widget.option("items")[0].text, "item 2", "items wew changed");
     });
-};
-
-module.exports = { run: runTests };
+});

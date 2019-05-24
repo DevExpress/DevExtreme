@@ -1,6 +1,10 @@
 .dx-dropdownbutton-toggle {
     &.dx-button {
         min-width: auto;
+
+        .dx-rtl & {
+            border-right-width: 0;
+        }
     }
 }
 
@@ -8,17 +12,17 @@
     .dx-button-has-icon.dx-button-has-text {
         .dx-button-content {
             padding-left: 8px;
-            padding-right: 0px;
+            padding-right: 8px;
         }
 
         .dx-icon {
             margin-right: 8px;
         }
 
-        .dx-icon-spindown {
+        .dx-icon.dx-icon-right {
             .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
-            margin-right: 0px;
-            margin-left: 0px;
+            margin-right: -8px;
+            margin-left: 0;
         }
     }
 }

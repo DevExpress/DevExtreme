@@ -1,6 +1,4 @@
-var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
-    domAdapter = require("../../core/dom_adapter"),
+var domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,
@@ -12,7 +10,6 @@ var $ = require("../../core/renderer"),
     pointerEvents = require("../../events/pointer"),
     holdEvent = require("../../events/hold"),
     addNamespace = require("../../events/utils").addNamespace,
-    devices = require("../../core/devices"),
     isDefined = require("../../core/utils/type").isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     _floor = Math.floor,
@@ -87,9 +84,7 @@ var baseTrackerPrototype = {
             .on(addNamespace(holdEvent.name, EVENT_NS), { timeout: 300 }, _noop);
     },
 
-    update: function(options) {
-        this._prepare();
-    },
+    update: function() {},
 
     updateSeries(series, resetDecorations) {
         const that = this;
@@ -124,29 +119,6 @@ var baseTrackerPrototype = {
             this._hideTooltip(point, true);
         } else {
             this._showTooltip(point);
-        }
-    },
-
-    _prepare: function() {
-        this._toggleParentsScrollSubscription(true);
-    },
-
-    _toggleParentsScrollSubscription: function(subscribe) {
-        var $parents = $(this._renderer.root.element).parents(),
-            scrollEvents = addNamespace("scroll", EVENT_NS);
-
-        if(devices.real().platform === "generic") {
-            $parents = $parents.add(window);
-        }
-
-        this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
-            || (function() { this._pointerOut(); }).bind(this);
-
-        eventsEngine.off($().add(this._$prevRootParents), scrollEvents, this._proxiedTargetParentsScrollHandler);
-
-        if(subscribe) {
-            eventsEngine.on($parents, scrollEvents, this._proxiedTargetParentsScrollHandler);
-            this._$prevRootParents = $parents;
         }
     },
 
@@ -281,12 +253,12 @@ var baseTrackerPrototype = {
     },
 
     stopCurrentHandling: function() {
-        this._pointerOut();
+        this._pointerOut(true);
     },
 
-    _pointerOut: function() {
+    _pointerOut: function(force) {
         this.clearHover();
-        this._tooltip.isEnabled() && this._hideTooltip(this.pointAtShownTooltip);
+        (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip);
     },
 
     _triggerLegendClick: function(eventArgs, elementClick) {
@@ -479,7 +451,6 @@ var baseTrackerPrototype = {
     dispose: function() {
         var that = this;
         that._disableOutHandler();
-        that._toggleParentsScrollSubscription();
         that._renderer.root.off(DOT_EVENT_NS);
         that._seriesGroup.off(DOT_EVENT_NS);
     }
@@ -608,7 +579,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         that._stuckSeries = null;
         that._hideCrosshair();
         that._resetTimer();
-        baseTrackerPrototype._pointerOut.call(that);
+        baseTrackerPrototype._pointerOut.apply(that, arguments);
     },
 
     _hoverArgumentAxis: function(x, y, e) {

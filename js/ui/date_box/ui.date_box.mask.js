@@ -141,6 +141,9 @@ let DateBoxMask = DateBoxBase.inherit({
         const formatLength = this._getActivePartProp("pattern").length;
 
         this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
+        if(isNaN(this._searchValue)) {
+            this._searchValue = char;
+        }
 
         this._setActivePartValue(this._searchValue);
 

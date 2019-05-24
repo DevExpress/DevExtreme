@@ -75,11 +75,14 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         // Looks like the following "laziness" is only to avoid unnecessary DOM content creation -
         // for example when widget is created without "title" option.
         if(!that._titleElement) {
-            that._titleElement = renderer.text().attr(alignObj).append(group);
-            that._subtitleElement = renderer.text().attr(alignObj);
+            that._titleElement = renderer.text().append(group);
+            that._subtitleElement = renderer.text();
             that._clipRect = renderer.clipRect();
             group.attr({ "clip-path": that._clipRect.id });
         }
+
+        that._titleElement.attr(alignObj);
+        that._subtitleElement.attr(alignObj);
 
         group.linkAppend();
         hasText(that._options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();
@@ -142,17 +145,19 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             options = extend(true, {}, themeOptions, processTitleOptions(userOptions)),
             _hasText = hasText(options.text),
             isLayoutChanged = _hasText || _hasText !== that._hasText;
+
+        that._baseLineCorrection = 0;
+
+        that._updateOptions(options);
+        that._boundingRect = {};
         if(_hasText) {
-            that._updateOptions(options);
             that._updateStructure();
             that._updateTexts();
-            that._boundingRect = {};
-            that._updateBoundingRect();
-            that._updateBoundingRectAlignment();
         } else {
             that._group.linkRemove();
-            that._boundingRect = null;
         }
+        that._updateBoundingRect();
+        that._updateBoundingRectAlignment();
         that._hasText = _hasText;
         return isLayoutChanged;
     },
@@ -160,11 +165,13 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     draw: function(width, height) {
         var that = this;
 
-        that._group.linkAppend();
-        that._correctTitleLength(width);
+        if(that._hasText) {
+            that._group.linkAppend();
+            that._correctTitleLength(width);
 
-        if(that._group.getBBox().height > height) {
-            this.freeSpace();
+            if(that._group.getBBox().height > height) {
+                this.freeSpace();
+            }
         }
 
         return that;
@@ -172,7 +179,6 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     probeDraw: function(width, height) {
         this.draw(width, height);
-
         return this;
     },
 
@@ -195,16 +201,12 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
         that._updateBoundingRect();
 
-        var bBox = this.getLayoutOptions();
-        this._clipRect.attr({ x: bBox.x, y: bBox.y - this._baseLineCorrection, width: width, height: bBox.height + this._baseLineCorrection });
+        const { x, y, height } = this.getCorrectedLayoutOptions();
+        this._clipRect.attr({ x, y, width, height });
     },
 
     getLayoutOptions: function() {
         return this._boundingRect || null;
-    },
-
-    getTrueSize: function() {
-        return this._group ? this._group.getBBox() : null;
     },
 
     shift: function(x, y) {
@@ -222,12 +224,14 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             boundingRect = that._boundingRect,
             box;
 
-        box = that._group.getBBox();
+        box = that._hasText ? that._group.getBBox() : { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
 
-        box.height += margin.top + margin.bottom - that._baseLineCorrection;
-        box.width += margin.left + margin.right;
-        box.x -= margin.left;
-        box.y += that._baseLineCorrection - margin.top;
+        if(!box.isEmpty) {
+            box.height += margin.top + margin.bottom - that._baseLineCorrection;
+            box.width += margin.left + margin.right;
+            box.x -= margin.left;
+            box.y += that._baseLineCorrection - margin.top;
+        }
 
         if(options.placeholderSize > 0) {
             box.height = options.placeholderSize;
@@ -237,6 +241,16 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         boundingRect.width = box.width;
         boundingRect.x = box.x;
         boundingRect.y = box.y;
+    },
+
+    getCorrectedLayoutOptions() {
+        const srcBox = this.getLayoutOptions();
+        const correction = this._baseLineCorrection;
+
+        return extend({}, srcBox, {
+            y: srcBox.y - correction,
+            height: srcBox.height + correction
+        });
     },
 
     // BaseWidget_layout_implementation

@@ -268,10 +268,6 @@ QUnit.test("getOptions", function(assert) {
 
 QUnit.module("draw legend", environment);
 
-QUnit.test('draw without set options', function(assert) {
-    assert.ok(this.createLegend({}, null, null).draw());
-});
-
 QUnit.test("visible = false", function(assert) {
     this.options.visible = false;
     this.createSimpleLegend();
@@ -2085,15 +2081,13 @@ var titleEnvironment = $.extend({}, environment, {
         environment.beforeEach.apply(that, arguments);
 
         var titleConstructor = module.Title;
-        that.titleLayout = { height: 10, width: 20, x: 4, y: 5 };
+
+        that.titleLayout = { height: 17, width: 20, x: 4, y: 5 };
         module.Title = function(params) {
             that.title = new titleConstructor(params);
 
             that.title.getLayoutOptions = sinon.stub();
             that.title.getLayoutOptions.returns(that.titleLayout);
-
-            that.title.getTrueSize = sinon.stub();
-            that.title.getTrueSize.returns(that.titleLayout);
 
             that.title.shift = sinon.spy();
 
@@ -2264,8 +2258,10 @@ QUnit.test("Title width less than markers width; legend horizontalAlignment = 'c
     var markersGroup = this.findMarkersGroup();
     assert.deepEqual(markersGroup.attr.callCount, 2, "attr function just calling for set class name and set Y position");
     assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 0, translateY: 17 }, "markers must move under title");
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [9, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.firstCall.args, [0, 0], "title must have moved");
+    assert.deepEqual(this.title.shift.lastCall.args, [9, -8], "title must have moved");
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, "center");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment = 'bottom'; margins not zero", function(assert) {
@@ -2289,8 +2285,8 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment
 
     var markersGroup = this.findMarkersGroup();
     assert.deepEqual(markersGroup.attr.callCount, 1, "attr function just calling for set class name");
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [5, 18], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [5, 2], "title must have moved");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment = 'top'; margins not zero", function(assert) {
@@ -2309,9 +2305,9 @@ QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [4, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [4, -8], "title must have moved");
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, "left");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", function(assert) {
@@ -2334,8 +2330,8 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", f
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [1, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [1, -8], "title must have moved");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'center'; legend position 'inside'", function(assert) {
@@ -2359,6 +2355,51 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; legend position 
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [1, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [1, -8], "title must have moved");
+});
+
+QUnit.test("Shift simple title; itemTextPosition = 'left'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.itemTextPosition = "left";
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, "right");
+    assert.deepEqual(this.title.shift.lastCall.args, [22, -8], "title must have moved");
+});
+
+QUnit.test("Shift simple title; horizontalAlignment = 'right'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.horizontalAlignment = "right";
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.deepEqual(this.title.shift.lastCall.args, [4, -8], "title must have moved");
+});
+
+QUnit.test("Shift simple title; itemTextPosition = 'top'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.itemTextPosition = "top";
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.deepEqual(this.title.shift.lastCall.args, [4, -8], "title must have moved");
+});
+
+QUnit.test("Shift simple title; itemTextPosition = 'bottom'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.itemTextPosition = "bottom";
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.deepEqual(this.title.shift.lastCall.args, [4, -8], "title must have moved");
 });

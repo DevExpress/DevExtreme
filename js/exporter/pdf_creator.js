@@ -69,7 +69,7 @@ exports.getData = function(data, options, callback) {
 
     blob.done(callback);
 
-    when(imageData).done(function(imageString) {
+    return when(imageData).done(function(imageString) {
         var binaryData = composePdfString(imageString, options, getCurDate()),
             pdfData = isFunction(window.Blob) ?
                 getBlob(binaryData) :

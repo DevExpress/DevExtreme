@@ -472,19 +472,6 @@ exports.plugin = {
             this._tooltip.dispose();
             this._tooltip = null;
         },
-        _hideTooltip: function() {
-            this._tooltip.hide();
-        },
-        _onRender: function() {
-            // This is for cases when user somehow hides the widget container without triggering any "out" events -
-            // in such cases we advice user to call the `render` - to notify the widget about changing visibility of the container.
-            // Since from now on the widget does not care about the container visibility the only purpose of the `render` is to notify that container size is changed -
-            // hence calling the `render` when visibility is changed is redundant... If it were not for the tooltip.
-            // TODO: Find a way to remove the following code.
-            if(!this._$element.is(":visible")) {
-                this._hideTooltip();
-            }
-        },
         // The method exists only to be overridden in sparklines.
         _setTooltipRendererOptions: function() {
             this._tooltip.setRendererOptions(this._getRendererOptions());
@@ -492,6 +479,11 @@ exports.plugin = {
         // The method exists only to be overridden in sparklines and gauges.
         _setTooltipOptions: function() {
             this._tooltip.update(this._getOption("tooltip"));
+        }
+    },
+    extenders: {
+        _stopCurrentHandling() {
+            this._tooltip && this._tooltip.hide();
         }
     },
     customize: function(constructor) {

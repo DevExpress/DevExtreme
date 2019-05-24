@@ -19,8 +19,8 @@ var environment = {
         this.renderer = new vizMocks.Renderer();
         this.container = createTestContainer("#test-container", { width: 800, height: 600 });
         rendererModule.Renderer.onCall(0).returns(this.renderer);
-        var tooltipRender = new vizMocks.Renderer();
-        rendererModule.Renderer.onCall(1).returns(tooltipRender);
+        rendererModule.Renderer.onCall(1).returns(new vizMocks.Renderer());
+        rendererModule.Renderer.onCall(2).returns(new vizMocks.Renderer());
     },
     setupScrollBar: function() {
         var originalScrollBar = scrollBarModule.ScrollBar,

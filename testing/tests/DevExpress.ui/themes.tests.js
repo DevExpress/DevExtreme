@@ -530,6 +530,11 @@ QUnit.module("misc", () => {
         assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [99] }));
         assert.equal("ios7", themeNameFromDevice({ platform: "ios" }));
     });
+
+    test("themeNameFromDevice for removed mobile themes (breaking change BC4928)", (assert) => {
+        assert.equal(themes.themeNameFromDevice({ platform: "android" }), "generic");
+        assert.equal(themes.themeNameFromDevice({ platform: "win" }), "generic");
+    });
 });
 
 QUnit.module("web font checker", () => {

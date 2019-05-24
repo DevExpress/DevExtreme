@@ -73,6 +73,8 @@ export class SchedulerTestWrapper {
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
+                getButtonWidth: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().width,
+                getButtonHeight: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().height,
             }
         };
 
@@ -108,7 +110,10 @@ export class SchedulerTestWrapper {
 
         this.appointmentForm = {
             getFormInstance: () => this.appointmentPopup.getPopup().find(".dx-form").dxForm("instance"),
-            hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs")
+            getEditor: name => this.appointmentForm.getFormInstance().getEditor(name),
+            setSubject: (value) => this.appointmentForm.getEditor("text").option("value", value),
+
+            hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs"),
         };
 
         this.workSpace = {
