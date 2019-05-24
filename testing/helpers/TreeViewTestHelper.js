@@ -17,6 +17,8 @@ const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibility-opened`;
 const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
 
+const SELECTED_ITEM_CLASS = "dx-state-selected";
+
 const { assert } = QUnit;
 
 class TreeViewTestWrapper {
@@ -25,7 +27,7 @@ class TreeViewTestWrapper {
             WIDGET_CLASS: WIDGET_CLASS,
             NODE_CLASS: NODE_CLASS,
             ITEM_CLASS: ITEM_CLASS,
-            SELECTED_ITEM_CLASS: "dx-state-selected",
+            SELECTED_ITEM_CLASS: SELECTED_ITEM_CLASS,
             CHECK_BOX_CLASS: "dx-checkbox",
             CHECK_BOX_CHECKED_CLASS: "dx-checkbox-checked",
             NODE_CONTAINER_CLASS: NODE_CONTAINER_CLASS,
@@ -57,6 +59,8 @@ class TreeViewTestWrapper {
         let checkBoxes = this.getElement().find(`.${this.classes.CHECK_BOX_CLASS}`);
         return isDefined(index) ? checkBoxes.eq(index) : checkBoxes;
     }
+    getSelectAllItem() { return this.getElement().find(`.${this.classes.SELECT_ALL_ITEM_CLASS}`); }
+    getSelectedItems() { return this.getElement().find(`.${this.classes.SELECTED_ITEM_CLASS}`); }
     getAllSelectedCheckboxes() { return this.getElement().find(`.${this.classes.CHECK_BOX_CHECKED_CLASS}`); }
     isNodeContainerOpened($nodeContainer) { return $nodeContainer.hasClass(OPENED_NODE_CONTAINER_CLASS); }
 

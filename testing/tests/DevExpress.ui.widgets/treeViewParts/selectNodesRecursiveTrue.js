@@ -1,128 +1,130 @@
-/* global DATA, internals, initTree */
-
 import $ from "jquery";
+import eventsEngine from "events/core/events_engine";
+import { TreeViewTestWrapper, TreeViewDataHelper } from "../../../helpers/TreeViewTestHelper.js";
 
-QUnit.module("selectNodesRecursive = true", {
-    beforeEach: function() {
-        this.data = $.extend(true, [], DATA[5]);
-        this.data[0].items[1].items[0].expanded = true;
-        this.data[0].items[1].items[1].expanded = true;
-        this.$treeView = initTree({
-            items: this.data,
-            showCheckBoxesMode: "normal"
-        });
-        this.treeView = this.$treeView.dxTreeView("instance");
-    },
-    afterEach: function() {
-    }
-});
+let { module, test, } = QUnit;
 
-QUnit.test("ignore invisible items on select (T317454)", function(assert) {
-    var items = [{
+const dataHelper = new TreeViewDataHelper();
+const createInstance = (options) => new TreeViewTestWrapper(options);
+
+module("selectNodesRecursive = true", () => {
+    test("ignore invisible items on select (T317454)", (assert) => {
+        const items = [{
             text: 'item 1', expanded: true, items: [
                 { text: 'item 11', selected: false },
                 { text: 'item 12', visible: false, selected: false }
             ]
-        }],
-        $treeView = initTree({
+        }];
+
+        const treeView = createInstance({
             items: items,
             showCheckBoxesMode: "selectAll"
-        }),
-        treeView = $treeView.dxTreeView("instance"),
-        selectAll = $treeView.find(".dx-treeview-select-all-item").dxCheckBox("instance");
+        });
 
-    treeView.selectItem(items[0].items[0]);
-    assert.strictEqual(items[0].selected, true, "parent item ignore invisible selection");
-    assert.strictEqual(selectAll.option("value"), true, "selectAll item ignore invisible selection");
-});
+        treeView.instance.selectItem(items[0].items[0]);
+        assert.strictEqual(items[0].selected, true, "parent item ignore invisible selection");
+        assert.strictEqual(treeView.getSelectAllItem().dxCheckBox("instance").option("value"), true, "selectAll item ignore invisible selection");
+    });
 
-QUnit.test("ignore invisible items on unselect (T317454)", function(assert) {
-    var items = [{
+    test("ignore invisible items on unselect (T317454)", (assert) => {
+        const items = [{
             text: 'item 1', expanded: true, items: [
                 { text: 'item 11' },
                 { text: 'item 12', visible: false, selected: true },
                 { text: 'item 13', visible: false }
             ]
-        }],
-        $treeView = initTree({
+        }];
+
+        const treeView = createInstance({
             items: items,
             showCheckBoxesMode: "selectAll"
-        }),
-        treeView = $treeView.dxTreeView("instance"),
-        selectAll = $treeView.find(".dx-treeview-select-all-item").dxCheckBox("instance");
+        });
 
-    treeView.selectItem(items[0]);
-    assert.notOk(items[0].items[2].selected, "invisible item ignores parent selection");
+        treeView.instance.selectItem(items[0]);
+        assert.notOk(items[0].items[2].selected, "invisible item ignores parent selection");
 
-    treeView.unselectItem(items[0].items[0]);
-    assert.strictEqual(items[0].selected, false, "parent item ignore invisible selection");
-    assert.strictEqual(selectAll.option("value"), false, "selectAll item ignore invisible selection");
-});
+        treeView.instance.unselectItem(items[0].items[0]);
+        assert.strictEqual(items[0].selected, false, "parent item ignore invisible selection");
+        assert.strictEqual(treeView.getSelectAllItem().dxCheckBox("instance").option("value"), false, "selectAll item ignore invisible selection");
+    });
 
-QUnit.test("Unselect disabled item via API", function(assert) {
-    var data = $.extend(true, [], DATA[2]);
-    data[0].disabled = true;
-    data[0].selected = true;
+    test("Unselect disabled item via API", (assert) => {
+        let data = $.extend(true, [], dataHelper.data[2]);
+        data[0].disabled = true;
+        data[0].selected = true;
 
-    var $treeView = initTree({
+        const treeView = createInstance({
             items: data,
             showCheckBoxesMode: "normal"
-        }),
-        instance = $treeView.dxTreeView("instance"),
-        $item = $treeView.find("." + internals.ITEM_CLASS).first().get(0);
+        });
 
-    assert.ok(instance.option("items")[0].selected, "item is selected");
-    instance.unselectItem($item);
-    assert.notOk(instance.option("items")[0].selected, "item is not selected");
+        assert.ok(treeView.instance.option("items")[0].selected, "item is selected");
+        treeView.instance.unselectItem(treeView.getItems(0).get(0));
+        assert.notOk(treeView.instance.option("items")[0].selected, "item is not selected");
+    });
 
-});
-
-QUnit.test("selection by key", function(assert) {
-    var data = [
+    test("selection by key", (assert) => {
+        let data = [
             { id: 1, text: "Item 1", expanded: true, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
-        ],
-        treeView = initTree({ items: data }).dxTreeView("instance");
+        ];
+        const treeView = createInstance({ items: data });
 
-    treeView.selectItem(1);
-    assert.ok(data[0].selected);
+        treeView.instance.selectItem(1);
+        assert.ok(data[0].selected);
 
-    treeView.unselectItem(1);
-    assert.notOk(data[0].selected);
-});
+        treeView.instance.unselectItem(1);
+        assert.notOk(data[0].selected);
+    });
 
-QUnit.test("Toggle node selected class", function(assert) {
-    var data = $.extend(true, [], DATA[2]);
-    data[0].selected = true;
-    data[0].expanded = true;
+    test("Toggle node selected class", (assert) => {
+        var data = $.extend(true, [], dataHelper.data[2]);
+        data[0].selected = true;
+        data[0].expanded = true;
 
-    var treeView = initTree({
+        const treeView = createInstance({
             items: data,
             showCheckBoxesMode: "normal"
-        }).dxTreeView("instance"),
-        $treeView = treeView.$element(),
-        $selectedItems = $treeView.find(".dx-state-selected"),
-        checkboxes = $treeView.find(".dx-checkbox");
+        });
 
-    assert.equal($selectedItems.length, 3, "3 selected items");
+        assert.equal(treeView.getSelectedItems().length, 3, "3 selected items");
 
-    $(checkboxes[1]).trigger("dxclick");
-    $selectedItems = $treeView.find(".dx-state-selected");
+        eventsEngine.trigger(treeView.getCheckBoxes(1), "dxclick");
+        assert.equal(treeView.getSelectedItems().length, 1, "1 selected items");
 
-    assert.equal($selectedItems.length, 1, "1 selected items");
+        eventsEngine.trigger(treeView.getCheckBoxes(2), "dxclick");
+        assert.equal(treeView.getSelectedItems().length, 0, "0 selected items");
+    });
 
-    $(checkboxes[2]).trigger("dxclick");
-    $selectedItems = $treeView.find(".dx-state-selected");
+    test("'selectItem()' by itemData", (assert) => {
+        let data = $.extend(true, [], dataHelper.data[5]);
+        data[0].items[1].items[0].expanded = true;
+        data[0].items[1].items[1].expanded = true;
 
-    assert.equal($selectedItems.length, 0, "0 selected items");
-});
+        const treeView = createInstance({
+            items: data,
+            showCheckBoxesMode: "normal"
+        });
 
-QUnit.test("'selectItem()' by itemData", function(assert) {
-    this.treeView.selectItem(this.data[0]);
-    assert.ok(this.data[0].selected, "item was selected");
-});
+        treeView.instance.selectItem(data[0]);
+        treeView.checkSelectedNodes([0, 1, 2, 3, 4]);
+        assert.ok(data[0].selected, "item was selected");
+    });
 
-QUnit.test("'unselectItem()' by itemData", function(assert) {
-    this.treeView.selectItem(this.data[0]);
-    this.treeView.unselectItem(this.data[0]);
-    assert.ok(!this.data[0].selected, "item was unselected");
+    test("'unselectItem()' by itemData", (assert) => {
+        let data = $.extend(true, [], dataHelper.data[5]);
+        data[0].items[1].items[0].expanded = true;
+        data[0].items[1].items[1].expanded = true;
+
+        const treeView = createInstance({
+            items: data,
+            showCheckBoxesMode: "normal"
+        });
+
+        treeView.instance.selectItem(data[0]);
+        treeView.instance.unselectItem(data[0]);
+
+        treeView.checkSelectedNodes([]);
+        assert.ok(!data[0].selected, "item was unselected");
+    });
+
 });
