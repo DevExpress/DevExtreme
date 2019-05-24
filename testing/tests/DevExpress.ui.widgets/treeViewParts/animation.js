@@ -1,199 +1,193 @@
-/* global internals */
-
-import $ from "jquery";
 import fx from "animation/fx";
 import keyboardMock from "../../../helpers/keyboardMock.js";
+import eventsEngine from "events/core/events_engine";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 
-QUnit.module("Animation", {
-    beforeEach: function() {
+const { module, test } = QUnit;
+const createInstance = (options) => new TreeViewTestWrapper(options);
+
+module("Animation", {
+    beforeEach() {
         fx.off = true;
     },
-    afterEach: function() {
+    afterEach() {
         fx.off = false;
     }
-});
+}, () => {
+    test("expand item should be animated if option animationEnabled is true", (assert) => {
+        assert.expect(7);
 
-QUnit.test("expand item should be animated if option animationEnabled is true", function(assert) {
-    assert.expect(7);
+        let originalAnimation = fx.animate;
+        let originalStop = fx.stop;
 
-    var originalAnimation = fx.animate;
-    var originalStop = fx.stop;
 
-    try {
-        fx.stop = sinon.spy(function($element) {
-            var $nodeContainer = $node.find("." + internals.NODE_CONTAINER_CLASS).eq(0);
-            assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
-        });
-        fx.animate = sinon.spy(function($element, config) {
-            var $nodeContainer = $node.find("." + internals.NODE_CONTAINER_CLASS).eq(0);
+        try {
+            fx.stop = sinon.spy(($element) => {
+                let $nodeContainer = treeView.getNodeContainers($node, 0);
+                assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
+            });
+            fx.animate = sinon.spy(($element, config) => {
+                let $nodeContainer = treeView.getNodeContainers($node, 0);
 
-            config.duration = 0;
+                config.duration = 0;
 
-            assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
-            assert.equal(config.from["maxHeight"], 0, "starting from zero height");
-            assert.equal(config.to["maxHeight"], $nodeContainer.height(), "starting from zero height");
-            assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
+                assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
+                assert.equal(config.from["maxHeight"], 0, "starting from zero height");
+                assert.equal(config.to["maxHeight"], $nodeContainer.height(), "starting from zero height");
+                assert.ok($nodeContainer.hasClass(treeView.classes.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
 
-            config.complete = (function() {
-                var orig = config.complete;
-                return function() {
-                    orig();
+                config.complete = (() => {
+                    let orig = config.complete;
+                    return () => {
+                        orig();
 
-                    assert.equal($nodeContainer.css("maxHeight"), "none", "max-height was reset");
-                    assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
-                };
-            })();
+                        assert.equal($nodeContainer.css("maxHeight"), "none", "max-height was reset");
+                        assert.ok($nodeContainer.hasClass(treeView.classes.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
+                    };
+                })();
 
-            originalAnimation.call(this, $element, config);
-        });
+                originalAnimation.call(this, $element, config);
+            });
 
-        var $treeView = $("#treeView").dxTreeView({
-            items: [{
-                id: 1, text: "Item 1",
-                items: [{ id: 3, text: "Item 3" }]
-            }],
-            animationEnabled: true
-        });
+            const treeView = createInstance({
+                items: [{
+                    id: 1, text: "Item 1",
+                    items: [{ id: 3, text: "Item 3" }]
+                }],
+                animationEnabled: true
+            });
 
-        var $node = $treeView.find("." + internals.NODE_CLASS).eq(0),
-            $item = $node.find("." + internals.ITEM_CLASS).eq(0);
+            let $node = treeView.getNodes(0);
 
-        $treeView.dxTreeView("instance").expandItem($item.get(0));
-    } finally {
-        fx.animate = originalAnimation;
-        fx.stop = originalStop;
-    }
-});
+            treeView.instance.expandItem(treeView.getItems(0).get(0));
+        } finally {
+            fx.animate = originalAnimation;
+            fx.stop = originalStop;
+        }
+    });
 
-QUnit.test("collapse item should be animated if option animationEnabled is true", function(assert) {
-    assert.expect(8);
+    test("collapse item should be animated if option animationEnabled is true", (assert) => {
+        assert.expect(8);
 
-    var originalAnimation = fx.animate;
-    var originalStop = fx.stop;
+        let originalAnimation = fx.animate;
+        let originalStop = fx.stop;
 
-    try {
-        fx.stop = sinon.spy(function($element) {
-            assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
-        });
-        fx.animate = sinon.spy(function($element, config) {
-            assert.notEqual(config.duration, 0, "not zero duration");
-            config.duration = 0;
+        try {
+            fx.stop = sinon.spy(($element) => {
+                assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
+            });
+            fx.animate = sinon.spy(($element, config) => {
+                assert.notEqual(config.duration, 0, "not zero duration");
+                config.duration = 0;
 
-            assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
+                assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
 
-            assert.equal(config.from["maxHeight"], $nodeContainer.height(), "starting from real height");
-            assert.equal(config.to["maxHeight"], 0, "starting to zero height");
-            assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
+                assert.equal(config.from["maxHeight"], $nodeContainer.height(), "starting from real height");
+                assert.equal(config.to["maxHeight"], 0, "starting to zero height");
+                assert.ok(treeView.isNodeContainerOpened($nodeContainer), "node container displayed");
 
-            config.complete = (function() {
-                var orig = config.complete;
-                return function() {
-                    orig();
+                config.complete = (() => {
+                    var orig = config.complete;
+                    return function() {
+                        orig();
 
-                    assert.equal($nodeContainer.css("maxHeight"), "none", "max-height was reset");
-                    assert.ok(!$nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
-                };
-            })();
+                        assert.equal($nodeContainer.css("maxHeight"), "none", "max-height was reset");
+                        assert.ok(!treeView.isNodeContainerOpened($nodeContainer), "node container displayed");
+                    };
+                })();
 
-            originalAnimation.call(this, $element, config);
-        });
+                originalAnimation.call(this, $element, config);
+            });
 
-        var $treeView = $("#treeView").dxTreeView({
-            items: [{
-                id: 1, text: "Item 1", expanded: true,
-                items: [{ id: 3, text: "Item 3" }]
-            }],
-            animationEnabled: true
-        });
+            const treeView = createInstance({
+                items: [{
+                    id: 1, text: "Item 1", expanded: true,
+                    items: [{ id: 3, text: "Item 3" }]
+                }],
+                animationEnabled: true
+            });
 
-        var $node = $treeView.find("." + internals.NODE_CLASS).eq(0),
-            $item = $node.find("." + internals.ITEM_CLASS).eq(0),
-            $nodeContainer = $node.find("." + internals.NODE_CONTAINER_CLASS).eq(0);
+            let $nodeContainer = treeView.getNodeContainers(treeView.getNodes(0), 0);
 
-        $treeView.dxTreeView("instance").collapseItem($item.get(0));
-    } finally {
-        fx.animate = originalAnimation;
-        fx.stop = originalStop;
-    }
-});
+            treeView.instance.collapseItem(treeView.getItems(0).get(0));
+        } finally {
+            fx.animate = originalAnimation;
+            fx.stop = originalStop;
+        }
+    });
 
-QUnit.test("collapse item should not be animated if option animationEnabled is false", function(assert) {
-    var originalAnimation = fx.animate;
+    test("collapse item should not be animated if option animationEnabled is false", (assert) => {
+        let originalAnimation = fx.animate;
 
-    try {
-        fx.animate = sinon.spy(function($element, config) {
-            assert.equal(config.duration, 0, "not zero duration");
-            originalAnimation.call(this, $element, config);
-        });
+        try {
+            fx.animate = sinon.spy(($element, config) => {
+                assert.equal(config.duration, 0, "not zero duration");
+                originalAnimation.call(this, $element, config);
+            });
 
-        var $treeView = $("#treeView").dxTreeView({
-            items: [{
-                id: 1, text: "Item 1", expanded: true,
-                items: [{ id: 3, text: "Item 3" }]
-            }],
-            animationEnabled: false
-        });
+            const treeView = createInstance({
+                items: [{
+                    id: 1, text: "Item 1", expanded: true,
+                    items: [{ id: 3, text: "Item 3" }]
+                }],
+                animationEnabled: false
+            });
 
-        var $node = $treeView.find("." + internals.NODE_CLASS).eq(0),
-            $item = $node.find("." + internals.ITEM_CLASS).eq(0);
+            treeView.instance.collapseItem(treeView.getItems(0).get(0));
+        } finally {
+            fx.animate = originalAnimation;
+        }
+    });
 
-        $treeView.dxTreeView("instance").collapseItem($item.get(0));
-    } finally {
-        fx.animate = originalAnimation;
-    }
-});
+    test("collapse item should not be animated if item is already collapsed", (assert) => {
+        assert.expect(0);
 
-QUnit.test("collapse item should not be animated if item is already collapsed", function(assert) {
-    assert.expect(0);
+        let originalAnimation = fx.animate;
 
-    var originalAnimation = fx.animate;
+        try {
+            fx.animate = sinon.spy(($element, config) => {
+                assert.ok(false, "animation was no run");
+            });
 
-    try {
-        fx.animate = sinon.spy(function($element, config) {
-            assert.ok(false, "animation was no run");
-        });
+            const treeView = createInstance({
+                items: [{
+                    id: 1, text: "Item 1", expanded: false,
+                    items: [{ id: 3, text: "Item 3" }]
+                }]
+            });
 
-        var $treeView = $("#treeView").dxTreeView({
-            items: [{
-                id: 1, text: "Item 1", expanded: false,
-                items: [{ id: 3, text: "Item 3" }]
-            }]
-        });
+            treeView.instance.collapseItem(treeView.getItems(0).get(0));
+        } finally {
+            fx.animate = originalAnimation;
+        }
+    });
 
-        var $node = $treeView.find("." + internals.NODE_CLASS).eq(0),
-            $item = $node.find("." + internals.ITEM_CLASS).eq(0);
+    test("keyboard navigation should stop animation", (assert) => {
+        let originalStop = fx.stop;
 
-        $treeView.dxTreeView("instance").collapseItem($item.get(0));
-    } finally {
-        fx.animate = originalAnimation;
-    }
-});
+        try {
+            const treeView = createInstance({
+                items: [{
+                    id: 1, text: "Item 1", expanded: false,
+                    items: [{ id: 3, text: "Item 3" }]
+                }],
+                focusStateEnabled: true
+            });
 
-QUnit.test("keyboard navigation should stop animation", function(assert) {
-    var originalStop = fx.stop;
+            let $node = treeView.getNodes(0),
+                $item = treeView.getItems(0);
 
-    try {
-        var $treeView = $("#treeView").dxTreeView({
-            items: [{
-                id: 1, text: "Item 1", expanded: false,
-                items: [{ id: 3, text: "Item 3" }]
-            }],
-            focusStateEnabled: true
-        });
+            treeView.instance.expandItem(treeView.getItems(0).get(0));
 
-        var $node = $treeView.find("." + internals.NODE_CLASS).eq(0),
-            $item = $node.find("." + internals.ITEM_CLASS).eq(0);
+            fx.stop = sinon.spy();
+            eventsEngine.trigger($item, "dxpointerdown");
 
-        $treeView.dxTreeView("instance").expandItem($item.get(0));
+            let $nodeContainer = treeView.getNodeContainers($node, 0);
 
-        fx.stop = sinon.spy();
-        $item.trigger("dxpointerdown");
-
-        var $nodeContainer = $node.find("." + internals.NODE_CONTAINER_CLASS).eq(0);
-
-        keyboardMock($treeView).keyDown("right");
-        assert.ok(fx.stop.calledWith($nodeContainer.get(0)), "animation stopped");
-    } finally {
-        fx.stop = originalStop;
-    }
+            keyboardMock(treeView.getElement()).keyDown("right");
+            assert.ok(fx.stop.calledWith($nodeContainer.get(0)), "animation stopped");
+        } finally {
+            fx.stop = originalStop;
+        }
+    });
 });
