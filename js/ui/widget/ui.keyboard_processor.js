@@ -41,7 +41,8 @@ const KeyboardProcessor = Class.inherit({
     dispose: function() {
         if(this._element) {
             eventsEngine.off(this._element, this._keydown, this._processFunction);
-            eventsEngine.off(this._element, this._keydown, this._toggleProcessingWithContext);
+            eventsEngine.off(this._element, this._compositionStart, this._toggleProcessingWithContext);
+            eventsEngine.off(this._element, this._compositionEnd, this._toggleProcessingWithContext);
         }
         this._element = undefined;
         this._handler = undefined;
