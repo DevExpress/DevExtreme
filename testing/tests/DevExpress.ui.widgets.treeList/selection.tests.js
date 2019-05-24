@@ -1233,3 +1233,38 @@ QUnit.test("Check selectedRowKeys after deselecting nested node", function(asser
     // assert
     assert.deepEqual(this.option("selectedRowKeys"), [5], "selected row keys");
 });
+
+QUnit.test("focusedItemIndex should be reset to -1 after change page index (T742193)", function(assert) {
+    // arrange
+    var $testElement = $('#treeList'),
+        array = [
+            { id: 1, field1: 'test1', field2: 1 },
+            { id: 2, field1: 'test2', field2: 2 },
+            { id: 3, field1: 'test3', field2: 3 },
+            { id: 4, field1: 'test4', field2: 4 }
+        ];
+
+    this.options.dataSource = {
+        store: {
+            type: "array",
+            data: array,
+            key: "id"
+        },
+        pageSize: 2,
+        paginate: true
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // act
+    this.selectionController.changeItemSelection(1, { shift: true });
+    // assert
+    assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ id: 2, field1: 'test2', field2: 2 }]);
+    assert.equal(this.selectionController._selection._focusedItemIndex, 1, "_focusedItemIndex corrected");
+
+    // act
+    this.dataController.pageIndex(1);
+    // assert
+    assert.equal(this.selectionController._selection._focusedItemIndex, -1, "_focusedItemIndex corrected");
+});

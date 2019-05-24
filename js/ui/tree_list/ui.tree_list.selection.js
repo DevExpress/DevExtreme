@@ -10,7 +10,8 @@ var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     SELECT_CHECKBOX_CLASS = "dx-select-checkbox";
 
-var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
+var originalRowClick = selectionModule.extenders.views.rowsView._rowClick,
+    originalHandleDataChanged = selectionModule.extenders.controllers.data._handleDataChanged;
 
 var nodeExists = function(array, currentKey) {
     return !!array.filter(function(key) { return key === currentKey; }).length;
@@ -42,7 +43,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                             selectedItemKeys: this.option("selectedRowKeys")
                         });
                     }
-                    this.callBase.apply(this, arguments);
+                    originalHandleDataChanged.apply(this, e);
                 },
 
                 loadDescendants: function() {
