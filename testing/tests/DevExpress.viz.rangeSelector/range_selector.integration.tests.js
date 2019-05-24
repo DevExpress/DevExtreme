@@ -26,10 +26,6 @@ QUnit.module("Render", function(hook) {
         assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharp, "h");
         assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharpDirection, 1);
     });
-
-    QUnit.test('Check ticks coords', function(assert) {
-        assert.strictEqual(this.rangeSelector._axis._axis._majorTicks[0].mark._settings.d, "M 32 18 L 32 30");
-    });
 });
 
 QUnit.module("Value", function(hook) {
