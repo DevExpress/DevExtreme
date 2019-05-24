@@ -8,6 +8,7 @@ const NODE_CLASS = `${WIDGET_CLASS}-node`;
 const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
 const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
 const IS_LEAF = `${NODE_CLASS}-is-leaf`;
+const SEARCH_CLASS = "dx-treeview-search";
 
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
 const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
@@ -17,7 +18,9 @@ const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibility-opened`;
 const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
 
+const SCROLLABLE_CLASS = "dx-scrollable";
 const SELECTED_ITEM_CLASS = "dx-state-selected";
+const FOCUSED_ITEM_CLASS = "dx-state-focused";
 
 const { assert } = QUnit;
 
@@ -28,6 +31,8 @@ class TreeViewTestWrapper {
             NODE_CLASS: NODE_CLASS,
             ITEM_CLASS: ITEM_CLASS,
             SELECTED_ITEM_CLASS: SELECTED_ITEM_CLASS,
+            SEARCH_CLASS: SEARCH_CLASS,
+            FOCUSED_ITEM_CLASS: FOCUSED_ITEM_CLASS,
             CHECK_BOX_CLASS: "dx-checkbox",
             CHECK_BOX_CHECKED_CLASS: "dx-checkbox-checked",
             NODE_CONTAINER_CLASS: NODE_CONTAINER_CLASS,
@@ -37,7 +42,8 @@ class TreeViewTestWrapper {
             IS_LEAF: IS_LEAF,
             TOGGLE_ITEM_VISIBILITY_CLASS: TOGGLE_ITEM_VISIBILITY_CLASS,
             TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: TOGGLE_ITEM_VISIBILITY_OPENED_CLASS,
-            SELECT_ALL_ITEM_CLASS: SELECT_ALL_ITEM_CLASS
+            SELECT_ALL_ITEM_CLASS: SELECT_ALL_ITEM_CLASS,
+            SCROLLABLE_CLASS: SCROLLABLE_CLASS
         };
 
         this.instance = this.getInstance(options);
