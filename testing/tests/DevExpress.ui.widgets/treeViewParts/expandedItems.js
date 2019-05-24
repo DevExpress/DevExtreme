@@ -327,7 +327,7 @@ module("Expanded items", {
         treeView.instance.collapseAll();
         treeView.instance.expandItem(111);
 
-        const $nodeContainers = treeView.getElement().find(`.${treeView.classes.NODE_CONTAINER_CLASS}`);
+        const $nodeContainers = treeView.getNodeContainers();
         assert.ok(treeView.isNodeContainerOpened($nodeContainers.eq(1)), "item 11");
         assert.ok(treeView.isNodeContainerOpened($nodeContainers.eq(2)), "item 111");
     });
