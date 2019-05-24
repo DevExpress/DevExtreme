@@ -1588,6 +1588,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var newRowIndex = this._getRowIndex($newFocusedRow),
             dataController = this.getController("data"),
             prevFocusedRowIndex = this.getVisibleRowIndex(),
+            loadingOperationTypes = dataController.loadingOperationTypes(),
             args = {
                 rowElement: $newFocusedRow,
                 prevRowIndex: prevFocusedRowIndex,
@@ -1597,7 +1598,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 cancel: false
             };
 
-        if(!dataController || dataController.isLoading()) {
+        if(!dataController || dataController.isLoading() && (loadingOperationTypes.reload || loadingOperationTypes.paging)) {
             args.cancel = true;
             return args;
         }

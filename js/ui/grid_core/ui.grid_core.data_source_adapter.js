@@ -286,6 +286,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 options.pageIndex = dataSource.pageIndex();
                 options.lastLoadOptions = loadOptions;
                 options.operationTypes = operationTypes;
+                that._loadingOperationTypes = operationTypes;
                 that._isRefreshing = true;
 
                 when(isRefreshing || that._isRefreshed || that.refresh(options, isReload, operationTypes)).done(function() {
@@ -478,6 +479,9 @@ module.exports = gridCore.Controller.inherit((function() {
             deferred.always(function() {
                 that._isCustomLoading = false;
             });
+        },
+        loadingOperationTypes: function() {
+            return this._loadingOperationTypes;
         },
         operationTypes: function() {
             return this._operationTypes;

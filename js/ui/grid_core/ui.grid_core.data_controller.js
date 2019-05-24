@@ -958,6 +958,11 @@ module.exports = {
 
                     that._fireChanged(change);
                 },
+                loadingOperationTypes: function() {
+                    var dataSource = this.dataSource();
+
+                    return dataSource && dataSource.loadingOperationTypes() || {};
+                },
                 _fireChanged: function(change) {
                     var that = this;
                     deferRender(function() {
