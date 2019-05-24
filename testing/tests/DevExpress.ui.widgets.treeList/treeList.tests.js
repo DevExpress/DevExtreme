@@ -965,6 +965,65 @@ QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
     assert.strictEqual($(treeList.getRowElement(0)).find(".dx-treelist-expanded").length, 1, "first row has expanded icon");
 });
 
+// T742885
+QUnit.test("Expand node after filtering when it has many children and they are selected", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        treeList = createTreeList({
+            loadingTimeout: 30,
+            height: 200,
+            dataSource: {
+                store: {
+                    type: "array",
+                    data: [{
+                        field1: "test1",
+                        items: [{
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }]
+                    }]
+                },
+                pageSize: 2
+            },
+            scrolling: {
+                mode: "virtual"
+            },
+            selection: {
+                mode: "multiple"
+            },
+            itemsExpr: "items",
+            dataStructure: "tree",
+            columns: [{ dataField: "field1", dataType: "string", filterValues: ["test2"] }],
+            onContentReady: function(e) {
+                e.component.selectRows([2, 3, 4, 5, 6, 7, 8, 9]);
+            }
+        });
+
+    clock.tick(500);
+
+    // act
+    treeList.collapseRow(1);
+    clock.tick(100);
+
+    // assert
+    var items = treeList.getVisibleRows();
+    assert.strictEqual(items.length, 1, "row count");
+    assert.notOk(treeList.isRowExpanded(1), "first node is collapsed");
+});
+
 QUnit.module("Focused Row", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
