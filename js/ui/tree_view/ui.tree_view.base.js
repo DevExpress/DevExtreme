@@ -744,7 +744,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems"];
+        var accessors = this.callBase();
+
+        accessors.push("hasItems");
+
+        return accessors;
     },
 
     _getDataAdapterOptions: function() {
