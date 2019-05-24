@@ -299,18 +299,30 @@ var numberLocalization = dependencyInjector({
             cleanedText = text
                 .replace(regExp, "")
                 .replace(decimalSeparator, ".")
-                .replace(/\.$/g, ""),
-            parsed = +cleanedText;
+                .replace(/\.$/g, "");
 
-        cleanedText = cleanedText.replace(/^\./g, "");
+        if(cleanedText === '.' || cleanedText === "") { return null; }
 
-        if(cleanedText.length > 15) {
-            return NaN;
+        let separatorIndex = cleanedText.indexOf(".");
+        separatorIndex = separatorIndex < 0 ? cleanedText.length : separatorIndex;
+
+        let significantDigitsCount = 0;
+        for(let index = 0; index < separatorIndex; index++) {
+            if(cleanedText.charAt(index) !== '0') {
+                significantDigitsCount += separatorIndex - index;
+                break;
+            }
         }
-        if(cleanedText === "") {
-            return null;
+        for(let index = cleanedText.length - 1; index > separatorIndex; index--) {
+            if(cleanedText.charAt(index) !== '0') {
+                significantDigitsCount += index - separatorIndex;
+                break;
+            }
         }
 
+        if(significantDigitsCount > 15) { return NaN; }
+
+        const parsed = +cleanedText;
         return parsed * this.getSign(text, format);
     }
 });
