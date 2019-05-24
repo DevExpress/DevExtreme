@@ -1,6 +1,6 @@
 import $ from "jquery";
 import commonUtils from "core/utils/common";
-import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+import { TreeViewTestWrapper } from "../../../helpers/TreeViewTestHelper.js";
 import eventsEngine from "events/core/events_engine";
 
 const { module, test } = QUnit;
@@ -83,9 +83,7 @@ module("Usage without keys", () => {
         assert.ok(items[0].items[0].selected);
         assert.ok(!items[1].selected);
 
-        assert.ok(treeView.getCheckBoxes().eq(0).dxCheckBox("instance").option("value"));
-        assert.ok(treeView.getCheckBoxes().eq(1).dxCheckBox("instance").option("value"));
-        assert.ok(!treeView.getCheckBoxes().eq(2).dxCheckBox("instance").option("value"));
+        treeView.checkCheckBoxesState([true, true, false]);
     });
 
     test("unselectItem() method", (assert) => {
@@ -107,9 +105,7 @@ module("Usage without keys", () => {
         assert.ok(!items[0].items[0].selected);
         assert.ok(!items[1].selected);
 
-        assert.ok(!treeView.getCheckBoxes().eq(0).dxCheckBox("instance").option("value"));
-        assert.ok(!treeView.getCheckBoxes().eq(1).dxCheckBox("instance").option("value"));
-        assert.ok(!treeView.getCheckBoxes().eq(2).dxCheckBox("instance").option("value"));
+        treeView.checkCheckBoxesState([false, false, false]);
     });
 
 

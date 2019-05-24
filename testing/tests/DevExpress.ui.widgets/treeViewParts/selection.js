@@ -1,7 +1,7 @@
 import $ from "jquery";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 import eventsEngine from "events/core/events_engine";
-import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+import { TreeViewTestWrapper } from "../../../helpers/TreeViewTestHelper.js";
 
 let { module, test, } = QUnit;
 

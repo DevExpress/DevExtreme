@@ -1,4 +1,4 @@
-import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+import { TreeViewTestWrapper } from "../../../helpers/TreeViewTestHelper.js";
 
 const { module, test } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
