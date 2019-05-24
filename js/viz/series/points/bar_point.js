@@ -149,14 +149,16 @@ module.exports = _extend({}, symbolPoint, {
 
         if(argAxis.getAxisPosition) {
             const axisOptions = argAxis.getOptions();
-            const edgeOffset = axisOptions ? Math.round(axisOptions.width / 2) : 1;
+            const edgeOffset = Math.round(axisOptions.width / 2);
             const argAxisPosition = argAxis.getAxisPosition();
-            if(!rotated) {
-                height -= that.minY === that.defaultY && that.minY === argAxisPosition ? edgeOffset : 0;
-            } else {
-                const isStartFromAxis = that.minX === that.defaultX && that.minX === argAxisPosition;
-                x += isStartFromAxis ? edgeOffset : 0;
-                width -= isStartFromAxis ? edgeOffset : 0;
+            if(axisOptions.visible) {
+                if(!rotated) {
+                    height -= that.minY === that.defaultY && that.minY === argAxisPosition ? edgeOffset : 0;
+                } else {
+                    const isStartFromAxis = that.minX === that.defaultX && that.minX === argAxisPosition;
+                    x += isStartFromAxis ? edgeOffset : 0;
+                    width -= isStartFromAxis ? edgeOffset : 0;
+                }
             }
         }
 
