@@ -3300,6 +3300,47 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
     clock.restore();
 });
 
+QUnit.test("Should navigate to the focused row by focusedRowIndex in virtual scrolling mode if corresponding page is not loaded (T733748)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 100,
+            focusedRowEnabled: true,
+            focusedRowKey: 11,
+            dataSource: [
+                { id: 2 }, { id: 3 },
+                { id: 4 }, { id: 5 },
+                { id: 6 }, { id: 7 },
+                { id: 8 }, { id: 9 },
+                { id: 10 }, { id: 11 },
+                { id: 12 }, { id: 13 }
+            ],
+            keyExpr: "id",
+            scrolling: {
+                mode: "virtual"
+            },
+            paging: {
+                pageSize: 2,
+                removeInvisiblePages: true
+            }
+        }).dxDataGrid("instance"),
+        rowsView = dataGrid.getView("rowsView");
+
+    clock.tick();
+
+    // act
+    dataGrid.option("focusedRowIndex", 0);
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowIndex"), 0, "focusedRowIndex");
+    assert.equal(dataGrid.option("focusedRowKey"), 2, "focusedRowKey");
+    assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "Focused row");
+    assert.equal($(rowsView.getRow(0)).find("td").eq(0).text(), "2", "Focused row cell text");
+
+    clock.restore();
+});
+
 QUnit.test("DataGrid should not scroll back to the focusedRow after paging if virtual scrolling (T718905, T719205)", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
