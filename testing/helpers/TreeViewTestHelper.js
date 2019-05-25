@@ -78,40 +78,6 @@ class TreeViewTestWrapper {
         });
     }
 
-    checkSelectedItems(selectedIndexes, items) {
-        let itemsArray = this.getItemsInOrder(items);
-
-        itemsArray.forEach((_, index) => {
-            if(selectedIndexes.indexOf(index) === -1) {
-                assert.equal(!!itemsArray[index].selected, false, `item ${index} is not selected`);
-            } else {
-                assert.equal(itemsArray[index].selected, true, `item ${index} is selected`);
-            }
-        });
-    }
-
-    checkSelected(expectedSelectedIndexes, items) {
-        this.checkSelectedItems(expectedSelectedIndexes, items);
-        this.checkSelectedNodes(expectedSelectedIndexes);
-    }
-
-    getItemsInOrder(items) {
-        let itemsArray = [];
-
-        let inOrder = (items) => {
-            items.forEach((item) => {
-                itemsArray.push(item);
-                if(item.items) {
-                    inOrder(item.items);
-                }
-            });
-        };
-
-        inOrder(items);
-
-        return itemsArray;
-    }
-
     checkCheckBoxesState(expectedValues) {
         this.getCheckBoxes().each((index) => {
             this.checkCheckBoxState(index, expectedValues[index]);

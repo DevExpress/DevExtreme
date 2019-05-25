@@ -17,18 +17,33 @@ module("SelectAll mode with 'selectNodesRecursive' = 'false'", {
             showCheckBoxesMode: "selectAll",
             selectNodesRecursive: false
         });
+        this.checkAllItemsSelection = function(selection) {
+            var items = this.treeView.instance.option('items'),
+                count = 0;
+
+            count = items[0].selected === selection ? (count + 1) : count;
+            count = items[0].items[0].selected === selection ? (count + 1) : count;
+            count = items[0].items[1].selected === selection ? (count + 1) : count;
+            count = items[0].items[1].items[0].selected === selection ? (count + 1) : count;
+            count = items[0].items[1].items[1].selected === selection ? (count + 1) : count;
+            count = items[1].selected === selection ? (count + 1) : count;
+
+            return count;
+        };
     }
 }, () => {
-    test("Select all items", function() {
+    test("Select all items", function(assert) {
         this.treeView.getSelectAllItem().dxCheckBox("instance").option("value", true);
 
-        this.treeView.checkSelected([0, 1, 2, 3, 4, 5], this.treeView.instance.option('items'));
+        this.treeView.checkSelectedNodes([0, 1, 2, 3, 4, 5]);
+        assert.equal(this.checkAllItemsSelection(true), 6, "all items were selected");
     });
 
-    test("Unselect all items", function() {
+    test("Unselect all items", function(assert) {
         this.treeView.getSelectAllItem().dxCheckBox("instance").option("value", true);
         this.treeView.getSelectAllItem().dxCheckBox("instance").option("value", false);
 
-        this.treeView.checkSelected([], this.treeView.instance.option('items'));
+        this.treeView.checkSelectedNodes([]);
+        assert.equal(this.checkAllItemsSelection(false), 6, "all items were unselected");
     });
 });
