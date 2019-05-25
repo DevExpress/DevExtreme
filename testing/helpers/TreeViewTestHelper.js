@@ -1,5 +1,4 @@
 import $ from "jquery";
-import { isDefined } from "core/utils/type";
 
 const CONTAINER_ID = "treeView";
 const WIDGET_CLASS = "dx-treeview";
@@ -42,19 +41,11 @@ class TreeViewTestWrapper {
     }
     getElement() { return $(`#${CONTAINER_ID}`); }
     getInstance(options) { return this.getElement().dxTreeView(options).dxTreeView("instance"); }
-    getNodes(index) {
-        return isDefined(index) ? this.getElement().find(`.${this.classes.NODE_CLASS}`).eq(index) : this.getElement().find(`.${this.classes.NODE_CLASS}`);
-    }
-    getNodeContainers($node, index) {
-        return isDefined(index) ? $node.find(`.${this.classes.NODE_CONTAINER_CLASS}`).eq(index) : $node.find(`.${this.classes.NODE_CONTAINER_CLASS}`);
-    }
-    getItems(index) {
-        return isDefined(index) ? this.getElement().find(`.${this.classes.ITEM_CLASS}`).eq(index) : this.getElement().find(`.${this.classes.ITEM_CLASS}`);
-    }
+    getNodes() { return this.getElement().find(`.${this.classes.NODE_CLASS}`); }
+    getItems() { return this.getElement().find(`.${this.classes.ITEM_CLASS}`); }
     getSelectedNodes() { return this.getElement().find(`.${this.classes.NODE_CLASS}.${this.classes.SELECTED_ITEM_CLASS}`); }
     getCheckBoxes() { return this.getElement().find(`.${this.classes.CHECK_BOX_CLASS}`); }
     getAllSelectedCheckboxes() { return this.getElement().find(`.${this.classes.CHECK_BOX_CHECKED_CLASS}`); }
-    isNodeContainerOpened($nodeContainer) { return $nodeContainer.hasClass(OPENED_NODE_CONTAINER_CLASS); }
 
     checkSelectedNodes(selectedIndexes, items) {
         selectedIndexes.forEach((index) => {
