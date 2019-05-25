@@ -201,6 +201,7 @@ import "./treeViewParts/checkboxes.js";
 import "./treeViewParts/events.js";
 import "./treeViewParts/expandedItems.js";
 import "./treeViewParts/focusing.js";
+import "./treeViewParts/initialization.js";
 import "./treeViewParts/keyboardNavigation.js";
 import "./treeViewParts/lazyRendering.js";
 import "./treeViewParts/optionChanged.js";
