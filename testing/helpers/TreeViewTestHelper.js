@@ -95,7 +95,7 @@ class TreeViewTestWrapper {
     getItemsWithCheckBoxes() { return this.getElement().find(`.${this.classes.ITEM_WITH_CHECKBOX_CLASS}`); }
     getSelectAllItem() { return this.getElement().find(`.${this.classes.SELECT_ALL_ITEM_CLASS}`); }
     getSelectedItems() { return this.getElement().find(`.${this.classes.SELECTED_ITEM_CLASS}`); }
-    getAllCheckedCheckboxes() { return this.getElement().find(`.${this.classes.CHECK_BOX_CHECKED_CLASS}`); }
+    getAllSelectedCheckboxes() { return this.getElement().find(`.${this.classes.CHECK_BOX_CHECKED_CLASS}`); }
     getOpenedContainers() { return this.getElement().find(`.${this.classes.OPENED_NODE_CONTAINER_CLASS}`); }
     isNodeContainerOpened($nodeContainer) { return $nodeContainer.hasClass(OPENED_NODE_CONTAINER_CLASS); }
     getScrollable() { return this.getElement().find(`.${this.classes.SCROLLABLE_CLASS}`); }

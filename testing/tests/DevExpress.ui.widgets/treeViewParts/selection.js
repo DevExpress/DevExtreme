@@ -498,7 +498,7 @@ module("selection single", () => {
         eventsEngine.trigger(treeView.getCheckBoxes(), "dxclick");
         treeView.instance.option("searchValue", "");
 
-        assert.equal(treeView.getAllCheckedCheckboxes().length, 1, "There is only one checked checkBox");
+        assert.equal(treeView.getAllSelectedCheckboxes().length, 1, "There is only one checked checkBox");
         treeView.checkSelected([0], items);
         assert.ok(treeView.getCheckBoxes().eq(0).hasClass(treeView.classes.CHECK_BOX_CHECKED_CLASS), "Correct checkbox checked");
     });

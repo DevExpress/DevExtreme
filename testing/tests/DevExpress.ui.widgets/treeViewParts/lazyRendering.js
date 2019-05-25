@@ -1,106 +1,139 @@
-import eventsEngine from "events/core/events_engine";
-import { TreeViewTestWrapper } from "../../../helpers/TreeViewTestHelper.js";
+/* global internals, initTree */
 
-let { module, test } = QUnit;
+QUnit.module("Lazy rendering");
 
-const createInstance = (options) => new TreeViewTestWrapper(options);
+QUnit.test("Render treeView with special symbols in id", function(assert) {
+    var $treeView = initTree({
+            items: [{ id: "!/#$%&'()*+,./:;<=>?@[\\]^`{|}~", text: "Item 1" }]
+        }),
+        $item = $treeView.find("." + internals.NODE_CLASS),
+        item = $treeView.dxTreeView("option", "items")[0];
 
-module("Lazy rendering", () => {
-    test("Render treeView with special symbols in id", (assert) => {
-        const treeView = createInstance({ items: [{ id: "!/#$%&'()*+,./:;<=>?@[\\]^`{|}~", text: "Item 1" }] });
-        const item = treeView.instance.option("items")[0];
+    assert.ok($item.attr("data-item-id").length > item.id.length * 4);
 
-        assert.ok(treeView.getNodes().attr("data-item-id").length > item.id.length * 4);
+});
+
+QUnit.test("Only root nodes should be rendered by default", function(assert) {
+    var $treeView = initTree({
+        items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }]
+    });
+    var items = $treeView.find("." + internals.ITEM_CLASS);
+
+    assert.equal(items.length, 2);
+});
+
+QUnit.test("Nested item should be rendered after click on toggle visibility icon", function(assert) {
+    var $treeView = initTree({
+        items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }]
     });
 
-    test("Only root nodes should be rendered by default", (assert) => {
-        const treeView = createInstance({ items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }] });
-        assert.equal(treeView.getItems().length, 2);
+    $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
+
+    var items = $treeView.find("." + internals.ITEM_CLASS);
+
+    assert.equal(items.length, 3);
+});
+
+QUnit.test("Nested item should be rendered when expandItem method was called", function(assert) {
+    var $treeView = initTree({
+        items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }]
     });
 
-    test("Nested item should be rendered after click on toggle visibility icon", (assert) => {
-        const treeView = createInstance({ items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }] });
-        eventsEngine.trigger(treeView.getToggleItemVisibility(), "dxclick");
+    $treeView.dxTreeView("instance").expandItem($treeView.find("." + internals.ITEM_CLASS).eq(0).get(0));
 
-        assert.equal(treeView.getItems().length, 3);
-    });
+    var items = $treeView.find("." + internals.ITEM_CLASS);
 
-    test("Nested item should be rendered when expandItem method was called", (assert) => {
-        const treeView = createInstance({ items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }] });
+    assert.equal(items.length, 3);
+});
 
-        treeView.instance.expandItem(treeView.getItems().eq(0).get(0));
-
-        assert.equal(treeView.getItems().length, 3);
-    });
-
-    test("Selection should work correctly for nested items", (assert) => {
-        const treeView = createInstance({
+QUnit.test("Selection should work correctly for nested items", function(assert) {
+    var $treeView = initTree({
             items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }],
             showCheckBoxesMode: "normal"
-        });
+        }),
+        treeView = $treeView.dxTreeView("instance"),
+        firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0).get(0);
 
-        treeView.instance.selectItem(treeView.getItems(0).get(0));
-        treeView.instance.expandItem(treeView.getItems(0).get(0));
+    treeView.selectItem(firstItem);
+    treeView.expandItem(firstItem);
 
-        assert.equal(treeView.getAllCheckedCheckboxes().length, 2);
-    });
+    var items = $treeView.find(".dx-checkbox-checked");
 
-    test("Unselection should work correctly for nested items", (assert) => {
-        const treeView = createInstance({
+    assert.equal(items.length, 2);
+});
+
+QUnit.test("Unselection should work correctly for nested items", function(assert) {
+    var $treeView = initTree({
             items: [{ id: 1, text: "Item 1", selected: true, items: [{ id: 3, text: "Item 3", selected: true }] }, { id: 2, text: "Item 2" }],
             showCheckBoxesMode: "normal"
-        });
+        }),
+        treeView = $treeView.dxTreeView("instance"),
+        firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0).get(0);
 
-        treeView.instance.unselectItem(treeView.getItems(0).get(0));
-        treeView.instance.expandItem(treeView.getItems(0).get(0));
+    treeView.unselectItem(firstItem);
+    treeView.expandItem(firstItem);
 
-        assert.equal(treeView.getAllCheckedCheckboxes().length, 0);
+    var items = $treeView.find(".dx-checkbox-checked");
+
+    assert.equal(items.length, 0);
+});
+
+QUnit.test("'selectAll' should have correct state on initialization", function(assert) {
+    var $treeView = initTree({
+        items: [
+            { id: 1, text: "Item 1", selected: true, items: [{ id: 3, text: "Item 3", selected: true }] }, { id: 2, text: "Item 2", selected: true }],
+        showCheckBoxesMode: "selectAll"
     });
 
-    test("'selectAll' should have correct state on initialization", (assert) => {
-        const treeView = createInstance({
-            items: [{ id: 1, text: "Item 1", selected: true, items: [{ id: 3, text: "Item 3", selected: true }] }, { id: 2, text: "Item 2", selected: true }],
+    assert.strictEqual($treeView.find(".dx-treeview-select-all-item").dxCheckBox("instance").option("value"), true);
+});
+
+QUnit.test("'selectAll' should work correctly when nested items are not rendered", function(assert) {
+    var $treeView = initTree({
+            items: [
+                { id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }],
             showCheckBoxesMode: "selectAll"
-        });
+        }),
+        $selectAllItem = $treeView.find(".dx-treeview-select-all-item");
 
-        assert.strictEqual(treeView.getSelectAllItem().dxCheckBox("instance").option("value"), true);
-    });
+    $selectAllItem.trigger("dxclick");
 
-    test("'selectAll' should work correctly when nested items are not rendered", (assert) => {
-        const treeView = createInstance({
-            items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }],
+    var items = $treeView.find(".dx-treeview-node-container .dx-checkbox-checked");
+
+    assert.strictEqual($selectAllItem.dxCheckBox("instance").option("value"), true);
+    assert.equal(items.length, 2);
+});
+
+QUnit.test("'selectAll' should work correctly when nested items are rendered", function(assert) {
+    var $treeView = initTree({
+            items: [
+                { id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }],
             showCheckBoxesMode: "selectAll"
-        });
+        }),
+        $selectAllItem = $treeView.find(".dx-treeview-select-all-item");
 
-        eventsEngine.trigger(treeView.getSelectAllItem(), "dxclick");
+    $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
+    $selectAllItem.trigger("dxclick");
 
-        assert.strictEqual(treeView.getSelectAllItem().dxCheckBox("instance").option("value"), true);
-        assert.equal(treeView.getAllCheckedCheckboxes().length, 3);
-    });
+    var items = $treeView.find(".dx-treeview-node-container .dx-checkbox-checked");
 
-    test("'selectAll' should work correctly when nested items are rendered", (assert) => {
-        const treeView = createInstance({
-            items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }],
+    assert.strictEqual($selectAllItem.dxCheckBox("instance").option("value"), true);
+    assert.equal(items.length, 3);
+});
+
+QUnit.test("'selectAll' should work correctly when nested items are rendered after click on 'selectAll' item", function(assert) {
+    var $treeView = initTree({
+            items: [
+                { id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }],
             showCheckBoxesMode: "selectAll"
-        });
+        }),
+        $selectAllItem = $treeView.find(".dx-treeview-select-all-item");
 
-        eventsEngine.trigger(treeView.getToggleItemVisibility(), "dxclick");
-        eventsEngine.trigger(treeView.getSelectAllItem(), "dxclick");
+    $selectAllItem.trigger("dxclick");
+    $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
 
-        assert.strictEqual(treeView.getSelectAllItem().dxCheckBox("instance").option("value"), true);
-        assert.equal(treeView.getAllCheckedCheckboxes().length, 4);
-    });
+    var items = $treeView.find(".dx-treeview-node-container .dx-checkbox-checked");
 
-    test("'selectAll' should work correctly when nested items are rendered after click on 'selectAll' item", (assert) => {
-        const treeView = createInstance({
-            items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }],
-            showCheckBoxesMode: "selectAll"
-        });
-
-        eventsEngine.trigger(treeView.getSelectAllItem(), "dxclick");
-        eventsEngine.trigger(treeView.getToggleItemVisibility(), "dxclick");
-
-        assert.strictEqual(treeView.getSelectAllItem().dxCheckBox("instance").option("value"), true);
-        assert.equal(treeView.getAllCheckedCheckboxes().length, 4);
-    });
+    assert.strictEqual($selectAllItem.dxCheckBox("instance").option("value"), true);
+    assert.equal(items.length, 3);
 });
