@@ -23,18 +23,18 @@ module("Animation", {
 
         try {
             fx.stop = sinon.spy(($element) => {
-                let $nodeContainer = treeView.getNodeContainersInNode($node, 0);
+                let $nodeContainer = treeView.getNodeContainers($node, 0);
                 assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
             });
             fx.animate = sinon.spy(($element, config) => {
-                let $nodeContainer = treeView.getNodeContainersInNode($node, 0);
+                let $nodeContainer = treeView.getNodeContainers($node, 0);
 
                 config.duration = 0;
 
                 assert.equal($element.get(0), $nodeContainer.get(0), "correct element was animated");
                 assert.equal(config.from["maxHeight"], 0, "starting from zero height");
                 assert.equal(config.to["maxHeight"], $nodeContainer.height(), "starting from zero height");
-                assert.ok(treeView.isNodeContainerOpened($nodeContainer), "node container displayed");
+                assert.ok($nodeContainer.hasClass(treeView.classes.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
 
                 config.complete = (() => {
                     let orig = config.complete;
@@ -42,7 +42,7 @@ module("Animation", {
                         orig();
 
                         assert.equal($nodeContainer.css("maxHeight"), "none", "max-height was reset");
-                        assert.ok(treeView.isNodeContainerOpened($nodeContainer), "node container displayed");
+                        assert.ok($nodeContainer.hasClass(treeView.classes.OPENED_NODE_CONTAINER_CLASS), "node container displayed");
                     };
                 })();
 
@@ -107,7 +107,7 @@ module("Animation", {
                 animationEnabled: true
             });
 
-            let $nodeContainer = treeView.getNodeContainersInNode(treeView.getNodes(0), 0);
+            let $nodeContainer = treeView.getNodeContainers(treeView.getNodes(0), 0);
 
             treeView.instance.collapseItem(treeView.getItems(0).get(0));
         } finally {
@@ -182,7 +182,7 @@ module("Animation", {
             fx.stop = sinon.spy();
             eventsEngine.trigger($item, "dxpointerdown");
 
-            let $nodeContainer = treeView.getNodeContainersInNode($node, 0);
+            let $nodeContainer = treeView.getNodeContainers($node, 0);
 
             keyboardMock(treeView.getElement()).keyDown("right");
             assert.ok(fx.stop.calledWith($nodeContainer.get(0)), "animation stopped");
