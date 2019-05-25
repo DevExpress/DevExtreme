@@ -40,7 +40,6 @@ class TreeViewTestWrapper {
 
         this.instance = this.getInstance(options);
     }
-    getToggleItemVisibility() { return this.getElement().find(`.${this.classes.TOGGLE_ITEM_VISIBILITY_CLASS}`); }
     getElement() { return $(`#${CONTAINER_ID}`); }
     getInstance(options) { return this.getElement().dxTreeView(options).dxTreeView("instance"); }
     getNodes(index) {
