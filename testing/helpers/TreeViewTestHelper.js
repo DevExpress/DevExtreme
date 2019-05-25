@@ -56,7 +56,7 @@ class TreeViewTestWrapper {
     }
     getSelectedNodes() { return this.getElement().find(`.${this.classes.NODE_CLASS}.${this.classes.SELECTED_ITEM_CLASS}`); }
     getCheckBoxes(index) {
-        let checkBoxes = this.getElement().find(`.${this.classes.CHECK_BOX_CLASS}:not(.${SELECT_ALL_ITEM_CLASS})`);
+        let checkBoxes = this.getElement().find(`.${this.classes.CHECK_BOX_CLASS}`);
         return isDefined(index) ? checkBoxes.eq(index) : checkBoxes;
     }
     getSelectAllItem() { return this.getElement().find(`.${this.classes.SELECT_ALL_ITEM_CLASS}`); }

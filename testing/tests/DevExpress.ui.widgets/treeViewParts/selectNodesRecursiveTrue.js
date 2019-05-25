@@ -106,7 +106,7 @@ module("selectNodesRecursive = true", () => {
         });
 
         treeView.instance.selectItem(data[0]);
-        treeView.checkSelected([0, 1, 2, 3, 4], data);
+        treeView.checkSelectedNodes([0, 1, 2, 3, 4]);
         assert.ok(data[0].selected, "item was selected");
     });
 
@@ -123,7 +123,7 @@ module("selectNodesRecursive = true", () => {
         treeView.instance.selectItem(data[0]);
         treeView.instance.unselectItem(data[0]);
 
-        treeView.checkSelected([], data);
+        treeView.checkSelectedNodes([]);
         assert.ok(!data[0].selected, "item was unselected");
     });
 

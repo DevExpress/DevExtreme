@@ -1,121 +1,125 @@
+/* global DATA, initTree */
+
 import $ from "jquery";
-import { TreeViewTestWrapper, TreeViewDataHelper } from "../../../helpers/TreeViewTestHelper.js";
 
-let { module, test, } = QUnit;
+function initFixture(items) {
+    this.treeView = initTree({
+        items: $.extend(true, [], items),
+        showCheckBoxesMode: "selectAll"
+    }).dxTreeView("instance");
 
-const createInstance = (options) => new TreeViewTestWrapper(options);
-const dataHelper = new TreeViewDataHelper();
+    this.checkAllItemsSelection = function(selection) {
+        var items = this.treeView.option('items'),
+            count = 0;
 
-module("SelectAll mode", () => {
-    test("select all item should not be rendered when single selection mode is used", function(assert) {
-        const treeView = createInstance({
-            items: [{ id: 1, text: "Item 1" }],
-            showCheckBoxesMode: "selectAll",
-            selectionMode: "single"
-        });
+        count = items[0].selected === selection ? (count + 1) : count;
+        count = items[0].items[0].selected === selection ? (count + 1) : count;
+        count = items[0].items[1].selected === selection ? (count + 1) : count;
+        count = items[0].items[1].items[0].selected === selection ? (count + 1) : count;
+        count = items[0].items[1].items[1].selected === selection ? (count + 1) : count;
+        count = items[1].selected === selection ? (count + 1) : count;
 
-        assert.equal(treeView.getSelectAllItem().length, 0, "item is not rendered");
+        return count;
+    };
+}
+
+QUnit.module("SelectAll mode");
+
+QUnit.test("select all item should not be rendered when single selection mode is used", function(assert) {
+    var $treeView = initTree({
+        items: [{ id: 1, text: "Item 1" }],
+        showCheckBoxesMode: "selectAll",
+        selectionMode: "single"
     });
 
-    test("Select all items", function(assert) {
-        const data = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }, { id: 3, text: "Item 3" }];
-        const treeView = createInstance({
-            items: $.extend(true, [], data),
-            showCheckBoxesMode: "selectAll"
+    assert.equal($treeView.find(".dx-treeview-select-all-item").length, 0, "item is not rendered");
+});
+
+QUnit.test("Select all items", function(assert) {
+    var data = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }, { id: 3, text: "Item 3" }],
+        that = this;
+
+    var checkState = function(state) {
+        $.each(that.treeView.option("items"), function(index, item) {
+            assert.strictEqual(item.selected, state, "item " + index + " selected state is " + state);
         });
+    };
 
-        let checkBox = treeView.instance._$selectAllItem.dxCheckBox("instance");
+    initFixture.call(this, data);
+    var checkBox = this.treeView._$selectAllItem.dxCheckBox("instance");
 
-        checkBox.option("value", true);
-        treeView.checkSelected([0, 1, 2], treeView.instance.option("items"));
+    checkBox.option("value", true);
+    checkState(true);
 
-        checkBox.option("value", false);
-        treeView.checkSelected([], treeView.instance.option("items"));
+    checkBox.option("value", false);
+    checkState(false);
+});
+
+QUnit.test("'selectAll' item should be selected if all items are selected", function(assert) {
+    initFixture.call(this, DATA[5]);
+
+    var checkBox = this.treeView._$selectAllItem.dxCheckBox("instance");
+
+    this.treeView.$element().find(".dx-checkbox:not(.dx-treeview-select-all-item)").each(function(_, checkbox) {
+        $(checkbox).dxCheckBox("instance").option("value", true);
     });
 
-    test("'selectAll' item should be selected if all items are selected", function(assert) {
-        const treeView = createInstance({
-            items: $.extend(true, [], dataHelper.data[5]),
-            showCheckBoxesMode: "selectAll"
-        });
+    assert.ok(checkBox.option("value"));
+});
 
-        treeView.getCheckBoxes().each((_, checkbox) => {
-            $(checkbox).dxCheckBox("instance").option("value", true);
-        });
+QUnit.test("'selectAll' item should be unselected if all items are unselected", function(assert) {
+    initFixture.call(this, DATA[5]);
 
-        treeView.checkSelectedItems([0, 1, 2, 3, 4, 5], treeView.instance.option("items"));
-        treeView.checkSelectedNodes([0, 1]);
-        treeView.checkCheckBoxesState([true, true, true]);
+    var checkBox = this.treeView._$selectAllItem.dxCheckBox("instance");
 
-        assert.ok(treeView.getSelectAllItem().dxCheckBox("instance").option("value"));
+    this.treeView.selectAll();
+
+    this.treeView.$element().find(".dx-checkbox:not(.dx-treeview-select-all-item)").each(function(_, checkbox) {
+        $(checkbox).dxCheckBox("instance").option("value", false);
     });
 
-    test("'selectAll' item should be unselected if all items are unselected", function(assert) {
-        const treeView = createInstance({
-            items: $.extend(true, [], dataHelper.data[5]),
-            showCheckBoxesMode: "selectAll"
-        });
+    assert.ok(!checkBox.option("value"));
+});
 
-        treeView.instance.selectAll();
+QUnit.test("'selectAll' item should have intermediate state if at least one item is unselected", function(assert) {
+    initFixture.call(this, DATA[5]);
 
-        treeView.getCheckBoxes().each((_, checkbox) => {
-            $(checkbox).dxCheckBox("instance").option("value", false);
-        });
+    var checkBox = this.treeView._$selectAllItem.dxCheckBox("instance");
 
-        treeView.checkSelectedItems([], treeView.instance.option("items"));
-        treeView.checkSelectedNodes([]);
-        treeView.checkCheckBoxesState([false, false, false]);
-        assert.ok(!treeView.getSelectAllItem().dxCheckBox("instance").option("value"));
-    });
+    this.treeView.selectAll();
 
-    test("'selectAll' item should have intermediate state if at least one item is unselected", function(assert) {
-        const treeView = createInstance({
-            items: $.extend(true, [], dataHelper.data[5]),
-            showCheckBoxesMode: "selectAll"
-        });
+    this.treeView.$element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value", false);
 
-        treeView.instance.selectAll();
-        treeView.getCheckBoxes().eq(1).dxCheckBox("instance").option("value", false);
+    assert.ok(!checkBox.option("value"));
+});
 
-        treeView.checkCheckBoxesState([true, false]);
-        assert.ok(!treeView.getSelectAllItem().dxCheckBox("instance").option("value"));
-    });
+QUnit.test("'selectAll' item should be selected if all item became selected", function(assert) {
+    initFixture.call(this, DATA[5]);
+    var checkBox = this.treeView._$selectAllItem.dxCheckBox("instance"),
+        items = this.treeView.option("items");
 
-    test("'selectAll' item should be selected if all item became selected", function(assert) {
-        const treeView = createInstance({
-            items: $.extend(true, [], dataHelper.data[5]),
-            showCheckBoxesMode: "selectAll"
-        });
+    assert.ok(!checkBox.option("value"));
 
-        assert.ok(!treeView.getSelectAllItem().dxCheckBox("instance").option("value"));
+    items[0].selected = true;
+    items[1].selected = true;
 
-        let items = treeView.instance.option("items");
-        items[0].selected = true;
-        items[1].selected = true;
+    this.treeView.option("items", items);
+    checkBox = this.treeView._$selectAllItem.dxCheckBox("instance"),
+    assert.strictEqual(checkBox.option("value"), true, 'selected');
+});
 
-        treeView.instance.option("items", items);
+QUnit.test("Select and unselect all items via API", function(assert) {
+    initFixture.call(this, DATA[5]);
+    var checkBox = this.treeView._$selectAllItem.dxCheckBox("instance");
 
-        assert.strictEqual(treeView.getSelectAllItem().dxCheckBox("instance").option("value"), true, 'selected');
-    });
+    assert.ok(!checkBox.option("value"));
+    this.treeView.selectAll();
 
-    test("Select and unselect all items via API", function(assert) {
-        const treeView = createInstance({
-            items: $.extend(true, [], dataHelper.data[5]),
-            showCheckBoxesMode: "selectAll"
-        });
+    assert.ok(checkBox.option("value"));
+    assert.equal(this.checkAllItemsSelection(true), 6, 'all items are selected');
 
-        let selectAllItem = treeView.getSelectAllItem().dxCheckBox("instance");
-        assert.ok(!selectAllItem.option("value"));
-        treeView.instance.selectAll();
+    this.treeView.unselectAll();
 
-        assert.ok(selectAllItem.option("value"));
-        treeView.checkSelectedItems([0, 1, 2, 3, 4, 5], treeView.instance.option("items"));
-        treeView.checkSelectedNodes([0, 1]);
-
-        treeView.instance.unselectAll();
-
-        assert.ok(!selectAllItem.option("value"));
-        treeView.checkSelected([], treeView.instance.option("items"));
-    });
-
+    assert.ok(!checkBox.option("value"));
+    assert.equal(this.checkAllItemsSelection(false), 6, 'all items are unselected');
 });
