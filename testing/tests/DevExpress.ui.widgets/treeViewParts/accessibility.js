@@ -1,4 +1,4 @@
-import { TreeViewTestWrapper } from "../../../helpers/TreeViewTestHelper.js";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 import eventsEngine from "events/core/events_engine";
 
 const { module, test } = QUnit;

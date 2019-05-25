@@ -1,7 +1,7 @@
 import fx from "animation/fx";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 import eventsEngine from "events/core/events_engine";
-import { TreeViewTestWrapper } from "../../../helpers/TreeViewTestHelper.js";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 
 const { module, test } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
