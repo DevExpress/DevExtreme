@@ -49,7 +49,6 @@ class TreeViewTestWrapper {
         this.instance = this.getInstance(options);
     }
     getToggleItemVisibility() { return this.getElement().find(`.${this.classes.TOGGLE_ITEM_VISIBILITY_CLASS}`); }
-    isToggleItemVisibilityOpened() { return this.getToggleItemVisibility().hasClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS); }
     getElement() { return $(`#${CONTAINER_ID}`); }
     getInstance(options) { return this.getElement().dxTreeView(options).dxTreeView("instance"); }
     getNodes(index) {
@@ -69,15 +68,7 @@ class TreeViewTestWrapper {
     getSelectAllItem() { return this.getElement().find(`.${this.classes.SELECT_ALL_ITEM_CLASS}`); }
     getSelectedItems() { return this.getElement().find(`.${this.classes.SELECTED_ITEM_CLASS}`); }
     getAllSelectedCheckboxes() { return this.getElement().find(`.${this.classes.CHECK_BOX_CHECKED_CLASS}`); }
-    getOpenedContainers() { return this.getElement().find(`.${this.classes.OPENED_NODE_CONTAINER_CLASS}`); }
     isNodeContainerOpened($nodeContainer) { return $nodeContainer.hasClass(OPENED_NODE_CONTAINER_CLASS); }
-
-    checkArguments(actualArgs, expectedArgs) {
-        assert.strictEqual(actualArgs.event, expectedArgs.event, "event");
-        assert.deepEqual(actualArgs.itemData, expectedArgs.itemData, "itemData");
-        assert.deepEqual(actualArgs.node, expectedArgs.node, "node");
-        assert.deepEqual($(actualArgs.itemElement).get(0), expectedArgs.itemElement.get(0), "itemElement");
-    }
 
     checkSelectedNodes(selectedIndexes, items) {
         selectedIndexes.forEach((index) => {
