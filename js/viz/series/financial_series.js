@@ -117,7 +117,7 @@ exports.stock = _extend({}, scatterSeries, {
 
             let isReduction = false;
 
-            if(reductionValue !== null) {
+            if(_isDefined(reductionValue)) {
                 if(_isDefined(prevLevelValue)) {
                     isReduction = reductionValue < prevLevelValue;
                 }
