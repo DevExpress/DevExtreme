@@ -85,4 +85,47 @@ QUnit.module("keyboardProcessor", {
 
         assert.ok(stubHandler.notCalled, "event was not processed");
     });
+
+    test("keyboardProcessor should not process events during IME composition", (assert) => {
+        const stubHandler = sinon.stub();
+
+        this.processor = new KeyboardProcessor({
+            element: this.element,
+            handler: stubHandler
+        });
+
+        this.element.trigger($.Event("compositionstart"));
+        this.element.trigger(this.keyDownEvent);
+        assert.ok(stubHandler.notCalled, "event was not processed");
+
+        this.element.trigger($.Event("compositionend"));
+        this.element.trigger(this.keyDownEvent);
+        assert.ok(stubHandler.calledOnce, "event has been processed");
+    });
+
+    test("keyboardProcessor should not process event after compositionend with a '229' keycode [MacOS Safari specific behavior]", (assert) => {
+        const stubHandler = sinon.stub();
+
+        this.processor = new KeyboardProcessor({
+            element: this.element,
+            handler: stubHandler
+        });
+
+        this.element.trigger($.Event("compositionstart"));
+        this.element.trigger(this.keyDownEvent);
+        assert.ok(stubHandler.notCalled, "event was not processed");
+
+        this.element.trigger($.Event("compositionend"));
+
+        const enterComposition = $.Event("keydown");
+        enterComposition.key = "Enter";
+        enterComposition.which = 229;
+
+        this.element.trigger(enterComposition);
+        assert.ok(stubHandler.notCalled, "event was not processed");
+
+        enterComposition.which = 13;
+        this.element.trigger(enterComposition);
+        assert.ok(stubHandler.calledOnce, "event has been processed");
+    });
 });
