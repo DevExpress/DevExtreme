@@ -16,6 +16,7 @@ const { assert } = QUnit;
 class TreeViewTestWrapper {
     constructor(options) {
         this.instance = this.getInstance(options);
+        this.isCheckBoxMode = this.instance.option("showCheckBoxesMode") === "normal";
     }
 
     getElement() { return $(`#${CONTAINER_ID}`); }
@@ -29,21 +30,26 @@ class TreeViewTestWrapper {
     hasWidgetClass($item) { return $item.hasClass(WIDGET_CLASS); }
     hasItemClass($item) { return $item.hasClass(ITEM_CLASS); }
     hasCheckboxCheckedClass($item) { return $item.hasClass(CHECK_BOX_CHECKED_CLASS); }
+    hasSelectedClass($item) { return $item.hasClass(SELECTED_ITEM_CLASS); }
 
     checkSelectedNodes(selectedIndexes) {
+        let $node = this.getNodes();
+
         selectedIndexes.forEach((index) => {
-            assert.equal(this.getNodes().eq(index).hasClass(SELECTED_ITEM_CLASS), true, `item ${index} has selected class`);
+            assert.equal(this.hasSelectedClass($node.eq(index)), true, `item ${index} has selected class`);
+            if(this.isCheckBoxMode) assert.equal(this.hasCheckboxCheckedClass($node.eq(index).children()), true, `checkbox ${index} has checked class`);
         });
 
-        this.getNodes().each((index) => {
+        $node.each((index) => {
             if(selectedIndexes.indexOf(index) === -1) {
-                assert.equal(this.getNodes().eq(index).hasClass(SELECTED_ITEM_CLASS), false, `item ${index} has no selected class`);
+                assert.equal(this.hasSelectedClass($node.eq(index)), false, `item ${index} has no selected class`);
+                if(this.isCheckBoxMode) assert.equal(!!this.hasCheckboxCheckedClass($node.eq(index).children()), false, `checkbox ${index} has not checked class`);
             }
         });
     }
 
     checkSelectedItems(selectedIndexes, items) {
-        let itemsArray = this.getItemsInOrder(items);
+        let itemsArray = this.convertTreeToFlatList(items);
 
         itemsArray.forEach((_, index) => {
             if(selectedIndexes.indexOf(index) === -1) {
@@ -59,9 +65,8 @@ class TreeViewTestWrapper {
         this.checkSelectedNodes(expectedSelectedIndexes);
     }
 
-    getItemsInOrder(items) {
+    convertTreeToFlatList(items) {
         let itemsArray = [];
-
         let inOrder = (items) => {
             items.forEach((item) => {
                 itemsArray.push(item);
