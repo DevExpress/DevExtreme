@@ -8,6 +8,10 @@ import ArrayStore from "data/array_store";
 import CustomStore from "data/custom_store";
 import dblclickEvent from "events/dblclick";
 import TreeView from "ui/tree_view";
+import eventsEngine from "events/core/events_engine";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+
+const createInstance = (options) => new TreeViewTestWrapper(options);
 
 import "common.css!";
 import "generic_light.css!";
@@ -263,6 +267,56 @@ QUnit.test("Don't create loadindicator when disabled item expands", function(ass
 
     $node.find(".dx-treeview-toggle-item-visibility").trigger("dxclick");
     assert.equal($node.find(".dx-loadindicator").length, 0);
+});
+
+QUnit.test("Don't create new loadindicator on the node when one is already exist", function(assert) {
+    const treeView = createInstance({
+        dataSource: makeSlowDataSource($.extend(true, [], data2)),
+        dataStructure: "plain",
+        virtualModeEnabled: true
+    });
+
+    this.clock.tick(400);
+
+    let $node = treeView.getNodes().eq(0);
+    let $toggleItem = $node.find(".dx-treeview-toggle-item-visibility");
+
+    eventsEngine.trigger($toggleItem, "dxclick");
+    eventsEngine.trigger($toggleItem, "dxclick");
+    eventsEngine.trigger($toggleItem, "dxclick");
+    eventsEngine.trigger($toggleItem, "dxclick");
+
+    assert.equal($node.find(".dx-loadindicator").length, 1);
+    assert.equal($node.find(".dx-treeview-toggle-item-visibility.dx-state-invisible").length, 1);
+
+    this.clock.tick(400);
+
+    assert.equal($node.find(".dx-loadindicator.dx-state-invisible").length, 1);
+    assert.equal($node.find(".dx-treeview-toggle-item-visibility").length, 4);
+});
+
+QUnit.test("Expand ui method should be called one times while showindicator is shown", function(assert) {
+    const treeView = createInstance({
+        dataSource: makeSlowDataSource($.extend(true, [], data2)),
+        dataStructure: "plain",
+        virtualModeEnabled: true
+    });
+
+    let updateExpandedItemsHandler = sinon.spy(treeView.instance, "_updateExpandedItemsUI");
+
+    this.clock.tick(400);
+
+    let $node = treeView.getNodes().eq(0);
+    let $toggleItem = $node.find(".dx-treeview-toggle-item-visibility");
+
+    eventsEngine.trigger($toggleItem, "dxclick");
+    eventsEngine.trigger($toggleItem, "dxclick");
+    eventsEngine.trigger($toggleItem, "dxclick");
+    eventsEngine.trigger($toggleItem, "dxclick");
+
+    this.clock.tick(400);
+
+    assert.equal(updateExpandedItemsHandler.callCount, 1);
 });
 
 QUnit.test("Add leaf class after expand childless item", function(assert) {
