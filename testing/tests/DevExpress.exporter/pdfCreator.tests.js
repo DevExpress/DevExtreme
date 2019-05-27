@@ -89,7 +89,7 @@ QUnit.test("PDF 'startxref' populated with correct offset", function(assert) {
         var match = data.match(/startxref\r\n(\d+)\r\n/);
         assert.ok(match);
         assert.strictEqual(match.length, 2);
-        assert.strictEqual(parseInt(match[1]), 709 + version.length);
+        assert.strictEqual(parseInt(match[1]), 707 + version.length);
         done();
     });
 });
@@ -109,8 +109,8 @@ QUnit.test("PDF 'xref' populated with correct blocks offset", function(assert) {
         assert.strictEqual(parseInt(match[2]), 10, "2");
         assert.strictEqual(parseInt(match[3]), 346, "3");
         assert.strictEqual(parseInt(match[4]), 89, "4");
-        assert.strictEqual(parseInt(match[5]), 522 + version.length, "5");
-        assert.strictEqual(parseInt(match[6]), 452, "6");
+        assert.strictEqual(parseInt(match[5]), 520 + version.length, "5");
+        assert.strictEqual(parseInt(match[6]), 450, "6");
         assert.strictEqual(parseInt(match[7]), 143, "7");
 
         done();
