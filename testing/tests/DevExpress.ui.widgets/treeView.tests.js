@@ -16,17 +16,14 @@ testStart(function() {
 });
 
 window.internals = {
-    WIDGET_CLASS: "dx-treeview",
     NODE_CONTAINER_CLASS: "dx-treeview-node-container",
     OPENED_NODE_CONTAINER_CLASS: "dx-treeview-node-container-opened",
     NODE_CLASS: "dx-treeview-node",
     ITEM_CLASS: "dx-treeview-item",
     ITEM_WITH_CHECKBOX_CLASS: "dx-treeview-item-with-checkbox",
-    ITEM_DATA_KEY: "dx-treeview-item-data",
     IS_LEAF: "dx-treeview-node-is-leaf",
     TOGGLE_ITEM_VISIBILITY_CLASS: "dx-treeview-toggle-item-visibility",
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: "dx-treeview-toggle-item-visibility-opened",
-    SELECT_ALL_ITEM_CLASS: "dx-treeview-select-all-item"
+    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: "dx-treeview-toggle-item-visibility-opened"
 };
 
 window.DATA = (function() {
@@ -199,6 +196,7 @@ import "./treeViewParts/accessibility.js";
 import "./treeViewParts/animation.js";
 import "./treeViewParts/checkboxes.js";
 import "./treeViewParts/events.js";
+import "./treeViewParts/expresions.js";
 import "./treeViewParts/expandedItems.js";
 import "./treeViewParts/focusing.js";
 import "./treeViewParts/initialization.js";
