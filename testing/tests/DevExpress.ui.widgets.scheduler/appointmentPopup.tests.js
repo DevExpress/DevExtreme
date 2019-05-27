@@ -1047,7 +1047,7 @@ QUnit.test("Appointment form will have right dates on multiple openings (T727713
 
     let form = this.instance.getAppointmentDetailsForm();
     let formDataChangedCount = 0;
-    form.option("onOptionChanged", function(args) {
+    form.option("onOptionChanged", (args) => {
         if(args.name === "formData") formDataChangedCount++;
     });
 
