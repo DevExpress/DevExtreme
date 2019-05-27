@@ -1760,6 +1760,79 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
     pointer.dragEnd();
 });
 
+QUnit.test("Appointment should not twitch on drag start with horizontal dragging", function(assert) {
+    let resourcesData = [
+        {
+            text: "Samantha Bright",
+            id: 1,
+            color: "#cb6bb2"
+        }, {
+            text: "John Heart",
+            id: 2,
+            color: "#56ca85"
+        }
+    ];
+
+    let priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    let data = [{
+        "text": "Google AdWords Strategy",
+        "ownerId": [2],
+        "startDate": new Date(2017, 4, 1, 9, 0),
+        "endDate": new Date(2017, 4, 1, 10, 30),
+        "priority": 1
+    }, {
+        "text": "New Brochures",
+        "ownerId": [1],
+        "startDate": new Date(2017, 4, 1, 11, 30),
+        "endDate": new Date(2017, 4, 1, 14, 15),
+        "priority": 2
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineDay"],
+        currentView: "timelineDay",
+        currentDate: new Date(2017, 4, 1),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20,
+        cellDuration: 60,
+        groups: ["priority"],
+        resources: [{
+            fieldExpr: "ownerId",
+            allowMultiple: true,
+            dataSource: resourcesData,
+            label: "Owner",
+            useColorAsDefault: true
+        }, {
+            fieldExpr: "priority",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }],
+        height: 400
+    });
+    let $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        dragDistance = 5;
+
+    const defaultPosition = translator.locate($appointment);
+    let pointer = pointerMock($appointment).start();
+    pointer.dragStart().drag(dragDistance, 0);
+    let startPosition = translator.locate($appointment);
+    assert.roughEqual(defaultPosition.left, startPosition.left - dragDistance, 1, "Appointment start position does not twitch after drag start");
+});
+
 QUnit.test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", function(assert) {
     this.createInstance({
         height: 500,
@@ -1777,14 +1850,10 @@ QUnit.test("Appointment should have correct position while horizontal dragging, 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
         dragDistance = 150;
 
-
-    var pointer = pointerMock($appointment).start(),
+    let pointer = pointerMock($appointment).start(),
         startPosition = translator.locate($appointment);
-
     pointer.dragStart().drag(dragDistance, 0);
-
     var currentPosition = translator.locate($appointment);
-
     assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
     pointer.dragEnd();
 });
