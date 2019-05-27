@@ -1,10 +1,10 @@
 /* global DATA, internals, initTree */
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    devices = require("core/devices");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import devices from "core/devices";
 
 var NODE_CLASS = "dx-treeview-node",
     ITEM_CLASS = "dx-treeview-item",
