@@ -310,7 +310,7 @@ var numberLocalization = dependencyInjector({
 
         let significantDigitsCount = 0;
         for(let index = 0; index < separatorIndex; index++) {
-            if(cleanedText.charAt(index) !== '0') {
+            if(cleanedText.charAt(index) !== "0") {
                 significantDigitsCount += separatorIndex - index;
                 break;
             }
