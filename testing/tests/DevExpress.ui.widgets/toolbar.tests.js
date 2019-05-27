@@ -3,6 +3,7 @@ import "ui/drop_down_menu";
 
 import $ from "jquery";
 import Toolbar from "ui/toolbar";
+import ToolbarBase from "ui/toolbar/ui.toolbar.base";
 import fx from "animation/fx";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import themes from "ui/themes";
@@ -1379,4 +1380,67 @@ QUnit.test("items in center section should have correct sizes, width increases",
     assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, "Width of the first item is correct");
     assert.roughEqual($toolbarItems.eq(1).outerWidth(), 58, 1, "Width of the second item is correct");
     assert.roughEqual($toolbarItems.eq(2).outerWidth(), 46, 1, "Width of the third item is correct");
+});
+
+QUnit.module("Waiting fonts for material theme", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Toolbar calls font-waiting function for labels (T736793)", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var spy = sinon.spy(themes, "waitWebFont");
+
+    $("#toolbar").dxToolbar({
+        items: [
+            { location: "before", text: "text1" },
+            { location: "before", text: "text2" },
+            { location: "before", text: "text3" }
+        ],
+        width: 250,
+        height: 50
+    });
+
+    assert.deepEqual(spy.args[0], ["text1", "400"], "call for the first label");
+    assert.deepEqual(spy.args[1], ["text2", "400"], "call for the second label");
+    assert.deepEqual(spy.args[2], ["text3", "400"], "call for the third label");
+
+    themes.isMaterial = origIsMaterial;
+});
+
+
+QUnit.test("Toolbar calls _dimensionChanged function in Material theme to recalculate labels (T736793)", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var done = assert.async();
+
+    ToolbarBase.prototype._checkWebFontForLabelsLoaded = () => {
+        return new Promise(resolve => { resolve(); });
+    };
+
+    ToolbarBase.prototype._dimensionChanged = () => {
+        assert.expect(0);
+        done();
+    };
+
+    $("#toolbar").dxToolbar({
+        items: [
+            { location: "before", text: "text1" },
+            { location: "before", text: "text2" },
+            { location: "before", text: "text3" }
+        ],
+        width: 250,
+        height: 50
+    });
+
+    this.clock.tick();
+
+    themes.isMaterial = origIsMaterial;
 });
