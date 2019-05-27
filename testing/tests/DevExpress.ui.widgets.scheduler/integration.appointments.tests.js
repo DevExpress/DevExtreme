@@ -1782,7 +1782,7 @@ QUnit.test("Appointment should not twitch on drag start with horizontal dragging
         }],
         height: 400
     });
-    let $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+    let $appointment = this.scheduler.appointments.getAppointment(),
         dragDistance = 5;
 
     const defaultPosition = translator.locate($appointment);
