@@ -697,6 +697,14 @@ const subscribes = {
         let tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
         date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
+        return date;
+    },
+
+    correctAppointmentDateByTimezone: function(date, appointmentTimezone, isBack) {
+        date = new Date(date);
+
+        let tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
+        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, isBack);
 
         return date;
     },
