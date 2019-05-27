@@ -500,7 +500,6 @@ module("selection single", () => {
 
         assert.equal(treeView.getAllSelectedCheckboxes().length, 1, "There is only one checked checkBox");
         treeView.checkSelected([0], items);
-        assert.ok(treeView.hasCheckboxCheckedClass(treeView.getCheckBoxes().eq(0)), "Correct checkbox checked");
     });
 
     test("items should be selectable after the search", (assert) => {
