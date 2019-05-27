@@ -1888,6 +1888,7 @@ Axis.prototype = {
     },
 
     setInitRange() {
+        this._initRange = {};
         if(Object.keys(this._options.wholeRange || {}).length === 0) {
             this._initRange = this.getZoomBounds();
         }
