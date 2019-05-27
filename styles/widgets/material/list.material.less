@@ -108,6 +108,11 @@
         }
     }
 
+    &.dx-state-focused {
+        background-color: @list-item-hover-bg;
+        color: @list-item-hover-color;
+    }
+
     &.dx-state-focused.dx-list-item-selected {
         background-color: @list-item-focused-selected-bg;
         color: @list-item-selected-color;
@@ -168,11 +173,6 @@
         &:not(.dx-list-select-decorator-enabled) {
             .dx-list-item {
                 .item-states();
-
-                &.dx-state-focused {
-                    background-color: @list-item-hover-bg;
-                    color: @list-item-hover-color;
-                }
             }
         }
     }
