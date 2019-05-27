@@ -595,6 +595,24 @@ QUnit.test("Allow zoom-out by minVisualRangeLength option", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 0.9);
 });
 
+QUnit.test("T741577. Reset initial whole range after dataSource is changed", function(assert) {
+    const chart = this.createChart({
+        zoomAndPan: {
+            valueAxis: "zoom",
+            allowMouseWheel: true
+        }
+    });
+
+    chart.option("dataSource", [{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(-10);
+    assert.deepEqual(chart.getValueAxis().visualRange(), {
+        startValue: 1,
+        endValue: 2
+    });
+});
+
 QUnit.test("Zoom-in argument axis", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
