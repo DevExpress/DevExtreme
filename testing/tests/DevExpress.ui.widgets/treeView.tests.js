@@ -1,31 +1,29 @@
 /* global stripFunctions */
 
-var $ = require("jquery"),
-    CustomStore = require("data/custom_store"),
-    ArrayStore = require("data/array_store");
+import $ from "jquery";
+import CustomStore from "data/custom_store";
+import ArrayStore from "data/array_store";
 
-require("common.css!");
-require("ui/tree_view");
+import "common.css!";
+import "ui/tree_view";
 
-QUnit.testStart(function() {
-    var markup =
-        '<div id="treeView"></div>';
+const { testStart } = QUnit;
+
+testStart(function() {
+    const markup = '<div id="treeView"></div>';
 
     $("#qunit-fixture").html(markup);
 });
 
 window.internals = {
-    WIDGET_CLASS: "dx-treeview",
     NODE_CONTAINER_CLASS: "dx-treeview-node-container",
     OPENED_NODE_CONTAINER_CLASS: "dx-treeview-node-container-opened",
     NODE_CLASS: "dx-treeview-node",
     ITEM_CLASS: "dx-treeview-item",
     ITEM_WITH_CHECKBOX_CLASS: "dx-treeview-item-with-checkbox",
-    ITEM_DATA_KEY: "dx-treeview-item-data",
     IS_LEAF: "dx-treeview-node-is-leaf",
     TOGGLE_ITEM_VISIBILITY_CLASS: "dx-treeview-toggle-item-visibility",
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: "dx-treeview-toggle-item-visibility-opened",
-    SELECT_ALL_ITEM_CLASS: "dx-treeview-select-all-item"
+    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: "dx-treeview-toggle-item-visibility-opened"
 };
 
 window.DATA = (function() {
@@ -192,23 +190,24 @@ window.makeSlowDataSource = function(data) {
     };
 };
 
-require("generic_light.css!");
+import "generic_light.css!";
 
-require("./treeViewParts/accessibility.js");
-require("./treeViewParts/animation.js");
-require("./treeViewParts/checkboxes.js");
-require("./treeViewParts/events.js");
-require("./treeViewParts/expandedItems.js");
-require("./treeViewParts/focusing.js");
-require("./treeViewParts/initialization.js");
-require("./treeViewParts/keyboardNavigation.js");
-require("./treeViewParts/lazyRendering.js");
-require("./treeViewParts/optionChanged.js");
-require("./treeViewParts/regression.js");
-require("./treeViewParts/rendering.js");
-require("./treeViewParts/selection.js");
-require("./treeViewParts/selectAllMode.js");
-require("./treeViewParts/selectAllWithSelectNodesRecursiveFalse.js");
-require("./treeViewParts/selectNodesRecursiveTrue.js");
-require("./treeViewParts/usageWithoutKeys.js");
-require("./treeViewParts/virtualMode.js");
+import "./treeViewParts/accessibility.js";
+import "./treeViewParts/animation.js";
+import "./treeViewParts/checkboxes.js";
+import "./treeViewParts/events.js";
+import "./treeViewParts/expresions.js";
+import "./treeViewParts/expandedItems.js";
+import "./treeViewParts/focusing.js";
+import "./treeViewParts/initialization.js";
+import "./treeViewParts/keyboardNavigation.js";
+import "./treeViewParts/lazyRendering.js";
+import "./treeViewParts/optionChanged.js";
+import "./treeViewParts/regression.js";
+import "./treeViewParts/rendering.js";
+import "./treeViewParts/selection.js";
+import "./treeViewParts/selectAllMode.js";
+import "./treeViewParts/selectAllWithSelectNodesRecursiveFalse.js";
+import "./treeViewParts/selectNodesRecursiveTrue.js";
+import "./treeViewParts/usageWithoutKeys.js";
+import "./treeViewParts/virtualMode.js";

@@ -1,46 +1,47 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    messageLocalization = require("../../localization/message"),
-    clickEvent = require("../../events/click"),
-    commonUtils = require("../../core/utils/common"),
-    windowUtils = require("../../core/utils/window"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    CheckBox = require("../check_box"),
-    HierarchicalCollectionWidget = require("../hierarchical_collection/ui.hierarchical_collection_widget"),
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    dblclickEvent = require("../../events/double_click"),
-    fx = require("../../animation/fx"),
-    Scrollable = require("../scroll_view/ui.scrollable"),
-    LoadIndicator = require("../load_indicator"),
-    deferredUtils = require("../../core/utils/deferred"),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import messageLocalization from "../../localization/message";
+import clickEvent from "../../events/click";
+import commonUtils from "../../core/utils/common";
+import windowUtils from "../../core/utils/window";
+import typeUtils from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { getPublicElement } from "../../core/utils/dom";
+import CheckBox from "../check_box";
+import HierarchicalCollectionWidget from "../hierarchical_collection/ui.hierarchical_collection_widget";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import dblclickEvent from "../../events/double_click";
+import fx from "../../animation/fx";
+import Scrollable from "../scroll_view/ui.scrollable";
+import LoadIndicator from "../load_indicator";
+import { fromPromise, Deferred, when } from "../../core/utils/deferred";
 
-var WIDGET_CLASS = "dx-treeview",
-    NODE_CONTAINER_CLASS = "dx-treeview-node-container",
-    OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened",
-    NODE_CLASS = "dx-treeview-node",
-    ITEM_CLASS = "dx-treeview-item",
-    ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
-    ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
-    ITEM_DATA_KEY = "dx-treeview-item-data",
-    IS_LEAF = "dx-treeview-node-is-leaf",
-    EXPAND_EVENT_NAMESPACE = "dxTreeView_expand",
-    TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility",
-    LOAD_INDICATOR_CLASS = "dx-treeview-loadindicator",
-    LOAD_INDICATOR_WRAPPER_CLASS = "dx-treeview-loadindicator-wrapper",
-    NODE_LOAD_INDICATOR_CLASS = "dx-treeview-node-loadindicator",
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = "dx-treeview-toggle-item-visibility-opened",
-    SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
-    DISABLED_STATE_CLASS = "dx-state-disabled",
-    SELECTED_ITEM_CLASS = "dx-state-selected",
+const WIDGET_CLASS = "dx-treeview";
 
-    DATA_ITEM_ID = "data-item-id";
+const NODE_CLASS = `${WIDGET_CLASS}-node`;
+const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
+const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
+const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
+const IS_LEAF = `${NODE_CLASS}-is-leaf`;
+
+const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
+const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
+const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
+
+const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
+const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
+const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
+const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibility-opened`;
+const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
+
+const DISABLED_STATE_CLASS = "dx-state-disabled";
+const SELECTED_ITEM_CLASS = "dx-state-selected";
+const EXPAND_EVENT_NAMESPACE = "dxTreeView_expand";
+const DATA_ITEM_ID = "data-item-id";
 
 var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
@@ -597,7 +598,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(invocationResult && typeUtils.isFunction(invocationResult.then)) {
-            return deferredUtils.fromPromise(invocationResult);
+            return fromPromise(invocationResult);
         }
 
         return new Deferred().resolve([]).promise();
