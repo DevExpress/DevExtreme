@@ -347,3 +347,21 @@ QUnit.test("widget should adopt its size on 'visible' option change (T403238)", 
 
     assert.ok($element.height() > initialHeight, "widget is resized");
 });
+
+QUnit.test("vertical scroll bar is hidden in auto resize mode", function(assert) {
+    var $element = $("#textarea").dxTextArea({
+            autoResizeEnabled: true,
+        }),
+        $input = $element.find("." + INPUT_CLASS),
+        instance = $element.dxTextArea("instance");
+
+    assert.equal($input.css("overflow-y"), "hidden", "vertical scroll bar is initially hidden");
+
+    instance.option("autoResizeEnabled", false);
+
+    assert.equal($input.css("overflow-y"), "auto", "vertical scroll bar is visible after disabling auto resize");
+
+    instance.option("autoResizeEnabled", true);
+
+    assert.equal($input.css("overflow-y"), "hidden", "vertical scroll bar is hidden after enabling auto resize");
+});

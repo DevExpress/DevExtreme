@@ -8,7 +8,8 @@ var $ = require("../core/renderer"),
     TextBox = require("./text_box");
 
 var TEXTAREA_CLASS = "dx-textarea",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
+    TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = "dx-texteditor-input-auto-resize";
 
 /**
 * @name dxTextArea
@@ -123,6 +124,8 @@ var TextArea = TextBox.inherit({
     _createInput: function() {
         var $input = $("<textarea>");
         this._applyInputAttributes($input, this.option("inputAttr"));
+        this._updateInputAutoResizeAppearance($input);
+
         return $input;
     },
 
@@ -235,9 +238,16 @@ var TextArea = TextBox.inherit({
         }
     },
 
+    _updateInputAutoResizeAppearance: function($input) {
+        if($input) {
+            $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, this.option("autoResizeEnabled"));
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "autoResizeEnabled":
+                this._updateInputAutoResizeAppearance(this._input());
                 this._refreshEvents();
                 this._updateInputHeight();
                 break;
