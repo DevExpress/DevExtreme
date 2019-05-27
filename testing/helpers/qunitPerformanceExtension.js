@@ -151,7 +151,7 @@
                 $(chrome).off("Tracing.dataCollected", collectData);
                 $(chrome).off("Tracing.tracingComplete", collectEndData);
 
-                var assertResult = that.styleRecalculations.length === standardMeasure;
+                var assertResult = (typeof standardMeasure === 'function') ? standardMeasure(that.styleRecalculations.length) : standardMeasure === that.styleRecalculations.length;
                 var resultMessage = 'Took ' + that.styleRecalculations.length + ' style recalculations';
                 var expectedMessage = 'Expected ' + standardMeasure + ' style recalculations';
                 var assertMessage = 'Performance test (Expected ' + standardMeasure + ' style recalculations, took ' + that.styleRecalculations.length + ' style recalculations)';
