@@ -1852,8 +1852,11 @@ QUnit.test("Appointment should have correct position while horizontal dragging, 
 
     let pointer = pointerMock($appointment).start(),
         startPosition = translator.locate($appointment);
+
     pointer.dragStart().drag(dragDistance, 0);
+
     var currentPosition = translator.locate($appointment);
+
     assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
     pointer.dragEnd();
 });
