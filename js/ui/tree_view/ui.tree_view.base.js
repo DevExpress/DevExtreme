@@ -131,7 +131,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
             return cache.$nodeByKey[normalizedKey] || $();
         }
-        return this.$element().find(`[${DATA_ITEM_ID}=${normalizedKey}]`);
+        return this.$element().find(`[${DATA_ITEM_ID}='${normalizedKey}']`);
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
@@ -672,7 +672,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataSource && this._dataSource.store()
-            .on("inserted", function(newItem) {
+            .on("inserted", newItem => {
                 this.option().items = this.option("items").concat(newItem);
                 this._dataAdapter.addItem(newItem);
 
@@ -682,7 +682,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 this._updateLevel(this._parentIdGetter(newItem));
             })
-            .on("removed", function(removedKey) {
+            .on("removed", removedKey => {
                 const node = this._dataAdapter.getNodeByKey(removedKey);
 
                 this.option("items")[this._dataAdapter.getIndexByKey(node.internalFields.key)] = 0;
@@ -707,7 +707,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const items = extend(true, [], this.option("items"));
         let counter = 0;
 
-        each(items, function(index, item) {
+        each(items, (index, item) => {
             if(!item) {
                 this.option("items").splice(index - counter, 1);
                 counter++;
