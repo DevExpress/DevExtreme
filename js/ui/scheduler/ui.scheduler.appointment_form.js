@@ -18,6 +18,7 @@ const SCREEN_SIZE_OF_SINGLE_COLUMN = 460;
 
 const SchedulerAppointmentForm = {
     _appointmentForm: {},
+    _lockDateShiftFlag: false,
 
     _validateAppointmentFormDate: function(editor, value, previousValue) {
         var isCurrentDateCorrect = value === null || !!value;
@@ -97,8 +98,7 @@ const SchedulerAppointmentForm = {
                             previousValue = dateSerialization.deserializeDate(args.previousValue),
                             endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
                             endValue = dateSerialization.deserializeDate(endDateEditor.option("value"));
-
-                        if(!!endValue && endValue < value) {
+                        if(!that._appointmentForm._lockDateShiftFlag && !!endValue && endValue < value) {
                             var duration = endValue.getTime() - previousValue.getTime();
                             endDateEditor.option("value", new Date(value.getTime() + duration));
                         }
@@ -140,8 +140,7 @@ const SchedulerAppointmentForm = {
                             previousValue = dateSerialization.deserializeDate(args.previousValue),
                             startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
                             startValue = dateSerialization.deserializeDate(startDateEditor.option("value"));
-
-                        if(value && startValue > value) {
+                        if(!that._appointmentForm._lockDateShiftFlag && !!value && startValue > value) {
                             var duration = previousValue ? previousValue.getTime() - startValue.getTime() : 0;
                             startDateEditor.option("value", new Date(value.getTime() - duration));
                         }
@@ -273,6 +272,12 @@ const SchedulerAppointmentForm = {
             form.itemOption(startDateExpr, "editorOptions", startDateEditorOptions);
             form.itemOption(endDateExpr, "editorOptions", endDateEditorOptions);
         }
+    },
+
+    updateFormData: function(appointmentForm, formData) {
+        appointmentForm._lockDateShiftFlag = true;
+        appointmentForm.option("formData", formData);
+        appointmentForm._lockDateShiftFlag = false;
     }
 };
 
