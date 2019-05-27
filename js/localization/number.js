@@ -301,7 +301,9 @@ var numberLocalization = dependencyInjector({
                 .replace(decimalSeparator, ".")
                 .replace(/\.$/g, "");
 
-        if(cleanedText === '.' || cleanedText === "") { return null; }
+        if(cleanedText === "." || cleanedText === "") {
+            return null;
+        }
 
         let separatorIndex = cleanedText.indexOf(".");
         separatorIndex = separatorIndex < 0 ? cleanedText.length : separatorIndex;
