@@ -316,7 +316,7 @@ var numberLocalization = dependencyInjector({
             }
         }
         for(let index = cleanedText.length - 1; index > separatorIndex; index--) {
-            if(cleanedText.charAt(index) !== '0') {
+            if(cleanedText.charAt(index) !== "0") {
                 significantDigitsCount += index - separatorIndex;
                 break;
             }
