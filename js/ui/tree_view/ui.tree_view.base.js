@@ -723,7 +723,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getOldContainer: function($itemElement) {
         if($itemElement.length) {
-            return $itemElement.children("." + NODE_CONTAINER_CLASS);
+            return $itemElement.children(`.${NODE_CONTAINER_CLASS}`);
         }
 
         if(this._scrollableContainer) {
@@ -1049,7 +1049,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _createLoadIndicator: function($node) {
         const $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
-        const $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS);
+        const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
 
         if($icon.hasClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS) || $nodeContainer.not(":empty").length) {
             return;
@@ -1098,7 +1098,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         const $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
-        const $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS);
+        const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
 
         $icon.toggleClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS, state);
 
@@ -1177,7 +1177,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _animateNodeContainer: function(node, state, e) {
         const $node = this._getNodeElement(node);
-        const $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS);
+        const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
         let nodeHeight;
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
@@ -1246,7 +1246,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderSelectAllItem: function($container) {
-        $container = $container || this.$element().find("." + NODE_CONTAINER_CLASS).first();
+        $container = $container || this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
 
         this._$selectAllItem = $("<div>").addClass(SELECT_ALL_ITEM_CLASS);
 
@@ -1590,7 +1590,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const FOCUS_LEFT = this.option("rtlEnabled") ? "right" : "left";
         const FOCUS_RIGHT = this.option("rtlEnabled") ? "left" : "right";
 
-        this.$element().find("." + NODE_CONTAINER_CLASS).each(function() {
+        this.$element().find(`.${NODE_CONTAINER_CLASS}`).each(function() {
             fx.stop(this, true);
         });
 
@@ -1659,7 +1659,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        const $node = $focusedNode.find("." + NODE_CONTAINER_CLASS).eq(0);
+        const $node = $focusedNode.find(`.${NODE_CONTAINER_CLASS}`).eq(0);
 
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
             const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
@@ -1686,7 +1686,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        const nodeElement = $focusedNode.find("." + NODE_CONTAINER_CLASS).eq(0);
+        const nodeElement = $focusedNode.find(`.${NODE_CONTAINER_CLASS}`).eq(0);
 
         if(!$focusedNode.hasClass(IS_LEAF) && nodeElement.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
             const node = this._getNodeByElement($focusedNode.children("." + ITEM_CLASS));
