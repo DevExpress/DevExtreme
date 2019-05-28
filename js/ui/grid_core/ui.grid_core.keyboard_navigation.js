@@ -91,7 +91,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         eventsEngine.trigger($focusedElement, "focus");
     },
 
-    _updateFocus: function(editingCanceled) {
+    _updateFocus: function() {
         var that = this;
         setTimeout(function() {
             var $cell = that._getFocusedCell(),
@@ -104,9 +104,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 if($cell && $cell.length > 0) {
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         if(that.getController("editorFactory").focus() || $cellEditingCell) {
-                            let args = that._fireFocusChangingEvents(null, $cell, true, !editingCanceled);
-                            $cell = args.$newCellElement;
-                            that._focus($cell, !args.isHighlighted);
+                            that._focus($cell);
                         } else if(that._isHiddenFocus) {
                             that._focus($cell, true);
                         }
@@ -144,7 +142,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 this._focusedView.element().attr("tabindex", 0);
                 this._focusedView.focus();
-            } else if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
+            } else if(!this._isMasterDetailCell($target)) {
                 this._clickTargetCellHandler(event, $target);
             } else {
                 this._updateFocusedCellPosition($target);
@@ -194,8 +192,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this.setRowFocusType();
             this.setFocusedRowIndex(args.prevRowIndex);
             $cell = this._getFocusedCell();
-            if(this._isCellValid($cell)) {
-                this._focus($cell, true);
+            if(this._editingController.isEditing() && isCellEditMode) {
+                this._editingController.closeEditCell();
             }
         }
     },
@@ -1339,9 +1337,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 cancel: false
             };
 
+        this._canceledFocusCellPosition = undefined;
+
         that.executeAction("onFocusedCellChanging", args);
         if(args.newColumnIndex !== columnIndex || args.newRowIndex !== rowIndex) {
             args.$newCellElement = this._getCell({ columnIndex: args.newColumnIndex, rowIndex: args.newRowIndex });
+        }
+
+        if(args.cancel) {
+            this._canceledFocusCellPosition = { rowIndex: rowIndex, columnIndex: columnIndex };
         }
 
         return args;
@@ -1634,9 +1638,19 @@ module.exports = {
         controllers: {
             editing: {
                 editCell: function(rowIndex, columnIndex) {
-                    var isCellEditing = this.callBase(rowIndex, columnIndex),
-                        keyboardNavigationController = this.getController("keyboardNavigation");
+                    var keyboardNavigationController = this.getController("keyboardNavigation");
 
+                    if(keyboardNavigationController._canceledFocusCellPosition) {
+                        let canceledCellRowIndex = keyboardNavigationController._canceledFocusCellPosition.rowIndex,
+                            canceledCellColumnIndex = keyboardNavigationController._canceledFocusCellPosition.columnIndex;
+
+                        if(canceledCellRowIndex === rowIndex && canceledCellColumnIndex === columnIndex) {
+                            keyboardNavigationController._canceledFocusCellPosition = undefined;
+                            return false;
+                        }
+                    }
+
+                    var isCellEditing = this.callBase(rowIndex, columnIndex);
                     if(isCellEditing) {
                         keyboardNavigationController.setupFocusedView();
                     }
@@ -1667,7 +1681,7 @@ module.exports = {
                 _processCanceledEditingCell: function() {
                     this.closeEditCell().done(() => {
                         let keyboardNavigation = this.getController("keyboardNavigation");
-                        keyboardNavigation._updateFocus(true);
+                        keyboardNavigation._updateFocus();
                     });
                 },
                 init: function() {

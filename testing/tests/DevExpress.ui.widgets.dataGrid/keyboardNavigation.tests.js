@@ -5270,7 +5270,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
-    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process", function(assert) {
+    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process (T718459)", function(assert) {
         // arrange
         var keyboardNavigationController,
             focusedCellChangingFiresCount = 0,
@@ -5312,15 +5312,85 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // act
         $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(1));
         $cell.trigger(CLICK_EVENT);
+
+        // act
         this.editCell(0, 1);
         this.clock.tick();
 
         // assert
         assert.equal(focusedCellChangingFiresCount, 2, "onFocusedCellChanging fires count");
         assert.equal(focusedCellChangedFiresCount, 2, "onFocusedCellChanged fires count");
-        assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+
+        assert.notOk(keyboardNavigationController._isHiddenFocus, "hidden focus");
+
         assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
         assert.equal(this.rowsView.element().find("input").length, 0, "input");
+
+        assert.ok($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    QUnit.testInActiveWindow("DataGrid should cancel editing cell if cell focusing canceled (T718459)", function(assert) {
+        // arrange
+        var keyboardNavigationController,
+            editingStartCount = 0,
+            focusedCellChangingFiresCount = 0,
+            focusedCellChangedFiresCount = 0,
+            $cell;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'cell', allowUpdating: true },
+            onEditingStart: function(e) {
+                ++editingStartCount;
+            },
+            onFocusedCellChanging: e => {
+                e.cancel = e.rows[e.newRowIndex].data.name === "Alex";
+                ++focusedCellChangingFiresCount;
+            },
+            onFocusedCellChanged: e => {
+                ++focusedCellChangedFiresCount;
+            },
+        };
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.editCell(1, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(editingStartCount, 1, "onStartEdiitng fires count");
+        assert.equal(focusedCellChangingFiresCount, 1, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 1, "onFocusedCellChanged fires count");
+
+        // act
+        $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        // assert
+        assert.deepEqual(keyboardNavigationController._canceledFocusCellPosition, { rowIndex: 0, columnIndex: 1 }, "Check _canceledFocusCellPosition");
+
+        // act
+        this.editCell(0, 1);
+        this.clock.tick();
+        // assert
+        assert.notOk(keyboardNavigationController._canceledFocusCellPosition, "Check _canceledFocusCellPosition");
+        assert.equal(editingStartCount, 1, "onStartEdiitng fires count");
+        assert.equal(focusedCellChangingFiresCount, 2, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 1, "onFocusedCellChanged fires count");
+
+        assert.notOk(keyboardNavigationController._isHiddenFocus, "hidden focus");
+
+        assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
+        assert.equal(this.rowsView.element().find("input").length, 0, "input");
+
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
