@@ -321,7 +321,9 @@ var numberLocalization = dependencyInjector({
         };
         let result = 0;
         if(integer) { result += calcDigitsAfterLeadingZeros(integer.split("")); }
-        if(fractional) { result += calcDigitsAfterLeadingZeros(fractional.split("").reverse()); }
+        if(fractional) {
+            result += calcDigitsAfterLeadingZeros(fractional.split("").reverse());
+        }
         return result;
     }
 });
