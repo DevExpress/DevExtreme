@@ -1824,7 +1824,7 @@ QUnit.test("Appointment should not twitch on drag start with horizontal dragging
         height: 400
     });
     let $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-        dragDistance = 5;
+        dragDistance = 50;
 
     const defaultPosition = translator.locate($appointment);
     let pointer = pointerMock($appointment).start();
