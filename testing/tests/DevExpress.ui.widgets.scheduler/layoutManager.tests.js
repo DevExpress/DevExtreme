@@ -641,7 +641,7 @@ QUnit.test("AllDay appointment should be displayed right when endDate > startDat
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         $allDayCell = $(this.instance.$element().find(".dx-scheduler-all-day-table-cell"));
 
-    assert.roughEqual($appointment.eq(0).outerWidth(), $allDayCell.eq(0).outerWidth() * 2, 1, "appointment has right width");
+    assert.roughEqual($appointment.eq(0).outerWidth(), $allDayCell.eq(0).outerWidth() * 2, 1.001, "appointment has right width");
 });
 
 QUnit.test("Two rival appointments should have correct positions", function(assert) {
@@ -986,7 +986,7 @@ QUnit.test("More than 3 cloned appointments should be grouped", function(assert)
 
     this.scheduler.appointments.compact.click();
     assert.equal(this.scheduler.appointments.compact.getButtonText(), "8 more", "DropDown menu has correct text");
-    assert.roughEqual(this.scheduler.appointments.compact.getButton().outerWidth(), 106, 1, "DropDownMenu button width is OK");
+    assert.roughEqual(this.scheduler.appointments.compact.getButton().outerWidth(), 106, 1.001, "DropDownMenu button width is OK");
     assert.equal(this.scheduler.tooltip.getItemCount(), 8, "DropDown menu has correct items");
 });
 

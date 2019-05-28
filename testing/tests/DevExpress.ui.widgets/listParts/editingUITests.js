@@ -552,8 +552,8 @@ QUnit.test("swipe should prepare item for delete", (assert) => {
     assert.ok(containerPositionDifference > 0 && containerPositionDifference < $deleteButton.outerWidth(), "button container moved");
     assert.ok(position($deleteButton) < 0 && position($deleteButton) > -$deleteButton.outerWidth(), "button moved");
     pointer.swipeEnd(-1, -0.5);
-    assert.strictEqual(position($itemContent), -$deleteButton.outerWidth(), "item animated");
-    assert.strictEqual(position($deleteButtonContainer), $item.width() - $deleteButton.outerWidth(), "button container animated");
+    assert.roughEqual(position($itemContent), -$deleteButton.outerWidth(), 0.251, "item animated");
+    assert.roughEqual(position($deleteButtonContainer), $item.width() - $deleteButton.outerWidth(), 0.251, "button container animated");
     assert.strictEqual(position($deleteButton), 0, "button animated");
     assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "item ready for delete");
 
@@ -561,7 +561,7 @@ QUnit.test("swipe should prepare item for delete", (assert) => {
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     assert.strictEqual(position($itemContent), 0, "item animated back");
     assert.strictEqual(position($deleteButtonContainer), $item.width(), "button container animated back");
-    assert.strictEqual(position($deleteButton), -$deleteButton.outerWidth(), "button animated back");
+    assert.roughEqual(position($deleteButton), -$deleteButton.outerWidth(), 0.251, "button animated back");
 });
 
 QUnit.test("swipe should not prepare item for delete if widget is disabled", (assert) => {
@@ -848,7 +848,7 @@ QUnit.test("swipe should prepare item for delete in RTL mode", (assert) => {
     assert.ok(position($deleteButton) > 0 && position($deleteButton) < $deleteButton.outerWidth(), "button moved");
 
     pointer.swipeEnd(1, 0.5);
-    assert.strictEqual(position($itemContent), $deleteButton.outerWidth(), "item animated");
+    assert.roughEqual(position($itemContent), $deleteButton.outerWidth(), 0.251, "item animated");
     assert.strictEqual(position($deleteButtonContainer), 0, "button container animated");
     assert.strictEqual(position($deleteButton), 0, "button animated");
     assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "item ready for delete");
@@ -856,8 +856,8 @@ QUnit.test("swipe should prepare item for delete in RTL mode", (assert) => {
     fx.off = false;
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
     assert.strictEqual(position($itemContent), 0, "item animated back");
-    assert.strictEqual(position($deleteButtonContainer), -$deleteButton.outerWidth(), "button container animated back");
-    assert.strictEqual(position($deleteButton), $deleteButton.outerWidth(), "button animated back");
+    assert.roughEqual(position($deleteButtonContainer), -$deleteButton.outerWidth(), 0.251, "button container animated back");
+    assert.roughEqual(position($deleteButton), $deleteButton.outerWidth(), 0.251, "button animated back");
 });
 
 QUnit.test("swipe should not move item lefter in RTL mode", (assert) => {
