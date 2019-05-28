@@ -320,7 +320,9 @@ var numberLocalization = dependencyInjector({
             return index > -1 ? digits.length - index : 0;
         };
         let result = 0;
-        if(integer) { result += calcDigitsAfterLeadingZeros(integer.split("")); }
+        if(integer) {
+            result += calcDigitsAfterLeadingZeros(integer.split(""));
+        }
         if(fractional) {
             result += calcDigitsAfterLeadingZeros(fractional.split("").reverse());
         }
