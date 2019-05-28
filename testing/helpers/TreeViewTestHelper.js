@@ -6,8 +6,12 @@ const WIDGET_CLASS = "dx-treeview";
 
 const NODE_CLASS = `${WIDGET_CLASS}-node`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
+const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
 
 const SELECTED_ITEM_CLASS = "dx-state-selected";
+const INVISIBLE_ITEM_CLASS = "dx-state-invisible";
+
 const CHECK_BOX_CLASS = "dx-checkbox";
 const CHECK_BOX_CHECKED_CLASS = "dx-checkbox-checked";
 
@@ -26,11 +30,14 @@ class TreeViewTestWrapper {
     getSelectedNodes() { return this.getElement().find(`.${NODE_CLASS}.${SELECTED_ITEM_CLASS}`); }
     getCheckBoxes() { return this.getElement().find(`.${CHECK_BOX_CLASS}`); }
     getAllSelectedCheckboxes() { return this.getElement().find(`.${CHECK_BOX_CHECKED_CLASS}`); }
+    getToggleItemVisibility($node) { return isDefined($node) ? $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`) : this.getElement().find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`); }
+    getNodeLoadIndicator($node) { return isDefined($node) ? $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`) : this.getElement().find(`.${NODE_LOAD_INDICATOR_CLASS}`); }
 
     hasWidgetClass($item) { return $item.hasClass(WIDGET_CLASS); }
     hasItemClass($item) { return $item.hasClass(ITEM_CLASS); }
     hasCheckboxCheckedClass($item) { return $item.hasClass(CHECK_BOX_CHECKED_CLASS); }
     hasSelectedClass($item) { return $item.hasClass(SELECTED_ITEM_CLASS); }
+    hasInvisibleClass($item) { return $item.hasClass(INVISIBLE_ITEM_CLASS); }
 
     checkSelectedNodes(selectedIndexes) {
         let $node = this.getNodes();

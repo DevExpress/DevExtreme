@@ -11,6 +11,7 @@ import TreeView from "ui/tree_view";
 import eventsEngine from "events/core/events_engine";
 import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 
+const { module, test, assert } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
 import "common.css!";
@@ -267,56 +268,6 @@ QUnit.test("Don't create loadindicator when disabled item expands", function(ass
 
     $node.find(".dx-treeview-toggle-item-visibility").trigger("dxclick");
     assert.equal($node.find(".dx-loadindicator").length, 0);
-});
-
-QUnit.test("Don't create new loadindicator on the node when one is already exist", function(assert) {
-    const treeView = createInstance({
-        dataSource: makeSlowDataSource($.extend(true, [], data2)),
-        dataStructure: "plain",
-        virtualModeEnabled: true
-    });
-
-    this.clock.tick(400);
-
-    let $node = treeView.getNodes().eq(0);
-    let $toggleItem = $node.find(".dx-treeview-toggle-item-visibility");
-
-    eventsEngine.trigger($toggleItem, "dxclick");
-    eventsEngine.trigger($toggleItem, "dxclick");
-    eventsEngine.trigger($toggleItem, "dxclick");
-    eventsEngine.trigger($toggleItem, "dxclick");
-
-    assert.equal($node.find(".dx-loadindicator").length, 1);
-    assert.equal($node.find(".dx-treeview-toggle-item-visibility.dx-state-invisible").length, 1);
-
-    this.clock.tick(400);
-
-    assert.equal($node.find(".dx-loadindicator.dx-state-invisible").length, 1);
-    assert.equal($node.find(".dx-treeview-toggle-item-visibility").length, 4);
-});
-
-QUnit.test("Expand ui method should be called one times while showindicator is shown", function(assert) {
-    const treeView = createInstance({
-        dataSource: makeSlowDataSource($.extend(true, [], data2)),
-        dataStructure: "plain",
-        virtualModeEnabled: true
-    });
-
-    let updateExpandedItemsHandler = sinon.spy(treeView.instance, "_updateExpandedItemsUI");
-
-    this.clock.tick(400);
-
-    let $node = treeView.getNodes().eq(0);
-    let $toggleItem = $node.find(".dx-treeview-toggle-item-visibility");
-
-    eventsEngine.trigger($toggleItem, "dxclick");
-    eventsEngine.trigger($toggleItem, "dxclick");
-    eventsEngine.trigger($toggleItem, "dxclick");
-    eventsEngine.trigger($toggleItem, "dxclick");
-
-    this.clock.tick(400);
-
-    assert.equal(updateExpandedItemsHandler.callCount, 1);
 });
 
 QUnit.test("Add leaf class after expand childless item", function(assert) {
@@ -1475,4 +1426,64 @@ QUnit.test("expand should work with createChildren", function(assert) {
     $expander.trigger("dxclick");
 
     assert.notOk($expander.hasClass("dx-treeview-toggle-item-visibility-opened"), "node is collapsed");
+});
+
+module("Loadindicator", () => {
+    [true, false].forEach(selectNodesRecursive => {
+        ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+            let config = `virtualModeEnabled: true, selectNodesRecursive: ${selectNodesRecursive}, showCheckBoxesMode: ${showCheckBoxesMode}`;
+
+            const checkAsserts = (treeView, contentReadyHandler, expectedArgs) => {
+                const $node = treeView.getNodes().eq(0);
+                const { toggleItemVisibilityCount, contentReadyCount } = expectedArgs;
+
+                assert.equal(contentReadyHandler.callCount, contentReadyCount, "contentReady.callCount");
+
+                const $loadIndicator = treeView.getNodeLoadIndicator($node);
+                assert.equal($loadIndicator.length, 1, "loadIndicator count");
+                assert.equal(treeView.hasInvisibleClass($loadIndicator), contentReadyCount ? true : false, "loadIndicator invisible class");
+
+                const $toggleItem = treeView.getToggleItemVisibility($node);
+                assert.equal($toggleItem.length, toggleItemVisibilityCount, "toggle item count");
+                assert.equal(treeView.hasInvisibleClass($toggleItem), contentReadyCount ? false : true, "toggle item invisible class");
+            };
+
+            test(`Loadindicator: ${config}`, () => {
+                const clock = sinon.useFakeTimers();
+
+                try {
+                    const items = $.extend(true, [], data2);
+                    let contentReadyHandler = sinon.spy();
+
+                    const treeView = createInstance({
+                        dataSource: makeSlowDataSource(items),
+                        dataStructure: "plain",
+                        virtualModeEnabled: true,
+                        selectNodesRecursive: selectNodesRecursive,
+                        showCheckBoxesMode: showCheckBoxesMode,
+                        onContentReady: contentReadyHandler
+                    });
+
+                    clock.tick(400);
+
+                    let $toggleItem = treeView.getToggleItemVisibility(treeView.getNodes().eq(0));
+                    contentReadyHandler.reset();
+
+                    eventsEngine.trigger($toggleItem, "dxclick");
+                    eventsEngine.trigger($toggleItem, "dxclick");
+                    eventsEngine.trigger($toggleItem, "dxclick");
+                    eventsEngine.trigger($toggleItem, "dxclick");
+
+                    checkAsserts(treeView, contentReadyHandler, { toggleItemVisibilityCount: 1, contentReadyCount: 0 });
+                    treeView.checkSelected([], items);
+
+                    clock.tick(400);
+                    checkAsserts(treeView, contentReadyHandler, { toggleItemVisibilityCount: 4, contentReadyCount: 1 });
+                    treeView.checkSelected([], items);
+                } finally {
+                    clock.restore();
+                }
+            });
+        });
+    });
 });
