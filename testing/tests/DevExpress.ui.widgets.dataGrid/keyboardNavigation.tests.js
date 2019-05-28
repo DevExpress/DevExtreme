@@ -8777,6 +8777,35 @@ QUnit.module("Keyboard navigation accessibility", {
         assert.equal(counter, 4, "_editingCellTabHandler counter");
     });
 
+    // T741590
+    testInDesktop("Focus column with showEditorAlways on tab", function(assert) {
+        // arrange
+        this.columns = [
+            { dataField: "name", allowSorting: true, allowFiltering: true },
+            { dataField: "room", dataType: "number", showEditorAlways: true }
+        ];
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        this.focusCell(0, 0);
+        this.clock.tick();
+
+        // act
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(0, 0)));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(":focus").hasClass("dx-editor-cell"), "editor cell is focused");
+    });
+
     testInDesktop("Command column should not focused if batch editing mode", function(assert) {
         // arrange
         this.options = {
