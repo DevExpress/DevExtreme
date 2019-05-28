@@ -1198,7 +1198,8 @@ function setDiscreteType(series) {
             point: { visible: false }
 
         });
-        series._argumentAxis.getAxisPosition = function() { return 2; };
+        series._argumentAxis.getAxisPosition = function() { return 3; };
+        series._argumentAxis.getAxisShift = function() { return 1; };
         series.updateData(this.data);
         series.createPoints();
         $.each(series._points, function(i, pt) {

@@ -132,8 +132,8 @@ var areaSeries = exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMe
                 areaPoints.forEach((p, i) => {
                     if(p) {
                         const index = points.length === 1 ? 0 : (i < points.length ? i : areaPoints.length - 1 - i);
-                        rotated && p.x === points[index].defaultX && p.x === argAxisPosition && (p.x += edgeOffset);
-                        !rotated && p.y === points[index].defaultY && p.y === argAxisPosition && (p.y += edgeOffset);
+                        rotated && p.x === points[index].defaultX && p.x === argAxisPosition - argAxis.getAxisShift() && (p.x += edgeOffset);
+                        !rotated && p.y === points[index].defaultY && p.y === argAxisPosition - argAxis.getAxisShift() && (p.y += edgeOffset);
                     }
                 });
             }
