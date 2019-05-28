@@ -4,7 +4,7 @@ import { each } from "../../core/utils/iterator";
 import { combineFilters } from "./ui.grid_core.utils";
 import { equalByValue } from "../../core/utils/common";
 import { isDefined } from "../../core/utils/type";
-import { Deferred } from "../../core/utils/deferred";
+import { Deferred, when } from "../../core/utils/deferred";
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
@@ -47,12 +47,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
         _focusRowByIndexCore: function(index) {
-            let dataController = this.getController("data"),
-                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
-                pageIndex = Math.floor(index / dataController.pageSize()),
-                visibleRowsCount = dataController.getVisibleRows().length + dataController.getRowIndexOffset(),
-                visiblePagesCount = Math.ceil(visibleRowsCount / dataController.pageSize()),
-                isLocalIndex = !isVirtualScrolling || visiblePagesCount > pageIndex,
+            var dataController = this.getController("data"),
+                pageSize = dataController.pageSize(),
                 setKeyByIndex = () => {
                     if(this._isValidFocusedRowIndex(index)) {
                         let rowIndex = Math.min(index - dataController.getRowIndexOffset(), dataController.items().length - 1),
@@ -64,10 +60,42 @@ exports.FocusController = core.ViewController.inherit((function() {
                     }
                 };
 
-            if(!isLocalIndex) {
-                dataController.pageIndex(pageIndex).done(setKeyByIndex);
-            } else {
-                setKeyByIndex();
+            if(pageSize >= 0) {
+                if(!this._isLocalRowIndex(index)) {
+                    let pageIndex = Math.floor(index / dataController.pageSize());
+                    when(dataController.pageIndex(pageIndex), dataController.waitReady()).done(() => {
+                        setKeyByIndex();
+                    });
+                } else {
+                    setKeyByIndex();
+                }
+            }
+        },
+        _isLocalRowIndex(index) {
+            var dataController = this.getController("data"),
+                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling();
+
+            if(isVirtualScrolling) {
+                let pageIndex = Math.floor(index / dataController.pageSize()),
+                    virtualItems = dataController.virtualItemsCount(),
+                    virtualItemsBegin = virtualItems ? virtualItems.begin : -1,
+                    visibleRowsCount = dataController.getVisibleRows().length + dataController.getRowIndexOffset(),
+                    visiblePagesCount = Math.ceil(visibleRowsCount / dataController.pageSize());
+
+                return virtualItemsBegin <= index && visiblePagesCount > pageIndex;
+            }
+
+            return true;
+        },
+        _setFocusedRowKeyByIndex: function(index) {
+            var dataController = this.getController("data");
+            if(this._isValidFocusedRowIndex(index)) {
+                let rowIndex = Math.min(index - dataController.getRowIndexOffset(), dataController.items().length - 1),
+                    focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
+
+                if(focusedRowKey !== undefined && !this.isRowFocused(focusedRowKey)) {
+                    this.option("focusedRowKey", focusedRowKey);
+                }
             }
         },
 
