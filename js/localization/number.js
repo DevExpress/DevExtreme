@@ -305,29 +305,22 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        let separatorIndex = cleanedText.indexOf(".");
-        separatorIndex = separatorIndex < 0 ? cleanedText.length : separatorIndex;
-
-        let significantDigitsCount = 0;
-        for(let index = 0; index < separatorIndex; index++) {
-            if(cleanedText.charAt(index) !== "0") {
-                significantDigitsCount += separatorIndex - index;
-                break;
-            }
-        }
-        for(let index = cleanedText.length - 1; index > separatorIndex; index--) {
-            if(cleanedText.charAt(index) !== "0") {
-                significantDigitsCount += index - separatorIndex;
-                break;
-            }
-        }
-
-        if(significantDigitsCount > 15) {
-            return NaN;
-        }
+        if(this._calcSignificantDigits(cleanedText) > 15) { return NaN; }
 
         const parsed = +cleanedText;
         return parsed * this.getSign(text, format);
+    },
+
+    _calcSignificantDigits: function(text) {
+        const [ integer, fractional ] = text.split(".");
+        const calcDigitsAfterLeadingZeros = digits => {
+            const index = digits.findIndex(x => x !== "0");
+            return index > -1 ? digits.length - index : 0;
+        };
+        let result = 0;
+        if(integer) { result += calcDigitsAfterLeadingZeros(integer.split("")); }
+        if(fractional) { result += calcDigitsAfterLeadingZeros(fractional.split("").reverse()); }
+        return result;
     }
 });
 
