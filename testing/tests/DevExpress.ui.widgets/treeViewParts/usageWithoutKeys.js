@@ -1,6 +1,6 @@
 /* global internals, initTree, $ */
 
-var commonUtils = require("core/utils/common");
+import commonUtils from "core/utils/common";
 
 QUnit.module("Usage without keys");
 

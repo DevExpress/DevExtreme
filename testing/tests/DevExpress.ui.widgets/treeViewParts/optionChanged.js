@@ -1,6 +1,6 @@
 /* global DATA, initTree */
 
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.module("optionChanged");
 
