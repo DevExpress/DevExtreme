@@ -1184,6 +1184,56 @@ QUnit.test("get coords marker", function(assert) {
     assert.deepEqual(point.getMarkerCoords(), { height: 55, width: 66, x: 10, y: 20 });
 });
 
+QUnit.test("get coords marker (trimmed)", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis().getOptions = function() { return { visible: true, width: 4 }; };
+    point.x = 10;
+    point.y = 245;
+    point.height = 55;
+    point.width = 66;
+    point.minY = 300;
+    point.defaultY = 300;
+    point.inVisibleArea = true;
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(point.getMarkerCoords(), { height: 53, width: 66, x: 10, y: 245 });
+});
+
+QUnit.test("get coords marker (axis shifted)", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis().getOptions = function() { return { visible: true, width: 4 }; };
+    this.series.getArgumentAxis().getAxisShift = function() { return 10; };
+    point.x = 10;
+    point.y = 245;
+    point.height = 55;
+    point.width = 66;
+    point.minY = 300;
+    point.defaultY = 300;
+    point.inVisibleArea = true;
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(point.getMarkerCoords(), { height: 55, width: 66, x: 10, y: 245 });
+});
+
+QUnit.test("get coords marker (too small)", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis().getOptions = function() { return { visible: true, width: 4 }; };
+    this.options.rotated = true;
+    point.x = 300;
+    point.y = 20;
+    point.height = 55;
+    point.width = 2;
+    point.minX = 300;
+    point.defaultX = 300;
+    point.inVisibleArea = true;
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(point.getMarkerCoords(), { height: 55, width: 0, x: 302, y: 20 });
+});
+
 QUnit.module("Tooltip", {
     beforeEach: function() {
         var that = this,
