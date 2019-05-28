@@ -739,8 +739,10 @@ Axis.prototype = {
             constantLineUnderSeries = that._axisConstantLineGroups.under,
             boxes = [that._axisElementsGroup,
                 constantLineAboveSeries.outside1, constantLineAboveSeries.outside2,
-                constantLineUnderSeries.outside1, constantLineUnderSeries.outside2]
-                .map(function(group) { return group && group.getBBox(); })
+                constantLineUnderSeries.outside1, constantLineUnderSeries.outside2,
+                that._axisLineGroup
+            ]
+                .map(group => group && group.getBBox())
                 .concat((function(group) {
                     var box = group && group.getBBox();
 
