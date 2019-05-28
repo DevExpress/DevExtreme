@@ -6166,5 +6166,62 @@ function checkDashStyle(assert, elem, result, style, value) {
             text.attr({ x: 45 });
             this.checkSimple(assert, text, undefined, { x: 45, y: 100 });
         });
+
+        QUnit.test("setMaxWidth with width that is less then zero", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "Text" });
+
+            this.prepareRenderBeforeEllipsis();
+
+            text.setMaxSize(-1, undefined, {
+                wordWrap: "none",
+                textOverflow: "ellipsis"
+            });
+
+            assert.equal(text.element.textContent, "...");
+        });
+
+        QUnit.test("Can hide ellipsis if maxWidth too small", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "Text" });
+
+            this.prepareRenderBeforeEllipsis();
+
+            text.setMaxSize(-1, undefined, {
+                wordWrap: "none",
+                textOverflow: "ellipsis",
+                hideOverflowEllipsis: true
+            });
+
+            assert.equal(text.element.textContent, "");
+        });
+
+        QUnit.test("Do not hide ellipsis if maxWidth is enought to dispay it", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "Text Text Text Text" });
+
+            this.prepareRenderBeforeEllipsis();
+
+            text.setMaxSize(60, undefined, {
+                wordWrap: "none",
+                textOverflow: "ellipsis",
+                hideOverflowEllipsis: true
+            });
+
+            assert.ok(text.element.textContent.indexOf, "..." > 0);
+        });
+
+        QUnit.test("Hide ellipsis string in multiple line text with height limit", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: "black",
+                text: "There\nis\ntest\ntext\nfor checking ellipsis with single line"
+            });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(10, 25, {
+                wordWrap: "none",
+                textOverflow: "ellipsis",
+                hideOverflowEllipsis: true
+            });
+
+            assert.equal(text.element.textContent, "");
+        });
     }
 })();
