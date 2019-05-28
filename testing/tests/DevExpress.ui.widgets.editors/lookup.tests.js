@@ -3021,7 +3021,7 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
     try {
 
-        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "blue" }).dxLookup("instance");
+        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple", "red", "green", "yellow"], value: "blue" }).dxLookup("instance");
 
         $(lookup.field()).trigger("dxclick");
 
