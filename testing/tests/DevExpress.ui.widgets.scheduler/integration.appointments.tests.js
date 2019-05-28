@@ -1783,7 +1783,7 @@ QUnit.test("Appointment should not twitch on drag start with horizontal dragging
         height: 400
     });
     let $appointment = this.scheduler.appointments.getAppointment(),
-        dragDistance = 5;
+        dragDistance = 50;
 
     const defaultPosition = translator.locate($appointment);
     let pointer = pointerMock($appointment).start();
