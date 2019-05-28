@@ -946,6 +946,10 @@ Axis.prototype = {
         return this._canvas;
     },
 
+    getAxisShift() {
+        return this._axisShift || 0;
+    },
+
     hideTitle: function() {
         var that = this;
 

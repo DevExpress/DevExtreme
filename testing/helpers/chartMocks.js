@@ -1033,6 +1033,9 @@ export const MockAxis = function(renderOptions) {
         getAxisPosition: function() {
             return 300;
         },
+        getAxisShift: function() {
+            return 0;
+        },
         getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),
