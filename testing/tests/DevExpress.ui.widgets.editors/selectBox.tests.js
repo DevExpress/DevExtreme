@@ -1236,6 +1236,19 @@ QUnit.module("widget options", moduleSetup, () => {
         $selectBox.dxSelectBox("option", "dataSource", [4, 5, 6]);
 
         assert.equal($selectBox.dxSelectBox("option", "value"), 1, "custom value displayed after dataSource change");
+        assert.equal($selectBox.dxSelectBox("option", "text"), 1, "custom value text is displayed after dataSource change");
+    });
+
+    QUnit.test("should not reset value and displayed value on dataSource change", (assert) => {
+        const $selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [1, 2, 3],
+            value: 1
+        });
+
+        $selectBox.dxSelectBox("option", "dataSource", [4, 5, 6]);
+
+        assert.equal($selectBox.dxSelectBox("option", "value"), 1, "custom value displayed after dataSource change");
+        assert.equal($selectBox.dxSelectBox("option", "text"), 1, "custom value text is displayed after dataSource change");
     });
 
     QUnit.test("value should reset", (assert) => {
