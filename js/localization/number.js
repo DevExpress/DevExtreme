@@ -305,7 +305,9 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        if(this._calcSignificantDigits(cleanedText) > 15) { return NaN; }
+        if(this._calcSignificantDigits(cleanedText) > 15) {
+            return NaN;
+        }
 
         const parsed = +cleanedText;
         return parsed * this.getSign(text, format);
