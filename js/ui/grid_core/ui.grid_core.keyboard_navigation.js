@@ -24,6 +24,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     FREESPACE_ROW_CLASS = "dx-freespace-row",
     VIRTUAL_ROW_CLASS = "dx-virtual-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
+    EDITOR_CELL_CLASS = "dx-editor-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     COMMAND_CELL_SELECTOR = "[class^=dx-command]",
@@ -63,6 +64,10 @@ function isNotFocusedRow($row) {
 
 function isCellElement($element) {
     return $element.length && $element[0].tagName === "TD";
+}
+
+function isEditorCell(that, $cell) {
+    return !that._isRowEditMode() && $cell && $cell.hasClass(EDITOR_CELL_CLASS);
 }
 
 var KeyboardNavigationController = core.ViewController.inherit({
@@ -945,7 +950,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             isOriginalHandlerRequired = false,
             elementType;
 
-        if($lastInteractiveElement.length && eventTarget !== $lastInteractiveElement.get(0)) {
+        if(!isEditorCell(this, $cell) && $lastInteractiveElement.length && eventTarget !== $lastInteractiveElement.get(0)) {
             isOriginalHandlerRequired = true;
         } else {
             if(this._focusedCellPosition.rowIndex === undefined && $(eventTarget).hasClass(ROW_CLASS)) {
@@ -972,7 +977,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
             this._focusCell($cell);
-            this._focusInteractiveElement($cell, eventArgs.shift);
+
+            if(!isEditorCell(this, $cell)) {
+                this._focusInteractiveElement($cell, eventArgs.shift);
+            }
         }
 
         return isOriginalHandlerRequired;
