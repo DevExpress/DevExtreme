@@ -143,7 +143,7 @@ const ListEdit = ListBase.inherit({
             * @default "Select All"
             * @hidden
             */
-            selectAllText: messageLocalization.format("dxList-selectAll"),
+            selectAllText: formatMessage("dxList-selectAll"),
 
             /**
             * @name dxListOptions.menuItems
@@ -355,8 +355,7 @@ const ListEdit = ListBase.inherit({
             return;
         }
 
-        const isTouchEvent = eventUtils.isTouchEvent(e);
-        const handledByEditProvider = isTouchEvent && this._editProvider.handleContextMenu($itemElement, e);
+        const handledByEditProvider = isTouchEvent(e) && this._editProvider.handleContextMenu($itemElement, e);
         if(handledByEditProvider) {
             e.handledByEditProvider = true;
             return;
