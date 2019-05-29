@@ -452,23 +452,23 @@ var SelectBox = DropDownList.inherit({
     },
 
     _isOldDataSourceValue: function() {
-        return this.option("text") && this.option("text") === this.option("value"); /* && !this._dataSource.isLoaded() */
+        return this.option("text") && this.option("text") === this.option("value");
     },
 
     _setSelectedItem: function(item) {
-        var isUnknownItem = !this._isCustomValueAllowed() && (item === undefined) && !this._isOldDataSourceValue();
+        var isUnknownItem = !this._isCustomValueAllowed() && (item === undefined);
 
         this.callBase(isUnknownItem ? null : item);
     },
 
-    _dataSourceChangedHandler() {
-        this.callBase.apply(this, arguments);
-        this._renderInputValue().fail((function() {
-            if(this._isCustomValueAllowed()) {
-                return;
-            }
+    _processNonexistentItem: function() {
+        var isUnknownItem = !this._isCustomValueAllowed() && !this._isOldDataSourceValue();
+
+        if(isUnknownItem) {
             this.reset();
-        }).bind(this));
+        } else {
+            this.callBase.apply(this, arguments);
+        }
     },
 
     _isCustomValueAllowed: function() {

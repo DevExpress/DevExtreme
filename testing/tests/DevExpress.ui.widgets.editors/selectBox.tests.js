@@ -1239,16 +1239,175 @@ QUnit.module("widget options", moduleSetup, () => {
         assert.equal($selectBox.dxSelectBox("option", "text"), 1, "custom value text is displayed after dataSource change");
     });
 
-    QUnit.test("should not reset value and displayed value on dataSource change", (assert) => {
-        const $selectBox = $("#selectBox").dxSelectBox({
-            dataSource: [1, 2, 3],
-            value: 1
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS contains value", (assert) => {
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: ["1", "2"],
+            deferRendering: true,
+            value: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", ["1", "3"]);
+
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "1", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS does not contain value (T728469)", (assert) => {
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: ["1", "2"],
+            deferRendering: true,
+            value: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", [4, 5]);
+
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS is async and contains value", (assert) => {
+        const items = ["1", "2"];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (i) => {
+                    return i === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
         });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: items,
+            deferRendering: true,
+            value: "1"
+        }).dxSelectBox("instance");
 
-        $selectBox.dxSelectBox("option", "dataSource", [4, 5, 6]);
+        selectBox.option("dataSource", dataSource);
 
-        assert.equal($selectBox.dxSelectBox("option", "value"), 1, "custom value displayed after dataSource change");
-        assert.equal($selectBox.dxSelectBox("option", "text"), 1, "custom value text is displayed after dataSource change");
+        this.clock.tick(50);
+
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "1", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS is async and does not contain value", (assert) => {
+        const items = ["4", "5"];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (i) => {
+                    return i === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
+        });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: ["1", "2"],
+            deferRendering: true,
+            value: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", dataSource);
+
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS contains value", (assert) => {
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            value: "1",
+            deferRendering: true,
+            selectedItem: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", ["1", "2"]);
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "1", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS does not contain value (T728469)", (assert) => {
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            deferRendering: true,
+            value: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", ["4", "5"]);
+
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS is async and contains value", (assert) => {
+        const items = ["1", "2"];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (i) => {
+                    return i === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
+        });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            deferRendering: true,
+            value: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", dataSource);
+
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "1", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS is async and does not contain value", (assert) => {
+        const items = ["4", "5"];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (i) => {
+                    return i === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
+        });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            deferRendering: true,
+            value: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", dataSource);
+
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+        this.clock.restore();
     });
 
     QUnit.test("value should reset", (assert) => {
@@ -3778,7 +3937,7 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
 
         instance.option("dataSource", [4, 5, 6]);
 
-        assert.strictEqual(instance.option("value"), 1);
+        assert.strictEqual(instance.option("value"), null);
 
         this.clock.tick(0);
         keyboard.keyDown("down");
