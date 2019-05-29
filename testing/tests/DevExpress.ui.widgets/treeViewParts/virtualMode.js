@@ -1445,7 +1445,6 @@ module("Loadindicator", () => {
 
                 const $toggleItem = treeView.getToggleItemVisibility($node);
                 assert.equal($toggleItem.length, toggleItemVisibilityCount, "toggle item count");
-
                 assert.equal($toggleItem.css('display') === 'none', contentReadyCount ? false : true, "toggle item is hidden");
             };
 
