@@ -45,6 +45,10 @@ function getOffset() {
     }
 }
 
+function isDeviceDesktop() {
+    return devices.current().deviceType === "desktop";
+}
+
 QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
@@ -1720,6 +1724,7 @@ QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is c
 });
 
 QUnit.test("Appointment should not twitch on drag start with horizontal dragging", function(assert) {
+    if(!isDeviceDesktop()) return;
     let resourcesData = [
         {
             text: "Samantha Bright",
@@ -1783,7 +1788,7 @@ QUnit.test("Appointment should not twitch on drag start with horizontal dragging
         height: 400
     });
     let $appointment = this.scheduler.appointments.getAppointment(),
-        dragDistance = 5;
+        dragDistance = 50;
 
     const defaultPosition = translator.locate($appointment);
     let pointer = pointerMock($appointment).start();
@@ -1793,6 +1798,7 @@ QUnit.test("Appointment should not twitch on drag start with horizontal dragging
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging", function(assert) {
+    if(!isDeviceDesktop()) return;
     this.createInstance({
         height: 500,
         editing: true,
@@ -1821,6 +1827,7 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", function(assert) {
+    if(!isDeviceDesktop()) return;
     this.createInstance({
         height: 500,
         editing: true,
