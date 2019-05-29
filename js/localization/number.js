@@ -316,7 +316,13 @@ var numberLocalization = dependencyInjector({
     _calcSignificantDigits: function(text) {
         const [ integer, fractional ] = text.split(".");
         const calcDigitsAfterLeadingZeros = digits => {
-            const index = digits.findIndex(x => x !== "0");
+            let index = -1;
+            for(let i = 0; i < digits.length; i++) {
+                if(digits[i] !== "0") {
+                    index = i;
+                    break;
+                }
+            }
             return index > -1 ? digits.length - index : 0;
         };
         let result = 0;
