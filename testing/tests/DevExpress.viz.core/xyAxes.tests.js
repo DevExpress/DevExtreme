@@ -505,6 +505,31 @@ QUnit.test("Date format with month", function(assert) {
     assert.equal(this.renderer.text.getCall(0).args[0], "January");
 });
 
+QUnit.module("Axis shift", environment2DTranslator);
+
+QUnit.test("axis without shifting", function(assert) {
+    this.options.isHorizontal = false;
+    var axis = this.createDrawnAxis({ position: "left" });
+    assert.deepEqual(axis.getAxisShift(), 0);
+});
+
+QUnit.test("axis shifted", function(assert) {
+    this.options.isHorizontal = true;
+    var axis = this.createDrawnAxis({ position: "bottom" });
+
+    axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+    assert.deepEqual(axis.getAxisShift(), 40);
+});
+
+QUnit.test("axis shifted (multipleAxesSpacing)", function(assert) {
+    this.options.isHorizontal = true;
+    this.options.multipleAxesSpacing = 10;
+    var axis = this.createDrawnAxis({ position: "top" });
+
+    axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+    assert.deepEqual(axis.getAxisShift(), 20);
+});
+
 QUnit.module("API methods", environment2DTranslator);
 
 QUnit.test("axis position is top", function(assert) {

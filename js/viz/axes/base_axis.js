@@ -739,8 +739,10 @@ Axis.prototype = {
             constantLineUnderSeries = that._axisConstantLineGroups.under,
             boxes = [that._axisElementsGroup,
                 constantLineAboveSeries.outside1, constantLineAboveSeries.outside2,
-                constantLineUnderSeries.outside1, constantLineUnderSeries.outside2]
-                .map(function(group) { return group && group.getBBox(); })
+                constantLineUnderSeries.outside1, constantLineUnderSeries.outside2,
+                that._axisLineGroup
+            ]
+                .map(group => group && group.getBBox())
                 .concat((function(group) {
                     var box = group && group.getBBox();
 
@@ -944,6 +946,10 @@ Axis.prototype = {
 
     getCanvas: function() {
         return this._canvas;
+    },
+
+    getAxisShift() {
+        return this._axisShift || 0;
     },
 
     hideTitle: function() {
@@ -2082,6 +2088,7 @@ Axis.prototype = {
     },
 
     setInitRange() {
+        this._initRange = {};
         if(Object.keys(this._options.wholeRange || {}).length === 0) {
             this._initRange = this.getZoomBounds();
         }
