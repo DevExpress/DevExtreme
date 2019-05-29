@@ -299,19 +299,34 @@ var numberLocalization = dependencyInjector({
             cleanedText = text
                 .replace(regExp, "")
                 .replace(decimalSeparator, ".")
-                .replace(/\.$/g, ""),
-            parsed = +cleanedText;
+                .replace(/\.$/g, "");
 
-        cleanedText = cleanedText.replace(/^\./g, "");
-
-        if(cleanedText.length > 15) {
-            return NaN;
-        }
-        if(cleanedText === "") {
+        if(cleanedText === "." || cleanedText === "") {
             return null;
         }
 
+        if(this._calcSignificantDigits(cleanedText) > 15) {
+            return NaN;
+        }
+
+        const parsed = +cleanedText;
         return parsed * this.getSign(text, format);
+    },
+
+    _calcSignificantDigits: function(text) {
+        const [ integer, fractional ] = text.split(".");
+        const calcDigitsAfterLeadingZeros = digits => {
+            const index = digits.findIndex(x => x !== "0");
+            return index > -1 ? digits.length - index : 0;
+        };
+        let result = 0;
+        if(integer) {
+            result += calcDigitsAfterLeadingZeros(integer.split(""));
+        }
+        if(fractional) {
+            result += calcDigitsAfterLeadingZeros(fractional.split("").reverse());
+        }
+        return result;
     }
 });
 
