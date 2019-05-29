@@ -383,7 +383,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         var dataSource = this._dataSource;
         var currentState = that.option("applyChangesMode") !== "instantly" && dataSource && dataSource.state();
 
-        currentState && dataSource.state(that.option("state"), true);
+        currentState && that.option("state") && dataSource.state(that.option("state"), true);
 
         if(layout === 0) {
             that._renderLayout0($container);
