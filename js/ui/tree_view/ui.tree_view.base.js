@@ -38,6 +38,7 @@ const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
 const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibility-opened`;
 const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
 
+const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 const DISABLED_STATE_CLASS = "dx-state-disabled";
 const SELECTED_ITEM_CLASS = "dx-state-selected";
 const EXPAND_EVENT_NAMESPACE = "dxTreeView_expand";
@@ -1032,17 +1033,22 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
+        if(this._hasChildren(node)) {
+            var $node = this._getNodeElement(node);
+
+            if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
+                return;
+            }
+
+            this._createLoadIndicator($node);
+        }
+
         if(!isDefined(state)) {
             state = !currentState;
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
         node.internalFields.expanded = state;
-
-        if(this._hasChildren(node)) {
-            const $node = this._getNodeElement(node);
-            this._createLoadIndicator($node);
-        }
 
         this._updateExpandedItemsUI(node, state, e);
     },

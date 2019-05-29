@@ -3,7 +3,7 @@ import keyboardMock from "../../../helpers/keyboardMock.js";
 import eventsEngine from "events/core/events_engine";
 import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 
-let { module, test, } = QUnit;
+let { module, test } = QUnit;
 
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
