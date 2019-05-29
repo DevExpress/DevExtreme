@@ -59,7 +59,7 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _repaintContainer: function() {
-        var $container = this.$element().find("." + NODE_CONTAINER_CLASS).first(),
+        var $container = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first(),
             rootNodes;
 
         if($container.length) {
