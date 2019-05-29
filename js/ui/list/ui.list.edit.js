@@ -1,33 +1,33 @@
-import $ from "../../core/renderer";
-import eventUtils from "../../events/utils";
-import { extend } from "../../core/utils/extend";
-import GroupedEditStrategy from "./ui.list.edit.strategy.grouped";
-import messageLocalization from "../../localization/message";
-import EditProvider from "./ui.list.edit.provider";
-import ListBase from "./ui.list.base";
+var $ = require("../../core/renderer"),
+    eventUtils = require("../../events/utils"),
+    extend = require("../../core/utils/extend").extend,
+    GroupedEditStrategy = require("./ui.list.edit.strategy.grouped"),
+    messageLocalization = require("../../localization/message"),
+    EditProvider = require("./ui.list.edit.provider"),
+    ListBase = require("./ui.list.base");
 
-const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
+var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
     LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait";
 
-class ListEdit extends ListBase {
-    _supportedKeys() {
-        const that = this,
+var ListEdit = ListBase.inherit({
+    _supportedKeys: function() {
+        var that = this,
             parent = this.callBase();
 
-        const deleteFocusedItem = e => {
+        var deleteFocusedItem = function(e) {
             if(that.option("allowItemDeleting")) {
                 e.preventDefault();
                 that.deleteItem(that.option("focusedElement"));
             }
         };
 
-        const moveFocusedItemUp = e => {
-            const focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+        var moveFocusedItemUp = function(e) {
+            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
 
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                const $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
+                var $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
 
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
@@ -41,7 +41,7 @@ class ListEdit extends ListBase {
             }
         };
 
-        const moveFocusedItemDown = e => {
+        var moveFocusedItemDown = function(e) {
             const focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
             const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
             if(isLastIndexFocused && this._isDataSourceLoading()) {
@@ -50,7 +50,7 @@ class ListEdit extends ListBase {
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                const $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
+                var $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
 
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
@@ -64,13 +64,13 @@ class ListEdit extends ListBase {
             }
         };
 
-        const enter = e => {
+        var enter = function(e) {
             if(!this._editProvider.handleEnterPressing()) {
                 parent.enter.apply(this, arguments);
             }
         };
 
-        const space = e => {
+        var space = function(e) {
             if(!this._editProvider.handleEnterPressing()) {
                 parent.space.apply(this, arguments);
             }
@@ -83,28 +83,28 @@ class ListEdit extends ListBase {
             enter: enter,
             space: space
         });
-    }
+    },
 
-    _updateSelection() {
+    _updateSelection: function() {
         this._editProvider.afterItemsRendered();
         this.callBase();
-    }
+    },
 
-    _getLastItemIndex() {
+    _getLastItemIndex: function() {
         return this._itemElements().length - 1;
-    }
+    },
 
-    _refreshItemElements() {
+    _refreshItemElements: function() {
         this.callBase();
 
-        const excludedSelectors = this._editProvider.getExcludedItemSelectors();
+        var excludedSelectors = this._editProvider.getExcludedItemSelectors();
 
         if(excludedSelectors.length) {
             this._itemElementsCache = this._itemElementsCache.not(excludedSelectors);
         }
-    }
+    },
 
-    _getDefaultOptions() {
+    _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
             * @name dxListOptions.showSelectionControls
@@ -230,12 +230,14 @@ class ListEdit extends ListBase {
             * @hidden false
             */
         });
-    }
+    },
 
-    _defaultOptionsRules() {
+    _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: device => device.platform === "ios",
+                device: function(device) {
+                    return device.platform === "ios";
+                },
                 options: {
                     /**
                     * @name dxListOptions.menuMode
@@ -271,91 +273,91 @@ class ListEdit extends ListBase {
                 }
             }
         ]);
-    }
+    },
 
-    _init() {
+    _init: function() {
         this.callBase();
         this._initEditProvider();
-    }
+    },
 
-    _initDataSource() {
+    _initDataSource: function() {
         this.callBase();
 
         if(!this._isPageSelectAll()) {
             this._dataSource && this._dataSource.requireTotalCount(true);
         }
-    }
+    },
 
-    _isPageSelectAll() {
+    _isPageSelectAll: function() {
         return this.option("selectAllMode") === "page";
-    }
+    },
 
-    _initEditProvider() {
+    _initEditProvider: function() {
         this._editProvider = new EditProvider(this);
-    }
+    },
 
-    _disposeEditProvider() {
+    _disposeEditProvider: function() {
         if(this._editProvider) {
             this._editProvider.dispose();
         }
-    }
+    },
 
-    _refreshEditProvider() {
+    _refreshEditProvider: function() {
         this._disposeEditProvider();
         this._initEditProvider();
-    }
+    },
 
-    _initEditStrategy() {
+    _initEditStrategy: function() {
         if(this.option("grouped")) {
             this._editStrategy = new GroupedEditStrategy(this);
         } else {
             this.callBase();
         }
-    }
+    },
 
-    _initMarkup() {
+    _initMarkup: function() {
         this._refreshEditProvider();
         this.callBase();
-    }
+    },
 
-    _renderItems() {
+    _renderItems: function() {
         this.callBase.apply(this, arguments);
         this._editProvider.afterItemsRendered();
-    }
+    },
 
-    _selectedItemClass() {
+    _selectedItemClass: function() {
         return LIST_ITEM_SELECTED_CLASS;
-    }
+    },
 
-    _itemResponseWaitClass() {
+    _itemResponseWaitClass: function() {
         return LIST_ITEM_RESPONSE_WAIT_CLASS;
-    }
+    },
 
-    _itemClickHandler(e) {
-        const $itemElement = $(e.currentTarget);
+    _itemClickHandler: function(e) {
+        var $itemElement = $(e.currentTarget);
         if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
             return;
         }
 
-        const handledByEditProvider = this._editProvider.handleClick($itemElement, e);
+        var handledByEditProvider = this._editProvider.handleClick($itemElement, e);
         if(handledByEditProvider) {
             return;
         }
 
         this.callBase.apply(this, arguments);
-    }
+    },
 
-    _shouldFireContextMenuEvent() {
+    _shouldFireContextMenuEvent: function() {
         return this.callBase.apply(this, arguments) || this._editProvider.contextMenuHandlerExists();
-    }
+    },
 
-    _itemHoldHandler(e) {
-        const $itemElement = $(e.currentTarget);
+    _itemHoldHandler: function(e) {
+        var $itemElement = $(e.currentTarget);
         if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
             return;
         }
 
-        const isTouchEvent = eventUtils.isTouchEvent(e),
+        var isTouchEvent = eventUtils.isTouchEvent(e),
             handledByEditProvider = isTouchEvent && this._editProvider.handleContextMenu($itemElement, e);
         if(handledByEditProvider) {
             e.handledByEditProvider = true;
@@ -363,42 +365,42 @@ class ListEdit extends ListBase {
         }
 
         this.callBase.apply(this, arguments);
-    }
+    },
 
-    _itemContextMenuHandler(e) {
-        const $itemElement = $(e.currentTarget);
+    _itemContextMenuHandler: function(e) {
+        var $itemElement = $(e.currentTarget);
         if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
             return;
         }
 
-        const handledByEditProvider = !e.handledByEditProvider && this._editProvider.handleContextMenu($itemElement, e);
+        var handledByEditProvider = !e.handledByEditProvider && this._editProvider.handleContextMenu($itemElement, e);
         if(handledByEditProvider) {
             e.preventDefault();
             return;
         }
 
         this.callBase.apply(this, arguments);
-    }
+    },
 
-    _postprocessRenderItem(args) {
+    _postprocessRenderItem: function(args) {
         this.callBase.apply(this, arguments);
         this._editProvider.modifyItemElement(args);
-    }
+    },
 
-    _clean() {
+    _clean: function() {
         this._disposeEditProvider();
         this.callBase();
-    }
+    },
 
-    focusListItem(index) {
-        const $item = this._editStrategy.getItemElement(index);
+    focusListItem: function(index) {
+        var $item = this._editStrategy.getItemElement(index);
 
         this.option("focusedElement", $item);
         this.focus();
         this.scrollToItem(this.option("focusedElement"));
-    }
+    },
 
-    _optionChanged(args) {
+    _optionChanged: function(args) {
         switch(args.name) {
             case "selectAllMode":
                 this._initDataSource();
@@ -425,27 +427,27 @@ class ListEdit extends ListBase {
             default:
                 this.callBase(args);
         }
-    }
+    },
 
     /**
     * @name dxListMethods.selectAll
     * @publicName selectAll()
     */
-    selectAll() {
+    selectAll: function() {
         return this._selection.selectAll(this._isPageSelectAll());
-    }
+    },
 
     /**
     * @name dxListMethods.unselectAll
     * @publicName unselectAll()
     */
-    unselectAll() {
+    unselectAll: function() {
         return this._selection.deselectAll(this._isPageSelectAll());
-    }
+    },
 
-    isSelectAll() {
+    isSelectAll: function() {
         return this._selection.getSelectAllState(this._isPageSelectAll());
-    }
+    },
 
     /**
     * @name dxListMethods.getFlatIndexByItemElement
@@ -454,9 +456,9 @@ class ListEdit extends ListBase {
     * @return object
     * @hidden
     */
-    getFlatIndexByItemElement(itemElement) {
+    getFlatIndexByItemElement: function(itemElement) {
         return this._itemElements().index(itemElement);
-    }
+    },
 
     /**
     * @name dxListMethods.getItemElementByFlatIndex
@@ -465,15 +467,15 @@ class ListEdit extends ListBase {
     * @return Node
     * @hidden
     */
-    getItemElementByFlatIndex(flatIndex) {
-        const $itemElements = this._itemElements();
+    getItemElementByFlatIndex: function(flatIndex) {
+        var $itemElements = this._itemElements();
 
         if(flatIndex < 0 || flatIndex >= $itemElements.length) {
             return $();
         }
 
         return $itemElements.eq(flatIndex);
-    }
+    },
 
     /**
     * @name dxListMethods.getItemByIndex
@@ -483,7 +485,7 @@ class ListEdit extends ListBase {
     * @hidden
     */
     // TODO: rename & rework because method return itemData but named as itemElement
-    getItemByIndex(index) {
+    getItemByIndex: function(index) {
         return this._editStrategy.getItemDataByIndex(index);
     }
 
@@ -549,6 +551,6 @@ class ListEdit extends ListBase {
     * @param2 toItemIndex:Number|Object
     * @return Promise<void>
     */
-}
+});
 
 module.exports = ListEdit;
