@@ -1441,11 +1441,11 @@ module("Loadindicator", () => {
 
                 const $loadIndicator = treeView.getNodeLoadIndicator($node);
                 assert.equal($loadIndicator.length, 1, "loadIndicator count");
-                assert.equal(treeView.hasInvisibleClass($loadIndicator), contentReadyCount ? true : false, "loadIndicator invisible class");
+                assert.equal(treeView.hasInvisibleClass($loadIndicator), contentReadyCount ? true : false, "loadIndicator has invisible class");
 
                 const $toggleItem = treeView.getToggleItemVisibility($node);
                 assert.equal($toggleItem.length, toggleItemVisibilityCount, "toggle item count");
-                assert.equal(treeView.hasInvisibleClass($toggleItem), contentReadyCount ? false : true, "toggle item invisible class");
+                assert.equal($toggleItem.css('display') === 'none', contentReadyCount ? false : true, "toggle item is hidden");
             };
 
             test(`Loadindicator: ${config}`, () => {
