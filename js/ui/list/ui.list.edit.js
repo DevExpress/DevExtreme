@@ -42,8 +42,11 @@ var ListEdit = ListBase.inherit({
         };
 
         var moveFocusedItemDown = function(e) {
-            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
-
+            const focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+            const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
+            if(isLastIndexFocused && this._isDataSourceLoading()) {
+                return;
+            }
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
@@ -52,7 +55,7 @@ var ListEdit = ListBase.inherit({
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(focusedItemIndex === this._getLastItemIndex() && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
+                if(isLastIndexFocused && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
                     return;
                 } else {
                     this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
