@@ -580,6 +580,34 @@ QUnit.test("overlay content is shown on 'dxshown' after hidden parent becomes vi
     assert.ok(overlay.$content().find(".content-inner").is(":visible"), "overlay shown");
 });
 
+QUnit.test("overlay content is shown on 'dxshown' after hidden parent becomes visible second time", function(assert) {
+    var $overlay = $("#overlay").append("<div class='content-inner'>");
+
+    var innerOverlay;
+
+    var overlay = $overlay.dxOverlay({
+        visible: false,
+        contentTemplate: function(container) {
+            var element = $("<div>").appendTo(container);
+            innerOverlay = element.dxOverlay({ visible: true }).dxOverlay("instance");
+            return element;
+        }
+    }).dxOverlay("instance");
+
+    overlay.option("visible", true);
+
+    assert.ok(innerOverlay.$content().is(":visible"), "overlay shown");
+
+    innerOverlay.option("visible", false);
+    overlay.option("visible", false);
+    innerOverlay.option("visible", true);
+    assert.ok(innerOverlay.$content().is(":hidden"), "overlay hidden");
+
+    overlay.option("visible", true);
+
+    assert.ok(innerOverlay.$content().is(":visible"), "overlay shown second time");
+});
+
 QUnit.test("overlay is hidden when dxhiding event is fired", function(assert) {
     var $overlay = $("#overlay").dxOverlay({
         visible: true,
