@@ -1654,6 +1654,57 @@ QUnit.testInActiveWindow("Highlight cell on focus() if focusedRowEnabled is true
     assert.notOk($("#container .dx-datagrid-focus-overlay:visible").length, "has no focus overlay");
 });
 
+QUnit.testInActiveWindow("DataGrid - onFocusedCellChanging event should execute on cell click in batch edit mode (T743530)", function(assert) {
+    var rowsView,
+        keyboardController,
+        focusedCellChangingCount = 0,
+        editingStartCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        editing: { mode: 'batch', allowUpdating: true },
+        onEditingStart: function(e) {
+            e.cancel = e.data.name === "Alex";
+            ++editingStartCount;
+        },
+        onFocusedCellChanging: e => {
+            ++focusedCellChangingCount;
+        }
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Dan", phone: "553355", room: 2 }
+    ];
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // act
+    $(rowsView.getRow(0).find("td").eq(1)).trigger("dxpointerdown").click();
+    this.clock.tick();
+    // assert
+    assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
+    assert.equal(editingStartCount, 1, "editingStartCount fires count");
+
+    // act
+    $(rowsView.getRow(1).find("td").eq(1)).trigger("dxpointerdown").click();
+    this.clock.tick();
+    // assert
+    assert.equal(focusedCellChangingCount, 2, "onFocusedCellChanging fires count");
+    assert.equal(editingStartCount, 1, "editingStartCount fires count");
+});
+
 QUnit.testInActiveWindow("Not highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex is not set", function(assert) {
     var focusedCellChangingCount = 0,
         keyboardController;
