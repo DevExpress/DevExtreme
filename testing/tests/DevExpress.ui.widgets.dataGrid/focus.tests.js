@@ -2554,6 +2554,49 @@ QUnit.testInActiveWindow("onFocusedCellChanged event should not fire if cell pos
     assert.equal(focusedCellChangedCount, 0, "onFocusedCellChanged fires count");
 });
 
+QUnit.testInActiveWindow("onFocusedCellChanged event the inserted row (T743086)", function(assert) {
+    var focusedCellChangedCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 1 },
+        { name: "Dan", phone: "2222222", room: 2 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        editing: {
+            mode: "batch"
+        },
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+            assert.ok(e.row.inserted, "Inserted row");
+            assert.equal(e.row.rowType, "data", "Row type");
+            assert.deepEqual(e.row.data, { }, "Row data");
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.addRow();
+    this.clock.tick();
+    // assert
+    assert.equal(focusedCellChangedCount, 0, "onFocusedCellChanged fires count");
+
+    // act
+    this.triggerKeyDown("tab", false, false, $(":focus"));
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+});
+
 QUnit.testInActiveWindow("Setting cancel in onFocusedCellChanging event should prevent focusing next cell", function(assert) {
     var rowsView,
         keyboardController,
