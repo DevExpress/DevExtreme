@@ -7495,6 +7495,38 @@ QUnit.module("Customize keyboard navigation", {
         assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
     });
 
+    // T742967
+    testInDesktop("Editing start for a number cell with format if 'keyboardNavigation.editOnKeyPress'", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "room", dataType: "number", editorOptions: { format: "$#0.00" } }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick(300);
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.val(), "$2.00", "input value");
+        assert.equal($input.get(0).selectionStart, 2, "caret start position");
+        assert.equal($input.get(0).selectionEnd, 2, "caret end position");
+    });
+
     testInDesktop("Editing navigation mode for a number cell if 'keyboardNavigation.editOnKeyPress' and Left/Right arrow keys exit", function(assert) {
         // arrange
         this.options = {

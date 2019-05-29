@@ -1683,7 +1683,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 4, "caret should not move");
     });
 
-    QUnit.testInActiveWindow("caret should be at start boundary on focusin", (assert) => {
+    QUnit.testInActiveWindow("caret should be before decimal separator on focusin", (assert) => {
         this.instance.option({
             format: "$ #0.## kg",
             value: 1.23
@@ -1696,7 +1696,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         }
 
         this.clock.tick(CARET_TIMEOUT_DURATION);
-        assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is just before decimal separator");
     });
 
     QUnit.testInActiveWindow("caret should not change position on focus after fast double click for IE", (assert) => {
