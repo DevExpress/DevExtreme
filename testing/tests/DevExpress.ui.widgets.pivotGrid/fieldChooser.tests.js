@@ -2364,3 +2364,19 @@ QUnit.test("state option change", function(assert) {
     // T717364
     assert.strictEqual(dataSource.field(0).sortOrder, "desc", "field sort order is not changed after state change");
 });
+
+// T744363
+QUnit.test("Render actual dataSource state on initialization", function(assert) {
+    // arrange
+    const dataSource = new PivotGridDataSource({ fields: [{ index: 0, dataField: "Field1", area: 'row', allowSorting: true, sortOrder: "asc" }] });
+
+    dataSource.field(0, { sortOrder: "desc" });
+
+    this.$container.dxPivotGridFieldChooser({
+        applyChangesMode: "onDemand",
+        dataSource: dataSource
+    });
+
+    const $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
+    assert.ok(!$sortIndicator.hasClass("dx-sort-up"));
+});
