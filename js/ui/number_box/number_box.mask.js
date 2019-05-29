@@ -74,7 +74,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
             var caret = this._caret();
 
             if(caret.start === caret.end) {
-                this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+                var text = this._getInputVal(),
+                    decimalSeparator = number.getDecimalSeparator(),
+                    decimalSeparatorIndex = text.indexOf(decimalSeparator);
+
+                if(decimalSeparatorIndex >= 0) {
+                    this._caret({ start: decimalSeparatorIndex, end: decimalSeparatorIndex });
+                } else {
+                    this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+                }
             }
         }.bind(this), CARET_TIMEOUT_DURATION);
     },
