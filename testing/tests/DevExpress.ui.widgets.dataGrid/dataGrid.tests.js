@@ -8336,6 +8336,39 @@ QUnit.test("search editor have not been recreated when search text is changed", 
     assert.strictEqual(searchEditor.option("value"), "123");
 });
 
+// T744851
+QUnit.test("search editor value should be changed when search text is changed if grid is rendered in toolbar", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            onToolbarPreparing: function(e) {
+                e.toolbarOptions.items.unshift({
+                    location: "before",
+                    template: function() {
+                        return $("<div>").dxDataGrid({
+                            loadingTimeout: undefined,
+                            searchPanel: {
+                                visible: true
+                            }
+                        });
+                    }
+                });
+            },
+            searchPanel: {
+                visible: true,
+            },
+            dataSource: [{ a: 1, b: 2 }, { a: 2, b: 1 }]
+        }),
+        $searchEditors = $(dataGrid.$element()).find(".dx-datagrid-search-panel");
+
+    // act
+    dataGrid.option("searchPanel.text", "123");
+
+    // assert
+    assert.strictEqual($searchEditors.eq(0).dxTextBox("instance").option("value"), "", "first search editor is not changed");
+    assert.strictEqual($searchEditors.eq(1).dxTextBox("instance").option("value"), "123", "second search editor is changed");
+});
+
 QUnit.test("search editor have not been recreated on typing", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
