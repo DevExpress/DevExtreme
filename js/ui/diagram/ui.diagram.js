@@ -86,10 +86,11 @@ class Diagram extends Widget {
             dataSources: this._getDataSources(),
             customShapes: this._getCustomShapes(),
             onShapeCategoryRendered: (e) => {
-                if(isServerSide || !e.$element) return;
+                if(isServerSide) return;
 
-                this._diagramInstance.createToolbox(e.$element[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
-                this._createTooltips($parent, e.$element.find('[data-toggle="shape-toolbox-tooltip"]'));
+                var $toolboxContainer = $(e.$element);
+                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
+                this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
             onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0])
         });
