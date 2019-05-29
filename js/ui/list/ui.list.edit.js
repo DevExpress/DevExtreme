@@ -1,33 +1,33 @@
-var $ = require("../../core/renderer"),
-    eventUtils = require("../../events/utils"),
-    extend = require("../../core/utils/extend").extend,
-    GroupedEditStrategy = require("./ui.list.edit.strategy.grouped"),
-    messageLocalization = require("../../localization/message"),
-    EditProvider = require("./ui.list.edit.provider"),
-    ListBase = require("./ui.list.base");
+import $ from "../../core/renderer";
+import { isTouchEvent } from "../../events/utils";
+import { extend } from "../../core/utils/extend";
+import GroupedEditStrategy from "./ui.list.edit.strategy.grouped";
+import { format as formatMessage } from "../../localization/message";
+import EditProvider from "./ui.list.edit.provider";
+import ListBase from "./ui.list.base";
 
-var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
-    LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait";
+const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
+const LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait";
 
-var ListEdit = ListBase.inherit({
-    _supportedKeys: function() {
-        var that = this,
-            parent = this.callBase();
+const ListEdit = ListBase.inherit({
+    _supportedKeys() {
+        const that = this;
+        const parent = this.callBase();
 
-        var deleteFocusedItem = function(e) {
+        const deleteFocusedItem = e => {
             if(that.option("allowItemDeleting")) {
                 e.preventDefault();
                 that.deleteItem(that.option("focusedElement"));
             }
         };
 
-        var moveFocusedItemUp = function(e) {
-            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+        const moveFocusedItemUp = function(e) {
+            const focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
 
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
+                const $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
 
                 that.reorderItem(that.option("focusedElement"), $prevItem);
                 that.scrollToItem(that.option("focusedElement"));
@@ -41,18 +41,21 @@ var ListEdit = ListBase.inherit({
             }
         };
 
-        var moveFocusedItemDown = function(e) {
-            var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
-
+        const moveFocusedItemDown = function(e) {
+            const focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement"));
+            const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
+            if(isLastIndexFocused && this._isDataSourceLoading()) {
+                return;
+            }
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
+                const $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
 
                 that.reorderItem(that.option("focusedElement"), $nextItem);
                 that.scrollToItem(that.option("focusedElement"));
             } else {
-                if(focusedItemIndex === this._getLastItemIndex() && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
+                if(isLastIndexFocused && this._editProvider.handleKeyboardEvents(focusedItemIndex, false)) {
                     return;
                 } else {
                     this._editProvider.handleKeyboardEvents(focusedItemIndex, true);
@@ -61,13 +64,13 @@ var ListEdit = ListBase.inherit({
             }
         };
 
-        var enter = function(e) {
+        const enter = function(e) {
             if(!this._editProvider.handleEnterPressing()) {
                 parent.enter.apply(this, arguments);
             }
         };
 
-        var space = function(e) {
+        const space = function(e) {
             if(!this._editProvider.handleEnterPressing()) {
                 parent.space.apply(this, arguments);
             }
@@ -77,31 +80,31 @@ var ListEdit = ListBase.inherit({
             del: deleteFocusedItem,
             upArrow: moveFocusedItemUp,
             downArrow: moveFocusedItemDown,
-            enter: enter,
-            space: space
+            enter,
+            space
         });
     },
 
-    _updateSelection: function() {
+    _updateSelection() {
         this._editProvider.afterItemsRendered();
         this.callBase();
     },
 
-    _getLastItemIndex: function() {
+    _getLastItemIndex() {
         return this._itemElements().length - 1;
     },
 
-    _refreshItemElements: function() {
+    _refreshItemElements() {
         this.callBase();
 
-        var excludedSelectors = this._editProvider.getExcludedItemSelectors();
+        const excludedSelectors = this._editProvider.getExcludedItemSelectors();
 
         if(excludedSelectors.length) {
             this._itemElementsCache = this._itemElementsCache.not(excludedSelectors);
         }
     },
 
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
             * @name dxListOptions.showSelectionControls
@@ -140,7 +143,7 @@ var ListEdit = ListBase.inherit({
             * @default "Select All"
             * @hidden
             */
-            selectAllText: messageLocalization.format("dxList-selectAll"),
+            selectAllText: formatMessage("dxList-selectAll"),
 
             /**
             * @name dxListOptions.menuItems
@@ -229,12 +232,10 @@ var ListEdit = ListBase.inherit({
         });
     },
 
-    _defaultOptionsRules: function() {
+    _defaultOptionsRules() {
         return this.callBase().concat([
             {
-                device: function(device) {
-                    return device.platform === "ios";
-                },
+                device: device => device.platform === "ios",
                 options: {
                     /**
                     * @name dxListOptions.menuMode
@@ -272,12 +273,12 @@ var ListEdit = ListBase.inherit({
         ]);
     },
 
-    _init: function() {
+    _init() {
         this.callBase();
         this._initEditProvider();
     },
 
-    _initDataSource: function() {
+    _initDataSource() {
         this.callBase();
 
         if(!this._isPageSelectAll()) {
@@ -285,26 +286,26 @@ var ListEdit = ListBase.inherit({
         }
     },
 
-    _isPageSelectAll: function() {
+    _isPageSelectAll() {
         return this.option("selectAllMode") === "page";
     },
 
-    _initEditProvider: function() {
+    _initEditProvider() {
         this._editProvider = new EditProvider(this);
     },
 
-    _disposeEditProvider: function() {
+    _disposeEditProvider() {
         if(this._editProvider) {
             this._editProvider.dispose();
         }
     },
 
-    _refreshEditProvider: function() {
+    _refreshEditProvider() {
         this._disposeEditProvider();
         this._initEditProvider();
     },
 
-    _initEditStrategy: function() {
+    _initEditStrategy() {
         if(this.option("grouped")) {
             this._editStrategy = new GroupedEditStrategy(this);
         } else {
@@ -312,92 +313,91 @@ var ListEdit = ListBase.inherit({
         }
     },
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._refreshEditProvider();
         this.callBase();
     },
 
-    _renderItems: function() {
-        this.callBase.apply(this, arguments);
+    _renderItems(...args) {
+        this.callBase(...args);
         this._editProvider.afterItemsRendered();
     },
 
-    _selectedItemClass: function() {
+    _selectedItemClass() {
         return LIST_ITEM_SELECTED_CLASS;
     },
 
-    _itemResponseWaitClass: function() {
+    _itemResponseWaitClass() {
         return LIST_ITEM_RESPONSE_WAIT_CLASS;
     },
 
-    _itemClickHandler: function(e) {
-        var $itemElement = $(e.currentTarget);
+    _itemClickHandler(e) {
+        const $itemElement = $(e.currentTarget);
         if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
             return;
         }
 
-        var handledByEditProvider = this._editProvider.handleClick($itemElement, e);
+        const handledByEditProvider = this._editProvider.handleClick($itemElement, e);
         if(handledByEditProvider) {
             return;
         }
 
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
     },
 
-    _shouldFireContextMenuEvent: function() {
-        return this.callBase.apply(this, arguments) || this._editProvider.contextMenuHandlerExists();
+    _shouldFireContextMenuEvent(...args) {
+        return this.callBase(...args) || this._editProvider.contextMenuHandlerExists();
     },
 
-    _itemHoldHandler: function(e) {
-        var $itemElement = $(e.currentTarget);
+    _itemHoldHandler(e) {
+        const $itemElement = $(e.currentTarget);
         if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
             return;
         }
 
-        var isTouchEvent = eventUtils.isTouchEvent(e),
-            handledByEditProvider = isTouchEvent && this._editProvider.handleContextMenu($itemElement, e);
+        const handledByEditProvider = isTouchEvent(e) && this._editProvider.handleContextMenu($itemElement, e);
         if(handledByEditProvider) {
             e.handledByEditProvider = true;
             return;
         }
 
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
     },
 
-    _itemContextMenuHandler: function(e) {
-        var $itemElement = $(e.currentTarget);
+    _itemContextMenuHandler(e) {
+        const $itemElement = $(e.currentTarget);
         if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
             return;
         }
 
-        var handledByEditProvider = !e.handledByEditProvider && this._editProvider.handleContextMenu($itemElement, e);
+        const handledByEditProvider = !e.handledByEditProvider && this._editProvider.handleContextMenu($itemElement, e);
         if(handledByEditProvider) {
             e.preventDefault();
             return;
         }
 
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
     },
 
-    _postprocessRenderItem: function(args) {
-        this.callBase.apply(this, arguments);
+    _postprocessRenderItem(args) {
+        this.callBase(...arguments);
         this._editProvider.modifyItemElement(args);
     },
 
-    _clean: function() {
+    _clean() {
         this._disposeEditProvider();
         this.callBase();
     },
 
-    focusListItem: function(index) {
-        var $item = this._editStrategy.getItemElement(index);
+    focusListItem(index) {
+        const $item = this._editStrategy.getItemElement(index);
 
         this.option("focusedElement", $item);
         this.focus();
         this.scrollToItem(this.option("focusedElement"));
     },
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "selectAllMode":
                 this._initDataSource();
@@ -430,7 +430,7 @@ var ListEdit = ListBase.inherit({
     * @name dxListMethods.selectAll
     * @publicName selectAll()
     */
-    selectAll: function() {
+    selectAll() {
         return this._selection.selectAll(this._isPageSelectAll());
     },
 
@@ -438,11 +438,11 @@ var ListEdit = ListBase.inherit({
     * @name dxListMethods.unselectAll
     * @publicName unselectAll()
     */
-    unselectAll: function() {
+    unselectAll() {
         return this._selection.deselectAll(this._isPageSelectAll());
     },
 
-    isSelectAll: function() {
+    isSelectAll() {
         return this._selection.getSelectAllState(this._isPageSelectAll());
     },
 
@@ -453,7 +453,7 @@ var ListEdit = ListBase.inherit({
     * @return object
     * @hidden
     */
-    getFlatIndexByItemElement: function(itemElement) {
+    getFlatIndexByItemElement(itemElement) {
         return this._itemElements().index(itemElement);
     },
 
@@ -464,8 +464,8 @@ var ListEdit = ListBase.inherit({
     * @return Node
     * @hidden
     */
-    getItemElementByFlatIndex: function(flatIndex) {
-        var $itemElements = this._itemElements();
+    getItemElementByFlatIndex(flatIndex) {
+        const $itemElements = this._itemElements();
 
         if(flatIndex < 0 || flatIndex >= $itemElements.length) {
             return $();
@@ -482,7 +482,7 @@ var ListEdit = ListBase.inherit({
     * @hidden
     */
     // TODO: rename & rework because method return itemData but named as itemElement
-    getItemByIndex: function(index) {
+    getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
     }
 
