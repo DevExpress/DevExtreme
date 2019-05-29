@@ -1,8 +1,8 @@
 import $ from "../../core/renderer";
-import eventUtils from "../../events/utils";
+import { isTouchEvent } from "../../events/utils";
 import { extend } from "../../core/utils/extend";
 import GroupedEditStrategy from "./ui.list.edit.strategy.grouped";
-import messageLocalization from "../../localization/message";
+import { format as formatMessage } from "../../localization/message";
 import EditProvider from "./ui.list.edit.provider";
 import ListBase from "./ui.list.base";
 
