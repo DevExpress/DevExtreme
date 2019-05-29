@@ -634,6 +634,7 @@ var Overlay = Widget.inherit({
         });
 
         if(this._parentHidden) {
+            this._isHidden = true;
             return deferred.resolve();
         }
 
