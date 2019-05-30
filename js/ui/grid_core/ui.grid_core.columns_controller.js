@@ -1141,6 +1141,7 @@ module.exports = {
                         }
                     }
 
+                    var hasAddedBands = false;
                     for(i = 0; i < columnsUserState.length; i++) {
                         columnUserState = columnsUserState[i];
                         if(columnUserState.added && findUserStateColumn(columns, columnUserState) < 0) {
@@ -1148,10 +1149,14 @@ module.exports = {
                             applyFieldsState(column, columnUserState);
                             resultColumns.push(column);
                             if(columnUserState.added.columns) {
-                                updateColumnIndexes(that);
-                                resultColumns = createColumnsFromOptions(that, resultColumns);
+                                hasAddedBands = true;
                             }
                         }
+                    }
+
+                    if(hasAddedBands) {
+                        updateColumnIndexes(that);
+                        resultColumns = createColumnsFromOptions(that, resultColumns);
                     }
 
                     assignColumns(that, resultColumns);
