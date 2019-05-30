@@ -12,8 +12,10 @@ var $ = require("jquery"),
     restoreMockFactory = chartMocks.restoreMockFactory,
     resetMockFactory = chartMocks.resetMockFactory;
 
-function getContainer() {
-    return $('<div>').appendTo("#qunit-fixture");
+function getContainer(hidden) {
+    var div = $('<div>').appendTo("#qunit-fixture");
+    hidden && div.hide();
+    return div;
 }
 
 function getPieChecker(x, y, r, assert, done) {
@@ -96,7 +98,7 @@ var environment = {
 
         this.LayoutManager.onCall(this._pieCounter++).returns(layoutManager);
 
-        return new dxPieChart(getContainer(), options);
+        return new dxPieChart(getContainer(options.hidden), options);
     }
 };
 
@@ -219,6 +221,32 @@ QUnit.test("Create pies with same group. Ask for common layout", function(assert
     },
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
+    this.createPieChart({
+        sizeGroup: "group1",
+        dataSource: dataSourceTemplate,
+        series: [{}],
+        onDrawn: checkPie
+    },
+    { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} },
+    { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
+});
+
+QUnit.test("Create pies with same group, but one pie is hidden. Do not ask hidden pie for its layout", function(assert) {
+    var done = assert.async(1);
+    var checkPie = getPieChecker(150, 250, 200, assert, done);
+
+    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+
+    this.createPieChart({
+        hidden: true,
+        sizeGroup: "group1",
+        dataSource: dataSourceTemplate,
+        series: [{}],
+        onDrawn: done
+    },
+    { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
+    { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} });
     this.createPieChart({
         sizeGroup: "group1",
         dataSource: dataSourceTemplate,
