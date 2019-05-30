@@ -1212,6 +1212,21 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), "-2.22");
     });
 
+    QUnit.test("keep null value with 0 step", assert => {
+        this.instance.option("showSpinButtons", true);
+        this.instance.option("value", null);
+        const $input = this.element.find("." + INPUT_CLASS);
+        const $spinUp = this.element.find("." + SPIN_UP_CLASS);
+        const $spinDown = this.element.find("." + SPIN_DOWN_CLASS);
+        this.instance.option("step", 0);
+
+        $spinUp.trigger("dxpointerdown");
+        assert.equal($input.val(), "");
+
+        $spinDown.trigger("dxpointerdown");
+        assert.equal($input.val(), "");
+    });
+
     QUnit.test("spin edit min/max", assert => {
         assert.expect(2);
 
