@@ -1,25 +1,30 @@
-var $ = require("jquery");
+import $ from "jquery";
+import TreeViewTestWrapper from "../../helpers/TreeViewTestHelper.js";
+import "ui/tree_view";
 
-QUnit.testStart(function() {
-    var markup =
-        '<div id="treeView"></div>';
+import "common.css!";
+import "generic_light.css!";
+
+const { module, test, testStart } = QUnit;
+const createInstance = (options) => new TreeViewTestWrapper(options);
+
+testStart(() => {
+    const markup = '<div id="treeView"></div>';
 
     $("#qunit-fixture").html(markup);
 });
 
-require("ui/tree_view");
-
-var WIDGET_CLASS = "dx-treeview",
-    NODE_CONTAINER_CLASS = "dx-treeview-node-container",
-    OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened",
-    NODE_CLASS = "dx-treeview-node",
-    ITEM_CLASS = "dx-treeview-item",
-    SELECTED_STATE_CLASS = "dx-state-selected",
-    ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
-    ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
-    IS_LEAF = "dx-treeview-node-is-leaf",
-    TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility",
-    SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
+const WIDGET_CLASS = "dx-treeview";
+const NODE_CONTAINER_CLASS = "dx-treeview-node-container";
+const OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened";
+const NODE_CLASS = "dx-treeview-node";
+const ITEM_CLASS = "dx-treeview-item";
+const SELECTED_STATE_CLASS = "dx-state-selected";
+const ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox";
+const ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox";
+const IS_LEAF = "dx-treeview-node-is-leaf";
+const TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility";
+const SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
 
 var initTree = function(options) {
     return $("#treeView").dxTreeView(options);
@@ -380,17 +385,6 @@ QUnit.test("Disabled class is added when disabledExpr is used with custom templa
     assert.ok($item.hasClass("dx-state-disabled"));
 });
 
-QUnit.test("toggle visibility icon should not render for invisible item (T323491)", function(assert) {
-    var $treeView = initTree({
-            items: [
-                { text: "item 1", visible: false, items: [{ text: "item 11" }] },
-                { text: "item 1", items: [{ text: "item 21" }] }],
-        }),
-        $icons = $treeView.find("." + TOGGLE_ITEM_VISIBILITY_CLASS);
-
-    assert.equal($icons.length, 1, "only one icon should be rendered");
-});
-
 QUnit.test("Render Search editor", function(assert) {
     var $searchEditor,
         $treeView = initTree({
@@ -499,4 +493,154 @@ QUnit.test("On initialization 'selectAll' item should have intermediate state if
         $selectAll = $treeView.find("." + SELECT_ALL_ITEM_CLASS);
 
     assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"));
+});
+
+module("Visible state", {
+    before() {
+        this.data = [
+            {
+                id: 1,
+                text: "Item 1",
+                expanded: true,
+                items: [
+                    { id: 11, text: "Nested Item 1" },
+                    {
+                        id: 12, text: "Nested Item 2", expanded: true, items: [
+                            { id: 121, text: "Third level item 1" },
+                            { id: 122, text: "Third level item 2" }
+                        ]
+                    }
+                ]
+            },
+            { id: 2, text: "Item 2" }
+        ];
+    },
+    beforeEach() {
+        this.items = $.extend(true, [], this.data);
+    }
+}, () => {
+    test("toggle visibility icon should not render for invisible item (T323491)", (assert) => {
+        const treeView = createInstance({
+            items: [
+                { text: "item 1", visible: false, items: [{ text: "item 11" }] },
+                { text: "item 1", items: [{ text: "item 21" }] }
+            ]
+        });
+
+        assert.equal(treeView.getToggleItemVisibility().length, 1, "only one icon should be rendered");
+    });
+
+    [true, false].forEach(selectNodesRecursive => {
+        [true, false].forEach((virtualModeEnabled) => {
+            ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+                let config = `virtualModeEnabled: ${virtualModeEnabled}, selectNodesRecursive: ${selectNodesRecursive}, showCheckBoxesMode: ${showCheckBoxesMode}`;
+
+                const createTreeView = (options) => {
+                    return createInstance($.extend(options, {
+                        virtualModeEnabled: virtualModeEnabled,
+                        selectNodesRecursive: selectNodesRecursive,
+                        showCheckBoxesMode: showCheckBoxesMode
+                    }));
+                };
+
+                const checkAsserts = (treeView, items, $items, expectedArgs) => {
+                    QUnit.assert.equal($items.length, expectedArgs.itemsCount, "items count");
+                    treeView.checkVisibleState(expectedArgs.hasVisibleState, items);
+                    treeView.checkItemsInvisibleClass(expectedArgs.hasInvisibleClass, $items);
+
+                    let $toggleItems = treeView.getToggleItemVisibility();
+
+                    QUnit.assert.equal($toggleItems.length, expectedArgs.toggleItemCount, "visibility items count");
+                    treeView.checkItemsInvisibleClass(expectedArgs.hasToggleInvisibleClass || [], $toggleItems, $item => $item.css('display') === 'none');
+                };
+
+                test(`1 level invisible ${config}`, function(assert) {
+                    this.items[0].visible = false;
+                    this.items[1].visible = false;
+
+                    const treeView = createTreeView({ items: this.items });
+
+                    checkAsserts(treeView, this.items, treeView.getItems(), { itemsCount: 2, toggleItemCount: 0, hasInvisibleClass: [0, 1], hasVisibleState: [1, 2, 3, 4] });
+                });
+
+                test(`2 level invisible ${config}`, function(assert) {
+                    this.items[0].items[0].visible = false;
+                    this.items[0].items[1].visible = false;
+
+                    const treeView = createTreeView({ items: this.items });
+
+                    checkAsserts(treeView, this.items, treeView.getItems(), { itemsCount: 4, toggleItemCount: 0, hasInvisibleClass: [1, 2], hasVisibleState: [0, 3, 4, 5] });
+                });
+
+                test(`3 level invisible ${config}`, function(assert) {
+                    this.items[0].items[1].items[0].visible = false;
+                    this.items[0].items[1].items[1].visible = false;
+
+                    const treeView = createTreeView({ items: this.items });
+
+                    checkAsserts(treeView, this.items, treeView.getItems(), { itemsCount: 6, toggleItemCount: 1, hasInvisibleClass: [3, 4], hasVisibleState: [0, 1, 2, 5] });
+                });
+
+                test(`3 level - first item invisible ${config}`, function(assert) {
+                    this.items[0].items[1].items[0].visible = false;
+
+                    const treeView = createTreeView({ items: this.items });
+
+                    checkAsserts(treeView, this.items, treeView.getItems(), { itemsCount: 6, toggleItemCount: 2, hasInvisibleClass: [3], hasVisibleState: [0, 1, 2, 4, 5] });
+                });
+
+                test(`1 level invisible after initialization ${config}`, function(assert) {
+                    const treeView = createTreeView({ items: this.items });
+
+                    treeView.instance.option("items[0].visible", false);
+                    treeView.instance.option("items[1].visible", false);
+
+                    checkAsserts(treeView, this.items, treeView.getNodes(), { itemsCount: 6, toggleItemCount: 2, hasInvisibleClass: [0, 5], hasVisibleState: [1, 2, 3, 4] });
+                });
+
+                test(`2 level invisible after initialization ${config}`, function(assert) {
+                    const treeView = createTreeView({ items: this.items });
+
+                    treeView.instance.option("items[0].items[0].visible", false);
+                    treeView.instance.option("items[0].items[1].visible", false);
+
+                    checkAsserts(treeView, this.items, treeView.getNodes(), { itemsCount: 6, toggleItemCount: 2, hasToggleInvisibleClass: [0], hasInvisibleClass: [1, 2], hasVisibleState: [0, 3, 4, 5] });
+                });
+
+                test(`3 level invisible after initialization ${config}`, function(assert) {
+                    const treeView = createTreeView({ items: this.items });
+
+                    treeView.instance.option("items[0].items[1].items[0].visible", false);
+                    treeView.instance.option("items[0].items[1].items[1].visible", false);
+
+                    checkAsserts(treeView, this.items, treeView.getNodes(), { itemsCount: 6, toggleItemCount: 2, hasToggleInvisibleClass: [1], hasInvisibleClass: [3, 4], hasVisibleState: [0, 1, 2, 5] });
+                });
+
+                test(`3 level invisible after initialize, select(items[0].items[1]), ${config}`, function(assert) {
+                    const treeView = createTreeView({ items: this.items });
+
+                    treeView.instance.option("items[0].items[1].items[0].visible", false);
+                    treeView.instance.option("items[0].items[1].items[1].visible", false);
+
+                    treeView.instance.selectItem(this.items[0].items[1]);
+
+                    checkAsserts(treeView, this.items, treeView.getNodes(), { itemsCount: 6, toggleItemCount: 2, hasToggleInvisibleClass: [1], hasInvisibleClass: [3, 4], hasVisibleState: [0, 1, 2, 5] });
+                    treeView.checkSelected([2], this.items);
+                });
+
+                test(`3 level invisible after initialize, toggle visibility `, function(assert) {
+                    const treeView = createTreeView({ items: this.items });
+
+                    treeView.instance.option("items[0].items[1].items[0].visible", false);
+                    checkAsserts(treeView, this.items, treeView.getNodes(), { itemsCount: 6, toggleItemCount: 2, hasInvisibleClass: [3], hasVisibleState: [0, 1, 2, 4, 5] });
+
+                    treeView.instance.option("items[0].items[1].items[1].visible", false);
+                    checkAsserts(treeView, this.items, treeView.getNodes(), { itemsCount: 6, toggleItemCount: 2, hasToggleInvisibleClass: [1], hasInvisibleClass: [3, 4], hasVisibleState: [0, 1, 2, 5] });
+
+                    treeView.instance.option("items[0].items[1].items[1].visible", true);
+                    checkAsserts(treeView, this.items, treeView.getNodes(), { itemsCount: 6, toggleItemCount: 2, hasInvisibleClass: [3], hasVisibleState: [0, 1, 2, 4, 5] });
+                });
+            });
+        });
+    });
 });

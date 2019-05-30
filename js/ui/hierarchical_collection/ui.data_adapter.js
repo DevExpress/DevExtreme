@@ -193,33 +193,54 @@ var DataAdapter = Class.inherit({
     },
 
     _calculateSelectedState: function(node) {
-        var itemsCount = node.internalFields.childrenKeys.length,
-            selectedItemsCount = 0,
-            invisibleItemsCount = 0,
-            result = false;
+        var selectedItemsCount = 0,
+            result = false,
+            that = this;
 
-        for(var i = 0; i <= itemsCount - 1; i++) {
-            var childNode = this.getNodeByKey(node.internalFields.childrenKeys[i]),
-                isChildInvisible = childNode.internalFields.item.visible === false,
-                childState = childNode.internalFields.selected;
-
-            if(isChildInvisible) {
-                invisibleItemsCount++;
-                continue;
-            }
-
-            if(childState) {
-                selectedItemsCount++;
-            } else if(childState === undefined) {
-                selectedItemsCount += 0.5;
-            }
+        if(this._isAllChildInvisible(node)) {
+            return node.internalFields.selected;
         }
 
+        this._iterateChildren(node, false, function(child) {
+            var childState = child.internalFields.selected;
+
+            if(that._isNodeVisible(child)) {
+                if(childState) {
+                    selectedItemsCount++;
+                } else if(childState === undefined) {
+                    selectedItemsCount += 0.5;
+                }
+            }
+        });
+
         if(selectedItemsCount) {
-            result = selectedItemsCount === itemsCount - invisibleItemsCount ? true : undefined;
+            result = selectedItemsCount === this._getChildVisibleCount(node) ? true : undefined;
         }
 
         return result;
+    },
+
+    _isAllChildInvisible: function(node) {
+        return !this._getChildVisibleCount(node);
+    },
+
+    _getChildVisibleCount: function(node) {
+        let itemsCount = node.internalFields.childrenKeys.length;
+
+        return itemsCount - this._getChildInvisibleCount(node);
+    },
+
+    _getChildInvisibleCount: function(node) {
+        var that = this;
+        var invisibleItemsCount = 0;
+
+        this._iterateChildren(node, false, function(child) {
+            if(!that._isNodeVisible(child)) {
+                invisibleItemsCount++;
+            }
+        });
+
+        return invisibleItemsCount;
     },
 
     _toggleChildrenSelection: function(node, state) {

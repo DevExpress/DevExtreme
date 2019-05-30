@@ -516,7 +516,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._scrollableContainer.option("direction", value);
                 break;
             case "items":
-                delete this._$selectAllItem;
                 this.callBase(args);
                 break;
             case "dataSource":
@@ -901,7 +900,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        this._renderToggleItemVisibilityIcon($node, node);
+        if(this._isVirtualMode() || this._useCustomChildrenLoader() || !this._dataAdapter._isAllChildInvisible(node)) {
+            this._renderToggleItemVisibilityIcon($node, node);
+        }
 
         if(this.option("deferRendering") && !node.internalFields.expanded) {
             return;
@@ -1311,6 +1312,23 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(property === this.option("disabledExpr")) {
             this._toggleNodeDisabledState(node, value);
+        }
+
+        if(property === "visible") {
+            const $node = this._getNodeElement(node);
+            $node.toggleClass(INVISIBLE_STATE_CLASS, value !== undefined && !value);
+
+            const parentNode = this._dataAdapter.options.dataConverter.getParentNode(node);
+            if(parentNode) {
+                const $parentNode = this._getNodeElement(parentNode);
+                const $icon = $parentNode.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
+
+                if(this._dataAdapter._isAllChildInvisible(parentNode)) {
+                    $icon.hide();
+                } else {
+                    $icon.show();
+                }
+            }
         }
     },
 

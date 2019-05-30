@@ -72,6 +72,34 @@ class TreeViewTestWrapper {
         this.checkSelectedNodes(expectedSelectedIndexes);
     }
 
+    checkVisibleState(visibleIndexes, items) {
+        let itemsArray = this.convertTreeToFlatList(items);
+
+        itemsArray.forEach((_, index) => {
+            if(visibleIndexes.indexOf(index) === -1) {
+                assert.equal(itemsArray[index].visible, false, `item ${index} is not visible`);
+            } else {
+                if(itemsArray[index].visible === undefined || itemsArray[index].visible === true) {
+                    assert.ok(true, `item ${index} is visible`);
+                }
+            }
+        });
+    }
+
+    checkItemsInvisibleClass(visibleIndexes, $items, rule) {
+        visibleIndexes.forEach((index) => {
+            let $item = $items.eq(index);
+            assert.equal(isDefined(rule) && rule($item) || this.hasInvisibleClass($item), true, `item ${index} has invisible class`);
+        });
+
+        $items.each((index) => {
+            if(visibleIndexes.indexOf(index) === -1) {
+                let $item = $items.eq(index);
+                assert.equal(isDefined(rule) && rule($item) || this.hasInvisibleClass($item), false, `item ${index} hasn't invisible class`);
+            }
+        });
+    }
+
     convertTreeToFlatList(items) {
         let itemsArray = [];
         let inOrder = (items) => {
