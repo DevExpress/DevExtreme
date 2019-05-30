@@ -276,6 +276,10 @@ exports.stock = _extend({}, scatterSeries, {
         }
 
         return oppositeCoord;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return false;
     }
 });
 

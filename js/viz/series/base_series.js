@@ -411,9 +411,7 @@ Series.prototype = {
         return aggregation && aggregation.enabled;
     },
 
-    autoHidePointMarkersEnabled() {
-        return false;
-    },
+    autoHidePointMarkersEnabled: _noop,
 
     usePointsToDefineAutoHiding: _noop,
 

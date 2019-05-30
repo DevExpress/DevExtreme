@@ -242,11 +242,7 @@ var lineMethods = {
         }
 
         return oppositeCoord;
-    },
-
-    usePointsToDefineAutoHiding() {
-        return this.autoHidePointMarkersEnabled();
-    },
+    }
 };
 
 var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods);
