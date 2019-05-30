@@ -1055,7 +1055,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _createLoadIndicator: function($node) {
-        const $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
+        const $icon = $node.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
 
         if($icon.hasClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS) || $nodeContainer.not(":empty").length) {
@@ -1104,7 +1104,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
         }
 
-        const $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
+        const $icon = $node.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
 
         $icon.toggleClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS, state);
@@ -1230,12 +1230,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         $loadIndicator.length && LoadIndicator.getInstance($loadIndicator).option("visible", false);
 
         if(hasNewItems) {
-            const $icon = $node.find("." + TOGGLE_ITEM_VISIBILITY_CLASS);
+            const $icon = $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
             $icon.show();
             return;
         }
 
-        $node.find("." + TOGGLE_ITEM_VISIBILITY_CLASS).removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
+        $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
         $node.addClass(IS_LEAF);
     },
 
@@ -1307,6 +1307,24 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
+    _toggleVisibleState: function(node, state) {
+        const $node = this._getNodeElement(node);
+        const parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey);
+
+        $node.toggleClass(INVISIBLE_STATE_CLASS, state !== undefined && !state);
+
+        if(parentNode) {
+            const $parentNode = this._getNodeElement(parentNode);
+            const $icon = $parentNode.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`);
+
+            if(this._dataAdapter._isAllChildInvisible(parentNode)) {
+                $icon.hide();
+            } else {
+                $icon.show();
+            }
+        }
+    },
+
     _itemOptionChanged: function(item, property, value) {
         const node = this._dataAdapter.getNodeByItem(item);
 
@@ -1315,20 +1333,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(property === "visible") {
-            const $node = this._getNodeElement(node);
-            $node.toggleClass(INVISIBLE_STATE_CLASS, value !== undefined && !value);
-
-            const parentNode = this._dataAdapter.options.dataConverter.getParentNode(node);
-            if(parentNode) {
-                const $parentNode = this._getNodeElement(parentNode);
-                const $icon = $parentNode.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
-
-                if(this._dataAdapter._isAllChildInvisible(parentNode)) {
-                    $icon.hide();
-                } else {
-                    $icon.show();
-                }
-            }
+            this._toggleVisibleState(node, value);
         }
     },
 
@@ -1464,7 +1469,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         const parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey);
-        const $parentNode = $($node.parents("." + NODE_CLASS)[0]);
+        const $parentNode = this._getNodeElement(parentNode);
 
         if(this._showCheckboxes()) {
             const parentValue = parentNode.internalFields.selected;
