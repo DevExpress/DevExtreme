@@ -79,8 +79,6 @@
     }
 
     function createTemplateEngine() {
-        var dxMvcExtensionsObj = window["MVCx"];
-
         return {
             compile: function(element) {
                 return templateCompiler(extractTemplateMarkup(element));
@@ -88,6 +86,7 @@
             render: function(template, data) {
                 var html = template(data, encodeHtml);
 
+                var dxMvcExtensionsObj = window["MVCx"];
                 if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
                     html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, "$1");
                 }
