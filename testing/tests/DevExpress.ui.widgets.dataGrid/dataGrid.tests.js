@@ -6763,6 +6763,51 @@ QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling m
     assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
 });
 
+// T742926
+QUnit.test("Scroll should works if error occurs during third page loading if scrolling mode is infinite", function(assert) {
+    var error = false;
+    var dataGrid = createDataGrid({
+        height: 300,
+        loadingTimeout: undefined,
+        dataSource: {
+            load: function(options) {
+                if(error) {
+                    return $.Deferred().reject("Load error");
+                }
+
+                var data = [];
+
+                for(var i = options.skip; i < options.skip + options.take; i++) {
+                    data.push({ id: i + 1 });
+                }
+
+                return $.Deferred().resolve(data);
+            }
+        },
+        remoteOperations: { paging: true },
+        scrolling: {
+            timeout: 0,
+            mode: "infinite",
+            useNative: false
+        }
+    });
+
+    error = true;
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 20);
+    assert.strictEqual($(dataGrid.$element()).find(".dx-error-row").length, 1, "error row is visible");
+
+
+    error = false;
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+    assert.strictEqual($(dataGrid.$element()).find(".dx-error-row").length, 0, "error row is hidden");
+});
+
 QUnit.test("Resize command column", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
