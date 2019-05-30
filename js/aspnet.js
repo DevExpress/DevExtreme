@@ -79,13 +79,20 @@
     }
 
     function createTemplateEngine() {
+        var dxMvcExtensionsObj = window["MVCx"];
 
         return {
             compile: function(element) {
                 return templateCompiler(extractTemplateMarkup(element));
             },
             render: function(template, data) {
-                return template(data, encodeHtml);
+                var html = template(data, encodeHtml);
+
+                if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
+                    html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, "$1");
+                }
+
+                return html;
             }
         };
     }

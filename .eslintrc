@@ -141,6 +141,7 @@
                     "microsoft",
                     "moz",        // Vendor prefix
                     "mozilla",
+                    "mvc",
                     "firefox",
                     "msie",
                     "odata",      // OData
