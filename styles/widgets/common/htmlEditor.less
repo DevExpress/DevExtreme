@@ -87,7 +87,6 @@
 
 .dx-htmleditor-content {
     box-sizing: border-box;
-    counter-reset: list-0;
     line-height: 1.42;
     width: 100%;
     outline: none;
@@ -107,12 +106,12 @@
         cursor: text;
     }
 
-    p, ol, pre, blockquote, h1, h2, h3, h4, h5, h6 {
+    p, ol, ul, pre, blockquote, h1, h2, h3, h4, h5, h6 {
         margin: 0;
         padding: 0;
     }
 
-    p, h1, h2, h3, h4, h5, h6 {
+    p, h1, h2, h3, h4, h5, h6, ol, ul {
         .add-counter-reset(@MAX_INDENT);
     }
 
@@ -125,7 +124,7 @@
         padding: 2px 5px;
     }
 
-    ol {
+    ol, ul {
         padding-left: 1.5em;
 
         .dx-rtl & {
