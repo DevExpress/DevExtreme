@@ -1240,37 +1240,43 @@ QUnit.module("widget options", moduleSetup, () => {
     });
 
     QUnit.test("should work correctly with value and displayed value on dataSource change if new DS contains value", (assert) => {
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
         const selectBox = $("#selectBox").dxSelectBox({
-            dataSource: ["1", "2"],
+            dataSource: items,
+            valueExpr: "id",
+            displayExpr: "text",
             deferRendering: true,
-            value: "1"
+            value: 1
         }).dxSelectBox("instance");
 
-        selectBox.option("dataSource", ["1", "3"]);
+        selectBox.option("dataSource", [{ id: 1, text: "a" }, { id: 3, text: "c" }]);
 
         assert.equal(selectBox.option("value"), "1", "value is correct");
-        assert.equal(selectBox.option("text"), "1", "text is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on dataSource change if new DS does not contain value (T728469)", (assert) => {
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
         const selectBox = $("#selectBox").dxSelectBox({
-            dataSource: ["1", "2"],
+            dataSource: items,
+            valueExpr: "id",
+            displayExpr: "text",
             deferRendering: true,
-            value: "1"
+            value: 1
         }).dxSelectBox("instance");
 
-        selectBox.option("dataSource", [4, 5]);
+        selectBox.option("dataSource", [{ id: 4, text: "d" }, { id: 5, text: "e" }]);
 
         assert.equal(selectBox.option("value"), null, "value is correct");
         assert.equal(selectBox.option("text"), "", "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on dataSource change if new DS is async and contains value", (assert) => {
-        const items = ["1", "2"];
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
         const dataSource = new DataSource({
             byKey: (key) => {
-                return $.grep(items, (i) => {
-                    return i === key;
+                return $.grep(items, (item) => {
+                    return item.id === key;
                 });
             },
             load: () => {
@@ -1284,7 +1290,9 @@ QUnit.module("widget options", moduleSetup, () => {
         const selectBox = $("#selectBox").dxSelectBox({
             dataSource: items,
             deferRendering: true,
-            value: "1"
+            displayExpr: "text",
+            valueExpr: "id",
+            value: 1
         }).dxSelectBox("instance");
 
         selectBox.option("dataSource", dataSource);
@@ -1292,15 +1300,15 @@ QUnit.module("widget options", moduleSetup, () => {
         this.clock.tick(50);
 
         assert.equal(selectBox.option("value"), "1", "value is correct");
-        assert.equal(selectBox.option("text"), "1", "text is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on dataSource change if new DS is async and does not contain value", (assert) => {
-        const items = ["4", "5"];
+        const items = [{ id: 4, text: "d" }, { id: 5, text: "e" }];
         const dataSource = new DataSource({
             byKey: (key) => {
-                return $.grep(items, (i) => {
-                    return i === key;
+                return $.grep(items, (item) => {
+                    return item.id === key;
                 });
             },
             load: () => {
@@ -1312,8 +1320,10 @@ QUnit.module("widget options", moduleSetup, () => {
             }
         });
         const selectBox = $("#selectBox").dxSelectBox({
-            dataSource: ["1", "2"],
+            dataSource: [{ id: 1, text: "a" }, { id: 2, text: "b" }],
             deferRendering: true,
+            displayExpr: "text",
+            valueExpr: "id",
             value: "1"
         }).dxSelectBox("instance");
 
@@ -1327,36 +1337,39 @@ QUnit.module("widget options", moduleSetup, () => {
     QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS contains value", (assert) => {
         const selectBox = $("#selectBox").dxSelectBox({
             dataSource: [],
-            value: "1",
+            value: 1,
             deferRendering: true,
-            selectedItem: "1"
+            displayExpr: "text",
+            valueExpr: "id"
         }).dxSelectBox("instance");
 
-        selectBox.option("dataSource", ["1", "2"]);
+        selectBox.option("dataSource", [{ id: 1, text: "a" }, { id: 2, text: "b" }]);
         this.clock.tick(50);
         assert.equal(selectBox.option("value"), "1", "value is correct");
-        assert.equal(selectBox.option("text"), "1", "text is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS does not contain value (T728469)", (assert) => {
         const selectBox = $("#selectBox").dxSelectBox({
             dataSource: [],
+            displayExpr: "text",
+            valueExpr: "id",
             deferRendering: true,
-            value: "1"
+            value: 1
         }).dxSelectBox("instance");
 
-        selectBox.option("dataSource", ["4", "5"]);
+        selectBox.option("dataSource", [{ id: 4, text: "d" }, { id: 5, text: "e" }]);
 
         assert.equal(selectBox.option("value"), null, "value is correct");
         assert.equal(selectBox.option("text"), "", "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS is async and contains value", (assert) => {
-        const items = ["1", "2"];
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
         const dataSource = new DataSource({
             byKey: (key) => {
-                return $.grep(items, (i) => {
-                    return i === key;
+                return $.grep(items, (item) => {
+                    return item.id === key;
                 });
             },
             load: () => {
@@ -1370,22 +1383,24 @@ QUnit.module("widget options", moduleSetup, () => {
         const selectBox = $("#selectBox").dxSelectBox({
             dataSource: [],
             deferRendering: true,
-            value: "1"
+            displayExpr: "text",
+            valueExpr: "id",
+            value: 1
         }).dxSelectBox("instance");
 
         selectBox.option("dataSource", dataSource);
 
         this.clock.tick(50);
         assert.equal(selectBox.option("value"), "1", "value is correct");
-        assert.equal(selectBox.option("text"), "1", "text is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS is async and does not contain value", (assert) => {
-        const items = ["4", "5"];
+        const items = [{ id: 4, text: "d" }, { id: 5, text: "e" }];
         const dataSource = new DataSource({
             byKey: (key) => {
-                return $.grep(items, (i) => {
-                    return i === key;
+                return $.grep(items, (item) => {
+                    return item.id === key;
                 });
             },
             load: () => {
@@ -1399,7 +1414,9 @@ QUnit.module("widget options", moduleSetup, () => {
         const selectBox = $("#selectBox").dxSelectBox({
             dataSource: [],
             deferRendering: true,
-            value: "1"
+            displayExpr: "text",
+            valueExpr: "id",
+            value: 1
         }).dxSelectBox("instance");
 
         selectBox.option("dataSource", dataSource);

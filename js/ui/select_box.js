@@ -451,10 +451,6 @@ var SelectBox = DropDownList.inherit({
         return result;
     },
 
-    _isOldDataSourceValue: function() {
-        return this.option("text") && this.option("text") === this.option("value");
-    },
-
     _setSelectedItem: function(item) {
         var isUnknownItem = !this._isCustomValueAllowed() && (item === undefined);
 
@@ -462,7 +458,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _processNonexistentItem: function() {
-        var isUnknownItem = !this._isCustomValueAllowed() && !this._isOldDataSourceValue();
+        var isUnknownItem = !this._isCustomValueAllowed();
 
         if(isUnknownItem) {
             this.reset();
