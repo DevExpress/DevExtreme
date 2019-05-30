@@ -40,7 +40,7 @@ function validateMargin(margin) {
 
 function Title(params) {
     this._params = params;
-    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.renderer.root, { name: "title", after: "peripheral" });
+    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.renderer.root, "title");
     this._hasText = false;
 }
 

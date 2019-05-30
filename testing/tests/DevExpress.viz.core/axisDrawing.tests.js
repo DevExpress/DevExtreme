@@ -7962,6 +7962,31 @@ QUnit.test("Add correction to right margin for grid width if right is less than 
     assert.strictEqual(margins.top, 0, "top");
 });
 
+QUnit.test("Take into account axis line group if labels are not visible", function(assert) {
+    // arrange
+    this.updateOptions({
+        argumentType: "datetime",
+        isHorizontal: true,
+        position: "bottom",
+        label: {
+            visible: false
+        }
+    });
+
+    this.translator.stub("translate").returns(50);
+    this.axis.parser = function() {
+        return 0;
+    };
+    this.axis.draw(this.canvas);
+
+    this.renderer.g.getCall(4).returnValue.getBBox = sinon.stub().returns({ x: 20, y: 90, width: 20, height: 40 });
+
+    // act
+    var margins = this.axis.getMargins();
+
+    // assert
+    assert.strictEqual(margins.bottom, 60, "bottom");
+});
 
 QUnit.test("Do not add correction to right margin for grid width if right margin is greter than grid width. Horizontal axis", function(assert) {
     // arrange
@@ -9956,6 +9981,33 @@ QUnit.test("Animate label to the new position on second drawing", function(asser
         x: 50,
         y: 30
     });
+});
+
+QUnit.test("Update hint on axis redrawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        visible: false,
+        label: {
+            customizeHint() {
+                return "hint";
+            },
+            visible: true,
+        }
+    });
+    this.generatedTicks = [1];
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    const label = renderer.text.lastCall.returnValue;
+    label.setTitle.reset();
+    // act
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+    assert.equal(label.setTitle.callCount, 1);
+    assert.equal(label.setTitle.lastCall.args[0], "hint");
 });
 
 QUnit.test("Fade in new label on second drawing", function(assert) {

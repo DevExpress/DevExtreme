@@ -53,11 +53,14 @@ const subscribes = {
             max: dateRange[1]
         };
 
-        let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions);
+        let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions),
+            initialDates;
 
         if(!dates.length) {
             dates.push(startDate);
+            initialDates = dates;
         } else {
+            initialDates = dates;
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption("startDayHour"));
             });
@@ -86,7 +89,7 @@ const subscribes = {
         let itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
-        options.callback(this._getCoordinates(dates, itemResources, allDay));
+        options.callback(this._getCoordinates(initialDates, dates, itemResources, allDay));
     },
 
     isGroupedByDate: function() {
@@ -353,10 +356,8 @@ const subscribes = {
             headerHeight = this.getWorkSpaceHeaderPanelHeight(),
             scrollLeft = this.getWorkSpaceScrollableScrollLeft(),
             tableLeftOffset = this.getWorkSpaceDateTableOffset();
-
         let topOffset = -scrollTop + allDayPanelTopOffset + headerHeight,
             leftOffset = -scrollLeft - tableLeftOffset;
-
         options.callback({
             top: options.coordinates.top + containerSign * topOffset,
             left: options.coordinates.left + containerSign * leftOffset

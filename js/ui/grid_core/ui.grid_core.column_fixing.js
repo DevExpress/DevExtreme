@@ -667,7 +667,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             column = options.columns[columnIndex];
 
         if(options.isFixed) {
-            return column.fixed && (result || column.fixedPosition === "right") || column.command === "edit";
+            return column.fixed && (result || column.fixedPosition === "right");
         }
 
         return result && !column.fixed;
@@ -809,14 +809,15 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         let maxScrollTop,
             scrollableContent,
             scrollableContainer,
-            elasticScrollTop = 0;
+            elasticScrollTop = 0,
+            scrollbarWidth = this.getScrollbarWidth(true);
 
         if(e.scrollOffset.top < 0) {
             elasticScrollTop = -e.scrollOffset.top;
         } else if(e.reachedBottom) {
-            scrollableContent = e.component.$content();
+            scrollableContent = this._findContentElement();
             scrollableContainer = e.component._container();
-            maxScrollTop = scrollableContent.height() - scrollableContainer.height();
+            maxScrollTop = scrollableContent.height() + scrollbarWidth - scrollableContainer.height();
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 

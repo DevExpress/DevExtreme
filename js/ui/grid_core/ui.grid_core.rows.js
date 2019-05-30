@@ -207,6 +207,8 @@ module.exports = {
             * @type_function_param1_field13 isExpanded:boolean
             * @type_function_param1_field14 rowElement:dxElement
             * @type_function_param1_field15 handled:boolean
+            * @type_function_param1_field16 node:dxTreeListNode
+            * @type_function_param1_field17 level:number
             * @extends Action
             * @action
             */
@@ -367,6 +369,8 @@ module.exports = {
              * @type_function_param1_field10 isSelected:boolean
              * @type_function_param1_field11 isExpanded:boolean
              * @type_function_param1_field12 rowElement:dxElement
+             * @type_function_param1_field13 node:dxTreeListNode
+             * @type_function_param1_field14 level:number
              * @extends Action
              * @action
              */
@@ -1406,7 +1410,7 @@ module.exports = {
                             break;
                         case "loadPanel":
                             that._tableElement = null;
-                            that._invalidate(true, true);
+                            that._invalidate(true, args.fullName !== "loadPanel.enabled");
                             args.handled = true;
                             break;
                         case "noDataText":
@@ -1418,6 +1422,7 @@ module.exports = {
 
                 dispose: function() {
                     clearTimeout(this._hideLoadingTimeoutID);
+                    this._scrollable && this._scrollable.dispose();
                 },
 
                 setScrollerSpacing: function() { }

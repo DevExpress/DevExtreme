@@ -713,7 +713,7 @@ Axis.prototype = {
             cRight = canvas.width - canvas.right,
             cBottom = canvas.height - canvas.bottom,
             edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0),
-            boxes = [that._axisElementsGroup, that._axisConstantLineGroups.outside1, that._axisConstantLineGroups.outside2]
+            boxes = [that._axisElementsGroup, that._axisConstantLineGroups.outside1, that._axisConstantLineGroups.outside2, that._axisLineGroup]
                 .map(function(group) { return group && group.getBBox(); })
                 .concat((function(group) {
                     var box = group && group.getBBox();
@@ -1888,6 +1888,7 @@ Axis.prototype = {
     },
 
     setInitRange() {
+        this._initRange = {};
         if(Object.keys(this._options.wholeRange || {}).length === 0) {
             this._initRange = this.getZoomBounds();
         }

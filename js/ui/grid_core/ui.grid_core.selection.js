@@ -456,7 +456,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(itemIndex, keys);
+            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys);
         },
 
         focusedItemIndex: function(itemIndex) {
@@ -795,6 +795,7 @@ module.exports = {
                     this.getController("editorFactory").createEditor(groupElement, extend({}, options.column, {
                         parentType: "dataRow",
                         dataType: "boolean",
+                        lookup: null,
                         value: options.value,
                         tabIndex: -1,
                         setValue: function(value, e) {
@@ -842,11 +843,13 @@ module.exports = {
                                     // T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
-                                        isSelected = change.items[index].isSelected;
-                                        $row
-                                            .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
-                                            .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
-                                        that.setAria("selected", isSelected, $row);
+                                        if($row.length) {
+                                            isSelected = change.items[index].isSelected;
+                                            $row
+                                                .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
+                                                .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
+                                            that.setAria("selected", isSelected, $row);
+                                        }
                                     }
                                 });
                             });

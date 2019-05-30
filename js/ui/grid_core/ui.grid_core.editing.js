@@ -396,7 +396,6 @@ var EditingController = modules.ViewController.inherit((function() {
                     buttons;
 
                 if(options.rowType === "data") {
-                    $container.css("textAlign", "center");
                     options.rtlEnabled = this.option("rtlEnabled");
                     buttons = this._getEditingButtons(options);
 
@@ -1131,9 +1130,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 showDialogTitle,
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
                 item = dataController.items()[rowIndex],
-                key = item && item.key;
+                key = item && item.key,
+                allowDeleting = isBatchMode || !this.isEditing(); // T741746
 
-            if(item) {
+            if(item && allowDeleting) {
                 removeByKey = function(key) {
                     that.refresh();
 
@@ -1473,6 +1473,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 visible: isEditColumnVisible,
                 cssClass: cssClass,
                 width: "auto",
+                alignment: "center",
                 cellTemplate: that._getEditCommandCellTemplate(),
                 fixedPosition: "right"
             });
@@ -1625,7 +1626,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 $cellElement = $(options.cellElement),
                 editMode = getEditMode(that),
                 params,
-                columns;
+                columns,
+                isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
 
             if(rowKey === undefined) {
                 that._dataController.fireError("E1043");
@@ -1657,11 +1659,11 @@ var EditingController = modules.ViewController.inherit((function() {
                         return that.saveEditData();
                     } else if(editMode === EDIT_MODE_BATCH) {
                         columns = that._columnsController.getVisibleColumns();
-                        forceUpdateRow = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
+                        forceUpdateRow = isCustomSetCellValue || columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
                     }
                 }
 
-                if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
+                if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
                     that._updateEditRow(options.row, forceUpdateRow);
                 }
             }
@@ -1913,7 +1915,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     $button.attr("title", button.hint);
                 }
 
-                eventsEngine.on($button, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(e) {
+                eventsEngine.on($button, addNamespace("click", EDITING_NAMESPACE), that.createAction(function(e) {
                     button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
                     e.event.preventDefault();
                 }));

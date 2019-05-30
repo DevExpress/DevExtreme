@@ -1102,6 +1102,27 @@ QUnit.test("scrollable should have correct scrollPosition when content is croppe
     assert.equal($scrollable.dxScrollable("instance").scrollLeft(), 50);
 });
 
+QUnit.test("scrollable prevents anchor events", function(assert) {
+    var $input = $("<input>").css("height", "40px");
+    var scrollable = $("#scrollable")
+        .append($input)
+        .dxScrollable({
+            useNative: false
+        })
+        .dxScrollable("instance");
+
+    $input
+        .focus()
+        .css("height", "auto");
+    var scrollPosition = scrollable.scrollTop();
+
+    $input
+        .parent()
+        .append($("<input>"));
+
+    assert.strictEqual(scrollable.scrollTop(), scrollPosition, "Scrollable save content position");
+});
+
 
 QUnit.module("horizontal direction", moduleConfig);
 
@@ -2502,6 +2523,64 @@ QUnit.test("mousewheel for vertical direction", function(assert) {
         .wheel(-distance);
 
     assert.equal(scrollable.scrollOffset().top, distance, "scrolled vertically");
+});
+
+// T737554
+QUnit.test("preventDefault should be called on immediate mousewheel at the end of content", function(assert) {
+    var $scrollable = $("#scrollable");
+    var lastWheelEventArgs;
+    $scrollable.on("dxmousewheel", function(e) {
+        lastWheelEventArgs = e;
+    });
+
+    $scrollable.dxScrollable({
+        useNative: false,
+        direction: "vertical",
+        inertiaEnabled: false,
+        bounceEnabled: false
+    });
+    var scrollable = $scrollable.dxScrollable("instance");
+
+    var $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS);
+
+    var pointer = pointerMock($container)
+        .start()
+        .wheel(-50);
+
+    pointer.wheel(-50);
+
+    assert.equal(scrollable.scrollOffset().top, 50, "scrolled vertically");
+    assert.strictEqual(lastWheelEventArgs.isDefaultPrevented(), true, "default is prevented for wheel event");
+});
+
+// T737554
+QUnit.test("preventDefault should not be called on delayed mousewheel at the end of content", function(assert) {
+    var $scrollable = $("#scrollable");
+    var lastWheelEventArgs;
+    $scrollable.on("dxmousewheel", function(e) {
+        lastWheelEventArgs = e;
+    });
+
+    $scrollable.dxScrollable({
+        useNative: false,
+        direction: "vertical",
+        inertiaEnabled: false,
+        bounceEnabled: false
+    });
+    var scrollable = $scrollable.dxScrollable("instance");
+
+    var $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS);
+
+    var pointer = pointerMock($container)
+        .start()
+        .wheel(-50);
+
+    this.clock.tick(500);
+
+    pointer.wheel(-50);
+
+    assert.equal(scrollable.scrollOffset().top, 50, "scrolled vertically");
+    assert.strictEqual(lastWheelEventArgs.isDefaultPrevented(), false, "default is prevented for wheel event");
 });
 
 QUnit.test("mousewheel calls update before validation", function(assert) {

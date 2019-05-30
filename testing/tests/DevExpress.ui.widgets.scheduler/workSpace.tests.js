@@ -195,6 +195,16 @@ QUnit.testStart(function() {
             "Exception messages should be correct"
         );
     });
+
+    QUnit.test("getWorkSpaceMinWidth should work correctly after width changing", function(assert) {
+        this.instance.option("crossScrollingEnabled", true);
+
+        this.instance.option("width", 400);
+        assert.equal(this.instance.getWorkSpaceMinWidth(), 300, "minWidth is ok");
+
+        this.instance.option("width", 900);
+        assert.equal(this.instance.getWorkSpaceMinWidth(), 800, "minWidth is ok");
+    });
 })("Work Space Base");
 
 (function() {
@@ -527,6 +537,35 @@ QUnit.testStart(function() {
             groups: {
                 one: 2
             }
+        });
+    });
+
+    QUnit.test("Date table cells should have right cellData, groupByDate = true without groups", function(assert) {
+        this.instance.option("groups", []);
+        var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+        assert.deepEqual($cells.eq(0).data("dxCellData"), {
+            startDate: new Date(2018, 2, 1),
+            endDate: new Date(2018, 2, 1, 0, 30),
+            allDay: false
+        });
+
+        assert.deepEqual($cells.eq(1).data("dxCellData"), {
+            startDate: new Date(2018, 2, 2),
+            endDate: new Date(2018, 2, 2, 0, 30),
+            allDay: false
+        });
+
+        assert.deepEqual($cells.eq(2).data("dxCellData"), {
+            startDate: new Date(2018, 2, 1, 0, 30),
+            endDate: new Date(2018, 2, 1, 1, 0),
+            allDay: false
+        });
+
+        assert.deepEqual($cells.eq(3).data("dxCellData"), {
+            startDate: new Date(2018, 2, 2, 0, 30),
+            endDate: new Date(2018, 2, 2, 1, 0),
+            allDay: false
         });
     });
 

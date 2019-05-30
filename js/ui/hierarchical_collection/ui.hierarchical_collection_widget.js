@@ -1,16 +1,16 @@
-var $ = require("../../core/renderer"),
-    dataCoreUtils = require("../../core/utils/data"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    devices = require("../../core/devices"),
-    iconUtils = require("../../core/utils/icon"),
-    HierarchicalDataAdapter = require("./ui.data_adapter"),
-    CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    BindableTemplate = require("../widget/bindable_template"),
-    isFunction = require("../../core/utils/type").isFunction,
-    noop = require("../../core/utils/common").noop;
+import $ from "../../core/renderer";
+import { compileGetter, compileSetter } from "../../core/utils/data";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import devices from "../../core/devices";
+import iconUtils from "../../core/utils/icon";
+import HierarchicalDataAdapter from "./ui.data_adapter";
+import CollectionWidget from "../collection/ui.collection_widget.edit";
+import BindableTemplate from "../widget/bindable_template";
+import { isFunction } from "../../core/utils/type";
+import { noop } from "../../core/utils/common";
 
-var DISABLED_STATE_CLASS = "dx-state-disabled";
+const DISABLED_STATE_CLASS = "dx-state-disabled";
 
 /**
 * @name HierarchicalCollectionWidget
@@ -153,10 +153,12 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         each(this._getAccessors(), function(_, accessor) {
             that._compileAccessor(accessor);
         });
+
+        this._compileDisplayGetter();
     },
 
     _getAccessors: function() {
-        return ["key", "display", "selected", "items", "disabled", "parentId", "expanded"];
+        return ["key", "selected", "items", "disabled", "parentId", "expanded"];
     },
 
     _getChildNodes: function(node) {
@@ -188,8 +190,8 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             return;
         }
 
-        this[getter] = dataCoreUtils.compileGetter(optionExpr);
-        this[setter] = dataCoreUtils.compileSetter(optionExpr);
+        this[getter] = compileGetter(optionExpr);
+        this[setter] = compileSetter(optionExpr);
     },
 
     _createDataAdapterAccessors: function() {
@@ -207,6 +209,8 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             accessors.getters[newAccessor] = that[getterName];
             accessors.setters[newAccessor] = that[setterName];
         });
+
+        accessors.getters["display"] = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
 
         return accessors;
     },

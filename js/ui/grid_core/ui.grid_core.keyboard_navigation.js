@@ -1349,18 +1349,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _fireFocusedCellChanged: function($cellElement, prevCellIndex, prevRowIndex) {
         var that = this,
-            columnIndex = that.option("focusedColumnIndex"),
-            dataController,
-            row,
-            focusedRowIndex = that.option("focusedRowIndex");
+            dataController = that.getController("data"),
+            columnIndex = that.getView("rowsView").getCellIndex($cellElement),
+            rowIndex = this._getRowIndex($cellElement && $cellElement.parent()),
+            isEditingCell = that.getController("editing").isEditCell(rowIndex, columnIndex),
+            row = dataController.items()[rowIndex];
 
-        if(prevCellIndex !== columnIndex || prevRowIndex !== focusedRowIndex) {
+        if(!isEditingCell && (prevCellIndex !== columnIndex || prevRowIndex !== rowIndex)) {
             dataController = that.getController("data");
-            row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
             that.executeAction("onFocusedCellChanged", {
                 cellElement: $cellElement,
                 columnIndex: columnIndex,
-                rowIndex: focusedRowIndex,
+                rowIndex: rowIndex,
                 row: row,
                 column: that.getController("columns").getVisibleColumns()[columnIndex]
             });
@@ -1398,12 +1398,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanged: function($rowElement) {
         var row,
             dataController,
-            focusedRowKey = this.option("focusedRowKey"),
             focusedRowIndex = this.option("focusedRowIndex");
 
-        if(focusedRowKey !== undefined && this.option("focusedRowEnabled")) {
-            dataController = this.getController("data");
-            row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
+        if(this.option("focusedRowEnabled")) {
+            if(focusedRowIndex >= 0) {
+                dataController = this.getController("data");
+                row = focusedRowIndex >= 0 && dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
+            }
             this.executeAction("onFocusedRowChanged", {
                 rowElement: $rowElement,
                 rowIndex: focusedRowIndex,

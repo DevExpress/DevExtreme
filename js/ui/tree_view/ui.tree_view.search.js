@@ -3,11 +3,12 @@ import searchBoxMixin from "../widget/ui.search_box_mixin";
 import { extend } from "../../core/utils/extend";
 import TreeViewBase from "./ui.tree_view.base";
 
-const NODE_CONTAINER_CLASS = "dx-treeview-node-container";
+const WIDGET_CLASS = "dx-treeview";
+const NODE_CONTAINER_CLASS = `${WIDGET_CLASS}-node-container`;
 
 const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     _addWidgetPrefix: function(className) {
-        return `dx-treeview-${className}`;
+        return `${WIDGET_CLASS}-${className}`;
     },
 
     _optionChanged: function(args) {

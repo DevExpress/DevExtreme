@@ -591,9 +591,10 @@ var GroupingRowsViewExtender = (function() {
 
         _changeGroupRowState: function(e) {
             var dataController = this.getController("data"),
-                row = dataController.items()[e.rowIndex];
+                row = dataController.items()[e.rowIndex],
+                allowCollapsing = this._columnsController.columnOption("groupIndex:" + row.groupIndex, "allowCollapsing");
 
-            if(row.rowType !== "detail") {
+            if(row.rowType === "data" || row.rowType === "group" && allowCollapsing !== false) {
                 dataController.changeRowExpand(row.key);
                 e.event.preventDefault();
                 e.handled = true;

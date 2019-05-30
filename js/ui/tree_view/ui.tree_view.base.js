@@ -20,26 +20,32 @@ import LoadIndicator from "../load_indicator";
 import { fromPromise, Deferred, when } from "../../core/utils/deferred";
 
 const WIDGET_CLASS = "dx-treeview";
-const NODE_CONTAINER_CLASS = "dx-treeview-node-container";
-const OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened";
-const NODE_CLASS = "dx-treeview-node";
-const ITEM_CLASS = "dx-treeview-item";
-const ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox";
-const ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox";
-const ITEM_DATA_KEY = "dx-treeview-item-data";
-const IS_LEAF = "dx-treeview-node-is-leaf";
-const EXPAND_EVENT_NAMESPACE = "dxTreeView_expand";
-const TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility";
-const LOAD_INDICATOR_CLASS = "dx-treeview-loadindicator";
-const LOAD_INDICATOR_WRAPPER_CLASS = "dx-treeview-loadindicator-wrapper";
-const NODE_LOAD_INDICATOR_CLASS = "dx-treeview-node-loadindicator";
-const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = "dx-treeview-toggle-item-visibility-opened";
-const SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
+
+const NODE_CLASS = `${WIDGET_CLASS}-node`;
+const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
+const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
+const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
+const IS_LEAF = `${NODE_CLASS}-is-leaf`;
+
+const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
+const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
+const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
+
+const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
+const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
+const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
+const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibility-opened`;
+const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
+
+const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 const DISABLED_STATE_CLASS = "dx-state-disabled";
 const SELECTED_ITEM_CLASS = "dx-state-selected";
+const EXPAND_EVENT_NAMESPACE = "dxTreeView_expand";
 const DATA_ITEM_ID = "data-item-id";
 
-const TreeViewBase = HierarchicalCollectionWidget.inherit({
+var TreeViewBase = HierarchicalCollectionWidget.inherit({
+
     _supportedKeys: function(e) {
         const click = e => {
             const $itemElement = $(this.option("focusedElement"));
@@ -536,6 +542,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case "virtualModeEnabled":
             case "selectByClick":
                 break;
+            case "selectionMode":
+                this._initDataAdapter();
+                this.callBase(args);
+                break;
             case "onSelectAllValueChanged":
                 this._createSelectAllValueChangedAction();
                 break;
@@ -740,7 +750,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems"];
+        var accessors = this.callBase();
+
+        accessors.push("hasItems");
+
+        return accessors;
     },
 
     _getDataAdapterOptions: function() {
@@ -1019,17 +1033,22 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
+        if(this._hasChildren(node)) {
+            var $node = this._getNodeElement(node);
+
+            if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
+                return;
+            }
+
+            this._createLoadIndicator($node);
+        }
+
         if(!isDefined(state)) {
             state = !currentState;
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
         node.internalFields.expanded = state;
-
-        if(this._hasChildren(node)) {
-            const $node = this._getNodeElement(node);
-            this._createLoadIndicator($node);
-        }
 
         this._updateExpandedItemsUI(node, state, e);
     },

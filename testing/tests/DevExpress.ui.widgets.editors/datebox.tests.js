@@ -57,6 +57,7 @@ const LIST_ITEM_SELECTOR = ".dx-list-item";
 const DATEBOX_ADAPTIVITY_MODE_CLASS = "dx-datebox-adaptivity-mode";
 const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 const STATE_FOCUSED_CLASS = "dx-state-focused";
+const TODAY_CELL_CLASS = "dx-calendar-today";
 const widgetName = "dxDateBox";
 
 const getShortDate = date => {
@@ -264,7 +265,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.ok(onValueChanged.getCall(1).args[0].event, "event was saved");
     });
 
-    QUnit.test("out of range value should be marked as invalid on init", assert => {
+    QUnit.test("out of range value should not be marked as invalid on init", assert => {
         const $dateBox = $("#widthRootStyle").dxDateBox({
             value: new Date(2015, 3, 20),
             min: new Date(2014, 3, 20),
@@ -273,7 +274,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
 
         const dateBox = $dateBox.dxDateBox("instance");
 
-        assert.notOk(dateBox.option("isValid"), "widget is invalid");
+        assert.ok(dateBox.option("isValid"), "widget is valid on init");
     });
 
     QUnit.test("it shouild be impossible to set out of range time to dxDateBox using ui (T394206)", assert => {
@@ -2972,6 +2973,21 @@ QUnit.module("datebox with time component", {
         assert.ok(hourEditor.hasClass("dx-editor-underlined"));
         assert.ok(minuteEditor.hasClass("dx-editor-underlined"));
         assert.ok(amPmEditor.hasClass("dx-editor-underlined"));
+    });
+
+    QUnit.test("datebox with the 'datetime' type should have an 'event' parameter of the ValueChanged event", assert => {
+        $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            onValueChanged: ({ event }) => {
+                assert.ok(event, "event field is exist");
+                assert.strictEqual(event.type, "dxclick", "it's a 'dxclick' event");
+            },
+            opened: true
+        });
+
+        $(`.${TODAY_CELL_CLASS}`).trigger("dxclick");
+        $(".dx-popup-done.dx-button").trigger("dxclick");
     });
 });
 

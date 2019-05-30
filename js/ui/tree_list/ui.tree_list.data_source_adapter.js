@@ -239,9 +239,9 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 }
             }
 
-            this._isReload = this._isReload || isReload || operationTypes.reload;
-
             if(!options.isCustomLoading) {
+                this._isReload = this._isReload || isReload || operationTypes.reload;
+
                 if(!options.cachedStoreData) {
                     this._isChildrenLoaded = {};
                 }

@@ -4417,6 +4417,76 @@ QUnit.test('click expand/collapse group', function(assert) {
     assert.deepEqual(values, ['Alex'], 'changeRowExpand path');
 });
 
+QUnit.test('click expand/collapse group row if expandMode is rowClick', function(assert) {
+    var rowClickArgs;
+    this.options.columns = [{ dataField: 'name', groupIndex: 0, allowCollapsing: true }, 'age'];
+    this.options.onRowClick = function(e) {
+        rowClickArgs = e;
+    };
+    this.options.grouping = {
+        expandMode: "rowClick"
+    };
+
+    this.setupDataGridModules();
+    // arrange
+    var that = this,
+        values,
+        testElement = $('#container');
+
+    that.dataController.changeRowExpand = function(path) {
+        values = path;
+    };
+
+    that.rowsView.render(testElement);
+
+    // assert
+    var $groupRow = testElement.find('.' + "dx-group-row").first();
+    assert.ok($groupRow.length, 'group cell exist');
+
+    // act
+    $($groupRow).trigger("dxclick");
+
+    // assert
+    assert.ok(rowClickArgs, 'rowClick called');
+    assert.ok(rowClickArgs.handled, 'rowClick handled by grid');
+    assert.deepEqual(values, ['Alex'], 'changeRowExpand path');
+});
+
+// T734376
+QUnit.test('click expand/collapse group row if expandMode is rowClick and allowCollapsing is false', function(assert) {
+    var rowClickArgs;
+    this.options.columns = [{ dataField: 'name', groupIndex: 0, allowCollapsing: false }, 'age'];
+    this.options.onRowClick = function(e) {
+        rowClickArgs = e;
+    };
+    this.options.grouping = {
+        expandMode: "rowClick"
+    };
+
+    this.setupDataGridModules();
+    // arrange
+    var that = this,
+        expandPath,
+        testElement = $('#container');
+
+    that.dataController.changeRowExpand = function(path) {
+        expandPath = path;
+    };
+
+    that.rowsView.render(testElement);
+
+    // assert
+    var $groupRow = testElement.find('.' + "dx-group-row").first();
+    assert.ok($groupRow.length, 'group cell exist');
+
+    // act
+    $($groupRow).trigger("dxclick");
+
+    // assert
+    assert.ok(rowClickArgs, 'rowClick is called');
+    assert.strictEqual(expandPath, undefined, 'changeRowExpand is not called');
+});
+
 // B254492
 QUnit.test('free space row height when dataGrid without height and pageCount = 1', function(assert) {
     this.setupDataGridModules();
@@ -6700,7 +6770,7 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
-    if(browser.msie && browser.version === "18.17763") {
+    if(browser.msie && browser.version === "18.18362") {
         assert.ok(true);
         return;
     }

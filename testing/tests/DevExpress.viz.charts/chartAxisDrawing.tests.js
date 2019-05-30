@@ -2737,4 +2737,5 @@ QUnit.test("Stop all current animations on adaptive layout", function(assert) {
 
     assert.ok(this.renderer.stopAllAnimations.getCall(2).calledAfter(valAxisStub.updateSize.getCall(1)));
     assert.ok(this.renderer.stopAllAnimations.getCall(2).calledBefore(valAxisStub.updateSize.getCall(2)));
+    assert.strictEqual(valAxisStub.updateSize.getCall(1).args[1], false);
 });

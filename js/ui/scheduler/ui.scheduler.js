@@ -1147,6 +1147,7 @@ var Scheduler = Widget.inherit({
             case "currentDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
+                this.option("selectedCellData", []);
                 this._workSpace.option(name, new Date(value));
                 this._header.option(name, new Date(value));
                 this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
@@ -1184,8 +1185,6 @@ var Scheduler = Widget.inherit({
                 break;
             case "currentView":
                 this._processCurrentView();
-
-                this.option("selectedCellData", []);
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
@@ -1521,6 +1520,7 @@ var Scheduler = Widget.inherit({
         if(!this._isAgenda() && filteredItems && this._isVisible()) {
             this._workSpace._cleanAllowedPositions();
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
+            this._workSpace._dimensionChanged();
 
             var appointments = this._layoutManager.createAppointmentsMap(filteredItems);
 
@@ -1811,22 +1811,43 @@ var Scheduler = Widget.inherit({
         this._appointments = this._createComponent("<div>", SchedulerAppointments, this._appointmentsConfig());
         this._appointments.option("itemTemplate", this._getAppointmentTemplate("appointmentTemplate"));
 
-        this._loadResources().done((function(resources) {
-            this._readyToRenderAppointments = windowUtils.hasWindow();
+        if(this._isLoaded()) {
+            this._initMarkupCore(this._loadedResources);
+            this._dataSourceChangedHandler(this._dataSource.items());
+        } else {
+            this._loadResources().done((function(resources) {
+                this._initMarkupCore(resources);
+                this._reloadDataSource();
+            }).bind(this));
+        }
+    },
 
-            this._workSpace && this._cleanWorkspace();
+    _initMarkupCore: function(resources) {
+        this._readyToRenderAppointments = windowUtils.hasWindow();
 
-            this._renderWorkSpace(resources);
-            this._appointments.option({
-                fixedContainer: this._workSpace.getFixedContainer(),
-                allDayContainer: this._workSpace.getAllDayContainer()
-            });
-            this._waitAsyncTemplates(() => {
-                this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
-            });
-            this._filterAppointmentsByDate();
-            this._reloadDataSource();
-        }).bind(this));
+        this._workSpace && this._cleanWorkspace();
+
+        this._renderWorkSpace(resources);
+        this._appointments.option({
+            fixedContainer: this._workSpace.getFixedContainer(),
+            allDayContainer: this._workSpace.getAllDayContainer()
+        });
+        this._waitAsyncTemplates(() => {
+            this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
+        });
+        this._filterAppointmentsByDate();
+    },
+
+    _isLoaded: function() {
+        return this._isResourcesLoaded() && this._isDataSourceLoaded();
+    },
+
+    _isResourcesLoaded: function() {
+        return typeUtils.isDefined(this._loadedResources);
+    },
+
+    _isDataSourceLoaded: function() {
+        return this._dataSource && this._dataSource.isLoaded();
     },
 
     _render: function() {
@@ -2077,6 +2098,8 @@ var Scheduler = Widget.inherit({
         this._appointments.$element().detach();
         this._workSpace._dispose();
         this._workSpace.$element().remove();
+
+        this.option("selectedCellData", []);
     },
 
     getWorkSpaceScrollable: function() {
@@ -2492,7 +2515,7 @@ var Scheduler = Widget.inherit({
             occurrenceText = messageLocalization.format(isDeleted ? "dxScheduler-confirmRecurrenceDeleteOccurrence" : "dxScheduler-confirmRecurrenceEditOccurrence");
 
         return dialog.custom({
-            message: message,
+            messageHtml: message,
             showCloseButton: true,
             showTitle: true,
             buttons: [
@@ -2545,14 +2568,14 @@ var Scheduler = Widget.inherit({
         return updatedData;
     },
 
-    _getCoordinates: function(dates, appointmentResources, allDay) {
+    _getCoordinates: function(initialDates, dates, appointmentResources, allDay) {
         var result = [];
 
         for(var i = 0; i < dates.length; i++) {
             var currentCoords = this._workSpace.getCoordinatesByDateInGroup(dates[i], appointmentResources, allDay);
 
             for(var j = 0; j < currentCoords.length; j++) {
-                extend(currentCoords[j], { startDate: dates[i] });
+                extend(currentCoords[j], { startDate: dates[i], initialStartDate: initialDates[i] });
             }
             result = result.concat(currentCoords);
         }

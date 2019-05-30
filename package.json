@@ -1,10 +1,14 @@
 {
   "name": "devextreme",
 <<<<<<< HEAD
+<<<<<<< HEAD
   "version": "18.2.9",
 =======
   "version": "18.2.7",
 >>>>>>> 24107e5a9c2d4a210396f0cd79cdad5e12eed6cc
+=======
+  "version": "18.2.8",
+>>>>>>> 0f313c38727d440bfdbd7ddb417b4c38b761b5d5
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -81,7 +85,7 @@
     "jsrender": "0.9.90",
     "knockout": "^3.4.2",
     "lazypipe": "^1.0.1",
-    "less": "^2.7.1",
+    "less": "^3.9.0",
     "less-plugin-autoprefix": "^2.0.0",
     "lint-staged": "^3.4.0",
     "merge-stream": "^1.0.0",

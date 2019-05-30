@@ -469,7 +469,8 @@
                         $.each(result, function(i) {
                             result[i] = createTouchByOptions(this);
                         });
-                        return document.createTouchList.apply(document, result);
+
+                        return result;
                     };
 
                     touches = createTouchListByArray(touches);

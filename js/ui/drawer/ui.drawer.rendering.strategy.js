@@ -139,6 +139,8 @@ class DrawerStrategy {
             when.apply($, drawer._animations).done(() => {
                 drawer._animationCompleteHandler();
             });
+        } else {
+            drawer.resizeContent();
         }
     }
 

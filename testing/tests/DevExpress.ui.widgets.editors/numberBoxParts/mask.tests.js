@@ -529,6 +529,24 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
     });
 
+    QUnit.test("removing of value should be possible when min is specified and stubs are in the format", (assert) => {
+        this.instance.option({
+            format: "#,##0 d",
+            min: 5,
+            value: 6,
+            max: 10
+        });
+
+        this.keyboard
+            .caret(1)
+            .press("backspace")
+            .type("7")
+            .press("enter");
+
+        assert.strictEqual(this.input.val(), "7 d", "text is correct");
+        assert.strictEqual(this.instance.option("value"), 7, "value is correct");
+    });
+
     QUnit.test("changing min limit should lead to value change in masked numberbox", (assert) => {
         this.instance.option({
             format: "$ #0",
@@ -568,6 +586,22 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         this.keyboard.caret(15).type("5");
 
         assert.equal(this.input.val(), "999999999999999", "input was prevented");
+    });
+
+    QUnit.test("trailing zeros should not affect 15 digits limit", (assert) => {
+        this.instance.option("format", "#,##0.000000");
+        this.instance.option("value", 222222222.120000);
+        this.keyboard.caret(12).type("8");
+
+        assert.equal(this.input.val(), "222,222,222.812000", "input was not prevented");
+    });
+
+    QUnit.test("leading zeros should not affect 15 digits limit", (assert) => {
+        this.instance.option("format", "000000000000000#.00");
+        this.instance.option("value", 1);
+        this.keyboard.caret(12).type("8");
+
+        assert.equal(this.input.val(), "000000000008001.00", "input was not prevented");
     });
 
     QUnit.test("negative integer should not be longer than 15 digit", (assert) => {

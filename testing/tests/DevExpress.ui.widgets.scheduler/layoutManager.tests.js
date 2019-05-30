@@ -7,6 +7,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import translator from "animation/translator";
 import { DataSource } from "data/data_source/data_source";
+import { SchedulerTestWrapper } from './helpers.js';
 
 import SchedulerLayoutManager from "ui/scheduler/ui.scheduler.appointments.layout_manager";
 import BaseAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.base";
@@ -87,6 +88,21 @@ const renderLayoutModuleOptions = {
 
 
 QUnit.module("Render layout", renderLayoutModuleOptions, function() {
+    const createScheduler = (view, dataSource, options) => {
+        const instance = $("#scheduler").dxScheduler($.extend(options, {
+            views: ["week", "month", "agenda"],
+            currentView: view,
+            dataSource: dataSource,
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 600,
+            width: 1300,
+            editing: true,
+        })).dxScheduler("instance");
+
+        return new SchedulerTestWrapper(instance);
+    };
+
     const defaultData = [
         {
             id: 0,
@@ -340,6 +356,32 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
         dataSource.load();
 
         assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
+    });
+
+    QUnit.test("Scheduler should re-render appointments in Agenda view, if data source loading data", function(assert) {
+        const items = [
+            { id: 0, startDate: new Date(2017, 4, 25, 9), endDate: new Date(2017, 4, 25, 9, 30), text: "a" },
+            { id: 1, startDate: new Date(2017, 4, 27, 15), endDate: new Date(2017, 4, 27, 15, 30), text: "b" }
+        ];
+
+        const dataSource = {
+            store: new CustomStore({
+                key: "id",
+                load: () => items,
+                update: (key, values) => items[parseInt(key)] = values
+            })
+        };
+        const scheduler = createScheduler("agenda", dataSource);
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, "Should render 2 appointments");
+        this.markAppointments();
+
+        scheduler.appointments.click();
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentForm.setSubject("new text");
+        scheduler.appointmentPopup.clickDoneButton();
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, "Should render 2 appointments");
+        assert.equal(scheduler.appointments.getAppointmentCount(), this.getUnmarkedAppointments().length, "Should re-rendered all appointments");
     });
 });
 
@@ -2917,4 +2959,58 @@ QUnit.test("Appointments should not have specific class if maxAppointmentsPerCel
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     assert.ok(!$appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
+});
+
+QUnit.test("_isAppointmentEmpty should work correctly in different strategies", function(assert) {
+    this.createInstance({
+        views: ["timelineDay", "week"],
+        currentView: "timelineDay"
+    });
+
+    let renderingStrategy = this.instance.getRenderingStrategyInstance();
+
+    assert.ok(renderingStrategy._isAppointmentEmpty(34, 41), "Appointment is empty");
+    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), "Appointment isn't empty");
+
+    this.instance.option("currentView", "week");
+
+    assert.ok(renderingStrategy._isAppointmentEmpty(34, 39), "Appointment is empty");
+    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), "Appointment isn't empty");
+
+    this.instance.option("currentView", "month");
+
+    assert.ok(renderingStrategy._isAppointmentEmpty(19, 50), "Appointment is empty");
+    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), "Appointment isn't empty");
+});
+
+QUnit.test("Long term appoinment inflict index shift in other appointments (T737780)", function(assert) {
+    var data = [
+        {
+            text: "Website Re-Design Plan",
+            startDate: new Date(2017, 4, 2, 9, 30),
+            endDate: new Date(2017, 4, 12, 11, 30)
+        }, {
+            text: "Book Flights to San Fran for Sales Trip",
+            startDate: new Date(2017, 4, 4, 12, 0),
+            endDate: new Date(2017, 4, 4, 13, 0),
+            allDay: true
+        }, {
+            text: "Approve Personal Computer Upgrade Plan",
+            startDate: new Date(2017, 4, 10, 10, 0),
+            endDate: new Date(2017, 4, 10, 11, 0)
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2017, 4, 25),
+        startDayHour: 9,
+        height: 600
+    });
+    let appointments = this.instance._getAppointmentsToRepaint();
+    assert.ok(appointments[0].settings[1].index === 0, "Long term appointment tail has right index");
+    assert.ok(appointments[1].settings[0].index === 1, "Appointment next to long term appointment head has right index");
+    assert.ok(appointments[2].settings[0].index === 1, "Appointment next to long term appointment tail has right index");
 });

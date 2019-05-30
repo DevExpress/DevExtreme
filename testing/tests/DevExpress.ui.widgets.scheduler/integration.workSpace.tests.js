@@ -1109,6 +1109,46 @@ QUnit.test("dateCellTemplate should work correctly", function(assert) {
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
 });
 
+QUnit.test("dateCellTemplate should have unique date in data (T732376)", function(assert) {
+    this.createInstance({
+        views: ["timelineWorkWeek"],
+        currentView: "timelineWorkWeek",
+        currentDate: new Date(2016, 8, 5),
+        dataSource: [],
+        firstDayOfWeek: 0,
+        startDayHour: 10,
+        endDayHour: 11,
+        cellDuration: 60,
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                dataSource: [
+                    { id: 1, text: "John" },
+                    { id: 2, text: "Mike" }
+                ]
+            }
+        ],
+        dateCellTemplate: function(data, index, element) {
+            let d = data;
+            $("<div>").appendTo(element).dxButton({
+                text: "Test",
+                onClick: function(e) {
+                    let expectedDate = new Date(2016, 8, 7, 10, 0);
+
+                    assert.equal(d.date.getTime(), expectedDate.getTime());
+                }
+            });
+
+            return element;
+        }
+    });
+
+    let $button = this.instance.$element().find(".dx-scheduler-header-panel-cell .dx-button").eq(2);
+
+    $($button).trigger("dxclick");
+});
+
 QUnit.test("dateCellTemplate should work correctly in workWeek view", function(assert) {
     var dayOfWeekNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 

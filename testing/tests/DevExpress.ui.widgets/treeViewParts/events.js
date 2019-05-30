@@ -1,22 +1,23 @@
 /* global DATA, internals, initTree, makeSlowDataSource, stripFunctions */
 
-var $ = require("jquery"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    holdEvent = require("events/hold"),
-    fx = require("animation/fx"),
-    devices = require("core/devices"),
-    contextMenuEvent = require("events/contextmenu"),
-    dblclickEvent = require("events/dblclick"),
-    checkEventArgs = function(assert, e) {
-        assert.ok(e.component);
-        assert.ok(e.element);
-        assert.ok(e.itemData);
-        assert.ok(e.itemElement);
-        assert.ok(typeUtils.isDefined(e.itemIndex));
-        assert.ok(e.event);
-        assert.ok(e.node);
-    };
+import $ from "jquery";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import holdEvent from "events/hold";
+import devices from "core/devices";
+import fx from "animation/fx";
+import contextMenuEvent from "events/contextmenu";
+import dblclickEvent from "events/dblclick";
+
+const checkEventArgs = function(assert, e) {
+    assert.ok(e.component);
+    assert.ok(e.element);
+    assert.ok(e.itemData);
+    assert.ok(e.itemElement);
+    assert.ok(typeUtils.isDefined(e.itemIndex));
+    assert.ok(e.event);
+    assert.ok(e.node);
+};
 
 QUnit.module("Events", {
     beforeEach: function() {

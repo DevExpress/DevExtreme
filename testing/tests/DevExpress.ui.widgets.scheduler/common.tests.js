@@ -1,30 +1,32 @@
-var pointerMock = require("../../helpers/pointerMock.js");
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    isRenderer = require("core/utils/type").isRenderer,
-    translator = require("animation/translator"),
-    devices = require("core/devices"),
-    domUtils = require("core/utils/dom"),
-    errors = require("ui/widget/ui.errors"),
-    Color = require("color"),
-    fx = require("animation/fx"),
-    config = require("core/config"),
-    dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment_model"),
-    dxSchedulerWorkSpace = require("ui/scheduler/workspaces/ui.scheduler.work_space"),
-    dxSchedulerWorkSpaceDay = require("ui/scheduler/workspaces/ui.scheduler.work_space_day"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    SchedulerTimezones = require("ui/scheduler/timezones/ui.scheduler.timezones"),
-    dataUtils = require("core/element_data"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    themes = require("ui/themes");
+import pointerMock from "../../helpers/pointerMock.js";
 
-require("ui/scheduler/ui.scheduler");
-require("common.css!");
-require("generic_light.css!");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { isRenderer } from "core/utils/type";
+import translator from "animation/translator";
+import devices from "core/devices";
+import domUtils from "core/utils/dom";
+import errors from "ui/widget/ui.errors";
+import Color from "color";
+import fx from "animation/fx";
+import config from "core/config";
+import dxSchedulerAppointmentModel from "ui/scheduler/ui.scheduler.appointment_model";
+import dxSchedulerWorkSpace from "ui/scheduler/workspaces/ui.scheduler.work_space";
+import dxSchedulerWorkSpaceDay from "ui/scheduler/workspaces/ui.scheduler.work_space_day";
+import subscribes from "ui/scheduler/ui.scheduler.subscribes";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import SchedulerTimezones from "ui/scheduler/timezones/ui.scheduler.timezones";
+import dataUtils from "core/element_data";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import themes from "ui/themes";
+import resizeCallbacks from "core/utils/resize_callbacks";
+
+import "ui/scheduler/ui.scheduler";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
@@ -1934,7 +1936,35 @@ QUnit.testStart(function() {
         }], "correct cell data");
 
         this.instance.option("currentView", "month");
-        assert.deepEqual(this.instance.option("selectedCellData"), []);
+        assert.deepEqual(this.instance.option("selectedCellData"), [], "selectedCellData was cleared");
+    });
+
+    QUnit.test("selectedCellData option should be updated after currentDate changing", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2018, 4, 10),
+            views: ["week", "month"],
+            currentView: "week",
+            focusStateEnabled: true
+        });
+
+        var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
+            cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+        pointerMock(cells.eq(7)).start().click();
+        keyboard.keyDown("down", { shiftKey: true });
+
+        assert.deepEqual(this.instance.option("selectedCellData"), [{
+            startDate: new Date(2018, 4, 6, 0, 30),
+            endDate: new Date(2018, 4, 6, 1),
+            allDay: false
+        }, {
+            startDate: new Date(2018, 4, 6, 1),
+            endDate: new Date(2018, 4, 6, 1, 30),
+            allDay: false
+        }], "correct cell data");
+
+        this.instance.option("currentDate", new Date(2018, 5, 10));
+        assert.deepEqual(this.instance.option("selectedCellData"), [], "selectedCellData was cleared");
     });
 
     QUnit.test("Multiple reloading should be avoided after some options changing (T656320)", function(assert) {
@@ -1956,6 +1986,24 @@ QUnit.testStart(function() {
         this.instance.option("endDayHour", 18);
         this.instance.endUpdate();
         assert.equal(counter, 2, "Data source was reloaded one more time after some options changing");
+    });
+
+    QUnit.test("Multiple reloading should be avoided after repaint (T737181)", function(assert) {
+        var counter = 0;
+
+        this.createInstance();
+
+        this.instance.option("dataSource", new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    counter++;
+                    return [];
+                }
+            })
+        }));
+        assert.equal(counter, 1, "Data source was reloaded after dataSource option changing");
+        this.instance.repaint();
+        assert.equal(counter, 1, "Data source wasn't reloaded after repaint");
     });
 
     QUnit.test("Multiple reloading should be avoided after some currentView options changing (T656320)", function(assert) {
@@ -3355,6 +3403,28 @@ QUnit.testStart(function() {
         });
 
         this.instance.deleteAppointment(appointment);
+    });
+
+    QUnit.test("Workspace dimension changing should be called before appointment repainting, when scheduler was resized (T739866)", function(assert) {
+        let appointment = {
+            startDate: new Date(2016, 2, 15, 1).toString(),
+            endDate: new Date(2016, 2, 15, 2).toString()
+        };
+
+        this.createInstance({
+            currentDate: new Date(2016, 2, 15),
+            views: ["day"],
+            currentView: "day",
+            width: 800,
+            dataSource: [appointment]
+        });
+
+        let workspaceSpy = sinon.spy(this.instance._workSpace, "_dimensionChanged");
+        let appointmentsSpy = sinon.spy(this.instance._appointments, "_repaintAppointments");
+
+        resizeCallbacks.fire();
+
+        assert.ok(appointmentsSpy.calledAfter(workspaceSpy), "workSpace dimension changing was called before appointments repainting");
     });
 })("Events");
 

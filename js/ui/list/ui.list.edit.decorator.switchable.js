@@ -18,7 +18,8 @@ var LIST_EDIT_DECORATOR = "dxListEditDecorator",
     SWITCHABLE_DELETE_TOP_SHIELD_CLASS = "dx-list-switchable-delete-top-shield",
     SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS = "dx-list-switchable-delete-bottom-shield",
     SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = "dx-list-switchable-menu-item-shield-positioning",
-    SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = "dx-list-switchable-delete-item-content-shield";
+    SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = "dx-list-switchable-delete-item-content-shield",
+    SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button-container";
 
 var SwitchableEditDecorator = EditDecorator.inherit({
 
@@ -161,8 +162,15 @@ var SwitchableEditDecorator = EditDecorator.inherit({
 
     _animateForgetDeleteReady: abstract,
 
+    _getDeleteButtonContainer: function($itemElement) {
+        $itemElement = $itemElement || this._$readyToDeleteItem;
+
+        return $itemElement.children("." + SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS);
+    },
+
     _deleteItem: function($itemElement) {
         $itemElement = $itemElement || this._$readyToDeleteItem;
+        this._getDeleteButtonContainer($itemElement).detach();
 
         if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
             return;

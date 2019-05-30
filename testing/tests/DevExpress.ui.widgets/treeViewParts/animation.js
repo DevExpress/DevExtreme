@@ -1,8 +1,8 @@
 /* global internals */
 
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+import $ from "jquery";
+import fx from "animation/fx";
+import keyboardMock from "../../../helpers/keyboardMock.js";
 
 QUnit.module("Animation", {
     beforeEach: function() {

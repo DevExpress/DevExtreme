@@ -5,8 +5,15 @@ import { inArray } from "../../core/utils/array";
 import { each } from "../../core/utils/iterator";
 import { addNamespace, normalizeKeyName } from "../../events/utils";
 
+const COMPOSITION_START_EVENT = "compositionstart";
+const COMPOSITION_END_EVENT = "compositionend";
+const KEYDOWN_EVENT = "keydown";
+const NAMESPACE = "KeyboardProcessor";
+
 const KeyboardProcessor = Class.inherit({
-    _keydown: addNamespace("keydown", "KeyboardProcessor"),
+    _keydown: addNamespace(KEYDOWN_EVENT, NAMESPACE),
+    _compositionStart: addNamespace(COMPOSITION_START_EVENT, NAMESPACE),
+    _compositionEnd: addNamespace(COMPOSITION_END_EVENT, NAMESPACE),
 
     ctor: function(options) {
         options = options || {};
@@ -23,13 +30,19 @@ const KeyboardProcessor = Class.inherit({
             this._processFunction = (e) => {
                 this.process(e);
             };
+            this._toggleProcessingWithContext = this.toggleProcessing.bind(this);
+
             eventsEngine.on(this._element, this._keydown, this._processFunction);
+            eventsEngine.on(this._element, this._compositionStart, this._toggleProcessingWithContext);
+            eventsEngine.on(this._element, this._compositionEnd, this._toggleProcessingWithContext);
         }
     },
 
     dispose: function() {
         if(this._element) {
             eventsEngine.off(this._element, this._keydown, this._processFunction);
+            eventsEngine.off(this._element, this._compositionStart, this._toggleProcessingWithContext);
+            eventsEngine.off(this._element, this._compositionEnd, this._toggleProcessingWithContext);
         }
         this._element = undefined;
         this._handler = undefined;
@@ -51,7 +64,7 @@ const KeyboardProcessor = Class.inherit({
     },
 
     attachChildProcessor: function() {
-        var childProcessor = new KeyboardProcessor();
+        const childProcessor = new KeyboardProcessor();
         this._childProcessors.push(childProcessor);
         return childProcessor;
     },
@@ -63,11 +76,15 @@ const KeyboardProcessor = Class.inherit({
     },
 
     process: function(e) {
-        if(this._focusTarget && this._focusTarget !== e.target && inArray(e.target, this._focusTarget) < 0) {
+        const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && inArray(e.target, this._focusTarget) < 0;
+        const shouldSkipProcessing = this._isComposingJustFinished && e.which === 229 || this._isComposing || isNotFocusTarget;
+
+        this._isComposingJustFinished = false;
+        if(shouldSkipProcessing) {
             return false;
         }
 
-        var args = {
+        const args = {
             keyName: normalizeKeyName(e),
             key: e.key,
             code: e.code,
@@ -80,15 +97,19 @@ const KeyboardProcessor = Class.inherit({
             originalEvent: e
         };
 
-        var handlerResult = this._handler && this._handler.call(this._context, args);
+        const handlerResult = this._handler && this._handler.call(this._context, args);
 
         if(handlerResult && this._childProcessors) {
-            each(this._childProcessors, function(index, childProcessor) {
+            each(this._childProcessors, (index, childProcessor) => {
                 childProcessor.process(e);
             });
         }
-    }
+    },
 
+    toggleProcessing: function({ type }) {
+        this._isComposing = type === COMPOSITION_START_EVENT;
+        this._isComposingJustFinished = !this._isComposing;
+    }
 });
 
 module.exports = KeyboardProcessor;

@@ -47,6 +47,18 @@ function getOffset() {
     }
 }
 
+function isDeviceDesktop() {
+    return devices.current().deviceType === "desktop";
+}
+
+function skipTestOnMobile(assert) {
+    const isMobile = !isDeviceDesktop();
+    if(isMobile) {
+        assert.ok(true, "Test skipped on mobile");
+    }
+    return isMobile;
+}
+
 QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
@@ -1390,6 +1402,68 @@ QUnit.test("Appointment should have correct position while vertical dragging, cr
     pointer.dragEnd();
 });
 
+QUnit.test("Appointment should be dragged correctly in grouped timeline (T739132)", function(assert) {
+    let data = new DataSource({
+        store: [{
+            "text": "Google AdWords Strategy",
+            "ownerId": [2],
+            "startDate": new Date(2017, 4, 2, 9, 0),
+            "endDate": new Date(2017, 4, 2, 10, 30),
+            "priority": 1
+        }]
+    });
+
+    let priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2017, 4, 1),
+        startDayHour: 8,
+        endDayHour: 20,
+        cellDuration: 60,
+        editing: true,
+        groups: ["priority"],
+        resources: [{
+            fieldExpr: "priority",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }]
+    });
+
+    this.clock.tick();
+
+    let updatedItem = {
+        "text": "Google AdWords Strategy",
+        "ownerId": [2],
+        "startDate": new Date(2017, 4, 1, 8, 0),
+        "endDate": new Date(2017, 4, 1, 9, 30),
+        "priority": 1
+    };
+
+    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).trigger(dragEvents.enter);
+    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.end);
+
+    let dataSourceItem = this.instance.option("dataSource").items()[0];
+
+    this.clock.tick();
+    assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, "New data is correct");
+    assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, "New data is correct");
+});
+
 QUnit.test("Appointment should have correct position while dragging from group", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),
@@ -1670,6 +1744,7 @@ QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is c
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging", function(assert) {
+    if(skipTestOnMobile(assert)) return;
     this.createInstance({
         height: 500,
         editing: true,
@@ -1694,11 +1769,115 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
 
     var currentPosition = translator.locate($appointment);
 
-    assert.equal(startPosition.left, currentPosition.left - dragDistance + timePanelWidth, "Appointment position is correct");
+    assert.roughEqual(startPosition.left, currentPosition.left - dragDistance + timePanelWidth, 2, "Appointment position is correct");
+    pointer.dragEnd();
+});
+
+QUnit.test("Appointment should not twitch on drag start with horizontal dragging", function(assert) {
+    if(skipTestOnMobile(assert)) return;
+    let resourcesData = [
+        {
+            text: "Samantha Bright",
+            id: 1,
+            color: "#cb6bb2"
+        }, {
+            text: "John Heart",
+            id: 2,
+            color: "#56ca85"
+        }
+    ];
+
+    let priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    let data = [{
+        "text": "Google AdWords Strategy",
+        "ownerId": [2],
+        "startDate": new Date(2017, 4, 1, 9, 0),
+        "endDate": new Date(2017, 4, 1, 10, 30),
+        "priority": 1
+    }, {
+        "text": "New Brochures",
+        "ownerId": [1],
+        "startDate": new Date(2017, 4, 1, 11, 30),
+        "endDate": new Date(2017, 4, 1, 14, 15),
+        "priority": 2
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineDay"],
+        currentView: "timelineDay",
+        currentDate: new Date(2017, 4, 1),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20,
+        cellDuration: 60,
+        groups: ["priority"],
+        resources: [{
+            fieldExpr: "ownerId",
+            allowMultiple: true,
+            dataSource: resourcesData,
+            label: "Owner",
+            useColorAsDefault: true
+        }, {
+            fieldExpr: "priority",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }],
+        height: 400
+    });
+    let $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        dragDistance = 50;
+
+    const defaultPosition = translator.locate($appointment);
+    let pointer = pointerMock($appointment).start();
+    pointer.dragStart().drag(dragDistance, 0);
+    let startPosition = translator.locate($appointment);
+    assert.roughEqual(defaultPosition.left, startPosition.left - dragDistance, 1, "Appointment start position does not twitch after drag start");
+});
+
+QUnit.test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", function(assert) {
+    if(skipTestOnMobile(assert)) return;
+    this.createInstance({
+        height: 500,
+        editing: true,
+        currentDate: new Date(2015, 1, 9),
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 1),
+            endDate: new Date(2015, 1, 9, 1, 30)
+        }],
+        crossScrollingEnabled: true,
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        dragDistance = 150;
+
+    let pointer = pointerMock($appointment).start(),
+        startPosition = translator.locate($appointment);
+
+    pointer.dragStart().drag(dragDistance, 0);
+
+    var currentPosition = translator.locate($appointment);
+
+    assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
     pointer.dragEnd();
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging in scrolled date table, crossScrollingEnabled = true", function(assert) {
+    if(skipTestOnMobile(assert)) return;
     this.createInstance({
         height: 500,
         width: 800,
@@ -1727,11 +1906,9 @@ QUnit.test("Appointment should have correct position while horizontal dragging i
 
     var pointer = pointerMock($appointment).start(),
         startPosition = translator.locate($appointment);
-
     pointer.dragStart().drag(dragDistance, 0);
 
     var currentPosition = translator.locate($appointment);
-
     assert.equal(startPosition.left, currentPosition.left + scrollDistance - dragDistance, "Appointment position is correct");
     pointer.dragEnd();
 });
@@ -3300,24 +3477,52 @@ QUnit.test("Rival long appointments should have right position on timeline month
     assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
 });
 
-QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
+QUnit.test("Long appointment part should not be rendered on timeline month view (T678380)", function(assert) {
     var appointment = {
-        startDate: new Date(2016, 1, 25, 8, 0),
-        endDate: new Date(2016, 2, 1, 8, 0)
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
     };
 
     this.createInstance({
-        currentDate: new Date(2016, 2, 1),
+        currentDate: new Date(2019, 3, 2),
         currentView: "timelineMonth",
+        views: ["timelineMonth"],
+        recurrenceRuleExpr: null,
         startDayHour: 8,
         firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
         dataSource: [appointment]
     });
 
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).get(0),
-        $cell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0);
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
 
-    assert.roughEqual($appointment.getBoundingClientRect().width, $cell.getBoundingClientRect().width, 1.1, "appointment-part width is correct");
+    assert.equal($appointment.length, 0, "appointment-part was not rendered");
+});
+
+QUnit.test("Long appointment part should not be rendered on timeline workWeek view (T678380)", function(assert) {
+    var appointment = {
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2019, 3, 2),
+        currentView: "timelineWorkWeek",
+        views: ["timelineWorkWeek"],
+        recurrenceRuleExpr: null,
+        startDayHour: 8,
+        firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
+        dataSource: [appointment]
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+
+    assert.equal($appointment.length, 0, "appointment-part was not rendered");
 });
 
 QUnit.test("Appointment should have right width on timeline week view", function(assert) {

@@ -874,7 +874,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellWidth = this.getCellMinWidth();
         }
 
-        var minWidth = this._groupedStrategy.getWorkSpaceMinWidth(),
+        var minWidth = this.getWorkSpaceMinWidth(),
             $headerCells = this._$headerPanel
                 .find("tr")
                 .last()
@@ -895,6 +895,10 @@ var SchedulerWorkSpace = Widget.inherit({
         if(this._isVerticalGroupedWorkSpace()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
+    },
+
+    getWorkSpaceMinWidth: function() {
+        return this._groupedStrategy.getWorkSpaceMinWidth();
     },
 
     _dimensionChanged: function() {
@@ -1821,7 +1825,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _patchCellIndex: function(cellIndex) {
-        if(this.option("groupByDate")) {
+        if(this.isGroupedByDate()) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
         }
 
@@ -2110,7 +2114,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     isGroupedByDate: function() {
-        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace();
+        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace() && this._getGroupCount() > 0;
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {

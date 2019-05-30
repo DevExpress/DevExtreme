@@ -93,7 +93,7 @@
 
     &.dx-state-focused.dx-list-item-selected {
         background-color: @list-item-focused-selected-bg;
-        color: @base-select-color;
+        color: @base-inverted-text-color;
     }
 
     &.dx-state-active {
@@ -117,7 +117,7 @@
         border: none;
 
         &.dx-list-with-search .dx-scrollable-wrapper {
-            height: calc(~"100% - "@GENERIC_LIST_SEARCH_EDITOR_HEIGHT + @GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM);
+            height: calc(100% - round(@GENERIC_LIST_SEARCH_EDITOR_HEIGHT + @GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM));
         }
 
         .dx-empty-message {

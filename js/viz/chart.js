@@ -1055,7 +1055,15 @@ var dxChart = AdvancedChart.inherit({
 
         _each(that._getStackPoints(), function(_, stacks) {
             _each(stacks, function(_, points) {
-                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, shiftDirection);
+                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, shiftDirection, (a, b) => {
+                    const coordPosition = isRotated ? 1 : 0;
+                    const figureCenter1 = a.labels[0].getFigureCenter()[coordPosition];
+                    const figureCenter12 = b.labels[0].getFigureCenter()[coordPosition];
+                    if(figureCenter1 - figureCenter12 === 0) {
+                        return (a.value() - b.value()) * (a.labels[0].getPoint().series.getValueAxis().getTranslator().isInverted() ? -1 : 1);
+                    }
+                    return 0;
+                });
             });
         });
     },
