@@ -1579,9 +1579,18 @@ QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
         moduleSetup.beforeEach.call(this);
         var dataSource = [];
         for(var i = 0; i < 500000; i += 250) {
+            var y1_rand = Math.random();
+            var y2_rand = Math.random();
+
             dataSource.push({
-                x: i,
-                y: Math.random() * 10 - Math.random() * 5
+                arg: i,
+                date: new Date(i),
+                val: y1_rand * 10 - y2_rand * 5,
+                val1: y1_rand * 10.5 - y2_rand * 5,
+                low: y1_rand * 10 - y2_rand * 8,
+                open: y1_rand * 10 - y2_rand * 6,
+                close: y1_rand * 10 - y2_rand * 4,
+                high: y1_rand * 10 - y2_rand * 2
             });
         }
 
@@ -1594,8 +1603,6 @@ QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
                 visualRange: [30000, 400000]
             },
             series: [{
-                argumentField: "x",
-                valueField: "y",
                 point: { size: 14 }
             }]
         };
@@ -1626,6 +1633,43 @@ QUnit.test("auto switching point markers visibility is disabled for non-line/are
     });
 
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("bar series are not used to define autoHiding", function(assert) {
+    var chart = this.createChart({
+        size: {
+            width: 820,
+            height: 440
+        },
+        argumentAxis: {
+            visualRange: [10000, 100000]
+        },
+        series: [
+            { type: "bar" },
+            { type: "line", valueField: "val1" }
+        ]
+    });
+
+    assert.ok(chart.getAllSeries()[1].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("financial series are not used to define autoHiding", function(assert) {
+    var chart = this.createChart({
+        size: {
+            width: 820,
+            height: 440
+        },
+        argumentAxis: {
+            visualRange: [new Date(10000), new Date(100000)]
+        },
+        commonSeriesSettings: { argumentField: "date" },
+        series: [
+            { type: "candlestick" },
+            { type: "line", valueField: "val1" }
+        ]
+    });
+
+    assert.ok(chart.getAllSeries()[1].getVisiblePoints()[0].graphic);
 });
 
 QUnit.test("show hovered point (points are hidden automatically)", function(assert) {
