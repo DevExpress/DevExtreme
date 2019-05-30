@@ -73,7 +73,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             this._caretTimeout = null;
             var caret = this._caret();
 
-            if(caret.start === caret.end) {
+            if(caret.start === caret.end && this._useMaskBehavior()) {
                 var text = this._getInputVal(),
                     decimalSeparator = number.getDecimalSeparator(),
                     decimalSeparatorIndex = text.indexOf(decimalSeparator);
