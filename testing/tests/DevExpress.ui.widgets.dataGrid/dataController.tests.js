@@ -3341,8 +3341,8 @@ QUnit.test("change sorting in onContentReady", function(assert) {
 
     // arrange
     assert.equal(that.dataController.items()[0].key, 999, "sorting is applied");
-    assert.equal(countCallChanged, 3, "count call changed of the dataController");
-    assert.equal(countCallDataSourceChanged, 3, "count call changed of the dataSource");
+    assert.equal(countCallChanged, 4, "count call changed of the dataController");
+    assert.equal(countCallDataSourceChanged, 4, "count call changed of the dataSource");
 });
 
 // T717716
