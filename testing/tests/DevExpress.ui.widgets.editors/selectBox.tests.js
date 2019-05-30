@@ -4124,6 +4124,23 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.equal($input.val(), 1, "chosen value is correct");
     });
 
+    QUnit.test("Down key should not loop if dataSource is loading", (assert) => {
+        const ds = new DataSource(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+        const $element = $("#selectBox").dxSelectBox({
+            dataSource: ds,
+            pageSize: 5,
+            opened: true,
+            value: "9"
+        });
+
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        ds.beginLoading();
+        keyboardMock($input)
+            .keyDown("down");
+
+        assert.equal($input.val(), "9", "chosen value is correct");
+    });
+
     QUnit.testInActiveWindow("value should be reset to the previous one on the 'tab' press if popup is closed", (assert) => {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "not actual");
