@@ -6,7 +6,7 @@ import { isObject, isString } from "../../core/utils/type";
 import positionUtils from "../../animation/position";
 import { each } from "../../core/utils/iterator";
 import Class from "../../core/class";
-import { Deferred } from "../../core/utils/deferred";
+import { Deferred, when } from "../../core/utils/deferred";
 
 var SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual";
@@ -175,14 +175,6 @@ exports.VirtualScrollController = Class.inherit((function() {
         return pageCount;
     };
 
-    var currentPageIsLoaded = function(that) {
-        var currentPageIndex = that._dataSource.pageIndex();
-
-        return that._cache.some(function(cacheItem) {
-            return cacheItem.pageIndex === currentPageIndex;
-        });
-    };
-
     var getPageIndexForLoad = function(that) {
         var result = -1,
             needToLoadNextPage,
@@ -194,7 +186,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         if(beginPageIndex < 0) {
             result = that._pageIndex;
         } else if(!that._cache[that._pageIndex - beginPageIndex]) {
-            if(currentPageIsLoaded(that) || that._isVirtual) {
+            if(that._loadingPageIndex !== that._pageIndex || that._isVirtual) {
                 result = that._pageIndex;
             }
         } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
@@ -293,7 +285,11 @@ exports.VirtualScrollController = Class.inherit((function() {
 
         if(pageIndex === that.pageIndex() || (!dataSource.isLoading() && pageIndex < dataSource.pageCount() || (!dataSource.hasKnownLastPage() && pageIndex === dataSource.pageCount()))) {
             dataSource.pageIndex(pageIndex);
-            return dataSource.load();
+
+            that._loadingPageIndex = pageIndex;
+            return when(dataSource.load()).always(function() {
+                that._loadingPageIndex = -1;
+            });
         }
     };
 
@@ -312,6 +308,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._items = [];
             that._cache = [];
             that._isVirtual = isVirtual;
+            that._loadingPageIndex = -1;
         },
 
         getItemSizes: function() {
