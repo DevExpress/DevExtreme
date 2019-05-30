@@ -49,6 +49,14 @@ function isDeviceDesktop() {
     return devices.current().deviceType === "desktop";
 }
 
+function skipTestOnMobile(assert) {
+    const isMobile = !isDeviceDesktop();
+    if(isMobile) {
+        assert.ok(true, "Test skipped on mobile");
+    }
+    return isMobile;
+}
+
 QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
@@ -1724,10 +1732,7 @@ QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is c
 });
 
 QUnit.test("Appointment should not twitch on drag start with horizontal dragging", function(assert) {
-    if(!isDeviceDesktop()) {
-        assert.ok(true, 'Mobile device skip');
-        return;
-    }
+    if(skipTestOnMobile(assert)) return;
     let resourcesData = [
         {
             text: "Samantha Bright",
@@ -1801,10 +1806,7 @@ QUnit.test("Appointment should not twitch on drag start with horizontal dragging
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging", function(assert) {
-    if(!isDeviceDesktop()) {
-        assert.ok(true, 'Mobile device skip');
-        return;
-    }
+    if(skipTestOnMobile(assert)) return;
     this.createInstance({
         height: 500,
         editing: true,
@@ -1833,10 +1835,7 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", function(assert) {
-    if(!isDeviceDesktop()) {
-        assert.ok(true, 'Mobile device skip');
-        return;
-    }
+    if(skipTestOnMobile(assert)) return;
     this.createInstance({
         height: 500,
         editing: true,
@@ -1866,10 +1865,7 @@ QUnit.test("Appointment should have correct position while horizontal dragging, 
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging in scrolled date table, crossScrollingEnabled = true", function(assert) {
-    if(!isDeviceDesktop()) {
-        assert.ok(true, 'Mobile device skip');
-        return;
-    }
+    if(skipTestOnMobile(assert)) return;
     this.createInstance({
         height: 500,
         width: 800,
