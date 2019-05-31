@@ -366,7 +366,7 @@ QUnit.test("text should crop in the label inside the toolbar on toolbar's width 
 
     instance.option("width", 100);
 
-    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1, "width of before element should be changed");
+    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1.001, "width of before element should be changed");
 });
 
 QUnit.test("text should crop in the label inside the toolbar on window's width changing", function(assert) {
@@ -382,7 +382,7 @@ QUnit.test("text should crop in the label inside the toolbar on window's width c
     $element.width(100);
     resizeCallbacks.fire();
 
-    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1, "width of before element should be changed");
+    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1.001, "width of before element should be changed");
 });
 
 QUnit.test("label should positioned correctly inside the toolbar if toolbar-before section is empty", function(assert) {

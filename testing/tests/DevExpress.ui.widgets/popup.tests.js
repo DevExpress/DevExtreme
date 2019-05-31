@@ -396,7 +396,14 @@ QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarBut
 });
 
 
-QUnit.module("dimensions");
+QUnit.module("dimensions", {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+});
 
 QUnit.test("content must not overlap bottom buttons", function(assert) {
     var $popup = $("#popup").dxPopup({
@@ -976,7 +983,7 @@ QUnit.test("popup content should update height after resize", function(assert) {
         pointer = pointerMock($handle).start();
 
     pointer.dragStart().drag(-100, -100);
-    assert.equal(popup.$content().outerHeight(), $overlayContent.height(), "size of popup and overlay is equal");
+    assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, "size of popup and overlay is equal");
 });
 
 QUnit.test("popup content position should be reset after show/hide", function(assert) {

@@ -1355,13 +1355,14 @@ QUnit.module("widget sizing render", {}, () => {
             width: undefined
         }).dxDateBox("instance");
 
-        const initialWidth = $element.outerWidth();
+        const { width: initialWidth } = $element.get(0).getBoundingClientRect();
 
         $parent.css("transform", "scale(0.5)");
         component.repaint();
         $parent.css("transform", "scale(1)");
+        const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
 
-        assert.equal(component.$element().outerWidth(), initialWidth, "component has correct width");
+        assert.strictEqual(actualWidth, initialWidth, "component has correct width");
     });
 
     QUnit.test("component width calculation should consider buttons containers element", assert => {
@@ -1373,11 +1374,14 @@ QUnit.module("widget sizing render", {}, () => {
             width: undefined,
             showDropDownButton: false
         }).dxDateBox("instance");
-        const initialWidth = $element.outerWidth();
+        const { width: initialWidth } = $element.get(0).getBoundingClientRect();
         const instance = $element.dxDateBox("instance");
 
         instance.option("showDropDownButton", true);
-        assert.strictEqual(component.$element().outerWidth(), initialWidth + $(`.${BUTTONS_CONTAINER_CLASS}`).width());
+        const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
+        const { width: buttonWidth } = $(`.${BUTTONS_CONTAINER_CLASS}`).get(0).getBoundingClientRect();
+
+        assert.strictEqual(actualWidth, initialWidth + buttonWidth);
     });
 
     QUnit.test("change width", assert => {
