@@ -7,11 +7,15 @@ const { test } = QUnit;
 const moduleConfig = {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
-        this.instance = $("#htmlEditor")
-            .dxHtmlEditor({
-                value: "<p>Test 1</p><p>Test 2</p><p>Test 3</p>"
-            })
-            .dxHtmlEditor("instance");
+        this.options = {
+            value: "<p>Test 1</p><p>Test 2</p><p>Test 3</p>"
+        };
+
+        this.createEditor = () => {
+            this.instance = $("#htmlEditor")
+                .dxHtmlEditor(this.options)
+                .dxHtmlEditor("instance");
+        };
     },
     afterEach: () => {
         this.clock.restore();
@@ -20,13 +24,26 @@ const moduleConfig = {
 
 QUnit.module("API", moduleConfig, () => {
     test("get registered module", (assert) => {
+        this.createEditor();
         const Bold = this.instance.getModule("formats/bold");
 
         assert.ok(Bold, "module is defined");
         assert.strictEqual(Bold.blotName, "bold", "we get correct blot");
     });
 
+    test("get registered module on init", (assert) => {
+        assert.expect(2);
+        this.options.onInitialized = ({ component }) => {
+            const Bold = component.getModule("formats/bold");
+
+            assert.ok(Bold, "module is defined");
+            assert.strictEqual(Bold.blotName, "bold", "we get correct blot");
+        };
+        this.createEditor();
+    });
+
     test("get quill instance", (assert) => {
+        this.createEditor();
         const quillInstance = this.instance.getQuillInstance();
 
         assert.ok(quillInstance, "instance isn't undefined");
@@ -34,6 +51,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("get/set selection", (assert) => {
+        this.createEditor();
         this.instance.setSelection(1, 2);
         const selection = this.instance.getSelection();
 
@@ -42,6 +60,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("format", (assert) => {
+        this.createEditor();
         this.instance.setSelection(1, 2);
         this.instance.format("bold", true);
 
@@ -49,6 +68,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("formatText", (assert) => {
+        this.createEditor();
         const expected = "<h1>T<strong>est 1</strong></h1><p><strong>Tes</strong>t 2</p><p>Test 3</p>";
         this.instance.formatText(1, 9, {
             bold: true, // inline format
@@ -60,6 +80,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("formatLine", (assert) => {
+        this.createEditor();
         this.instance.formatLine(1, 9, {
             bold: true, // inline format
             header: 1 // block format
@@ -69,6 +90,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("getFormat", (assert) => {
+        this.createEditor();
         this.instance.option("value", "<p><b>Test Test</b></p>");
 
         const format = this.instance.getFormat(1, 2);
@@ -76,6 +98,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("removeFormat", (assert) => {
+        this.createEditor();
         this.instance.option("value", "<p><b>Test Test</b></p>");
         this.instance.removeFormat(1, 2);
 
@@ -83,6 +106,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("getLength", (assert) => {
+        this.createEditor();
         const length = this.instance.getLength();
         const LINE_WIDTH = 7; // 6 chars + the new line char
 
@@ -90,12 +114,14 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("delete", (assert) => {
+        this.createEditor();
         this.instance.delete(1, 7);
 
         assert.strictEqual(this.instance.option("value"), "<p>Test 2</p><p>Test 3</p>", "custom range removed");
     });
 
     test("insertText", (assert) => {
+        this.createEditor();
         this.instance.insertText(1, "one");
         this.instance.insertText(6, "two", { italic: true });
 
@@ -103,6 +129,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("insertEmbed", (assert) => {
+        this.createEditor();
         const expected = '<p>T<span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#"' +
             ' data-var-value="template"><span contenteditable="false">#template#</span></span>est 1</p><p>Test 2</p><p>Test 3</p>';
         this.instance.insertEmbed(1, "variable", { value: "template", escapeChar: "#" });
@@ -111,6 +138,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("undo/redo", (assert) => {
+        this.createEditor();
         this.instance.insertText(0, "a");
         this.clock.tick(1000);
         this.instance.insertText(0, "b");
@@ -127,6 +155,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("clearHistory", (assert) => {
+        this.createEditor();
         this.instance.insertText(0, "a");
         this.clock.tick(1000);
         this.instance.insertText(0, "b");
@@ -151,6 +180,7 @@ QUnit.module("API", moduleConfig, () => {
             }
         }
 
+        this.createEditor();
         this.instance.registerModules({ "modules/test": Test });
 
         const testModule = this.instance.getQuillInstance().getModule("test");
@@ -159,7 +189,30 @@ QUnit.module("API", moduleConfig, () => {
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
+    test("registerModule on init", (assert) => {
+        class Test {
+            constructor(quillInstance, options) {
+                this._editorInstance = options.editorInstance;
+            }
+
+            getEditor() {
+                return this._editorInstance;
+            }
+        }
+
+        this.options.onInitialized = ({ component }) => {
+            component.registerModules({ "modules/testInit": Test });
+        };
+        this.createEditor();
+
+        const testModule = this.instance.getQuillInstance().getModule("testInit");
+
+        assert.ok(testModule);
+        assert.strictEqual(testModule.getEditor(), this.instance);
+    });
+
     test("'focus' method should call the quill's focus", (assert) => {
+        this.createEditor();
         const focusSpy = sinon.spy(this.instance.getQuillInstance(), "focus");
 
         this.instance.focus();
@@ -168,6 +221,7 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("change value via 'option' method should correctly update content", (assert) => {
+        this.createEditor();
         const valueChangeStub = sinon.stub();
         const updateContentSpy = sinon.spy(this.instance, "_updateHtmlContent");
 
