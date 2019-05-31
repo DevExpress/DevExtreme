@@ -16,6 +16,7 @@ import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
+import ArrayStore from 'data/array_store';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
@@ -432,6 +433,44 @@ QUnit.testInActiveWindow("Focused border is not displayed around expandable cell
     // assert
     assert.ok(!$expandableCell.hasClass("dx-focused"));
     clock.restore();
+});
+
+// T742205
+QUnit.test("The load method should not be called on an attempt to select loaded nodes when they are collapsed", function(assert) {
+    // arrange
+    var $testElement = $('#treeList'),
+        store = new ArrayStore([
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) }
+        ]),
+        load = sinon.spy((loadOptions) => {
+            return store.load(loadOptions).promise();
+        });
+
+    this.options.cacheEnabled = true;
+    this.options.expandedRowKeys = [1];
+    this.options.remoteOperations = { filtering: true };
+    this.options.dataSource = {
+        load: load
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // assert
+    assert.strictEqual(this.getVisibleRows().length, 2, "row count");
+
+    this.collapseRow(1);
+
+    // assert
+    assert.strictEqual(this.getVisibleRows().length, 1, "row count");
+
+    // act
+    load.reset();
+    this.selectRows([2]);
+
+    // assert
+    assert.strictEqual(load.callCount, 0, "load isn't called");
 });
 
 QUnit.module("Recursive selection", {
