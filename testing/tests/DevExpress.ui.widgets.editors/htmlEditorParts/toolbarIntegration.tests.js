@@ -412,4 +412,63 @@ QUnit.module("Toolbar integration", {
 
         $okDialogButton.trigger("dxclick");
     });
+
+    test("link should be correctly added for a third", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+        let $urlInput;
+        let $okDialogButton;
+
+        const prepareLink = () => {
+            instance.focus();
+
+            instance.setSelection(0, 4);
+
+            let $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger("dxclick");
+
+            $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+            $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+        };
+
+        const valueChangeSpy = sinon.spy(({ value }) => {
+            if(valueChangeSpy.calledOnce) {
+                setTimeout(() => {
+                    prepareLink();
+                    $urlInput
+                        .val("http://test2.com")
+                        .change();
+
+                    $okDialogButton.trigger("dxclick");
+                });
+            } else if(valueChangeSpy.calledTwice) {
+                setTimeout(() => {
+                    prepareLink();
+                    $urlInput
+                        .val("http://test3.com")
+                        .change();
+
+                    $okDialogButton.trigger("dxclick");
+                });
+            } else {
+                assert.strictEqual(value, '<a href="http://test3.com" target="_blank">test</a>', "link was setted");
+                done();
+            }
+        });
+
+        const instance = $container.dxHtmlEditor({
+            toolbar: { items: ["link"] },
+            value: "<p>test</p>",
+            onValueChanged: valueChangeSpy
+        }).dxHtmlEditor("instance");
+
+        prepareLink();
+        $urlInput
+            .val("http://test1.com")
+            .change();
+
+        $okDialogButton.trigger("dxclick");
+        this.clock.tick();
+        this.clock.tick();
+    });
 });
