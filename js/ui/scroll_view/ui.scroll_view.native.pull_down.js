@@ -168,7 +168,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location <= this._scrollOffset + this._bottomPocketSize;
+        return this._reachBottomEnabled && this._location - (this._scrollOffset + this._bottomPocketSize) <= 0.1;
     },
 
     _reachBottom: function() {
