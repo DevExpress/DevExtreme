@@ -1,31 +1,30 @@
 .diagram-icons-mixin(@new-color) {
     .dx-diagram-i-connector-begin-none {
-        .diagram-icon-colored('images/widgets/common/diagram/connector-begin-none.svg', @new-color, 32px, 22px);
+        .diagram-icon-colored2(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-none.svg'), @new-color, 32px, 22px);
     }
 
     .dx-diagram-i-connector-begin-arrow {
-        .diagram-icon-colored('images/widgets/common/diagram/connector-begin-arrow.svg', @new-color, 32px, 22px);
+        .diagram-icon-colored2(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-arrow.svg'), @new-color, 32px, 22px);
     }
 
     .dx-diagram-i-connector-end-none {
-        .diagram-icon-colored('images/widgets/common/diagram/connector-end-none.svg', @new-color, 32px, 22px);
+        .diagram-icon-colored2(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-none.svg'), @new-color, 32px, 22px);
     }
     
     .dx-diagram-i-connector-end-arrow {
-        .diagram-icon-colored('images/widgets/common/diagram/connector-end-arrow.svg', @new-color, 32px, 22px);
+        .diagram-icon-colored2(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-arrow.svg'), @new-color, 32px, 22px);
     }
     
     .dx-diagram-i-connector-orthogonal {
-        .diagram-icon-colored('images/widgets/common/diagram/connector-orthogonal.svg', @new-color, 32px, 22px);
+        .diagram-icon-colored2(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-orthogonal.svg'), @new-color, 32px, 22px);
     }
     
     .dx-diagram-i-connector-straight {
-        .diagram-icon-colored('images/widgets/common/diagram/connector-straight.svg', @new-color, 32px, 22px);
+        .diagram-icon-colored2(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-straight.svg'), @new-color, 32px, 22px);
     }
 }
 
-.diagram-icon-colored(@svg-src, @current-color, @width, @height) {
-    @data-uri: data-uri('image/svg+xml;charset=UTF-8', @svg-src);
+.diagram-icon-colored2(@data-uri, @current-color, @width, @height) {
     @uri: replace("@{data-uri}", "currentColor", escape(@current-color));
     background-image: e(@uri);
     width: @width;
