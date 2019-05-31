@@ -7,6 +7,7 @@ import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
+import { Deferred } from "../../core/utils/deferred";
 
 import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
@@ -253,9 +254,12 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderContentImpl: function() {
+        this._contentRenderedDeferred = new Deferred();
         this.callBase();
         this._renderHtmlEditor();
         this._renderFormDialog();
+
+        return this._contentRenderedDeferred.promise();
     },
 
     _renderHtmlEditor: function() {
@@ -329,13 +333,20 @@ const HtmlEditor = Editor.inherit({
 
     _textChangeHandler: function(newDelta, oldDelta, source) {
         const htmlMarkup = this._deltaConverter.toHtml();
-
-
         const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
 
         if(this.option("value") !== value) {
             this._isEditorUpdating = true;
             this.option("value", value);
+        }
+
+        this._finalizeContentRendering();
+    },
+
+    _finalizeContentRendering: function() {
+        if(this._contentRenderedDeferred) {
+            this._contentRenderedDeferred.resolve();
+            this._contentRenderedDeferred = undefined;
         }
     },
 
