@@ -975,7 +975,7 @@ QUnit.test("The second appointment in recurring series in Month view should have
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
         cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
-    assert.equal($appointments.eq(1).outerWidth(), cellWidth * 2, "2d appt has correct width");
+    assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 0.1, "2d appt has correct width");
 });
 
 QUnit.test("The second appointment in recurring series in Week view should have correct width", function(assert) {
