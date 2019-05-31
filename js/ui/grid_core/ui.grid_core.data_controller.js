@@ -1421,6 +1421,10 @@ module.exports = {
                         pageIndex: this.pageIndex(),
                         pageSize: this.pageSize()
                     };
+                },
+
+                getCachedStoreData: function() {
+                    return this._dataSource && this._dataSource.getCachedStoreData();
                 }
             };
 

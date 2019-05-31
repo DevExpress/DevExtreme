@@ -594,6 +594,9 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         reload: function(full) {
             return full ? this._dataSource.reload() : this._dataSource.load();
+        },
+        getCachedStoreData: function() {
+            return this._cachedStoreData;
         }
     };
 })());
