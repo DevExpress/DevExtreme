@@ -495,11 +495,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _processNonexistentItem: function() {
-        if(this._isCustomValueAllowed()) {
-            this.callBase.apply(this, arguments);
-        } else {
-            this.reset();
-        }
+        this.reset();
     },
 
     _isCustomValueAllowed: function() {
