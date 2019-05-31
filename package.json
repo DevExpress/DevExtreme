@@ -120,7 +120,7 @@
     "test-env": "node testing/launch",
     "update-ts": "dx-tools declaration-validator && dx-tools ts-generator",
     "validate-declarations": "dx-tools declaration-validator",
-    "e2e": "node ./testing/e2e/runner"
+    "test-functional": "node ./testing/functional/runner"
   },
   "browserslist": [
     "last 2 versions",

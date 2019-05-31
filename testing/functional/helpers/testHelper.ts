@@ -15,7 +15,7 @@ export async function createWidget(widgetName: string, options: any) {
 }
 
 export function getContainerFileUrl() {
-    return getFileUrl(`/testing/e2e/tests/container.html`);
+    return getFileUrl(`/testing/functional/tests/container.html`);
 }
 
 export function getFileUrl(relativePath: string) {

@@ -10,7 +10,7 @@ createTestCafe('localhost', 1437, 1438)
             runner = testCafe.createRunner()
                 .browsers(["chrome"])
                 .src([
-                    "./testing/e2e/tests/dataGrid/keyboardNavigation.ts"
+                    "./testing/functional/tests/dataGrid/keyboardNavigation.ts"
                 ]);
 
         if(testName && testName.trim()) {
