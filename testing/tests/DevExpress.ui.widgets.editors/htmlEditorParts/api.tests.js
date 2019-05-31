@@ -34,6 +34,17 @@ QUnit.module("API", moduleConfig, () => {
         assert.strictEqual(Bold.blotName, "bold", "we get correct blot");
     });
 
+    test("get registered module on init", (assert) => {
+        assert.expect(2);
+        this.options.onInitialized = ({ component }) => {
+            const Bold = component.get("formats/bold");
+
+            assert.ok(Bold, "module is defined");
+            assert.strictEqual(Bold.blotName, "bold", "we get correct blot");
+        };
+        this.createEditor();
+    });
+
     test("get quill instance", (assert) => {
         this.createEditor();
         const quillInstance = this.instance.getQuillInstance();
@@ -176,6 +187,28 @@ QUnit.module("API", moduleConfig, () => {
         this.instance.register({ "modules/test": Test });
 
         const testModule = this.instance.getQuillInstance().getModule("test");
+
+        assert.ok(testModule);
+        assert.strictEqual(testModule.getEditor(), this.instance);
+    });
+
+    test("registerModule on init", (assert) => {
+        class Test {
+            constructor(quillInstance, options) {
+                this._editorInstance = options.editorInstance;
+            }
+
+            getEditor() {
+                return this._editorInstance;
+            }
+        }
+
+        this.options.onInitialized = ({ component }) => {
+            component.register({ "modules/testInit": Test });
+        };
+        this.createEditor();
+
+        const testModule = this.instance.getQuillInstance().getModule("testInit");
 
         assert.ok(testModule);
         assert.strictEqual(testModule.getEditor(), this.instance);

@@ -323,13 +323,20 @@ const HtmlEditor = Editor.inherit({
     },
 
     _render: function() {
-        if(!this._quillRegistrator) {
-            this._quillRegistrator = new QuillRegistrator();
-        }
-
         this._prepareConverters();
 
         this.callBase();
+    },
+
+    _prepareQuillRegistrator: function() {
+        if(!this._quillRegistrator) {
+            this._quillRegistrator = new QuillRegistrator();
+        }
+    },
+
+    _getRegistrator: function() {
+        this._prepareQuillRegistrator();
+        return this._quillRegistrator;
     },
 
     _prepareConverters: function() {
@@ -360,7 +367,7 @@ const HtmlEditor = Editor.inherit({
             customizeModules(modulesConfig);
         }
 
-        this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
+        this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
             readOnly: this.option("readOnly") || this.option("disabled"),
             modules: modulesConfig,
@@ -383,7 +390,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
-        const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
+        const wordListMatcher = getWordMatcher(this._getRegistrator().getQuill());
         let modulesConfig = extend({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
@@ -426,7 +433,7 @@ const HtmlEditor = Editor.inherit({
 
     _getCustomModules: function() {
         const modules = {};
-        const moduleNames = this._quillRegistrator.getRegisteredModuleNames();
+        const moduleNames = this._getRegistrator().getRegisteredModuleNames();
 
         moduleNames.forEach(modulePath => {
             modules[modulePath] = this._getBaseModuleConfig();
@@ -586,7 +593,7 @@ const HtmlEditor = Editor.inherit({
     * @param1 modules:Object
     */
     register: function(components) {
-        this._quillRegistrator.registerModules(components);
+        this._getRegistrator().registerModules(components);
 
         this.repaint();
     },
@@ -598,7 +605,7 @@ const HtmlEditor = Editor.inherit({
     * @return Object
     */
     get: function(modulePath) {
-        return this._quillRegistrator.getQuill().import(modulePath);
+        return this._getRegistrator().getQuill().import(modulePath);
     },
 
     /**
