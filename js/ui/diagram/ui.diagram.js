@@ -11,6 +11,7 @@ import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
 import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
+import Tooltip from "../tooltip";
 import { getDiagram } from "./diagram_importer";
 import { hasWindow } from "../../core/utils/window";
 
@@ -84,8 +85,32 @@ class Diagram extends Widget {
         this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
             dataSources: this._getDataSources(),
             customShapes: this._getCustomShapes(),
-            onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category),
+            onShapeCategoryRendered: (e) => {
+                if(isServerSide) return;
+
+                var $toolboxContainer = $(e.$element);
+                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
+                this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
+            },
             onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0])
+        });
+    }
+    _createTooltips($container, targets) {
+        targets.each((index, element) => {
+            var $target = $(element);
+            const $tooltip = $("<div>")
+                .html($target.attr("title"))
+                .appendTo($container);
+            this._tooltipInstance = this._createComponent($tooltip, Tooltip, {
+                target: $target,
+                showEvent: "mouseenter",
+                hideEvent: "mouseleave",
+                position: "top",
+                animation: {
+                    show: { type: "fade", from: 0, to: 1, delay: 500 },
+                    hide: { type: "fade", from: 1, to: 0, delay: 100 }
+                }
+            });
         });
     }
     _invalidateLeftPanel() {

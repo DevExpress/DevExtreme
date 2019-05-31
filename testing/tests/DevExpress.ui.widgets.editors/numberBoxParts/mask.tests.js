@@ -588,6 +588,22 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "999999999999999", "input was prevented");
     });
 
+    QUnit.test("trailing zeros should not affect 15 digits limit", (assert) => {
+        this.instance.option("format", "#,##0.000000");
+        this.instance.option("value", 222222222.120000);
+        this.keyboard.caret(12).type("8");
+
+        assert.equal(this.input.val(), "222,222,222.812000", "input was not prevented");
+    });
+
+    QUnit.test("leading zeros should not affect 15 digits limit", (assert) => {
+        this.instance.option("format", "000000000000000#.00");
+        this.instance.option("value", 1);
+        this.keyboard.caret(12).type("8");
+
+        assert.equal(this.input.val(), "000000000008001.00", "input was not prevented");
+    });
+
     QUnit.test("negative integer should not be longer than 15 digit", (assert) => {
         this.instance.option("value", -999999999999999);
         this.keyboard.caret(16).type("5");
@@ -1683,7 +1699,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 4, "caret should not move");
     });
 
-    QUnit.testInActiveWindow("caret should be at start boundary on focusin", (assert) => {
+    QUnit.testInActiveWindow("caret should be before decimal separator on focusin", (assert) => {
         this.instance.option({
             format: "$ #0.## kg",
             value: 1.23
@@ -1696,7 +1712,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         }
 
         this.clock.tick(CARET_TIMEOUT_DURATION);
-        assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is just before decimal separator");
     });
 
     QUnit.testInActiveWindow("caret should not change position on focus after fast double click for IE", (assert) => {

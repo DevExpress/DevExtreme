@@ -440,7 +440,7 @@ QUnit.module("basics", {}, () => {
 
         $numberBoxInput.blur();
         mouse.wheel(-20);
-        assert.equal(numberBox.option("value"), 100.6);
+        assert.roughEqual(numberBox.option("value"), 100.6, 1.001);
     });
 
     QUnit.test("mousewheel action should not work in disabled state", assert => {
@@ -1208,6 +1208,21 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), "-0.41");
         $spinDown.trigger("dxpointerdown");
         assert.equal($input.val(), "-2.22");
+    });
+
+    QUnit.test("keep null value with 0 step", assert => {
+        this.instance.option("showSpinButtons", true);
+        this.instance.option("value", null);
+        const $input = this.element.find("." + INPUT_CLASS);
+        const $spinUp = this.element.find("." + SPIN_UP_CLASS);
+        const $spinDown = this.element.find("." + SPIN_DOWN_CLASS);
+        this.instance.option("step", 0);
+
+        $spinUp.trigger("dxpointerdown");
+        assert.equal($input.val(), "");
+
+        $spinDown.trigger("dxpointerdown");
+        assert.equal($input.val(), "");
     });
 
     QUnit.test("spin edit min/max", assert => {

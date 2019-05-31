@@ -24,6 +24,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     FREESPACE_ROW_CLASS = "dx-freespace-row",
     VIRTUAL_ROW_CLASS = "dx-virtual-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
+    EDITOR_CELL_CLASS = "dx-editor-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     COMMAND_CELL_SELECTOR = "[class^=dx-command]",
@@ -63,6 +64,10 @@ function isNotFocusedRow($row) {
 
 function isCellElement($element) {
     return $element.length && $element[0].tagName === "TD";
+}
+
+function isEditorCell(that, $cell) {
+    return !that._isRowEditMode() && $cell && $cell.hasClass(EDITOR_CELL_CLASS);
 }
 
 var KeyboardNavigationController = core.ViewController.inherit({
@@ -945,7 +950,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             isOriginalHandlerRequired = false,
             elementType;
 
-        if($lastInteractiveElement.length && eventTarget !== $lastInteractiveElement.get(0)) {
+        if(!isEditorCell(this, $cell) && $lastInteractiveElement.length && eventTarget !== $lastInteractiveElement.get(0)) {
             isOriginalHandlerRequired = true;
         } else {
             if(this._focusedCellPosition.rowIndex === undefined && $(eventTarget).hasClass(ROW_CLASS)) {
@@ -972,7 +977,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
             this._focusCell($cell);
-            this._focusInteractiveElement($cell, eventArgs.shift);
+
+            if(!isEditorCell(this, $cell)) {
+                this._focusInteractiveElement($cell, eventArgs.shift);
+            }
         }
 
         return isOriginalHandlerRequired;
@@ -1566,18 +1574,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _fireFocusedCellChanged: function($cellElement, prevCellIndex, prevRowIndex) {
         var that = this,
-            columnIndex = that.option("focusedColumnIndex"),
-            dataController,
-            row,
-            focusedRowIndex = that.option("focusedRowIndex");
+            dataController = that.getController("data"),
+            columnIndex = that.getView("rowsView").getCellIndex($cellElement),
+            rowIndex = this._getRowIndex($cellElement && $cellElement.parent()),
+            isEditingCell = that.getController("editing").isEditCell(rowIndex, columnIndex),
+            row = dataController.items()[rowIndex];
 
-        if(prevCellIndex !== columnIndex || prevRowIndex !== focusedRowIndex) {
+        if(!isEditingCell && (prevCellIndex !== columnIndex || prevRowIndex !== rowIndex)) {
             dataController = that.getController("data");
-            row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
             that.executeAction("onFocusedCellChanged", {
                 cellElement: $cellElement,
                 columnIndex: columnIndex,
-                rowIndex: focusedRowIndex,
+                rowIndex: rowIndex,
                 row: row,
                 column: that.getController("columns").getVisibleColumns()[columnIndex]
             });
@@ -1588,6 +1596,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var newRowIndex = this._getRowIndex($newFocusedRow),
             dataController = this.getController("data"),
             prevFocusedRowIndex = this.getVisibleRowIndex(),
+            loadingOperationTypes = dataController.loadingOperationTypes(),
             args = {
                 rowElement: $newFocusedRow,
                 prevRowIndex: prevFocusedRowIndex,
@@ -1597,7 +1606,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 cancel: false
             };
 
-        if(!dataController || dataController.isLoading()) {
+        if(!dataController || dataController.isLoading() && (loadingOperationTypes.reload || loadingOperationTypes.paging)) {
             args.cancel = true;
             return args;
         }

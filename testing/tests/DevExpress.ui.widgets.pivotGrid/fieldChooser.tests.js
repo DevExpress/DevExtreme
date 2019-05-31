@@ -1390,9 +1390,9 @@ QUnit.test("Layout 0", function(assert) {
     assert.roughEqual($cols.eq(0).height(), $cols.eq(1).height(), 0.1, "col heights");
 
     assert.equal($areas.length, 5, "area count");
-    assert.roughEqual($areas.eq(0).outerHeight(true) + $areas.eq(1).outerHeight(true), $areas.eq(2).outerHeight(true) + $areas.eq(3).outerHeight(true) + $areas.eq(4).outerHeight(true), 0.1, "area 0+1=2+3+4 height");
-    assert.roughEqual($areas.eq(0).outerHeight(true), $areas.eq(2).outerHeight(true) + $areas.eq(3).outerHeight(true), 0.1, "area 0=2+3 height");
-    assert.roughEqual($areas.eq(1).outerHeight(true), $areas.eq(2).outerHeight(true), 1.1, "area 1=2 height");
+    assert.roughEqual($areas.eq(0).outerHeight(true) + $areas.eq(1).outerHeight(true), $areas.eq(2).outerHeight(true) + $areas.eq(3).outerHeight(true) + $areas.eq(4).outerHeight(true), 1.01, "area 0+1=2+3+4 height");
+    assert.roughEqual($areas.eq(0).outerHeight(true), $areas.eq(2).outerHeight(true) + $areas.eq(3).outerHeight(true), 1.01, "area 0=2+3 height");
+    assert.roughEqual($areas.eq(1).outerHeight(true), $areas.eq(2).outerHeight(true), 0.1, "area 1=2 height");
     assert.equal($areas.eq(0).width(), $areas.eq(1).width(), "area 0=1 width");
     assert.equal($areas.eq(1).width(), $areas.eq(2).width(), "area 1=2 width");
     assert.equal($areas.eq(2).width(), $areas.eq(3).width(), "area 2=3 width");
@@ -2363,4 +2363,20 @@ QUnit.test("state option change", function(assert) {
     assert.ok($sortIndicator.hasClass("dx-sort-up"), "state is changed");
     // T717364
     assert.strictEqual(dataSource.field(0).sortOrder, "desc", "field sort order is not changed after state change");
+});
+
+// T744363
+QUnit.test("Render actual dataSource state on initialization", function(assert) {
+    // arrange
+    const dataSource = new PivotGridDataSource({ fields: [{ index: 0, dataField: "Field1", area: 'row', allowSorting: true, sortOrder: "asc" }] });
+
+    dataSource.field(0, { sortOrder: "desc" });
+
+    this.$container.dxPivotGridFieldChooser({
+        applyChangesMode: "onDemand",
+        dataSource: dataSource
+    });
+
+    const $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
+    assert.ok(!$sortIndicator.hasClass("dx-sort-up"));
 });

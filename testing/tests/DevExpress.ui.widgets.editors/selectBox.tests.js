@@ -1236,6 +1236,195 @@ QUnit.module("widget options", moduleSetup, () => {
         $selectBox.dxSelectBox("option", "dataSource", [4, 5, 6]);
 
         assert.equal($selectBox.dxSelectBox("option", "value"), 1, "custom value displayed after dataSource change");
+        assert.equal($selectBox.dxSelectBox("option", "text"), 1, "custom value text is displayed after dataSource change");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS contains value", (assert) => {
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: items,
+            valueExpr: "id",
+            displayExpr: "text",
+            deferRendering: true,
+            value: 1
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", [{ id: 1, text: "a" }, { id: 3, text: "c" }]);
+
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS does not contain value (T728469)", (assert) => {
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: items,
+            valueExpr: "id",
+            displayExpr: "text",
+            deferRendering: true,
+            value: 1
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", [{ id: 4, text: "d" }, { id: 5, text: "e" }]);
+
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS is async and contains value", (assert) => {
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (item) => {
+                    return item.id === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
+        });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: items,
+            deferRendering: true,
+            displayExpr: "text",
+            valueExpr: "id",
+            value: 1
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", dataSource);
+
+        this.clock.tick(50);
+
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on dataSource change if new DS is async and does not contain value", (assert) => {
+        const items = [{ id: 4, text: "d" }, { id: 5, text: "e" }];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (item) => {
+                    return item.id === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
+        });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [{ id: 1, text: "a" }, { id: 2, text: "b" }],
+            deferRendering: true,
+            displayExpr: "text",
+            valueExpr: "id",
+            value: "1"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", dataSource);
+
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS contains value", (assert) => {
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            value: 1,
+            deferRendering: true,
+            displayExpr: "text",
+            valueExpr: "id"
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", [{ id: 1, text: "a" }, { id: 2, text: "b" }]);
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS does not contain value (T728469)", (assert) => {
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            displayExpr: "text",
+            valueExpr: "id",
+            deferRendering: true,
+            value: 1
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", [{ id: 4, text: "d" }, { id: 5, text: "e" }]);
+
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS is async and contains value", (assert) => {
+        const items = [{ id: 1, text: "a" }, { id: 2, text: "b" }];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (item) => {
+                    return item.id === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
+        });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            deferRendering: true,
+            displayExpr: "text",
+            valueExpr: "id",
+            value: 1
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", dataSource);
+
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), "1", "value is correct");
+        assert.equal(selectBox.option("text"), "a", "text is correct");
+    });
+
+    QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS is async and does not contain value", (assert) => {
+        const items = [{ id: 4, text: "d" }, { id: 5, text: "e" }];
+        const dataSource = new DataSource({
+            byKey: (key) => {
+                return $.grep(items, (item) => {
+                    return item.id === key;
+                });
+            },
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(items);
+                });
+                return d.promise();
+            }
+        });
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: [],
+            deferRendering: true,
+            displayExpr: "text",
+            valueExpr: "id",
+            value: 1
+        }).dxSelectBox("instance");
+
+        selectBox.option("dataSource", dataSource);
+
+        this.clock.tick(50);
+        assert.equal(selectBox.option("value"), null, "value is correct");
+        assert.equal(selectBox.option("text"), "", "text is correct");
+        this.clock.restore();
     });
 
     QUnit.test("value should reset", (assert) => {
@@ -3765,7 +3954,7 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
 
         instance.option("dataSource", [4, 5, 6]);
 
-        assert.strictEqual(instance.option("value"), 1);
+        assert.strictEqual(instance.option("value"), null);
 
         this.clock.tick(0);
         keyboard.keyDown("down");
@@ -4122,6 +4311,23 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
             .keyDown("down");
 
         assert.equal($input.val(), 1, "chosen value is correct");
+    });
+
+    QUnit.test("Down key should not loop if dataSource is loading", (assert) => {
+        const ds = new DataSource(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+        const $element = $("#selectBox").dxSelectBox({
+            dataSource: ds,
+            pageSize: 5,
+            opened: true,
+            value: "9"
+        });
+
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        ds.beginLoading();
+        keyboardMock($input)
+            .keyDown("down");
+
+        assert.equal($input.val(), "9", "chosen value is correct");
     });
 
     QUnit.testInActiveWindow("value should be reset to the previous one on the 'tab' press if popup is closed", (assert) => {

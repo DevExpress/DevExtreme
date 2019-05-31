@@ -351,4 +351,31 @@
         }
     });
 
+    QUnit.test("T744904 - MVCx extension in template", function(assert) {
+        aspnet.setTemplateEngine();
+        window["MVCx"] = { };
+        try {
+            $("#qunit-fixture").html(
+                '<div id="test-widget"></div>' +
+                '<script id="test-template" type="text/html">' +
+                '  <script id="dxss_123456789" type="text/javascript"></<% %>script>' +
+                '</script>'
+            );
+
+            var widgetElement = $("#test-widget");
+            widgetElement.dxButton({
+                template: $("#test-template")
+            });
+
+            assert.ok(widgetElement.html().indexOf("dxss_") < 0);
+
+            window["MVCx"].isDXScriptInitializedOnLoad = true;
+            widgetElement.dxButton("instance").repaint();
+            assert.ok(widgetElement.html().indexOf("dxss_") > -1);
+        } finally {
+            setTemplateEngine("default");
+            delete window["MVCx"];
+        }
+    });
+
 }));

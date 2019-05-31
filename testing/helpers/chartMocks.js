@@ -10,6 +10,7 @@ import translator2DModule from "viz/translators/translator2d";
 import seriesFamilyModule from "viz/core/series_family";
 import seriesModule from "viz/series/base_series";
 import vizMocks from "./vizMocks.js";
+import { isDefined } from "../../js/core/utils/type.js";
 
 const firstCategory = "First";
 const secondCategory = "Second";
@@ -927,6 +928,12 @@ export const MockAxis = function(renderOptions) {
             this._options[typeSelector] = axisType || this._options[typeSelector];
         },
         getOptions: function() {
+            if(!isDefined(this._options)) {
+                this._options = {
+                    width: 1,
+                    visible: true
+                };
+            }
             return this._options;
         },
         getTitle: function() {
@@ -1022,6 +1029,12 @@ export const MockAxis = function(renderOptions) {
         },
         getCategoriesSorter: function() {
             return this._options.categoriesSortingMethod;
+        },
+        getAxisPosition: function() {
+            return 300;
+        },
+        getAxisShift: function() {
+            return 0;
         },
         getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),

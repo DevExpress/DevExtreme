@@ -3021,13 +3021,21 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
     try {
 
-        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "blue" }).dxLookup("instance");
+        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple", "red", "green", "yellow"], value: "blue" }).dxLookup("instance");
 
         $(lookup.field()).trigger("dxclick");
 
         var $popup = $(".dx-popup-wrapper");
 
         assert.roughEqual($popup.find(".dx-overlay-content").position().top, -3.5, 1, "offset of the lookup if first item is selected");
+
+        lookup._list.scrollTo(100);
+
+        lookup.close();
+
+        $(lookup.field()).trigger("dxclick");
+
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -3.5, 1, "offset of the lookup after scrolling and without item selecting");
 
         lookup.close();
 

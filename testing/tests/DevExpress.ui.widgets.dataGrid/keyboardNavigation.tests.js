@@ -6010,7 +6010,7 @@ QUnit.module("Customize keyboard navigation", {
         }, this.options);
 
         setupDataGridModules(this,
-            ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
+            ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail", "summary"],
             { initViews: true }
         );
     },
@@ -6332,6 +6332,51 @@ QUnit.module("Customize keyboard navigation", {
         assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
         assert.equal($("td.dx-focused").length, 1, "one cell is focused");
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    // T741572
+    testInDesktop("Enter key if 'enterKeyDirection' is 'column' and batch edit mode if recalculateWhileEditing is enabled", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column"
+            },
+            summary: {
+                recalculateWhileEditing: true
+            },
+            loadingTimeout: 0
+        };
+        this.setupModule();
+        this.renderGridView();
+
+
+        this.clock.tick();
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.$element().find(".dx-texteditor").dxTextBox("instance").option("value", "test");
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+
+
+        var changedSpy = sinon.spy();
+        this.dataController.changed.add(changedSpy);
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(changedSpy.callCount, 2, "changed count");
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
     });
 
     testInDesktop("Enter+Shift key if 'enterKeyDirection' is 'column' and batch edit mode", function(assert) {
@@ -7448,6 +7493,38 @@ QUnit.module("Customize keyboard navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
         assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
         assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
+    });
+
+    // T742967
+    testInDesktop("Editing start for a number cell with format if 'keyboardNavigation.editOnKeyPress'", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "room", dataType: "number", editorOptions: { format: "$#0.00" } }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick(300);
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.val(), "$2.00", "input value");
+        assert.equal($input.get(0).selectionStart, 2, "caret start position");
+        assert.equal($input.get(0).selectionEnd, 2, "caret end position");
     });
 
     testInDesktop("Editing navigation mode for a number cell if 'keyboardNavigation.editOnKeyPress' and Left/Right arrow keys exit", function(assert) {
@@ -8730,6 +8807,35 @@ QUnit.module("Keyboard navigation accessibility", {
 
         // assert
         assert.equal(counter, 4, "_editingCellTabHandler counter");
+    });
+
+    // T741590
+    testInDesktop("Focus column with showEditorAlways on tab", function(assert) {
+        // arrange
+        this.columns = [
+            { dataField: "name", allowSorting: true, allowFiltering: true },
+            { dataField: "room", dataType: "number", showEditorAlways: true }
+        ];
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        this.focusCell(0, 0);
+        this.clock.tick();
+
+        // act
+        this.triggerKeyDown("tab", false, false, $(this.getCellElement(0, 0)));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(":focus").hasClass("dx-editor-cell"), "editor cell is focused");
     });
 
     testInDesktop("Command column should not focused if batch editing mode", function(assert) {

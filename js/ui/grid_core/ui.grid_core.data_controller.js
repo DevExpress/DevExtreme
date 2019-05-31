@@ -356,6 +356,13 @@ module.exports = {
                     }
                     return filter;
                 },
+                waitReady: function() {
+                    if(this._updateLockCount) {
+                        this._readyDeferred = new Deferred();
+                        return this._readyDeferred;
+                    }
+                    return when();
+                },
                 _endUpdateCore: function() {
                     var changes = this._changes;
 
@@ -363,6 +370,11 @@ module.exports = {
                         this._changes = [];
                         var repaintChangesOnly = changes.every(change => change.repaintChangesOnly);
                         this.updateItems(changes.length === 1 ? changes[0] : { repaintChangesOnly: repaintChangesOnly });
+                    }
+
+                    if(this._readyDeferred) {
+                        this._readyDeferred.resolve();
+                        this._readyDeferred = null;
                     }
                 },
                 // Handlers
@@ -957,6 +969,11 @@ module.exports = {
                     if(change.cancel) return;
 
                     that._fireChanged(change);
+                },
+                loadingOperationTypes: function() {
+                    var dataSource = this.dataSource();
+
+                    return dataSource && dataSource.loadingOperationTypes() || {};
                 },
                 _fireChanged: function(change) {
                     var that = this;

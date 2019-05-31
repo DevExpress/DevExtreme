@@ -457,6 +457,16 @@ var SelectBox = DropDownList.inherit({
         this.callBase(isUnknownItem ? null : item);
     },
 
+    _processNonexistentItem: function() {
+        var isUnknownItem = !this._isCustomValueAllowed();
+
+        if(isUnknownItem) {
+            this.reset();
+        } else {
+            this.callBase.apply(this, arguments);
+        }
+    },
+
     _isCustomValueAllowed: function() {
         return this.option("acceptCustomValue") || this.callBase();
     },

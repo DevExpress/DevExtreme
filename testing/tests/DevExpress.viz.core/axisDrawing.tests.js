@@ -8995,6 +8995,31 @@ QUnit.test("Add correction to right margin for grid width if right is less than 
     assert.strictEqual(margins.top, 0, "top");
 });
 
+QUnit.test("Take into account axis line group if labels are not visible", function(assert) {
+    // arrange
+    this.updateOptions({
+        argumentType: "datetime",
+        isHorizontal: true,
+        position: "bottom",
+        label: {
+            visible: false
+        }
+    });
+
+    this.translator.stub("translate").returns(50);
+    this.axis.parser = function() {
+        return 0;
+    };
+    this.axis.draw(this.canvas);
+
+    this.renderer.g.getCall(4).returnValue.getBBox = sinon.stub().returns({ x: 20, y: 90, width: 20, height: 40 });
+
+    // act
+    var margins = this.axis.getMargins();
+
+    // assert
+    assert.strictEqual(margins.bottom, 60, "bottom");
+});
 
 QUnit.test("Do not add correction to right margin for grid width if right margin is greter than grid width. Horizontal axis", function(assert) {
     // arrange

@@ -3300,6 +3300,47 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
     clock.restore();
 });
 
+QUnit.test("Should navigate to the focused row by focusedRowIndex in virtual scrolling mode if corresponding page is not loaded (T733748)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 100,
+            focusedRowEnabled: true,
+            focusedRowKey: 11,
+            dataSource: [
+                { id: 2 }, { id: 3 },
+                { id: 4 }, { id: 5 },
+                { id: 6 }, { id: 7 },
+                { id: 8 }, { id: 9 },
+                { id: 10 }, { id: 11 },
+                { id: 12 }, { id: 13 }
+            ],
+            keyExpr: "id",
+            scrolling: {
+                mode: "virtual"
+            },
+            paging: {
+                pageSize: 2,
+                removeInvisiblePages: true
+            }
+        }).dxDataGrid("instance"),
+        rowsView = dataGrid.getView("rowsView");
+
+    clock.tick();
+
+    // act
+    dataGrid.option("focusedRowIndex", 0);
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowIndex"), 0, "focusedRowIndex");
+    assert.equal(dataGrid.option("focusedRowKey"), 2, "focusedRowKey");
+    assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "Focused row");
+    assert.equal($(rowsView.getRow(0)).find("td").eq(0).text(), "2", "Focused row cell text");
+
+    clock.restore();
+});
+
 QUnit.test("DataGrid should not scroll back to the focusedRow after paging if virtual scrolling (T718905, T719205)", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
@@ -6759,6 +6800,51 @@ QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling m
     assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
 });
 
+// T742926
+QUnit.test("Scroll should works if error occurs during third page loading if scrolling mode is infinite", function(assert) {
+    var error = false;
+    var dataGrid = createDataGrid({
+        height: 300,
+        loadingTimeout: undefined,
+        dataSource: {
+            load: function(options) {
+                if(error) {
+                    return $.Deferred().reject("Load error");
+                }
+
+                var data = [];
+
+                for(var i = options.skip; i < options.skip + options.take; i++) {
+                    data.push({ id: i + 1 });
+                }
+
+                return $.Deferred().resolve(data);
+            }
+        },
+        remoteOperations: { paging: true },
+        scrolling: {
+            timeout: 0,
+            mode: "infinite",
+            useNative: false
+        }
+    });
+
+    error = true;
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 20);
+    assert.strictEqual($(dataGrid.$element()).find(".dx-error-row").length, 1, "error row is visible");
+
+
+    error = false;
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+    assert.strictEqual($(dataGrid.$element()).find(".dx-error-row").length, 0, "error row is hidden");
+});
+
 QUnit.test("Resize command column", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
@@ -8334,6 +8420,39 @@ QUnit.test("search editor have not been recreated when search text is changed", 
     dataGrid.option("searchPanel.text", "123");
     // assert
     assert.strictEqual(searchEditor.option("value"), "123");
+});
+
+// T744851
+QUnit.test("search editor value should be changed when search text is changed if grid is rendered in toolbar", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            onToolbarPreparing: function(e) {
+                e.toolbarOptions.items.unshift({
+                    location: "before",
+                    template: function() {
+                        return $("<div>").dxDataGrid({
+                            loadingTimeout: undefined,
+                            searchPanel: {
+                                visible: true
+                            }
+                        });
+                    }
+                });
+            },
+            searchPanel: {
+                visible: true,
+            },
+            dataSource: [{ a: 1, b: 2 }, { a: 2, b: 1 }]
+        }),
+        $searchEditors = $(dataGrid.$element()).find(".dx-datagrid-search-panel");
+
+    // act
+    dataGrid.option("searchPanel.text", "123");
+
+    // assert
+    assert.strictEqual($searchEditors.eq(0).dxTextBox("instance").option("value"), "", "first search editor is not changed");
+    assert.strictEqual($searchEditors.eq(1).dxTextBox("instance").option("value"), "123", "second search editor is changed");
 });
 
 QUnit.test("search editor have not been recreated on typing", function(assert) {

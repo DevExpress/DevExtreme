@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     AsyncCollectionWidget = require("../collection/ui.collection_widget.async"),
+    Promise = require("../../core/polyfills/promise"),
     BindableTemplate = require("../widget/bindable_template");
 
 var TOOLBAR_CLASS = "dx-toolbar",
@@ -151,6 +152,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     _render: function() {
         this.callBase();
         this._renderItemsAsync();
+
+        if(themes.isMaterial()) {
+            this._checkWebFontForLabelsLoaded().then(this._dimensionChanged.bind(this));
+        }
     },
 
     _postProcessRenderItems: function() {
@@ -180,6 +185,17 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                     .appendTo($container);
             }
         });
+    },
+
+    _checkWebFontForLabelsLoaded: function() {
+        const $labels = this.$element().find(TOOLBAR_LABEL_SELECTOR);
+        const promises = [];
+        $labels.each((_, label) => {
+            const text = $(label).text();
+            const fontWeight = $(label).css("fontWeight");
+            promises.push(themes.waitWebFont(text, fontWeight));
+        });
+        return Promise.all(promises);
     },
 
     _arrangeItems: function(elementWidth) {

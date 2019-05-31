@@ -292,8 +292,12 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _spinValueChange: function(sign, dxEvent) {
-        var value = parseFloat(this._normalizeInputValue()) || 0,
-            step = parseFloat(this.option("step"));
+        var step = parseFloat(this.option("step"));
+        if(step === 0) {
+            return;
+        }
+
+        var value = parseFloat(this._normalizeInputValue()) || 0;
 
         value = this._correctRounding(value, step * sign);
 
