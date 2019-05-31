@@ -53,9 +53,29 @@
         }
     }
 
-    .dx-format-sm {
-        .dx-texteditor {
-            width: 90px;
+    .dx-diagram-toolbar {
+        .dx-diagram-select-b {
+            .dx-texteditor {
+                width: auto;
+            }
+            .dx-dropdowneditor-field-template-wrapper {
+                display: flex;
+                align-items: center;
+                
+                .dx-diagram-i {
+                    display: block;
+                }
+                
+                .dx-textbox {
+                    width: 0px;
+                }
+            }
         }
     }
+}
+
+.dx-diagram-i {
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    display: inline-block;
 }
