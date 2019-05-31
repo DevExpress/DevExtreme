@@ -167,7 +167,7 @@ class ToolbarModule extends BaseModule {
             });
 
             promise.done((formData) => {
-                if(selection && !formats.link && formData.text) {
+                if(selection && formData.text) {
                     const text = formData.text;
                     const { index, length } = selection;
 
