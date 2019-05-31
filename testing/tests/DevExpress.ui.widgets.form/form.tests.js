@@ -371,9 +371,15 @@ QUnit.test("Hide helper text when validation message shows for material theme", 
         ]
     }).dxForm("instance");
 
-    form.validate();
     form.getEditor("lastName").focus();
+    form.validate();
 
+    triggerKeyUp(form.getEditor("lastName").$element(), "Enter");
+    assert.ok(form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "invalid css class");
+
+    form.getEditor("name").focus();
+
+    form.getEditor("lastName").focus();
     assert.ok(form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "invalid css class");
 
     form.getEditor("name").focus();
