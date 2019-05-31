@@ -930,7 +930,7 @@ QUnit.test("should have no errors after value change if text editor buttons were
         items: [0, 1, 2, 3, 4, 5],
         value: 1,
         fieldTemplate: function(value) {
-            var $textBox = $("<div>").dxTextBox();
+            const $textBox = $("<div>").dxTextBox();
             return $("<div>").text(value + this.option("value")).append($textBox);
         }
     });
