@@ -384,8 +384,10 @@ var DropDownEditor = TextBox.inherit({
         this._disposeKeyboardProcessor();
 
         // NOTE: to prevent buttons disposition
-        this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode.removeChild(this._$beforeButtonsContainer[0]);
-        this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode.removeChild(this._$afterButtonsContainer[0]);
+        var beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
+        var afterButtonsContainerParent = this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode;
+        beforeButtonsContainerParent && beforeButtonsContainerParent.removeChild(this._$beforeButtonsContainer[0]);
+        afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
 
         $container.empty();
 
