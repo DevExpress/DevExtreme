@@ -817,7 +817,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         } else if(e.reachedBottom) {
             scrollableContent = this._findContentElement();
             scrollableContainer = e.component._container();
-            maxScrollTop = scrollableContent.height() + scrollbarWidth - scrollableContainer.height();
+            maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - scrollableContainer.height(), 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 
