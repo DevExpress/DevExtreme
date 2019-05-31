@@ -942,7 +942,7 @@ QUnit.test("AllDay appointment should have correct height after changing view", 
     this.instance.option("currentView", "day");
     this.instance.option("currentView", "week");
 
-    assert.equal(this.instance.$element().find(".dx-scheduler-all-day-appointment").outerHeight(), allDayPanelHeight, "Appointment height is correct");
+    assert.roughEqual(this.instance.$element().find(".dx-scheduler-all-day-appointment").outerHeight(), allDayPanelHeight, 1, "Appointment height is correct");
 });
 
 QUnit.test("allDay panel should be expanded when there are long appointments without allDay", function(assert) {

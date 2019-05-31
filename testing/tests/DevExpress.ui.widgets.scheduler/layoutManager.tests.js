@@ -1149,7 +1149,7 @@ QUnit.test("Parts of long compact appt should have right positions", function(as
 
         assert.deepEqual($appointment.eq(i).outerWidth(), 15, "appointment has a right size");
         assert.roughEqual(appointmentPosition.top, gap, 1.5, "part has right position");
-        assert.roughEqual(appointmentPosition.left, gap + 3 * tableCellWidth + tableCellWidth * (i - 2), 1.5, "part has right position");
+        assert.roughEqual(appointmentPosition.left, gap + 3 * tableCellWidth + tableCellWidth * (i - 2), 3, "part has right position");
     }
 });
 
