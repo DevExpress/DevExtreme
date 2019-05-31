@@ -3901,7 +3901,9 @@ QUnit.test("clientWidth", function(assert) {
     });
     var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    assert.equal($scrollable.dxScrollable("clientWidth"), $container.outerWidth(), "client width equals to container width");
+    $container.css({ overflowY: "hidden" });
+
+    assert.equal($scrollable.dxScrollable("clientWidth"), $container.width(), "client width equals to container width");
 });
 
 QUnit.test("scroll reachedTop true only at the top", function(assert) {
