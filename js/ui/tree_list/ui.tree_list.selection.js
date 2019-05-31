@@ -70,6 +70,27 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     this._selectionStateByKey = {};
                 },
 
+                _getSelectionConfig: function() {
+                    let config = this.callBase.apply(this, arguments);
+
+                    config.plainItems = () => {
+                        return this._dataController.getCachedStoreData() || [];
+                    };
+                    config.isItemSelected = (item) => {
+                        let key = this._dataController.keyOf(item);
+
+                        return this.isRowSelected(key);
+                    };
+                    config.isSelectableItem = () => {
+                        return true;
+                    };
+                    config.getItemData = (item) => {
+                        return item;
+                    };
+
+                    return config;
+                },
+
                 renderSelectCheckBoxContainer: function($container, model) {
                     var that = this,
                         rowsView = that.component.getView("rowsView");
