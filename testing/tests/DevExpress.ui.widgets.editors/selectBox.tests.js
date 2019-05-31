@@ -1242,7 +1242,7 @@ QUnit.module("widget options", moduleSetup, () => {
         selectBox.option("dataSource", [{ id: 4, text: "d" }, { id: 5, text: "e" }]);
 
         assert.equal(selectBox.option("value"), null, "value is correct");
-        assert.equal(selectBox.option("text"), "", "text is correct");
+        assert.equal(selectBox.option("text"), null, "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on dataSource change if new DS is async and contains value", (assert) => {
@@ -1305,7 +1305,7 @@ QUnit.module("widget options", moduleSetup, () => {
 
         this.clock.tick(50);
         assert.equal(selectBox.option("value"), null, "value is correct");
-        assert.equal(selectBox.option("text"), "", "text is correct");
+        assert.equal(selectBox.option("text"), null, "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS contains value", (assert) => {
@@ -1335,7 +1335,7 @@ QUnit.module("widget options", moduleSetup, () => {
         selectBox.option("dataSource", [{ id: 4, text: "d" }, { id: 5, text: "e" }]);
 
         assert.equal(selectBox.option("value"), null, "value is correct");
-        assert.equal(selectBox.option("text"), "", "text is correct");
+        assert.equal(selectBox.option("text"), null, "text is correct");
     });
 
     QUnit.test("should work correctly with value and displayed value on empty dataSource change if new DS is async and contains value", (assert) => {
@@ -1397,7 +1397,7 @@ QUnit.module("widget options", moduleSetup, () => {
 
         this.clock.tick(50);
         assert.equal(selectBox.option("value"), null, "value is correct");
-        assert.equal(selectBox.option("text"), "", "text is correct");
+        assert.equal(selectBox.option("text"), null, "text is correct");
         this.clock.restore();
     });
 
