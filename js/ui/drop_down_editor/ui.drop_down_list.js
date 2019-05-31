@@ -449,6 +449,10 @@ var DropDownList = DropDownEditor.inherit({
         this.option("selectedItem", null);
     },
 
+    _processNonexistentItem: function() {
+        this._clearSelectedItem();
+    },
+
     _processDataSourceChanging: function() {
         this._setListDataSource();
 
@@ -456,7 +460,7 @@ var DropDownList = DropDownEditor.inherit({
             if(this._isCustomValueAllowed()) {
                 return;
             }
-            this._clearSelectedItem();
+            this._processNonexistentItem();
         }).bind(this));
     },
 
