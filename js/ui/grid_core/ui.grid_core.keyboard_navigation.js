@@ -172,6 +172,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
         $cell = args.$newCellElement;
 
         if(!args.cancel) {
+            if(args.resetFocusedRow) {
+                this.getController("focus")._resetFocusedRow();
+                return;
+            }
+
             if(args.rowIndexChanged) {
                 $cell = this._getFocusedCell();
             }
@@ -1395,7 +1400,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(this.option("focusedRowEnabled")) {
             this.executeAction("onFocusedRowChanging", args);
             if(!args.cancel && args.newRowIndex !== newRowIndex) {
-                this.setFocusedRowIndex(args.newRowIndex);
+                args.resetFocusedRow = args.newRowIndex < 0;
+                if(!args.resetFocusedRow) {
+                    this.setFocusedRowIndex(args.newRowIndex);
+                }
                 args.rowIndexChanged = true;
             }
         }
