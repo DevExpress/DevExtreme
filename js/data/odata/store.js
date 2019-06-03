@@ -156,6 +156,7 @@ var ODataStore = Store.inherit({
     * @param1 key:object|string|number
     * @param2 extraOptions:object
     * @param2_field1 expand:string|Array<string>
+    * @param2_field2 select:string|Array<string>
     * @return Promise<any>
     */
     _byKeyImpl: function(key, extraOptions) {
