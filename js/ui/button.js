@@ -347,7 +347,7 @@ var Button = Widget.inherit({
     _renderClick: function() {
         var that = this,
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            actionConfig = { };
+            actionConfig = { excludeValidators: ["readOnly"] };
 
         if(this.option("useSubmitBehavior")) {
             actionConfig.afterExecute = function(e) {
