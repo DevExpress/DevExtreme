@@ -1700,10 +1700,10 @@ QUnit.test("Appointment should push correct data to the onAppointmentUpdating ev
     });
 
     var stub = sinon.stub(this.instance._options, "onAppointmentUpdating");
-    var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
+    var $appointment = this.scheduler.appointments.getAppointment(0);
 
     $appointment.trigger(dragEvents.start);
-    $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
+    this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
 
     const result = stub.getCall(0).args[0];
