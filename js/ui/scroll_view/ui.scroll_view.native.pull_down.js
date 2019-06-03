@@ -101,7 +101,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this.callBase();
         this._topPocketSize = this._$topPocket.height();
         this._bottomPocketSize = this._$bottomPocket.height();
-        this._scrollOffset = this._$container.height() - this._$content.height();
+        this._scrollOffset = Math.round((this._$container.height() - this._$content.height()) * 100) / 100;
     },
 
     _allowedDirections: function() {
@@ -168,7 +168,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location <= this._scrollOffset + this._bottomPocketSize;
+        return this._reachBottomEnabled && this._location - (this._scrollOffset + this._bottomPocketSize) <= 0.1;
     },
 
     _reachBottom: function() {

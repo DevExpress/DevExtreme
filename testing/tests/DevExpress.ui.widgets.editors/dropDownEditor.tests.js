@@ -925,6 +925,27 @@ QUnit.test("events should be rendered for input after value is changed when fiel
     });
 });
 
+QUnit.test("should have no errors after value change if text editor buttons were directly removed (T743479)", (assert) => {
+    const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        items: [0, 1, 2, 3, 4, 5],
+        value: 1,
+        fieldTemplate: function(value) {
+            const $textBox = $("<div>").dxTextBox();
+            return $("<div>").text(value + this.option("value")).append($textBox);
+        }
+    });
+    const dropDownEditor = $dropDownEditor.dxDropDownEditor("instance");
+
+    $dropDownEditor.find(".dx-texteditor-buttons-container").remove();
+
+    try {
+        dropDownEditor.option("value", 2);
+        assert.ok(true);
+    } catch(e) {
+        assert.ok(false, "the error is thrown");
+    }
+});
+
 
 QUnit.module("options");
 

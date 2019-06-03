@@ -20,6 +20,7 @@ var $ = require("../../core/renderer"),
     PivotGridDataSource = require("./data_source"),
     dataAreaNamespace = require("./ui.pivot_grid.data_area"),
     headersArea = require("./ui.pivot_grid.headers_area"),
+    getSize = require("../../core/utils/size").getSize,
 
     fieldsArea = require("./ui.pivot_grid.fields_area"),
 
@@ -1792,7 +1793,11 @@ var PivotGrid = Widget.inherit({
             rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
             dataAreaHeights = dataArea.getRowsHeight();
 
-            descriptionCellHeight = descriptionCell.outerHeight() + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
+            descriptionCellHeight = getSize(descriptionCell[0], "height", {
+                paddings: true,
+                borders: true,
+                margins: true
+            }) + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
 
             columnsAreaRowCount = that._dataController.getColumnsInfo().length;
 
