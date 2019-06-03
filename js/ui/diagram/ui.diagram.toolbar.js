@@ -11,7 +11,6 @@ import "../color_box";
 import "../check_box";
 
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
-const SIZING_FORMAT_CLASS_PREFIX = "dx-format-";
 const TOOLBAR_CLASS = "dx-diagram-toolbar";
 const WIDGET_COMMANDS = [
     {
@@ -71,7 +70,7 @@ class DiagramToolbar extends Widget {
         }
         return {
             widget: item.widget || "dxButton",
-            cssClass: item.sizing && (SIZING_FORMAT_CLASS_PREFIX + item.sizing),
+            cssClass: item.cssClass,
             options: {
                 stylingMode: "text",
                 text: item.text,
@@ -82,16 +81,37 @@ class DiagramToolbar extends Widget {
             }
         };
     }
-    _createItemOptions({ widget, items, valueExpr, displayExpr, showText }) {
+    _createItemOptions({ widget, items, valueExpr, displayExpr, showText, hint }) {
         if(widget === "dxSelectBox") {
-            return {
+            const isSelectButton = items.every(i => i.icon !== undefined);
+            let options = {
                 options: {
                     stylingMode: "filled",
                     items,
+                    hint: hint,
                     valueExpr,
                     displayExpr
                 }
             };
+            if(isSelectButton) {
+                options = extend(true, options, {
+                    options: {
+                        fieldTemplate: (data, container) => {
+                            $("<i>")
+                                .addClass(data && data.icon)
+                                .appendTo(container);
+                            $("<div>").dxTextBox({
+                                readOnly: true,
+                                stylingMode: "outlined"
+                            }).appendTo(container);
+                        },
+                        itemTemplate: (data) => {
+                            return `<i class="${data.icon}"${data.hint && ` title="${data.hint}`}"}></i>`;
+                        }
+                    }
+                });
+            }
+            return options;
         } else if(widget === "dxColorBox") {
             return {
                 options: {

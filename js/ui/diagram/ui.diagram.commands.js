@@ -4,7 +4,10 @@ import { isFunction } from "../../core/utils/type";
 import { getWindow } from "../../core/utils/window";
 
 const SEPARATOR = { widget: "separator" };
-const SIZING = { sm: "sm" };
+const CSS_CLASSES = {
+    SMALL_SELECT: "dx-diagram-select-sm",
+    BUTTON_SELECT: "dx-diagram-select-b"
+};
 
 const DiagramCommands = {
     getToolbar: function() {
@@ -33,7 +36,7 @@ const DiagramCommands = {
                 command: DiagramCommand.FontSize,
                 widget: "dxSelectBox",
                 items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"],
-                sizing: SIZING.sm
+                cssClass: CSS_CLASSES.SMALL_SELECT
             },
             SEPARATOR,
             {
@@ -94,37 +97,38 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.ConnectorLineOption,
                 widget: "dxSelectBox",
-                text: "Line Option",
+                hint: "Line Type",
                 items: [
-                    { name: "Straight", value: 0 },
-                    { name: "Orthogonal", value: 1 }
+                    { value: 0, icon: "dx-diagram-i-connector-straight dx-diagram-i", hint: "Straight" },
+                    { value: 1, icon: "dx-diagram-i-connector-orthogonal dx-diagram-i", hint: "Orthogonal" }
                 ],
                 displayExpr: "name",
-                valueExpr: "value"
+                valueExpr: "value",
+                cssClass: CSS_CLASSES.BUTTON_SELECT
             },
             {
                 command: DiagramCommand.ConnectorStartLineEnding,
                 widget: "dxSelectBox",
-                text: "Start Line Ending",
-                sizing: SIZING.sm,
                 items: [
-                    { name: "None", value: 0 },
-                    { name: "Arrow", value: 1 }
+                    { value: 0, icon: "dx-diagram-i-connector-begin-none dx-diagram-i", hint: "None" },
+                    { value: 1, icon: "dx-diagram-i-connector-begin-arrow dx-diagram-i", hint: "Arrow" }
                 ],
                 displayExpr: "name",
-                valueExpr: "value"
+                valueExpr: "value",
+                hint: "Line Start",
+                cssClass: CSS_CLASSES.BUTTON_SELECT
             },
             {
                 command: DiagramCommand.ConnectorEndLineEnding,
                 widget: "dxSelectBox",
-                text: "End Line Ending",
                 items: [
-                    { name: "None", value: 0 },
-                    { name: "Arrow", value: 1 }
+                    { value: 0, icon: "dx-diagram-i-connector-end-none dx-diagram-i", hint: "None" },
+                    { value: 1, icon: "dx-diagram-i-connector-end-arrow dx-diagram-i", hint: "Arrow" }
                 ],
                 displayExpr: "name",
-                sizing: SIZING.sm,
-                valueExpr: "value"
+                valueExpr: "value",
+                hint: "Line End",
+                cssClass: CSS_CLASSES.BUTTON_SELECT
             },
             SEPARATOR,
             {

@@ -52,6 +52,13 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         fontSelectBox.option("value", "Arial Black");
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, "Arial Black");
     });
+    test("selectboxes with icon items should be replaced with select buttons", (assert) => {
+        const $selectButtonTemplates = this.$element.find(TOOLBAR_SELECTOR).find(".dx-diagram-select-b").find(".dx-dropdowneditor-field-template-wrapper");
+        assert.ok($selectButtonTemplates.length > 0);
+        const selectButtonsCount = $selectButtonTemplates.length;
+        assert.equal($selectButtonTemplates.find(".dx-diagram-i").length, selectButtonsCount, "icons are rendered");
+        assert.equal($selectButtonTemplates.find(".dx-textbox")[0].offsetWidth, 0, "textbox is hidden");
+    });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
     test("should load default items", (assert) => {
