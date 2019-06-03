@@ -666,26 +666,33 @@ var Popup = Overlay.inherit({
                 + popupHeightParts.popupVerticalOffsets,
             overlayContent = this.overlayContent().get(0),
             cssStyles = {},
+            overlayClass = "dx-popup-inherit-height",
+            isAutoWidth = this.overlayContent().get(0).style.width === "auto" || this.overlayContent().get(0).style.width === "",
             contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
             contentMinHeight = this._getOptionValue("minHeight", overlayContent),
-            isAutoResizable = !isIE11 || (!contentMaxHeight && !contentMinHeight);
+            isAutoResizable = !(isIE11 && isAutoWidth) || !(contentMaxHeight || contentMinHeight);
 
         if(this.option("autoResizeEnabled") && this._isAutoHeight() && isAutoResizable) {
-            if(!isIE11) {
-                var container = $(this._getContainer()).get(0),
-                    maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
-                    minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
-
-                cssStyles = extend(cssStyles, {
-                    minHeight: minHeightValue,
-                    maxHeight: maxHeightValue
-                });
+            if(!isAutoWidth) {
+                overlayClass = "dx-popup-fixed-width";
+            } else if(!isIE11) {
+                overlayClass = "dx-popup-inherit-height";
             }
+
+            var container = $(this._getContainer()).get(0),
+                maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
+                minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
+
+            cssStyles = extend(cssStyles, {
+                minHeight: minHeightValue,
+                maxHeight: maxHeightValue
+            });
         } else {
             var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
             cssStyles = { height: Math.max(0, contentHeight) };
         }
 
+        this.overlayContent().addClass(overlayClass);
         this.$content().css(cssStyles);
     },
 
