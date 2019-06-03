@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 32 22" style="enable-background:new 0 0 32 22;" xml:space="preserve">
+<path d="M1,15l9-9l1,1l-9,9L1,15z" fill-rule="evenodd" clip-rule="evenodd" fill="#FF0000"/>
+<path d="M12,10V5H0v12h12v-5h20v-2H12z M10,15H2V7h8V15z" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"/>
+</svg>
