@@ -34,7 +34,9 @@ export default class TextEditorButton {
     }
 
     _isVisible() {
-        throw "Not implemented";
+        const { editor, options } = this;
+
+        return options.visible || !editor.option("readOnly");
     }
 
     _isDisabled() {
