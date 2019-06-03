@@ -8,7 +8,7 @@ export default class TextEditorButton {
         this.$placeMarker = null;
         this.editor = editor;
         this.name = name;
-        this.options = options;
+        this.options = options || {};
     }
 
     _addPlaceMarker($container) {
@@ -34,6 +34,12 @@ export default class TextEditorButton {
     }
 
     _isVisible() {
+        const { editor, options } = this;
+
+        return options.visible || !editor.option("readOnly");
+    }
+
+    _isDisabled() {
         throw "Not implemented";
     }
 

@@ -54,7 +54,7 @@ export default class ClearButton extends TextEditorButton {
     _isVisible() {
         const { editor } = this;
 
-        return editor.option("showDropDownButton");
+        return super._isVisible() && editor.option("showDropDownButton");
     }
 
     // TODO: get rid of it
