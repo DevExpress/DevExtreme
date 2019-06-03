@@ -371,20 +371,27 @@ QUnit.test("Hide helper text when validation message shows for material theme", 
         ]
     }).dxForm("instance");
 
-    form.getEditor("lastName").focus();
+    var lastName = form.getEditor("lastName"),
+        firstName = form.getEditor("name");
+
+    var isFieldWrapperInvalid = function(editor) {
+        return editor.$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS);
+    };
+
+    lastName.focus();
     form.validate();
 
-    triggerKeyUp(form.getEditor("lastName").$element(), "Enter");
-    assert.ok(form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "invalid css class");
+    triggerKeyUp(lastName.$element(), "Enter");
+    assert.ok(isFieldWrapperInvalid(lastName), "invalid css class");
 
-    form.getEditor("name").focus();
+    firstName.focus();
 
-    form.getEditor("lastName").focus();
-    assert.ok(form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "invalid css class");
+    lastName.focus();
+    assert.ok(isFieldWrapperInvalid(lastName), "invalid css class");
 
-    form.getEditor("name").focus();
-    assert.ok(!form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
-    assert.ok(!form.getEditor("name").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
+    firstName.focus();
+    assert.ok(!isFieldWrapperInvalid(lastName), "not invalid css class");
+    assert.ok(!isFieldWrapperInvalid(firstName), "not invalid css class");
 
     themes.isMaterial = origIsMaterial;
 
