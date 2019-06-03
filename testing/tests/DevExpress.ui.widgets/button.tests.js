@@ -93,6 +93,18 @@ QUnit.module("options changed callbacks", {
         assert.ok(this.element.hasClass("dx-state-disabled"));
     });
 
+    QUnit.test("readOnly validator should be excluded for the click action", (assert) => {
+        const clickHandler = sinon.spy();
+
+        this.instance.option({
+            onClick: clickHandler
+        });
+
+        this.element.addClass("dx-state-readonly");
+        this.element.trigger("dxclick");
+        assert.strictEqual(clickHandler.callCount, 1, "click handler was executed");
+    });
+
     QUnit.test("T325811 - 'text' option change should not lead to widget clearing", (assert) => {
         const $testElement = $("<div>").appendTo(this.element);
         assert.ok($testElement.parent().hasClass("dx-button"), "test element is in button");

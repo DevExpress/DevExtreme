@@ -67,7 +67,7 @@ export default class SpinButtons extends TextEditorButton {
     _isVisible() {
         const { editor } = this;
 
-        return editor.option("showSpinButtons");
+        return super._isVisible() && editor.option("showSpinButtons");
     }
 
     _isTouchFriendly() {

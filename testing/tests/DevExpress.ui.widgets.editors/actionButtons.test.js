@@ -276,6 +276,52 @@ module("rendering", () => {
 
             assert.strictEqual($textBox.height(), startHeight);
         });
+
+        test("custom button should be disabled in readOnly state by default", (assert) => {
+            const textBox = $("<div>").appendTo("#qunit-fixture").dxTextBox({
+                value: "text",
+                buttons: [
+                    {
+                        name: "custom",
+                        location: "after",
+                        options: {
+                            text: "custom"
+                        }
+                    }
+                ],
+                readOnly: true
+            }).dxTextBox("instance");
+            const button = textBox.getButton("custom");
+
+            assert.ok(button.option("disabled"), "button is disabled");
+
+            textBox.option("readOnly", false);
+            assert.notOk(button.option("disabled"), "button is enabled");
+        });
+
+        test("custom button should not be disabled in readOnly state if it was specified by a user", (assert) => {
+            const textBox = $("<div>").appendTo("#qunit-fixture").dxTextBox({
+                value: "text",
+                buttons: [
+                    {
+                        name: "custom",
+                        location: "after",
+                        options: {
+                            disabled: false,
+                            text: "custom"
+                        }
+                    }
+                ],
+                readOnly: true
+            }).dxTextBox("instance");
+            const button = textBox.getButton("custom");
+
+            assert.notOk(button.option("disabled"), "button is enabled");
+
+            button.option("disabled", true);
+            textBox.option("readOnly", false);
+            assert.ok(button.option("disabled"), "button is disabled");
+        });
     });
 
     module("numberBox", () => {
