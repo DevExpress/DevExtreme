@@ -337,7 +337,7 @@ describe("Cli arguments normalizer", () => {
         });
     });
 
-    it("build-theme input parameters (base theme) - material compact 12345", () => {
+    it("build-theme input parameters (base theme) - material compact", () => {
         const config = { command: "build-theme", baseTheme: "material.blue.light.compact" };
         normalizeConfig(config);
 
