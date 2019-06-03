@@ -419,7 +419,7 @@ module.exports = {
                     this.callBase($cell, direction);
 
                     this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
-                },
+                }
             },
 
             editorFactory: {
