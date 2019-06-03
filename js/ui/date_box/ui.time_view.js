@@ -177,17 +177,20 @@ var TimeView = Editor.inherit({
             min: -1,
             max: 24,
             value: this._getValue().getHours(),
-            onValueChanged: (function(args) {
-                var hours = this._convertMaxHourToMin(args.value),
-                    time = new Date(this._getValue());
-
-                time.setHours(hours);
-                uiDateUtils.normalizeTime(time);
-                this.option("value", time);
-            }).bind(this)
+            onValueChanged: this._onHourBoxValueChanged.bind(this),
         }, this._getNumberBoxConfig()));
 
         this._hourBox.setAria("label", "hours");
+    },
+
+    _onHourBoxValueChanged: function(args) {
+        var currentValue = this._getValue(),
+            newHours = this._convertMaxHourToMin(currentValue.getHours() + (args.value - args.previousValue)),
+            newValue = new Date(currentValue);
+
+        newValue.setHours(newHours);
+        uiDateUtils.normalizeTime(newValue);
+        this.option("value", newValue);
     },
 
     _convertMaxHourToMin: function(hours) {
