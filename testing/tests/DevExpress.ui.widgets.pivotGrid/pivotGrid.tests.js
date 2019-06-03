@@ -33,7 +33,8 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     devices = require("core/devices"),
     browser = require("core/utils/browser"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    getSize = require("core/utils/size").getSize;
 
 function sumArray(array) {
     var sum = 0;
@@ -4426,10 +4427,16 @@ QUnit.test("columns area row height calculation when description area is big", f
             }
         }, assert),
 
-        tableElement = pivot.$element().find('table').first();
-    tableElement.find(".dx-area-description-cell").height(80);
+        tableElement = pivot.$element().find('table').first(),
+        descriptionCell = tableElement.find(".dx-area-description-cell");
 
-    var delta = (tableElement.find(".dx-area-description-cell").outerHeight() - 28) / 2;
+    descriptionCell.height(80);
+
+    var delta = (getSize(descriptionCell[0], "height", {
+        paddings: true,
+        borders: true,
+        margins: true
+    }) - 28) / 2;
 
     // act
     pivot.updateDimensions();
