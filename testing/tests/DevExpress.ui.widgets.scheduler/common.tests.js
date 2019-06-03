@@ -2193,7 +2193,7 @@ QUnit.testStart(function() {
             dataSource: new DataSource({ store: oldData })
         });
 
-        this.instance.updateAppointment(Object.assign({}, oldData[0]), newData);
+        this.instance.updateAppointment($.extend({}, oldData[0]), newData);
         this.clock.tick();
 
         var args = updatingSpy.getCall(0).args[0];
