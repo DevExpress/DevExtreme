@@ -78,8 +78,8 @@ const subscribes = {
                 longParts = dateUtils.getDatesOfInterval(dates[i], endDateOfPart, {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
-
-                resultDates = resultDates.concat(longParts);
+                const maxDate = new Date(dateRange[1]);
+                resultDates = resultDates.concat(longParts.filter(el => new Date(el) < maxDate));
             }
 
             dates = resultDates;
