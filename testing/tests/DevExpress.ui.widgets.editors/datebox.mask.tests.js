@@ -381,6 +381,19 @@ if(devices.real().deviceType === "desktop") {
             }.bind(this));
         });
 
+        test("Moving through the february should not break day value", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 0, 29),
+                displayFormat: "MMMM, dd"
+            });
+
+            this.keyboard.press("up").press("up");
+            assert.strictEqual(this.$input.val(), "March, 29");
+
+            this.keyboard.press("down").press("down");
+            assert.strictEqual(this.$input.val(), "January, 29");
+        });
+
         test("Month changing should adjust days to limits", (assert) => {
             this.instance.option("value", new Date(2018, 2, 30));
             assert.strictEqual(this.$input.val(), "March 30 2018", "initial text is correct");
@@ -686,6 +699,19 @@ if(devices.real().deviceType === "desktop") {
             this.clock.tick(1);
             this.keyboard.type("d");
             assert.strictEqual(this.$input.val(), "December", "revert incorrect chars");
+        });
+
+        test("Month by char step over February", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 0, 29),
+                displayFormat: "MMMM, dd"
+            });
+
+            this.keyboard.type("march");
+            assert.strictEqual(this.$input.val(), "March, 29", "move forward, text is correct");
+
+            this.keyboard.type("january");
+            assert.strictEqual(this.$input.val(), "January, 29", "move backward, text is correct");
         });
 
         test("Short month", (assert) => {
