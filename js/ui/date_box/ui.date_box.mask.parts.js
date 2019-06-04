@@ -39,7 +39,7 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
         let hours = date.getHours(),
             current = hours >= 12;
 
-        if(current === value) {
+        if(current === !!(parseInt(value))) {
             return;
         }
 
