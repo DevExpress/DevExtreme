@@ -1003,7 +1003,7 @@ QUnit.test("allDay panel should be expanded after adding long appointment via ap
     assert.ok(workspace.option("allDayExpanded"), "allDay panel is expanded");
 });
 
-QUnit.test("all-day-appointment should have a correct height when the 'showAllDayPanel' option was changed", function(assert) {
+QUnit.skip("all-day-appointment should have a correct height when the 'showAllDayPanel' option was changed", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         currentView: "week",
