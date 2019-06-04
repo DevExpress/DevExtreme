@@ -10,6 +10,7 @@ import dateLocalization from "../../localization/date";
 import { getRegExpInfo } from "../../localization/ldml/date.parser";
 import { getFormat } from "../../localization/ldml/date.format";
 import { isString } from "../../core/utils/type";
+import { sign } from "../../core/utils/math";
 import DateBoxBase from "./ui.date_box.base";
 
 const MASK_EVENT_NAMESPACE = "dateBoxMask",
@@ -51,14 +52,25 @@ let DateBoxMask = DateBoxBase.inherit({
                 e.preventDefault();
             },
             upArrow: (e) => {
-                this._partIncrease(FORWARD);
+                this._upDownArrowHandler(FORWARD);
                 e.preventDefault();
             },
             downArrow: (e) => {
-                this._partIncrease(BACKWARD);
+                this._upDownArrowHandler(BACKWARD);
                 e.preventDefault();
             },
         });
+    },
+
+    _upDownArrowHandler(step) {
+        this._setNewDateIfEmpty();
+
+        const originalValue = this._getActivePartValue(this._initialMaskValue);
+        const currentValue = this._getActivePartValue();
+        const delta = currentValue - originalValue;
+
+        this._loadMaskValue(this._initialMaskValue);
+        this._partIncrease(delta + step);
     },
 
     _getDefaultOptions() {
@@ -131,6 +143,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _setNewDateIfEmpty() {
         if(!this._maskValue) {
             this._maskValue = new Date();
+            this._initialMaskValue = new Date();
             this._renderDateParts();
         }
     },
@@ -169,7 +182,8 @@ let DateBoxMask = DateBoxBase.inherit({
             endLimit = limits.max - limits.min;
 
         for(let i = 0; i <= endLimit; i++) {
-            this._partIncrease(1);
+            this._loadMaskValue(this._initialMaskValue);
+            this._partIncrease(i + 1);
             if(this._getActivePartProp("text").toLowerCase().indexOf(startString) === 0) {
                 this._searchValue = startString;
                 return;
@@ -272,6 +286,10 @@ let DateBoxMask = DateBoxBase.inherit({
             return;
         }
 
+        if(step) {
+            this._initialMaskValue = new Date(this._maskValue);
+        }
+
         let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
             let isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
@@ -332,13 +350,14 @@ let DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
-    _loadMaskValue() {
-        const value = this.dateOption("value");
+    _loadMaskValue(value = this.dateOption("value")) {
         this._maskValue = value && new Date(value);
+        this._initialMaskValue = value && new Date(value);
     },
 
     _saveMaskValue() {
         const value = this._maskValue && new Date(this._maskValue);
+        this._initialMaskValue = new Date(value);
         this.dateOption("value", value);
     },
 
@@ -358,13 +377,29 @@ let DateBoxMask = DateBoxBase.inherit({
     _partIncrease(step) {
         this._setNewDateIfEmpty();
 
-        let limits = this._getActivePartLimits(),
-            newValue = step + this._getActivePartValue();
+        const { max, min } = this._getActivePartLimits();
 
-        newValue = newValue > limits.max ? limits.min : newValue;
-        newValue = newValue < limits.min ? limits.max : newValue;
+        let limitDelta = max - min;
+
+        // take AM\PM into account
+        if(limitDelta === 1) {
+            limitDelta++;
+        }
+
+        let newValue = step + this._getActivePartValue();
+
+        if(newValue > max) {
+            newValue = this._applyLimits(newValue, { limitBase: min, limitClosest: max, limitDelta });
+        } else if(newValue < min) {
+            newValue = this._applyLimits(newValue, { limitBase: max, limitClosest: min, limitDelta });
+        }
 
         this._setActivePartValue(newValue);
+    },
+
+    _applyLimits(newValue, { limitBase, limitClosest, limitDelta }) {
+        const delta = (newValue - limitClosest) % limitDelta;
+        return delta ? limitBase + delta - 1 * sign(delta) : limitClosest;
     },
 
     _maskClickHandler() {
