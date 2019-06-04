@@ -158,7 +158,7 @@ QUnit.test("Tasks should have right boundOffset", function(assert) {
         draggableBounds = $appointment.dxDraggable("instance").option("boundOffset"),
         allDayPanelHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").first().outerHeight();
 
-    assert.equal(draggableBounds.top, -allDayPanelHeight, "bounds are OK");
+    assert.roughEqual(draggableBounds.top, -allDayPanelHeight, 1, "bounds are OK");
 });
 
 QUnit.test("Draggable rendering option 'immediate' should be turned off", function(assert) {
@@ -2542,7 +2542,7 @@ QUnit.test("Appointment should have correct position while vertical dragging", f
 
     var currentPosition = translator.locate($appointment);
 
-    assert.equal(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, "Appointment position is correct");
+    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 1, "Appointment position is correct");
     pointer.dragEnd();
 });
 
