@@ -81,48 +81,75 @@ class DiagramToolbar extends Widget {
             }
         };
     }
-    _createItemOptions({ widget, items, valueExpr, displayExpr, showText, hint }) {
+    _createItemOptions({ widget, items, valueExpr, displayExpr, showText, hint, icon }) {
         if(widget === "dxSelectBox") {
-            const isSelectButton = items.every(i => i.icon !== undefined);
-            let options = {
-                options: {
-                    stylingMode: "filled",
-                    items,
-                    hint: hint,
-                    valueExpr,
-                    displayExpr
-                }
-            };
-            if(isSelectButton) {
-                options = extend(true, options, {
-                    options: {
-                        fieldTemplate: (data, container) => {
-                            $("<i>")
-                                .addClass(data && data.icon)
-                                .appendTo(container);
-                            $("<div>").dxTextBox({
-                                readOnly: true,
-                                stylingMode: "outlined"
-                            }).appendTo(container);
-                        },
-                        itemTemplate: (data) => {
-                            return `<i class="${data.icon}"${data.hint && ` title="${data.hint}`}"}></i>`;
-                        }
-                    }
-                });
-            }
-            return options;
+            return this._createSelectBoxItemOptions(hint, items, valueExpr, displayExpr);
         } else if(widget === "dxColorBox") {
-            return {
-                options: {
-                    stylingMode: "filled"
-                }
-            };
+            return this._createColorBoxItemOptions(hint, icon);
         } else if(!widget || widget === "dxButton") {
             return {
                 showText: showText || "inMenu"
             };
         }
+    }
+    _createSelectBoxItemOptions(hint, items, valueExpr, displayExpr) {
+        let options = this._createSelectBoxBaseItemOptions(hint);
+        options = extend(true, options, {
+            options: {
+                items,
+                valueExpr,
+                displayExpr
+            }
+        });
+        const isSelectButton = items.every(i => i.icon !== undefined);
+        if(isSelectButton) {
+            options = extend(true, options, {
+                options: {
+                    fieldTemplate: (data, container) => {
+                        $("<i>")
+                            .addClass(data && data.icon)
+                            .appendTo(container);
+                        $("<div>").dxTextBox({
+                            readOnly: true,
+                            stylingMode: "outlined"
+                        }).appendTo(container);
+                    },
+                    itemTemplate: (data) => {
+                        return `<i class="${data.icon}"${data.hint && ` title="${data.hint}`}"}></i>`;
+                    }
+                }
+            });
+        }
+        return options;
+    }
+    _createColorBoxItemOptions(hint, icon) {
+        let options = this._createSelectBoxBaseItemOptions(hint);
+        if(icon) {
+            options = extend(true, options, {
+                options: {
+                    openOnFieldClick: true,
+                    fieldTemplate: (data, container) => {
+                        $("<i>")
+                            .addClass(icon)
+                            .css("borderBottomColor", data)
+                            .appendTo(container);
+                        $("<div>").dxTextBox({
+                            readOnly: true,
+                            stylingMode: "outlined"
+                        }).appendTo(container);
+                    }
+                }
+            });
+        }
+        return options;
+    }
+    _createSelectBoxBaseItemOptions(hint) {
+        return {
+            options: {
+                stylingMode: "filled",
+                hint: hint,
+            }
+        };
     }
     _createItemActionOptions(item, handler) {
         switch(item.widget) {
