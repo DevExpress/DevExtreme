@@ -6,7 +6,8 @@ import { getWindow } from "../../core/utils/window";
 const SEPARATOR = { widget: "separator" };
 const CSS_CLASSES = {
     SMALL_SELECT: "dx-diagram-select-sm",
-    BUTTON_SELECT: "dx-diagram-select-b"
+    BUTTON_SELECT: "dx-diagram-select-b",
+    BUTTON_COLOR: "dx-diagram-color-b",
 };
 
 const DiagramCommands = {
@@ -61,17 +62,23 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.FontColor,
                 text: "Text Color",
-                widget: "dxColorBox"
+                widget: "dxColorBox",
+                icon: "dx-icon dx-icon-color",
+                cssClass: CSS_CLASSES.BUTTON_COLOR
             },
             {
                 command: DiagramCommand.StrokeColor,
                 text: "Line Color",
-                widget: "dxColorBox"
+                widget: "dxColorBox",
+                icon: "dx-icon dx-icon-background",
+                cssClass: CSS_CLASSES.BUTTON_COLOR
             },
             {
                 command: DiagramCommand.FillColor,
                 text: "Fill Color",
-                widget: "dxColorBox"
+                widget: "dxColorBox",
+                icon: "dx-diagram-i dx-diagram-i-button-fill",
+                cssClass: CSS_CLASSES.BUTTON_COLOR
             },
             SEPARATOR,
             {
