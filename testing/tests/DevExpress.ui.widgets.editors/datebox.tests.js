@@ -1301,13 +1301,13 @@ QUnit.test("component should have correct width when it was rendered in a scaled
         component = $("#dateBox").dxDateBox({
             width: undefined
         }).dxDateBox("instance"),
-        initialWidth = $element.get(0).getBoundingClientRect();
+        initialWidth = $element.get(0).getBoundingClientRect().width;
 
     $parent.css("transform", "scale(0.5)");
     component.repaint();
     $parent.css("transform", "scale(1)");
 
-    var actualWidth = component.$element().get(0).getBoundingClientRect();
+    var actualWidth = component.$element().get(0).getBoundingClientRect().width;
     assert.strictEqual(actualWidth, initialWidth, "component has correct width");
 });
 
