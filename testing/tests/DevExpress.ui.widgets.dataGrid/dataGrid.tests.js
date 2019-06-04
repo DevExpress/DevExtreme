@@ -70,8 +70,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { PagerWrapper } from "../../helpers/wrappers/pagerWrapper.js";
-import { FilterPanelWrapper } from "../../helpers/wrappers/filterPanelWrapper.js";
+import { FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
