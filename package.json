@@ -101,7 +101,9 @@
     "vinyl-named": "^1.1.0",
     "webpack": "^3.10.0",
     "webpack-stream": "^3.2.0",
-    "yargs": "^4.6.0"
+    "yargs": "^4.6.0",
+    "testcafe": "^1.2.0",
+    "nconf": "^0.10.0"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
@@ -117,7 +119,8 @@
     "dev": "gulp dev",
     "test-env": "node testing/launch",
     "update-ts": "dx-tools declaration-validator && dx-tools ts-generator",
-    "validate-declarations": "dx-tools declaration-validator"
+    "validate-declarations": "dx-tools declaration-validator",
+    "test-functional": "node ./testing/functional/runner"
   },
   "browserslist": [
     "last 2 versions",
