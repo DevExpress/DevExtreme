@@ -361,7 +361,7 @@ function isWebFontLoaded(text, fontWeight) {
 
 function waitWebFont(text, fontWeight) {
     const timeout = 15;
-    const attempts = 35;
+    const attempts = 135;
     let i = 0;
 
     return new Promise((resolve, reject) => {
