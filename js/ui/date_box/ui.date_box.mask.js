@@ -10,6 +10,7 @@ import dateLocalization from "../../localization/date";
 import { getRegExpInfo } from "../../localization/ldml/date.parser";
 import { getFormat } from "../../localization/ldml/date.format";
 import { isString } from "../../core/utils/type";
+import { sign } from "../../core/utils/math";
 import DateBoxBase from "./ui.date_box.base";
 
 const MASK_EVENT_NAMESPACE = "dateBoxMask",
@@ -376,24 +377,29 @@ let DateBoxMask = DateBoxBase.inherit({
     _partIncrease(step) {
         this._setNewDateIfEmpty();
 
-        const limits = this._getActivePartLimits();
+        const { max, min } = this._getActivePartLimits();
 
-        let limitDelta = limits.max - limits.min;
+        let limitDelta = max - min;
+
+        // take AM\PM into account
         if(limitDelta === 1) {
             limitDelta++;
         }
 
         let newValue = step + this._getActivePartValue();
 
-        if(newValue > limits.max) {
-            const delta = (newValue - limits.max) % limitDelta;
-            newValue = delta ? limits.min + delta - 1 : limits.max;
-        } else if(newValue < limits.min) {
-            const delta = (limits.min - newValue) % limitDelta;
-            newValue = delta ? limits.max - delta + 1 : limits.min;
+        if(newValue > max) {
+            newValue = this._applyLimits(newValue, { limitBase: min, limitClosest: max, limitDelta });
+        } else if(newValue < min) {
+            newValue = this._applyLimits(newValue, { limitBase: max, limitClosest: min, limitDelta });
         }
 
         this._setActivePartValue(newValue);
+    },
+
+    _applyLimits(newValue, { limitBase, limitClosest, limitDelta }) {
+        const delta = (newValue - limitClosest) % limitDelta;
+        return delta ? limitBase + delta - 1 * sign(delta) : limitClosest;
     },
 
     _maskClickHandler() {
