@@ -19,7 +19,24 @@ const FOCUS_STATE_CLASS = "dx-state-focused",
 var isMouseDown = false,
     isHiddenFocusing = false;
 
+function fireKeyDownEvent(instance, event) {
+    var args = {
+        event: event,
+        handled: false
+    };
+
+    instance.executeAction && instance.executeAction("onKeyDown", args);
+    return args.handled;
+}
+
 function processKeyDown(viewName, instance, event, action, $mainElement) {
+    instance = instance.option('parent') || instance;
+
+    var isHandled = fireKeyDownEvent(instance, event.originalEvent);
+    if(isHandled) {
+        return;
+    }
+
     var keyName = eventUtils.normalizeKeyName(event);
 
     if(keyName === "enter" || keyName === "space") {
@@ -44,6 +61,11 @@ function findFocusedViewElement(viewSelectors) {
     }
 }
 
+function createOnKeyDownAction(instance) {
+    var actionInstance = instance.option('parent') || instance;
+    actionInstance.createAction && actionInstance.createAction("onKeyDown");
+}
+
 module.exports = {
     hiddenFocus: function(element) {
         isHiddenFocusing = true;
@@ -57,6 +79,8 @@ module.exports = {
         }
 
         var $mainElement = $(instance.element());
+
+        createOnKeyDownAction(instance);
 
         eventsEngine.on($element, "keydown", selector, e => processKeyDown(viewName, instance, e, action, $mainElement));
         eventsEngine.on($element, "mousedown", selector, () => {

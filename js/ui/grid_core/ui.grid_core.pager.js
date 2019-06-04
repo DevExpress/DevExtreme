@@ -43,6 +43,7 @@ var PagerView = modules.View.inherit({
             pagerOptions = that.option("pager") || {},
             dataController = that.getController("data"),
             options = {
+                parent: that,
                 maxPagesCount: MAX_PAGES_COUNT,
                 pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
                 pageCount: dataController.pageCount(),
