@@ -13,7 +13,10 @@ import "ui/data_grid/ui.data_grid";
 import "data/odata/store";
 
 import $ from "jquery";
+import eventUtils from "events/utils";
 import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
+
+var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
 
 var addOptionChangedHandlers = function(that) {
     that.optionCalled.add(function(optionName, value) {
@@ -4731,7 +4734,7 @@ QUnit.testInActiveWindow("DataGrid should reset focused row if focusedRowKey is 
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, this.option("focusedRowIndex"), "Keyboard navigation focused row index");
 });
 
-QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowIndex is set to < 0", function(assert) {
+QUnit.testInActiveWindow("DataGrid should reset focused row if focusedRowIndex is set to < 0", function(assert) {
     // arrange
     var rowsView;
 
@@ -4761,6 +4764,47 @@ QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowInd
     // assert
     assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
     assert.notOk(this.option("focusedRowKey"), "No focusedRowKey");
+});
+
+QUnit.testInActiveWindow("DataGrid should reset focused row if 'e.newRowIndex' is set to < 0 value in the onFocusedRowChanging event (T745451)", function(assert) {
+    // arrange
+    var focusedRowChangingCount = 0,
+        rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+    this.data = [{ id: 0 }, { id: 1 }];
+    this.options = {
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1,
+        onFocusedRowChanging: e => {
+            ++focusedRowChangingCount;
+            e.newRowIndex = -1;
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    this.clock.tick();
+
+    try {
+        // act
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
+        this.clock.tick();
+        // assert
+        assert.equal(focusedRowChangingCount, 1, "focusedRowChangingCount");
+        assert.notOk($(rowsView.getRow(0)).hasClass("dx-row-focused"), "no focused row");
+        assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
+        assert.equal(this.option("focusedRowIndex"), -1, "focusedRowIndex");
+        assert.equal(this.option("focusedRowKey"), undefined, "focusedRowKey");
+    } catch(e) {
+        // assert
+        assert.ok(false, e.message);
+    }
 });
 
 QUnit.testInActiveWindow("DataGrid should raise exception if focusedRowEnabled and dataSource has no operationTypes", function(assert) {
@@ -4926,4 +4970,42 @@ QUnit.testInActiveWindow("Highlight cell on click when startEditAction is 'dblCl
     // assert
     assert.strictEqual(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
     assert.ok($("#container .dx-datagrid-focus-overlay:visible").length, "has focus overlay");
+});
+
+QUnit.testInActiveWindow("DataGrid - onFocusedCellChanging event should execute on cell click in batch edit mode (T743530)", function(assert) {
+    var rowsView,
+        keyboardController,
+        focusedCellChangingCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        editing: { mode: 'batch', allowUpdating: true },
+        onFocusedCellChanging: e => {
+            ++focusedCellChangingCount;
+        }
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Dan", phone: "553355", room: 2 }
+    ];
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // act
+    $(rowsView.getRow(0).find("td").eq(1)).trigger("dxpointerdown").click();
+    this.clock.tick();
+    // assert
+    assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
 });

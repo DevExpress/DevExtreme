@@ -2728,7 +2728,7 @@ const Scheduler = Widget.inherit({
     _updateAppointment: function(target, appointment, onUpdatePrevented) {
         var updatingOptions = {
             newData: appointment,
-            oldData: target,
+            oldData: extend({}, target),
             cancel: false
         };
 

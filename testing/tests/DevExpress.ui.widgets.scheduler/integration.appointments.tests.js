@@ -1695,19 +1695,22 @@ QUnit.test("Appointment should push correct data to the onAppointmentUpdating ev
                 label: "Priority"
             }
         ],
-        onAppointmentUpdating: function(e) {
-            assert.equal(e.oldData.priorityId, 1, "Appointment was located in the first group");
-            assert.equal(e.newData.priorityId, 2, "Appointment located in the second group now");
-        },
+        onAppointmentUpdating: function(e) {},
         width: 800
     });
-    var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
+
+    var stub = sinon.stub(this.instance._options, "onAppointmentUpdating");
+    var $appointment = this.scheduler.appointments.getAppointment(0);
 
     $appointment.trigger(dragEvents.start);
-    $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
+    this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
 
-    assert.expect(2);
+    const result = stub.getCall(0).args[0];
+
+    assert.equal(result.oldData.priorityId, 1, "Appointment was located in the first group");
+    assert.equal(result.newData.priorityId, 2, "Appointment located in the second group now");
+
     this.clock.tick();
 });
 
