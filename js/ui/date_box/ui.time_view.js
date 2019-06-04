@@ -185,12 +185,19 @@ var TimeView = Editor.inherit({
 
     _onHourBoxValueChanged: function(args) {
         var currentValue = this._getValue(),
-            newHours = this._convertMaxHourToMin(currentValue.getHours() + (args.value - args.previousValue)),
+            newHours = this._convertMaxHourToMin(this._getCalculatedHours(currentValue.getHours(), args.previousValue, args.value)),
             newValue = new Date(currentValue);
 
         newValue.setHours(newHours);
         uiDateUtils.normalizeTime(newValue);
         this.option("value", newValue);
+    },
+
+    _getCalculatedHours: function(currentHours, prevHours, newHours) {
+        if(Math.abs(prevHours - newHours) === 1) {
+            return currentHours + (newHours - prevHours);
+        }
+        return newHours;
     },
 
     _convertMaxHourToMin: function(hours) {
