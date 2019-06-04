@@ -840,12 +840,13 @@ var LayoutManager = Widget.inherit({
         var wrapperClass = "." + FIELD_ITEM_CONTENT_WRAPPER_CLASS,
             toggleInvalidClass = function(e) {
                 $(e.element).parents(wrapperClass)
-                    .toggleClass(INVALID_CLASS, e.event.type === "focusin" && e.component.option("isValid") === false);
+                    .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option("isValid") === false);
             };
 
         editorInstance
             .on("focusIn", toggleInvalidClass)
-            .on("focusOut", toggleInvalidClass);
+            .on("focusOut", toggleInvalidClass)
+            .on("enterKey", toggleInvalidClass);
     },
 
     _createEditor: function($container, renderOptions, editorOptions) {
