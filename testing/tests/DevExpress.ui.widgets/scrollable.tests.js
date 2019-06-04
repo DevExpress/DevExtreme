@@ -3948,6 +3948,8 @@ QUnit.test("clientWidth", function(assert) {
     });
     var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
+    $container.css({ overflowY: "hidden" });
+
     assert.equal($scrollable.dxScrollable("clientWidth"), $container.width(), "client width equals to container width");
 });
 
