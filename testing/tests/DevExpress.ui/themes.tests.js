@@ -589,16 +589,16 @@ QUnit.module("web font checker", () => {
         const font = new FontFace("RobotoFallback", "url(../../artifacts/css/fonts/Roboto-400.woff2)", { weight: 400 });
         document.fonts.add(font);
 
-        themes.waitWebFont("test text", 400).then((success) => {
-            assert.ok(true, "The font was loaded, waiting successfully resolved");
-            document.fonts.clear();
-            done();
-        }, (fail) => {
-            assert.ok(false, "The font was loaded, but waiting was rejected");
-            document.fonts.clear();
-            done();
+        document.fonts.ready.then(() => {
+            themes.waitWebFont("test text", 400).then((success) => {
+                assert.ok(true, "The font was loaded, waiting successfully resolved");
+                document.fonts.clear();
+                done();
+            }, (fail) => {
+                assert.ok(false, "The font was loaded, but waiting was rejected");
+                document.fonts.clear();
+                done();
+            });
         });
-
-        font.load();
     });
 });
