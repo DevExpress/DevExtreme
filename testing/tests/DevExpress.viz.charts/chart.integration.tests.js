@@ -1660,7 +1660,7 @@ QUnit.test("financial series are not used to define autoHiding", function(assert
             height: 440
         },
         argumentAxis: {
-            visualRange: [new Date(10000), new Date(100000)]
+            visualRange: [new Date(10000), new Date(89000)]
         },
         commonSeriesSettings: { argumentField: "date" },
         series: [
