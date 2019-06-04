@@ -436,7 +436,7 @@ QUnit.testInActiveWindow("input value is greeter or less after mousewheel action
     assert.equal(numberBox.option("value"), 100.6, "value is less after mousewheel down");
 
     mouse.wheel(-20);
-    assert.equal(numberBox.option("value"), 100.6, "value is less after mousewheel down");
+    assert.roughEqual(numberBox.option("value"), 100.6, 1.001, "value is less after mousewheel down");
 
     $numberBoxInput.blur();
     mouse.wheel(-20);
