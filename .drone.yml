@@ -12,14 +12,14 @@ clone:
     commands:
       - "echo \"PR $DRONE_PULL_REQUEST: $DRONE_REPO#$DRONE_BRANCH \u2190 $DRONE_COMMIT_SHA\""
       - git init
-      - git config user.email "devextreme-ci@devexpress.com"      
+      - git config user.email "devextreme-ci@devexpress.com"
       - git remote add origin "https://github.com/$DRONE_REPO.git"
       - git fetch origin "$DRONE_BRANCH"
       - git fetch origin "+refs/pull/$DRONE_PULL_REQUEST/head:"
       - git checkout -qf "$DRONE_BRANCH"
       - git merge --squash "$DRONE_COMMIT_SHA"
     when:
-      event: [ pull_request ]    
+      event: [ pull_request ]
 
 pipeline:
 
@@ -48,4 +48,5 @@ matrix:
     - { TARGET: test, BROWSER: firefox, CONSTEL: ui.grid }
     - { TARGET: test, BROWSER: firefox, CONSTEL: ui.scheduler }
     - { TARGET: test, BROWSER: firefox, CONSTEL: viz }
+    - { TARGET: test_functional }
     - { TARGET: test_themebuilder }
