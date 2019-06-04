@@ -337,6 +337,25 @@ describe("Cli arguments normalizer", () => {
         });
     });
 
+    it("build-theme input parameters (base theme) - material compact", () => {
+        const config = { command: "build-theme", baseTheme: "material.blue.light.compact" };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "blue-light-compact",
+            "command": "build-theme",
+            "data": {},
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "makeSwatch": false,
+            "out": "dx.material.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
+            "themeName": "material"
+        });
+    });
+
     it("build-theme input parameters (base theme, input file)", () => {
         const config = { command: "build-theme", baseTheme: "material.blue.light", inputFile: "file.json" };
         normalizeConfig(config);
