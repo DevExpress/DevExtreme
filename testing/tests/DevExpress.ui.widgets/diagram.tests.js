@@ -23,6 +23,10 @@ const moduleConfig = {
     }
 };
 
+function getToolbarIcon(button) {
+    return button.find(".dx-dropdowneditor-field-template-wrapper").find(".dx-diagram-i, .dx-icon");
+}
+
 QUnit.module("Diagram Toolbar", moduleConfig, () => {
     test("should fill toolbar with default items", (assert) => {
         let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
@@ -68,16 +72,21 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
     });
     test("colorbuttons should show an active color", (assert) => {
         const colorButton = this.$element.find(TOOLBAR_SELECTOR).find(".dx-diagram-color-b").first();
-        const getIcon = () => colorButton.find(".dx-dropdowneditor-field-template-wrapper").find(".dx-diagram-i, .dx-icon");
-        assert.equal(getIcon().css("borderBottomColor"), "rgb(0, 0, 0)");
+        assert.equal(getToolbarIcon(colorButton).css("borderBottomColor"), "rgb(0, 0, 0)");
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontColor).execute("rgb(255, 0, 0)");
-        assert.equal(getIcon().css("borderBottomColor"), "rgb(255, 0, 0)", "button changed via command");
+        assert.equal(getToolbarIcon(colorButton).css("borderBottomColor"), "rgb(255, 0, 0)", "button changed via command");
         colorButton.find(".dx-dropdowneditor-button").trigger("dxclick");
         const $overlayContent = $(".dx-colorbox-overlay");
         $overlayContent.find(".dx-colorview-label-hex").find(".dx-textbox").dxTextBox("instance").option("value", "00ff00");
         $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-apply-button").trigger("dxclick");
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontColor).getState().value, "#00ff00", "color changed by color button");
-        assert.equal(getIcon().css("borderBottomColor"), "rgb(0, 255, 0)", "button changed via coloredit");
+        assert.equal(getToolbarIcon(colorButton).css("borderBottomColor"), "rgb(0, 255, 0)", "button changed via coloredit");
+    });
+    test("colorbutton should show dropdown on icon click", (assert) => {
+        const colorButton = this.$element.find(TOOLBAR_SELECTOR).find(".dx-diagram-color-b").first();
+        const colorBox = colorButton.find(".dx-colorbox").dxColorBox("instance");
+        getToolbarIcon(colorButton).trigger("dxclick");
+        assert.ok(colorBox.option("opened"), true);
     });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
