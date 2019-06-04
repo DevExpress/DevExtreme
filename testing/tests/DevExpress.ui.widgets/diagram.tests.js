@@ -54,10 +54,30 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
     });
     test("selectboxes with icon items should be replaced with select buttons", (assert) => {
         const $selectButtonTemplates = this.$element.find(TOOLBAR_SELECTOR).find(".dx-diagram-select-b").find(".dx-dropdowneditor-field-template-wrapper");
-        assert.ok($selectButtonTemplates.length > 0);
+        assert.ok($selectButtonTemplates.length > 0, "select buttons are rendered");
         const selectButtonsCount = $selectButtonTemplates.length;
         assert.equal($selectButtonTemplates.find(".dx-diagram-i").length, selectButtonsCount, "icons are rendered");
         assert.equal($selectButtonTemplates.find(".dx-textbox")[0].offsetWidth, 0, "textbox is hidden");
+    });
+    test("colorboxes should be replaced with color buttons", (assert) => {
+        const $selectButtonTemplates = this.$element.find(TOOLBAR_SELECTOR).find(".dx-diagram-color-b").find(".dx-dropdowneditor-field-template-wrapper");
+        assert.ok($selectButtonTemplates.length > 0, "color buttons are rendered");
+        const selectButtonsCount = $selectButtonTemplates.length;
+        assert.equal($selectButtonTemplates.find(".dx-diagram-i, .dx-icon").length, selectButtonsCount, "icons are rendered");
+        assert.equal($selectButtonTemplates.find(".dx-textbox")[0].offsetWidth, 0, "textbox is hidden");
+    });
+    test("colorbuttons should show an active color", (assert) => {
+        const colorButton = this.$element.find(TOOLBAR_SELECTOR).find(".dx-diagram-color-b").first();
+        const getIcon = () => colorButton.find(".dx-dropdowneditor-field-template-wrapper").find(".dx-diagram-i, .dx-icon");
+        assert.equal(getIcon().css("borderBottomColor"), "rgb(0, 0, 0)");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontColor).execute("rgb(255, 0, 0)");
+        assert.equal(getIcon().css("borderBottomColor"), "rgb(255, 0, 0)", "button changed via command");
+        colorButton.find(".dx-dropdowneditor-button").trigger("dxclick");
+        const $overlayContent = $(".dx-colorbox-overlay");
+        $overlayContent.find(".dx-colorview-label-hex").find(".dx-textbox").dxTextBox("instance").option("value", "00ff00");
+        $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-apply-button").trigger("dxclick");
+        assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontColor).getState().value, "#00ff00", "color changed by color button");
+        assert.equal(getIcon().css("borderBottomColor"), "rgb(0, 255, 0)", "button changed via coloredit");
     });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
