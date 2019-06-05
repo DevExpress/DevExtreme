@@ -152,32 +152,36 @@ class ToolbarModule extends BaseModule {
 
     _prepareLinkHandler() {
         return () => {
+            this.quill.focus();
+
             const selection = this.quill.getSelection();
-            const formats = this.quill.getFormat();
+            const hasEmbedContent = this._hasEmbedContent(selection);
+            const formats = selection ? this.quill.getFormat() : {};
             const formData = {
                 href: formats.link || "",
-                text: selection ? this.quill.getText(selection) : "",
+                text: selection && !hasEmbedContent ? this.quill.getText(selection) : "",
                 target: formats.hasOwnProperty("target") ? !!formats.target : true
             };
             this._editorInstance.formDialogOption("title", format(DIALOG_LINK_CAPTION));
 
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: this._linkFormItems
+                items: this._getLinkFormItems(selection)
             });
 
             promise.done((formData) => {
-                if(selection && formData.text) {
-                    const text = formData.text;
+                if(selection && !hasEmbedContent) {
+                    const text = formData.text || formData.href;
                     const { index, length } = selection;
 
-                    formData.text = "";
+                    formData.text = undefined;
 
                     length && this.quill.deleteText(index, length, SILENT_ACTION);
                     this.quill.insertText(index, text, "link", formData, USER_ACTION);
                     this.quill.setSelection(index + text.length, 0, USER_ACTION);
 
                 } else {
+                    formData.text = !selection && !formData.text ? formData.href : formData.text;
                     this.quill.format("link", formData, USER_ACTION);
                 }
             });
@@ -188,10 +192,18 @@ class ToolbarModule extends BaseModule {
         };
     }
 
-    get _linkFormItems() {
+    _hasEmbedContent(selection) {
+        return !!selection && this.quill.getText(selection).trim().length < selection.length;
+    }
+
+    _getLinkFormItems(selection) {
         return [
             { dataField: "href", label: { text: format(DIALOG_LINK_FIELD_URL) } },
-            { dataField: "text", label: { text: format(DIALOG_LINK_FIELD_TEXT) } },
+            {
+                dataField: "text",
+                label: { text: format(DIALOG_LINK_FIELD_TEXT) },
+                visible: !this._hasEmbedContent(selection)
+            },
             {
                 dataField: "target",
                 editorType: "dxCheckBox",
