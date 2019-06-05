@@ -451,14 +451,23 @@ var SelectBox = DropDownList.inherit({
         return result;
     },
 
+    _isOldDataSourceValue: function() {
+        if(this.oldValue) {
+            // this.option("text", this._displayValue(this.oldValue))
+        }
+    },
+
     _setSelectedItem: function(item) {
-        var isUnknownItem = !this._isCustomValueAllowed() && (item === undefined);
+        var isUnknownItem = !this._isCustomValueAllowed() && (item === undefined) && !this._isOldDataSourceValue();
+
+        this.oldValue = undefined;
 
         this.callBase(isUnknownItem ? null : item);
     },
 
     _processNonexistentItem: function() {
-        this.reset();
+        this.callBase();
+
     },
 
     _isCustomValueAllowed: function() {

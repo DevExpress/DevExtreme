@@ -456,6 +456,10 @@ var DropDownList = DropDownEditor.inherit({
     _processDataSourceChanging: function() {
         this._setListDataSource();
 
+        if(this.option("value")) {
+            this.oldValue = this.option("slelctedItem");
+        }
+
         this._renderInputValue().fail((function() {
             if(this._isCustomValueAllowed()) {
                 return;
