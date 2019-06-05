@@ -2544,16 +2544,6 @@ QUnit.test("size of input is reset after selecting item", function(assert) {
     assert.roughEqual($tagBox.find("input").width(), initInputWidth, 0.1, "input width is not changed after selecting item");
 });
 
-QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-        searchEnabled: false,
-        editEnabled: false
-    });
-    var $input = $tagBox.find("input");
-    // NOTE: width should be 0.1 because of T393423
-    assert.roughEqual($input.width(), 0.1, 0.1, "input has correct width");
-});
-
 QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", assert => {
     const $tagBox = $("#tagBox").dxTagBox({
         searchEnabled: false,
