@@ -5291,7 +5291,7 @@ declare module DevExpress.data {
         /** @name Store.byKey(key) */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /** @name ODataStore.byKey(key, extraOptions) */
-        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
         /** @name ODataStore.createQuery(loadOptions) */
         createQuery(loadOptions: any): any;
     }
