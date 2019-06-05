@@ -1,8 +1,11 @@
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
+import readyCallbacks from "../../core/utils/ready_callbacks";
 import Widget from "../widget/ui.widget";
 import { initAction, disposeAction } from "./speed_dial_main_item";
+
+const ready = readyCallbacks.add;
 
 const SpeedDialAction = Widget.inherit({
     _getDefaultOptions() {
@@ -100,7 +103,7 @@ const SpeedDialAction = Widget.inherit({
     },
 
     _render() {
-        initAction(this);
+        ready(() => initAction(this));
     },
 
     _dispose() {
