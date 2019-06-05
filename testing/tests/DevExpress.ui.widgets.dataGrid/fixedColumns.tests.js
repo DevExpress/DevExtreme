@@ -1246,9 +1246,9 @@ QUnit.test("Synchronize rows for fixed table with master detail", function(asser
 
     assert.equal($table.find("tbody > tr").length, 4, "count rows");
     assert.equal($fixTable.find("tbody > tr").length, 4, "count fixed rows");
-    assert.ok($table.find("tbody > tr").first().outerHeight() === $fixTable.find("tbody > tr").first().outerHeight(), "height first row");
-    assert.ok($table.find("tbody > tr").eq(1).outerHeight() === $fixTable.find("tbody > tr").eq(1).outerHeight(), "height second row");
-    assert.roughEqual($table.find("tbody > tr").eq(2).outerHeight(), $fixTable.find("tbody > tr").eq(2).outerHeight(), 0.1, "height third row");
+    assert.ok($table.find("tbody > tr")[0].getBoundingClientRect().height === $fixTable.find("tbody > tr")[0].getBoundingClientRect().height, "height first row");
+    assert.ok($table.find("tbody > tr")[1].getBoundingClientRect().height === $fixTable.find("tbody > tr")[1].getBoundingClientRect().height, "height second row");
+    assert.roughEqual($table.find("tbody > tr")[2].getBoundingClientRect().height, $fixTable.find("tbody > tr")[2].getBoundingClientRect().height, 0.1, "height third row");
 });
 
 QUnit.test("Synchronize rows with floating-point height", function(assert) {

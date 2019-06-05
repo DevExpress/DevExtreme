@@ -13,8 +13,8 @@ QUnit.testStart(function() {
         border-collapse: separate !important;\
     }\
 </style>\
-<div>\
-    <div class="dx-datagrid">\
+<div class="dx-widget">\
+    <div class="dx-datagrid dx-gridbase-container">\
         <div id="container"></div>\
     </div>\
 </div>';
@@ -2008,7 +2008,7 @@ QUnit.test('Render additional row for free space_B232625', function(assert) {
     // assert
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is table-row');
     assert.ok(oldTableHeight < $testElement.height(), 'old table height');
-    assert.ok(Math.floor(Math.abs($table.height() - $testElement.height())) <= 1);
+    assert.ok(Math.abs($table[0].offsetHeight - $testElement[0].offsetHeight) <= 1);
     assert.ok(rowsView._getFreeSpaceRowElements()[0].style.height, 'free space rows height');
 });
 
@@ -2147,16 +2147,18 @@ QUnit.test('Height free space row for virtual scroller', function(assert) {
         rowsView = this.createRowsView(this.items, dataController),
         $testElement = $('#container'),
         freeSpaceRowHeight,
-        borderTopWidth;
+        borderTopWidth,
+        tableBorderTopWidth;
 
     // act
     rowsView.render($testElement);
     rowsView.height(400);
     rowsView.resize();
-    borderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css("borderTopWidth")));
+    borderTopWidth = Math.ceil(parseFloat($(rowsView.element()).css("borderTopWidth")));
+    tableBorderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css("borderTopWidth")));
 
     // assert
-    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth;
+    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth - tableBorderTopWidth;
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is none');
     assert.equal(rowsView._getFreeSpaceRowElements()[0].offsetHeight, Math.round(freeSpaceRowHeight), 'height free space row');
 });
@@ -4164,7 +4166,6 @@ QUnit.test('None-zero initial pageIndex when virtual scrolling mode', function(a
     this.rowsView.render(testElement);
     this.rowsView.height(50);
     this.rowsView.resize();
-    this.rowsView.resize();
 });
 
 // B254955
@@ -4291,9 +4292,7 @@ QUnit.test('Scroll position is not reset on change dataSource', function(assert)
         scrollOffsetChangedCallCount++;
         if(scrollOffsetChangedCallCount === 1) {
             assert.ok(e.top > 0, 'scroll position more 0');
-            setTimeout(function() {
-                that.dataController.optionChanged({ name: 'dataSource' });
-            });
+            that.dataController.optionChanged({ name: 'dataSource' });
         } else {
             assert.equal(scrollOffsetChangedCallCount, 2, 'scrollChanged Call Count');
             assert.equal(e.top, 150, 'scroll position is 150');
@@ -6296,6 +6295,11 @@ QUnit.test("Last data row of the last tbody should not have border bottom width"
 
 // T487466
 QUnit.test("Vertical scroll position should be correct after render rows when scroll up", function(assert) {
+    if(!browser.webkit) {
+        assert.ok(true, "This test is only relevant for webkit browser");
+        return;
+    }
+
     // arrange
     var options = {
             items: [

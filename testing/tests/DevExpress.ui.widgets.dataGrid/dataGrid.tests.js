@@ -6274,7 +6274,7 @@ QUnit.test("scroll position should not be changed after refresh", function(asser
     dataGrid.refresh();
 
     // assert
-    assert.equal(dataGrid.getScrollable().scrollTop(), browser.mozilla ? 101 : 100, "scroll top is not changed");
+    assert.roughEqual(dataGrid.getScrollable().scrollTop(), 100, 1.1, "scroll top is not changed");
 });
 
 QUnit.module("Rendered on server", {
