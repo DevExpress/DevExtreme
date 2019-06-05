@@ -4386,10 +4386,14 @@ QUnit.module("DateBox number and string value support", {
             pickerType: "calendar"
         });
 
-        const instance = $dateBox.dxDateBox("instance");
-        instance.open();
+        const dateBox = $dateBox.dxDateBox("instance");
 
+        dateBox.open();
         const formatSelectBox = $(".dx-timeview-format12").dxSelectBox("instance");
+        const $hourDown = $(dateBox.content()).parent().find(".dx-numberbox-spin-down").eq(0);
+        const $hourUp = $(dateBox.content()).parent().find(".dx-numberbox-spin-up").eq(0);
+        const $hoursInput = $(".dx-numberbox").eq(0).find("." + TEXTEDITOR_INPUT_CLASS);
+
         assert.equal(formatSelectBox.option("value"), TIMEVIEW_FORMAT12_PM, "correct value on init");
 
         formatSelectBox.option("value", TIMEVIEW_FORMAT12_AM);
@@ -4397,6 +4401,21 @@ QUnit.module("DateBox number and string value support", {
             .find(".dx-button.dx-popup-done")
             .trigger("dxclick");
 
-        assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 4)).valueOf(), "DateBox value is formatted");
+        assert.equal(dateBox.option("value").valueOf(), (new Date(2018, 6, 6, 4)).valueOf(), "DateBox value is formatted");
+
+        dateBox.option("value", new Date(2018, 6, 6, 16));
+        dateBox.open();
+
+        $hourDown.trigger("dxpointerdown");
+        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after decrement hours");
+
+        $hourUp.trigger("dxpointerdown");
+        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after increment hours");
+
+        $hoursInput.val(9).trigger("change");
+        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_AM, "date format should be AM after change value to 9");
+
+        $hoursInput.val(16).trigger("change");
+        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after change value to 16");
     });
 });
