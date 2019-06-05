@@ -178,7 +178,7 @@ QUnit.test("title should be rendered with correct position in RTL mode", functio
 
     var $title = $panorama.find(toSelector(PANORAMA_TITLE_CLASS));
 
-    assert.roughEqual(position($title), PANORAMA_TEST_WIDTH - (PANORAMA_TEST_WIDTH * PANORAMA_TITLE_MARGIN_SCALE + $title.outerWidth()), 0.1, "correct position");
+    assert.roughEqual(position($title), PANORAMA_TEST_WIDTH - (PANORAMA_TEST_WIDTH * PANORAMA_TITLE_MARGIN_SCALE + $title.outerWidth()), 0.5, "correct position");
 });
 
 QUnit.test("item should have correct geometry", function(assert) {
@@ -1032,7 +1032,7 @@ QUnit.test("swipe through left bound should cause correct title animation", func
     pointer.swipeEnd(1);
 
     assert.strictEqual(this.capturedAnimations.title.length, 2, "animation present");
-    assert.roughEqual(this.capturedAnimations.title[0].start, -$title.outerWidth(), 0.1, "correct title animation start position");
+    assert.roughEqual(this.capturedAnimations.title[0].start, -$title.outerWidth(), 0.5, "correct title animation start position");
     assert.ok(Math.abs(this.capturedAnimations.title[0].end - (titleStartPosition - titleStep($title, 2))) <= 1, "correct title animation end position");
     assert.strictEqual(this.capturedAnimations.title[1].start, offset, "correct ghost animation start position");
     assert.ok(Math.abs(this.capturedAnimations.title[1].end - PANORAMA_TEST_WIDTH) <= 1, "correct ghost animation end position");
@@ -1110,7 +1110,7 @@ QUnit.test("swipe through left bound should cause correct background animation",
     pointer.swipeEnd(1);
 
     assert.strictEqual(this.capturedAnimations.title.length, 2, "animation present");
-    assert.roughEqual(this.capturedAnimations.title[0].start, -$title.outerWidth(), 0.01, "correct title animation start position");
+    assert.roughEqual(this.capturedAnimations.title[0].start, -$title.outerWidth(), 0.5, "correct title animation start position");
     assert.ok(Math.abs(this.capturedAnimations.title[0].end - titleStartPosition) <= 1, "correct title animation end position");
     assert.equal(Math.round(this.capturedAnimations.title[1].start), Math.round(offset), "correct ghost animation start position");
     assert.ok(Math.abs(this.capturedAnimations.title[1].end - PANORAMA_TEST_WIDTH) <= 1, "correct ghost animation end position");
