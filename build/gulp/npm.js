@@ -42,11 +42,13 @@ var DIST_GLOBS = [
     '!artifacts/js/jquery*',
     '!artifacts/js/jszip*',
     '!artifacts/js/dx.custom*',
+    '!artifacts/js/dx-diagram*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',
     '!artifacts/ts/cldr*',
-    '!artifacts/css/dx*legacy*.css'
+    '!artifacts/css/dx*legacy*.css',
+    '!artifacts/css/dx-diagram.*'
 ];
 
 var MODULES = require('./modules_metadata.json');
