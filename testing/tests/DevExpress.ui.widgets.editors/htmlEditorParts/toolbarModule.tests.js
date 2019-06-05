@@ -913,11 +913,13 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
 
+        assert.ok(this.focusStub.calledOnce, "focus method was called on link adding");
+
         $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .last()
             .trigger("dxclick");
 
-        assert.ok(this.focusStub.calledOnce, "focus method was called after closing the dialog");
+        assert.ok(this.focusStub.calledTwice, "focus method was called after closing the dialog");
     });
 
     test("change an image formatting", (assert) => {
