@@ -7006,7 +7006,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.axis */
         axis?: string;
         /** @name dxChartCommonAnnotationConfig.border */
-        border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+        border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name dxChartCommonAnnotationConfig.color */
         color?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
