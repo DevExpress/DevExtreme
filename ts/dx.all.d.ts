@@ -1260,7 +1260,7 @@ declare module DevExpress.data {
         /** Gets a data item with a specific key. */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /** Gets an entity with a specific key. */
-        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
         /** Creates a Query for the OData endpoint. */
         createQuery(loadOptions: any): any;
     }
