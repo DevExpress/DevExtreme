@@ -5390,8 +5390,8 @@ QUnit.test('Render rows with virtual items count is more 1 000 000', function(as
     assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
     assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
-    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * heightRatio * 7000000, 1);
-    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * heightRatio * 3000000, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row")[0].getBoundingClientRect().height, rowHeight * heightRatio * 7000000, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row")[1].getBoundingClientRect().height, rowHeight * heightRatio * 3000000, 1);
     assert.ok(content.children().eq(0).height() < 16000000, "height is less then height limit");
     assert.equal(content.children().eq(0).find("." + "dx-datagrid-group-space").length, 0, "group space class");
 });

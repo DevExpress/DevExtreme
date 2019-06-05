@@ -1706,7 +1706,7 @@ QUnit.test("getHeadersRowHeight with band columns", function(assert) {
     // assert
     $trElements = $testElement.find("tbody > tr");
     assert.equal($trElements.length, 2, "count row");
-    assert.equal(this.columnHeadersView.getHeadersRowHeight(), $trElements.toArray().reduce((sum, row) => sum + $(row).height(), 0), "height of the headers");
+    assert.roughEqual(this.columnHeadersView.getHeadersRowHeight(), $trElements.toArray().reduce((sum, row) => sum + $(row).height(), 0), 1, "height of the headers");
 });
 
 QUnit.test("Header with headerFilter - alignment cell content", function(assert) {
