@@ -40,13 +40,13 @@ const JS_VENDORS = [
         base: '/globalize/dist/'
     },
     {
-        path: '/devexpress-diagram/dist/dx.@(diagram|diagram.min).js'
+        path: '/devexpress-diagram/dist/dx-@(diagram|diagram.min).js'
     }
 ];
 
 const CSS_VENDORS = [
     {
-        path: '/devexpress-diagram/dist/dx.@(diagram|diagram.min).css'
+        path: '/devexpress-diagram/dist/dx-@(diagram|diagram.min).css'
     }
 ];
 
