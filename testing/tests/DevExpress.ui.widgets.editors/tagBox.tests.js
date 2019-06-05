@@ -2554,6 +2554,16 @@ QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", fun
     assert.roughEqual($input.width(), 0.1, 0.1, "input has correct width");
 });
 
+QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", assert => {
+    const $tagBox = $("#tagBox").dxTagBox({
+        searchEnabled: false,
+        editEnabled: false
+    });
+    const $input = $tagBox.find("input");
+    // NOTE: width should be 0.1 because of T393423
+    assert.roughEqual($input.width(), 0.1, 0.101, "input has correct width");
+});
+
 QUnit.test("no placeholder when textbox is not empty", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
         searchEnabled: true,
