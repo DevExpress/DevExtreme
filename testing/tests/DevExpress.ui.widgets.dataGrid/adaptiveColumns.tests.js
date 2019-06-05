@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     var markup =
-        '<div>\
+        '<div class="dx-widget">\
             <div class="dx-datagrid">\
                 <div id="container"></div>\
                 <div id="container2"></div>\
@@ -269,7 +269,7 @@ QUnit.test("Hide the adaptive command column when it is located on a left side a
 
 QUnit.test("The last data column has correct width when 'columnAutoWidth' option is 'true'", function(assert) {
     // arrange
-    $(".dx-datagrid").width(275);
+    $(".dx-datagrid").width(265);
 
     this.columns = [
         { dataField: 'firstName', index: 0 },
@@ -298,7 +298,7 @@ QUnit.test("The last data column has correct width when 'columnAutoWidth' option
 // T402287
 QUnit.test("Hidden columns must have zero widths for virtual scrolling table", function(assert) {
     // arrange
-    $(".dx-datagrid").width(275);
+    $(".dx-datagrid").width(265);
 
     this.columns = [
         { dataField: 'firstName', index: 0 },
@@ -1563,7 +1563,7 @@ QUnit.test("Calculate correct an average width of column when some columns has p
 
 QUnit.test("Columns should hide consistently if percentage width (T640539)", function(assert) {
     // arrange
-    $(".dx-datagrid").width(700);
+    $(".dx-datagrid").width(680);
 
     this.items = [
         { firstName: 'Blablablablablablablablablabla', lastName: "Psy", phone: "+1123456789" },
@@ -2580,7 +2580,7 @@ QUnit.test("Edit batch. Render editor of form's item when clicked on a text of i
 
 QUnit.test("Edit batch. Editor is rendered only one when click on text", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2638,7 +2638,7 @@ QUnit.test("Edit batch. Editor is rendered only one when click on text", functio
 
 QUnit.test("Edit batch. Close edit mode for the form widget when a data is saved", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2687,7 +2687,7 @@ QUnit.test("Edit batch. Close edit mode for the form widget when a data is saved
 
 QUnit.test("Edit batch. Close edit mode and cancel editing when click out the data grid", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2737,7 +2737,7 @@ QUnit.test("Edit batch. Close edit mode and cancel editing when click out the da
 
 QUnit.test("Edit batch. Close edit mode for the form widget when a editing is canceled", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2786,7 +2786,7 @@ QUnit.test("Edit batch. Close edit mode for the form widget when a editing is ca
 
 QUnit.test("Edit batch. Form's item is marked as modified", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2840,7 +2840,7 @@ QUnit.test("Edit batch. Form's item is marked as modified", function(assert) {
 
 QUnit.test("Edit batch. Form's item is marked as modified for other adaptive row", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -3164,7 +3164,7 @@ QUnit.test("Edit cell. Render editor of form's item when clicked on a text of it
 
 QUnit.test("Edit cell. Editor is rendered only one when click on text", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
