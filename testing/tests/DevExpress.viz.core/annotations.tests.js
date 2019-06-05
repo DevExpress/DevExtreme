@@ -910,6 +910,26 @@ QUnit.test("Plaque height more than canvas - draw plaque from top border", funct
     assert.deepEqual(contentGroup.move.firstCall.args, [200 - 10, 20 - 10]);
 });
 
+QUnit.test("Round x, y", function(assert) {
+    this.widget._getAnnotationCoords.returns({ x: 200, y: 10, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 30 } });
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
+    const annotation = this.createAnnotations([{
+        type: "image", image: { url: "some_url" },
+        x: 201.3,
+        y: 20.6
+    }])[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const plaque = this.renderer.path.getCall(0).returnValue;
+    checkCloudPath(assert, plaque, [181, 1, 221, 1, 221, 41, 181, 41], [0, 201, 21]);
+
+    const contentGroup = this.renderer.g.getCall(3).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [201 - 10, 21 - 10]);
+});
+
 QUnit.module("Text annotaion", environment);
 
 QUnit.test("Draw text inside plaque", function(assert) {

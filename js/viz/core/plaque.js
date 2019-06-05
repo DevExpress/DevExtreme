@@ -307,6 +307,8 @@ export class Plaque {
     }
 
     move(x, y) {
+        x = round(x);
+        y = round(y);
         this.x = x;
         this.y = y;
 
