@@ -3547,8 +3547,13 @@ var dxChartCommonAnnotationConfig = {
         * @type boolean
         * @default true
         */
-        visible: true
-        // cornerRadius: 0
+        visible: true,
+        /**
+        * @name dxChartCommonAnnotationConfig.border.cornerRadius
+        * @type number
+        * @default 0
+        */
+        cornerRadius: 0
     },
     /**
     * @name dxChartCommonAnnotationConfig.font
