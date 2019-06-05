@@ -103,9 +103,7 @@ const SpeedDialAction = Widget.inherit({
     },
 
     _render() {
-        ready(() => {
-            initAction(this);
-        });
+        ready(() => initAction(this));
     },
 
     _dispose() {
