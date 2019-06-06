@@ -452,22 +452,18 @@ var SelectBox = DropDownList.inherit({
     },
 
     _isOldDataSourceValue: function() {
-        if(this.oldValue) {
-            // this.option("text", this._displayValue(this.oldValue))
-        }
+        return (this.oldValue && this.option("value") === this._valueGetter(this.oldValue));
     },
 
     _setSelectedItem: function(item) {
-        var isUnknownItem = !this._isCustomValueAllowed() && (item === undefined) && !this._isOldDataSourceValue();
-
-        this.oldValue = undefined;
+        var isOldDataSourceValue = this._isOldDataSourceValue();
+        var isUnknownItem = !this._isCustomValueAllowed() && (item === undefined) && !isOldDataSourceValue;
 
         this.callBase(isUnknownItem ? null : item);
-    },
 
-    _processNonexistentItem: function() {
-        this.callBase();
-
+        if(isOldDataSourceValue) {
+            this.option("text", this._displayValue(this.oldValue));
+        }
     },
 
     _isCustomValueAllowed: function() {

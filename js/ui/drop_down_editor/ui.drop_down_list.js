@@ -449,22 +449,18 @@ var DropDownList = DropDownEditor.inherit({
         this.option("selectedItem", null);
     },
 
-    _processNonexistentItem: function() {
-        this._clearSelectedItem();
-    },
-
     _processDataSourceChanging: function() {
         this._setListDataSource();
 
-        if(this.option("value")) {
-            this.oldValue = this.option("slelctedItem");
+        if(this.option("value") && this.option("selectedItem")) {
+            this.oldValue = this.option("selectedItem");
         }
 
         this._renderInputValue().fail((function() {
             if(this._isCustomValueAllowed()) {
                 return;
             }
-            this._processNonexistentItem();
+            this._clearSelectedItem();
         }).bind(this));
     },
 
