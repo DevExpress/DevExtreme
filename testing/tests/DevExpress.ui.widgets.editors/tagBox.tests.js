@@ -528,6 +528,42 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "tags are cleared");
         assert.equal($input.val(), "", "input is also cleared");
     });
+
+    QUnit.test("Tag should have empty text if display value is empty", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: "", value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), "", "tag has empty text");
+    });
+
+    QUnit.test("Tag should have correct text if display value is '0'", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: 0, value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), 0, "tag has correct text");
+    });
+
+    QUnit.test("Tag should have correct text if display value is 'null'", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: null, value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), "", "tag has correct text");
+    });
 });
 
 QUnit.module("multi tag support", {
@@ -5203,9 +5239,9 @@ QUnit.module("regression", {
 
     QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item", (assert) => {
         const items = [
-            { id: 1, text: "Item 1" },
-            { id: 2, text: "Item 2" },
-            { id: 3, text: "Item 3" }
+            { id: 1, name: "Item 1" },
+            { id: 2, name: "Item 2" },
+            { id: 3, name: "Item 3" }
         ];
 
         const tagBox = $("#tagBox").dxTagBox({
