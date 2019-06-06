@@ -64,7 +64,7 @@
     "gulp-typescript": "^3.0.2",
     "gulp-uglify": "^1.5.3",
     "gulp-watch": "^5.0.0",
-    "handlebars": "4.0.11",
+    "handlebars": "^4.1.2",
     "hogan.js": "3.0.2",
     "jquery": "^3.4.1",
     "jquery.1": "^1.0.0",
