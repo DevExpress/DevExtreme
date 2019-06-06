@@ -2,6 +2,8 @@ import $ from "jquery";
 import ExcelJS from "exceljs";
 import { exportDataGrid } from "exporter/exceljs/excelExporter";
 import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
+import { initializeDxArrayFind, clearDxArrayFind } from "./arrayFindHelper.js";
+
 import typeUtils from "core/utils/type";
 
 import "ui/data_grid/ui.data_grid";
@@ -18,6 +20,7 @@ QUnit.testStart(() => {
 const moduleConfig = {
     before: () => {
         initializeDxObjectAssign();
+        initializeDxArrayFind();
     },
     beforeEach: () => {
         this.worksheet = new ExcelJS.Workbook().addWorksheet("Test sheet");
@@ -25,6 +28,7 @@ const moduleConfig = {
     },
     after: () => {
         clearDxObjectAssign();
+        clearDxArrayFind();
     }
 };
 
