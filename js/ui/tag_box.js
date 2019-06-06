@@ -1010,7 +1010,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _getItemModel: function(item, displayValue) {
-        if(typeUtils.isObject(item)) {
+        if(typeUtils.isObject(item) && displayValue) {
             return item;
         } else {
             return displayValue;
