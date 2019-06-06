@@ -1014,7 +1014,7 @@ var TagBox = SelectBox.inherit({
         if(typeUtils.isObject(item) && displayValue) {
             return item;
         } else {
-            return displayValue;
+            return commonUtils.ensureDefined(displayValue, "");
         }
     },
 

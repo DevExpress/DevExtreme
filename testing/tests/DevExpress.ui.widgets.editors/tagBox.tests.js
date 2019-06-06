@@ -540,6 +540,30 @@ QUnit.module("tags", moduleSetup, () => {
         const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
         assert.equal($tag.text(), "", "tag has empty text");
     });
+
+    QUnit.test("Tag should have correct text if display value is '0'", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: 0, value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), 0, "tag has correct text");
+    });
+
+    QUnit.test("Tag should have correct text if display value is 'null'", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: null, value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), "", "tag has correct text");
+    });
 });
 
 QUnit.module("multi tag support", {
