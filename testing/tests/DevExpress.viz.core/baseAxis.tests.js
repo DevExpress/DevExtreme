@@ -1598,6 +1598,28 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
     assert.equal(axis.getTranslator().getBusinessRange().interval, 2 * 1000 * 3600 * 24, "interval");
 });
 
+
+QUnit.test("Pass correct range to tick generator. Discrete axis", function(assert) {
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        type: "discrete"
+    });
+
+    axis.setBusinessRange({
+        categories: ["1", "2", "3"]
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        size: 40
+    });
+
+    axis.draw(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].min, undefined);
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].max, undefined);
+});
+
 QUnit.test("margins calculation. Work week calculation: interval > work week", function(assert) {
     const getTickGeneratorReturns = (tickInterval) => {
         return {
