@@ -88,6 +88,16 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         getToolbarIcon(colorButton).trigger("dxclick");
         assert.ok(colorBox.option("opened"), true);
     });
+    test("call .update() after accordion item collapsing/expanding", (assert) => {
+        const clock = sinon.useFakeTimers();
+        const $leftPanel = this.$element.find(".dx-diagram-left-panel");
+        const scrollView = $leftPanel.find(".dx-scrollview").dxScrollView("instance");
+        const updateSpy = sinon.spy(scrollView, "update");
+        $leftPanel.find(".dx-accordion-item-title").first().trigger("dxclick");
+        clock.tick(2000);
+        assert.equal(updateSpy.callCount, 1, "scrollView.update() called once");
+        clock.restore();
+    });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
     test("should load default items", (assert) => {

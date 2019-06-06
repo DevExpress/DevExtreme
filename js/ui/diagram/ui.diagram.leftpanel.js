@@ -4,6 +4,7 @@ import Widget from "../widget/ui.widget";
 import Accordion from "../accordion";
 import ScrollView from "../scroll_view";
 import ShapeCategories from "./ui.diagram.shape.categories";
+import { Deferred } from "../../core/utils/deferred";
 
 const DIAGRAM_LEFT_PANEL_CLASS = "dx-diagram-left-panel";
 
@@ -22,10 +23,10 @@ class DiagramLeftPanel extends Widget {
         const $scrollViewWrapper = $("<div>")
             .appendTo(this.$element());
 
-        const scrollView = this._createComponent($scrollViewWrapper, ScrollView);
+        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
 
         const $accordion = $("<div>")
-            .appendTo(scrollView.content());
+            .appendTo(this._scrollView.content());
 
         this._renderAccordion($accordion);
     }
@@ -62,13 +63,24 @@ class DiagramLeftPanel extends Widget {
             collapsible: true,
             displayExpr: "title",
             dataSource: data,
-            itemTemplate: (data, index, $element) => data.onTemplate(this, $element, data)
+            itemTemplate: (data, index, $element) => data.onTemplate(this, $element, data),
+            onContentReady: (e) => {
+                this._updateScrollAnimateSubscription(e.component);
+            }
         });
         // TODO option for expanded item
         if(this._customShapes.length > 0 || this._hasDataSources) {
             this._accordionInstance.collapseItem(0);
             this._accordionInstance.expandItem(data.length - 1);
         }
+    }
+
+    _updateScrollAnimateSubscription(component) {
+        component._deferredAnimate = new Deferred();
+        component._deferredAnimate.done(() => {
+            this._scrollView.update();
+            this._updateScrollAnimateSubscription(component);
+        });
     }
 
     _optionChanged(args) {
