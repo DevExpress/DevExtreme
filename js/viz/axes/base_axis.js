@@ -1700,11 +1700,11 @@ Axis.prototype = {
         maxPercentPadding = maxPercentPadding === undefined ? maxPadding / screenDeltaWithMargins : maxPercentPadding;
 
         if(this._translator.isInverted()) {
-            minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start + screenDelta * minPercentPadding);
-            maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end - screenDelta * maxPercentPadding);
+            minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start + screenDelta * minPercentPadding, -1);
+            maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end - screenDelta * maxPercentPadding, 1);
         } else {
-            minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start - screenDelta * minPercentPadding);
-            maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end + screenDelta * maxPercentPadding);
+            minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start - screenDelta * minPercentPadding, -1);
+            maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end + screenDelta * maxPercentPadding, 1);
         }
 
         function correctZeroLevel(minPoint, maxPoint) {
