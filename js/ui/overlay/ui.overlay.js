@@ -1569,6 +1569,7 @@ var Overlay = Widget.inherit({
     */
     repaint: function() {
         this._renderGeometry();
+        domUtils.triggerResizeEvent(this._$content);
     }
 });
 
