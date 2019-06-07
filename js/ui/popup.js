@@ -9,6 +9,7 @@ var $ = require("../core/renderer"),
     inArray = require("../core/utils/array").inArray,
     extend = require("../core/utils/extend").extend,
     browser = require("../core/utils/browser"),
+    compareVersions = require("../core/utils/version").compare,
     messageLocalization = require("../localization/message"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
@@ -38,6 +39,9 @@ var POPUP_CLASS = "dx-popup",
 
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
+    POPUP_CONTENT_FLEX_HEIGHT_CLASS = "dx-popup-flex-height",
+    POPUP_CONTENT_INHERIT_HEIGHT_CLASS = "dx-popup-inherit-height",
+
     ALLOWED_TOOLBAR_ITEM_ALIASES = ["cancel", "clear", "done"],
 
     BUTTON_DEFAULT_TYPE = "default",
@@ -46,6 +50,8 @@ var POPUP_CLASS = "dx-popup",
     BUTTON_CONTAINED_MODE = "contained";
 
 var isIE11 = (browser.msie && parseInt(browser.version) === 11);
+var isOldSafari = browser.safari && compareVersions(browser.version, [11]) < 0;
+var heightStrategies = { static: "", inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
 var getButtonPlace = function(name) {
 
@@ -666,19 +672,28 @@ var Popup = Overlay.inherit({
                 + popupHeightParts.popupVerticalOffsets,
             overlayContent = this.overlayContent().get(0),
             cssStyles = {},
-            overlayClass = "dx-popup-inherit-height",
             isAutoWidth = this.overlayContent().get(0).style.width === "auto" || this.overlayContent().get(0).style.width === "",
             contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
-            contentMinHeight = this._getOptionValue("minHeight", overlayContent),
-            isAutoResizable = !(isIE11 && isAutoWidth) || !(contentMaxHeight || contentMinHeight);
+            contentMinHeight = this._getOptionValue("minHeight", overlayContent);
 
-        if(this.option("autoResizeEnabled") && this._isAutoHeight() && isAutoResizable) {
-            if(!isAutoWidth) {
-                overlayClass = "dx-popup-fixed-width";
-            } else if(!isIE11) {
-                overlayClass = "dx-popup-inherit-height";
+        var currentHeightStrategyClass = heightStrategies.static;
+
+        if(this._isAutoHeight() && this.option("autoResizeEnabled")) {
+            if(isAutoWidth || isOldSafari) {
+                if(isIE11) {
+                    currentHeightStrategyClass = heightStrategies.static;
+                } else {
+                    currentHeightStrategyClass = heightStrategies.inherit;
+                }
+            } else {
+                currentHeightStrategyClass = heightStrategies.flex;
             }
+        }
 
+        if(currentHeightStrategyClass === heightStrategies.static) {
+            var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
+            cssStyles = { height: Math.max(0, contentHeight) };
+        } else {
             var container = $(this._getContainer()).get(0),
                 maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
                 minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
@@ -687,13 +702,22 @@ var Popup = Overlay.inherit({
                 minHeight: minHeightValue,
                 maxHeight: maxHeightValue
             });
-        } else {
-            var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
-            cssStyles = { height: Math.max(0, contentHeight) };
         }
 
-        this.overlayContent().addClass(overlayClass);
+        this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
         this.$content().css(cssStyles);
+    },
+
+    _setHeightClasses: function($container, currentClass) {
+        var excessClasses = "";
+
+        for(var name in heightStrategies) {
+            if(heightStrategies[name] !== currentClass) {
+                excessClasses += " " + heightStrategies[name];
+            }
+        }
+
+        $container.removeClass(excessClasses).addClass(currentClass);
     },
 
     _isAutoHeight: function() {

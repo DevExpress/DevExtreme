@@ -6,6 +6,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import { isRenderer } from "core/utils/type";
 import browser from "core/utils/browser";
+import { compare as compareVersions } from "core/utils/version";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "common.css!";
@@ -78,6 +79,8 @@ var POPUP_CLASS = "dx-popup",
     POPUP_TITLE_CLASS = "dx-popup-title",
     POPUP_TITLE_CLOSEBUTTON_CLASS = "dx-closebutton",
     POPUP_NORMAL_CLASS = "dx-popup-normal",
+    POPUP_CONTENT_FLEX_HEIGHT_CLASS = "dx-popup-flex-height",
+    POPUP_CONTENT_INHERIT_HEIGHT_CLASS = "dx-popup-inherit-height",
 
     POPUP_DRAGGABLE_CLASS = "dx-popup-draggable",
 
@@ -676,6 +679,63 @@ QUnit.test("popup height should support any maxHeight and minHeight option value
     popup.option("minHeight", "auto");
     assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).innerHeight() + popupContentPadding, "popup minHeight: auto");
 });
+
+QUnit.test("popup overlay should have correct height strategy classes for all browsers", assert => {
+    const popup = $("#popup").dxPopup({
+        visible: true,
+        height: "auto",
+        showTitle: false,
+        contentTemplate: () => $("<div>")
+    }).dxPopup("instance");
+
+    const $popup = popup.$content().parent();
+    const isOldSafari = browser.safari && compareVersions(browser.version, [11]) < 0;
+
+    if(isOldSafari) {
+        assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width for old safari");
+        assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width for old safari");
+    } else {
+        assert.ok($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width");
+        assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width");
+    }
+
+
+    popup.option("width", "auto");
+
+    if(isIE11) {
+        assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width for IE11");
+        assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with auto width for IE11");
+    } else {
+        assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width");
+    }
+
+});
+
+
+QUnit.test("popup height should support TreeView with Search if height = auto", assert => {
+    const $content = $(
+        '<div class="dx-treeview">\
+            <div style="height: 30px;"></div>\
+            <div class="dx-scrollable" style="height: calc(100% - 30px)">\
+                <div style="height: 100px;"></div>\
+            </div>\
+        </div>');
+
+    $("#popup").dxPopup({
+        visible: true,
+        height: "auto",
+        showTitle: false,
+        contentTemplate: () => $content,
+        maxHeight: 100
+
+    });
+
+    let treeviewContentHeight = 0;
+    $content.children().each(function(_, item) { treeviewContentHeight += $(item).height(); });
+
+    assert.roughEqual($content.height(), treeviewContentHeight, 1, "treeview content can not be heighter than container");
+});
+
 
 QUnit.test("fullScreen", function(assert) {
     this.instance.option({
