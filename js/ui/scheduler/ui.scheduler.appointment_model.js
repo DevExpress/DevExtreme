@@ -180,7 +180,7 @@ var AppointmentModel = Class.inherit({
         return result;
     },
 
-    _filterAppointmentByRRule: function(appointment, min, max, startDayHour, endDayHour) {
+    _filterAppointmentByRRule: function(appointment, min, max, startDayHour, endDayHour, firstDayOfWeek) {
         var recurrenceRule = appointment.recurrenceRule,
             recurrenceException = appointment.recurrenceException,
             allDay = appointment.allDay,
@@ -206,7 +206,8 @@ var AppointmentModel = Class.inherit({
                 start: appointmentStartDate,
                 end: appointmentEndDate,
                 min: min,
-                max: max
+                max: max,
+                firstDayOfWeek: firstDayOfWeek
             });
         }
 
@@ -261,7 +262,7 @@ var AppointmentModel = Class.inherit({
                     recurrenceRule: recurrenceRule,
                     recurrenceException: dataAccessors.getter.recurrenceException(appointment),
                     allDay: appointmentTakesAllDay
-                }, min, max, startDayHour, endDayHour);
+                }, min, max, startDayHour, endDayHour, filterOptions.firstDayOfWeek);
             }
 
             var startDateTimeZone = dataAccessors.getter.startDateTimeZone(appointment),

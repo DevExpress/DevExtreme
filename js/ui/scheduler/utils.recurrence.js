@@ -50,14 +50,14 @@ var dateSetterMap = {
             correctDate(date, value);
         }
     },
-    "byday": function(date, byDay, weekStart, frequency) {
+    "byday": function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
         var dayOfWeek = byDay;
 
-        if((frequency === "DAILY" || frequency === "WEEKLY") && byDay === 0) {
+        if((frequency === "DAILY" || frequency === "WEEKLY") && ((firstDayOfWeek && byDay >= firstDayOfWeek) || (!firstDayOfWeek && byDay === 0))) {
             dayOfWeek = 7;
         }
 
-        byDay += days[weekStart] > dayOfWeek ? 7 : 0;
+        byDay += days[appointmentWeekStart] > dayOfWeek ? 7 : 0;
         date.setDate(date.getDate() - date.getDay() + byDay);
     },
     "byweekno": function(date, weekNumber, weekStart) {
@@ -145,7 +145,8 @@ var dateGetterMap = {
 
 var ruleNames = ["freq", "interval", "byday", "byweekno", "byyearday", "bymonth", "bymonthday", "count", "until", "byhour", "byminute", "bysecond", "bysetpos", "wkst"],
     freqNames = ["DAILY", "WEEKLY", "MONTHLY", "YEARLY", "SECONDLY", "MINUTELY", "HOURLY"],
-    days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
+    days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 },
+    daysNames = { 0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA" };
 
 var getTimeZoneOffset = function() {
     return new Date().getTimezoneOffset();
@@ -249,7 +250,7 @@ var getDatesByRecurrence = function(options) {
     }
 
     rule.interval = normalizeInterval(rule);
-    dateRules = splitDateRules(rule);
+    dateRules = splitDateRules(rule, options.firstDayOfWeek);
 
     var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs("day");
 
@@ -618,11 +619,19 @@ var getAsciiStringByDate = function(date) {
         'T' + ('0' + (date.getHours())).slice(-2) + ('0' + (date.getMinutes())).slice(-2) + ('0' + (date.getSeconds())).slice(-2) + 'Z';
 };
 
-var splitDateRules = function(rule) {
+var splitDateRules = function(rule, firstDayOfWeek = null) {
     var result = [];
 
+    if(firstDayOfWeek) {
+        rule["fdow"] = firstDayOfWeek;
+    }
+
     if(!rule["wkst"]) {
-        rule["wkst"] = "MO";
+        if(firstDayOfWeek) {
+            rule["wkst"] = daysNames[firstDayOfWeek];
+        } else {
+            rule["wkst"] = "MO";
+        }
     }
 
     if(rule["byweekno"] && !rule["byday"]) {
@@ -692,7 +701,7 @@ var getDatesByRules = function(dateRules, startDate, rule) {
             updatedDate = new Date(startDate);
 
         for(var field in current) {
-            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule["wkst"], rule.freq);
+            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule["wkst"], rule.freq, rule["fdow"]);
         }
 
         if(Array.isArray(updatedDate)) {
