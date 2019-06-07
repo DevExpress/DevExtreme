@@ -15,3 +15,17 @@ export default class DataGridTestHelper {
         return this.getDataRow(rowIndex).find(`td:nth-child(${columnIndex + 1})`);
     }
 }
+
+export class DataGridKeyboardTestHelper extends DataGridTestHelper {
+    constructor(selector: string) {
+        super(selector);
+    }
+
+    cellHasFocusClass(rowIndex: number, columnIndex: number) : Promise<boolean> {
+        return this.getDataCell(rowIndex, columnIndex).hasClass("dx-focused");
+    }
+
+    isEditCell(rowIndex: number, columnIndex: number) : Promise<boolean> {
+        return this.getDataCell(rowIndex, columnIndex).hasClass("dx-editor-cell");
+    }
+}
