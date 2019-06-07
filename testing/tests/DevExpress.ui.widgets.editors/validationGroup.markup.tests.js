@@ -149,3 +149,13 @@ QUnit.test("group.validate", function(assert) {
     assert.ok(ValidationEngine.validateGroup.calledOnce, "validatorGroup should be called");
     assert.equal(ValidationEngine.validateGroup.getCall(0).args[0], group, "correct group key should be passed");
 });
+
+QUnit.test("empty validation group should return valid 'validationResult' object", function(assert) {
+    const $container = $("#dxValidationGroup");
+    const group = this.fixture.createGroup($container);
+    const { isValid, brokenRules, validators } = group.validate();
+
+    assert.ok(isValid, "empty group is valid");
+    assert.deepEqual(brokenRules, [], "empty group doesn't have broken rules");
+    assert.deepEqual(validators, [], "empty group doesn't have validators");
+});

@@ -45,6 +45,7 @@ var ValidationGroup = DOMComponent.inherit({
 
     _init: function() {
         this.callBase();
+        ValidationEngine.addGroup(this);
     },
 
     _initMarkup: function() {
