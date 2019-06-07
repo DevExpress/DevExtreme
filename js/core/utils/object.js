@@ -71,7 +71,7 @@ var deepExtendArraySafe = function(target, changes, extendComplexObject, assignB
         prevValue = target[name];
         newValue = changes[name];
 
-        if(target === newValue) {
+        if(name === "__proto__" || target === newValue) {
             continue;
         }
 
