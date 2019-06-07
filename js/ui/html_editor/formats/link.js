@@ -36,9 +36,9 @@ class ExtLink extends Link {
                 this.domNode.innerText = value.text;
             }
             if(value.target) {
-                this.domNode.removeAttribute("target");
-            } else {
                 this.domNode.setAttribute("target", "_blank");
+            } else {
+                this.domNode.removeAttribute("target");
             }
             this.domNode.setAttribute("href", value.href);
         } else {

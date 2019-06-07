@@ -3,8 +3,11 @@ import { extend } from "../../../core/utils/extend";
 
 import Popup from "../../popup";
 import Form from "../../form";
+import { getActiveElement } from "../../../core/dom_adapter";
+import { resetActiveElement } from "../../../core/utils/dom";
 import { Deferred } from "../../../core/utils/deferred";
 import { format } from "../../../localization/message";
+import browser from "../../../core/utils/browser";
 
 const DIALOG_CLASS = "dx-formdialog";
 const FORM_CLASS = "dx-formdialog-form";
@@ -50,8 +53,9 @@ class FormDialog {
                 const $formContainer = $("<div>").appendTo(contentElem);
 
                 this._renderForm($formContainer, {
-                    onEditorEnterKey: (e) => {
-                        this.hide(e.component.option("formData"));
+                    onEditorEnterKey: ({ component, dataField }) => {
+                        this._updateEditorValue(component, dataField);
+                        this.hide(component.option("formData"));
                     },
                     customizeItem: (item) => {
                         if(item.itemType === "simple") {
@@ -91,6 +95,17 @@ class FormDialog {
                 }
             ]
         }, this._popupUserConfig);
+    }
+
+    _updateEditorValue(component, dataField) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            const editor = component.getEditor(dataField);
+            const activeElement = getActiveElement();
+
+            if(editor.$element().find(activeElement).length) {
+                resetActiveElement();
+            }
+        }
     }
 
     _renderForm($container, options) {

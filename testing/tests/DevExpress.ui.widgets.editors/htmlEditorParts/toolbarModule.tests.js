@@ -913,11 +913,13 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
 
+        assert.ok(this.focusStub.calledOnce, "focus method was called on link adding");
+
         $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .last()
             .trigger("dxclick");
 
-        assert.ok(this.focusStub.calledOnce, "focus method was called after closing the dialog");
+        assert.ok(this.focusStub.calledTwice, "focus method was called after closing the dialog");
     });
 
     test("change an image formatting", (assert) => {
@@ -995,7 +997,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}, .${CHECKBOX_TEXT_CLASS}`).text();
 
-        assert.equal($fields.length, 3, "Form with 4 fields shown");
+        assert.equal($fields.length, 3, "Form with 3 fields shown");
         assert.equal(fieldsText, "URL:Text:Open link in new window", "Check labels");
     });
 
@@ -1077,5 +1079,22 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
                 text: "Test"
             }
         }], "expected format config");
+    });
+
+    test("'Text' field should be hidden when formatting embed config with the 'link' dialog", (assert) => {
+        this.options.items = ["link"];
+        this.quillMock.getSelection = () => { return { index: 0, length: 10 }; };
+        this.quillMock.getText = () => "Test";
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        const $form = $(`.${FORM_CLASS}`);
+        const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
+        const fieldsText = $fields.find(`.${FIELD_ITEM_LABEL_CLASS}, .${CHECKBOX_TEXT_CLASS}`).text();
+
+        assert.equal($fields.length, 2, "Form with 2 fields shown");
+        assert.equal(fieldsText, "URL:Open link in new window", "Check labels");
     });
 });
