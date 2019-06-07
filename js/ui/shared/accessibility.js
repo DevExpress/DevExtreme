@@ -21,20 +21,8 @@ var isMouseDown = false,
     isHiddenFocusing = false,
     focusedElementInfo = null;
 
-function fireKeyDownEvent(instance, event) {
-    var args = {
-        event: event,
-        handled: false
-    };
-
-    instance.executeAction && instance.executeAction("onKeyDown", args);
-    return args.handled;
-}
-
-function processKeyDown(viewName, instance, event, action, $mainElement) {
-    instance = instance.option('parent') || instance;
-
-    var isHandled = fireKeyDownEvent(instance, event.originalEvent);
+function processKeyDown(viewName, instance, event, action, $mainElement, executeKeyDown) {
+    var isHandled = fireKeyDownEvent(instance, event.originalEvent, executeKeyDown);
     if(isHandled) {
         return;
     }
@@ -88,9 +76,19 @@ function findFocusedViewElement(viewSelectors) {
     }
 }
 
-function createOnKeyDownAction(instance) {
-    var actionInstance = instance.option('parent') || instance;
-    actionInstance.createAction && actionInstance.createAction("onKeyDown");
+function fireKeyDownEvent(instance, event, executeAction) {
+    var args = {
+        event: event,
+        handled: false
+    };
+
+    if(executeAction) {
+        executeAction(args);
+    } else {
+        instance._createActionByOption("onKeyDown")(args);
+    }
+
+    return args.handled;
 }
 
 module.exports = {
@@ -100,16 +98,14 @@ module.exports = {
         isHiddenFocusing = false;
     },
 
-    registerKeyboardAction: function(viewName, instance, $element, selector, action) {
+    registerKeyboardAction: function(viewName, instance, $element, selector, action, executeKeyDown) {
         if(instance.option("useLegacyKeyboardNavigation")) {
             return;
         }
 
         var $mainElement = $(instance.element());
 
-        createOnKeyDownAction(instance);
-
-        eventsEngine.on($element, "keydown", selector, e => processKeyDown(viewName, instance, e, action, $mainElement));
+        eventsEngine.on($element, "keydown", selector, e => processKeyDown(viewName, instance, e, action, $mainElement, executeKeyDown));
         eventsEngine.on($element, "mousedown", selector, () => {
             isMouseDown = true;
             $mainElement.removeClass(FOCUS_STATE_CLASS);

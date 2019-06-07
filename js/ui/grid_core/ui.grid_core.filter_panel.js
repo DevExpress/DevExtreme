@@ -8,7 +8,7 @@ import CheckBox from "../check_box";
 import utils from "../filter_builder/utils";
 import { when, Deferred } from "../../core/utils/deferred";
 import inflector from "../../core/utils/inflector";
-import { registerKeyboardAction } from "../shared/accessibility";
+import { registerKeyboardAction } from "./ui.grid_core.accessibility";
 
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",

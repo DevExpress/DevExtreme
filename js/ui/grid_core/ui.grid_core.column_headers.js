@@ -5,7 +5,7 @@ import messageLocalization from "../../localization/message";
 import { isDefined } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
-import { registerKeyboardAction } from "../shared/accessibility";
+import { registerKeyboardAction } from "./ui.grid_core.accessibility";
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",

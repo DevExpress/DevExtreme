@@ -43,7 +43,6 @@ var PagerView = modules.View.inherit({
             pagerOptions = that.option("pager") || {},
             dataController = that.getController("data"),
             options = {
-                parent: that,
                 maxPagesCount: MAX_PAGES_COUNT,
                 pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
                 pageCount: dataController.pageCount(),
@@ -66,6 +65,14 @@ var PagerView = modules.View.inherit({
                     setTimeout(function() {
                         dataController.pageSize(pageSize);
                     });
+                },
+                onKeyDown: e => {
+                    var keyDownHandler = that.option("onKeyDown");
+                    if(keyDownHandler) {
+                        e.component = that.component;
+                        e.element = that.element();
+                        keyDownHandler.bind(that)(e);
+                    }
                 },
                 useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation")
             };
