@@ -277,7 +277,7 @@ QUnit.module("Custom blots rendering", {
             .dxHtmlEditor({
                 value: "test",
                 onValueChanged: (e) => {
-                    assert.equal(e.value, '<a href="http://test.com" target="_blank">test</a>test', "markup contains an image");
+                    assert.equal(e.value, '<a href="http://test.com" target="_blank">test</a>test', "markup contains a link");
                 }
             })
             .dxHtmlEditor("instance");

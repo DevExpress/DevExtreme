@@ -2,6 +2,8 @@ import $ from "jquery";
 
 import FormDialog from "ui/html_editor/ui/formDialog";
 import { isPromise } from "core/utils/type";
+import { getActiveElement } from "core/dom_adapter";
+import browser from "core/utils/browser";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 
 const DIALOG_CLASS = "dx-formdialog";
@@ -79,6 +81,31 @@ QUnit.module("FormDialog", moduleConfig, () => {
         });
 
         keyboardMock($input).type("Test").change().press("enter");
+    });
+
+    test("IE11 should reset active editor to update data", (assert) => {
+        const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+        if(!isIE11) {
+            assert.ok("IE11 specific test");
+            return;
+        }
+
+        assert.expect(2);
+        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const promise = formDialog.show({ items: ["name"] });
+        const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+        promise.done((formData) => {
+            assert.ok(activeElements[0], "there is an active element during typing");
+            assert.notOk(activeElements[1], "There is no active element after pressing the 'enter' key");
+        });
+
+        const activeElements = [];
+        const kb = keyboardMock($input);
+        kb.type("Test");
+        activeElements.push(getActiveElement());
+        kb.change().press("enter");
+        activeElements.push(getActiveElement());
     });
 
     test("confirm dialog by button", (assert) => {
