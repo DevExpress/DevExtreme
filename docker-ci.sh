@@ -109,7 +109,7 @@ function run_test_themebuilder {
 
 function run_test_functional {
     npm run build
-    npm run test-functional -- --browsers chrome:headless
+    npm run test-functional -- --browsers "chrome:headless --start-maximized"
 }
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"

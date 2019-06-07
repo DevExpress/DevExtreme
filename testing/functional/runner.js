@@ -11,7 +11,7 @@ createTestCafe('localhost', 1437, 1438)
         var args = getArgs(),
             testName = args.test.trim(),
             runner = testCafe.createRunner()
-                .browsers(args.browsers.split(" "))
+                .browsers(args.browsers.split(";"))
                 .src(["./testing/functional/tests/**/*.ts"]);
 
         if(testName) {
