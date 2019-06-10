@@ -452,7 +452,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _isOldDataSourceValue: function() {
-        return (this.oldValue && this.option("value") === this._valueGetter(this.oldValue));
+        return (this._oldValue && this.option("value") === this._valueGetter(this._oldValue));
     },
 
     _setSelectedItem: function(item) {
@@ -462,7 +462,7 @@ var SelectBox = DropDownList.inherit({
         this.callBase(isUnknownItem ? null : item);
 
         if(isOldDataSourceValue) {
-            this.option("text", this._displayValue(this.oldValue));
+            this.option("text", this._displayValue(this._oldValue));
         }
     },
 

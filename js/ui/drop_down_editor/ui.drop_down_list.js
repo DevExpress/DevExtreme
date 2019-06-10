@@ -453,15 +453,19 @@ var DropDownList = DropDownEditor.inherit({
         this._setListDataSource();
 
         if(this.option("value") && this.option("selectedItem")) {
-            this.oldValue = this.option("selectedItem");
+            this._oldValue = this.option("selectedItem");
         }
 
-        this._renderInputValue().fail((function() {
-            if(this._isCustomValueAllowed()) {
-                return;
-            }
-            this._clearSelectedItem();
-        }).bind(this));
+        this._renderInputValue()
+            .done((function() {
+                this._oldValue = undefined;
+            }).bind(this))
+            .fail((function() {
+                if(this._isCustomValueAllowed()) {
+                    return;
+                }
+                this._clearSelectedItem();
+            }).bind(this));
     },
 
     _isCustomValueAllowed: function() {
@@ -823,6 +827,8 @@ var DropDownList = DropDownEditor.inherit({
         if(this._list) {
             delete this._list;
         }
+
+        delete this._oldValue;
         this.callBase();
     },
 
