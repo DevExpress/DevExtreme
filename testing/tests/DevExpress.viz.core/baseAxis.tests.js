@@ -1619,7 +1619,7 @@ QUnit.test("T746896. Pass correct range to tick generator after syncroniztion", 
         min: 50,
         max: 250
     });
-    
+
     this.tickGeneratorSpy.reset();
 
     axis.createTicks(this.canvas);
