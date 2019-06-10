@@ -924,6 +924,26 @@ testModule("shading", moduleConfig, () => {
         overlay.option("shading", false);
         assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("backgroundColor")));
     });
+
+    test("overlay should adjust height on iOS after positioning (T742021)", (assert) => {
+        assert.expect(1);
+        if(devices.real().platform !== "ios" || devices.real().deviceType === "desktop") {
+            assert.ok(true);
+            return;
+        }
+
+        const overlay = $("#overlay").dxOverlay().dxOverlay("instance");
+        sinon.stub(
+            overlay,
+            "_fixHeightAfterSafariAddressBarResizing",
+            () => {
+                const $wrapper = $(overlay.$content().parent());
+                assert.strictEqual($wrapper.css("position"), "absolute", "overlay wrapper should have a position");
+            }
+        );
+
+        overlay.show();
+    });
 });
 
 
