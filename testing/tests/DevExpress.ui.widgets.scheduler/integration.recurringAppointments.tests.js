@@ -4,6 +4,7 @@ import Color from "color";
 import fx from "animation/fx";
 import pointerMock from "../../helpers/pointerMock.js";
 import dragEvents from "events/drag";
+import translator from "animation/translator";
 import { DataSource } from "data/data_source/data_source";
 import subscribes from "ui/scheduler/ui.scheduler.subscribes";
 import dateSerialization from "core/utils/date_serialization";
@@ -1249,3 +1250,35 @@ QUnit.test("Single changed appointment should be rendered correctly in specified
     }
 });
 
+QUnit.test("Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: 'test',
+            startDate: new Date(2018, 4, 18, 6, 0),
+            endDate: new Date(2018, 4, 18, 7, 0),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SA,SU,MO,TH,FR;INTERVAL=2"
+        }],
+        views: [{
+            type: "month"
+        }],
+        currentView: "month",
+        currentDate: new Date(2018, 4, 21),
+        height: 700,
+        firstDayOfWeek: 3,
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 9, "Appointment has right count of occurences");
+
+    var firstAppointmentCoords = translator.locate($(this.scheduler.appointments.getAppointment(0)));
+
+    assert.equal(firstAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(1)).top, "Second occurence has same top coordinate as first");
+    assert.equal(firstAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(2)).top, "Third occurence has same top coordinate as first");
+    assert.equal(firstAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(3)).top, "Fourth occurence has same top coordinate as first");
+
+    var secondRowAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(4));
+
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(5)).top, "Sixth occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(6)).top, "Seventh occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(7)).top, "Eighth occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(8)).top, "Ninth occurence has same top coordinate as fifth");
+});
