@@ -180,6 +180,6 @@ QUnit.test("deepExtendArraySafe utility does not throw an error with 'null' deep
 });
 
 QUnit.test("deepExtendArraySafe utility does not pollute object prototype", function(assert) {
-    objectUtils.deepExtendArraySafe({ }, JSON.parse(`{ "__proto__": { "pollution": true }}`), true);
+    objectUtils.deepExtendArraySafe({ }, JSON.parse("{ \"__proto__\": { \"pollution\": true }}"), true);
     assert.ok(!("pollution" in { }), "object prototype is not polluted");
 });
