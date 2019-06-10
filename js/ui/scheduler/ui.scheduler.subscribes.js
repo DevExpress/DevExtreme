@@ -41,7 +41,8 @@ const subscribes = {
             allDay = this.appointmentTakesAllDay(appointmentData),
             startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0],
             originalStartDate = options.originalStartDate || startDate,
-            renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
+            renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance(),
+            firstDayOfWeek = this.option("firstDayOfWeek");
 
         let recurrenceOptions = {
             rule: recurrenceRule,
@@ -49,7 +50,8 @@ const subscribes = {
             start: originalStartDate,
             end: endDate,
             min: startViewDate,
-            max: dateRange[1]
+            max: dateRange[1],
+            firstDayOfWeek: firstDayOfWeek
         };
 
         let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions),
@@ -565,7 +567,8 @@ const subscribes = {
             min: dateRange[0],
             max: dateRange[1],
             resources: resources,
-            allDay: allDay
+            allDay: allDay,
+            firstDayOfWeek: this.option('firstDayOfWeek'),
         }, this._subscribes["convertDateByTimezone"].bind(this));
     },
 
