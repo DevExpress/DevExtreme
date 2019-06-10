@@ -105,13 +105,14 @@ const SpeedDialAction = Widget.inherit({
     },
 
     _render() {
-        this.renderPromise = new Promise((resolve) => {
+        this.renderPromise = new Promise((resolve, reject) => {
             if(!getSwatchContainer(this.$element())) {
                 ready(() => {
                     resolve();
                 });
             } else {
-                resolve();
+                initAction(this);
+                reject();
             }
         });
 
