@@ -2402,6 +2402,19 @@ testModule("API", moduleConfig, () => {
 
         assert.ok(instance.$content().hasClass(OVERLAY_CONTENT_CLASS), "API method content() returns correct jQuery object");
     });
+
+    test("'repaint' method should trigger 'dxresize' event to notify content that its dimensions could changes", (assert) => {
+        const $element = $("#overlay");
+        const instance = $element.dxOverlay({
+            visible: true
+        }).dxOverlay("instance");
+        const resizeStub = sinon.stub(domUtils, "triggerResizeEvent");
+
+        instance.repaint();
+
+        assert.strictEqual(resizeStub.callCount, 1, "'dxresize' event handler was called");
+        resizeStub.restore();
+    });
 });
 
 
