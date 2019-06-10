@@ -1428,12 +1428,13 @@ Axis.prototype = {
         that._tickInterval = ticks.tickInterval;
         that._minorTickInterval = ticks.minorTickInterval;
 
-        const majorTicksByValues = (that._majorTicks || []).reduce((r, t) => {
+        const oldMajorTicks = that._majorTicks || [];
+        const majorTicksByValues = oldMajorTicks.reduce((r, t) => {
             r[t.value.valueOf()] = t;
             return r;
         }, {});
 
-        const sameType = type(ticks.ticks[0]) === type(majorTicksByValues[0] && majorTicksByValues[0].value);
+        const sameType = type(ticks.ticks[0]) === type(oldMajorTicks[0] && oldMajorTicks[0].value);
         const skippedCategory = that._getSkippedCategory(ticks.ticks);
         const majorTicks = ticks.ticks.map(v => {
             const tick = majorTicksByValues[v.valueOf()];
