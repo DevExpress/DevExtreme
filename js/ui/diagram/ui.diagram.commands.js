@@ -339,6 +339,15 @@ const DiagramCommands = {
             {
                 command: DiagramCommand.SendToBack,
                 text: "Send to Back"
+            },
+            {
+                command: DiagramCommand.Lock,
+                text: "Lock",
+                beginGroup: true
+            },
+            {
+                command: DiagramCommand.Unlock,
+                text: "Unlock"
             }
         ];
     },
