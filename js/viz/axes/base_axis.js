@@ -1578,6 +1578,7 @@ Axis.prototype = {
     },
 
     _calculateValueMargins(ticks) {
+        this._resetMargins();
         const that = this;
         const margins = that.getMarginOptions();
         const marginSize = (margins.size || 0) / 2;
@@ -1764,6 +1765,7 @@ Axis.prototype = {
     },
 
     _resetMargins: function() {
+        this._reinitTranslator(this._getViewportRange());
         if(this._canvas) {
             this._translator.updateCanvas(this._processCanvas(this._canvas));
         }
