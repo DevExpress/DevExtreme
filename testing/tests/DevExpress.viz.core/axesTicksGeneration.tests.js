@@ -2201,6 +2201,25 @@ QUnit.test("The Daylight Saving day on the Central European time zone", function
     assert.deepEqual(this.axis._tickInterval, { "hours": 1 });
 });
 
+QUnit.test("Get ticks with right type after empty range", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        axisDivisionFactor: 50,
+        valueType: "datetime",
+        type: "continuous",
+        endOnTick: false
+    });
+    this.axis.setBusinessRange({ });
+    this.axis.createTicks($.extend(canvas(300), { left: 21, right: 21 }));
+
+    // act
+    this.axis.setBusinessRange({ min: new Date(0), max: new Date(23 * 1000) });
+    this.axis.createTicks(canvas(300), { left: 21, right: 21 });
+
+    assert.deepEqual(this.axis._majorTicks.map(v => v.value.getTime()), [0, 5000, 10000, 15000, 20000]);
+    assert.deepEqual(this.axis._tickInterval, { "seconds": 5 });
+});
+
 QUnit.module("DateTime. Minor ticks", environment);
 
 QUnit.test("tickInterval month - minorTickInterval can not be in weeks", function(assert) {
