@@ -58,8 +58,12 @@
                         visibility: hidden;
                         background-color: transparent;
                         pointer-events: none;
-                        border-bottom-color: transparent; // T672281
                     }
+                }
+
+                // T745266
+                .dx-header-row td.dx-pointer-events-none {
+                    border-bottom-color: transparent; // T672281
                 }
 
                 &.dx-@{widgetName}-table-fixed .dx-row td.dx-pointer-events-none {
