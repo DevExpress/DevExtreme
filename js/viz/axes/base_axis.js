@@ -1,6 +1,6 @@
 import { smartFormatter as _format, formatRange } from "./smart_formatter";
 import vizUtils from "../core/utils";
-import { isDefined, isFunction, isPlainObject, isNumeric } from "../../core/utils/type";
+import { isDefined, isFunction, isPlainObject, isNumeric, type } from "../../core/utils/type";
 import constants from "./axes_constants";
 import { extend } from "../../core/utils/extend";
 import { inArray } from "../../core/utils/array";
@@ -1482,12 +1482,12 @@ Axis.prototype = {
             return r;
         }, {});
 
-
+        const sameType = type(ticks.ticks[0]) === type(majorTicksByValues[0] && majorTicksByValues[0].value);
         const skippedCategory = that._getSkippedCategory(ticks.ticks);
         const majorTicks = ticks.ticks.map(v => {
             const tick = majorTicksByValues[v.valueOf()];
-            delete majorTicksByValues[v.valueOf()];
-            if(tick) {
+            if(tick && sameType) {
+                delete majorTicksByValues[v.valueOf()];
                 tick.setSkippedCategory(skippedCategory);
                 return tick;
             } else {
