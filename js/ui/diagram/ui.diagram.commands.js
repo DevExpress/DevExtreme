@@ -182,59 +182,16 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return [
             {
+                command: DiagramCommand.Units,
+                text: "Units",
+                widget: "dxSelectBox"
+            },
+            {
                 command: DiagramCommand.PageSize,
                 text: "Page Size",
                 widget: "dxSelectBox",
-                getValue: (v) => {
-                    const vParts = v.split("|");
-                    return {
-                        width: parseInt(vParts[0]),
-                        height: parseInt(vParts[1])
-                    };
-                },
-                setValue: (v) => `${v.width}|${v.height}`,
-                items: [
-                    {
-                        value: "12240|15840",
-                        title: "US-Letter (8,5\" x 11\")"
-                    },
-                    {
-                        value: "15817|24491",
-                        title: "US-Tabloid (27.9 cm x 43.2 cm)"
-                    },
-                    {
-                        value: "47679|67408",
-                        title: "A0 (84.1 cm x 118.9 cm)"
-                    },
-                    {
-                        value: "33676|47679",
-                        title: "A1 (59.4 cm x 84.1 cm)"
-                    },
-                    {
-                        value: "23811|33676",
-                        title: "A2 (42.0 cm x 59.4 cm)"
-                    },
-                    {
-                        value: "16838|23811",
-                        title: "A3 (29.7 cm x 42.0 cm)"
-                    },
-                    {
-                        value: "11906|16838",
-                        title: "A4 (21.0 cm x 29.7 cm)"
-                    },
-                    {
-                        value: "8391|11906",
-                        title: "A5 (14.8 cm x 21.0 cm)"
-                    },
-                    {
-                        value: "5953|8391",
-                        title: "A6 (10.5 cm x 14.8 cm)"
-                    },
-                    {
-                        value: "4195|5953",
-                        title: "A7 (7.4 cm x 10.5 cm)"
-                    }
-                ]
+                getValue: (v) => JSON.parse(v),
+                setValue: (v) => JSON.stringify(v)
             },
             {
                 command: DiagramCommand.PageLandscape,
@@ -242,27 +199,16 @@ const DiagramCommands = {
                 widget: "dxCheckBox"
             },
             {
-                command: DiagramCommand.GridSize,
-                text: "Grid Size",
-                widget: "dxSelectBox",
-                items: [
-                    {
-                        value: 90,
-                        title: "0.16 cm"
-                    },
-                    {
-                        value: 180,
-                        title: "0.32 cm"
-                    },
-                    {
-                        value: 360,
-                        title: "0.64 cm"
-                    },
-                    {
-                        value: 720,
-                        title: "1.28 cm"
-                    }
-                ]
+                command: DiagramCommand.PageColor,
+                text: "Page Color",
+                widget: "dxColorBox",
+                beginGroup: true
+            },
+            {
+                command: DiagramCommand.ShowGrid,
+                text: "Show Grid",
+                widget: "dxCheckBox",
+                beginGroup: true
             },
             {
                 command: DiagramCommand.SnapToGrid,
@@ -270,39 +216,15 @@ const DiagramCommands = {
                 widget: "dxCheckBox"
             },
             {
+                command: DiagramCommand.GridSize,
+                text: "Grid Size",
+                widget: "dxSelectBox"
+            },
+            {
                 command: DiagramCommand.ZoomLevel,
                 text: "Zoom Level",
                 widget: "dxSelectBox",
-                items: [
-                    {
-                        value: 0.5,
-                        title: "50%"
-                    },
-                    {
-                        value: 0.75,
-                        title: "75%"
-                    },
-                    {
-                        value: 1,
-                        title: "100%"
-                    },
-                    {
-                        value: 1.25,
-                        title: "125%"
-                    },
-                    {
-                        value: 1.5,
-                        title: "150%"
-                    },
-                    {
-                        value: 2,
-                        title: "200%"
-                    },
-                    {
-                        value: 3,
-                        title: "300%"
-                    }
-                ]
+                beginGroup: true
             }
         ];
     },
