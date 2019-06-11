@@ -375,7 +375,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     },
 
     _needColumnExporting: function(column) {
-        return column.allowExporting && !column.command;
+        return !column.command && (column.allowExporting || column.allowExporting === undefined);
     },
 
     _getFooterSummaryItems: function(summaryCells, isTotal) {
