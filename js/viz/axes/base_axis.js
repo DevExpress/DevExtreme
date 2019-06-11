@@ -1521,7 +1521,9 @@ Axis.prototype = {
         var that = this,
             translator = that._translator;
 
-        range.breaks = that._correctedBreaks;
+        if(that._correctedBreaks) {
+            range.breaks = that._correctedBreaks;
+        }
 
         if(that._isSynchronized) {
             return;

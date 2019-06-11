@@ -4469,6 +4469,32 @@ QUnit.test("Apply margin to series range when adjust", function(assert) {
     });
 });
 
+QUnit.test("T746896. Take into account scale breaks on tick calculation", function(assert) {
+    const axis = this.createAxis(this.renderSettings, {
+        valueMarginsEnabled: true,
+        breakStyle: { width: 0 },
+        minValueMargin: 0.1,
+        maxValueMargin: 0.1,
+        breaks: [{
+            startValue: 150,
+            endValue: 950
+        }],
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 1000
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({});
+
+    axis.draw(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].min, 90);
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].max, 1010);
+});
+
 QUnit.test("Extend range to boundery ticks on adjust", function(assert) {
     const series = [new MockSeries({})];
     series[0].getViewport.returns({
