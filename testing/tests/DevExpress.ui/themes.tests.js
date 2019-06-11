@@ -125,7 +125,7 @@ QUnit.module("Selector check", () => {
             }
 
             window.waitFor(isCssLoaded).done(function() {
-                assert.deepEqual(findBadCssSelectors(frameDoc), []);
+                assert.deepEqual(findBadCssSelectors(frameDoc), [], "Css rule has incorrect selectors");
                 frame.remove();
                 done();
             });
