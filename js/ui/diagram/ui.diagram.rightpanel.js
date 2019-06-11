@@ -7,6 +7,7 @@ import { extend } from "../../core/utils/extend";
 import DiagramBar from "./diagram_bar";
 
 const DIAGRAM_RIGHT_PANEL_CLASS = "dx-diagram-right-panel";
+const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = "dx-diagram-right-panel-begin-group";
 
 class DiagramRightPanel extends Widget {
     _init() {
@@ -43,7 +44,7 @@ class DiagramRightPanel extends Widget {
                 return extend(true, {
                     editorType: item.widget,
                     dataField: item.command.toString(),
-                    cssClass: item.beginGroup && "begin-group",
+                    cssClass: item.beginGroup && DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS,
                     label: {
                         text: item.text
                     },
