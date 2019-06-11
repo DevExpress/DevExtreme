@@ -43,6 +43,7 @@ class DiagramRightPanel extends Widget {
                 return extend(true, {
                     editorType: item.widget,
                     dataField: item.command.toString(),
+                    cssClass: item.beginGroup && "begin-group",
                     label: {
                         text: item.text
                     },
@@ -89,6 +90,18 @@ class DiagramRightPanel extends Widget {
         this._formInstance.updateData(key.toString(), value);
         this._updateLocked = false;
     }
+    _setItemSubItems(key, items) {
+        this._updateLocked = true;
+        var editorInstance = this._formInstance.getEditor(key.toString());
+        editorInstance.option('items', items.map(item => {
+            var value = typeof item.value === "object" ? item.value.toString() : item.value;
+            return {
+                'value': value,
+                'title': item.text
+            };
+        }));
+        this._updateLocked = false;
+    }
     _setEnabled(enabled) {
         this._formInstance.option("disabled", !enabled);
     }
@@ -108,6 +121,9 @@ class OptionsDiagramBar extends DiagramBar {
     }
     setEnabled(enabled) {
         this._owner._setEnabled(enabled);
+    }
+    setItemSubItems(key, items) {
+        this._owner._setItemSubItems(key, items);
     }
 }
 
