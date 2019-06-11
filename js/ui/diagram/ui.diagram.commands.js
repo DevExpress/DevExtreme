@@ -190,14 +190,8 @@ const DiagramCommands = {
                 command: DiagramCommand.PageSize,
                 text: "Page Size",
                 widget: "dxSelectBox",
-                getValue: (v) => {
-                    const vParts = v.replace("[", "").replace("]", "").split(",");
-                    return {
-                        width: parseInt(vParts[0]),
-                        height: parseInt(vParts[1])
-                    };
-                },
-                setValue: (v) => v.toString()
+                getValue: (v) => JSON.parse(v),
+                setValue: (v) => JSON.stringify(v)
             },
             {
                 command: DiagramCommand.PageLandscape,

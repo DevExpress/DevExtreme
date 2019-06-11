@@ -95,7 +95,7 @@ class DiagramRightPanel extends Widget {
         this._updateLocked = true;
         var editorInstance = this._formInstance.getEditor(key.toString());
         editorInstance.option('items', items.map(item => {
-            var value = typeof item.value === "object" ? item.value.toString() : item.value;
+            var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
             return {
                 'value': value,
                 'title': item.text
