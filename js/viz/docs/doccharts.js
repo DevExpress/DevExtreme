@@ -3496,6 +3496,18 @@ var dxChartCommonAnnotationConfig = {
     */
     y: undefined,
     /**
+    * @name dxChartCommonAnnotationConfig.offsetX
+    * @type number
+    * @default undefined
+    */
+    offsetX: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.offsetY
+    * @type number
+    * @default undefined
+    */
+    offsetY: undefined,
+    /**
     * @name dxChartCommonAnnotationConfig.tooltipEnabled
     * @type boolean
     * @default true

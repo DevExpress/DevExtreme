@@ -465,6 +465,16 @@ QUnit.module("Coordinates calculation. Chart plugin", {
 
         this.checkCoords(assert, chart, { argument: "December", value: "Monday" }, { x: undefined, y: undefined });
     });
+
+    QUnit.test("Pass offset to annotation coord object", function(assert) {
+        let chart = this.getChartForSeriesTests();
+        const coords = chart._getAnnotationCoords({
+            offsetX: 10,
+            offsetY: 20
+        });
+        assert.equal(coords.offsetX, 10);
+        assert.equal(coords.offsetY, 20);
+    });
 });
 
 QUnit.module("Lifecycle", {
