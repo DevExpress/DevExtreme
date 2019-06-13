@@ -170,15 +170,25 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.ok(!$input.prop("readOnly"), "correct readOnly value");
     });
 
-    QUnit.test("readonly property should not be applied to the native picker", assert => {
-        const $dateBox = $("#dateBox").dxDateBox({
-            pickerType: "native",
-            acceptCustomValue: false
+    QUnit.test("readonly property should not be applied to the native picker on real ios", assert => {
+        const deviceStub = sinon.stub(devices, "real").returns({
+            deviceType: "mobile",
+            version: [],
+            platform: "ios"
         });
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        try {
+            const $dateBox = $("#dateBox").dxDateBox({
+                pickerType: "native",
+                acceptCustomValue: false
+            });
 
-        assert.ok(!$input.prop("readOnly"), "correct readOnly value");
+            const $input = $dateBox.find(".dx-texteditor-input");
+
+            assert.ok(!$input.prop("readOnly"), "correct readOnly value");
+        } finally {
+            deviceStub.restore();
+        }
     });
 
     QUnit.test("T204179 - dxDateBox should not render dropDownButton only for generic device when pickerType is 'native'", assert => {
