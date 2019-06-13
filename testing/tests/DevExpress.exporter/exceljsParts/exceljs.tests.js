@@ -475,7 +475,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns" + topLeftCellOption, (assert) => {
+            QUnit.test("Data - 3 columns" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -520,7 +520,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns - col_1.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Data - 3 columns - col_1.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -563,7 +563,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns - col_2.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Data - 3 columns - col_2.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -606,7 +606,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns - col_3.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Data - 3 columns - col_3.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -649,7 +649,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 1 level" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -698,7 +698,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level - 1 summary group node" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 1 level - 1 summary group node" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: 1 },
@@ -740,7 +740,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level - 1 summary showInGroupFooter" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 1 level - 1 summary showInGroupFooter" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -790,7 +790,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level & 2 column" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 1 level & 2 column" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -844,7 +844,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 2 level" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -892,7 +892,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level - 2 summary group node" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 2 level - 2 summary group node" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -940,7 +940,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level - 2 summary showInGroupFooter" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 2 level - 2 summary showInGroupFooter" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -1001,7 +1001,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level & 2 column - 2 summary showInGroupFooter" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 2 level & 2 column - 2 summary showInGroupFooter" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1", f4: "f4_1" },
@@ -1077,7 +1077,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level & 2 column - 2 summary alignByColumn" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 2 level & 2 column - 2 summary alignByColumn" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1", f4: "f4_1", f5: "f5_1" },
@@ -1145,7 +1145,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1196,7 +1196,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & group.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & group.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1247,7 +1247,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false - " + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false - " + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1295,7 +1295,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1343,7 +1343,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_3.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_3.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1391,7 +1391,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1452,7 +1452,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1508,7 +1508,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1565,7 +1565,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_1.alignByColumn: true x showInGroupFooter: true" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_1.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1622,7 +1622,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1675,7 +1675,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1732,7 +1732,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -1785,7 +1785,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary" + topLeftCellOption, (assert) => {
+            QUnit.test("Total summary" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2" },
@@ -1840,7 +1840,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_1.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_1.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -1892,7 +1892,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_1.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_1.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -1944,7 +1944,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_1.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_1.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -1996,7 +1996,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_2.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_2.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -2048,7 +2048,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_2.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_2.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -2100,7 +2100,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_2.allowExporting: false" + topLeftCellOption, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_2.allowExporting: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
