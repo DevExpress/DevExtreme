@@ -157,6 +157,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._renderCloseIcon();
                 break;
             case "position":
+                this._renderGeometry();
                 break;
             default:
                 this.callBase(args);
@@ -207,7 +208,10 @@ exports.initAction = function(newAction) {
                 position: speedDialMainItem._getDefaultOptions().position
             }));
         } else {
-            speedDialMainItem.option({ actions: savedActions });
+            speedDialMainItem.option({
+                actions: savedActions,
+                position: speedDialMainItem._getDefaultOptions().position
+            });
         }
     }
 };
