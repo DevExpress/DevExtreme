@@ -21,7 +21,12 @@ var isMouseDown = false,
     isHiddenFocusing = false,
     focusedElementInfo = null;
 
-function processKeyDown(viewName, instance, event, action, $mainElement) {
+function processKeyDown(viewName, instance, event, action, $mainElement, executeKeyDown) {
+    var isHandled = fireKeyDownEvent(instance, event.originalEvent, executeKeyDown);
+    if(isHandled) {
+        return;
+    }
+
     var keyName = eventUtils.normalizeKeyName(event);
 
     if(keyName === "enter" || keyName === "space") {
@@ -71,6 +76,21 @@ function findFocusedViewElement(viewSelectors) {
     }
 }
 
+function fireKeyDownEvent(instance, event, executeAction) {
+    var args = {
+        event: event,
+        handled: false
+    };
+
+    if(executeAction) {
+        executeAction(args);
+    } else {
+        instance._createActionByOption("onKeyDown")(args);
+    }
+
+    return args.handled;
+}
+
 module.exports = {
     hiddenFocus: function(element) {
         isHiddenFocusing = true;
@@ -78,14 +98,14 @@ module.exports = {
         isHiddenFocusing = false;
     },
 
-    registerKeyboardAction: function(viewName, instance, $element, selector, action) {
+    registerKeyboardAction: function(viewName, instance, $element, selector, action, executeKeyDown) {
         if(instance.option("useLegacyKeyboardNavigation")) {
             return;
         }
 
         var $mainElement = $(instance.element());
 
-        eventsEngine.on($element, "keydown", selector, e => processKeyDown(viewName, instance, e, action, $mainElement));
+        eventsEngine.on($element, "keydown", selector, e => processKeyDown(viewName, instance, e, action, $mainElement, executeKeyDown));
         eventsEngine.on($element, "mousedown", selector, () => {
             isMouseDown = true;
             $mainElement.removeClass(FOCUS_STATE_CLASS);
