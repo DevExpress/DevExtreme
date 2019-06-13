@@ -10,7 +10,7 @@ import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import devices from "core/devices";
 import dataUtils from "core/element_data";
-import { SchedulerTestWrapper, createWrapper, initTestMarkup } from './helpers.js';
+import { createWrapper, initTestMarkup } from './helpers.js';
 import { getSimpleDataArray } from './data.js';
 
 import "common.css!";
@@ -25,8 +25,8 @@ QUnit.module("Integration: Appointment tooltip", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
-            this.scheduler = new SchedulerTestWrapper(this.instance);
+            this.scheduler = createWrapper($.extend(options, { height: 600 }));
+            this.instance = this.scheduler.instance;
         };
 
         this.clock = sinon.useFakeTimers();
