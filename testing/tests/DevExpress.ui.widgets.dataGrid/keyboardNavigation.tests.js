@@ -8998,40 +8998,156 @@ QUnit.module("Keyboard navigation accessibility", {
         assert.notOk($(this.getCellElement(1, 0)).hasClass("dx-focused"), "Cell focused");
     });
 
-    // TODO onKeyDown event
-    // testInDesktop("Enter, Space key down by header cell", function(assert) {
-    //     var keyDownFiresCount = 0;
-    //     // arrange
-    //     this.options = {
-    //         onKeyDown: () => ++keyDownFiresCount
-    //     };
-    //     this.setupModule();
-    //     this.gridView.render($("#container"));
+    testInDesktop("Enter, Space key down by group panel", function(assert) {
+        var headerPanelWrapper = new HeaderPanelWrapper("#container"),
+            keyDownFiresCount = 0;
 
-    //     // act
-    //     var $firstCell = $(this.$element()).find(".dx-header-row td").eq(0);
-    //     $firstCell.focus();
-    //     this.clock.tick();
+        // arrange
+        this.options = {
+            onKeyDown: () => ++keyDownFiresCount,
+            editing: {
+                mode: "batch",
+                allowUpdating: true,
+                selectTextOnEditStart: true,
+                startEditAction: "dblClick"
+            },
+            groupPanel: { visible: true },
+            columns: [
+                { dataField: "name" },
+                { dataField: "date", dataType: "date" },
+                { dataField: "room", dataType: "number", groupIndex: 0 },
+                { dataField: "phone", dataType: "number" }
+            ]
+        };
 
-    //     // assert
-    //     assert.notOk(this.getController("data").getDataSource().sort(), "Sorting");
+        this.setupModule();
+        this.gridView.render($("#container"));
 
-    //     // act
-    //     fireKeyDown($firstCell, "Enter");
-    //     this.clock.tick();
+        headerPanelWrapper.getGroupPanelItem(0).focus();
 
-    //     // assert
-    //     assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: false }], "Sorting");
-    //     assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+        // act
+        fireKeyDown(headerPanelWrapper.getGroupPanelItem(0), "Enter");
+        this.clock.tick();
+        // assert
+        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
 
-    //     // act
-    //     fireKeyDown($firstCell, " ");
-    //     this.clock.tick();
+        // act
+        fireKeyDown(headerPanelWrapper.getGroupPanelItem(0), " ");
+        this.clock.tick();
+        // assert
+        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    });
 
-    //     // assert
-    //     assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: true }], "Sorting");
-    //     assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
-    // });
+    testInDesktop("Enter, Space key down by header cell", function(assert) {
+        var headersWrapper = new HeadersWrapper("#container"),
+            keyDownFiresCount = 0;
+
+        // arrange
+        this.options = {
+            onKeyDown: () => ++keyDownFiresCount
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        headersWrapper.getHeaderItem(0, 0).focus();
+
+        // assert
+        assert.notOk(this.getController("data").getDataSource().sort(), "Sorting");
+
+        // act
+        fireKeyDown(headersWrapper.getHeaderItem(0, 0), "Enter");
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: false }], "Sorting");
+        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+
+        // act
+        fireKeyDown(headersWrapper.getHeaderItem(0, 0), " ");
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.getController("data").getDataSource().sort(), [{ selector: "name", desc: true }], "Sorting");
+        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    });
+
+    testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
+        var headersWrapper = new HeadersWrapper("#container"),
+            keyDownFiresCount = 0,
+            headerFilterShownCount = 0;
+
+        // arrange
+        this.options = {
+            onKeyDown: () => ++keyDownFiresCount,
+            headerFilter: {
+                visible: true
+            }
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.getView("headerFilterView").showHeaderFilterMenu = ($columnElement, options) => {
+            assert.equal(options.column.dataField, "name");
+            ++headerFilterShownCount;
+        };
+
+        headersWrapper.getHeaderFilterItem(0, 0).focus();
+
+        // act
+        fireKeyDown(headersWrapper.getHeaderFilterItem(0, 0), "Enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(headerFilterShownCount, 1, "headerFilterShownCount");
+        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+
+        // act
+        fireKeyDown(headersWrapper.getHeaderFilterItem(0, 0), " ");
+        this.clock.tick();
+
+        // assert
+        assert.equal(headerFilterShownCount, 2, "headerFilterShownCount");
+        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    });
+
+    testInDesktop("Enter, Space key down by pager", function(assert) {
+        var pagerWrapper = new PagerWrapper("#container"),
+            keyDownFiresCount = 0;
+
+        // arrange
+        this.options = {
+            onKeyDown: () => ++keyDownFiresCount,
+            editing: {
+                mode: "batch",
+                allowUpdating: true,
+                selectTextOnEditStart: true,
+                startEditAction: "dblClick"
+            },
+            pager: {
+                visible: true
+            },
+            paging: {
+                pageSize: 1,
+                showNavigationButtons: true
+            }
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        pagerWrapper.getPagerPageElement(0).focus();
+
+        // act
+        fireKeyDown(pagerWrapper.getPagerPageElement(0), "Enter");
+        this.clock.tick();
+        // assert
+        assert.equal(keyDownFiresCount, 1, "keyDownFiresCount");
+
+        // act
+        fireKeyDown(pagerWrapper.getPagerPageElement(0), " ");
+        this.clock.tick();
+        // assert
+        assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
+    });
 
     testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
         var headersWrapper = new HeadersWrapper("#container");

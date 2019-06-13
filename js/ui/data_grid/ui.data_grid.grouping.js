@@ -8,7 +8,8 @@ import { isDefined, isString } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import devices from "../../core/devices";
 import { when, Deferred } from "../../core/utils/deferred";
-import { registerKeyboardAction, setTabIndex, restoreFocus } from "../shared/accessibility";
+import { registerKeyboardAction } from "../grid_core/ui.grid_core.accessibility";
+import { setTabIndex, restoreFocus } from "../shared/accessibility";
 
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
