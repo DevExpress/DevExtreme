@@ -1,5 +1,6 @@
 import $ from "jquery";
 import ExcelJS from "exceljs";
+import ExcelJSTestHelper from "./ExcelJSTestHelper.js";
 import { exportDataGrid } from "exporter/exceljs/excelExporter";
 import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
 import { initializeDxArrayFind, clearDxArrayFind } from "./arrayFindHelper.js";
@@ -10,6 +11,8 @@ import "ui/data_grid/ui.data_grid";
 
 import "common.css!";
 import "generic_light.css!";
+
+let helper;
 
 QUnit.testStart(() => {
     let markup = "<div id='dataGrid'></div>";
@@ -25,6 +28,7 @@ const moduleConfig = {
     beforeEach: () => {
         this.worksheet = new ExcelJS.Workbook().addWorksheet("Test sheet");
         this.customizeCellCallCount = 0;
+        helper = new ExcelJSTestHelper(this.worksheet);
     },
     after: () => {
         clearDxObjectAssign();
@@ -33,67 +37,6 @@ const moduleConfig = {
 };
 
 QUnit.module("API", moduleConfig, () => {
-    function checkCustomizeCell(worksheet, eventArgs, expectedArgs, callIndex) {
-        var expectedAddress = expectedArgs[callIndex].excelCell;
-        QUnit.assert.strictEqual(worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, eventArgs.cell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
-
-        let expectedColumn = expectedArgs[callIndex].gridCell.column;
-        let actualColumn = eventArgs.gridCell.column;
-
-        QUnit.assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${callIndex}`);
-        QUnit.assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${callIndex}`);
-        QUnit.assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${callIndex}`);
-        QUnit.assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${callIndex}`);
-
-        const gridCellSkipProperties = ["column"];
-
-        for(const propertyName in expectedArgs[callIndex].gridCell) {
-            if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                QUnit.assert.strictEqual(eventArgs.gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
-            }
-        }
-    }
-
-    function checkAutoFilter(assert, worksheet, excelFilterEnabled, from, to, frozenArea) {
-        if(excelFilterEnabled === true) {
-            assert.deepEqual(worksheet.autoFilter.from, from, "worksheet.autoFilter.from");
-            assert.deepEqual(worksheet.autoFilter.to, to, "worksheet.autoFilter.to");
-            assert.deepEqual(worksheet.views, [ { state: "frozen", ySplit: frozenArea.y } ], "worksheet.views");
-        } else {
-            assert.equal(worksheet.autoFilter, undefined, "worksheet.autoFilter");
-        }
-    }
-
-    function checkValues(assert, expectedRows, worksheet, topLeft) {
-        for(let rowIndex = 0; rowIndex < expectedRows.length; rowIndex++) {
-            for(let columnIndex = 0; columnIndex < expectedRows[rowIndex].values.length; columnIndex++) {
-                assert.equal(worksheet.getRow(topLeft.row + rowIndex).getCell(topLeft.column + columnIndex).value, expectedRows[rowIndex].values[columnIndex], `this.worksheet.getRow(${topLeft.row + rowIndex}).getCell(${topLeft.column + columnIndex}).value`);
-            }
-            assert.equal(worksheet.getRow(topLeft.row + rowIndex).outlineLevel, expectedRows[rowIndex].outlineLevel, `this.worksheet.getRow(${topLeft.row + rowIndex}).outlineLevel`);
-        }
-    }
-
-    function checkRowAndColumnCount(assert, worksheet, total, actual) {
-        assert.equal(worksheet.rowCount, total.row, "worksheet.rowCount");
-        assert.equal(worksheet.columnCount, total.column, "worksheet.columnCount");
-        assert.equal(worksheet.actualRowCount, actual.row, "worksheet.actualRowCount");
-        assert.equal(worksheet.actualColumnCount, actual.column, "worksheet.actualColumnCount");
-    }
-
-    function _extendCellArgs(cellArgs, values, topLeft) {
-        let row = 0;
-        let cell = 0;
-
-        cellArgs.forEach((item) => {
-            item.excelCell = { row: topLeft.row + row, column: topLeft.column + cell };
-            item.gridCell.value = values[row].values[cell];
-
-            if(values[0].values.length - cell === 1) { row++; cell = 0; } else { cell++; }
-        });
-
-        return cellArgs;
-    }
-
     [undefined, { row: 1, column: 1 }, { row: 2, column: 3 }].forEach((topLeftCell) => {
         let topLeft = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
         let topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
@@ -104,7 +47,7 @@ QUnit.module("API", moduleConfig, () => {
             topLeftCell: topLeftCell,
             customizeCell: (eventArgs) => {
                 if(typeUtils.isDefined(expectedCustomizeCellArgs)) {
-                    checkCustomizeCell(this.worksheet, eventArgs, expectedCustomizeCellArgs, this.customizeCellCallCount++);
+                    helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, this.customizeCellCallCount++);
                 }
             }
         });
@@ -121,8 +64,8 @@ QUnit.module("API", moduleConfig, () => {
                 let expectedArgs = [];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
-                    checkAutoFilter(assert, this.worksheet, false);
+                    helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 });
+                    helper.checkAutoFilter(false);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, topLeft, "result.to");
                     done();
@@ -139,8 +82,8 @@ QUnit.module("API", moduleConfig, () => {
                 let expectedCustomizeCellArgs = [ { excelCell: topLeft, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } } ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, topLeft, { row: 1, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount(topLeft, { row: 1, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, topLeft, "result.to");
@@ -159,8 +102,8 @@ QUnit.module("API", moduleConfig, () => {
                 let expectedCustomizeCellArgs = [];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
-                    checkAutoFilter(assert, this.worksheet, false);
+                    helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 });
+                    helper.checkAutoFilter(false);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, topLeft, "result.to");
                     done();
@@ -180,8 +123,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -200,8 +143,8 @@ QUnit.module("API", moduleConfig, () => {
                 let expectedCustomizeCellArgs = [];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: 0, column: 0 }, { row: 0, column: 0 });
-                    checkAutoFilter(assert, this.worksheet, false);
+                    helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 });
+                    helper.checkAutoFilter(false);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, topLeft, "result.to");
                     done();
@@ -218,8 +161,8 @@ QUnit.module("API", moduleConfig, () => {
                 let expectedCustomizeCellArgs = [ { excelCell: topLeft, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } } ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, topLeft, { row: 1, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount(topLeft, { row: 1, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row, column: topLeft.column }, "result.to");
@@ -239,8 +182,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, topLeft, { row: 1, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount(topLeft, { row: 1, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row, column: topLeft.column }, "result.to");
@@ -266,8 +209,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 2 }, { row: 1, column: 3 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row, column: topLeft.column + 2 }, { row: 1, column: 3 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f3", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 2).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 2}).value`);
@@ -294,8 +237,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f3", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -321,8 +264,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f3", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -348,8 +291,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -375,8 +318,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "1", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column + 1).value, "2", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -404,8 +347,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "1", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -433,8 +376,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 1, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "number", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -462,8 +405,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "true", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -492,8 +435,8 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -522,12 +465,186 @@ QUnit.module("API", moduleConfig, () => {
                 ];
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
-                    checkAutoFilter(assert, this.worksheet, excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, dateTime, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 1, column: topLeft.column }, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 3 columns" + topLeftCellOption, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                    { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+                ];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string" },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
+                        { dataField: "f3", caption: "f3", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+                ];
+
+                const expectedRows = [
+                    { values: [ "f1_1", "f2_1", "f3_1" ], outlineLevel: 0 },
+                    { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 0 }
+                ];
+
+                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 2 }, { row: 2, column: 3 });
+                    helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedRows, topLeft);
+                    assert.deepEqual(result.from, topLeft, "result.from");
+                    assert.deepEqual(result.to, { row: topLeft.row + 1, column: topLeft.column + 2 }, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 3 columns - first.allowExporting: false" + topLeftCellOption, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                    { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+                ];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string", allowExporting: false },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
+                        { dataField: "f3", caption: "f3", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+                ];
+
+                const expectedRows = [
+                    { values: [ "f2_1", "f3_1" ], outlineLevel: 0 },
+                    { values: [ "f2_2", "f3_2" ], outlineLevel: 0 }
+                ];
+
+                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
+                    helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedRows, topLeft);
+                    assert.deepEqual(result.from, topLeft, "result.from");
+                    assert.deepEqual(result.to, { row: topLeft.row + 1, column: topLeft.column + 1 }, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 3 columns - second.allowExporting: false" + topLeftCellOption, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                    { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+                ];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string" },
+                        { dataField: "f2", caption: "f2", dataType: "string", allowExporting: false },
+                        { dataField: "f3", caption: "f3", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+                ];
+
+                const expectedRows = [
+                    { values: [ "f1_1", "f3_1" ], outlineLevel: 0 },
+                    { values: [ "f1_2", "f3_2" ], outlineLevel: 0 }
+                ];
+
+                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
+                    helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedRows, topLeft);
+                    assert.deepEqual(result.from, topLeft, "result.from");
+                    assert.deepEqual(result.to, { row: topLeft.row + 1, column: topLeft.column + 1 }, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 3 columns - third.allowExporting: false" + topLeftCellOption, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                    { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+                ];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string" },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
+                        { dataField: "f3", caption: "f3", dataType: "string", allowExporting: false },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
+                ];
+
+                const expectedRows = [
+                    { values: [ "f1_1", "f2_1" ], outlineLevel: 0 },
+                    { values: [ "f1_2", "f2_2" ], outlineLevel: 0 }
+                ];
+
+                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
+                    helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedRows, topLeft);
+                    assert.deepEqual(result.from, topLeft, "result.from");
+                    assert.deepEqual(result.to, { row: topLeft.row + 1, column: topLeft.column + 1 }, "result.to");
                     done();
                 });
             });
@@ -558,8 +675,8 @@ QUnit.module("API", moduleConfig, () => {
             ];
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 4, column: topLeft.column }, { row: 5, column: 1 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row }, { x: 0, y: topLeft.row });
+                helper.checkRowAndColumnCount({ row: topLeft.row + 4, column: topLeft.column }, { row: 5, column: 1 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row }, { x: 0, y: topLeft.row });
 
                 assert.equal(this.worksheet.getRow(topLeft.row).getCell(topLeft.column).value, "f2", `this.worksheet.getRow(${topLeft.row}).getCell(${topLeft.column}).value`);
                 assert.equal(this.worksheet.getRow(topLeft.row).outlineLevel, 0, `this.worksheet.getRow(${topLeft.row}).outlineLevel`);
@@ -616,10 +733,10 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ 3 ], outlineLevel: 1 }
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then(() => {
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkValues(expectedRows, topLeft);
                 done();
             });
         });
@@ -664,10 +781,10 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ "Max: f2_2" ], outlineLevel: 1 },
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 5, column: topLeft.column }, "result.to");
                 done();
@@ -716,12 +833,12 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ "f1_1", "f3_2" ], outlineLevel: 1 }
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
                 done();
@@ -764,12 +881,12 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ "f3_2" ], outlineLevel: 2 }
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 5, column: topLeft.column }, { row: 6, column: 1 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkRowAndColumnCount({ row: topLeft.row + 5, column: topLeft.column }, { row: 6, column: 1 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 5, column: topLeft.column }, "result.to");
                 done();
@@ -813,10 +930,10 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ "f3_2" ], outlineLevel: 2 }
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 4, column: topLeft.column }, "result.to");
 
@@ -873,12 +990,12 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ "Count: 2" ], outlineLevel: 2 },
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 10, column: topLeft.column }, { row: 11, column: 1 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkRowAndColumnCount({ row: topLeft.row + 10, column: topLeft.column }, { row: 11, column: 1 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 10, column: topLeft.column }, "result.to");
                 done();
@@ -949,12 +1066,12 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ "Count: 2", "Count: 2" ], outlineLevel: 2 },
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 10, column: topLeft.column + 1 }, { row: 11, column: 2 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkRowAndColumnCount({ row: topLeft.row + 10, column: topLeft.column + 1 }, { row: 11, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 10, column: topLeft.column + 1 }, "result.to");
                 done();
@@ -1017,14 +1134,597 @@ QUnit.module("API", moduleConfig, () => {
                 { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(4) } },
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 4, column: topLeft.column + 2 }, { row: 5, column: 3 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkRowAndColumnCount({ row: topLeft.row + 4, column: topLeft.column + 2 }, { row: 5, column: 3 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 4, column: topLeft.column + 2 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Grouping - 3 column + group column" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined, undefined ], outlineLevel: 0 },
+                { values: [ "f1_1", "f2_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 2 }, { row: 3, column: 3 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 2 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Grouping - 3 column + group column - group.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined, undefined ], outlineLevel: 0 },
+                { values: [ "f1_1", "f2_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 2 }, { row: 3, column: 3 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 2 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Grouping - 3 column + group column - first.allowExporting: false - " + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string", allowExporting: false },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined ], outlineLevel: 0 },
+                { values: [ "f2_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f2_2", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Grouping - 3 column + group column - second.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string", allowExporting: false },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined ], outlineLevel: 0 },
+                { values: [ "f1_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Grouping - 3 column + group column - third.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string", allowExporting: false },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined ], outlineLevel: 0 },
+                { values: [ "f1_1", "f2_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f2_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Group summary - 3 column + group column - group.allowExporting: false, summaryThird.alignByColumn: true x showInGroupFooter: true" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0, allowExporting: false },
+                ],
+                summary: {
+                    groupItems: [
+                        { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: true }
+                    ]
+                },
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined, undefined ], outlineLevel: 0 },
+                { values: [ "f1_1", "f2_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 1 },
+                { values: [ undefined, undefined, "Max: f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 2 }, { row: 4, column: 3 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 2 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Group summary - 3 column + group column - group.allowExporting: false, summaryThird.alignByColumn: true x showInGroupFooter: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0, allowExporting: false },
+                ],
+                summary: {
+                    groupItems: [
+                        { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
+                    ]
+                },
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined, "Max: f3_2" ], outlineLevel: 0 },
+                { values: [ "f1_1", "f2_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 2 }, { row: 3, column: 3 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 2 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Group summary - 3 column + group column - first.allowExporting: false, summaryThird.alignByColumn: true x showInGroupFooter: true" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string", allowExporting: false },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                summary: {
+                    groupItems: [
+                        { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: true }
+                    ]
+                },
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined ], outlineLevel: 0 },
+                { values: [ "f2_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f2_2", "f3_2" ], outlineLevel: 1 },
+                { values: [ undefined, "Max: f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Group summary - 3 column + group column - first.allowExporting: false, summaryThird.alignByColumn: true x showInGroupFooter: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string", allowExporting: false },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                summary: {
+                    groupItems: [
+                        { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
+                    ]
+                },
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", "Max: f3_2" ], outlineLevel: 0 },
+                { values: [ "f2_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f2_2", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Group summary - 3 column + group column - second.allowExporting: false, summaryThird.alignByColumn: true x showInGroupFooter: true" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string", allowExporting: false },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                summary: {
+                    groupItems: [
+                        { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: true }
+                    ]
+                },
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "groupFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", undefined ], outlineLevel: 0 },
+                { values: [ "f1_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f3_2" ], outlineLevel: 1 },
+                { values: [ undefined, "Max: f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Group summary - 3 column + group column - second.allowExporting: false, summaryThird.alignByColumn: true x showInGroupFooter: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string", allowExporting: false },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                    { dataField: "f4", caption: "f4", dataType: "string", groupIndex: 0 },
+                ],
+                summary: {
+                    groupItems: [
+                        { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
+                    ]
+                },
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
+                { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f4: f4_1", "Max: f3_2" ], outlineLevel: 0 },
+                { values: [ "f1_1", "f3_1" ], outlineLevel: 1 },
+                { values: [ "f1_2", "f3_2" ], outlineLevel: 1 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
                 done();
             });
         });
@@ -1072,14 +1772,326 @@ QUnit.module("API", moduleConfig, () => {
                 { values: [ "Min: f1_1", "Min: f1_2" ], outlineLevel: 0 }
             ];
 
-            expectedCustomizeCellArgs = _extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
             exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                checkRowAndColumnCount(assert, this.worksheet, { row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
-                checkAutoFilter(assert, this.worksheet, false, topLeft, topLeft, { x: 0, y: topLeft.row });
-                checkValues(assert, expectedRows, this.worksheet, topLeft);
+                helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
                 assert.deepEqual(result.from, topLeft, "result.from");
                 assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Total summary - 3 columns, totalFirst.showInColumn: first - first.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string", allowExporting: false },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                ],
+                dataSource: ds,
+                summary: {
+                    totalItems: [
+                        { column: "f1", summaryType: "max" }
+                    ]
+                },
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f2_1", "f3_1" ], outlineLevel: 0 },
+                { values: [ "f2_2", "f3_2" ], outlineLevel: 0 },
+                { values: [ undefined, undefined ], outlineLevel: 0 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 2, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Total summary - 3 columns, totalFirst.showInColumn: second - first.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string", allowExporting: false },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                ],
+                dataSource: ds,
+                summary: {
+                    totalItems: [
+                        { column: "f2", summaryType: "max" }
+                    ]
+                },
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f2_1", "f3_1" ], outlineLevel: 0 },
+                { values: [ "f2_2", "f3_2" ], outlineLevel: 0 },
+                { values: [ "Max: f2_2", undefined ], outlineLevel: 0 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Total summary - 3 columns, totalFirst.showInColumn: third - first.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string", allowExporting: false },
+                    { dataField: "f2", caption: "f2", dataType: "string" },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                ],
+                dataSource: ds,
+                summary: {
+                    totalItems: [
+                        { column: "f3", summaryType: "max" }
+                    ]
+                },
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1) } },
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f2_1", "f3_1" ], outlineLevel: 0 },
+                { values: [ "f2_2", "f3_2" ], outlineLevel: 0 },
+                { values: [ undefined, "Max: f3_2" ], outlineLevel: 0 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Total summary - 3 columns, totalFirst.showInColumn: first - second.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string", allowExporting: false },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                ],
+                dataSource: ds,
+                summary: {
+                    totalItems: [
+                        { column: "f1", summaryType: "max" }
+                    ]
+                },
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f1_1", "f3_1" ], outlineLevel: 0 },
+                { values: [ "f1_2", "f3_2" ], outlineLevel: 0 },
+                { values: [ "Max: f1_2", undefined ], outlineLevel: 0 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Total summary - 3 columns, totalFirst.showInColumn: second - second.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string", allowExporting: false },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                ],
+                dataSource: ds,
+                summary: {
+                    totalItems: [
+                        { column: "f2", summaryType: "max" }
+                    ]
+                },
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f1_1", "f3_1" ], outlineLevel: 0 },
+                { values: [ "f1_2", "f3_2" ], outlineLevel: 0 },
+                { values: [ undefined, undefined ], outlineLevel: 0 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 2, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
+                done();
+            });
+        });
+
+        QUnit.test("Total summary - 3 columns, totalFirst.showInColumn: third - second.allowExporting: false" + topLeftCellOption, (assert) => {
+            const done = assert.async();
+            const ds = [
+                { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
+                { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
+            ];
+
+            let dataGrid = $("#dataGrid").dxDataGrid({
+                columns: [
+                    { dataField: "f1", caption: "f1", dataType: "string" },
+                    { dataField: "f2", caption: "f2", dataType: "string", allowExporting: false },
+                    { dataField: "f3", caption: "f3", dataType: "string" },
+                ],
+                dataSource: ds,
+                summary: {
+                    totalItems: [
+                        { column: "f3", summaryType: "max" }
+                    ]
+                },
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid("instance");
+
+            let expectedCustomizeCellArgs = [
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0) } },
+                { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) } }
+            ];
+
+            const expectedRows = [
+                { values: [ "f1_1", "f3_1" ], outlineLevel: 0 },
+                { values: [ "f1_2", "f3_2" ], outlineLevel: 0 },
+                { values: [ undefined, "Max: f3_2" ], outlineLevel: 0 }
+            ];
+
+            expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+            exportDataGrid(getConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                helper.checkAutoFilter(false, topLeft, topLeft, { x: 0, y: topLeft.row });
+                helper.checkValues(expectedRows, topLeft);
+                assert.deepEqual(result.from, topLeft, "result.from");
+                assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
                 done();
             });
         });
