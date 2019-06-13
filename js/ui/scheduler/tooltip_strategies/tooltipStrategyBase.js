@@ -72,14 +72,17 @@ export class TooltipStrategyBase {
         return true;
     }
 
-    _createList(target, dataList) {
-        const $list = $("<div>");
-        return this.scheduler._createComponent($list, List, {
+    _createListOption(target, dataList) {
+        return {
             dataSource: dataList,
             onItemRendered: e => this._onListItemRendered(e),
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) => this._renderTemplate(target, item.data, item.currentData || item.data, index, item.color)
-        });
+        };
+    }
+
+    _createList(target, dataList) {
+        return this.scheduler._createComponent($("<div>"), List, this._createListOption(target, dataList));
     }
 
     _onListItemRendered(e) {

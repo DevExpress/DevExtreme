@@ -4,6 +4,13 @@ import { extend } from "core/utils/extend";
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
 
+const SCHEDULER_ID = "scheduler";
+const TEST_ROOT_ELEMENT_ID = "qunit-fixture";
+
+export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
+
+export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler("instance"));
+
 export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
@@ -142,5 +149,10 @@ export class SchedulerTestWrapper {
 
     isAdaptivity() {
         return this.instance.option("adaptivityEnabled");
+    }
+
+    drawControl() {
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("top", 0);
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("left", 0);
     }
 }
