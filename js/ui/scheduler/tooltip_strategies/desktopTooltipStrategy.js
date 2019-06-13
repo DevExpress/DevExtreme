@@ -5,6 +5,7 @@ import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
 import eventsEngine from "../../../events/core/events_engine";
 import FunctionTemplate from "../../widget/function_template";
+import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
@@ -216,6 +217,14 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _getItemListDefaultTemplateName() {
         return this.behavior.getItemListDefaultTemplateName();
+    }
+
+    _createListOption(target, dataList) {
+        const result = super._createListOption(target, dataList);
+        // TODO:T724287 this condition is not covered by tests, because touch variable cannot be overridden.
+        // In the future, it is necessary to cover the tests
+        result.showScrollbar = touch ? "always" : "onHover";
+        return result;
     }
 
     _createTooltip(target, list) {
