@@ -1249,3 +1249,26 @@ QUnit.test("Single changed appointment should be rendered correctly in specified
     }
 });
 
+QUnit.test("Recurrence appointment must not change it's time when one of occurences has a timezone change (T739951)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recurring appt",
+            startDate: new Date(2019, 2, 9, 0, 0),
+            endDate: new Date(2019, 2, 9, 14, 0),
+            recurrenceRule: 'FREQ=DAILY'
+        }],
+        currentView: "month",
+        views: ['month'],
+        currentDate: new Date(2019, 2, 1),
+        height: 600
+    });
+
+    for(var i = 0; i < 3; i++) {
+        $(this.instance.$element()).find(".dx-scheduler-appointment").eq(i).trigger("dxclick");
+        this.clock.tick(300);
+
+        var tooltipDate = $(".dx-scheduler-appointment-tooltip-wrapper .dx-scheduler-appointment-tooltip .dx-scheduler-appointment-tooltip-date").text();
+
+        assert.equal(tooltipDate, "March " + (i + 9) + ", 12:00 AM - 2:00 PM", "Tooltip date for " + (i + 9) + " of March is correct");
+    }
+});

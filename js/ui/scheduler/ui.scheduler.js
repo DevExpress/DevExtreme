@@ -2590,7 +2590,6 @@ var Scheduler = Widget.inherit({
 
     _getSingleAppointmentData: function(appointmentData, options) {
         options = options || {};
-
         var $appointment = options.$appointment,
             updatedData = options.skipDateCalculation ? {} : this._getUpdatedData(options),
             resultAppointmentData = extend({}, appointmentData, updatedData),
@@ -2637,7 +2636,10 @@ var Scheduler = Widget.inherit({
 
         if(updatedStartDate) {
             this.fire("setField", "startDate", resultAppointmentData, updatedStartDate);
-            this.fire("setField", "endDate", resultAppointmentData, new Date(updatedStartDate.getTime() + appointmentDuration));
+            var updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
+            var startDateDaylightOffset = this.fire("getDaylightOffset", updatedStartDate, startDate);
+            var endDateDaylightOffset = this.fire("getDaylightOffset", updatedEndDate, endDate);
+            this.fire("setField", "endDate", resultAppointmentData, new Date(updatedEndDate.getTime() - (startDateDaylightOffset - endDateDaylightOffset) * toMs("minute")));
         }
 
         return resultAppointmentData;
