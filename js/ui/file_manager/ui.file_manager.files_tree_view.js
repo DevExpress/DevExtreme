@@ -9,7 +9,6 @@ import Widget from "../widget/ui.widget";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 import { FileManagerItem } from "./file_provider/file_provider";
-import whenSome from "./ui.file_manager.common";
 import { getParentPath, getName } from "./ui.file_manager.utils";
 
 import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
@@ -325,7 +324,7 @@ class FilesTreeViewModel {
             return this._expandAndGetChildrenForGeneralItem(item);
         });
 
-        return whenSome(deferreds)
+        return when.apply(null, deferreds)
             .then(() => {
                 this._ensureSelectedItemLoaded();
                 return this._rootItem.children;

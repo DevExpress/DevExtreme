@@ -22,34 +22,30 @@ const whenSome = function(arg, onSuccess, onError) {
     };
 
     if(!Array.isArray(arg)) {
-        return when(arg)
-            .then(onSuccess,
-                error => {
-                    if(error) {
-                        onError(createErrorInfo(0, error));
-                    }
-                });
+        arg = [ arg ];
     }
 
     const deferreds = arg.map((item, index) => {
         return when(item)
-            .then(result => createResult(result, true),
+            .then(
+                result => {
+                    const resultObj = createResult(result, true);
+                    if(resultObj.error && onError) {
+                        onError(createErrorInfo(index, resultObj.error));
+                    }
+
+                    if(resultObj.success && onSuccess) {
+                        onSuccess();
+                    }
+                },
                 error => {
                     if(error) {
                         onError(createErrorInfo(index, error));
                     }
-                    return createResult(null, false, !error, error);
                 });
     });
 
-    return when.apply(null, deferreds)
-        .then(function() {
-            const resArray = [].slice.call(arguments);
-            if(resArray.some(res => res.success)) {
-                onSuccess();
-            }
-            return resArray;
-        });
+    return when.apply(null, deferreds);
 };
 
 module.exports = whenSome;
