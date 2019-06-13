@@ -152,7 +152,7 @@ export class SchedulerTestWrapper {
     }
 
     drawControl() {
-        $(TEST_ROOT_ELEMENT_ID).css("top", 0);
-        $(TEST_ROOT_ELEMENT_ID).css("left", 0);
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("top", 0);
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("left", 0);
     }
 }
