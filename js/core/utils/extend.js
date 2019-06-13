@@ -37,7 +37,7 @@ var extend = function(target) {
                 sourceValueIsArray = false,
                 clone;
 
-            if(target === sourceValue) {
+            if(key === "__proto__" || target === sourceValue) {
                 continue;
             }
 

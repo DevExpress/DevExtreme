@@ -218,6 +218,22 @@ QUnit.test("width and height should take into consideration borders and paddings
     assert.equal($element.get(0).style.width, "96px");
 });
 
+QUnit.test("null and NaN values should not be set in .css()", function(assert) {
+    var $element = renderer("<div>");
+    const prop = "height";
+    document.getElementById("qunit-fixture").appendChild($element.get(0));
+
+    $element.css(prop, "100px");
+    assert.equal($element.get(0).style[prop], "100px");
+
+    $element.css(prop, null);
+    assert.equal($element.get(0).style[prop], "100px");
+
+    $element.css(prop, NaN);
+    assert.equal($element.get(0).style[prop], "100px");
+});
+
+
 ["Width", "Height"].forEach(function(propName) {
     var outerPropName = "outer" + propName;
     var innerPropName = "inner" + propName;
