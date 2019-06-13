@@ -4,6 +4,7 @@ import Guid from "../../core/guid";
 import readyCallbacks from "../../core/utils/ready_callbacks";
 import Widget from "../widget/ui.widget";
 import { initAction, disposeAction } from "./speed_dial_main_item";
+import { getSwatchContainer } from "../widget/swatch_container";
 
 const ready = readyCallbacks.add;
 
@@ -103,7 +104,11 @@ const SpeedDialAction = Widget.inherit({
     },
 
     _render() {
-        ready(() => initAction(this));
+        if(!getSwatchContainer(this.$element())) {
+            ready(() => initAction(this));
+        } else {
+            initAction(this);
+        }
     },
 
     _dispose() {
