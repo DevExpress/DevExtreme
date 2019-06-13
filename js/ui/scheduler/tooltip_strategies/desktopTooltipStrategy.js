@@ -221,7 +221,9 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _createListOption(target, dataList) {
         const result = super._createListOption(target, dataList);
-        result.showScrollbar = touch ? "always" : "onHover"; // BUG:T724287 this condition is not covered by tests, because touch variable cannot be overridden. In the future, it is necessary to cover the tests
+        // TODO:T724287 this condition is not covered by tests, because touch variable cannot be overridden.
+        // In the future, it is necessary to cover the tests
+        result.showScrollbar = touch ? "always" : "onHover";
         return result;
     }
 
