@@ -82,8 +82,7 @@ export class TooltipStrategyBase {
     }
 
     _createList(target, dataList) {
-        const $list = $("<div>");
-        return this.scheduler._createComponent($list, List, this._createListOption(target, dataList));
+        return this.scheduler._createComponent($("<div>"), List, this._createListOption(target, dataList));
     }
 
     _onListItemRendered(e) {
