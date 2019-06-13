@@ -205,7 +205,7 @@ export class Plaque {
         this.renderContent = renderContent;
     }
 
-    draw({ x: anchorX, y: anchorY, canvas = {} }) {
+    draw({ x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY }) {
         const renderer = this.widget._renderer;
         const options = this.options;
         let { x, y } = options;
@@ -272,33 +272,46 @@ export class Plaque {
         const bm = max(blur + yOff, 0); // bottom margin
 
         if(!isDefined(x)) {
-            if(bounds.width < size.width) {
-                x = round(bounds.xl + bounds.width / 2);
+            if(isDefined(offsetX)) {
+                x = anchorX + offsetX;
             } else {
-                x = min(max(anchorX, Math.ceil(bounds.xl + size.width / 2 + lm)), Math.floor(bounds.xr - size.width / 2 - rm));
-            }
-        } else if(!isDefined(anchorX)) {
-            anchorX = x;
-        }
-
-        if(!isDefined(y)) {
-            const y_top = anchorY - options.arrowLength - size.height / 2;
-            const y_bottom = anchorY + options.arrowLength + size.height / 2;
-
-            if(bounds.height < size.height + options.arrowLength) {
-                y = round(bounds.yt + size.height / 2);
-            } else if(y_top - size.height / 2 - tm < bounds.yt) {
-                if(y_bottom + size.height / 2 + bm < bounds.yb) {
-                    y = y_bottom;
+                if(bounds.width < size.width) {
+                    x = round(bounds.xl + bounds.width / 2);
                 } else {
-                    y = round(bounds.yt + size.height / 2);
+                    x = min(max(anchorX, Math.ceil(bounds.xl + size.width / 2 + lm)), Math.floor(bounds.xr - size.width / 2 - rm));
                 }
-            } else {
-                y = y_top;
             }
 
-        } else if(!isDefined(anchorY)) {
-            anchorY = y + size.height / 2;
+        } else {
+            x += offsetX || 0;
+            if(!isDefined(anchorX)) {
+                anchorX = x;
+            }
+        }
+        if(!isDefined(y)) {
+            if(isDefined(offsetY)) {
+                y = anchorY + offsetY;
+            } else {
+                const y_top = anchorY - options.arrowLength - size.height / 2;
+                const y_bottom = anchorY + options.arrowLength + size.height / 2;
+
+                if(bounds.height < size.height + options.arrowLength) {
+                    y = round(bounds.yt + size.height / 2);
+                } else if(y_top - size.height / 2 - tm < bounds.yt) {
+                    if(y_bottom + size.height / 2 + bm < bounds.yb) {
+                        y = y_bottom;
+                    } else {
+                        y = round(bounds.yt + size.height / 2);
+                    }
+                } else {
+                    y = y_top;
+                }
+            }
+        } else {
+            y += (offsetY || 0);
+            if(!isDefined(anchorY)) {
+                anchorY = y + size.height / 2;
+            }
         }
 
         this.anchorX = anchorX;

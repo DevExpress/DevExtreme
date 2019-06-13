@@ -7019,6 +7019,10 @@ declare module DevExpress.viz {
         height?: number;
         /** @name dxChartCommonAnnotationConfig.image */
         image?: string | { height?: number, url?: string, width?: number };
+        /** @name dxChartCommonAnnotationConfig.offsetX */
+        offsetX?: number;
+        /** @name dxChartCommonAnnotationConfig.offsetY */
+        offsetY?: number;
         /** @name dxChartCommonAnnotationConfig.opacity */
         opacity?: number;
         /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
