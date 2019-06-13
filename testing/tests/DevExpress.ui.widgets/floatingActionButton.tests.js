@@ -129,6 +129,18 @@ QUnit.module("modify global action button config", (hooks) => {
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+
+                }
+            }
+        });
+
     }),
 
     test("check main fab rendering", (assert) => {
