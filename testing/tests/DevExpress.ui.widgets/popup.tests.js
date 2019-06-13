@@ -1123,6 +1123,7 @@ QUnit.module("rendering", {
 });
 
 QUnit.test("anonymous content template rendering", function(assert) {
+    var $inner = $("#popupWithAnonymousTmpl .testContent");
     var $popup = $("#popupWithAnonymousTmpl").dxPopup({
         visible: true
     });
@@ -1130,6 +1131,7 @@ QUnit.test("anonymous content template rendering", function(assert) {
     var $content = $popup.dxPopup("$content");
 
     assert.equal($.trim($content.text()), "TestContent", "content rendered");
+    assert.equal($content.find(".testContent").get(0), $inner[0], "content should not lost the link");
 });
 
 QUnit.test("custom content template is applied even if there is 'content' template in popup", function(assert) {

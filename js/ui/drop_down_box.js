@@ -71,14 +71,14 @@ var DropDownBox = DropDownEditor.inherit({
             /**
              * @name dxDropDownBoxOptions.contentTemplate
              * @type template|function
-             * @default null
+             * @default 'content'
              * @type_function_param1 templateData:object
              * @type_function_param1_field1 component:dxDropDownBox
              * @type_function_param1_field2 value:any
              * @type_function_param2 contentElement:dxElement
              * @type_function_return string|Node|jQuery
              */
-            contentTemplate: null,
+            contentTemplate: "content",
 
             /**
              * @name dxDropDownBoxOptions.dropDownOptions
@@ -263,6 +263,14 @@ var DropDownBox = DropDownEditor.inherit({
                 context: this
             }));
         }
+    },
+
+    _renderPopupContent: function() {
+        if(this.option("contentTemplate") === ANONYMOUS_TEMPLATE_NAME) {
+            return;
+        }
+
+        return this.callBase();
     },
 
     _popupConfig: function() {

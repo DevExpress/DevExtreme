@@ -307,6 +307,7 @@ testComponentDefaults(DropDownBox,
     {
         openOnFieldClick: true,
         acceptCustomValue: false,
+        contentTemplate: "content",
         valueChangeEvent: "change"
     }
 );
