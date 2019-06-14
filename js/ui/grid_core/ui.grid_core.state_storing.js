@@ -187,7 +187,9 @@ module.exports = {
                         exportController.selectionOnly(state.exportSelectionOnly);
                     }
 
-                    that.option("selectedRowKeys", selectedRowKeys || []);
+                    if(selectedRowKeys) {
+                        that.option("selectedRowKeys", selectedRowKeys);
+                    }
 
                     that.option("selectionFilter", selectionFilter);
 

@@ -5623,7 +5623,72 @@ QUnit.test("Console errors should not be occurs when stateStoring enabled with s
 
     // assert
     assert.ok(dataGrid);
-    assert.equal(errors.log.getCalls().length, 0, "no error maeesages in console");
+    assert.deepEqual(errors.log.getCalls().length, 0, "no error maeesages in console");
+
+    clock.restore();
+});
+
+// T748677
+QUnit.test("getSelectedRowsData should works if selectedRowKeys is defined and state is empty", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [{ id: 1, text: "Text 1" }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return {};
+                }
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], "selectedRowKeys");
+    assert.deepEqual(dataGrid.getSelectedRowsData(), [{ id: 1, text: "Text 1" }], "getSelectedRowsData result");
+
+    clock.restore();
+});
+
+QUnit.test("empty selection should be restored from state storing if selectedRowKeys option is defined", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [{ id: 1, text: "Text 1" }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: []
+                    };
+                }
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "selectedRowKeys");
+    assert.deepEqual(dataGrid.getSelectedRowsData(), [], "getSelectedRowsData result");
 
     clock.restore();
 });
