@@ -1574,6 +1574,50 @@ QUnit.test("reject selection after options updating", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
 });
 
+QUnit.module("Legend title", $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+
+        this.options = {
+            dataSource: [{ arg: 1, val: -0.25, val1: 9.75 }, { arg: 2, val: 10.2, val1: 1.9 }],
+            series: [
+                { name: "seriesseriesseriesseriesseries" },
+                { valueField: "val1", name: "series1" }
+            ],
+            legend: {
+                title: {
+                    text: "Super title",
+                    margin: 10
+                }
+            }
+        };
+    },
+    createChart: function(options) {
+        return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
+    }
+}));
+
+QUnit.test("check default horizontal alignment(left)", function(assert) {
+    var chart = this.createChart({});
+    assert.equal(chart._legend._title._group._settings.translateX, 10);
+});
+
+QUnit.test("check horizontal alignment === center", function(assert) {
+    var chart = this.createChart({
+        legend: {
+            title: {
+                horizontalAlignment: "center",
+                margin: {
+                    left: 40,
+                    right: 100
+                }
+            }
+        }
+    });
+    assert.roughEqual(chart._legend._title._group._settings.translateX, 80, 5);
+    assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 370, 5);
+});
+
 QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);

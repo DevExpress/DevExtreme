@@ -654,7 +654,6 @@ extend(legendPrototype, {
     _applyItemPosition: function(lines, layoutOptions) {
         var that = this,
             position = { x: 0, y: 0 },
-            titleX = this._title.getLayoutOptions().x,
             maxLineLength = getMaxLineLength(lines, layoutOptions);
 
         lines.forEach(line => {
@@ -666,7 +665,7 @@ extend(legendPrototype, {
                 var offset = item.offset || layoutOptions.spacing,
                     wrap = new WrapperLayoutElement(item.element, item.bBox),
                     itemBBoxOptions = {
-                        x: position.x + titleX,
+                        x: position.x,
                         y: position.y,
                         width: item.width,
                         height: item.height
@@ -809,6 +808,7 @@ extend(legendPrototype, {
         const verticalPadding = this._background ? 2 * this._options.paddingTopBottom : 0;
 
         box.height = markerBox.height + titleBox.height + verticalPadding;
+        titleBox.width > box.width && (box.width = titleBox.width);
 
         return box;
     },
@@ -886,21 +886,19 @@ extend(legendPrototype, {
             return;
         }
 
-        const { horizontalAlignment, paddingLeftRight, itemTextPosition } = that._options;
-        const width = boxWidth - (that._background ? 2 * paddingLeftRight : 0);
+        const width = boxWidth - (that._background ? 2 * that._options.paddingLeftRight : 0);
         const titleOptions = title.getOptions();
-        let titleY = titleBox.y;
-        let titleX = titleBox.x;
+        let titleY = titleBox.y + titleOptions.margin.top;
+        let titleX = 0;
 
         if(titleOptions.verticalAlignment === BOTTOM) {
             titleY += that._markersGroup.getBBox().height;
         }
 
-        if(horizontalAlignment === CENTER || itemTextPosition === BOTTOM || itemTextPosition === TOP) {
-            titleX = titleBox.x + (width / 2) - (titleBox.width / 2);
-        } else if(itemTextPosition === LEFT) {
-            const box = that.getLayoutOptions();
-            titleX = 2 * box.x + box.width;
+        if(titleOptions.horizontalAlignment === RIGHT) {
+            titleX = width - titleBox.width;
+        } else if(titleOptions.horizontalAlignment === CENTER) {
+            titleX = (width - titleBox.width) / 2;
         }
         title.shift(titleX, titleY);
     },
