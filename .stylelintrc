@@ -13,7 +13,6 @@
         "number-leading-zero": null,
         "block-opening-brace-space-before": null,
         "block-closing-brace-empty-line-before": null,
-        "block-no-empty": null,
         "block-closing-brace-newline-before": null,
         "declaration-block-no-duplicate-properties": null,
         "selector-descendant-combinator-no-non-space": null,
