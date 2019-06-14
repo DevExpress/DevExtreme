@@ -39,7 +39,6 @@
         "selector-combinator-space-after": null,
         "selector-combinator-space-before": null,
         "function-comma-space-after": null,
-        "comment-whitespace-inside": null,
         "no-descending-specificity": null,
         "no-duplicate-selectors": null,
         "number-no-trailing-zeros": null,
