@@ -29,6 +29,8 @@ const DIAGRAM_ITEMS_FIELD = "items";
 const DIAGRAM_FROM_FIELD = "from";
 const DIAGRAM_TO_FIELD = "to";
 
+const DIAGRAM_CONNECTION_POINT_SIDES = ["north", "east", "south", "west"];
+
 class Diagram extends Widget {
     _init() {
         this._updateDiagramLockCount = 0;
@@ -385,16 +387,12 @@ class Diagram extends Widget {
                         textWidth: s.textWidth,
                         textHeight: s.textHeight,
                         connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
-                            return { 'x': pt.x, 'y': pt.y, 'side': this._getDiagramSide(pt.side) };
+                            return { 'x': pt.x, 'y': pt.y, 'side': DIAGRAM_CONNECTION_POINT_SIDES.indexOf(pt.side) };
                         })
                     };
                 }
             ));
         }
-    }
-    _getDiagramSide(side) {
-        const sides = ["north", "east", "south", "west"];
-        return sides.indexOf(side);
     }
 
     /**
