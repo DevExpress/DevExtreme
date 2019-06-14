@@ -1978,7 +1978,10 @@ module.exports = {
                         $cell = this.callBase(rowIndex);
 
                     if(this.option("useKeyboard") && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
-                        $cell = keyboardNavigationController._getFocusedCell() || $cell;
+                        let keyboardFocusedCell = keyboardNavigationController._getFocusedCell();
+                        if(keyboardFocusedCell && !keyboardFocusedCell.hasClass('dx-command-edit')) {
+                            $cell = keyboardFocusedCell;
+                        }
                     }
 
                     return $cell;
