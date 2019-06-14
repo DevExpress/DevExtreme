@@ -14,7 +14,6 @@
         "block-opening-brace-space-before": null,
         "block-closing-brace-empty-line-before": null,
         "declaration-block-trailing-semicolon": null,
-        "declaration-bang-space-before": null,
         "block-no-empty": null,
         "block-closing-brace-newline-before": null,
         "declaration-block-semicolon-space-before": null,
