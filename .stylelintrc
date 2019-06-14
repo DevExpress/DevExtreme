@@ -10,7 +10,6 @@
         "selector-pseudo-element-colon-notation": null,
         "declaration-empty-line-before": null,
         "color-hex-case": null,
-        "declaration-colon-space-after": null,
         "number-leading-zero": null,
         "no-missing-end-of-source-newline": null,
         "block-opening-brace-space-before": null,
