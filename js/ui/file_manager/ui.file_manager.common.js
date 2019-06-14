@@ -1,55 +1,40 @@
 import { when } from "../../core/utils/deferred";
 import { noop } from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+
+const ErrorCode = {
+    NoAccess: 0,
+    FileExists: 1,
+    FileNotFound: 2,
+    DirectoryExists: 3,
+    Other: 32767
+};
 
 const whenSome = function(arg, onSuccess, onError) {
     onSuccess = onSuccess || noop;
     onError = onError || noop;
 
-    const createResult = function(result, success, canceled, error) {
-        return {
-            result: result,
-            success: success,
-            canceled: canceled || false,
-            error: error || null
-        };
-    };
-
-    const createErrorInfo = function(index, result) {
-        return {
-            index: index,
-            errorId: result.errorId,
-        };
-    };
-
     if(!Array.isArray(arg)) {
-        return when(arg)
-            .then(onSuccess,
-                error => {
-                    if(error) {
-                        onError(createErrorInfo(0, error));
-                    }
-                });
+        arg = [ arg ];
     }
 
     const deferreds = arg.map((item, index) => {
         return when(item)
-            .then(result => createResult(result, true),
+            .then(
+                () => {
+                    typeUtils.isFunction(onSuccess) && onSuccess();
+                },
                 error => {
-                    if(error) {
-                        onError(createErrorInfo(index, error));
+                    if(!error) {
+                        error = { };
                     }
-                    return createResult(null, false, !error, error);
+                    error.index = index;
+                    typeUtils.isFunction(onError) && onError(error);
                 });
     });
 
-    return when.apply(null, deferreds)
-        .then(function() {
-            const resArray = [].slice.call(arguments);
-            if(resArray.some(res => res.success)) {
-                onSuccess();
-            }
-            return resArray;
-        });
+    return when.apply(null, deferreds);
 };
 
 module.exports = whenSome;
+module.exports.ErrorCode = ErrorCode;

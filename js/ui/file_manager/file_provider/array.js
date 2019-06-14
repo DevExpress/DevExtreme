@@ -5,6 +5,8 @@ import typeUtils from "../../../core/utils/type";
 import { errors } from "../../../data/errors";
 
 import { FileProvider } from "./file_provider";
+import { ErrorCode } from "../ui.file_manager.common";
+import { pathCombine } from "../ui.file_manager.utils";
 
 /**
 * @name ArrayFileProvider
@@ -66,20 +68,33 @@ class ArrayFileProvider extends FileProvider {
         each(items, (_, item) => this._deleteItem(item));
     }
 
-    moveItems(items, destinationFolder) {
-        let array = this._getChildrenArray(destinationFolder.dataItem);
+    moveItems(items, destinationDir) {
+        let array = this._getChildrenArray(destinationDir.dataItem);
         each(items, (_, item) => {
+            this._checkAbilityToMoveOrCopyItem(item, destinationDir);
             this._deleteItem(item);
             array.push(item.dataItem);
         });
     }
 
-    copyItems(items, destinationFolder) {
-        const array = this._getChildrenArray(destinationFolder.dataItem);
+    copyItems(items, destinationDir) {
+        const array = this._getChildrenArray(destinationDir.dataItem);
         each(items, (_, item) => {
+            this._checkAbilityToMoveOrCopyItem(item, destinationDir);
+
             const copiedItem = this._createCopy(item.dataItem);
             array.push(copiedItem);
         });
+    }
+
+    _checkAbilityToMoveOrCopyItem(item, destinationDir) {
+        const newItemPath = pathCombine(destinationDir.relativeName, item.name);
+        if(newItemPath.indexOf(item.relativeName) === 0) {
+            throw {
+                errorId: ErrorCode.Other,
+                fileItem: item
+            };
+        }
     }
 
     _createCopy(dataObj) {
