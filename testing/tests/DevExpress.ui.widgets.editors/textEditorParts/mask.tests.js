@@ -1623,7 +1623,7 @@ QUnit.test("validation after value changed", function(assert) {
     $input.trigger("change");
 
     textEditor.option("value", "");
-    assert.equal(textEditor.option("isValid"), false, "value is invalid");
+    assert.equal(textEditor.option("isValid"), true, "mask with an empty value should be valid. Required validator should check it");
 });
 
 
