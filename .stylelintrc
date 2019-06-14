@@ -14,7 +14,6 @@
         "number-leading-zero": null,
         "no-missing-end-of-source-newline": null,
         "block-opening-brace-space-before": null,
-        "no-eol-whitespace": null,
         "block-closing-brace-empty-line-before": null,
         "declaration-block-trailing-semicolon": null,
         "declaration-bang-space-before": null,
