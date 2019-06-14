@@ -11,7 +11,6 @@
         "declaration-empty-line-before": null,
         "color-hex-case": null,
         "number-leading-zero": null,
-        "no-missing-end-of-source-newline": null,
         "block-opening-brace-space-before": null,
         "block-closing-brace-empty-line-before": null,
         "declaration-block-trailing-semicolon": null,
