@@ -732,10 +732,12 @@ var TagBox = SelectBox.inherit({
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._renderTags().always((function() {
-            this._popup && this._popup.refreshPosition();
-            d.resolve();
-        }).bind(this));
+        this._renderTags()
+            .done((function() {
+                this._popup && this._popup.refreshPosition();
+                d.resolve();
+            }).bind(this))
+            .fail(d.reject);
 
         return d.promise();
     },
@@ -825,10 +827,14 @@ var TagBox = SelectBox.inherit({
             var loadOptions = dataSource.loadOptions();
             var customQueryParams = loadOptions.customQueryParams;
 
-            dataSource.store().load({ filter, customQueryParams }).done(function(items) {
-                var mappedItems = dataSource._applyMapFunction(items);
-                d.resolve(mappedItems.filter(clientFilterFunction));
-            });
+            dataSource
+                .store()
+                .load({ filter, customQueryParams })
+                .done(function(items) {
+                    var mappedItems = dataSource._applyMapFunction(items);
+                    d.resolve(mappedItems.filter(clientFilterFunction));
+                })
+                .fail(d.reject);
 
             return d.promise();
         }
@@ -904,6 +910,11 @@ var TagBox = SelectBox.inherit({
         var d = new Deferred();
 
         this._loadTagsData().always((function(items) {
+            if(this._disposed) {
+                d.reject();
+                return;
+            }
+
             this._renderTagsCore(items);
             this._renderEmptyState();
 
