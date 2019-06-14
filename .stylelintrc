@@ -9,7 +9,6 @@
         "max-empty-lines": null,
         "selector-pseudo-element-colon-notation": null,
         "declaration-empty-line-before": null,
-        "color-hex-case": null,
         "number-leading-zero": null,
         "block-opening-brace-space-before": null,
         "block-closing-brace-empty-line-before": null,
