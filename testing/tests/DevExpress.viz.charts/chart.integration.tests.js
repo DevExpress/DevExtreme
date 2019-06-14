@@ -1602,17 +1602,6 @@ QUnit.test("check default horizontal alignment(left)", function(assert) {
     assert.equal(chart._legend._title._group._settings.translateX, 10);
 });
 
-QUnit.test("check horizontal alignment === right", function(assert) {
-    var chart = this.createChart({
-        legend: {
-            title: {
-                horizontalAlignment: "right"
-            }
-        }
-    });
-    assert.roughEqual(chart._legend._title._group._settings.translateX, 158, 3);
-});
-
 QUnit.test("check horizontal alignment === center", function(assert) {
     var chart = this.createChart({
         legend: {
@@ -1625,8 +1614,8 @@ QUnit.test("check horizontal alignment === center", function(assert) {
             }
         }
     });
-    assert.roughEqual(chart._legend._title._group._settings.translateX, 77, 3);
-    assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 373, 5);
+    assert.roughEqual(chart._legend._title._group._settings.translateX, 80, 5);
+    assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 370, 5);
 });
 
 QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
