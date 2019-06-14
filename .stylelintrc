@@ -33,8 +33,6 @@
         "color-hex-length": null,
         "font-family-no-missing-generic-family-keyword": null,
         "rule-empty-line-before": null,
-        "selector-combinator-space-after": null,
-        "selector-combinator-space-before": null,
         "no-descending-specificity": null,
         "no-duplicate-selectors": null,
         "number-no-trailing-zeros": null,
