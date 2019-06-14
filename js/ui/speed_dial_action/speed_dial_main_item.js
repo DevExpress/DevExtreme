@@ -214,7 +214,8 @@ exports.initAction = function(newAction) {
             }));
         } else {
             speedDialMainItem.option({
-                actions: savedActions
+                actions: savedActions,
+                position: speedDialMainItem._getDefaultOptions().position
             });
         }
     }
@@ -244,6 +245,9 @@ exports.disposeAction = function(actionId) {
             position: speedDialMainItem._getDefaultOptions().position
         }));
     } else {
-        speedDialMainItem.option({ actions: savedActions });
+        speedDialMainItem.option({
+            actions: savedActions,
+            position: speedDialMainItem._getDefaultOptions().position
+        });
     }
 };
