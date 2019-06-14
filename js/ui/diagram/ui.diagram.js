@@ -384,7 +384,7 @@ class Diagram extends Widget {
                         textTop: s.textTop,
                         textWidth: s.textWidth,
                         textHeight: s.textHeight,
-                        connectionPoints: s.connectionPoints.map(pt => {
+                        connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
                             return { 'x': pt.x, 'y': pt.y, 'side': this._getDiagramSide(pt.side) };
                         })
                     };
