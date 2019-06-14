@@ -179,8 +179,8 @@ class FileManagerEditingControl extends Widget {
                     () => this._raiseOnSuccess(action.getSuccessMessage(items), onlyFiles),
                     info => this._onFileProviderError(info, items)
                 );
-            })
-            .fail(info => this._onFileProviderError(info, items));
+            },
+            info => this._onFileProviderError(info, items));
     }
 
     _onFileProviderError(errorInfo, fileItems) {
