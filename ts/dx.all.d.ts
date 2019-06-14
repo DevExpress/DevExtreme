@@ -1991,7 +1991,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.customShapes */
-        customShapes?: Array<{ allowHasText?: boolean, defaultHeight?: number, defaultWidth?: number, id?: number, svgUrl?: string, title?: string }>;
+        customShapes?: Array<{ allowHasText?: boolean, connectionPoints?: Array<{ side?: 'north' | 'east' | 'south' | 'west', x?: number, y?: number }>, defaultHeight?: number, defaultText?: string, defaultWidth?: number, id?: number, svgHeight?: number, svgLeft?: number, svgTop?: number, svgUrl?: string, svgWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string }>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */

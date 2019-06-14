@@ -372,13 +372,29 @@ class Diagram extends Widget {
                         id: s.id,
                         title: s.title,
                         svgUrl: s.svgUrl,
+                        svgLeft: s.svgLeft,
+                        svgTop: s.svgTop,
+                        svgWidth: s.svgWidth,
+                        svgHeight: s.svgHeight,
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
+                        defaultText: s.defaultText,
                         allowHasText: s.allowHasText,
+                        textLeft: s.textLeft,
+                        textTop: s.textTop,
+                        textWidth: s.textWidth,
+                        textHeight: s.textHeight,
+                        connectionPoints: s.connectionPoints.map(pt => {
+                            return { 'x': pt.x, 'y': pt.y, 'side': this._getDiagramSide(pt.side) };
+                        })
                     };
                 }
             ));
         }
+    }
+    _getDiagramSide(side) {
+        const sides = ["north", "east", "south", "west"];
+        return sides.indexOf(side);
     }
 
     /**
@@ -623,6 +639,22 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.svgLeft
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.svgTop
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.svgWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.svgHeight
+                * @type Number
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.defaultWidth
                 * @type Number
                 */
@@ -631,8 +663,44 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.defaultText
+                * @type String
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.allowHasText
                 * @type Boolean
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textLeft
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textTop
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textHeight
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints
+                * @type Array<Object>
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints.x
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints.y
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints.side
+                * @type Enums.DiagramConnectionPointSide
                 */
             ],
             /**
