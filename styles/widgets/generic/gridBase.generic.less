@@ -618,12 +618,12 @@
             border-top: @GENERIC_GRID_BASE_ROW_BORDER;
             border-bottom: @GENERIC_GRID_BASE_ROW_BORDER;
 
-            &.dx-edit-row:first-child > td {
+            &.dx-edit-row:first-child > td:not(.dx-command-edit) {
                 border-top-width: 0px;
                 border-bottom: ~"@{@{widgetName}-border}";
             }
 
-            &.dx-edit-row > td {
+            &.dx-edit-row > td:not(.dx-command-edit) {
                 border-top: ~"@{@{widgetName}-border}";
                 border-bottom: ~"@{@{widgetName}-border}";
             }
@@ -734,6 +734,16 @@
                 & .dx-command-edit .dx-link:focus {
                     background-color: ~"@{@{widgetName}-base-background-color}";
                     color: ~"@{@{widgetName}-base-color}";
+                }
+            }
+
+            & .dx-command-edit {
+                background-color: ~"@{@{widgetName}-row-focused-bg}";
+                border-top: 1px solid ~"@{@{widgetName}-row-focused-bg}";
+                border-bottom: 1px solid ~"@{@{widgetName}-row-focused-bg}";
+
+                & .dx-link {
+                    color: ~"@{@{widgetName}-row-focused-color}";
                 }
             }
 
