@@ -1,11 +1,5 @@
 import messageLocalization from "../../localization/message";
-
-const ErrorCode = {
-    NoAccess: 0,
-    FileExists: 1,
-    FileNotFound: 2,
-    DirectoryExists: 3
-};
+import { ErrorCode } from "./ui.file_manager.common";
 
 export const FileManagerMessages = {
     get: (errorId, args) => {
@@ -23,3 +17,5 @@ export const FileManagerMessages = {
         return messageLocalization.format("dxFileManager-errorDefault");
     }
 };
+
+module.exports.ErrorCode = ErrorCode;
