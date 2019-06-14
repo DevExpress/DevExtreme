@@ -4746,6 +4746,40 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
         assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
     });
+
+    QUnit.test("TagBox should correctly handle disposing on data loading", (assert) => {
+        assert.expect(1);
+
+        try {
+            const ds = new CustomStore({
+                load: function() {
+                    const deferred = $.Deferred();
+
+                    setTimeout(function() {
+                        deferred.resolve([2]);
+                    }, 1000);
+
+                    return deferred.promise();
+                }
+            });
+
+            const tagBox = $("#tagBox").dxTagBox({
+                dataSource: ds,
+                value: [2],
+                onInitializing: function() {
+                    this.beginUpdate();
+                }
+            }).dxTagBox("instance");
+
+            tagBox.endUpdate();
+            tagBox.dispose();
+            this.clock.tick(1000);
+        } catch(e) {
+            assert.ok(false, "TagBox raise the error");
+        }
+
+        assert.ok(true, "TagBox rendered");
+    });
 });
 
 QUnit.module("performance", () => {
