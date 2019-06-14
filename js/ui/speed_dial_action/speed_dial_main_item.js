@@ -246,8 +246,7 @@ exports.disposeAction = function(actionId) {
         }));
     } else {
         speedDialMainItem.option({
-            actions: savedActions,
-            position: speedDialMainItem._getDefaultOptions().position
+            actions: savedActions
         });
     }
 };
