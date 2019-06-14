@@ -19,7 +19,6 @@
         "at-rule-empty-line-before": null,
         "at-rule-name-case": null,
         "at-rule-no-unknown": null,
-        "unit-case": null,
         "declaration-colon-newline-after": null,
         "block-opening-brace-newline-after": null,
         "property-no-unknown": null,
