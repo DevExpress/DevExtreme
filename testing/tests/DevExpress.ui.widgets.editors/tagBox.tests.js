@@ -3080,6 +3080,30 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
     });
 
+    QUnit.test("filtering operation should pass 'expand' parameter to the dataSource", (assert) => {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: "odata4.org",
+            callback: ({ data }) => {
+                assert.deepEqual(data, {
+                    $filter: "this eq '1'",
+                    $expand: "Orders"
+                });
+                ajaxMock.clear();
+                done();
+            }
+        });
+
+        $("#tagBox").dxTagBox({
+            value: ["1"],
+            dataSource: new DataSource({
+                store: new ODataStore({ version: 4, url: "odata4.org" }),
+                expand: ["Orders"]
+            })
+        });
+    });
+
     QUnit.testInActiveWindow("input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)", (assert) => {
         const items = ["111", "222", "333"];
 
