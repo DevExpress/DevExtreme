@@ -6,7 +6,14 @@ import { each } from "../../core/utils/iterator";
 import { addNamespace } from "../../events/utils";
 import registerComponent from "../../core/component_registrator";
 import DOMComponent from "../../core/dom_component";
-import dragEvents from "../../events/drag";
+import {
+    moveEvent,
+    startEvent,
+    endEvent,
+    enterEvent,
+    leaveEvent,
+    dropEvent
+} from "../../events/drag";
 import { getSwatchContainer } from "../widget/swatch_container";
 
 var SORTABLE_NAMESPACE = "dxSortable",
@@ -112,7 +119,7 @@ function getScrollWrapper(scrollable) {
         stop();
         scrollable.scrollTo(scrollTop += delta);
 
-        timeout = setTimeout(move, SCROLL_TIMEOUT);
+        timeout = setTimeout(moveEvent, SCROLL_TIMEOUT);
     }
 
     function stop() {
@@ -213,7 +220,7 @@ var Sortable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        var dragEventsString = [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(" ");
+        var dragEventsString = [moveEvent, startEvent, endEvent, enterEvent, leaveEvent, dropEvent].join(" ");
         eventsEngine.off(this._getEventListener(), addNamespace(dragEventsString, SORTABLE_NAMESPACE));
     },
 
@@ -305,7 +312,7 @@ var Sortable = DOMComponent.inherit({
         if(that.option("allowDragging")) {
             var $eventListener = that._getEventListener();
 
-            eventsEngine.on($eventListener, addNamespace(dragEvents.start, SORTABLE_NAMESPACE), itemSelector, function(e) {
+            eventsEngine.on($eventListener, addNamespace(startEvent, SORTABLE_NAMESPACE), itemSelector, function(e) {
                 $sourceItem = $(e.currentTarget);
                 var $sourceGroup = $sourceItem.closest(groupSelector);
                 sourceGroup = $sourceGroup.attr("group");
@@ -326,7 +333,7 @@ var Sortable = DOMComponent.inherit({
                 $groups = createGroups();
                 that._indicator = $("<div>").addClass("dx-position-indicator");
             });
-            eventsEngine.on($eventListener, addNamespace(dragEvents.move, SORTABLE_NAMESPACE), function(e) {
+            eventsEngine.on($eventListener, addNamespace(moveEvent, SORTABLE_NAMESPACE), function(e) {
                 var $item,
                     $itemContainer,
                     $items,
@@ -429,7 +436,7 @@ var Sortable = DOMComponent.inherit({
                 }
 
             });
-            eventsEngine.on($eventListener, addNamespace(dragEvents.end, SORTABLE_NAMESPACE), function() {
+            eventsEngine.on($eventListener, addNamespace(endEvent, SORTABLE_NAMESPACE), function() {
                 disposeScrollWrapper();
 
                 if(!$sourceItem) {

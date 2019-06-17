@@ -1,8 +1,8 @@
 import $ from "../../core/renderer";
 import { noop } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
-import areaItem from "./ui.pivot_grid.area_item";
-import pivotGridUtils from "./ui.pivot_grid.utils";
+import { AreaItem } from "./ui.pivot_grid.area_item";
+import { capitalizeFirstLetter } from "./ui.pivot_grid.utils";
 import Popup from "../popup";
 import Button from "../button";
 
@@ -22,7 +22,7 @@ function renderGroupConnector(field, nextField, prevField, $container) {
     }
 }
 
-exports.FieldsArea = areaItem.AreaItem.inherit({
+exports.FieldsArea = AreaItem.inherit({
 
     ctor: function(component, area) {
         this.callBase(component);
@@ -38,7 +38,7 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
     },
 
     isVisible: function() {
-        return !!this.option("fieldPanel.visible") && this.option("fieldPanel.show" + pivotGridUtils.capitalizeFirstLetter(this._area) + "Fields");
+        return !!this.option("fieldPanel.visible") && this.option("fieldPanel.show" + capitalizeFirstLetter(this._area) + "Fields");
     },
 
     _renderButton: function(element) {

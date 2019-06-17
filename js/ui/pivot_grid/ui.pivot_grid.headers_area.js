@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import { isDefined } from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { each } from "../../core/utils/iterator";
-import areaItem from "./ui.pivot_grid.area_item";
+import { AreaItem } from "./ui.pivot_grid.area_item";
 
 var PIVOTGRID_AREA_CLASS = "dx-pivotgrid-area",
     PIVOTGRID_AREA_COLUMN_CLASS = "dx-pivotgrid-horizontal-headers",
@@ -27,7 +27,7 @@ function getCellPath(tableElement, cell) {
     }
 }
 
-exports.HorizontalHeadersArea = areaItem.AreaItem.inherit({
+exports.HorizontalHeadersArea = AreaItem.inherit({
     _getAreaName: function() {
         return "column";
     },

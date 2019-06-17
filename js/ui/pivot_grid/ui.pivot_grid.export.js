@@ -2,8 +2,8 @@ import Class from "../../core/class";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
-import formatHelper from "../../format_helper";
-import numberLocalization from "../../localization/number";
+import { format } from "../../format_helper";
+import { parse } from "../../localization/number";
 import clientExporter, { excel as excelExporter } from "../../exporter";
 import exportMixin from "../grid_core/ui.grid_core.export_mixin";
 import { when, Deferred } from "../../core/utils/deferred";
@@ -134,10 +134,10 @@ function getCellDataType(field) {
     }
 
     if(field.format) {
-        if(numberLocalization.parse(formatHelper.format(1, field.format)) === 1) {
+        if(parse(format(1, field.format)) === 1) {
             return "number";
         }
-        if(formatHelper.format(new Date(), field.format)) {
+        if(format(new Date(), field.format)) {
             return "date";
         }
     }

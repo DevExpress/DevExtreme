@@ -1,7 +1,7 @@
-import typeUtils, { isDefined } from "../../core/utils/type";
+import { isFunction, isDefined, isObject } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { inArray } from "../../core/utils/array";
-import pivotGridUtils, { findField, foreachTree } from "./ui.pivot_grid.utils";
+import { findField, foreachTree, setFieldProperty } from "./ui.pivot_grid.utils";
 
 var COLUMN = "column",
     ROW = "row",
@@ -119,7 +119,7 @@ function getFieldPos(descriptions, field, cache) {
             index: -1
         };
 
-    if(!typeUtils.isObject(field)) {
+    if(!isObject(field)) {
         if(cache.fields[field]) {
             field = cache[field];
         } else {
@@ -488,7 +488,7 @@ function getExpression(field) {
         crossGroupCalculation = field.allowCrossGroupCalculation,
         expression = NULL;
 
-    if(typeUtils.isFunction(field.calculateSummaryValue)) {
+    if(isFunction(field.calculateSummaryValue)) {
         expression = field.calculateSummaryValue;
     } else if(summaryDisplayMode) {
         if(summaryDisplayMode === "absoluteVariation") {
@@ -500,7 +500,7 @@ function getExpression(field) {
         }
 
         if(expression && !field.format && summaryDisplayMode.indexOf("percent") !== -1) {
-            pivotGridUtils.setFieldProperty(field, "format", "percent");
+            setFieldProperty(field, "format", "percent");
         }
     }
     return expression;

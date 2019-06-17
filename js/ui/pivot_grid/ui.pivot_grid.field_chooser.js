@@ -1,19 +1,19 @@
 import $ from "../../core/renderer";
-import iconUtils from "../../core/utils/icon";
-import windowUtils from "../../core/utils/window";
+import { getImageContainer } from "../../core/utils/icon";
+import { hasWindow as getHasWindow } from "../../core/utils/window";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { inArray } from "../../core/utils/array";
 import { each } from "../../core/utils/iterator";
-import messageLocalization from "../../localization/message";
+import { format } from "../../localization/message";
 import registerComponent from "../../core/component_registrator";
-import pivotGridUtils from "./ui.pivot_grid.utils";
+import { getCompareFunction, foreachDataLevel } from "./ui.pivot_grid.utils";
 import TreeView from "../tree_view";
 import ContextMenu from "../context_menu";
 import BaseFieldChooser from "./ui.pivot_grid.field_chooser_base";
 
 var DIV = "<div>",
-    hasWindow = windowUtils.hasWindow();
+    hasWindow = getHasWindow();
 
 import "./data_source";
 
@@ -73,7 +73,7 @@ var compareOrder = [
 
         return aValue + bValue;
     },
-    pivotGridUtils.getCompareFunction(function(item) { return item.text; })
+    getCompareFunction(function(item) { return item.text; })
 ];
 
 function compareItems(a, b) {
@@ -149,31 +149,31 @@ var FieldChooser = BaseFieldChooser.inherit({
                  * @type string
                  * @default 'Column Fields'
                  */
-                columnFields: messageLocalization.format("dxPivotGrid-columnFields"),
+                columnFields: format("dxPivotGrid-columnFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.rowFields
                  * @type string
                  * @default 'Row Fields'
                  */
-                rowFields: messageLocalization.format("dxPivotGrid-rowFields"),
+                rowFields: format("dxPivotGrid-rowFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.dataFields
                  * @type string
                  * @default 'Data Fields'
                  */
-                dataFields: messageLocalization.format("dxPivotGrid-dataFields"),
+                dataFields: format("dxPivotGrid-dataFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.filterFields
                  * @type string
                  * @default 'Filter Fields'
                  */
-                filterFields: messageLocalization.format("dxPivotGrid-filterFields"),
+                filterFields: format("dxPivotGrid-filterFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.allFields
                  * @type string
                  * @default 'All Fields'
                  */
-                allFields: messageLocalization.format("dxPivotGrid-allFields")
+                allFields: format("dxPivotGrid-allFields")
             },
             /**
             * @name dxPivotGridFieldChooserOptions.applyChangesMode
@@ -545,7 +545,7 @@ var FieldChooser = BaseFieldChooser.inherit({
 
         treeItems = this._createTreeItems(fields, ["dimension", "displayFolder"]);
 
-        pivotGridUtils.foreachDataLevel(treeItems, function(items) {
+        foreachDataLevel(treeItems, function(items) {
             items.sort(compareItems);
         }, 0, "items");
 
@@ -562,7 +562,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                 searchTimeout: that.option("searchTimeout"),
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     if(itemData.icon) {
-                        iconUtils.getImageContainer(itemData.icon).appendTo(itemElement);
+                        getImageContainer(itemData.icon).appendTo(itemElement);
                     }
 
                     $('<span>')

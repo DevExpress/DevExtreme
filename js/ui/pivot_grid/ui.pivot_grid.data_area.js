@@ -1,5 +1,5 @@
 import $ from "../../core/renderer";
-import areaItem from "./ui.pivot_grid.area_item";
+import { AreaItem } from "./ui.pivot_grid.area_item";
 
 var PIVOTGRID_AREA_CLASS = "dx-pivotgrid-area",
     PIVOTGRID_AREA_DATA_CLASS = "dx-pivotgrid-area-data",
@@ -7,7 +7,7 @@ var PIVOTGRID_AREA_CLASS = "dx-pivotgrid-area",
     PIVOTGRID_GRAND_TOTAL_CLASS = "dx-grandtotal",
     PIVOTGRID_ROW_TOTAL_CLASS = "dx-row-total";
 
-exports.DataArea = areaItem.AreaItem.inherit({
+exports.DataArea = AreaItem.inherit({
     _getAreaName: function() {
         return "data";
     },

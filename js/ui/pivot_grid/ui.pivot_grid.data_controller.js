@@ -6,7 +6,7 @@ import iteratorUtils from "../../core/utils/iterator";
 import Class from "../../core/class";
 import stringUtils from "../../core/utils/string";
 import commonUtils from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
+import { isDefined, isString } from "../../core/utils/type";
 import virtualScrolling from "../grid_core/ui.grid_core.virtual_scrolling_core";
 import virtualColumnsCore from "../grid_core/ui.grid_core.virtual_columns_core";
 import stateStoring from "../grid_core/ui.grid_core.state_storing_core";
@@ -39,9 +39,9 @@ exports.DataController = Class.inherit((function() {
     function getHeaderItemText(item, description, options) {
         var text = item.text;
 
-        if(typeUtils.isDefined(item.displayText)) {
+        if(isDefined(item.displayText)) {
             text = item.displayText;
-        } else if(typeUtils.isDefined(item.caption)) {
+        } else if(isDefined(item.caption)) {
             text = item.caption;
         } else if(item.type === GRAND_TOTAL_TYPE) {
             text = options.texts.grandTotal;
@@ -94,7 +94,7 @@ exports.DataController = Class.inherit((function() {
             if(headerItem.width) {
                 infoItem.width = headerItem.width;
             }
-            if(typeUtils.isDefined(headerItem.wordWrapEnabled)) {
+            if(isDefined(headerItem.wordWrapEnabled)) {
                 infoItem.wordWrapEnabled = headerItem.wordWrapEnabled;
             }
 
@@ -107,7 +107,7 @@ exports.DataController = Class.inherit((function() {
             if(headerItem.isMetric) {
                 infoItem.dataIndex = headerItem.dataIndex;
             }
-            if(typeUtils.isDefined(headerItem.expanded)) {
+            if(isDefined(headerItem.expanded)) {
                 /**
                 * @name dxPivotGridPivotGridCell.expanded
                 * @type boolean
@@ -159,7 +159,7 @@ exports.DataController = Class.inherit((function() {
         var isItemSorted = function(items, sortBySummaryPath) {
             var path,
                 item = items[0],
-                stringValuesUsed = typeUtils.isString(sortBySummaryPath[0]),
+                stringValuesUsed = isString(sortBySummaryPath[0]),
                 headerItem = item.dataIndex >= 0 ? items[1] : item;
 
             if((stringValuesUsed && sortBySummaryPath[0].indexOf("&[") !== -1 && headerItem.key) || !headerItem.key) {
@@ -242,7 +242,7 @@ exports.DataController = Class.inherit((function() {
                         item.isLast = !item.children || !item.children.length;
                         if(item.isLast) {
                             iteratorUtils.each(options.sortBySummaryPaths, function(index, sortBySummaryPath) {
-                                if(!typeUtils.isDefined(item.dataIndex)) {
+                                if(!isDefined(item.dataIndex)) {
                                     sortBySummaryPath = sortBySummaryPath.slice(0);
                                     sortBySummaryPath.pop();
                                 }
@@ -569,7 +569,7 @@ exports.DataController = Class.inherit((function() {
                 path: path
             });
 
-            if(typeUtils.isDefined(indexedItem.index)) {
+            if(isDefined(indexedItem.index)) {
                 indexedItems[indexedItem.index] = indexedItem;
             } else {
                 indexedItems.push(indexedItem);
@@ -1084,10 +1084,10 @@ exports.DataController = Class.inherit((function() {
                     notifyProgress: notifyProgress
                 };
 
-            if(!typeUtils.isDefined(data.grandTotalRowIndex)) {
+            if(!isDefined(data.grandTotalRowIndex)) {
                 data.grandTotalRowIndex = getHeaderIndexedItems(data.rows, rowOptions).length;
             }
-            if(!typeUtils.isDefined(data.grandTotalColumnIndex)) {
+            if(!isDefined(data.grandTotalColumnIndex)) {
                 data.grandTotalColumnIndex = getHeaderIndexedItems(data.columns, columnOptions).length;
             }
 

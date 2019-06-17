@@ -6,14 +6,17 @@ import { noop } from "../../core/utils/common";
 import { isDefined } from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { extend } from "../../core/utils/extend";
-import iteratorUtils, { each } from "../../core/utils/iterator";
-import messageLocalization from "../../localization/message";
+import { each, map } from "../../core/utils/iterator";
+import { format as messageFormat } from "../../localization/message";
 import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
-import headerFilter from "../grid_core/ui.grid_core.header_filter_core";
+import headerFilter, {
+    updateHeaderFilterItemSelectionState,
+    headerFilterMixin
+} from "../grid_core/ui.grid_core.header_filter_core";
 import columnStateMixin from "../grid_core/ui.grid_core.column_state_mixin";
 import sortingMixin from "../grid_core/ui.grid_core.sorting_mixin";
-import pivotGridUtils from "./ui.pivot_grid.utils";
+import { foreachTree, createPath } from "./ui.pivot_grid.utils";
 import Sortable from "./ui.sortable";
 import { Deferred } from "../../core/utils/deferred";
 
@@ -38,10 +41,10 @@ var processItems = function(groupItems, field) {
         });
     }
 
-    pivotGridUtils.foreachTree(groupItems, function(items) {
+    foreachTree(groupItems, function(items) {
         var item = items[0],
-            path = pivotGridUtils.createPath(items),
-            preparedFilterValueByText = isTree ? iteratorUtils.map(items, function(item) { return item.text; }).reverse().join("/") : item.text,
+            path = createPath(items),
+            preparedFilterValueByText = isTree ? map(items, function(item) { return item.text; }).reverse().join("/") : item.text,
             preparedFilterValue;
 
         item.value = isTree ? path.slice(0) : (item.key || item.value);
@@ -52,7 +55,7 @@ var processItems = function(groupItems, field) {
             item.children = null;
         }
 
-        headerFilter.updateHeaderFilterItemSelectionState(item, item.key && inArray(preparedFilterValueByText, filterValues) > -1 || inArray(preparedFilterValue, filterValues) > -1, isExcludeFilterType);
+        updateHeaderFilterItemSelectionState(item, item.key && inArray(preparedFilterValueByText, filterValues) > -1 || inArray(preparedFilterValue, filterValues) > -1, isExcludeFilterType);
 
     });
 };
@@ -71,7 +74,7 @@ function getStringState(state) {
     return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
 }
 
-var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).inherit(headerFilter.headerFilterMixin).inherit({
+var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).inherit(headerFilterMixin).inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             allowFieldDragging: true,
@@ -82,9 +85,9 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 height: 325,
                 searchTimeout: 500,
                 texts: {
-                    emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
-                    ok: messageLocalization.format("dxDataGrid-headerFilterOK"),
-                    cancel: messageLocalization.format("dxDataGrid-headerFilterCancel")
+                    emptyValue: messageFormat("dxDataGrid-headerFilterEmptyValue"),
+                    ok: messageFormat("dxDataGrid-headerFilterOK"),
+                    cancel: messageFormat("dxDataGrid-headerFilterCancel")
                 }
             }
         });
@@ -335,7 +338,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                     return userData.store.load(options);
                                 } else {
                                     var d = new Deferred();
-                                    dataSource.getFieldValues(mainGroupField.index, that.option("headerFilter.showRelevantValues"), paginate ? options : undefined).done(function(data) {
+                                    dataSource.getFieldValues(mainGroupField.index, that.option("showRelevantValues"), paginate ? options : undefined).done(function(data) {
                                         if(paginate) {
                                             d.resolve(data);
                                         } else {
