@@ -17,7 +17,8 @@ var dblclickEvent = require("events/dblclick"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dateSerialization = require("core/utils/date_serialization");
+    dateSerialization = require("core/utils/date_serialization"),
+    translator = require("animation/translator");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -1249,3 +1250,36 @@ QUnit.test("Single changed appointment should be rendered correctly in specified
     }
 });
 
+QUnit.test("Recurrent appointment considers firstDayOfWeek of Scheduler, FREQ=WEEKLY,INTERVAL=2 (T749155)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: 'test',
+            startDate: new Date(2018, 4, 18, 6, 0),
+            endDate: new Date(2018, 4, 18, 7, 0),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SA,SU,MO,TH,FR;INTERVAL=2"
+        }],
+        views: [{
+            type: "month"
+        }],
+        currentView: "month",
+        currentDate: new Date(2018, 4, 21),
+        height: 700,
+        firstDayOfWeek: 3,
+    });
+
+    var appointments = $(this.instance.$element()).find(".dx-scheduler-appointment");
+    assert.equal(appointments.length, 9, "Appointment has right count of occurences");
+
+    var firstAppointmentCoords = translator.locate($(appointments[0]));
+
+    assert.equal(firstAppointmentCoords.top, translator.locate($(appointments[1])).top, "Second occurence has same top coordinate as first");
+    assert.equal(firstAppointmentCoords.top, translator.locate($(appointments[2])).top, "Third occurence has same top coordinate as first");
+    assert.equal(firstAppointmentCoords.top, translator.locate($(appointments[3])).top, "Fourth occurence has same top coordinate as first");
+
+    var secondRowAppointmentCoords = translator.locate($(appointments[4]));
+
+    assert.equal(secondRowAppointmentCoords.top, translator.locate($(appointments[5])).top, "Sixth occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate($(appointments[6])).top, "Seventh occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate($(appointments[7])).top, "Eighth occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate($(appointments[8])).top, "Ninth occurence has same top coordinate as fifth");
+});
