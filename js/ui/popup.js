@@ -49,9 +49,9 @@ var POPUP_CLASS = "dx-popup",
     BUTTON_TEXT_MODE = "text",
     BUTTON_CONTAINED_MODE = "contained";
 
-var isIE11 = (browser.msie && parseInt(browser.version) === 11);
-var isOldSafari = browser.safari && compareVersions(browser.version, [11]) < 0;
-var heightStrategies = { static: "", inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
+var IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
+var IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
+var HEIGHT_STRATEGIES = { static: "", inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
 var getButtonPlace = function(name) {
 
@@ -665,32 +665,39 @@ var Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option("forceApplyBindings") || noop)();
 
-        var popupHeightParts = this._splitPopupHeight(),
+        var overlayContent = this.overlayContent().get(0),
+            currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
+
+        this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
+        this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
+    },
+
+    _chooseHeightStrategy: function(overlayContent) {
+        var isAutoWidth = this.overlayContent().get(0).style.width === "auto" || this.overlayContent().get(0).style.width === "",
+            currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
+
+        if(this._isAutoHeight() && this.option("autoResizeEnabled")) {
+            if((isAutoWidth && !IS_IE11) || IS_OLD_SAFARI) {
+                currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
+            } else {
+                currentHeightStrategyClass = HEIGHT_STRATEGIES.flex;
+            }
+        }
+
+        return currentHeightStrategyClass;
+    },
+
+    _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent) {
+        var cssStyles,
+            popupHeightParts = this._splitPopupHeight(),
             toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
                 + popupHeightParts.footer
                 + popupHeightParts.contentVerticalOffsets
                 + popupHeightParts.popupVerticalOffsets,
-            overlayContent = this.overlayContent().get(0),
-            cssStyles = {},
-            isAutoWidth = this.overlayContent().get(0).style.width === "auto" || this.overlayContent().get(0).style.width === "",
             contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
             contentMinHeight = this._getOptionValue("minHeight", overlayContent);
 
-        var currentHeightStrategyClass = heightStrategies.static;
-
-        if(this._isAutoHeight() && this.option("autoResizeEnabled")) {
-            if(isAutoWidth || isOldSafari) {
-                if(isIE11) {
-                    currentHeightStrategyClass = heightStrategies.static;
-                } else {
-                    currentHeightStrategyClass = heightStrategies.inherit;
-                }
-            } else {
-                currentHeightStrategyClass = heightStrategies.flex;
-            }
-        }
-
-        if(currentHeightStrategyClass === heightStrategies.static) {
+        if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
             cssStyles = { height: Math.max(0, contentHeight) };
         } else {
@@ -698,22 +705,21 @@ var Popup = Overlay.inherit({
                 maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
                 minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
-            cssStyles = extend(cssStyles, {
+            cssStyles = {
                 minHeight: minHeightValue,
                 maxHeight: maxHeightValue
-            });
+            };
         }
 
-        this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
-        this.$content().css(cssStyles);
+        return cssStyles;
     },
 
     _setHeightClasses: function($container, currentClass) {
         var excessClasses = "";
 
-        for(var name in heightStrategies) {
-            if(heightStrategies[name] !== currentClass) {
-                excessClasses += " " + heightStrategies[name];
+        for(var name in HEIGHT_STRATEGIES) {
+            if(HEIGHT_STRATEGIES[name] !== currentClass) {
+                excessClasses += " " + HEIGHT_STRATEGIES[name];
             }
         }
 
