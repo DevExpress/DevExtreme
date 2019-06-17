@@ -78,3 +78,40 @@ test("Cell should highlighted after editing another cell when startEditAction is
         onFocusedCellChanging: e => e.isHighlighted = true
     });
 });
+
+test("Cell should be focused after Enter key press if enterKeyDirection is 'none' and enterKeyAction is 'moveFocus'", async t => {
+    var dataCell = dataGrid.getDataCell(0, 0),
+        commandCell = dataGrid.getDataCell(0, 1);
+
+    await t.click(dataCell);
+    await t.pressKey("esc");
+    await t.expect(dataCell.focused).ok();
+    await t.pressKey("enter");
+    await t.expect(dataCell.focused).ok();
+
+    await t.pressKey("enter");
+    await t.expect(dataCell.focused).ok();
+
+    await t.pressKey("tab");
+    await t.pressKey("enter");
+    await t.expect(commandCell.focused).ok();
+    await t.expect(dataGrid.isRowRemoved(0)).ok();
+}).before(async () => {
+    await createWidget("dxDataGrid", {
+        height: 200,
+        width: 200,
+        dataSource: [
+            { id: 0 },
+            { id: 1 }
+        ],
+        editing: {
+            mode: "batch",
+            allowUpdating: true,
+            allowDeleting: true
+        },
+        keyboardNavigation: {
+            enterKeyAction: "moveFocus",
+            enterKeyDirection: "none"
+        }
+    });
+});

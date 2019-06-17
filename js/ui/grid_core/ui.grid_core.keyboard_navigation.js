@@ -526,19 +526,17 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _processEnterKeyForDataCell: function(eventArgs, isEditing) {
-        var direction;
+        var direction = this._getEnterKeyDirection(eventArgs),
+            allowEditingOnEnterKey = this._allowEditingOnEnterKey();
 
-        if(isEditing || !this._allowEditingOnEnterKey()) {
+        if(isEditing || !allowEditingOnEnterKey && direction) {
             this._handleEnterKeyEditingCell(eventArgs.originalEvent);
-
-            direction = this._getEnterKeyDirection(eventArgs);
             if(direction === "next" || direction === "previous") {
                 this._targetCellTabHandler(eventArgs, direction);
             } else if(direction === "upArrow" || direction === "downArrow") {
                 this._navigateNextCell(eventArgs.originalEvent, direction);
             }
-
-        } else {
+        } else if(allowEditingOnEnterKey) {
             this._startEditing(eventArgs);
         }
     },
