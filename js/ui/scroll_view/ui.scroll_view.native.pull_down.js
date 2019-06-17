@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     NativeStrategy = require("./ui.scrollable.native"),
     LoadIndicator = require("../load_indicator"),
     each = require("../../core/utils/iterator").each,
+    browser = require("../../core/utils/browser"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = "dx-scrollview-pull-down-loading",
@@ -18,7 +19,6 @@ var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = "dx-scrollview-pull-down-loading",
     STATE_REFRESHING = 2,
     STATE_LOADING = 3,
     PULLDOWN_RELEASE_TIME = 400;
-
 
 var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
@@ -101,7 +101,12 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this.callBase();
         this._topPocketSize = this._$topPocket.height();
         this._bottomPocketSize = this._$bottomPocket.height();
-        this._scrollOffset = Math.round((this._$container.height() - this._$content.height()) * 100) / 100;
+
+        if(browser.msie) {
+            this._scrollOffset = Math.round((this._$container.height() - this._$content.height()) * 100) / 100;
+        } else {
+            this._scrollOffset = this._$container.height() - this._$content.height();
+        }
     },
 
     _allowedDirections: function() {
@@ -168,7 +173,11 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location - (this._scrollOffset + this._bottomPocketSize) <= 0.1;
+        if(browser.msie) {
+            return this._reachBottomEnabled && this._location - (this._scrollOffset + this._bottomPocketSize) <= 0.1;
+        } else {
+            return this._reachBottomEnabled && this._location <= this._scrollOffset + this._bottomPocketSize;
+        }
     },
 
     _reachBottom: function() {
