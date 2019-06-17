@@ -50,6 +50,8 @@ import deferredUtils from "../../core/utils/deferred";
 import EmptyTemplate from "../widget/empty_template";
 import BindableTemplate from "../widget/bindable_template";
 import themes from "../themes";
+import browser from "../../core/utils/browser";
+import { touch } from "../../core/utils/support";
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -57,12 +59,13 @@ const Deferred = deferredUtils.Deferred;
 const toMs = dateUtils.dateToMilliseconds;
 
 const WIDGET_CLASS = "dx-scheduler";
-const WIDGET_SMALL_CLASS = "dx-scheduler-small";
-const WIDGET_ADAPTIVE_CLASS = "dx-scheduler-adaptive";
-const WIDGET_READONLY_CLASS = "dx-scheduler-readonly";
-const APPOINTMENT_POPUP_CLASS = "dx-scheduler-appointment-popup";
-const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
-const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = "dx-scheduler-recurrence-rule-item-opened";
+const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
+const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
+const WIDGET_WIN_NO_TOUCH_CLASS = `${WIDGET_CLASS}-win-no-touch`;
+const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
+const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
+const RECURRENCE_EDITOR_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item`;
+const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item-opened`;
 const WIDGET_SMALL_WIDTH = 400;
 const APPOINTMENT_POPUP_WIDTH = 610;
 const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 768;
@@ -1587,7 +1590,10 @@ const Scheduler = Widget.inherit({
         this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
         this._customizeStoreLoadOptions();
 
-        this.$element().addClass(WIDGET_CLASS);
+        this.$element()
+            .addClass(WIDGET_CLASS)
+            .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && touch));
+
         this._initEditing();
 
         this._resourcesManager = new SchedulerResourceManager(this.option("resources"));
