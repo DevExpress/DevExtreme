@@ -817,7 +817,7 @@
 @scrollable-scroll-shadow-color: transparent;
 
 @scrollable-scrollbar-bg: transparent;
-@scrollable-scrollbar-custom-bg: @scrollable-bg;
+
 /**
 * @name 20. Scrollbar background color
 * @type color
@@ -825,9 +825,12 @@
 */
 @scrollable-scrollbar-active-bg: fade(darken(@base-bg, 9%), 70%);
 
-// Custom scrollable
-@scrollable-scrollbar-arrow-custom-bg: darken(@scrollable-bg, 70.5%);
 @scrollable-scrollbar-thumb-bg: darken(@scrollable-bg, 54%);
+
+@scrollable-scrollbar-msie-base-color: @scrollable-scrollbar-thumb-bg;
+@scrollable-scrollbar-msie-arrow-color: @scrollable-scrollbar-msie-base-color;
+@scrollable-scrollbar-msie-shadow-color: @scrollable-bg;
+@scrollable-scrollbar-msie-track-color: @scrollable-bg;
 
 // ScrollView
 

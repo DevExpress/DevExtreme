@@ -691,7 +691,13 @@
 @scrollable-scroll-shadow-color: fade(@scrollable-bg, 20%);
 
 @scrollable-scrollbar-bg: fade(@base-inverted-bg, 0%);
-@scrollable-scrollbar-custom-bg: @base-bg;
+
+@scrollable-scrollbar-thumb-bg: @base-inverted-bg;
+
+@scrollable-scrollbar-msie-base-color: @scrollable-scrollbar-thumb-bg;
+@scrollable-scrollbar-msie-arrow-color: @scrollable-scrollbar-msie-base-color;
+@scrollable-scrollbar-msie-shadow-color: @scrollable-bg;
+@scrollable-scrollbar-msie-track-color: @scrollable-bg;
 /**
 * @name 20. Scrollbar background color
 * @type color
@@ -838,10 +844,6 @@
 @switch-container-readonly-bg: @switch-bg;
 
 @switch-border-radius: @base-border-radius - 2px;
-
-// Custom scrollable
-@scrollable-scrollbar-arrow-custom-bg: @base-inverted-bg;
-@scrollable-scrollbar-thumb-bg: @base-inverted-bg;
 
 // ScrollView
 
