@@ -1665,6 +1665,46 @@ QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", functio
     clock.restore();
 });
 
+// T744592
+QUnit.test("freeSpaceRow height should not be changed after editing next cell", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        $grid = $("#dataGrid").dxDataGrid({
+            dataSource: [
+                { id: 1, field1: "field1" },
+                { id: 2, field1: "field1" },
+                { id: 3, field1: "field1" }
+            ],
+            paging: {
+                pageSize: 2
+            },
+            keyExpr: "id",
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            }
+        }),
+        dataGrid = $grid.dxDataGrid("instance");
+
+    clock.tick();
+
+    dataGrid.pageIndex(1);
+    clock.tick();
+    dataGrid.cellValue(0, "field1", "updated");
+    clock.tick();
+    dataGrid.saveEditData();
+
+    // act
+    dataGrid.focus(dataGrid.getCellElement(0, "field1"));
+
+    // assert
+    assert.ok($grid.find(".dx-freespace-row").is(":visible"), "Free space row is visible");
+    assert.equal(dataGrid.totalCount(), -1, "totalCount");
+    assert.equal(dataGrid.getController("data").isLoading(), true, "isLoading");
+
+    clock.restore();
+});
+
 QUnit.test("Lose focus on start of resize columns", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
