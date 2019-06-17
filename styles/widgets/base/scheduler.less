@@ -854,7 +854,7 @@
         height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     }
 
-    .dx-scheduler-date-table-cell, 
+    .dx-scheduler-date-table-cell,
     .dx-scheduler-all-day-table-cell {
         > div {
             pointer-events: none;
@@ -2809,5 +2809,11 @@
     }
     .dx-tooltip-appointment-item-marker-body {
         background: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+    }
+}
+
+.dx-scheduler-win-no-touch {
+    .dx-scheduler-appointment {
+        touch-action: none;
     }
 }
