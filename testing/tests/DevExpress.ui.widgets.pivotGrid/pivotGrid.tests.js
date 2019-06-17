@@ -5424,6 +5424,38 @@ QUnit.test('Set column width', function(assert) {
     assert.deepEqual(setColumnWidth([40, 50, 30, 60, 80]), [40, 50, 30, 140]);
 });
 
+QUnit.test('Set column width in container with transform', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    $("#pivotArea").css({ "transform": "scale(0.5, 0.5)" });
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    function setColumnWidth(widthArray) {
+        headersArea.setColumnsWidth(widthArray);
+        return headersArea.getColumnsWidth();
+    }
+
+    assert.deepEqual(setColumnWidth([40, 50, 30, 60]), [40, 50, 30, 60]);
+});
+
+QUnit.test('Set row height in container with transform', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    $("#pivotArea").css({ "transform": "scale(0.5, 0.5)" });
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    function setRowsHeight(widthArray) {
+        headersArea.setRowsHeight(widthArray);
+        return headersArea.getRowsHeight();
+    }
+
+    assert.deepEqual(setRowsHeight([40, 50, 60, 70]), [40, 50, 60, 70]);
+});
+
 // T696415
 QUnit.test('Set column width with floating point', function(assert) {
     // arrange
