@@ -338,7 +338,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                     return userData.store.load(options);
                                 } else {
                                     var d = new Deferred();
-                                    dataSource.getFieldValues(mainGroupField.index, that.option("showRelevantValues"), paginate ? options : undefined).done(function(data) {
+                                    dataSource.getFieldValues(mainGroupField.index, that.option("headerFilter.showRelevantValues"), paginate ? options : undefined).done(function(data) {
                                         if(paginate) {
                                             d.resolve(data);
                                         } else {

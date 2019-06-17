@@ -14,7 +14,8 @@ import { LocalStore } from "./local_store";
 import RemoteStore from "./remote_store";
 import { XmlaStore } from "./xmla_store/xmla_store";
 import { applyDisplaySummaryMode, createMockSummaryCell, applyRunningTotal } from "./ui.pivot_grid.summary_display_modes";
-import { foreachTree,
+import {
+    foreachTree,
     foreachTreeAsync,
     findField,
     formatValue,
