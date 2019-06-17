@@ -1,20 +1,20 @@
-var deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    dataUtils = require("../../data/utils"),
-    dataQuery = require("../../data/query"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    DataSourceModule = require("../../data/data_source/data_source"),
-    CustomStore = require("../../data/custom_store"),
-    dataCoreUtils = require("../../core/utils/data"),
-    Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    getFiltersByPath = pivotGridUtils.getFiltersByPath,
-    setFieldProperty = pivotGridUtils.setFieldProperty,
-    ArrayStore = require("../../data/array_store");
+import { when, Deferred } from "../../core/utils/deferred";
+import { aggregators } from "../../data/utils";
+import dataQuery from "../../data/query";
+import { deserializeDate } from "../../core/utils/date_serialization";
+import { DataSource } from "../../data/data_source/data_source";
+import CustomStore from "../../data/custom_store";
+import { compileGetter, toComparable } from "../../core/utils/data";
+import Class from "../../core/class";
+import { noop } from "../../core/utils/common";
+import { isNumeric, isDefined, isString } from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import { getFiltersByPath,
+    setFieldProperty,
+    setDefaultFieldValueFormatting,
+    storeDrillDownMixin,
+    discoverObjectFields } from "./ui.pivot_grid.utils";
+import ArrayStore from "../../data/array_store";
 
 const PATH_DELIMETER = "/./";
 
@@ -39,14 +39,14 @@ exports.LocalStore = Class.inherit((function() {
     };
 
     function getDataSelector(dataField) {
-        return dataField.indexOf(".") !== -1 ? dataCoreUtils.compileGetter(dataField) : function(data) { return data[dataField]; };
+        return dataField.indexOf(".") !== -1 ? compileGetter(dataField) : function(data) { return data[dataField]; };
     }
 
     function getDateValue(dataSelector) {
         return function(data) {
             var value = dataSelector(data);
             if(value && !(value instanceof Date)) {
-                value = dateSerialization.deserializeDate(value);
+                value = deserializeDate(value);
             }
             return value;
         };
@@ -81,11 +81,11 @@ exports.LocalStore = Class.inherit((function() {
                         return intervalSelector ? intervalSelector(value) : value;
                     };
                 } else if(field.dataType === 'number') {
-                    groupInterval = typeUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
+                    groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
                     fieldSelector = function(data) {
                         var value = dataSelector(data);
-                        if(typeUtils.isString(value)) {
+                        if(isString(value)) {
                             value = Number(value);
                         }
                         return groupInterval ? Math.floor(value / groupInterval) * groupInterval : value;
@@ -94,7 +94,7 @@ exports.LocalStore = Class.inherit((function() {
                     fieldSelector = dataSelector;
                 }
 
-                pivotGridUtils.setDefaultFieldValueFormatting(field);
+                setDefaultFieldValueFormatting(field);
 
                 setFieldProperty(field, "selector", fieldSelector);
             }
@@ -200,7 +200,7 @@ exports.LocalStore = Class.inherit((function() {
 
     function getAggregator(field) {
         if(field.summaryType === "custom") {
-            field.calculateCustomSummary = field.calculateCustomSummary || commonUtils.noop;
+            field.calculateCustomSummary = field.calculateCustomSummary || noop;
 
             return {
                 seed: function() {
@@ -226,7 +226,7 @@ exports.LocalStore = Class.inherit((function() {
             };
         }
 
-        return dataUtils.aggregators[field.summaryType] || dataUtils.aggregators.count;
+        return aggregators[field.summaryType] || aggregators.count;
     }
 
     function aggregationStep(measures, aggregationCells, data) {
@@ -244,7 +244,7 @@ exports.LocalStore = Class.inherit((function() {
                 }
                 if(cell[aggregatorIndex] === undefined) {
                     cell[aggregatorIndex] = cellValue;
-                } else if(typeUtils.isDefined(cellValue)) {
+                } else if(isDefined(cellValue)) {
                     cell[aggregatorIndex] = aggregator.step(cell[aggregatorIndex], cellValue);
                 }
             }
@@ -302,7 +302,7 @@ exports.LocalStore = Class.inherit((function() {
                 groupName = field.groupName,
                 filter;
 
-            if(groupName && typeUtils.isNumeric(field.groupIndex)) {
+            if(groupName && isNumeric(field.groupIndex)) {
                 return;
             }
             filter = function(dataItem) {
@@ -332,7 +332,7 @@ exports.LocalStore = Class.inherit((function() {
                 var expandValue;
                 for(var i = 0; i < path.length; i++) {
                     expandValue = expandedDimensions[i].selector(dataItem);
-                    if(dataCoreUtils.toComparable(expandValue, true) !== dataCoreUtils.toComparable(path[i], true)) {
+                    if(toComparable(expandValue, true) !== toComparable(path[i], true)) {
                         return false;
                     }
                 }
@@ -467,7 +467,7 @@ exports.LocalStore = Class.inherit((function() {
         }
 
         filter = filter.slice(0);
-        if(typeUtils.isString(filter[0]) && (filter[1] instanceof Date || filter[2] instanceof Date)) {
+        if(isString(filter[0]) && (filter[1] instanceof Date || filter[2] instanceof Date)) {
             filter[0] = fieldSelectors[filter[0]];
         }
 
@@ -479,8 +479,8 @@ exports.LocalStore = Class.inherit((function() {
 
     return {
         ctor: function(options) {
-            this._progressChanged = options.onProgressChanged || commonUtils.noop;
-            this._dataSource = new DataSourceModule.DataSource(options);
+            this._progressChanged = options.onProgressChanged || noop;
+            this._dataSource = new DataSource(options);
             this._dataSource.paginate(false);
         },
 
@@ -490,7 +490,7 @@ exports.LocalStore = Class.inherit((function() {
                 d = new Deferred();
 
             loadDataSource(dataSource, getFieldSelectors(fields)).done(function(data) {
-                d.resolve(pivotGridUtils.discoverObjectFields(data, fields));
+                d.resolve(discoverObjectFields(data, fields));
             }).fail(d.reject);
 
             return d;
@@ -562,4 +562,4 @@ exports.LocalStore = Class.inherit((function() {
             return drillDownItems;
         }
     };
-})()).include(pivotGridUtils.storeDrillDownMixin);
+})()).include(storeDrillDownMixin);

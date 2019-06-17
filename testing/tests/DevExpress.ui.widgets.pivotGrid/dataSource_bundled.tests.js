@@ -12,7 +12,6 @@ import browser from "core/utils/browser";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "../../../testing/content/orders.js";
-import "bundles/dx.web";
 
 function createDataSource(options) {
     var dataSource = new DataSource(options);
@@ -165,23 +164,23 @@ QUnit.test("Create XmlaStore with paginate", function(assert) {
 
 QUnit.test("Create XmlaStore by Instance", function(assert) {
 
-    sinon.spy(DevExpress.data, "XmlaStore");
+    sinon.spy(xmlaStore, "XmlaStore");
 
     var dataSource = createDataSource({
-        store: new DevExpress.data.XmlaStore({
+        store: new xmlaStore.XmlaStore({
             type: "xmla",
             url: ""
         })
     });
-    assert.ok(dataSource.store() instanceof DevExpress.data.XmlaStore);
-    assert.ok(DevExpress.data.XmlaStore.calledOnce);
-    assert.ok(DevExpress.data.XmlaStore.calledWithNew);
-    assert.deepEqual(DevExpress.data.XmlaStore.lastCall.args, [{
+    assert.ok(dataSource.store() instanceof xmlaStore.XmlaStore);
+    assert.ok(xmlaStore.XmlaStore.calledOnce);
+    assert.ok(xmlaStore.XmlaStore.calledWithNew);
+    assert.deepEqual(xmlaStore.XmlaStore.lastCall.args, [{
         type: "xmla",
         url: ""
     }]);
 
-    DevExpress.data.XmlaStore.restore();
+    xmlaStore.XmlaStore.restore();
 });
 
 QUnit.test("Create LocalStore when store with type", function(assert) {
