@@ -1363,6 +1363,32 @@ QUnit.module("keyboard navigation", {}, () => {
 
         assert.equal(handler.callCount, 1, "new handler fired");
     });
+
+    QUnit.test("Keyboard processor should be initialize once", (assert) => {
+        const supportedKeysHandler = sinon.stub().returns({ "a": () => {} });
+
+        const TestWidget = Widget.inherit({
+            NAME: "TestWidget",
+            _supportedKeys: supportedKeysHandler
+        });
+
+        const $element = $("#widget");
+        let firstCall = true;
+
+        new TestWidget($element, {
+            focusStateEnabled: true,
+            onContentReady: function() {
+                if(firstCall) {
+                    firstCall = false;
+                    this.repaint();
+                }
+            }
+        });
+        keyboardMock($element).press("a");
+
+        assert.strictEqual(supportedKeysHandler.callCount, 1, "supportedKeysHandler.callCount");
+        assert.strictEqual(supportedKeysHandler.getCall(0).args[0].type, "keydown", "supportedKeysHandler.type");
+    });
 });
 
 if(devices.current().deviceType === "desktop") {
