@@ -1,11 +1,12 @@
-var $ = require("jquery"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    HORIZONTAL_WIDTH_LARGE = 1500,
+import $ from "jquery";
+import pointerMock from "../../helpers/pointerMock.js";
+
+var HORIZONTAL_WIDTH_LARGE = 1500,
     HORIZONTAL_WIDTH_SMALL = 900;
 
-require("common.css!");
-require("ui/pivot_grid/ui.sortable");
-require("ui/scroll_view/ui.scrollable");
+import "common.css!";
+import "ui/pivot_grid/ui.sortable";
+import "ui/scroll_view/ui.scrollable";
 
 QUnit.testStart(function() {
     var markup =

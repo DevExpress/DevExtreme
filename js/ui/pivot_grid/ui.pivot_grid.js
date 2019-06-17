@@ -1,40 +1,38 @@
-var $ = require("../../core/renderer"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
-    browser = require("../../core/utils/browser"),
-    eventsEngine = require("../../events/core/events_engine"),
-    registerComponent = require("../../core/component_registrator"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    stringUtils = require("../../core/utils/string"),
-    commonUtils = require("../../core/utils/common"),
-    each = require("../../core/utils/iterator").each,
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    clickEvent = require("../../events/click"),
-    messageLocalization = require("../../localization/message"),
-    Widget = require("../widget/ui.widget"),
-    eventUtils = require("../../events/utils"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    pivotGridDataController = require("./ui.pivot_grid.data_controller"),
-    PivotGridDataSource = require("./data_source"),
-    dataAreaNamespace = require("./ui.pivot_grid.data_area"),
-    headersArea = require("./ui.pivot_grid.headers_area"),
-    getSize = require("../../core/utils/size").getSize,
+import $ from "../../core/renderer";
+import { getWindow, hasWindow } from "../../core/utils/window";
+var window = getWindow();
+import { msie } from "../../core/utils/browser";
+import eventsEngine from "../../events/core/events_engine";
+import registerComponent from "../../core/component_registrator";
+import { getPublicElement } from "../../core/utils/dom";
+import { format as formatString } from "../../core/utils/string";
+import { noop, deferRender, deferUpdate } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { name as clickEventName } from "../../events/click";
+import { getFormatter, format as formatMessage } from "../../localization/message";
+import Widget from "../widget/ui.widget";
+import { addNamespace } from "../../events/utils";
+import { renderNoDataText, renderLoadPanel } from "../grid_core/ui.grid_core.utils";
+import { setFieldProperty, findField, mergeArraysByMaxValue } from "./ui.pivot_grid.utils";
+import { DataController } from "./ui.pivot_grid.data_controller";
+import PivotGridDataSource from "./data_source";
+import { DataArea } from "./ui.pivot_grid.data_area";
+import { VerticalHeadersArea, HorizontalHeadersArea } from "./ui.pivot_grid.headers_area";
+import { getSize } from "../../core/utils/size";
 
-    fieldsArea = require("./ui.pivot_grid.fields_area"),
+import { FieldsArea } from "./ui.pivot_grid.fields_area";
 
-    PivotGridFieldChooser = require("./ui.pivot_grid.field_chooser"),
-    PivotGridFieldChooserBase = require("./ui.pivot_grid.field_chooser_base"),
-    ExportMixin = require("./ui.pivot_grid.export").ExportMixin,
-    chartIntegrationMixin = require("./ui.pivot_grid.chart_integration"),
-    Popup = require("../popup"),
-    ContextMenu = require("../context_menu"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
+import PivotGridFieldChooser from "./ui.pivot_grid.field_chooser";
+import PivotGridFieldChooserBase from "./ui.pivot_grid.field_chooser_base";
+import { ExportMixin } from "./ui.pivot_grid.export";
+import chartIntegrationMixin from "./ui.pivot_grid.chart_integration";
+import Popup from "../popup";
+import ContextMenu from "../context_menu";
+import { when, Deferred } from "../../core/utils/deferred";
 
-    DATA_AREA_CELL_CLASS = "dx-area-data-cell",
+var DATA_AREA_CELL_CLASS = "dx-area-data-cell",
     ROW_AREA_CELL_CLASS = "dx-area-row-cell",
     COLUMN_AREA_CELL_CLASS = "dx-area-column-cell",
     DESCRIPTION_AREA_CELL_CLASS = "dx-area-description-cell",
@@ -250,7 +248,7 @@ var PivotGrid = Widget.inherit({
                  * @type string
                  * @default "Field Chooser"
                  */
-                title: messageLocalization.format("dxPivotGrid-fieldChooserTitle"),
+                title: formatMessage("dxPivotGrid-fieldChooserTitle"),
                 /**
                  * @name dxPivotGridOptions.fieldChooser.width
                  * @type number
@@ -401,25 +399,25 @@ var PivotGrid = Widget.inherit({
                     * @type string
                     * @default "Drop Column Fields Here"
                     */
-                    columnFieldArea: messageLocalization.format("dxPivotGrid-columnFieldArea"),
+                    columnFieldArea: formatMessage("dxPivotGrid-columnFieldArea"),
                     /**
                     * @name dxPivotGridOptions.fieldPanel.texts.rowFieldArea
                     * @type string
                     * @default "Drop Row Fields Here"
                     */
-                    rowFieldArea: messageLocalization.format("dxPivotGrid-rowFieldArea"),
+                    rowFieldArea: formatMessage("dxPivotGrid-rowFieldArea"),
                     /**
                     * @name dxPivotGridOptions.fieldPanel.texts.filterFieldArea
                     * @type string
                     * @default "Drop Filter Fields Here"
                     */
-                    filterFieldArea: messageLocalization.format("dxPivotGrid-filterFieldArea"),
+                    filterFieldArea: formatMessage("dxPivotGrid-filterFieldArea"),
                     /**
                     * @name dxPivotGridOptions.fieldPanel.texts.dataFieldArea
                     * @type string
                     * @default "Drop Data Fields Here"
                     */
-                    dataFieldArea: messageLocalization.format("dxPivotGrid-dataFieldArea")
+                    dataFieldArea: formatMessage("dxPivotGrid-dataFieldArea")
                 }
             },
             /**
@@ -518,7 +516,7 @@ var PivotGrid = Widget.inherit({
                  * @type string
                  * @default 'Loading...'
                  */
-                text: messageLocalization.format("Loading"),
+                text: formatMessage("Loading"),
                 /**
                  * @name dxPivotGridOptions.loadPanel.width
                  * @type number
@@ -563,67 +561,67 @@ var PivotGrid = Widget.inherit({
                  * @type string
                  * @default 'Grand Total'
                  */
-                grandTotal: messageLocalization.format("dxPivotGrid-grandTotal"),
+                grandTotal: formatMessage("dxPivotGrid-grandTotal"),
                 /**
                  * @name dxPivotGridOptions.texts.total
                  * @type string
                  * @default '{0} Total'
                  */
-                total: messageLocalization.getFormatter("dxPivotGrid-total"),
+                total: getFormatter("dxPivotGrid-total"),
                 /**
                  * @name dxPivotGridOptions.texts.noData
                  * @type string
                  * @default 'No data'
                  */
-                noData: messageLocalization.format("dxDataGrid-noDataText"),
+                noData: formatMessage("dxDataGrid-noDataText"),
                 /**
                   * @name dxPivotGridOptions.texts.showFieldChooser
                   * @type string
                   * @default 'Show Field Chooser'
                   */
-                showFieldChooser: messageLocalization.format("dxPivotGrid-showFieldChooser"),
+                showFieldChooser: formatMessage("dxPivotGrid-showFieldChooser"),
                 /**
                  * @name dxPivotGridOptions.texts.expandAll
                  * @type string
                  * @default 'Expand All'
                  */
-                expandAll: messageLocalization.format("dxPivotGrid-expandAll"),
+                expandAll: formatMessage("dxPivotGrid-expandAll"),
                 /**
                  * @name dxPivotGridOptions.texts.collapseAll
                  * @type string
                  * @default 'Collapse All'
                  */
-                collapseAll: messageLocalization.format("dxPivotGrid-collapseAll"),
+                collapseAll: formatMessage("dxPivotGrid-collapseAll"),
                 /**
                  * @name dxPivotGridOptions.texts.sortColumnBySummary
                  * @type string
                  * @default 'Sort {0} by This Column'
                  */
-                sortColumnBySummary: messageLocalization.getFormatter("dxPivotGrid-sortColumnBySummary"),
+                sortColumnBySummary: getFormatter("dxPivotGrid-sortColumnBySummary"),
                 /**
                  * @name dxPivotGridOptions.texts.sortRowBySummary
                  * @type string
                  * @default 'Sort {0} by This Row'
                  */
-                sortRowBySummary: messageLocalization.getFormatter("dxPivotGrid-sortRowBySummary"),
+                sortRowBySummary: getFormatter("dxPivotGrid-sortRowBySummary"),
                 /**
                  * @name dxPivotGridOptions.texts.removeAllSorting
                  * @type string
                  * @default 'Remove All Sorting'
                  */
-                removeAllSorting: messageLocalization.format("dxPivotGrid-removeAllSorting"),
+                removeAllSorting: formatMessage("dxPivotGrid-removeAllSorting"),
                 /**
                  * @name dxPivotGridOptions.texts.exportToExcel
                  * @type string
                  * @default "Export to Excel file"
                  */
-                exportToExcel: messageLocalization.format("dxDataGrid-exportToExcel"),
+                exportToExcel: formatMessage("dxDataGrid-exportToExcel"),
                 /**
                  * @name dxPivotGridOptions.texts.dataNotAvailable
                  * @type string
                  * @default "N/A"
                  */
-                dataNotAvailable: messageLocalization.format("dxPivotGrid-dataNotAvailable")
+                dataNotAvailable: formatMessage("dxPivotGrid-dataNotAvailable")
             },
             /**
             * @name dxPivotGridOptions.onCellClick
@@ -785,19 +783,19 @@ var PivotGrid = Widget.inherit({
                      * @type string
                      * @default "(Blanks)"
                      */
-                    emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
+                    emptyValue: formatMessage("dxDataGrid-headerFilterEmptyValue"),
                     /**
                      * @name dxPivotGridOptions.headerFilter.texts.ok
                      * @type string
                      * @default "Ok"
                      */
-                    ok: messageLocalization.format("dxDataGrid-headerFilterOK"),
+                    ok: formatMessage("dxDataGrid-headerFilterOK"),
                     /**
                      * @name dxPivotGridOptions.headerFilter.texts.cancel
                      * @type string
                      * @default "Cancel"
                      */
-                    cancel: messageLocalization.format("dxDataGrid-headerFilterCancel")
+                    cancel: formatMessage("dxDataGrid-headerFilterCancel")
                 }
             }
         });
@@ -822,7 +820,7 @@ var PivotGrid = Widget.inherit({
                 each(fields, function(index, field) {
                     each(["allowSorting", "allowSortingBySummary", "allowFiltering", "allowExpandAll"], function(_, optionName) {
                         if(field[optionName] === undefined) {
-                            pivotGridUtils.setFieldProperty(field, optionName, that.option(optionName));
+                            setFieldProperty(field, optionName, that.option(optionName));
                         }
                     });
                 });
@@ -834,9 +832,9 @@ var PivotGrid = Widget.inherit({
         var that = this;
         that._dataController && that._dataController.dispose();
 
-        that._dataController = new pivotGridDataController.DataController(that._getDataControllerOptions());
+        that._dataController = new DataController(that._getDataControllerOptions());
 
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             that._dataController.changed.add(function() {
                 that._render();
             });
@@ -935,7 +933,7 @@ var PivotGrid = Widget.inherit({
                 that.callBase(args);
                 that._renderFieldChooser();
                 that._renderContextMenu();
-                windowUtils.hasWindow() && that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
+                hasWindow() && that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                 that._invalidate();
                 break;
             case "export":
@@ -956,7 +954,7 @@ var PivotGrid = Widget.inherit({
                 that._renderDescriptionArea();
                 break;
             case "loadPanel":
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                     that._invalidate();
                 }
@@ -1048,7 +1046,7 @@ var PivotGrid = Widget.inherit({
         !that._hasHeight && that._dataController.subscribeToWindowScrollEvents(dataArea.groupElement());
     },
 
-    _clean: commonUtils.noop,
+    _clean: noop,
 
     _needDelayResizing: function(cellsInfo) {
         var cellsCount = cellsInfo.length * (cellsInfo.length ? cellsInfo[0].length : 0);
@@ -1065,7 +1063,7 @@ var PivotGrid = Widget.inherit({
                     location: "after",
                     widget: "dxButton",
                     options: {
-                        text: messageLocalization.format("OK"),
+                        text: formatMessage("OK"),
                         onClick: function(e) {
                             that._fieldChooserPopup.$content().dxPivotGridFieldChooser("applyChanges");
                             that._fieldChooserPopup.hide();
@@ -1077,7 +1075,7 @@ var PivotGrid = Widget.inherit({
                     location: "after",
                     widget: "dxButton",
                     options: {
-                        text: messageLocalization.format("Cancel"),
+                        text: formatMessage("Cancel"),
                         onClick: function(e) {
                             that._fieldChooserPopup.hide();
                         }
@@ -1212,8 +1210,8 @@ var PivotGrid = Widget.inherit({
 
                         var showDataFieldCaption = (!isDefined(e.cell.dataIndex) && e.dataFields.length > 1),
                             textFormat = e.area === "column" ? texts.sortColumnBySummary : texts.sortRowBySummary,
-                            checked = pivotGridUtils.findField(e.dataFields, field.sortBySummaryField) === dataIndex && (e.cell.path || []).join("/") === (field.sortBySummaryPath || []).join("/"),
-                            text = stringUtils.format(textFormat, showDataFieldCaption ? field.caption + " - " + dataField.caption : field.caption);
+                            checked = findField(e.dataFields, field.sortBySummaryField) === dataIndex && (e.cell.path || []).join("/") === (field.sortBySummaryPath || []).join("/"),
+                            text = formatString(textFormat, showDataFieldCaption ? field.caption + " - " + dataField.caption : field.caption);
 
                         items.push({
                             beginGroup: sortingBySummaryItemCount === 0,
@@ -1349,9 +1347,9 @@ var PivotGrid = Widget.inherit({
         return this.option("texts.noData");
     },
 
-    _renderNoDataText: gridCoreUtils.renderNoDataText,
+    _renderNoDataText: renderNoDataText,
 
-    _renderLoadPanel: gridCoreUtils.renderLoadPanel,
+    _renderLoadPanel: renderLoadPanel,
 
     _updateLoading: function(progress) {
         var that = this,
@@ -1463,8 +1461,7 @@ var PivotGrid = Widget.inherit({
 
     _renderHeaders: function(rowHeaderContainer, columnHeaderContainer, filterHeaderContainer, dataHeaderContainer) {
         var that = this,
-            dataSource = that.getDataSource(),
-            FieldsArea = fieldsArea.FieldsArea;
+            dataSource = that.getDataSource();
 
         that._rowFields = that._rowFields || new FieldsArea(that, "row");
         that._rowFields.render(rowHeaderContainer, dataSource.getAreaFields("row"));
@@ -1488,14 +1485,14 @@ var PivotGrid = Widget.inherit({
             .toggleClass(BORDERS_CLASS, !!that.option("showBorders"))
             .toggleClass("dx-word-wrap", !!that.option("wordWrapEnabled"));
 
-        eventsEngine.on($table, eventUtils.addNamespace(clickEvent.name, "dxPivotGrid"), 'td', that._handleCellClick.bind(that));
+        eventsEngine.on($table, addNamespace(clickEventName, "dxPivotGrid"), 'td', that._handleCellClick.bind(that));
 
         return $table;
     },
 
     _renderDataArea: function(dataAreaElement) {
         var that = this,
-            dataArea = that._dataArea || new dataAreaNamespace.DataArea(that);
+            dataArea = that._dataArea || new DataArea(that);
         that._dataArea = dataArea;
         dataArea.render(dataAreaElement, that._dataController.getCellsInfo());
 
@@ -1504,7 +1501,7 @@ var PivotGrid = Widget.inherit({
 
     _renderRowsArea: function(rowsAreaElement) {
         var that = this,
-            rowsArea = that._rowsArea || new headersArea.VerticalHeadersArea(that);
+            rowsArea = that._rowsArea || new VerticalHeadersArea(that);
         that._rowsArea = rowsArea;
         rowsArea.render(rowsAreaElement, that._dataController.getRowsInfo());
 
@@ -1513,7 +1510,7 @@ var PivotGrid = Widget.inherit({
 
     _renderColumnsArea: function(columnsAreaElement) {
         var that = this,
-            columnsArea = that._columnsArea || new headersArea.HorizontalHeadersArea(that);
+            columnsArea = that._columnsArea || new HorizontalHeadersArea(that);
         that._columnsArea = columnsArea;
         columnsArea.render(columnsAreaElement, that._dataController.getColumnsInfo());
 
@@ -1573,7 +1570,7 @@ var PivotGrid = Widget.inherit({
                 .appendTo(tableElement);
 
             $(TR)
-                .toggleClass("dx-ie", browser.msie === true)
+                .toggleClass("dx-ie", msie === true)
                 .append(rowHeaderContainer)
                 .append(columnsAreaElement)
                 .appendTo(tableElement);
@@ -1757,7 +1754,7 @@ var PivotGrid = Widget.inherit({
             needSynchronizeFieldPanel,
             d = new Deferred();
 
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return;
         }
 
@@ -1785,7 +1782,7 @@ var PivotGrid = Widget.inherit({
         columnsArea.reset();
         rowFieldsHeader.reset();
 
-        commonUtils.deferUpdate(function() {
+        deferUpdate(function() {
             resultWidths = dataArea.getColumnsWidth();
 
             rowHeights = rowsArea.getRowsHeight();
@@ -1801,7 +1798,7 @@ var PivotGrid = Widget.inherit({
 
             columnsAreaRowCount = that._dataController.getColumnsInfo().length;
 
-            resultHeights = pivotGridUtils.mergeArraysByMaxValue(rowsAreaHeights, dataAreaHeights.slice(columnsAreaRowCount));
+            resultHeights = mergeArraysByMaxValue(rowsAreaHeights, dataAreaHeights.slice(columnsAreaRowCount));
 
             columnsAreaRowHeights = dataAreaHeights.slice(0, columnsAreaRowCount);
             columnsAreaHeight = getArraySum(columnsAreaRowHeights);
@@ -1837,7 +1834,7 @@ var PivotGrid = Widget.inherit({
                 groupHeight = totalHeight + (hasColumnsScroll ? scrollBarWidth : 0);
             }
 
-            commonUtils.deferRender(function() {
+            deferRender(function() {
                 columnsArea.tableElement().append(dataArea.headElement());
 
                 rowFieldsHeader.tableElement().append(rowsArea.headElement());

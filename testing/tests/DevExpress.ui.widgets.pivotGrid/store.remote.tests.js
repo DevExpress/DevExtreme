@@ -1,11 +1,11 @@
-require("../../../testing/content/orders.js");
+import "../../../testing/content/orders.js";
 
-var $ = require("jquery"),
-    RemoteStore = require("ui/pivot_grid/remote_store"),
-    pivotGridDataSource = require("ui/pivot_grid/data_source"),
-    pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
-    ArrayStore = require("data/array_store"),
-    DataSource = require("data/data_source");
+import $ from "jquery";
+import RemoteStore from "ui/pivot_grid/remote_store";
+import pivotGridDataSource from "ui/pivot_grid/data_source";
+import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
+import ArrayStore from "data/array_store";
+import DataSource from "data/data_source";
 
 function getCustomArrayStore(data) {
     var arrayStore = new ArrayStore(data);

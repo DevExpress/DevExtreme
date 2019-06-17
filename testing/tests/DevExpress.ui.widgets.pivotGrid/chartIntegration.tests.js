@@ -1,20 +1,18 @@
-var $ = require("jquery"),
-    PivotGridDataSource = require("ui/pivot_grid/data_source"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+import $ from "jquery";
+import PivotGridDataSource from "ui/pivot_grid/data_source";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
-require("viz/core/themes/generic.light"); // remove
+import "viz/core/themes/generic.light"; // remove
 
 /* global orders */
-require("../../../testing/content/orders.js");
+import "../../../testing/content/orders.js";
 
-require("ui/pivot_grid/ui.pivot_grid.field_chooser");
-require("ui/pivot_grid/ui.pivot_grid");
+import "ui/pivot_grid/ui.pivot_grid.field_chooser";
+import "ui/pivot_grid/ui.pivot_grid";
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/pivot_grid/ui.pivot_grid");
-require("viz/chart");
-
+import "common.css!";
+import "generic_light.css!";
+import "viz/chart";
 
 $('<div id="pivotGridContainer">').appendTo("#qunit-fixture");
 $('<div id="chartContainer">').appendTo("#qunit-fixture");

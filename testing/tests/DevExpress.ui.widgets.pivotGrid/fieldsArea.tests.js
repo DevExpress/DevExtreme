@@ -1,4 +1,4 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     var markup = '<div id="container"></div>';
@@ -7,10 +7,10 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
+import "common.css!";
 
-var FieldsArea = require("ui/pivot_grid/ui.pivot_grid.fields_area").FieldsArea,
-    AreaItem = require("ui/pivot_grid/ui.pivot_grid.area_item").AreaItem;
+import { FieldsArea } from "ui/pivot_grid/ui.pivot_grid.fields_area";
+import { AreaItem } from "ui/pivot_grid/ui.pivot_grid.area_item";
 
 QUnit.module("Creation");
 

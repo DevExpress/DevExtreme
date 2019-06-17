@@ -1,71 +1,69 @@
-var $ = require("jquery"),
-    summaryDisplayModes = require("ui/pivot_grid/ui.pivot_grid.summary_display_modes"),
-    applyDisplaySummaryMode = summaryDisplayModes.applyDisplaySummaryMode, // arguments: description, data
-    applyRunningTotal = summaryDisplayModes.applyRunningTotal, // arguments: description, data
-    pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
-    summaryDictionary = summaryDisplayModes.summaryDictionary,
-    data = {
-        columns: [{
-            index: 1,
-            value: "1",
-            children: [{
-                index: 2,
-                value: "11"
-            }, {
-                index: 3,
-                value: "12"
-            }, {
-                index: 4,
-                value: "13"
-            }]
-        }, {
-            index: 5,
-            value: "2"
-        }, {
-            index: 6,
-            value: "3",
-            children: [{
-                index: 7,
-                value: "31"
-            }, {
-                index: 8,
-                value: "32"
-            }]
-        }],
+import $ from "jquery";
+import summaryDisplayModes, { applyDisplaySummaryMode, applyRunningTotal, summaryDictionary } from "ui/pivot_grid/ui.pivot_grid.summary_display_modes"; // arguments: description, data
+import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
 
-        rows: [{
-            index: 1,
-            value: 1991,
-            children: [{
-                index: 5,
-                value: ""
-            }]
-
-        }, {
+var data = {
+    columns: [{
+        index: 1,
+        value: "1",
+        children: [{
             index: 2,
-            value: 1992,
-            children: [
-                {
-                    index: 3,
-                    value: ""
-                },
-                {
-                    index: 4,
-                    value: "1992-2"
-                }
-            ]
-        }],
-        values: [
-            [['GT'], ['T1'], ['T2'], ['T3'], ['T4'], ['T5'], ['T6'], ['T7'], ['T8']],
-            [['1T'], [1], [11], [12], [13], [2], [3], [31], [32]],
-            [['2T'], [10], [110], [120], [130], [20], [30], [310], [320]],
-            [['3T'], [100], [1100], [1200], [1300], [200], [300], [3100], [3200]],
-            [['4T'], [1000], [11000], [12000], [13000], [2000], [3000], [31000], [32000]],
-            [['5T'], [10000], [110000], [120000], [130000], [20000], [30000], [310000], [320000]]
-        ],
-        grandTotalColumnIndex: 0,
-        grandTotalRowIndex: 0
-    };
+            value: "11"
+        }, {
+            index: 3,
+            value: "12"
+        }, {
+            index: 4,
+            value: "13"
+        }]
+    }, {
+        index: 5,
+        value: "2"
+    }, {
+        index: 6,
+        value: "3",
+        children: [{
+            index: 7,
+            value: "31"
+        }, {
+            index: 8,
+            value: "32"
+        }]
+    }],
+
+    rows: [{
+        index: 1,
+        value: 1991,
+        children: [{
+            index: 5,
+            value: ""
+        }]
+
+    }, {
+        index: 2,
+        value: 1992,
+        children: [
+            {
+                index: 3,
+                value: ""
+            },
+            {
+                index: 4,
+                value: "1992-2"
+            }
+        ]
+    }],
+    values: [
+        [['GT'], ['T1'], ['T2'], ['T3'], ['T4'], ['T5'], ['T6'], ['T7'], ['T8']],
+        [['1T'], [1], [11], [12], [13], [2], [3], [31], [32]],
+        [['2T'], [10], [110], [120], [130], [20], [30], [310], [320]],
+        [['3T'], [100], [1100], [1200], [1300], [200], [300], [3100], [3200]],
+        [['4T'], [1000], [11000], [12000], [13000], [2000], [3000], [31000], [32000]],
+        [['5T'], [10000], [110000], [120000], [130000], [20000], [30000], [310000], [320000]]
+    ],
+    grandTotalColumnIndex: 0,
+    grandTotalRowIndex: 0
+};
 
 QUnit.module("display Summary Type. CallBack arg", {
     beforeEach: function() {
@@ -412,9 +410,6 @@ QUnit.test("Cache original value", function(assert) {
 
 QUnit.module("summary display type calculation", {
     beforeEach: function() {
-
-
-        summaryDictionary = summaryDisplayModes.summaryDictionary;
         this.data = $.extend(true, {}, data);
 
         this.descriptions = {
@@ -1148,7 +1143,6 @@ QUnit.test("Percent of column", function(assert) {
 
 QUnit.module("Check empty columns and rows", {
     beforeEach: function() {
-        summaryDictionary = summaryDisplayModes.summaryDictionary;
         this.data = $.extend(true, {}, data);
 
         this.descriptions = {

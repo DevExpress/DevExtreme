@@ -1,16 +1,14 @@
-var Class = require("../../core/class"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    formatHelper = require("../../format_helper"),
-    numberLocalization = require("../../localization/number"),
-    clientExporter = require("../../exporter"),
-    excelExporter = clientExporter.excel,
-    DEFAULT_DATA_TYPE = "string",
-    exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
+import Class from "../../core/class";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { format } from "../../format_helper";
+import { parse } from "../../localization/number";
+import clientExporter, { excel as excelExporter } from "../../exporter";
+import exportMixin from "../grid_core/ui.grid_core.export_mixin";
+import { when, Deferred } from "../../core/utils/deferred";
+
+var DEFAULT_DATA_TYPE = 'string',
     COLUMN_HEADER_STYLE_ID = 0,
     ROW_HEADER_STYLE_ID = 1,
     DATA_STYLE_OFFSET = 2,
@@ -136,10 +134,10 @@ function getCellDataType(field) {
     }
 
     if(field.format) {
-        if(numberLocalization.parse(formatHelper.format(1, field.format)) === 1) {
+        if(parse(format(1, field.format)) === 1) {
             return "number";
         }
-        if(formatHelper.format(new Date(), field.format)) {
+        if(format(new Date(), field.format)) {
             return "date";
         }
     }
