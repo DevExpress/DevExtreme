@@ -1,18 +1,18 @@
-var $ = require("../../../core/renderer"),
-    window = require("../../../core/utils/window").getWindow(),
-    Class = require("../../../core/class"),
-    stringFormat = require("../../../core/utils/string").format,
-    errors = require("../../../data/errors").errors,
-    noop = require("../../../core/utils/common").noop,
-    extend = require("../../../core/utils/extend").extend,
-    typeUtils = require("../../../core/utils/type"),
-    iteratorUtils = require("../../../core/utils/iterator"),
-    inArray = require("../../../core/utils/array").inArray,
-    pivotGridUtils = require("../ui.pivot_grid.utils"),
-    deferredUtils = require("../../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    getLanguageId = require("../../../localization/language_codes").getLanguageId;
+import $ from "../../../core/renderer";
+import { getWindow } from "../../../core/utils/window";
+import Class from "../../../core/class";
+import { format as stringFormat } from "../../../core/utils/string";
+import { errors } from "../../../data/errors";
+import { noop } from "../../../core/utils/common";
+import { extend } from "../../../core/utils/extend";
+import typeUtils from "../../../core/utils/type";
+import iteratorUtils from "../../../core/utils/iterator";
+import { inArray } from "../../../core/utils/array";
+import pivotGridUtils from "../ui.pivot_grid.utils";
+import { when, Deferred } from "../../../core/utils/deferred";
+import { getLanguageId } from "../../../localization/language_codes";
+
+var window = getWindow();
 
 exports.XmlaStore = Class.inherit((function() {
 

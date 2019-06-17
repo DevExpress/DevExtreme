@@ -1,11 +1,9 @@
-var typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    isDefined = typeUtils.isDefined,
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    findField = pivotGridUtils.findField,
-    foreachTree = pivotGridUtils.foreachTree,
-    COLUMN = "column",
+import typeUtils, { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import pivotGridUtils, { findField, foreachTree } from "./ui.pivot_grid.utils";
+
+var COLUMN = "column",
     ROW = "row",
     NULL = null,
 

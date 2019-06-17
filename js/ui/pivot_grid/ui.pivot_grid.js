@@ -1,40 +1,38 @@
-var $ = require("../../core/renderer"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
-    browser = require("../../core/utils/browser"),
-    eventsEngine = require("../../events/core/events_engine"),
-    registerComponent = require("../../core/component_registrator"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    stringUtils = require("../../core/utils/string"),
-    commonUtils = require("../../core/utils/common"),
-    each = require("../../core/utils/iterator").each,
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    clickEvent = require("../../events/click"),
-    messageLocalization = require("../../localization/message"),
-    Widget = require("../widget/ui.widget"),
-    eventUtils = require("../../events/utils"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    pivotGridDataController = require("./ui.pivot_grid.data_controller"),
-    PivotGridDataSource = require("./data_source"),
-    dataAreaNamespace = require("./ui.pivot_grid.data_area"),
-    headersArea = require("./ui.pivot_grid.headers_area"),
-    getSize = require("../../core/utils/size").getSize,
+import $ from "../../core/renderer";
+import windowUtils from "../../core/utils/window";
+var window = windowUtils.getWindow();
+import browser from "../../core/utils/browser";
+import eventsEngine from "../../events/core/events_engine";
+import registerComponent from "../../core/component_registrator";
+import { getPublicElement } from "../../core/utils/dom";
+import stringUtils from "../../core/utils/string";
+import commonUtils from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import clickEvent from "../../events/click";
+import messageLocalization from "../../localization/message";
+import Widget from "../widget/ui.widget";
+import eventUtils from "../../events/utils";
+import gridCoreUtils from "../grid_core/ui.grid_core.utils";
+import pivotGridUtils from "./ui.pivot_grid.utils";
+import pivotGridDataController from "./ui.pivot_grid.data_controller";
+import PivotGridDataSource from "./data_source";
+import dataAreaNamespace from "./ui.pivot_grid.data_area";
+import headersArea from "./ui.pivot_grid.headers_area";
+import { getSize } from "../../core/utils/size";
 
-    fieldsArea = require("./ui.pivot_grid.fields_area"),
+import fieldsArea from "./ui.pivot_grid.fields_area";
 
-    PivotGridFieldChooser = require("./ui.pivot_grid.field_chooser"),
-    PivotGridFieldChooserBase = require("./ui.pivot_grid.field_chooser_base"),
-    ExportMixin = require("./ui.pivot_grid.export").ExportMixin,
-    chartIntegrationMixin = require("./ui.pivot_grid.chart_integration"),
-    Popup = require("../popup"),
-    ContextMenu = require("../context_menu"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
+import PivotGridFieldChooser from "./ui.pivot_grid.field_chooser";
+import PivotGridFieldChooserBase from "./ui.pivot_grid.field_chooser_base";
+import { ExportMixin } from "./ui.pivot_grid.export";
+import chartIntegrationMixin from "./ui.pivot_grid.chart_integration";
+import Popup from "../popup";
+import ContextMenu from "../context_menu";
+import { when, Deferred } from "../../core/utils/deferred";
 
-    DATA_AREA_CELL_CLASS = "dx-area-data-cell",
+var DATA_AREA_CELL_CLASS = "dx-area-data-cell",
     ROW_AREA_CELL_CLASS = "dx-area-row-cell",
     COLUMN_AREA_CELL_CLASS = "dx-area-column-cell",
     DESCRIPTION_AREA_CELL_CLASS = "dx-area-description-cell",

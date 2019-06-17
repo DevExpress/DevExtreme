@@ -1,20 +1,16 @@
-var deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    dataUtils = require("../../data/utils"),
-    dataQuery = require("../../data/query"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    DataSourceModule = require("../../data/data_source/data_source"),
-    CustomStore = require("../../data/custom_store"),
-    dataCoreUtils = require("../../core/utils/data"),
-    Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    getFiltersByPath = pivotGridUtils.getFiltersByPath,
-    setFieldProperty = pivotGridUtils.setFieldProperty,
-    ArrayStore = require("../../data/array_store");
+import { when, Deferred } from "../../core/utils/deferred";
+import dataUtils from "../../data/utils";
+import dataQuery from "../../data/query";
+import dateSerialization from "../../core/utils/date_serialization";
+import DataSourceModule from "../../data/data_source/data_source";
+import CustomStore from "../../data/custom_store";
+import dataCoreUtils from "../../core/utils/data";
+import Class from "../../core/class";
+import commonUtils from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import pivotGridUtils, { getFiltersByPath, setFieldProperty } from "./ui.pivot_grid.utils";
+import ArrayStore from "../../data/array_store";
 
 const PATH_DELIMETER = "/./";
 

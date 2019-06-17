@@ -1,16 +1,14 @@
-var typeUtils = require("../../core/utils/type"),
-    ajax = require("../../core/utils/ajax"),
-    dataCoreUtils = require("../../core/utils/data"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    extend = require("../../core/utils/extend").extend,
-    isDefined = require("../../core/utils/type").isDefined,
-    dateLocalization = require("../../localization/date"),
-    formatHelper = require("../../format_helper"),
-    DataSourceModule = require("../../data/data_source/data_source"),
-    ArrayStore = require("../../data/array_store"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import typeUtils from "../../core/utils/type";
+import ajax from "../../core/utils/ajax";
+import dataCoreUtils from "../../core/utils/data";
+import iteratorUtils from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { isDefined } from "../../core/utils/type";
+import dateLocalization from "../../localization/date";
+import formatHelper from "../../format_helper";
+import DataSourceModule from "../../data/data_source/data_source";
+import ArrayStore from "../../data/array_store";
+import { when, Deferred } from "../../core/utils/deferred";
 
 var setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
     var initProperties = field._initProperties = field._initProperties || {},

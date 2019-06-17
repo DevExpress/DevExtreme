@@ -1,20 +1,21 @@
-var $ = require("../../core/renderer"),
-    iconUtils = require("../../core/utils/icon"),
-    hasWindow = require("../../core/utils/window").hasWindow(),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
-    messageLocalization = require("../../localization/message"),
-    registerComponent = require("../../core/component_registrator"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    TreeView = require("../tree_view"),
-    ContextMenu = require("../context_menu"),
-    BaseFieldChooser = require("./ui.pivot_grid.field_chooser_base"),
-    each = iteratorUtils.each,
-    DIV = "<div>";
+import $ from "../../core/renderer";
+import iconUtils from "../../core/utils/icon";
+import windowUtils from "../../core/utils/window";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import { each } from "../../core/utils/iterator";
+import messageLocalization from "../../localization/message";
+import registerComponent from "../../core/component_registrator";
+import pivotGridUtils from "./ui.pivot_grid.utils";
+import TreeView from "../tree_view";
+import ContextMenu from "../context_menu";
+import BaseFieldChooser from "./ui.pivot_grid.field_chooser_base";
 
-require("./data_source");
+var DIV = "<div>",
+    hasWindow = windowUtils.hasWindow();
+
+import "./data_source";
 
 var FIELDCHOOSER_CLASS = "dx-pivotgridfieldchooser",
     FIELDCHOOSER_CONTAINER_CLASS = "dx-pivotgridfieldchooser-container",

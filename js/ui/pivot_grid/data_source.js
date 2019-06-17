@@ -1,34 +1,30 @@
-var DataSourceModule = require("../../data/data_source/data_source"),
-    Store = require("../../data/abstract_store"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
-    isDefined = typeUtils.isDefined,
-    each = iteratorUtils.each,
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    Class = require("../../core/class"),
-    EventsMixin = require("../../core/events_mixin"),
-    inflector = require("../../core/utils/inflector"),
-    normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
-    localStore = require("./local_store"),
-    RemoteStore = require("./remote_store"),
-    xmlaStore = require("./xmla_store/xmla_store"),
-    summaryDisplayModes = require("./ui.pivot_grid.summary_display_modes"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    foreachTree = pivotGridUtils.foreachTree,
-    foreachTreeAsync = pivotGridUtils.foreachTreeAsync,
-    findField = pivotGridUtils.findField,
-    formatValue = pivotGridUtils.formatValue,
-    getCompareFunction = pivotGridUtils.getCompareFunction,
-    createPath = pivotGridUtils.createPath,
-    foreachDataLevel = pivotGridUtils.foreachDataLevel,
-    setFieldProperty = pivotGridUtils.setFieldProperty,
+import DataSourceModule from "../../data/data_source/data_source";
+import Store from "../../data/abstract_store";
+import commonUtils from "../../core/utils/common";
+import typeUtils, { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import iteratorUtils, { each } from "../../core/utils/iterator";
+import { when, Deferred } from "../../core/utils/deferred";
+import Class from "../../core/class";
+import EventsMixin from "../../core/events_mixin";
+import inflector from "../../core/utils/inflector";
+import { normalizeIndexes } from "../../core/utils/array";
+import localStore from "./local_store";
+import RemoteStore from "./remote_store";
+import xmlaStore from "./xmla_store/xmla_store";
+import summaryDisplayModes from "./ui.pivot_grid.summary_display_modes";
+import pivotGridUtils, { foreachTree,
+    foreachTreeAsync,
+    findField,
+    formatValue,
+    getCompareFunction,
+    createPath,
+    foreachDataLevel,
+    setFieldProperty
+} from "./ui.pivot_grid.utils";
 
-    DESCRIPTION_NAME_BY_AREA = {
+var DESCRIPTION_NAME_BY_AREA = {
         row: "rows",
         column: "columns",
         data: "values",

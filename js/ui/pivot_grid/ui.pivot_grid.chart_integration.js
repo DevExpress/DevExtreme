@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
-    pivotUtils = require("./ui.pivot_grid.utils"),
-    each = require("../../core/utils/iterator").each,
-    foreachTree = pivotUtils.foreachTree,
-    FORMAT_DICTIONARY = {
+import $ from "../../core/renderer";
+import { extend } from "../../core/utils/extend";
+import pivotUtils, { foreachTree } from "./ui.pivot_grid.utils";
+import { each } from "../../core/utils/iterator";
+
+var FORMAT_DICTIONARY = {
         number: "numeric",
         date: "datetime"
     },

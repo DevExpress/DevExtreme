@@ -1,23 +1,23 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    ArrayStore = require("../../data/array_store"),
-    clickEvent = require("../../events/click"),
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    inArray = require("../../core/utils/array").inArray,
-    extend = require("../../core/utils/extend").extend,
-    iteratorUtils = require("../../core/utils/iterator"),
-    messageLocalization = require("../../localization/message"),
-    registerComponent = require("../../core/component_registrator"),
-    Widget = require("../widget/ui.widget"),
-    headerFilter = require("../grid_core/ui.grid_core.header_filter_core"),
-    columnStateMixin = require("../grid_core/ui.grid_core.column_state_mixin"),
-    sortingMixin = require("../grid_core/ui.grid_core.sorting_mixin"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    Sortable = require("./ui.sortable"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    each = iteratorUtils.each,
-    IE_FIELD_WIDTH_CORRECTION = 1,
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import ArrayStore from "../../data/array_store";
+import clickEvent from "../../events/click";
+import { noop } from "../../core/utils/common";
+import { isDefined } from "../../core/utils/type";
+import { inArray } from "../../core/utils/array";
+import { extend } from "../../core/utils/extend";
+import iteratorUtils, { each } from "../../core/utils/iterator";
+import messageLocalization from "../../localization/message";
+import registerComponent from "../../core/component_registrator";
+import Widget from "../widget/ui.widget";
+import headerFilter from "../grid_core/ui.grid_core.header_filter_core";
+import columnStateMixin from "../grid_core/ui.grid_core.column_state_mixin";
+import sortingMixin from "../grid_core/ui.grid_core.sorting_mixin";
+import pivotGridUtils from "./ui.pivot_grid.utils";
+import Sortable from "./ui.sortable";
+import { Deferred } from "../../core/utils/deferred";
+
+var IE_FIELD_WIDTH_CORRECTION = 1,
     DIV = "<div>";
 
 var HeaderFilterView = headerFilter.HeaderFilterView.inherit({

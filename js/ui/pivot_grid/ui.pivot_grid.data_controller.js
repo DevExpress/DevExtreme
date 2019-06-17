@@ -1,24 +1,24 @@
-var Callbacks = require("../../core/utils/callbacks"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
-    Class = require("../../core/class"),
-    stringUtils = require("../../core/utils/string"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    virtualScrolling = require("../grid_core/ui.grid_core.virtual_scrolling_core"),
-    virtualColumnsCore = require("../grid_core/ui.grid_core.virtual_columns_core"),
-    stateStoring = require("../grid_core/ui.grid_core.state_storing_core"),
-    PivotGridDataSource = require("./data_source"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    foreachTree = pivotGridUtils.foreachTree,
-    foreachTreeAsync = pivotGridUtils.foreachTreeAsync,
-    createPath = pivotGridUtils.createPath,
-    formatValue = pivotGridUtils.formatValue,
-    math = Math,
+import Callbacks from "../../core/utils/callbacks";
+import { when, Deferred } from "../../core/utils/deferred";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import iteratorUtils from "../../core/utils/iterator";
+import Class from "../../core/class";
+import stringUtils from "../../core/utils/string";
+import commonUtils from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import virtualScrolling from "../grid_core/ui.grid_core.virtual_scrolling_core";
+import virtualColumnsCore from "../grid_core/ui.grid_core.virtual_columns_core";
+import stateStoring from "../grid_core/ui.grid_core.state_storing_core";
+import PivotGridDataSource from "./data_source";
+import pivotGridUtils, {
+    foreachTree,
+    foreachTreeAsync,
+    createPath,
+    formatValue
+} from "./ui.pivot_grid.utils";
+
+var math = Math,
     GRAND_TOTAL_TYPE = "GT",
     TOTAL_TYPE = "T",
     DATA_TYPE = "D",
