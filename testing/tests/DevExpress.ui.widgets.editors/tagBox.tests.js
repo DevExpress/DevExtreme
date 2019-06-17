@@ -3080,7 +3080,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
     });
 
-    QUnit.test("filtering operation should respect'expand' parameter of the dataSource", (assert) => {
+    QUnit.test("filtering operation should pass 'expand' parameter to the dataSource", (assert) => {
         const done = assert.async();
 
         ajaxMock.setup({
