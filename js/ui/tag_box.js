@@ -825,10 +825,11 @@ var TagBox = SelectBox.inherit({
             var filter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
             var loadOptions = dataSource.loadOptions();
             var customQueryParams = loadOptions.customQueryParams;
+            var expand = loadOptions.expand;
 
             dataSource
                 .store()
-                .load({ filter, customQueryParams })
+                .load({ filter, customQueryParams, expand })
                 .done(function(items) {
                     var mappedItems = dataSource._applyMapFunction(items);
                     d.resolve(mappedItems.filter(clientFilterFunction));
