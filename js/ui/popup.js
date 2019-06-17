@@ -700,8 +700,10 @@ var Popup = Overlay.inherit({
             contentMinHeight = this._getOptionValue("minHeight", overlayContent);
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
-            var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
-            cssStyles = { height: Math.max(0, contentHeight) };
+            if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
+                var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
+                cssStyles = { height: Math.max(0, contentHeight) };
+            }
         } else {
             var container = $(this._getContainer()).get(0),
                 maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
