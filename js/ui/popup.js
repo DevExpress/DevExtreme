@@ -690,7 +690,7 @@ var Popup = Overlay.inherit({
     },
 
     _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent) {
-        var cssStyles,
+        var cssStyles = {},
             popupHeightParts = this._splitPopupHeight(),
             toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
                 + popupHeightParts.footer
