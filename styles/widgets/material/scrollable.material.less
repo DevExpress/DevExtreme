@@ -136,65 +136,6 @@
     }
 }
 
-.dx-scrollable-customizable-scrollbars .dx-scrollable-container {
-    /*IE*/
-    -ms-scrollbar-base-color: @scrollable-scrollbar-custom-bg;
-    -ms-scrollbar-arrow-color: @scrollable-scrollbar-arrow-custom-bg;
-    -ms-scrollbar-track-color: @scrollable-scrollbar-custom-bg;
-
-    /*Chrome and Safari*/
-    ::-webkit-scrollbar:horizontal {
-        height: 19px;
-    }
-
-    ::-webkit-scrollbar:vertical {
-        width: 19px;
-    }
-
-    ::-webkit-scrollbar {
-        background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: @scrollable-scrollbar-thumb-bg;
-        border-right: 2px solid transparent;
-        border-left: 1px solid transparent;
-        background-clip: content-box;
-    }
-
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-corner {
-        background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-button {
-        background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-button:horizontal:decrement {
-        background: @scrollbar-button-horizontal-decrement-bg;
-        background-position: center;
-    }
-
-    ::-webkit-scrollbar-button:horizontal:increment {
-        background: @scrollbar-button-horizontal-increment-bg;
-        background-position: center;
-    }
-
-    ::-webkit-scrollbar-button:vertical:decrement {
-        background: @scrollbar-button-vertical-decrement-bg;
-        background-position: 3px 5px;
-    }
-
-    ::-webkit-scrollbar-button:vertical:increment {
-        background: @scrollbar-button-vertical-increment-bg;
-        background-position: 3px 5px;
-    }
-}
-
 .dx-scrollview-scrollbottom-text, 
 .dx-scrollview-pull-down-text {
     margin-left: 10px;
