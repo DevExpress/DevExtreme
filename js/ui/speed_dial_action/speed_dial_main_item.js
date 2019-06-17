@@ -142,6 +142,11 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         }
     },
 
+    _setPosition() {
+        this._normalizePosition();
+        this._actions.onPositioned({ position: this._renderPosition() });
+    },
+
     _optionChanged(args) {
         switch(args.name) {
             case "actions":
@@ -157,6 +162,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._renderCloseIcon();
                 break;
             case "position":
+                this._setPosition();
                 break;
             default:
                 this.callBase(args);
@@ -207,7 +213,10 @@ exports.initAction = function(newAction) {
                 position: speedDialMainItem._getDefaultOptions().position
             }));
         } else {
-            speedDialMainItem.option({ actions: savedActions });
+            speedDialMainItem.option({
+                actions: savedActions,
+                position: speedDialMainItem._getDefaultOptions().position
+            });
         }
     }
 };
@@ -236,6 +245,8 @@ exports.disposeAction = function(actionId) {
             position: speedDialMainItem._getDefaultOptions().position
         }));
     } else {
-        speedDialMainItem.option({ actions: savedActions });
+        speedDialMainItem.option({
+            actions: savedActions
+        });
     }
 };
