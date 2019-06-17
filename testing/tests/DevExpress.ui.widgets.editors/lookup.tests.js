@@ -1334,6 +1334,32 @@ QUnit.test("list display items when 'minSearchLength' is not exceeded and 'showD
     assert.equal(this.$list.find(".dx-list-item").length, 3);
 });
 
+
+QUnit.test("Lookup should catch delayed data", function(assert) {
+    var items = [{
+        "ID": 1,
+        "Name": "John"
+    }, {
+        "ID": 2,
+        "Name": "Olivia"
+    }];
+
+    this.element.dxLookup({
+        dataSource: [],
+        displayExpr: 'Name',
+        valueExpr: "ID",
+        value: 1,
+        title: "Select employee"
+    });
+
+    setTimeout(()=>{
+        $("#lookup").dxLookup("instance").option("dataSource", items);
+    }, 100);
+    this.clock.tick(100);
+
+    assert.equal(this.$field.text(), "John", "display field work in text");
+});
+
 QUnit.test("dxLookup should accept undefined value (T141821)", function(assert) {
     assert.expect(0);
 

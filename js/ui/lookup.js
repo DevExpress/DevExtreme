@@ -17,7 +17,9 @@ var $ = require("../core/renderer"),
     Popover = require("./popover"),
     TextBox = require("./text_box"),
     ChildDefaultTemplate = require("./widget/child_default_template"),
-    translator = require("../animation/translator");
+    translator = require("../animation/translator"),
+    deferredUtils = require("../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred;
 
 var LOOKUP_CLASS = "dx-lookup",
     LOOKUP_SEARCH_CLASS = "dx-lookup-search",
@@ -1180,9 +1182,21 @@ var Lookup = DropDownList.inherit({
 
     _renderInputValue: function() {
         return this.callBase().always((function() {
-            this._refreshSelected();
+            this._renderInputValueAsync();
             this._setSubmitValue();
         }).bind(this));
+    },
+
+    _renderInputValueImpl: function() {
+        this._renderField();
+
+        return new Deferred().resolve();
+    },
+
+    _renderInputValueAsync: function() {
+        this._renderInputValueImpl().always(function() {
+            this._refreshSelected();
+        }.bind(this));
     },
 
     _setSubmitValue: function() {
