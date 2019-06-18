@@ -1,7 +1,7 @@
 .grid-base(@widgetName) {
     @GRID_BASE_CELL_PADDING: 7px;
-    @GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-first-shadow-color}";
-    @GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
+    @GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px ~"@{@{widgetName}-drag-header-first-shadow-color}";
+    @GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
     @GRID_BASE_BUTTON_SIZE: 21px;
     @GRID_BASE_GROUP_COLUMN_ICONS_SIZE: 24px;
     @GRID_BASE_CONTEXT_MENU_SORT_ICON_SIZE: 20px;
@@ -101,7 +101,7 @@
 
             .dx-menu-horizontal {
                 .dx-menu-item-content {
-                    padding: 8px 0px 6px 7px;
+                    padding: 8px 0 6px 7px;
                 }
             }
         }
@@ -121,7 +121,7 @@
         }
 
         .dx-column-lines > td {
-            border-left-width: 0px;
+            border-left-width: 0;
         }
 
 
@@ -132,8 +132,8 @@
                 }
 
                 .dx-texteditor-input {
-                    border-radius: 0px;
-                    border-width: 0px;
+                    border-radius: 0;
+                    border-width: 0;
                     background: ~"@{@{widgetName}-editor-background}";
                 }
 
@@ -207,12 +207,12 @@
         }
 
         &, .dx-texteditor-container {
-            border-radius: 0px;
+            border-radius: 0;
         }
 
         .dx-editor-container.dx-highlight-outline::after {
             border-color: ~"@{@{widgetName}-data-modified-color}";
-            left: 0px;
+            left: 0;
         }
 
         .dx-texteditor {
@@ -301,18 +301,18 @@
         }
 
         .dx-overlay-content {
-            border-radius: 0px;
-            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+            border-radius: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 
             .dx-popup-content {
                 .dx-list-item-content::after {
-                    height: 0px;
+                    height: 0;
                 }
 
                 .dx-column-chooser-item {
-                    padding: 0px;
+                    padding: 0;
                     border: ~"@{@{widgetName}-border}";
-                    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
+                    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.2);
                     background-color: ~"@{@{widgetName}-headers-background-color}";
 
                     .dx-treeview-item-content {
@@ -323,7 +323,7 @@
                         padding: @GRID_BASE_CELL_PADDING;
 
                         &::after {
-                            margin-top: 0px;
+                            margin-top: 0;
                         }
                     }
                 }
@@ -464,7 +464,7 @@
         }
 
         .dx-link {
-            padding: @GRID_BASE_CELL_PADDING 0px @GRID_BASE_CELL_PADDING 10px;
+            padding: @GRID_BASE_CELL_PADDING 0 @GRID_BASE_CELL_PADDING 10px;
         }
     }
 
@@ -533,7 +533,7 @@
             .dx-invalid-message {
                 .dx-overlay-content {
                     padding: 10px 17px 9px;
-                    border-radius: 0px;
+                    border-radius: 0;
                 }
             }
 
@@ -700,7 +700,7 @@
             .dx-menu {
                 .dx-menu-horizontal {
                     .dx-menu-item-content {
-                        padding: 8px 11px 7px 0px;
+                        padding: 8px 11px 7px 0;
                     }
                 }
             }

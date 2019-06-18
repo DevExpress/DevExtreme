@@ -1,6 +1,6 @@
 @PIVOTGRID_DRAG_HEADER_BORDER: 1px solid @PIVOTGRID_DRAG_HEADER_BORDER_COLOR;
-@PIVOTGRID_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px @PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR;
-@PIVOTGRID_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR;
+@PIVOTGRID_DRAG_HEADER_FIRST_SHADOW: 0 0 1px @PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR;
+@PIVOTGRID_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR;
 @PIVOTGRID_BORDER_WIDTH: 1px;
 @PIVOTGRID_BORDER: @PIVOTGRID_BORDER_WIDTH solid @PIVOTGRID_BORDER_COLOR;
 @PIVOTGRID_ICON_SIZE: 14px;
@@ -166,7 +166,7 @@
         }
 
         .dx-pivotgrid-area-data tr:first-child > td {
-            border-top-width: 0px;
+            border-top-width: 0;
         }
     }
 
@@ -288,12 +288,12 @@
             }
 
                 td:first-child {
-                    border-left: 0px;
+                    border-left: 0;
                 }
 
             tr:first-child {
                 .dx-total, .dx-grandtotal {
-                    border-top-width: 0px;
+                    border-top-width: 0;
                 }
             }
         }
@@ -306,7 +306,7 @@
         }
 
         .dx-last-cell {
-            border-right: 0px;
+            border-right: 0;
         }
 
         td {
@@ -316,12 +316,12 @@
         }
 
         tr:first-child td {
-            border-top: 0px;
+            border-top: 0;
         }
 
         .dx-pivotgrid-fields-area-head{
             td:last-child{
-                border-right: 0px;
+                border-right: 0;
             }
         }
 
@@ -365,11 +365,11 @@
         }
 
             td:first-child {
-                border-left: 0px;
+                border-left: 0;
             }
 
         tr:first-child td {
-            border-top: 0px;
+            border-top: 0;
         }
     }
 
@@ -439,7 +439,7 @@
 
         .dx-pivotgrid-fields-area-head {
             td {
-                 padding: 0px 2px;
+                 padding: 0 2px;
              }
         }
     }
@@ -619,46 +619,46 @@
         .dx-area-row-cell,
         .dx-area-description-cell {
         border-left: @PIVOTGRID_BORDER;
-        border-right: 0px;
+        border-right: 0;
     }
 
         .dx-pivotgrid-area-data {
             tbody td {
-                border-left: 0px;
+                border-left: 0;
                 border-right: @PIVOTGRID_BORDER;
             }
         }
 
         .dx-pivotgrid-area-data tbody td:first-child {
             border-left: @PIVOTGRID_BORDER;
-            border-right: 0px;
+            border-right: 0;
         }
 
         .dx-pivotgrid-vertical-headers {
             td {
-            border-right: 0px;
+            border-right: 0;
             border-left: @PIVOTGRID_BORDER;
         }
 
             .dx-last-cell {
-            border-left: 0px;
-            border-right: 0px;
+            border-left: 0;
+            border-right: 0;
         }
         }
 
         .dx-pivotgrid-horizontal-headers {
         &.dx-vertical-scroll {
-            border-right: 0px;
+            border-right: 0;
             border-left: @PIVOTGRID_BORDER;
         }
 
         &.dx-pivotgrid-area {
-            border-left: 0px;
+            border-left: 0;
         }
 
         td:first-child {
             border-left: @PIVOTGRID_BORDER;
-            border-right: 0px;
+            border-right: 0;
         }
     }
 

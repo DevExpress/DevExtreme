@@ -4,7 +4,7 @@
     @GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 10px;
     @GENERIC_GRID_BASE_MENU_ITEM_PADDING: 6px 5px 7px;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING: 20px;
-    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
+    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0 @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 10px;
     @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 10px;
     @GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 70px;
@@ -23,7 +23,7 @@
     @GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 5px;
     @GENERIC_GRID_BASE_MENU_ITEM_PADDING: 5px 3px 3px;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING: 10px;
-    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
+    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0 @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 5px;
     @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 5px;
     @GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
@@ -41,8 +41,8 @@
     @GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
     @GENERIC_GRID_BASE_BORDER_COLOR: ~"@{@{widgetName}-border-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
-    @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
-    @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
+    @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px ~"@{@{widgetName}-drag-header-shadow-color}";
+    @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
     @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
     .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
@@ -230,7 +230,7 @@
         }
 
         .dx-icon-clear {
-            left: 0px;
+            left: 0;
         }
 
         .dx-texteditor {
@@ -314,7 +314,7 @@
         .dx-overlay-content {
             background-color: ~"@{@{widgetName}-columnchooser-bg}";
             border-radius: ~"@{@{widgetName}-columnchooser-overlay-border-radius}";
-            box-shadow: 0px 1px 3px ~"@{@{widgetName}-columnchooser-shadow-color}";
+            box-shadow: 0 1px 3px ~"@{@{widgetName}-columnchooser-shadow-color}";
 
             .dx-popup-title {
                 padding-top: 7px;
@@ -330,7 +330,7 @@
                     font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
                     border: ~"@{@{widgetName}-border}";
                     padding: @GENERIC_GRID_BASE_CELL_PADDING;
-                    box-shadow: 0px 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}";
+                    box-shadow: 0 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}";
                 }
             }
         }
@@ -492,7 +492,7 @@
 
             .dx-editor-container.dx-highlight-outline::after {
                 border-color: ~"@{@{widgetName}-cell-modified-border-color}";
-                left: 0px;
+                left: 0;
             }
 
             .dx-texteditor {
@@ -516,7 +516,7 @@
                 .dx-menu-item-content {
                     padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
                     .dx-icon {
-                        margin: 0px 3px;
+                        margin: 0 3px;
                     }
                 }
             }
@@ -619,7 +619,7 @@
             border-bottom: @GENERIC_GRID_BASE_ROW_BORDER;
 
             &.dx-edit-row:first-child > td {
-                border-top-width: 0px;
+                border-top-width: 0;
                 border-bottom: ~"@{@{widgetName}-border}";
             }
 
@@ -852,7 +852,7 @@
         }
 
         .dx-revert-button {
-            margin: 0px 1px;
+            margin: 0 1px;
             margin-left: 1px;
             .dx-button-styling-variant(
                 @button-danger-bg, @button-danger-border-color, @button-danger-color,
@@ -907,7 +907,7 @@
             .dx-menu {
                 .dx-menu-item-has-submenu.dx-menu-item-has-icon {
                     .dx-icon {
-                         margin: 0px 3px;
+                         margin: 0 3px;
                     }
                 }
             }
