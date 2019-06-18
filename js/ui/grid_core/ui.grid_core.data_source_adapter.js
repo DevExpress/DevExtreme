@@ -448,7 +448,8 @@ module.exports = gridCore.Controller.inherit((function() {
                 if(dataSource.pageIndex() >= that.pageCount()) {
                     dataSource.pageIndex(that.pageCount() - 1);
                     that.pageIndex(dataSource.pageIndex());
-                    dataSource.reload();
+                    that.resetPagesCache();
+                    dataSource.load();
                     isLoading = true;
                 }
             } else {
