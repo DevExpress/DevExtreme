@@ -13,7 +13,6 @@
         "block-closing-brace-newline-before": null,
         "declaration-block-no-duplicate-properties": null,
         "selector-descendant-combinator-no-non-space": null,
-        "value-list-comma-newline-after": null,
         "block-opening-brace-newline-after": null,
         "property-no-unknown": null,
         "font-family-no-missing-generic-family-keyword": null,
