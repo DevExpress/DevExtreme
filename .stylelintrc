@@ -7,7 +7,6 @@
         "max-empty-lines": 2,
         "selector-pseudo-element-colon-notation": null,
         "declaration-empty-line-before": null,
-        "number-leading-zero": null,
         "block-opening-brace-space-before": null,
         "block-closing-brace-empty-line-before": null,
         "block-closing-brace-newline-before": null,
