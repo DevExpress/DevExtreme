@@ -3,7 +3,6 @@
     "ignoreFiles": "**/*.json",
     "rules": {
         "indentation": null,
-        "comment-empty-line-before": null,
         "length-zero-no-unit": null,
         "selector-list-comma-newline-after": null,
         "max-empty-lines": null,
