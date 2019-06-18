@@ -25,7 +25,7 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
         if(!this._nameTextBox) {
             return;
         }
-        const $textBoxInput = $(this._nameTextBox.element()).find("input");
+        const $textBoxInput = this._nameTextBox._input();
         $textBoxInput.length && $textBoxInput[0].select();
         this._nameTextBox.focus();
     }
