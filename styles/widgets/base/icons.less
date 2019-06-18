@@ -67,7 +67,8 @@
 .dx-font-icons(@font-file: "dxicons", @font-name: "DevExtreme Generic Icons", @font-name-safari: "devextreme_generic_icons") {
     @font-face {
         font-family: 'DXIcons';
-        src: local("@{font-name}"),
+        src:
+             local("@{font-name}"),
              local("@{font-name-safari}"),
              url(~"icons/@{font-file}.woff2") format('woff2'),
              url(~"icons/@{font-file}.woff") format('woff'),
