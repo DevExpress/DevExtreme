@@ -7,16 +7,11 @@
         "max-empty-lines": 2,
         "selector-pseudo-element-colon-notation": null,
         "declaration-empty-line-before": null,
-        "block-opening-brace-space-before": null,
-        "block-closing-brace-empty-line-before": null,
-        "block-closing-brace-newline-before": null,
         "declaration-block-no-duplicate-properties": null,
-        "block-opening-brace-newline-after": null,
         "property-no-unknown": null,
         "rule-empty-line-before": null,
         "no-descending-specificity": null,
         "no-duplicate-selectors": null,
-        "no-empty-source": null,
-        "block-closing-brace-space-before": null
+        "no-empty-source": null
     }
 }
