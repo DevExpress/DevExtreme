@@ -1,16 +1,17 @@
-var typeUtils = require("../../core/utils/type"),
-    ajax = require("../../core/utils/ajax"),
-    dataCoreUtils = require("../../core/utils/data"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    extend = require("../../core/utils/extend").extend,
-    isDefined = require("../../core/utils/type").isDefined,
-    dateLocalization = require("../../localization/date"),
-    formatHelper = require("../../format_helper"),
-    DataSourceModule = require("../../data/data_source/data_source"),
-    ArrayStore = require("../../data/array_store"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import { isNumeric, isDefined, type } from "../../core/utils/type";
+import { sendRequest } from "../../core/utils/ajax";
+import { compileGetter } from "../../core/utils/data";
+import { each, map } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import {
+    getMonthNames,
+    format as formatDate,
+    getDayNames
+} from "../../localization/date";
+import { format } from "../../format_helper";
+import { DataSource } from "../../data/data_source/data_source";
+import ArrayStore from "../../data/array_store";
+import { when, Deferred } from "../../core/utils/deferred";
 
 var setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
     var initProperties = field._initProperties = field._initProperties || {},
@@ -24,7 +25,7 @@ var setFieldProperty = exports.setFieldProperty = function(field, property, valu
 };
 
 exports.sendRequest = function(options) {
-    return ajax.sendRequest(options);
+    return sendRequest(options);
 };
 
 var foreachTreeAsyncDate = new Date();
@@ -99,7 +100,7 @@ exports.findField = function(fields, id) {
     var i,
         field;
 
-    if(fields && typeUtils.isDefined(id)) {
+    if(fields && isDefined(id)) {
         for(i = 0; i < fields.length; i++) {
             field = fields[i];
             if(field.name === id || field.caption === id || field.dataField === id || field.index === id) {
@@ -113,7 +114,7 @@ exports.findField = function(fields, id) {
 exports.formatValue = function(value, options) {
     var formatObject = {
         value: value,
-        valueText: formatHelper.format(value, options.format) || ''
+        valueText: format(value, options.format) || ''
     };
     return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
 };
@@ -194,7 +195,7 @@ exports.getExpandedLevel = function(options, axisName) {
     } else if(options.headerName && options.headerName !== axisName && options.oppositePath) {
         expandLevel = options.oppositePath.length;
     } else {
-        iteratorUtils.each(expandedPaths, function(_, path) {
+        each(expandedPaths, function(_, path) {
             expandLevel = Math.max(expandLevel, path.length);
         });
     }
@@ -207,7 +208,7 @@ exports.getExpandedLevel = function(options, axisName) {
 };
 
 function createGroupFields(item) {
-    return iteratorUtils.map(["year", "quarter", "month"], function(value, index) {
+    return map(["year", "quarter", "month"], function(value, index) {
         return extend({}, item, { groupInterval: value, groupIndex: index });
     });
 }
@@ -215,22 +216,22 @@ function createGroupFields(item) {
 function parseFields(dataSource, fieldsList, path, fieldsDataType) {
     var result = [];
 
-    iteratorUtils.each(fieldsList || [], function(field, value) {
+    each(fieldsList || [], function(field, value) {
         if(field && field.indexOf("__") === 0) return;
 
         var dataIndex = 1,
             currentPath = path.length ? path + "." + field : field,
             dataType = fieldsDataType[currentPath],
-            getter = dataCoreUtils.compileGetter(currentPath),
+            getter = compileGetter(currentPath),
             items;
 
-        while(!typeUtils.isDefined(value) && dataSource[dataIndex]) {
+        while(!isDefined(value) && dataSource[dataIndex]) {
             value = getter(dataSource[dataIndex]);
             dataIndex++;
         }
 
-        if(!dataType && typeUtils.isDefined(value)) {
-            dataType = typeUtils.type(value);
+        if(!dataType && isDefined(value)) {
+            dataType = type(value);
         }
 
         items = [{
@@ -260,7 +261,7 @@ exports.discoverObjectFields = function(items, fields) {
 
 exports.getFieldsDataType = function(fields) {
     var result = {};
-    iteratorUtils.each(fields, function(_, field) {
+    each(fields, function(_, field) {
         result[field.dataField] = result[field.dataField] || field.dataType;
     });
     return result;
@@ -268,13 +269,13 @@ exports.getFieldsDataType = function(fields) {
 
 var DATE_INTERVAL_FORMATS = {
     'month': function(value) {
-        return dateLocalization.getMonthNames()[value - 1];
+        return getMonthNames()[value - 1];
     },
     'quarter': function(value) {
-        return dateLocalization.format(new Date(2000, value * 3 - 1), 'quarter');
+        return formatDate(new Date(2000, value * 3 - 1), 'quarter');
     },
     'dayOfWeek': function(value) {
-        return dateLocalization.getDayNames()[value];
+        return getDayNames()[value];
     }
 };
 
@@ -284,12 +285,12 @@ exports.setDefaultFieldValueFormatting = function(field) {
             setFieldProperty(field, "format", DATE_INTERVAL_FORMATS[field.groupInterval]);
         }
     } else if(field.dataType === 'number') {
-        var groupInterval = typeUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
+        var groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
         if(groupInterval && !field.customizeText) {
             setFieldProperty(field, "customizeText", function(formatObject) {
                 var secondValue = formatObject.value + groupInterval,
-                    secondValueText = formatHelper.format(secondValue, field.format);
+                    secondValueText = format(secondValue, field.format);
 
                 return formatObject.valueText && secondValueText ? formatObject.valueText + " - " + secondValueText : "";
             });
@@ -335,7 +336,7 @@ exports.storeDrillDownMixin = {
 
         var items = this.getDrillDownItems(descriptions, params),
             arrayStore,
-            dataSource = new DataSourceModule.DataSource({
+            dataSource = new DataSource({
                 load: createCustomStoreMethod("load"),
                 totalCount: createCustomStoreMethod("totalCount"),
                 key: this.key()

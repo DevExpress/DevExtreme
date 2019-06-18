@@ -1665,6 +1665,46 @@ QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", functio
     clock.restore();
 });
 
+// T744592
+QUnit.test("freeSpaceRow height should not be changed after editing next cell", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        $grid = $("#dataGrid").dxDataGrid({
+            dataSource: [
+                { id: 1, field1: "field1" },
+                { id: 2, field1: "field1" },
+                { id: 3, field1: "field1" }
+            ],
+            paging: {
+                pageSize: 2
+            },
+            keyExpr: "id",
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            }
+        }),
+        dataGrid = $grid.dxDataGrid("instance");
+
+    clock.tick();
+
+    dataGrid.pageIndex(1);
+    clock.tick();
+    dataGrid.cellValue(0, "field1", "updated");
+    clock.tick();
+    dataGrid.saveEditData();
+
+    // act
+    dataGrid.focus(dataGrid.getCellElement(0, "field1"));
+
+    // assert
+    assert.ok($grid.find(".dx-freespace-row").is(":visible"), "Free space row is visible");
+    assert.equal(dataGrid.totalCount(), -1, "totalCount");
+    assert.equal(dataGrid.getController("data").isLoading(), true, "isLoading");
+
+    clock.restore();
+});
+
 QUnit.test("Lose focus on start of resize columns", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
@@ -5623,7 +5663,72 @@ QUnit.test("Console errors should not be occurs when stateStoring enabled with s
 
     // assert
     assert.ok(dataGrid);
-    assert.equal(errors.log.getCalls().length, 0, "no error maeesages in console");
+    assert.deepEqual(errors.log.getCalls().length, 0, "no error maeesages in console");
+
+    clock.restore();
+});
+
+// T748677
+QUnit.test("getSelectedRowsData should works if selectedRowKeys is defined and state is empty", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [{ id: 1, text: "Text 1" }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return {};
+                }
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], "selectedRowKeys");
+    assert.deepEqual(dataGrid.getSelectedRowsData(), [{ id: 1, text: "Text 1" }], "getSelectedRowsData result");
+
+    clock.restore();
+});
+
+QUnit.test("empty selection should be restored from state storing if selectedRowKeys option is defined", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [{ id: 1, text: "Text 1" }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: []
+                    };
+                }
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "selectedRowKeys");
+    assert.deepEqual(dataGrid.getSelectedRowsData(), [], "getSelectedRowsData result");
 
     clock.restore();
 });

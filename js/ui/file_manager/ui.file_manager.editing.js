@@ -103,38 +103,33 @@ class FileManagerEditingControl extends Widget {
                 affectsAllItems: true,
                 dialog: this._createFolderDialog,
                 action: ([item], { name }) => this._provider.createFolder(item, name),
-                getSuccessMessage: items => "Folder created",
-                getErrorMessage: ([{ name }], info) => `Create folder operation failed for the ${name} parent folder`
+                getSuccessMessage: items => "Folder created"
             },
 
             rename: {
                 dialog: this._renameItemDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: ([item], { name }) => this._provider.renameItem(item, name),
-                getSuccessMessage: items => "Item renamed",
-                getErrorMessage: ([{ name }], info) => `Rename operation failed for the ${name} item`,
+                getSuccessMessage: items => "Item renamed"
             },
 
             delete: {
                 dialog: this._confirmationDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: (items, arg) => this._provider.deleteItems(items),
-                getSuccessMessage: items => "Items deleted",
-                getErrorMessage: (items, { index }) => `Delete operation failed for the ${items[index].name} item`
+                getSuccessMessage: items => "Items deleted"
             },
 
             move: {
                 dialog: this._chooseFolderDialog,
                 action: (items, arg) => this._provider.moveItems(items, arg.folder),
-                getSuccessMessage: items => "Items moved",
-                getErrorMessage: (items, info) => `Move operation failed for the ${items[info.index].name} item`
+                getSuccessMessage: items => "Items moved"
             },
 
             copy: {
                 dialog: this._chooseFolderDialog,
                 action: (items, arg) => this._provider.copyItems(items, arg.folder),
-                getSuccessMessage: items => "Items copied",
-                getErrorMessage: (items, info) => `Copy operation failed for the ${items[info.index].name} item`
+                getSuccessMessage: items => "Items copied"
             },
 
             upload: this._tryUpload.bind(this),
@@ -179,13 +174,18 @@ class FileManagerEditingControl extends Widget {
         this._showDialog(action.dialog, dialogArgumentGetter(items))
             .then(dialogResult => action.action(items, dialogResult))
             .then(result => {
-                whenSome(result,
+                whenSome(
+                    result,
                     () => this._raiseOnSuccess(action.getSuccessMessage(items), onlyFiles),
-                    info => {
-                        const fileItem = items[info.index];
-                        this._raiseOnError(info.errorId, fileItem);
-                    });
-            });
+                    info => this._onFileProviderError(info, items)
+                );
+            },
+            info => this._onFileProviderError(info, items));
+    }
+
+    _onFileProviderError(errorInfo, fileItems) {
+        const fileItem = fileItems[errorInfo.index];
+        this._raiseOnError(errorInfo.errorId, fileItem);
     }
 
     _tryUpload(destinationFolder) {

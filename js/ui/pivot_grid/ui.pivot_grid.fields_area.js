@@ -1,13 +1,14 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    each = require("../../core/utils/iterator").each,
-    areaItem = require("./ui.pivot_grid.area_item"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    Popup = require("../popup"),
-    Button = require("../button"),
-    DIV = "<div>";
+import $ from "../../core/renderer";
+import { noop } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import { AreaItem } from "./ui.pivot_grid.area_item";
+import { capitalizeFirstLetter } from "./ui.pivot_grid.utils";
+import Popup from "../popup";
+import Button from "../button";
 
-require("./ui.pivot_grid.field_chooser_base");
+var DIV = "<div>";
+
+import "./ui.pivot_grid.field_chooser_base";
 
 var AREA_DRAG_CLASS = "dx-pivotgrid-drag-action";
 
@@ -21,7 +22,7 @@ function renderGroupConnector(field, nextField, prevField, $container) {
     }
 }
 
-exports.FieldsArea = areaItem.AreaItem.inherit({
+exports.FieldsArea = AreaItem.inherit({
 
     ctor: function(component, area) {
         this.callBase(component);
@@ -37,7 +38,7 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
     },
 
     isVisible: function() {
-        return !!this.option("fieldPanel.visible") && this.option("fieldPanel.show" + pivotGridUtils.capitalizeFirstLetter(this._area) + "Fields");
+        return !!this.option("fieldPanel.visible") && this.option("fieldPanel.show" + capitalizeFirstLetter(this._area) + "Fields");
     },
 
     _renderButton: function(element) {

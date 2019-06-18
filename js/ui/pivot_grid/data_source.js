@@ -1,34 +1,32 @@
-var DataSourceModule = require("../../data/data_source/data_source"),
-    Store = require("../../data/abstract_store"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
-    isDefined = typeUtils.isDefined,
-    each = iteratorUtils.each,
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    Class = require("../../core/class"),
-    EventsMixin = require("../../core/events_mixin"),
-    inflector = require("../../core/utils/inflector"),
-    normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
-    localStore = require("./local_store"),
-    RemoteStore = require("./remote_store"),
-    xmlaStore = require("./xmla_store/xmla_store"),
-    summaryDisplayModes = require("./ui.pivot_grid.summary_display_modes"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    foreachTree = pivotGridUtils.foreachTree,
-    foreachTreeAsync = pivotGridUtils.foreachTreeAsync,
-    findField = pivotGridUtils.findField,
-    formatValue = pivotGridUtils.formatValue,
-    getCompareFunction = pivotGridUtils.getCompareFunction,
-    createPath = pivotGridUtils.createPath,
-    foreachDataLevel = pivotGridUtils.foreachDataLevel,
-    setFieldProperty = pivotGridUtils.setFieldProperty,
+import { normalizeDataSourceOptions } from "../../data/data_source/data_source";
+import Store from "../../data/abstract_store";
+import { executeAsync } from "../../core/utils/common";
+import { isFunction, isNumeric, isDefined, isString, isPlainObject } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import { each, map } from "../../core/utils/iterator";
+import { when, Deferred } from "../../core/utils/deferred";
+import Class from "../../core/class";
+import EventsMixin from "../../core/events_mixin";
+import { titleize } from "../../core/utils/inflector";
+import { normalizeIndexes } from "../../core/utils/array";
+import { LocalStore } from "./local_store";
+import RemoteStore from "./remote_store";
+import { XmlaStore } from "./xmla_store/xmla_store";
+import { applyDisplaySummaryMode, createMockSummaryCell, applyRunningTotal } from "./ui.pivot_grid.summary_display_modes";
+import {
+    foreachTree,
+    foreachTreeAsync,
+    findField,
+    formatValue,
+    getCompareFunction,
+    createPath,
+    foreachDataLevel,
+    setFieldProperty,
+    getFieldsDataType
+} from "./ui.pivot_grid.utils";
 
-    DESCRIPTION_NAME_BY_AREA = {
+var DESCRIPTION_NAME_BY_AREA = {
         row: "rows",
         column: "columns",
         data: "values",
@@ -60,7 +58,7 @@ function createCaption(field) {
     var caption = field.dataField || field.groupName || "",
         summaryType = (field.summaryType || "").toLowerCase();
 
-    if(typeUtils.isString(field.groupInterval)) {
+    if(isString(field.groupInterval)) {
         caption += "_" + field.groupInterval;
     }
 
@@ -73,13 +71,13 @@ function createCaption(field) {
         summaryType = "";
     }
 
-    return inflector.titleize(caption) + summaryType;
+    return titleize(caption) + summaryType;
 }
 
 function resetFieldState(field, properties) {
     var initialProperties = field._initProperties || {};
 
-    iteratorUtils.each(properties, function(_, prop) {
+    each(properties, function(_, prop) {
         if(initialProperties.hasOwnProperty(prop)) {
             field[prop] = initialProperties[prop];
         }
@@ -252,9 +250,9 @@ module.exports = Class.inherit((function() {
     };
 
     function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
-        var StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : localStore.LocalStore;
+        var StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : LocalStore;
 
-        return new StoreConstructor(extend(DataSourceModule.normalizeDataSourceOptions(dataSourceOptions), {
+        return new StoreConstructor(extend(normalizeDataSourceOptions(dataSourceOptions), {
             onChanged: null,
             onLoadingChanged: null,
             onProgressChanged: notifyProgress
@@ -265,7 +263,7 @@ module.exports = Class.inherit((function() {
         var store,
             storeOptions;
 
-        if(typeUtils.isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
+        if(isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
             store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
         } else {
             // TODO remove
@@ -276,8 +274,8 @@ module.exports = Class.inherit((function() {
             storeOptions = dataSourceOptions.store;
 
             if(storeOptions.type === "xmla") {
-                store = new xmlaStore.XmlaStore(storeOptions);
-            } else if((typeUtils.isPlainObject(storeOptions) && storeOptions.type) || (storeOptions instanceof Store) || Array.isArray(storeOptions)) {
+                store = new XmlaStore(storeOptions);
+            } else if((isPlainObject(storeOptions) && storeOptions.type) || (storeOptions instanceof Store) || Array.isArray(storeOptions)) {
                 store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
             } else if(storeOptions instanceof Class) {
                 store = storeOptions;
@@ -400,7 +398,7 @@ module.exports = Class.inherit((function() {
 
     function getFieldsByGroup(fields, groupingField) {
         return fields.filter(field => {
-            return field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false;
+            return field.groupName === groupingField.groupName && isNumeric(field.groupIndex) && field.visible !== false;
         }).map(function(field) {
             return extend(field, {
                 areaIndex: groupingField.areaIndex,
@@ -443,7 +441,7 @@ module.exports = Class.inherit((function() {
             fieldsDictionary = {},
             removedFields = {},
             mergedGroups = [],
-            dataTypes = pivotGridUtils.getFieldsDataType(fields);
+            dataTypes = getFieldsDataType(fields);
 
         if(storeFields) {
             each(storeFields, function(_, field) {
@@ -507,7 +505,7 @@ module.exports = Class.inherit((function() {
             foreachTree(items, function(items) {
                 var item = items[0],
                     itemPath = createPath(items).join("."),
-                    textPath = iteratorUtils.map(items, function(item) { return item.text; }).reverse().join(".");
+                    textPath = map(items, function(item) { return item.text; }).reverse().join(".");
 
                 if(pathValue === itemPath || (item.key && textPath === pathValue)) {
                     index = items[0].index;
@@ -1035,7 +1033,7 @@ module.exports = Class.inherit((function() {
         field: function(id, options) {
             var that = this,
                 fields = that._fields,
-                field = fields && fields[typeUtils.isNumeric(id) ? id : findField(fields, id)],
+                field = fields && fields[isNumeric(id) ? id : findField(fields, id)],
                 levels;
 
             if(field && options) {
@@ -1160,7 +1158,7 @@ module.exports = Class.inherit((function() {
                 }
             }
             if(that.store()) {
-                that._delayedLoadTask = commonUtils.executeAsync(loadTask);
+                that._delayedLoadTask = executeAsync(loadTask);
             } else {
                 loadTask();
             }
@@ -1202,11 +1200,11 @@ module.exports = Class.inherit((function() {
                     dimension = descriptions[descriptionName],
                     groupName = field.groupName;
 
-                if(groupName && !typeUtils.isNumeric(field.groupIndex)) {
+                if(groupName && !isNumeric(field.groupIndex)) {
                     field.levels = getFieldsByGroup(fields, field);
                 }
 
-                if(!dimension || groupName && typeUtils.isNumeric(field.groupIndex) || (field.visible === false && (field.area !== "data" && field.area !== "filter"))) {
+                if(!dimension || groupName && isNumeric(field.groupIndex) || (field.visible === false && (field.area !== "data" && field.area !== "filter"))) {
                     return;
                 }
 
@@ -1227,8 +1225,8 @@ module.exports = Class.inherit((function() {
             var indices = {};
             each(descriptions.values, function(_, field) {
                 var expression = field.calculateSummaryValue;
-                if(typeUtils.isFunction(expression)) {
-                    var summaryCell = summaryDisplayModes.createMockSummaryCell(descriptions, fields, indices);
+                if(isFunction(expression)) {
+                    var summaryCell = createMockSummaryCell(descriptions, fields, indices);
                     expression(summaryCell);
                 }
             });
@@ -1518,12 +1516,12 @@ module.exports = Class.inherit((function() {
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
                     that._sort(descriptions, loadedData, expressionsUsed);
-                    !that.isEmpty() && summaryDisplayModes.applyDisplaySummaryMode(descriptions, loadedData);
+                    !that.isEmpty() && applyDisplaySummaryMode(descriptions, loadedData);
                 }
 
                 that._sort(descriptions, loadedData);
 
-                !that.isEmpty() && isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
+                !that.isEmpty() && isRunningTotalUsed(dataFields) && applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
                 deferred !== false && when(deferred).done(function() {
