@@ -5,7 +5,7 @@
         "indentation": null,
         "length-zero-no-unit": null,
         "selector-list-comma-newline-after": null,
-        "max-empty-lines": null,
+        "max-empty-lines": 2,
         "selector-pseudo-element-colon-notation": null,
         "declaration-empty-line-before": null,
         "number-leading-zero": null,
