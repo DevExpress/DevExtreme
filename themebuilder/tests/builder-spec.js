@@ -1,6 +1,6 @@
-/* global __dirname */
+// /* global __dirname */
 const fs = require("fs");
-const path = require("path");
+// const path = require("path");
 const assert = require("chai").assert;
 const buildTheme = require("../modules/builder").buildTheme;
 const commands = require("../modules/commands");
@@ -14,10 +14,10 @@ const fileReader = (filename) => {
     });
 };
 
-const normalizeCss = (css) => css
-    .toLowerCase()
-    .replace(/\s*\/\*[\s\S]*?\*\//g, "")
-    .trim();
+// const normalizeCss = (css) => css
+//     .toLowerCase()
+//     .replace(/\s*\/\*[\s\S]*?\*\//g, "")
+//     .trim();
 
 const lessCompiler = require("less/lib/less-node");
 
