@@ -50,7 +50,8 @@
     margin-left: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
     margin-right: auto;
 
-    &.dx-rtl, .dx-rtl & {
+    &.dx-rtl,
+    .dx-rtl & {
         margin-left: auto;
         margin-right: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
     }
@@ -63,8 +64,10 @@
                 padding-left: 0;
             }
 
-            .dx-editor-filled&, .dx-editor-outlined& {
-                .dx-rtl&, .dx-rtl & {
+            .dx-editor-filled&,
+            .dx-editor-outlined& {
+                .dx-rtl&,
+                .dx-rtl & {
                     padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
                 }
             }
@@ -72,7 +75,8 @@
         .dx-texteditor-buttons-container .dx-dropdowneditor-button {
             margin-right: 0;
 
-            &.dx-rtl, .dx-rtl & {
+            &.dx-rtl,
+            .dx-rtl & {
                 margin-left: 0;
             }
         }

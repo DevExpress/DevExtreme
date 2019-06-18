@@ -51,7 +51,8 @@
         }
     }
 
-    .dx-@{widgetName}, .dx-@{widgetName}-container {
+    .dx-@{widgetName},
+    .dx-@{widgetName}-container {
         .dx-menu-item-has-icon {
             .dx-icon {
                 color: ~"@{@{widgetName}-menu-icon-color}";
@@ -126,7 +127,8 @@
         line-height: inherit;
 
         .dx-row-alt {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 background-color: ~"@{@{widgetName}-row-alternation-bg}";
             }
 
@@ -187,13 +189,15 @@
         padding: @GENERIC_GRID_BASE_CELL_PADDING;
     }
 
-    .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
+    .dx-@{widgetName}-headers,
+    .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
             padding: @GENERIC_GRID_BASE_CELL_PADDING;
             min-height: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + 2 * @GENERIC_GRID_BASE_CELL_PADDING;
         }
 
-        .dx-numberbox, .dx-textbox {
+        .dx-numberbox,
+        .dx-textbox {
             &.dx-show-clear-button.dx-texteditor-empty:not(.dx-invalid) {
                 .dx-texteditor-input {
                     padding-right: @GENERIC_GRID_BASE_CELL_PADDING;
@@ -630,14 +634,16 @@
         }
 
         .dx-master-detail-row {
-            > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
+            > .dx-@{widgetName}-group-space,
+            .dx-master-detail-cell {
                 border-top: ~"@{@{widgetName}-border}";
                 border-bottom: ~"@{@{widgetName}-border}";
             }
         }
 
         .dx-master-detail-row:not(.dx-@{widgetName}-edit-form) {
-            > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
+            > .dx-@{widgetName}-group-space,
+            .dx-master-detail-cell {
                 background-color: ~"@{@{widgetName}-master-detail-cell-bg}";
             }
         }
@@ -726,7 +732,8 @@
                     border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
                 }
                 &:not(.dx-row-lines) {
-                    & > td, & > tr:first-child > td {
+                    & > td,
+                    & > tr:first-child > td {
                         border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
                     }
                 }
@@ -750,7 +757,8 @@
 
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
                 color: ~"@{@{widgetName}-row-selected-color}";
 
@@ -782,14 +790,16 @@
             }
 
             &.dx-column-lines {
-                & > td, & > tr > td {
+                & > td,
+                & > tr > td {
                     border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
                     border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
                 }
             }
 
             &.dx-row-lines {
-                & > td, & > tr > td {
+                & > td,
+                & > tr > td {
                     border-bottom-color: ~"@{@{widgetName}-row-selected-border-color}";
                 }
             }
@@ -916,8 +926,10 @@
         }
 
         .dx-@{widgetName}-rowsview {
-            .dx-selection.dx-row, .dx-selection.dx-row:hover {
-                & > td, & > tr > td {
+            .dx-selection.dx-row,
+            .dx-selection.dx-row:hover {
+                & > td,
+                & > tr > td {
                     &:not(.dx-focused) {
                         &.dx-@{widgetName}-group-space {
                             border-left-color: ~"@{@{widgetName}-selection-bg}";

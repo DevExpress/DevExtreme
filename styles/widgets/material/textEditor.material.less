@@ -37,7 +37,8 @@
                 padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
-        &.dx-editor-filled, &.dx-editor-outlined {
+        &.dx-editor-filled,
+        &.dx-editor-outlined {
             .dx-texteditor-input {
                 padding-right: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
@@ -99,7 +100,8 @@
         .dx-texteditor-borders-position();
     }
 
-    &.dx-state-focused, &.dx-state-active {
+    &.dx-state-focused,
+    &.dx-state-active {
         background-color: @texteditor-focused-bg;
 
         &:before {
@@ -111,7 +113,8 @@
 
     .validation-icon-position();
 
-    &.dx-editor-filled, &.dx-editor-outlined {
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
         .dx-texteditor-buttons-container {
             right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         }
@@ -136,7 +139,8 @@
             padding: @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING;
         }
 
-        .dx-rtl &, &.dx-rtl {
+        .dx-rtl &,
+        &.dx-rtl {
             .dx-texteditor-buttons-container {
                 left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
                 right: auto;
@@ -191,7 +195,8 @@
             padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
         }
 
-        .dx-rtl &, &.dx-rtl {
+        .dx-rtl &,
+        &.dx-rtl {
             .dx-texteditor-buttons-container {
                 left: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
                 right: auto;
@@ -290,7 +295,8 @@
         }
     }
 
-    &.dx-state-focused, &.dx-state-active {
+    &.dx-state-focused,
+    &.dx-state-active {
         &:before {
             border-top: 1px solid @texteditor-invalid-focused-border-color;
             border-bottom: 1px solid @texteditor-invalid-focused-border-color;

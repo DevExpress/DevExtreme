@@ -94,8 +94,11 @@
         }
     }
 
-    &.dx-state-focused, &.dx-state-active {
-        &.dx-editor-filled, &.dx-editor-underlined, &.dx-editor-outlined {
+    &.dx-state-focused,
+    &.dx-state-active {
+        &.dx-editor-filled,
+        &.dx-editor-underlined,
+        &.dx-editor-outlined {
             border-color: @texteditor-focused-border-color;
         }
 
@@ -182,7 +185,9 @@
 
 .dx-invalid.dx-texteditor {
     border-color: @texteditor-invalid-faded-border-color;
-    &.dx-editor-filled, &.dx-editor-underlined, &.dx-editor-outlined {
+    &.dx-editor-filled,
+    &.dx-editor-underlined,
+    &.dx-editor-outlined {
         &.dx-state-focused {
             border-color: @texteditor-invalid-focused-border-color;
         }

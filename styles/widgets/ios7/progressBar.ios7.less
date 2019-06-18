@@ -4,7 +4,8 @@
 @IOS7_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT: -90deg, transparent 5%, @IOS7_PROGRESSBAR_INTERDETERMINATE_STATE_COLOR, transparent 95%;
 @IOS7_PROGRESSBAR_DISABLED_STATE_INTERDETERMINATE_STATE_GRADIENT: -90deg, transparent 5%, @IOS7_PROGRESSBAR_DISABLED_STATE_RANGE_COLOR, transparent 95%;
 
-.dx-progressbar-range-container, .dx-progressbar-animating-container {
+.dx-progressbar-range-container,
+.dx-progressbar-animating-container {
     border-radius: @IOS7_BAR_HEIGHT;
     overflow: hidden;
 }
@@ -54,7 +55,8 @@
 }
 
 .dx-rtl {
-    .dx-progressbar, &.dx-progressbar {
+    .dx-progressbar,
+    &.dx-progressbar {
         .dx-progressbar-animating-container {
             animation: loader-rtl 1s linear infinite;
             .gradient-linear(@IOS7_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);

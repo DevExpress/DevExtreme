@@ -83,7 +83,8 @@
         }
     }
 
-    .dx-@{widgetName}, .dx-@{widgetName}-container {
+    .dx-@{widgetName},
+    .dx-@{widgetName}-container {
 
         .dx-menu {
             background-color: transparent;
@@ -148,7 +149,9 @@
             }
         }
 
-        .dx-sort-up, .dx-sort-down, .dx-header-filter {
+        .dx-sort-up,
+        .dx-sort-down,
+        .dx-header-filter {
             .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
         }
 
@@ -270,7 +273,9 @@
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
-            > td, > td.dx-cell-modified:not(.dx-field-item-content), > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
+            > td,
+            > td.dx-cell-modified:not(.dx-field-item-content),
+            > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
                 padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                 padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                 vertical-align: middle;
@@ -307,7 +312,8 @@
                     }
                 }
 
-                &.dx-command-expand, .dx-@{widgetName}-group-space {
+                &.dx-command-expand,
+                .dx-@{widgetName}-group-space {
                     width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
                     min-width: @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
                     padding: 0 4px 0 8px;
@@ -325,7 +331,8 @@
         padding: @MATERIAL_GRID_BASE_CELL_PADDING;
     }
 
-    .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
+    .dx-@{widgetName}-headers,
+    .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
             min-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
         }
@@ -395,7 +402,10 @@
         }
 
         .dx-texteditor {
-            &, &.dx-state-hover, &.dx-state-focused, &.dx-state-active {
+            &,
+            &.dx-state-hover,
+            &.dx-state-focused,
+            &.dx-state-active {
                 background: ~"@{@{widgetName}-editor-bg}";
                 box-shadow: none;
             }
@@ -415,11 +425,13 @@
                 right: 0;
             }
 
-            &:after, &:before {
+            &:after,
+            &:before {
                 content: none;
             }
 
-            &.dx-rtl, .dx-rtl & {
+            &.dx-rtl,
+            .dx-rtl & {
                 .dx-texteditor-buttons-container {
                     left: 0;
                 }
@@ -585,7 +597,8 @@
                     font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
                     font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
 
-                    .dx-sort-indicator, .dx-sort {
+                    .dx-sort-indicator,
+                    .dx-sort {
                         color: ~"@{@{widgetName}-base-color}";
                     }
 
@@ -800,25 +813,29 @@
         }
 
         .dx-master-detail-row {
-            > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
+            > .dx-@{widgetName}-group-space,
+            .dx-master-detail-cell {
                 border-top: ~"@{@{widgetName}-border}";
                 border-bottom: ~"@{@{widgetName}-border}";
             }
         }
 
         .dx-master-detail-row:not(.dx-@{widgetName}-edit-form) {
-            > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
+            > .dx-@{widgetName}-group-space,
+            .dx-master-detail-cell {
                 background-color: ~"@{@{widgetName}-master-detail-cell-bg}";
             }
         }
 
-        .dx-data-row, .dx-adaptive-detail-row {
+        .dx-data-row,
+        .dx-adaptive-detail-row {
             &:not(.dx-edit-row) .dx-cell-modified {
                 background-color: ~"@{@{widgetName}-cell-modified-border-color}";
             }
 
             .dx-validator {
-                &.dx-@{widgetName}-invalid, &.dx-invalid {
+                &.dx-@{widgetName}-invalid,
+                &.dx-invalid {
                     background-color: ~"@{@{widgetName}-row-invalid-faded-border-color}";
                 }
             }
@@ -862,7 +879,8 @@
                 line-height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
             }
 
-            .dx-texteditor:after, .dx-texteditor:before {
+            .dx-texteditor:after,
+            .dx-texteditor:before {
                 content: none;
             }
 
@@ -906,7 +924,8 @@
 
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
                 color: ~"@{@{widgetName}-row-selected-color}";
 
@@ -1004,7 +1023,8 @@
             }
         }
 
-        .dx-@{widgetName}, .dx-@{widgetName}-container {
+        .dx-@{widgetName},
+        .dx-@{widgetName}-container {
             .dx-menu {
                 .dx-menu-item-has-submenu.dx-menu-item-has-icon {
                     .dx-icon {
@@ -1013,7 +1033,9 @@
                 }
             }
             .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
-                > td, > td.dx-cell-modified:not(.dx-field-item-content), > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
+                > td,
+                > td.dx-cell-modified:not(.dx-field-item-content),
+                > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
                     &:first-of-type {
                         padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                         padding-right: @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
@@ -1033,8 +1055,10 @@
         }
 
         .dx-@{widgetName}-rowsview {
-            .dx-selection.dx-row, .dx-selection.dx-row:hover {
-                & > td, & > tr > td {
+            .dx-selection.dx-row,
+            .dx-selection.dx-row:hover {
+                & > td,
+                & > tr > td {
                     &:not(.dx-focused) {
                         &.dx-@{widgetName}-group-space {
                             border-left-color: ~"@{@{widgetName}-selection-bg}";

@@ -24,7 +24,8 @@
         }
     }
 
-    .dx-@{widgetName}, .dx-@{widgetName}-container {
+    .dx-@{widgetName},
+    .dx-@{widgetName}-container {
         .dx-menu-items-container {
             .dx-menu-item {
                 .dx-icon-context-menu-sort-asc {
@@ -107,7 +108,8 @@
         }
 
         .dx-row-alt {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 background-color: ~"@{@{widgetName}-row-alternation-color}";
             }
 
@@ -206,7 +208,8 @@
             border: none;
         }
 
-        &, .dx-texteditor-container {
+        &,
+        .dx-texteditor-container {
             border-radius: 0;
         }
 
@@ -227,7 +230,8 @@
         }
     }
 
-    .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
+    .dx-@{widgetName}-headers,
+    .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
             padding: @GRID_BASE_CELL_PADDING;
         }
@@ -584,8 +588,10 @@
             border-bottom: 1px solid ~"@{@{widgetName}-data-modified-color}";
         }
 
-        .dx-selection, .dx-selection.dx-row:hover {
-            & > td, & > tr > td {
+        .dx-selection,
+        .dx-selection.dx-row:hover {
+            & > td,
+            & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-background}";
 
                 &.dx-editor-cell {
@@ -614,7 +620,8 @@
         }
 
         .dx-master-detail-row:not(.dx-@{widgetName}-edit-form) {
-            > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
+            > .dx-@{widgetName}-group-space,
+            .dx-master-detail-cell {
                 background-color: ~"@{@{widgetName}-master-detail-cell-background-color}";
             }
         }
@@ -686,7 +693,8 @@
 
         .dx-data-row.dx-state-hover {
             &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
-                & > td, & > tr > td {
+                & > td,
+                & > tr > td {
                     &:not(.dx-focused) {
                         &.dx-@{widgetName}-group-space {
                             border-left-color: ~"@{@{widgetName}-hover-background}";
@@ -716,8 +724,10 @@
         }
 
         .dx-@{widgetName}-rowsview {
-            .dx-selection, .dx-selection.dx-row:hover {
-                & > td, & > th > td {
+            .dx-selection,
+            .dx-selection.dx-row:hover {
+                & > td,
+                & > th > td {
                     &:not(.dx-focused) {
                         &.dx-@{widgetName}-group-space {
                             border-left-color: ~"@{@{widgetName}-selection-background}";

@@ -144,8 +144,10 @@
                 visibility: hidden;
             }
 
-            .dx-sort, .dx-header-filter {
-                &.dx-sort, &.dx-header-filter {
+            .dx-sort,
+            .dx-header-filter {
+                &.dx-sort,
+                &.dx-header-filter {
                     display: inline-block;
                 }
 
@@ -162,7 +164,8 @@
         }
 
         .dx-row {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 padding: @GRID_CELL_PADDING;
             }
         }
@@ -280,7 +283,8 @@
         visibility: hidden;
     }
 
-    .dx-@{widgetName}-action, .dx-@{widgetName}-drag-action {
+    .dx-@{widgetName}-action,
+    .dx-@{widgetName}-drag-action {
         cursor: pointer;
     }
 
@@ -323,7 +327,8 @@
     }
 
     .dx-row {
-        & > td, & > tr > td {
+        & > td,
+        & > tr > td {
             border: none;
         }
     }
@@ -399,7 +404,8 @@
         }
 
         .dx-row {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 vertical-align: top;
 
                 &:first-child {
@@ -422,7 +428,8 @@
                 overflow: hidden;
             }
 
-            .dx-cell-modified, .dx-@{widgetName}-invalid {
+            .dx-cell-modified,
+            .dx-@{widgetName}-invalid {
                 &:not(.dx-field-item-content) {
                     padding: 0;
                 }
@@ -442,7 +449,8 @@
                 padding: 0;
                 vertical-align: middle;
 
-                .dx-texteditor, .dx-texteditor-container {
+                .dx-texteditor,
+                .dx-texteditor-container {
                     border: 0;
                     margin: 0;
                 }
@@ -569,12 +577,14 @@
             }
         }
 
-        .dx-text-content-alignment-left, .dx-text-content-alignment-right {
+        .dx-text-content-alignment-left,
+        .dx-text-content-alignment-right {
             display: inline-block;
             max-width: 100%;
         }
 
-        .dx-sort-indicator, .dx-header-filter-indicator {
+        .dx-sort-indicator,
+        .dx-header-filter-indicator {
             max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_TEXT_CONTENT_MARGIN));
 
             &.dx-text-content-alignment-left {
@@ -636,7 +646,8 @@
                 .dx-menu {
                     display: block;
                 }
-                .dx-texteditor-input, .dx-placeholder:before {
+                .dx-texteditor-input,
+                .dx-placeholder:before {
                     padding-left: @GRID_TEXTEDITOR_INPUT_PADDING;
                 }
             }
@@ -688,7 +699,8 @@
             }
         }
 
-        & > td:first-child .dx-menu, & > .dx-first-cell .dx-menu {
+        & > td:first-child .dx-menu,
+        & > .dx-first-cell .dx-menu {
             margin-left: 0;
         }
 
@@ -792,7 +804,8 @@
         }
 
         .dx-row {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 overflow: hidden;
                 -o-text-overflow: ellipsis;
                 text-overflow: ellipsis;
@@ -801,7 +814,8 @@
 
         .dx-row.dx-row-lines:first-child {
             border-top: none;
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 border-top: none;
             }
         }
@@ -810,15 +824,18 @@
             outline: 0;
         }
 
-        .dx-selection, .dx-selection.dx-row:hover {
-            & > td, & > tr > td {
+        .dx-selection,
+        .dx-selection.dx-row:hover {
+            & > td,
+            & > tr > td {
                 .dx-link {
                     color: inherit;
                 }
             }
         }
 
-        .dx-@{widgetName}-table .dx-freespace-row, .dx-@{widgetName}-table .dx-virtual-row {
+        .dx-@{widgetName}-table .dx-freespace-row,
+        .dx-@{widgetName}-table .dx-virtual-row {
             border-top: 0;
             border-bottom: 0;
             & > td {
@@ -1006,7 +1023,8 @@
             }
         }
 
-        .dx-@{widgetName}-headers, .dx-@{widgetName}-total-footer {
+        .dx-@{widgetName}-headers,
+        .dx-@{widgetName}-total-footer {
             direction: ltr;
             .dx-@{widgetName}-table {
                 direction: rtl;
@@ -1016,7 +1034,8 @@
         .dx-@{widgetName}-filter-row {
             .dx-editor-cell .dx-editor-with-menu {
                 .dx-texteditor {
-                    .dx-texteditor-input, .dx-placeholder:before {
+                    .dx-texteditor-input,
+                    .dx-placeholder:before {
                         padding-right: @GRID_TEXTEDITOR_INPUT_PADDING;
                     }
                 }

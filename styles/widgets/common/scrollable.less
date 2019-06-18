@@ -90,7 +90,8 @@
 }
 
 .dx-scrollable-scrollbar-simulated {
-    &, .dx-scrollable-container {
+    &,
+    .dx-scrollable-container {
         ::-webkit-scrollbar {
             display: none;
         }
@@ -171,7 +172,8 @@
 .dx-rtl .dx-scrollable,
 .dx-rtl.dx-scrollable {
     direction: ltr;
-    .dx-scrollable-content, .dx-scrollable-container {
+    .dx-scrollable-content,
+    .dx-scrollable-container {
         direction: ltr;
     }
     .dx-scrollable-content > * {
