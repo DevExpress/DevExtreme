@@ -1364,18 +1364,11 @@ QUnit.module("keyboard navigation", {}, () => {
         assert.equal(handler.callCount, 1, "new handler fired");
     });
 
-    QUnit.test("Keyboard processor should be initialize once", (assert) => {
-        const supportedKeysHandler = sinon.stub().returns({ "a": () => {} });
-
-        const TestWidget = Widget.inherit({
-            NAME: "TestWidget",
-            _supportedKeys: supportedKeysHandler
-        });
-
-        const $element = $("#widget");
+    QUnit.test("Call 'repaint' from 'onContentReady'", (assert) => {
+        const keyHandler = sinon.stub();
         let firstCall = true;
 
-        new TestWidget($element, {
+        const $element = $("#widget").dxWidget({
             focusStateEnabled: true,
             onContentReady: function() {
                 if(firstCall) {
@@ -1384,10 +1377,13 @@ QUnit.module("keyboard navigation", {}, () => {
                 }
             }
         });
-        keyboardMock($element).press("a");
+        const widget = $("#widget").dxWidget("instance");
+        widget.registerKeyHandler("A", keyHandler);
 
-        assert.strictEqual(supportedKeysHandler.callCount, 1, "supportedKeysHandler.callCount");
-        assert.strictEqual(supportedKeysHandler.getCall(0).args[0].type, "keydown", "supportedKeysHandler.type");
+        keyboardMock($element).press("A");
+
+        assert.strictEqual(keyHandler.callCount, 1, "supportedKeysHandler.callCount");
+        assert.strictEqual(keyHandler.getCall(0).args[0].type, "keydown", "supportedKeysHandler.type");
     });
 });
 
