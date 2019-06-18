@@ -32,7 +32,6 @@ var DIST_GLOBS = [
     'artifacts/**/*.*',
     '!' + context.TRANSPILED_PATH + "/**/*.*",
     '!artifacts/npm/**/*.*',
-    '!artifacts/js/dx.aspnet.mvc.js',
     '!artifacts/js/angular**/*.*',
     '!artifacts/js/angular*',
     '!artifacts/js/knockout*',
@@ -169,7 +168,7 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
         }
 
         return Object.keys(moduleMeta.exports).map(function(name) {
-            var uniqueIdentifier = moduleMeta.name.split('\/').concat([name]).join('__');
+            var uniqueIdentifier = moduleMeta.name.split('/').concat([name]).join('__');
             var importIdentifier = name === 'default' ? uniqueIdentifier : `{ ${name} as ${uniqueIdentifier} }`;
 
             var widgetName = widgetNameByPath(moduleMeta.exports[name]);

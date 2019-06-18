@@ -1536,7 +1536,7 @@ QUnit.test("dynamic templates should be supported by angular", function(assert) 
         $scope.text = "Test";
         $scope.vm = {
             template() {
-                return $("<script type=\"text/html\" id=\"scriptTemplate\"><div>{{text}}</div><\/script>");
+                return $("<script type=\"text/html\" id=\"scriptTemplate\"><div>{{text}}</div></script>");
             }
         };
     });

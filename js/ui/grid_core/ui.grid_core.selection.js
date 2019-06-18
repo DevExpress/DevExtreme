@@ -122,7 +122,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return dataController.dataSource() && dataController.dataSource().load(options) || new Deferred().resolve([]);
                 },
                 plainItems: function() {
-                    return dataController.items();
+                    return dataController.items(true);
                 },
                 isItemSelected: function(item) {
                     return item.selected;
@@ -455,7 +455,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(itemIndex, keys);
+            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys);
         },
 
         focusedItemIndex: function(itemIndex) {

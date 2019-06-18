@@ -600,7 +600,8 @@ QUnit.testStart(function() {
     QUnit.test("Add new item when timezone doesn't equal to the default value and set as string", function(assert) {
         this.clock.restore();
         var data = [],
-            deltaTz = getDeltaTz(4);
+            deltaTz = getDeltaTz(4),
+            daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
 
         this.createInstance({
             currentDate: new Date(2015, 1, 9),
@@ -610,8 +611,8 @@ QUnit.testStart(function() {
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17) });
 
-        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz), "Start date is OK");
-        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz), "End date is OK");
+        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz + daylightOffset), "Start date is OK");
+        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz + daylightOffset), "End date is OK");
     });
 
     QUnit.test("Update item", function(assert) {
@@ -2317,7 +2318,7 @@ QUnit.testStart(function() {
         var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
         pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
 
-        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, "Width is OK");
+        assert.roughEqual(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, 1, "Width is OK");
     });
 
     QUnit.test("Appointment should have initial size if 'cancel' flag is defined as true during update operation (if appointment takes few days)", function(assert) {
@@ -2338,7 +2339,7 @@ QUnit.testStart(function() {
         var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
         pointer.dragStart().drag(cellWidth * 3, 0).dragEnd();
 
-        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, "Width is OK");
+        assert.roughEqual(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, 1, "Width is OK");
     });
 
     QUnit.test("Appointment should have initial left coordinate if 'cancel' flag is defined as true during resize operation", function(assert) {

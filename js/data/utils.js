@@ -150,7 +150,7 @@ function isDisjunctiveOperator(condition) {
 }
 
 function isConjunctiveOperator(condition) {
-    return /^(and|\&\&|\&)$/i.test(condition);
+    return /^(and|&&|&)$/i.test(condition);
 }
 
 var keysEqual = function(keyExpr, key1, key2) {

@@ -363,7 +363,7 @@ var Component = Class.inherit({
             for(var i = 0; i < optionNames.length; i++) {
                 var name = optionNames[i],
                     args = {
-                        name: name.split(/[.\[]/)[0],
+                        name: name.split(/[.[]/)[0],
                         fullName: name,
                         value: value,
                         previousValue: previousValue
@@ -628,7 +628,7 @@ var Component = Class.inherit({
                 cachedSetters[name] = coreDataUtils.compileSetter(name);
             }
 
-            var path = name.split(/[.\[]/);
+            var path = name.split(/[.[]/);
 
             cachedSetters[name](that._options, value, {
                 functionsAsIs: true,

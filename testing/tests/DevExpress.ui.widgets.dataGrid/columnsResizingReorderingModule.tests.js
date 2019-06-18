@@ -2919,7 +2919,7 @@ function getEvent(options) {
 
         // assert
         $headersContainer = $(resizeController._columnHeadersView.element());
-        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row").first().height();
+        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row")[0].getBoundingClientRect().height;
         assert.strictEqual(this.component._controllers.columns.columnOption(2, "width"), 75, "width of the first banded column");
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, "separator offset top");
     });

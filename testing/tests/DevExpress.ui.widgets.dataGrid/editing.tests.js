@@ -2761,6 +2761,29 @@ QUnit.testInActiveWindow("Focus overlay should not be shown in batch editing mod
     assert.notOk($testElement.find(".dx-datagrid-focus-overlay").is(":visible"), "not visible focus overlay");
 });
 
+// T713844
+QUnit.test("Set editor mode via editorOptions", function(assert) {
+    // arrange
+    var that = this,
+        textEditor,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+    that.columns[0].editorOptions = { mode: "password" };
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find('td').first().trigger('dxclick');
+
+    // assert
+    textEditor = $testElement.find('td').first().find(".dx-texteditor").first().dxTextBox("instance");
+    assert.strictEqual(textEditor.option("mode"), "password", "editor mode");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -6977,6 +7000,50 @@ QUnit.test("hasChanges with rowIndex", function(assert) {
     assert.notOk(that.editingController.hasChanges(0), "the first row hasn't changed");
     assert.ok(that.editingController.hasChanges(1), "the second row has changed");
 });
+
+// T729713
+QUnit.test("Cell mode - The editCellTemplate of the column should not be called when editing another column", function(assert) {
+    // arrange
+    var that = this,
+        $inputElement,
+        rowsView = that.rowsView,
+        $testElement = $("#container"),
+        editCellTemplate = sinon.spy(function(_, options) {
+            return $("<div>").dxTextBox({
+                value: options.value,
+                onValueChanged: function(e) {
+                    options.setValue(e.value);
+                }
+            });
+        });
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+
+    rowsView.render($testElement);
+    that.columnOption("name", "editCellTemplate", editCellTemplate);
+
+    // act
+    $(rowsView.getCellElement(0, 0)).trigger("dxclick");
+    that.clock.tick();
+
+    $inputElement = getInputElements($(rowsView.getCellElement(0, 0))).first();
+    $inputElement.val("test");
+
+    // assert
+    assert.strictEqual(editCellTemplate.callCount, 1);
+
+    // act
+    eventsEngine.trigger($inputElement[0], "change");
+    $(rowsView.getCellElement(0, 1)).trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(editCellTemplate.callCount, 1);
+});
+
 
 QUnit.module('Editing with validation', {
     beforeEach: function() {

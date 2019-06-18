@@ -3,7 +3,6 @@ var $ = require("jquery"),
     isDefined = require("core/utils/type").isDefined,
     config = require("core/config"),
     isRenderer = require("core/utils/type").isRenderer,
-    dateSerialization = require("core/utils/date_serialization"),
     hasWindow = require("core/utils/window").hasWindow;
 
 require("common.css!");

@@ -649,7 +649,7 @@ var testNestedGestureAcceptingOnUnsubscribing = function(parentGesture, childGes
 
 QUnit.module("nested singletouch gestures accepting on unsubscribing");
 
-var gestures = [scrollEvents.move, swipeEvents.swipe, dragEvents.move];
+gestures = [scrollEvents.move, swipeEvents.swipe, dragEvents.move];
 $.each(gestures, function(_, firstGesture) {
     $.each(gestures, function(_, secondGesture) {
         testNestedGestureAcceptingOnUnsubscribing(firstGesture, secondGesture);
@@ -684,7 +684,7 @@ var testNestedGestureCanceling = function(parentGesture, childGesture) {
 
 QUnit.module("nested singletouch gestures cancelling");
 
-var gestures = [scrollEvents.move, swipeEvents.swipe, dragEvents.move];
+gestures = [scrollEvents.move, swipeEvents.swipe, dragEvents.move];
 $.each(gestures, function(_, firstGesture) {
     $.each(gestures, function(_, secondGesture) {
         testNestedGestureCanceling(firstGesture, secondGesture);

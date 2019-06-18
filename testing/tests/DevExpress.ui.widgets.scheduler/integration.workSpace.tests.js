@@ -13,14 +13,12 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    eventsEngine = require("events/core/events_engine"),
+var eventsEngine = require("events/core/events_engine"),
     renderer = require("core/renderer"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
     CustomStore = require("data/custom_store"),
-    dateLocalization = require("localization/date"),
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config");
 

@@ -21,6 +21,7 @@
         "module": true,
         "exports": true
     },
+    "extends": "eslint:recommended",
     "rules": {
         "block-spacing": "error",
         "comma-spacing": "error",
@@ -43,13 +44,12 @@
             }
         ],
         "no-multiple-empty-lines": [ "error", { "max": 2 } ],
-        "no-irregular-whitespace": "error",
         "no-multi-spaces": "error",
         "no-trailing-spaces": "error",
+        "no-empty": ["error", { "allowEmptyCatch": true }],
         "no-new-func": "error",
         "no-eval": "error",
-        "no-undef": "error",
-        "no-unused-expressions": "off",
+        "no-undef-init": "error",
         "no-unused-vars": ["error", { "args": "none" }],
         "no-extend-native": "error",
         "no-alert": "error",
@@ -83,7 +83,6 @@
                 }
             }
         ],
-        "no-console": "error",
         "spellcheck/spell-checker": [
             "error",
             {

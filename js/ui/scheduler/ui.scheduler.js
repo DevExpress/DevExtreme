@@ -59,6 +59,9 @@ var WIDGET_CLASS = "dx-scheduler",
     WIDGET_SMALL_WIDTH = 400,
     APPOINTEMENT_POPUP_WIDTH = 610;
 
+var FULL_DATE_FORMAT = "yyyyMMddTHHmmss",
+    UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + "Z";
+
 var VIEWS_CONFIG = {
     day: {
         workSpace: SchedulerWorkSpaceDay,
@@ -97,6 +100,8 @@ var VIEWS_CONFIG = {
         renderingStrategy: "agenda"
     }
 };
+
+var toMs = dateUtils.dateToMilliseconds;
 
 var Scheduler = Widget.inherit({
     _getDefaultOptions: function() {
@@ -1119,7 +1124,7 @@ var Scheduler = Widget.inherit({
                 break;
             case "views":
                 this._processCurrentView();
-                if(!!this._getCurrentViewOptions()) {
+                if(this._getCurrentViewOptions()) {
                     this.repaint();
                 } else {
                     this._header.option(name, value);
@@ -1622,7 +1627,7 @@ var Scheduler = Widget.inherit({
         }
 
         each(fields, (function(name, expr) {
-            if(!!expr) {
+            if(expr) {
 
                 var getter = dataCoreUtils.compileGetter(expr),
                     setter = dataCoreUtils.compileSetter(expr);
@@ -2243,7 +2248,7 @@ var Scheduler = Widget.inherit({
 
         function convert(obj, dateFieldName) {
             var date = new Date(this.fire("getField", dateFieldName, obj));
-            var tzDiff = this._getTimezoneOffsetByOption() * 3600000 + this.fire("getClientTimezoneOffset", date);
+            var tzDiff = this._getTimezoneOffsetByOption() * toMs("hour") + this.fire("getClientTimezoneOffset", date);
 
             return new Date(date.getTime() + tzDiff);
         }
@@ -2414,12 +2419,18 @@ var Scheduler = Widget.inherit({
         return recurrenceException ? recurrenceException + "," + exceptionByDate : exceptionByDate;
     },
 
-    _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate, startDateTimeZone) {
-        var startDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
+    _getRecurrenceExceptionDate: function(exceptionStartDate, targetStartDate, startDateTimeZone) {
+        exceptionStartDate = this.fire("convertDateByTimezoneBack", exceptionStartDate, startDateTimeZone);
+        var appointmentStartDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
 
-        exceptionDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
+        exceptionStartDate.setHours(
+            appointmentStartDate.getHours(),
+            appointmentStartDate.getMinutes(),
+            appointmentStartDate.getSeconds(),
+            appointmentStartDate.getMilliseconds()
+        );
 
-        return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
+        return dateSerialization.serializeDate(exceptionStartDate, UTC_FULL_DATE_FORMAT);
     },
 
     _showRecurrenceChangeConfirm: function(isDeleted) {
@@ -2756,17 +2767,23 @@ var Scheduler = Widget.inherit({
                 startDateTimeZone = this.fire("getField", "startDateTimeZone", appointmentData),
                 exceptionByStartDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
 
-            exceptions.forEach(function(item, i) {
-                exceptions[i] = item.replace(/\s/g, "");
-                exceptions[i] = dateSerialization.deserializeDate(exceptions[i]);
-                exceptions[i].setHours(exceptionByStartDate.getHours());
-                exceptions[i] = dateSerialization.serializeDate(exceptions[i], "yyyyMMddTHHmmss");
-            });
+            for(var i = 0; i < exceptions.length; i++) {
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], exceptionByStartDate, startDateTimeZone);
+            }
 
             recurrenceException = exceptions.join();
         }
 
         return recurrenceException;
+    },
+
+    _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
+        exception = exception.replace(/\s/g, "");
+        exception = dateSerialization.deserializeDate(exception);
+        exception = this.fire("convertDateByTimezone", exception, startDateTimeZone);
+        exception.setHours(exceptionByStartDate.getHours());
+        exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
+        return exception;
     },
 
     recurrenceEditorVisibilityChanged: function(visible) {

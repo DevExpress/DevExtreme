@@ -30,7 +30,7 @@ require("style-compiler-test-server/known-css-files");
         selectorText = selectorText.replace(/\[.*?\]/gi, "");
 
         // strip :not(), :nth-child(n), ::after, etc
-        selectorText = selectorText.replace(/\:\:?[\w-]+(\(.*?\))?/gi, "");
+        selectorText = selectorText.replace(/::?[\w-]+(\(.*?\))?/gi, "");
 
         // strip tag names when qualified by class/id
         selectorText = selectorText.replace(/(^|[^\w.#-])[a-z]+([.#][\w-]+)/gi, "$1$2");

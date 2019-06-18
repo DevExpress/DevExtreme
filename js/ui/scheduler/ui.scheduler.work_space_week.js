@@ -75,7 +75,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
 
         $cells = $(result).slice(newFirstIndex, newLastIndex + 1);
 
-        if(!!this._getGroupCount()) {
+        if(this._getGroupCount()) {
             var arr = [],
                 focusedGroupIndex = this._getGroupIndexByCell($first);
             each($cells, (function(_, cell) {

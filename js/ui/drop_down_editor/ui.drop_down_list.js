@@ -495,6 +495,7 @@ var DropDownList = DropDownEditor.inherit({
                 that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
             },
             height: "auto",
+            autoResizeEnabled: false,
             maxHeight: this._getMaxHeight.bind(this)
         });
     },

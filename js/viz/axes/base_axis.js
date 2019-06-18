@@ -1953,8 +1953,11 @@ Axis.prototype = {
 
     drawScaleBreaks: _noop,
 
+    // T642779,T714928
     getCategoriesSorter() {
-        return this._options.categoriesSortingMethod;
+        const categoriesSortingMethod = this._options.categoriesSortingMethod;
+
+        return isDefined(categoriesSortingMethod) ? categoriesSortingMethod : this._options.categories;
     },
 
     ///#DEBUG

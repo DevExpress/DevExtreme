@@ -139,7 +139,7 @@ define(function(require) {
     QUnit.test("custom user template engine for script template", function(assert) {
         setTemplateEngine(customUserTemplate);
 
-        var template = new Template($("<script type='text/html'>Text: <b>$text$</b><\/script>"));
+        var template = new Template($("<script type='text/html'>Text: <b>$text$</b></script>"));
         var container = $('<div>');
 
         // act

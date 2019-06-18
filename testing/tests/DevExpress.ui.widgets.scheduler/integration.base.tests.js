@@ -11,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
+var noop = require("core/utils/common").noop,
     errors = require("ui/widget/ui.errors"),
     DataSource = require("data/data_source/data_source").DataSource,
     config = require("core/config");
@@ -46,6 +45,90 @@ QUnit.test("Header should be initialized with correct views and currentView opti
     var $element = this.instance.$element();
     assert.deepEqual($element.find(".dx-scheduler-header").dxSchedulerHeader("instance").option("views"), ["day", "week"], "Scheduler header has a correct views option");
     assert.equal($element.find(".dx-scheduler-header").dxSchedulerHeader("instance").option("currentView"), "week", "Scheduler header has a correct current view");
+});
+
+QUnit.test("Height of 'dx-scheduler-group-row' should be equal with height of 'dx-scheduler-date-table-row'", function(assert) {
+    var priorities = [
+        {
+            text: "High priority",
+            id: 1,
+            color: "#cc5c53"
+        }, {
+            text: "Low priority",
+            id: 2,
+            color: "#ff9747"
+        }];
+    var owners = [
+        {
+            text: "Samantha Bright",
+            id: 1,
+            color: "#727bd2"
+        }, {
+            text: "John Heart",
+            id: 2,
+            color: "#32c9ed"
+        }, {
+            text: "Todd Hoffman",
+            id: 3,
+            color: "#2a7ee4"
+        }, {
+            text: "Sandra Johnson",
+            id: 4,
+            color: "#7b49d3"
+        }];
+
+    var data = [
+        {
+            text: "Website Re-Design Plan",
+            ownerId: 4, roomId: 1, priorityId: 2,
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }, {
+            text: "Book Flights to San Fran for Sales Trip",
+            ownerId: 2, roomId: 2, priorityId: 1,
+            startDate: new Date(2017, 4, 22, 12, 0),
+            endDate: new Date(2017, 4, 22, 13, 0),
+            allDay: true
+        }, {
+            text: "Install New Router in Dev Room",
+            ownerId: 1, roomId: 1, priorityId: 2,
+            startDate: new Date(2017, 4, 22, 14, 30),
+            endDate: new Date(2017, 4, 22, 15, 30)
+        }, {
+            text: "Approve Personal Computer Upgrade Plan",
+            ownerId: 3, roomId: 2, priorityId: 2,
+            startDate: new Date(2017, 4, 23, 10, 0),
+            endDate: new Date(2017, 4, 23, 11, 0)
+        }, {
+            text: "Final Budget Review",
+            ownerId: 1, roomId: 1, priorityId: 1,
+            startDate: new Date(2017, 4, 23, 12, 0),
+            endDate: new Date(2017, 4, 23, 13, 35)
+        }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
+        currentDate: new Date(2017, 4, 22),
+        groups: ["ownerId", "priorityId"],
+        resources: [{
+            fieldExpr: "priorityId",
+            dataSource: priorities,
+            label: "Priority"
+        }, {
+            fieldExpr: "ownerId",
+            dataSource: owners,
+            label: "Owner"
+        }],
+        height: 600
+    });
+
+    var $element = this.instance.$element();
+    var groupRow = $element.find('.dx-scheduler-group-row').eq(0),
+        dataTableRow = $element.find('.dx-scheduler-date-table-row').eq(0);
+
+    assert.equal(groupRow.outerHeight(), dataTableRow.outerHeight(), 'Row heights is equal');
 });
 
 QUnit.test("Header should be initialized with correct 'width' option", function(assert) {

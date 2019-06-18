@@ -10,7 +10,7 @@ var getCaretBoundaries = function(text, format) {
     format = sign < 0 ? signParts[1] : signParts[0];
 
     var clearedFormat = format.replace(/'([^']*)'/g, "$1"),
-        result = /^([^#0\.,]*)([#0\.,]*)([^#0\.,]*)$/.exec(clearedFormat);
+        result = /^([^#0.,]*)([#0.,]*)([^#0.,]*)$/.exec(clearedFormat);
 
     var startBorder = result[1].length,
         endBorder = text.length - result[3].length;

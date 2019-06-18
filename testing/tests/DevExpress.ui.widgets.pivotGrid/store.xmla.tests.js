@@ -828,7 +828,7 @@ define(function(require) {
             var deferred = $.Deferred();
             send.apply(this, arguments)
                 .then(function() {
-                    arguments[0] = arguments[0].replace(/\<MEMBER_VALUE xsi\:type=\"xsd\:short\"\>2001\<\/MEMBER_VALUE\>/g, "<MEMBER_VALUE/>");
+                    arguments[0] = arguments[0].replace(/<MEMBER_VALUE xsi:type="xsd:short">2001<\/MEMBER_VALUE>/g, "<MEMBER_VALUE/>");
                     deferred.resolve.apply(deferred, arguments);
                 })
                 .fail(deferred.reject);

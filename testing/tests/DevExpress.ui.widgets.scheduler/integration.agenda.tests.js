@@ -11,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
+var devices = require("core/devices"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     dblclickEvent = require("events/dblclick"),
     fx = require("animation/fx"),
@@ -1361,7 +1360,7 @@ QUnit.test("Long appointment should be rendered correctly after changing view", 
     $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 1, "appointment is OK");
-    assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth * 4, 1.001, "appointment size is OK");
+    assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth * 4, 2.001, "appointment size is OK");
 });
 
 QUnit.test("Timepanel rows count should be OK for long appointment", function(assert) {
