@@ -6,7 +6,6 @@
         "max-empty-lines": 2,
         "selector-pseudo-element-colon-notation": null,
         "declaration-empty-line-before": null,
-        "declaration-block-no-duplicate-properties": null,
         "rule-empty-line-before": null,
         "no-descending-specificity": null,
         "no-duplicate-selectors": null,
