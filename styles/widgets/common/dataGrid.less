@@ -41,35 +41,35 @@
 }
 
 .dx-datagrid-rowsview {
-        .dx-row.dx-group-row {
-            td {
-                border-top: 1px solid;
-                border-bottom: 1px solid;
-            }
+    .dx-row.dx-group-row {
+        td {
+            border-top: 1px solid;
+            border-bottom: 1px solid;
+        }
+    }
+
+    .dx-row.dx-group-row:first-child {
+        td {
+            border-top: none;
+        }
+    }
+
+    .dx-group-row {
+        &:focus {
+            outline: 0;
         }
 
-        .dx-row.dx-group-row:first-child {
-            td {
-                border-top: none;
-            }
+        &.dx-row > td {
+            border-left-color: transparent;
+            border-right-color: transparent;
         }
+    }
 
-        .dx-group-row {
-            &:focus {
-                outline: 0;
-            }
-
-            &.dx-row > td {
-                border-left-color: transparent;
-                border-right-color: transparent;
-            }
+    .dx-adaptive-detail-row {
+        .dx-field-item-content:focus {
+            outline: none;
         }
-
-        .dx-adaptive-detail-row {
-            .dx-field-item-content:focus {
-                outline: none;
-            }
-        }
+    }
 }
 
 .dx-datagrid-group-opened, .dx-datagrid-group-closed {
