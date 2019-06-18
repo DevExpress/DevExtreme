@@ -168,6 +168,7 @@
             & > td {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
             }
+
             & > td.dx-command-adaptive {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING - 2px @GENERIC_GRID_BASE_CELL_PADDING;
             }
@@ -176,6 +177,7 @@
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
             .dx-command-edit-with-icons .dx-link {
                 .dx-icon-sizing(@GENERIC_COMMAND_EDIT_ICON_SIZE);
+
                 margin: 0 @GENERIC_COMMAND_EDIT_ICON_MARGIN;
             }
         }
@@ -516,15 +518,18 @@
         &.dx-menu {
             background-color: transparent;
             height: 100%;
+
             .dx-menu-item {
                 .dx-menu-item-content {
                     padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
+
                     .dx-icon {
                         margin: 0 3px;
                     }
                 }
             }
         }
+
         .dx-menu-item-content {
             .dx-icon.dx-icon-filter-operation-default {
                 margin-top: 2px;
@@ -612,7 +617,6 @@
     }
 
     .dx-@{widgetName}-rowsview {
-
         .dx-@{widgetName}-borders &,
         .dx-@{widgetName}-headers + & {
             border-top: ~"@{@{widgetName}-border}";
@@ -715,6 +719,7 @@
             &:focus {
                 outline: none;
             }
+
             &.dx-data-row:not(.dx-edit-row) {
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
@@ -727,10 +732,12 @@
                         color: ~"@{@{widgetName}-row-focused-color}";
                     }
                 }
+
                 & > td,
                 & > tr:last-child > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
                 }
+
                 &:not(.dx-row-lines) {
                     & > td,
                     & > tr:first-child > td {
@@ -776,14 +783,17 @@
                     color: ~"@{@{widgetName}-base-color}";
                 }
             }
+
             &:not(.dx-row-lines):not(.dx-row-focused) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
                 }
+
                 & > tr:first-child > td {
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
                 }
+
                 & > tr:last-child > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                 }
@@ -871,6 +881,7 @@
                 darken(@button-danger-bg, 20%), @button-danger-border-color, @button-danger-color,
                 @button-danger-color
             );
+
             > .dx-button-content {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
             }

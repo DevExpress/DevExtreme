@@ -30,6 +30,7 @@
 
 .diagram-icon-colored(@data-uri, @current-color, @width, @height) {
     @uri: replace("@{data-uri}", "currentColor", escape(@current-color));
+
     background-image: e(@uri);
     width: @width;
     height: @height;

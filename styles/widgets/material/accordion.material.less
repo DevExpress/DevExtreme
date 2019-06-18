@@ -38,8 +38,8 @@
     box-shadow: @MATERIAL_ACCORDION_SHADOW;
     transition: margin 200ms cubic-bezier(0.4, 0, 0.2, 1);
     will-change: margin, height;
-
     border-top: 1px solid @accordion-item-border-color;
+
     &:first-child {
         border-top: none;
     }
@@ -149,6 +149,7 @@
             right: @MATERIAL_ACCORDION_TITLE_PADDING;
             left: @MATERIAL_ACCORDION_TITLE_PADDING*2 + @MATERIAL_BASE_ICON_SIZE;
         }
+
         &:before {
             left: @MATERIAL_ACCORDION_TITLE_PADDING;
             right: auto;

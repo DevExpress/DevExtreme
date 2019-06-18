@@ -10,6 +10,7 @@
 
 .add-counter-reset(@counter, @start: 1) when (@counter >= @start) {
     .add-counter-reset(@counter - 1, @start);
+
     counter-reset+_: ~"list-@{counter}";
 }
 
@@ -184,6 +185,7 @@
 
     li {
         .add-counter-reset(@MAX_INDENT);
+
         counter-increment: list-0;
 
         &::before {
@@ -300,6 +302,7 @@
 
 .dx-formdialog-field-target .dx-field-item-content {
     text-align: right;
+
     .dx-rtl & {
         text-align: left;
     }

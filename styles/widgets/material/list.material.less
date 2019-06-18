@@ -55,6 +55,7 @@
 
     .dx-icon-chevronnext;
     .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+
     margin-left: -5px;
     color: @list-item-chevron-icon-color;
 }
@@ -136,7 +137,6 @@
 }
 
 .dx-list-sizing(@item_horizontal_padding) {
-
     .dx-list {
         border: none;
 
@@ -166,6 +166,7 @@
                             background-color: fade(@checkbox-border-color, 10%);
                             transform: scale(1);
                         }
+
                         &.dx-checkbox-checked,
                         &.dx-checkbox-indeterminate {
                             .dx-checkbox-icon:after {
@@ -203,6 +204,7 @@
             .dx-list-group-header-indicator {
                 .dx-list-collapsible-groups & {
                     .dx-icon-chevrondown;
+
                     font-size: @MATERIAL_BASE_ICON_SIZE;
                 }
             }
@@ -234,8 +236,10 @@
 
         .dx-list-group-header-indicator {
             color: @list-header-indicator-color;
+
             .dx-list-collapsible-groups & {
                 .dx-icon-chevronup;
+
                 font-size: @MATERIAL_BASE_ICON_SIZE;
                 float: right;
                 margin-top: -2px;
@@ -353,7 +357,6 @@
             height: 24px;
             width: 24px;
             margin-left: @item_horizontal_padding - 1px;
-
             box-shadow: none;
 
             .dx-button-content {
@@ -385,8 +388,8 @@
     .dx-list-select-all {
         padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING - 1px 0;
         font-size: @MATERIAL_LIST_MAIN_FONT_SIZE;
-
         position: relative;
+
         &:after {
             content: "";
             position: absolute;
@@ -420,6 +423,7 @@
 
         .dx-list-reorder-handle {
             .dx-icon-dragvertical;
+
             color: fade(@base-icon-color, 27%);
             .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE, @MATERIAL_BASE_ICON_SIZE * 1.6);
         }
@@ -431,6 +435,7 @@
 
     .dx-list-slide-menu-button-delete {
         .dx-icon-trash;
+
         color: @base-inverted-text-color;
         border: 1px solid @list-button-delete-shadow-color;
         border-right-color: transparent;

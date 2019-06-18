@@ -8,7 +8,6 @@
 @PIVOTGRID_FILTER_AREA_BORDER_SPACING: @PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - @PIVOTGRID_COMMON_FIELD_PADDING;
 
 .dx-pivotgrid-fields-container {
-
     .dx-position-indicator {
         background-color: gray;
 
@@ -53,6 +52,7 @@
     .dx-header-filter {
         color: @HEADER_FILTER_COLOR;
         .dx-icon-filter;
+
         font-size: @PIVOTGRID_ICON_SIZE;
         width: @PIVOTGRID_ICON_SIZE;
     }
@@ -96,7 +96,6 @@
 }
 
 .dx-pivotgrid {
-
     .dx-column-header,
     .dx-filter-header {
         .dx-pivotgrid-fields-area {
@@ -256,7 +255,6 @@
     }
 
     .dx-virtual-mode {
-
         .dx-virtual-content {
             position: relative;
             overflow: hidden;
@@ -266,6 +264,7 @@
                 span {
                     visibility: hidden;
                 }
+
                 color: transparent;
                 background-color: transparent !important;
             }
@@ -301,7 +300,6 @@
     }
 
     .dx-pivotgrid-vertical-headers {
-
         .dx-expand-border {
             border-top: @PIVOTGRID_BORDER;
         }
@@ -336,7 +334,6 @@
     }
 
     .dx-area-tree-view {
-
         .dx-total {
             border-bottom: none;
         }
@@ -395,7 +392,6 @@
     }
 
     .dx-pivotgrid-border {
-
         .dx-data-header,
         .dx-filter-header,
         .dx-area-description-cell,
@@ -447,7 +443,6 @@
 }
 
 .dx-pivotgridfieldchooser {
-
     .dx-area-fields {
         overflow: hidden;
     }
@@ -540,12 +535,11 @@
 
 
 .dx-rtl {
-
     .dx-pivotgrid-fields-container {
         .dx-position-indicator {
-
             &.dx-position-indicator-horizontal {
                 margin-left: -3px;
+
                 &.dx-position-indicator-last {
                     margin-left: 1px;
                 }
@@ -559,13 +553,13 @@
     }
 
     &.dx-pivotgrid {
-
         .dx-column-header,
         .dx-filter-header {
             .dx-pivotgrid-toolbar {
                 margin-right: 0;
                 margin-left: 10px;
                 float: left;
+
                 .dx-pivotgrid-field-chooser-button {
                     margin-right: 0;
                     margin-left: 4px;
@@ -580,6 +574,7 @@
                 margin-right: -5px;
                 padding-right: 5px;
             }
+
             .dx-pivotgrid-fields-area-head {
                 tr > td:first-child {
                     padding-left: 2px;
@@ -603,7 +598,6 @@
         }
 
         .dx-group-connector {
-
             &.dx-group-connector-prev {
                 left: initial;
                 right: 0;

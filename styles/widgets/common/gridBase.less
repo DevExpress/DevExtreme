@@ -49,6 +49,7 @@
 
             .dx-@{widgetName}-table {
                 position: relative;
+
                 td {
                     pointer-events: auto;
                 }
@@ -646,6 +647,7 @@
                 .dx-menu {
                     display: block;
                 }
+
                 .dx-texteditor-input,
                 .dx-placeholder:before {
                     padding-left: @GRID_TEXTEDITOR_INPUT_PADDING;
@@ -747,6 +749,7 @@
 
     .dx-state-disabled {
         cursor: pointer;
+
         .dx-menu-item {
             cursor: default;
         }
@@ -785,6 +788,7 @@
             &.dx-scrollable .dx-scrollable-content {
                 z-index: 2;
             }
+
             .dx-scrollable-scrollbar {
                 z-index: 3;
             }
@@ -814,6 +818,7 @@
 
         .dx-row.dx-row-lines:first-child {
             border-top: none;
+
             & > td,
             & > tr > td {
                 border-top: none;
@@ -838,6 +843,7 @@
         .dx-@{widgetName}-table .dx-virtual-row {
             border-top: 0;
             border-bottom: 0;
+
             & > td {
                 padding-top: 0;
                 padding-bottom: 0;
@@ -922,6 +928,7 @@
                     width: 16px;
                     height: 16px;
                 }
+
                 .dx-checkbox-text {
                     white-space: nowrap;
                     word-break: normal;
@@ -945,11 +952,13 @@
                     padding: 0;
                 }
             }
+
             .dx-popover-arrow {
                 width: 0;
                 height: 0;
             }
         }
+
         .dx-revert-button {
             margin: 0;
         }
@@ -1026,6 +1035,7 @@
         .dx-@{widgetName}-headers,
         .dx-@{widgetName}-total-footer {
             direction: ltr;
+
             .dx-@{widgetName}-table {
                 direction: rtl;
             }
@@ -1097,6 +1107,7 @@
         .dx-@{widgetName}-filter-panel-text {
             .dx-overflow();
         }
+
         .dx-@{widgetName}-filter-panel-text:hover,
         .dx-@{widgetName}-filter-panel-clear-filter:hover {
             text-decoration: underline;

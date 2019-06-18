@@ -33,6 +33,7 @@
     background-size: @IOS7_BACKGROUND_WIDTH @IOS7_BAR_HEIGHT;
     animation: loader 2s linear infinite;
     .gradient-linear(@IOS7_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
+
     background-repeat: repeat;
 }
 
@@ -48,6 +49,7 @@
     .dx-progressbar-animating-container {
         animation: none;
         .gradient-linear(@IOS7_PROGRESSBAR_DISABLED_STATE_INTERDETERMINATE_STATE_GRADIENT);
+
         background-repeat: repeat;
         background-color: @IOS7_PROGRESSBAR_CONTAINER_COLOR;
         background-position-x: @IOS7_BACKGROUND_WIDTH / 2;
@@ -60,6 +62,7 @@
         .dx-progressbar-animating-container {
             animation: loader-rtl 1s linear infinite;
             .gradient-linear(@IOS7_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
+
             background-repeat: repeat;
         }
     }

@@ -49,7 +49,6 @@
 }
 
 .dx-texteditor {
-
     &.dx-editor-outlined {
         background: @texteditor-bg;
         border: @GENERIC_TEXTEDITOR_BORDER_WIDTH solid @texteditor-border-color;
@@ -70,16 +69,20 @@
 
     &.dx-state-readonly {
         border-style: dashed;
+
         &.dx-editor-filled {
             border-color: transparent;
             background-color: fade(@texteditor-filled-bg, 3%);
+
             &.dx-state-focused {
                 background-color: fade(@texteditor-filled-bg, 3%);
             }
+
             &.dx-state-hover {
                 background-color: fade(@texteditor-hover-border-color, 7%);
             }
         }
+
         &.dx-editor-underlined {
             border-style: none;
             border-bottom-style: dashed;
@@ -88,6 +91,7 @@
 
     &.dx-state-hover {
         border-color: @texteditor-hover-border-color;
+
         &.dx-editor-filled {
             border-color: transparent;
             background-color: fade(@texteditor-hover-border-color, 10%);
@@ -185,6 +189,7 @@
 
 .dx-invalid.dx-texteditor {
     border-color: @texteditor-invalid-faded-border-color;
+
     &.dx-editor-filled,
     &.dx-editor-underlined,
     &.dx-editor-outlined {
@@ -202,6 +207,7 @@
     &.dx-editor-filled {
         background-color: @texteditor-filled-invalid-background;
         border-color: transparent;
+
         &.dx-state-focused {
             background: transparent;
         }
@@ -213,6 +219,7 @@
     .dx-placeholder:before {
         right: 0;
         left: auto;
+
         .dx-editor-underlined& {
             padding-right: 0;
         }

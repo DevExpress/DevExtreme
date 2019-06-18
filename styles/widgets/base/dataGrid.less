@@ -74,6 +74,7 @@
                 outline: 2px solid @datagrid-focused-border-color;
                 outline-offset: 2px;
             }
+
             td:focus {
                 outline-offset: -2px;
             }
@@ -127,6 +128,7 @@
             outline: 2px solid @datagrid-focused-border-color;
             outline-offset: 2px;
         }
+
         &.dx-row-focused > td.dx-command-edit > a.dx-link:focus {
             outline-color: @base-focus-color;
             outline-offset: 0;
@@ -174,6 +176,7 @@
         &:first-child {
             border-left: none;
         }
+
         &:last-child {
             border-right: none;
         }
@@ -183,11 +186,13 @@
 .dx-datagrid-filter-panel {
     color: @datagrid-base-color;
     border-top: @datagrid-border;
+
     .dx-icon-filter,
     .dx-datagrid-filter-panel-text,
     .dx-datagrid-filter-panel-clear-filter {
         outline: none;
     }
+
     &.dx-state-focused {
         .dx-icon-filter:focus,
         .dx-datagrid-filter-panel-text:focus,
@@ -200,6 +205,7 @@
 
 .dx-datagrid-form-buttons-container {
     float: right;
+
     .dx-button {
         margin-left: 10px;
         margin-top: 10px;
@@ -224,6 +230,7 @@
 
 .dx-datagrid-edit-popup .dx-error-message {
     .dx-datagrid-error-message();
+
     color: @datagrid-row-error-color;
     margin-bottom: 20px;
 }
@@ -271,8 +278,10 @@
             }
         }
     }
+
     .dx-datagrid-form-buttons-container {
         float: left;
+
         .dx-button {
             margin-left: 0;
             margin-right: 10px;
@@ -288,6 +297,7 @@
     from {
         background-color: fade(@datagrid-base-color, 8%);
     }
+
     50% {
         background-color: fade(@datagrid-base-color, 8%);
     }
