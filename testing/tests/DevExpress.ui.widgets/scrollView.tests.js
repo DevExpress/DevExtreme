@@ -2400,29 +2400,24 @@ module("pullDown, reachBottom events", moduleConfig, () => {
     });
 
     test("Exception should not be thrown after subscription on pullDown, reachBottom events when initialize is ready", (assert) => {
-        try {
-            let $scrollView = $("#scrollView").dxScrollView({
-                useNative: false,
-                onInitialized: (e) => {
-                    e.component.beginUpdate();
-                    e.component.on("pullDown", () => {
-                        assert.ok(true, "pullDown is fired");
-                    });
-                    e.component.on("reachBottom", () => {
-                        assert.ok(true, "reachBottom is fired");
-                    });
-                    e.component.endUpdate();
-                }
-            });
-            const scrollView = $scrollView.dxScrollView("instance");
-            assert.ok(true, "Exception is not throw");
+        let $scrollView = $("#scrollView").dxScrollView({
+            useNative: false,
+            onInitialized: (e) => {
+                e.component.beginUpdate();
+                e.component.on("pullDown", () => {
+                    assert.ok(true, "pullDown is fired");
+                });
+                e.component.on("reachBottom", () => {
+                    assert.ok(true, "reachBottom is fired");
+                });
+                e.component.endUpdate();
+            }
+        });
+        const scrollView = $scrollView.dxScrollView("instance");
 
-            scrollView.refresh();
-            const bottomPocketHeight = $scrollView.find("." + SCROLLVIEW_REACHBOTTOM_CLASS).height();
-            scrollView.scrollTo($(scrollView.content()).height() + bottomPocketHeight);
-        } catch(e) {
-            assert.ok(false, "Exception: " + e);
-        }
+        scrollView.refresh();
+        const bottomPocketHeight = $scrollView.find("." + SCROLLVIEW_REACHBOTTOM_CLASS).height();
+        scrollView.scrollTo($(scrollView.content()).height() + bottomPocketHeight);
     });
 
 });
