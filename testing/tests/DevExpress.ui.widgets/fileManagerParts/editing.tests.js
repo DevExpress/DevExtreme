@@ -109,7 +109,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
         this.clock.tick(400);
 
         const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
-        assert.notOk($input.val(), "input has not value");
+        assert.ok($input.has(":focus"), "dialog's input element should be focused");
+        assert.equal("Untitled folder", $input.val(), "input has default value");
 
         $input.val("Test 4");
         $input.trigger("change");

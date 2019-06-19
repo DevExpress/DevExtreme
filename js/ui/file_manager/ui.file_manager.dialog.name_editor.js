@@ -21,6 +21,15 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
         super.show();
     }
 
+    _onPopupShown() {
+        if(!this._nameTextBox) {
+            return;
+        }
+        const $textBoxInput = this._nameTextBox._input();
+        $textBoxInput.length && $textBoxInput[0].select();
+        this._nameTextBox.focus();
+    }
+
     _getDialogOptions() {
         return extend(super._getDialogOptions(), {
             title: this.option("title"),
@@ -34,8 +43,7 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
         super._createContentTemplate(element);
 
         this._nameTextBox = this._createComponent($("<div>"), TextBox, {
-            value: this._initialNameValue,
-            placeholder: "Enter your new name"
+            value: this._initialNameValue
         });
 
         this._$contentElement.append(this._nameTextBox.$element());
