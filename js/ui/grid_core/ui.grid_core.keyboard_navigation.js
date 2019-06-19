@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import domAdapter from "../../core/dom_adapter";
 import eventsEngine from "../../events/core/events_engine";
 import core from "./ui.grid_core.modules";
-import { focusAndSelectElement } from "./ui.grid_core.utils";
+import { focusAndSelectElement, getWidgetInstance } from "./ui.grid_core.utils";
 import { isDefined } from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { focused } from "../widget/selectors";
@@ -1932,11 +1932,9 @@ module.exports = {
                     }
                 },
                 _getEditorInstance: function($cell) {
-                    var $editor = $cell.find(".dx-texteditor").eq(0),
-                        editorData = $editor.data && $editor.data(),
-                        editorName = editorData && editorData["dxComponents"][0];
+                    var $editor = $cell.find(".dx-texteditor").eq(0);
 
-                    return editorName && editorData[editorName];
+                    return getWidgetInstance($editor);
                 }
             }
         },
