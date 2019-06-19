@@ -9639,6 +9639,51 @@ QUnit.test("onContentReady when there is no dataSource and stateStoring is enabl
     assert.equal(contentReadyCallCount, 1);
 });
 
+// T749733
+QUnit.test("Change editing.popup option should not reload data", function(assert) {
+    // arrange
+    var lookupLoadingSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        onInitNewRow: function(e) {
+            e.component.option("editing.popup.title", "New title");
+        },
+        dataSource: [],
+        editing: {
+            mode: "popup",
+            allowAdding: true,
+            popup: {
+                showTitle: true
+            }
+        },
+        columns: [{
+            dataField: "Task_Assigned_Employee_ID",
+            lookup: {
+                dataSource: {
+                    load: function() {
+                        lookupLoadingSpy();
+                        var d = $.Deferred();
+                        setTimeout(function() {
+                            d.resolve([]);
+                        }, 100);
+                        return d.promise();
+                    }
+                },
+                valueExpr: "Customer_ID",
+                displayExpr: "Customer_Name"
+            }
+        }]
+    });
+    this.clock.tick(100);
+
+    // act
+    dataGrid.addRow();
+    this.clock.tick(100);
+
+    // assert
+    assert.equal(lookupLoadingSpy.callCount, 1, "lookup is loaded once");
+    assert.equal(dataGrid.getController("editing")._editPopup.option("title"), "New title", "popup title is updated");
+});
+
 QUnit.module("API methods", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
