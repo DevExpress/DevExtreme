@@ -17,7 +17,7 @@
 
 .dx-scrollable-native {
     -ms-overflow-style: -ms-autohiding-scrollbar;
-    -ms-scroll-snap-type: proximity;
+    -ms-scroll-snap-type: proximity; // stylelint-disable-line property-no-vendor-prefix
 
     .dx-scrollable-scrollbar {
         display: none;
@@ -156,7 +156,7 @@
     position: relative;
     background-color: #888; /* NOTE: fallback for rgba non-supporting */
     background-color: rgba(0, 0, 0, 0.5);
-    -webkit-transform: translate(0, 0);
+    -webkit-transform: translate(0, 0); //stylelint-disable-line property-no-vendor-prefix
     transition: background-color 0s linear;
 
     &.dx-state-invisible {
