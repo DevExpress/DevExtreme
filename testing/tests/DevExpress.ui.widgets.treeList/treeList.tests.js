@@ -1050,6 +1050,8 @@ QUnit.test("TreeList with focusedRowEnabled and focusedRowIndex 0", function(ass
 QUnit.test("TreeList with focusedRowKey", function(assert) {
     // arrange, act
     var treeList = createTreeList({
+        height: 100,
+        keyExpr: "id",
         dataSource: generateData(10),
         paging: {
             pageSize: 4
@@ -1069,6 +1071,8 @@ QUnit.test("TreeList with focusedRowKey", function(assert) {
 QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) {
     // arrange, act
     var treeList = createTreeList({
+        height: 100,
+        keyExpr: "id",
         dataSource: generateData(10),
         remoteOperations: true,
         paging: {
