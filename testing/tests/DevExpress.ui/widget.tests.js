@@ -1382,8 +1382,8 @@ QUnit.module("keyboard navigation", {}, () => {
 
         keyboardMock($element).press("A");
 
-        assert.strictEqual(keyHandler.callCount, 1, "supportedKeysHandler.callCount");
-        assert.strictEqual(keyHandler.getCall(0).args[0].type, "keydown", "supportedKeysHandler.type");
+        assert.strictEqual(keyHandler.callCount, 1, "keyHandler.callCount");
+        assert.strictEqual(keyHandler.getCall(0).args[0].type, "keydown", "keyHandler.type");
     });
 });
 
