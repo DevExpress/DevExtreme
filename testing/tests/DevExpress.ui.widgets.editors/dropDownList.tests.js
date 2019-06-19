@@ -281,7 +281,8 @@ QUnit.test("submit value should be equal to the displayExpr in case value is obj
         dataSource: [{ text: "test" }],
         deferRendering: false,
         value: { text: "test" },
-        displayExpr: "text"
+        displayExpr: "text",
+        useHiddenSubmitElement: true
     });
     const $submitInput = $dropDownList.find("input[type='hidden']");
 
@@ -297,7 +298,8 @@ QUnit.test("submit value should be equal to the primitive value type", function(
             if(item) {
                 return item + "123";
             }
-        }
+        },
+        useHiddenSubmitElement: true
     });
     const $submitInput = $dropDownList.find("input[type='hidden']");
 
