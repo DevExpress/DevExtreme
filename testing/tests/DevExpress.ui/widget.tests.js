@@ -1363,6 +1363,28 @@ QUnit.module("keyboard navigation", {}, () => {
 
         assert.equal(handler.callCount, 1, "new handler fired");
     });
+
+    QUnit.test("Call 'repaint' from 'onContentReady'", (assert) => {
+        const keyHandler = sinon.stub();
+        let firstCall = true;
+
+        const $element = $("#widget").dxWidget({
+            focusStateEnabled: true,
+            onContentReady: function() {
+                if(firstCall) {
+                    firstCall = false;
+                    this.repaint();
+                }
+            }
+        });
+        const widget = $("#widget").dxWidget("instance");
+        widget.registerKeyHandler("A", keyHandler);
+
+        keyboardMock($element).press("A");
+
+        assert.strictEqual(keyHandler.callCount, 1, "keyHandler.callCount");
+        assert.strictEqual(keyHandler.getCall(0).args[0].type, "keydown", "keyHandler.type");
+    });
 });
 
 if(devices.current().deviceType === "desktop") {
