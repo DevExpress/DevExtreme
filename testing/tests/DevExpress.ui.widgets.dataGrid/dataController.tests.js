@@ -2902,6 +2902,30 @@ QUnit.test("change pageIndex to greater then pageCount", function(assert) {
     assert.equal(this.dataController.pageIndex(), 1);
 });
 
+// T746935
+QUnit.test("dataSource should not be reloaded when pageIndex is normalized after grouping", function(assert) {
+    this.applyOptions({
+        columns: ["name", "group"]
+    });
+
+    var loadingSpy = sinon.spy();
+    this.dataSource.store().on("loading", loadingSpy);
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.pageIndex(1);
+    this.dataSource.load();
+
+    // act
+    this.dataSource.group([{ selector: "group" }]);
+    this.dataSource.load();
+
+    // assert
+    assert.equal(loadingSpy.callCount, 1, "dataSource is loaded once");
+    assert.equal(this.dataController.items().length, 1, "item count");
+    assert.equal(this.dataController.items()[0].rowType, "group", "first row type");
+    assert.equal(this.dataController.pageIndex(), 0, "pageIndex");
+});
+
 QUnit.test("Change pageSize", function(assert) {
     // arrange
     var countCallPageChanged = 0;
