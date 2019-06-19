@@ -85,6 +85,7 @@ QUnit.test('Text editor', function(assert) {
     assert.equal(value, 'B', 'value after change');
 });
 
+// T749989
 QUnit.test('Editor should not convert value to string if editorType is defined and not equal to dxTextBox', function(assert) {
     // arrange
     var $container = $('#container'),
