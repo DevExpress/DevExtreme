@@ -11,21 +11,26 @@
     .dx-diagram-left-panel,
     .dx-diagram-right-panel {
         background: @overlay-content-bg;
+
         .dx-accordion {
             .dx-accordion-item {
                 border-left: none;
                 border-right: none;
+
                 .dx-diagram-right-panel-begin-group {
                     padding-top: 24px;
                 }
             }
+
             .dx-accordion-item:first-of-type {
                 border-top: none;
             }
+
             .dx-state-focused {
                 &.dx-accordion-item {
                     border-color: @accordion-item-border-color;
                 }
+
                 &.dx-accordion-item-closed:not(:last-of-type) {
                     border-bottom-color: transparent;
                 }
@@ -36,6 +41,7 @@
     .dx-diagram-left-panel {
         border-right-color: @diagram-toolbar-border-color;
     }
+
     .dx-diagram-right-panel {
         border-left-color: @diagram-toolbar-border-color;
     }
@@ -91,24 +97,30 @@
     .dx-diagram-toolbar-menu-separator {
         border-top-color: @diagram-toolbar-border-color;
     }
+
     .dx-diagram-select-sm .dx-texteditor {
         width: 110px;
     }
 
-    .dx-diagram-select-b, .dx-diagram-color-b {
+    .dx-diagram-select-b,
+    .dx-diagram-color-b {
         .dx-dropdowneditor-field-template-wrapper {
-            .dx-diagram-i, .dx-icon {
+            .dx-diagram-i,
+            .dx-icon {
                 margin-left: 12px;
                 margin-right: 12px;
             }
+
             .dx-icon {
                 font-size: @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE;
                 color: @base-icon-color;
             }
         }
     }
+
     .dx-diagram-color-b .dx-dropdowneditor-field-template-wrapper {
-        .dx-diagram-i, .dx-icon {
+        .dx-diagram-i,
+        .dx-icon {
             border-bottom-width: @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH;
             border-bottom-style: solid;
         }
