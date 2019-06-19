@@ -2399,25 +2399,24 @@ module("pullDown, reachBottom events", moduleConfig, () => {
         assert.ok(true, "chains is supported");
     });
 
-    test("Exception should not be thrown after subscription on pullDown, reachBottom events when initialize is ready", (assert) => {
-        let $scrollView = $("#scrollView").dxScrollView({
-            useNative: false,
-            onInitialized: (e) => {
-                e.component.beginUpdate();
-                e.component.on("pullDown", () => {
-                    assert.ok(true, "pullDown is fired");
-                });
-                e.component.on("reachBottom", () => {
-                    assert.ok(true, "reachBottom is fired");
-                });
-                e.component.endUpdate();
+    ["config", "onInitialized"].forEach(assignMethod => {
+        test("Check add event handlers", (assert) => {
+            var config = {};
+
+            if(assignMethod === "config") {
+                config.onPullDown = function() {};
+                config.onReachBottom = function() {};
+            } else if(assignMethod === "onInitialized") {
+                config.onInitialized = function(e) {
+                    e.component.on("pullDown", function() {});
+                    e.component.on("reachBottom", function() {});
+                };
+            } else {
+                assert.ok(false);
             }
+
+            $("#scrollView").dxScrollView(config);
+            assert.ok(true, "no exceptions");
         });
-        const scrollView = $scrollView.dxScrollView("instance");
-
-        scrollView.refresh();
-        const bottomPocketHeight = $scrollView.find("." + SCROLLVIEW_REACHBOTTOM_CLASS).height();
-        scrollView.scrollTo($(scrollView.content()).height() + bottomPocketHeight);
     });
-
 });
