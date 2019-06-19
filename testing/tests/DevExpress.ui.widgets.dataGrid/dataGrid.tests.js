@@ -6904,6 +6904,46 @@ QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling m
     assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
 });
 
+// T748954
+QUnit.test("Scroll to second page should works if scrolling mode is infinite, summary is defined and server returns totalCount", function(assert) {
+    var dataGrid = createDataGrid({
+        height: 100,
+        loadingTimeout: undefined,
+        scrolling: {
+            timeout: 0,
+            mode: "infinite",
+            useNative: false
+        },
+        remoteOperations: true,
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                var items = [];
+
+                for(var i = options.skip; i < options.skip + options.take; i++) {
+                    items.push({ id: i + 1 });
+                }
+
+                return $.Deferred().resolve(items, {
+                    totalCount: 100000,
+                    summary: [100000]
+                });
+            }
+        },
+        summary: {
+            totalItems: [{ column: "id", summaryType: "count" }]
+        }
+    });
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+    assert.strictEqual(dataGrid.getVisibleRows()[0].key, 1);
+    assert.strictEqual(dataGrid.getVisibleRows()[39].key, 40);
+});
+
 // T742926
 QUnit.test("Scroll should works if error occurs during third page loading if scrolling mode is infinite", function(assert) {
     var error = false;

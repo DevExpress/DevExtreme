@@ -351,8 +351,9 @@ module.exports = gridCore.Controller.inherit((function() {
             var loadOptions = options.loadOptions,
                 localPaging = options.remoteOperations && !options.remoteOperations.paging,
                 cachedPagesData = options.cachedPagesData,
-                needCache = this.option("cacheEnabled") !== false && options.storeLoadOptions,
-                needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || options.storeLoadOptions.group) && !this.option("legacyRendering"),
+                storeLoadOptions = options.storeLoadOptions,
+                needCache = this.option("cacheEnabled") !== false && storeLoadOptions,
+                needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group) && !this.option("legacyRendering"),
                 needPagingCache = needCache && localPaging,
                 needStoreCache = needPagingCache && !options.isCustomLoading;
 
@@ -380,7 +381,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 loadOptions.group = options.group || loadOptions.group;
             }
 
-            var groupCount = gridCore.normalizeSortingInfo(options.storeLoadOptions.group || loadOptions.group).length;
+            var groupCount = gridCore.normalizeSortingInfo(storeLoadOptions.group || loadOptions.group).length;
 
             if(!needPageCache || !getPageDataFromCache(options)) {
                 if(needPagingCache && options.cachedPagingData) {
@@ -388,7 +389,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 } else {
                     if(needStoreCache) {
                         if(!this._cachedStoreData) {
-                            this._cachedStoreData = cloneItems(options.data, gridCore.normalizeSortingInfo(options.storeLoadOptions.group).length);
+                            this._cachedStoreData = cloneItems(options.data, gridCore.normalizeSortingInfo(storeLoadOptions.group).length);
                         } else if(options.mergeStoreLoadData) {
                             options.data = this._cachedStoreData = this._cachedStoreData.concat(options.data);
                         }
@@ -408,7 +409,13 @@ module.exports = gridCore.Controller.inherit((function() {
                     options.extra = typeUtils.isPlainObject(options.extra) ? options.extra : {};
                     options.extra.totalCount = options.data.length;
                 }
+
+                if(options.extra && options.extra.totalCount >= 0 && storeLoadOptions.requireTotalCount === false) {
+                    options.extra.totalCount = -1;
+                }
+
                 this._handleDataLoadedCore(options);
+
                 if(needPageCache) {
                     cachedPagesData.extra = cachedPagesData.extra || extend({}, options.extra);
                     when(options.data).done(function(data) {
