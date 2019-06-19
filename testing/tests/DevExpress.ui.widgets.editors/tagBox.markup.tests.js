@@ -239,6 +239,29 @@ QUnit.test("option elements should have displayed text of selected items as valu
     });
 });
 
+QUnit.test("the submit value must be equal to the value of the widget", function(assert) {
+    var items = ["test-1", "test-2", "test-3"],
+        value = [items[0], items[2]],
+        $options = $("#tagBox")
+            .dxTagBox({
+                items: items,
+                value: value,
+                valueExpr: "this",
+                displayExpr: function(item) {
+                    if(item) {
+                        return item.split("-").join("+");
+                    }
+                }
+            })
+            .find("option");
+
+    assert.equal($options.length, value.length, "all options are rendered");
+
+    $options.each(function(index) {
+        assert.deepEqual(this.value, value[index], "the 'value' attribute is set for the option " + index);
+    });
+});
+
 QUnit.test("select element should get the 'name' attribute with a correct value", function(assert) {
     var expectedName = "some_name",
         $element = $("#tagBox").dxTagBox({

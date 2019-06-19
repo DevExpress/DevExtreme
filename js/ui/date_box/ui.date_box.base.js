@@ -383,7 +383,6 @@ var DateBox = DropDownEditor.inherit({
 
     _initMarkup: function() {
         this.$element().addClass(DATEBOX_CLASS);
-        this._renderSubmitElement();
 
         this.callBase();
 
@@ -422,16 +421,6 @@ var DateBox = DropDownEditor.inherit({
         });
 
         $element.addClass(DATEBOX_CLASS + "-" + this._pickerType);
-    },
-
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
     },
 
     _updateSize: function() {
@@ -573,17 +562,21 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption("value"),
-            dateSerializationFormat = this.option("dateSerializationFormat");
+        var value = this.dateOption("value");
 
         this.option("text", this._getDisplayedText(value));
+        this._strategy.renderValue();
 
+        return this.callBase();
+    },
+
+    _setSubmitValue: function() {
+        var value = this.dateOption("value");
+        var dateSerializationFormat = this.option("dateSerializationFormat");
         var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option("type")];
         var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
-        this._$submitElement.val(submitValue);
 
-        this._strategy.renderValue();
-        return this.callBase();
+        this._getSubmitElement().val(submitValue);
     },
 
     _getDisplayedText: function(value) {

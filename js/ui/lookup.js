@@ -659,7 +659,6 @@ var Lookup = DropDownList.inherit({
         this.$element()
             .addClass(LOOKUP_CLASS)
             .toggleClass(LOOKUP_POPOVER_MODE, this.option("usePopover"));
-        this._renderSubmitElement();
         this.callBase();
     },
 
@@ -667,21 +666,10 @@ var Lookup = DropDownList.inherit({
         return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
     },
 
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
     _dataSourceOptions: function() {
         return extend(this.callBase(), {
             paginate: true
         });
-    },
-
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
     },
 
     _fireContentReadyAction: commonUtils.noop, // TODO: why not symmetric to other dropdowns?
@@ -1181,15 +1169,7 @@ var Lookup = DropDownList.inherit({
     _renderInputValue: function() {
         return this.callBase().always((function() {
             this._refreshSelected();
-            this._setSubmitValue();
         }).bind(this));
-    },
-
-    _setSubmitValue: function() {
-        var value = this.option("value"),
-            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
-
-        this._$submitElement.val(submitValue);
     },
 
     _renderPlaceholder: function() {

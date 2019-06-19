@@ -13,7 +13,8 @@ QUnit.testStart(function() {
 });
 
 var WIDGET_CLASS = "dx-autocomplete",
-    TEXTEDITOR_CLASS = "dx-texteditor";
+    TEXTEDITOR_CLASS = "dx-texteditor",
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 
 QUnit.module("dxAutocomplete", {
@@ -69,7 +70,7 @@ QUnit.test("input should be empty when value is empty", function(assert) {
         value: ""
     });
 
-    var $input = $autocomplete.find("input");
+    var $input = $autocomplete.find("." + TEXTEDITOR_INPUT_CLASS);
     assert.equal($input.val(), "", "input is empty");
 });
 
@@ -117,7 +118,7 @@ QUnit.module("aria accessibility");
 
 QUnit.test("aria-autocomplete property", function(assert) {
     var $element = $("#widget").dxAutocomplete(),
-        $input = $element.find("input:first");
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS + ":first");
 
     assert.equal($input.attr("aria-autocomplete"), "inline");
 });

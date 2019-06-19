@@ -965,7 +965,7 @@ var Calendar = Editor.inherit({
 
     _setSubmitValue: function(value) {
         var dateValue = this._convertToDate(value);
-        this._$submitElement.val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
+        this._getSubmitElement().val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
     },
 
     _getSubmitElement: function() {

@@ -115,6 +115,25 @@ QUnit.test("the hidden input should get display text as value if widget value is
     assert.equal($input.val(), items[0].text, "input value is correct");
 });
 
+QUnit.test("the submit value must be equal to the value of the widget", function(assert) {
+    var items = ["test"];
+
+    this.$element.dxDropDownBox({
+        items: items,
+        value: items[0],
+        valueExpr: "this",
+        displayExpr: function(item) {
+            if(item) {
+                return item + "123";
+            }
+        }
+    });
+
+    var $input = this.$element.find("input[type='hidden']");
+
+    assert.deepEqual($input.val(), items[0], "submit value should be equal to editor value");
+});
+
 QUnit.test("the hidden input should get value in respect of the 'valueExpr' option", function(assert) {
     var items = [{ id: 1, text: "one" }];
 

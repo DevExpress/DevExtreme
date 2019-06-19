@@ -309,7 +309,10 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _initMarkup: function() {
+        this._renderSubmitElement();
+
         this.callBase();
+
         this.$element()
             .addClass(DROP_DOWN_EDITOR_CLASS);
 
@@ -372,6 +375,8 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderValue: function() {
+        this._setSubmitValue();
+
         const promise = this.callBase();
 
         promise.always(this._renderField.bind(this));
@@ -756,6 +761,20 @@ var DropDownEditor = TextBox.inherit({
         if(Object.keys(options).indexOf("width") !== -1 && options["width"] === undefined) {
             this._updatePopupWidth();
         }
+    },
+
+    _renderSubmitElement: function() {
+        this._$submitElement = $("<input>")
+            .attr("type", "hidden")
+            .appendTo(this.$element());
+    },
+
+    _setSubmitValue: function() {
+        this._getSubmitElement().val(this.option("value"));
+    },
+
+    _getSubmitElement: function() {
+        return this._$submitElement;
     },
 
     _optionChanged: function(args) {

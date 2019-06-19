@@ -231,7 +231,7 @@ var CheckBox = Editor.inherit({
         $element.toggleClass(CHECKBOX_CHECKED_CLASS, Boolean(checked));
         $element.toggleClass(CHECKBOX_INDETERMINATE_CLASS, indeterminate);
 
-        this._$submitElement.val(checked);
+        this._getSubmitElement().val(checked);
         this.setAria("checked", indeterminate ? "mixed" : checked || "false");
     },
 

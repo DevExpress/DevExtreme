@@ -525,7 +525,7 @@ QUnit.test("Color changed in preview if value is valid", function(assert) {
         colorBox = $colorBox.dxColorBox("instance");
 
     var $colorPreview = $colorBox.find(".dx-colorbox-color-result-preview");
-    var $input = $colorBox.find("input");
+    var $input = $colorBox.find("." + TEXTEDITOR_INPUT_CLASS);
     var keyboard = keyboardMock($input);
 
     $input.val("");
