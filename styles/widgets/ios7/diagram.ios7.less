@@ -1,7 +1,20 @@
+@IOS7_DIAGRAM_TOOLBAR_ICON_SIZE: 18px;
+@DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
+
 .dx-diagram {
     .dx-diagram-toolbar-wrapper:first-child {
         border-bottom: 1px solid @IOS7_BORDER;
     }
+
+    .dx-diagram-select-b,
+    .dx-diagram-color-b {
+        .dx-dropdowneditor-field-template-wrapper {
+            .dx-icon {
+                font-size: @IOS7_DIAGRAM_TOOLBAR_ICON_SIZE;
+                color: @IOS7_BUTTON_TEXT;
+            }
+        }
+    }
 }
 
-.diagram-icons-mixin(@IOS7_BUTTON_TEXT);
+.diagram-icons-mixin(@IOS7_BUTTON_TEXT, @IOS7_DIAGRAM_TOOLBAR_ICON_SIZE);
