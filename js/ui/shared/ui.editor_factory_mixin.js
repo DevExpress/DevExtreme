@@ -101,6 +101,7 @@ var EditorFactoryMixin = (function() {
             toString = function(value) {
                 return typeUtils.isDefined(value) ? value.toString() : "";
             };
+
         if(options.editorType && options.editorType !== "dxTextBox") {
             config.value = options.value;
         } else {

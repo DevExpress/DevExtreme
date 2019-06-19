@@ -92,13 +92,14 @@ QUnit.test('Editor should not convert value to string if editorType is defined a
 
     // act
     this.editorFactoryController.createEditor($container, {
-        value: value,
-        editorType: "some type"
+        editorType: 'dxSelectBox',
+        parentType: 'dataRow',
+        value: value
     });
-    var editor = $container.dxTextBox('instance');
+    var editor = $container.dxSelectBox('instance');
 
     // assert
-    assert.ok(editor, 'dxTextBox created');
+    assert.ok(editor, 'editor created');
     assert.strictEqual(editor.option('value'), value, 'editor value was not converted to string');
 });
 
