@@ -1,42 +1,44 @@
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    noop = require("core/utils/common").noop,
-    translator = require("animation/translator"),
-    animationFrame = require("animation/frame"),
-    devices = require("core/devices"),
-    messageLocalization = require("localization/message"),
-    Scrollbar = require("ui/scroll_view/ui.scrollbar"),
-    themes = require("ui/themes"),
-    pointerMock = require("../../helpers/pointerMock.js");
+import $ from "jquery";
+import renderer from "core/renderer";
+import { noop } from "core/utils/common";
+import translator from "animation/translator";
+import animationFrame from "animation/frame";
+import devices from "core/devices";
+import messageLocalization from "localization/message";
+import Scrollbar from "ui/scroll_view/ui.scrollbar";
+import themes from "ui/themes";
+import pointerMock from "../../helpers/pointerMock.js";
 
-require("common.css!");
-require("ui/scroll_view");
+import "common.css!";
+import "ui/scroll_view";
 
-var SCROLLVIEW_CLASS = "dx-scrollview",
-    SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
-    SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
-    SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll",
-    SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar",
-    SCROLLVIEW_CONTENT_CLASS = "dx-scrollview-content",
-    SCROLLVIEW_TOP_POCKET_CLASS = "dx-scrollview-top-pocket",
-    SCROLLVIEW_BOTTOM_POCKET_CLASS = "dx-scrollview-bottom-pocket",
-    SCROLLVIEW_LOADPANEL = "dx-scrollview-loadpanel",
-    SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper",
+const { module, test } = QUnit;
 
-    SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + "-pull-down",
-    SCROLLVIEW_PULLDOWN_IMAGE_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-image",
-    SCROLLVIEW_PULLDOWN_TEXT_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-text",
-    SCROLLVIEW_PULLDOWN_LOADING_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-loading",
-    SCROLLVIEW_PULLDOWN_READY_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-ready",
-    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-indicator",
+const SCROLLVIEW_CLASS = "dx-scrollview";
+const SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content";
+const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
+const SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll";
+const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
+const SCROLLVIEW_CONTENT_CLASS = "dx-scrollview-content";
+const SCROLLVIEW_TOP_POCKET_CLASS = "dx-scrollview-top-pocket";
+const SCROLLVIEW_BOTTOM_POCKET_CLASS = "dx-scrollview-bottom-pocket";
+const SCROLLVIEW_LOADPANEL = "dx-scrollview-loadpanel";
+const SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper";
 
-    SCROLLVIEW_REACHBOTTOM_CLASS = SCROLLVIEW_CLASS + "-scrollbottom",
-    SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + "-text",
-    SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + "-indicator",
+const SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + "-pull-down";
+const SCROLLVIEW_PULLDOWN_IMAGE_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-image";
+const SCROLLVIEW_PULLDOWN_TEXT_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-text";
+const SCROLLVIEW_PULLDOWN_LOADING_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-loading";
+const SCROLLVIEW_PULLDOWN_READY_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-ready";
+const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = SCROLLVIEW_PULLDOWN_CLASS + "-indicator";
 
-    PULLDOWN_HEIGHT = 160;
+const SCROLLVIEW_REACHBOTTOM_CLASS = SCROLLVIEW_CLASS + "-scrollbottom";
+const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + "-text";
+const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + "-indicator";
 
-var getScrollOffset = function($scrollView) {
+const PULLDOWN_HEIGHT = 160;
+
+const getScrollOffset = function($scrollView) {
     var $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS),
         $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS),
         location = translator.locate($content);
@@ -2348,44 +2350,73 @@ QUnit.test("refreshStrategy for android set by real device", function(assert) {
 });
 
 
-QUnit.module("pullDown and reachBottom events", moduleConfig);
+module("pullDown, reachBottom events", moduleConfig, () => {
+    test("topPocket visibility depends on pullDown event", (assert) => {
+        const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
+        const $topPocket = $scrollView.find("." + SCROLLVIEW_PULLDOWN_CLASS);
 
-QUnit.test("topPocket visibility depends on pullDown event", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({ useNative: false }),
-        $topPocket = $scrollView.find("." + SCROLLVIEW_PULLDOWN_CLASS);
+        $scrollView.dxScrollView("instance").on("pullDown", noop);
 
-    $scrollView.dxScrollView("instance").on("pullDown", noop);
-
-    assert.ok($topPocket.is(":visible"), "topPocket is visible");
-});
-
-QUnit.test("pullDown event should be fired after refresh method call", function(assert) {
-    assert.expect(1);
-
-    var $scrollView = $("#scrollView").dxScrollView({ useNative: false }),
-        instance = $scrollView.dxScrollView("instance");
-
-    instance.on("pullDown", function() {
-        assert.ok(true, "pullDown is fired on refresh");
+        assert.ok($topPocket.is(":visible"), "topPocket is visible");
     });
 
-    instance.refresh();
-});
+    test("pullDown event should be fired after refresh method call", (assert) => {
+        assert.expect(1);
 
-QUnit.test("bottomPocket element depends on reachBottom event", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({ useNative: false });
+        const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
+        const instance = $scrollView.dxScrollView("instance");
 
-    $scrollView.dxScrollView("instance").on("reachBottom", noop);
+        instance.on("pullDown", () => {
+            assert.ok(true, "pullDown is fired on refresh");
+        });
 
-    var $reachBottom = $scrollView.find("." + SCROLLVIEW_REACHBOTTOM_CLASS);
+        instance.refresh();
+    });
 
-    assert.ok($reachBottom.is(":visible"), "reach bottom is visible");
-});
+    test("bottomPocket element depends on reachBottom event", (assert) => {
+        const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
 
-QUnit.test("scrollview events support chains", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({ useNative: false });
+        $scrollView.dxScrollView("instance").on("reachBottom", noop);
 
-    $scrollView.dxScrollView("instance").on("reachBottom", noop).on("pullDown", noop);
+        const $reachBottom = $scrollView.find("." + SCROLLVIEW_REACHBOTTOM_CLASS);
 
-    assert.ok(true, "chains is supported");
+        assert.ok($reachBottom.is(":visible"), "reach bottom is visible");
+    });
+
+    test("scrollview events support chains", (assert) => {
+        const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
+
+        $scrollView.dxScrollView("instance").on("reachBottom", noop).on("pullDown", noop);
+
+        assert.ok(true, "chains is supported");
+    });
+
+    test("scrollview events support chains", (assert) => {
+        const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
+
+        $scrollView.dxScrollView("instance").on("reachBottom", noop).on("pullDown", noop);
+
+        assert.ok(true, "chains is supported");
+    });
+
+    ["config", "onInitialized"].forEach(assignMethod => {
+        test("Check add event handlers", (assert) => {
+            var config = {};
+
+            if(assignMethod === "config") {
+                config.onPullDown = function() {};
+                config.onReachBottom = function() {};
+            } else if(assignMethod === "onInitialized") {
+                config.onInitialized = function(e) {
+                    e.component.on("pullDown", function() {});
+                    e.component.on("reachBottom", function() {});
+                };
+            } else {
+                assert.ok(false);
+            }
+
+            $("#scrollView").dxScrollView(config);
+            assert.ok(true, "no exceptions");
+        });
+    });
 });
