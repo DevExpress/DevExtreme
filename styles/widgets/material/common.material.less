@@ -61,7 +61,8 @@
     font-family: @base-font-family;
     line-height: @MATERIAL_BASE_LINE_HEIGHT;
 
-    input, textarea {
+    input,
+    textarea {
         font-family: @base-font-family;
         line-height: @MATERIAL_BASE_LINE_HEIGHT;
     }
@@ -70,6 +71,7 @@
 .disabled-widget(@opacity: @texteditor-disabled-opacity) {
     opacity: @opacity;
     .user-select(none);
+
     zoom: 1;
     cursor: default;
 }
@@ -139,6 +141,7 @@
         box-shadow: @dropdown-widgets-shadow;
         border-top-width: 0;
         border-bottom-width: 1px;
+
         &.dx-dropdowneditor-overlay-flipped {
             border-top-width: 1px;
             border-bottom-width: 0;
@@ -163,7 +166,8 @@
         padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING + 2px 0 @MATERIAL_LIST_ITEM_VERTICAL_PADDING - 2px;
     }
 
-    .dx-list-item, .dx-empty-message {
+    .dx-list-item,
+    .dx-empty-message {
         border-top: 0;
 
         &:last-of-type {

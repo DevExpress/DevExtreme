@@ -32,7 +32,8 @@
     height: @MATERIAL_SLIDER_WRAPPER_HEIGHT;
 }
 
-.dx-slider-bar, .dx-slider-range {
+.dx-slider-bar,
+.dx-slider-range {
     margin-top: (@MATERIAL_SLIDER_WRAPPER_HEIGHT - @MATERIAL_SLIDER_BAR_HEIGHT) / 2;
     height: @MATERIAL_SLIDER_BAR_HEIGHT;
 }
@@ -76,6 +77,7 @@
         .dx-overlay-content {
             background-color: transparent;
             min-width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
+
             &:before {
                 content: "";
                 position: absolute;
@@ -113,12 +115,15 @@
             &.dx-state-disabled {
                 &:before {
                     margin-top: @MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN;
+
                     .dx-slider-tooltip-position-top & {
                         margin-top: -@MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN;
                     }
                 }
+
                 .dx-popup-content {
                     padding-top: @MATERIAL_SLIDER_TOOLTIP_WIDTH / 2;
+
                     .dx-slider-tooltip-position-top & {
                         padding-top: 6px;
                         padding-bottom: @MATERIAL_SLIDER_TOOLTIP_WIDTH / 2;
@@ -154,7 +159,8 @@
 }
 
 .dx-state-disabled {
-    &.dx-slider, .dx-slider {
+    &.dx-slider,
+    .dx-slider {
         opacity: 1;
 
         .dx-slider-handle {

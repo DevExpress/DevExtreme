@@ -12,7 +12,7 @@
 
 @MATERIAL_RADIOBUTTON_BORDER_WIDTH: 2px;
 @MATERIAL_RADIOBUTTON_INNER_SIZE: @MATERIAL_RADIOBUTTON_SIZE - @MATERIAL_RADIOBUTTON_BORDER_WIDTH * 2;
-@MATERIAL_RADIOBUTTON_RIPPLE_TRANSITION: all .4s cubic-bezier(0.23, 1, 0.32, 1);
+@MATERIAL_RADIOBUTTON_RIPPLE_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
 .dx-radiobutton-icon {
     width: @MATERIAL_RADIOBUTTON_SIZE;
@@ -49,7 +49,7 @@
     }
 }
 
-.dx-radiobutton-icon-checked  {
+.dx-radiobutton-icon-checked {
     &:before {
         border-color: @radiogroup-checked-bg;
     }

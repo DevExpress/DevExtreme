@@ -1,7 +1,6 @@
 .dx-drawer {
     height: 100%;
     width: 100%;
-    
     touch-action: pinch-zoom;
 }
 
@@ -13,16 +12,16 @@
 
 .dx-drawer-panel-content {
     position: absolute;
-    top: 0px;
-    bottom: 0px;
+    top: 0;
+    bottom: 0;
 }
 
-.dx-drawer-right .dx-drawer-panel-content{
-    right: 0px;
+.dx-drawer-right .dx-drawer-panel-content {
+    right: 0;
 }
 
 .dx-drawer-left .dx-drawer-panel-content {
-    left: 0px;
+    left: 0;
 }
 
 .dx-drawer-content {
@@ -54,11 +53,13 @@
         flex: 0 0 auto;
         height: 100%;
     }
+
     .dx-drawer-wrapper {
         flex: 1 0 auto;
         display: flex;
         flex-direction: row;
     }
+
     .dx-drawer-content {
         position: relative;
         flex: 1 1 auto;
@@ -73,7 +74,7 @@
 }
 
 .dx-drawer-overlap {
-    .dx-drawer-panel-content{
+    .dx-drawer-panel-content {
         overflow: visible;
 
         &.dx-overlay-wrapper {
@@ -99,7 +100,7 @@
 
     &.dx-drawer-right.dx-drawer-expand {
         .dx-overlay-content {
-            right: 0px;
+            right: 0;
         }
     }
 }

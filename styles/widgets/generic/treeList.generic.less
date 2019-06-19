@@ -26,6 +26,7 @@
     .dx-treelist-expanded span {
         .dx-icon-spindown;
         .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+
         cursor: pointer;
 
         &:before {
@@ -38,6 +39,7 @@
     .dx-treelist-collapsed span {
         .dx-icon-spinright;
         .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+
         cursor: pointer;
 
         &:before {
@@ -71,10 +73,11 @@
 }
 
 .dx-treelist-checkbox-size {
-    line-height: 0px;
+    line-height: 0;
 }
 
-.dx-treelist-cell-expandable, .dx-treelist-select-all  {
+.dx-treelist-cell-expandable,
+.dx-treelist-select-all {
     .dx-checkbox {
         position: absolute;
     }
@@ -105,7 +108,8 @@
 
 .dx-rtl {
     .dx-treelist-rowsview {
-        .dx-treelist-expanded, .dx-treelist-collapsed {
+        .dx-treelist-expanded,
+        .dx-treelist-collapsed {
             .flip-horizontally();
         }
 
@@ -127,7 +131,7 @@
 
     .dx-treelist-icon-container.dx-editor-inline-block {
         padding-left: @TREELIST_ICON_CONTAINER_PADDING_RIGHT;
-        padding-right: 0px;
+        padding-right: 0;
     }
 }
 

@@ -7,7 +7,7 @@
     @MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING: 14px;
 
     @MATERIAL_LIST_SELECT_ALL_MARGIN_TOP: -1px;
-    @MATERIAL_LIST_SELECT_ALL_MARGIN_RIGHT: 0px;
+    @MATERIAL_LIST_SELECT_ALL_MARGIN_RIGHT: 0;
     @MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 3px;
     @MATERIAL_LIST_DELETEBUTTON_PADDING: 3px;
 
@@ -26,7 +26,7 @@
     @MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING: 10px;
 
     @MATERIAL_LIST_SELECT_ALL_MARGIN_TOP: -1px;
-    @MATERIAL_LIST_SELECT_ALL_MARGIN_RIGHT: 0px;
+    @MATERIAL_LIST_SELECT_ALL_MARGIN_RIGHT: 0;
     @MATERIAL_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 3px;
     @MATERIAL_LIST_DELETEBUTTON_PADDING: 3px;
 
@@ -55,6 +55,7 @@
 
     .dx-icon-chevronnext;
     .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+
     margin-left: -5px;
     color: @list-item-chevron-icon-color;
 }
@@ -89,7 +90,9 @@
     }
 }
 
-.dx-list-select-all, .dx-list-item, .dx-list-group-header {
+.dx-list-select-all,
+.dx-list-item,
+.dx-list-group-header {
     position: relative;
 
     .dx-inkripple {
@@ -134,7 +137,6 @@
 }
 
 .dx-list-sizing(@item_horizontal_padding) {
-
     .dx-list {
         border: none;
 
@@ -164,6 +166,7 @@
                             background-color: fade(@checkbox-border-color, 10%);
                             transform: scale(1);
                         }
+
                         &.dx-checkbox-checked,
                         &.dx-checkbox-indeterminate {
                             .dx-checkbox-icon:after {
@@ -201,6 +204,7 @@
             .dx-list-group-header-indicator {
                 .dx-list-collapsible-groups & {
                     .dx-icon-chevrondown;
+
                     font-size: @MATERIAL_BASE_ICON_SIZE;
                 }
             }
@@ -232,8 +236,10 @@
 
         .dx-list-group-header-indicator {
             color: @list-header-indicator-color;
+
             .dx-list-collapsible-groups & {
                 .dx-icon-chevronup;
+
                 font-size: @MATERIAL_BASE_ICON_SIZE;
                 float: right;
                 margin-top: -2px;
@@ -243,7 +249,7 @@
         .dx-inkripple {
             height: auto;
             top: -1px;
-            bottom: 0px;
+            bottom: 0;
         }
 
         &:before {
@@ -252,7 +258,8 @@
     }
 
     .dx-list-item {
-        &.dx-state-hover, &.dx-state-active {
+        &.dx-state-hover,
+        &.dx-state-active {
             background-color: @list-item-hover-bg;
             color: @list-item-hover-color;
 
@@ -283,7 +290,7 @@
                     background: @list-item-ghost-bg;
                     border-top: 1px solid fade(@list-item-ghost-border-color, 50%);
                     border-bottom: 1px solid fade(@list-item-ghost-border-color, 50%);
-                    box-shadow: 0px 0px 1px fade(@list-item-ghost-shadow-color, 10%), 0px 1px 3px fade(@list-item-ghost-shadow-color, 20%);
+                    box-shadow: 0 0 1px fade(@list-item-ghost-shadow-color, 10%), 0 1px 3px fade(@list-item-ghost-shadow-color, 20%);
                 }
             }
         }
@@ -346,11 +353,10 @@
         .dx-button.dx-list-toggle-delete-switch {
             border: none;
             background: transparent;
-            padding: 0px;
-            height:  24px;
-            width:  24px;
+            padding: 0;
+            height: 24px;
+            width: 24px;
             margin-left: @item_horizontal_padding - 1px;
-
             box-shadow: none;
 
             .dx-button-content {
@@ -382,8 +388,8 @@
     .dx-list-select-all {
         padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING - 1px 0;
         font-size: @MATERIAL_LIST_MAIN_FONT_SIZE;
-
         position: relative;
+
         &:after {
             content: "";
             position: absolute;
@@ -417,6 +423,7 @@
 
         .dx-list-reorder-handle {
             .dx-icon-dragvertical;
+
             color: fade(@base-icon-color, 27%);
             .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE, @MATERIAL_BASE_ICON_SIZE * 1.6);
         }
@@ -428,6 +435,7 @@
 
     .dx-list-slide-menu-button-delete {
         .dx-icon-trash;
+
         color: @base-inverted-text-color;
         border: 1px solid @list-button-delete-shadow-color;
         border-right-color: transparent;
@@ -437,9 +445,10 @@
         vertical-align: middle;
         padding: 0 @item_horizontal_padding;
         width: @item_horizontal_padding * 2 + @MATERIAL_BASE_ICON_SIZE;
-        box-shadow: inset 3px 0px 5px -3px @list-button-delete-shadow-color,
-        inset 0px 3px 5px -3px @list-button-delete-shadow-color,
-            inset 0px -3px 5px -3px @list-button-delete-shadow-color;
+        box-shadow:
+            inset 3px 0 5px -3px @list-button-delete-shadow-color,
+            inset 0 3px 5px -3px @list-button-delete-shadow-color,
+            inset 0 -3px 5px -3px @list-button-delete-shadow-color;
     }
 
     .dx-list-slide-menu-button-menu {
@@ -478,13 +487,14 @@
         background-color: @list-holdmenu-bg;
         border: 1px solid @list-holdmenu-border-color;
         border-radius: 0;
-        box-shadow: 0px 3px 10px @list-holdmenu-shadow-color;
+        box-shadow: 0 3px 10px @list-holdmenu-shadow-color;
     }
 
     .dx-state-disabled {
-        &.dx-list-item, .dx-list-item {
+        &.dx-list-item,
+        .dx-list-item {
             background-color: transparent;
-            opacity: .6;
+            opacity: 0.6;
         }
     }
 

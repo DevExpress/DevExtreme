@@ -7,6 +7,7 @@
         &.dx-tagbox-only-select {
             .dx-texteditor-input {
                 .hide-input-cursor(); // T278002
+
                 min-width: 0;
                 width: 0.1px; // T393423, T437866
                 padding-left: 0;
@@ -66,7 +67,7 @@
     text-align: center;
     cursor: pointer;
 
-    &:before{
+    &:before {
         content: ".";
         color: transparent;
         display: inline-block;
@@ -79,7 +80,8 @@
     top: 0;
     right: 0;
 
-    &:before, &:after {
+    &:before,
+    &:after {
         position: absolute;
         top: 50%;
         content: "";

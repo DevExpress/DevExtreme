@@ -26,6 +26,7 @@
 
     .dx-navbar & .dx-icon {
         .dx-icon-sizing(@GENERIC_NAVBAR_ICON_SIZE);
+
         color: @navbar-tab-color;
     }
 
@@ -39,8 +40,9 @@
 
     &.dx-tab-selected {
         background: @navbar-tab-selected-bg;
-        
-        .dx-tab-text, .dx-icon {
+
+        .dx-tab-text,
+        .dx-icon {
             color: @navbar-tab-selected-color;
         }
     }
@@ -54,9 +56,9 @@
         box-shadow: @GENERIC_NAVBAR_FOCUSED_ITEM_SHADOW;
     }
 
-    &.dx-state-disabled{
+    &.dx-state-disabled {
         .dx-icon {
-            opacity: .5;
+            opacity: 0.5;
         }
     }
 }

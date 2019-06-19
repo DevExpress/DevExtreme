@@ -14,6 +14,7 @@
 .dx-treelist-rowsview {
     .dx-treelist-empty-space {
         .dx-icon-spinright;
+
         position: relative;
         display: inline-block;
         width: @TREELIST_EMPTY_SPACE_WIDTH;
@@ -27,9 +28,10 @@
     .dx-treelist-expanded span {
         .dx-icon-chevrondown;
         .dx-icon-font-centered-sizing(@GRID_BASE_GROUP_COLUMN_ICONS_SIZE);
-        font-size: 0px;
-        line-height: 0px;
-        color: #9A9A9A;
+
+        font-size: 0;
+        line-height: 0;
+        color: #9a9a9a;
         cursor: pointer;
 
         &:before {
@@ -44,9 +46,10 @@
     .dx-treelist-collapsed span {
         .dx-icon-chevronright;
         .dx-icon-font-centered-sizing(@GRID_BASE_GROUP_COLUMN_ICONS_SIZE);
-        font-size: 0px;
-        line-height: 0px;
-        color: #9A9A9A;
+
+        font-size: 0;
+        line-height: 0;
+        color: #9a9a9a;
         cursor: pointer;
 
         &:before {
@@ -104,10 +107,11 @@
     .dx-treelist-rowsview {
         .dx-treelist-empty-space {
             margin-left: @TREELIST_EMPTY_SPACE_MARGIN_RIGHT;
-            margin-right: 0px;
+            margin-right: 0;
         }
 
-        .dx-treelist-expanded, .dx-treelist-collapsed {
+        .dx-treelist-expanded,
+        .dx-treelist-collapsed {
             .flip-horizontally();
         }
 
@@ -129,6 +133,6 @@
 
     .dx-treelist-icon-container.dx-editor-inline-block {
         padding-left: @TREELIST_ICON_CONTAINER_PADDING_RIGHT;
-        padding-right: 0px;
+        padding-right: 0;
     }
 }

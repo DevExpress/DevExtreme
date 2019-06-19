@@ -13,11 +13,13 @@
         .dx-colorbox-input {
             padding-left: @MATERIAL_COLORBOX_PREVIEW_LEFT + 27px;
         }
+
         &.dx-colorbox-color-is-not-defined {
             .dx-colorbox-color-result-preview {
                 background: @colorbox-preview-empty-bg no-repeat 0 0;
             }
         }
+
         &:after {
             left: @MATERIAL_COLORBOX_PREVIEW_LEFT + 1;
         }
@@ -27,7 +29,6 @@
         left: 32px;
     }
 }
-
 
 
 .dx-colorbox-color-result-preview {
@@ -48,7 +49,8 @@
 }
 
 .dx-rtl {
-    &.dx-colorbox, .dx-colorbox {
+    &.dx-colorbox,
+    .dx-colorbox {
         &.dx-state-focused .dx-colorbox-input {
             padding-right: @MATERIAL_COLORBOX_PREVIEW_LEFT + 27px;
         }

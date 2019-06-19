@@ -17,6 +17,7 @@
 .dx-gallery-nav-button-prev,
 .dx-gallery-nav-button-next {
     .dx-icon-font-centered-sizing(36px);
+
     color: @IOS7_FONT_COLOR;
 
     &.dx-state-active {
@@ -40,10 +41,10 @@
 .dx-gallery-indicator-item-selected {
     border: solid 1px fade(@IOS7_GALLERY_INDICATOR_BACKGROUND, 80%);
     background: @IOS7_GALLERY_INDICATOR_SELECTED_BACKGROUND;
-    margin: 0px 6px 1px 6px; /* chrome accessibility hack T321837 */
+    margin: 0 6px 1px 6px; /* chrome accessibility hack T321837 */
 }
 
 .dx-state-disabled .dx-gallery,
 .dx-state-disabled.dx-gallery {
-    opacity: .45;
+    opacity: 0.45;
 }

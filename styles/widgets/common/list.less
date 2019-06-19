@@ -5,7 +5,7 @@
     min-height: 3em;
 
     .dx-scrollview-content:focus {
-        outline: 0px;
+        outline: 0;
     }
 }
 
@@ -20,7 +20,6 @@
         display: block;
         float: right;
         margin-top: 6px;
-
         border-style: solid;
         border-color: transparent;
         border-width: 5px 5px 0 5px;
@@ -29,7 +28,7 @@
     .dx-list-collapsible-groups & {
         cursor: pointer;
 
-        &:before{
+        &:before {
             content: ' ';
         }
     }
@@ -43,9 +42,6 @@
     overflow: hidden;
 }
 
-.dx-list-group {
-}
-
 .dx-list-item {
     position: static;
     cursor: pointer;
@@ -57,6 +53,7 @@
 
 .dx-list-item-content {
     .dx-overflow();
+
     display: table-cell;
     width: 100%;
 
@@ -71,16 +68,15 @@
 
 .dx-list .dx-empty-message {
     .dx-overflow();
+
     min-height: 3em;
 }
 
 .dx-list-item-badge-container {
     display: table-cell;
-
     width: 20px;
     text-align: right;
     vertical-align: middle;
-
     padding-right: 10px;
 }
 
@@ -91,7 +87,6 @@
 
 .dx-list-item-chevron-container {
     display: table-cell;
-
     width: 15px;
     vertical-align: middle;
 }
@@ -104,18 +99,14 @@
     height: 8px;
     width: 8px;
     margin-left: -6px;
-
     transform: rotate(135deg);
-
     border-width: 2px 0 0 2px;
     border-style: solid;
-
-    opacity: .3;
+    opacity: 0.3;
 
     .dx-rtl & {
         margin-left: auto;
         margin-right: -6px;
-
         transform: rotate(-45deg);
     }
 }
@@ -123,7 +114,7 @@
 
 .dx-list-item-response-wait {
     opacity: 0.5;
-    transition: opacity .2s linear;
+    transition: opacity 0.2s linear;
 }
 
 .dx-list-slide-menu-content {
@@ -148,12 +139,12 @@
     }
 
     .dx-icon-toggle-delete {
-        transition: all .1s linear;
+        transition: all 0.1s linear;
     }
 
     .dx-list-select-checkbox {
         float: left;
-        transition: all .1s linear;
+        transition: all 0.1s linear;
     }
 }
 
@@ -182,7 +173,6 @@
 
 .dx-list-switchable-menu-shield-positioning {
     position: relative;
-
     -moz-transform: translateZ(0);
     -o-transform: translateZ(0);
     -webkit-transform: translateZ(0);
@@ -297,12 +287,6 @@
     opacity: 0;
 }
 
-.dx-list-description {
-}
-
-.dx-list-image {
-}
-
 .dx-list-next-button {
     padding: 5px;
     text-align: center;
@@ -313,7 +297,8 @@
 }
 
 .dx-state-disabled {
-    &.dx-list-item, .dx-list-item {
+    &.dx-list-item,
+    .dx-list-item {
         cursor: default;
     }
 

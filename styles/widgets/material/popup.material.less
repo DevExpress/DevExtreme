@@ -1,7 +1,7 @@
 .dx-size-default() {
     @MATERIAL_POPUP_CONTENT_PADDING: 24px;
     @MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING: 20px;
-   
+
     @MATERIAL_POPUP_BUTTON_MARGIN: 0 8px;
 
     @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 8px;
@@ -13,7 +13,7 @@
 .dx-size-compact() {
     @MATERIAL_POPUP_CONTENT_PADDING: 16px;
     @MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING: 14px;
-   
+
     @MATERIAL_POPUP_BUTTON_MARGIN: 0 8px;
 
     @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 8px;
@@ -29,7 +29,7 @@
 .dx-popup-wrapper {
     & > .dx-overlay-content {
         background: @overlay-content-bg;
-        box-shadow: 0px 11px 15px -7px fade(@base-shadow-color, 20%), 0px 24px 38px 3px fade(@base-shadow-color, 14%), 0px 9px 46px 8px fade(@base-shadow-color, 12%);
+        box-shadow: 0 11px 15px -7px fade(@base-shadow-color, 20%), 0 24px 38px 3px fade(@base-shadow-color, 14%), 0 9px 46px 8px fade(@base-shadow-color, 12%);
         border-radius: @popup-border-radius;
     }
 
@@ -49,6 +49,7 @@
 
     &.dx-toolbar {
         .dx-toolbar-sizing(@MATERIAL_TOOLBAR_HEIGHT, @MATERIAL_POPUP_TOOLBARTOP_PADDING, @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE, @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING );
+
         box-shadow: none;
 
         .dx-button.dx-closebutton {
@@ -76,6 +77,7 @@
             @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
             @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING
         );
+
         .dx-device-mobile & {
             .dx-toolbar-sizing(
                 @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT,

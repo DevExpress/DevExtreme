@@ -22,6 +22,7 @@
     @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 2px 8px 7px 8px;
     @MATERIAL_TAGBOX_TAG_HEIGHT: 26px;
 }
+
 .dx-tagbox {
     .dx-texteditor-input-container {
         height: 100%;
@@ -31,7 +32,8 @@
         height: @MATERIAL_TAGBOX_TAG_HEIGHT;
     }
 
-    &.dx-editor-filled, &.dx-editor-outlined {
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
         .dx-texteditor-input {
             padding: 0;
             margin-top: @MATERIAL_TAGBOX_TAG_MARGIN;
@@ -66,14 +68,16 @@
         }
     }
 
-    &.dx-state-focused, &.dx-state-active {
+    &.dx-state-focused,
+    &.dx-state-active {
         &:before {
             border-top: 0;
             border-bottom: 0;
         }
     }
 
-    &.dx-state-hover, & {
+    &.dx-state-hover,
+    & {
         &:after {
             border-bottom: 0;
         }
@@ -142,7 +146,6 @@
 
 .dx-tagbox.dx-invalid {
     .dx-texteditor-container {
-
         &:after {
             right: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
 
@@ -173,6 +176,6 @@
     }
 
     .dx-tag-remove-button {
-        left: 4px!important;
+        left: 4px !important;
     }
 }

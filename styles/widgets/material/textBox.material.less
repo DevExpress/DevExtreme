@@ -8,18 +8,21 @@
             text-indent: 0;
             color: @textbox-search-icon-color;
         }
+
         color: @texteditor-placeholder-color;
     }
 
     &.dx-editor-underlined {
         .dx-icon-search {
             left: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
             .dx-rtl &,
             .dx-rtl& {
                 left: initial;
                 right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
+
         .dx-texteditor-input,
         .dx-placeholder:before {
             padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
@@ -32,15 +35,18 @@
         }
     }
 
-    &.dx-editor-filled, &.dx-editor-outlined {
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
         .dx-icon-search {
             left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
             .dx-rtl &,
             .dx-rtl& {
                 left: initial;
                 right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
+
         .dx-texteditor-input,
         .dx-placeholder:before {
             padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;

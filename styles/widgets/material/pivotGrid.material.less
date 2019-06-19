@@ -14,7 +14,6 @@
 @MATERIAL_PIVOTGRIDFIELDCHOOSER_FIELD_MIN_HEIGHT: 36px;
 
 .dx-pivotgrid-fields-container {
-
     &.dx-drag {
         .dx-area-field.dx-area-box {
             background-color: fade(@pivotgrid-field-area-box-background-color, 90%);
@@ -58,7 +57,8 @@
                 font-weight: 500;
             }
 
-            .dx-grandtotal, .dx-total {
+            .dx-grandtotal,
+            .dx-total {
                 color: @base-text-color;
             }
         }
@@ -67,7 +67,6 @@
             padding: @MATERIAL_PIVOTGRID_CELL_PADDING;
         }
     }
-
 
 
     .dx-area-description-cell {
@@ -98,6 +97,7 @@
     .dx-expand-icon-container {
         margin: 0 10px 0 5px;
         .dx-icon-chevronright;
+
         font-size: @MATERIAL_PIVOTGRID_HEADERS_FONT_SIZE;
 
         &:before {
@@ -108,12 +108,14 @@
     .dx-pivotgrid-collapsed .dx-expand {
         .dx-icon-chevronright;
         .dx-icon-font-centered-sizing(@MATERIAL_PIVOTGRID_CHEVRON_ICON_SIZE);
+
         color: @pivotgrid-chevron-icon-color;
     }
 
     .dx-pivotgrid-expanded .dx-expand {
         .dx-icon-chevrondown;
         .dx-icon-font-centered-sizing(@MATERIAL_PIVOTGRID_CHEVRON_ICON_SIZE);
+
         color: @pivotgrid-chevron-icon-color;
     }
 
@@ -132,6 +134,7 @@
         .dx-area-icon-filter {
             background: none;
             .dx-icon-filter;
+
             width: 14px;
             height: 14px;
         }

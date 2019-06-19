@@ -19,7 +19,7 @@
 
 .dx-dateviewroller-current {
     .dx-dateview-item {
-        transition: font-size .2s ease-out;
+        transition: font-size 0.2s ease-out;
     }
 }
 
@@ -106,7 +106,8 @@
     top: @GENERIC_DATEVIEW_ROLLER_PADDING;
     width: 100%;
 
-    &:before, &:after {
+    &:before,
+    &:after {
         backface-visibility: hidden;
         content: "";
         display: block;
@@ -128,7 +129,8 @@
     }
 }
 
-.dx-device-tablet, .dx-device-phone,
+.dx-device-tablet,
+.dx-device-phone,
 .dx-dateview-compact {
     .dx-dateview-rollers {
         .flex-container(row, nowrap);

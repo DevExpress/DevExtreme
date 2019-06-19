@@ -24,6 +24,7 @@
     width: @GENERIC_DROPDOWNEDITOR_BUTTON_SIZE;
     height: 100%;
     .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+
     border-radius: @dropdowneditor-icon-border-radius;
 }
 
@@ -46,7 +47,7 @@
         }
     }
 
-    .dx-state-readonly &{
+    .dx-state-readonly & {
         .dx-dropdowneditor-icon {
             opacity: 1;
         }
@@ -132,7 +133,8 @@
         color: @dropdowneditor-icon-active-color;
         opacity: 1;
 
-        .dx-editor-filled&, .dx-editor-filled & {
+        .dx-editor-filled&,
+        .dx-editor-filled & {
             background-color: @dropdowneditor-filled-button-active-bg;
         }
     }
@@ -170,9 +172,11 @@
             .dx-state-hover& {
                 background-color: @dropdowneditor-filled-button-invalid-hover-bg;
             }
+
             .dx-dropdowneditor-active& {
                 background-color: @dropdowneditor-filled-button-invalid-active-bg;
             }
+
             .dx-state-active& {
                 background-color: @dropdowneditor-filled-button-invalid-active-bg;
             }

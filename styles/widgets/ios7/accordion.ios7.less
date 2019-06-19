@@ -45,7 +45,7 @@
         font-weight: bold;
         color: @IOS7_LINK;
         content: "\f016";
-        font-family: DXIcons;
+        font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
         font-size: @IOS7_ACCORDION_ARROW_SIZE;
         margin-left: @IOS7_ACCORDION_ICON_SIZE/2;
         margin-right: 0;
@@ -54,6 +54,7 @@
 
     .dx-icon {
         .dx-icon-margin(@IOS7_ACCORDION_ICON_SIZE/2);
+
         display: inline-block;
     }
 }

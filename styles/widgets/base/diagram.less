@@ -10,15 +10,15 @@
     .dx-diagram-i-connector-end-none {
         .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-none.svg'), @new-color, 32px, 22px);
     }
-    
+
     .dx-diagram-i-connector-end-arrow {
         .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-arrow.svg'), @new-color, 32px, 22px);
     }
-    
+
     .dx-diagram-i-connector-orthogonal {
         .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-orthogonal.svg'), @new-color, 32px, 22px);
     }
-    
+
     .dx-diagram-i-connector-straight {
         .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-straight.svg'), @new-color, 32px, 22px);
     }
@@ -30,6 +30,7 @@
 
 .diagram-icon-colored(@data-uri, @current-color, @width, @height) {
     @uri: replace("@{data-uri}", "currentColor", escape(@current-color));
+
     background-image: e(@uri);
     width: @width;
     height: @height;

@@ -8,7 +8,7 @@
     @MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT: 64px;
     @MATERIAL_ACCORDION_TITLE_FONT_SIZE: 15px;
     @MATERIAL_ACCORDION_OPENED_MARGIN: 16px;
-    @MATERIAL_ACCORDION_SHADOW: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    @MATERIAL_ACCORDION_SHADOW: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
 .dx-size-compact() {
@@ -21,10 +21,10 @@
     @MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT: 40px;
     @MATERIAL_ACCORDION_TITLE_FONT_SIZE: 15px;
     @MATERIAL_ACCORDION_OPENED_MARGIN: 8px;
-    @MATERIAL_ACCORDION_SHADOW: 0 3px 1px -2px rgba(0, 0, 0, .1), 0 2px 2px 0 rgba(0, 0, 0, .07), 0 1px 5px 0 rgba(0, 0, 0, .06);
+    @MATERIAL_ACCORDION_SHADOW: 0 3px 1px -2px rgba(0, 0, 0, 0.1), 0 2px 2px 0 rgba(0, 0, 0, 0.07), 0 1px 5px 0 rgba(0, 0, 0, 0.06);
 }
 
-@MATERIAL_ACCORDION_DISABLED_OPACITY: .5;
+@MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
 
 
 .dx-accordion {
@@ -38,18 +38,19 @@
     box-shadow: @MATERIAL_ACCORDION_SHADOW;
     transition: margin 200ms cubic-bezier(0.4, 0, 0.2, 1);
     will-change: margin, height;
-
     border-top: 1px solid @accordion-item-border-color;
+
     &:first-child {
         border-top: none;
     }
 
-    &.dx-state-active, &.dx-state-focused {
+    &.dx-state-active,
+    &.dx-state-focused {
         > .dx-accordion-item-title {
             color: @accordion-title-active-color;
             background-color: @accordion-title-active-bg;
         }
-        
+
         &:not(.dx-accordion-item-opened) {
             .dx-icon {
                 color: @accordion-icon-active-color;
@@ -124,7 +125,7 @@
         font-weight: normal;
         color: @accordion-icon-color;
         content: "\f016";
-        font-family: DXIcons;
+        font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
         font-size: @MATERIAL_BASE_ICON_SIZE;
         height: @MATERIAL_BASE_ICON_SIZE;
         width: @MATERIAL_BASE_ICON_SIZE;
@@ -148,6 +149,7 @@
             right: @MATERIAL_ACCORDION_TITLE_PADDING;
             left: @MATERIAL_ACCORDION_TITLE_PADDING*2 + @MATERIAL_BASE_ICON_SIZE;
         }
+
         &:before {
             left: @MATERIAL_ACCORDION_TITLE_PADDING;
             right: auto;

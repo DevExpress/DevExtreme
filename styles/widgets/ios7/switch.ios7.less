@@ -11,7 +11,8 @@
     }
 }
 
-.dx-switch-on, .dx-switch-off {
+.dx-switch-on,
+.dx-switch-off {
     display: none;
 }
 
@@ -29,7 +30,7 @@
     height: @IOS7_SWITCH_HEIGHT;
     border-radius: @IOS7_SWITCH_RADIUS;
     background: @IOS7_SWITCH_OFF_BACKGROUND;
-    transition: all .24s ease;
+    transition: all 0.24s ease;
 
     &:before {
         position: absolute;
@@ -41,7 +42,7 @@
         content: " ";
         border-radius: @IOS7_SWITCH_RADIUS;
         background: @IOS7_SWITCH_OFF_INNER_BACKGROUND;
-        transition: all .24s ease;
+        transition: all 0.24s ease;
     }
 }
 
@@ -57,8 +58,8 @@
     bottom: @IOS7_SWITCH_BORDER_WIDTH;
     border-radius: @IOS7_SWITCH_RADIUS;
     background: @IOS7_SWITCH_HANDLE_BACKGROUND;
-    box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 5px rgba(0,0,0,.2);
-    transition: margin-left .24s ease 0s, left .24s ease 0s, width .14s ease .1s, transform .14s ease .1s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 5px rgba(0, 0, 0, 0.2);
+    transition: margin-left 0.24s ease 0s, left 0.24s ease 0s, width 0.14s ease 0.1s, transform 0.14s ease 0.1s;
 
     .dx-state-active & {
         width: @IOS7_SWITCH_ACTIVE_HANDLE_SIZE;
@@ -74,7 +75,7 @@
             right: 50%;
             bottom: 50%;
             left: 50%;
-            transition: all .06s ease;
+            transition: all 0.06s ease;
         }
     }
 
@@ -87,14 +88,12 @@
     }
 }
 
-
-
 .dx-rtl {
     .dx-switch-handle {
         left: auto;
         right: 50%;
         margin-right: -@IOS7_SWITCH_HANDLE_SIZE;
-        transition: margin-right .24s ease 0s, right .24s ease 0s, width .14s ease .1s, transform .14s ease .1s;
+        transition: margin-right 0.24s ease 0s, right 0.24s ease 0s, width 0.14s ease 0.1s, transform 0.14s ease 0.1s;
 
         .dx-state-active& {
             transform: translate(0, 0);

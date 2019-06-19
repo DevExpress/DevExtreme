@@ -11,7 +11,7 @@
 
     .dx-menu-separator {
         display: inline-block;
-        margin: 0px 15px 0px 0px;
+        margin: 0 15px 0 0;
     }
 }
 
@@ -23,7 +23,7 @@
     }
 
     .dx-menu-separator {
-        margin: 0px 0px 15px 0px;
+        margin: 0 0 15px 0;
     }
 }
 
@@ -32,11 +32,11 @@
 }
 
 .dx-context-menu-container-border {
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
 }
 
 .dx-context-menu-content-delimiter {
@@ -51,7 +51,8 @@
         left: auto;
         right: 0;
 
-        .dx-rtl &, .dx-rtl& {
+        .dx-rtl &,
+        .dx-rtl& {
             left: 0;
             right: auto;
         }
@@ -67,7 +68,8 @@
         .dx-item-content {
             padding-left: 15px;
 
-            .dx-rtl &, .dx-rtl& {
+            .dx-rtl &,
+            .dx-rtl& {
                 padding-right: 15px;
             }
         }
@@ -87,7 +89,6 @@
 
         .dx-treeview {
             height: auto;
-
             flex: 1 1 auto;
         }
     }

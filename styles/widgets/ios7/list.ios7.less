@@ -4,7 +4,7 @@
     background: @IOS7_LIST_BACKGROUND;
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-        height: calc(100% - 1.2em - round(2*@TEXTEDITOR_INPUT_PADDING));
+        height: calc(100% - 1.2em - round(2 * @TEXTEDITOR_INPUT_PADDING));
     }
 
     .dx-empty-message {
@@ -70,7 +70,7 @@
 
     .dx-hairlines & {
         margin-top: @IOS7_LIST_ITEM_VERTICAL_PADDING - 0.5px;
-        height: .5px;
+        height: 0.5px;
         background: @IOS7_LIST_ITEM_BORDER;
     }
 
@@ -244,15 +244,14 @@
         position: relative;
         width: 40px;
         height: 40px;
-
         color: @IOS7_LIST_ITEM_REORDER_HANDLE_COLOR;
     }
 }
 
 .dx-list-item-ghost-reordering {
     border-bottom: none;
-    box-shadow: rgba(0, 0, 0, .5) 0 0 16px 0;
-    opacity: .8;
+    box-shadow: rgba(0, 0, 0, 0.5) 0 0 16px 0;
+    opacity: 0.8;
 
     .dx-list & {
         background: none;
@@ -296,7 +295,7 @@
 
 .dx-list-context-menucontent {
     box-shadow: @IOS7_HOLDMENU_SHADOW;
-    border-radius: .5em;
+    border-radius: 0.5em;
     border: 1px solid @IOS7_HOLDMENU_BORDERCOLOR;
     background-color: @IOS7_HOLDMENU_BACKGROUND;
 
@@ -306,7 +305,8 @@
 }
 
 .dx-state-disabled {
-    &.dx-list-item, .dx-list-item {
+    &.dx-list-item,
+    .dx-list-item {
         color: @IOS7_LIST_DISABLE;
     }
 }
@@ -343,6 +343,6 @@
 
     .dx-list-item-content:after {
         padding-right: @IOS7_LIST_ITEM_HORIZONTAL_PADDING;
-        padding-left: 0px;
+        padding-left: 0;
     }
 }

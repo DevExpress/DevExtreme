@@ -12,13 +12,11 @@
     .dx-tab {
         width: 140px;
 
-        &:not(.dx-tab-selected):not(.dx-state-hover){
+        &:not(.dx-tab-selected):not(.dx-state-hover) {
             background: none;
         }
-
     }
 
-    // NOTE: fractional pixels for ie
     .dx-tab-selected:before {
         content: "";
         pointer-events: none;
@@ -30,6 +28,8 @@
         z-index: 2;
         height: 0;
         border-bottom: 1.5px solid @tabs-tab-selected-bg;
+        // NOTE: fractional pixels for ie
+        // stylelint-disable-next-line declaration-block-no-duplicate-properties
         bottom: -1.4px;
     }
 
@@ -60,8 +60,9 @@
                 z-index: 2;
                 height: 0;
                 border-bottom: 1.5px solid @tabs-focused-border-color;
-                bottom: -1.4px;
+                bottom: -1.4px; // stylelint-disable-line declaration-block-no-duplicate-properties
             }
+
             .dx-tab-selected:after {
                 border-bottom: 1.5px solid @tabs-tab-bg;
             }

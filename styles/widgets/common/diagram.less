@@ -23,18 +23,23 @@
         position: relative;
         border-right: @TRANSPARENT_BORDER;
     }
+
     .dx-diagram-left-panel > * {
         position: absolute;
     }
+
     .dx-diagram-drawer-wrapper {
-        flex: 1 0px;
+        flex: 1 0;
     }
+
     .dx-diagram-content {
         height: 100%;
     }
+
     .dx-diagram-right-panel {
         border-left: @TRANSPARENT_BORDER;
     }
+
     .dx-diagram-right-panel .dx-accordion {
         width: 280px;
     }
@@ -43,31 +48,34 @@
         height: 100%;
         border-left: @TRANSPARENT_BORDER;
     }
-    
+
     .dx-diagram-toolbar-menu-separator {
         width: 100%;
         border-top: @TRANSPARENT_BORDER;
-    
+
         &::before {
             content: none;
         }
     }
 
     .dx-diagram-toolbar {
-        .dx-diagram-select-b, .dx-diagram-color-b {
+        .dx-diagram-select-b,
+        .dx-diagram-color-b {
             .dx-texteditor {
                 width: auto;
             }
+
             .dx-dropdowneditor-field-template-wrapper {
                 display: flex;
                 align-items: center;
-                
+
                 .dx-diagram-i {
                     display: block;
                 }
-                
+
                 .dx-textbox {
-                    width: 0px;
+                    width: 0;
+
                     .dx-texteditor-input {
                         width: 0;
                         padding-left: 0;
@@ -80,6 +88,6 @@
 
 .dx-diagram-i {
     background-repeat: no-repeat;
-    background-position: 0px 0px;
+    background-position: 0 0;
     display: inline-block;
 }

@@ -47,7 +47,8 @@
     margin-right: @size;
     margin-left: 0;
 
-    .dx-rtl &, .dx-rtl& {
+    .dx-rtl &,
+    .dx-rtl& {
         margin-left: @size;
         margin-right: 0;
     }
@@ -56,7 +57,8 @@
         margin-left: @size;
         margin-right: 0;
 
-        .dx-rtl &, .dx-rtl& {
+        .dx-rtl &,
+        .dx-rtl& {
             margin-right: @size;
             margin-left: 0;
         }
@@ -67,11 +69,12 @@
 .dx-font-icons(@font-file: "dxicons", @font-name: "DevExtreme Generic Icons", @font-name-safari: "devextreme_generic_icons") {
     @font-face {
         font-family: 'DXIcons';
-        src: local("@{font-name}"),
-             local("@{font-name-safari}"),
-             url(~"icons/@{font-file}.woff2") format('woff2'),
-             url(~"icons/@{font-file}.woff") format('woff'),
-             url(~"icons/@{font-file}.ttf") format('truetype');
+        src:
+            local("@{font-name}"),
+            local("@{font-name-safari}"),
+            url(~"icons/@{font-file}.woff2") format('woff2'),
+            url(~"icons/@{font-file}.woff") format('woff'),
+            url(~"icons/@{font-file}.ttf") format('truetype');
         font-weight: normal;
         font-style: normal;
     }
@@ -86,7 +89,7 @@
     }
 
     .dx-font-icon(@glyph) {
-        font: 14px/1 DXIcons;
+        font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
 
         &:before {
             content: @glyph;
@@ -98,146 +101,150 @@
 
 .dx-font-icons-list() {
 
-    .dx-icon-add        { .dx-font-icon("\f00b"); }
-    .dx-icon-airplane   { .dx-font-icon("\f000"); }
-    .dx-icon-bookmark   { .dx-font-icon("\f017"); }
-    .dx-icon-box        { .dx-font-icon("\f018"); }
-    .dx-icon-car        { .dx-font-icon("\f01b"); }
-    .dx-icon-card       { .dx-font-icon("\f019"); }
-    .dx-icon-cart       { .dx-font-icon("\f01a"); }
-    .dx-icon-chart      { .dx-font-icon("\f01c"); }
-    .dx-icon-check      { .dx-font-icon("\f005"); }
-    .dx-icon-clear      { .dx-font-icon("\f008"); }
-    .dx-icon-clock      { .dx-font-icon("\f01d"); }
-    .dx-icon-close      { .dx-font-icon("\f00a"); }
-    .dx-icon-coffee     { .dx-font-icon("\f02a"); }
-    .dx-icon-comment    { .dx-font-icon("\f01e"); }
-    .dx-icon-doc        { .dx-font-icon("\f021"); }
-    .dx-icon-download   { .dx-font-icon("\f022"); }
+    .dx-icon-add { .dx-font-icon("\f00b"); }
+    .dx-icon-airplane { .dx-font-icon("\f000"); }
+    .dx-icon-bookmark { .dx-font-icon("\f017"); }
+    .dx-icon-box { .dx-font-icon("\f018"); }
+    .dx-icon-car { .dx-font-icon("\f01b"); }
+    .dx-icon-card { .dx-font-icon("\f019"); }
+    .dx-icon-cart { .dx-font-icon("\f01a"); }
+    .dx-icon-chart { .dx-font-icon("\f01c"); }
+    .dx-icon-check { .dx-font-icon("\f005"); }
+    .dx-icon-clear { .dx-font-icon("\f008"); }
+    .dx-icon-clock { .dx-font-icon("\f01d"); }
+    .dx-icon-close { .dx-font-icon("\f00a"); }
+    .dx-icon-coffee { .dx-font-icon("\f02a"); }
+    .dx-icon-comment { .dx-font-icon("\f01e"); }
+    .dx-icon-doc { .dx-font-icon("\f021"); }
+    .dx-icon-download { .dx-font-icon("\f022"); }
     .dx-icon-dragvertical { .dx-font-icon("\f038"); }
-    .dx-icon-edit       { .dx-font-icon("\f023"); }
-    .dx-icon-email      { .dx-font-icon("\f024"); }
-    .dx-icon-event      { .dx-font-icon("\f026"); }
-    .dx-icon-favorites  { .dx-font-icon("\f025"); }
-    .dx-icon-find       { .dx-font-icon("\f027"); }
-    .dx-icon-filter     { .dx-font-icon("\f050"); }
-    .dx-icon-folder     { .dx-font-icon("\f028"); }
-    .dx-icon-food       { .dx-font-icon("\f029"); }
-    .dx-icon-gift       { .dx-font-icon("\f02b"); }
-    .dx-icon-globe      { .dx-font-icon("\f02c"); }
-    .dx-icon-group      { .dx-font-icon("\f02e"); }
-    .dx-icon-help       { .dx-font-icon("\f02f"); }
-    .dx-icon-home       { .dx-font-icon("\f030"); }
-    .dx-icon-image      { .dx-font-icon("\f031"); }
-    .dx-icon-info       { .dx-font-icon("\f032"); }
-    .dx-icon-key        { .dx-font-icon("\f033"); }
-    .dx-icon-like       { .dx-font-icon("\f034"); }
-    .dx-icon-map        { .dx-font-icon("\f035"); }
-    .dx-icon-menu       { .dx-font-icon("\f00c"); }
-    .dx-icon-message    { .dx-font-icon("\f024"); }
-    .dx-icon-money      { .dx-font-icon("\f036"); }
-    .dx-icon-music      { .dx-font-icon("\f037"); }
-    .dx-icon-overflow   { .dx-font-icon("\f00d"); }
-    .dx-icon-percent    { .dx-font-icon("\f039"); }
-    .dx-icon-photo      { .dx-font-icon("\f03a"); }
-    .dx-icon-plus       { .dx-font-icon("\f00b"); }
+    .dx-icon-edit { .dx-font-icon("\f023"); }
+    .dx-icon-email { .dx-font-icon("\f024"); }
+    .dx-icon-event { .dx-font-icon("\f026"); }
+    .dx-icon-favorites { .dx-font-icon("\f025"); }
+    .dx-icon-find { .dx-font-icon("\f027"); }
+    .dx-icon-filter { .dx-font-icon("\f050"); }
+    .dx-icon-folder { .dx-font-icon("\f028"); }
+    .dx-icon-food { .dx-font-icon("\f029"); }
+    .dx-icon-gift { .dx-font-icon("\f02b"); }
+    .dx-icon-globe { .dx-font-icon("\f02c"); }
+    .dx-icon-group { .dx-font-icon("\f02e"); }
+    .dx-icon-help { .dx-font-icon("\f02f"); }
+    .dx-icon-home { .dx-font-icon("\f030"); }
+    .dx-icon-image { .dx-font-icon("\f031"); }
+    .dx-icon-info { .dx-font-icon("\f032"); }
+    .dx-icon-key { .dx-font-icon("\f033"); }
+    .dx-icon-like { .dx-font-icon("\f034"); }
+    .dx-icon-map { .dx-font-icon("\f035"); }
+    .dx-icon-menu { .dx-font-icon("\f00c"); }
+    .dx-icon-message { .dx-font-icon("\f024"); }
+    .dx-icon-money { .dx-font-icon("\f036"); }
+    .dx-icon-music { .dx-font-icon("\f037"); }
+    .dx-icon-overflow { .dx-font-icon("\f00d"); }
+    .dx-icon-percent { .dx-font-icon("\f039"); }
+    .dx-icon-photo { .dx-font-icon("\f03a"); }
+    .dx-icon-plus { .dx-font-icon("\f00b"); }
     .dx-icon-preferences { .dx-font-icon("\f03b"); }
-    .dx-icon-product    { .dx-font-icon("\f03c"); }
-    .dx-icon-pulldown   { .dx-font-icon("\f062"); }
-    .dx-icon-refresh    { .dx-font-icon("\f03d"); }
-    .dx-icon-remove     { .dx-font-icon("\f00a"); }
-    .dx-icon-revert     { .dx-font-icon("\f04c"); }
-    .dx-icon-runner     { .dx-font-icon("\f040"); }
-    .dx-icon-save       { .dx-font-icon("\f041"); }
-    .dx-icon-search     { .dx-font-icon("\f027"); }
-    .dx-icon-tags       { .dx-font-icon("\f009"); }
-    .dx-icon-tel        { .dx-font-icon("\f003"); }
-    .dx-icon-tips       { .dx-font-icon("\f004"); }
-    .dx-icon-todo       { .dx-font-icon("\f005"); }
-    .dx-icon-toolbox    { .dx-font-icon("\f007"); }
-    .dx-icon-trash      { .dx-font-icon("\f03e"); }
-    .dx-icon-user       { .dx-font-icon("\f02d"); }
-    .dx-icon-upload     { .dx-font-icon("\f006"); }
-    .dx-icon-floppy     { .dx-font-icon("\f073"); }
+    .dx-icon-product { .dx-font-icon("\f03c"); }
+    .dx-icon-pulldown { .dx-font-icon("\f062"); }
+    .dx-icon-refresh { .dx-font-icon("\f03d"); }
+    .dx-icon-remove { .dx-font-icon("\f00a"); }
+    .dx-icon-revert { .dx-font-icon("\f04c"); }
+    .dx-icon-runner { .dx-font-icon("\f040"); }
+    .dx-icon-save { .dx-font-icon("\f041"); }
+    .dx-icon-search { .dx-font-icon("\f027"); }
+    .dx-icon-tags { .dx-font-icon("\f009"); }
+    .dx-icon-tel { .dx-font-icon("\f003"); }
+    .dx-icon-tips { .dx-font-icon("\f004"); }
+    .dx-icon-todo { .dx-font-icon("\f005"); }
+    .dx-icon-toolbox { .dx-font-icon("\f007"); }
+    .dx-icon-trash { .dx-font-icon("\f03e"); }
+    .dx-icon-user { .dx-font-icon("\f02d"); }
+    .dx-icon-upload { .dx-font-icon("\f006"); }
+    .dx-icon-floppy { .dx-font-icon("\f073"); }
 
-    .dx-icon-arrowleft  { .dx-font-icon("\f011"); }
-    .dx-icon-arrowdown  { .dx-font-icon("\f015"); }
+    .dx-icon-arrowleft { .dx-font-icon("\f011"); }
+    .dx-icon-arrowdown { .dx-font-icon("\f015"); }
     .dx-icon-arrowright { .dx-font-icon("\f00e"); }
-    .dx-icon-arrowup    { .dx-font-icon("\f013"); }
+    .dx-icon-arrowup { .dx-font-icon("\f013"); }
 
-    .dx-icon-spinleft   { .dx-font-icon("\f04f"); }
-    .dx-icon-spinright  { .dx-font-icon("\f04e"); }
+    .dx-icon-spinleft { .dx-font-icon("\f04f"); }
+    .dx-icon-spinright { .dx-font-icon("\f04e"); }
+
     .dx-icon-spinnext {
         .dx-icon-spinright;
         .dx-rtl &:before { content: "\f04f"; } //.dx-icon-spinleft
     }
+
     .dx-icon-spinprev {
         .dx-icon-spinleft;
         .dx-rtl &:before { content: "\f04e"; } //.dx-icon-spinright
     }
-    .dx-icon-spindown   { .dx-font-icon("\f001"); }
-    .dx-icon-spinup     { .dx-font-icon("\f002"); }
+    .dx-icon-spindown { .dx-font-icon("\f001"); }
+    .dx-icon-spinup { .dx-font-icon("\f002"); }
 
     .dx-icon-chevronleft { .dx-font-icon("\f012"); }
     .dx-icon-chevronright { .dx-font-icon("\f010"); }
+
     .dx-icon-chevronnext {
         .dx-icon-chevronright;
         .dx-rtl &:before { content: "\f012"; } //.dx-icon-chevronleft
     }
+
     .dx-icon-chevronprev {
         .dx-icon-chevronleft;
         .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
     }
     .dx-icon-chevrondown { .dx-font-icon("\f016"); }
-    .dx-icon-chevronup  { .dx-font-icon("\f014"); }
+    .dx-icon-chevronup { .dx-font-icon("\f014"); }
     .dx-icon-chevrondoubleleft { .dx-font-icon("\f042"); }
     .dx-icon-chevrondoubleright { .dx-font-icon("\f043"); }
 
-    .dx-icon-equal      { .dx-font-icon("\f044"); }
-    .dx-icon-notequal   { .dx-font-icon("\f045"); }
-    .dx-icon-less       { .dx-font-icon("\f046"); }
-    .dx-icon-greater    { .dx-font-icon("\f047"); }
+    .dx-icon-equal { .dx-font-icon("\f044"); }
+    .dx-icon-notequal { .dx-font-icon("\f045"); }
+    .dx-icon-less { .dx-font-icon("\f046"); }
+    .dx-icon-greater { .dx-font-icon("\f047"); }
     .dx-icon-lessorequal { .dx-font-icon("\f048"); }
     .dx-icon-greaterorequal { .dx-font-icon("\f049"); }
     .dx-icon-isblank { .dx-font-icon("\f075"); }
     .dx-icon-isnotblank { .dx-font-icon("\f076"); }
 
-    .dx-icon-sortup     { .dx-font-icon("\f051"); }
-    .dx-icon-sortdown   { .dx-font-icon("\f052"); }
+    .dx-icon-sortup { .dx-font-icon("\f051"); }
+    .dx-icon-sortdown { .dx-font-icon("\f052"); }
     .dx-icon-sortuptext { .dx-font-icon("\f053"); }
     .dx-icon-sortdowntext { .dx-font-icon("\f054"); }
     .dx-icon-sorted { .dx-font-icon("\f055"); }
 
-    .dx-icon-expand     { .dx-font-icon("\f04a"); }
-    .dx-icon-collapse   { .dx-font-icon("\f04b"); }
+    .dx-icon-expand { .dx-font-icon("\f04a"); }
+    .dx-icon-collapse { .dx-font-icon("\f04b"); }
 
     .dx-icon-columnfield { .dx-font-icon("\f057"); }
-    .dx-icon-rowfield   { .dx-font-icon("\f058"); }
-    .dx-icon-datafield  { .dx-font-icon("\f056"); }
-    .dx-icon-fields     { .dx-font-icon("\f059"); }
+    .dx-icon-rowfield { .dx-font-icon("\f058"); }
+    .dx-icon-datafield { .dx-font-icon("\f056"); }
+    .dx-icon-fields { .dx-font-icon("\f059"); }
     .dx-icon-fieldchooser { .dx-font-icon("\f05a"); }
     .dx-icon-columnchooser { .dx-font-icon("\f04d"); }
 
-    .dx-icon-pin        { .dx-font-icon("\f05b"); }
-    .dx-icon-unpin      { .dx-font-icon("\f05c"); }
-    .dx-icon-pinleft    { .dx-font-icon("\f05d"); }
-    .dx-icon-pinright   { .dx-font-icon("\f05e"); }
+    .dx-icon-pin { .dx-font-icon("\f05b"); }
+    .dx-icon-unpin { .dx-font-icon("\f05c"); }
+    .dx-icon-pinleft { .dx-font-icon("\f05d"); }
+    .dx-icon-pinright { .dx-font-icon("\f05e"); }
 
-    .dx-icon-contains   { .dx-font-icon("\f063"); }
+    .dx-icon-contains { .dx-font-icon("\f063"); }
     .dx-icon-startswith { .dx-font-icon("\f064"); }
-    .dx-icon-endswith   { .dx-font-icon("\f065"); }
+    .dx-icon-endswith { .dx-font-icon("\f065"); }
     .dx-icon-doesnotcontain { .dx-font-icon("\f066"); }
     .dx-icon-range { .dx-font-icon("\f06a"); }
 
-    .dx-icon-export     { .dx-font-icon("\f05f"); }
+    .dx-icon-export { .dx-font-icon("\f05f"); }
     .dx-icon-exportxlsx { .dx-font-icon("\f060"); }
-    .dx-icon-exportpdf  { .dx-font-icon("\f061"); }
+    .dx-icon-exportpdf { .dx-font-icon("\f061"); }
     .dx-icon-exportselected { .dx-font-icon("\f06d"); }
 
     .dx-icon-warning { .dx-font-icon("\f06b"); }
     .dx-icon-more { .dx-font-icon("\f06c"); }
 
-    .dx-icon-square     { .dx-font-icon("\f067"); }
+    .dx-icon-square { .dx-font-icon("\f067"); }
     .dx-icon-clearsquare { .dx-font-icon("\f068"); }
 
     .dx-icon-back {
@@ -280,10 +287,12 @@
     .dx-icon-mention { .dx-font-icon("\f090"); }
     .dx-icon-variable { .dx-font-icon("\f091"); }
     .dx-icon-clearformat { .dx-font-icon("\f092"); }
+
     .dx-icon-undo {
         .dx-font-icon("\f04c");
         .dx-rtl &:before { content: "\f093"; } // redo icon
     }
+
     .dx-icon-redo {
         .dx-font-icon("\f093");
         .dx-rtl &:before { content: "\f04c"; } // undo icon

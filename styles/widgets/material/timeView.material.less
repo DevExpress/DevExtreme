@@ -2,8 +2,8 @@
     @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 252px;
     @MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE: 215px;
     @MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 35px;
-    @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0px;
-    @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0px;
+    @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0;
+    @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0;
     @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
     @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
     @MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 70px;
@@ -12,8 +12,8 @@
     @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 200px;
     @MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE: 190px;
     @MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 35px;
-    @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0px;
-    @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0px;
+    @MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0;
+    @MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0;
     @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
     @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
     @MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 56px;
@@ -23,13 +23,12 @@
 .dx-timeview {
     height: auto;
     width: auto;
-    background-color: @timeview-bg
+    background-color: @timeview-bg;
 }
 
 .dx-timeview-clock {
     min-height: @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE + @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE;
     min-width: @MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE + @MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE;
-
     background: @timeview-clock-bg no-repeat 50% 50%;
     background-size: @MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE;
 }
@@ -46,11 +45,11 @@
 
 .dx-timeview-format12 {
     width: @MATERIAL_TIMEVIEW_FORMAT12_WIDTH;
-
     margin-left: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
     margin-right: auto;
 
-    &.dx-rtl, .dx-rtl & {
+    &.dx-rtl,
+    .dx-rtl & {
         margin-left: auto;
         margin-right: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
     }
@@ -63,16 +62,20 @@
                 padding-left: 0;
             }
 
-            .dx-editor-filled&, .dx-editor-outlined& {
-                .dx-rtl&, .dx-rtl & {
+            .dx-editor-filled&,
+            .dx-editor-outlined& {
+                .dx-rtl&,
+                .dx-rtl & {
                     padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
                 }
             }
         }
+
         .dx-texteditor-buttons-container .dx-dropdowneditor-button {
             margin-right: 0;
 
-            &.dx-rtl, .dx-rtl & {
+            &.dx-rtl,
+            .dx-rtl & {
                 margin-left: 0;
             }
         }

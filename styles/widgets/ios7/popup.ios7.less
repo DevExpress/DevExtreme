@@ -7,7 +7,7 @@
         border-radius: @IOS7_POPUP_BORDER_RADIUS;
 
         .dx-hairlines & {
-            border-width: .5px;
+            border-width: 0.5px;
         }
     }
 
@@ -32,7 +32,7 @@
 
 .dx-popup-fullscreen {
     border: none;
-    border-radius: 0px;;
+    border-radius: 0;
 }
 
 .dx-popup-title {
@@ -42,10 +42,9 @@
     text-align: center;
     font-weight: bold;
     border-radius: @IOS7_POPUP_BORDER_RADIUS @IOS7_POPUP_BORDER_RADIUS 0 0;
-    font-weight: bold;
 
     .dx-hairlines & {
-        border-bottom-width: .5px;
+        border-bottom-width: 0.5px;
     }
 
     & + .dx-popup-content {
@@ -62,7 +61,6 @@
         text-align: center;
         font-weight: bold;
         font-size: 1em;
-        font-weight: bold;
         line-height: 1em;
     }
 }
@@ -85,7 +83,8 @@
 }
 
 .dx-dialog-root {
-    .dx-overlay-content, .dx-popup-content {
+    .dx-overlay-content,
+    .dx-popup-content {
         border-radius: @IOS7_DIALOG_BORDER_RADIUS;
     }
 
@@ -114,7 +113,7 @@
         border-top: 1px solid @IOS7_DIALOG_BUTTONS_BORDER;
 
         .dx-hairlines & {
-            border-top-width: .5px;
+            border-top-width: 0.5px;
         }
 
         .dx-toolbar-center {
@@ -129,7 +128,7 @@
             display: table-cell;
 
             .dx-hairlines & {
-                border-left-width: .5px;
+                border-left-width: 0.5px;
             }
 
             &:first-child {
@@ -153,7 +152,7 @@
                 border-left: none;
 
                 .dx-hairlines & {
-                    border-right-width: .5px;
+                    border-right-width: 0.5px;
                 }
 
                 &:first-child {

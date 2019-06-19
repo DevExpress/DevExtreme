@@ -8,7 +8,8 @@
             background-color: @hoverColor;
         }
 
-        &:focus, &.dx-state-active {
+        &:focus,
+        &.dx-state-active {
             background-color: @focusColor;
             color: @filterbuilder-text-focus-color;
         }
@@ -17,6 +18,7 @@
     .dx-filterbuilder-group {
         .dx-filterbuilder-text {
             color: @filterbuilder-text-color;
+
             &.dx-filterbuilder-group-operation {
                 .button-color(@filterbuilder-group-operation-color, @filterbuilder-group-operation-hover-color, @filterbuilder-group-operation-focus-color);
             }
@@ -33,20 +35,27 @@
                 .button-color(@filterbuilder-item-value-color, @filterbuilder-item-value-hover-color, @filterbuilder-item-value-focus-color);
             }
         }
+
         .dx-icon-plus {
             color: @filterbuilder-plus-icon-color;
+
             &:hover {
                 color: @filterbuilder-plus-icon-hover-color;
             }
-            &:focus, &.dx-state-active {
+
+            &:focus,
+            &.dx-state-active {
                 color: @filterbuilder-plus-icon-focus-color;
             }
         }
+
         .dx-icon-remove {
             color: @filterbuilder-remove-icon-color;
+
             &:hover {
                 color: @filterbuilder-remove-icon-hover-color;
             }
+
             &:focus {
                 color: @filterbuilder-remove-icon-focus-color;
             }
