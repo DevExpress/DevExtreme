@@ -178,8 +178,8 @@ const DiagramCommands = {
             },
             {
                 command: DiagramCommand.Fullscreen,
-                hint: "Full Screen",
-                text: "Full Screen",
+                hint: "Fullscreen",
+                text: "Fullscreen",
                 icon: "dx-diagram-i dx-diagram-i-button-fullscreen",
                 cssClass: CSS_CLASSES.BUTTON_COLOR
             }
