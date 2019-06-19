@@ -85,6 +85,25 @@ QUnit.test('Text editor', function(assert) {
     assert.equal(value, 'B', 'value after change');
 });
 
+// T749989
+QUnit.test('Editor should not convert value to string if editorType is defined and not equal to dxTextBox', function(assert) {
+    // arrange
+    var $container = $('#container'),
+        value = [];
+
+    // act
+    this.editorFactoryController.createEditor($container, {
+        editorType: 'dxSelectBox',
+        parentType: 'dataRow',
+        value: value
+    });
+    var editor = $container.dxSelectBox('instance');
+
+    // assert
+    assert.ok(editor, 'editor created');
+    assert.strictEqual(editor.option('value'), value, 'editor value was not converted to string');
+});
+
 QUnit.test('Text editor enter in ios (T344096)', function(assert) {
     if(!browser.webkit) {
         assert.ok(true, "Not webkit browser");
