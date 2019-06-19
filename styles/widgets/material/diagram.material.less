@@ -1,3 +1,6 @@
+@MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE: @MATERIAL_BASE_ICON_SIZE;
+@DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
+
 .dx-diagram {
     border-color: @diagram-border-color;
 
@@ -109,7 +112,8 @@
             }
 
             .dx-icon {
-                font-size: 18px;
+                font-size: @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE;
+                color: @base-icon-color;
             }
         }
     }
@@ -117,10 +121,10 @@
     .dx-diagram-color-b .dx-dropdowneditor-field-template-wrapper {
         .dx-diagram-i,
         .dx-icon {
-            border-bottom-width: 3px;
+            border-bottom-width: @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH;
             border-bottom-style: solid;
         }
     }
 }
 
-.diagram-icons-mixin(@base-icon-color);
+.diagram-icons-mixin(@base-icon-color, @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE);
