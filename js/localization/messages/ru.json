@@ -253,6 +253,7 @@
         "dxHtmlEditor-heading": "Заголовок",
         "dxHtmlEditor-normalText": "Обычный текст",
 
+        "dxFileManager-newFolder": "TODO!",
         "dxFileManager-errorNoAccess": "TODO!",
         "dxFileManager-errorDirectoryExistsFormat": "TODO!",
         "dxFileManager-errorFileExistsFormat": "TODO!",
