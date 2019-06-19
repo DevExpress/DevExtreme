@@ -14,6 +14,9 @@ import messageLocalization from "../../localization/message";
 import dateLocalization from "../../localization/date";
 import { utils } from "./utils";
 
+const DEFAULT_HORIZONTAL_HANDLES = "left right";
+const DEFAULT_VERTICAL_HANDLES = "top bottom";
+
 var REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, "dxSchedulerAppointment"),
     REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, "dxSchedulerAppointment");
 
@@ -76,32 +79,23 @@ var Appointment = DOMComponent.inherit({
 
     _getHorizontalResizingRule: function() {
         const reducedHandles = {
-            head: isRTL ? "right" : "left",
+            head: this.option("rtlEnabled") ? "right" : "left",
             body: "",
-            tail: isRTL ? "left" : "right"
+            tail: this.option("rtlEnabled") ? "left" : "right"
         };
 
-        let width = this.invoke("getCellWidth"),
-            step = this.invoke("getResizableStep"),
-            isRTL = this.option("rtlEnabled"),
-            handles = "left right";
-
-        if(this.option("reduced")) {
-            handles = reducedHandles[this.option("reduced")];
-        }
-
         return {
-            handles: handles,
+            handles: this.option("reduced") ? reducedHandles[this.option("reduced")] : DEFAULT_HORIZONTAL_HANDLES,
             minHeight: 0,
-            minWidth: width,
-            step: step
+            minWidth: this.invoke("getCellWidth"),
+            step: this.invoke("getResizableStep")
         };
     },
 
     _getVerticalResizingRule: function() {
         const height = this.invoke("getCellHeight");
         return {
-            handles: "top bottom",
+            handles: DEFAULT_VERTICAL_HANDLES,
             minWidth: 0,
             minHeight: height,
             step: height
