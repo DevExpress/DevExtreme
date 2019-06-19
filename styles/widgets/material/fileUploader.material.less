@@ -44,6 +44,7 @@
 
     .dx-fileuploader-input-label {
         text-align: center;
+        padding: @MATERIAL_FILEUPLOADER_VERTICAL_PADDING*2 @MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
     }
 
     .dx-fileuploader-input-container {
@@ -59,10 +60,6 @@
         //NOTE: height of the widget should be the same in default and drag over states
         margin-bottom: 1px;
         box-sizing: content-box;
-    }
-
-    .dx-fileuploader-input-label {
-        padding: @MATERIAL_FILEUPLOADER_VERTICAL_PADDING*2 @MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
     }
 }
 
@@ -144,6 +141,8 @@
 
 .dx-fileuploader-invalid {
     .dx-fileuploader-file-status-message {
+        color: @base-danger;
+
         span {
             &:first-child {
                 margin-top: 2px;
@@ -153,10 +152,6 @@
                 margin-bottom: 2px;
             }
         }
-    }
-
-    .dx-fileuploader-file-status-message {
-        color: @base-danger;
     }
 
     .dx-fileuploader-button-container {

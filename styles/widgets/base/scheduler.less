@@ -721,6 +721,39 @@
                 }
             }
         }
+
+        .dx-scheduler-appointment-reduced {
+            .dx-scheduler-appointment-content {
+                padding-right: @SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING;
+            }
+        }
+
+        .dx-scheduler-appointment-reduced-icon {
+            top: 9px;
+        }
+
+        .dx-scheduler-appointment-head {
+            .dx-scheduler-appointment-recurrence-icon {
+                top: calc(35% - 3px);
+                right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
+            }
+        }
+
+        &.dx-scheduler-work-space-odd-cells {
+            .dx-scheduler-date-table-row:nth-child(odd) .dx-scheduler-date-table-cell {
+                border-top: @SCHEDULER_ACCENT_BORDER;
+            }
+
+            .dx-scheduler-date-table-row:first-child .dx-scheduler-date-table-cell {
+                border-top: none;
+            }
+
+            .dx-scheduler-time-panel-row:nth-child(2n) .dx-scheduler-time-panel-cell {
+                &:after {
+                    background-color: @SCHEDULER_ACCENT_BORDER_COLOR;
+                }
+            }
+        }
     }
 
     .dx-scheduler-timeline-week,
@@ -792,6 +825,244 @@
                 content: none;
             }
         }
+
+        .dx-scheduler-fixed-appointments {
+            left: 0;
+        }
+
+        .dx-scheduler-header-row,
+        .dx-scheduler-date-table .dx-scheduler-date-table-row {
+            &:before {
+                content: none;
+            }
+        }
+
+        .dx-scheduler-date-table {
+            border-spacing: 0;
+            border-collapse: separate;
+            margin-left: 0;
+
+            .flex-container(column, nowrap);
+
+            tbody {
+                .flex-container(column, nowrap);
+
+                height: 100%;
+                min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
+            }
+
+            .dx-scheduler-date-table-row {
+                .flex-container(row, nowrap);
+
+                flex: 1;
+            }
+
+            .dx-scheduler-date-table-cell {
+                .flex-container(row, nowrap);
+
+                align-items: stretch;
+                flex: 1 1 auto;
+                height: inherit;
+            }
+        }
+
+        .dx-scheduler-header-panel-cell:not(.dx-scheduler-header-panel-week-cell),
+        .dx-scheduler-date-table-cell {
+            width: 200px;
+        }
+
+        .dx-scheduler-date-table-cell {
+            border-right: none;
+        }
+
+        .dx-scheduler-work-space-vertical-group-table {
+            display: none;
+        }
+
+        .dx-scheduler-group-table {
+            border-spacing: 0;
+            border-collapse: separate;
+
+            .flex-container(column, nowrap);
+
+            tbody {
+                .flex-container(column, nowrap);
+
+                height: 100%;
+            }
+        }
+
+        .dx-scheduler-group-row {
+            .flex-container(row, nowrap);
+
+            flex: 1;
+        }
+
+        .dx-scheduler-group-header {
+            .flex-container(row, nowrap);
+
+            align-items: center;
+            flex: 1 1 auto;
+            padding: 0 10px 0 5px;
+            height: auto;
+            width: 100%;
+
+            &[rowspan='2'],
+            &[rowspan='3'] {
+                .dx-scheduler-group-header-content div {
+                    margin-top: 200%;
+                }
+            }
+        }
+
+
+        .dx-scheduler-group-header-content {
+            overflow: visible;
+            margin: auto;
+            flex-grow: 1;
+
+            div {
+                white-space: normal;
+                line-height: normal;
+            }
+        }
+
+        &[dx-group-column-count='2'],
+        &[dx-group-column-count='3'] {
+            .dx-scheduler-group-header:last-child {
+                font-weight: normal;
+                text-align: left;
+            }
+
+            .dx-scheduler-group-header:only-child {
+                position: relative;
+                left: 80px;
+                width: 80px;
+            }
+        }
+
+        &.dx-scheduler-work-space-group-by-date {
+            .dx-scheduler-group-header {
+                width: 200px;
+            }
+
+            .dx-scheduler-group-row .dx-scheduler-group-header {
+                border-right: @SCHEDULER_BASE_BORDER;
+            }
+
+            .dx-scheduler-last-group-cell {
+                border-right: @SCHEDULER_ACCENT_BORDER;
+            }
+        }
+
+        .dx-scheduler-date-table,
+        .dx-scheduler-date-table-scrollable .dx-scrollable-content,
+        .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
+        .dx-scheduler-group-table {
+            height: 100%;
+            min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
+        }
+
+        &.dx-scheduler-work-space-both-scrollbar {
+            .dx-scheduler-date-table-scrollable .dx-scrollable-content,
+            .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
+            .dx-scheduler-group-table {
+                height: auto;
+            }
+
+            .dx-scheduler-date-table .dx-scheduler-date-table-row:first-child {
+                .dx-scheduler-date-table-cell {
+                    border-top-color: transparent;
+                }
+            }
+
+            .dx-scheduler-header-panel {
+                border-bottom: @SCHEDULER_ACCENT_BORDER;
+            }
+
+            &.dx-scheduler-work-space-grouped {
+                .dx-scheduler-sidebar-scrollable {
+                    &:before {
+                        border-bottom: @SCHEDULER_ACCENT_BORDER;
+                    }
+                }
+            }
+        }
+
+        .dx-scheduler-date-table-scrollable {
+            padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
+            margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
+        }
+
+        .dx-scheduler-header-scrollable {
+            height: auto;
+        }
+
+        .dx-scheduler-sidebar-scrollable {
+            display: none;
+        }
+
+        &.dx-scheduler-work-space-grouped {
+            .dx-scheduler-sidebar-scrollable {
+                display: block;
+                float: left;
+                padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
+                margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
+
+                &:before {
+                    content: "";
+                    height: @SCHEDULER_HEADER_PANEL_OFFSET;
+                    position: absolute;
+                    display: block;
+                    margin-top: -@SCHEDULER_HEADER_PANEL_OFFSET;
+                    left: 0;
+                    border-right: @SCHEDULER_BASE_BORDER;
+                }
+            }
+
+            .dx-scheduler-group-row .dx-scheduler-group-header {
+                border: none;
+                border-top: @SCHEDULER_BASE_BORDER;
+            }
+
+            .dx-scheduler-group-table {
+                border-right: @SCHEDULER_BASE_BORDER;
+            }
+
+            .dx-scheduler-date-table-row .dx-scheduler-date-table-cell,
+            .dx-scheduler-header-row .dx-scheduler-header-panel-cell {
+                &:first-child {
+                    border-left: none;
+
+                    .dx-rtl & {
+                        border-right: none;
+                        border-left: @SCHEDULER_BASE_BORDER;
+                    }
+                }
+            }
+
+            .dx-scheduler-group-row {
+                &:before {
+                    display: none;
+                }
+            }
+
+            &.dx-scheduler-work-space-both-scrollbar {
+                .dx-scheduler-group-row:first-child {
+                    .dx-scheduler-group-header {
+                        border-top: none;
+                    }
+                }
+            }
+
+            .dx-scheduler-timeline-group-table-mixin();
+        }
+
+        .dx-scheduler-appointment-reduced {
+            .dx-scheduler-appointment-recurrence-icon {
+                top: 0;
+            }
+        }
     }
 
     .dx-scheduler-work-space {
@@ -843,6 +1114,18 @@
                 border-bottom: @SCHEDULER_BASE_BORDER;
             }
         }
+
+        &:not(.dx-scheduler-work-space-all-day) {
+            .dx-scheduler-all-day-title-hidden {
+                display: block;
+                background-color: transparent;
+                color: transparent;
+                border-left: none;
+                border-right: none;
+                border-bottom: none;
+                height: 0;
+            }
+        }
     }
 
 
@@ -853,6 +1136,8 @@
 
     .dx-scheduler-date-table-cell {
         border-top: @SCHEDULER_BASE_BORDER;
+        border-left: @SCHEDULER_BASE_BORDER;
+        border-right: @SCHEDULER_BASE_BORDER;
         height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     }
 
@@ -860,6 +1145,27 @@
     .dx-scheduler-all-day-table-cell {
         > div {
             pointer-events: none;
+        }
+
+        &.dx-state-active {
+            background-color: @SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR;
+        }
+
+        &.dx-state-hover {
+            background-color: @SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR;
+
+            &.dx-state-focused {
+                background-color: @SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR;
+            }
+        }
+
+        &.dx-state-focused {
+            background-color: @SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR;
+            opacity: 1;
+        }
+
+        &.dx-scheduler-focused-cell {
+            box-shadow: @SCHEDULER_FOCUSED_CELL_SHADOW;
         }
     }
 
@@ -880,26 +1186,6 @@
         opacity: @SCHEDULER_OTHER_MONTH_CELL_OPACITY;
     }
 
-    .dx-scheduler-work-space-day,
-    .dx-scheduler-work-space-week,
-    .dx-scheduler-work-space-work-week {
-        &.dx-scheduler-work-space-odd-cells {
-            .dx-scheduler-date-table-row:nth-child(odd) .dx-scheduler-date-table-cell {
-                border-top: @SCHEDULER_ACCENT_BORDER;
-            }
-
-            .dx-scheduler-date-table-row:first-child .dx-scheduler-date-table-cell {
-                border-top: none;
-            }
-
-            .dx-scheduler-time-panel-row:nth-child(2n) .dx-scheduler-time-panel-cell {
-                &:after {
-                    background-color: @SCHEDULER_ACCENT_BORDER_COLOR;
-                }
-            }
-        }
-    }
-
     .dx-scheduler-work-space-day {
         &:not(.dx-scheduler-work-space-vertical-grouped) {
             .dx-scheduler-scrollable-offset-mixin(0, @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
@@ -917,6 +1203,23 @@
                 margin-top: 1px;
             }
         }
+
+        .dx-scheduler-header-panel-cell,
+        .dx-scheduler-date-table-cell,
+        .dx-scheduler-all-day-table-cell {
+            border-right: none;
+
+            .dx-rtl & {
+                border-left: none;
+            }
+        }
+
+        &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
+            .dx-scheduler-all-day-table-cell {
+                border-top: none;
+                border-left: none;
+            }
+        }
     }
 
     .dx-scheduler-work-space-day,
@@ -930,15 +1233,6 @@
     .dx-scheduler-all-day-table-cell {
         border-left: @SCHEDULER_BASE_BORDER;
         border-top: @SCHEDULER_BASE_BORDER;
-    }
-
-    .dx-scheduler-work-space-day {
-        &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
-            .dx-scheduler-all-day-table-cell {
-                border-top: none;
-                border-left: none;
-            }
-        }
     }
 
     .dx-scheduler-work-space-week,
@@ -1064,251 +1358,6 @@
         }
     }
 
-    .dx-scheduler-timeline {
-        .dx-scheduler-fixed-appointments {
-            left: 0;
-        }
-
-        .dx-scheduler-header-row,
-        .dx-scheduler-date-table .dx-scheduler-date-table-row {
-            &:before {
-                content: none;
-            }
-        }
-
-        .dx-scheduler-date-table {
-            border-spacing: 0;
-            border-collapse: separate;
-            margin-left: 0;
-        }
-
-        .dx-scheduler-header-panel-cell:not(.dx-scheduler-header-panel-week-cell),
-        .dx-scheduler-date-table-cell {
-            width: 200px;
-        }
-
-        .dx-scheduler-date-table-cell {
-            border-right: none;
-        }
-
-        .dx-scheduler-work-space-vertical-group-table {
-            display: none;
-        }
-
-        .dx-scheduler-date-table {
-            .flex-container(column, nowrap);
-
-            tbody {
-                .flex-container(column, nowrap);
-
-                height: 100%;
-                min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
-            }
-
-            .dx-scheduler-date-table-row {
-                .flex-container(row, nowrap);
-
-                flex: 1;
-            }
-
-            .dx-scheduler-date-table-cell {
-                .flex-container(row, nowrap);
-
-                align-items: stretch;
-                flex: 1 1 auto;
-                height: inherit;
-            }
-        }
-
-        .dx-scheduler-group-table {
-            border-spacing: 0;
-            border-collapse: separate;
-
-            .flex-container(column, nowrap);
-
-            tbody {
-                .flex-container(column, nowrap);
-
-                height: 100%;
-            }
-        }
-
-        .dx-scheduler-group-row {
-            .flex-container(row, nowrap);
-
-            flex: 1;
-        }
-
-        .dx-scheduler-group-header {
-            .flex-container(row, nowrap);
-
-            align-items: center;
-            flex: 1 1 auto;
-            padding: 0 10px 0 5px;
-            height: auto;
-            width: 100%;
-
-            &[rowspan='2'],
-            &[rowspan='3'] {
-                .dx-scheduler-group-header-content div {
-                    margin-top: 200%;
-                }
-            }
-        }
-
-
-        .dx-scheduler-group-header-content {
-            overflow: visible;
-            margin: auto;
-            flex-grow: 1;
-
-            div {
-                white-space: normal;
-                line-height: normal;
-            }
-        }
-
-        &[dx-group-column-count='2'],
-        &[dx-group-column-count='3'] {
-            .dx-scheduler-group-header:last-child {
-                font-weight: normal;
-                text-align: left;
-            }
-
-            .dx-scheduler-group-header:only-child {
-                position: relative;
-                left: 80px;
-                width: 80px;
-            }
-        }
-
-        &.dx-scheduler-work-space-group-by-date {
-            .dx-scheduler-group-header {
-                width: 200px;
-            }
-        }
-
-        .dx-scheduler-date-table,
-        .dx-scheduler-date-table-scrollable .dx-scrollable-content,
-        .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
-        .dx-scheduler-group-table {
-            height: 100%;
-            min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
-        }
-
-        &.dx-scheduler-work-space-both-scrollbar {
-            .dx-scheduler-date-table-scrollable .dx-scrollable-content,
-            .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
-            .dx-scheduler-group-table {
-                height: auto;
-            }
-
-            .dx-scheduler-date-table .dx-scheduler-date-table-row:first-child {
-                .dx-scheduler-date-table-cell {
-                    border-top-color: transparent;
-                }
-            }
-
-            .dx-scheduler-header-panel {
-                border-bottom: @SCHEDULER_ACCENT_BORDER;
-            }
-
-            &.dx-scheduler-work-space-grouped {
-                .dx-scheduler-sidebar-scrollable {
-                    &:before {
-                        border-bottom: @SCHEDULER_ACCENT_BORDER;
-                    }
-                }
-            }
-        }
-
-        .dx-scheduler-date-table-scrollable {
-            padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
-            margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
-        }
-
-        .dx-scheduler-header-scrollable {
-            height: auto;
-        }
-
-        .dx-scheduler-sidebar-scrollable {
-            display: none;
-        }
-
-        &.dx-scheduler-work-space-grouped {
-            .dx-scheduler-sidebar-scrollable {
-                display: block;
-                float: left;
-                padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
-                margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
-
-                &:before {
-                    content: "";
-                    height: @SCHEDULER_HEADER_PANEL_OFFSET;
-                    position: absolute;
-                    display: block;
-                    margin-top: -@SCHEDULER_HEADER_PANEL_OFFSET;
-                    left: 0;
-                    border-right: @SCHEDULER_BASE_BORDER;
-                }
-            }
-
-            .dx-scheduler-group-row .dx-scheduler-group-header {
-                border: none;
-                border-top: @SCHEDULER_BASE_BORDER;
-            }
-
-            .dx-scheduler-group-table {
-                border-right: @SCHEDULER_BASE_BORDER;
-            }
-
-            .dx-scheduler-date-table-row .dx-scheduler-date-table-cell,
-            .dx-scheduler-header-row .dx-scheduler-header-panel-cell {
-                &:first-child {
-                    border-left: none;
-
-                    .dx-rtl & {
-                        border-right: none;
-                        border-left: @SCHEDULER_BASE_BORDER;
-                    }
-                }
-            }
-
-            .dx-scheduler-group-row {
-                &:before {
-                    display: none;
-                }
-            }
-
-            &.dx-scheduler-work-space-both-scrollbar {
-                .dx-scheduler-group-row:first-child {
-                    .dx-scheduler-group-header {
-                        border-top: none;
-                    }
-                }
-            }
-
-            .dx-scheduler-timeline-group-table-mixin();
-        }
-
-        &.dx-scheduler-work-space-group-by-date {
-            .dx-scheduler-group-row .dx-scheduler-group-header {
-                border-right: @SCHEDULER_BASE_BORDER;
-            }
-
-            .dx-scheduler-last-group-cell {
-                border-right: @SCHEDULER_ACCENT_BORDER;
-            }
-        }
-
-        .dx-scheduler-appointment-reduced {
-            .dx-scheduler-appointment-recurrence-icon {
-                top: 0;
-            }
-        }
-    }
-
-
     .dx-scheduler-work-space.dx-scheduler-timeline-week,
     .dx-scheduler-work-space.dx-scheduler-timeline-work-week,
     .dx-scheduler-work-space.dx-scheduler-work-space-count.dx-scheduler-timeline-day {
@@ -1357,18 +1406,6 @@
                 .dx-rtl & {
                     border-left: none;
                 }
-            }
-        }
-    }
-
-    .dx-scheduler-work-space-day {
-        .dx-scheduler-header-panel-cell,
-        .dx-scheduler-date-table-cell,
-        .dx-scheduler-all-day-table-cell {
-            border-right: none;
-
-            .dx-rtl & {
-                border-left: none;
             }
         }
     }
@@ -1428,20 +1465,6 @@
 
     .dx-scheduler-all-day-title-hidden {
         display: none;
-    }
-
-    .dx-scheduler-work-space {
-        &:not(.dx-scheduler-work-space-all-day) {
-            .dx-scheduler-all-day-title-hidden {
-                display: block;
-                background-color: transparent;
-                color: transparent;
-                border-left: none;
-                border-right: none;
-                border-bottom: none;
-                height: 0;
-            }
-        }
     }
 
     .dx-scheduler-work-space-grouped {
@@ -1673,9 +1696,6 @@
         border-collapse: collapse;
         table-layout: fixed;
         width: 100%;
-    }
-
-    .dx-scheduler-all-day-table {
         height: @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT;
 
         .dx-scheduler-work-space-all-day-collapsed & {
@@ -1772,40 +1792,9 @@
         }
     }
 
-    .dx-scheduler-date-table-cell {
-        border-left: @SCHEDULER_BASE_BORDER;
-        border-right: @SCHEDULER_BASE_BORDER;
-        height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
-    }
-
-    .dx-scheduler-all-day-table-cell,
-    .dx-scheduler-date-table-cell {
-        &.dx-state-active {
-            background-color: @SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR;
-        }
-
-        &.dx-state-hover {
-            background-color: @SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR;
-
-            &.dx-state-focused {
-                background-color: @SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR;
-            }
-        }
-
-        &.dx-state-focused {
-            background-color: @SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR;
-            opacity: 1;
-        }
-
-        &.dx-scheduler-focused-cell {
-            box-shadow: @SCHEDULER_FOCUSED_CELL_SHADOW;
-        }
-    }
-
     .dx-scheduler-date-table-droppable-cell {
         background-color: @SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR;
     }
-
 
     .dx-scheduler-scrollable-appointments {
         position: absolute;
@@ -1887,26 +1876,10 @@
             cursor: default;
             opacity: 0.6;
         }
-    }
 
-    .dx-scheduler-work-space-week,
-    .dx-scheduler-work-space-work-week,
-    .dx-scheduler-work-space-day {
-        .dx-scheduler-appointment-reduced {
-            .dx-scheduler-appointment-content {
-                padding-right: @SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING;
-            }
-        }
-
-        .dx-scheduler-appointment-reduced-icon {
-            top: 9px;
-        }
-
-        .dx-scheduler-appointment-head {
-            .dx-scheduler-appointment-recurrence-icon {
-                top: calc(35% - 3px);
-                right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
-            }
+        &.dx-scheduler-appointment-body,
+        &.dx-scheduler-appointment-tail {
+            box-shadow: none;
         }
     }
 
@@ -1950,13 +1923,6 @@
     .dx-scheduler-all-day-appointment .dx-scheduler-appointment-reduced-icon {
         position: absolute;
         top: 15%;
-    }
-
-    .dx-scheduler-appointment {
-        &.dx-scheduler-appointment-body,
-        &.dx-scheduler-appointment-tail {
-            box-shadow: none;
-        }
     }
 
     .dx-scheduler-group-header-content div {
@@ -2628,6 +2594,15 @@
             .dx-scheduler-date-table {
                 margin-right: 0;
             }
+
+            .dx-scheduler-header-panel-cell,
+            .dx-scheduler-date-table-cell {
+                border-right: @SCHEDULER_BASE_BORDER;
+
+                &:first-child {
+                    border-right: none;
+                }
+            }
         }
 
         .dx-scheduler-header-panel {
@@ -2652,17 +2627,6 @@
             &:after {
                 right: auto;
                 left: 0;
-            }
-        }
-
-        .dx-scheduler-work-space-month {
-            .dx-scheduler-header-panel-cell,
-            .dx-scheduler-date-table-cell {
-                border-right: @SCHEDULER_BASE_BORDER;
-
-                &:first-child {
-                    border-right: none;
-                }
             }
         }
 

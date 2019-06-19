@@ -100,6 +100,7 @@
 
     .dx-area-field-content {
         display: inline-block;
+        white-space: nowrap;
     }
 
     .dx-column-indicators {
@@ -132,10 +133,6 @@
     }
 
     .dx-area-field {
-        white-space: nowrap;
-    }
-
-    .dx-area-field-content {
         white-space: nowrap;
     }
 
@@ -193,6 +190,16 @@
             -webkit-flex-direction: column;
             flex-direction: column;
         }
+
+        .dx-row:nth-child(1) {
+            -webkit-flex-grow: 2;
+            flex-grow: 2;
+        }
+
+        .dx-row:nth-child(2) {
+            -webkit-flex-grow: 1;
+            flex-grow: 1;
+        }
     }
 
     .dx-pivotgridfieldchooser-container.dx-layout-2 {
@@ -229,18 +236,6 @@
         -webkit-flex-direction: row;
         flex-direction: row;
         height: 0;
-    }
-
-    .dx-pivotgridfieldchooser-container {
-        .dx-row:nth-child(1) {
-            -webkit-flex-grow: 2;
-            flex-grow: 2;
-        }
-
-        .dx-row:nth-child(2) {
-            -webkit-flex-grow: 1;
-            flex-grow: 1;
-        }
     }
 
     .dx-area-caption {
