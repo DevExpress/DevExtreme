@@ -101,8 +101,11 @@ var EditorFactoryMixin = (function() {
             toString = function(value) {
                 return typeUtils.isDefined(value) ? value.toString() : "";
             };
-
-        config.value = toString(options.value);
+        if(options.editorType && options.editorType !== "dxTextBox") {
+            config.value = options.value;
+        } else {
+            config.value = toString(options.value);
+        }
         config.valueChangeEvent += (isSearching ? " keyup search" : "");
         config.mode = config.mode || (isSearching ? "search" : "text");
 
