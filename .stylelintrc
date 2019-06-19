@@ -12,6 +12,8 @@
         "property-no-vendor-prefix": true,
         "selector-no-vendor-prefix": true,
         "value-no-vendor-prefix": true,
-        "declaration-no-important": true
+        "declaration-no-important": true,
+        "selector-max-id": 0,
+        "selector-class-pattern": "dx-[a-z0-9-]+"
     }
 }
