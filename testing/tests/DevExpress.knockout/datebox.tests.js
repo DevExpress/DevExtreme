@@ -29,6 +29,7 @@ QUnit.testStart(function() {
 var toStandardDateFormat = uiDateUtils.toStandardDateFormat;
 
 var FORMATS_MAP = uiDateUtils.FORMATS_MAP,
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     widgetName = "dxDateBox";
 
 
@@ -149,7 +150,7 @@ QUnit.test("B250640 - Unable to get property 'show' of undefined or null referen
     var $element = $("#B250640");
 
     ko.applyBindings({}, $element.get(0));
-    $element.find("input").trigger("dxclick");
+    $element.find("." + TEXTEDITOR_INPUT_CLASS).trigger("dxclick");
     assert.ok(true, "no exceptions were fired");
 });
 
@@ -167,7 +168,7 @@ QUnit.test("Q468727 - dxDateBox - It is impossible to change a value if the init
     ko.applyBindings(vm, $dateBox[0]);
 
     $dateBox
-        .find("input")
+        .find("." + TEXTEDITOR_INPUT_CLASS)
         .val("2010-10-10T10:10:10.500")
         .trigger("change");
 

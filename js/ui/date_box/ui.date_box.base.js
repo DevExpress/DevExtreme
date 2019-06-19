@@ -222,8 +222,9 @@ var DateBox = DropDownEditor.inherit({
              * @type dxCalendarOptions
              * @default {}
              */
-            calendarOptions: {}
+            calendarOptions: {},
 
+            useHiddenSubmitElement: true
         });
     },
 

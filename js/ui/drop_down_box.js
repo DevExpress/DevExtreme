@@ -139,7 +139,8 @@ var DropDownBox = DropDownEditor.inherit({
 
             valueFormat: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
-            }
+            },
+            useHiddenSubmitElement: true
         });
     },
 

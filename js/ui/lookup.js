@@ -30,7 +30,8 @@ var LOOKUP_CLASS = "dx-lookup",
     LOOKUP_POPUP_SEARCH_CLASS = "dx-lookup-popup-search",
     LOOKUP_POPOVER_MODE = "dx-lookup-popover-mode",
     LOOKUP_EMPTY_CLASS = "dx-lookup-empty",
-    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical";
+    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical",
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 var POPUP_OPTION_MAP = {
     "popupWidth": "width",
@@ -480,7 +481,8 @@ var Lookup = DropDownList.inherit({
             * @inheritdoc
             */
 
-            _scrollToSelectedItemEnabled: false
+            _scrollToSelectedItemEnabled: false,
+            useHiddenSubmitElement: true
         });
     },
 
@@ -1173,7 +1175,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _renderPlaceholder: function() {
-        if(this.$element().find("input").length === 0) {
+        if(this.$element().find("." + TEXTEDITOR_INPUT_CLASS).length === 0) {
             return;
         }
 

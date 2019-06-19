@@ -210,7 +210,8 @@ var DropDownEditor = TextBox.inherit({
             applyButtonText: messageLocalization.format("OK"),
             cancelButtonText: messageLocalization.format("Cancel"),
             buttonsLocation: "default",
-            showPopupTitle: false
+            showPopupTitle: false,
+            useHiddenSubmitElement: false,
 
             /**
             * @name dxDropDownEditorOptions.mask
@@ -375,7 +376,9 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderValue: function() {
-        this._setSubmitValue();
+        if(this.option("useHiddenSubmitElement")) {
+            this._setSubmitValue();
+        }
 
         const promise = this.callBase();
 
@@ -764,9 +767,11 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
+        if(this.option("useHiddenSubmitElement")) {
+            this._$submitElement = $("<input>")
+                .attr("type", "hidden")
+                .appendTo(this.$element());
+        }
     },
 
     _setSubmitValue: function() {
@@ -774,7 +779,11 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _getSubmitElement: function() {
-        return this._$submitElement;
+        if(this.option("useHiddenSubmitElement")) {
+            return this._$submitElement;
+        } else {
+            return this.callBase();
+        }
     },
 
     _optionChanged: function(args) {
@@ -820,6 +829,14 @@ var DropDownEditor = TextBox.inherit({
                 break;
             case "showPopupTitle":
                 this._setPopupOption("showTitle", args.value);
+                break;
+            case "useHiddenSubmitElement":
+                if(this._$submitElement) {
+                    this._$submitElement.remove();
+                    this._$submitElement = undefined;
+                }
+
+                this._renderSubmitElement();
                 break;
             default:
                 this.callBase(args);

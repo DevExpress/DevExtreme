@@ -94,16 +94,47 @@ QUnit.test("dropdown must close on outside click", function(assert) {
     assert.ok(this.dropDownEditor._popup.option("closeOnOutsideClick"));
 });
 
-QUnit.test("widget should render hidden submit input", function(assert) {
+QUnit.test("widget should have only one input by default", function(assert) {
+    const $inputs = this.$dropDownEditor.find("input");
+    const $submitElement = this.dropDownEditor._getSubmitElement();
+
+    assert.equal($inputs.length, 1, "there is only one input");
+    assert.ok($inputs.is($submitElement), "and it is a submit element");
+});
+
+QUnit.test("widget should have two inputs when 'useHiddenSubmitElement' is 'true'", function(assert) {
+    this.dropDownEditor.option("useHiddenSubmitElement", true);
+    const $inputs = this.$dropDownEditor.find("input");
+
+    assert.equal($inputs.length, 2, "there are two inputs");
+});
+
+QUnit.test("widget should have only one input when 'useHiddenSubmitElement' changing to 'false'", function(assert) {
+    this.dropDownEditor.option("useHiddenSubmitElement", true);
+    this.dropDownEditor.option("useHiddenSubmitElement", false);
+
+    const $inputs = this.$dropDownEditor.find("input");
+    const $submitElement = this.dropDownEditor._getSubmitElement();
+
+    assert.equal($inputs.length, 1, "there is only one input");
+    assert.ok($inputs.is($submitElement), "and it is a submit element");
+});
+
+QUnit.test("widget should render hidden submit input when 'useHiddenSubmitElement' is 'true'", function(assert) {
+    this.dropDownEditor.option("useHiddenSubmitElement", true);
+
     const $submitInput = this.$dropDownEditor.find("input[type='hidden']");
 
     assert.equal($submitInput.length, 1, "there is one hidden input");
 });
 
 QUnit.test("submit value should be equal to the widget value", function(assert) {
-    const $submitInput = this.$dropDownEditor.find("input[type='hidden']");
+    this.dropDownEditor.option({
+        useHiddenSubmitElement: true,
+        value: "test"
+    });
 
-    this.dropDownEditor.option("value", "test");
+    const $submitInput = this.$dropDownEditor.find("input[type='hidden']");
 
     assert.equal($submitInput.val(), "test", "the submit value is correct");
 });

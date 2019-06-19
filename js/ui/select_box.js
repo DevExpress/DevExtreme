@@ -239,7 +239,8 @@ var SelectBox = DropDownList.inherit({
             displayCustomValue: false,
 
             _isAdaptablePopupPosition: false,
-            useInkRipple: false
+            useInkRipple: false,
+            useHiddenSubmitElement: true
         });
     },
 
