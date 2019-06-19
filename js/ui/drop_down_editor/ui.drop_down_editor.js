@@ -211,7 +211,7 @@ var DropDownEditor = TextBox.inherit({
             cancelButtonText: messageLocalization.format("Cancel"),
             buttonsLocation: "default",
             showPopupTitle: false,
-            useHiddenSubmitElement: false,
+            useHiddenSubmitElement: false
 
             /**
             * @name dxDropDownEditorOptions.mask
