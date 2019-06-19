@@ -1607,7 +1607,9 @@ module.exports = {
                         case "columnMinWidth":
                         case "columnWidth":
                             args.handled = true;
-                            this.reinit();
+                            if(!(args.fullName && args.fullName.indexOf("editing.popup") === 0)) {
+                                this.reinit();
+                            }
                             break;
                         case "rtlEnabled":
                             this.reinit();
