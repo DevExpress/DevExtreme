@@ -211,13 +211,20 @@ module.exports = gridCore.Controller.inherit((function() {
             this.changing.fire(e);
             this._applyBatch(e.changes);
         },
+        _needCleanCacheByOperation: function(operationType, remoteOperations) {
+            var operationTypesByOrder = ["filtering", "sorting", "paging"],
+                operationTypeIndex = operationTypesByOrder.indexOf(operationType),
+                currentOperationTypes = operationTypeIndex >= 0 ? operationTypesByOrder.slice(operationTypeIndex) : [operationType];
+
+            return currentOperationTypes.some(operationType => remoteOperations[operationType]);
+        },
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this,
                 cachedStoreData = that._cachedStoreData,
                 cachedPagingData = that._cachedPagingData,
                 cachedPagesData = that._cachedPagesData;
 
-            if(options.storeLoadOptions.filter && !options.remoteOperations.filtering) {
+            if((options.storeLoadOptions.filter && !options.remoteOperations.filtering) || (options.storeLoadOptions.sort && !options.remoteOperations.sorting)) {
                 options.remoteOperations = {};
             }
 
@@ -234,7 +241,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 }
 
                 each(operationTypes, function(operationType, value) {
-                    if(value && options.remoteOperations[operationType]) {
+                    if(value && that._needCleanCacheByOperation(operationType, options.remoteOperations)) {
                         cachedStoreData = undefined;
                         cachedPagingData = undefined;
                     }
