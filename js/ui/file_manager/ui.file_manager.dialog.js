@@ -41,7 +41,8 @@ class FileManagerDialogBase extends Widget {
                     }
                 }
             ],
-            onHidden: this._onPopupHidden.bind(this)
+            onHidden: this._onPopupHidden.bind(this),
+            onShown: this._onPopupShown.bind(this)
         });
     }
 
@@ -84,6 +85,9 @@ class FileManagerDialogBase extends Widget {
 
     _onPopupHidden() {
         this._onClosedAction({ dialogResult: this._dialogResult });
+    }
+
+    _onPopupShown() {
     }
 
     _createOnClosedAction() {

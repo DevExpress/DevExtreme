@@ -103,7 +103,8 @@
         border-collapse: collapse;
     }
 
-    td, th {
+    td,
+    th {
         text-align: center;
     }
 
@@ -129,7 +130,7 @@
         }
 
         &.dx-state-active:not(.dx-calendar-empty-cell) {
-            .gradient-radial-circle(@IOS7_CALENDAR_ACTIVE_BACKGROUND_COLOR, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, .5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+            .gradient-radial-circle(@IOS7_CALENDAR_ACTIVE_BACKGROUND_COLOR, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0.5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
         }
 
         &.dx-calendar-selected-date {
@@ -137,7 +138,7 @@
             &.dx-calendar-contoured-date,
             &.dx-state-active {
                 color: @IOS7_CALENDAR_SELECTED;
-                .gradient-radial-circle(@IOS7_CALENDAR_TODAY_CELL_BACKGROUND_COLOR, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, .5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+                .gradient-radial-circle(@IOS7_CALENDAR_TODAY_CELL_BACKGROUND_COLOR, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0.5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
             }
         }
 
@@ -146,7 +147,7 @@
             &.dx-calendar-contoured-date,
             &.dx-state-active {
                 color: @IOS7_CALENDAR_SELECTED;
-                .gradient-radial-circle(@IOS7_CALENDAR_ACTIVE, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, .5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+                .gradient-radial-circle(@IOS7_CALENDAR_ACTIVE, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0.5), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
             }
         }
     }
@@ -257,7 +258,8 @@
 
         .dx-calendar-body {
             table {
-                th, td {
+                th,
+                td {
                     color: @IOS7_CALENDAR_DISABLE;
                 }
             }

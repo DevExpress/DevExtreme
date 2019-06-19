@@ -4,6 +4,7 @@ import { Deferred, when } from "../../core/utils/deferred";
 import { isFunction } from "../../core/utils/type";
 import { noop } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
+import messageLocalization from "../../localization/message";
 
 import Widget from "../widget/ui.widget";
 
@@ -23,7 +24,7 @@ class FileManagerEditingControl extends Widget {
         this._initActions();
 
         this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
-        this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
+        this._createFolderDialog = this._createEnterNameDialog("New folder", "Create");
 
         const $chooseFolderDialog = $("<div>").appendTo(this.$element());
         this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
@@ -102,6 +103,7 @@ class FileManagerEditingControl extends Widget {
                 useCurrentFolder: true,
                 affectsAllItems: true,
                 dialog: this._createFolderDialog,
+                getDialogArgument: () => messageLocalization.format("dxFileManager-newFolderName"),
                 action: ([item], { name }) => this._provider.createFolder(item, name),
                 getSuccessMessage: items => "Folder created"
             },

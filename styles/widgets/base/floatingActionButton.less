@@ -6,55 +6,52 @@
                 max-height: @main-action-button-size;
                 background-color: @button-default-bg;
                 color: @button-default-color;
-    
+
                 .dx-fa-button-states(@button-default-bg, @button-default-color);
-      
+
                 .dx-fa-button-icon,
-                .dx-fa-button-icon-close  {
+                .dx-fa-button-icon-close {
                     padding: (@main-action-button-size - @icon-size) / 2;
                 }
             }
         }
-    
+
         .dx-fa-button-icon,
         .dx-fa-button-icon-close {
             padding: (@action-button-size - @icon-size) / 2;
             width: @icon-size;
             box-sizing: content-box;
-    
+
             .dx-icon {
                 font-size: @icon-size;
             }
-        
+
             img {
                 width: 100%;
                 height: 100%;
             }
         }
-        
+
         .dx-overlay-content {
             max-width: @action-button-size;
             max-height: @action-button-size;
             background-color: @button-normal-bg;
             color: @button-normal-color;
             box-shadow: @shadow;
-    
+
             .dx-fa-button-states(@button-normal-bg, @button-normal-color);
         }
     }
-    
-    .dx-fa-button-states(    
-        @background-color,
-        @color
-    ) {
+
+    .dx-fa-button-states(@background-color, @color) {
         &.dx-state-hover {
             background-color: darken(@background-color, 10%);
             color: @color;
         }
-    
+
         &.dx-state-active {
             background-color: darken(@background-color, 15%);
             color: @color;
         }
-    }    
+    }
 }

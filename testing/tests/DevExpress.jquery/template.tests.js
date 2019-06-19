@@ -10,7 +10,6 @@ define(function(require) {
         setTemplateEngine = require("ui/set_template_engine"),
         errors = require("core/errors");
 
-    window.doT = require("../../../node_modules/dot/doT.min.js");
     window.Handlebars = require("../../../node_modules/handlebars/dist/handlebars.min.js");
     window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
     require("../../../node_modules/jquery.tmpl/index.js");
@@ -76,10 +75,6 @@ define(function(require) {
 
     QUnit.test("mustache", function(assert) {
         checkTemplateEngine('mustache', '{{text}}', assert);
-    });
-
-    QUnit.test("doT", function(assert) {
-        checkTemplateEngine('doT', '{{=it.text}}', assert);
     });
 
     QUnit.test("hogan", function(assert) {

@@ -33,7 +33,7 @@
         .dx-info {
             display: inline-block;
             margin-right: @PAGER_INFO_PADDINGS;
-            opacity: .6;
+            opacity: 0.6;
         }
 
         .dx-navigate-button {
@@ -46,12 +46,13 @@
             box-sizing: content-box;
 
             &.dx-button-disable {
-                opacity: .3;
+                opacity: 0.3;
                 cursor: inherit;
             }
         }
 
-        .dx-prev-button, .dx-next-button {
+        .dx-prev-button,
+        .dx-next-button {
             position: relative;
         }
     }
@@ -75,11 +76,11 @@
         }
     }
 
-    .dx-pages, .dx-page-sizes {
+    .dx-pages,
+    .dx-page-sizes {
         .dx-selection {
             cursor: inherit;
             text-shadow: none;
-
         }
     }
 
@@ -89,13 +90,19 @@
         .dx-page-index {
             width: 40px;
         }
+
         .dx-pages-count {
             cursor: pointer;
         }
-        .dx-info-text, .dx-pages-count {
+
+        .dx-info-text,
+        .dx-pages-count {
             padding-left: 6px;
         }
-        .dx-page-index, .dx-info-text, .dx-pages-count {
+
+        .dx-page-index,
+        .dx-info-text,
+        .dx-pages-count {
             display: table-cell;
         }
     }

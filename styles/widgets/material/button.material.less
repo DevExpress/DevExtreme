@@ -3,18 +3,17 @@
     @MATERIAL_BUTTON_VERTICAL_PADDING: 6px;
     @MATERIAL_BUTTON_HEIGHT: 36px;
     @MATERIAL_BUTTON_MIN_WIDTH: 64px;
-    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0px 1px 3px;
-    @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0px 4px 6px;
+    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
+    @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0 4px 6px;
 }
 .dx-size-compact() {
     @MATERIAL_BUTTON_HORIZONTAL_PADDING: 16px;
     @MATERIAL_BUTTON_VERTICAL_PADDING: 5px;
     @MATERIAL_BUTTON_HEIGHT: 28px;
     @MATERIAL_BUTTON_MIN_WIDTH: 48px;
-    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0px 1px 3px;
-    @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0px 4px 6px;
+    @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
+    @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0 4px 6px;
 }
-
 
 
 @MATERIAL_BUTTON_PADDING: @MATERIAL_BUTTON_VERTICAL_PADDING @MATERIAL_BUTTON_HORIZONTAL_PADDING;
@@ -192,6 +191,7 @@
         transparent,
         @button-color
     );
+
     border: 1px solid @border-color;
 }
 
@@ -208,6 +208,7 @@
 
     .dx-button-content {
         position: relative;
+
         .dx-inkripple {
             overflow: hidden;
         }
@@ -257,8 +258,10 @@
 
     &.dx-button-back {
         .dx-button-flat-color-styling(@button-flat-color);
+
         border-radius: 50%;
         .dx-button-onlyicon-sizing();
+
         .dx-button-text {
             display: none;
         }
@@ -300,7 +303,8 @@
     }
 }
 
-.dx-editor-outlined, .dx-editor-filled {
+.dx-editor-outlined,
+.dx-editor-filled {
     .dx-texteditor-buttons-container {
         > .dx-button {
             margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
@@ -391,7 +395,7 @@
         &:first-child {
             > .dx-button {
                 &:first-child {
-                    margin-left:0;
+                    margin-left: 0;
                 }
             }
         }

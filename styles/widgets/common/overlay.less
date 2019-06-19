@@ -5,7 +5,12 @@
     left: 0;
     z-index: @OVERLAY_ZINDEX;
 
-    &, *, &:before, &:after, *:before, *:after {
+    &,
+    *,
+    &:before,
+    &:after,
+    *:before,
+    *:after {
         box-sizing: border-box;
     }
 }
@@ -16,7 +21,7 @@
 }
 
 .dx-overlay-shader {
-    background-color: rgba(128, 128, 128, .5);
+    background-color: rgba(128, 128, 128, 0.5);
 }
 
 .dx-overlay-content {

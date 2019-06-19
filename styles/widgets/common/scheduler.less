@@ -8,7 +8,7 @@
         padding-bottom: 0;
     }
 
-     .dx-scrollable-content {
+    .dx-scrollable-content {
         padding-top: @SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING;
     }
 }
@@ -16,7 +16,7 @@
 .dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
 .dx-scheduler .dx-scheduler-overlay-panel {
     .dx-popup-content {
-        padding: 0px;
+        padding: 0;
 
         .dx-list-item-content {
             width: 360px;
@@ -32,7 +32,7 @@
             height: 20px;
             border-radius: 50%;
             margin-top: 7px;
-            margin-left: 5px
+            margin-left: 5px;
         }
 
         .dx-tooltip-appointment-item-content {
@@ -56,7 +56,7 @@
                 text-align: left;
                 font-size: 12px;
                 opacity: 0.8;
-                margin-top: 10px
+                margin-top: 10px;
             }
         }
     }
@@ -90,6 +90,7 @@
 
     .dx-scheduler-appointment-collector-content {
         .dx-overflow();
+
         margin: 0 2* (@SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN - 1);
 
         &.dx-button-content {
@@ -119,7 +120,8 @@
 }
 
 .dx-scheduler-work-space-mouse-selection {
-    .dx-scheduler-fixed-appointments, .dx-scheduler-scrollable-appointments {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-scrollable-appointments {
         pointer-events: none;
     }
 }

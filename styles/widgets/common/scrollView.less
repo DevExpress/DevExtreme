@@ -10,7 +10,7 @@
     }
 
     &.dx-scrollable-native-android {
-         .dx-scrollview-top-pocket {
+        .dx-scrollview-top-pocket {
             width: 40px;
             height: 40px;
             left: 50%;
@@ -54,11 +54,11 @@
             padding: 8px;
             font-size: 24px;
             box-sizing: border-box;
-            transition: opacity .2s;
+            transition: opacity 0.2s;
         }
 
         .dx-scrollview-pull-down-loading.dx-scrollview-pull-down {
-            transition: top .2s ease-out 0s;
+            transition: top 0.2s ease-out 0s;
         }
 
         .dx-scrollview-pull-down-image {
@@ -69,7 +69,7 @@
             top: 0;
             left: 0;
             background-size: contain;
-            transition: opacity .2s ease 0s;
+            transition: opacity 0.2s ease 0s;
         }
 
         .dx-scrollview-pull-down-loading .dx-icon-pulldown {
@@ -84,7 +84,7 @@
             width: 100%;
             overflow-y: auto;
             transition: transform 400ms ease;
-            transform: translate(0px, 0px);
+            transform: translate(0, 0);
         }
 
         .dx-scrollview-content {
@@ -140,8 +140,8 @@
     padding: @PULLDOWN_PADDING 0;
     top: -(@PULLDOWN_HEIGHT + @PULLDOWN_PADDING*2);
     overflow: hidden;
-    transform: translate(0px, 0px);
-    user-drag: none;
+    transform: translate(0, 0);
+    -webkit-user-drag: none;
     box-sizing: content-box;
 }
 
@@ -159,7 +159,7 @@
     display: inline-block;
     margin: -15px 20px 0 15px;
     width: 20px;
-    user-drag: none;
+    -webkit-user-drag: none;
 }
 
 .dx-scrollview-pull-down-image {
@@ -169,10 +169,10 @@
     width: 20px;
     height: 50px;
     background-size: contain;
-    user-drag: none;
+    -webkit-user-drag: none;
     // B231062
-    transform: translate(0,0) rotate(0deg);
-    transition: transform .2s linear;
+    transform: translate(0, 0) rotate(0deg);
+    transition: transform 0.2s linear;
 }
 
 .dx-scrollview-pull-down-text {
@@ -180,7 +180,7 @@
     vertical-align: middle;
     position: relative;
     overflow: visible;
-    user-drag: none;
+    -webkit-user-drag: none;
 
     div {
         position: absolute;
@@ -199,7 +199,7 @@
 .dx-scrollview-pull-down-ready {
     .dx-scrollview-pull-down-image {
         // B231062
-        transform: translate(0,0) rotate(-180deg);
+        transform: translate(0, 0) rotate(-180deg);
     }
 }
 
@@ -218,7 +218,7 @@
     padding: 10px 0;
     overflow: hidden;
     text-align: center;
-    transform: translate(0,0);
+    transform: translate(0, 0);
 
     &:before {
         content: '';
@@ -231,14 +231,14 @@
 .dx-scrollview-scrollbottom-indicator {
     display: inline-block;
     margin: 0 10px 0 0;
-    user-drag: none;
+    -webkit-user-drag: none;
 }
 
 .dx-scrollview-scrollbottom-text {
     display: inline-block;
     margin-top: -20px;
     vertical-align: middle;
-    user-drag: none;
+    -webkit-user-drag: none;
 }
 
 .dx-scrollview-scrollbottom-end {

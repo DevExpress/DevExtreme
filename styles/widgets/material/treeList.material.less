@@ -12,6 +12,7 @@
         top: -2px;
         display: inline-block;
         .dx-icon-chevronup;
+
         width: @TREELIST_EMPTY_SPACE_WIDTH;
 
         &:before {
@@ -26,6 +27,7 @@
     .dx-treelist-expanded span {
         .dx-icon-chevrondown;
         .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
+
         cursor: pointer;
 
         &:before {
@@ -38,6 +40,7 @@
     .dx-treelist-collapsed span {
         .dx-icon-chevronright;
         .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
+
         cursor: pointer;
 
         &:before {
@@ -47,12 +50,14 @@
         }
     }
 
-	.dx-sort-up, .dx-sort-down, .dx-header-filter {
-		vertical-align: middle;
-	}
+    .dx-sort-up,
+    .dx-sort-down,
+    .dx-header-filter {
+        vertical-align: middle;
+    }
 
     tr:not(.dx-row-focused).dx-selection {
-        .dx-treelist-empty-space  {
+        .dx-treelist-empty-space {
             color: @treelist-selection-chevron-icon-color;
         }
     }
@@ -75,10 +80,11 @@
 }
 
 .dx-treelist-checkbox-size {
-    line-height: 0px;
+    line-height: 0;
 }
 
-.dx-treelist-cell-expandable, .dx-treelist-select-all  {
+.dx-treelist-cell-expandable,
+.dx-treelist-select-all {
     .dx-checkbox {
         position: absolute;
     }
@@ -115,7 +121,8 @@
 
 .dx-rtl {
     .dx-treelist-rowsview {
-        .dx-treelist-expanded, .dx-treelist-collapsed {
+        .dx-treelist-expanded,
+        .dx-treelist-collapsed {
             .flip-horizontally();
         }
 
@@ -137,6 +144,6 @@
 
     .dx-treelist-icon-container.dx-editor-inline-block {
         padding-left: @TREELIST_ICON_CONTAINER_PADDING_RIGHT;
-        padding-right: 0px;
+        padding-right: 0;
     }
 }

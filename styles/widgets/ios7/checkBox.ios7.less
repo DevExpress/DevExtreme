@@ -32,6 +32,7 @@
 
     .dx-checkbox-checked & {
         .dx-icon-check;
+
         color: @IOS7_CHECKBOX_BACKGROUND_COLOR;
         .dx-icon-font-centered-sizing(@IOS7_CHECKBOX_CHECKED_ICON_SIZE);
     }
@@ -53,17 +54,18 @@
     .dx-checkbox-checked & {
         background-color: @IOS7_CHECKBOX_CHECKED_BACKGROUND;
 
-        .dx-state-active&  {
-                &:before {
-                    content: '';
-                    background: none;
-                }
+        .dx-state-active& {
+            &:before {
+                content: '';
+                background: none;
+            }
         }
     }
 }
 
 .dx-state-disabled {
-    &.dx-checkbox, .dx-checkbox {
+    &.dx-checkbox,
+    .dx-checkbox {
         opacity: 0.5;
     }
 }
