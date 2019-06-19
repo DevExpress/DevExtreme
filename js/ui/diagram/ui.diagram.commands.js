@@ -175,6 +175,13 @@ const DiagramCommands = {
                     { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Layered (vertical)" },
                     { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Layered (horizontal)" }
                 ]
+            },
+            {
+                command: DiagramCommand.Fullscreen,
+                hint: "Full Screen",
+                text: "Full Screen",
+                icon: "dx-diagram-i dx-diagram-i-button-fullscreen",
+                cssClass: CSS_CLASSES.BUTTON_COLOR
             }
         ];
     },
