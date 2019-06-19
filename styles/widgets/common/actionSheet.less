@@ -2,9 +2,10 @@
     .dx-overlay-content {
         padding-top: 0;
         padding-bottom: 0;
-        user-drag: none;
+        -webkit-user-drag: none;
     }
 }
+
 .dx-actionsheet-popup-wrapper,
 .dx-actionsheet-popover-wrapper {
     .dx-popup-content {
@@ -16,11 +17,13 @@
     }
 }
 
-.dx-actionsheet-item, .dx-actionsheet-cancel {
+.dx-actionsheet-item,
+.dx-actionsheet-cancel {
     width: 100%;
 }
 
-.dx-state-disabled, &.dx-state-disabled {
+.dx-state-disabled,
+&.dx-state-disabled {
     .dx-actionsheet-container {
         .dx-button {
             .dx-button-disabled;
@@ -28,7 +31,8 @@
     }
 }
 
-.dx-actionsheet-popup-wrapper, .dx-actionsheet-popover-wrapper {
+.dx-actionsheet-popup-wrapper,
+.dx-actionsheet-popover-wrapper {
     .dx-popup-title {
         word-wrap: break-word;
     }

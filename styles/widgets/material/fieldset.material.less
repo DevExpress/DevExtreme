@@ -89,26 +89,26 @@
             &:not(.dx-widget) > .@{name} {
                 margin: (@MATERIAL_FIELD_MIN_HEIGHT - @size)/2 0;
             }
-}
-.dx-field-value-widget-position(dx-checkbox, @MATERIAL_CHECKBOX_SIZE);
-.dx-field-value-widget-position(dx-switch, @MATERIAL_SWITCH_HEIGHT);
-.dx-field-value-widget-position(dx-slider, @MATERIAL_SLIDER_HEIGHT);
-.dx-field-value-widget-position(dx-radiogroup, @MATERIAL_RADIOGROUP_MIN_HEIGHT);
+        }
+        .dx-field-value-widget-position(dx-checkbox, @MATERIAL_CHECKBOX_SIZE);
+        .dx-field-value-widget-position(dx-switch, @MATERIAL_SWITCH_HEIGHT);
+        .dx-field-value-widget-position(dx-slider, @MATERIAL_SLIDER_HEIGHT);
+        .dx-field-value-widget-position(dx-radiogroup, @MATERIAL_RADIOGROUP_MIN_HEIGHT);
 
-&.dx-attention {
-    padding: @MATERIAL_FIELD_VALUE_TOP_PADDING @MATERIAL_FIELD_VALUE_HORIZONTAL_PADDING @MATERIAL_FIELD_VALUE_BOTTOM_PADDING;
-    position: relative;
-    padding-left: @MATERIAL_FIELDSET_ATTENTION_ICON_OFFSET;
+        &.dx-attention {
+            padding: @MATERIAL_FIELD_VALUE_TOP_PADDING @MATERIAL_FIELD_VALUE_HORIZONTAL_PADDING @MATERIAL_FIELD_VALUE_BOTTOM_PADDING;
+            position: relative;
+            padding-left: @MATERIAL_FIELDSET_ATTENTION_ICON_OFFSET;
 
-    &:before {
-        left: 0;
+            &:before {
+                left: 0;
+            }
+        }
     }
-}
-}
 
-.dx-field-value-static {
-    padding: @MATERIAL_FIELD_VALUE_TOP_PADDING @MATERIAL_FIELD_VALUE_HORIZONTAL_PADDING @MATERIAL_FIELD_VALUE_BOTTOM_PADDING;
-}
+    .dx-field-value-static {
+        padding: @MATERIAL_FIELD_VALUE_TOP_PADDING @MATERIAL_FIELD_VALUE_HORIZONTAL_PADDING @MATERIAL_FIELD_VALUE_BOTTOM_PADDING;
+    }
 }
 
 .dx-fieldset-sizing(@vertical-margin, @horizontal_margin, @header-vertical-margin, @field-vertical_margin) {
@@ -139,9 +139,9 @@
         margin: 0 0 @field-vertical_margin 0;
     }
 
-        .dx-field:last-of-type {
-            margin: 0;
-        }
+    .dx-field:last-of-type {
+        margin: 0;
+    }
 }
 
 .dx-fieldset-styling();

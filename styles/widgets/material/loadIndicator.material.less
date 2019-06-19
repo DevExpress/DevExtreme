@@ -21,7 +21,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    animation: icon-rotation 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+    animation: icon-rotation 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
 .dx-loadindicator-segment {
@@ -41,7 +41,8 @@
     border-radius: 50%;
 }
 
-.dx-loadindicator-segment2, .dx-loadindicator-segment0 {
+.dx-loadindicator-segment2,
+.dx-loadindicator-segment0 {
     width: 50%;
     height: 100%;
     overflow: hidden;
@@ -53,20 +54,22 @@
 
 .dx-loadindicator-segment2 {
     left: 0;
+
     .dx-loadindicator-segment-inner {
         border-right-color: transparent;
         transform: rotate(-129deg);
-        animation: left-segment-rotation 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: left-segment-rotation 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
     }
 }
 
 .dx-loadindicator-segment0 {
     right: 0;
+
     .dx-loadindicator-segment-inner {
         left: -100%;
         border-left-color: transparent;
         transform: rotate(129deg);
-        animation: right-segment-rotation 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
+        animation: right-segment-rotation 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
     }
 }
 
@@ -86,82 +89,82 @@
 }
 
 @-webkit-keyframes content-rotation {
-  to    { -webkit-transform: rotate(360deg); }
+    to { -webkit-transform: rotate(360deg); }
 }
 
 @-moz-keyframes content-rotation {
-  to    { -moz-transform: rotate(360deg); }
+    to { -moz-transform: rotate(360deg); }
 }
 
 @keyframes content-rotation {
-  to    { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
 
 @-webkit-keyframes icon-rotation {
-  12.5% { -webkit-transform: rotate(135deg);  }
-  25%   { -webkit-transform: rotate(270deg);  }
-  37.5% { -webkit-transform: rotate(405deg);  }
-  50%   { -webkit-transform: rotate(540deg);  }
-  62.5% { -webkit-transform: rotate(675deg);  }
-  75%   { -webkit-transform: rotate(810deg);  }
-  87.5% { -webkit-transform: rotate(945deg);  }
-  to    { -webkit-transform: rotate(1080deg); }
+    12.5% { -webkit-transform: rotate(135deg); }
+    25% { -webkit-transform: rotate(270deg); }
+    37.5% { -webkit-transform: rotate(405deg); }
+    50% { -webkit-transform: rotate(540deg); }
+    62.5% { -webkit-transform: rotate(675deg); }
+    75% { -webkit-transform: rotate(810deg); }
+    87.5% { -webkit-transform: rotate(945deg); }
+    to { -webkit-transform: rotate(1080deg); }
 }
 
 @-moz-keyframes icon-rotation {
-  12.5% { -moz-transform: rotate(135deg);  }
-  25%   { -moz-transform: rotate(270deg);  }
-  37.5% { -moz-transform: rotate(405deg);  }
-  50%   { -moz-transform: rotate(540deg);  }
-  62.5% { -moz-transform: rotate(675deg);  }
-  75%   { -moz-transform: rotate(810deg);  }
-  87.5% { -moz-transform: rotate(945deg);  }
-  to    { -moz-transform: rotate(1080deg); }
+    12.5% { -moz-transform: rotate(135deg); }
+    25% { -moz-transform: rotate(270deg); }
+    37.5% { -moz-transform: rotate(405deg); }
+    50% { -moz-transform: rotate(540deg); }
+    62.5% { -moz-transform: rotate(675deg); }
+    75% { -moz-transform: rotate(810deg); }
+    87.5% { -moz-transform: rotate(945deg); }
+    to { -moz-transform: rotate(1080deg); }
 }
 
 @keyframes icon-rotation {
-  12.5% { transform: rotate(135deg);  }
-  25%   { transform: rotate(270deg);  }
-  37.5% { transform: rotate(405deg);  }
-  50%   { transform: rotate(540deg);  }
-  62.5% { transform: rotate(675deg);  }
-  75%   { transform: rotate(810deg);  }
-  87.5% { transform: rotate(945deg);  }
-  to    { transform: rotate(1080deg); }
+    12.5% { transform: rotate(135deg); }
+    25% { transform: rotate(270deg); }
+    37.5% { transform: rotate(405deg); }
+    50% { transform: rotate(540deg); }
+    62.5% { transform: rotate(675deg); }
+    75% { transform: rotate(810deg); }
+    87.5% { transform: rotate(945deg); }
+    to { transform: rotate(1080deg); }
 }
 
 @-webkit-keyframes left-segment-rotation {
-  from  { -webkit-transform: rotate(130deg); }
-  50%   { -webkit-transform: rotate(-5deg); }
-  to    { -webkit-transform: rotate(130deg); }
+    from { -webkit-transform: rotate(130deg); }
+    50% { -webkit-transform: rotate(-5deg); }
+    to { -webkit-transform: rotate(130deg); }
 }
 
 @-moz-keyframes left-segment-rotation {
-  from  { -moz-transform: rotate(130deg); }
-  50%   { -moz-transform: rotate(-5deg); }
-  to    { -moz-transform: rotate(130deg); }
+    from { -moz-transform: rotate(130deg); }
+    50% { -moz-transform: rotate(-5deg); }
+    to { -moz-transform: rotate(130deg); }
 }
 
 @keyframes left-segment-rotation {
-  from  { transform: rotate(130deg); }
-  50%   { transform: rotate(-5deg); }
-  to    { transform: rotate(130deg); }
+    from { transform: rotate(130deg); }
+    50% { transform: rotate(-5deg); }
+    to { transform: rotate(130deg); }
 }
 
 @-webkit-keyframes right-segment-rotation {
-  from  { -webkit-transform: rotate(-130deg); }
-  50%   { -webkit-transform: rotate(5deg); }
-  to    { -webkit-transform: rotate(-130deg); }
+    from { -webkit-transform: rotate(-130deg); }
+    50% { -webkit-transform: rotate(5deg); }
+    to { -webkit-transform: rotate(-130deg); }
 }
 
 @-moz-keyframes right-segment-rotation {
-  from  { -moz-transform: rotate(-130deg); }
-  50%   { -moz-transform: rotate(5deg); }
-  to    { -moz-transform: rotate(-130deg); }
+    from { -moz-transform: rotate(-130deg); }
+    50% { -moz-transform: rotate(5deg); }
+    to { -moz-transform: rotate(-130deg); }
 }
 
 @keyframes right-segment-rotation {
-  from  { transform: rotate(-130deg); }
-  50%   { transform: rotate(5deg); }
-  to    { transform: rotate(-130deg); }
+    from { transform: rotate(-130deg); }
+    50% { transform: rotate(5deg); }
+    to { transform: rotate(-130deg); }
 }

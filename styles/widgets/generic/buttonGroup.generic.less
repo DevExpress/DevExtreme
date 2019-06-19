@@ -1,4 +1,5 @@
-.dx-button-mode-outlined, .dx-button-mode-contained {
+.dx-button-mode-outlined,
+.dx-button-mode-contained {
     &.dx-buttongroup-item {
         padding-left: 1px;
         padding-right: 1px;
@@ -12,7 +13,8 @@
         padding-left: 0;
         border-left-width: @GENERIC_BUTTON_BORDER_WEIGHT;
 
-        &.dx-button, &.dx-state-hover .dx-button-content {
+        &.dx-button,
+        &.dx-state-hover .dx-button-content {
             border-top-left-radius: @button-border-radius;
             border-bottom-left-radius: @button-border-radius;
         }
@@ -21,7 +23,8 @@
     &.dx-buttongroup-last-item {
         padding-right: 0;
 
-        &.dx-button, &.dx-state-hover .dx-button-content {
+        &.dx-button,
+        &.dx-state-hover .dx-button-content {
             border-top-right-radius: @button-border-radius;
             border-bottom-right-radius: @button-border-radius;
         }
@@ -36,7 +39,8 @@
 
 .dx-buttongroup-item {
     &.dx-button {
-        &.dx-button-mode-outlined, &.dx-button-mode-contained {
+        &.dx-button-mode-outlined,
+        &.dx-button-mode-contained {
             &.dx-state-disabled {
                 opacity: 1;
 
@@ -69,33 +73,39 @@
                 background-color: @button-group-danger-selected-bg;
             }
 
-                &.dx-button-normal, &.dx-button-normal .dx-icon {
-                    color: @button-group-normal-selected-color;
-                }
+            &.dx-button-normal,
+            &.dx-button-normal .dx-icon {
+                color: @button-group-normal-selected-color;
+            }
 
-                &.dx-button-success, &.dx-button-success .dx-icon {
-                    color: @button-group-success-selected-color;
-                }
+            &.dx-button-success,
+            &.dx-button-success .dx-icon {
+                color: @button-group-success-selected-color;
+            }
 
-                &.dx-button-default, &.dx-button-default .dx-icon {
-                    color: @button-group-default-selected-color;
-                }
+            &.dx-button-default,
+            &.dx-button-default .dx-icon {
+                color: @button-group-default-selected-color;
+            }
 
-                &.dx-button-danger, &.dx-button-danger .dx-icon {
-                    color: @button-group-danger-selected-color;
-                }
+            &.dx-button-danger,
+            &.dx-button-danger .dx-icon {
+                color: @button-group-danger-selected-color;
+            }
         }
     }
 }
 
 .dx-rtl {
-    &.dx-button-mode-outlined, &.dx-button-mode-contained {
+    &.dx-button-mode-outlined,
+    &.dx-button-mode-contained {
         &.dx-buttongroup-first-item {
             border-left-width: 0;
             padding-left: 1px;
             padding-right: 0;
 
-            &.dx-button, &.dx-state-hover .dx-button-content {
+            &.dx-button,
+            &.dx-state-hover .dx-button-content {
                 border-radius: 0 @button-border-radius @button-border-radius 0;
             }
         }
@@ -105,12 +115,14 @@
             padding-right: 1px;
             padding-left: 0;
 
-            &.dx-button, &.dx-state-hover .dx-button-content {
+            &.dx-button,
+            &.dx-state-hover .dx-button-content {
                 border-radius: @button-border-radius 0 0 @button-border-radius;
             }
 
             &.dx-buttongroup-first-item {
-                &.dx-button, &.dx-state-hover .dx-button-content {
+                &.dx-button,
+                &.dx-state-hover .dx-button-content {
                     border-radius: @button-border-radius;
                 }
             }

@@ -1,5 +1,7 @@
 .dx-color-scheme {
-    font-family: "#"; // NOTE: To override 'font-family' default value.
+    // NOTE: To override 'font-family' default value.
+    // stylelint-disable-next-line font-family-no-missing-generic-family-keyword
+    font-family: "#";
 }
 
 .dx-widget {
@@ -12,7 +14,12 @@
     outline: 0;
     color-adjust: exact;
 
-    &, &:before, &:after, *, *:before, *:after {
+    &,
+    &:before,
+    &:after,
+    *,
+    *:before,
+    *:after {
         box-sizing: border-box;
     }
 }
@@ -29,10 +36,11 @@
 .disabled-widget(@opacity: .3) {
     opacity: @opacity;
     .user-select(none);
+
     zoom: 1;
     cursor: default;
 }
 
 .dx-state-disabled {
-     pointer-events: none;
+    pointer-events: none;
 }

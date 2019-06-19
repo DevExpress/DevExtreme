@@ -12,7 +12,7 @@
     @GENERIC_ACCORDION_ARROW_LINE_HEIGHT: 21px;
 }
 
-@GENERIC_ACCORDION_DISABLED_OPACITY: .5;
+@GENERIC_ACCORDION_DISABLED_OPACITY: 0.5;
 
 
 .dx-accordion {
@@ -85,7 +85,7 @@
         font-weight: normal;
         color: @accordion-icon-color;
         content: "\f016";
-        font-family: DXIcons;
+        font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
         font-size: @GENERIC_BASE_ICON_SIZE;
         margin-left: @GENERIC_BASE_ICON_SIZE/2;
         margin-right: 0;
@@ -95,6 +95,7 @@
     .dx-icon {
         .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         .dx-icon-margin(@GENERIC_BASE_ICON_SIZE/2);
+
         display: inline-block;
         color: @accordion-icon-color;
     }
