@@ -2429,22 +2429,36 @@ module("pullDown, reachBottom events", moduleConfig, () => {
 
     ["config", "onInitialized"].forEach(assignMethod => {
         test("Check add event handlers", (assert) => {
-            var config = {};
+            let config = {};
+            let pullDownHandler = sinon.stub();
+            let reachBottomHandler = sinon.stub();
 
             if(assignMethod === "config") {
-                config.onPullDown = function() {};
-                config.onReachBottom = function() {};
+                config.onPullDown = pullDownHandler;
+                config.onReachBottom = reachBottomHandler;
             } else if(assignMethod === "onInitialized") {
                 config.onInitialized = function(e) {
-                    e.component.on("pullDown", function() {});
-                    e.component.on("reachBottom", function() {});
+                    e.component.on("pullDown", pullDownHandler);
+                    e.component.on("reachBottom", reachBottomHandler);
                 };
             } else {
                 assert.ok(false);
             }
 
-            $("#scrollView").dxScrollView(config);
+            const scrollView = $("#scrollView").dxScrollView(config).dxScrollView("instance");
             assert.ok(true, "no exceptions");
+
+            assert.strictEqual(reachBottomHandler.callCount, 0, "reachBottomHandler.callCount");
+            assert.strictEqual(pullDownHandler.callCount, 0, "pullDownHandler.callCount");
+
+            scrollView.refresh();
+            assert.strictEqual(reachBottomHandler.callCount, 0, "reachBottomHandler.callCount");
+            assert.strictEqual(pullDownHandler.callCount, 1, "pullDownHandler.callCount");
+
+            const bottomPocketHeight = scrollView.$element().find("." + SCROLLVIEW_REACHBOTTOM_CLASS).height();
+            scrollView.scrollTo($(scrollView.content()).height() + bottomPocketHeight);
+            assert.strictEqual(reachBottomHandler.callCount, 1, "reachBottomHandler.callCount");
+            assert.strictEqual(pullDownHandler.callCount, 1, "pullDownHandler.callCount");
         });
     });
 });
