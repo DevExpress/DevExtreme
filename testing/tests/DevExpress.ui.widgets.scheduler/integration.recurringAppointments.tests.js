@@ -1282,3 +1282,26 @@ QUnit.test("Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,
     assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(7)).top, "Eighth occurence has same top coordinate as fifth");
     assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(8)).top, "Ninth occurence has same top coordinate as fifth");
 });
+
+QUnit.test("Prerender filter by recurrence rule determines renderable appointments correctly (T736600)", function(assert) {
+    var data = [
+        {
+            text: "Recurrent app with exc",
+            startDate: new Date(2019, 5, 6, 15, 0),
+            endDate: new Date(2019, 5, 6, 18, 30),
+            recurrenceException: "20190607T150000Z",
+            recurrenceRule: "FREQ=DAILY"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["day"],
+        currentView: "day",
+        currentDate: new Date(2019, 5, 7),
+        startDayHour: 8,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appt is filtered on prerender and not rendered");
+});
