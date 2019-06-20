@@ -73,7 +73,7 @@
     overflow: hidden;
 }
 
-.ql-clipboard {
+.ql-clipboard { // stylelint-disable-line selector-class-pattern
     left: -100000px;
     height: 1px;
     overflow-y: hidden;
@@ -197,6 +197,7 @@
     .add-counter(@MAX_INDENT);
     .add-indent-styles(@MAX_INDENT);
 
+    // stylelint-disable selector-class-pattern
     .ql-code-block-container {
         font-family: monospace;
     }
@@ -236,6 +237,7 @@
         position: absolute;
         right: 15px;
     }
+    // stylelint-enable selector-class-pattern
 
     pre {
         white-space: pre-wrap;
