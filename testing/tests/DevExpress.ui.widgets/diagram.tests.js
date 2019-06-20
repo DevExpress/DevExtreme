@@ -15,6 +15,7 @@ const TOOLBAR_ITEM_ACTIVE_CLASS = "dx-format-active";
 const MAIN_ELEMENT_SELECTOR = ".dxdi-control";
 const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":19, "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
 const DX_MENU_ITEM_SELECTOR = ".dx-menu-item";
+const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
 
 const moduleConfig = {
     beforeEach: () => {
@@ -97,6 +98,14 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         clock.tick(2000);
         assert.equal(updateSpy.callCount, 1, "scrollView.update() called once");
         clock.restore();
+    });
+    test("should toggle fullscreen class name on button click", (assert) => {
+        assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
+        let fullscreenButton = findToolbarItem(this.$element, "fullscreen");
+        fullscreenButton.trigger("dxclick");
+        assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
+        fullscreenButton.trigger("dxclick");
+        assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
     });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
