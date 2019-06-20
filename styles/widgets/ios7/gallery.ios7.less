@@ -4,6 +4,13 @@
     width: 52px;
     height: 52px;
     background-repeat: no-repeat;
+    color: @IOS7_FONT_COLOR;
+
+    .dx-icon-font-centered-sizing(36px);
+
+    &.dx-state-active {
+        color: @IOS7_SELECTION_BACKGROUND;
+    }
 }
 
 .dx-gallery-nav-button-prev {
@@ -12,17 +19,6 @@
 
 .dx-gallery-nav-button-next {
     .dx-icon-chevronright;
-}
-
-.dx-gallery-nav-button-prev,
-.dx-gallery-nav-button-next {
-    .dx-icon-font-centered-sizing(36px);
-
-    color: @IOS7_FONT_COLOR;
-
-    &.dx-state-active {
-        color: @IOS7_SELECTION_BACKGROUND;
-    }
 }
 
 .dx-gallery-indicator {

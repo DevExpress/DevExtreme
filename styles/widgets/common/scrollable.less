@@ -1,5 +1,12 @@
 .dx-scrollable-scrollbar-simulated {
     position: relative;
+
+    &,
+    .dx-scrollable-container {
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    }
 }
 
 .dx-scrollable {
@@ -86,15 +93,6 @@
     &.dx-scrollable-native-android .dx-scrollable-content {
         transform: none;
         z-index: 0;
-    }
-}
-
-.dx-scrollable-scrollbar-simulated {
-    &,
-    .dx-scrollable-container {
-        ::-webkit-scrollbar {
-            display: none;
-        }
     }
 }
 
