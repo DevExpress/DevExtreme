@@ -569,6 +569,7 @@ const subscribes = {
             resources: resources,
             allDay: allDay,
             firstDayOfWeek: this.option('firstDayOfWeek'),
+            recurrenceException: this._getRecurrenceException.bind(this),
         }, this._subscribes["convertDateByTimezone"].bind(this));
     },
 
