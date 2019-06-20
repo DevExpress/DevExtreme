@@ -9538,6 +9538,51 @@ QUnit.test("onContentReady when there is no dataSource and stateStoring is enabl
     assert.equal(contentReadyCallCount, 1);
 });
 
+// T749733
+QUnit.test("Change editing.popup option should not reload data", function(assert) {
+    // arrange
+    var lookupLoadingSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        onInitNewRow: function(e) {
+            e.component.option("editing.popup.title", "New title");
+        },
+        dataSource: [],
+        editing: {
+            mode: "popup",
+            allowAdding: true,
+            popup: {
+                showTitle: true
+            }
+        },
+        columns: [{
+            dataField: "Task_Assigned_Employee_ID",
+            lookup: {
+                dataSource: {
+                    load: function() {
+                        lookupLoadingSpy();
+                        var d = $.Deferred();
+                        setTimeout(function() {
+                            d.resolve([]);
+                        }, 100);
+                        return d.promise();
+                    }
+                },
+                valueExpr: "Customer_ID",
+                displayExpr: "Customer_Name"
+            }
+        }]
+    });
+    this.clock.tick(100);
+
+    // act
+    dataGrid.addRow();
+    this.clock.tick(100);
+
+    // assert
+    assert.equal(lookupLoadingSpy.callCount, 1, "lookup is loaded once");
+    assert.equal(dataGrid.getController("editing")._editPopup.option("title"), "New title", "popup title is updated");
+});
+
 QUnit.module("API methods", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -10337,6 +10382,44 @@ QUnit.test("refresh", function(assert) {
     });
 
     assert.ok(reloadResolved);
+});
+
+// T750728
+QUnit.test("Toolbar should be updated immediately after option change", function(assert) {
+    var titleText = "Custom Title";
+    var dataGridOptions = {
+        columns: ["field1"],
+        headerFilter: {
+            visible: false
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        dataSource: [],
+        onToolbarPreparing: (e) => {
+            e.toolbarOptions.items.unshift(
+                {
+                    location: "after",
+                    template: function() {
+                        return $("<div/>").attr('id', 'testElement');
+                    }
+                }
+            );
+        }
+    };
+
+    function load() {
+        createDataGrid(dataGridOptions);
+        $("#testElement").text(titleText);
+    }
+
+    load();
+    this.clock.tick();
+    assert.equal($("#testElement").text(), titleText, "title text");
+
+    load();
+    this.clock.tick();
+    assert.equal($("#testElement").text(), titleText, "title text after refresh");
 });
 
 // T257132
