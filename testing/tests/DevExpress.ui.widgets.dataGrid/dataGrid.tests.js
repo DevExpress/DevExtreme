@@ -10541,18 +10541,18 @@ QUnit.test("Toolbar should be updated immediately after option change", function
             e.toolbarOptions.items.unshift(
                 {
                     location: "after",
-                    template: function () {
+                    template: function() {
                         return $("<div/>").attr('id', 'testElement');
                     }
-                }          
+                }
             );
         }
     };
 
-    function load(){
+    function load() {
         createDataGrid(dataGridOptions);
         $("#testElement").text(titleText);
-    };
+    }
 
     load();
     this.clock.tick();
