@@ -9446,6 +9446,8 @@ declare module DevExpress {
     export function registerComponent(name: string, namespace: any, componentClass: any): void;
     /** @name ui */
     export class ui {
+        /** @name ui.floatingActionButtonRepaint() */
+        static floatingActionButtonRepaint(): void;
         /** @name ui.notify(message,type,displayTime) */
         static notify(message: string, type?: string, displayTime?: number): void;
         /** @name ui.notify(options,type,displayTime) */
@@ -9454,8 +9456,6 @@ declare module DevExpress {
         static setTemplateEngine(templateEngineName: string): void;
         /** @name ui.setTemplateEngine(options) */
         static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
-        /** @name ui.floatingActionButtonRepaint() */
-        static floatingActionButtonRepaint(): void;
     }
     /** @name validationEngine */
     export class validationEngine {
