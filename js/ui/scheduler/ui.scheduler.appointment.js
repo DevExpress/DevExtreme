@@ -12,7 +12,7 @@ import DOMComponent from "../../core/dom_component";
 import Resizable from "../resizable";
 import messageLocalization from "../../localization/message";
 import dateLocalization from "../../localization/date";
-import { utils } from "./utils";
+import utils from "./utils";
 
 const DEFAULT_HORIZONTAL_HANDLES = "left right";
 const DEFAULT_VERTICAL_HANDLES = "top bottom";

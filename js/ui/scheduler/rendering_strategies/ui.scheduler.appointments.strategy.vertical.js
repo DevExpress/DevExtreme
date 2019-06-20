@@ -1,5 +1,5 @@
 import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base";
-import { utils } from "../utils";
+import utils from "../utils";
 import { extend } from "../../../core/utils/extend";
 import { isNumeric } from "../../../core/utils/type";
 import devices from "../../../core/devices";
