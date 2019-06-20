@@ -1082,19 +1082,36 @@ testComponentDefaults(Tabs,
     }
 );
 
-testComponentDefaults(NumberBox,
-    { platform: devices.current().platform },
-    { mode: "number" },
-    function() {
-        this.originalRealDevice = devices.real();
-        devices.real({
-            platform: "ios"
-        });
-    },
-    function() {
-        devices.real(this.originalRealDevice);
-    }
-);
+[
+    { name: "chrome", version: "65.9", mode: "number" },
+    { name: "chrome", version: "66.0", mode: "text" },
+    { name: "msie", version: "74.9", mode: "number" },
+    { name: "msie", version: "75.0", mode: "text" },
+    { name: "safari", version: "11.9", mode: "number" },
+    { name: "safari", version: "12.0", mode: "text" }
+].forEach(function(item) {
+    testComponentDefaults(NumberBox,
+        { browser: item.name, version: item.version, platform: "ios" },
+        { mode: item.mode },
+        function() {
+            this.originalRealDevice = devices.real();
+            this._origBrowser = browser;
+
+            delete browser.chrome;
+            delete browser.safari;
+            delete browser.msie;
+            browser.version = item.version;
+            browser[item.name] = true;
+
+            devices.real({ platform: "ios" });
+        },
+        function() {
+            browser = this._origBrowser;
+            devices.real(this.originalRealDevice);
+        }
+    );
+
+});
 
 testComponentDefaults(FileUploader,
     { },

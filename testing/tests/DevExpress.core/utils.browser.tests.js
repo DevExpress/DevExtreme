@@ -2,7 +2,7 @@ var browser = require("core/utils/browser");
 
 var userAgents = {
     win_phone_8_1_update: "Mozilla/5.0 (Mobile; Windows Phone 8.1; Android 4.0; ARM; Trident/7.0; Touch; rv:11.0; IEMobile/11.0; NOKIA; Lumia 520) like iPhone OS 7_0_3 Mac OS X AppleWebKit/537 (KHTML, like Gecko) Mobile Safari/537",
-    webkit: "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36",
+    webkit: "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Custom/43.0.2357.124",
     mozilla: "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0",
     ie11: "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729; rv:11.0) like Gecko",
     ie: "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",
@@ -66,4 +66,6 @@ QUnit.test("chrome is webkit but not safari", function(assert) {
 
     assert.notOk(browserObject.safari, "chrome is not safari");
     assert.ok(browserObject.webkit, "chrome is webkit browser");
+    assert.ok(browserObject.chrome, "chrome is true");
+    assert.strictEqual(browserObject.version, "56.0", "chrome version is correct");
 });
