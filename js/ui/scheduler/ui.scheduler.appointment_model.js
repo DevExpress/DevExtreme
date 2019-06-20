@@ -230,6 +230,7 @@ var AppointmentModel = Class.inherit({
             max = new Date(filterOptions.max),
             resources = filterOptions.resources,
             firstDayOfWeek = filterOptions.firstDayOfWeek,
+            getRecurrenceException = filterOptions.recurrenceException,
             that = this;
 
         return [[function(appointment) {
@@ -255,21 +256,21 @@ var AppointmentModel = Class.inherit({
                 result = false;
             }
 
-            if(result && useRecurrence) {
-
-                result = that._filterAppointmentByRRule({
-                    startDate: startDate,
-                    endDate: endDate,
-                    recurrenceRule: recurrenceRule,
-                    recurrenceException: dataAccessors.getter.recurrenceException(appointment),
-                    allDay: appointmentTakesAllDay
-                }, min, max, startDayHour, endDayHour, firstDayOfWeek);
-            }
-
             var startDateTimeZone = dataAccessors.getter.startDateTimeZone(appointment),
                 endDateTimeZone = dataAccessors.getter.endDateTimeZone(appointment),
                 comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone),
                 comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
+
+            if(result && useRecurrence) {
+                var recurrenceException = getRecurrenceException ? getRecurrenceException(appointment) : dataAccessors.getter.recurrenceException(appointment);
+                result = that._filterAppointmentByRRule({
+                    startDate: comparableStartDate,
+                    endDate: comparableEndDate,
+                    recurrenceRule: recurrenceRule,
+                    recurrenceException: recurrenceException,
+                    allDay: appointmentTakesAllDay
+                }, min, max, startDayHour, endDayHour, firstDayOfWeek);
+            }
 
             // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min
             if(result && comparableEndDate < min && appointmentIsLong && !isAllDay && (!useRecurrence || (useRecurrence && !recurrenceRule))) {
