@@ -107,6 +107,10 @@
 .dx-popup-content {
     padding: @GENERIC_POPUP_CONTENT_PADDING;
 
+    .dx-popup-flex-height & {
+        max-width: calc(100% - 2 * @GENERIC_POPUP_CONTENT_PADDING);
+    }
+
     & > .dx-button {
         margin: @GENERIC_POPUP_BUTTON_MARGIN;
     }
