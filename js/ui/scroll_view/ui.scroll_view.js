@@ -249,7 +249,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     on: function(eventName) {
         var result = this.callBase.apply(this, arguments);
 
-        if(this._strategy && (eventName === "pullDown" || eventName === "reachBottom")) {
+        if(eventName === "pullDown" || eventName === "reachBottom") {
             this._tryRefreshPocketState();
         }
 
