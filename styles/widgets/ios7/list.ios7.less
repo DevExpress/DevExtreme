@@ -202,34 +202,9 @@
             border-bottom-width: 0.5px;
         }
     }
-}
 
-// static delete button
-
-.dx-list-static-delete-button-container {
-    width: 28px;
-
-    .dx-list-static-delete-button {
-        padding: 0;
-
-        .dx-icon {
-            margin: 0;
-        }
-    }
-}
-
-
-.dx-list-item-after-bag {
     &.dx-list-reorder-handle-container {
         width: @IOS7_LIST_ITEM_HORIZONTAL_PADDING + 32px;
-        border-bottom: 1px solid @IOS7_LIST_ITEM_BORDER;
-
-        .dx-hairlines & {
-            border-bottom-width: 0.5px;
-        }
-    }
-
-    &.dx-list-static-delete-button-container {
         border-bottom: 1px solid @IOS7_LIST_ITEM_BORDER;
 
         .dx-hairlines & {
@@ -245,6 +220,20 @@
         width: 40px;
         height: 40px;
         color: @IOS7_LIST_ITEM_REORDER_HANDLE_COLOR;
+    }
+}
+
+// static delete button
+
+.dx-list-static-delete-button-container {
+    width: 28px;
+
+    .dx-list-static-delete-button {
+        padding: 0;
+
+        .dx-icon {
+            margin: 0;
+        }
     }
 }
 

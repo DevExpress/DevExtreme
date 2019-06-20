@@ -28,6 +28,11 @@
 
 .dx-popup-content {
     border-radius: @IOS7_POPUP_BORDER_RADIUS;
+    padding: 10px;
+
+    &.dx-dialog-content:first-child {
+        padding-top: @IOS7_DIALOG_PADDING_TOP;
+    }
 }
 
 .dx-popup-fullscreen {
@@ -62,14 +67,6 @@
         font-weight: bold;
         font-size: 1em;
         line-height: 1em;
-    }
-}
-
-.dx-popup-content {
-    padding: 10px;
-
-    &.dx-dialog-content:first-child {
-        padding-top: @IOS7_DIALOG_PADDING_TOP;
     }
 }
 

@@ -136,6 +136,12 @@
 
     table {
         border-collapse: collapse;
+        table-layout: fixed;
+        width: 100%;
+
+        td {
+            outline: none;
+        }
     }
 
     td {
@@ -165,6 +171,7 @@
             text-align: right;
             white-space: nowrap;
             width: @LIST_STYLE_WIDTH;
+            content: counter(list-0, extract(@LIST_STYLE, 1)) + '. ';
         }
 
         .dx-rtl & {
@@ -177,43 +184,18 @@
                 text-align: left;
             }
         }
+
+        .add-counter-reset(@MAX_INDENT);
+
+        counter-increment: list-0;
     }
 
     ul > li::before {
         content: '\2022';
     }
 
-    li {
-        .add-counter-reset(@MAX_INDENT);
-
-        counter-increment: list-0;
-
-        &::before {
-            content: counter(list-0, extract(@LIST_STYLE, 1)) + '. ';
-        }
-    }
-
     .add-counter(@MAX_INDENT);
     .add-indent-styles(@MAX_INDENT);
-
-    .dx-rtl & li {
-        padding-right: @LIST_STYLE_OUTER_WIDTH;
-
-        &::before {
-            margin-left: @LIST_STYLE_MARGIN;
-            margin-right: -1 * @LIST_STYLE_OUTER_WIDTH;
-            text-align: left;
-        }
-    }
-
-    table {
-        table-layout: fixed;
-        width: 100%;
-
-        td {
-            outline: none;
-        }
-    }
 
     .ql-code-block-container {
         font-family: monospace;

@@ -45,6 +45,11 @@
 
     .dx-filemanager-container {
         border-top-color: @filemanager-border-color;
+
+        .dx-filemanager-dirs-panel {
+            min-width: 300px;
+            max-width: 350px;
+        }
     }
 
     .dx-filemanager-dirs-panel {
@@ -98,6 +103,15 @@
     .dx-filemanager-files-view {
         background: @base-bg;
     }
+
+    .dx-row {
+        .dx-filemanager-file-actions-button {
+            .dx-button {
+                margin: -4px 0;
+                height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT - 4;
+            }
+        }
+    }
 }
 
 .dx-filemanager-dirs-tree.dx-treeview {
@@ -118,24 +132,6 @@
 
         & * {
             color: @filemanager-dirs-tree-item-focus-color;
-        }
-    }
-}
-
-.dx-filemanager {
-    .dx-filemanager-container {
-        .dx-filemanager-dirs-panel {
-            min-width: 300px;
-            max-width: 350px;
-        }
-    }
-
-    .dx-row {
-        .dx-filemanager-file-actions-button {
-            .dx-button {
-                margin: -4px 0;
-                height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT - 4;
-            }
         }
     }
 }

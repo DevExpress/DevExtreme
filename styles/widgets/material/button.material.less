@@ -66,7 +66,79 @@
 }
 
 .dx-button {
+    height: @MATERIAL_BUTTON_HEIGHT;
+    position: relative;
+    overflow: hidden;
+
     .dx-button-onlyicon-sizing();
+
+    &.dx-button-has-icon:not(.dx-button-has-text) {
+        &:not(.dx-shape-standard) {
+            border-radius: 50%;
+            box-shadow: none;
+        }
+    }
+
+    .dx-button-content {
+        position: relative;
+
+        .dx-inkripple {
+            overflow: hidden;
+        }
+    }
+
+    .dx-button-styling(
+        @button-normal-bg,
+        @button-normal-color,
+        @button-normal-hover-bg,
+        @button-normal-focused-bg,
+        @button-normal-active-bg,
+        @button-normal-icon-color
+    );
+
+    &.dx-button-default {
+        .dx-button-styling(
+            @button-default-bg,
+            @button-default-color,
+            @button-default-hover-bg,
+            @button-default-focused-bg,
+            @button-default-active-bg,
+            @button-default-icon-color
+        );
+    }
+
+    &.dx-button-danger {
+        .dx-button-styling(
+            @button-danger-bg,
+            @button-danger-color,
+            @button-danger-hover-bg,
+            @button-danger-focused-bg,
+            @button-danger-active-bg,
+            @button-danger-icon-color
+        );
+    }
+
+    &.dx-button-success {
+        .dx-button-styling(
+            @button-success-bg,
+            @button-success-color,
+            @button-success-hover-bg,
+            @button-success-focused-bg,
+            @button-success-active-bg,
+            @button-success-icon-color
+        );
+    }
+
+    &.dx-button-back {
+        .dx-button-flat-color-styling(@button-flat-color);
+
+        border-radius: 50%;
+        .dx-button-onlyicon-sizing();
+
+        .dx-button-text {
+            display: none;
+        }
+    }
 }
 
 .dx-button-has-icon {
@@ -82,14 +154,6 @@
     .dx-button-text-and-icon-sizing();
 }
 
-.dx-button {
-    &.dx-button-has-icon:not(.dx-button-has-text) {
-        &:not(.dx-shape-standard) {
-            border-radius: 50%;
-            box-shadow: none;
-        }
-    }
-}
 
 // NOTE: Button styles
 
@@ -200,74 +264,6 @@
     background: transparent;
     border-color: transparent;
 }
-
-.dx-button {
-    height: @MATERIAL_BUTTON_HEIGHT;
-    position: relative;
-    overflow: hidden;
-
-    .dx-button-content {
-        position: relative;
-
-        .dx-inkripple {
-            overflow: hidden;
-        }
-    }
-
-    .dx-button-styling(
-        @button-normal-bg,
-        @button-normal-color,
-        @button-normal-hover-bg,
-        @button-normal-focused-bg,
-        @button-normal-active-bg,
-        @button-normal-icon-color
-    );
-
-    &.dx-button-default {
-        .dx-button-styling(
-            @button-default-bg,
-            @button-default-color,
-            @button-default-hover-bg,
-            @button-default-focused-bg,
-            @button-default-active-bg,
-            @button-default-icon-color
-        );
-    }
-
-    &.dx-button-danger {
-        .dx-button-styling(
-            @button-danger-bg,
-            @button-danger-color,
-            @button-danger-hover-bg,
-            @button-danger-focused-bg,
-            @button-danger-active-bg,
-            @button-danger-icon-color
-        );
-    }
-
-    &.dx-button-success {
-        .dx-button-styling(
-            @button-success-bg,
-            @button-success-color,
-            @button-success-hover-bg,
-            @button-success-focused-bg,
-            @button-success-active-bg,
-            @button-success-icon-color
-        );
-    }
-
-    &.dx-button-back {
-        .dx-button-flat-color-styling(@button-flat-color);
-
-        border-radius: 50%;
-        .dx-button-onlyicon-sizing();
-
-        .dx-button-text {
-            display: none;
-        }
-    }
-}
-
 
 .dx-button-mode-text {
     .dx-button-flat-color-styling(@button-flat-color);
