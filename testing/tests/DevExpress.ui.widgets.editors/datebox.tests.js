@@ -2925,6 +2925,23 @@ QUnit.module("datebox with time component", {
         assert.equal(dateBox.option("value").getMilliseconds(), 0, "milliseconds has zero value");
     });
 
+    QUnit.test("Submit value should not be changed when apply button clicked and an invalid value is selected", assert => {
+        const dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            opened: true,
+            min: new Date("2015/1/25 12:00:00"),
+            value: new Date("2015/1/25 12:00:00")
+        }).dxDateBox("instance");
+        const $submitElement = $("#dateBox").find("input[type=hidden]");
+        const $hourDownButton = $(dateBox.content()).find(".dx-numberbox-spin-down").first();
+
+        $hourDownButton.trigger("dxpointerdown");
+        $(".dx-popup-done.dx-button").first().trigger("dxclick");
+
+        assert.notOk(dateBox.option("isValid"), "editor is invalid");
+        assert.equal($submitElement.val(), "2015-01-25T12:00:00", "submit element has correct value");
+    });
+
     QUnit.test("Reset seconds and milliseconds when DateBox has no value for time view", assert => {
         const dateBox = $("#dateBox").dxDateBox({
             pickerType: "list",
