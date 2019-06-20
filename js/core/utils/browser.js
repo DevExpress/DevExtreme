@@ -23,11 +23,18 @@ var browserFromUA = function(ua) {
         browserName = matches[1],
         browserVersion = matches[2];
 
-    if(browserName === "webkit" && ua.indexOf("chrome") < 0 && safari.exec(ua)) {
-        browserName = "safari";
+    if(browserName === "webkit") {
         result["webkit"] = true;
-        browserVersion = /Version\/([0-9.]+)/i.exec(ua);
-        browserVersion = browserVersion && browserVersion[1];
+
+        if(ua.indexOf("chrome") < 0 && safari.exec(ua)) {
+            browserName = "safari";
+            browserVersion = /Version\/([0-9.]+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        } else if(ua.indexOf("chrome") >= 0) {
+            browserName = "chrome";
+            browserVersion = /Chrome\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        }
     }
 
     if(browserName === "trident" || browserName === "edge") {
