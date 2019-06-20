@@ -692,7 +692,7 @@ var TextEditorMask = TextEditorBase.inherit({
         if(!this._maskRulesChain) {
             return;
         }
-        var isValid = this._maskRulesChain.isEmpty() ? true : this._maskRulesChain.isValid(this._normalizeChainArguments());
+        var isValid = stringUtils.isEmpty(this.option("value")) || this._maskRulesChain.isValid(this._normalizeChainArguments());
 
         this.option({
             isValid: isValid,
