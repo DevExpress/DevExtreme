@@ -237,8 +237,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _repaintAppointments: function(appointments) {
         const isRepaintAll = this._isRepaintAll(appointments);
 
-        const allDayFragment = $(domAdapter.createDocumentFragment());
-        const commonFragment = $(domAdapter.createDocumentFragment());
+        const allDayFragment = $(this._getAppointmentContainer(true));
+        const commonFragment = $(this._getAppointmentContainer(false));
 
         if(isRepaintAll) {
             this._getAppointmentContainer(true).html("");
