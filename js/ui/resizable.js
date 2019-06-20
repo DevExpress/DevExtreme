@@ -506,6 +506,7 @@ var Resizable = DOMComponent.inherit({
             case "area":
             case "stepPrecision":
             case "step":
+            case "preventStepValueRound":
                 break;
             default:
                 this.callBase(args);
