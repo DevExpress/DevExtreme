@@ -1232,11 +1232,11 @@ var Overlay = Widget.inherit({
     _renderGeometryImpl: function() {
         this._stopAnimation();
 
+        this._fixHeightAfterSafariAddressBarResizing();
         this._normalizePosition();
         this._renderShading();
         this._renderDimensions();
         var resultPosition = this._renderPosition();
-        this._fixHeightAfterSafariAddressBarResizing();
 
         this._actions.onPositioned({ position: resultPosition });
     },

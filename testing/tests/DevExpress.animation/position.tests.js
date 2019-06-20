@@ -980,6 +980,58 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
         }
     });
 
+    // T750017
+    QUnit.test("position should return window.innerWidth for chrome on android if window.outerHeight === window.innerHeight but window height is less then innerHeight", function(assert) {
+        if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
+            // skip for ie because we can not write window.innerWidth in IE
+            assert.expect(0);
+            return;
+        }
+
+        var $what = $("#what").height(50),
+            initialInnerHeight = window.innerHeight,
+            initialOuterHeight = window.outerHeight;
+
+        try {
+            window.innerHeight = 2000;
+            window.outerHeight = 2000;
+
+            var resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 1, "innerHeight was used as window height");
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            window.outerHeight = initialOuterHeight;
+        }
+    });
+
+    QUnit.test("position should return window.innerWidth for chrome on android if window.outerHeight < window.innerHeight but window.height is less then innerHeight in Safari", function(assert) {
+        if(!browser.safari) {
+            assert.expect(0);
+            return;
+        }
+
+        var $what = $("#what").height(50),
+            initialInnerHeight = window.innerHeight,
+            initialOuterHeight = window.outerHeight;
+
+        try {
+            window.innerHeight = 2000;
+            window.outerHeight = 2010;
+
+            var resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 1, "innerHeight was used as window height");
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            window.outerHeight = initialOuterHeight;
+        }
+    });
+
     // T664522
     QUnit.test("setup should call resetPosition with finishTransition argument", function(assert) {
         var origResetPosition = translator.resetPosition;

@@ -94,13 +94,15 @@ var $ = require("../core/renderer"),
     domAdapter = require("../core/dom_adapter"),
     isWindow = require("../core/utils/type").isWindow,
     extend = require("../core/utils/extend").extend,
+    browser = require("../core/utils/browser"),
 
     translator = require("./translator"),
     support = require("../core/utils/support");
 
 var horzRe = /left|right/,
     vertRe = /top|bottom/,
-    collisionRe = /fit|flip|none/;
+    collisionRe = /fit|flip|none/,
+    IS_SAFARI = browser.safari;
 
 var normalizeAlign = function(raw) {
     var result = {
@@ -333,8 +335,8 @@ var calculatePosition = function(what, options) {
         if(isWindow(of[0])) {
             h.atLocation = of.scrollLeft();
             v.atLocation = of.scrollTop();
-            h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : of.width();
-            v.atSize = of[0].innerHeight > of[0].outerHeight ? of[0].innerHeight : of.height();
+            h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
+            v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
             v.atLocation = 0;
