@@ -208,7 +208,7 @@ var Appointment = DOMComponent.inherit({
 
     _createResizingConfig: function() {
         const config = this.option("direction") === "vertical" ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
-        config.preventStepValueRound = utils.isWebKitBrowserInZoom();
+        config.roundStepValue = !utils.isWebKitBrowserInZoom();
 
         if(!this.invoke("isGroupedByDate")) {
             config.stepPrecision = "strict";
