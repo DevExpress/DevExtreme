@@ -2442,7 +2442,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
                 assert.ok(false);
             }
 
-            const $scrollView = $("#scrollView").dxScrollView(config);
+            const $scrollView = $("#scrollView").dxScrollView($.extend(config, { useNative: false }));
             assert.ok(true, "no exceptions");
 
             let $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -2469,7 +2469,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
                 assert.ok(false);
             }
 
-            const $scrollView = $("#scrollView").dxScrollView(config);
+            const $scrollView = $("#scrollView").dxScrollView($.extend(config, { useNative: false }));
             assert.ok(true, "no exceptions");
 
             let $content = $scrollView.find("." + SCROLLABLE_CONTENT_CLASS);
