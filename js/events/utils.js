@@ -163,9 +163,10 @@ const needSkipEvent = (e) => {
         return true;
     }
     if(isDxMouseWheelEvent(e)) {
-        const isContentEditableFocused = target.isContentEditable && $target.closest("div[contenteditable='true']").is(':focus');
+        const isContentEditable = target.isContentEditable || $(target).hasAttr("contenteditable");
+        const hasContentEditableParent = $target.closest("div[contenteditable='true']").is(':focus');
         const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
-        return isInputFocused || isContentEditableFocused;
+        return isInputFocused || isContentEditable || hasContentEditableParent;
     }
     if(isMouseEvent(e)) {
         return touchInInput || e.which > 1; // only left mouse button
