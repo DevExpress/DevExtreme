@@ -1,25 +1,25 @@
-require("../../../testing/content/orders.js");
-require("data/odata/store");
+import "../../../testing/content/orders.js";
+import "data/odata/store";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    LocalStore = require("ui/pivot_grid/local_store").LocalStore,
-    pivotGridDataSource = require("ui/pivot_grid/data_source"),
-    pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
-    config = require("core/config"),
-    formatHelper = require("format_helper"),
-    ajaxMock = require("../../helpers/ajaxMock.js"),
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { LocalStore } from "ui/pivot_grid/local_store";
+import pivotGridDataSource from "ui/pivot_grid/data_source";
+import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
+import config from "core/config";
+import formatHelper from "format_helper";
+import ajaxMock from "../../helpers/ajaxMock.js";
 
-    moduleConfig = {
-        beforeEach: function() {
-            this.store = new LocalStore(window.orders);
-            this.load = function(options) {
-                return this.store.load(options).done(function(data) {
-                    pivotGridDataSource.sort(options, data);
-                });
-            };
-        }
-    };
+var moduleConfig = {
+    beforeEach: function() {
+        this.store = new LocalStore(window.orders);
+        this.load = function(options) {
+            return this.store.load(options).done(function(data) {
+                pivotGridDataSource.sort(options, data);
+            });
+        };
+    }
+};
 
 QUnit.testDone(function() {
     ajaxMock.clear();

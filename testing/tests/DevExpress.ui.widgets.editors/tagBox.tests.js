@@ -3080,6 +3080,30 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
     });
 
+    QUnit.test("filtering operation should pass 'expand' parameter to the dataSource", (assert) => {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: "odata4.org",
+            callback: ({ data }) => {
+                assert.deepEqual(data, {
+                    $filter: "this eq '1'",
+                    $expand: "Orders"
+                });
+                ajaxMock.clear();
+                done();
+            }
+        });
+
+        $("#tagBox").dxTagBox({
+            value: ["1"],
+            dataSource: new DataSource({
+                store: new ODataStore({ version: 4, url: "odata4.org" }),
+                expand: ["Orders"]
+            })
+        });
+    });
+
     QUnit.testInActiveWindow("input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)", (assert) => {
         const items = ["111", "222", "333"];
 
@@ -4745,6 +4769,40 @@ QUnit.module("dataSource integration", moduleSetup, () => {
 
         const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
         assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
+    });
+
+    QUnit.test("TagBox should correctly handle disposing on data loading", (assert) => {
+        assert.expect(1);
+
+        try {
+            const ds = new CustomStore({
+                load: function() {
+                    const deferred = $.Deferred();
+
+                    setTimeout(function() {
+                        deferred.resolve([2]);
+                    }, 1000);
+
+                    return deferred.promise();
+                }
+            });
+
+            const tagBox = $("#tagBox").dxTagBox({
+                dataSource: ds,
+                value: [2],
+                onInitializing: function() {
+                    this.beginUpdate();
+                }
+            }).dxTagBox("instance");
+
+            tagBox.endUpdate();
+            tagBox.dispose();
+            this.clock.tick(1000);
+        } catch(e) {
+            assert.ok(false, "TagBox raise the error");
+        }
+
+        assert.ok(true, "TagBox rendered");
     });
 });
 

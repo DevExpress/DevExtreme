@@ -718,6 +718,8 @@ var Widget = DOMComponent.inherit({
         if(processor) {
             this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
         } else if(this.option("focusStateEnabled")) {
+            this._disposeKeyboardProcessor();
+
             this._keyboardProcessor = new KeyboardProcessor({
                 element: this._keyboardEventBindingTarget(),
                 handler: this._keyboardHandler,

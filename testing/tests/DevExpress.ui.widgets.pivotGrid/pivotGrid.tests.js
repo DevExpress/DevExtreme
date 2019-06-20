@@ -14,27 +14,27 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/pivot_grid/ui.pivot_grid");
+import "ui/pivot_grid/ui.pivot_grid";
 
-var $ = require("jquery"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    pivotGridDataController = require("ui/pivot_grid/ui.pivot_grid.data_controller"),
-    dataArea = require("ui/pivot_grid/ui.pivot_grid.data_area"),
-    headersArea = require("ui/pivot_grid/ui.pivot_grid.headers_area"),
-    pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
-    getRealElementWidth = require("ui/pivot_grid/ui.pivot_grid.area_item").getRealElementWidth,
-    PivotGridDataSource = require("ui/pivot_grid/data_source"),
-    domUtils = require("core/utils/dom"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    dateLocalization = require("localization/date"),
-    devices = require("core/devices"),
-    browser = require("core/utils/browser"),
-    dataUtils = require("core/element_data"),
-    getSize = require("core/utils/size").getSize;
+import $ from "jquery";
+import pointerMock from "../../helpers/pointerMock.js";
+import pivotGridDataController from "ui/pivot_grid/ui.pivot_grid.data_controller";
+import dataArea from "ui/pivot_grid/ui.pivot_grid.data_area";
+import headersArea from "ui/pivot_grid/ui.pivot_grid.headers_area";
+import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
+import { getRealElementWidth } from "ui/pivot_grid/ui.pivot_grid.area_item";
+import PivotGridDataSource from "ui/pivot_grid/data_source";
+import domUtils from "core/utils/dom";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import dateLocalization from "localization/date";
+import devices from "core/devices";
+import browser from "core/utils/browser";
+import dataUtils from "core/element_data";
+import { getSize } from "core/utils/size";
 
 function sumArray(array) {
     var sum = 0;
@@ -5422,6 +5422,38 @@ QUnit.test('Set column width', function(assert) {
     assert.deepEqual(setColumnWidth([40, 50, 30, 60]), [40, 50, 30, 60]);
     assert.deepEqual(setColumnWidth([40, 50, 30]), [40, 50, 30, 0]);
     assert.deepEqual(setColumnWidth([40, 50, 30, 60, 80]), [40, 50, 30, 140]);
+});
+
+QUnit.test('Set column width in container with transform', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    $("#pivotArea").css({ "transform": "scale(0.5, 0.5)" });
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    function setColumnWidth(widthArray) {
+        headersArea.setColumnsWidth(widthArray);
+        return headersArea.getColumnsWidth();
+    }
+
+    assert.deepEqual(setColumnWidth([40, 50, 30, 60]), [40, 50, 30, 60]);
+});
+
+QUnit.test('Set row height in container with transform', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    $("#pivotArea").css({ "transform": "scale(0.5, 0.5)" });
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    function setRowsHeight(widthArray) {
+        headersArea.setRowsHeight(widthArray);
+        return headersArea.getRowsHeight();
+    }
+
+    assert.deepEqual(setRowsHeight([40, 50, 60, 70]), [40, 50, 60, 70]);
 });
 
 // T696415

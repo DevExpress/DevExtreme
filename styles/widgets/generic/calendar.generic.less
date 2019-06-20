@@ -89,7 +89,7 @@
             opacity: 1;
 
             .dx-button-content {
-                opacity: .5;
+                opacity: 0.5;
             }
         }
 
@@ -147,7 +147,7 @@
     background: none;
 
     &.dx-button {
-        margin: 0px 1px;
+        margin: 0 1px;
     }
 
     .dx-button-content {
@@ -158,7 +158,7 @@
 
 .dx-calendar-navigator-previous-view,
 .dx-calendar-navigator-previous-month {
-    left: 0px;
+    left: 0;
 
     &.dx-button {
         border-radius: @calendar-navigator-border-radius 0 0 @calendar-navigator-border-radius;
@@ -171,7 +171,7 @@
 
 .dx-calendar-navigator-next-view,
 .dx-calendar-navigator-next-month {
-    right: 0px;
+    right: 0;
 
     &.dx-button {
         border-radius: 0 @calendar-navigator-border-radius @calendar-navigator-border-radius 0;
@@ -196,14 +196,14 @@
             padding-bottom: 10px;
 
             th {
-                box-shadow: inset 0px -1px 0px @calendar-border-color;
+                box-shadow: inset 0 -1px 0 @calendar-border-color;
                 color: @calendar-header-color;
             }
         }
     }
 
     table {
-        border-spacing: 0px;
+        border-spacing: 0;
 
         th {
             color: @calendar-header-color;
@@ -228,7 +228,7 @@
     }
 
     &.dx-state-hover {
-        box-shadow: inset 0px -1px 0px 1000px @calendar-hover-bg;
+        box-shadow: inset 0 -1px 0 1000px @calendar-hover-bg;
         color: @calendar-cell-hover-color;
     }
 
@@ -254,23 +254,24 @@
     &.dx-state-active {
         &:not(.dx-calendar-empty-cell) {
             &:not(.dx-calendar-selected-date) {
-                box-shadow: inset 0px -1px 0px 1000px @calendar-cell-active-bg;
+                box-shadow: inset 0 -1px 0 1000px @calendar-cell-active-bg;
             }
         }
     }
 
     &.dx-calendar-contoured-date {
-        box-shadow: inset 0px 0px 0px 1px @calendar-cell-contoured-border-color;
+        box-shadow: inset 0 0 0 1px @calendar-cell-contoured-border-color;
     }
 
     &.dx-calendar-selected-date {
-        &, &.dx-calendar-today {
+        &,
+        &.dx-calendar-today {
             color: @base-inverted-text-color;
-            box-shadow: inset 0px 0px 0px 1000px @calendar-cell-selected-bg;
+            box-shadow: inset 0 0 0 1000px @calendar-cell-selected-bg;
             font-weight: normal;
 
             &.dx-calendar-contoured-date {
-                box-shadow:  inset 0px 0px 0px 1px @calendar-cell-contoured-border-color, inset 0px 0px 0px 1000px @calendar-cell-selected-bg;
+                box-shadow: inset 0 0 0 1px @calendar-cell-contoured-border-color, inset 0 0 0 1000px @calendar-cell-selected-bg;
             }
         }
     }

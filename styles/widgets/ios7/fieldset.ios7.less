@@ -171,8 +171,7 @@
     .dx-dropdowneditor-icon,
     &.dx-tagbox-single-line,
     .dx-tagbox-single-line,
-    .dx-dropdowneditor-input-wrapper
-     {
+    .dx-dropdowneditor-input-wrapper {
         border: none;
         box-shadow: none;
     }
@@ -208,7 +207,7 @@
 
         & > .dx-switch {
             margin-top: -6px;
-            margin-right: 0px;
+            margin-right: 0;
         }
 
         & > .dx-checkbox {
@@ -230,7 +229,8 @@
             color: @IOS7_FIELDSET_TEXTEDITOR;
         }
 
-        & > .dx-textarea, & > .dx-tagbox {
+        & > .dx-textarea,
+        & > .dx-tagbox {
             margin: -6px 0 -5px -8px;
         }
 
@@ -337,11 +337,11 @@
 .dx-rtl {
     .dx-fieldset {
         padding-right: 15px;
-        padding-left: 0px;
+        padding-left: 0;
     }
 
     .dx-field {
-        padding: 3px 0px 2px 10px;
+        padding: 3px 0 2px 10px;
     }
 }
 

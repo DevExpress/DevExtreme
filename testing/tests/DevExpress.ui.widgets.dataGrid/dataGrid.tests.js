@@ -1665,6 +1665,46 @@ QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", functio
     clock.restore();
 });
 
+// T744592
+QUnit.test("freeSpaceRow height should not be changed after editing next cell", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        $grid = $("#dataGrid").dxDataGrid({
+            dataSource: [
+                { id: 1, field1: "field1" },
+                { id: 2, field1: "field1" },
+                { id: 3, field1: "field1" }
+            ],
+            paging: {
+                pageSize: 2
+            },
+            keyExpr: "id",
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            }
+        }),
+        dataGrid = $grid.dxDataGrid("instance");
+
+    clock.tick();
+
+    dataGrid.pageIndex(1);
+    clock.tick();
+    dataGrid.cellValue(0, "field1", "updated");
+    clock.tick();
+    dataGrid.saveEditData();
+
+    // act
+    dataGrid.focus(dataGrid.getCellElement(0, "field1"));
+
+    // assert
+    assert.ok($grid.find(".dx-freespace-row").is(":visible"), "Free space row is visible");
+    assert.equal(dataGrid.totalCount(), -1, "totalCount");
+    assert.equal(dataGrid.getController("data").isLoading(), true, "isLoading");
+
+    clock.restore();
+});
+
 QUnit.test("Lose focus on start of resize columns", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
@@ -5623,7 +5663,72 @@ QUnit.test("Console errors should not be occurs when stateStoring enabled with s
 
     // assert
     assert.ok(dataGrid);
-    assert.equal(errors.log.getCalls().length, 0, "no error maeesages in console");
+    assert.deepEqual(errors.log.getCalls().length, 0, "no error maeesages in console");
+
+    clock.restore();
+});
+
+// T748677
+QUnit.test("getSelectedRowsData should works if selectedRowKeys is defined and state is empty", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [{ id: 1, text: "Text 1" }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return {};
+                }
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], "selectedRowKeys");
+    assert.deepEqual(dataGrid.getSelectedRowsData(), [{ id: 1, text: "Text 1" }], "getSelectedRowsData result");
+
+    clock.restore();
+});
+
+QUnit.test("empty selection should be restored from state storing if selectedRowKeys option is defined", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [{ id: 1, text: "Text 1" }]
+                }
+            },
+            selectedRowKeys: [1],
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: []
+                    };
+                }
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "selectedRowKeys");
+    assert.deepEqual(dataGrid.getSelectedRowsData(), [], "getSelectedRowsData result");
 
     clock.restore();
 });
@@ -6797,6 +6902,46 @@ QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling m
     assert.strictEqual(dataGrid.getVisibleRows()[0].data.key, 1);
     assert.strictEqual(dataGrid.getVisibleRows()[40].data.key, 21);
     assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
+});
+
+// T748954
+QUnit.test("Scroll to second page should works if scrolling mode is infinite, summary is defined and server returns totalCount", function(assert) {
+    var dataGrid = createDataGrid({
+        height: 100,
+        loadingTimeout: undefined,
+        scrolling: {
+            timeout: 0,
+            mode: "infinite",
+            useNative: false
+        },
+        remoteOperations: true,
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                var items = [];
+
+                for(var i = options.skip; i < options.skip + options.take; i++) {
+                    items.push({ id: i + 1 });
+                }
+
+                return $.Deferred().resolve(items, {
+                    totalCount: 100000,
+                    summary: [100000]
+                });
+            }
+        },
+        summary: {
+            totalItems: [{ column: "id", summaryType: "count" }]
+        }
+    });
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+    assert.strictEqual(dataGrid.getVisibleRows()[0].key, 1);
+    assert.strictEqual(dataGrid.getVisibleRows()[39].key, 40);
 });
 
 // T742926
@@ -9532,6 +9677,51 @@ QUnit.test("onContentReady when there is no dataSource and stateStoring is enabl
 
     // assert
     assert.equal(contentReadyCallCount, 1);
+});
+
+// T749733
+QUnit.test("Change editing.popup option should not reload data", function(assert) {
+    // arrange
+    var lookupLoadingSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        onInitNewRow: function(e) {
+            e.component.option("editing.popup.title", "New title");
+        },
+        dataSource: [],
+        editing: {
+            mode: "popup",
+            allowAdding: true,
+            popup: {
+                showTitle: true
+            }
+        },
+        columns: [{
+            dataField: "Task_Assigned_Employee_ID",
+            lookup: {
+                dataSource: {
+                    load: function() {
+                        lookupLoadingSpy();
+                        var d = $.Deferred();
+                        setTimeout(function() {
+                            d.resolve([]);
+                        }, 100);
+                        return d.promise();
+                    }
+                },
+                valueExpr: "Customer_ID",
+                displayExpr: "Customer_Name"
+            }
+        }]
+    });
+    this.clock.tick(100);
+
+    // act
+    dataGrid.addRow();
+    this.clock.tick(100);
+
+    // assert
+    assert.equal(lookupLoadingSpy.callCount, 1, "lookup is loaded once");
+    assert.equal(dataGrid.getController("editing")._editPopup.option("title"), "New title", "popup title is updated");
 });
 
 QUnit.module("API methods", {

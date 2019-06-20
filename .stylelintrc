@@ -1,0 +1,12 @@
+{
+    "extends": "stylelint-config-standard",
+    "ignoreFiles": "**/*.json",
+    "rules": {
+        "indentation": [4, { ignore: ["inside-parens"] }],
+        "max-empty-lines": 2,
+        "selector-pseudo-element-colon-notation": null,
+        "no-descending-specificity": null,
+        "no-duplicate-selectors": null,
+        "no-empty-source": null
+    }
+}

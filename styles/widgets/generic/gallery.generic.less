@@ -49,7 +49,7 @@
     .dx-gallery-nav-button-prev {
         .dx-icon-chevronleft;
 
-         &:after {
+        &:after {
             left: 0;
         }
 
@@ -63,7 +63,7 @@
     .dx-gallery-nav-button-next {
         .dx-icon-chevronright;
 
-         &:after {
+        &:after {
             right: 0;
         }
 
@@ -85,7 +85,6 @@
     box-sizing: border-box;
     border: 1px solid @gallery-indicator-item-border-color;
     pointer-events: auto;
-
     margin: 5px - @GENERIC_GALLERY_INDICATOR_SIZE/2 6px;
     width: @GENERIC_GALLERY_INDICATOR_SIZE;
     height: @GENERIC_GALLERY_INDICATOR_SIZE;
@@ -101,10 +100,8 @@
     margin: 5px - @GENERIC_GALLERY_INDICATOR_SELECTED_SIZE/2 6px;
 }
 
-
-
 .dx-state-focused.dx-gallery {
     .dx-gallery-indicator-item-selected {
-         background: @gallery-indicator-focused-bg;
+        background: @gallery-indicator-focused-bg;
     }
 }

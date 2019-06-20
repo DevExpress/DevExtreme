@@ -67,12 +67,8 @@ var PagerView = modules.View.inherit({
                     });
                 },
                 onKeyDown: e => {
-                    var keyDownHandler = that.option("onKeyDown");
-                    if(keyDownHandler) {
-                        e.component = that.component;
-                        e.element = that.element();
-                        keyDownHandler.bind(that)(e);
-                    }
+                    let keyboardController = that.getController("keyboardNavigation");
+                    keyboardController && keyboardController.executeAction("onKeyDown", e);
                 },
                 useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation")
             };

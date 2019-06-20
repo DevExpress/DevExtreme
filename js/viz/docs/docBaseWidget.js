@@ -896,6 +896,12 @@ var BaseLegend = {
     */
     title: {
         /**
+        * @name BaseLegend.title.horizontalAlignment
+        * @type Enums.HorizontalAlignment
+        * @default undefined
+        */
+        horizontalAlignment: undefined,
+        /**
         * @name BaseLegend.title.verticalAlignment
         * @type Enums.VerticalEdge
         * @default 'top'
@@ -923,7 +929,19 @@ var BaseLegend = {
             * @type number
             * @default 9
             */
-            bottom: 9
+            bottom: 9,
+            /**
+            * @name BaseLegend.title.margin.left
+            * @type number
+            * @default 0
+            */
+            left: 0,
+            /**
+            * @name BaseLegend.title.margin.right
+            * @type number
+            * @default 0
+            */
+            right: 0
         },
         /**
         * @name BaseLegend.title.font

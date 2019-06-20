@@ -173,12 +173,15 @@
 
 .dx-button-mode-contained {
     .dx-button-styling-mode-contained(@button-normal-bg, @button-normal-border-color, @button-normal-color);
+
     &.dx-button-danger {
         .dx-button-styling-mode-contained(@button-danger-bg, transparent, @button-danger-color);
     }
+
     &.dx-button-success {
         .dx-button-styling-mode-contained(@button-success-bg, transparent, @button-success-color);
     }
+
     &.dx-button-default {
         .dx-button-styling-mode-contained(@button-default-bg, transparent, @button-default-color);
     }
@@ -186,12 +189,15 @@
 
 .dx-button-mode-outlined {
     .dx-button-styling-mode-outlined(@button-normal-bg, @button-normal-border-color, @button-normal-color);
+
     &.dx-button-danger {
         .dx-button-styling-mode-outlined(@button-danger-bg, @button-danger-border-color, @button-danger-border-color);
     }
+
     &.dx-button-success {
         .dx-button-styling-mode-outlined(@button-success-bg, @button-success-border-color, @button-success-border-color);
     }
+
     &.dx-button-default {
         .dx-button-styling-mode-outlined(@button-default-bg, @button-default-border-color, @button-default-border-color);
     }
@@ -199,24 +205,29 @@
 
 .dx-button-mode-text {
     .dx-button-styling-mode-text(@button-normal-bg, transparent, @button-normal-color);
+
     &.dx-button-danger {
         .dx-button-styling-mode-text(@button-danger-bg, transparent, @button-danger-border-color);
     }
+
     &.dx-button-success {
         .dx-button-styling-mode-text(@button-success-bg, transparent, @button-success-border-color);
     }
+
     &.dx-button-default {
         .dx-button-styling-mode-text(@button-default-bg, transparent, @button-default-border-color);
     }
 }
 
-.dx-button-normal, .dx-button-back {
+.dx-button-normal,
+.dx-button-back {
     .dx-button-special-hover(@button-special-hover);
 }
 
 .dx-texteditor-buttons-container {
     > .dx-button {
         margin: 1px @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+
         > .dx-button-content {
             padding-top: @GENERIC_BASE_INLINE_WIDGET_TOP_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT - 2px;
             padding-bottom: @GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT - 2px;
@@ -224,7 +235,8 @@
     }
 }
 
-.dx-editor-outlined, .dx-editor-filled {
+.dx-editor-outlined,
+.dx-editor-filled {
     .dx-texteditor-buttons-container {
         &:first-child {
             > .dx-button {

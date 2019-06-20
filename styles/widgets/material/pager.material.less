@@ -64,16 +64,20 @@
             .dx-icon-chevronright;
         }
 
-        .dx-prev-button, .dx-next-button {
+        .dx-prev-button,
+        .dx-next-button {
             .dx-icon-font-centered-sizing(21px);
         }
     }
 
-    .dx-page, .dx-page-size {
+    .dx-page,
+    .dx-page-size {
         font-size: @MATERIAL_PAGER_PAGE_FONT_SIZE;
+
         &:hover {
             background-color: @pager-page-hovered-bg;
         }
+
         border-radius: 20px;
     }
 
@@ -82,7 +86,8 @@
         line-height: @MATERIAL_PAGER_PAGE_LINE_HEIGHT;
     }
 
-    .dx-pages, .dx-page-sizes {
+    .dx-pages,
+    .dx-page-sizes {
         .dx-selection {
             font-weight: 500;
             background-color: @pager-page-selected-bg;

@@ -310,6 +310,52 @@ QUnit.test("Draw annotation with x/y and without anchor", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 50 - 2 - 5]);
 });
 
+QUnit.test("Draw annotation with offsetX/offsetY with anchor", function(assert) {
+    this.widget._getAnnotationCoords.returns({
+        offsetX: 10,
+        offsetY: -20,
+        x: 100,
+        y: 200
+    });
+    const annotation = createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+        arrowLength: 20,
+        arrowWidth: 30,
+        paddingLeftRight: 10,
+        paddingTopBottom: 15
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const contentGroup = this.renderer.g.getCall(3).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [100 - 1 - 10 + 10, 160 - 2 - 5 + 20]);
+});
+
+QUnit.test("Draw annotation with offsetX/offsetY and without anchor", function(assert) {
+    this.widget._getAnnotationCoords.returns({
+        offsetX: 10,
+        offsetY: -20,
+    });
+    const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+        border: {
+            width: 1,
+            visible: true
+        },
+        arrowLength: 20,
+        arrowWidth: 30,
+        paddingLeftRight: 10,
+        paddingTopBottom: 15
+    })[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    const contentGroup = this.renderer.g.getCall(3).returnValue;
+    assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10 + 10, 50 - 2 - 5 - 20]);
+});
+
 QUnit.module("Check plaque path", environment);
 
 QUnit.test("Arrow on the top, left side", function(assert) {

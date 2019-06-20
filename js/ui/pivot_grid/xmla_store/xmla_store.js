@@ -1,18 +1,18 @@
-var $ = require("../../../core/renderer"),
-    window = require("../../../core/utils/window").getWindow(),
-    Class = require("../../../core/class"),
-    stringFormat = require("../../../core/utils/string").format,
-    errors = require("../../../data/errors").errors,
-    noop = require("../../../core/utils/common").noop,
-    extend = require("../../../core/utils/extend").extend,
-    typeUtils = require("../../../core/utils/type"),
-    iteratorUtils = require("../../../core/utils/iterator"),
-    inArray = require("../../../core/utils/array").inArray,
-    pivotGridUtils = require("../ui.pivot_grid.utils"),
-    deferredUtils = require("../../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    getLanguageId = require("../../../localization/language_codes").getLanguageId;
+import $ from "../../../core/renderer";
+import { getWindow } from "../../../core/utils/window";
+import Class from "../../../core/class";
+import { format as stringFormat } from "../../../core/utils/string";
+import { errors } from "../../../data/errors";
+import { noop } from "../../../core/utils/common";
+import { extend } from "../../../core/utils/extend";
+import { isFunction, isNumeric, isDefined, isString } from "../../../core/utils/type";
+import { map, each } from "../../../core/utils/iterator";
+import { inArray } from "../../../core/utils/array";
+import { sendRequest, getExpandedLevel, storeDrillDownMixin, foreachTree } from "../ui.pivot_grid.utils";
+import { when, Deferred } from "../../../core/utils/deferred";
+import { getLanguageId } from "../../../localization/language_codes";
+
+var window = getWindow();
 
 exports.XmlaStore = Class.inherit((function() {
 
@@ -28,7 +28,6 @@ exports.XmlaStore = Class.inherit((function() {
         mdxAxis = "{0} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON {1}",
         mdxCrossJoin = "CrossJoin({0})",
         mdxSet = "{{0}}",
-        each = iteratorUtils.each,
 
         MEASURE_DEMENSION_KEY = "DX_MEASURES",
         MD_DIMTYPE_MEASURE = "2";
@@ -48,11 +47,11 @@ exports.XmlaStore = Class.inherit((function() {
                 method: "POST"
             };
 
-        if(typeUtils.isFunction(beforeSend)) {
+        if(isFunction(beforeSend)) {
             beforeSend(ajaxSettings);
         }
 
-        pivotGridUtils.sendRequest(ajaxSettings).fail(function() {
+        sendRequest(ajaxSettings).fail(function() {
             deferred.reject(arguments);
         }).done(function(text) {
             var parser = new window.DOMParser();
@@ -248,7 +247,7 @@ exports.XmlaStore = Class.inherit((function() {
             } else {
                 expandedPaths = (axisName === "columns" ? options.columnExpandedPaths : options.rowExpandedPaths) || expandedPaths;
             }
-            expandLevel = pivotGridUtils.getExpandedLevel(options, axisName);
+            expandLevel = getExpandedLevel(options, axisName);
 
             fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString, axisName === "rows" ? options.rowTake : options.columnTake, options.totalsOnly);
             each(expandedPaths, function(_, expandedPath) {
@@ -296,7 +295,7 @@ exports.XmlaStore = Class.inherit((function() {
                 filterValues = field.filterValues || [],
                 filterStringExpression;
 
-            if(field.hierarchyName && typeUtils.isNumeric(field.groupIndex)) {
+            if(field.hierarchyName && isNumeric(field.groupIndex)) {
                 return;
             }
 
@@ -364,8 +363,8 @@ exports.XmlaStore = Class.inherit((function() {
 
     function prepareDataFields(withArray, valueFields) {
 
-        return iteratorUtils.map(valueFields, function(cell) {
-            if(typeUtils.isString(cell.expression)) {
+        return map(valueFields, function(cell) {
+            if(isString(cell.expression)) {
                 declare(cell.expression, withArray, cell.dataField, "member");
             }
             return cell.dataField;
@@ -454,7 +453,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function parseValue(valueText) {
 
-        return typeUtils.isNumeric(valueText) ? parseFloat(valueText) : valueText;
+        return isNumeric(valueText) ? parseFloat(valueText) : valueText;
     }
 
     function getFirstChild(node, tagName) {
@@ -473,7 +472,7 @@ exports.XmlaStore = Class.inherit((function() {
                 axis = [],
                 index = 0;
 
-            if(name.indexOf("Axis") === 0 && typeUtils.isNumeric(getNumber(name.substr(4)))) {
+            if(name.indexOf("Axis") === 0 && isNumeric(getNumber(name.substr(4)))) {
 
                 axes.push(axis);
 
@@ -582,7 +581,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function preparePathValue(pathValue, dataField) {
         if(pathValue) {
-            pathValue = typeUtils.isString(pathValue) && pathValue.indexOf("&") !== -1 ? pathValue : "[" + pathValue + "]";
+            pathValue = isString(pathValue) && pathValue.indexOf("&") !== -1 ? pathValue : "[" + pathValue + "]";
 
             if(dataField && pathValue.indexOf(dataField + ".") === 0) {
                 pathValue = pathValue.slice(dataField.length + 1, pathValue.length);
@@ -599,7 +598,7 @@ exports.XmlaStore = Class.inherit((function() {
             hash[name] = item;
         }
 
-        if(!typeUtils.isDefined(item.value) && member) {
+        if(!isDefined(item.value) && member) {
             item.text = member.caption;
             item.value = member.value;
             item.key = name ? name : '';
@@ -689,7 +688,7 @@ exports.XmlaStore = Class.inherit((function() {
             var parentItem = {
                     children: result
                 },
-                dataIndex = typeUtils.isDefined(measureCount) ? Math.floor(tupleIndex / measureCount) : tupleIndex;
+                dataIndex = isDefined(measureCount) ? Math.floor(tupleIndex / measureCount) : tupleIndex;
 
             each(members, function(_, member) {
                 parentItem = processMember(dataIndex, member, parentItem);
@@ -704,7 +703,7 @@ exports.XmlaStore = Class.inherit((function() {
 
         grandTotalIndex = getGrandTotalIndex(parentItem, visibleLevels);
 
-        pivotGridUtils.foreachTree(parentItem.children, function(items) {
+        foreachTree(parentItem.children, function(items) {
             var item = items[0],
                 children = getVisibleChildren(item, visibleLevels);
 
@@ -1068,4 +1067,4 @@ exports.XmlaStore = Class.inherit((function() {
         key: noop,
         filter: noop
     };
-})()).include(pivotGridUtils.storeDrillDownMixin);
+})()).include(storeDrillDownMixin);

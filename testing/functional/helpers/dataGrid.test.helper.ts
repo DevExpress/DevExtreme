@@ -14,6 +14,10 @@ export default class DataGridTestHelper {
     getDataCell(rowIndex: number, columnIndex: number) : Selector {
         return this.getDataRow(rowIndex).find(`td:nth-child(${columnIndex + 1})`);
     }
+
+    isRowRemoved(rowIndex: number) : Promise<boolean> {
+        return this.getDataRow(rowIndex).hasClass("dx-row-removed");
+    }
 }
 
 export class DataGridKeyboardTestHelper extends DataGridTestHelper {

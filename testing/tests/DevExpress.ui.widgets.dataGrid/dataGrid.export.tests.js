@@ -1916,6 +1916,124 @@ QUnit.test("Group summary - showInGroupFooter: true", function(assert) {
     );
 });
 
+QUnit.test("Group summary - 5 columns, 2 summary - allowExporting: false, showInGroupFooter: false, alignByColumn: true", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>3</v></c><c r="B2" s="1" t="s"><v>4</v></c><c r="C2" s="1" t="s"><v>5</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>6</v></c><c r="B3" s="3" t="s"><v>7</v></c><c r="C3" s="3" t="s"><v>8</v></c></row>' +
+        '<row r="4" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="4" t="s"><v>9</v></c><c r="B4" s="1" t="s"><v>10</v></c><c r="C4" s="1" t="s"><v>11</v></c></row>' +
+        '<row r="5" spans="1:3" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>12</v></c><c r="B5" s="3" t="s"><v>13</v></c><c r="C5" s="3" t="s"><v>14</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="15" uniqueCount="15">' +
+        '<si><t>Field 3</t></si>' +
+        '<si><t>Field 4</t></si>' +
+        '<si><t>Field 5</t></si>' +
+        '<si><t>Field 1: str1_1</t></si>' +
+        '<si><t>Min: str4_1</t></si><si><t>Max: str5_1</t></si>' +
+        '<si><t>str3_1</t></si>' +
+        '<si><t>str4_1</t></si>' +
+        '<si><t>str5_1</t></si>' +
+        '<si><t>Field 1: str1_2</t></si><si><t>Min: str4_2</t></si><si><t>Max: str5_2</t></si>' +
+        '<si><t>str3_2</t></si>' +
+        '<si><t>str4_2</t></si>' +
+        '<si><t>str5_2</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string", groupIndex: 0 },
+                { dataField: "field2", dataType: "string", allowExporting: false },
+                { dataField: "field3", dataType: "string" },
+                { dataField: "field4", dataType: "string" },
+                { dataField: "field5", dataType: "string" }
+            ],
+            dataSource: [
+                { field1: 'str1_1', field2: 'str2_1', field3: 'str3_1', field4: 'str4_1', field5: 'str5_1' },
+                { field1: 'str1_2', field2: 'str2_2', field3: 'str3_2', field4: 'str4_2', field5: 'str5_2' }
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'field4', summaryType: 'min', showInGroupFooter: false, alignByColumn: true },
+                    { column: 'field5', summaryType: 'max', showInGroupFooter: false, alignByColumn: true }
+                ]
+            },
+            export: { ignoreExcelErrors: false }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Group summary - 4 columns, 1 summary - allowExporting: false, showInGroupFooter: false, alignByColumn: true", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols><sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>2</v></c><c r="B2" s="1" t="s"><v>3</v></c></row>' +
+        '<row r="3" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>4</v></c><c r="B3" s="3" t="s"><v>5</v></c></row>' +
+        '<row r="4" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="4" t="s"><v>6</v></c><c r="B4" s="1" t="s"><v>7</v></c></row>' +
+        '<row r="5" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>8</v></c><c r="B5" s="3" t="s"><v>9</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="10" uniqueCount="10">' +
+        '<si><t>Field 3</t></si>' +
+        '<si><t>Field 4</t></si>' +
+        '<si><t>Field 1: str1_1</t></si>' +
+        '<si><t>Min: str4_1</t></si><si><t>str3_1</t></si>' +
+        '<si><t>str4_1</t></si>' +
+        '<si><t>Field 1: str1_2</t></si><si><t>Min: str4_2</t></si><si><t>str3_2</t></si>' +
+        '<si><t>str4_2</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string", groupIndex: 0 },
+                { dataField: "field2", dataType: "string", allowExporting: false },
+                { dataField: "field3", dataType: "string" },
+                { dataField: "field4", dataType: "string" }
+            ],
+            dataSource: [
+                { field1: 'str1_1', field2: 'str2_1', field3: 'str3_1', field4: 'str4_1' },
+                { field1: 'str1_2', field2: 'str2_2', field3: 'str3_2', field4: 'str4_2' }
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'field4', summaryType: 'min', showInGroupFooter: false, alignByColumn: true }
+                ]
+            },
+            export: { ignoreExcelErrors: false }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
 QUnit.test("Total summary", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +

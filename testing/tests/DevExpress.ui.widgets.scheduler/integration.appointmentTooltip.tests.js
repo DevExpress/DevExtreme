@@ -10,19 +10,14 @@ import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import devices from "core/devices";
 import dataUtils from "core/element_data";
-import { SchedulerTestWrapper } from './helpers.js';
+import { createWrapper, initTestMarkup } from './helpers.js';
 import { getSimpleDataArray } from './data.js';
 
 import "common.css!";
 import "generic_light.css!";
 import "ui/scheduler/ui.scheduler";
 
-QUnit.testStart(function() {
-    $("#qunit-fixture").html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+QUnit.testStart(() => initTestMarkup());
 
 const getDeltaTz = (schedulerTz, date) => schedulerTz * 3600000 + date.getTimezoneOffset() * 60000;
 
@@ -30,8 +25,8 @@ QUnit.module("Integration: Appointment tooltip", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
-            this.scheduler = new SchedulerTestWrapper(this.instance);
+            this.scheduler = createWrapper($.extend(options, { height: 600 }));
+            this.instance = this.scheduler.instance;
         };
 
         this.clock = sinon.useFakeTimers();
@@ -856,7 +851,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             startDayHour: 9,
             height: 600,
         };
-        return new SchedulerTestWrapper($("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance"));
+        return createWrapper($.extend(defaultOption, options));
     };
 
     QUnit.test("Title in tooltip should equals title of cell appointments in month view", function(assert) {

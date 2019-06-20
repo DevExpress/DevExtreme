@@ -15,6 +15,7 @@ const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EV
 
 const DRAG_START_EVENT_NAME = dragEvents.start + DOT_EVENT_NS;
 const DRAG_EVENT_NAME = dragEvents.move + DOT_EVENT_NS;
+const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
 
 function coreAnnotation(options, draw) {
     return {
@@ -27,6 +28,8 @@ function coreAnnotation(options, draw) {
         axis: options.axis,
         series: options.series,
         options: options,
+        offsetX: options.offsetX,
+        offsetY: options.offsetY,
         draw: function(widget, group) {
             const annotationGroup = widget._renderer.g().append(group);
             this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
@@ -40,6 +43,9 @@ function coreAnnotation(options, draw) {
                     })
                     .on(DRAG_EVENT_NAME, e => {
                         this.plaque.move(e.pageX + this._dragOffsetX, e.pageY + this._dragOffsetY);
+                    }).on(DRAG_END_EVENT_NAME, e => {
+                        this.offsetX += e.offset.x;
+                        this.offsetY += e.offset.y;
                     });
             }
         },
@@ -125,7 +131,10 @@ const chartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
-            const coords = { };
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY
+            };
             const argCoordName = this._options.rotated ? "y" : "x";
             const valCoordName = this._options.rotated ? "x" : "y";
             const argAxis = this.getArgumentAxis();
