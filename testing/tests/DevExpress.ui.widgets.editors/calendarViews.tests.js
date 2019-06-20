@@ -619,9 +619,9 @@ QUnit.test("decadeView should not allow to navigate to a disabled date via keybo
     var $element = this.$element,
         view = this.view;
 
-    view.option("contouredDate", Date(2015, 3, 15));
+    view.option("contouredDate", new Date(2015, 3, 15));
     triggerKeydown(UP_ARROW_KEY_CODE, $element);
-    assert.deepEqual(view.option("contouredDate"), Date(2015, 3, 15));
+    assert.deepEqual(view.option("contouredDate"), new Date(2015, 3, 15));
 });
 
 
