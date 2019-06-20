@@ -76,9 +76,16 @@ exports.HeaderFilterView = modules.View.inherit({
             isSelectAll = !list.option("searchValue") && !options.isFilterBuilder && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
             filterValues = [];
 
-        var fillSelectedItemKeys = function(filterValues, items, isExclude) {
+        var fillSelectedItemKeys = function(filterValues, items, isExclude, itemsParent) {
+            var containSelectedItems = false;
+            for(let item of items) {
+                if(item.selected === true) {
+                    containSelectedItems = true;
+                    break;
+                }
+            }
             each(items, function(_, item) {
-                if(item.selected !== undefined && (!!item.selected) ^ isExclude) {
+                if(item.selected !== undefined && (!!item.selected) ^ isExclude || !containSelectedItems && !item.selected && itemsParent && itemsParent.selected) {
                     if(!list.option("searchValue") || !item.items || !item.items.length) {
                         filterValues.push(item.value);
                         return;
@@ -86,7 +93,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 }
 
                 if(item.items && item.items.length) {
-                    fillSelectedItemKeys(filterValues, item.items, isExclude);
+                    fillSelectedItemKeys(filterValues, item.items, isExclude, item);
                 }
             });
         };
