@@ -2400,23 +2400,58 @@ module("pullDown, reachBottom events", moduleConfig, () => {
     });
 
     ["config", "onInitialized"].forEach(assignMethod => {
-        test("Check add event handlers", (assert) => {
-            var config = {};
+        test(`Check pullDown event handler - ` + assignMethod, (assert) => {
+            let config = {};
+            let pullDownHandler = sinon.stub();
 
             if(assignMethod === "config") {
-                config.onPullDown = function() {};
-                config.onReachBottom = function() {};
+                config.onPullDown = pullDownHandler;
             } else if(assignMethod === "onInitialized") {
-                config.onInitialized = function(e) {
-                    e.component.on("pullDown", function() {});
-                    e.component.on("reachBottom", function() {});
+                config.onInitialized = (e) => {
+                    e.component.on("pullDown", pullDownHandler);
                 };
             } else {
                 assert.ok(false);
             }
 
-            $("#scrollView").dxScrollView(config);
+            const $scrollView = $("#scrollView").dxScrollView($.extend(config, { useNative: false }));
             assert.ok(true, "no exceptions");
+
+            let $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+            const $topPocket = $scrollView.find(`.${SCROLLVIEW_TOP_POCKET_CLASS}`);
+            pointerMock($content)
+                .start()
+                .down()
+                .move(0, $topPocket.height() + 10)
+                .up();
+            assert.strictEqual(pullDownHandler.callCount, 1, "pullDownHandler.callCount");
+        });
+
+        test(`Check reachBottom event handler - ` + assignMethod, (assert) => {
+            let config = {};
+            let reachBottomHandler = sinon.stub();
+
+            if(assignMethod === "config") {
+                config.onReachBottom = reachBottomHandler;
+            } else if(assignMethod === "onInitialized") {
+                config.onInitialized = (e) => {
+                    e.component.on("reachBottom", reachBottomHandler);
+                };
+            } else {
+                assert.ok(false);
+            }
+
+            const $scrollView = $("#scrollView").dxScrollView($.extend(config, { useNative: false }));
+            assert.ok(true, "no exceptions");
+
+            let $content = $scrollView.find("." + SCROLLABLE_CONTENT_CLASS);
+
+            pointerMock($content)
+                .start()
+                .down()
+                .move(0, -$content.height() - 10)
+                .up();
+            assert.strictEqual(reachBottomHandler.callCount, 1, "reachBottomHandler.callCount");
         });
     });
 });

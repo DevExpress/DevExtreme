@@ -237,19 +237,20 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         this.callBase();
         this._pullDownAction = this._createActionByOption("onPullDown");
         this._reachBottomAction = this._createActionByOption("onReachBottom");
-        this._refreshPocketState();
+        this._tryRefreshPocketState();
     },
 
-    _refreshPocketState: function() {
+    _tryRefreshPocketState: function() {
         this._pullDownEnable(this.hasActionSubscription("onPullDown"));
         this._reachBottomEnable(this.hasActionSubscription("onReachBottom"));
+
     },
 
     on: function(eventName) {
         var result = this.callBase.apply(this, arguments);
 
-        if(this._strategy && (eventName === "pullDown" || eventName === "reachBottom")) {
-            this._refreshPocketState();
+        if(eventName === "pullDown" || eventName === "reachBottom") {
+            this._tryRefreshPocketState();
         }
 
         return result;
@@ -260,9 +261,11 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             return this._pullDownEnabled;
         }
 
-        this._$pullDown.toggle(enabled);
-        this._strategy.pullDownEnable(enabled);
-        this._pullDownEnabled = enabled;
+        if(this._$pullDown && this._strategy) {
+            this._$pullDown.toggle(enabled);
+            this._strategy.pullDownEnable(enabled);
+            this._pullDownEnabled = enabled;
+        }
     },
 
     _reachBottomEnable: function(enabled) {
@@ -270,9 +273,11 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             return this._reachBottomEnabled;
         }
 
-        this._$reachBottom.toggle(enabled);
-        this._strategy.reachBottomEnable(enabled);
-        this._reachBottomEnabled = enabled;
+        if(this._$reachBottom && this._strategy) {
+            this._$reachBottom.toggle(enabled);
+            this._strategy.reachBottomEnable(enabled);
+            this._reachBottomEnabled = enabled;
+        }
     },
 
     _pullDownHandler: function() {
