@@ -13,6 +13,7 @@ import "common.css!";
 import "ui/popup";
 
 const isIE11 = (browser.msie && parseInt(browser.version) === 11);
+var IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 
 QUnit.testStart(function() {
     var markup =
@@ -689,9 +690,8 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
     }).dxPopup("instance");
 
     const $popup = popup.$content().parent();
-    const isOldSafari = browser.safari && compareVersions(browser.version, [11]) < 0;
 
-    if(isOldSafari) {
+    if(IS_OLD_SAFARI) {
         assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width for old safari");
         assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width for old safari");
     } else {
@@ -712,7 +712,12 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
 });
 
 
-QUnit.test("popup height should support TreeView with Search if height = auto", assert => {
+QUnit.test("popup height should support TreeView with Search if height = auto (T724029)", assert => {
+    if(IS_OLD_SAFARI) {
+        assert.expect(0);
+        return;
+    }
+
     const $content = $(
         '<div class="dx-treeview">\
             <div style="height: 30px;"></div>\
@@ -727,12 +732,10 @@ QUnit.test("popup height should support TreeView with Search if height = auto", 
         showTitle: false,
         contentTemplate: () => $content,
         maxHeight: 100
-
     });
 
     let treeviewContentHeight = 0;
     $content.children().each(function(_, item) { treeviewContentHeight += $(item).height(); });
-
     assert.roughEqual($content.height(), treeviewContentHeight, 1, "treeview content can not be heighter than container");
 });
 
