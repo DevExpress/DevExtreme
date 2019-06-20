@@ -32,9 +32,7 @@
 
     .dx-label-h-align {
         &.dx-flex-layout {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -moz-flex;
+            display: -webkit-box; // stylelint-disable-line value-no-vendor-prefix
             display: flex;
 
             .dx-field-item-label {
@@ -51,8 +49,7 @@
         }
 
         &.dx-flex-layout:not(.dx-field-item-label-align) {
-            -webkit-align-items: baseline;
-            -webkit-box-align: baseline;
+            -webkit-box-align: baseline; // stylelint-disable-line property-no-vendor-prefix
             align-items: baseline;
         }
 

@@ -173,15 +173,9 @@
 
 .dx-list-switchable-menu-shield-positioning {
     position: relative;
-    -moz-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    -webkit-transform: translateZ(0);
     transform: translateZ(0);
 
     .dx-device-android-4 & {
-        -moz-transform: none;
-        -o-transform: none;
-        -webkit-transform: none;
         transform: none;
     }
 }
@@ -256,7 +250,7 @@
     overflow: hidden;
 
     .dx-device-ios & {
-        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        -webkit-mask-image: -webkit-radial-gradient(white, black); // stylelint-disable-line property-no-vendor-prefix
     }
 }
 
