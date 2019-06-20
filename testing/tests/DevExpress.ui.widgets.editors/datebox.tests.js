@@ -165,7 +165,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
             pickerType: "calendar"
         });
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.ok(!$input.prop("readOnly"), "correct readOnly value");
     });
@@ -183,7 +183,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
                 acceptCustomValue: false
             });
 
-            const $input = $dateBox.find(".dx-texteditor-input");
+            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             assert.ok(!$input.prop("readOnly"), "correct readOnly value");
         } finally {
@@ -246,7 +246,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
             focusStateEnabled: true
         });
         const instance = $dateBox.dxDateBox("instance");
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $clearButton = $dateBox.find(".dx-clear-button-area");
 
         $($input.val("asd")).trigger("change");
@@ -443,7 +443,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
         const instance = $dateBox.dxDateBox("instance");
         const expectedDisplayValue = dateLocalization.format(new Date(2016, 0, 1), format);
 
-        const $input = $dateBox.find("input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val("");
         $input.val("1/01/2016");
@@ -640,7 +640,7 @@ QUnit.module("focus policy", {}, () => {
         });
 
         const instance = $dateBox.dxDateBox("instance");
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input);
 
@@ -664,7 +664,7 @@ QUnit.module("focus policy", {}, () => {
         const $dateBox = $("#dateBox").dxDateBox({ type: "datetime", useMaskBehavior: true });
         const dateBox = $dateBox.dxDateBox("instance");
         const initText = dateBox.option("text");
-        const input = $(".dx-texteditor-input", $dateBox).get(0);
+        const input = $(`.${TEXTEDITOR_INPUT_CLASS}`, $dateBox).get(0);
         const mouse = pointerMock(input).start();
 
         mouse.wheel(10);
@@ -2284,7 +2284,7 @@ QUnit.module("datebox w/ calendar", {
         });
 
         const dateBox = this.fixture.dateBox;
-        const $input = $(dateBox.$element().find(".dx-texteditor-input"));
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
         const kb = keyboardMock($input);
         const inputValue = "1/5/2015";
 
@@ -2312,7 +2312,7 @@ QUnit.module("datebox w/ calendar", {
         });
 
         const dateBox = this.fixture.dateBox;
-        const $input = $(dateBox.$element().find(".dx-texteditor-input"));
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
         const kb = keyboardMock($input);
 
         clearInput($input, kb);
@@ -2332,7 +2332,7 @@ QUnit.module("datebox w/ calendar", {
         });
 
         const dateBox = this.fixture.dateBox;
-        const $input = $(dateBox.$element().find(".dx-texteditor-input"));
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
         const kb = keyboardMock($input);
 
         dateBox.open();
@@ -2481,7 +2481,7 @@ QUnit.module("datebox w/ calendar", {
 
         const dateBox = this.fixture.dateBox;
         const $element = $(dateBox.$element());
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb
@@ -3392,7 +3392,7 @@ QUnit.module("keyboard navigation", {
             })
             .dxDateBox("instance");
 
-        this.$input = this.$dateBox.find(".dx-texteditor-input");
+        this.$input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         this.keyboard = keyboardMock(this.$input);
     },
     afterEach: () => {
@@ -3476,7 +3476,7 @@ QUnit.module("keyboard navigation", {
             })
             .dxDateBox("instance");
 
-        const $input = this.$dateBox.find(".dx-texteditor-input");
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger($.Event("keydown", { key: "ArrowUp" }));
         $($input).trigger($.Event("keydown", { key: "ArrowDown" }));
@@ -3502,7 +3502,7 @@ QUnit.module("keyboard navigation", {
                 opened: true
             });
 
-            const $input = $dateBox.find(".dx-texteditor-input");
+            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const kb = keyboardMock($input);
 
             $input.focusin();
@@ -3527,7 +3527,7 @@ QUnit.module("keyboard navigation", {
                 onValueChanged: valueChanged
             }).dxDateBox("instance");
 
-        const $input = this.$dateBox.find(".dx-texteditor-input");
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focusin();
 
@@ -3554,7 +3554,7 @@ QUnit.module("keyboard navigation", {
             opened: true
         });
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         try {
@@ -3610,8 +3610,8 @@ QUnit.module("aria accessibility", {}, () => {
                 pickerType: "calendar"
             });
 
-            const keyboard = keyboardMock($element.find("." + TEXTEDITOR_INPUT_CLASS));
-            const $input = $element.find(".dx-texteditor-input");
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
 
             keyboard.keyDown("right");
 
@@ -3635,8 +3635,8 @@ QUnit.module("aria accessibility", {}, () => {
                 opened: true
             });
 
-            const keyboard = keyboardMock($element.find("." + TEXTEDITOR_INPUT_CLASS));
-            const $input = $element.find(".dx-texteditor-input");
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
 
             keyboard.keyDown("down");
 
@@ -3908,7 +3908,7 @@ QUnit.module("datebox validation", {}, () => {
             },
         });
 
-        const $input = $dateBox.find("input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val("");
         $($input).trigger("change");
@@ -3956,7 +3956,7 @@ QUnit.module("datebox validation", {}, () => {
         });
         const dateBox = $dateBox.dxDateBox("instance");
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -4209,7 +4209,7 @@ QUnit.module("DateBox number and string value support", {
                 mode: "text"
             });
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), "1/11/2016", "text is correct");
 
             $($input.val("1/12/2016")).trigger("change");
@@ -4235,7 +4235,7 @@ QUnit.module("DateBox number and string value support", {
                 return dateSerialization.serializeDate(new Date(Date.UTC(year, month, day)), "M/d/y");
             };
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), serializeUTCDate(2016, 0, 11), "text is correct");
 
             $($input.val(serializeUTCDate(2016, 0, 12))).trigger("change");
@@ -4256,7 +4256,7 @@ QUnit.module("DateBox number and string value support", {
                 mode: "text"
             });
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             $($input.val("1/12/21016")).trigger("change");
 
@@ -4276,7 +4276,7 @@ QUnit.module("DateBox number and string value support", {
                 mode: "text"
             });
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             $($input.val("1/12/21016")).trigger("change");
 

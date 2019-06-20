@@ -443,7 +443,7 @@ var Switch = Editor.inherit({
         this._renderPosition(val, 0);
 
         this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, val);
-        this._$submitElement.val(val);
+        this._getSubmitElement().val(val);
         this.setAria({
             "pressed": val,
             "label": val ? this.option("switchedOnText") : this.option("switchedOffText")

@@ -638,7 +638,7 @@ var Slider = TrackBar.inherit({
 
         var value = this.option("value");
 
-        this._$submitElement.val(applyServerDecimalSeparator(value));
+        this._getSubmitElement().val(applyServerDecimalSeparator(value));
         SliderHandle.getInstance(this._activeHandle()).option("value", value);
     },
 

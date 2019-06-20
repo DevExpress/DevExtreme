@@ -535,10 +535,11 @@ const TagBox = SelectBox.inherit({
         }
 
         const value = this._getValue();
-        const useDisplayText = this.option("valueExpr") === "this";
         const $options = [];
 
         for(let i = 0, n = value.length; i < n; i++) {
+            const useDisplayText = this._shouldUseDisplayValue(value[i]);
+
             $options.push(
                 $("<option>")
                     .val(useDisplayText ? this._displayGetter(value[i]) : value[i])
@@ -546,8 +547,9 @@ const TagBox = SelectBox.inherit({
             );
         }
 
-        this._$submitElement.empty();
-        this._$submitElement.append($options);
+        this._getSubmitElement()
+            .empty()
+            .append($options);
     },
 
     _initMarkup: function() {

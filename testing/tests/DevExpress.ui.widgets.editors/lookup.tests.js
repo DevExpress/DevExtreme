@@ -68,6 +68,8 @@ var OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     LOOKUP_SEARCH_WRAPPER_CLASS = "dx-lookup-search-wrapper",
     LOOKUP_FIELD_CLASS = "dx-lookup-field",
 
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
+
     FOCUSED_CLASS = "dx-state-focused";
 
 var toSelector = function(val) {
@@ -2142,7 +2144,7 @@ QUnit.test("popup does not close when filtering datasource has item equal select
     $lookup.dxLookup("option", "opened", true);
 
     var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-    keyboardMock($popupContent.find("input")).type("y");
+    keyboardMock($popupContent.find("." + TEXTEDITOR_INPUT_CLASS)).type("y");
 
     assert.ok($lookup.dxLookup("option", "opened"), "lookup stays opened");
 });
@@ -2400,7 +2402,7 @@ QUnit.test("Popup height should be decrease after a loading of new page and sear
 
     var listHeight = $list.outerHeight();
 
-    var $input = $(".dx-lookup-search").find("input");
+    var $input = $(".dx-lookup-search").find("." + TEXTEDITOR_INPUT_CLASS);
     var keyboard = keyboardMock($input);
 
     keyboard.type("a");
@@ -2754,7 +2756,7 @@ QUnit.test("T320459 - the 'space' key press should prevent default behavior whil
             opened: true,
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $popupInput = $($(lookup.content()).find("input")),
+        $popupInput = $($(lookup.content()).find("." + TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($popupInput),
         event;
 
@@ -2830,7 +2832,7 @@ QUnit.test("search should be execute after paste", function(assert) {
             searchMode: "contains"
         });
 
-        var $input = $(toSelector(POPUP_CONTENT_CLASS) + " input");
+        var $input = $(toSelector(POPUP_CONTENT_CLASS) + " " + toSelector(TEXTEDITOR_INPUT_CLASS));
         $($input.val("o")).trigger("input");
         clock.tick();
         assert.equal($(".dx-list-item").length, 2, "filters execute on input event");

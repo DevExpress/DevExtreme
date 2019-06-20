@@ -860,7 +860,7 @@ QUnit.test("there should be no warnings after widget value is cleared (T386512)"
             items: [item],
             value: item
         }),
-        $input = $autocomplete.find("input"),
+        $input = $autocomplete.find("." + TEXTEDITOR_INPUT_CLASS),
         keyboard = keyboardMock($input);
 
     var spy = sinon.spy(console, "warn");
@@ -1398,7 +1398,7 @@ QUnit.testInActiveWindow("filter is not reset", function(assert) {
         searchTimeout: 0
     });
 
-    var $input = $element.find("input");
+    var $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
     var keyboard = keyboardMock($input);
 
     keyboard.type("C");

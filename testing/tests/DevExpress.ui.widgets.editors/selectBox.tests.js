@@ -4672,7 +4672,7 @@ QUnit.module("focus policy", {
             }
         });
 
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focusin();
 
@@ -4693,7 +4693,7 @@ QUnit.module("focus policy", {
         });
 
         // act
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type("b");
 
         this.clock.tick(TIME_TO_WAIT);
@@ -4711,7 +4711,7 @@ QUnit.module("focus policy", {
         });
 
         try {
-            const $input = this.$element.find("input");
+            const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             $input.focusin();
 
             keyboardMock($input).type("b");
