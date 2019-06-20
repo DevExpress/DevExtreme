@@ -383,7 +383,8 @@ exports.headerFilterMixin = {
 
     optionChanged: function(args) {
         if(args.name === "headerFilter") {
-            this._invalidate(true, true);
+            var requireReady = this.name === "columnHeadersView";
+            this._invalidate(requireReady, requireReady);
             args.handled = true;
         } else {
             this.callBase(args);

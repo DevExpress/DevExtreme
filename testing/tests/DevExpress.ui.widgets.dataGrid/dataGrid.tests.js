@@ -10525,6 +10525,44 @@ QUnit.test("refresh", function(assert) {
     assert.ok(reloadResolved);
 });
 
+// T750728
+QUnit.test("Toolbar should be updated immediately after option change", function(assert) {
+    var titleText = "Custom Title";
+    var dataGridOptions = {
+        columns: ["field1"],
+        headerFilter: {
+            visible: false
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        dataSource: [],
+        onToolbarPreparing: (e) => {
+            e.toolbarOptions.items.unshift(
+                {
+                    location: "after",
+                    template: function() {
+                        return $("<div/>").attr('id', 'testElement');
+                    }
+                }
+            );
+        }
+    };
+
+    function load() {
+        createDataGrid(dataGridOptions);
+        $("#testElement").text(titleText);
+    }
+
+    load();
+    this.clock.tick();
+    assert.equal($("#testElement").text(), titleText, "title text");
+
+    load();
+    this.clock.tick();
+    assert.equal($("#testElement").text(), titleText, "title text after refresh");
+});
+
 // T257132
 QUnit.test("refresh $.Callbacks memory leaks", function(assert) {
     // arrange, act
