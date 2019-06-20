@@ -113,9 +113,9 @@
     "devextreme-bundler": "bin/bundler.js"
   },
   "scripts": {
-    "lint": "npm-run-all -p -c eslint stylelint",
-    "eslint": "eslint .",
-    "stylelint": "stylelint styles",
+    "lint": "npm-run-all -p -c lint-js lint-css",
+    "lint-js": "eslint .",
+    "lint-css": "stylelint styles",
     "lint-staged": "lint-staged",
     "build": "dotnet build build/build-dotnet.sln && gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",
