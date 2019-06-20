@@ -1000,7 +1000,7 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
                 of: $(window)
             });
 
-            assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 1, "innerHeight was used as window height");
+            assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 25, "innerHeight was used as window height");
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
@@ -1025,7 +1025,7 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
                 of: $(window)
             });
 
-            assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 1, "innerHeight was used as window height");
+            assert.roughEqual(resultPosition.v.location, (window.innerHeight - 50) / 2, 25, "innerHeight was used as window height");
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
