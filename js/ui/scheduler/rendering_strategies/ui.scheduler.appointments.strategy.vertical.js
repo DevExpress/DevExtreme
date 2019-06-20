@@ -1,8 +1,9 @@
-var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
-    extend = require("../../../core/utils/extend").extend,
-    isNumeric = require("../../../core/utils/type").isNumeric,
-    devices = require("../../../core/devices"),
-    dateUtils = require("../../../core/utils/date");
+import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base";
+import utils from "../utils";
+import { extend } from "../../../core/utils/extend";
+import { isNumeric } from "../../../core/utils/type";
+import devices from "../../../core/devices";
+import dateUtils from "../../../core/utils/date";
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
@@ -137,8 +138,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _correctOnePxGap: function(deltaHeight) {
-        if(Math.abs(deltaHeight) % this.getDefaultCellHeight()) {
-            deltaHeight--;
+        const heightDifference = Math.abs(deltaHeight) % this.getDefaultCellHeight();
+        if(heightDifference) {
+            return utils.isWebKitBrowserInZoom() ? deltaHeight - heightDifference : deltaHeight - 1;
         }
         return deltaHeight;
     },
