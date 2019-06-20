@@ -13,6 +13,7 @@ ui.setTemplateEngine = require("../../../ui/set_template_engine");
 
 ui.dialog = require("../../../ui/dialog");
 ui.notify = require("../../../ui/notify");
+ui.floatingActionButtonRepaint = require("../../../ui/floating_action_button_repaint");
 
 /* Base widgets (dx.module-widgets-base.js) */
 

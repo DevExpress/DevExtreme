@@ -9454,6 +9454,8 @@ declare module DevExpress {
         static setTemplateEngine(templateEngineName: string): void;
         /** @name ui.setTemplateEngine(options) */
         static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
+        /** @name ui.floatingActionButtonRepaint() */
+        static floatingActionButtonRepaint(): void;
     }
     /** @name validationEngine */
     export class validationEngine {

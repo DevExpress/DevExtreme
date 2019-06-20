@@ -250,3 +250,19 @@ exports.disposeAction = function(actionId) {
         });
     }
 };
+
+exports.repaint = function() {
+    if(!speedDialMainItem) return;
+
+    const icon = speedDialMainItem.option("actions").length === 1 ?
+        speedDialMainItem.option("actions")[0].option("icon") :
+        speedDialMainItem._getDefaultOptions().icon;
+
+    speedDialMainItem.option({
+        actions: speedDialMainItem.option("actions"),
+        icon: icon,
+        closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
+        position: speedDialMainItem._getDefaultOptions().position,
+        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount
+    });
+};

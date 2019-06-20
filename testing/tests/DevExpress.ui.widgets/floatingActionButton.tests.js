@@ -124,7 +124,6 @@ QUnit.module("create multiple actions", (hooks) => {
     });
 });
 
-
 QUnit.module("modify global action button config", (hooks) => {
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
@@ -136,7 +135,6 @@ QUnit.module("modify global action button config", (hooks) => {
                     at: "right bottom",
                     my: "right bottom",
                     offset: "-16 -16"
-
                 }
             }
         });
@@ -244,7 +242,6 @@ QUnit.module("add or remove action buttons", (hooks) => {
         assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position");
     });
 });
-
 
 QUnit.module("check action buttons position", (hooks) => {
     hooks.afterEach(() => {

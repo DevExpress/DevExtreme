@@ -417,6 +417,12 @@
     }
   },
   {
+    "name": "ui/floating_action_button_repaint",
+    "exports": {
+      "default": { "path": "ui.floatingActionButtonRepaint" }
+    }
+  },
+  {
     "name": "ui/number_box",
     "exports": {
       "default": { "path": "ui.dxNumberBox", "isWidget": true }
