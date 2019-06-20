@@ -28,7 +28,7 @@
     }
 
     .dx-@{widgetName}-important-margin {
-        margin-right: 5px !important;
+        margin-right: 5px !important; // stylelint-disable-line declaration-no-important
     }
 
     // for Foundation Responsive Framework
@@ -298,8 +298,8 @@
     }
 
     input.dx-hidden {
-        display: inline-block !important;
-        width: 0 !important;
+        display: inline-block !important; // stylelint-disable-line declaration-no-important
+        width: 0 !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-hidden-cell {
@@ -331,7 +331,7 @@
 
         .dx-@{widgetName}-best-fit {
             .dx-column-indicators {
-                float: none !important;
+                float: none !important; // stylelint-disable-line declaration-no-important
 
                 & > span {
                     width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH;
@@ -359,7 +359,7 @@
 
         &:not(.dx-@{widgetName}-table-fixed) {
             .dx-column-indicators {
-                float: none !important;
+                float: none !important; // stylelint-disable-line declaration-no-important
 
                 & > span {
                     width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH;
@@ -501,7 +501,7 @@
         }
 
         &.dx-hidden {
-            display: block !important;
+            display: block !important; // stylelint-disable-line declaration-no-important
 
             &::after {
                 display: none;
@@ -878,7 +878,7 @@
     }
 
     .dx-@{widgetName}-hidden-column > * {
-        display: none !important;
+        display: none !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-@{widgetName}-total-footer {

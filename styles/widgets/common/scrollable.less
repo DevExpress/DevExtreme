@@ -160,7 +160,7 @@
     transition: background-color 0s linear;
 
     &.dx-state-invisible {
-        display: block !important;
+        display: block !important; // stylelint-disable-line declaration-no-important
         background-color: transparent; /* NOTE: fallback for rgba non-supporting */
         background-color: rgba(0, 0, 0, 0);
         transition: background-color 0.5s linear 1s;

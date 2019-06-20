@@ -6,10 +6,10 @@
 
 .dx-deferrendering {
     &.dx-pending-rendering .dx-invisible-while-pending-rendering {
-        display: none !important;
+        display: none !important; // stylelint-disable-line declaration-no-important
     }
 
     &:not(.dx-pending-rendering) .dx-visible-while-pending-rendering {
-        display: none !important;
+        display: none !important; // stylelint-disable-line declaration-no-important
     }
 }
