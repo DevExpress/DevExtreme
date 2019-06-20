@@ -1,17 +1,21 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    translator = require("../../animation/translator"),
-    recurrenceUtils = require("./utils.recurrence"),
-    extend = require("../../core/utils/extend").extend,
-    registerComponent = require("../../core/component_registrator"),
-    tooltip = require("../tooltip/ui.tooltip"),
-    publisherMixin = require("./ui.scheduler.publisher_mixin"),
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    DOMComponent = require("../../core/dom_component"),
-    Resizable = require("../resizable"),
-    messageLocalization = require("../../localization/message"),
-    dateLocalization = require("../../localization/date");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import translator from "../../animation/translator";
+import recurrenceUtils from "./utils.recurrence";
+import { extend } from "../../core/utils/extend";
+import registerComponent from "../../core/component_registrator";
+import tooltip from "../tooltip/ui.tooltip";
+import publisherMixin from "./ui.scheduler.publisher_mixin";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import DOMComponent from "../../core/dom_component";
+import Resizable from "../resizable";
+import messageLocalization from "../../localization/message";
+import dateLocalization from "../../localization/date";
+import utils from "./utils";
+
+const DEFAULT_HORIZONTAL_HANDLES = "left right";
+const DEFAULT_VERTICAL_HANDLES = "top bottom";
 
 var REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, "dxSchedulerAppointment"),
     REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, "dxSchedulerAppointment");
@@ -73,39 +77,29 @@ var Appointment = DOMComponent.inherit({
         }
     },
 
-    _resizingRules: {
-        horizontal: function() {
-            var width = this.invoke("getCellWidth"),
-                step = this.invoke("getResizableStep"),
-                isRTL = this.option("rtlEnabled"),
-                reducedHandles = {
-                    head: isRTL ? "right" : "left",
-                    body: "",
-                    tail: isRTL ? "left" : "right"
-                },
-                handles = "left right",
-                reducedPart = this.option("reduced");
+    _getHorizontalResizingRule: function() {
+        const reducedHandles = {
+            head: this.option("rtlEnabled") ? "right" : "left",
+            body: "",
+            tail: this.option("rtlEnabled") ? "left" : "right"
+        };
 
-            if(reducedPart) {
-                handles = reducedHandles[reducedPart];
-            }
+        return {
+            handles: this.option("reduced") ? reducedHandles[this.option("reduced")] : DEFAULT_HORIZONTAL_HANDLES,
+            minHeight: 0,
+            minWidth: this.invoke("getCellWidth"),
+            step: this.invoke("getResizableStep")
+        };
+    },
 
-            return {
-                handles: handles,
-                minHeight: 0,
-                minWidth: width,
-                step: step
-            };
-        },
-        vertical: function() {
-            var height = this.invoke("getCellHeight");
-            return {
-                handles: "top bottom",
-                minWidth: 0,
-                minHeight: height,
-                step: height
-            };
-        }
+    _getVerticalResizingRule: function() {
+        const height = this.invoke("getCellHeight");
+        return {
+            handles: DEFAULT_VERTICAL_HANDLES,
+            minWidth: 0,
+            minHeight: height,
+            step: height
+        };
     },
 
     _render: function() {
@@ -212,17 +206,21 @@ var Appointment = DOMComponent.inherit({
         this.$element().addClass(DIRECTION_APPOINTMENT_CLASSES[this.option("direction")]);
     },
 
-    _renderResizable: function() {
-        if(!this.option("allowResize") || this.option("isCompact")) {
-            return;
-        }
-
-        var config = this._resizingRules[this.option("direction")].apply(this);
+    _createResizingConfig: function() {
+        const config = this.option("direction") === "vertical" ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
+        config.roundStepValue = !utils.isWebKitBrowserInZoom();
 
         if(!this.invoke("isGroupedByDate")) {
             config.stepPrecision = "strict";
         }
-        this._createComponent(this.$element(), Resizable, extend(config, this.option("resizableConfig")));
+
+        return config;
+    },
+
+    _renderResizable: function() {
+        if(this.option("allowResize") && !this.option("isCompact")) {
+            this._createComponent(this.$element(), Resizable, extend(this._createResizingConfig(), this.option("resizableConfig")));
+        }
     }
 
 }).include(publisherMixin);

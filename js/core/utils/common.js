@@ -230,10 +230,10 @@ const isObjectsEqualByValue = function(object1, object2, deep) {
     return true;
 };
 
-const pairToObject = function(raw) {
+const pairToObject = function(raw, preventRound) {
     const pair = splitPair(raw);
-    let h = parseInt(pair && pair[0], 10);
-    let v = parseInt(pair && pair[1], 10);
+    let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
+    let v = preventRound ? parseFloat(pair && pair[1]) : parseInt(pair && pair[1], 10);
 
     if(!isFinite(h)) {
         h = 0;
