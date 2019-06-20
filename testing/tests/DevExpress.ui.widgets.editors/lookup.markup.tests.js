@@ -173,6 +173,23 @@ module("hidden input", () => {
         assert.equal($input.val(), items[0].text, "input value is correct");
     });
 
+    test("the submit value must be equal to the value of the widget", (assert) => {
+        const items = ["test"];
+        const $element = $("#lookup").dxLookup({
+            items: items,
+            value: items[0],
+            valueExpr: "this",
+            displayExpr: function(item) {
+                if(item) {
+                    return item + "123";
+                }
+            }
+        });
+        const $input = $element.find("input[type='hidden']");
+
+        assert.deepEqual($input.val(), items[0], "input value is correct");
+    });
+
     test("the hidden input should get value in respect of the 'valueExpr' option", (assert) => {
         const items = [{ id: 1, text: "one" }];
         const $element = $("#lookup").dxLookup({

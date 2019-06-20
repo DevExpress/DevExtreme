@@ -1,13 +1,13 @@
 import DropDownEditor from "./drop_down_editor/ui.drop_down_editor";
 import DataExpressionMixin from "./editor/ui.data_expression";
-import commonUtils from "../core/utils/common";
+import { ensureDefined, noop, grep } from "../core/utils/common";
+import { isObject } from "../core/utils/type";
 import { map } from "../core/utils/iterator";
 import selectors from "./widget/selectors";
 import KeyboardProcessor from "./widget/ui.keyboard_processor";
 import { when, Deferred } from "../core/utils/deferred";
 import $ from "../core/renderer";
 import eventsEngine from "../events/core/events_engine";
-import { grep } from "../core/utils/common";
 import { extend } from "../core/utils/extend";
 import { getElementMaxHeightByWindow } from "../ui/overlay/utils";
 import registerComponent from "../core/component_registrator";
@@ -139,38 +139,27 @@ var DropDownBox = DropDownEditor.inherit({
 
             valueFormat: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
-            }
+            },
+            useHiddenSubmitElement: true
         });
     },
 
     _initMarkup: function() {
         this._initDataExpressions();
-        this._renderSubmitElement();
         this.$element().addClass(DROP_DOWN_BOX_CLASS);
 
         this.callBase();
     },
 
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
-    _renderValue: function() {
-        this._setSubmitValue();
-        return this.callBase();
-    },
-
     _setSubmitValue: function() {
-        var value = this.option("value"),
-            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
+        const value = this.option("value");
+        const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
 
-        this._$submitElement.val(submitValue);
+        this._getSubmitElement().val(submitValue);
     },
 
-    _getSubmitElement: function() {
-        return this._$submitElement;
+    _shouldUseDisplayValue: function(value) {
+        return this.option("valueExpr") === "this" && isObject(value);
     },
 
     _renderInputValue: function() {
@@ -183,14 +172,14 @@ var DropDownBox = DropDownEditor.inherit({
         }
 
         var currentValue = this._getCurrentValue(),
-            keys = commonUtils.ensureDefined(currentValue, []);
+            keys = ensureDefined(currentValue, []);
 
         keys = Array.isArray(keys) ? keys : [keys];
 
         var itemLoadDeferreds = map(keys, (function(key) {
             return this._loadItem(key).always((function(item) {
                 var displayValue = this._displayGetter(item);
-                values.push(commonUtils.ensureDefined(displayValue, key));
+                values.push(ensureDefined(displayValue, key));
             }).bind(this));
         }).bind(this));
 
@@ -294,7 +283,7 @@ var DropDownBox = DropDownEditor.inherit({
         eventsEngine.trigger($firstElement, "focus");
     },
 
-    _setCollectionWidgetOption: commonUtils.noop,
+    _setCollectionWidgetOption: noop,
 
     _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);

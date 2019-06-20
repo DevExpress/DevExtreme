@@ -196,7 +196,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _setSubmitValue: function(value) {
-        this._$submitElement.val(commonUtils.applyServerDecimalSeparator(value));
+        this._getSubmitElement().val(commonUtils.applyServerDecimalSeparator(value));
     },
 
     _getSubmitElement: function() {

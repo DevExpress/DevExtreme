@@ -276,6 +276,36 @@ QUnit.test("displayExpr has item in argument", function(assert) {
     assert.deepEqual(args, [2].concat(dataSource), "displayExpr args is correct");
 });
 
+QUnit.test("submit value should be equal to the displayExpr in case value is object and valueExpr isn't an object field", function(assert) {
+    const $dropDownList = $("#dropDownList").dxDropDownList({
+        dataSource: [{ text: "test" }],
+        deferRendering: false,
+        value: { text: "test" },
+        displayExpr: "text",
+        useHiddenSubmitElement: true
+    });
+    const $submitInput = $dropDownList.find("input[type='hidden']");
+
+    assert.equal($submitInput.val(), "test", "the submit value is correct");
+});
+
+QUnit.test("submit value should be equal to the primitive value type", function(assert) {
+    const $dropDownList = $("#dropDownList").dxDropDownList({
+        dataSource: ["test"],
+        deferRendering: false,
+        value: "test",
+        displayExpr: (item) => {
+            if(item) {
+                return item + "123";
+            }
+        },
+        useHiddenSubmitElement: true
+    });
+    const $submitInput = $dropDownList.find("input[type='hidden']");
+
+    assert.equal($submitInput.val(), "test", "the submit value is correct");
+});
+
 
 QUnit.module("items & dataSource", moduleConfig);
 
@@ -444,7 +474,7 @@ QUnit.test("set item when key is 0", function(assert) {
     dropDownList.option("value", { key: 0, value: "one" });
 
     this.clock.tick();
-    var $input = $dropDownList.find("input");
+    var $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
     assert.equal($input.val(), "one", "item displayed");
 });
 
@@ -562,7 +592,7 @@ QUnit.test("searchTimeout should be refreshed after next symbol entered", functi
             }),
             searchTimeout: 100
         }),
-        $input = $element.find("input"),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
         kb = keyboardMock($input);
 
     kb.type("1");
@@ -586,7 +616,7 @@ QUnit.test("dropDownList should search for a pasted value", function(assert) {
         }),
         instance = $element.dxDropDownList("instance"),
         searchSpy = sinon.spy(instance, "_searchDataSource"),
-        $input = $element.find("input"),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
         kb = keyboardMock($input);
 
     kb.input("2");
@@ -605,7 +635,7 @@ QUnit.test("dropDownList should search in grouped DataSource", function(assert) 
             dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }]
         }),
         instance = $element.dxDropDownList("instance"),
-        $input = $element.find("input"),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
         kb = keyboardMock($input),
         expectedValue = { key: "b", items: [{ name: "2", key: "b" }] };
 
@@ -657,11 +687,12 @@ QUnit.test("value option should be case-sensitive", function(assert) {
     });
 
     var instance = $element.dxDropDownList("instance");
+    var $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
 
-    assert.equal($element.find("input").val(), "");
+    assert.equal($input.val(), "");
 
     instance.option("value", "First");
-    assert.equal($element.find("input").val(), "First");
+    assert.equal($input.val(), "First");
 });
 
 QUnit.test("set items on init when items of a data source are loaded", function(assert) {
@@ -1035,7 +1066,7 @@ QUnit.testInActiveWindow("After search and load new page scrollTop should not be
     listInstance.option("useNativeScrolling", "true");
     listInstance.option("useNative", "true");
 
-    var $input = $dropDownList.find("input");
+    var $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
     var keyboard = keyboardMock($input);
 
     $dropDownList.focusin();
@@ -1159,7 +1190,7 @@ QUnit.test("dropDownButton rendered correctly when dataSource is async", functio
 QUnit.module("aria accessibility", moduleConfig);
 
 QUnit.test("aria-owns should point to list", function(assert) {
-    var $input = $("#dropDownList").dxDropDownList({ opened: true }).find("input"),
+    var $input = $("#dropDownList").dxDropDownList({ opened: true }).find("." + TEXTEDITOR_INPUT_CLASS),
         $list = $(".dx-list");
 
     assert.notEqual($input.attr("aria-owns"), undefined, "aria-owns exists");
@@ -1174,7 +1205,7 @@ QUnit.test("input's aria-activedescendant attribute should point to the focused 
         }),
         $list = $(".dx-list"),
         list = $list.dxList("instance"),
-        $input = $dropDownList.find("input"),
+        $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS),
         $item = $list.find(".dx-list-item:eq(1)");
 
     list.option("focusedElement", $item);
@@ -1325,7 +1356,7 @@ QUnit.module(
                 opened: true
             });
 
-            keyboardMock($("#test-drop-down input")).type("z");
+            keyboardMock($("#test-drop-down ." + TEXTEDITOR_INPUT_CLASS)).type("z");
 
             window
                 .waitFor(function() {

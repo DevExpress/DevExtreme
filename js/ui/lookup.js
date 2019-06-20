@@ -30,7 +30,8 @@ var LOOKUP_CLASS = "dx-lookup",
     LOOKUP_POPUP_SEARCH_CLASS = "dx-lookup-popup-search",
     LOOKUP_POPOVER_MODE = "dx-lookup-popover-mode",
     LOOKUP_EMPTY_CLASS = "dx-lookup-empty",
-    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical";
+    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical",
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 var POPUP_OPTION_MAP = {
     "popupWidth": "width",
@@ -480,7 +481,8 @@ var Lookup = DropDownList.inherit({
             * @inheritdoc
             */
 
-            _scrollToSelectedItemEnabled: false
+            _scrollToSelectedItemEnabled: false,
+            useHiddenSubmitElement: true
         });
     },
 
@@ -659,7 +661,6 @@ var Lookup = DropDownList.inherit({
         this.$element()
             .addClass(LOOKUP_CLASS)
             .toggleClass(LOOKUP_POPOVER_MODE, this.option("usePopover"));
-        this._renderSubmitElement();
         this.callBase();
     },
 
@@ -667,21 +668,10 @@ var Lookup = DropDownList.inherit({
         return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
     },
 
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
     _dataSourceOptions: function() {
         return extend(this.callBase(), {
             paginate: true
         });
-    },
-
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
     },
 
     _fireContentReadyAction: commonUtils.noop, // TODO: why not symmetric to other dropdowns?
@@ -1181,19 +1171,11 @@ var Lookup = DropDownList.inherit({
     _renderInputValue: function() {
         return this.callBase().always((function() {
             this._refreshSelected();
-            this._setSubmitValue();
         }).bind(this));
     },
 
-    _setSubmitValue: function() {
-        var value = this.option("value"),
-            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
-
-        this._$submitElement.val(submitValue);
-    },
-
     _renderPlaceholder: function() {
-        if(this.$element().find("input").length === 0) {
+        if(this.$element().find("." + TEXTEDITOR_INPUT_CLASS).length === 0) {
             return;
         }
 
