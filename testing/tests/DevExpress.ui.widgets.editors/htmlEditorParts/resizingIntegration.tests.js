@@ -112,7 +112,7 @@ module("Resizing integration", {
         const vOffset = 5;
 
         this.options.onValueChanged = (e) => {
-            const $image = $(e.value);
+            const $image = $(e.value).children();
 
             assert.ok($image.is("img"), "It's an image");
             assert.strictEqual(parseInt($image.attr("height")), IMAGE_SIZE + vOffset, `Height + ${vOffset}`);

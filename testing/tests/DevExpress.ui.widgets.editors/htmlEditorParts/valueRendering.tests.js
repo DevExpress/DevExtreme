@@ -189,6 +189,26 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(instance.option("value"), expectedMarkup);
         assert.equal(markup, expectedMarkup);
     });
+
+    test("editor should respect attributes of the list item", (assert) => {
+        const done = assert.async();
+        const expectedMarkup = '<ul><li style="text-align: center;">test</li></ul>';
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "<ul><li>test</li></ul>",
+                onValueChanged: (e) => {
+                    assert.equal(e.value, expectedMarkup, "value is OK");
+                    done();
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
+        assert.expect(1);
+        instance.setSelection(0, 4);
+        instance.format("align", "center");
+    });
 });
 
 
@@ -277,7 +297,7 @@ QUnit.module("Custom blots rendering", {
             .dxHtmlEditor({
                 value: "test",
                 onValueChanged: (e) => {
-                    assert.equal(e.value, '<a href="http://test.com" target="_blank">test</a>test', "markup contains a link");
+                    assert.equal(e.value, '<p><a href="http://test.com" target="_blank">test</a>test</p>', "markup contains a link");
                 }
             })
             .dxHtmlEditor("instance");
@@ -287,7 +307,7 @@ QUnit.module("Custom blots rendering", {
     });
 
     test("render variable", (assert) => {
-        const expected = '<span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#" data-var-value="Test"><span contenteditable="false">#Test#</span></span>';
+        const expected = '<p><span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#" data-var-value="Test"><span contenteditable="false">#Test#</span></span></p>';
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 onValueChanged: (e) => {
