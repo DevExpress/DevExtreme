@@ -135,7 +135,7 @@ var Resizable = DOMComponent.inherit({
             * @type_function_param1_field7 height:number
             * @action
             */
-            onResizeEnd: null
+            onResizeEnd: null,
             /**
              * @name dxResizableOptions.width
              * @fires dxResizableOptions.onResize
@@ -146,6 +146,8 @@ var Resizable = DOMComponent.inherit({
              * @fires dxResizableOptions.onResize
              * @inheritdoc
              */
+
+            roundStepValue: true
         });
     },
 
@@ -314,7 +316,7 @@ var Resizable = DOMComponent.inherit({
 
     _getOffset: function(e) {
         var offset = e.offset,
-            steps = commonUtils.pairToObject(this.option("step")),
+            steps = commonUtils.pairToObject(this.option("step"), !this.option("roundStepValue")),
             sides = this._getMovingSides(e),
             strictPrecision = this.option("stepPrecision") === "strict";
 
@@ -504,6 +506,7 @@ var Resizable = DOMComponent.inherit({
             case "area":
             case "stepPrecision":
             case "step":
+            case "roundStepValue":
                 break;
             default:
                 this.callBase(args);
