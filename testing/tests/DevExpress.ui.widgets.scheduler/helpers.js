@@ -135,7 +135,8 @@ export class SchedulerTestWrapper {
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
-            getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight()
+            getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
+            getCurrentTimeIndicator: () => $(".dx-scheduler-date-time-indicator"),
         };
 
         this.grouping = {
