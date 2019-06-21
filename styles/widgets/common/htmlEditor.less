@@ -136,12 +136,6 @@
 
     table {
         border-collapse: collapse;
-        table-layout: fixed;
-        width: 100%;
-
-        td {
-            outline: none;
-        }
     }
 
     td {
@@ -171,7 +165,6 @@
             text-align: right;
             white-space: nowrap;
             width: @LIST_STYLE_WIDTH;
-            content: counter(list-0, extract(@LIST_STYLE, 1)) + '. ';
         }
 
         .dx-rtl & {
@@ -184,18 +177,43 @@
                 text-align: left;
             }
         }
-
-        .add-counter-reset(@MAX_INDENT);
-
-        counter-increment: list-0;
     }
 
     ul > li::before {
         content: '\2022';
     }
 
+    li {  // stylelint-disable-line no-duplicate-selectors
+        .add-counter-reset(@MAX_INDENT);
+
+        counter-increment: list-0;
+
+        &::before {  // stylelint-disable-line no-duplicate-selectors
+            content: counter(list-0, extract(@LIST_STYLE, 1)) + '. ';
+        }
+    }
+
     .add-counter(@MAX_INDENT);
     .add-indent-styles(@MAX_INDENT);
+
+    .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
+        padding-right: @LIST_STYLE_OUTER_WIDTH;
+
+        &::before { // stylelint-disable-line no-duplicate-selectors
+            margin-left: @LIST_STYLE_MARGIN;
+            margin-right: -1 * @LIST_STYLE_OUTER_WIDTH;
+            text-align: left;
+        }
+    }
+
+    table { // stylelint-disable-line no-duplicate-selectors
+        table-layout: fixed;
+        width: 100%;
+
+        td {
+            outline: none;
+        }
+    }
 
     // stylelint-disable selector-class-pattern
     .ql-code-block-container {

@@ -202,25 +202,6 @@
             border-bottom-width: 0.5px;
         }
     }
-
-    &.dx-list-reorder-handle-container {
-        width: @IOS7_LIST_ITEM_HORIZONTAL_PADDING + 32px;
-        border-bottom: 1px solid @IOS7_LIST_ITEM_BORDER;
-
-        .dx-hairlines & {
-            border-bottom-width: 0.5px;
-        }
-    }
-
-    .dx-list-reorder-handle {
-        .dx-icon-dragvertical;
-        .dx-icon-font-centered-sizing(25px);
-
-        position: relative;
-        width: 40px;
-        height: 40px;
-        color: @IOS7_LIST_ITEM_REORDER_HANDLE_COLOR;
-    }
 }
 
 // static delete button
@@ -234,6 +215,36 @@
         .dx-icon {
             margin: 0;
         }
+    }
+}
+
+
+.dx-list-item-after-bag { // stylelint-disable-line no-duplicate-selectors
+    &.dx-list-reorder-handle-container {
+        width: @IOS7_LIST_ITEM_HORIZONTAL_PADDING + 32px;
+        border-bottom: 1px solid @IOS7_LIST_ITEM_BORDER;
+
+        .dx-hairlines & {
+            border-bottom-width: 0.5px;
+        }
+    }
+
+    &.dx-list-static-delete-button-container { // stylelint-disable-line no-duplicate-selectors
+        border-bottom: 1px solid @IOS7_LIST_ITEM_BORDER;
+
+        .dx-hairlines & { // stylelint-disable-line no-duplicate-selectors
+            border-bottom-width: 0.5px;
+        }
+    }
+
+    .dx-list-reorder-handle {
+        .dx-icon-dragvertical;
+        .dx-icon-font-centered-sizing(25px);
+
+        position: relative;
+        width: 40px;
+        height: 40px;
+        color: @IOS7_LIST_ITEM_REORDER_HANDLE_COLOR;
     }
 }
 

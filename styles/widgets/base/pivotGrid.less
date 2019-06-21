@@ -172,7 +172,6 @@
     .dx-expand-icon-container {
         margin-left: @PIVOTGRID_EXPAND_ICON_OFFSET;
         margin-right: @PIVOTGRID_EXPAND_ICON_TEXT_OFFSET;
-        width: @PIVOTGRID_ICON_SIZE;
     }
 
     .dx-area-row-cell,
@@ -371,6 +370,10 @@
         tr:first-child td {
             border-top: 0;
         }
+    }
+
+    .dx-expand-icon-container { // stylelint-disable-line no-duplicate-selectors
+        width: @PIVOTGRID_ICON_SIZE;
     }
 
     .dx-pivotgrid-horizontal-headers:last-child {
