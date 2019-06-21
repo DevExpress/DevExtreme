@@ -3703,7 +3703,13 @@ var dxChartCommonAnnotationConfig = {
     * @type Enums.VizTextOverflow
     * @default "ellipsis"
     */
-    textOverflow: "ellipsis"
+    textOverflow: "ellipsis",
+    /**
+    * @name dxChartCommonAnnotationConfig.allowDragging
+    * @type boolean
+    * @default false
+    */
+    allowDragging: false
 };
 /**
 * @name dxChartAnnotationConfig
