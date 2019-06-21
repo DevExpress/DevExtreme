@@ -105,7 +105,7 @@ QUnit.module("API", moduleConfig, () => {
         this.instance.option("value", "<p><b>Test Test</b></p>");
         this.instance.removeFormat(1, 2);
 
-        assert.strictEqual(this.instance.option("value"), "<strong>T</strong>es<strong>t Test</strong>", "remove format from specific range");
+        assert.strictEqual(this.instance.option("value"), "<p><strong>T</strong>es<strong>t Test</strong></p>", "remove format from specific range");
     });
 
     test("getLength", (assert) => {
