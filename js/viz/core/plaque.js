@@ -68,7 +68,7 @@ function getCloudAngle({ width, height }, x, y, anchorX, anchorY) {
     return 0; // 0, 3, 4
 }
 
-function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth, cornerRadius = 0 }) {
+function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth, cornerRadius = 0 }, bounded) {
     const halfArrowWidth = arrowWidth / 2;
     const halfWidth = width / 2;
     const halfHeight = height / 2;
@@ -100,7 +100,7 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
     // 1 | 2 | 3
     // 8 | 0 | 4
     // 7 | 6 | 5
-    if(xl <= anchorX && anchorX <= xr && yt <= anchorY && anchorY <= yb) { // 0
+    if(!bounded || xl <= anchorX && anchorX <= xr && yt <= anchorY && anchorY <= yb) { // 0
         points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), "L", rightTopCorner, getArc(cornerRadius, 1, 1), "L", rightBottomCorner, getArc(cornerRadius, -1, 1), "L", leftBottomCorner, getArc(cornerRadius, -1, -1));
     } else if(anchorX > xr && anchorY < yt) { // 3
         const arrowAngle = (arrowWidth / cornerRadius) || 0;
@@ -198,11 +198,12 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
 }
 
 export class Plaque {
-    constructor(options, widget, root, renderContent) {
+    constructor(options, widget, root, renderContent, bounded = true) {
         this.widget = widget;
         this.options = options;
         this.root = root;
         this.renderContent = renderContent;
+        this.bonded = bounded;
     }
 
     draw({ x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY }) {
@@ -334,7 +335,7 @@ export class Plaque {
                 x, y,
                 rotateX(this.anchorX, this.anchorY, radRotationAngle, x, y),
                 rotateY(this.anchorX, this.anchorY, radRotationAngle, x, y),
-                this.options)
+                this.options, this.bonded)
         })
             .rotate(rotationAngle, x, y);
 
