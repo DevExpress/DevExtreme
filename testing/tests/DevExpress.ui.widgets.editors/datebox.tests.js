@@ -2928,6 +2928,7 @@ QUnit.module("datebox with time component", {
     QUnit.test("Submit value should not be changed when apply button clicked and an invalid value is selected", assert => {
         const dateBox = $("#dateBox").dxDateBox({
             type: "datetime",
+            pickerType: "calendar",
             opened: true,
             min: new Date("2015/1/25 12:00:00"),
             value: new Date("2015/1/25 12:00:00")
