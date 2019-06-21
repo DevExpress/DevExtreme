@@ -271,14 +271,6 @@
                 color: ~"@{@{widgetName}-context-menu-icons-color}";
             }
         }
-
-        .dx-menu-item {
-            .dx-checkbox {
-                .dx-checkbox-text {
-                    padding-left: 32px;
-                }
-            }
-        }
     }
 
     .dx-@{widgetName}-header-text {
@@ -300,15 +292,17 @@
             .dx-treeview-search {
                 margin-bottom: @GRID_BASE_TREEVIEW_SEARCH_MARGIN;
             }
-
-            .dx-popup-content {
-                padding: 20px;
-            }
         }
 
         &.dx-@{widgetName}-column-chooser-mode-select {
             .dx-popup-content {
                 padding: 10px;
+            }
+        }
+
+        &.dx-@{widgetName}-column-chooser-mode-drag { // stylelint-disable-line no-duplicate-selectors
+            .dx-popup-content {
+                padding: 20px;
             }
         }
 
@@ -565,7 +559,9 @@
                 padding-bottom: @GRID_BASE_ADAPTIVE_TEXT_PADDING;
                 padding-left: @GRID_BASE_ADAPTIVE_TEXT_PADDING;
             }
+        }
 
+        .dx-adaptive-detail-row { // stylelint-disable-line no-duplicate-selectors
             .dx-@{widgetName}-invalid {
                 border-radius: 6px;
                 border: 1px solid ~"@{@{widgetName}-data-invalid-color}";
@@ -641,6 +637,16 @@
     .dx-@{widgetName}-nodata {
         color: ~"@{@{widgetName}-nodata-color}";
         font-size: ~"@{@{widgetName}-nodata-font-size}";
+    }
+
+    .dx-@{widgetName}-export-menu { // stylelint-disable-line no-duplicate-selectors
+        .dx-menu-item {
+            .dx-checkbox {
+                .dx-checkbox-text {
+                    padding-left: 32px;
+                }
+            }
+        }
     }
 
     .dx-@{widgetName}-bottom-load-panel {

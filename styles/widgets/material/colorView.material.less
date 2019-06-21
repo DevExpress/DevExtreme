@@ -51,7 +51,6 @@
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-        color: @colorview-label-color;
 
         &.dx-colorview-label-hex {
             margin: @MATERIAL_COLORVIEW_CONTAINER_HEX_MARGIN;
@@ -109,6 +108,10 @@
 .dx-colorview-controls-container {
     width: @MATERIAL_COLORVIEW_CONTROLS_CONTAINER_WIDTH;
     margin-left: @MATERIAL_COLORVIEW_CONTROLS_CONTAINER_MARGIN;
+}
+
+.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
+    color: @colorview-label-color;
 }
 
 .dx-colorview-palette-cell,
