@@ -1421,6 +1421,30 @@ QUnit.test("onValueChanged argument should contains an event property after sele
     assert.strictEqual(event.type, "dxclick");
 });
 
+QUnit.test("Lookup should catch delayed data", function(assert) {
+    const items = [{
+        "ID": 1,
+        "Name": "John"
+    }, {
+        "ID": 2,
+        "Name": "Olivia"
+    }];
+
+    this.element.dxLookup({
+        dataSource: [],
+        displayExpr: 'Name',
+        valueExpr: "ID",
+        value: 1,
+        title: "Select employee"
+    });
+
+    setTimeout(() => {
+        $("#lookup").dxLookup("instance").option("dataSource", items);
+    }, 100);
+    this.clock.tick(100);
+
+    assert.equal(this.$field.text(), "John", "display field work in text");
+});
 
 QUnit.module("hidden input");
 

@@ -1194,6 +1194,10 @@ var Lookup = DropDownList.inherit({
         var value = args.value;
 
         switch(name) {
+            case "dataSource":
+                this.callBase.apply(this, arguments);
+                this._renderField();
+                break;
             case "searchEnabled":
                 this._popup && this._renderSearch();
                 this._attachSearchChildProcessor();
