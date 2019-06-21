@@ -666,10 +666,22 @@ var Popup = Overlay.inherit({
         (this.option("forceApplyBindings") || noop)();
 
         var overlayContent = this.overlayContent().get(0),
-            currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
+            currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent),
+            popupHeightParts = this._splitPopupHeight(),
+            toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
+                + popupHeightParts.footer
+                + popupHeightParts.contentVerticalOffsets
+                + popupHeightParts.popupVerticalOffsets
+                + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts);
 
+        this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent, toolbarsAndVerticalOffsetsHeight));
         this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
-        this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
+
+        this._oldHeightStrategyClass = currentHeightStrategyClass;
+    },
+
+    _heightStrategyChangeOffset: function(currentHeightStrategyClass, popupHeightParts) {
+        return currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupHeightParts.popupVerticalPaddings : 0;
     },
 
     _chooseHeightStrategy: function(overlayContent) {
@@ -689,20 +701,20 @@ var Popup = Overlay.inherit({
         return currentHeightStrategyClass;
     },
 
-    _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent) {
+    _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent, toolbarsAndVerticalOffsetsHeight) {
         var cssStyles = {},
-            popupHeightParts = this._splitPopupHeight(),
-            toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
-                + popupHeightParts.footer
-                + popupHeightParts.contentVerticalOffsets
-                + popupHeightParts.popupVerticalOffsets,
+
             contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
             contentMinHeight = this._getOptionValue("minHeight", overlayContent);
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
                 var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
-                cssStyles = { height: Math.max(0, contentHeight) };
+                cssStyles = {
+                    height: Math.max(0, contentHeight),
+                    minHeight: "auto",
+                    maxHeight: "auto"
+                };
             }
         } else {
             var container = $(this._getContainer()).get(0),
@@ -710,6 +722,7 @@ var Popup = Overlay.inherit({
                 minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
             cssStyles = {
+                height: "auto",
                 minHeight: minHeightValue,
                 maxHeight: maxHeightValue
             };
@@ -742,7 +755,8 @@ var Popup = Overlay.inherit({
             header: sizeUtils.getVisibleHeight(topToolbar && topToolbar.get(0)),
             footer: sizeUtils.getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
             contentVerticalOffsets: sizeUtils.getVerticalOffsets(this.overlayContent().get(0), true),
-            popupVerticalOffsets: sizeUtils.getVerticalOffsets(this.$content().get(0), true)
+            popupVerticalOffsets: sizeUtils.getVerticalOffsets(this.$content().get(0), true),
+            popupVerticalPaddings: sizeUtils.getVerticalOffsets(this.$content().get(0), false)
         };
     },
 
@@ -790,6 +804,16 @@ var Popup = Overlay.inherit({
 
             return this.callBase.apply(this, arguments);
         }
+    },
+
+    hide: function() {
+        this._oldHeightStrategyClass = undefined;
+        this.callBase();
+    },
+
+    dispose: function() {
+        this._oldHeightStrategyClass = undefined;
+        this.callBase();
     },
 
     _optionChanged: function(args) {
