@@ -1289,7 +1289,7 @@ QUnit.test("Prerender filter by recurrence rule determines renderable appointmen
             text: "Recurrent app with exc",
             startDate: new Date(2019, 5, 6, 15, 0),
             endDate: new Date(2019, 5, 6, 18, 30),
-            recurrenceException: "20190607T150000Z",
+            recurrenceException: "20190607T150000",
             recurrenceRule: "FREQ=DAILY"
         }
     ];
