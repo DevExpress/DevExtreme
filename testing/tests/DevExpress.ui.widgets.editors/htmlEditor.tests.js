@@ -8,8 +8,8 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-import "./htmlEditorParts/quillRegistrator.tests.js";
 import "./htmlEditorParts/converters.tests.js";
+import "./htmlEditorParts/quillRegistrator.tests.js";
 import "./htmlEditorParts/markup.tests.js";
 import "./htmlEditorParts/valueRendering.tests.js";
 import "./htmlEditorParts/toolbarModule.tests.js";
