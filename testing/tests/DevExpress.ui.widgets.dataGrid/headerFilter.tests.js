@@ -1842,7 +1842,7 @@ QUnit.test("Check select all state after filtering if column dataType is date an
     treeView = $popupContent.find(".dx-treeview").dxTreeView("instance");
 
     // act
-    treeView.option("searchValue", "Mar");
+    treeView.option("searchValue", "March");
 
     $selectAll = treeView.$element().find(".dx-treeview-select-all-item");
     $($selectAll).trigger("dxclick");
@@ -1853,7 +1853,7 @@ QUnit.test("Check select all state after filtering if column dataType is date an
 
     // assert
     assert.equal(selectAll.option("value"), undefined, "select all has correct state"); // should be true after treeview fix
-    assert.deepEqual(column.filterValues, ["1986/3/1"], "filterValue is correct");
+    assert.deepEqual(column.filterValues, ["1986/3"], "filterValue is correct");
     assert.notEqual(column.filterType, "exclude", "filterType is correct");
 });
 
