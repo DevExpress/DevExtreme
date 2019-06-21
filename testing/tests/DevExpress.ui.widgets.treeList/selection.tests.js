@@ -473,6 +473,30 @@ QUnit.test("The load method should not be called on an attempt to select loaded 
     assert.strictEqual(load.callCount, 0, "load isn't called");
 });
 
+// T742205, T751539
+QUnit.test("selection for nested node should works", function(assert) {
+    // arrange
+    var $testElement = $('#treeList');
+
+    this.options.cacheEnabled = true;
+    this.options.expandedRowKeys = [1];
+    this.options.dataSource = [
+        { id: 1, field1: 'test1' },
+        { id: 2, field1: 'test2' },
+        { id: 3, parentId: 1, field1: 'test3' }
+    ];
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // assert
+    this.selectionController.changeItemSelection(1);
+
+    // assert
+    assert.deepEqual(this.getSelectedRowKeys(), [3], "selected row keys");
+    assert.strictEqual(this.getVisibleRows()[1].isSelected, true, "row 1 is selected");
+});
+
 QUnit.module("Recursive selection", {
     beforeEach: function() {
         setupModule.call(this);
