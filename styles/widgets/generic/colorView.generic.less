@@ -47,7 +47,6 @@
     width: @GENERIC_COLORVIEW_CONTAINER_WIDTH;
 
     label {
-        color: @colorview-label-color;
         line-height: @GENERIC_COLORVIEW_CONTAINER_LINE_HEIGHT;
 
         &.dx-colorview-label-hex {
@@ -104,6 +103,10 @@
 .dx-colorview-controls-container {
     width: @GENERIC_COLORVIEW_CONTROLS_CONTAINER_WIDTH;
     margin-left: @GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN;
+}
+
+.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
+    color: @colorview-label-color;
 }
 
 .dx-colorview-palette-cell,
