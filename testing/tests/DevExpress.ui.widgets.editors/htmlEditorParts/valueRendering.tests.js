@@ -209,6 +209,26 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         instance.setSelection(0, 4);
         instance.format("align", "center");
     });
+
+    test("editor should respect attributes of the single formatted line", (assert) => {
+        const done = assert.async();
+        const expectedMarkup = '<p style="text-align: center;">test</p>';
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "test",
+                onValueChanged: (e) => {
+                    assert.equal(e.value, expectedMarkup, "value is OK");
+                    done();
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
+        assert.expect(1);
+        instance.setSelection(1, 0);
+        instance.format("align", "center");
+    });
 });
 
 
