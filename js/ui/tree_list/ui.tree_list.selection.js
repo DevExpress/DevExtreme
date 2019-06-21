@@ -73,8 +73,13 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 _getSelectionConfig: function() {
                     let config = this.callBase.apply(this, arguments);
 
-                    config.plainItems = () => {
-                        return this._dataController.getCachedStoreData() || [];
+                    var plainItems = config.plainItems;
+                    config.plainItems = (all) => {
+                        if(all) {
+                            return this._dataController.getCachedStoreData() || [];
+                        }
+
+                        return plainItems.apply(this, arguments).map(item => item.data);
                     };
                     config.isItemSelected = (item) => {
                         let key = this._dataController.keyOf(item);
