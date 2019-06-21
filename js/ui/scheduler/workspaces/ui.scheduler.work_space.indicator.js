@@ -118,8 +118,9 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _getIndicatorDuration: function() {
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate);
-
-        var timeDiff = today.getTime() - firstViewDate.getTime() + 1;
+        let timeDiffNew = today.getTime() - firstViewDate.getTime();
+        if(this.option('type') === 'workWeek') timeDiffNew = timeDiffNew - (this._getWeekendsCount(Math.round(timeDiffNew / toMs("day"))) * toMs("day"));
+        var timeDiff = timeDiffNew + 1;
 
         return Math.ceil(timeDiff / toMs("day"));
     },
