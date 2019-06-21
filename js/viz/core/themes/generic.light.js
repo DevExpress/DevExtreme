@@ -787,7 +787,8 @@ registerTheme({
                 height: 30
             },
             wordWrap: "normal",
-            textOverflow: "ellipsis"
+            textOverflow: "ellipsis",
+            allowDragging: false
         }
     },
     pie: {
