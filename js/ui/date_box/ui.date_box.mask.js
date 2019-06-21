@@ -21,10 +21,10 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys(e) {
         const originalHandlers = this.callBase(e);
-        const callOriginalEvent = (e) => originalHandlers[normalizeKeyName(e)].apply(this, [e]);
+        const callOriginalHandler = (e) => originalHandlers[normalizeKeyName(e)].apply(this, [e]);
         const applyHandler = (e, maskHandler) => {
             if(this._shouldUseOriginalHandler(e)) {
-                return callOriginalEvent.apply(this, [e]);
+                return callOriginalHandler.apply(this, [e]);
             } else {
                 return maskHandler.apply(this, [e]);
             }
