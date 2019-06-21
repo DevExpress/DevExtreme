@@ -87,7 +87,7 @@ QUnit.module("Toolbar integration", {
 
     test("Apply simple format with selection", (assert) => {
         const done = assert.async();
-        const expected = "<strong>te</strong>st";
+        const expected = "<p><strong>te</strong>st</p>";
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },
@@ -108,7 +108,7 @@ QUnit.module("Toolbar integration", {
     test("Apply format via color dialog located in the adaptive menu", (assert) => {
         const done = assert.async();
         const toolbarClickStub = sinon.stub();
-        const expected = '<span style="color: rgb(250, 250, 250);">te</span>st';
+        const expected = '<p><span style="color: rgb(250, 250, 250);">te</span>st</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: [{ formatName: "color", locateInMenu: "always" }] },
@@ -141,7 +141,7 @@ QUnit.module("Toolbar integration", {
 
     test("Add a link via dialog", (assert) => {
         const done = assert.async();
-        const expected = '<a href="http://test.com" target="_blank">te</a>st';
+        const expected = '<p><a href="http://test.com" target="_blank">te</a>st</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["link"] },
@@ -387,7 +387,7 @@ QUnit.module("Toolbar integration", {
         const done = assert.async();
         const $container = $("#htmlEditor");
         const link = "http://test.com";
-        const expected = `<a href="${link}" target="_blank"><img src="${BLACK_PIXEL}"></a>`;
+        const expected = `<p><a href="${link}" target="_blank"><img src="${BLACK_PIXEL}"></a></p>`;
         const instance = $container.dxHtmlEditor({
             toolbar: { items: ["link"] },
             value: `<img src=${BLACK_PIXEL}>`,
@@ -451,7 +451,7 @@ QUnit.module("Toolbar integration", {
                     $okDialogButton.trigger("dxclick");
                 });
             } else {
-                assert.strictEqual(value, '<a href="http://test3.com" target="_blank">test</a>', "link was setted");
+                assert.strictEqual(value, '<p><a href="http://test3.com" target="_blank">test</a></p>', "link was setted");
                 done();
             }
         });
@@ -474,7 +474,7 @@ QUnit.module("Toolbar integration", {
 
     test("Add a link with empty text", (assert) => {
         const done = assert.async();
-        const expected = '<a href="http://test.com" target="_blank">http://test.com</a>test';
+        const expected = '<p><a href="http://test.com" target="_blank">http://test.com</a>test</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["link"] },
@@ -504,7 +504,7 @@ QUnit.module("Toolbar integration", {
 
     test("Add a link and text without selection", (assert) => {
         const done = assert.async();
-        const expected = '<a href="http://test.com" target="_blank">123</a>test';
+        const expected = '<p><a href="http://test.com" target="_blank">123</a>test</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["link"] },
@@ -539,7 +539,7 @@ QUnit.module("Toolbar integration", {
 
     test("Add a link with empty text and selected range", (assert) => {
         const done = assert.async();
-        const expected = '<a href="http://test.com" target="_blank">http://test.com</a>st';
+        const expected = '<p><a href="http://test.com" target="_blank">http://test.com</a>st</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["link"] },
@@ -576,7 +576,7 @@ QUnit.module("Toolbar integration", {
         const done = assert.async();
         const $container = $("#htmlEditor");
         const link = "http://test.com";
-        const expected = `<a href="${link}" target="_blank"><img src="${BLACK_PIXEL}">12</a>`;
+        const expected = `<p><a href="${link}" target="_blank"><img src="${BLACK_PIXEL}">12</a></p>`;
         const instance = $container.dxHtmlEditor({
             toolbar: { items: ["link"] },
             value: `<img src=${BLACK_PIXEL}>12`,
@@ -606,7 +606,7 @@ QUnit.module("Toolbar integration", {
         const done = assert.async();
         const $container = $("#htmlEditor");
         const link = "http://test.com";
-        const expected = `<a href="${link}" target="_blank">123</a>`;
+        const expected = `<p><a href="${link}" target="_blank">123</a></p>`;
         const instance = $container.dxHtmlEditor({
             toolbar: { items: ["link"] },
             value: `<a href="${link}" target="_blank">test</a>`,

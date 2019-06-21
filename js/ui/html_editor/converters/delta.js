@@ -24,18 +24,12 @@ class DeltaConverter {
         this.quillInstance = quillInstance;
     }
 
-    toHtml(index = 0, length = this.quillInstance.getLength() - index) {
+    toHtml() {
         if(!this.quillInstance) {
             return;
         }
 
-        const [line, lineOffset] = this.quillInstance.scroll.line(index);
-
-        if(line.length() >= lineOffset + length) {
-            return this._convertHTML(line, lineOffset, length, true);
-        }
-
-        return this._convertHTML(this.quillInstance.scroll, index, length, true);
+        return this._convertHTML(this.quillInstance.scroll, 0, this.quillInstance.getLength(), true);
     }
 
     _convertHTML(blot, index, length, isRoot = false) {
@@ -144,11 +138,39 @@ class DeltaConverter {
     }
 
     _processIndentListMarkup(childItemArgs, restItemsArgs, tag = "/li") {
-        return `<${tag}><li>${this._convertHTML(...childItemArgs)}${this._getListMarkup(...restItemsArgs)}`;
+        const itemAttrs = this._getListItemAttributes(childItemArgs[0]);
+        return `<${tag}><li${itemAttrs}>${this._convertHTML(...childItemArgs)}${this._getListMarkup(...restItemsArgs)}`;
+    }
+
+    _getListItemAttributes({ domNode }) {
+        if(!domNode.hasAttributes()) {
+            return "";
+        }
+
+        const { attributes } = domNode;
+        let attributesString = " ";
+
+        for(let i = 0; i < attributes.length; i++) {
+            let { name, value } = attributes[i];
+
+            if(name === "class") {
+                value = this._removeIndentClass(value);
+            }
+
+            if(value.length) {
+                attributesString += `${name}="${value}"`;
+            }
+        }
+
+        return attributesString.length > 1 ? attributesString : "";
     }
 
     _getListType(type) {
         return type === "ordered" ? "ol" : "ul";
+    }
+
+    _removeIndentClass(classString) {
+        return classString.replace(/ql-indent-\d/g, "").trim();
     }
 
     _escapeText(text) {
