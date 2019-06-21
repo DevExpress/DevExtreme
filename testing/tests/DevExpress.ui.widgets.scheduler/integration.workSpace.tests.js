@@ -1844,5 +1844,5 @@ QUnit.test("Current time indicator calculates position correctly with workWeek v
     var $dateTimeIndicator = this.scheduler.workSpace.getCurrentTimeIndicator()[0];
     const position = { top: $dateTimeIndicator.style.top, left: $dateTimeIndicator.style.left };
 
-    assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator");
+    assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator positioned correctly");
 });
