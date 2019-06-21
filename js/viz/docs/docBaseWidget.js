@@ -535,7 +535,13 @@ var BaseWidget = {
             * @default 2
             */
             blur: 2
-        }
+        },
+        /**
+        * @name BaseWidgetOptions.tooltip.cornerRadius
+        * @type number
+        * @default 0
+        * @default 4 @for Material
+        */
     },
     /**
     * @name BaseWidgetOptions.loadingIndicator
