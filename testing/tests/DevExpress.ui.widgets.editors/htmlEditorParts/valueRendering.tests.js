@@ -208,6 +208,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.expect(1);
         instance.setSelection(0, 4);
         instance.format("align", "center");
+        this.clock.tick();
     });
 
     test("editor should respect attributes of the single formatted line", (assert) => {
@@ -228,11 +229,19 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.expect(1);
         instance.setSelection(1, 0);
         instance.format("align", "center");
+        this.clock.tick();
     });
 });
 
 
-QUnit.module("Value as Markdown markup", () => {
+QUnit.module("Value as Markdown markup", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: () => {
+        this.clock.restore();
+    }
+}, () => {
     test("render default value", (assert) => {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "Hi!\nIt's a **test**!",
