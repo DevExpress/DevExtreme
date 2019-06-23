@@ -84,6 +84,13 @@
 .dx-scrollbar-horizontal {
     .dx-scrollable-scroll {
         height: @SCROLLBAR_SIZE_THIN;
+
+        &,
+        .dx-rtl & {
+            padding-left: 2px;
+            padding-right: 2px;
+            padding-bottom: 0;
+        }
     }
 
     &.dx-scrollbar-hoverable {
