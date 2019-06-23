@@ -1,6 +1,6 @@
-// /* global __dirname */
+/* global __dirname */
 const fs = require("fs");
-// const path = require("path");
+const path = require("path");
 const assert = require("chai").assert;
 const buildTheme = require("../modules/builder").buildTheme;
 const commands = require("../modules/commands");
@@ -14,10 +14,10 @@ const fileReader = (filename) => {
     });
 };
 
-// const normalizeCss = (css) => css
-//     .toLowerCase()
-//     .replace(/\s*\/\*[\s\S]*?\*\//g, "")
-//     .trim();
+const normalizeCss = (css) => css
+    .toLowerCase()
+    .replace(/\s*\/\*[\s\S]*?\*\//g, "")
+    .trim();
 
 const lessCompiler = require("less/lib/less-node");
 
@@ -79,36 +79,36 @@ describe("Builder - testing exported function", () => {
         });
     }).timeout(5000);
 
-    // it("Theme built without parameters is the same that in distribution (generic)", () => {
-    //     const config = {
-    //         command: commands.BUILD_THEME,
-    //         reader: fileReader,
-    //         lessCompiler: lessCompiler,
-    //         items: []
-    //     };
+    it("Theme built without parameters is the same that in distribution (generic)", () => {
+        const config = {
+            command: commands.BUILD_THEME,
+            reader: fileReader,
+            lessCompiler: lessCompiler,
+            items: []
+        };
 
-    //     return buildTheme(config).then((result) => {
-    //         const themeBuilderCss = normalizeCss(result.css);
-    //         const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, "../../artifacts/css/dx.light.css"), "utf8"));
-    //         assert.ok(themeBuilderCss === distributionCss);
-    //     });
-    // }).timeout(5000);
+        return buildTheme(config).then((result) => {
+            const themeBuilderCss = normalizeCss(result.css);
+            const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, "../../artifacts/css/dx.light.css"), "utf8"));
+            assert.ok(themeBuilderCss === distributionCss);
+        });
+    }).timeout(5000);
 
-    // it("Theme built without parameters is the same that in distribution (material)", () => {
-    //     const config = {
-    //         command: commands.BUILD_THEME,
-    //         reader: fileReader,
-    //         lessCompiler: lessCompiler,
-    //         baseTheme: "material.blue.light",
-    //         items: []
-    //     };
+    it("Theme built without parameters is the same that in distribution (material)", () => {
+        const config = {
+            command: commands.BUILD_THEME,
+            reader: fileReader,
+            lessCompiler: lessCompiler,
+            baseTheme: "material.blue.light",
+            items: []
+        };
 
-    //     return buildTheme(config).then((result) => {
-    //         const themeBuilderCss = normalizeCss(result.css);
-    //         const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, "../../artifacts/css/dx.material.blue.light.css"), "utf8"));
-    //         assert.ok(themeBuilderCss === distributionCss);
-    //     });
-    // }).timeout(5000);
+        return buildTheme(config).then((result) => {
+            const themeBuilderCss = normalizeCss(result.css);
+            const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, "../../artifacts/css/dx.material.blue.light.css"), "utf8"));
+            assert.ok(themeBuilderCss === distributionCss);
+        });
+    }).timeout(5000);
 });
 
 
