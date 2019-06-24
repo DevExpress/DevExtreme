@@ -221,6 +221,7 @@ var pointsForStacking = {
             new MockPoint({ argument: "Second", value: 0 })
         ];
     },
+
     points1DateArgument: function() {
         return [
             new MockPoint({ argument: new Date(0), value: 13 }),
@@ -228,6 +229,28 @@ var pointsForStacking = {
             new MockPoint({ argument: new Date(4), value: 29 })
         ];
     },
+    points1DateValue: function() {
+        return [
+            new MockPoint({ argument: "First", value: new Date(10) }),
+            new MockPoint({ argument: "Second", value: new Date(11) }),
+            new MockPoint({ argument: "Third", value: new Date(12) })
+        ];
+    },
+    points2DateValue: function() {
+        return [
+            new MockPoint({ argument: "First", value: new Date(20) }),
+            new MockPoint({ argument: "Second", value: new Date(21) }),
+            new MockPoint({ argument: "Third", value: new Date(22) })
+        ];
+    },
+    points3DateValue: function() {
+        return [
+            new MockPoint({ argument: "First", value: new Date(30) }),
+            new MockPoint({ argument: "Second", value: new Date(31) }),
+            new MockPoint({ argument: "Third", value: new Date(32) })
+        ];
+    },
+
     points1WithSameArguments: function() {
         return [
             new MockPoint({ argument: "A", value: 13 }),
@@ -335,7 +358,7 @@ function checkStackedPoints(assert, points1, points2, points3) {
 
         assert.strictEqual(point.correctedValue, undefined, "Value should not be corrected");
 
-        bound[valueType][i] = (currentBound) ? currentBound + value : value;
+        bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
     });
 
     if(points2) {
@@ -344,9 +367,9 @@ function checkStackedPoints(assert, points1, points2, points3) {
                 valueType = (value >= 0) ? "positive" : "negative",
                 currentBound = bound[valueType][i];
 
-            assert.strictEqual(points2[i].correctedValue, point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
+            assert.strictEqual(points2[i].correctedValue && points2[i].correctedValue.valueOf(), point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
 
-            bound[valueType][i] = (currentBound) ? currentBound + value : value;
+            bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
         });
     }
     if(points3) {
@@ -355,9 +378,9 @@ function checkStackedPoints(assert, points1, points2, points3) {
                 valueType = (value >= 0) ? "positive" : "negative",
                 currentBound = bound[valueType][i];
 
-            assert.strictEqual(points3[i].correctedValue, point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
+            assert.strictEqual(points3[i].correctedValue && points3[i].correctedValue.valueOf(), point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
 
-            bound[valueType][i] = (currentBound) ? currentBound + value : value;
+            bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
         });
     }
 }
@@ -2084,6 +2107,29 @@ QUnit.test("Set three series. inverted", function(assert) {
     checkStackedPoints(assert, points1);
     checkStackedPoints(assert, points2);
     checkStackedPoints(assert, points3);
+});
+
+QUnit.test("Set three series - datetime value", function(assert) {
+    var points1 = pointsForStacking.points1DateValue(),
+        points2 = pointsForStacking.points2DateValue(),
+        points3 = pointsForStacking.points3DateValue(),
+        series1 = createSeries({
+            points: points1,
+            stack: "0"
+        }),
+        series2 = createSeries({
+            points: points2,
+            stack: "0"
+        }),
+        series3 = createSeries({
+            points: points3,
+            stack: "0"
+        }),
+        series = [series1, series2, series3];
+
+    createSeriesFamily("stackedbar", series, { equalBarWidth: true });
+
+    checkStackedPoints(assert, points1, points2, points3);
 });
 
 QUnit.module("Stacked Bar series - single column. Negative values");

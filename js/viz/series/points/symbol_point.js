@@ -171,9 +171,10 @@ module.exports = {
 
     correctValue: function(correction) {
         var that = this;
+        const axis = that.series.getValueAxis();
         if(that.hasValue()) {
-            that.value = that.properValue = that.initialValue + correction;
-            that.minValue = correction;
+            that.value = that.properValue = axis.validateUnit(that.initialValue.valueOf() + correction.valueOf());
+            that.minValue = axis.validateUnit(correction);
         }
     },
 
