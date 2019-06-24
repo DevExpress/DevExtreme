@@ -1,6 +1,6 @@
 {
     "extends": "stylelint-config-standard",
-    "ignoreFiles": "**/*.json",
+    "ignoreFiles": "!**/*.{css,less}",
     "rules": {
         "indentation": [4, { ignore: ["inside-parens"] }],
         "max-empty-lines": 2,
