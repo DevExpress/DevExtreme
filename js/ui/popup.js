@@ -666,18 +666,10 @@ var Popup = Overlay.inherit({
         (this.option("forceApplyBindings") || noop)();
 
         var overlayContent = this.overlayContent().get(0),
-            currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent),
-            popupHeightParts = this._splitPopupHeight(),
-            toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
-                + popupHeightParts.footer
-                + popupHeightParts.contentVerticalOffsets
-                + popupHeightParts.popupVerticalOffsets
-                + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts);
+            currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
-        this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent, toolbarsAndVerticalOffsetsHeight));
+        this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
         this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
-
-        this._oldHeightStrategyClass = currentHeightStrategyClass;
     },
 
     _heightStrategyChangeOffset: function(currentHeightStrategyClass, popupHeightParts) {
@@ -685,7 +677,7 @@ var Popup = Overlay.inherit({
     },
 
     _chooseHeightStrategy: function(overlayContent) {
-        var isAutoWidth = this.overlayContent().get(0).style.width === "auto" || this.overlayContent().get(0).style.width === "",
+        var isAutoWidth = overlayContent.style.width === "auto" || overlayContent.style.width === "",
             currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
 
         if(this._isAutoHeight() && this.option("autoResizeEnabled")) {
@@ -701,11 +693,16 @@ var Popup = Overlay.inherit({
         return currentHeightStrategyClass;
     },
 
-    _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent, toolbarsAndVerticalOffsetsHeight) {
+    _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent) {
         var cssStyles = {},
-
             contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
-            contentMinHeight = this._getOptionValue("minHeight", overlayContent);
+            contentMinHeight = this._getOptionValue("minHeight", overlayContent),
+            popupHeightParts = this._splitPopupHeight(),
+            toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
+                + popupHeightParts.footer
+                + popupHeightParts.contentVerticalOffsets
+                + popupHeightParts.popupVerticalOffsets
+                + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts);
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
@@ -804,16 +801,6 @@ var Popup = Overlay.inherit({
 
             return this.callBase.apply(this, arguments);
         }
-    },
-
-    hide: function() {
-        this._oldHeightStrategyClass = undefined;
-        this.callBase();
-    },
-
-    dispose: function() {
-        this._oldHeightStrategyClass = undefined;
-        this.callBase();
     },
 
     _optionChanged: function(args) {
