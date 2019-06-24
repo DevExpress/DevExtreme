@@ -4,7 +4,8 @@ var inArray = require("./array").inArray,
     windowUtils = require("./window"),
     navigator = windowUtils.getNavigator(),
     devices = require("../devices"),
-    styleUtils = require("./style");
+    styleUtils = require("./style"),
+    ensureDefined = require("./common").ensureDefined;
 
 var transitionEndEventNames = {
     'webkitTransition': 'webkitTransitionEnd',
@@ -48,7 +49,10 @@ var detectTouchEvents = function(window, maxTouchPoints) {
 };
 
 var detectPointerEvent = function(window, navigator) {
-    return window.hasProperty("PointerEvent") || !!navigator.pointerEnabled;
+    var isPointerEnabled = ensureDefined(navigator.pointerEnabled, true);
+    var canUsePointerEvent = ensureDefined(navigator.pointerEnabled, false);
+
+    return window.hasProperty("PointerEvent") && isPointerEnabled || canUsePointerEvent;
 };
 
 var touchEvents = detectTouchEvents(windowUtils, navigator.maxTouchPoints);
