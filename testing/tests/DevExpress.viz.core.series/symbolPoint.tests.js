@@ -222,26 +222,16 @@ QUnit.test("create point with index", function(assert) {
 QUnit.module("Correct value", {
     beforeEach: function() {
         var that = this;
-        this.translators = {
-            arg: new MockTranslator({
-                translate: { "-4": 96, 0: 100, 10: 110, 6: 106, 14: 114, 24: 124, "canvas_position_default": 100 }
-            }),
-            val: new MockTranslator({
-                translate: { "-4": 196, 0: 200, 10: 210, 6: 206, 14: 214, 24: 224, "canvas_position_default": 200 }
-            })
-        };
         this.options = {
             widgetType: "chart",
             label: { visible: false },
             styles: {}
         };
+        this.validateUnit = v => v;
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; }
+            getValueAxis: function() { return { validateUnit: that.validateUnit }; }
         };
         this.data = {
             argument: 1,
@@ -275,6 +265,20 @@ QUnit.test("Point has no value - do not correct", function(assert) {
 
     assert.equal(point.argument, 1);
     assert.equal(point.initialValue, null);
+});
+
+QUnit.test("Point has datetime value - do correction", function(assert) {
+    this.validateUnit = v => new Date(v);
+    var point = createPoint(this.series, { argument: 1, value: new Date(10) }, this.options);
+
+    point.correctValue(new Date(14));
+
+    assert.equal(point.value.getTime(), 24);
+    assert.equal(point.properValue.getTime(), 24);
+    assert.equal(point.minValue.getTime(), 14);
+
+    assert.equal(point.argument, 1);
+    assert.equal(point.initialValue.getTime(), 10);
 });
 
 QUnit.test("Reset correction", function(assert) {
