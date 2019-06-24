@@ -269,16 +269,16 @@ QUnit.test("Point has no value - do not correct", function(assert) {
 
 QUnit.test("Point has datetime value - do correction", function(assert) {
     this.validateUnit = v => new Date(v);
-    var point = createPoint(this.series, { argument: 1, value: new Date(10) }, this.options);
+    var point = createPoint(this.series, { argument: 1, value: new Date(10000) }, this.options);
 
-    point.correctValue(new Date(14));
+    point.correctValue(new Date(20000));
 
-    assert.equal(point.value.getTime(), 24);
-    assert.equal(point.properValue.getTime(), 24);
-    assert.equal(point.minValue.getTime(), 14);
+    assert.equal(point.value.getTime(), 30000);
+    assert.equal(point.properValue.getTime(), 30000);
+    assert.equal(point.minValue.getTime(), 20000);
 
     assert.equal(point.argument, 1);
-    assert.equal(point.initialValue.getTime(), 10);
+    assert.equal(point.initialValue.getTime(), 10000);
 });
 
 QUnit.test("Reset correction", function(assert) {
