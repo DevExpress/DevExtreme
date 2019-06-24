@@ -293,6 +293,25 @@ QUnit.test("map function", function(assert) {
         });
 });
 
+QUnit.test("map function with push to store", function(assert) {
+    var done = assert.async(),
+        dataSource = new DataSource({
+            store: [1],
+            paginate: false,
+            map: function(item) { return item + "p"; }
+        });
+
+    dataSource.load()
+        .done((data) => {
+            assert.deepEqual(data, ["1p"]);
+            dataSource.store().push([{ type: "insert", data: 2 }]);
+            dataSource.on("changed", function() {
+                assert.deepEqual(dataSource.items(), ["1p", "2p"]);
+                done();
+            });
+        });
+});
+
 QUnit.test("map function + grouping", function(assert) {
     new DataSource({
         store: [{ a: 1, b: 3 }],
