@@ -527,7 +527,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     assert.equal($table.find("tbody > .dx-group-row").find("td").length, 2, "count cell in group row");
     assert.strictEqual($table.find("tbody > .dx-group-row").find("td").first().html(), "<div class=\"dx-datagrid-group-opened\"></div>", "text first cell in group row");
     assert.strictEqual($table.find("tbody > .dx-group-row").find("td").last().text(), "Column 4: test4", "text second cell in group row");
-    assert.strictEqual($table.find("tbody > .dx-group-row").find("td").last().css("pointer-events"), "auto", "pointer-events is auto for second cell in group row"); // T747718
+    assert.notEqual($table.find("tbody > .dx-group-row").find("td").last().css("pointer-events"), "none", "pointer-events is auto for second cell in group row"); // T747718
     assert.equal($table.find("tbody > .dx-group-row").find("td").last().attr("colspan"), 4, "colspan a second cell in group row");
     // data row
     assert.equal($table.find("tbody > .dx-data-row").length, 2, "has data rows in main table");
@@ -543,7 +543,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     assert.equal($fixTable.find("tbody > .dx-group-row").length, 1, "has group row in fixed table");
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").length, 2, "count cell in group row");
     assert.ok($fixTable.find("tbody > .dx-group-row").find("td").first().hasClass("dx-datagrid-expand"), "has expand column in group row");
-    assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").first().css("pointer-events"), "auto", "pointer-events is auto for first cell in group row"); // T747718
+    assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").first().css("pointer-events"), "none", "pointer-events is auto for first cell in group row"); // T747718
     assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").last().text(), "Column 4: test4", "text second cell in group row");
     assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").last().css("pointer-events"), "none", "pointer-events is none for second cell in group row"); // T747718
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").last().attr("colspan"), 4, "colspan a second cell in group row");
