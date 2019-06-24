@@ -680,8 +680,8 @@ var Popup = Overlay.inherit({
         this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
     },
 
-    _heightStrategyChangeOffset: function(currentHeightStrategyClass, popupHeightParts) {
-        return currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupHeightParts.popupVerticalPaddings : 0;
+    _heightStrategyChangeOffset: function(currentHeightStrategyClass, popupVerticalPaddings) {
+        return currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0;
     },
 
     _chooseHeightStrategy: function(overlayContent) {
@@ -710,7 +710,7 @@ var Popup = Overlay.inherit({
                 + popupHeightParts.footer
                 + popupHeightParts.contentVerticalOffsets
                 + popupHeightParts.popupVerticalOffsets
-                + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts);
+                + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts.popupVerticalPaddings);
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
