@@ -1,4 +1,4 @@
-import eventsUtils from "../../events/utils";
+import { addNamespace, normalizeKeyName } from "../../events/utils";
 import { isFunction } from "../../core/utils/type";
 import { clipboardText } from "../../core/utils/dom";
 import { extend } from "../../core/utils/extend";
@@ -13,53 +13,87 @@ import { isString } from "../../core/utils/type";
 import { sign } from "../../core/utils/math";
 import DateBoxBase from "./ui.date_box.base";
 
-const MASK_EVENT_NAMESPACE = "dateBoxMask",
-    FORWARD = 1,
-    BACKWARD = -1;
+const MASK_EVENT_NAMESPACE = "dateBoxMask";
+const FORWARD = 1;
+const BACKWARD = -1;
 
-let DateBoxMask = DateBoxBase.inherit({
+const DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys(e) {
-        if(!this._useMaskBehavior() || this.option("opened") || (e && e.altKey)) {
-            return this.callBase(e);
-        }
+        const originalHandlers = this.callBase(e);
+        const callOriginalHandler = (e) => originalHandlers[normalizeKeyName(e)].apply(this, [e]);
+        const applyHandler = (e, maskHandler) => {
+            if(this._shouldUseOriginalHandler(e)) {
+                return callOriginalHandler.apply(this, [e]);
+            } else {
+                return maskHandler.apply(this, [e]);
+            }
+        };
 
-        return extend(this.callBase(e), {
+        return extend({}, originalHandlers, {
             del: (e) => {
-                this._revertPart(FORWARD);
-                this._isAllSelected() || e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._revertPart(FORWARD);
+                    this._isAllSelected() || event.preventDefault();
+                });
             },
             backspace: (e) => {
-                this._revertPart(BACKWARD);
-                this._isAllSelected() || e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._revertPart(BACKWARD);
+                    this._isAllSelected() || event.preventDefault();
+                });
             },
             home: (e) => {
-                this._selectFirstPart();
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectFirstPart();
+                    event.preventDefault();
+                });
             },
             end: (e) => {
-                this._selectLastPart();
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectLastPart();
+                    event.preventDefault();
+                });
             },
-            escape: this._revertChanges,
-            enter: this._enterHandler,
+            escape: (e) => {
+                return applyHandler(e, (event) => {
+                    this._revertChanges(event);
+                });
+            },
+            enter: (e) => {
+                return applyHandler(e, (event) => {
+                    this._enterHandler(event);
+                });
+            },
             leftArrow: (e) => {
-                this._selectNextPart(BACKWARD);
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectNextPart(BACKWARD);
+                    event.preventDefault();
+                });
             },
             rightArrow: (e) => {
-                this._selectNextPart(FORWARD);
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectNextPart(FORWARD);
+                    event.preventDefault();
+                });
             },
             upArrow: (e) => {
-                this._upDownArrowHandler(FORWARD);
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._upDownArrowHandler(FORWARD);
+                    event.preventDefault();
+                });
             },
             downArrow: (e) => {
-                this._upDownArrowHandler(BACKWARD);
-                e.preventDefault();
-            },
+                return applyHandler(e, (event) => {
+                    this._upDownArrowHandler(BACKWARD);
+                    event.preventDefault();
+                });
+            }
         });
+    },
+
+    _shouldUseOriginalHandler(e) {
+        return !this._useMaskBehavior() || this.option("opened") || (e && e.altKey);
     },
 
     _upDownArrowHandler(step) {
@@ -253,9 +287,9 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _attachMaskEvents() {
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), () => {
+        eventsEngine.on(this._input(), addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
+        eventsEngine.on(this._input(), addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
+        eventsEngine.on(this._input(), addNamespace("drop", MASK_EVENT_NAMESPACE), () => {
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart();
         });
