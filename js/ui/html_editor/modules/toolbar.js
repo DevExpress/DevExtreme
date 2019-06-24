@@ -97,7 +97,9 @@ class ToolbarModule extends BaseModule {
             this._markActiveFormatWidget(formatName, widget, formats);
         } else {
             this._resetFormatWidget(formatName, widget);
-            formats.hasOwnProperty(formatName) && delete formats[formatName];
+            if(Object.prototype.hasOwnProperty.call(formatName)) {
+                delete formats[formatName];
+            }
         }
 
         this._toggleClearFormatting(isApplied || !isEmptyObject(formats));
@@ -160,7 +162,7 @@ class ToolbarModule extends BaseModule {
             const formData = {
                 href: formats.link || "",
                 text: selection && !hasEmbedContent ? this.quill.getText(selection) : "",
-                target: formats.hasOwnProperty("target") ? !!formats.target : true
+                target: Object.prototype.hasOwnProperty.call(formats, "target") ? !!formats.target : true
             };
             this._editorInstance.formDialogOption("title", format(DIALOG_LINK_CAPTION));
 
@@ -219,7 +221,7 @@ class ToolbarModule extends BaseModule {
     _prepareImageHandler() {
         return () => {
             const formData = this.quill.getFormat();
-            const isUpdateDialog = formData.hasOwnProperty("imageSrc");
+            const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, "imageSrc");
             const defaultIndex = this._defaultPasteIndex;
 
             if(isUpdateDialog) {

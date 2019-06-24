@@ -775,7 +775,7 @@ if(Globalize && Globalize.formatDate) {
             }
 
             for(var i = 0; i < ACCEPTABLE_JSON_FORMAT_PROPERTIES.length; i++) {
-                if(format.hasOwnProperty(ACCEPTABLE_JSON_FORMAT_PROPERTIES[i])) {
+                if(Object.prototype.hasOwnProperty.call(format, ACCEPTABLE_JSON_FORMAT_PROPERTIES[i])) {
                     return true;
                 }
             }

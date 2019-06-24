@@ -10,7 +10,7 @@
     } else {
         root.pointerMock = factory(jQuery, DevExpress.events.GestureEmitter, DevExpress.events.click);
     }
-}(window, function($, GestureEmitter, clickEvent, undefined) {
+}(window, function($, GestureEmitter, clickEvent) {
 
     GestureEmitter.touchBoundary(0);
 

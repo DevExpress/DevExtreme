@@ -1,4 +1,3 @@
-/* global Promise */
 var deferredUtils = require("../../core/utils/deferred"),
     windowUtils = require("../../core/utils/window"),
     Deferred = deferredUtils.Deferred,

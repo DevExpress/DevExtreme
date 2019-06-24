@@ -53,6 +53,7 @@
         "no-unused-vars": ["error", { "args": "none" }],
         "no-extend-native": "error",
         "no-alert": "error",
+        "no-console": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
         "semi-spacing": "error",
@@ -147,7 +148,7 @@
                     "odata",      // OData
                     "rtl",        // Right-to-Left
                     "scss",
-                    "semver",     // The semantic versioner for npm 
+                    "semver",     // The semantic versioner for npm
                     "sinon",      // JS library
                     "tspan",      // SVG element
                     "tspans",

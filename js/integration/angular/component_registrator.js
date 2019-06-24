@@ -91,7 +91,7 @@ let ComponentBuilder = Class.inherit({
             return;
         }
 
-        if(!options.hasOwnProperty('bindingOptions') && options.bindingOptions) {
+        if(!Object.prototype.hasOwnProperty.call(options, 'bindingOptions') && options.bindingOptions) {
             this._ngOptions.bindingOptions = options.bindingOptions;
         }
 

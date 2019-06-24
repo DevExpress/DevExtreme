@@ -414,7 +414,7 @@ class FilesTreeViewModel {
         }
 
         for(let key in this._itemMap) {
-            if(!this._itemMap.hasOwnProperty(key)) {
+            if(!Object.prototype.hasOwnProperty.call(this._itemMap, key)) {
                 continue;
             }
 

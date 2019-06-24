@@ -335,7 +335,7 @@ var sendRequest = function(options) {
     }
 
     for(var name in headers) {
-        if(headers.hasOwnProperty(name) && isDefined(headers[name])) {
+        if(Object.prototype.hasOwnProperty.call(headers, name) && isDefined(headers[name])) {
             xhr.setRequestHeader(name, headers[name]);
         }
     }

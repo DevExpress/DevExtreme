@@ -173,7 +173,7 @@ var ResourceManager = Class.inherit({
         var resourcesSetter = this._dataAccessors.setter;
 
         for(var name in resources) {
-            if(resources.hasOwnProperty(name)) {
+            if(Object.prototype.hasOwnProperty.call(resources, name)) {
                 var resourceData = resources[name];
                 resourcesSetter[name](itemData, this._isMultipleResource(name) ? arrayUtils.wrapToArray(resourceData) : resourceData);
             }

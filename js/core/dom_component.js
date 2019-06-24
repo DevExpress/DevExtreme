@@ -112,7 +112,8 @@ var DOMComponent = Component.inherit({
     },
 
     _isInitialOptionValue: function(name) {
-        var isCustomOption = this.constructor._classCustomRules && this._convertRulesToOptions(this.constructor._classCustomRules).hasOwnProperty(name);
+        var isCustomOption = this.constructor._classCustomRules
+            && Object.prototype.hasOwnProperty.call(this._convertRulesToOptions(this.constructor._classCustomRules), name);
 
         return !isCustomOption && this.callBase(name);
     },
@@ -318,7 +319,7 @@ var DOMComponent = Component.inherit({
 
     _extendConfig: function(config, extendConfig) {
         each(extendConfig, function(key, value) {
-            config[key] = config.hasOwnProperty(key) ? config[key] : value;
+            config[key] = Object.prototype.hasOwnProperty.call(config, key) ? config[key] : value;
         });
     },
 

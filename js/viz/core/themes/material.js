@@ -467,7 +467,7 @@ var materialAccents = {
 };
 
 for(var accent in materialAccents) {
-    if(materialAccents.hasOwnProperty(accent)) {
+    if(Object.prototype.hasOwnProperty.call(materialAccents, accent)) {
         var color = materialAccents[accent];
         registerMaterialColorScheme(accent, "light", color);
         registerMaterialColorScheme(accent, "dark", color);
