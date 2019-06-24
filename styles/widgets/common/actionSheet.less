@@ -8,10 +8,6 @@
 
 .dx-actionsheet-popup-wrapper,
 .dx-actionsheet-popover-wrapper {
-    .dx-popup-title {
-        word-wrap: break-word;
-    }
-
     .dx-popup-content {
         .dx-button {
             width: 100%;
@@ -32,5 +28,13 @@
         .dx-button {
             .dx-button-disabled;
         }
+    }
+}
+
+// stylelint-disable-next-line no-duplicate-selectors
+.dx-actionsheet-popup-wrapper,
+.dx-actionsheet-popover-wrapper {
+    .dx-popup-title {
+        word-wrap: break-word;
     }
 }

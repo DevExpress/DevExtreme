@@ -1,5 +1,4 @@
 @IOS7_DIALOG_PADDING_TOP: 12px;
-@IOS7_POPUP_PADDING: 10px;
 
 .dx-popup-wrapper {
     & > .dx-overlay-content {
@@ -29,11 +28,6 @@
 
 .dx-popup-content {
     border-radius: @IOS7_POPUP_BORDER_RADIUS;
-    padding: @IOS7_POPUP_PADDING;
-
-    &.dx-dialog-content:first-child {
-        padding-top: @IOS7_DIALOG_PADDING_TOP;
-    }
 }
 
 .dx-popup-fullscreen {
@@ -68,6 +62,14 @@
         font-weight: bold;
         font-size: 1em;
         line-height: 1em;
+    }
+}
+
+.dx-popup-content { // stylelint-disable-line no-duplicate-selectors
+    padding: 10px;
+
+    &.dx-dialog-content:first-child {
+        padding-top: @IOS7_DIALOG_PADDING_TOP;
     }
 }
 

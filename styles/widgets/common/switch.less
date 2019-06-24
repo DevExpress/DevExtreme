@@ -22,7 +22,6 @@
 
 .dx-switch-inner {
     display: flex;
-    transform: translateX(-50%);
 }
 
 .dx-switch-container {
@@ -38,6 +37,10 @@
     .dx-switch {
         cursor: default;
     }
+}
+
+.dx-switch-inner { // stylelint-disable-line no-duplicate-selectors
+    transform: translateX(-50%);
 }
 
 .dx-switch-handle {

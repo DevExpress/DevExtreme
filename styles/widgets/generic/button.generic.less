@@ -54,7 +54,6 @@
 
 .dx-button {
     .dx-button-onlyicon-sizing();
-    .dx-button-styling();
 }
 
 .dx-button-has-icon {
@@ -166,6 +165,10 @@
 .dx-button-styling-clear() {
     background: transparent;
     border-color: transparent;
+}
+
+.dx-button { // stylelint-disable-line no-duplicate-selectors
+    .dx-button-styling();
 }
 
 .dx-button-mode-contained {
