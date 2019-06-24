@@ -1,13 +1,13 @@
-var inArray = require("./array").inArray,
-    domAdapter = require("../dom_adapter"),
-    callOnce = require("./call_once"),
-    windowUtils = require("./window"),
-    navigator = windowUtils.getNavigator(),
-    devices = require("../devices"),
-    styleUtils = require("./style"),
-    ensureDefined = require("./common").ensureDefined;
+import { inArray } from "./array";
+import { createElement } from "../dom_adapter";
+import { ensureDefined } from "./common";
+import callOnce from "./call_once";
+import windowUtils from "./window";
+import devices from "../devices";
+import styleUtils from "./style";
 
-var transitionEndEventNames = {
+const navigator = windowUtils.getNavigator();
+const transitionEndEventNames = {
     'webkitTransition': 'webkitTransitionEnd',
     'MozTransition': 'transitionend',
     'OTransition': 'oTransitionEnd',
@@ -15,26 +15,24 @@ var transitionEndEventNames = {
     'transition': 'transitionend'
 };
 
-var supportProp = function(prop) {
+const supportProp = function(prop) {
     return !!styleUtils.styleProp(prop);
 };
 
-var isNativeScrollingSupported = function() {
-    var realDevice = devices.real(),
-        realPlatform = realDevice.platform,
-        realVersion = realDevice.version,
-        isObsoleteAndroid = (realVersion && realVersion[0] < 4 && realPlatform === "android"),
-        isNativeScrollDevice = !isObsoleteAndroid && inArray(realPlatform, ["ios", "android", "win"]) > -1 || realDevice.mac;
+const isNativeScrollingSupported = function() {
+    const { platform, version, mac: isMac } = devices.real();
+    const isObsoleteAndroid = (version && version[0] < 4 && platform === "android");
+    const isNativeScrollDevice = !isObsoleteAndroid && inArray(platform, ["ios", "android", "win"]) > -1 || isMac;
 
     return isNativeScrollDevice;
 };
 
-var inputType = function(type) {
+const inputType = function(type) {
     if(type === "text") {
         return true;
     }
 
-    var input = domAdapter.createElement("input");
+    const input = createElement("input");
     try {
         input.setAttribute("type", type);
         input.value = "wrongValue";
@@ -44,20 +42,20 @@ var inputType = function(type) {
     }
 };
 
-var detectTouchEvents = function(window, maxTouchPoints) {
+const detectTouchEvents = function(window, maxTouchPoints) {
     return (window.hasProperty("ontouchstart") || !!maxTouchPoints) && !window.hasProperty("callPhantom");
 };
 
-var detectPointerEvent = function(window, navigator) {
-    var isPointerEnabled = ensureDefined(navigator.pointerEnabled, true);
-    var canUsePointerEvent = ensureDefined(navigator.pointerEnabled, false);
+const detectPointerEvent = function(window, { pointerEnabled }) {
+    const isPointerEnabled = ensureDefined(pointerEnabled, true);
+    const canUsePointerEvent = ensureDefined(pointerEnabled, false);
 
     return window.hasProperty("PointerEvent") && isPointerEnabled || canUsePointerEvent;
 };
 
-var touchEvents = detectTouchEvents(windowUtils, navigator.maxTouchPoints);
-var pointerEvents = detectPointerEvent(windowUtils, navigator);
-var touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
+const touchEvents = detectTouchEvents(windowUtils, navigator.maxTouchPoints);
+const pointerEvents = detectPointerEvent(windowUtils, navigator);
+const touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
 
 ///#DEBUG
 exports.detectTouchEvents = detectTouchEvents;
