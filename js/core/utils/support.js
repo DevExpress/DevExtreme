@@ -6,7 +6,12 @@ import windowUtils from "./window";
 import devices from "../devices";
 import styleUtils from "./style";
 
-const navigator = windowUtils.getNavigator();
+const {
+    maxTouchPoints,
+    msMaxTouchPoints, // TODO: remove this line when we drop IE support
+    pointerEnabled
+} = windowUtils.getNavigator();
+const hasProperty = windowUtils.hasProperty.bind(windowUtils);
 const transitionEndEventNames = {
     'webkitTransition': 'webkitTransitionEnd',
     'MozTransition': 'transitionend',
@@ -42,20 +47,21 @@ const inputType = function(type) {
     }
 };
 
-const detectTouchEvents = function(window, maxTouchPoints) {
-    return (window.hasProperty("ontouchstart") || !!maxTouchPoints) && !window.hasProperty("callPhantom");
+const detectTouchEvents = function(isWindowHasProperty, maxTouchPoints) {
+    return (isWindowHasProperty("ontouchstart") || !!maxTouchPoints) && !isWindowHasProperty("callPhantom");
 };
 
-const detectPointerEvent = function(window, { pointerEnabled }) {
+const detectPointerEvent = function(isWindowHasProperty, pointerEnabled) {
+    // TODO: remove the check of the 'pointerEnabled' when we drop IE support
     const isPointerEnabled = ensureDefined(pointerEnabled, true);
     const canUsePointerEvent = ensureDefined(pointerEnabled, false);
 
-    return window.hasProperty("PointerEvent") && isPointerEnabled || canUsePointerEvent;
+    return isWindowHasProperty("PointerEvent") && isPointerEnabled || canUsePointerEvent;
 };
 
-const touchEvents = detectTouchEvents(windowUtils, navigator.maxTouchPoints);
-const pointerEvents = detectPointerEvent(windowUtils, navigator);
-const touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
+const touchEvents = detectTouchEvents(hasProperty, maxTouchPoints);
+const pointerEvents = detectPointerEvent(hasProperty, pointerEnabled);
+const touchPointersPresent = !!maxTouchPoints || !!msMaxTouchPoints;
 
 ///#DEBUG
 exports.detectTouchEvents = detectTouchEvents;
