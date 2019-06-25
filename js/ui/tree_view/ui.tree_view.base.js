@@ -1882,9 +1882,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName expandAll()
     */
     expandAll: function() {
-        each(this._dataAdapter.getData(), (function(_, node) {
-            this._dataAdapter.toggleExpansion(node.internalFields.key, true);
-        }).bind(this));
+        const dataAdapter = this._dataAdapter;
+        each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
         this.repaint();
     },
 
