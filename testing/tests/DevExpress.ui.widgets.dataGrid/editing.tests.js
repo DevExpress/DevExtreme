@@ -1596,6 +1596,7 @@ QUnit.test('Close Editing Cell when batch mode on click outside dataGrid', funct
 
     // act
     $(document).trigger('dxpointerdown');
+    $(document).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -1604,6 +1605,52 @@ QUnit.test('Close Editing Cell when batch mode on click outside dataGrid', funct
 
     this.editingController.saveEditData();
 
+    assert.deepEqual(updateArgs, ['test1', { "name": "Test update cell" }]);
+});
+
+// T749034
+QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
+    if(devices.real().deviceType === "desktop") {
+        assert.ok(true, "test is not actual for desktop");
+        return;
+    }
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        updateArgs,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'cell',
+        texts: {
+            editRow: "Edit"
+        }
+    };
+
+    that.dataControllerOptions.store = {
+        key: function() { },
+        update: function(key, values) {
+            updateArgs = [key, values];
+            return $.Deferred().resolve(key, values);
+        }
+    };
+
+    rowsView.render(testElement);
+    testElement.find('td').first().trigger('dxclick'); // Edit
+    this.clock.tick();
+
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
+
+    // act
+    testElement.find('input').first().val('Test update cell');
+    $(document).trigger('dxpointerdown');
+    testElement.find('input').first().trigger('change');
+    $(document).trigger('dxclick');
+    this.clock.tick();
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
     assert.deepEqual(updateArgs, ['test1', { "name": "Test update cell" }]);
 });
 
@@ -1632,6 +1679,7 @@ QUnit.test('Not close Editing Cell in batch mode on click editor popup', functio
     // act
     this.clock.tick();
     $($calendar).trigger('dxpointerdown');
+    $($calendar).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -1641,6 +1689,10 @@ QUnit.test('Not close Editing Cell in batch mode on click editor popup', functio
 
 // T727856
 QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up in another cell', function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "focus is not actual for mobile devices");
+        return;
+    }
     // arrange
     var that = this,
         rowsView = this.rowsView,
@@ -1691,6 +1743,7 @@ QUnit.test('Close Editing Cell when grid in popup', function(assert) {
 
     // act
     $($popupContent).trigger("dxpointerdown");
+    $($popupContent).trigger("dxclick");
     that.clock.tick();
 
     // assert
@@ -1725,6 +1778,7 @@ QUnit.test('Not close Editing Cell in batch mode on click detached element', fun
     // act
     this.clock.tick();
     $($otherMonthDay).trigger('dxpointerdown');
+    $($otherMonthDay).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -1757,6 +1811,7 @@ if(!device.win) {
 
         // act
         $($focusOverlay).trigger('dxpointerdown');
+        $($focusOverlay).trigger('dxclick');
         this.clock.tick();
 
         // assert
@@ -2013,6 +2068,7 @@ QUnit.test('Close Editing Cell when batch mode on click inside freespace row', f
 
     // act
     testElement.find(".dx-freespace-row").first().trigger('dxpointerdown');
+    testElement.find(".dx-freespace-row").first().trigger('dxclick');
 
     this.clock.tick();
     // assert
@@ -3985,6 +4041,7 @@ QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(as
     testElement.find("input").first().trigger("change");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4017,6 +4074,7 @@ QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(as
     testElement.find("input").first().trigger("change");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4308,6 +4366,7 @@ QUnit.test("Update cell when edit mode bath and set onRowUpdated", function(asse
     testElement.find("input").first().trigger("change");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4355,6 +4414,7 @@ QUnit.test("Highlight modified boolean editor", function(assert) {
     $($checkbox).trigger("dxclick");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4863,6 +4923,7 @@ QUnit.test("Close current editor when clicked on not editable cells_B255594", fu
 
     // act
     $(".dx-select-checkbox").closest("td").first().trigger("dxpointerdown");
+    $(".dx-select-checkbox").closest("td").first().trigger("dxclick");
 
     // assert
     assert.ok(isCloseEditCell, "current editor is closed");
@@ -4902,6 +4963,7 @@ QUnit.test('Column currency format after editing', function(assert) {
     testElement.find('td').first().next().find('input').val('123');
     testElement.find('td').first().next().find('input').trigger('change');
     $(document).trigger("dxpointerdown");
+    $(document).trigger("dxclick");
 
     this.clock.tick();
 
@@ -5080,6 +5142,7 @@ QUnit.test('Close editing cell when using "cell" edit mode on click outside data
 
     // act
     $(document).trigger('dxpointerdown');
+    $(document).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -5119,6 +5182,7 @@ QUnit.test('Cell should be closed on click outside dataGrid after changes in sev
 
     // act
     $(document).trigger('dxpointerdown');
+    $(document).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -11158,6 +11222,7 @@ QUnit.testInActiveWindow("SelectBox should be closed on focus another editor if 
         // act
         $cellElements.find(".dx-texteditor-input").last().focus();
         $cellElements.find(".dx-texteditor-input").last().trigger("dxpointerdown");
+        $cellElements.find(".dx-texteditor-input").last().trigger("dxclick");
         this.clock.tick();
 
         // assert

@@ -123,6 +123,10 @@ var isRowEditMode = function(that) {
     return ROW_BASED_MODES.indexOf(editMode) !== -1;
 };
 
+var getDocumentClickEventName = function() {
+    return devices.real().deviceType === "desktop" ? pointerEvents.down : clickEvent.name;
+};
+
 var EditingController = modules.ViewController.inherit((function() {
     var getDefaultEditorTemplate = function(that) {
         return function(container, options) {
@@ -235,7 +239,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, that._saveEditorHandler);
+                eventsEngine.on(domAdapter.getDocument(), getDocumentClickEventName(), that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -505,7 +509,7 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._saveEditorHandler);
+            eventsEngine.off(domAdapter.getDocument(), getDocumentClickEventName(), this._saveEditorHandler);
         },
 
         optionChanged: function(args) {
