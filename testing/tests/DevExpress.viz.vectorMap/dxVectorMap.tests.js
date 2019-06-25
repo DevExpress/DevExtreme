@@ -712,7 +712,6 @@ QUnit.test('Immediate rerender when render is async', function(assert) {
 
 //  B250883
 QUnit.test('Immediate option changing when render is async', function(assert) {
-    /* global ROOT_URL */
     this.$container.dxVectorMap({
         mapData: ROOT_URL + 'some-address',
         markers: ROOT_URL + 'some-address-2'

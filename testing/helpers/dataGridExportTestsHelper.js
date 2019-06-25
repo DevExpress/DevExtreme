@@ -66,7 +66,7 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
 
                 assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
 
-                if(expectedArgsItem.hasOwnProperty("gridCell")) {
+                if(Object.prototype.hasOwnProperty.call(expectedArgsItem, "gridCell")) {
                     if(expectedArgsItem.gridCell === undefined) {
                         assert.strictEqual(actualArgsItem.gridCell, undefined, `gridCell, ${i}`);
                     } else if(actualArgsItem.gridCell === undefined) {

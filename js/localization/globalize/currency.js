@@ -149,7 +149,7 @@ if(Globalize && Globalize.formatCurrency) {
                 result = currencyFormat.accounting.split(";");
                 for(i = 0; i < result.length; i++) {
                     for(symbol in encodeSymbols) {
-                        if(encodeSymbols.hasOwnProperty(symbol)) {
+                        if(Object.prototype.hasOwnProperty.call(encodeSymbols, symbol)) {
                             result[i] = result[i].replace(new RegExp(symbol, "g"), encodeSymbols[symbol]);
                         }
                     }

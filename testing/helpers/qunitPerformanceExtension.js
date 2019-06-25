@@ -8,7 +8,7 @@
     } else {
         factory(root.jQuery);
     }
-}(this, function($, undefined) {
+}(this, function($) {
     function ChromeRemote() {
         var that = this;
         that.callbacks = {};

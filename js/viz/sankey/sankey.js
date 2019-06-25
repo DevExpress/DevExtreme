@@ -231,11 +231,12 @@ var dxSankey = require("../core/base_widget").inherit({
             processedData = [];
 
         data.forEach(function(item) {
-            if(!item.hasOwnProperty(sourceField)) {
+            var hasItemOwnProperty = Object.prototype.hasOwnProperty.bind(item);
+            if(!hasItemOwnProperty(sourceField)) {
                 that._incidentOccurred("E2007", sourceField);
-            } else if(!item.hasOwnProperty(targetField)) {
+            } else if(!hasItemOwnProperty(targetField)) {
                 that._incidentOccurred("E2007", targetField);
-            } else if(!item.hasOwnProperty(weightField)) {
+            } else if(!hasItemOwnProperty(weightField)) {
                 that._incidentOccurred("E2007", weightField);
             } else {
 
@@ -278,7 +279,7 @@ var dxSankey = require("../core/base_widget").inherit({
             );
         that._layoutMap = layout;
 
-        if(!layout.hasOwnProperty('error')) {
+        if(!Object.prototype.hasOwnProperty.call(layout, 'error')) {
             let nodeColors = {},
                 nodeIdx = 0,
                 linkOptions = that._getOption("link"),

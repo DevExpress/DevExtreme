@@ -90,7 +90,7 @@ function expand(target, name, expander) {
             current.add(target[name]);
             current.add(expander);
         } else {
-            if(target.hasOwnProperty(name) === false) {
+            if(Object.prototype.hasOwnProperty.call(target, name) === false) {
                 current = createChainExecutor();
                 current.copy(target[name]);
             }

@@ -42,7 +42,7 @@ var AnimationPresetCollection = Component.inherit({
                     defaultStaggerAnimationStartDelay: 0
                 }
             },
-            {// T254756
+            { // T254756
                 device: function() {
                     return devices.current().android || devices.real.android;
                 },

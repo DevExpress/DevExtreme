@@ -528,8 +528,8 @@ QUnit.module("Mentions module", moduleConfig, () => {
             y: "flip"
         }, "Check popup position collision resolve strategy");
         assert.ok(positionTarget instanceof dxEvent, "mention positioned by event's pageX and pageY");
-        assert.notOk(offset.hasOwnProperty("h"), "it hasn't a horizontal offset");
-        assert.ok(offset.hasOwnProperty("v"), "it has a vertical offset");
+        assert.notOk(Object.prototype.hasOwnProperty.call(offset, "h"), "it hasn't a horizontal offset");
+        assert.ok(Object.prototype.hasOwnProperty.call(offset, "v"), "it has a vertical offset");
     });
 
     test("popup shouldn't close on target scroll", (assert) => {

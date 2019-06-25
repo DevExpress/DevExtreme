@@ -7,7 +7,7 @@ const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
 const createModifyVars = modifyVars => {
     let result = "";
     for(let key in modifyVars) {
-        if(modifyVars.hasOwnProperty(key)) {
+        if(Object.prototype.hasOwnProperty.call(modifyVars, key)) {
             result += `@${key}: ${modifyVars[key]};`;
         }
     }
@@ -39,7 +39,7 @@ class LessMetadataPreCompilerPlugin {
 
         less += "#devexpress-metadata-compiler{";
         for(let key in this._metadata) {
-            if(this._metadata.hasOwnProperty(key)) {
+            if(Object.prototype.hasOwnProperty.call(this._metadata, key)) {
                 let value = this._metadata[key];
                 less += key + ": " + value + ";";
             }
@@ -61,7 +61,7 @@ class LessMetadataPostCompilerPlugin {
         metadataRegex.exec(css)[1].split(";").forEach(item => {
             let rule = getCompiledRule(item);
             for(let key in rule) {
-                if(rule.hasOwnProperty(key)) {
+                if(Object.prototype.hasOwnProperty.call(rule, key)) {
                     this._metadata[key] = rule[key];
                 }
             }
@@ -198,7 +198,7 @@ class LessTemplateLoader {
     analyzeBootstrapTheme(theme, colorScheme, metadata, bootstrapMetadata, customLessContent, version) {
         let metadataVariables = "";
         for(let key in bootstrapMetadata) {
-            if(bootstrapMetadata.hasOwnProperty(key)) {
+            if(Object.prototype.hasOwnProperty.call(bootstrapMetadata, key)) {
                 metadataVariables += bootstrapMetadata[key] + ": dx-empty" + (version === 4 ? " !default" : "") + ";";
             }
         }
@@ -208,7 +208,7 @@ class LessTemplateLoader {
                 let compiledMetadata = data.compiledMetadata;
                 let modifyVars = {};
                 for(let key in compiledMetadata) {
-                    if(compiledMetadata.hasOwnProperty(key)) {
+                    if(Object.prototype.hasOwnProperty.call(compiledMetadata, key)) {
                         let value = compiledMetadata[key];
                         if(value !== "dx-empty") {
                             modifyVars[key] = value;

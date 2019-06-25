@@ -137,7 +137,7 @@ let layout = {
             y = Math.round(y);
 
             Object.keys(cascade).forEach(nodeTitle => {
-                cascade[nodeTitle].sort = this._sort && this._sort.hasOwnProperty(nodeTitle) ? this._sort[nodeTitle] : 1;
+                cascade[nodeTitle].sort = this._sort && Object.prototype.hasOwnProperty.call(this._sort, nodeTitle) ? this._sort[nodeTitle] : 1;
             });
 
             Object.keys(cascade).sort((a, b) => { return cascade[a].sort - cascade[b].sort; }).forEach(nodeTitle => {

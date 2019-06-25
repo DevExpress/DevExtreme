@@ -13,7 +13,6 @@ registerTemplateEngine("jquery-tmpl", {
 
 registerTemplateEngine("jsrender", {
     compile: (element) => {
-        /* global jQuery */
         /* global jsrender */
         return (jQuery ? jQuery : jsrender).templates(extractTemplateMarkup(element));
     },

@@ -6274,8 +6274,10 @@ QUnit.test("EditorPreparing and EditorPrepared events should have correct parame
     assert.strictEqual(editorPreparingHandler.getCall(0).args[0].command, "select", "The editorPreparing event argument - select column");
     assert.strictEqual(editorPreparedHandler.getCall(0).args[0].command, "select", "The editorPrepared event argument - select column");
     expectedProperties.forEach(function(item) {
-        assert.ok(editorPreparingHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPreparing event argument - The '" + item + "' property existed");
-        assert.ok(editorPreparedHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPrepared event argument - The '" + item + "' property existed");
+        var firstArg = editorPreparingHandler.getCall(0).args[0];
+        var hasFirstArgOwnProperty = Object.prototype.hasOwnProperty.bind(firstArg);
+        assert.ok(hasFirstArgOwnProperty(item), "The editorPreparing event argument - The '" + item + "' property existed");
+        assert.ok(hasFirstArgOwnProperty(item), "The editorPrepared event argument - The '" + item + "' property existed");
     });
 });
 
@@ -14005,7 +14007,7 @@ QUnit.test("EditorPreparing event have the correct parameters", function(assert)
 
     // assert
     expectedProperties.forEach(function(item) {
-        assert.ok(spyArgs[0].hasOwnProperty(item), "The '" + item + "' property existed");
+        assert.ok(Object.prototype.hasOwnProperty.call(spyArgs[0], item), "The '" + item + "' property existed");
     });
 });
 

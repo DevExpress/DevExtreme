@@ -46,7 +46,8 @@ var include = function() {
 
     // NOTE: For ES6 classes. They don't have _includedCtors/_includedPostCtors
     // properties and get them from the ancestor class.
-    var isES6Class = !classObj.hasOwnProperty('_includedCtors') && !classObj.hasOwnProperty('_includedPostCtors');
+    var hasClassObjOwnProperty = Object.prototype.hasOwnProperty.bind(classObj);
+    var isES6Class = !hasClassObjOwnProperty('_includedCtors') && !hasClassObjOwnProperty('_includedPostCtors');
 
     if(isES6Class) {
         classObj._includedCtors = classObj._includedCtors.slice(0);

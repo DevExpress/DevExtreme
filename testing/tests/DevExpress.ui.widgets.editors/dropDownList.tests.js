@@ -854,7 +854,7 @@ QUnit.test("onSelectionChanged args should provide selectedItem (T193115)", func
         },
         value: 2,
         onSelectionChanged: function(e) {
-            assert.ok(e.hasOwnProperty("selectedItem"), "onSelectionChanged fired on creation when selectedItem is loaded");
+            assert.ok(Object.prototype.hasOwnProperty.call(e, "selectedItem"), "onSelectionChanged fired on creation when selectedItem is loaded");
         }
     });
 
