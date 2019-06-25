@@ -105,8 +105,9 @@ export default class TextEditorButtonCollection {
         const buttonsInfo = buttons ? this._compileButtonInfo(buttons) : this.defaultButtonsInfo;
         const getButtonsContainer = () => {
             $buttonsContainer = $buttonsContainer || $("<div>")
-                .addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS)
-                .appendTo($container);
+                .addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
+
+            targetLocation === "before" ? $container.prepend($buttonsContainer) : $container.append($buttonsContainer);
 
             return $buttonsContainer;
         };
