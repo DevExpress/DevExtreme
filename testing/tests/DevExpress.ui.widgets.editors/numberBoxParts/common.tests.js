@@ -2050,7 +2050,7 @@ QUnit.module("aria accessibility", {}, () => {
         assert.equal($input.attr("aria-valuenow"), 25, "aria now is correct");
     });
 
-    QUnit.test("aria-valuemin and valuemax attributes should be setted when min/max option is 0", (assert) => {
+    QUnit.test("aria-valuemin and valuemax attributes should be set when min/max option is 0", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             min: 0,
             max: 0
