@@ -203,7 +203,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
 
             var unwrapModel = function(model, propertyPath) {
                 for(var propertyName in model) {
-                    if(model.hasOwnProperty(propertyName)) {
+                    if(Object.prototype.hasOwnProperty.call(model, propertyName)) {
                         unwrapModelValue(model, propertyName, propertyPath ? [propertyPath, propertyName].join(".") : propertyName);
                     }
                 }

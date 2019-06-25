@@ -30,7 +30,7 @@ var BaseMaskRule = Class.inherit({
 
     _prepareHandlingArgs: function(args, config) {
         config = config || {};
-        var handlingProperty = args.hasOwnProperty("value") ? "value" : "text";
+        var handlingProperty = Object.prototype.hasOwnProperty.call(args, "value") ? "value" : "text";
         args[handlingProperty] = typeUtils.isDefined(config.str) ? config.str : args[handlingProperty];
         args.start = typeUtils.isDefined(config.start) ? config.start : args.start;
         args.length = typeUtils.isDefined(config.length) ? config.length : args.length;
@@ -110,7 +110,7 @@ var MaskRule = BaseMaskRule.inherit({
     },
 
     handle: function(args) {
-        var str = args.hasOwnProperty("value") ? args.value : args.text;
+        var str = Object.prototype.hasOwnProperty.call(args, "value") ? args.value : args.text;
         if(!str || !str.length || !args.length) {
             return 0;
         }
@@ -225,7 +225,7 @@ var StubMaskRule = MaskRule.inherit({
     },
 
     handle: function(args) {
-        var hasValueProperty = args.hasOwnProperty("value");
+        var hasValueProperty = Object.prototype.hasOwnProperty.call(args, "value");
         var str = hasValueProperty ? args.value : args.text;
         if(!str.length || !args.length) {
             return 0;

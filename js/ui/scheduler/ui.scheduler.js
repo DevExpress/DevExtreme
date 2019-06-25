@@ -1773,7 +1773,7 @@ const Scheduler = Widget.inherit({
             editing = this._editing;
 
         for(var prop in editing) {
-            if(editing.hasOwnProperty(prop)) {
+            if(Object.prototype.hasOwnProperty.call(editing, prop)) {
                 result = result && !editing[prop];
             }
         }

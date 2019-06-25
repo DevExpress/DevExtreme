@@ -101,10 +101,11 @@ QUnit.test("Create labels with styles and invisible borders", function(assert) {
         }
     });
     var attrs = this.label(0).attr.firstCall.args[0];
+    var haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
 
-    assert.equal(attrs.hasOwnProperty("stroke-width"), false);
-    assert.equal(attrs.hasOwnProperty("stroke-opacity"), false);
-    assert.equal(attrs.hasOwnProperty("stroke"), false);
+    assert.equal(haveAttrsOwnProperty("stroke-width"), false);
+    assert.equal(haveAttrsOwnProperty("stroke-opacity"), false);
+    assert.equal(haveAttrsOwnProperty("stroke"), false);
 });
 
 QUnit.test("Create labels with styles and invisible borders if border width is 0", function(assert) {
@@ -121,10 +122,11 @@ QUnit.test("Create labels with styles and invisible borders if border width is 0
         }
     });
     var attrs = this.label(0).attr.firstCall.args[0];
+    var haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
 
-    assert.equal(attrs.hasOwnProperty("stroke-width"), false);
-    assert.equal(attrs.hasOwnProperty("stroke-opacity"), false);
-    assert.equal(attrs.hasOwnProperty("stroke"), false);
+    assert.equal(haveAttrsOwnProperty("stroke-width"), false);
+    assert.equal(haveAttrsOwnProperty("stroke-opacity"), false);
+    assert.equal(haveAttrsOwnProperty("stroke"), false);
 });
 
 QUnit.test("Label color if useNodeColors set to true", function(assert) {

@@ -78,7 +78,7 @@ function resetFieldState(field, properties) {
     var initialProperties = field._initProperties || {};
 
     each(properties, function(_, prop) {
-        if(initialProperties.hasOwnProperty(prop)) {
+        if(Object.prototype.hasOwnProperty.call(initialProperties, prop)) {
             field[prop] = initialProperties[prop];
         }
     });
@@ -697,7 +697,7 @@ module.exports = Class.inherit((function() {
                 ],
                 (function(_, eventName) {
                     var optionName = "on" + eventName[0].toUpperCase() + eventName.slice(1);
-                    if(options.hasOwnProperty(optionName)) {
+                    if(Object.prototype.hasOwnProperty.call(options, optionName)) {
                         this.on(eventName, options[optionName]);
                     }
                 }).bind(this)

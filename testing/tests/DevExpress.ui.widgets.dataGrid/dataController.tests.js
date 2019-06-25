@@ -11345,8 +11345,8 @@ QUnit.test("Visible item after expanded/collapsed", function(assert) {
 
         // assert
         assert.ok(change.items[1].visible, "visible master detail");
-        assert.ok(!change.items[1].hasOwnProperty("rowType"), "not have property rowType");
-        assert.ok(!change.items[1].hasOwnProperty("key"), "not have property key");
+        assert.ok(!Object.prototype.hasOwnProperty.call(change.items[1], "rowType"), "not have property rowType");
+        assert.ok(!Object.prototype.hasOwnProperty.call(change.items[1], "key"), "not have property key");
     });
 
     // act

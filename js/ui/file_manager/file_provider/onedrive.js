@@ -197,7 +197,7 @@ class OneDriveFileProvider extends FileProvider {
     }
 
     _hasSubDirs(dataObj) {
-        return dataObj.hasOwnProperty("folder") && dataObj.folder.childCount > 0;
+        return Object.prototype.hasOwnProperty.call(dataObj, "folder") && dataObj.folder.childCount > 0;
     }
 
 }

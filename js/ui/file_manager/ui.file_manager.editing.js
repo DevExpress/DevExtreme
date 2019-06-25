@@ -144,7 +144,7 @@ class FileManagerEditingControl extends Widget {
         const result = {};
 
         each(this._editActions, (name, action) => {
-            if(this._editActions.hasOwnProperty(name)) {
+            if(Object.prototype.hasOwnProperty.call(this._editActions, name)) {
                 result[name] = arg => this._executeAction(name, arg);
             }
         });

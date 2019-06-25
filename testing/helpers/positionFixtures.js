@@ -6,7 +6,7 @@
     } else {
         root.fixtures = factory(root.jQuery);
     }
-}(window, function($, undefined) {
+}(window, function($) {
 
     var fixtures = {
         simple: {

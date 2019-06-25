@@ -153,7 +153,7 @@ QUnit.test("'getNodes' method with selectedItems", function(assert) {
     assert.equal(nodes[1].itemData.text, "Item 2");
     assert.equal(nodes[1].parent, null);
 
-    assert.ok(nodes[1].hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[1], "selected"));
     assert.strictEqual(nodes[1].selected, undefined);
     assert.equal(nodes[1].children.length, 2);
 
@@ -197,7 +197,7 @@ QUnit.test("'getNodes' method should return right result when some item was sele
     assert.equal(nodes[1].itemData.text, "Item 2");
     assert.equal(nodes[1].parent, null);
 
-    assert.ok(nodes[1].hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[1], "selected"));
     assert.strictEqual(nodes[1].selected, undefined);
     assert.equal(nodes[1].children.length, 2);
 

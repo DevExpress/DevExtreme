@@ -321,8 +321,8 @@ module("dialog tests", {
 
         const clickArgs = clickStub.lastCall.args[0];
 
-        assert.ok(clickArgs.hasOwnProperty("component"));
-        assert.ok(clickArgs.hasOwnProperty("event"));
+        assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, "component"));
+        assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, "event"));
         assert.strictEqual(clickArgs.component.NAME, "dxButton");
     });
 });

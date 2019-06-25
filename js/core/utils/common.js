@@ -216,7 +216,10 @@ const isArraysEqualByValue = function(array1, array2, deep) {
 
 const isObjectsEqualByValue = function(object1, object2, deep) {
     for(const propertyName in object1) {
-        if(object1.hasOwnProperty(propertyName) && !equalByValue(object1[propertyName], object2[propertyName], deep + 1)) {
+        if(
+            Object.prototype.hasOwnProperty.call(object1, propertyName) &&
+            !equalByValue(object1[propertyName], object2[propertyName], deep + 1)
+        ) {
             return false;
         }
     }

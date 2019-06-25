@@ -388,7 +388,8 @@ function calcWatchersCount(element) {
 
     var f = function(element) {
         angular.forEach(['$scope', '$isolateScope'], function(scopeProperty) {
-            if(element.data() && element.data().hasOwnProperty(scopeProperty)) {
+            var elementData = element.data();
+            if(elementData && Object.prototype.hasOwnProperty.call(elementData, scopeProperty)) {
                 angular.forEach(element.data()[scopeProperty].$$watchers, function(watcher) {
                     watchers.push(watcher);
                 });

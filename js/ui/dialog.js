@@ -144,7 +144,7 @@ exports.custom = function(options) {
         width: function() {
             const isPortrait = $(window).height() > $(window).width(),
                 key = (isPortrait ? "p" : "l") + "Width",
-                widthOption = options.hasOwnProperty(key) ? options[key] : options["width"];
+                widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options["width"];
 
             return isFunction(widthOption) ? widthOption() : widthOption;
         },
