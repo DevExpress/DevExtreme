@@ -300,4 +300,13 @@ QUnit.module("API", moduleConfig, () => {
         this.clock.tick();
         assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
     });
+
+    test("editor with invalid transcluded content should trigger onContentReady event", (assert) => {
+        $("#htmlEditor").html("<test><custom-tag></custom-tag></test>");
+        this.options = { onContentReady: sinon.stub() };
+        this.createEditor();
+
+        this.clock.tick();
+        assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
+    });
 });
