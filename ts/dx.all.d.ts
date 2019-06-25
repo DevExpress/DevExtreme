@@ -2431,6 +2431,8 @@ declare module DevExpress.ui {
         format?: format;
         /** @name dxFilterBuilderField.lookup */
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
+        /** @name dxFilterBuilderField.name */
+        name?: string;
         /** @name dxFilterBuilderField.trueText */
         trueText?: string;
     }
