@@ -25,6 +25,8 @@ import config from "core/config";
 
 import "ui/scheduler/ui.scheduler";
 
+import { dateToMilliseconds as toMs } from "core/utils/date";
+
 const DATE_TABLE_CELL_BORDER = 1;
 
 QUnit.module("Integration: Work space", {
@@ -1825,4 +1827,22 @@ QUnit.test("Vertical scrollable should work after switching currentDate if allDa
     var $scroll = this.instance.$element().find(".dx-scrollbar-vertical").eq(1);
 
     assert.notEqual($scroll.css("display"), "none", "ok");
+});
+
+QUnit.test("Current time indicator calculates position correctly with workWeek view (T750252)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: [
+            { name: "2 Work Weeks", type: "workWeek", intervalCount: 2, startDate: new Date(Date.now() - 5 * toMs("day")) },
+        ],
+        currentView: "workWeek",
+        currentDate: new Date(),
+        height: 580
+    });
+
+
+    let $dateTimeIndicator = this.scheduler.workSpace.getCurrentTimeIndicator()[0];
+    const position = { top: $dateTimeIndicator.style.top, left: $dateTimeIndicator.style.left };
+
+    assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator positioned correctly");
 });
