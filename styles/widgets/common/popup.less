@@ -51,14 +51,18 @@
     display: flex;
     flex-wrap: wrap;
 
-    .dx-popup-title,
-    .dx-popup-bottom {
-        width: 100%;
+    .dx-overlay-wrapper .dx-overlay-content& {
+        > .dx-popup-title,
+        > .dx-popup-bottom {
+            width: 100%;
+        }
     }
 
     .dx-popup-content {
+        box-sizing: border-box;
         height: auto;
         flex: 1;
+        max-width: 100%;
     }
 }
 

@@ -12,7 +12,8 @@ import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import "common.css!";
 import "ui/popup";
 
-const isIE11 = (browser.msie && parseInt(browser.version) === 11);
+const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
+const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 
 QUnit.testStart(function() {
     var markup =
@@ -612,7 +613,7 @@ QUnit.test("popup height can be changed according to the content if height = aut
     popup.option("width", "auto");
     $content.empty();
 
-    assert.strictEqual($popup.height(), (isIE11 ? 400 : 50), "popup with auto width can change height (except IE11)");
+    assert.strictEqual($popup.height(), (IS_IE11 ? 400 : 50), "popup with auto width can change height (except IE11)");
 });
 
 QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
@@ -689,9 +690,8 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
     }).dxPopup("instance");
 
     const $popup = popup.$content().parent();
-    const isOldSafari = browser.safari && compareVersions(browser.version, [11]) < 0;
 
-    if(isOldSafari) {
+    if(IS_OLD_SAFARI) {
         assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width for old safari");
         assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width for old safari");
     } else {
@@ -702,7 +702,7 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
 
     popup.option("width", "auto");
 
-    if(isIE11) {
+    if(IS_IE11) {
         assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width for IE11");
         assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with auto width for IE11");
     } else {
@@ -712,7 +712,12 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
 });
 
 
-QUnit.test("popup height should support TreeView with Search if height = auto", assert => {
+QUnit.test("popup height should support TreeView with Search if height = auto (T724029)", assert => {
+    if(IS_OLD_SAFARI) {
+        assert.expect(0);
+        return;
+    }
+
     const $content = $(
         '<div class="dx-treeview">\
             <div style="height: 30px;"></div>\
@@ -727,12 +732,10 @@ QUnit.test("popup height should support TreeView with Search if height = auto", 
         showTitle: false,
         contentTemplate: () => $content,
         maxHeight: 100
-
     });
 
     let treeviewContentHeight = 0;
     $content.children().each(function(_, item) { treeviewContentHeight += $(item).height(); });
-
     assert.roughEqual($content.height(), treeviewContentHeight, 1, "treeview content can not be heighter than container");
 });
 
