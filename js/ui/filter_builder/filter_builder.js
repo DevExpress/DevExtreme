@@ -176,6 +176,12 @@ var FilterBuilder = Widget.inherit({
             */
 
             /**
+            * @name dxFilterBuilderField.name
+            * @type string
+            * @default undefined
+            */
+
+            /**
              * @name dxFilterBuilderField.dataType
              * @type Enums.FilterBuilderFieldDataType
              * @default "string"
@@ -820,7 +826,7 @@ var FilterBuilder = Widget.inherit({
         var that = this,
             allowHierarchicalFields = this.option("allowHierarchicalFields"),
             items = utils.getItems(fields, allowHierarchicalFields),
-            item = utils.getField(field.dataField, items),
+            item = utils.getField(field.name || field.dataField, items),
             getFullCaption = function(item, items) {
                 return allowHierarchicalFields ? utils.getCaptionWithParents(item, items) : item.caption;
             };
@@ -830,12 +836,11 @@ var FilterBuilder = Widget.inherit({
             menu: {
                 items: items,
                 dataStructure: "plain",
-                keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: (e) => {
                     if(item !== e.itemData) {
                         item = e.itemData;
-                        condition[0] = item.dataField;
+                        condition[0] = item.name || item.dataField;
                         condition[2] = item.dataType === "object" ? null : "";
                         utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
                         $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
