@@ -929,57 +929,55 @@
     }
 }
 
-.dx-scheduler {
-    .dx-scheduler-appointment-tooltip-wrapper,
-    .dx-scheduler-overlay-panel {
-        .dx-overlay-content {
-            background-color: @base-bg;
+.dx-scheduler-appointment-tooltip-wrapper,
+.dx-scheduler-overlay-panel {
+    .dx-overlay-content {
+        background-color: @base-bg;
 
-            .dx-popup-content {
-                padding: 0;
-            }
+        .dx-popup-content {
+            padding: 0;
+        }
 
-            .dx-list {
-                .dx-list-item {
-                    margin-bottom: 0;
-                    margin-top: 0;
-                    border-bottom: 1px solid @base-border-color;
+        .dx-list {
+            .dx-list-item {
+                margin-bottom: 0;
+                margin-top: 0;
+                border-bottom: 1px solid @base-border-color;
 
-                    &:last-of-type {
-                        border-bottom-left-radius: @tooltip-border-radius;
-                        border-bottom-right-radius: @tooltip-border-radius;
-                        border-bottom: none;
+                &:last-of-type {
+                    border-bottom-left-radius: @tooltip-border-radius;
+                    border-bottom-right-radius: @tooltip-border-radius;
+                    border-bottom: none;
+                }
+
+                &:first-of-type {
+                    border-top-left-radius: @tooltip-border-radius;
+                    border-top-right-radius: @tooltip-border-radius;
+                }
+
+                .dx-tooltip-appointment-item {
+                    margin-left: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_CONTENT_MARGIN_LEFT;
+
+                    .dx-tooltip-appointment-item-marker-body {
+                        width: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
+                        height: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
                     }
 
-                    &:first-of-type {
-                        border-top-left-radius: @tooltip-border-radius;
-                        border-top-right-radius: @tooltip-border-radius;
+                    .dx-tooltip-appointment-item-content {
+                        .dx-tooltip-appointment-item-content-subject {
+                            margin-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP;
+                            font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE;
+                        }
+
+                        .dx-tooltip-appointment-item-content-date {
+                            font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE;
+                            opacity: 1;
+                            margin-top: 4px;
+                        }
                     }
 
-                    .dx-tooltip-appointment-item {
-                        margin-left: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_CONTENT_MARGIN_LEFT;
-
-                        .dx-tooltip-appointment-item-marker-body {
-                            width: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
-                            height: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
-                        }
-
-                        .dx-tooltip-appointment-item-content {
-                            .dx-tooltip-appointment-item-content-subject {
-                                margin-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP;
-                                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE;
-                            }
-
-                            .dx-tooltip-appointment-item-content-date {
-                                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE;
-                                opacity: 1;
-                                margin-top: 4px;
-                            }
-                        }
-
-                        .dx-tooltip-appointment-item-delete-button-container {
-                            padding-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP;
-                        }
+                    .dx-tooltip-appointment-item-delete-button-container {
+                        padding-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP;
                     }
                 }
             }
