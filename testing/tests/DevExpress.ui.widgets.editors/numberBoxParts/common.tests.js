@@ -1114,7 +1114,7 @@ QUnit.module("options changed callbacks", {
     });
 
     QUnit.test("showSpinButtons", (assert) => {
-        assert.expect(6);
+        assert.expect(5);
 
         assert.ok(!this.element.hasClass(SPIN_CLASS), "on default spin classes aren't applied");
         let $spinContainer = this.element.find("." + SPIN_CONTAINER_CLASS);
