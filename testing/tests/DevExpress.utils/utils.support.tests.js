@@ -36,7 +36,7 @@ QUnit.module("Pointer event detection", () => {
         assert.ok(detectPointerEvent(hasWindowProperty, pointerEnabled), "PointerEvent detected");
     });
 
-    QUnit.test("pointerEvent = true when 'pointerEnabled' exists (surface with old IE11)", assert => {
+    QUnit.test("pointerEvent = true when 'pointerEnabled' not exists (surface with old IE11)", assert => {
         const hasWindowProperty = createHasPropertyMock();
         const pointerEnabled = true;
 
