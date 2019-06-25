@@ -19,6 +19,10 @@ var environment = {
         this.argumentAxis.visualRange = noop;
 
         sinon.stub(this.argumentAxis, "getTranslator").returns(new MockTranslator({}));
+
+        this.valueAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
+        this.valueAxis.setTypes = sinon.spy();
+        this.valueAxis.validate = sinon.spy();
     }
 };
 
@@ -773,6 +777,29 @@ QUnit.test("'valueType' option should be passed to the series", function(assert)
     });
 
     assert.equal(seriesDataSource.getSeries()[0].valueType, "string");
+});
+
+QUnit.test("Set right types for valueAxis and validate it", function(assert) {
+    var seriesDataSource = createSeriesDataSource({
+        dataSource: [{ arg: 1, val: 4 },
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "stackedarea"
+            },
+            valueAxis: {
+                valueType: "string",
+            },
+            series: [{ }]
+        },
+        renderer: new vizMocks.Renderer(),
+        argumentAxis: this.argumentAxis,
+        valueAxis: this.valueAxis
+    });
+
+    assert.deepEqual(seriesDataSource.getSeries()[0].getValueAxis().setTypes.firstCall.args, ["discrete", "string", "valueType"]);
+    assert.equal(seriesDataSource.getSeries()[0].getValueAxis().validate.called, true);
 });
 
 QUnit.test("dataSource is null or is empty", function(assert) {

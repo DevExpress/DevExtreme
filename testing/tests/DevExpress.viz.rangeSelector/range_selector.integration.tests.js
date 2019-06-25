@@ -522,6 +522,32 @@ QUnit.test("Range selector with aggregation when dataSource is set after widget 
     assert.deepEqual(rangeSelector.getValue(), [50, 90]);
 });
 
+QUnit.test("Range selector with stacked series", function(assert) {
+    var rangeSelector = $("#container").dxRangeSelector({
+        dataSource: [{
+            arg: 0.5,
+            val1: 1,
+            val2: 2
+        }, {
+            arg: 2.5,
+            val1: 2,
+            val2: 1
+        }],
+
+        chart: {
+            series: [{
+                type: "stackedbar",
+                valueField: "val1"
+            }, {
+                type: "stackedbar",
+                valueField: "val2"
+            }]
+        }
+    }).dxRangeSelector("instance");
+
+    assert.deepEqual(rangeSelector.getValue(), [0.5, 2.5]);
+});
+
 QUnit.module("selectedRangeUpdateMode", {
     createRangeSelector: function(options) {
         return $("#container").dxRangeSelector(options).dxRangeSelector("instance");
