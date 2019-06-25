@@ -12,8 +12,8 @@ import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import "common.css!";
 import "ui/popup";
 
-const isIE11 = (browser.msie && parseInt(browser.version) === 11);
-var IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
+const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
+const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 
 QUnit.testStart(function() {
     var markup =
@@ -613,7 +613,7 @@ QUnit.test("popup height can be changed according to the content if height = aut
     popup.option("width", "auto");
     $content.empty();
 
-    assert.strictEqual($popup.height(), (isIE11 ? 400 : 50), "popup with auto width can change height (except IE11)");
+    assert.strictEqual($popup.height(), (IS_IE11 ? 400 : 50), "popup with auto width can change height (except IE11)");
 });
 
 QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
@@ -702,7 +702,7 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
 
     popup.option("width", "auto");
 
-    if(isIE11) {
+    if(IS_IE11) {
         assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width for IE11");
         assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with auto width for IE11");
     } else {
