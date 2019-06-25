@@ -117,15 +117,14 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _getIndicatorDuration: function() {
-        var today = this._getToday(),
+        let today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate);
-        var timeDiffNew = today.getTime() - firstViewDate.getTime();
+        let timeDiff = today.getTime() - firstViewDate.getTime();
         if(this.option('type') === 'workWeek') {
-            timeDiffNew = timeDiffNew - (this._getWeekendsCount(Math.round(timeDiffNew / toMs("day"))) * toMs("day"));
+            timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs("day"))) * toMs("day"));
         }
-        var timeDiff = timeDiffNew + 1;
 
-        return Math.ceil(timeDiff / toMs("day"));
+        return Math.ceil((timeDiff + 1) / toMs("day"));
     },
 
     getIndicationHeight: function() {
