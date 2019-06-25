@@ -133,11 +133,21 @@ var NativeStrategy = Class.inherit({
                 top: -location.top,
                 left: -location.left
             },
-            reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
-            reachedRight: this._isDirection(HORIZONTAL) ? location.left <= this._containerSize.width - this._componentContentSize.width : undefined,
-            reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? location.top <= this._containerSize.height - this._componentContentSize.height : undefined
+            reachedLeft: this._reachedMax(location, HORIZONTAL),
+            reachedTop: this._reachedMax(location, VERTICAL),
+            reachedRight: this._reachedMin(location, HORIZONTAL),
+            reachedBottom: this._reachedMin(location, VERTICAL)
         };
+    },
+
+    _reachedMax: function(location, direction) {
+        return this._isDirection(direction) ? location[direction === VERTICAL ? "top" : "left"] >= 0 : undefined;
+    },
+
+    _reachedMin: function(location, direction) {
+        var props = direction === VERTICAL ? ["top", "height"] : ["left", "width"];
+
+        return this._isDirection(direction) ? location[props[0]] <= this._containerSize[props[1]] - this._componentContentSize[props[1]] : undefined;
     },
 
     handleScroll: function(e) {
@@ -279,12 +289,50 @@ var NativeStrategy = Class.inherit({
         this._$container.scrollLeft(-location.left - distance.left);
     },
 
-    validate: function() {
-        return !this.option("disabled") && this._allowedDirection();
+    isWheelEvent: function(e) {
+        return e.type === "dxmousewheel";
     },
 
-    getDirection: function() {
+    validate: function(e) {
+        if(this.option("disabled")) {
+            return false;
+        }
+
+        return this.isWheelEvent(e) ? this._validateWheel(e) : this._validateMove();
+    },
+
+    _validateWheel: function(e) {
+        var location = this.location();
+        var direction = this._wheelDirection(e);
+        var reachedMin = this._reachedMin(location, direction);
+        var reachedMax = this._reachedMax(location, direction);
+
+        var contentGreaterThanContainer = !reachedMin || !reachedMax;
+        var locatedNotAtBound = !reachedMin && !reachedMax;
+        var scrollFromMin = (reachedMin && e.delta > 0);
+        var scrollFromMax = (reachedMax && e.delta < 0);
+        var validated = contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+
+        return validated;
+    },
+
+    _validateMove: function() {
         return this._allowedDirection();
+    },
+
+    getDirection: function(e) {
+        return this.isWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
+    },
+
+    _wheelDirection: function(e) {
+        switch(this.option("direction")) {
+            case HORIZONTAL:
+                return HORIZONTAL;
+            case VERTICAL:
+                return VERTICAL;
+            default:
+                return e && e.shiftKey ? HORIZONTAL : VERTICAL;
+        }
     },
 
     verticalOffset: function() {
