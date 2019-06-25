@@ -16,6 +16,7 @@ import { getDiagram } from "./diagram_importer";
 import { hasWindow, getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
@@ -39,6 +40,7 @@ const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("fullscreenchange",
 const IE_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("msfullscreenchange", DIAGRAM_NAMESPACE);
 const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("webkitfullscreenchange", DIAGRAM_NAMESPACE);
 const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("mozfullscreenchange", DIAGRAM_NAMESPACE);
+const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, DIAGRAM_NAMESPACE);
 
 class Diagram extends Widget {
     _init() {
@@ -76,6 +78,18 @@ class Diagram extends Widget {
         this._renderContextMenu($content);
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
+    }
+
+    _render() {
+        super._render();
+        this._attachPointerUpEvent();
+    }
+
+    _attachPointerUpEvent() {
+        eventsEngine.off(this.$element(), POINTERUP_EVENT_NAME);
+        eventsEngine.on(this.$element(), POINTERUP_EVENT_NAME, () => {
+            this._diagramInstance.captureFocus();
+        });
     }
 
     _renderToolbar() {
