@@ -858,6 +858,14 @@ var DataSource = Class.inherit({
                 groupLevel = Array.isArray(group) ? group.length : 1;
             }
 
+            if(this._mapFunc) {
+                dataSourceChanges.forEach((item) => {
+                    if(item.type === "insert") {
+                        item.data = this._mapFunc(item.data);
+                    }
+                });
+            }
+
             arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel, true);
             this._fireChanged([{ changes: changes }]);
         }

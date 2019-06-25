@@ -492,7 +492,7 @@ var wrongDayOfWeek = function(rule) {
         brokenDaysExist = false;
 
     each(daysByRule, function(_, day) {
-        if(!days.hasOwnProperty(day)) {
+        if(!Object.prototype.hasOwnProperty.call(days, day)) {
             brokenDaysExist = true;
             return false;
         }

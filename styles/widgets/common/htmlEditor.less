@@ -73,7 +73,7 @@
     overflow: hidden;
 }
 
-.ql-clipboard {
+.ql-clipboard { // stylelint-disable-line selector-class-pattern
     left: -100000px;
     height: 1px;
     overflow-y: hidden;
@@ -183,12 +183,12 @@
         content: '\2022';
     }
 
-    li {
+    li {  // stylelint-disable-line no-duplicate-selectors
         .add-counter-reset(@MAX_INDENT);
 
         counter-increment: list-0;
 
-        &::before {
+        &::before {  // stylelint-disable-line no-duplicate-selectors
             content: counter(list-0, extract(@LIST_STYLE, 1)) + '. ';
         }
     }
@@ -196,17 +196,17 @@
     .add-counter(@MAX_INDENT);
     .add-indent-styles(@MAX_INDENT);
 
-    .dx-rtl & li {
+    .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
         padding-right: @LIST_STYLE_OUTER_WIDTH;
 
-        &::before {
+        &::before { // stylelint-disable-line no-duplicate-selectors
             margin-left: @LIST_STYLE_MARGIN;
             margin-right: -1 * @LIST_STYLE_OUTER_WIDTH;
             text-align: left;
         }
     }
 
-    table {
+    table { // stylelint-disable-line no-duplicate-selectors
         table-layout: fixed;
         width: 100%;
 
@@ -215,6 +215,7 @@
         }
     }
 
+    // stylelint-disable selector-class-pattern
     .ql-code-block-container {
         font-family: monospace;
     }
@@ -254,6 +255,7 @@
         position: absolute;
         right: 15px;
     }
+    // stylelint-enable selector-class-pattern
 
     pre {
         white-space: pre-wrap;

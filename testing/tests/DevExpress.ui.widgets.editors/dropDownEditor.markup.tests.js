@@ -20,6 +20,7 @@ const DROP_DOWN_EDITOR_INPUT_WRAPPER = "dx-dropdowneditor-input-wrapper";
 const DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button";
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-template-wrapper";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 module("DropDownEditor markup", {
     beforeEach: () => {
@@ -109,14 +110,14 @@ module("DropDownEditor markup", {
 module("aria accessibility", () => {
     test("aria role", (assert) => {
         const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor(),
-            $input = $dropDownEditor.find("input");
+            $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr("role"), "combobox", "aria role on input is correct");
         assert.strictEqual($dropDownEditor.attr("role"), undefined, "aria role on element is not exist");
     });
 
     test("aria-autocomplete property on input", (assert) => {
-        const $input = $("#dropDownEditorLazy").dxDropDownEditor().find("input");
+        const $input = $("#dropDownEditorLazy").dxDropDownEditor().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.attr("aria-autocomplete"), "list", "haspopup attribute exists");
     });
 });

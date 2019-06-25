@@ -204,7 +204,7 @@
     .dx-scheduler-vertical-group-table-mixin(1px);
 }
 
-.dx-scheduler-appointment-content {
+.dx-scheduler-appointment-content { // stylelint-disable-line no-duplicate-selectors
     padding: @MATERIAL_SCHEDULER_APPOINTMENT_CONTENT_PADDING;
 }
 
@@ -385,7 +385,7 @@
         }
     }
 
-    .dx-scheduler-header-panel-cell {
+    .dx-scheduler-header-panel-cell { // stylelint-disable-line no-duplicate-selectors
         .dx-scheduler-header-panel-cell-date {
             font-size: @MATERIAL_SCHEDULER_HEADER_PANEL_WEEK_FONT_SIZE;
             margin-left: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET;
@@ -582,7 +582,7 @@
     }
 }
 
-.dx-scheduler-header-panel {
+.dx-scheduler-header-panel { // stylelint-disable-line no-duplicate-selectors
     .dx-scheduler-group-row {
         &:before {
             border-right: 1px solid @SCHEDULER_BASE_BORDER_COLOR;
@@ -598,7 +598,7 @@
     }
 }
 
-.dx-scheduler-work-space {
+.dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
     padding-top: @MATERIAL_SCHEDULER_HEADER_HEIGHT;
     margin-top: -@MATERIAL_SCHEDULER_HEADER_HEIGHT - 1;
 
@@ -657,7 +657,7 @@
     }
 }
 
-.dx-scheduler-date-table-cell {
+.dx-scheduler-date-table-cell { // stylelint-disable-line no-duplicate-selectors
     border-left: @SCHEDULER_BASE_BORDER;
     border-right: @SCHEDULER_BASE_BORDER;
 }
@@ -783,7 +783,7 @@
     }
 }
 
-.dx-scheduler-work-space-vertical-grouped {
+.dx-scheduler-work-space-vertical-grouped { // stylelint-disable-line no-duplicate-selectors
     &.dx-scheduler-work-space-month {
         .dx-scheduler-date-table-scrollable {
             border-top: @SCHEDULER_BASE_BORDER;
@@ -791,7 +791,7 @@
     }
 }
 
-.dx-scheduler-work-space {
+.dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
     &.dx-scheduler-timeline-week,
     &.dx-scheduler-timeline,
     &.dx-scheduler-timeline-work-week {
@@ -929,57 +929,55 @@
     }
 }
 
-.dx-scheduler {
-    .dx-scheduler-appointment-tooltip-wrapper,
-    .dx-scheduler-overlay-panel {
-        .dx-overlay-content {
-            background-color: @base-bg;
+.dx-scheduler-appointment-tooltip-wrapper,
+.dx-scheduler-overlay-panel {
+    .dx-overlay-content {
+        background-color: @base-bg;
 
-            .dx-popup-content {
-                padding: 0;
-            }
+        .dx-popup-content {
+            padding: 0;
+        }
 
-            .dx-list {
-                .dx-list-item {
-                    margin-bottom: 0;
-                    margin-top: 0;
-                    border-bottom: 1px solid @base-border-color;
+        .dx-list {
+            .dx-list-item {
+                margin-bottom: 0;
+                margin-top: 0;
+                border-bottom: 1px solid @base-border-color;
 
-                    &:last-of-type {
-                        border-bottom-left-radius: @tooltip-border-radius;
-                        border-bottom-right-radius: @tooltip-border-radius;
-                        border-bottom: none;
+                &:last-of-type {
+                    border-bottom-left-radius: @tooltip-border-radius;
+                    border-bottom-right-radius: @tooltip-border-radius;
+                    border-bottom: none;
+                }
+
+                &:first-of-type {
+                    border-top-left-radius: @tooltip-border-radius;
+                    border-top-right-radius: @tooltip-border-radius;
+                }
+
+                .dx-tooltip-appointment-item {
+                    margin-left: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_CONTENT_MARGIN_LEFT;
+
+                    .dx-tooltip-appointment-item-marker-body {
+                        width: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
+                        height: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
                     }
 
-                    &:first-of-type {
-                        border-top-left-radius: @tooltip-border-radius;
-                        border-top-right-radius: @tooltip-border-radius;
+                    .dx-tooltip-appointment-item-content {
+                        .dx-tooltip-appointment-item-content-subject {
+                            margin-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP;
+                            font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE;
+                        }
+
+                        .dx-tooltip-appointment-item-content-date {
+                            font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE;
+                            opacity: 1;
+                            margin-top: 4px;
+                        }
                     }
 
-                    .dx-tooltip-appointment-item {
-                        margin-left: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_CONTENT_MARGIN_LEFT;
-
-                        .dx-tooltip-appointment-item-marker-body {
-                            width: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
-                            height: @MATERIAL_TOOLTIP_MARKER_DIMENSION;
-                        }
-
-                        .dx-tooltip-appointment-item-content {
-                            .dx-tooltip-appointment-item-content-subject {
-                                margin-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_MARGIN_TOP;
-                                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_TITLE_FONT_SIZE;
-                            }
-
-                            .dx-tooltip-appointment-item-content-date {
-                                font-size: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_DATE_FONT_SIZE;
-                                opacity: 1;
-                                margin-top: 4px;
-                            }
-                        }
-
-                        .dx-tooltip-appointment-item-delete-button-container {
-                            padding-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP;
-                        }
+                    .dx-tooltip-appointment-item-delete-button-container {
+                        padding-top: @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_REMOVE_PADDING_TOP;
                     }
                 }
             }

@@ -234,7 +234,7 @@
             margin: -6px 0 -5px -8px;
         }
 
-        & > .dx-texteditor:not(.dx-textarea):not(.dx-tagbox):not(.dx-lookup) {
+        & > .dx-texteditor:not(.dx-textarea):not(.dx-tagbox):not(.dx-lookup) { // stylelint-disable-line no-duplicate-selectors
             margin-top: -8px;
         }
 
@@ -405,7 +405,7 @@
     width: 60%;
 }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (min-resolution: 192dpi) {
     /* Retina-specific stuff here */
 
     .dx-field-value {

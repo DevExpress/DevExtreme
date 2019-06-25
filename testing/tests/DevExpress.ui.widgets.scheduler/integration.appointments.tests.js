@@ -620,7 +620,7 @@ QUnit.test("DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.skip("Recurrence repeat-type editor should have default 'never' value after reopening appointment popup", function(assert) {
+QUnit.test("Recurrence repeat-type editor should have default 'never' value after reopening appointment popup", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -3279,7 +3279,7 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
     assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
 });
 
-QUnit.skip("Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)", function(assert) {
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)", function(assert) {
     var tasks = [{
         text: "Recurrence task",
         start: new Date(2017, 2, 13),
@@ -3314,7 +3314,7 @@ QUnit.skip("Scheduler appointment popup should be opened correctly for recurrenc
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
 });
 
-QUnit.skip("Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)", function(assert) {
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)", function(assert) {
     var tasks = [{
         text: "Task",
         start: new Date(2017, 2, 13),

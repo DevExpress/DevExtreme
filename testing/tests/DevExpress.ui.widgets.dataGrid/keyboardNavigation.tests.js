@@ -8111,6 +8111,65 @@ QUnit.module("Customize keyboard navigation", {
         assert.equal(getTextSelection(input), input.value, "Selection");
     });
 
+    // T744711
+    testInDesktop("Select all text for editor with remote data source", function(assert) {
+        // arrange
+        var rooms = [
+            { id: 0, name: "room0" },
+            { id: 1, name: "room1" },
+            { id: 2, name: "room2" },
+            { id: 3, name: "room3" }
+        ];
+
+        this.options = {
+            editing: {
+                mode: "batch",
+                selectTextOnEditStart: true
+            }
+        };
+        this.columns = [
+            { dataField: "name" },
+            {
+                dataField: "room",
+                lookup: {
+                    dataSource: {
+                        load: function() {
+                            return rooms;
+                        },
+                        byKey: function(key) {
+                            var d = $.Deferred();
+
+                            setTimeout(function() {
+                                d.resolve(rooms.filter(room => room.id === key)[0]);
+                            }, 100);
+
+                            return d.promise();
+                        }
+                    },
+                    valueExpr: "id",
+                    displayExpr: "name"
+                }
+            }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        $(this.getCellElement(0, 1)).focus().trigger("dxclick");
+
+        // assert
+        var input = $(".dx-texteditor-input").get(0);
+        assert.equal(input.value, "", "editor input value is empty");
+
+        // act
+        this.clock.tick(100);
+
+        // assert
+        assert.equal(input.value, "room0", "editor input value is not empty");
+        assert.equal(getTextSelection(input), input.value, "input value is selected");
+    });
+
     testInDesktop("Not select all text if editing mode is batch", function(assert) {
         // arrange
         var rooms = [

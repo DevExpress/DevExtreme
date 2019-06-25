@@ -24,7 +24,8 @@ QUnit.testStart(function() {
 var DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
     DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
-    DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active";
+    DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
+    TEXT_EDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 var TAB_KEY_CODE = "Tab",
     ESC_KEY_CODE = "Escape";
@@ -91,6 +92,51 @@ QUnit.test("content returned by _renderPopupContent must be rendered inside the 
 QUnit.test("dropdown must close on outside click", function(assert) {
     this.dropDownEditor.open();
     assert.ok(this.dropDownEditor._popup.option("closeOnOutsideClick"));
+});
+
+QUnit.test("widget should have only one input by default", function(assert) {
+    const $inputs = this.$dropDownEditor.find("input");
+    const $submitElement = this.dropDownEditor._getSubmitElement();
+
+    assert.equal($inputs.length, 1, "there is only one input");
+    assert.ok($inputs.is($submitElement), "and it is a submit element");
+});
+
+QUnit.test("widget should have two inputs when 'useHiddenSubmitElement' is 'true'", function(assert) {
+    this.dropDownEditor.option("useHiddenSubmitElement", true);
+    const $inputs = this.$dropDownEditor.find("input");
+
+    assert.equal($inputs.length, 2, "there are two inputs");
+});
+
+QUnit.test("widget should have only one input when 'useHiddenSubmitElement' changing to 'false'", function(assert) {
+    this.dropDownEditor.option("useHiddenSubmitElement", true);
+    this.dropDownEditor.option("useHiddenSubmitElement", false);
+
+    const $inputs = this.$dropDownEditor.find("input");
+    const $submitElement = this.dropDownEditor._getSubmitElement();
+
+    assert.equal($inputs.length, 1, "there is only one input");
+    assert.ok($inputs.is($submitElement), "and it is a submit element");
+});
+
+QUnit.test("widget should render hidden submit input when 'useHiddenSubmitElement' is 'true'", function(assert) {
+    this.dropDownEditor.option("useHiddenSubmitElement", true);
+
+    const $submitInput = this.$dropDownEditor.find("input[type='hidden']");
+
+    assert.equal($submitInput.length, 1, "there is one hidden input");
+});
+
+QUnit.test("submit value should be equal to the widget value", function(assert) {
+    this.dropDownEditor.option({
+        useHiddenSubmitElement: true,
+        value: "test"
+    });
+
+    const $submitInput = this.$dropDownEditor.find("input[type='hidden']");
+
+    assert.equal($submitInput.val(), "test", "the submit value is correct");
 });
 
 QUnit.test("clicking the input must not close the dropdown", function(assert) {
@@ -252,8 +298,9 @@ QUnit.test("reset()", function(assert) {
 });
 
 QUnit.test("reset method should clear the input value", function(assert) {
-    var dropDownEditor = this.dropDownEditor,
-        $input = dropDownEditor.$element().find("input");
+    const dropDownEditor = this.dropDownEditor;
+    const $editor = dropDownEditor.$element();
+    const $input = $editor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
     dropDownEditor.option("value", null);
     $input.val("456");
@@ -264,7 +311,6 @@ QUnit.test("reset method should clear the input value", function(assert) {
     // assert
     assert.strictEqual(dropDownEditor.option("value"), null, "Value should be null");
     assert.equal($input.val(), "", "Input value is correct");
-
 });
 
 QUnit.test("dx-state-hover class added after hover on element", function(assert) {
@@ -446,7 +492,7 @@ QUnit.testInActiveWindow("input is focused by click on dropDownButton", function
     var $dropDownButton = $dropDownEditor.find(".dx-dropdowneditor-button");
     $dropDownButton.trigger("dxclick");
 
-    assert.ok($dropDownEditor.find("input").is(":focus"), "input focused");
+    assert.ok($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).is(":focus"), "input focused");
 });
 
 QUnit.test("native focus event should not be triggered if dropdown button clicked on mobile device", function(assert) {
@@ -496,7 +542,7 @@ QUnit.test("focusout should not be fired on valueChanged", function(assert) {
         onFocusOut: onFocusOutStub,
         focusStateEnabled: true
     });
-    var $input = $dropDownEditor.find("input");
+    var $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
     var keyboard = keyboardMock($input);
 
     keyboard.type("2");
@@ -860,10 +906,10 @@ QUnit.test("onValueChanged should be fired for each change by keyboard when fiel
         onValueChanged: valueChangedSpy
     });
 
-    keyboardMock($dropDownEditor.find("input")).type("2");
+    keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`)).type("2");
     assert.equal(valueChangedSpy.callCount, 1, "onValueChanged is fired first time");
 
-    keyboardMock($dropDownEditor.find("input")).type("4");
+    keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`)).type("4");
     assert.equal(valueChangedSpy.callCount, 2, "onValueChanged is fired second time");
 });
 
@@ -920,7 +966,7 @@ QUnit.test("events should be rendered for input after value is changed when fiel
         }
 
         var event = $.Event(eventName.toLowerCase(), params);
-        $dropDownEditor.find("input").trigger(event);
+        $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).trigger(event);
         assert.equal(spies[eventName].callCount, 1, "the '" + eventName + "' event was fired after value change");
     });
 });
@@ -955,7 +1001,7 @@ QUnit.test("acceptCustomValue", function(assert) {
         valueChangeEvent: "change keyup"
     });
 
-    var $input = $dropDownEditor.find("input");
+    var $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
     keyboardMock($input).type("test");
 
     assert.equal($dropDownEditor.dxDropDownEditor("option", "value"), "", "value is not set");
@@ -968,7 +1014,7 @@ QUnit.test("openOnFieldClick", function(assert) {
     });
 
     var dropDownEditor = $dropDownEditor.dxDropDownEditor("instance");
-    var $input = $dropDownEditor.find("input");
+    var $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
     assert.ok($dropDownEditor.hasClass("dx-dropdowneditor-field-clickable"), "special css class attached");
 
@@ -1026,7 +1072,7 @@ QUnit.test("input is not editable after changed readOnly state", function(assert
         readOnly: true
     });
 
-    var $input = $dropDownEditor.find("input");
+    var $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
     var instance = $dropDownEditor.dxDropDownEditor("instance");
 
     instance.option("value", "one");
@@ -1308,7 +1354,7 @@ QUnit.module("aria accessibility");
 
 QUnit.test("aria role", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor(),
-        $input = $dropDownEditor.find("input");
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
     assert.strictEqual($input.attr("role"), "combobox", "aria role on input is correct");
     assert.strictEqual($dropDownEditor.attr("role"), undefined, "aria role on element is not exist");
@@ -1316,7 +1362,7 @@ QUnit.test("aria role", function(assert) {
 
 QUnit.test("aria-expanded property on input", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({ opened: true }),
-        $input = $dropDownEditor.find("input"),
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`),
         instance = $dropDownEditor.dxDropDownEditor("instance");
 
     assert.equal($input.attr("aria-expanded"), "true", "aria-expanded property on opened");
@@ -1326,18 +1372,18 @@ QUnit.test("aria-expanded property on input", function(assert) {
 });
 
 QUnit.test("aria-haspopup property on input", function(assert) {
-    var $input = $("#dropDownEditorLazy").dxDropDownEditor().find("input");
+    var $input = $("#dropDownEditorLazy").dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
     assert.equal($input.attr("aria-haspopup"), "true", "haspopup attribute exists");
 });
 
 QUnit.test("aria-autocomplete property on input", function(assert) {
-    var $input = $("#dropDownEditorLazy").dxDropDownEditor().find("input");
+    var $input = $("#dropDownEditorLazy").dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
     assert.equal($input.attr("aria-autocomplete"), "list", "haspopup attribute exists");
 });
 
 QUnit.test("aria-owns should be removed when popup is not visible", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({ opened: true }),
-        $input = $dropDownEditor.find("input"),
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`),
         instance = $dropDownEditor.dxDropDownEditor("instance");
 
     assert.notEqual($input.attr("aria-owns"), undefined, "owns exists");

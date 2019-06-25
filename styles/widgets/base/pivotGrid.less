@@ -266,7 +266,7 @@
                 }
 
                 color: transparent;
-                background-color: transparent !important;
+                background-color: transparent !important; // stylelint-disable-line declaration-no-important
             }
         }
 
@@ -372,7 +372,7 @@
         }
     }
 
-    .dx-expand-icon-container {
+    .dx-expand-icon-container { // stylelint-disable-line no-duplicate-selectors
         width: @PIVOTGRID_ICON_SIZE;
     }
 
@@ -465,11 +465,8 @@
 
     .dx-area {
         padding: 5px;
-        display: -webkit-flex;
         display: flex;
-        -webkit-flex-grow: 1;
         flex-grow: 1;
-        -webkit-flex-direction: column;
         flex-direction: column;
 
         .flexible-scrollable();
@@ -477,9 +474,7 @@
         .dx-area-fields {
             margin-top: 3px;
             border: @PIVOTGRID_BORDER;
-            display: -webkit-flex;
             display: flex;
-            -webkit-flex-direction: column;
             flex-direction: column;
             height: 0;
         }
@@ -492,7 +487,6 @@
     .dx-area-fields[group] {
         padding: 5px;
         background-color: @PIVOTGRID_TOTALCOLOR;
-        display: -webkit-flex;
         display: flex;
     }
 
@@ -677,7 +671,6 @@
         }
 
         .dx-pivotgridfieldchooser-container .dx-col {
-            display: -webkit-flex;
             display: flex;
         }
 

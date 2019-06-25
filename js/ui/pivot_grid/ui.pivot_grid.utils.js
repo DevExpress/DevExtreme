@@ -17,7 +17,7 @@ var setFieldProperty = exports.setFieldProperty = function(field, property, valu
     var initProperties = field._initProperties = field._initProperties || {},
         initValue = isInitialization ? value : field[property];
 
-    if(!initProperties.hasOwnProperty(property) || isInitialization) {
+    if(!Object.prototype.hasOwnProperty.call(initProperties, property) || isInitialization) {
         initProperties[property] = initValue;
     }
 

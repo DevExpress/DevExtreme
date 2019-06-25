@@ -6997,6 +6997,8 @@ declare module DevExpress.viz {
     }
     /** @name dxChartCommonAnnotationConfig */
     export interface dxChartCommonAnnotationConfig {
+        /** @name dxChartCommonAnnotationConfig.allowDragging */
+        allowDragging?: boolean;
         /** @name dxChartCommonAnnotationConfig.argument */
         argument?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.arrowLength */

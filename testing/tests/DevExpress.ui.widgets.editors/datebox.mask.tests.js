@@ -339,6 +339,21 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(handler.callCount, 1, "registerKeyHandler works");
         });
 
+        test("original keyboard handlers should work after 'registerKeyHandler'", (assert) => {
+            this.instance.option("pickerType", "calendar");
+            this.instance.registerKeyHandler("space", sinon.stub());
+            this.instance.open();
+
+            this.keyboard.press("up");
+
+            assert.strictEqual(this.$input.val(), "October 10 2012", "text was not changed");
+
+            const $content = $(this.instance.content());
+            const $contouredDate = $content.find(".dx-calendar-contoured-date");
+            const $selectedDate = $content.find(".dx-calendar-selected-date");
+            assert.notOk($contouredDate.is($selectedDate), "Contoured date isn't a selected");
+        });
+
         test("Right and left arrows should move the selection", (assert) => {
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");

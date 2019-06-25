@@ -122,7 +122,7 @@
 
         .dx-column-indicators {
             vertical-align: top;
-            float: none !important;
+            float: none !important; // stylelint-disable-line declaration-no-important
         }
 
         .dx-area-field {
@@ -135,13 +135,13 @@
         white-space: nowrap;
     }
 
-    .dx-area-field-content {
+    .dx-area-field-content { // stylelint-disable-line no-duplicate-selectors
         white-space: nowrap;
     }
 
     .dx-popup-content {
         .dx-column-indicators {
-            float: none !important;
+            float: none !important; // stylelint-disable-line declaration-no-important
             display: inline-block;
         }
 
@@ -184,64 +184,53 @@
     position: relative;
 
     .dx-pivotgridfieldchooser-container {
-        display: -webkit-flex;
         display: flex;
         overflow: hidden;
         height: 100%;
 
         &.dx-layout-0 {
-            -webkit-flex-direction: column;
             flex-direction: column;
         }
     }
 
     .dx-pivotgridfieldchooser-container.dx-layout-2 {
-        -webkit-flex-direction: column;
         flex-direction: column;
 
         .dx-row:nth-child(1) {
-            -webkit-flex-grow: 3;
             flex-grow: 3;
         }
 
         .dx-row:nth-child(2) {
-            display: -webkit-flex;
             display: flex;
-            -webkit-flex-direction: row;
             flex-direction: row;
             flex-wrap: wrap;
-            -webkit-flex-grow: 4;
             flex-grow: 4;
         }
     }
 
     .dx-col {
         width: 50%;
-        display: -webkit-flex;
         display: flex;
-        -webkit-flex-direction: column;
         flex-direction: column;
     }
 
     .dx-row {
-        display: -webkit-flex;
         display: flex;
-        -webkit-flex-direction: row;
         flex-direction: row;
         height: 0;
     }
 
+    // stylelint-disable no-duplicate-selectors
     .dx-pivotgridfieldchooser-container {
         .dx-row:nth-child(1) {
-            -webkit-flex-grow: 2;
             flex-grow: 2;
         }
 
         .dx-row:nth-child(2) {
-            -webkit-flex-grow: 1;
             flex-grow: 1;
         }
     }
+    // stylelint-enable no-duplicate-selectors
 
     .dx-area-caption {
         vertical-align: middle;

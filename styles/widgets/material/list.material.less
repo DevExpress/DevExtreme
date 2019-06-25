@@ -308,13 +308,10 @@
 
     .dx-list-item-content {
         font-size: @MATERIAL_LIST_MAIN_FONT_SIZE;
-    }
-
-    .dx-list-item-content {
         padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING @item_horizontal_padding @MATERIAL_LIST_ITEM_VERTICAL_PADDING - 1px;
     }
 
-    .dx-list .dx-empty-message {
+    .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
         padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING/2 + 1px @item_horizontal_padding @MATERIAL_LIST_ITEM_VERTICAL_PADDING/2;
         color: fade(@list-normal-color, 54%);
         font-size: 12px;

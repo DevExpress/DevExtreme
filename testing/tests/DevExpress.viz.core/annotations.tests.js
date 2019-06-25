@@ -11,6 +11,9 @@ const environment = {
             _renderer: this.renderer,
             _getAnnotationCoords: sinon.stub().returns({ x: 100, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } })
         };
+    },
+    createAnnotations(items, options = {}, customizeAnnotation) {
+        return createAnnotations(items, $.extend(true, { argument: 0 }, options), customizeAnnotation);
     }
 };
 
@@ -41,7 +44,7 @@ QUnit.module("Image annotation", environment);
 QUnit.test("Do not draw annotation if cannot get coords, or coords out of canvas", function(assert) {
     const testCase = (anchor, coords, message) => {
         this.widget._getAnnotationCoords.returns($.extend({ canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } }, anchor));
-        const annotation = createAnnotations([$.extend({ type: "image", image: { url: "some_url" } }, coords)], {})[0];
+        const annotation = this.createAnnotations([$.extend({ type: "image", image: { url: "some_url" } }, coords)], {})[0];
 
         annotation.draw(this.widget, this.group);
 
@@ -61,7 +64,7 @@ QUnit.test("Do not draw annotation if cannot get coords, or coords out of canvas
 });
 
 QUnit.test("Image params", function(assert) {
-    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10, height: 10, location: "some_location" } }])[0];
+    const annotation = this.createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10, height: 10, location: "some_location" } }])[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -69,7 +72,7 @@ QUnit.test("Image params", function(assert) {
 });
 
 QUnit.test("Merge common and item options", function(assert) {
-    const annotation = createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10 } }], { image: { height: 10 } })[0];
+    const annotation = this.createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10 } }], { image: { height: 10 } })[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -83,7 +86,7 @@ QUnit.test("Merge customizeAnnotation result and common+item options", function(
         type: "image",
         image: { url: "some_url", width: 10 }
     };
-    const annotation = createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
+    const annotation = this.createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -93,7 +96,7 @@ QUnit.test("Merge customizeAnnotation result and common+item options", function(
 });
 
 QUnit.test("Draw image inside a plaque with borders and arrow", function(assert) {
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -166,7 +169,7 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
 });
 
 QUnit.test("Get size from annotation setting if it less than image size", function(assert) {
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url", width: 50, height: 50 } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 50, height: 50 } }], {
         color: "#AAAAAA",
         opacity: 0.5,
         arrowLength: 0,
@@ -187,7 +190,7 @@ QUnit.test("Get size from annotation setting if it less than image size", functi
 });
 
 QUnit.test("Draw image inside a plaque without borders", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -211,7 +214,7 @@ QUnit.test("Draw image inside a plaque without borders", function(assert) {
 
 QUnit.test("Draw annotation with anchor and x/y", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 290, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -236,7 +239,7 @@ QUnit.test("Draw annotation with anchor and x/y", function(assert) {
 
 QUnit.test("Draw annotation with anchor and only x", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 290, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ x: 300, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -259,7 +262,7 @@ QUnit.test("Draw annotation with anchor and only x", function(assert) {
 });
 
 QUnit.test("Draw annotation with anchor and only y", function(assert) {
-    const annotation = createAnnotations([{ y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -288,7 +291,7 @@ QUnit.test("Draw annotation with anchor and only y", function(assert) {
 
 QUnit.test("Draw annotation with x/y and without anchor", function(assert) {
     this.widget._getAnnotationCoords.returns({});
-    const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -317,7 +320,7 @@ QUnit.test("Draw annotation with offsetX/offsetY with anchor", function(assert) 
         x: 100,
         y: 200
     });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         arrowLength: 20,
         arrowWidth: 30,
         paddingLeftRight: 10,
@@ -337,7 +340,7 @@ QUnit.test("Draw annotation with offsetX/offsetY and without anchor", function(a
         offsetX: 10,
         offsetY: -20,
     });
-    const annotation = createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -360,7 +363,7 @@ QUnit.module("Check plaque path", environment);
 
 QUnit.test("Arrow on the top, left side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 120, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 120, y: 240, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -384,7 +387,7 @@ QUnit.test("Arrow on the top, left side", function(assert) {
 
 QUnit.test("Arrow on the top, center", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 100, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 240, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -408,7 +411,7 @@ QUnit.test("Arrow on the top, center", function(assert) {
 
 QUnit.test("Arrow on the top, right side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 80, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 80, y: 240, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -432,7 +435,7 @@ QUnit.test("Arrow on the top, right side", function(assert) {
 
 QUnit.test("Arrow on the bottom, left side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 120, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 120, y: 160, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -456,7 +459,7 @@ QUnit.test("Arrow on the bottom, left side", function(assert) {
 
 QUnit.test("Arrow on the bottom, center", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -480,7 +483,7 @@ QUnit.test("Arrow on the bottom, center", function(assert) {
 
 QUnit.test("Arrow on the bottom, right side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 80, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 80, y: 160, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -504,7 +507,7 @@ QUnit.test("Arrow on the bottom, right side", function(assert) {
 
 QUnit.test("Arrow on the left, top side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 60, y: 220, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 220, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -528,7 +531,7 @@ QUnit.test("Arrow on the left, top side", function(assert) {
 
 QUnit.test("Arrow on the left, center", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -553,7 +556,7 @@ QUnit.test("Arrow on the left, center", function(assert) {
 
 QUnit.test("Arrow on the left, bottom side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 60, y: 180, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 180, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -577,7 +580,7 @@ QUnit.test("Arrow on the left, bottom side", function(assert) {
 
 QUnit.test("Arrow on the right, top side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 140, y: 220, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 220, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -601,7 +604,7 @@ QUnit.test("Arrow on the right, top side", function(assert) {
 
 QUnit.test("Arrow on the left, center", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 140, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 200, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -625,7 +628,7 @@ QUnit.test("Arrow on the left, center", function(assert) {
 
 QUnit.test("Arrow on the left, bottom side", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 140, y: 180, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 180, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -649,7 +652,7 @@ QUnit.test("Arrow on the left, bottom side", function(assert) {
 
 QUnit.test("Arrow on top-left corner", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 140, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 240, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -673,7 +676,7 @@ QUnit.test("Arrow on top-left corner", function(assert) {
 
 QUnit.test("Arrow on top-right corner", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 60, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 240, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -697,7 +700,7 @@ QUnit.test("Arrow on top-right corner", function(assert) {
 
 QUnit.test("Arrow on bottom-right corner", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 60, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 160, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -721,7 +724,7 @@ QUnit.test("Arrow on bottom-right corner", function(assert) {
 
 QUnit.test("Arrow on bottom-left corner", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 140, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 160, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -745,7 +748,7 @@ QUnit.test("Arrow on bottom-left corner", function(assert) {
 
 QUnit.test("Anchor is inside plaque", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 100, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 200, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -769,7 +772,7 @@ QUnit.test("Anchor is inside plaque", function(assert) {
 
 QUnit.test("Arrow on the left, center. Arrow width is bigger than annotation height", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -792,7 +795,7 @@ QUnit.test("Arrow on the left, center. Arrow width is bigger than annotation hei
 
 QUnit.test("Arrow on the bottom, center. Arrow width is bigger than annotation width", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
         border: {
             width: 1,
             visible: true
@@ -819,6 +822,7 @@ QUnit.module("Check plaque path on pane bounds", {
     },
     createAnnotations(items, options) {
         return createAnnotations(items, $.extend(true, {
+            argument: 0,
             border: {
                 width: 1,
                 visible: true
@@ -979,7 +983,7 @@ QUnit.test("Round x, y", function(assert) {
 QUnit.module("Text annotaion", environment);
 
 QUnit.test("Draw text inside plaque", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: {} } ], {})[0];
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: {} } ], {})[0];
     this.renderer.g.reset();
 
     annotation.draw(this.widget, this.group);
@@ -994,7 +998,7 @@ QUnit.test("Draw text inside plaque", function(assert) {
 });
 
 QUnit.test("Text params", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {})[0];
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {})[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -1003,7 +1007,7 @@ QUnit.test("Text params", function(assert) {
 });
 
 QUnit.test("Merge common and item options", function(assert) {
-    const annotation = createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {
         font: { color: "red" }
     })[0];
 
@@ -1013,7 +1017,7 @@ QUnit.test("Merge common and item options", function(assert) {
 });
 
 QUnit.test("Draw text with width/height", function(assert) {
-    const annotation = createAnnotations([{
+    const annotation = this.createAnnotations([{
         x: 0, y: 0,
         type: "text",
         text: "some text",
@@ -1043,7 +1047,7 @@ QUnit.test("Draw text with width/height", function(assert) {
 });
 
 QUnit.test("Do not call setMax size is less than 0", function(assert) {
-    const annotation = createAnnotations([{
+    const annotation = this.createAnnotations([{
         x: 0, y: 0,
         type: "text",
         text: "some text",
@@ -1069,7 +1073,7 @@ QUnit.test("Do not call setMax size is less than 0", function(assert) {
 });
 
 QUnit.test("Draw plague bound text bbox if it greater than passed size", function(assert) {
-    const annotation = createAnnotations([{
+    const annotation = this.createAnnotations([{
         x: 0, y: 0,
         type: "text",
         text: "some text",
@@ -1096,7 +1100,7 @@ QUnit.module("Tooltip", environment);
 QUnit.test("customizeTooltip in item", function(assert) {
     const customizeTooltip = function() { return 2; };
     const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" }, customizeTooltip }];
-    const annotation = createAnnotations(items, { customizeTooltip: function() { return 1; } })[0];
+    const annotation = this.createAnnotations(items, { customizeTooltip: function() { return 1; } })[0];
 
     annotation.draw(this.widget, this.group);
 
@@ -1107,7 +1111,7 @@ QUnit.test("customizeTooltip in item", function(assert) {
 QUnit.module("Misc", environment);
 
 QUnit.test("Do not create annotation with wrong type", function(assert) {
-    const annotations = createAnnotations([
+    const annotations = this.createAnnotations([
         { type: "image" },
         { type: "wrongtype" },
         { type: "text" }
@@ -1122,7 +1126,7 @@ QUnit.module("Plaque with cornerRadius", environment);
 
 QUnit.test("Draw plaque w/o arrow", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 100, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url", width: 40, height: 20 } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 40, height: 20 } }], {
         x: 100,
         y: 100,
         paddingLeftRight: 10,
@@ -1139,7 +1143,7 @@ QUnit.test("Draw plaque w/o arrow", function(assert) {
 
 QUnit.test("Corner radius can't be greater than half of height", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 100, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 40,
@@ -1158,7 +1162,7 @@ QUnit.test("Corner radius can't be greater than half of height", function(assert
 
 QUnit.test("Corner radius can't be greater than half of width", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 100, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 40,
@@ -1181,7 +1185,7 @@ function roundPathCoords(cloud) {
 
 QUnit.test("Arrow bettween arcs", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 50,
@@ -1200,7 +1204,7 @@ QUnit.test("Arrow bettween arcs", function(assert) {
 
 QUnit.test("Arrow start on top arc, arrow end beetween arcs", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 80, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 50,
@@ -1219,7 +1223,7 @@ QUnit.test("Arrow start on top arc, arrow end beetween arcs", function(assert) {
 
 QUnit.test("Both arrrow coordinates on top arc", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 60, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 50,
@@ -1238,7 +1242,7 @@ QUnit.test("Both arrrow coordinates on top arc", function(assert) {
 
 QUnit.test("Arrow starts on top arc and ends on bottom arc", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1257,7 +1261,7 @@ QUnit.test("Arrow starts on top arc and ends on bottom arc", function(assert) {
 
 QUnit.test("Arrow starts on bottom arc and ends on bottom arc", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 140, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1276,7 +1280,7 @@ QUnit.test("Arrow starts on bottom arc and ends on bottom arc", function(assert)
 
 QUnit.test("Arrow starts from bottom arc", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 140, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1295,7 +1299,7 @@ QUnit.test("Arrow starts from bottom arc", function(assert) {
 
 QUnit.test("Arrow on bottom arc", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 150, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1314,7 +1318,7 @@ QUnit.test("Arrow on bottom arc", function(assert) {
 
 QUnit.test("Arrow in the corner", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 160, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1333,7 +1337,7 @@ QUnit.test("Arrow in the corner", function(assert) {
 
 QUnit.test("Arrow in the corner. Arrow width greater than arc length", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 160, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1352,7 +1356,7 @@ QUnit.test("Arrow in the corner. Arrow width greater than arc length", function(
 
 QUnit.test("Arrow in the corner. Arrow width is 0", function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 160, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
         x: 100,
         y: 100,
         width: 100,

@@ -124,6 +124,7 @@ SeriesDataSource.prototype = {
             groupsData = {
                 groups: [{
                     series: series,
+                    valueAxis: options.valueAxis,
                     valueOptions: {
                         type: valueAxis.type,
                         valueType: dataSourceField ? options.valueType : valueAxis.valueType

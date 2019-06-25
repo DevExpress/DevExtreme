@@ -187,7 +187,7 @@ function adjustStackedSeriesValues() {
         singleSeries.holes = extend(true, {}, holesStack);
 
         singleSeries.getPoints().forEach(function(point, index, points) {
-            var value = point.initialValue,
+            var value = point.initialValue && point.initialValue.valueOf(),
                 argument = point.argument.valueOf(),
                 stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative,
                 isNotBarSeries = singleSeries.type !== "bar",
@@ -214,12 +214,12 @@ function adjustStackedSeriesValues() {
                 if(!hole && prevPoint && prevPoint.hasValue()) {
                     argument = prevPoint.argument.valueOf();
                     prevPoint._skipSetRightHole = true;
-                    holesStack.right[argument] = (holesStack.right[argument] || 0) + (prevPoint.value - (isFinite(prevPoint.minValue) ? prevPoint.minValue : 0));
+                    holesStack.right[argument] = (holesStack.right[argument] || 0) + (prevPoint.value.valueOf() - (isFinite(prevPoint.minValue) ? prevPoint.minValue.valueOf() : 0));
                 }
                 hole = true;
             } else if(hole) {
                 hole = false;
-                holesStack.left[argument] = (holesStack.left[argument] || 0) + (point.value - (isFinite(point.minValue) ? point.minValue : 0));
+                holesStack.left[argument] = (holesStack.left[argument] || 0) + (point.value.valueOf() - (isFinite(point.minValue) ? point.minValue.valueOf() : 0));
                 point._skipSetLeftHole = true;
             }
         });
@@ -268,7 +268,7 @@ function updateStackedSeriesValues() {
             if(!point.hasValue()) {
                 return;
             }
-            var value = point.initialValue,
+            var value = point.initialValue && point.initialValue.valueOf(),
                 argument = point.argument.valueOf(),
                 updateValue,
                 valueType,

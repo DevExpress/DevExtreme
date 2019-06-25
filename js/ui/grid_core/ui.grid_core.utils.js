@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import { equalByValue } from "../../core/utils/common";
 import { isDefined, isFunction } from "../../core/utils/type";
+import { when } from "../../core/utils/deferred";
 import { getGroupInterval } from "../shared/filtering";
 import { format } from "../../core/utils/string";
 import { each } from "../../core/utils/iterator";
@@ -77,6 +78,14 @@ module.exports = (function() {
 
     var setEmptyText = function($container) {
         $container.get(0).textContent = "\u00A0";
+    };
+
+    var getWidgetInstance = function($element) {
+        var editorData = $element.data && $element.data(),
+            dxComponents = editorData && editorData.dxComponents,
+            widgetName = dxComponents && dxComponents[0];
+
+        return widgetName && editorData[widgetName];
     };
 
     return {
@@ -474,9 +483,15 @@ module.exports = (function() {
                 isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
 
             if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is(".dx-texteditor-input")) {
-                $element.get(0).select();
+                var editor = getWidgetInstance($element.closest(".dx-texteditor"));
+
+                when(editor && editor._loadItemDeferred).done(function() {
+                    $element.get(0).select();
+                });
             }
         },
+
+        getWidgetInstance: getWidgetInstance,
 
         getLastResizableColumnIndex: function(columns, resultWidths) {
             var hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);

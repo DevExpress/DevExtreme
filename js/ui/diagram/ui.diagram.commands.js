@@ -171,10 +171,28 @@ const DiagramCommands = {
                 text: "Auto Layout",
                 showText: "always",
                 items: [
-                    { command: DiagramCommand.AutoLayoutTreeVertical, text: "Tree (vertical)" },
-                    { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Layered (vertical)" },
-                    { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Layered (horizontal)" }
+                    {
+                        text: "Tree",
+                        items: [
+                            { command: DiagramCommand.AutoLayoutTreeVertical, text: "Vertical" },
+                            { command: DiagramCommand.AutoLayoutTreeHorizontal, text: "Horizontal" }
+                        ]
+                    },
+                    {
+                        text: "Layered",
+                        items: [
+                            { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Vertical" },
+                            { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Horizontal" }
+                        ]
+                    }
                 ]
+            },
+            {
+                command: DiagramCommand.Fullscreen,
+                hint: "Fullscreen",
+                text: "Fullscreen",
+                icon: "dx-diagram-i dx-diagram-i-button-fullscreen",
+                cssClass: CSS_CLASSES.BUTTON_COLOR
             }
         ];
     },

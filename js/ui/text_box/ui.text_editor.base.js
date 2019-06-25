@@ -412,24 +412,30 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderInput: function() {
-        const buttons = this.option("buttons");
-        const $textEditorContainer = $("<div>")
+        this._$textEditorContainer = $("<div>")
             .addClass(TEXTEDITOR_CONTAINER_CLASS)
             .appendTo(this.$element());
 
-        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $textEditorContainer);
-
         this._$textEditorInputContainer = $("<div>")
             .addClass(TEXTEDITOR_INPUT_CONTAINER_CLASS)
-            .appendTo($textEditorContainer);
+            .appendTo(this._$textEditorContainer);
         this._$textEditorInputContainer.append(this._createInput());
-        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $textEditorContainer);
+
+        this._renderButtonContainers();
+    },
+
+    _renderButtonContainers: function() {
+        const buttons = this.option("buttons");
+
+        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, this._$textEditorContainer);
+        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$textEditorContainer);
     },
 
     _clean() {
         this._buttonCollection.clean();
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
+        this._$textEditorContainer = null;
         this.callBase();
     },
 
@@ -799,7 +805,10 @@ var TextEditorBase = Editor.inherit({
                 if(args.fullName === args.name) {
                     checkButtonsOptionType(args.value);
                 }
-                this._invalidate();
+                this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
+                this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
+                this._buttonCollection.clean();
+                this._renderButtonContainers();
                 break;
             case "valueFormat":
                 this._invalidate();

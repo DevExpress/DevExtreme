@@ -374,9 +374,10 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                 assert.equal($(args.appointmentElement).get(0), tooltipItemElement, "Appointment element is OK");
                 assert.ok(args.event instanceof $.Event, "Event is OK");
 
-                assert.notOk(args.hasOwnProperty('itemData'));
-                assert.notOk(args.hasOwnProperty('itemIndex'));
-                assert.notOk(args.hasOwnProperty('itemElement'));
+                var haveArgsOwnProperty = Object.prototype.hasOwnProperty.bind(args);
+                assert.notOk(haveArgsOwnProperty('itemData'));
+                assert.notOk(haveArgsOwnProperty('itemIndex'));
+                assert.notOk(haveArgsOwnProperty('itemElement'));
             }
         });
 

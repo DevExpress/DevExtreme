@@ -43,7 +43,7 @@ class DiagramLeftPanel extends Widget {
             });
         }
         for(var key in this._dataSources) {
-            if(this._dataSources.hasOwnProperty(key)) {
+            if(Object.prototype.hasOwnProperty.call(this._dataSources, key)) {
                 result.push({
                     key,
                     title: this._dataSources[key].title,

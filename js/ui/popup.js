@@ -668,12 +668,16 @@ var Popup = Overlay.inherit({
         var overlayContent = this.overlayContent().get(0),
             currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
-        this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
         this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
+        this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
+    },
+
+    _heightStrategyChangeOffset: function(currentHeightStrategyClass, popupVerticalPaddings) {
+        return currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0;
     },
 
     _chooseHeightStrategy: function(overlayContent) {
-        var isAutoWidth = this.overlayContent().get(0).style.width === "auto" || this.overlayContent().get(0).style.width === "",
+        var isAutoWidth = overlayContent.style.width === "auto" || overlayContent.style.width === "",
             currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
 
         if(this._isAutoHeight() && this.option("autoResizeEnabled")) {
@@ -691,18 +695,23 @@ var Popup = Overlay.inherit({
 
     _getHeightCssStyles: function(currentHeightStrategyClass, overlayContent) {
         var cssStyles = {},
+            contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
+            contentMinHeight = this._getOptionValue("minHeight", overlayContent),
             popupHeightParts = this._splitPopupHeight(),
             toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
                 + popupHeightParts.footer
                 + popupHeightParts.contentVerticalOffsets
-                + popupHeightParts.popupVerticalOffsets,
-            contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
-            contentMinHeight = this._getOptionValue("minHeight", overlayContent);
+                + popupHeightParts.popupVerticalOffsets
+                + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts.popupVerticalPaddings);
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
                 var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
-                cssStyles = { height: Math.max(0, contentHeight) };
+                cssStyles = {
+                    height: Math.max(0, contentHeight),
+                    minHeight: "auto",
+                    maxHeight: "auto"
+                };
             }
         } else {
             var container = $(this._getContainer()).get(0),
@@ -710,6 +719,7 @@ var Popup = Overlay.inherit({
                 minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
             cssStyles = {
+                height: "auto",
                 minHeight: minHeightValue,
                 maxHeight: maxHeightValue
             };
@@ -742,7 +752,8 @@ var Popup = Overlay.inherit({
             header: sizeUtils.getVisibleHeight(topToolbar && topToolbar.get(0)),
             footer: sizeUtils.getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
             contentVerticalOffsets: sizeUtils.getVerticalOffsets(this.overlayContent().get(0), true),
-            popupVerticalOffsets: sizeUtils.getVerticalOffsets(this.$content().get(0), true)
+            popupVerticalOffsets: sizeUtils.getVerticalOffsets(this.$content().get(0), true),
+            popupVerticalPaddings: sizeUtils.getVerticalOffsets(this.$content().get(0), false)
         };
     },
 

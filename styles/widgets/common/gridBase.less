@@ -28,7 +28,7 @@
     }
 
     .dx-@{widgetName}-important-margin {
-        margin-right: 5px !important;
+        margin-right: 5px !important; // stylelint-disable-line declaration-no-important
     }
 
     // for Foundation Responsive Framework
@@ -108,26 +108,6 @@
                 .dx-menu-image {
                     background-position-x: left;
                 }
-            }
-        }
-
-        @-webkit-keyframes dx-loadpanel-opacity {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes dx-loadpanel-opacity {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
             }
         }
 
@@ -305,7 +285,6 @@
 
     .dx-@{widgetName}-text-content {
         overflow: hidden;
-        -o-text-overflow: ellipsis;
         text-overflow: ellipsis;
     }
 
@@ -319,8 +298,8 @@
     }
 
     input.dx-hidden {
-        display: inline-block !important;
-        width: 0 !important;
+        display: inline-block !important; // stylelint-disable-line declaration-no-important
+        width: 0 !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-hidden-cell {
@@ -352,7 +331,7 @@
 
         .dx-@{widgetName}-best-fit {
             .dx-column-indicators {
-                float: none !important;
+                float: none !important; // stylelint-disable-line declaration-no-important
 
                 & > span {
                     width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH;
@@ -380,7 +359,7 @@
 
         &:not(.dx-@{widgetName}-table-fixed) {
             .dx-column-indicators {
-                float: none !important;
+                float: none !important; // stylelint-disable-line declaration-no-important
 
                 & > span {
                     width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH;
@@ -422,9 +401,7 @@
                     }
                 }
             }
-        }
 
-        .dx-row {
             .dx-editor-container {
                 overflow: hidden;
             }
@@ -495,7 +472,6 @@
         .dx-filter-range-content {
             padding: @GRID_CELL_PADDING @GRID_CELL_PADDING @GRID_CELL_PADDING @GRID_TEXTEDITOR_INPUT_PADDING;
             overflow: hidden;
-            -o-text-overflow: ellipsis;
             text-overflow: ellipsis;
             cursor: pointer;
         }
@@ -525,7 +501,7 @@
         }
 
         &.dx-hidden {
-            display: block !important;
+            display: block !important; // stylelint-disable-line declaration-no-important
 
             &::after {
                 display: none;
@@ -811,7 +787,6 @@
             & > td,
             & > tr > td {
                 overflow: hidden;
-                -o-text-overflow: ellipsis;
                 text-overflow: ellipsis;
             }
         }
@@ -903,7 +878,7 @@
     }
 
     .dx-@{widgetName}-hidden-column > * {
-        display: none !important;
+        display: none !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-@{widgetName}-total-footer {

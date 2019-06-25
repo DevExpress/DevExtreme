@@ -10,7 +10,7 @@ var focused;
         focused = DevExpress.require("ui/widget/selectors").focused;
         root.keyboardMock = factory(root.jQuery);
     }
-}(window, function($, undefined) {
+}(window, function($) {
     var $element;
 
     var caret;

@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     devices = require("../../core/devices"),
+    browser = require("../../core/utils/browser"),
     TextEditor = require("../text_box/ui.text_editor"),
     eventUtils = require("../../events/utils"),
     SpinButtons = require("./number_box.spins").default,
@@ -163,7 +164,13 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    return devices.real().platform !== "generic";
+                    var version = parseFloat(browser.version);
+                    return devices.real().platform !== "generic"
+                        && !(
+                            browser.chrome && version >= 66
+                            || browser.safari && version >= 12
+                            || browser.msie && version >= 75
+                        );
                 },
                 options: {
                     /**
@@ -183,6 +190,11 @@ var NumberBoxBase = TextEditor.inherit({
         this.callBase();
     },
 
+    _applyInputAttributes: function($input, customAttributes) {
+        $input.attr("inputmode", "numeric");
+        this.callBase($input, customAttributes);
+    },
+
     _renderContentImpl: function() {
         this.option("isValid") && this._validateValue(this.option("value"));
         this.setAria("role", "spinbutton");
@@ -196,7 +208,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _setSubmitValue: function(value) {
-        this._$submitElement.val(commonUtils.applyServerDecimalSeparator(value));
+        this._getSubmitElement().val(commonUtils.applyServerDecimalSeparator(value));
     },
 
     _getSubmitElement: function() {
@@ -267,8 +279,8 @@ var NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            "valuemin": this.option("min") || "undefined",
-            "valuemax": this.option("max") || "undefined"
+            "valuemin": this.option("min") || null,
+            "valuemax": this.option("max") || null
         });
     },
 

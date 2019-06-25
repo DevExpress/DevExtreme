@@ -580,7 +580,8 @@ QUnit.module("Lifecycle", {
                 offsetY: 1,
                 blur: 4,
                 color: '#000000'
-            }
+            },
+            allowDragging: false
         });
     });
 
@@ -674,7 +675,7 @@ QUnit.module("Lifecycle", {
     });
 });
 
-QUnit.module("Tooltip", {
+const environment = {
     beforeEach() {
         this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = sinon.spy(() => this.renderer);
@@ -726,7 +727,9 @@ QUnit.module("Tooltip", {
 
         return chart;
     }
-}, function() {
+};
+
+QUnit.module("Tooltip", environment, function() {
     QUnit.test("Create - use chart toltip options, but remove customize callback", function(assert) {
         this.createChart({
             tooltip: {
@@ -918,6 +921,47 @@ QUnit.module("Tooltip", {
         assert.equal(this.tooltip.show.callCount, 0);
     });
 
+    QUnit.test("Do not show tooltip on pointer down when dragging allowed", function(assert) {
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                allowDragging: true
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+        pointer.start({ x: 20 + 3, y: 25 + 5 }).down();
+
+        assert.equal(this.tooltip.show.callCount, 0);
+    });
+
+    QUnit.test("Do not show tooltip on pointer move when dragging allowed", function(assert) {
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                allowDragging: true
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+        pointer.start({ x: 20 + 3, y: 25 + 5 }).down().move(3, 3);
+
+        assert.equal(this.tooltip.show.callCount, 0);
+    });
+
+    QUnit.test("Show tooltip on pointer up when dragging allowed", function(assert) {
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                allowDragging: true
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+        const basePointer = pointerMock($("#qunit-fixture")).start();
+        pointer.start({ x: 20 + 3, y: 25 + 5 }).down().up();
+        basePointer.start({ x: 20 + 3, y: 25 + 5 }).up();
+
+        assert.equal(this.tooltip.show.callCount, 1);
+    });
+
     QUnit.test("Dispose", function(assert) {
         const chart = this.createChart({
             some: "options"
@@ -930,5 +974,103 @@ QUnit.module("Tooltip", {
 
         assert.equal(this.tooltip.dispose.callCount, 1);
         assert.equal(annotationsGroup.off.lastCall.args[0], ".annotations");
+    });
+});
+
+QUnit.module("Drag", environment, function() {
+    QUnit.test("Disabled (by default)", function(assert) {
+        const chart = this.createChart();
+
+        const plaqueMove = chart._annotations.items[1].plaque._contentGroup.move;
+
+        const pointer = pointerMock(chart._annotationsGroup.children[1].element).start();
+        pointer.start({ x: 20 + 5, y: 25 + 5 }).dragStart().drag(10, 10).dragEnd();
+
+        assert.notOk(chart._annotations.items[1].offsetX);
+        assert.notOk(chart._annotations.items[1].offsetY);
+        assert.notOk(chart._annotations.items[1]._dragOffsetX);
+        assert.notOk(chart._annotations.items[1]._dragOffsetY);
+        assert.equal(plaqueMove.callCount, 1);
+    });
+
+    QUnit.test("Simple drag", function(assert) {
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                allowDragging: true
+            },
+            annotations: []
+        });
+        chart.option("annotations", [
+            { x: 30, y: 30, name: "annotation1", description: "d1" },
+            { argument: 70, name: "annotation2", description: "d2" }
+        ]);
+
+        const plaqueMove = chart._annotations.items[0].plaque._contentGroup.move;
+
+        const pointer = pointerMock(chart._annotationsGroup.children[0].element).start();
+        pointer.start({ x: 20 + 5, y: 25 + 5 }).dragStart().drag(10, 10).dragEnd();
+
+        assert.equal(this.tooltip.show.callCount, 0);
+        assert.equal(chart._annotations.items[0].offsetX, 35);
+        assert.equal(chart._annotations.items[0].offsetY, 40);
+        assert.equal(chart._annotations.items[0]._dragOffsetX, 5);
+        assert.equal(chart._annotations.items[0]._dragOffsetY, 0);
+        assert.equal((chart._annotations.items[0].plaque._cloud._stored_settings.d.match(/,/g) || []).length, 4, "check not bounded - has no arrow");
+        assert.equal((chart._annotations.items[1].plaque._cloud._stored_settings.d.match(/,/g) || []).length, 9, "check bounded - has arrow");
+        assert.deepEqual(plaqueMove.getCall(1).args, [29, 33]);
+    });
+
+    QUnit.test("Dragging with predefined offset", function(assert) {
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                allowDragging: true,
+                offsetX: 20,
+                offsetY: -10
+            }
+        });
+
+        const plaqueMove = chart._annotations.items[1].plaque._contentGroup.move;
+
+        const pointer = pointerMock(chart._annotationsGroup.children[1].element).start();
+        pointer.start({ x: 20 + 5, y: 25 + 5 }).dragStart().drag(10, 10).dragEnd();
+
+        assert.equal(chart._annotations.items[1].offsetX, 55);
+        assert.equal(chart._annotations.items[1].offsetY, 30);
+        assert.equal(chart._annotations.items[1]._dragOffsetX, 25);
+        assert.equal(chart._annotations.items[1]._dragOffsetY, -10);
+        assert.deepEqual(plaqueMove.getCall(1).args, [49, 23]);
+    });
+
+    QUnit.test("Drag the annotation and pan", function(assert) {
+        const chart = this.createChart({
+            argumentAxis: {
+                visualRange: [10, 90],
+                wholeRange: [0, 100]
+            },
+            zoomAndPan: {
+                argumentAxis: "both"
+            },
+            commonAnnotationSettings: {
+                allowDragging: true
+            }
+        });
+
+        chart._lastRenderingTime = 10;
+
+        const pointerAnnotation = pointerMock(chart._annotationsGroup.children[1].element).start();
+        pointerAnnotation.start({ x: 20 + 5, y: 25 + 5 }).dragStart().drag(10, 10).dragEnd();
+
+        const pointer = pointerMock(chart._renderer.root.element).start();
+        pointer.start({ x: 5, y: 5 }).dragStart().drag(-15, 2).dragEnd();
+
+        const plaqueMove = chart._annotations.items[1].plaque._contentGroup.move;
+
+        assert.equal(chart._annotations.items[1].offsetX, 35);
+        assert.equal(chart._annotations.items[1].offsetY, 40);
+        assert.equal(chart._annotations.items[1]._dragOffsetX, 5);
+        assert.equal(chart._annotations.items[1]._dragOffsetY, 0);
+        assert.equal(plaqueMove.callCount, 1);
+        assert.deepEqual(plaqueMove.getCall(0).args, [54, 63]);
+        assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 18, endValue: 98 });
     });
 });

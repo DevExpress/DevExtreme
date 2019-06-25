@@ -831,6 +831,17 @@ var DropDownList = DropDownEditor.inherit({
         this._setListOption.apply(this, arguments);
     },
 
+    _setSubmitValue: function() {
+        var value = this.option("value"),
+            submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
+
+        this._getSubmitElement().val(submitValue);
+    },
+
+    _shouldUseDisplayValue: function(value) {
+        return this.option("valueExpr") === "this" && typeUtils.isObject(value);
+    },
+
     _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);
         switch(args.name) {

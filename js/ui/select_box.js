@@ -239,7 +239,8 @@ var SelectBox = DropDownList.inherit({
             displayCustomValue: false,
 
             _isAdaptablePopupPosition: false,
-            useInkRipple: false
+            useInkRipple: false,
+            useHiddenSubmitElement: true
         });
     },
 
@@ -249,19 +250,12 @@ var SelectBox = DropDownList.inherit({
     },
 
     _initMarkup: function() {
-        this._renderSubmitElement();
         this.$element().addClass(SELECTBOX_CLASS);
         this._renderTooltip();
         this.option("useInkRipple") && this._renderInkRipple();
 
         this.callBase();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
-    },
-
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
     },
 
     _renderInkRipple: function() {
@@ -372,17 +366,6 @@ var SelectBox = DropDownList.inherit({
         this._setSubmitValue();
 
         return new Deferred().resolve();
-    },
-
-    _setSubmitValue: function() {
-        var value = this.option("value"),
-            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
-
-        this._$submitElement.val(submitValue);
-    },
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
     },
 
     _renderInputValue: function() {

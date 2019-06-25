@@ -16,7 +16,7 @@ var orderEach = function(map, func) {
         i;
 
     for(key in map) {
-        if(map.hasOwnProperty(key)) {
+        if(Object.prototype.hasOwnProperty.call(map, key)) {
             keys.push(key);
         }
     }

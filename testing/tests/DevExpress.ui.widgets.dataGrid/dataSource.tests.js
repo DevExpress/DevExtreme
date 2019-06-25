@@ -602,6 +602,61 @@ QUnit.test("Custom store with remote paging and with local filtering", function(
     assert.strictEqual(loadArgs[0].skip, undefined, "skip is not exists");
     assert.strictEqual(loadArgs[0].take, undefined, "take is not exists");
     assert.strictEqual(loadArgs[0].filter, undefined, "filter is not exists");
+
+    // act
+    loadArgs = [];
+    source.filter(null);
+    source.load();
+
+    // assert
+    assert.strictEqual(source.items().length, 2, "items are not filtered");
+    assert.strictEqual(loadArgs.length, 1);
+    assert.strictEqual(loadArgs[0].skip, 0, "skip is not exists");
+    assert.strictEqual(loadArgs[0].take, 20, "take is not exists");
+    assert.strictEqual(loadArgs[0].filter, undefined, "filter is not exists");
+});
+
+// T748688
+QUnit.test("Custom store with remote paging and with local sorting", function(assert) {
+    // arrange
+    var loadArgs = [];
+    var source = createDataSource({
+        remoteOperations: { paging: true },
+        pageSize: 2,
+        load: function(e) {
+            loadArgs.push(e);
+            if(e.take === 2) {
+                return $.Deferred().resolve([{ x: 1 }, { x: 2 }]);
+            } else {
+                return $.Deferred().resolve([{ x: 1 }, { x: 2 }, { x: 3 }]);
+            }
+        }
+    });
+
+    // act
+    source.sort([{ selector: "x", desc: true }]);
+    source.load();
+
+    // assert
+    assert.strictEqual(source.items().length, 2, "items are paged");
+    assert.strictEqual(source.items()[0].x, 3, "items are sorted");
+    assert.strictEqual(loadArgs.length, 1);
+    assert.strictEqual(loadArgs[0].skip, undefined, "skip is not exists");
+    assert.strictEqual(loadArgs[0].take, undefined, "take is not exists");
+    assert.strictEqual(loadArgs[0].sort, undefined, "sort is not exists");
+
+    // act
+    loadArgs = [];
+    source.sort(null);
+    source.load();
+
+    // assert
+    assert.strictEqual(source.items().length, 2, "items are paged");
+    assert.strictEqual(source.items()[0].x, 1, "items are not sorted");
+    assert.strictEqual(loadArgs.length, 1);
+    assert.strictEqual(loadArgs[0].skip, 0, "skip is not exists");
+    assert.strictEqual(loadArgs[0].take, 2, "take is not exists");
+    assert.strictEqual(loadArgs[0].sort, undefined, "sort is not exists");
 });
 
 QUnit.module("DataSource when not requireTotalCount", {

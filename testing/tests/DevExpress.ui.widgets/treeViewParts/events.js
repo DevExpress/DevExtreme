@@ -471,19 +471,19 @@ QUnit.test("'onSelectionChanged' should have right arguments for nested items (s
 
     var nodes = args.component.getNodes();
 
-    assert.ok(nodes[0].hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0], "selected"));
     assert.strictEqual(nodes[0].selected, undefined);
 
-    assert.ok(nodes[0].items[0].hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0], "selected"));
     assert.strictEqual(nodes[0].items[0].selected, undefined);
-    assert.ok(nodes[0].items[0].parent.hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0].parent, "selected"));
     assert.strictEqual(nodes[0].items[0].parent.selected, undefined);
 
     assert.ok(nodes[0].items[0].items[0].selected);
-    assert.ok(nodes[0].items[0].items[0].parent.hasOwnProperty("selected"), undefined);
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0].items[0].parent, "selected"));
 
     assert.ok(!nodes[0].items[0].items[1].selected);
-    assert.ok(nodes[0].items[0].items[1].parent.hasOwnProperty("selected"), undefined);
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0].items[1].parent, "selected"));
 
     assert.ok(nodes[0].items[0].items[0].items[0].selected);
     assert.ok(nodes[0].items[0].items[0].items[0].parent.selected);
