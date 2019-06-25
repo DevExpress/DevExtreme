@@ -774,6 +774,7 @@ QUnit.test("Edit cell - The editable cell should be closed after click on expand
 
     // act
     $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxpointerdown");
+    $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxclick");
     this.clock.tick();
 
     // assert
