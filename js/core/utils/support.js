@@ -47,16 +47,16 @@ const inputType = function(type) {
     }
 };
 
-const detectTouchEvents = function(isWindowHasProperty, maxTouchPoints) {
-    return (isWindowHasProperty("ontouchstart") || !!maxTouchPoints) && !isWindowHasProperty("callPhantom");
+const detectTouchEvents = function(hasWindowProperty, maxTouchPoints) {
+    return (hasWindowProperty("ontouchstart") || !!maxTouchPoints) && !hasWindowProperty("callPhantom");
 };
 
-const detectPointerEvent = function(isWindowHasProperty, pointerEnabled) {
+const detectPointerEvent = function(hasWindowProperty, pointerEnabled) {
     // TODO: remove the check of the 'pointerEnabled' when we drop IE support
     const isPointerEnabled = ensureDefined(pointerEnabled, true);
     const canUsePointerEvent = ensureDefined(pointerEnabled, false);
 
-    return isWindowHasProperty("PointerEvent") && isPointerEnabled || canUsePointerEvent;
+    return hasWindowProperty("PointerEvent") && isPointerEnabled || canUsePointerEvent;
 };
 
 const touchEvents = detectTouchEvents(hasProperty, maxTouchPoints);
