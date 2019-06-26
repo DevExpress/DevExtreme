@@ -279,8 +279,8 @@ var NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            "valuemin": this.option("min") || null,
-            "valuemax": this.option("max") || null
+            "valuemin": commonUtils.ensureDefined(this.option("min"), null),
+            "valuemax": commonUtils.ensureDefined(this.option("max"), null)
         });
     },
 

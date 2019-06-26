@@ -2050,6 +2050,18 @@ QUnit.module("aria accessibility", {}, () => {
         assert.equal($input.attr("aria-valuenow"), 25, "aria now is correct");
     });
 
+    QUnit.test("aria-valuemin and valuemax attributes should be set when min/max option is 0", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            min: 0,
+            max: 0
+        });
+
+        const $input = $element.find(".dx-texteditor-input");
+
+        assert.strictEqual($input.attr("aria-valuemin"), "0", "aria min is correct");
+        assert.strictEqual($input.attr("aria-valuemax"), "0", "aria max is correct");
+    });
+
     QUnit.test("the dxNumberBox should not have valuemin when max only is specified", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             max: 30,
