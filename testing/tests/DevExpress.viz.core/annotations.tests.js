@@ -856,10 +856,10 @@ QUnit.test("Out of right bound - draw plaque from right border", function(assert
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    checkCloudPath(assert, plaque, [400, 140, 440, 140, 440, 140, 460, 140, 440, 150, 440, 180, 400, 180], [90, 420, 160]);
+    checkCloudPath(assert, plaque, [395, 140, 425, 140, 455, 135, 435, 150, 435, 180, 395, 180], [90, 415, 160]);
 
     const contentGroup = this.renderer.g.getCall(3).returnValue;
-    assert.deepEqual(contentGroup.move.firstCall.args, [420 - 10, 160 - 10]);
+    assert.deepEqual(contentGroup.move.firstCall.args, [420 - 15, 160 - 10]);
 });
 
 QUnit.test("Out of left bound - draw plaque from left border", function(assert) {
@@ -878,10 +878,10 @@ QUnit.test("Out of left bound - draw plaque from left border", function(assert) 
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    checkCloudPath(assert, plaque, [60, 140, 100, 140, 100, 170, 120, 180, 100, 180, 100, 180, 60, 180], [90, 80, 160]);
+    checkCloudPath(assert, plaque, [70, 140, 100, 140, 120, 120, 110, 150, 110, 180, 70, 180], [180, 90, 160]);
 
     const contentGroup = this.renderer.g.getCall(3).returnValue;
-    assert.deepEqual(contentGroup.move.firstCall.args, [80 - 10, 160 - 10]);
+    assert.deepEqual(contentGroup.move.firstCall.args, [80, 160 - 10]);
 });
 
 QUnit.test("Plaque width more than canvas - draw plaque in center", function(assert) {

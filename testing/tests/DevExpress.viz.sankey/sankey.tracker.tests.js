@@ -18,9 +18,9 @@ var trackerEnvironment = $.extend({}, environment, {
         common.environment.beforeEach.apply(this, arguments);
         this.renderer.root.element = $("<div>").appendTo("#test-container")[0];
 
-        this.linksGroupIndex = 1;
-        this.nodesGroupIndex = 2;
-        this.labelsGroupIndex = 3;
+        this.linksGroupIndex = 0;
+        this.nodesGroupIndex = 1;
+        this.labelsGroupIndex = 2;
     },
 
     afterEach: function() {

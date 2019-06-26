@@ -110,6 +110,7 @@ registerTheme({
         arrowLength: 10,
         paddingLeftRight: 18,
         paddingTopBottom: 15,
+        textAlignment: "center",
         shared: false,
         location: CENTER,
         shadow: {

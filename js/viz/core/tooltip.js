@@ -1,17 +1,20 @@
-var domAdapter = require("../../core/dom_adapter"),
-    windowUtils = require("../../core/utils/window"),
-    inflector = require("../../core/utils/inflector"),
-    window = windowUtils.getWindow(),
-    $ = require("../../core/renderer"),
-    rendererModule = require("./renderers/renderer"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    HALF_ARROW_WIDTH = 10,
-    vizUtils = require("./utils"),
-    _format = require("../../format_helper").format,
-    mathCeil = Math.ceil,
-    mathMax = Math.max,
-    mathMin = Math.min;
+import domAdapter from "../../core/dom_adapter";
+import windowUtils from "../../core/utils/window";
+import inflector from "../../core/utils/inflector";
+
+import $ from "../../core/renderer";
+import rendererModule from "./renderers/renderer";
+import typeUtils from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import vizUtils from "./utils";
+import { format } from "../../format_helper";
+
+import { Plaque } from "./plaque";
+
+const mathCeil = Math.ceil;
+const mathMax = Math.max;
+const mathMin = Math.min;
+const window = windowUtils.getWindow();
 
 function hideElement($element) {
     $element.css({ left: "-9999px" }).detach();
@@ -39,22 +42,18 @@ function Tooltip(params) {
     that._widgetRoot = params.widgetRoot;
 
     that._wrapper = $("<div>")
-        .css({ position: "absolute", overflow: "visible", height: "1px", "pointerEvents": "none" }) // T265557, T447623
+        .css({ position: "absolute", overflow: "hidden", "pointerEvents": "none" }) // T265557, T447623
         .addClass(params.cssClass);
 
     that._renderer = renderer = new rendererModule.Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
     root = renderer.root;
     root.attr({ "pointer-events": "none" });
 
-    that._cloud = renderer.path([], "area").sharp().append(root);
-    that._shadow = renderer.shadowFilter();
-
     // svg text
-    that._textGroup = renderer.g().attr({ align: "center" }).append(root);
-    that._text = renderer.text(undefined, 0, 0).append(that._textGroup);
+    that._text = renderer.text(undefined, 0, 0);
 
     // html text
-    that._textGroupHtml = $("<div>").css({ position: "absolute", width: 0, padding: 0, margin: 0, border: "0px solid transparent" }).appendTo(that._wrapper);
+    that._textGroupHtml = $("<div>").css({ position: "absolute", padding: 0, margin: 0, border: "0px solid transparent" }).appendTo(that._wrapper);
     that._textHtml = $("<div>").css({ position: "relative", display: "inline-block", padding: 0, margin: 0, border: "0px solid transparent" }).appendTo(that._textGroupHtml);
 }
 
@@ -79,27 +78,63 @@ Tooltip.prototype = {
     setOptions: function(options) {
         options = options || {};
 
-        var that = this,
-            cloudSettings = that._cloudSettings = { opacity: options.opacity, filter: that._shadow.id, "stroke-width": null, stroke: null },
-            borderOptions = options.border || {};
-
-        that._shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
+        var that = this;
 
         that._options = options;
-
-        if(borderOptions.visible) {
-            extend(cloudSettings, {
-                "stroke-width": borderOptions.width,
-                stroke: borderOptions.color,
-                "stroke-opacity": borderOptions.opacity,
-                dashStyle: borderOptions.dashStyle
-            });
-        }
         that._textFontStyles = vizUtils.patchFontOptions(options.font);
         that._textFontStyles.color = options.font.color;
         that._wrapper.css({ "zIndex": options.zIndex });
 
         that._customizeTooltip = options.customizeTooltip;
+
+        const textGroupHtml = that._textGroupHtml;
+        const textHtml = that._textHtml;
+
+        this.plaque = new Plaque({
+            opacity: that._options.opacity,
+            color: that._options.color,
+            border: that._options.border,
+            paddingLeftRight: that._options.paddingLeftRight,
+            paddingTopBottom: that._options.paddingTopBottom,
+            arrowLength: that._options.arrowLength,
+            arrowWidth: 20,
+            shadow: that._options.shadow,
+            cornerRadius: that._options.cornerRadius
+        }, that, that._renderer.root, (tooltip, group) => {
+            const state = tooltip._state;
+            if(state.html) {
+                that._text.attr({ text: "" });
+                textGroupHtml.css({ color: state.textColor });
+                textHtml.html(state.html);
+            } else {
+                textHtml.html("");
+                that._text.css({ fill: state.textColor }).attr({ text: state.text }).append(group.attr({ align: options.textAlignment }));
+            }
+            this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
+        }, true, (tooltip, g) => {
+            const state = tooltip._state;
+            if(state.html) {
+                let bBox;
+                const getComputedStyle = window.getComputedStyle;
+                if(getComputedStyle) { // IE9 compatibility (T298249)
+                    bBox = getComputedStyle(textHtml.get(0));
+                    bBox = { x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)) };
+                } else {
+                    bBox = textHtml.get(0).getBoundingClientRect();
+                    bBox = { x: 0, y: 0, width: mathCeil(bBox.width ? bBox.width : (bBox.right - bBox.left)), height: mathCeil(bBox.height ? bBox.height : (bBox.bottom - bBox.top)) };
+                }
+                return bBox;
+            }
+            return g.getBBox();
+        }, (tooltip, g, x, y) => {
+            const state = tooltip._state;
+            if(state.html) {
+                that._textGroupHtml.css({ left: x, top: y });
+            } else {
+                g.move(x, y);
+            }
+        });
+
         return that;
     },
 
@@ -115,16 +150,12 @@ Tooltip.prototype = {
         // The following is because after update (on widget refresh) tooltip must be hidden
         hideElement(that._wrapper);
 
-        that._cloud.attr(that._cloudSettings);
-        that._shadow.attr(that._shadowSettings);
-
         // text area
         var normalizedCSS = {};
         for(var name in that._textFontStyles) {
             normalizedCSS[inflector.camelize(name)] = that._textFontStyles[name];
         }
         that._textGroupHtml.css(normalizedCSS);
-        that._textGroup.css(that._textFontStyles);
         that._text.css(that._textFontStyles);
 
         that._eventData = null;
@@ -161,71 +192,25 @@ Tooltip.prototype = {
 
     show: function(formatObject, params, eventData, customizeTooltip) {
         var that = this,
-            state = {},
-            options = that._options,
-            paddingLeftRight = options.paddingLeftRight,
-            paddingTopBottom = options.paddingTopBottom,
-            textGroupHtml = that._textGroupHtml,
-            textHtml = that._textHtml,
-            bBox,
-            contentSize,
-            ss = that._shadowSettings,
-            xOff = ss.offsetX,
-            yOff = ss.offsetY,
-            blur = ss.blur * 2 + 1,
-            getComputedStyle = window.getComputedStyle;
+            state = {};
 
         if(!that._prepare(formatObject, state, customizeTooltip)) {
             return false;
         }
 
         that._state = state;
-        state.tc = {};
 
         that._wrapper.appendTo(that._getContainer());
 
-        // apply attributes
-        that._cloud.attr({ fill: state.color, stroke: state.borderColor });
+        this.plaque.clear().draw(extend({}, that._options, {
+            canvas: that._getCanvas()
+        }, state, {
+            x: params.x,
+            y: params.y,
+            offset: params.offset
+        }));
 
-        // draw texts
-        if(state.html) {
-            that._text.attr({ text: "" });
-            textGroupHtml.css({ color: state.textColor, width: that._getCanvas().width });
-            textHtml.html(state.html);
-
-            if(getComputedStyle) { // IE9 compatibility (T298249)
-                bBox = getComputedStyle(textHtml.get(0));
-                bBox = { x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)) };
-            } else {
-                bBox = textHtml.get(0).getBoundingClientRect();
-                bBox = { x: 0, y: 0, width: mathCeil(bBox.width ? bBox.width : (bBox.right - bBox.left)), height: mathCeil(bBox.height ? bBox.height : (bBox.bottom - bBox.top)) };
-            }
-
-            textGroupHtml.width(bBox.width);
-            textGroupHtml.height(bBox.height);
-        } else {
-            textHtml.html("");
-            that._text.css({ fill: state.textColor }).attr({ text: state.text });
-            bBox = that._textGroup.css({ fill: state.textColor }).getBBox();
-        }
-
-        contentSize = state.contentSize = {
-            x: bBox.x - paddingLeftRight,
-            y: bBox.y - paddingTopBottom,
-            width: bBox.width + 2 * paddingLeftRight,
-            height: bBox.height + 2 * paddingTopBottom,
-
-            lm: (blur - xOff) > 0 ? blur - xOff : 0, // left margin
-            rm: (blur + xOff) > 0 ? blur + xOff : 0, // right margin
-            tm: (blur - yOff) > 0 ? blur - yOff : 0, // top margin
-            bm: (blur + yOff) > 0 ? blur + yOff : 0 // bottom margin
-        };
-
-        contentSize.fullWidth = contentSize.width + contentSize.lm + contentSize.rm;
-        contentSize.fullHeight = contentSize.height + contentSize.tm + contentSize.bm + options.arrowLength;
-
-        // move to position
-        that.move(params.x, params.y, params.offset);
+        that.moveWrapper();
 
         // trigger event
         // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
@@ -247,39 +232,38 @@ Tooltip.prototype = {
         that._eventData = null;
     },
 
+
     move: function(x, y, offset) {
-        offset = offset || 0;
-        var that = this,
-            canvas = that._getCanvas(),
-            state = that._state,
-            coords = state.tc,
-            contentSize = state.contentSize;
+        this.plaque.draw({ x, y, offset, canvas: this._getCanvas() });
+        this.moveWrapper();
+    },
 
-        if(that._calculatePosition(x, y, offset, canvas)) {
-            that._cloud.attr({ points: coords.cloudPoints }).move(contentSize.lm, contentSize.tm);
+    moveWrapper: function() {
+        var that = this;
 
-            // translate inner content
-            if(state.html) {
-                that._textGroupHtml.css({ left: -contentSize.x + contentSize.lm, top: -contentSize.y + contentSize.tm + coords.correction });
-            } else {
-                that._textGroup.move(-contentSize.x + contentSize.lm, -contentSize.y + contentSize.tm + coords.correction);
-            }
-            that._renderer.resize(coords.hp === "out" ? canvas.fullWidth + contentSize.lm : contentSize.fullWidth,
-                coords.vp === "out" ? canvas.fullHeight : contentSize.fullHeight);
-        }
+        const plaqueBBox = this.plaque.getBBox();
+        that._renderer.resize(plaqueBBox.width, plaqueBBox.height);
 
         // move wrapper
-        offset = that._wrapper.css({ left: 0, top: 0 }).offset(); // T277991
+        const left = plaqueBBox.x;
+        const top = plaqueBBox.y;
+
         that._wrapper.css({
-            left: coords.x - offset.left,
-            top: coords.y - offset.top,
-            width: coords.hp === "out" ? canvas.fullWidth + contentSize.lm : contentSize.fullWidth// T486487
+            left,
+            top,
         });
+
+        this.plaque.moveRoot(-left, -top);
+        if(this._state.html) {
+            that._textHtml.css({
+                left: -left, top: -top
+            });
+        }
     },
 
     formatValue: function(value, _specialFormat) {
         var options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
-        return _format(value, options.format);
+        return format(value, options.format);
     },
 
     getLocation: function() {
@@ -292,112 +276,6 @@ Tooltip.prototype = {
 
     isShared: function() {
         return !!this._options.shared;
-    },
-
-    _calculatePosition: function(x, y, offset, canvas) {
-        var that = this,
-            options = that._options,
-            arrowLength = options.arrowLength,
-            state = that._state,
-            coords = state.tc,
-            contentSize = state.contentSize,
-            contentWidth = contentSize.width,
-            halfContentWidth = contentWidth / 2,
-            contentHeight = contentSize.height,
-
-            cTop = y - canvas.top,
-            cBottom = canvas.top + canvas.height - y,
-            cLeft = x - canvas.left,
-            cRight = canvas.width + canvas.left - x,
-
-            tTop = contentHeight + arrowLength + offset + contentSize.tm,
-            tBottom = contentHeight + arrowLength + offset + contentSize.bm,
-            tLeft = contentWidth + contentSize.lm,
-            tRight = contentWidth + contentSize.rm,
-            tHalfLeft = halfContentWidth + contentSize.lm,
-            tHalfRight = halfContentWidth + contentSize.rm,
-
-            correction = 0,
-            cloudPoints,
-            arrowPoints = [6, 0],
-            x1 = halfContentWidth + HALF_ARROW_WIDTH,
-            x2 = halfContentWidth,
-            x3 = halfContentWidth - HALF_ARROW_WIDTH,
-            y1,
-            y3,
-            y2 = contentHeight + arrowLength,
-            hp = "center",
-            vp = "bottom";
-
-        y1 = y3 = contentHeight;
-
-        if(tTop > cTop && tBottom > cBottom) {
-            vp = "out";
-        } else if(tTop > cTop) {
-            vp = "top";
-        }
-
-        if(tLeft > cLeft && tRight > cRight) {
-            hp = "out";
-        } else if(tHalfLeft > cLeft && tRight < cRight) {
-            hp = "left";
-        } else if(tHalfRight > cRight && tLeft < cLeft) {
-            hp = "right";
-        }
-
-        if(hp === "out") {
-            x = canvas.left;
-        } else if(hp === "left") {
-            x1 = HALF_ARROW_WIDTH;
-            x2 = x3 = 0;
-        } else if(hp === "right") {
-            x1 = x2 = contentWidth;
-            x3 = contentWidth - HALF_ARROW_WIDTH;
-            x = x - contentWidth;
-        } else if(hp === "center") {
-            x = x - halfContentWidth;
-        }
-
-        if(vp === "out") {
-            y = canvas.top;
-        } else if(vp === "top") {
-            hp !== "out" && (correction = arrowLength);
-            arrowPoints[0] = 2;
-            y1 = y3 = arrowLength;
-            y2 = x1;
-            x1 = x3;
-            x3 = y2;
-            y2 = 0;
-            y = y + offset;
-        } else {
-            y = y - (contentHeight + arrowLength + offset);
-        }
-
-        coords.x = x - contentSize.lm;
-        coords.y = y - contentSize.tm;
-        coords.correction = correction;
-
-        if(hp === coords.hp && vp === coords.vp) {
-            return false;
-        }
-        coords.hp = hp;
-        coords.vp = vp;
-
-        cloudPoints = [
-            0, 0 + correction, // lt
-            contentWidth, 0 + correction, // rt
-            contentWidth, contentHeight + correction, // rb
-            0, contentHeight + correction // lb
-        ];
-
-        if(hp !== "out" && vp !== "out") {
-            arrowPoints.splice(2, 0, x1, y1, x2, y2, x3, y3);
-            cloudPoints.splice.apply(cloudPoints, arrowPoints);
-        }
-
-        coords.cloudPoints = cloudPoints;
-
-        return true;
     },
 
     _getCanvas: function() {
@@ -413,6 +291,8 @@ Tooltip.prototype = {
             top: top,
             width: html.clientWidth || 0,
             height: html.clientHeight || 0,
+            right: 0,
+            bottom: 0,
 
             /* scrollWidth */
             fullWidth: mathMax(

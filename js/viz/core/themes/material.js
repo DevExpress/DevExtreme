@@ -64,7 +64,8 @@ registerTheme({
         color: "#616161",
         font: {
             color: WHITE
-        }
+        },
+        cornerRadius: 4
     },
 
     chart: {
