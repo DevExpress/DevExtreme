@@ -154,11 +154,8 @@ class Diagram extends Widget {
         });
     }
 
-    _onPanelPointerUp({ event }) {
-        const preventRefocusSelector = ".dx-textbox";
-        if(!$(event.target).closest(preventRefocusSelector).length) {
-            this._diagramInstance.captureFocus();
-        }
+    _onPanelPointerUp() {
+        this._diagramInstance.captureFocus();
     }
 
     _renderContextMenu($mainElement) {

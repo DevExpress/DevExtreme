@@ -1,9 +1,11 @@
+import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 
 const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, "dxDiagramPanel");
+const PREVENT_REFOCUS_SELECTOR = ".dx-textbox";
 
 class DiagramPanel extends Widget {
     _init() {
@@ -17,7 +19,9 @@ class DiagramPanel extends Widget {
     _attachPointerUpEvent() {
         eventsEngine.off(this.$element(), POINTERUP_EVENT_NAME);
         eventsEngine.on(this.$element(), POINTERUP_EVENT_NAME, (e) => {
-            this._onPointerUpAction({ event: e });
+            if(!$(e.target).closest(PREVENT_REFOCUS_SELECTOR).length) {
+                this._onPointerUpAction();
+            }
         });
     }
     _createOnPointerUpAction() {
