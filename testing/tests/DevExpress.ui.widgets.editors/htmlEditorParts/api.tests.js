@@ -269,4 +269,44 @@ QUnit.module("API", moduleConfig, () => {
         this.createEditor();
         this.instance.register({ "modules/testWithOptions": Test });
     });
+
+    test("onContentReady should trigger after processing transcluded content", (assert) => {
+        const initialMarkup = "<custom-tag></custom-tag><h1>Hi!</h1><p>Test         </p>";
+        const expectedValue = "<h1>Hi!</h1><p>Test</p>";
+
+        $("#htmlEditor").html(initialMarkup);
+        this.options = {
+            onContentReady: ({ component }) => {
+                assert.strictEqual(component.option("value"), expectedValue, "value is synchronized with the transcluded content");
+            }
+        };
+        this.createEditor();
+
+        this.clock.tick();
+    });
+
+    test("onContentReady event should trigger after editor without transcluded content rendered", (assert) => {
+        this.options.onContentReady = sinon.stub();
+        this.createEditor();
+
+        this.clock.tick();
+        assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
+    });
+
+    test("empty editor should trigger onContentReady event", (assert) => {
+        this.options = { onContentReady: sinon.stub() };
+        this.createEditor();
+
+        this.clock.tick();
+        assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
+    });
+
+    test("editor with invalid transcluded content should trigger onContentReady event", (assert) => {
+        $("#htmlEditor").html("<test><custom-tag></custom-tag></test>");
+        this.options = { onContentReady: sinon.stub() };
+        this.createEditor();
+
+        this.clock.tick();
+        assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
+    });
 });

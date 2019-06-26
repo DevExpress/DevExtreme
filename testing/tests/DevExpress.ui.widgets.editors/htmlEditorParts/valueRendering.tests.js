@@ -85,22 +85,6 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, "<p>Test1</p><p>Test2</p>");
     });
 
-    test("onContentReady should trigger after processing transcluded content", (assert) => {
-        const initialMarkup = "<custom-tag></custom-tag><h1>Hi!</h1><p>Test         </p>";
-        const expectedValue = "<h1>Hi!</h1><p>Test</p>";
-
-        $("#htmlEditor")
-            .html(initialMarkup)
-            .dxHtmlEditor({
-                onContentReady: ({ component }) => {
-                    assert.strictEqual(component.option("value"), expectedValue, "value is synchronized with the transcluded content");
-                }
-            })
-            .dxHtmlEditor("instance");
-
-        this.clock.tick();
-    });
-
     test("change value by user", (assert) => {
         const done = assert.async();
         const expectedValue = "<p>Hi! <strong>Test.</strong></p><p>New line</p>";
