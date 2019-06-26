@@ -1264,6 +1264,7 @@ QUnit.test("Left-top corner of page", function(assert) {
     assert.equal(wrapper.css("top"), "101px");
 
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.lastCall.args, [0, -101]);
+    assert.ok(!this.renderer.g.getCall(0).returnValue._stored_settings.class);
 });
 
 QUnit.test("Center-top side of page", function(assert) {

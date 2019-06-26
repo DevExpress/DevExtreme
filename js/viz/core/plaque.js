@@ -332,7 +332,10 @@ export class Plaque {
         const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
         const shadow = renderer.shadowFilter().attr(shadowSettings);
 
-        const group = this._root = renderer.g().attr({ class: `dxc-${options.type}-annotation` }).append(this.root);
+        const group = this._root = renderer.g().append(this.root);
+        if(options.type) {
+            group.attr({ class: `dxc-${options.type}-annotation` });
+        }
         const cloudGroup = renderer.g().attr({ filter: shadow.id }).append(group);
         this._cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(cloudGroup);
 
