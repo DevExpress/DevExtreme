@@ -2390,6 +2390,15 @@ QUnit.test("coordsIn", function(assert) {
 
 });
 
+QUnit.test("getCenterCoord", function(assert) {
+    const point = createPoint(this.series, { argument: 1, value: 5 }, this.opt);
+
+    point.correctCoordinates({ width: 20 });
+    point.translate();
+
+    assert.deepEqual(point.getCenterCoord(), { x: 120, y: 577.5 });
+});
+
 QUnit.module("get point radius", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();

@@ -89,6 +89,35 @@ var baseRangeSeries = {
 
     getValueFields: function() {
         return [this._options.rangeValue1Field || "val1", this._options.rangeValue2Field || "val2"];
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        let oppositeCoord = null;
+        const { rotated } = this._options;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
+        const coordName = isOpposite ? "vy" : "vx";
+        const minCoordName = rotated ? "minX" : "minY";
+        const oppositeCoordName = isOpposite ? "vx" : "vy";
+        const points = this.getPoints();
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            let tmpCoord;
+
+            if(isArgument) {
+                tmpCoord = p.getCenterCoord()[coordName[1]] === coord ? p[oppositeCoordName] : undefined;
+            } else {
+                const coords = [Math.min(p[coordName], p[minCoordName]), Math.max(p[coordName], p[minCoordName])];
+                tmpCoord = coord >= coords[0] && coord <= coords[1] ? p[oppositeCoordName] : undefined;
+            }
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
     }
 };
 

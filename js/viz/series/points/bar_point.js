@@ -197,11 +197,12 @@ module.exports = _extend({}, symbolPoint, {
         };
     },
 
-    _getEdgeTooltipParams: function(x, y, width, height) {
-        var isPositive = this.value >= 0,
-            xCoord,
-            yCoord,
-            invertedBusinessRange = this._getValTranslator().getBusinessRange().invert;
+    _getEdgeTooltipParams() {
+        const isPositive = this.value >= 0;
+        let xCoord;
+        let yCoord;
+        const invertedBusinessRange = this._getValTranslator().getBusinessRange().invert;
+        const { x, y, width, height } = this;
 
         if(this._options.rotated) {
             yCoord = y + height / 2;
@@ -223,12 +224,18 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     getTooltipParams: function(location) {
-        var x = this.x,
-            y = this.y,
-            width = this.width,
-            height = this.height;
+        if(location === 'edge') {
+            return this._getEdgeTooltipParams();
+        }
+        const center = this.getCenterCoord();
+        center.offset = 0;
+        return center;
+    },
 
-        return location === 'edge' ? this._getEdgeTooltipParams(x, y, width, height) : { x: x + width / 2, y: y + height / 2, offset: 0 };
+    getCenterCoord() {
+        const { width, height, x, y } = this;
+
+        return { x: x + width / 2, y: y + height / 2 };
     },
 
     _truncateCoord: function(coord, minBounce, maxBounce) {

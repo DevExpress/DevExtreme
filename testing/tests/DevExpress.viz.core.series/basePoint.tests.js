@@ -1493,6 +1493,13 @@ QUnit.test("Set default coords. Rotated", function(assert) {
     assert.strictEqual(point.y, 50, "Y");
 });
 
+QUnit.test("getCenterCoord", function(assert) {
+    const point = createPoint(this.series, this.data, this.options);
+    point.translate();
+
+    assert.deepEqual(point.getCenterCoord(), { x: 50, y: 100 });
+});
+
 QUnit.module("getBoundingRect", {});
 
 QUnit.test("getBoundingRect", function(assert) {

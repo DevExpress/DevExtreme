@@ -514,5 +514,11 @@ Point.prototype = {
     },
     getLabels: function() {
         return [this._label];
+    },
+    getCenterCoord() {
+        return {
+            x: this.x,
+            y: this.y
+        };
     }
 };

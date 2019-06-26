@@ -171,9 +171,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
 
         this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 25, y: 50 });
         this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 75, y: 0 });
-
-        // TODO
-        // this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
+        this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
         this.checkCoords(assert, chart, { value: 180, series: "s1" }, { x: 50, y: 20 });
 
         chart.option("valueAxis[0].inverted", true);
@@ -208,9 +206,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
 
         this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 25, y: 50 });
         this.checkCoords(assert, chart, { argument: 75, series: "s1" }, { x: 75, y: 0 });
-
-        // TODO
-        // this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
+        this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
         this.checkCoords(assert, chart, { value: 180, series: "s1" }, { x: 50, y: 20 });
 
         chart.option("valueAxis[0].inverted", true);
@@ -297,18 +293,19 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             series: [{ name: "s1", type: "bar" }]
         });
 
-        this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 0, y: 50 });
-        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: null });
+        this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 8.5, y: 50 });
+        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: undefined, y: undefined });
         this.checkCoords(assert, chart, { argument: 50, series: "s1" }, { x: 50, y: 0 });
 
         // TODO
         // this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
         this.checkCoords(assert, chart, { value: 200, series: "s1" }, { x: 50, y: 0 });
-        this.checkCoords(assert, chart, { value: 160, series: "s1" }, { x: 50, y: 40 });
+        this.checkCoords(assert, chart, { value: 160, series: "s1" }, { x: null, y: 40 });
 
         chart.option("valueAxis[0].inverted", true);
 
-        this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 0, y: 50 });
+        this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 8.5, y: 50 });
+
         this.checkCoords(assert, chart, { argument: 50, series: "s1" }, { x: 50, y: 100 });
 
         chart.option({
@@ -322,7 +319,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             ]
         });
 
-        this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 160, y: 100 });
+        this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 160, y: 91 });
         this.checkCoords(assert, chart, { argument: 50, series: "s1" }, { x: 210, y: 50 });
     });
 
@@ -341,8 +338,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
         });
 
         this.checkCoords(assert, chart, { argument: 50, series: "s2" }, { x: 50, y: 30 });
-        // TODO
-        // this.checkCoords(assert, chart, { argument: 50, series: "s3" }, { x: 62, y: 50 });
+        this.checkCoords(assert, chart, { argument: 50, series: "s3" }, { x: 62, y: 50 });
 
         this.checkCoords(assert, chart, { value: 170, series: "s2" }, { x: 50, y: 30 });
         this.checkCoords(assert, chart, { value: 150, series: "s3" }, { x: 62, y: 50 });
@@ -359,7 +355,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
         });
 
         this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 0, y: 50 });
-        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: null });
+        this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: undefined, y: undefined });
         this.checkCoords(assert, chart, { argument: 50, series: "s1" }, { x: 50, y: 0 });
 
         this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
@@ -393,13 +389,11 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             ],
             series: [{ name: "s1", type: "bubble" }]
         });
-
-        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: 25, y: null });
-        this.checkCoords(assert, chart, { argument: 0, series: "s1" }, { x: 0, y: 50 });
-        this.checkCoords(assert, chart, { argument: 48, series: "s1" }, { x: 48, y: 0 });
+        this.checkCoords(assert, chart, { argument: 25, series: "s1" }, { x: undefined, y: undefined });
+        this.checkCoords(assert, chart, { argument: 50, series: "s1" }, { x: 50, y: 0 });
 
         this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
-        this.checkCoords(assert, chart, { value: 190, series: "s1" }, { x: 50, y: 10 });
+        this.checkCoords(assert, chart, { value: 190, series: "s1" }, { x: 0, y: 10 });
     });
 
     QUnit.test("Get coordinates from series. Financial series", function(assert) {
@@ -414,7 +408,7 @@ QUnit.module("Coordinates calculation. Chart plugin", {
 
         this.checkCoords(assert, chart, { argument: 10, series: "s1" }, { x: 10, y: 50 });
         this.checkCoords(assert, chart, { argument: 90, series: "s1" }, { x: 90, y: 70 });
-        this.checkCoords(assert, chart, { argument: 40, series: "s1" }, { x: 40, y: null });
+        this.checkCoords(assert, chart, { argument: 40, series: "s1" }, { x: undefined, y: undefined });
 
         this.checkCoords(assert, chart, { value: 140, series: "s1" }, { x: 10, y: 60 });
     });

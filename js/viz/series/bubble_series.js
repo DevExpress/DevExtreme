@@ -76,12 +76,6 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         }
     },
 
-    getSeriesPairCoord(coord, isArgument) {
-        return this.getShapePairCoord(coord, isArgument, (point) => {
-            return point.bubbleSize;
-        });
-    },
-
     getValueFields: function() {
         return [this._options.valueField || "val"];
     },
