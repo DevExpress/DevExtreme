@@ -198,16 +198,17 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
 }
 
 export class Plaque {
-    constructor(options, widget, root, renderContent, bounded = true) {
+    constructor(options, widget, root, renderContent, bounded = true, measureContent = (_, g)=>g.getBBox(), moveContentGroup = (_, g, x, y)=>g.move(x, y)) {
         this.widget = widget;
         this.options = options;
         this.root = root;
         this.renderContent = renderContent;
         this.bonded = bounded;
+        this.measureContent = measureContent;
+        this.moveContentGroup = moveContentGroup;
     }
 
-    draw({ x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY }) {
-        const renderer = this.widget._renderer;
+    draw({ x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY, offset = 0 }) {
         const options = this.options;
         let { x, y } = options;
 
@@ -220,6 +221,7 @@ export class Plaque {
             height: canvas.height - canvas.bottom - canvas.top
         };
 
+
         if(!(isDefined(anchorX) && isDefined(anchorY)) && !(isDefined(x) && isDefined(y))) {
             return;
         }
@@ -228,26 +230,11 @@ export class Plaque {
             return;
         }
 
-        const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
-        const shadow = renderer.shadowFilter().attr(shadowSettings);
-
-        let cloudSettings = { opacity: options.opacity, "stroke-width": 0, fill: options.color };
-        let borderOptions = options.border || {};
-
-        if(borderOptions.visible) {
-            extend(cloudSettings, {
-                "stroke-width": borderOptions.width,
-                stroke: borderOptions.color,
-                "stroke-opacity": borderOptions.opacity,
-                dashStyle: borderOptions.dashStyle
-            });
+        if(!this._root) {
+            this._draw();
         }
 
-        const group = renderer.g().attr({ class: `dxc-${options.type}-annotation` }).append(this.root);
-        const cloudGroup = renderer.g().attr({ filter: shadow.id }).append(group);
-        this._cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(cloudGroup);
-
-        this._contentGroup = renderer.g().append(group);
+        const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
 
         const contentWidth = options.width > 0 ? options.width : null;
         const contentHeight = options.height > 0 ? options.height : null;
@@ -256,21 +243,25 @@ export class Plaque {
             width: contentWidth,
             height: contentHeight
         });
-
-        const bBox = this._contentBBox = this._contentGroup.getBBox();
+        const bBox = this._contentBBox = this.measureContent(this.widget, this._contentGroup);
 
         const size = this._size = {
             width: max(contentWidth, bBox.width) + options.paddingLeftRight * 2,
-            height: max(contentHeight, bBox.height) + options.paddingTopBottom * 2
+            height: max(contentHeight, bBox.height) + options.paddingTopBottom * 2,
+            offset
         };
 
         const xOff = shadowSettings.offsetX;
         const yOff = shadowSettings.offsetY;
-        const blur = shadowSettings.blur + 1;
+        const blur = shadowSettings.blur * 2 + 1;
         const lm = max(blur - xOff, 0); // left margin
         const rm = max(blur + xOff, 0); // right margin
         const tm = max(blur - yOff, 0); // top margin
         const bm = max(blur + yOff, 0); // bottom margin
+
+        this.margins = {
+            lm, rm, tm, bm
+        };
 
         if(!isDefined(x)) {
             if(isDefined(offsetX)) {
@@ -293,19 +284,21 @@ export class Plaque {
             if(isDefined(offsetY)) {
                 y = anchorY + offsetY;
             } else {
-                const y_top = anchorY - options.arrowLength - size.height / 2;
-                const y_bottom = anchorY + options.arrowLength + size.height / 2;
+                const y_top = anchorY - options.arrowLength - size.height / 2 - offset;
+                const y_bottom = anchorY + options.arrowLength + size.height / 2 + offset;
 
                 if(bounds.height < size.height + options.arrowLength) {
                     y = round(bounds.yt + size.height / 2);
                 } else if(y_top - size.height / 2 - tm < bounds.yt) {
                     if(y_bottom + size.height / 2 + bm < bounds.yb) {
                         y = y_bottom;
+                        anchorY += offset;
                     } else {
                         y = round(bounds.yt + size.height / 2);
                     }
                 } else {
                     y = y_top;
+                    anchorY -= offset;
                 }
             }
         } else {
@@ -318,6 +311,67 @@ export class Plaque {
         this.anchorX = anchorX;
         this.anchorY = anchorY;
         this.move(x, y);
+    }
+
+    _draw() {
+        const renderer = this.widget._renderer;
+        const options = this.options;
+
+        let cloudSettings = { opacity: options.opacity, "stroke-width": 0, fill: options.color };
+        let borderOptions = options.border || {};
+
+        if(borderOptions.visible) {
+            extend(cloudSettings, {
+                "stroke-width": borderOptions.width,
+                stroke: borderOptions.color,
+                "stroke-opacity": borderOptions.opacity,
+                dashStyle: borderOptions.dashStyle
+            });
+        }
+
+        const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
+        const shadow = renderer.shadowFilter().attr(shadowSettings);
+
+        const group = this._root = renderer.g().append(this.root);
+        if(options.type) {
+            group.attr({ class: `dxc-${options.type}-annotation` });
+        }
+        const cloudGroup = renderer.g().attr({ filter: shadow.id }).append(group);
+        this._cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(cloudGroup);
+
+        this._contentGroup = renderer.g().append(group);
+    }
+
+    getBBox() {
+        const size = this._size || {};
+        const margins = this.margins || {};
+        const rotationAngle = getCloudAngle(size, this.x, this.y, this.anchorX, this.anchorY);
+        return {
+            x: this.x - size.width / 2 - margins.lm,
+            y: this.y - size.height / 2 - margins.tm - (rotationAngle === 270 ? this.options.arrowLength : 0),
+            width: size.width + margins.lm + margins.rm,
+            height: size.height + margins.tm + margins.bm + (rotationAngle === 90 || rotationAngle === 270 ? this.options.arrowLength : 0)
+        };
+    }
+
+    clear() {
+        if(this._root) {
+            this._root.remove();
+            this._root = null;
+        }
+        return this;
+    }
+
+    customizeCloud(attr) {
+        if(this._cloud) {
+            this._cloud.attr(attr);
+        }
+    }
+
+    moveRoot(x, y) {
+        if(this._root) {
+            this._root.move(x, y);
+        }
     }
 
     move(x, y) {
@@ -339,7 +393,7 @@ export class Plaque {
         })
             .rotate(rotationAngle, x, y);
 
-        this._contentGroup.move(x - this._contentBBox.x - this._contentBBox.width / 2, y - this._contentBBox.y - this._contentBBox.height / 2);
+        this.moveContentGroup(this.widget, this._contentGroup, x - this._contentBBox.x - this._contentBBox.width / 2, y - this._contentBBox.y - this._contentBBox.height / 2);
     }
 
     hitTest(x, y) {

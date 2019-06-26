@@ -1,17 +1,19 @@
 /* global currentTest */
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    tooltipModule = require("viz/core/tooltip"),
-    Tooltip = tooltipModule.Tooltip,
-    vizUtils = require("viz/core/utils"),
-    rendererModule = require("viz/core/renderers/renderer");
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import tooltipModule from "viz/core/tooltip";
+const Tooltip = tooltipModule.Tooltip;
+import vizUtils from "viz/core/utils";
+import rendererModule from "viz/core/renderers/renderer";
 
 QUnit.testStart(function() {
     $("<div>")
         .attr("class", "some-correct-class-name")
         .appendTo($("#qunit-fixture"));
 });
+
+const CANVAS = { left: 0, top: 0, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000, bottom: 0, right: 0 };
 
 function getInitialOptions() {
     return {
@@ -88,41 +90,15 @@ QUnit.test("Create tooltip", function(assert) {
     assert.equal(wrapper.nodeName, "DIV");
     assert.equal(wrapper.className, "tooltip-class");
     assert.equal(wrapper.style.position, "absolute");
-    assert.equal(wrapper.style.overflow, "visible");
-    assert.equal(wrapper.style.height, "1px"); // T447623
+    assert.equal(wrapper.style.overflow, "hidden");
 
     assert.equal(tooltip._renderer.root.attr.callCount, 1, "renderer root attr");
     assert.deepEqual(tooltip._renderer.root.attr.firstCall.args, [{ "pointer-events": "none" }]);
 
-    assert.equal(tooltip._renderer.path.callCount, 1, "cloud element created");
-    assert.deepEqual(tooltip._renderer.path.firstCall.args, [[], "area"]);
-    assert.equal(tooltip._cloud, tooltip._renderer.path.firstCall.returnValue);
-    assert.equal(tooltip._cloud.sharp.callCount, 1, "cloud sharp");
-    assert.equal(tooltip._cloud.append.callCount, 1, "cloud added to dom");
-    assert.deepEqual(tooltip._cloud.append.firstCall.args, [tooltip._renderer.root]);
-
-    assert.equal(tooltip._renderer.shadowFilter.callCount, 1, "shadow element created");
-    assert.deepEqual(tooltip._renderer.shadowFilter.firstCall.args, []);
-    assert.equal(tooltip._shadow, tooltip._renderer.shadowFilter.firstCall.returnValue);
-
     // for svg text ↓
-    assert.equal(tooltip._renderer.g.callCount, 1, "text group element created");
-    assert.deepEqual(tooltip._renderer.g.firstCall.args, []);
-    assert.equal(tooltip._textGroup, tooltip._renderer.g.firstCall.returnValue);
-
-    assert.equal(tooltip._textGroup.attr.callCount, 1, "textGroup attrs");
-    assert.deepEqual(tooltip._textGroup.attr.firstCall.args, [{ align: "center" }]);
-
-    assert.equal(tooltip._textGroup.append.callCount, 1, "textGroup added to dom");
-    assert.deepEqual(tooltip._textGroup.append.firstCall.args, [tooltip._renderer.root]);
-
     assert.equal(tooltip._renderer.text.callCount, 1, "text element created");
     assert.deepEqual(tooltip._renderer.text.firstCall.args, [undefined, 0, 0]);
     assert.equal(tooltip._text, tooltip._renderer.text.firstCall.returnValue);
-
-    assert.equal(tooltip._text.append.callCount, 1, "text added to dom");
-    assert.deepEqual(tooltip._text.append.firstCall.args, [tooltip._textGroup]);
-    // for svg text ↑
 
     // for html text ↓
     assert.ok(tooltip._textGroupHtml, "textGroupHtml");
@@ -130,7 +106,7 @@ QUnit.test("Create tooltip", function(assert) {
     assert.equal(div.nodeName, "DIV");
     assert.equal(div.parentNode, tooltip._wrapper.get(0));
     assert.equal(div.style.position, "absolute");
-    assert.equal(div.style.width, "0px");
+    assert.equal(div.style.width, "");
     assert.equal(div.style.padding, "0px");
     assert.equal(div.style.margin, "0px");
     assert.equal(div.style["border-width"], "0px");
@@ -162,25 +138,7 @@ QUnit.test("Set options. All options", function(assert) {
     // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
-    assert.deepEqual(tooltip._shadowSettings, {
-        x: "-50%",
-        y: "-50%",
-        width: "200%",
-        height: "200%",
-        opacity: 0.6,
-        color: "#000000",
-        offsetX: 5,
-        offsetY: 6,
-        blur: 7
-    }, "shadow");
-    assert.deepEqual(tooltip._cloudSettings, {
-        opacity: this.options.opacity,
-        filter: tooltip._shadow.id,
-        "stroke-width": this.options.border.width,
-        stroke: this.options.border.color,
-        "stroke-opacity": this.options.border.opacity,
-        dashStyle: this.options.border.dashStyle
-    }, "cloud");
+
     assert.equal(this.patchFontOptions.callCount, 1, "font");
     assert.deepEqual(this.patchFontOptions.firstCall.args, [this.options.font]);
     assert.equal(tooltip._textFontStyles, this.patchFontOptions.firstCall.returnValue); // reference
@@ -200,12 +158,6 @@ QUnit.test("Set options. Cloud border options", function(assert) {
     // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
-    assert.deepEqual(tooltip._cloudSettings, {
-        opacity: this.options.opacity,
-        filter: tooltip._shadow.id,
-        "stroke-width": null,
-        stroke: null
-    }, "cloud");
 });
 
 QUnit.test("Set options. ZIndex", function(assert) {
@@ -350,25 +302,6 @@ QUnit.test("Set options. Two times", function(assert) {
     // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, options2, "whole options");
-    assert.deepEqual(tooltip._shadowSettings, {
-        x: "-50%",
-        y: "-50%",
-        width: "200%",
-        height: "200%",
-        opacity: 0.6,
-        color: "color4",
-        offsetX: 13,
-        offsetY: 40,
-        blur: 20
-    }, "shadow");
-    assert.deepEqual(tooltip._cloudSettings, {
-        opacity: options2.opacity,
-        filter: tooltip._shadow.id,
-        "stroke-width": options2.border.width,
-        stroke: options2.border.color,
-        "stroke-opacity": options2.border.opacity,
-        dashStyle: options2.border.dashStyle
-    }, "cloud");
 
     assert.equal(this.patchFontOptions.callCount, 2, "font");
     assert.deepEqual(this.patchFontOptions.lastCall.args, [options2.font]);
@@ -415,16 +348,7 @@ QUnit.test("Render, enabled", function(assert) {
     assert.equal(tooltip._wrapper.get(0).style.left, "-9999px", "wrapper is moved to invisible area");
     assert.equal(tooltip._wrapper.detach.callCount, 1, "wrapper detached");
 
-    assert.equal(tooltip._cloud.attr.callCount, 1, "cloud attrs");
-    assert.deepEqual(tooltip._cloud.attr.firstCall.args, [tooltip._cloudSettings]);
-
-    assert.equal(tooltip._shadow.attr.callCount, 1, "shadow attrs");
-    assert.deepEqual(tooltip._shadow.attr.firstCall.args, [tooltip._shadowSettings]);
-
     // for svg text ↓
-    assert.equal(tooltip._textGroup.css.callCount, 1, "textGroup styles");
-    assert.deepEqual(tooltip._textGroup.css.firstCall.args, [tooltip._textFontStyles]);
-
     assert.equal(tooltip._text.css.callCount, 1, "text styles");
     assert.deepEqual(tooltip._text.css.firstCall.args, [tooltip._textFontStyles]);
     // for svg text ↑
@@ -569,11 +493,6 @@ QUnit.module("Manipulation", {
         tooltip.update(this.options);
 
         this.resetTooltipMocks = function() {
-            tooltip._cloud.stub("attr").reset();
-            tooltip._shadow.stub("attr").reset();
-            tooltip._textGroup.stub("attr").reset();
-            tooltip._textGroup.stub("css").reset();
-            tooltip._textGroup.stub("move").reset();
             tooltip._text.stub("css").reset();
             tooltip._renderer.stub("resize").reset();
         };
@@ -620,12 +539,10 @@ QUnit.test("Show preparations. W/o customize, empty text", function(assert) {
 QUnit.test("Show preparations. W/o customize, w/ text", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
-    this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: "b" };
 
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -634,14 +551,37 @@ QUnit.test("Show preparations. W/o customize, w/ text", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text",
-        tc: {}
+        text: "some-text"
     }, "state");
+
+    const cloudSettings = this.renderer.path.lastCall.returnValue._stored_settings;
+    delete cloudSettings.d;
+    delete cloudSettings.points;
+
+    assert.deepEqual(cloudSettings, {
+        fill: "#ffffff",
+        stroke: "#252525",
+        "stroke-width": 1,
+        "stroke-opacity": 0.9,
+        dashStyle: "solid",
+        type: "area",
+        opacity: 0.8
+    });
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
+});
+
+QUnit.test("Tooltip with corener radius", function(assert) {
+    this.options.customizeTooltip = null;
+    this.options.cornerRadius = 10;
+    this.tooltip.update(this.options);
+    this.tooltip._state = { a: "b" };
+
+    this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
+    const cloudSettings = this.renderer.path.lastCall.returnValue._stored_settings;
+
+    assert.ok(cloudSettings.d.indexOf("a 10 10 0 0 1 10 -10") >= 0, "Cloud is rendered with arcs");
 });
 
 QUnit.test("Show preparations. W/o customize, w/ text from 'description' filed", function(assert) {
@@ -652,7 +592,6 @@ QUnit.test("Show preparations. W/o customize, w/ text from 'description' filed",
     this.tooltip._state = { a: "b" };
 
     var result = this.tooltip.show({ description: "some-text" }, { x: 100, y: 200, offset: 300 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -661,14 +600,11 @@ QUnit.test("Show preparations. W/o customize, w/ text from 'description' filed",
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text",
-        tc: {}
+        text: "some-text"
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show preparations. W/ customize empty text, empty text", function(assert) {
@@ -756,7 +692,6 @@ QUnit.test("Show preparations. W/ customize w/o text, w/ text", function(assert)
     var formatObject = { valueText: "some-text" };
 
     var result = this.tooltip.show(formatObject, {});
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -768,12 +703,10 @@ QUnit.test("Show preparations. W/ customize w/o text, w/ text", function(assert)
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
-        text: "some-text",
-        tc: {}
+        text: "some-text"
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is not added to dom");
-    assert.equal(this.tooltip.move.callCount, 1);
 });
 
 QUnit.test("Show preparations. customizeTooltip is not function - use custom format", function(assert) {
@@ -786,7 +719,6 @@ QUnit.test("Show preparations. customizeTooltip is not function - use custom for
     var formatObject = { valueText: "some-text" };
 
     var result = this.tooltip.show(formatObject, {});
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.tooltip._state.text, "some-text");
@@ -802,7 +734,6 @@ QUnit.test("Show preparations. W/ customize w/ text, empty text", function(asser
     var formatObject = { valueText: "" };
 
     var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -814,14 +745,11 @@ QUnit.test("Show preparations. W/ customize w/ text, empty text", function(asser
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
-        text: "some-customized-text",
-        tc: {}
+        text: "some-customized-text"
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show preparations. W/ customize w/ text, w/ text", function(assert) {
@@ -834,7 +762,6 @@ QUnit.test("Show preparations. W/ customize w/ text, w/ text", function(assert) 
     var formatObject = { valueText: "some-text" };
 
     var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -846,14 +773,11 @@ QUnit.test("Show preparations. W/ customize w/ text, w/ text", function(assert) 
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
-        text: "some-customized-text",
-        tc: {}
+        text: "some-customized-text"
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show preparations. W/ customize empty html", function(assert) {
@@ -941,7 +865,6 @@ QUnit.test("Show preparations. W/ customize w/ html", function(assert) {
     var formatObject = { valueText: "" };
 
     var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -953,14 +876,11 @@ QUnit.test("Show preparations. W/ customize w/ html", function(assert) {
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
-        html: "some-customized-html",
-        tc: {}
+        html: "some-customized-html"
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show preparations. W/ customize w/ html/text", function(assert) {
@@ -973,7 +893,6 @@ QUnit.test("Show preparations. W/ customize w/ html/text", function(assert) {
     var formatObject = { valueText: "" };
 
     var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -986,14 +905,11 @@ QUnit.test("Show preparations. W/ customize w/ html/text", function(assert) {
         borderColor: "cColor2",
         textColor: "cColor3",
         text: "some-customized-text",
-        html: "some-customized-html",
-        tc: {}
+        html: "some-customized-html"
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$("body").get(0)]);
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show preparations. Certain container", function(assert) {
@@ -1005,7 +921,6 @@ QUnit.test("Show preparations. Certain container", function(assert) {
     this.tooltip._state = { a: "b" };
 
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -1014,14 +929,11 @@ QUnit.test("Show preparations. Certain container", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text",
-        tc: {}
+        text: "some-text"
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$(".some-correct-class-name").get(0)]);
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show. W/o params", function(assert) {
@@ -1040,7 +952,6 @@ QUnit.test("Show. W/o params", function(assert) {
 
     // act
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", eventData], "event is triggered");
@@ -1049,18 +960,12 @@ QUnit.test("Show. W/o params", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text",
-        tc: {}
+        text: "some-text"
     }, "state");
 
-    assert.equal(this.tooltip._shadow.attr.callCount, 0, "shadow attrs");
-    assert.equal(this.tooltip._textGroup.attr.callCount, 0, "textGroup attrs");
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 1, "cloud attrs");
-    assert.deepEqual(this.tooltip._cloud.attr.firstCall.args, [{ fill: "#ffffff", stroke: "#252525" }]);
-
-    assert.equal(this.tooltip._textGroup.css.callCount, 1, "textGroup styles");
-    assert.deepEqual(this.tooltip._textGroup.css.firstCall.args, [{ fill: "#939393" }]);
+    const cloud = this.renderer.path.lastCall.returnValue;
+    assert.equal(cloud._stored_settings.fill, "#ffffff");
+    assert.equal(cloud._stored_settings.stroke, "#252525");
 
     assert.equal(this.tooltip._text.css.callCount, 1, "text styles");
     assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: "#939393" }]);
@@ -1073,17 +978,11 @@ QUnit.test("Show. W/o params", function(assert) {
 
     assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
-
-    assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.tooltip._textGroup.getBBox.firstCall));
-
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show. W/o params. Html", function(assert) {
-    var canvas = { left: 0, top: 0, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000 },
-        eventData = { tag: "event-data" };
-    this.tooltip._getCanvas = function() { return canvas; };
+    var eventData = { tag: "event-data" };
+    this.tooltip._getCanvas = function() { return CANVAS; };
     this.options.customizeTooltip = function() { return { html: "some-html" }; };
     this.tooltip.update(this.options);
 
@@ -1103,7 +1002,6 @@ QUnit.test("Show. W/o params. Html", function(assert) {
 
     // act
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", eventData], "event is triggered");
@@ -1112,29 +1010,19 @@ QUnit.test("Show. W/o params. Html", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        html: "some-html",
-        tc: {}
+        html: "some-html"
     }, "state");
 
-    assert.equal(this.tooltip._shadow.attr.callCount, 0, "shadow attrs");
-    assert.equal(this.tooltip._textGroup.attr.callCount, 0, "textGroup attrs");
+    const cloud = this.renderer.path.lastCall.returnValue;
+    assert.equal(cloud._stored_settings.fill, "#ffffff");
+    assert.equal(cloud._stored_settings.stroke, "#252525");
 
-    assert.equal(this.tooltip._cloud.attr.callCount, 1, "cloud attrs");
-    assert.deepEqual(this.tooltip._cloud.attr.firstCall.args, [{ fill: "#ffffff", stroke: "#252525" }]);
-
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 1, "textGroupHtml styles");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: 800 }]);
-
-    assert.equal(this.tooltip._textGroupHtml.width.callCount, 1, "textGroupHtml width");
-    assert.deepEqual(this.tooltip._textGroupHtml.width.firstCall.args, [84]);
-
-    assert.equal(this.tooltip._textGroupHtml.height.callCount, 1, "textGroupHtml height");
-    assert.deepEqual(this.tooltip._textGroupHtml.height.firstCall.args, [24]);
+    assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroupHtml styles");
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393" }]);
 
     assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ["some-html"], "textHtml html");
 
-    assert.equal(this.tooltip._textGroup.css.callCount, 0, "textGroup styles");
     assert.equal(this.tooltip._text.css.callCount, 0, "text styles");
     assert.equal(this.tooltip._text.attr.callCount, 1, "text attrs");
     assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: "" }]);
@@ -1144,15 +1032,11 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     } else {
         assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
     }
-
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
 });
 
 QUnit.test("Show. W/o params. Html. T298249", function(assert) {
-    var canvas = { left: 0, top: 0, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000 },
-        eventData = { tag: "event-data" };
-    this.tooltip._getCanvas = function() { return canvas; };
+    var eventData = { tag: "event-data" };
+    this.tooltip._getCanvas = function() { return CANVAS; };
     this.options.customizeTooltip = function() { return { html: "some-html" }; };
     this.tooltip.update(this.options);
 
@@ -1172,13 +1056,6 @@ QUnit.test("Show. W/o params. Html. T298249", function(assert) {
 
     // act
     this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
-    delete this.tooltip._state.contentSize;
-
-    assert.equal(this.tooltip._textGroupHtml.width.callCount, 1, "textGroupHtml width");
-    assert.deepEqual(this.tooltip._textGroupHtml.width.firstCall.args, [84]);
-
-    assert.equal(this.tooltip._textGroupHtml.height.callCount, 1, "textGroupHtml height");
-    assert.deepEqual(this.tooltip._textGroupHtml.height.firstCall.args, [24]);
 
     if(this.getComputedStyle) {
         assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
@@ -1203,13 +1080,10 @@ QUnit.test("Show preparations. Use external customizeText", function(assert) {
             text: "custom text from external customizeText"
         };
     });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.equal(this.options.customizeTooltip.callCount, 0);
     assert.deepEqual(this.tooltip._state.text, "custom text from external customizeText");
-
-    assert.equal(this.tooltip.move.callCount, 1);
 });
 
 QUnit.test("Show. W/ params", function(assert) {
@@ -1222,19 +1096,14 @@ QUnit.test("Show. W/ params", function(assert) {
 
     // act
     var result = this.tooltip.show({ valueText: "some-text" }, { x: 10, y: 20, offset: 30 });
-    delete this.tooltip._state.contentSize;
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.tooltip._state, {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text",
-        tc: {}
+        text: "some-text"
     }, "state");
-
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [10, 20, 30]);
 });
 
 QUnit.test("'tooltipHidden' is triggered on show if tooltip is already shown", function(assert) {
@@ -1270,95 +1139,6 @@ QUnit.test("'tooltipHidden' is not triggered on hide if tooltip is already hidde
     assert.strictEqual(this.eventTrigger.lastCall, null);
 });
 
-QUnit.test("Show. Calculate content size", function(assert) {
-    this.options.customizeTooltip = null;
-    this.tooltip.update(this.options);
-    this.tooltip.move = sinon.spy(function() { return this; });
-
-    // act
-    this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
-
-    assert.deepEqual(this.tooltip._state.tc, {});
-
-    assert.deepEqual(this.tooltip._state.contentSize, {
-        x: -10 - 18,
-        y: -5 - 15,
-        width: 20 + 18 + 18,
-        height: 7 + 15 + 15,
-
-        lm: 15 - 5,
-        rm: 15 + 5,
-        tm: 15 - 6,
-        bm: 15 + 6,
-
-        fullWidth: 20 + 18 + 18 + 15 - 5 + 15 + 5,
-        fullHeight: 7 + 15 + 15 + 15 - 6 + 15 + 6 + 10
-    });
-
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
-});
-
-QUnit.test("Show. Calculate content size. Html", function(assert) {
-    var canvas = { left: 0, top: 0, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000 };
-    this.tooltip._getCanvas = function() { return canvas; };
-    this.options.customizeTooltip = function() { return { html: "some-html" }; };
-    this.tooltip.update(this.options);
-
-    this.resetTooltipMocks();
-
-    this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
-    this.tooltip._textHtml.html = sinon.spy();
-
-    if(!this.getComputedStyle) {
-        this.tooltip._textHtml.get(0).getBoundingClientRect = function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; };
-    }
-
-    // act
-    this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
-
-    // assert
-    assert.deepEqual(this.tooltip._state.tc, {});
-
-    assert.deepEqual(this.tooltip._state.contentSize, {
-        x: 0 - 18,
-        y: 0 - 15,
-        width: 84 + 18 + 18,
-        height: 24 + 15 + 15,
-
-        lm: 15 - 5,
-        rm: 15 + 5,
-        tm: 15 - 6,
-        bm: 15 + 6,
-
-        fullWidth: 84 + 18 + 18 + 15 - 5 + 15 + 5,
-        fullHeight: 24 + 15 + 15 + 15 - 6 + 15 + 6 + 10
-    }, "content size");
-
-    assert.equal(this.tooltip.move.callCount, 1);
-    assert.deepEqual(this.tooltip.move.firstCall.args, [100, 200, 300]);
-});
-
-QUnit.test("Show. Calculate content size. Margins to zero", function(assert) {
-    this.options.customizeTooltip = null;
-    this.options.shadow.blur = 3;
-    this.options.shadow.offsetX = 9;
-    this.options.shadow.offsetY = -9;
-    this.tooltip.update(this.options);
-    this.tooltip.move = sinon.spy(function() { return this; });
-
-    // act
-    this.tooltip.show({ valueText: "some-text" }, {});
-
-    assert.equal(this.tooltip._state.contentSize.lm, 0);
-    assert.equal(this.tooltip._state.contentSize.rm, 7 + 9);
-    assert.equal(this.tooltip._state.contentSize.tm, 7 + 9);
-    assert.equal(this.tooltip._state.contentSize.bm, 0);
-});
-
 QUnit.test("Hide.", function(assert) {
     var eventObject = { "some-event-object": "some-event-value" };
     this.options.customizeTooltip = null;
@@ -1391,6 +1171,23 @@ QUnit.test("Show then show on invisible target then move", function(assert) {
     assert.ok(true, "no errors");
 });
 
+function getCloudPoints() {
+    const cloud = this.renderer.path.lastCall.returnValue;
+    const path = cloud._stored_settings.d.replace(/a 0 0 0 0 1 0 0/g, "");
+
+    const regExp = /(?:(-?\d+),(-?\d+))/g;
+    let m;
+    const coords = [];
+
+    do {
+        m = regExp.exec(path);
+        if(m) {
+            coords.push(Number(m[1]), Number(m[2]));
+        }
+    } while(m);
+    return coords;
+}
+
 QUnit.module("Movements", {
     beforeEach: function() {
         var that = this,
@@ -1406,23 +1203,14 @@ QUnit.module("Movements", {
         tooltip.update(that.options);
 
         that.resetTooltipMocks = function() {
-            tooltip._cloud.stub("attr").reset();
-            tooltip._cloud.stub("move").reset();
-            tooltip._shadow.stub("attr").reset();
-            tooltip._textGroup.stub("attr").reset();
-            tooltip._textGroup.stub("css").reset();
-            tooltip._textGroup.stub("move").reset();
             tooltip._text.stub("css").reset();
             tooltip._renderer.stub("resize").reset();
         };
 
-        if(tooltip._textGroup && tooltip._textGroup.stub("getBBox")) {
-            tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -12, y: -5, width: 24, height: 10 }; });
-        }
+        this.renderer.bBoxTemplate = { x: -12, y: -5, width: 24, height: 10 };
 
-        that.canvas = { left: 0, top: 0, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000 };
+        that.canvas = CANVAS;
         tooltip._getCanvas = function() { return that.canvas; };
-
         if(getComputedStyle) {
             this.getComputedStyle = sinon.stub(window, "getComputedStyle", function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
@@ -1439,24 +1227,18 @@ QUnit.module("Movements", {
         });
         $("body").get(0).scrollTop = 0;
         this.tooltip.dispose();
-    }
+    },
+
+    getContentGroup() {
+        return this.renderer.g.getCall(2).returnValue;
+    },
+
+    getCloudPoints: getCloudPoints
 });
 
-QUnit.test("LT corner of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            rm: 20,
-            tm: 9,
-            bm: 21
-        },
-        wrapper;
-
+QUnit.test("Left-top corner of page", function(assert) {
     this.options.customizeTooltip = null;
+    this.options.textAlignment = "center";
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
@@ -1465,45 +1247,27 @@ QUnit.test("LT corner of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 80, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm + this.options.arrowLength]);
+    const wrapper = $('.test-title-class');
 
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 10, // lt
-            0, 10, // la
-            0, 0, // ca
-            10, 10, // ra
-            60, 10, // rt
-            60, 50, // rb
-            0, 50] // lb
-    }]);
+    const contentGroup = this.getContentGroup();
+    assert.equal(contentGroup.move.callCount, 1, "textGroup move call count");
+    assert.deepEqual(contentGroup.move.firstCall.args, [40, 140], "move args");
 
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    assert.deepEqual(this.getCloudPoints(), [20, 110, 60, 110, 60, 120, 70, 130, 60, 140, 60, 170, 20, 170]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
+    assert.equal(this.tooltip._text.append.lastCall.args[0], contentGroup);
+    assert.deepEqual(contentGroup.attr.lastCall.args[0], { "align": "center" });
 
-    assert.equal(wrapper.css("left"), "20px"); // x - lm
-    assert.equal(wrapper.css("top"), "101px"); // y + offset - tm
+    assert.equal(wrapper.css("left"), "0px");
+    assert.equal(wrapper.css("top"), "101px");
+
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.lastCall.args, [0, -101]);
+    assert.ok(!this.renderer.g.getCall(0).returnValue._stored_settings.class);
 });
 
-QUnit.test("CT side of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            rm: 20,
-            tm: 9,
-            bm: 21
-        },
-        wrapper;
-
+QUnit.test("Center-top side of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1513,32 +1277,19 @@ QUnit.test("CT side of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 80, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm + this.options.arrowLength]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [400, 140], "move args");
+    assert.deepEqual(this.getCloudPoints(), [380, 110, 420, 110, 420, 130, 430, 140, 420, 150, 420, 170, 380, 170]);
 
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 10, // lt
-            20, 10, // la
-            30, 0, // ca
-            40, 10, // ra
-            60, 10, // rt
-            60, 50, // rb
-            0, 50] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
-
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
     assert.equal(wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
     assert.equal(wrapper.css("top"), "101px"); // y + offset - tm
+
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.lastCall.args, [-360, -101]);
 });
 
-QUnit.test("CT side of page, Html", function(assert) {
+QUnit.test("Center-top side of page, Html", function(assert) {
     this.options.customizeTooltip = function() { return { html: "some-html" }; };
     this.tooltip.update(this.options);
 
@@ -1554,28 +1305,15 @@ QUnit.test("CT side of page, Html", function(assert) {
 
     // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 18 + 10, top: 15 + 9 + this.options.arrowLength }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 370, top: 135 }]);
 
-    assert.equal(this.tooltip._textGroup.stub("move").callCount, 0);
+    assert.equal(this.getContentGroup().stub("move").callCount, 0);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
 });
 
-QUnit.test("RT corner of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            rm: 20,
-            tm: 9,
-            bm: 21
-        },
-        wrapper;
-
+QUnit.test("Right-top corner of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1585,45 +1323,17 @@ QUnit.test("RT corner of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 80, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm + this.options.arrowLength]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [750, 140], "move args");
+    assert.deepEqual(this.getCloudPoints(), [730, 110, 770, 110, 770, 150, 780, 160, 770, 170, 770, 170, 730, 170]);
 
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 10, // lt
-            50, 10, // la
-            60, 0, // ca
-            60, 10, // ra
-            60, 10, // rt
-            60, 50, // rb
-            0, 50] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
-
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "700px"); // x - bBox.width - lm
-    assert.equal(wrapper.css("top"), "101px"); // y + offset - tm
+    assert.equal(wrapper.css("left"), "710px");
+    assert.equal(wrapper.css("top"), "101px");
 });
 
-QUnit.test("LC side of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            rm: 20,
-            tm: 9,
-            bm: 21
-        },
-        wrapper;
-
+QUnit.test("Left-center side of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1633,43 +1343,17 @@ QUnit.test("LC side of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 300, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [40, 240], "move args");
+    assert.deepEqual(this.getCloudPoints(), [20, 210, 60, 210, 60, 240, 70, 250, 60, 260, 60, 270, 20, 270]);
 
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 40, // rb
-            10, 40, // ra
-            0, 50, // ca
-            0, 40, // la
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
-
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "20px"); // x - lm
-    assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "0px");
+    assert.equal(wrapper.css("top"), "211px");
 });
 
-QUnit.test("CC of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            tm: 9
-        },
-        wrapper;
-
+QUnit.test("Center of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1679,32 +1363,16 @@ QUnit.test("CC of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 40, // rb
-            40, 40, // ra
-            30, 50, // ca
-            20, 40, // la
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
-
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [400, 240], "move args");
+    assert.deepEqual(this.getCloudPoints(), [380, 210, 420, 210, 420, 230, 430, 240, 420, 250, 420, 270, 380, 270]);
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
     assert.equal(wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
     assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
-QUnit.test("CC side of page, Html", function(assert) {
+QUnit.test("Center-center side of page, Html", function(assert) {
     this.options.customizeTooltip = function() { return { html: "some-html" }; };
     this.tooltip.update(this.options);
 
@@ -1720,28 +1388,18 @@ QUnit.test("CC side of page, Html", function(assert) {
 
     // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 18 + 10, top: 15 + 9 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 370, top: 205 }]);
 
-    assert.equal(this.tooltip._textGroup.stub("move").callCount, 0);
+    assert.equal(this.getContentGroup().stub("move").callCount, 0);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
+
+    assert.equal(this.tooltip._textHtml.css("left"), "-342px"); // x - bBox.width / 2 - lm
+    assert.equal(this.tooltip._textHtml.css("top"), "-181px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
-QUnit.test("RC side of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            rm: 20,
-            tm: 9,
-            bm: 21
-        },
-        wrapper;
-
+QUnit.test("Right-center side of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1751,45 +1409,18 @@ QUnit.test("RC side of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 300, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 40, // rb
-            60, 40, // ra
-            60, 50, // ca
-            50, 40, // la
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [750, 240], "move args");
+    assert.deepEqual(this.getCloudPoints(), [730, 210, 770, 210, 770, 210, 780, 220, 770, 230, 770, 270, 730, 270]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "700px"); // x - bBox.width - lm
+    assert.equal(wrapper.css("left"), "710px"); // x - bBox.width - lm
     assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
-QUnit.test("LB corner of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            rm: 20,
-            tm: 9,
-            bm: 21
-        },
-        wrapper;
-
+QUnit.test("Left-bottom corner of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1799,43 +1430,18 @@ QUnit.test("LB corner of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 600, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 40, // rb
-            10, 40, // ra
-            0, 50, // ca
-            0, 40, // la
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [40, 540], "move args");
+    assert.deepEqual(this.getCloudPoints(), [20, 510, 60, 510, 60, 540, 70, 550, 60, 560, 60, 570, 20, 570]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "20px"); // x - lm
-    assert.equal(wrapper.css("top"), "511px"); // y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "0px");
+    assert.equal(wrapper.css("top"), "511px");
 });
 
-QUnit.test("CB side of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            tm: 9
-        },
-        wrapper;
-
+QUnit.test("Center-bootom side of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1845,44 +1451,15 @@ QUnit.test("CB side of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 600, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 40, // rb
-            40, 40, // ra
-            30, 50, // ca
-            20, 40, // la
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
-
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [400, 540], "move args");
+    assert.deepEqual(this.getCloudPoints(), [380, 510, 420, 510, 420, 530, 430, 540, 420, 550, 420, 570, 380, 570]);
 
     assert.equal(wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
     assert.equal(wrapper.css("top"), "511px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("RB corner of page", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            rm: 20,
-            tm: 9,
-            bm: 21
-        },
-        wrapper;
 
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
@@ -1893,28 +1470,12 @@ QUnit.test("RB corner of page", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 600, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 40, // rb
-            60, 40, // ra
-            60, 50, // ca
-            50, 40, // la
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
-
-    assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.firstCall.args, [750, 540], "move args");
+    assert.deepEqual(this.getCloudPoints(), [730, 510, 770, 510, 770, 510, 780, 520, 770, 530, 770, 570, 730, 570]);
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "700px"); // x - bBox.width - lm
+    assert.equal(wrapper.css("left"), "710px"); // x - bBox.width - lm
     assert.equal(wrapper.css("top"), "511px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
@@ -1934,26 +1495,15 @@ QUnit.test("Orientation is not changed", function(assert) {
     // assert
     wrapper = $('.test-title-class');
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml move");
-    assert.equal(this.tooltip._textGroup.move.callCount, 0, "textGroup move");
-    assert.equal(this.tooltip._cloud.attr.callCount, 0, "cloud attr");
-    assert.equal(this.tooltip._renderer.resize.callCount, 0, "renderer resize");
+    assert.equal(this.renderer.path.callCount, 1);
+    assert.deepEqual(this.getCloudPoints(), [480, 330, 520, 330, 520, 350, 530, 360, 520, 370, 520, 390, 480, 390]);
+    assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
 
     assert.equal(wrapper.css("left"), "460px"); // x - bBox.width / 2 - lm
     assert.equal(wrapper.css("top"), "331px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 QUnit.test("Orientation is changed", function(assert) {
-    var bBox = {
-            x: -30,
-            y: -20,
-            width: 60,
-            height: 40,
-
-            lm: 10,
-            tm: 9
-        },
-        wrapper;
-
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
@@ -1965,30 +1515,14 @@ QUnit.test("Orientation is changed", function(assert) {
     this.tooltip.move(800, 300, 30);
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml move");
-
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 1, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 40, // rb
-            60, 40, // ra
-            60, 50, // ca
-            50, 40, // la
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.lastCall.args, [750, 240], "move args");
+    assert.deepEqual(this.getCloudPoints(), [730, 210, 760, 210, 780, 190, 770, 220, 770, 270, 730, 270]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(wrapper.css("left"), "730px"); // x - bBox.width - lm
+    assert.equal(wrapper.css("left"), "710px"); // x - bBox.width - lm
     assert.equal(wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
@@ -2008,61 +1542,33 @@ QUnit.test("Orientation is changed. Html", function(assert) {
     this.tooltip.move(800, 300, 30);
 
     // assert
-    assert.equal(this.tooltip._textGroup.move.callCount, 0, "textGroup move");
-
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 1, "textGroupHtml move");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ left: 18 + 10, top: 15 + 9 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 702, top: 205 }]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
 });
 
 QUnit.test("Show after move w/o orientation changing", function(assert) {
-    var bBox = {
-            x: -40,
-            y: -30,
-            width: 80,
-            height: 50,
-
-            lm: 10,
-            tm: 9
-        },
-        wrapper;
-
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300 });
-    this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -22, y: -15, width: 44, height: 20 }; });
+    this.bBoxTemplate = { x: -22, y: -15, width: 44, height: 20 };
     this.resetTooltipMocks();
 
     // act
     this.tooltip.show({ valueText: "some-long-text" }, { x: 500, y: 400, offset: 30 });
 
     // assert
-    wrapper = $('.test-title-class');
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            80, 0, // rt
-            80, 50, // rb
-            50, 50, // ra
-            40, 60, // ca
-            30, 50, // la
-            0, 50] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    const wrapper = $('.test-title-class');
+    assert.deepEqual(this.getContentGroup().move.lastCall.args, [400, 270], "move args");
+    assert.deepEqual(this.getCloudPoints(), [480, 310, 520, 310, 520, 330, 530, 340, 520, 350, 520, 370, 480, 370]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [80 + 10 + 20, 50 + 9 + 21 + this.options.arrowLength]);
+    assert.deepEqual(this.tooltip._renderer.resize.lastCall.args, [90, 80]);
 
-    assert.equal(wrapper.css("left"), "450px"); // x - bBox.width / 2 - lm
-    assert.equal(wrapper.css("top"), "301px"); // y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(wrapper.css("left"), "460px"); // x - bBox.width / 2 - lm
+    assert.equal(wrapper.css("top"), "311px"); // y - (bBox.height + arrowLength) - offset - tm
 });
 
 // T277991, T447623
@@ -2072,8 +1578,8 @@ QUnit.test("Position when page's body has relative position and margins and page
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
-    this.tooltip.show({ valueText: "some-text" }, {});
-    this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -22, y: -15, width: 44, height: 20 }; });
+    this.tooltip.show({ valueText: "some-text" }, { x: 500, y: 400, offset: 30 });
+    this.renderer.bBoxTemplate = { x: -22, y: -15, width: 44, height: 20 };
     this.resetTooltipMocks();
 
     $("body").css({
@@ -2090,18 +1596,8 @@ QUnit.test("Position when page's body has relative position and margins and page
 
     // assert
     wrapper = $('.test-title-class');
-    assert.strictEqual(wrapper.css("left"), "350px");
-    assert.strictEqual(wrapper.css("top"), "191px");
-});
-
-// T486487
-QUnit.test("size of wrapper", function(assert) {
-    this.tooltip.update(this.options);
-    this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -22, y: -15, width: 44, height: 20 }; });
-
-    this.tooltip.show({ valueText: "some-text" }, {});
-
-    assert.equal($('.test-title-class').width(), 110);
+    assert.strictEqual(wrapper.css("left"), "450px");
+    assert.strictEqual(wrapper.css("top"), "301px");
 });
 
 QUnit.module("Movements. Out of visible borders", {
@@ -2118,256 +1614,122 @@ QUnit.module("Movements. Out of visible borders", {
         tooltip.update(that.options);
 
         that.resetTooltipMocks = function() {
-            tooltip._cloud.stub("attr").reset();
-            tooltip._cloud.stub("move").reset();
-            tooltip._shadow.stub("attr").reset();
-            tooltip._textGroup.stub("attr").reset();
-            tooltip._textGroup.stub("css").reset();
-            tooltip._textGroup.stub("move").reset();
             tooltip._text.stub("css").reset();
             tooltip._renderer.stub("resize").reset();
         };
 
-        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000 };
+        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000, right: 0, bottom: 0 };
         tooltip._getCanvas = function() { return that.canvas; };
     },
     afterEach: function() {
         $(document.body).css({ margin: this._initialBodyMargin });
         this.tooltip.dispose();
-    }
+    },
+
+    getCloudPoints: getCloudPoints
 });
 
-QUnit.test("Out of bounds vertically. L side of page", function(assert) {
-    var bBox = {
-        x: -30,
-        y: -500,
-        width: 60,
-        height: 1000,
-
-        lm: 10,
-        rm: 20,
-        tm: 9,
-        bm: 21
-    };
+QUnit.test("Out of bounds vertically. Left side of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
 
-    if(this.tooltip._textGroup && this.tooltip._textGroup.stub("getBBox")) {
-        this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -12, y: -485, width: 24, height: 970 }; });
-    }
+    this.renderer.bBoxTemplate = { x: -12, y: -485, width: 24, height: 970 };
 
     // act
     this.tooltip.show({ valueText: "some-text" }, { x: 40, y: 300, offset: 30 });
 
     // assert
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 1000, // rb
-            0, 1000] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    assert.deepEqual(this.getCloudPoints(), [20, 20, 80, 20, 80, 1020, 20, 1020]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 2000]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 1030]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "30px"); // x - lm
+    assert.equal(this.tooltip._wrapper.css("left"), "10px"); // x - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); // canvas.top - tm
-    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
-QUnit.test("Out of bounds vertically. C of page", function(assert) {
-    var bBox = {
-        x: -30,
-        y: -500,
-        width: 60,
-        height: 1000,
-
-        lm: 10,
-        rm: 20,
-        tm: 9,
-        bm: 21
-    };
+QUnit.test("Out of bounds vertically. Center of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
 
-    if(this.tooltip._textGroup && this.tooltip._textGroup.stub("getBBox")) {
-        this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -12, y: -485, width: 24, height: 970 }; });
-    }
+    this.renderer.bBoxTemplate = { x: -12, y: -485, width: 24, height: 970 };
 
     // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
     // assert
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
+    assert.deepEqual(this.getCloudPoints(), [370, 20, 430, 20, 430, 1020, 370, 1020]);
 
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 1000, // rb
-            0, 1000] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 2000]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 1030]);
 
     assert.equal(this.tooltip._wrapper.css("left"), "360px"); // x - bBox.width / 2 - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); // canvas.top - tm
-    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
-QUnit.test("Out of bounds vertically. R side of page", function(assert) {
-    var bBox = {
-        x: -30,
-        y: -500,
-        width: 60,
-        height: 1000,
-
-        lm: 10,
-        rm: 20,
-        tm: 9,
-        bm: 21
-    };
+QUnit.test("Out of bounds vertically. Right side of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
 
-    if(this.tooltip._textGroup && this.tooltip._textGroup.stub("getBBox")) {
-        this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -12, y: -485, width: 24, height: 970 }; });
-    }
-
+    this.renderer.bBoxTemplate = { x: -12, y: -485, width: 24, height: 970 };
     // act
     this.tooltip.show({ valueText: "some-text" }, { x: 770, y: 300, offset: 30 });
 
     // assert
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            60, 0, // rt
-            60, 1000, // rb
-            0, 1000] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    assert.deepEqual(this.getCloudPoints(), [720, 20, 780, 20, 780, 1020, 720, 1020]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 2000]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 1030]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "700px"); // x - bBox.width - lm
+    assert.equal(this.tooltip._wrapper.css("left"), "710px"); // x - bBox.width - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); // canvas.top - tm
-    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
-QUnit.test("Out of bounds horizontally. T side of page", function(assert) {
-    var bBox = {
-        x: -500,
-        y: -20,
-        width: 1000,
-        height: 40,
-
-        lm: 10,
-        rm: 20,
-        tm: 9,
-        bm: 21
-    };
+QUnit.test("Out of bounds horizontally. Top side of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
 
-    if(this.tooltip._textGroup && this.tooltip._textGroup.stub("getBBox")) {
-        this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -482, y: -5, width: 964, height: 10 }; });
-    }
+    this.renderer.bBoxTemplate = { x: -482, y: -5, width: 964, height: 10 };
 
     // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 80, offset: 30 });
 
     // assert
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            1000, 0, // rt
-            1000, 40, // rb
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    assert.deepEqual(this.getCloudPoints(), [385, -360, 425, -360, 425, 125, 435, 135, 425, 145, 425, 640, 385, 640]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [1030, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "0px"); // canvas.left - lm
+    assert.equal(this.tooltip._wrapper.css("left"), "-105px"); // canvas.left - lm
     assert.equal(this.tooltip._wrapper.css("top"), "101px"); // y + offset - tm
-    assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });
 
-QUnit.test("Out of bounds horizontally. C of page", function(assert) {
-    var bBox = {
-        x: -500,
-        y: -20,
-        width: 1000,
-        height: 40,
-
-        lm: 10,
-        rm: 20,
-        tm: 9,
-        bm: 21
-    };
+QUnit.test("Out of bounds horizontally. Center of page", function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
 
-    if(this.tooltip._textGroup && this.tooltip._textGroup.stub("getBBox")) {
-        this.tooltip._textGroup.getBBox = sinon.spy(function() { return { x: -482, y: -5, width: 964, height: 10 }; });
-    }
+    this.renderer.bBoxTemplate = { x: -482, y: -5, width: 964, height: 10 };
 
     // act
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
     // assert
-    assert.equal(this.tooltip._textGroup.move.callCount, 1, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroup.move.firstCall.args, [-bBox.x + bBox.lm, -bBox.y + bBox.tm]);
-
-    assert.equal(this.tooltip._cloud.attr.callCount, 2, "cloud attr");
-    assert.deepEqual(this.tooltip._cloud.attr.lastCall.args, [{
-        points: [0, 0, // lt
-            1000, 0, // rt
-            1000, 40, // rb
-            0, 40] // lb
-    }]);
-
-    assert.equal(this.tooltip._cloud.move.callCount, 1, "cloud move");
-    assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
+    assert.deepEqual(this.getCloudPoints(), [385, -260, 425, -260, 425, 235, 435, 245, 425, 255, 425, 740, 385, 740]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [1030, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(this.tooltip._wrapper.css("left"), "0px"); // canvas.left - lm
+    assert.equal(this.tooltip._wrapper.css("left"), "-105px"); // canvas.left - lm
     assert.equal(this.tooltip._wrapper.css("top"), "211px"); // y - (bBox.height + arrowLength) - offset - tm
-    assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });

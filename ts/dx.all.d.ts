@@ -5972,6 +5972,8 @@ declare module DevExpress.viz {
         color?: string;
         /** @name BaseWidget.Options.tooltip.container */
         container?: string | Element | JQuery;
+        /** @name BaseWidget.Options.tooltip.cornerRadius */
+        cornerRadius?: number;
         /** @name BaseWidget.Options.tooltip.enabled */
         enabled?: boolean;
         /** @name BaseWidget.Options.tooltip.font */
