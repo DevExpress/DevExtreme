@@ -15277,3 +15277,38 @@ QUnit.testInActiveWindow("Validation message should be positioned relative cell 
     themes.isMaterial = origIsMaterial;
     clock.restore();
 });
+
+QUnit.testInActiveWindow("Focus on edited cell after the edit button in command column was chosen (T747484)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            keyExpr: "name",
+            focusedRowEnabled: true,
+            useLegacyKeyboardNavigation: false,
+            dataSource: [
+                { name: 'Alex', phone: "555555" },
+                { name: 'Dan', phone: "111111" }
+            ],
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                texts: {
+                    editRow: "Edit",
+                    saveRowChanges: "Save",
+                    cancelRowChanges: "Cancel"
+                }
+            },
+            columns: [ { type: 'buttons' }, "name", "phone"]
+        });
+
+    clock.tick();
+
+    // act
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger("dxpointerdown").click();
+    clock.tick();
+
+    // assert
+    assert.ok($(dataGrid.getRowElement(0)).find(".dx-editor-cell").eq(0).hasClass("dx-focused"), "first editable cell is active");
+
+    clock.restore();
+});
