@@ -1604,6 +1604,20 @@ QUnit.test("Position when page's body has relative position and margins and page
     assert.strictEqual(wrapper.css("top"), "301px");
 });
 
+QUnit.test("Floor plaque coordinates", function(assert) {
+    this.options.customizeTooltip = null;
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 5, height: 7 };
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    // act
+    this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 300, offset: 30 });
+
+    // assert
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.lastCall.args, [-69, -214]);
+});
+
 QUnit.module("Movements. Out of visible borders", {
     beforeEach: function() {
         var that = this,
