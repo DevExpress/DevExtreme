@@ -310,3 +310,50 @@ QUnit.module("API", moduleConfig, () => {
         assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
     });
 });
+
+QUnit.module("Private API", moduleConfig, () => {
+    test("cleanCallback should trigger on refresh", (assert) => {
+        const cleanCallback = sinon.stub();
+
+        this.createEditor();
+        this.instance.addCleanCallback(cleanCallback);
+
+        this.instance.repaint();
+        assert.ok(cleanCallback.calledOnce, "callback is called on refresh");
+
+        this.instance.repaint();
+        assert.ok(cleanCallback.calledOnce, "callbacks has been removed after clean");
+
+        this.instance.addCleanCallback(cleanCallback);
+        this.instance.dispose();
+        assert.ok(cleanCallback.calledTwice, "callback is called on dispose");
+    });
+
+    test("contentInitialized callback should trigger after content was initialized by Quill but before ContentReady event", (assert) => {
+        const contentInitializedCallback = () => {
+            assert.ok(contentReadyHandler.notCalled, "ContentReady event isn't trigger yet");
+        };
+        const contentReadyHandler = sinon.stub();
+
+        this.options.onInitialized = ({ component }) => {
+            component.addContentInitializedCallback(contentInitializedCallback);
+        };
+        this.options.onContentReady = contentReadyHandler;
+        this.createEditor();
+
+        this.instance.repaint();
+    });
+
+    test("contentInitialized callback should been removed on widget repaint", (assert) => {
+        const contentInitializedCallback = sinon.stub();
+
+        this.options.onInitialized = ({ component }) => {
+            component.addContentInitializedCallback(contentInitializedCallback);
+        };
+        this.createEditor();
+
+        assert.ok(contentInitializedCallback.calledOnce, "contentInitialized was called once");
+        this.instance.repaint();
+        assert.ok(contentInitializedCallback.calledOnce, "contentInitialized wasn't called twice");
+    });
+});
