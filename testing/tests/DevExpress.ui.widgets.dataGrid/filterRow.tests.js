@@ -521,7 +521,7 @@ QUnit.test('Reset operation on columnsChanged event with filterValue optionName 
     assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-default')); // <>
 });
 
-function UpdateFilterTextTest(assert, that, eventToTrigger) {
+function updateFilterTextTest(assert, that, eventToTrigger) {
     // arrange
     var testElement = $('#container');
 
@@ -556,12 +556,12 @@ function UpdateFilterTextTest(assert, that, eventToTrigger) {
 }
 
 QUnit.test('update filter text with timeout and keyup event', function(assert) {
-    UpdateFilterTextTest(assert, this, "keyup");
+    updateFilterTextTest(assert, this, "keyup");
 });
 
 // T751914
 QUnit.test('update filter text with timeout and input event', function(assert) {
-    UpdateFilterTextTest(assert, this, "input");
+    updateFilterTextTest(assert, this, "input");
 });
 
 QUnit.test('update filter text to empty string', function(assert) {
