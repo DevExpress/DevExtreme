@@ -1379,6 +1379,7 @@ QUnit.test("Center-center side of page, Html", function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip._textGroupHtml.css = sinon.spy();
+    sinon.spy(this.tooltip._textHtml, "css");
     if(!this.getComputedStyle) {
         this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
     }
@@ -1394,9 +1395,10 @@ QUnit.test("Center-center side of page, Html", function(assert) {
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
-
-    assert.equal(this.tooltip._textHtml.css("left"), "-342px"); // x - bBox.width / 2 - lm
-    assert.equal(this.tooltip._textHtml.css("top"), "-181px"); // y - (bBox.height + arrowLength) - offset - tm
+    assert.deepEqual(this.tooltip._textHtml.css.lastCall.args[0], {
+        left: -342,
+        top: -181
+    });
 });
 
 QUnit.test("Right-center side of page", function(assert) {
