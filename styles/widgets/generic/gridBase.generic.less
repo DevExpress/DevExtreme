@@ -720,17 +720,26 @@
                 outline: none;
             }
 
-            &.dx-data-row:not(.dx-edit-row) {
+            &.dx-data-row {
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
                 & .dx-command-edit:not(.dx-focused) .dx-link {
                     background-color: ~"@{@{widgetName}-row-focused-bg}";
                     color: ~"@{@{widgetName}-row-focused-color}";
 
+                    .dx-texteditor-input {
+                        border-radius: 0;
+                    }
+
                     & .dx-@{widgetName}-group-opened,
                     & .dx-@{widgetName}-group-closed {
                         color: ~"@{@{widgetName}-row-focused-color}";
                     }
+                }
+
+                & .dx-command-edit .dx-link:focus {
+                    background-color: ~"@{@{widgetName}-base-background-color}";
+                    color: ~"@{@{widgetName}-base-color}";
                 }
 
                 & > td,
@@ -742,12 +751,8 @@
                     & > td,
                     & > tr:first-child > td {
                         border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                        border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
                     }
-                }
-
-                & .dx-command-edit .dx-link:focus {
-                    background-color: ~"@{@{widgetName}-base-background-color}";
-                    color: ~"@{@{widgetName}-base-color}";
                 }
             }
 
