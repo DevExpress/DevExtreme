@@ -631,4 +631,55 @@ QUnit.module("Toolbar integration", {
 
         $okDialogButton.trigger("dxclick");
     });
+
+    test("history buttons are inactive after processing transcluded content", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor").html("<p>test</p>");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        this.clock.tick();
+    });
+
+    test("history buttons are inactive when editor has initial value", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            value: "<p>test</p>",
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
+    });
+
+    test("history buttons are inactive when editor hasn't initial value", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
+    });
 });
