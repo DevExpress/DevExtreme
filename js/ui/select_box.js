@@ -565,6 +565,10 @@ var SelectBox = DropDownList.inherit({
     },
 
     _restoreInputText: function() {
+        if(this.option("readOnly")) {
+            return;
+        }
+
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
             var initialSelectedItem = this.option("selectedItem");
 
