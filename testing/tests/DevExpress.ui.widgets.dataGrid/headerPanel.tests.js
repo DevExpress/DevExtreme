@@ -409,7 +409,7 @@ QUnit.test('Hide search panel', function(assert) {
     assert.strictEqual($headerPanel.css('display'), 'none', 'header panel hidden');
 });
 
-function UpdateSearchTextTest(assert, that, eventToTrigger) {
+function updateSearchTextTest(assert, that, eventToTrigger) {
     // arrange
     var headerPanel = that.headerPanel,
         container = $('#container');
@@ -440,12 +440,12 @@ function UpdateSearchTextTest(assert, that, eventToTrigger) {
 }
 
 QUnit.test('update search text with timeout and keyup event', function(assert) {
-    UpdateSearchTextTest(assert, this, "keyup");
+    updateSearchTextTest(assert, this, "keyup");
 });
 
 // T751914
 QUnit.test('update search text with timeout and input event', function(assert) {
-    UpdateSearchTextTest(assert, this, "input");
+    updateSearchTextTest(assert, this, "input");
 });
 
 // T117339
