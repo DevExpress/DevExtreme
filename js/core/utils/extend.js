@@ -37,10 +37,9 @@ var extend = function(target) {
                 sourceValueIsArray = false,
                 clone;
 
-            if(key === "__proto__" || sourceValue === source || target === sourceValue) {
+            if(key === "__proto__" || target === sourceValue) {
                 continue;
             }
-
             if(deep && sourceValue && (isPlainObject(sourceValue) ||
                 (sourceValueIsArray = Array.isArray(sourceValue)))) {
 
@@ -49,8 +48,11 @@ var extend = function(target) {
                 } else {
                     clone = targetValue && isPlainObject(targetValue) ? targetValue : {};
                 }
-
-                target[key] = extend(deep, clone, sourceValue);
+                if(sourceValue === source) {
+                    target[key] = extend(false, clone, sourceValue);
+                } else {
+                    target[key] = extend(deep, clone, sourceValue);
+                }
 
             } else if(sourceValue !== undefined) {
                 target[key] = sourceValue;
