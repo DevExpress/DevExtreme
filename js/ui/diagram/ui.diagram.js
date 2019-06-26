@@ -16,7 +16,6 @@ import { getDiagram } from "./diagram_importer";
 import { hasWindow, getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
-import pointerEvents from "../../events/pointer";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
@@ -40,7 +39,6 @@ const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("fullscreenchange",
 const IE_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("msfullscreenchange", DIAGRAM_NAMESPACE);
 const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("webkitfullscreenchange", DIAGRAM_NAMESPACE);
 const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("mozfullscreenchange", DIAGRAM_NAMESPACE);
-const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, DIAGRAM_NAMESPACE);
 
 class Diagram extends Widget {
     _init() {
@@ -79,25 +77,13 @@ class Diagram extends Widget {
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
     }
-
-    _render() {
-        super._render();
-        this._attachPointerUpEvent();
-    }
-
-    _attachPointerUpEvent() {
-        eventsEngine.off(this.$element(), POINTERUP_EVENT_NAME);
-        eventsEngine.on(this.$element(), POINTERUP_EVENT_NAME, () => {
-            this._diagramInstance.captureFocus();
-        });
-    }
-
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
             onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option("export")
         });
     }
@@ -117,7 +103,8 @@ class Diagram extends Widget {
                 this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
-            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0])
+            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0]),
+            onPointerUp: this._onPanelPointerUp.bind(this)
         });
     }
     _createTooltips($container, targets) {
@@ -154,7 +141,8 @@ class Diagram extends Widget {
             position: "right",
             template: ($options) => {
                 this._createComponent($options, DiagramRightPanel, {
-                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar)
+                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+                    onPointerUp: this._onPanelPointerUp.bind(this)
                 });
             }
         });
@@ -164,6 +152,13 @@ class Diagram extends Widget {
                 drawer.toggle();
             }
         });
+    }
+
+    _onPanelPointerUp({ event }) {
+        const preventRefocusSelector = ".dx-textbox";
+        if(!$(event.target).closest(preventRefocusSelector).length) {
+            this._diagramInstance.captureFocus();
+        }
     }
 
     _renderContextMenu($mainElement) {
