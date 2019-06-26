@@ -56,6 +56,7 @@ var createPoint = function() {
     stub.hasValue.returns(true);
     stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
+    stub.getCenterCoord.returns({ x: "center_x", y: "center_y" });
     stub._label = sinon.createStubInstance(labelModule.Label);
     return stub;
 };
@@ -2409,6 +2410,33 @@ var checkTwoGroups = function(assert, series) {
         checkVisibility({ type: "fixed", displayMode: "all" }, undefined, "discrete", false, "fixed, displayMode all");
         checkVisibility({ type: "fixed", displayMode: "all" }, undefined, "logarithmic", false, "fixed, displayMode all");
         checkVisibility({ type: "fixed", displayMode: "all" }, "datetime", undefined, false, "fixed, displayMode all");
+    });
+
+    QUnit.test("getPointCenterByArg. no existing argument", function(assert) {
+        var series = createSeries({
+            type: seriesType
+        });
+
+        series.updateData([{ arg: 1, val: 1 }]);
+        series.createPoints();
+
+        assert.strictEqual(series.getAllPoints()[0].getCenterCoord.callCount, 0);
+        assert.strictEqual(series.getPointCenterByArg(2), undefined);
+    });
+
+    QUnit.test("getPointCenterByArg. existing argument", function(assert) {
+        var series = createSeries({
+            type: seriesType
+        });
+
+        series.updateData([{ arg: 1, val: 1 }]);
+        series.createPoints();
+
+        var centerCoord = series.getPointCenterByArg(1);
+
+        assert.strictEqual(series.getAllPoints()[0].getCenterCoord.callCount, 1);
+        assert.deepEqual(centerCoord, series.getAllPoints()[0].getCenterCoord.firstCall.returnValue);
+        assert.deepEqual(centerCoord, { x: "center_x", y: "center_y" });
     });
 
     QUnit.module("Check visible area", {

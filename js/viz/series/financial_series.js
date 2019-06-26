@@ -263,7 +263,7 @@ exports.stock = _extend({}, scatterSeries, {
             let tmpCoord;
 
             if(isArgument) {
-                tmpCoord = Math.abs(p.vx - coord) <= p.width / 2 ? (p.openY + p.closeY) / 2 : undefined;
+                tmpCoord = p.vx === coord ? (p.openY + p.closeY) / 2 : undefined;
             } else {
                 const coords = [Math.min(p.lowY, p.highY), Math.max(p.lowY, p.highY)];
                 tmpCoord = coord >= coords[0] && coord <= coords[1] ? p.vx : undefined;
