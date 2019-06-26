@@ -133,32 +133,25 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
         if(this._points.length === 0) {
             return false;
         }
-        const range = axis.isArgumentAxis ? this.getArgumentRange() : this.getViewport();
-        let min = axis.getTranslator().translate(range.categories ? range.categories[0] : range.min);
-        let max = axis.getTranslator().translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
+        if(axis.isArgumentAxis) {
+            return true;
+        }
+        const translator = axis.getTranslator();
+        const range = this.getViewport();
+        let min = translator.translate(range.categories ? range.categories[0] : range.min);
+        let max = translator.translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
         const rotated = this.getOptions().rotated;
         const inverted = axis.getOptions().inverted;
-        const points = this.getVisiblePoints();
-        const isOpposite = !axis.isArgumentAxis && !rotated || axis.isArgumentAxis && rotated;
-        const sizeName = !isOpposite ? "width" : "height";
-        if(axis.isArgumentAxis) {
-            const multiplier = !rotated && !inverted || rotated && inverted ? -1 : 1;
-            points[0] && (min += multiplier * points[0].getMarkerCoords()[sizeName] / 2);
-            points[points.length - 1] && (max -= multiplier * points[points.length - 1].getMarkerCoords()[sizeName] / 2);
-        }
 
-        return (axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted) ||
-            !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)) ?
-            coord >= min && coord <= max : coord >= max && coord <= min;
+        return ((rotated && !inverted || !rotated && inverted)) ? coord >= min && coord <= max : coord >= max && coord <= min;
     },
 
     getSeriesPairCoord(coord, isArgument) {
         let oppositeCoord = null;
-        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
-        const coordName = !isOpposite ? "vx" : "vy";
-        const minCoordName = !this._options.rotated ? "minY" : "minX";
-        const sizeName = !isOpposite ? "width" : "height";
-        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const { rotated } = this._options;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
+        const coordName = isOpposite ? "vy" : "vx";
+        const oppositeCoordName = isOpposite ? "vx" : "vy";
         const points = this.getPoints();
 
         for(let i = 0; i < points.length; i++) {
@@ -166,10 +159,9 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
             let tmpCoord;
 
             if(isArgument) {
-                tmpCoord = Math.abs(p[coordName] - coord) <= p.getMarkerCoords()[sizeName] / 2 ? p[oppositeCoordName] : undefined;
+                tmpCoord = p.getCenterCoord()[coordName[1]] === coord ? p[oppositeCoordName] : undefined;
             } else {
-                const coords = [Math.min(p[coordName], p[minCoordName]), Math.max(p[coordName], p[minCoordName])];
-                tmpCoord = coord >= coords[0] && coord <= coords[1] ? p[oppositeCoordName] : undefined;
+                tmpCoord = p[coordName] === coord ? p[oppositeCoordName] : undefined;
             }
 
             if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
