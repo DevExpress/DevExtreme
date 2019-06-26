@@ -108,6 +108,7 @@ function run_test_themebuilder {
 }
 
 function run_test_functional {
+    npm i
     npm run build
     npm run test-functional -- --browsers chrome:headless
 }
