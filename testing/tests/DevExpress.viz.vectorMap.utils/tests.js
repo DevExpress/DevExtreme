@@ -18,6 +18,14 @@ testData.forEach(function(testDataItem) {
     });
 });
 
+function getFailCallBack(assert) {
+    return function(e) {
+        e = e || {};
+        assert.ok(false, e.statusText);
+        assert.ok(false, e.stack);
+    };
+}
+
 if(typeof ArrayBuffer !== "undefined") {
 
     QUnit.module("browser - parse ArrayBuffer");
@@ -36,8 +44,8 @@ if(typeof ArrayBuffer !== "undefined") {
                 assert.strictEqual(func, data, "function result");
                 assert.deepEqual(data, testDataItem.expected, "parsing result");
                 checkErrors(assert, errors, testDataItem.name);
-                done();
-            });
+            }).fail(getFailCallBack(assert))
+                .always(done);
         });
     });
 
@@ -68,8 +76,8 @@ testData.forEach(function(testDataItem) {
             assert.strictEqual(response.func, true, "function result");
             assert.deepEqual(response.data, testDataItem.expected, "parsing result");
             checkErrors(assert, response.errors, testDataItem.name);
-            done();
-        });
+        }).fail(getFailCallBack(assert))
+            .always(done);
     });
 });
 
@@ -83,8 +91,8 @@ testData.forEach(function(testDataItem) {
             assert.strictEqual(response.func, true, "function result");
             assert.deepEqual(response.data, testDataItem.expected, "parsing result");
             checkErrors(assert, response.errors, testDataItem.name);
-            done();
-        });
+        }).fail(getFailCallBack(assert))
+            .always(done);
     });
 });
 
@@ -102,8 +110,8 @@ QUnit.test("process single file", function(assert) {
         assert.strictEqual(response[0].file, "test_Point.js", "file");
         assert.strictEqual(response[0].variable, "test.namespace.Point", "variable");
         assert.deepEqual(response[0].content, $.grep(testData, isPoint)[0].expected, "content");
-        done();
-    });
+    }).fail(getFailCallBack(assert))
+        .always(done);
 });
 
 QUnit.test("process directory", function(assert) {
@@ -116,8 +124,8 @@ QUnit.test("process directory", function(assert) {
             applyNodeDatesPatch(responseItem.content);
             assert.deepEqual(responseItem.content, testDataItem.expected, "content / " + testDataItem.name);
         });
-        done();
-    });
+    }).fail(getFailCallBack(assert))
+        .always(done);
 });
 
 QUnit.test("process single file / json", function(assert) {
@@ -127,8 +135,8 @@ QUnit.test("process single file / json", function(assert) {
         applyNodeDatesPatch(response[0].content);
         assert.strictEqual(response[0].file, "test_Point.json", "file");
         assert.deepEqual(response[0].content, $.grep(testData, isPoint)[0].expected, "content");
-        done();
-    });
+    }).fail(getFailCallBack(assert))
+        .always(done);
 });
 
 QUnit.test("process directory / json", function(assert) {
@@ -140,8 +148,8 @@ QUnit.test("process directory / json", function(assert) {
             applyNodeDatesPatch(responseItem.content);
             assert.deepEqual(responseItem.content, testDataItem.expected, "content / " + testDataItem.name);
         });
-        done();
-    });
+    }).fail(getFailCallBack(assert))
+        .always(done);
 });
 
 function applyDatesPatch(obj, parser) {
