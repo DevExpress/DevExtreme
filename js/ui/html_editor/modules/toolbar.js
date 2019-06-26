@@ -58,7 +58,7 @@ class ToolbarModule extends BaseModule {
         this._formatHandlers = this._getFormatHandlers();
 
         if(isDefined(options.items)) {
-            this._editorInstance.addCleanCallback(this.clean.bind(this));
+            this._addCallbacks();
             this._renderToolbar();
 
             this.quill.on('editor-change', (eventName) => {
@@ -67,6 +67,11 @@ class ToolbarModule extends BaseModule {
                 this._updateToolbar(isSelectionChanged);
             });
         }
+    }
+
+    _addCallbacks() {
+        this._editorInstance.addCleanCallback(this.clean.bind(this));
+        this._editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
     }
 
     _updateToolbar(isSelectionChanged) {

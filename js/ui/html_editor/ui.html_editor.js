@@ -232,7 +232,8 @@ const HtmlEditor = Editor.inherit({
 
     _init: function() {
         this.callBase();
-        this.cleanCallback = Callbacks();
+        this._cleanCallback = Callbacks();
+        this._contentInitializedCallback = Callbacks();
     },
 
     _getAnonymousTemplateName: function() {
@@ -476,6 +477,8 @@ const HtmlEditor = Editor.inherit({
 
     _finalizeContentRendering: function() {
         if(this._contentRenderedDeferred) {
+            this.clearHistory();
+            this._contentInitializedCallback.fire();
             this._contentRenderedDeferred.resolve();
             this._contentRenderedDeferred = undefined;
         }
@@ -583,11 +586,12 @@ const HtmlEditor = Editor.inherit({
     _clean: function() {
         if(this._quillInstance) {
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
-            this.cleanCallback.fire();
+            this._cleanCallback.fire();
         }
 
         this._abortUpdateContentTask();
-        this.cleanCallback.empty();
+        this._cleanCallback.empty();
+        this._contentInitializedCallback.empty();
         this.callBase();
     },
 
@@ -611,7 +615,11 @@ const HtmlEditor = Editor.inherit({
     },
 
     addCleanCallback(callback) {
-        this.cleanCallback.add(callback);
+        this._cleanCallback.add(callback);
+    },
+
+    addContentInitializedCallback(callback) {
+        this._contentInitializedCallback.add(callback);
     },
 
     /**
