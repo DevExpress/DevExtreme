@@ -7,6 +7,7 @@ import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
+import Callbacks from "../../core/utils/callbacks";
 import { Deferred } from "../../core/utils/deferred";
 
 import QuillRegistrator from "./quill_registrator";
@@ -132,6 +133,12 @@ const HtmlEditor = Editor.inherit({
             * @default ""
             */
         });
+    },
+
+    _init: function() {
+        this.callBase();
+        this._cleanCallback = Callbacks();
+        this._contentInitializedCallback = Callbacks();
     },
 
     _getAnonymousTemplateName: function() {
@@ -361,6 +368,8 @@ const HtmlEditor = Editor.inherit({
 
     _finalizeContentRendering: function() {
         if(this._contentRenderedDeferred) {
+            this.clearHistory();
+            this._contentInitializedCallback.fire();
             this._contentRenderedDeferred.resolve();
             this._contentRenderedDeferred = undefined;
         }
@@ -454,13 +463,13 @@ const HtmlEditor = Editor.inherit({
 
     _clean: function() {
         if(this._quillInstance) {
-            const toolbar = this._quillInstance.getModule("toolbar");
-
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
-            toolbar && toolbar.clean();
+            this._cleanCallback.fire();
         }
 
         this._abortUpdateContentTask();
+        this._cleanCallback.empty();
+        this._contentInitializedCallback.empty();
         this.callBase();
     },
 
@@ -481,6 +490,14 @@ const HtmlEditor = Editor.inherit({
         if(this._quillInstance && this._quillInstance.history) {
             this._quillInstance.history[methodName]();
         }
+    },
+
+    addCleanCallback(callback) {
+        this._cleanCallback.add(callback);
+    },
+
+    addContentInitializedCallback(callback) {
+        this._contentInitializedCallback.add(callback);
     },
 
     /**
