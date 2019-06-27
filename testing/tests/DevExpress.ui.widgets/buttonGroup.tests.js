@@ -221,5 +221,10 @@ QUnit.module("Events", () => {
 });
 
 if(devices.current().deviceType === "desktop") {
-    registerKeyHandlerTestHelper.runTests(QUnit, "dxButtonGroup");
+    const callBack = ($element, options) => $element.dxButtonGroup($.extend({
+        focusStateEnabled: true,
+        items: [{ text: "text" }]
+    }, options)).dxButtonGroup("instance");
+
+    registerKeyHandlerTestHelper.runTests({ widgetCallBack: callBack, checkInitialize: true });
 }

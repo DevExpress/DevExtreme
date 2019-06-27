@@ -455,7 +455,12 @@ module("keyboard navigation", moduleConfig, () => {
 });
 
 if(devices.current().deviceType === "desktop") {
-    registerKeyHandlerTestHelper.runTests(QUnit, "dxRadioGroup");
+    const callBack = ($element, options) => $element.dxRadioGroup($.extend({
+        focusStateEnabled: true,
+        items: [{ text: "text" }]
+    }, options)).dxRadioGroup("instance");
+
+    registerKeyHandlerTestHelper.runTests({ widgetCallBack: callBack, checkInitialize: true });
 }
 
 module("focus policy", moduleConfig, () => {

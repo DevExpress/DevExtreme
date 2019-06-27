@@ -1388,7 +1388,12 @@ QUnit.module("keyboard navigation", {}, () => {
 });
 
 if(devices.current().deviceType === "desktop") {
-    registerKeyHandlerTestHelper.runTests(QUnit, "dxWidget");
+    const callBack = ($element, options) => $element.dxWidget($.extend({
+        focusStateEnabled: true,
+        items: [{ text: "text" }]
+    }, options)).dxWidget("instance");
+
+    registerKeyHandlerTestHelper.runTests({ widgetCallBack: callBack, checkInitialize: true });
 }
 
 QUnit.module("isReady", {}, () => {

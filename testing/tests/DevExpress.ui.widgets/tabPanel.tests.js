@@ -526,7 +526,19 @@ QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(asse
 });
 
 if(devices.current().deviceType === "desktop") {
-    registerKeyHandlerTestHelper.runTests(QUnit, "dxTabPanel");
+    const callBack = ($element) => {
+        let widget = $element.dxTabPanel({
+            focusStateEnabled: true,
+            items: [{ text: "text" }]
+        }).dxTabPanel("instance");
+
+        $element.attr("tabIndex", 1);
+
+        return widget;
+    };
+
+    registerKeyHandlerTestHelper.runTests({ widgetCallBack: callBack, checkInitialize: false });
+    registerKeyHandlerTestHelper.runTests({ widgetCallBack: callBack, checkedWidgetCallBack: (widget) => widget._tabs, checkInitialize: false, testNamePrefix: `Tabs: ` });
 }
 
 QUnit.module("aria accessibility");

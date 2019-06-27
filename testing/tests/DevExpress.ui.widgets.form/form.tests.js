@@ -1,13 +1,13 @@
 import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
-import keyboardMock from "../../helpers/keyboardMock.js";
 import typeUtils from "core/utils/type";
 import browser from "core/utils/browser";
 import domUtils from "core/utils/dom";
 import { __internals as internals } from "ui/form/ui.form";
 import themes from "ui/themes";
 import device from "core/devices";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from "core/dom_adapter";
 
 import "ui/text_area";
@@ -15,10 +15,10 @@ import "ui/text_area";
 import "common.css!";
 import "generic_light.css!";
 
-var INVALID_CLASS = "dx-invalid";
+const INVALID_CLASS = "dx-invalid";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="form"></div>\
         <div id="form2"></div>';
 
@@ -26,37 +26,31 @@ QUnit.testStart(function() {
 });
 
 QUnit.module("Form");
-QUnit.test("Check that registerKeyHandler proxy works well", function(assert) {
-    // arrange, act
-    var $formContainer = $("#form").dxForm({
-            items:
-            [
-                {
-                    dataField: "name",
-                    editorType: "dxTextBox"
-                },
-                {
-                    dataField: "age",
-                    editorType: "dxNumberBox"
-                }
-            ]
-        }),
-        $inputs = $formContainer.find(".dx-texteditor-input"),
-        counter = 0,
-        handler = function() { counter++; };
 
-    $formContainer.dxForm("instance").registerKeyHandler("tab", handler);
+if(device.current().deviceType === "desktop") {
+    const callBack = ($element) => $element.dxForm({
+        items: [
+            { dataField: "name", editorType: "dxTextBox" },
+            { dataField: "age", editorType: "dxNumberBox" }
+        ]
+    }).dxForm("instance");
 
-    keyboardMock($inputs.eq(0)).keyDown("tab");
+    ["TextBox", "NumberBox"].forEach((editorName) => {
+        registerKeyHandlerTestHelper.runTests({
+            widgetCallBack: callBack,
+            checkedWidgetCallBack: (widget) => {
+                let $editor = widget.$element().find(`.dx-${editorName.toLowerCase()}`);
 
-    // assert
-    assert.equal(counter, 1, "Custom key handler for the first editor");
-
-    keyboardMock($inputs.eq(1)).keyDown("tab");
-
-    // assert
-    assert.equal(counter, 2, "Custom key handler for the second editor");
-});
+                return {
+                    checkedWidget: $editor[`dx${editorName}`]("instance"),
+                    checkedElement: $editor.find(".dx-texteditor-input")
+                };
+            },
+            checkInitialize: false,
+            testNamePrefix: `Form -> ${editorName}:`
+        });
+    });
+}
 
 QUnit.testInActiveWindow("Form's inputs saves value on refresh", function(assert) {
     // arrange, act
