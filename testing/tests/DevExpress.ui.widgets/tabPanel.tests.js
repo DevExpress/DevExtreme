@@ -2,9 +2,11 @@ import $ from "jquery";
 import fx from "animation/fx";
 import support from "core/utils/support";
 import domUtils from "core/utils/dom";
+import devices from "core/devices";
 import TabPanel from "ui/tab_panel";
 import pointerMock from "../../helpers/pointerMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
 
@@ -522,6 +524,10 @@ QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(asse
     assert.ok(!$(toSelector(TABPANEL_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
     assert.ok(!$(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests(QUnit, "dxTabPanel");
+}
 
 QUnit.module("aria accessibility");
 
