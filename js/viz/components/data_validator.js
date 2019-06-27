@@ -125,15 +125,14 @@ function validUnit(unit, field, incidentOccurred) {
 }
 
 // TODO: Too much complication because of logarithmic only
-function createParserUnit(type, axisType, ignoreEmptyPoints, incidentOccurred) {
+function createParserUnit(type, axisType, incidentOccurred) {
     var parser = type ? _getParser(type) : eigen,
         filter = axisType === LOGARITHMIC ? filterForLogAxis : eigen,
-        filterInfinity = axisType !== DISCRETE ? function(x) { return isFinite(x) || x === undefined ? x : null; } : eigen,
-        filterNulls = ignoreEmptyPoints ? function(x) { return x === null ? undefined : x; } : eigen;
+        filterInfinity = axisType !== DISCRETE ? function(x) { return isFinite(x) || x === undefined ? x : null; } : eigen;
 
     return function(unit, field) {
         var filterLogValues = function(x) { return filter(x, field, incidentOccurred); },
-            parseUnit = filterNulls(filterLogValues(filterInfinity(parser(unit))));
+            parseUnit = filterLogValues(filterInfinity(parser(unit)));
 
         if(parseUnit === undefined) {
             validUnit(unit, field, incidentOccurred);
@@ -143,19 +142,17 @@ function createParserUnit(type, axisType, ignoreEmptyPoints, incidentOccurred) {
 }
 
 function prepareParsers(groupsData, incidentOccurred) {
-    var argumentParser = createParserUnit(groupsData.argumentType, groupsData.argumentAxisType, false, incidentOccurred),
+    var argumentParser = createParserUnit(groupsData.argumentType, groupsData.argumentAxisType, incidentOccurred),
         sizeParser,
         valueParser,
-        ignoreEmptyPoints,
         categoryParsers = [argumentParser],
         cache = {},
         list = [];
 
     groupsData.groups.forEach(function(group, groupIndex) {
         group.series.forEach(function(series) {
-            ignoreEmptyPoints = series.getOptions().ignoreEmptyPoints;
-            valueParser = createParserUnit(group.valueType, group.valueAxisType, ignoreEmptyPoints, incidentOccurred);
-            sizeParser = createParserUnit(NUMERIC, CONTINUOUS, ignoreEmptyPoints, incidentOccurred);
+            valueParser = createParserUnit(group.valueType, group.valueAxisType, incidentOccurred);
+            sizeParser = createParserUnit(NUMERIC, CONTINUOUS, incidentOccurred);
 
             cache[series.getArgumentField()] = argumentParser;
             series.getValueFields().forEach(function(field) {

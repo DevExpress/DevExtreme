@@ -151,6 +151,48 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(this.createPoint.getCall(1).args[1].argument, 3, "argument");
     });
 
+    QUnit.test("Null values, ignoreEmptyPoints false", function(assert) {
+        var series = createSeries({ type: "scatter", label: { visible: false } }),
+            data = [{ arg: 1, val: 10 }, { arg: 2, val: null }, { arg: 3, val: 30 }];
+
+        series.updateData(data);
+        series.createPoints();
+
+        assert.ok(series.getAllPoints(), "Series points should be created");
+        assert.equal(series.getAllPoints().length, 3, "Series should have 3 point");
+
+        assert.equal(this.createPoint.getCall(0).args[1].index, 0, "index");
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "argument");
+        assert.equal(this.createPoint.getCall(0).args[1].value, 10, "value");
+
+        assert.equal(this.createPoint.getCall(1).args[1].index, 1, "index");
+        assert.equal(this.createPoint.getCall(1).args[1].argument, 2, "argument");
+        assert.equal(this.createPoint.getCall(1).args[1].value, null, "value");
+
+        assert.equal(this.createPoint.getCall(2).args[1].index, 2, "index");
+        assert.equal(this.createPoint.getCall(2).args[1].argument, 3, "argument");
+        assert.equal(this.createPoint.getCall(2).args[1].value, 30, "value");
+    });
+
+    QUnit.test("Null values, ignoreEmptyPoints true", function(assert) {
+        var series = createSeries({ type: "scatter", ignoreEmptyPoints: true, label: { visible: false } }),
+            data = [{ arg: 1, val: 10 }, { arg: 2, val: null }, { arg: 3, val: 30 }];
+
+        series.updateData(data);
+        series.createPoints();
+
+        assert.ok(series.getAllPoints(), "Series points should be created");
+        assert.equal(series.getAllPoints().length, 2, "Series should have 3 point");
+
+        assert.equal(this.createPoint.getCall(0).args[1].index, 0, "index");
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "argument");
+        assert.equal(this.createPoint.getCall(0).args[1].value, 10, "value");
+
+        assert.equal(this.createPoint.getCall(1).args[1].index, 1, "index");
+        assert.equal(this.createPoint.getCall(1).args[1].argument, 3, "argument");
+        assert.equal(this.createPoint.getCall(1).args[1].value, 30, "value");
+    });
+
     QUnit.test("IncidentOccurred. Data without value field", function(assert) {
         const data = [{ arg: 1 }, { arg: 2 }];
         const incidentOccurred = sinon.spy();

@@ -37,8 +37,8 @@ var baseRangeSeries = {
         return (data) => {
             return {
                 tag: data[tagField],
-                minValue: data[val1Field],
-                value: data[val2Field],
+                minValue: this._processEmptyValue(data[val1Field]),
+                value: this._processEmptyValue(data[val2Field]),
                 argument: data[argumentField],
                 data: data
             };

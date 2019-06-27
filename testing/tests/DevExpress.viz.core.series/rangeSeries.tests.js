@@ -134,6 +134,50 @@ var environmentWithSinonStubPoint = {
         assert.strictEqual(incidentOccurred.lastCall.args[0], "W2002");
     });
 
+    QUnit.test("Null values, ignoreEmptyPoints false", function(assert) {
+        var series = createSeries({
+                type: "rangearea", rangeValue1Field: "val1", rangeValue2Field: "val2", label: {
+                    visible: false
+                }
+            }),
+            data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }],
+            points;
+        series.updateData(data);
+        series.createPoints();
+        points = series.getPoints();
+
+        assert.ok(points, "Points should be created");
+        assert.equal(points.length, 2, "Series should have one point");
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "Argument should be correct");
+        assert.equal(this.createPoint.getCall(0).args[1].value, 4, "Value should be correct");
+        assert.equal(this.createPoint.getCall(0).args[1].minValue, 3, "Min value should be correct");
+
+        assert.equal(this.createPoint.getCall(1).args[1].argument, 2, "Argument should be correct");
+        assert.equal(this.createPoint.getCall(1).args[1].value, null, "Value should be correct");
+        assert.equal(this.createPoint.getCall(1).args[1].minValue, null, "Min value should be correct");
+    });
+
+    QUnit.test("Null values, ignoreEmptyPoints true", function(assert) {
+        var series = createSeries({
+                type: "rangearea", rangeValue1Field: "val1", rangeValue2Field: "val2",
+                ignoreEmptyPoints: true,
+                label: {
+                    visible: false
+                }
+            }),
+            data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }],
+            points;
+        series.updateData(data);
+        series.createPoints();
+        points = series.getPoints();
+
+        assert.ok(points, "Points should be created");
+        assert.equal(points.length, 1, "Series should have one point");
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "Argument should be correct");
+        assert.equal(this.createPoint.getCall(0).args[1].value, 4, "Value should be correct");
+        assert.equal(this.createPoint.getCall(0).args[1].minValue, 3, "Min value should be correct");
+    });
+
     QUnit.module("RangeSeries. API", {
         beforeEach: function() {
             environment.beforeEach.call(this);
