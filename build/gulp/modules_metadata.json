@@ -417,9 +417,9 @@
     }
   },
   {
-    "name": "ui/floating_action_button_repaint",
+    "name": "ui/speed_dial_action/repaint_floating_action_button",
     "exports": {
-      "default": { "path": "ui.floatingActionButtonRepaint" }
+      "default": { "path": "ui.repaintFloatingActionButton" }
     }
   },
   {

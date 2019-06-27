@@ -1,6 +1,6 @@
 import $ from "jquery";
 import config from "core/config";
-import floatingActionButtonRepaint from "ui/floating_action_button_repaint";
+import repaintFloatingActionButton from "ui/speed_dial_action/repaint_floating_action_button";
 
 import "ui/speed_dial_action";
 import "common.css!";
@@ -52,7 +52,7 @@ QUnit.module("apply current config options", (hooks) => {
             }
         });
 
-        floatingActionButtonRepaint();
+        repaintFloatingActionButton();
 
         assert.equal($fabMainContent.find(".dx-icon-edit").length, 1, "default icon is changed");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
@@ -82,7 +82,7 @@ QUnit.module("apply current config options", (hooks) => {
         });
 
         firstSDA.dispose();
-        floatingActionButtonRepaint();
+        repaintFloatingActionButton();
 
         assert.equal($fabMainContent.find(".dx-icon-trash").length, 1, "default icon is changed");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
