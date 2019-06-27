@@ -2,7 +2,8 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     extend = require("../../../core/utils/extend").extend,
     isNumeric = require("../../../core/utils/type").isNumeric,
     devices = require("../../../core/devices"),
-    dateUtils = require("../../../core/utils/date");
+    dateUtils = require("../../../core/utils/date"),
+    utils = require("../utils");
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
@@ -134,8 +135,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _correctOnePxGap: function(deltaHeight) {
-        if(Math.abs(deltaHeight) % this._defaultHeight) {
-            deltaHeight--;
+        var heightDifference = Math.abs(deltaHeight) % this._defaultHeight;
+        if(heightDifference) {
+            return utils.isWebKitBrowserInZoom() ? deltaHeight - heightDifference : deltaHeight - 1;
         }
         return deltaHeight;
     },

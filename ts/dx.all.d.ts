@@ -5090,6 +5090,7 @@ declare module DevExpress.ui {
         format?: format;
         /** Configures the lookup field. */
         lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions, valueExpr?: string | Function, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
+        name?: string;
         /** Specifies the true value text. Applies only if dataType is "boolean". */
         trueText?: string;
     }
