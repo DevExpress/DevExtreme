@@ -467,6 +467,11 @@
                 max-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
                 .user-select(none);
             }
+
+            .dx-command-adaptive {
+                padding: 0;
+                vertical-align: middle;
+            }
         }
 
         .dx-filter-range-content {
@@ -848,13 +853,6 @@
         .dx-data-row.dx-edit-row {
             .dx-cell-modified .dx-highlight-outline:after {
                 border-color: transparent;
-            }
-        }
-
-        .dx-command-adaptive {
-            &.dx-command-adaptive-hidden {
-                padding-left: 0;
-                padding-right: 0;
             }
         }
     }
