@@ -28,26 +28,17 @@ QUnit.testStart(function() {
 QUnit.module("Form");
 
 if(device.current().deviceType === "desktop") {
-    const callBack = ($element) => $element.dxForm({
-        items: [
-            { dataField: "name", editorType: "dxTextBox" },
-            { dataField: "age", editorType: "dxNumberBox" }
-        ]
-    }).dxForm("instance");
+    const items = [
+        { dataField: "name", editorType: "dxTextBox" },
+        { dataField: "age", editorType: "dxNumberBox" }
+    ];
 
-    ["TextBox", "NumberBox"].forEach((editorName) => {
+    items.forEach((item) => {
         registerKeyHandlerTestHelper.runTests({
-            widgetCallBack: callBack,
-            checkedWidgetCallBack: (widget) => {
-                let $editor = widget.$element().find(`.dx-${editorName.toLowerCase()}`);
-
-                return {
-                    checkedWidget: $editor[`dx${editorName}`]("instance"),
-                    checkedElement: $editor.find(".dx-texteditor-input")
-                };
-            },
+            createWidget: ($element) => $element.dxForm({ items: items }).dxForm("instance"),
+            checkedTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(".dx-texteditor-input"),
             checkInitialize: false,
-            testNamePrefix: `Form -> ${editorName}:`
+            testNamePrefix: `Form -> ${item.editorType}:`
         });
     });
 }

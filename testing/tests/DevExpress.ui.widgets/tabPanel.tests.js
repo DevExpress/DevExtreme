@@ -537,8 +537,8 @@ if(devices.current().deviceType === "desktop") {
         return widget;
     };
 
-    registerKeyHandlerTestHelper.runTests({ widgetCallBack: callBack, checkInitialize: false });
-    registerKeyHandlerTestHelper.runTests({ widgetCallBack: callBack, checkedWidgetCallBack: (widget) => widget._tabs, checkInitialize: false, testNamePrefix: `Tabs: ` });
+    registerKeyHandlerTestHelper.runTests({ createWidget: callBack, checkInitialize: false });
+    registerKeyHandlerTestHelper.runTests({ createWidget: callBack, checkedTargetElement: (widget) => widget._tabs.$element(), checkInitialize: false, testNamePrefix: `Tabs: ` });
 }
 
 QUnit.module("aria accessibility");
