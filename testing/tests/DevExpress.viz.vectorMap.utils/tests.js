@@ -21,8 +21,7 @@ testData.forEach(function(testDataItem) {
 function getFailCallBack(assert) {
     return function(e) {
         e = e || {};
-        assert.ok(false, e.statusText);
-        assert.ok(false, e.stack);
+        assert.ok(false, e.responseText);
     };
 }
 
