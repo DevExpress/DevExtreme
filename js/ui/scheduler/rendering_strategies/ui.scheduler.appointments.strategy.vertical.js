@@ -4,7 +4,7 @@ import { isNumeric } from "../../../core/utils/type";
 import devices from "../../../core/devices";
 import dateUtils from "../../../core/utils/date";
 
-var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
+const WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
 
     APPOINTMENT_MIN_WIDTH = 5,
