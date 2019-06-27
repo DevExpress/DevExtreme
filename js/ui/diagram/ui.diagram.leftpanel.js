@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 
-import Widget from "../widget/ui.widget";
+import DiagramPanel from "./diagram.panel";
 import Accordion from "../accordion";
 import ScrollView from "../scroll_view";
 import ShapeCategories from "./ui.diagram.shape.categories";
@@ -8,7 +8,7 @@ import { Deferred } from "../../core/utils/deferred";
 
 const DIAGRAM_LEFT_PANEL_CLASS = "dx-diagram-left-panel";
 
-class DiagramLeftPanel extends Widget {
+class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
