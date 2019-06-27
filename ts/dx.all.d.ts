@@ -173,6 +173,13 @@ interface JQuery {
     dxGallery(options: DevExpress.ui.dxGalleryOptions): JQuery;
 }
 interface JQuery {
+    dxGantt(): JQuery;
+    dxGantt(options: "instance"): DevExpress.ui.dxGantt;
+    dxGantt(options: string): any;
+    dxGantt(options: string, ...params: any[]): any;
+    dxGantt(options: DevExpress.ui.dxGanttOptions): JQuery;
+}
+interface JQuery {
     dxHtmlEditor(): JQuery;
     dxHtmlEditor(options: "instance"): DevExpress.ui.dxHtmlEditor;
     dxHtmlEditor(options: string): any;
@@ -2672,6 +2679,22 @@ declare module DevExpress.ui {
         imageAlt?: string;
         /** @name dxGalleryItem.imageSrc */
         imageSrc?: string;
+    }
+    /** @name dxGantt.Options */
+    export interface dxGanttOptions extends WidgetOptions<dxGantt> {
+        /** @name dxGantt.Options.dependenciesDataSource */
+        dependenciesDataSource?: any;
+        /** @name dxGantt.Options.resourceAssignmentsDataSource */
+        resourceAssignmentsDataSource?: any;
+        /** @name dxGantt.Options.resourcesDataSource */
+        resourcesDataSource?: any;
+        /** @name dxGantt.Options.taskDataSource */
+        taskDataSource?: any;
+    }
+    /** @name dxGantt */
+    export class dxGantt extends Widget {
+        constructor(element: Element, options?: dxGanttOptions)
+        constructor(element: JQuery, options?: dxGanttOptions)
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {

@@ -357,6 +357,12 @@
     }
   },
   {
+    "name": "ui/gantt",
+    "exports": {
+      "default": { "path": "ui.dxGantt", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/html_editor",
     "exports": {
       "default": { "path": "ui.dxHtmlEditor", "isWidget": true }
