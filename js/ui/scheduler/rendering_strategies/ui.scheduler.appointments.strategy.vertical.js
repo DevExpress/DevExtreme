@@ -2,8 +2,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     extend = require("../../../core/utils/extend").extend,
     isNumeric = require("../../../core/utils/type").isNumeric,
     devices = require("../../../core/devices"),
-    dateUtils = require("../../../core/utils/date"),
-    utils = require("../utils");
+    dateUtils = require("../../../core/utils/date");
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
@@ -20,11 +19,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             deltaTime = this._getDeltaWidth(args, initialSize) * 24 * 60 * 60000;
         } else {
             var deltaHeight = args.height - initialSize.height;
-
-            if(deltaHeight < 0) {
-                deltaHeight = this._correctOnePxGap(deltaHeight);
-            }
-
             deltaTime = 60000 * Math.round(deltaHeight / this._defaultHeight * this.instance.getAppointmentDurationInMinutes());
         }
         return deltaTime;
@@ -132,14 +126,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return result;
-    },
-
-    _correctOnePxGap: function(deltaHeight) {
-        var heightDifference = Math.abs(deltaHeight) % this._defaultHeight;
-        if(heightDifference) {
-            return utils.isWebKitBrowserInZoom() ? deltaHeight - heightDifference : deltaHeight - 1;
-        }
-        return deltaHeight;
     },
 
     _getMinuteHeight: function() {
