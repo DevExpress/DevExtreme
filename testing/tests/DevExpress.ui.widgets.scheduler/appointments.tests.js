@@ -793,7 +793,7 @@ QUnit.test("Delta time for resizable appointment should decreased correctly in v
         }
     });
     strategy._defaultHeight = 50;
-    var deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 99 }, { allDay: false });
+    var deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 
     assert.strictEqual(deltaTime, -1800000, "Delta time is OK");
 });

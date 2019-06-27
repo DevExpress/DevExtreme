@@ -12,7 +12,6 @@ import DOMComponent from "../../core/dom_component";
 import Resizable from "../resizable";
 import messageLocalization from "../../localization/message";
 import dateLocalization from "../../localization/date";
-import utils from "./utils";
 
 const DEFAULT_HORIZONTAL_HANDLES = "left right";
 const DEFAULT_VERTICAL_HANDLES = "top bottom";
@@ -208,7 +207,7 @@ var Appointment = DOMComponent.inherit({
 
     _createResizingConfig: function() {
         const config = this.option("direction") === "vertical" ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
-        config.roundStepValue = !utils.isWebKitBrowserInZoom();
+        config.roundStepValue = true;
 
         if(!this.invoke("isGroupedByDate")) {
             config.stepPrecision = "strict";
