@@ -2149,6 +2149,31 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, "There is 2 columns in hiding queue");
     clock.restore();
 });
+
+// T745930
+QUnit.test("Native scrollbars should not be visible if columns are not hidden by hidingPriority", function(assert) {
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1100,
+        loadingTimeout: undefined,
+        dataSource: [{
+            OrderNumber: 35703,
+            Employee: "Harv Mudd"
+        }],
+        columnAutoWidth: true,
+        scrolling: { useNative: true },
+        columns: [{
+            dataField: "OrderNumber",
+            hidingPriority: 0,
+            width: 130
+        },
+        "Employee"]
+    }).dxDataGrid("instance");
+
+    assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(true), 0, "Horizontal scrollbar is hidden");
+    assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(false), 0, "Vertical scrollbar is hidden");
+});
+
 // TODO jsdmitry: wait fix T381435
 /* QUnit.test("Columns hiding - do not hide fixed columns", function(assert) {
     // arrange
