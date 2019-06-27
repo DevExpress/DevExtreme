@@ -317,6 +317,8 @@ Series.prototype = {
         that._visible = newOptions.visible;
         that.isUpdated = true;
         that._createGroups();
+
+        that._processEmptyValue = newOptions.ignoreEmptyPoints ? x => x === null ? undefined : x : x => x;
     },
 
     _defineDrawingState() {
