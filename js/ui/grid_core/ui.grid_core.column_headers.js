@@ -93,7 +93,7 @@ module.exports = {
 
                     return function($container, options) {
                         var $content = column.command ? $container : createCellContent(that, $container, options),
-                            caption = !isDefined(column.groupIndex) && column.caption;
+                            caption = column.command !== 'expand' && column.caption;
 
                         if(caption) {
                             $content.text(caption);
