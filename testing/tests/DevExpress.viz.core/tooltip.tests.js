@@ -1017,8 +1017,8 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     assert.equal(cloud._stored_settings.fill, "#ffffff");
     assert.equal(cloud._stored_settings.stroke, "#252525");
 
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroupHtml styles");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393" }]);
+    assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroupHtml styles");
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: null }]);
 
     assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ["some-html"], "textHtml html");
@@ -1304,8 +1304,9 @@ QUnit.test("Center-top side of page, Html", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 80, offset: 30 });
 
     // assert
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 370, top: 135 }]);
+    assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroup move");
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 135 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 126 }]);
 
     assert.equal(this.getContentGroup().stub("move").callCount, 0);
 
@@ -1388,8 +1389,9 @@ QUnit.test("Center-center side of page, Html", function(assert) {
     this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300, offset: 30 });
 
     // assert
-    assert.equal(this.tooltip._textGroupHtml.css.callCount, 2, "textGroup move");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 370, top: 205 }]);
+    assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroup move");
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 205 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 126 }]);
 
     assert.equal(this.getContentGroup().stub("move").callCount, 0);
 
@@ -1544,7 +1546,7 @@ QUnit.test("Orientation is changed. Html", function(assert) {
     this.tooltip.move(800, 300, 30);
 
     // assert
-    assert.deepEqual(this.tooltip._textGroupHtml.css.lastCall.args, [{ left: 702, top: 205 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 702, top: 205 }]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
@@ -1600,6 +1602,20 @@ QUnit.test("Position when page's body has relative position and margins and page
     wrapper = $('.test-title-class');
     assert.strictEqual(wrapper.css("left"), "450px");
     assert.strictEqual(wrapper.css("top"), "301px");
+});
+
+QUnit.test("Floor plaque coordinates", function(assert) {
+    this.options.customizeTooltip = null;
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 5, height: 7 };
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    // act
+    this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 300, offset: 30 });
+
+    // assert
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.lastCall.args, [-69, -214]);
 });
 
 QUnit.module("Movements. Out of visible borders", {

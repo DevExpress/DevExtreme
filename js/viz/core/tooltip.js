@@ -104,7 +104,7 @@ Tooltip.prototype = {
             const state = tooltip._state;
             if(state.html) {
                 that._text.attr({ text: "" });
-                textGroupHtml.css({ color: state.textColor });
+                textGroupHtml.css({ color: state.textColor, width: null });
                 textHtml.html(state.html);
             } else {
                 textHtml.html("");
@@ -250,7 +250,7 @@ Tooltip.prototype = {
 
         that._wrapper.css({
             left,
-            top,
+            top
         });
 
         this.plaque.moveRoot(-left, -top);
@@ -258,6 +258,7 @@ Tooltip.prototype = {
             that._textHtml.css({
                 left: -left, top: -top
             });
+            that._textGroupHtml.css({ width: plaqueBBox.width });
         }
     },
 

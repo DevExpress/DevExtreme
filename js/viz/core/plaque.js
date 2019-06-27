@@ -347,8 +347,8 @@ export class Plaque {
         const margins = this.margins || {};
         const rotationAngle = getCloudAngle(size, this.x, this.y, this.anchorX, this.anchorY);
         return {
-            x: this.x - size.width / 2 - margins.lm,
-            y: this.y - size.height / 2 - margins.tm - (rotationAngle === 270 ? this.options.arrowLength : 0),
+            x: Math.floor(this.x - size.width / 2 - margins.lm),
+            y: Math.floor(this.y - size.height / 2 - margins.tm - (rotationAngle === 270 ? this.options.arrowLength : 0)),
             width: size.width + margins.lm + margins.rm,
             height: size.height + margins.tm + margins.bm + (rotationAngle === 90 || rotationAngle === 270 ? this.options.arrowLength : 0)
         };
