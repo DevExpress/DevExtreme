@@ -1,5 +1,5 @@
 import $ from "../../core/renderer";
-import Widget from "../widget/ui.widget";
+import DiagramPanel from "./diagram.panel";
 import Accordion from "../accordion";
 import Form from "../form";
 import DiagramCommands from "./ui.diagram.commands";
@@ -9,7 +9,7 @@ import DiagramBar from "./diagram_bar";
 const DIAGRAM_RIGHT_PANEL_CLASS = "dx-diagram-right-panel";
 const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = "dx-diagram-right-panel-begin-group";
 
-class DiagramRightPanel extends Widget {
+class DiagramRightPanel extends DiagramPanel {
     _init() {
         super._init();
         this.bar = new OptionsDiagramBar(this);

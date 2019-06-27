@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 
-import Widget from "../widget/ui.widget";
+import DiagramPanel from "./diagram.panel";
 import Toolbar from "../toolbar";
 import ContextMenu from "../context_menu";
 import DiagramCommands from "./ui.diagram.commands";
@@ -23,7 +23,7 @@ const WIDGET_COMMANDS = [
 const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";
 const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-diagram-toolbar-menu-separator";
 
-class DiagramToolbar extends Widget {
+class DiagramToolbar extends DiagramPanel {
     _init() {
         this.bar = new ToolbarDiagramBar(this);
         this._itemHelpers = {};

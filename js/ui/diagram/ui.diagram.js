@@ -77,13 +77,13 @@ class Diagram extends Widget {
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
     }
-
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
             onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option("export")
         });
     }
@@ -103,7 +103,8 @@ class Diagram extends Widget {
                 this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
-            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0])
+            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0]),
+            onPointerUp: this._onPanelPointerUp.bind(this)
         });
     }
     _createTooltips($container, targets) {
@@ -140,7 +141,8 @@ class Diagram extends Widget {
             position: "right",
             template: ($options) => {
                 this._createComponent($options, DiagramRightPanel, {
-                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar)
+                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+                    onPointerUp: this._onPanelPointerUp.bind(this)
                 });
             }
         });
@@ -150,6 +152,10 @@ class Diagram extends Widget {
                 drawer.toggle();
             }
         });
+    }
+
+    _onPanelPointerUp() {
+        this._diagramInstance.captureFocus();
     }
 
     _renderContextMenu($mainElement) {
