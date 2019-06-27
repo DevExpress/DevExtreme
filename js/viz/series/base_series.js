@@ -323,6 +323,8 @@ Series.prototype = {
         that.barOverlapGroup = newOptions.barOverlapGroup;
 
         that._createGroups();
+
+        that._processEmptyValue = newOptions.ignoreEmptyPoints ? x => x === null ? undefined : x : x => x;
     },
 
     _defineDrawingState() {
