@@ -620,6 +620,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             visible: true,
             adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
+            alignment: "center",
             width: "auto",
             cellTemplate: adaptiveCellTemplate,
             fixedPosition: "right"
