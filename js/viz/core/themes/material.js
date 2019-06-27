@@ -93,7 +93,8 @@ registerTheme({
                 opacity: 0.08,
                 offsetY: 4,
                 blur: 8
-            }
+            },
+            cornerRadius: 4
         }
     },
 
