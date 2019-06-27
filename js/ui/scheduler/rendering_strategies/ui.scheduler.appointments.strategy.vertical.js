@@ -1,5 +1,4 @@
 import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base";
-import utils from "../utils";
 import { extend } from "../../../core/utils/extend";
 import { isNumeric } from "../../../core/utils/type";
 import devices from "../../../core/devices";
@@ -23,11 +22,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             deltaTime = this._getDeltaWidth(args, initialSize) * toMs("day");
         } else {
             var deltaHeight = args.height - initialSize.height;
-
-            if(deltaHeight < 0) {
-                deltaHeight = this._correctOnePxGap(deltaHeight);
-            }
-
             deltaTime = toMs("minute") * Math.round(deltaHeight / this.getDefaultCellHeight() * this.instance.getAppointmentDurationInMinutes());
         }
         return deltaTime;
@@ -135,14 +129,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return result;
-    },
-
-    _correctOnePxGap: function(deltaHeight) {
-        const heightDifference = Math.abs(deltaHeight) % this.getDefaultCellHeight();
-        if(heightDifference) {
-            return utils.isWebKitBrowserInZoom() ? deltaHeight - heightDifference : deltaHeight - 1;
-        }
-        return deltaHeight;
     },
 
     _getMinuteHeight: function() {
