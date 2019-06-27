@@ -75,7 +75,7 @@ QUnit.module("render", () => {
             _layoutStrategy: "flex"
         });
 
-        const $scrollable = $("#scrollable").dxScrollable({ height: 100 });
+        const $scrollable = $("#isScrollable").dxScrollable({ height: 100 });
         const scrollableContainer = $scrollable.find(".dx-scrollable-container").get(0);
 
         assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight);
