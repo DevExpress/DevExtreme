@@ -274,8 +274,8 @@ var focused;
             input: function(data, inputType) {
                 var params = { data: data };
 
-                if(inputType) {
-                    params.originalEvent = $.Event("input", { inputType: inputType });
+                if(inputType !== null) {
+                    params.originalEvent = $.Event("input", { inputType: inputType || "insertText" });
                 }
 
                 this.triggerEvent("input", params);
@@ -402,6 +402,7 @@ var focused;
 
             paste: function(string) {
                 this.triggerEvent("paste", { originalEvent: $.Event("paste", { clipboardData: { getData: function() { return string; } } }) });
+                return this;
             }
         };
     };

@@ -939,6 +939,66 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 0.0005 kg", "walue has been reformatted");
     });
 
+    QUnit.test("paste of value should call valueChanged event on keyup", (assert) => {
+        const valueChangedStub = sinon.stub();
+        const originalIE = browser.msie;
+        const $element = $("<div>").appendTo("body");
+
+        try {
+            browser.msie = false;
+
+            $element.dxNumberBox({
+                valueChangeEvent: "keyup",
+                format: "#,##0.00",
+                value: null,
+                onValueChanged: valueChangedStub
+            });
+
+            const $input = $element.find("." + INPUT_CLASS);
+            const kb = keyboardMock($input);
+
+            $input.val("1.00");
+            kb.input("1.00", "insertFromPaste");
+            kb.keyUp("v");
+
+            assert.ok(valueChangedStub.calledOnce, "valueChanged event was called");
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
+
+
+    QUnit.test("paste of value should call valueChanged event on keyup in IE", (assert) => {
+        const valueChangedStub = sinon.stub();
+        const originalIE = browser.msie;
+        const originalVersion = browser.version;
+        const $element = $("<div>").appendTo("body");
+
+        try {
+            browser.msie = true;
+            browser.version = "11.0";
+
+            $element.dxNumberBox({
+                valueChangeEvent: "keyup",
+                format: "#,##0.00",
+                value: null,
+                onValueChanged: valueChangedStub
+            });
+
+            const $input = $element.find("." + INPUT_CLASS);
+            const kb = keyboardMock($input);
+            kb.paste("1.00");
+            $input.val("1.00");
+            kb.input("1.00", null);
+            kb.keyUp("v");
+
+            assert.ok(valueChangedStub.calledOnce, "valueChanged event was called");
+        } finally {
+            browser.msie = originalIE;
+            browser.version = originalVersion;
+        }
+    });
+
     QUnit.test("incomplete values should be limited by max precision", (assert) => {
         this.instance.option({
             format: "$ #0.### kg",
