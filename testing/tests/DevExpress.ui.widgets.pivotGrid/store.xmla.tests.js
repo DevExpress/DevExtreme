@@ -3992,9 +3992,9 @@ define(function(require) {
             rowSkip: 0,
             rowTake: 2
         }).done(function(data) {
-            assert.strictEqual(data.rows.length, 18484);
-            assert.strictEqual(data.rows[0].value, "Aaron A. Allen");
-            assert.strictEqual(data.rows[1].value, "Aaron A. Hayes");
+            assert.strictEqual(data.rows.length, 962);
+            assert.strictEqual(data.rows[0].value, "Aaron C. Diaz");
+            assert.strictEqual(data.rows[1].value, "Aaron Flores");
             assert.strictEqual(data.rows[2].value, undefined);
         }).fail(getFailCallBack(assert))
             .always(done);
@@ -4021,16 +4021,16 @@ define(function(require) {
             rowSkip: 0,
             rowTake: 3
         }).done(function(data) {
-            assert.strictEqual(data.rows.length, 18484);
-            assert.strictEqual(data.rows[0].value, "Aaron A. Allen");
-            assert.strictEqual(data.rows[1].value, "Aaron A. Hayes");
-            assert.strictEqual(data.rows[2].value, "Aaron A. Zhang");
+            assert.strictEqual(data.rows.length, 6470);
+            assert.strictEqual(data.rows[0].value, "Aaron A. Zhang");
+            assert.strictEqual(data.rows[1].value, "Aaron B. Adams");
+            assert.strictEqual(data.rows[2].value, "Aaron C. Diaz");
             assert.strictEqual(data.rows[3].value, undefined);
 
-            assert.strictEqual(getValue(data, data.rows[0]), null), "Aaron A. Allen 2003";
-            assert.strictEqual(getValue(data, data.rows[1]), null), "Aaron A. Hayes 2003";
-            assert.strictEqual(getValue(data, data.rows[2]), 1), "Aaron A. Zhang 2003";
-            assert.strictEqual(getValue(data, data.rows[2], data.columns[10]), 1), "Aaron A. Zhang 2003 October";
+            assert.strictEqual(getValue(data, data.rows[0]), 1), "Aaron A. Zhang 2003";
+            assert.strictEqual(getValue(data, data.rows[1]), 1), "Aaron A. Adams 2003";
+            assert.strictEqual(getValue(data, data.rows[2]), 1), "Aaron A. Diaz 2003";
+            assert.strictEqual(getValue(data, data.rows[2], data.columns[10]), 1), "Aaron A. Diaz 2003 October";
         }).fail(getFailCallBack(assert))
             .always(done);
     });
@@ -4080,7 +4080,7 @@ define(function(require) {
                 undefined, undefined,
                 undefined, undefined,
                 undefined, undefined,
-                undefined, undefined
+                undefined
             ]);
         }).fail(getFailCallBack(assert))
             .always(done);
