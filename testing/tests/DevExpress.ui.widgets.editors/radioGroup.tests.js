@@ -458,7 +458,6 @@ if(devices.current().deviceType === "desktop") {
     registerKeyHandlerTestHelper.runTests({
         createWidget: ($element, options) => $element.dxRadioGroup(
             $.extend({
-                focusStateEnabled: true,
                 items: [{ text: "text" }]
             }, options)).dxRadioGroup("instance"),
         checkInitialize: true });

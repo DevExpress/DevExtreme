@@ -1390,8 +1390,7 @@ QUnit.module("keyboard navigation", {}, () => {
 if(devices.current().deviceType === "desktop") {
     registerKeyHandlerTestHelper.runTests({
         createWidget: ($element, options) => $element.dxWidget($.extend({
-            focusStateEnabled: true,
-            items: [{ text: "text" }]
+            focusStateEnabled: true
         }, options)).dxWidget("instance"),
         checkInitialize: true
     });

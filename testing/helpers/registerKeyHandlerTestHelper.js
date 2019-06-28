@@ -8,7 +8,7 @@ const { module, test, assert } = QUnit;
 const registerKeyHandlerTestHelper = {
     runTests: function(config) {
 
-        const { createWidget, checkedTargetElement, checkInitialize, testNamePrefix } = config;
+        const { createWidget, keyPressTargetElement, checkInitialize, testNamePrefix } = config;
 
         module("RegisterKeyHandler", {
             beforeEach: () => {
@@ -19,7 +19,7 @@ const registerKeyHandlerTestHelper = {
 
                     this.widget = createWidget(this.$widget, options);
 
-                    this.keyPressTargetElement = checkedTargetElement ? checkedTargetElement(this.widget) : this.widget.$element();
+                    this.keyPressTargetElement = keyPressTargetElement ? keyPressTargetElement(this.widget) : this.widget.$element();
                 };
 
                 this.checkKeyHandlerCall = (key) => {

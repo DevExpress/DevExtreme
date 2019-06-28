@@ -526,7 +526,7 @@ QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(asse
 });
 
 if(devices.current().deviceType === "desktop") {
-    const callBack = ($element) => {
+    const createWidget = ($element) => {
         let widget = $element.dxTabPanel({
             focusStateEnabled: true,
             items: [{ text: "text" }]
@@ -537,8 +537,8 @@ if(devices.current().deviceType === "desktop") {
         return widget;
     };
 
-    registerKeyHandlerTestHelper.runTests({ createWidget: callBack, checkInitialize: false });
-    registerKeyHandlerTestHelper.runTests({ createWidget: callBack, checkedTargetElement: (widget) => widget._tabs.$element(), checkInitialize: false, testNamePrefix: `Tabs: ` });
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, checkInitialize: false });
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: `Tabs: ` });
 }
 
 QUnit.module("aria accessibility");

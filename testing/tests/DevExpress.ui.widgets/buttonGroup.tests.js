@@ -224,7 +224,6 @@ if(devices.current().deviceType === "desktop") {
     registerKeyHandlerTestHelper.runTests({
         createWidget: ($element, options) => $element.dxButtonGroup(
             $.extend({
-                focusStateEnabled: true,
                 items: [{ text: "text" }]
             }, options)).dxButtonGroup("instance"),
         checkInitialize: true

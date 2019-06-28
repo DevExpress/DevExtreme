@@ -36,7 +36,7 @@ if(device.current().deviceType === "desktop") {
     items.forEach((item) => {
         registerKeyHandlerTestHelper.runTests({
             createWidget: ($element) => $element.dxForm({ items: items }).dxForm("instance"),
-            checkedTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(".dx-texteditor-input"),
+            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(".dx-texteditor-input"),
             checkInitialize: false,
             testNamePrefix: `Form -> ${item.editorType}:`
         });
