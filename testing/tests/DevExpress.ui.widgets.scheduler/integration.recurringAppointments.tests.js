@@ -1205,12 +1205,18 @@ QUnit.test("Recurrence exception should be adjusted by appointment timezone afte
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         exceptionDate = new Date(2018, 3, 1, 10),
-        timezoneDiff = new Date(2018, 2, 26).getTimezoneOffset() - exceptionDate.getTimezoneOffset();
+        timezoneDiff = exceptionDate.getTimezoneOffset();
 
     timezoneDiff = timezoneDiff * 60000;
+    exceptionDate = this.instance.fire(
+        "convertDateByTimezoneBack",
+        exceptionDate,
+        "Australia/Canberra"
+    );
     exceptionDate = new Date(exceptionDate.getTime() - timezoneDiff);
 
     assert.notOk($appointment.length, "appt is deleted");
+
     assert.equal(this.instance.option("dataSource")[0].recurrenceException, dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ"), "exception is correct");
 });
 

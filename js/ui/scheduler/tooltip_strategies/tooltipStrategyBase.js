@@ -215,7 +215,7 @@ export class TooltipStrategyBase {
             onClick: e => {
                 this._onDeleteButtonClick();
                 this.scheduler._checkRecurringAppointment(data, currentData,
-                    this.scheduler._getStartDate(currentData, true), () => this.scheduler.deleteAppointment(data), true);
+                    currentData.startDate, () => this.scheduler.deleteAppointment(data), true);
 
                 e.event.stopPropagation();
             }
