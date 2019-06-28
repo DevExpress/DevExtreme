@@ -1,20 +1,20 @@
-var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
-    dateUtils = require("../../../core/utils/date");
+import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base";
+import dateUtils from "../../../core/utils/date";
 
-var MAX_APPOINTMENT_HEIGHT = 100,
+const MAX_APPOINTMENT_HEIGHT = 100,
     DEFAULT_APPOINTMENT_HEIGHT = 60,
     MIN_APPOINTMENT_HEIGHT = 35,
     DROP_DOWN_BUTTON_OFFSET = 2,
     BOTTOM_CELL_GAP = 20;
 
-var toMs = dateUtils.dateToMilliseconds;
+const toMs = dateUtils.dateToMilliseconds;
 
-var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
-    _needVerifyItemSize: function() {
+class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
+    _needVerifyItemSize() {
         return true;
-    },
+    }
 
-    calculateAppointmentWidth: function(appointment, position, isRecurring) {
+    calculateAppointmentWidth(appointment, position, isRecurring) {
         var cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize(),
             allDay = this.instance.fire("getField", "allDay", appointment),
             width;
@@ -33,19 +33,19 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         width = this.cropAppointmentWidth(width, cellWidth);
 
         return width;
-    },
+    }
 
-    _needAdjustDuration: function(diff) {
+    _needAdjustDuration(diff) {
         return diff < 0;
-    },
+    }
 
-    getAppointmentGeometry: function(coordinates) {
+    getAppointmentGeometry(coordinates) {
         var result = this._customizeAppointmentGeometry(coordinates);
 
-        return this.callBase(result);
-    },
+        return super.getAppointmentGeometry(result);
+    }
 
-    _customizeAppointmentGeometry: function(coordinates) {
+    _customizeAppointmentGeometry(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
         if(overlappingMode) {
@@ -69,16 +69,16 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 left: coordinates.left
             };
         }
-    },
+    }
 
-    _getOffsets: function() {
+    _getOffsets() {
         return {
             unlimited: 0,
             auto: 0
         };
-    },
+    }
 
-    _checkLongCompactAppointment: function(item, result) {
+    _checkLongCompactAppointment(item, result) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
         if(overlappingMode) {
@@ -86,44 +86,44 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
             return result;
         }
-    },
+    }
 
-    _getCompactLeftCoordinate: function(itemLeft, index) {
+    _getCompactLeftCoordinate(itemLeft, index) {
         var cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         return itemLeft + cellWidth * index;
-    },
+    }
 
-    _getMaxHeight: function() {
+    _getMaxHeight() {
         return this.getDefaultCellHeight() || this.getAppointmentMinSize();
-    },
+    }
 
-    _getAppointmentCount: function(overlappingMode, coordinates) {
+    _getAppointmentCount(overlappingMode, coordinates) {
         return this._getMaxAppointmentCountPerCellByType(false);
-    },
+    }
 
-    _getAppointmentDefaultHeight: function() {
+    _getAppointmentDefaultHeight() {
         return DEFAULT_APPOINTMENT_HEIGHT;
-    },
+    }
 
-    _getAppointmentMinHeight: function() {
+    _getAppointmentMinHeight() {
         return MIN_APPOINTMENT_HEIGHT;
-    },
+    }
 
-    _correctRtlCoordinatesParts: function(coordinates, width) {
+    _correctRtlCoordinatesParts(coordinates, width) {
         for(var i = 1; i < coordinates.length; i++) {
             coordinates[i].left -= width;
         }
 
         return coordinates;
-    },
+    }
 
-    _sortCondition: function(a, b) {
+    _sortCondition(a, b) {
         var result = this._columnCondition(a, b);
         return this._fixUnstableSorting(result, a, b);
-    },
+    }
 
-    _getMaxAppointmentWidth: function(startDate) {
+    _getMaxAppointmentWidth(startDate) {
         var result;
         this.instance.fire("getMaxAppointmentWidth", {
             date: startDate,
@@ -133,28 +133,28 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         });
 
         return result;
-    },
+    }
 
-    getDropDownAppointmentWidth: function() {
+    getDropDownAppointmentWidth() {
         return this.getDefaultCellWidth() - DROP_DOWN_BUTTON_OFFSET * 2;
-    },
+    }
 
-    getDeltaTime: function(args, initialSize) {
+    getDeltaTime(args, initialSize) {
         var deltaTime = 0,
             deltaWidth = args.width - initialSize.width;
 
         deltaTime = toMs("minute") * Math.round(deltaWidth / this.getDefaultCellWidth() * this.instance.getAppointmentDurationInMinutes());
 
         return deltaTime;
-    },
+    }
 
-    isAllDay: function(appointmentData) {
+    isAllDay(appointmentData) {
         return this.instance.fire("getField", "allDay", appointmentData);
-    },
+    }
 
-    needSeparateAppointment: function() {
+    needSeparateAppointment() {
         return this.instance.fire("isGroupedByDate");
-    },
-});
+    }
+}
 
 module.exports = HorizontalRenderingStrategy;
