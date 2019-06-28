@@ -1,5 +1,5 @@
-import Widget from '../widget/ui.widget';
-import { getGanttViewCore } from './gantt_importer';
+import Widget from "../widget/ui.widget";
+import { getGanttViewCore } from "./gantt_importer";
 
 const GANTT_VIEW_HEADER_HEIGHT = 48;
 
@@ -34,7 +34,7 @@ export class GanttView extends Widget {
 
     // IGanttView
     getGanttSize() {
-        let height = this.option('height') - GANTT_VIEW_HEADER_HEIGHT;
+        let height = this.option("height") - GANTT_VIEW_HEADER_HEIGHT;
         return { width: 700, height: height };
     }
     getGanttTickSize() {
@@ -44,36 +44,24 @@ export class GanttView extends Widget {
         return this.$element().get(0);
     }
     getGanttViewStartDate() {
-        let min = new Date();
         const tasks = this.getGanttTasksData();
-        tasks.forEach(t => {
-            if(t.start < min) {
-                min = t.start;
-            }
-        });
-        return min;
+        return tasks.reduce((min, t) => t.start < min ? t.start : min, tasks[0].start);
     }
     getGanttViewEndDate() {
-        let max = new Date();
         const tasks = this.getGanttTasksData();
-        tasks.forEach(t => {
-            if(t.end > max) {
-                max = t.end;
-            }
-        });
-        return max;
+        return tasks.reduce((max, t) => t.end > max ? t.end : max, tasks[0].end);
     }
     getGanttTasksData() {
-        return this.option('tasks');
+        return this.option("tasks");
     }
     getGanttDependenciesData() {
-        return this.option('dependenciesDataSource');
+        return this.option("dependencies");
     }
     getGanttResourcesData() {
-        return this.option('resourcesDataSource');
+        return this.option("resources");
     }
     getGanttResourceAssignmentsData() {
-        return this.option('resourceAssignmentsDataSource');
+        return this.option("resourceAssignments");
     }
     getGanttWorkTimeRules() {
         return {};

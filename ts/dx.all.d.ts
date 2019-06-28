@@ -2682,14 +2682,14 @@ declare module DevExpress.ui {
     }
     /** @name dxGantt.Options */
     export interface dxGanttOptions extends WidgetOptions<dxGantt> {
-        /** @name dxGantt.Options.dependenciesDataSource */
-        dependenciesDataSource?: any;
-        /** @name dxGantt.Options.resourceAssignmentsDataSource */
-        resourceAssignmentsDataSource?: any;
-        /** @name dxGantt.Options.resourcesDataSource */
-        resourcesDataSource?: any;
-        /** @name dxGantt.Options.taskDataSource */
-        taskDataSource?: any;
+        /** @name dxGantt.Options.dependencies */
+        dependencies?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxGantt.Options.resourceAssignments */
+        resourceAssignments?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxGantt.Options.resources */
+        resources?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxGantt.Options.tasks */
+        tasks?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {

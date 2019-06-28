@@ -49,6 +49,9 @@ const JS_VENDORS = [
 
 const CSS_VENDORS = [
     {
+        path: '/devexpress-diagram/dist/dx-@(diagram|diagram.min).css'
+    },
+    {
         path: '/devexpress-gantt/dist/dx-@(gantt|gantt.min).css'
     }
 ];

@@ -1,18 +1,15 @@
-import $ from '../../core/renderer';
-import Widget from '../widget/ui.widget';
-import registerComponent from '../../core/component_registrator';
-import { GanttView } from './ui.gantt.view';
-import dxTreeList from '../tree_list';
-import { extend } from '../../core/utils/extend';
+import $ from "../../core/renderer";
+import Widget from "../widget/ui.widget";
+import registerComponent from "../../core/component_registrator";
+import { GanttView } from "./ui.gantt.view";
+import dxTreeList from "../tree_list";
+import { extend } from "../../core/utils/extend";
 
-const GANTT_CLASS = 'dx-gantt';
-const GANTT_SPLITTER_CLASS = 'dx-gantt-splitter';
-const GANTT_VIEW_CLASS = 'dx-gantt-view';
+const GANTT_CLASS = "dx-gantt";
+const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
+const GANTT_VIEW_CLASS = "dx-gantt-view";
 
 class Gantt extends Widget {
-    _init() {
-        super._init();
-    }
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
@@ -22,15 +19,15 @@ class Gantt extends Widget {
     }
 
     _initTreeList() {
-        const $treeList = $('<div>')
+        const $treeList = $("<div>")
             .appendTo(this.$element());
 
         this._treeList = this._createComponent($treeList, dxTreeList, {
-            dataSource: this.option('taskDataSource'),
-            width: '100%',
-            selection: { mode: 'single' },
-            sorting: { mode: 'none' },
-            scrolling: { showScrollbar: 'never', mode: 'standard' },
+            dataSource: this.option("tasks"),
+            width: "100%",
+            selection: { mode: "single" },
+            sorting: { mode: "none" },
+            scrolling: { showScrollbar: "never", mode: "standard" },
             allowColumnResizing: true,
             autoExpandAll: true,
             showRowLines: true,
@@ -42,7 +39,7 @@ class Gantt extends Widget {
     }
 
     _initSplitter() {
-        $('<div>')
+        $("<div>")
             .addClass(GANTT_SPLITTER_CLASS)
             .appendTo(this.$element());
     }
@@ -51,16 +48,16 @@ class Gantt extends Widget {
         if(this._ganttView) {
             return;
         }
-        const $ganttView = $('<div>')
+        const $ganttView = $("<div>")
             .addClass(GANTT_VIEW_CLASS)
             .appendTo(this.$element());
 
         this._ganttView = this._createComponent($ganttView, GanttView, {
             height: this._treeList._$element.get(0).offsetHeight,
             tasks: this._getTasks(),
-            dependenciesDataSource: this.option('dependenciesDataSource'),
-            resourcesDataSource: this.option('resourcesDataSource'),
-            resourceAssignmentsDataSource: this.option('resourceAssignmentsDataSource'),
+            dependencies: this.option("dependencies"),
+            resources: this.option("resources"),
+            resourceAssignments: this.option("resourceAssignments"),
             onSelectionChanged: (e) => { this._onGanttViewSelectionChanged(e); },
             onScroll: (e) => { this._onGanttViewScroll(e); }
         });
@@ -73,7 +70,7 @@ class Gantt extends Widget {
         }
     }
     _onGanttViewSelectionChanged(e) {
-        this._treeList.option('selectedRowKeys', [e.id]);
+        this._treeList.option("selectedRowKeys", [e.id]);
     }
     _onGanttViewScroll(e) {
         const treeListScrollable = this._treeList.getScrollable();
@@ -92,7 +89,7 @@ class Gantt extends Widget {
     }
 
     _updateGanttView() {
-        this._ganttView.option('tasks', this._getTasks());
+        this._ganttView.option("tasks", this._getTasks());
         this._ganttView._update();
     }
     _getTasks() {
@@ -101,46 +98,46 @@ class Gantt extends Widget {
     _initScrollSync(treeList) {
         const scrollable = treeList.getScrollable();
         if(scrollable) {
-            scrollable.off('scroll', (e) => { this._onTreeListScroll(e); });
-            scrollable.on('scroll', (e) => { this._onTreeListScroll(e); });
+            scrollable.off("scroll", (e) => { this._onTreeListScroll(e); });
+            scrollable.on("scroll", (e) => { this._onTreeListScroll(e); });
         }
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
-            * @name dxGanttOptions.taskDataSource
-            * @type object
+            * @name dxGanttOptions.tasks
+            * @type Array<object>|DataSource|DataSourceOptions
             * @default null
             */
-            taskDataSource: null,
+            tasks: null,
             /**
-            * @name dxGanttOptions.dependenciesDataSource
-            * @type object
+            * @name dxGanttOptions.dependencies
+            * @type Array<object>|DataSource|DataSourceOptions
             * @default null
             */
-            dependenciesDataSource: null,
+            dependencies: null,
             /**
-            * @name dxGanttOptions.resourcesDataSource
-            * @type object
+            * @name dxGanttOptions.resources
+            * @type Array<object>|DataSource|DataSourceOptions
             * @default null
             */
-            resourcesDataSource: null,
+            resources: null,
             /**
-            * @name dxGanttOptions.resourceAssignmentsDataSource
-            * @type object
+            * @name dxGanttOptions.resourceAssignments
+            * @type Array<object>|DataSource|DataSourceOptions
             * @default null
             */
-            resourceAssignmentsDataSource: null
+            resourceAssignments: null
         });
     }
 
     _optionChanged(args) {
         switch(args.name) {
-            case 'taskDataSource':
-            case 'dependenciesDataSource':
-            case 'resourcesDataSource':
-            case 'resourceAssignmentsDataSource':
+            case "tasks":
+            case "dependencies":
+            case "resources":
+            case "resourceAssignments":
                 break;
             default:
                 super._optionChanged(args);
@@ -148,5 +145,5 @@ class Gantt extends Widget {
     }
 }
 
-registerComponent('dxGantt', Gantt);
+registerComponent("dxGantt", Gantt);
 module.exports = Gantt;
