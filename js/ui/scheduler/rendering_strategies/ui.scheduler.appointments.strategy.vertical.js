@@ -4,7 +4,7 @@ import { isNumeric } from "../../../core/utils/type";
 import devices from "../../../core/devices";
 import dateUtils from "../../../core/utils/date";
 
-var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
+const WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
 
     APPOINTMENT_MIN_WIDTH = 5,
@@ -12,10 +12,10 @@ var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
-var toMs = dateUtils.dateToMilliseconds;
+const toMs = dateUtils.dateToMilliseconds;
 
-var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
-    getDeltaTime: function(args, initialSize, appointment) {
+class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
+    getDeltaTime(args, initialSize, appointment) {
         var deltaTime = 0;
 
         if(this.isAllDay(appointment)) {
@@ -25,9 +25,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             deltaTime = toMs("minute") * Math.round(deltaHeight / this.getDefaultCellHeight() * this.instance.getAppointmentDurationInMinutes());
         }
         return deltaTime;
-    },
+    }
 
-    getAppointmentGeometry: function(coordinates) {
+    getAppointmentGeometry(coordinates) {
         var result,
             allDay = coordinates.allDay;
 
@@ -37,15 +37,15 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             result = this._getVerticalAppointmentGeometry(coordinates);
         }
 
-        return this.callBase(result);
-    },
+        return super.getAppointmentGeometry(result);
+    }
 
-    _getItemPosition: function(item) {
+    _getItemPosition(item) {
         var allDay = this.isAllDay(item),
             isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
 
         if(allDay) {
-            return this.callBase(item);
+            return super._getItemPosition(item);
         }
 
         var position = this._getAppointmentCoordinates(item),
@@ -86,22 +86,22 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return result;
-    },
+    }
 
-    _isMultiDayAppointment: function(position, height) {
+    _isMultiDayAppointment(position, height) {
         var maxTop = position.vMax,
             result = height > (maxTop - position.top);
 
         return result;
-    },
+    }
 
-    _reduceMultiDayAppointment: function(sourceAppointmentHeight, bound) {
+    _reduceMultiDayAppointment(sourceAppointmentHeight, bound) {
         sourceAppointmentHeight = bound.bottom - Math.floor(bound.top);
 
         return sourceAppointmentHeight;
-    },
+    }
 
-    _getAppointmentParts: function(appointmentGeometry, appointmentSettings) {
+    _getAppointmentParts(appointmentGeometry, appointmentSettings) {
         var tailHeight = appointmentGeometry.sourceAppointmentHeight - appointmentGeometry.reducedHeight,
             width = appointmentGeometry.width,
             result = [],
@@ -129,26 +129,26 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return result;
-    },
+    }
 
-    _getMinuteHeight: function() {
+    _getMinuteHeight() {
         return this.getDefaultCellHeight() / this.instance.getAppointmentDurationInMinutes();
-    },
+    }
 
-    _getCompactLeftCoordinate: function(itemLeft, index) {
+    _getCompactLeftCoordinate(itemLeft, index) {
         var cellBorderSize = 1,
             cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         return itemLeft + (cellBorderSize + cellWidth) * index;
-    },
+    }
 
-    _checkLongCompactAppointment: function(item, result) {
+    _checkLongCompactAppointment(item, result) {
         this._splitLongCompactAppointment(item, result);
 
         return result;
-    },
+    }
 
-    _getVerticalAppointmentGeometry: function(coordinates) {
+    _getVerticalAppointmentGeometry(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
         if(overlappingMode) {
@@ -167,9 +167,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
             return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
         }
-    },
+    }
 
-    _customizeVerticalCoordinates: function(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
+    _customizeVerticalCoordinates(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
         var index = coordinates.index,
             appointmentWidth = Math.max(width / appointmentCountPerCell, width / coordinates.count),
             height = coordinates.height,
@@ -196,9 +196,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             left: appointmentLeft,
             empty: this._isAppointmentEmpty(height, width)
         };
-    },
+    }
 
-    _calculateVerticalGeometryConfig: function(coordinates) {
+    _calculateVerticalGeometryConfig(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
             offsets = this._getOffsets(),
             appointmentDefaultOffset = this._getAppointmentDefaultOffset();
@@ -224,13 +224,13 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             appointmentCountPerCell: appointmentCountPerCell,
             offset: topOffset
         };
-    },
+    }
 
-    _getMaxWidth: function() {
+    _getMaxWidth() {
         return this.getDefaultCellWidth() || this.invoke("getCellWidth");
-    },
+    }
 
-    isAllDay: function(appointmentData) {
+    isAllDay(appointmentData) {
         var allDay = this.instance.fire("getField", "allDay", appointmentData);
 
         if(allDay) {
@@ -238,16 +238,16 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return this.instance.appointmentTakesAllDay(appointmentData);
-    },
+    }
 
-    _getAppointmentMaxWidth: function() {
+    _getAppointmentMaxWidth() {
         var offset = devices.current().deviceType === "desktop" && !this.instance.fire("isAdaptive") ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET,
             width = this.getDefaultCellWidth() - offset;
 
         return width > 0 ? width : this.getAppointmentMinSize();
-    },
+    }
 
-    calculateAppointmentWidth: function(appointment, position, isRecurring) {
+    calculateAppointmentWidth(appointment, position, isRecurring) {
         if(!this.isAllDay(appointment)) {
             return 0;
         }
@@ -263,9 +263,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
         width = this.cropAppointmentWidth(width, cellWidth);
         return width;
-    },
+    }
 
-    calculateAppointmentHeight: function(appointment, position, isRecurring) {
+    calculateAppointmentHeight(appointment, position, isRecurring) {
         var endDate = this.endDate(appointment, position, isRecurring),
             startDate = this.startDate(appointment, false, position),
             allDay = this.instance.fire("getField", "allDay", appointment);
@@ -280,70 +280,70 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var height = durationInMinutes * this._getMinuteHeight();
 
         return height;
-    },
+    }
 
-    getDirection: function() {
+    getDirection() {
         return "vertical";
-    },
+    }
 
-    _sortCondition: function(a, b) {
+    _sortCondition(a, b) {
         var allDayCondition = a.allDay - b.allDay,
             isAllDay = a.allDay && b.allDay,
             condition = this.instance._groupOrientation === "vertical" && isAllDay ? this._columnCondition(a, b) : this._rowCondition(a, b),
             result = allDayCondition ? allDayCondition : condition;
         return this._fixUnstableSorting(result, a, b);
-    },
+    }
 
-    hasAllDayAppointments: function() {
+    hasAllDayAppointments() {
         return true;
-    },
+    }
 
-    _getAllDayAppointmentGeometry: function(coordinates) {
+    _getAllDayAppointmentGeometry(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);
 
         return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset, true);
-    },
+    }
 
-    _calculateGeometryConfig: function(coordinates) {
+    _calculateGeometryConfig(coordinates) {
         if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
             coordinates.skipResizing = true;
         }
 
-        var config = this.callBase(coordinates);
+        var config = super._calculateGeometryConfig(coordinates);
 
         if(coordinates.count <= this._getDynamicAppointmentCountPerCell().allDay) {
             config.offset = 0;
         }
 
         return config;
-    },
+    }
 
-    _getAppointmentCount: function(overlappingMode, coordinates) {
+    _getAppointmentCount(overlappingMode, coordinates) {
         return overlappingMode !== "auto" && (coordinates.count === 1 && !isNumeric(overlappingMode)) ? coordinates.count : this._getMaxAppointmentCountPerCellByType(coordinates.allDay);
-    },
+    }
 
-    _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
+    _getDefaultRatio(coordinates, appointmentCountPerCell) {
         return coordinates.count > this.instance.option("_appointmentCountPerCell") ? 0.65 : 1;
-    },
+    }
 
-    _getOffsets: function() {
+    _getOffsets() {
         return {
             unlimited: ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET,
             auto: ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET
         };
-    },
+    }
 
-    _getMaxHeight: function() {
+    _getMaxHeight() {
         return this.getDefaultAllDayCellHeight() || this.getAppointmentMinSize();
-    },
+    }
 
-    _needVerticalGroupBounds: function(allDay) {
+    _needVerticalGroupBounds(allDay) {
         return !allDay;
-    },
+    }
 
-    _needHorizontalGroupBounds: function() {
+    _needHorizontalGroupBounds() {
         return false;
     }
-});
+}
 
 module.exports = VerticalRenderingStrategy;
