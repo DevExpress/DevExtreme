@@ -270,19 +270,21 @@ var DragEmitter = GestureEmitter.inherit({
             return false;
         }
 
+        var draggingElementPosition = getItemPosition(config, this._$element);
         var targetPosition = getItemPosition(config, $target);
-        if(e.pageX < targetPosition.left) {
+        
+        if(draggingElementPosition.left < targetPosition.left) {
             return false;
         }
-        if(e.pageY < targetPosition.top) {
+        if(draggingElementPosition.top < targetPosition.top) {
             return false;
         }
 
         var targetSize = getItemSize(config, $target);
-        if(e.pageX > targetPosition.left + targetSize.width) {
+        if(draggingElementPosition.left > targetPosition.left + targetSize.width) {
             return false;
         }
-        if(e.pageY > targetPosition.top + targetSize.height) {
+        if(draggingElementPosition.top > targetPosition.top + targetSize.height) {
             return false;
         }
 
