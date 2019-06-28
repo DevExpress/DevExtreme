@@ -215,6 +215,16 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         instance.format("align", "center");
         this.clock.tick();
     });
+
+    test("editor should have an empty string value when all content has been removed", (assert) => {
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "test"
+            }).dxHtmlEditor("instance");
+
+        instance.delete(0, 4);
+        assert.equal(instance.option("value"), "", "value is empty line");
+    });
 });
 
 
