@@ -5,7 +5,7 @@ import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base"
 
 class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     constructor(instance) {
-        super();
+        super(instance);
         this.instance = instance;
     }
 
