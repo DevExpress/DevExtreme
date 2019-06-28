@@ -3,25 +3,30 @@ import keyboardMock from "./keyboardMock.js";
 
 const SUPPORTED_KEYS = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
 
-const registerKeyHandlerTestHelper = {
-    runTests: function(QUnit, WidgetName) {
+const { module, test, assert } = QUnit;
 
-        QUnit.module("RegisterKeyHandler", {
+const registerKeyHandlerTestHelper = {
+    runTests: function(config) {
+
+        const { createWidget, keyPressTargetElement, checkInitialize, testNamePrefix } = config;
+
+        module("RegisterKeyHandler", {
             beforeEach: () => {
                 this.handler = sinon.spy();
 
                 this.createWidget = (options = {}) => {
-                    this.$widget = $("<div>")[WidgetName]($.extend({
-                        focusStateEnabled: true,
-                        items: [{ text: "text" }]
-                    }, options)).appendTo("#qunit-fixture");
+                    this.$widget = $("<div>").appendTo("#qunit-fixture");
 
-                    this.widget = this.$widget[WidgetName]("instance");
+                    this.widget = createWidget(this.$widget, options);
+
+                    this.keyPressTargetElement = keyPressTargetElement ? keyPressTargetElement(this.widget) : this.widget.$element();
                 };
 
-                this.checkKeyHandlerCall = (assert, key) => {
+                this.checkKeyHandlerCall = (key) => {
+                    let args = this.handler.firstCall.args[0];
+
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.ok(this.$widget.is(this.handler.firstCall.args[0].target), "event.target");
+                    assert.ok(this.keyPressTargetElement.is(args.target), "event.target");
                 };
             },
             afterEach: () => {
@@ -29,20 +34,22 @@ const registerKeyHandlerTestHelper = {
             }
         }, () => {
             SUPPORTED_KEYS.forEach((key) => {
-                QUnit.test(`RegisterKeyHandler -> onInitialize - "${key}"`, (assert) => {
-                    this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
+                if(checkInitialize) {
+                    test(`${testNamePrefix || ''} RegisterKeyHandler -> onInitialize - "${key}"`, () => {
+                        this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
 
-                    keyboardMock(this.$widget).press(key);
-                    this.checkKeyHandlerCall(assert, key);
-                });
+                        keyboardMock(this.keyPressTargetElement).press(key);
+                        this.checkKeyHandlerCall(key);
+                    });
+                }
 
-                QUnit.test(`RegisterKeyHandler -> "${key}"`, (assert) => {
+                test(`${testNamePrefix || ''} RegisterKeyHandler -> "${key}"`, () => {
                     this.createWidget();
 
                     this.widget.registerKeyHandler(key, this.handler);
 
-                    keyboardMock(this.$widget).press(key);
-                    this.checkKeyHandlerCall(assert, key);
+                    keyboardMock(this.keyPressTargetElement).press(key);
+                    this.checkKeyHandlerCall(key);
                 });
             });
         });
