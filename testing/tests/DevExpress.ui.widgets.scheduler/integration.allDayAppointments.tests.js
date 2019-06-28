@@ -1008,7 +1008,6 @@ QUnit.test("all-day-appointment should have a correct height when the 'showAllDa
         currentDate: new Date(2015, 1, 9),
         currentView: "week",
         firstDayOfWeek: 0,
-        showAllDayPanel: true,
         dataSource: [{
             startDate: new Date(2015, 1, 9),
             endDate: new Date(2015, 1, 9),
