@@ -48,7 +48,9 @@ var $ = require("../../core/renderer"),
     Deferred = deferredUtils.Deferred,
     EmptyTemplate = require("../widget/empty_template"),
     BindableTemplate = require("../widget/bindable_template"),
-    themes = require("../themes");
+    themes = require("../themes"),
+    browser = require("../../core/utils/browser"),
+    support = require("../../core/utils/support");
 
 var WIDGET_CLASS = "dx-scheduler",
     WIDGET_SMALL_CLASS = "dx-scheduler-small",
@@ -58,6 +60,8 @@ var WIDGET_CLASS = "dx-scheduler",
     RECURRENCE_EDITOR_OPENED_ITEM_CLASS = "dx-scheduler-recurrence-rule-item-opened",
     WIDGET_SMALL_WIDTH = 400,
     APPOINTEMENT_POPUP_WIDTH = 610;
+
+var WIDGET_WIN_NO_TOUCH_CLASS = WIDGET_CLASS + '-win-no-touch';
 
 var FULL_DATE_FORMAT = "yyyyMMddTHHmmss",
     UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + "Z";
@@ -1522,7 +1526,10 @@ var Scheduler = Widget.inherit({
         this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
         this._customizeStoreLoadOptions();
 
-        this.$element().addClass(WIDGET_CLASS);
+        this.$element()
+            .addClass(WIDGET_CLASS)
+            .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && support.touch));
+
         this._initEditing();
 
         this._resourcesManager = new SchedulerResourceManager(this.option("resources"));
