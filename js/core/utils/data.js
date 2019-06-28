@@ -115,6 +115,7 @@ var combineGetters = function(getters) {
             var value = this(obj, options),
                 current,
                 path,
+                pathItem,
                 last,
                 i;
 
@@ -126,11 +127,17 @@ var combineGetters = function(getters) {
             path = name.split(".");
             last = path.length - 1;
 
-            for(i = 0; i < last; i++) {
-                current = current[path[i]] = {};
+            for(i = 0; i <= last; i++) {
+                pathItem = path[i];
+                if(i === last) {
+                    current[pathItem] = value;
+                } else {
+                    if(!(pathItem in current)) {
+                        current[pathItem] = { };
+                    }
+                    current = current[pathItem];
+                }
             }
-
-            current[path[i]] = value;
         });
         return result;
     };
