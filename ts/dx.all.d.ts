@@ -9456,6 +9456,8 @@ declare module DevExpress {
         static notify(message: string, type?: string, displayTime?: number): void;
         /** @name ui.notify(options,type,displayTime) */
         static notify(options: any, type?: string, displayTime?: number): void;
+        /** @name ui.repaintFloatingActionButton() */
+        static repaintFloatingActionButton(): void;
         /** @name ui.setTemplateEngine(name) */
         static setTemplateEngine(templateEngineName: string): void;
         /** @name ui.setTemplateEngine(options) */
