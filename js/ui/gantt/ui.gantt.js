@@ -135,9 +135,16 @@ class Gantt extends Widget {
     _optionChanged(args) {
         switch(args.name) {
             case "tasks":
+                // TODO
+                break;
             case "dependencies":
+                // TODO
+                break;
             case "resources":
+                // TODO
+                break;
             case "resourceAssignments":
+                // TODO
                 break;
             default:
                 super._optionChanged(args);
