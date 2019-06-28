@@ -7,7 +7,6 @@ import { isNumeric } from "../../../core/utils/type";
 import typeUtils from "../../../core/utils/type";
 import themes from "../../themes";
 
-
 const toMs = dateUtils.dateToMilliseconds;
 
 const APPOINTMENT_MIN_SIZE = 2,

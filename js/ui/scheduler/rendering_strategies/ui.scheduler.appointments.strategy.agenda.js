@@ -1,27 +1,29 @@
-var noop = require("../../../core/utils/common").noop,
-    dateUtils = require("../../../core/utils/date"),
-    each = require("../../../core/utils/iterator").each,
-    arrayUtils = require("../../../core/utils/array"),
-    BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base");
+import dateUtils from "../../../core/utils/date";
+import { each } from "../../../core/utils/iterator";
+import arrayUtils from "../../../core/utils/array";
+import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base";
 
-var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
-    ctor: function(instance) {
+class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
+    constructor(instance) {
+        super();
         this.instance = instance;
-    },
+    }
 
-    getAppointmentMinSize: noop,
+    getAppointmentMinSize() {
+    }
 
-    getDeltaTime: noop,
+    getDeltaTime() {
+    }
 
-    keepAppointmentSettings: function() {
+    keepAppointmentSettings() {
         return true;
-    },
+    }
 
-    getAppointmentGeometry: function(geometry) {
+    getAppointmentGeometry(geometry) {
         return geometry;
-    },
+    }
 
-    createTaskPositionMap: function(appointments) {
+    createTaskPositionMap(appointments) {
 
         if(appointments.length) {
             var height = this.instance.fire("getAgendaVerticalStepHeight"),
@@ -71,9 +73,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }.bind(this));
 
         return result;
-    },
+    }
 
-    _calculateGroupIndex: function(apptIndex, appointmentsByResources) {
+    _calculateGroupIndex(apptIndex, appointmentsByResources) {
         var resultInd,
             counter = 0;
 
@@ -89,66 +91,81 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return resultInd;
-    },
+    }
 
-    _getDeltaWidth: noop,
+    _getDeltaWidth() {
+    }
 
-    _correctRtlCoordinatesParts: noop,
+    _correctRtlCoordinatesParts() {
+    }
 
-    _getAppointmentMaxWidth: function() {
+    _getAppointmentMaxWidth() {
         return this.getDefaultCellWidth();
-    },
+    }
 
-    _needVerifyItemSize: function() {
+    _needVerifyItemSize() {
         return false;
-    },
+    }
 
-    _isRtl: function() {
+    _isRtl() {
         return this.instance.option("rtlEnabled");
-    },
+    }
 
-    _getAppointmentParts: noop,
+    _getAppointmentParts() {
+    }
 
-    _reduceMultiWeekAppointment: noop,
+    _reduceMultiWeekAppointment() {
+    }
 
-    calculateAppointmentHeight: function() {
+    calculateAppointmentHeight() {
         return 0;
-    },
+    }
 
-    calculateAppointmentWidth: function() {
+    calculateAppointmentWidth() {
         return 0;
-    },
+    }
 
-    isAppointmentGreaterThan: noop,
+    isAppointmentGreaterThan() {
+    }
 
-    isAllDay: function() {
+    isAllDay() {
         return false;
-    },
+    }
 
-    _sortCondition: noop,
+    _sortCondition() {
+    }
 
-    _rowCondition: noop,
+    _rowCondition() {
+    }
 
-    _columnCondition: noop,
+    _columnCondition() {
+    }
 
-    _findIndexByKey: noop,
+    _findIndexByKey() {
+    }
 
-    _getMaxNeighborAppointmentCount: noop,
+    _getMaxNeighborAppointmentCount() {
+    }
 
-    _markAppointmentAsVirtual: noop,
+    _markAppointmentAsVirtual() {
+    }
 
-    getDropDownAppointmentWidth: noop,
+    getDropDownAppointmentWidth() {
+    }
 
-    getDefaultCellWidth: function() {
+    getDefaultCellWidth() {
         return this._defaultWidth;
-    },
+    }
 
-    getCompactAppointmentDefaultWidth: noop,
+    getCompactAppointmentDefaultWidth() {
+    }
 
-    getCompactAppointmentLeftOffset: noop,
-    getCompactAppointmentTopOffset: noop,
+    getCompactAppointmentLeftOffset() {
+    }
+    getCompactAppointmentTopOffset() {
+    }
 
-    calculateRows: function(appointments, agendaDuration, currentDate, needClearSettings) {
+    calculateRows(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
 
         var appts = {
@@ -209,9 +226,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }.bind(this));
 
         return this._rows;
-    },
+    }
 
-    _iterateRow: function(row, obj, index) {
+    _iterateRow(row, obj, index) {
         for(var i = 0; i < row.length; i++) {
             obj.counter = obj.counter + row[i];
             if(obj.counter >= index) {
@@ -219,9 +236,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 break;
             }
         }
-    },
+    }
 
-    getDateByIndex: function(index, rows, startViewDate) {
+    getDateByIndex(index, rows, startViewDate) {
         var obj = { counter: 0, indexInRow: 0 };
         index++;
 
@@ -231,9 +248,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return new Date(new Date(startViewDate).setDate(startViewDate.getDate() + obj.indexInRow));
-    },
+    }
 
-    getAppointmentDataCalculator: function() {
+    getAppointmentDataCalculator() {
         return function($appointment, originalStartDate) {
             var apptIndex = $appointment.index(),
                 startViewDate = this.instance.getStartViewDate(),
@@ -251,6 +268,6 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
         }.bind(this);
     }
-});
+}
 
 module.exports = AgendaRenderingStrategy;
