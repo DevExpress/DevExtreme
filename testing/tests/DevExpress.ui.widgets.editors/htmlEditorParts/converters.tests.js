@@ -78,6 +78,10 @@ QUnit.module("Delta converter", {
         this.quillInstance.setContents(deltaOps);
         assert.strictEqual(this.deltaConverter.toHtml(), expected, "converted markup should contains inner styles");
     });
+
+    test("it should return an empty string when editor is empty", (assert) => {
+        assert.strictEqual(this.deltaConverter.toHtml(), "", "editor is empty and converter return an empty string");
+    });
 });
 
 QUnit.module("Markdown converter", () => {

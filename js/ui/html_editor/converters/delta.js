@@ -29,7 +29,19 @@ class DeltaConverter {
             return;
         }
 
-        return this._convertHTML(this.quillInstance.scroll, 0, this.quillInstance.getLength(), true);
+        return this._isQuillEmpty() ?
+            "" :
+            this._convertHTML(this.quillInstance.scroll, 0, this.quillInstance.getLength(), true);
+    }
+
+    _isQuillEmpty() {
+        const delta = this.quillInstance.getContents();
+
+        return delta.length() === 1 && this._isDeltaEmpty(delta);
+    }
+
+    _isDeltaEmpty(delta) {
+        return delta.reduce((__, { insert }) => insert.indexOf("\n") !== -1);
     }
 
     _convertHTML(blot, index, length, isRoot = false) {
