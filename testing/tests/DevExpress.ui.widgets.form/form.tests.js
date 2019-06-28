@@ -254,7 +254,7 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
     assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 
     assert.deepEqual(values[0], { dataField: "name", value: "" }, "value of name dataField");
-    assert.deepEqual(values[3], { dataField: "room", value: null }, "value of room dataField");
+    assert.deepEqual(values[1], { dataField: "room", value: null }, "value of room dataField");
 });
 
 QUnit.test("Reset editor's value when the formData option is null", function(assert) {
