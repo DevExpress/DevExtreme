@@ -149,12 +149,40 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         this.setAria("role", "toolbar");
     },
 
+    _waitParentAnimationFinished: function() {
+        var that = this,
+            timeout = 15;
+        return new Promise(function(resolve) {
+            var check = function() {
+                var animated = true;
+                that.$element().parents().each(function(_, parent) {
+                    if($(parent).data("dxAnimData")) {
+                        animated = false;
+                    }
+                });
+                animated && resolve();
+                return animated;
+            };
+            var runCheck = function runCheck() {
+                setTimeout(function() {
+                    check() || runCheck();
+                }, timeout);
+            };
+            that.$element().width() > 0
+            && check()
+            || runCheck();
+        });
+    },
+
     _render: function() {
+        var that = this;
         this.callBase();
         this._renderItemsAsync();
 
         if(themes.isMaterial()) {
-            this._checkWebFontForLabelsLoaded().then(this._dimensionChanged.bind(this));
+            this._waitParentAnimationFinished().then(function() {
+                that._checkWebFontForLabelsLoaded().then(that._dimensionChanged.bind(that));
+            });
         }
     },
 
