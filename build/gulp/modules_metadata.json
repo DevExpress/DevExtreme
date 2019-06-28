@@ -417,6 +417,12 @@
     }
   },
   {
+    "name": "ui/speed_dial_action/repaint_floating_action_button",
+    "exports": {
+      "default": { "path": "ui.repaintFloatingActionButton" }
+    }
+  },
+  {
     "name": "ui/number_box",
     "exports": {
       "default": { "path": "ui.dxNumberBox", "isWidget": true }
