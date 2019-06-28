@@ -114,15 +114,15 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         const item = $(document).find(".dx-list-item-content").filter(function() {
             return $(this).text().toLowerCase().indexOf("arial black") >= 0;
         });
-        assert.notOk(this.instance._diagramInstance.isFocused());
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
         item.trigger("dxclick");
-        assert.ok(this.instance._diagramInstance.isFocused());
+        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
     });
     test("diagram should be focused after set font bold", (assert) => {
         const boldButton = findToolbarItem(this.$element, "bold");
-        assert.notOk(this.instance._diagramInstance.isFocused());
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
         boldButton.trigger("dxclick");
-        assert.ok(this.instance._diagramInstance.isFocused());
+        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
     });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
