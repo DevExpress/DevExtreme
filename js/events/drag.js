@@ -272,7 +272,7 @@ var DragEmitter = GestureEmitter.inherit({
 
         var draggingElementPosition = getItemPosition(config, this._$element);
         var targetPosition = getItemPosition(config, $target);
-        
+
         if(draggingElementPosition.left < targetPosition.left) {
             return false;
         }
