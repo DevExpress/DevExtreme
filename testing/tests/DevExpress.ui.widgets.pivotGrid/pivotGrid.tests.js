@@ -718,6 +718,67 @@ QUnit.test("clear selection and filtering in field chooser treeview on popup hid
     assert.ok(resetTreeView.calledOnce, 'resetTreeView was called');
 });
 
+// T752355
+QUnit.test("add field to column area in field chooser when enabled state storing", function(assert) {
+    var pivotGrid = createPivotGrid({
+        fieldChooser: {
+            applyChangesMode: "onDemand",
+            enabled: true
+        },
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return $.Deferred().resolve({
+                    fields: [{ dataField: "field2", area: "column" }]
+                });
+            }
+        },
+        dataSource: [{
+            field1: "",
+            field2: ""
+        }]
+    }, assert);
+
+    this.clock.tick();
+
+    // act, assert
+    pivotGrid.getFieldChooserPopup().show();
+    this.clock.tick(500);
+
+    function normalizeField(field) {
+        return { area: field.area, areaIndex: field.areaIndex, dataField: field.dataField };
+    }
+
+    assert.equal($(".dx-checkbox-checked").length, 1, "one checked checkbox");
+
+    assert.deepEqual(pivotGrid.getDataSource().state().fields.map(normalizeField), [{
+        "area": undefined,
+        "areaIndex": undefined,
+        "dataField": "field1"
+    }, {
+        "area": "column",
+        "areaIndex": 0,
+        "dataField": "field2"
+    }], "field's state when one field is in column area");
+
+    $(".dx-checkbox").eq(0).trigger("dxclick");
+    assert.equal($(".dx-checkbox-checked").length, 2, "two checked checkboxes");
+
+    $(".dx-button").eq(2).trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.deepEqual(pivotGrid.getDataSource().state().fields.map(normalizeField), [{
+        "area": "column",
+        "areaIndex": 1,
+        "dataField": "field1"
+    }, {
+        "area": "column",
+        "areaIndex": 0,
+        "dataField": "field2"
+    }], "field's state when two fields are in column area");
+});
+
 QUnit.test("Field panel headerFilter with search", function(assert) {
     createPivotGrid({
         dataSource: this.dataSource,
