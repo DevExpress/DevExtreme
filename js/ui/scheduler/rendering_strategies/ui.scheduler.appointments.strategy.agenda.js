@@ -4,11 +4,6 @@ import arrayUtils from "../../../core/utils/array";
 import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base";
 
 class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
-    constructor(instance) {
-        super(instance);
-        this.instance = instance;
-    }
-
     getAppointmentMinSize() {
     }
 
