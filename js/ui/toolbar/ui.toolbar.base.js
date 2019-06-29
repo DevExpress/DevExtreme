@@ -150,12 +150,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _waitParentAnimationFinished: function() {
-        var that = this,
+        var $element = this.$element(),
             timeout = 15;
         return new Promise(function(resolve) {
-            var check = function() {
+            const check = function() {
                 var animated = true;
-                that.$element().parents().each(function(_, parent) {
+                $element.parents().each(function(_, parent) {
                     if($(parent).data("dxAnimData")) {
                         animated = false;
                     }
@@ -163,14 +163,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 animated && resolve();
                 return animated;
             };
-            var runCheck = function runCheck() {
+            const runCheck = function() {
                 setTimeout(function() {
                     check() || runCheck();
                 }, timeout);
             };
-            that.$element().width() > 0
-            && check()
-            || runCheck();
+            ($element.width() > 0 && check()) || runCheck();
         });
     },
 
