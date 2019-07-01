@@ -428,3 +428,86 @@ QUnit.test("Appointment should have correct color after resources option changin
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
     assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Color is OK");
 });
+
+QUnit.module("Integration: Multiple resources", {
+    beforeEach: function() {
+        $("#qunit-fixture").css({ top: 0, left: 0 });
+        this.createInstance = function(options) {
+            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+        };
+        $("#qunit-fixture").html(
+            '<div style="width: 1000px; height: 500px;"><div id="scheduler" style="height: 100%;">\
+                <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+                </div></div>');
+    }
+});
+
+QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", function(assert) {
+    this.createInstance({
+        groups: ['facilityId'],
+        crossScrollingEnabled: true,
+        dataSource: [],
+        resources: [{
+            dataSource: [
+                {
+                    facilityId: 1,
+                    facilityName: 'A',
+                },	{
+                    facilityId: 2,
+                    facilityName: 'B',
+                },	{
+                    facilityId: 3,
+                    facilityName: 'C',
+                },	{
+                    facilityId: 4,
+                    facilityName: 'D',
+                },	{
+                    facilityId: 5,
+                    facilityName: 'E',
+                },	{
+                    facilityId: 6,
+                    facilityName: 'F',
+                },	{
+                    facilityId: 7,
+                    facilityName: 'G',
+                },	{
+                    facilityId: 8,
+                    facilityName: 'H',
+                },	{
+                    facilityId: 9,
+                    facilityName: 'I',
+                },	{
+                    facilityId: 10,
+                    facilityName: 'J',
+                },	{
+                    facilityId: 11,
+                    facilityName: 'K',
+                },	{
+                    facilityId: 12,
+                    facilityName: 'L',
+                },	{
+                    facilityId: 13,
+                    facilityName: 'M',
+                },	{
+                    facilityId: 14,
+                    facilityName: 'N',
+                },	{
+                    facilityId: 15,
+                    facilityName: 'O',
+                },	{
+                    facilityId: 16,
+                    facilityName: 'P',
+                },	{
+                    facilityId: 17,
+                    facilityName: 'Q',
+                },
+            ],
+            displayExpr: 'facilityName',
+            valueExpr: 'facilityId',
+            fieldExpr: 'facilityId',
+            allowMultiple: false,
+        }]
+    });
+    var scrollbar = $(this.instance.$element()).find(".dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal");
+    assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(this.instance.$element()).find(".dx-scheduler-work-space-both-scrollbar").outerHeight(), 1, "Horizontal scrollbar has visible top coordinate");
+});
