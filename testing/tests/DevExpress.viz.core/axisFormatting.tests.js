@@ -52,11 +52,11 @@ var environment = {
             };
         });
 
+    },
+    createAxis: function(options) {
         this.translator = new StubTranslator();
         this.translator.stub("getBusinessRange").returns(new Range());
         this.translator.stub("getCanvasVisibleArea").returns({ min: 0, max: 200 }); // for horizontal only
-    },
-    createAxis: function(options) {
         this.axis = new Axis({
             renderer: this.renderer,
             stripsGroup: this.renderer.g(),
