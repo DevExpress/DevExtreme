@@ -568,6 +568,17 @@ QUnit.module("web font checker", () => {
         assert.equal(diff, 0, "Element's count are the same after method call");
     });
 
+    test("waitWebFont: function resolve by timeout if the font is not loaded", (assert) => {
+        const done = assert.async();
+        themes.waitWebFont("test text", 400).then((success) => {
+            assert.ok(true, "The font was not loaded, but waiting successfully resolved");
+            done();
+        }, (fail) => {
+            assert.ok(false, "The font was not loaded, waiting was rejected");
+            done();
+        });
+    });
+
     test("waitWebFont: function resolved when the font is loaded", (assert) => {
         if(!document.fonts) {
             assert.expect(0);

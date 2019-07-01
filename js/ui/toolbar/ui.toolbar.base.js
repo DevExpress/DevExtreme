@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     AsyncCollectionWidget = require("../collection/ui.collection_widget.async"),
     Promise = require("../../core/polyfills/promise"),
-    BindableTemplate = require("../widget/bindable_template");
+    BindableTemplate = require("../widget/bindable_template"),
+    fx = require("../../animation/fx");
 
 var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_BEFORE_CLASS = "dx-toolbar-before",
@@ -150,13 +151,13 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _waitParentAnimationFinished: function() {
-        var $element = this.$element(),
+        const $element = this.$element(),
             timeout = 15;
-        return new Promise(function(resolve) {
+        return new Promise(resolve => {
             const check = function() {
-                var animated = true;
+                let animated = true;
                 $element.parents().each(function(_, parent) {
-                    if($(parent).data("dxAnimData")) {
+                    if(fx.isAnimating($(parent))) {
                         animated = false;
                     }
                 });
@@ -173,14 +174,14 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _render: function() {
-        var that = this;
         this.callBase();
         this._renderItemsAsync();
 
         if(themes.isMaterial()) {
-            this._waitParentAnimationFinished().then(function() {
-                that._checkWebFontForLabelsLoaded().then(that._dimensionChanged.bind(that));
-            });
+            Promise.all([
+                this._waitParentAnimationFinished(),
+                this._checkWebFontForLabelsLoaded()
+            ]).then(this._dimensionChanged.bind(this));
         }
     },
 

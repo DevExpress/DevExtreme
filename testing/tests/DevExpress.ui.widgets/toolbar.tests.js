@@ -1398,9 +1398,9 @@ QUnit.test("Toolbar calls font-waiting function for labels (T736793)", function(
         { args: [ "text3", "400" ], description: "call for the third label" }
     ];
 
-    var executionCount = 0;
-    var origIsMaterial = themes.isMaterial;
-    var done = assert.async(3);
+    let executionCount = 0;
+    let origIsMaterial = themes.isMaterial;
+    let done = assert.async(3);
 
     themes.isMaterial = function() { return true; };
 
