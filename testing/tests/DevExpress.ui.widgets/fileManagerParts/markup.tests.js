@@ -63,4 +63,24 @@ QUnit.module("Markup rendering", moduleConfig, () => {
         assert.equal(this.wrapper.getCustomThumbnails().length, counter, "custom thumbnails rendered");
     });
 
+    test("elipsis rendered", function(assert) {
+        const fileSystem = createTestFileSystem();
+        fileSystem[1].name = "Folder 2 test 11111111 testtesttestest 22222 test test 1111111 test 1 222222";
+
+        this.prepareFileManager({
+            fileProvider: fileSystem,
+            itemView: {
+                mode: "details"
+            },
+            width: 600
+        });
+
+        const $node = this.wrapper.getFolderNode(2);
+        const $text = $node.find(".dx-filemanager-dirs-tree-item-text");
+        const $button = $node.find(".dx-filemanager-file-actions-button");
+        const textBottom = $text.position().top + $text.height();
+        const buttonTop = $button.position().top;
+        assert.ok(buttonTop < textBottom, "text and button on the same line");
+    });
+
 });
