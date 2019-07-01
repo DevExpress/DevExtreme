@@ -406,12 +406,12 @@ QUnit.test("No data -> set visualRange = wholeRange -> set data < wholeRange - t
 
     chart.option({ dataSource });
 
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), [1, 5], "Case 1");
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), [0, 6], "Case 1");
     assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 10, endValue: 50 }, "Case 1");
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 5 }, "Case 1");
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 0, endValue: 6 }, "Case 1");
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 50 }, "Case 1");
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, "argumentAxis.visualRange", "Case 1");
-    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [1, 5], "Case 1");
+    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [0, 6], "Case 1");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, "valueAxis.visualRange", "Case 1");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 10, endValue: 50 }, "Case 1");
 
@@ -423,12 +423,12 @@ QUnit.test("No data -> set visualRange = wholeRange -> set data < wholeRange - t
 
     chart.option({ dataSource });
 
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 1, endValue: 5 }, "Case 2");
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 0, endValue: 6 }, "Case 2");
     assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 10, endValue: 50 }, "Case 2");
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 5 }, "Case 2");
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 0, endValue: 6 }, "Case 2");
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 50 }, "Case 2");
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, "argumentAxis.visualRange", "Case 2");
-    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 1, endValue: 5 }, "Case 2");
+    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 0, endValue: 6 }, "Case 2");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, "valueAxis.visualRange", "Case 2");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 10, endValue: 50 }, "Case 2");
 
@@ -439,12 +439,12 @@ QUnit.test("No data -> set visualRange = wholeRange -> set data < wholeRange - t
 
     chart.option({ dataSource });
 
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), [1, 5], "Case 3");
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), [0, 6], "Case 3");
     assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 10, endValue: 50 }, "Case 3");
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 5 }, "Case 3");
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 0, endValue: 6 }, "Case 3");
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 50 }, "Case 3");
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, "argumentAxis.visualRange", "Case 3");
-    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [1, 5], "Case 3");
+    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [0, 6], "Case 3");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, "valueAxis.visualRange", "Case 3");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 10, endValue: 50 }, "Case 3");
 
@@ -456,12 +456,12 @@ QUnit.test("No data -> set visualRange = wholeRange -> set data < wholeRange - t
 
     chart.option({ dataSource });
 
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), [1, 5], "Case 4");
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), [0, 6], "Case 4");
     assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 10, endValue: 50 }, "Case 4");
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 5 }, "Case 4");
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 0, endValue: 6 }, "Case 4");
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 50 }, "Case 4");
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, "argumentAxis.visualRange", "Case 4");
-    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [1, 5], "Case 4");
+    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [0, 6], "Case 4");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, "valueAxis.visualRange", "Case 4");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 10, endValue: 50 }, "Case 4");
 
@@ -473,12 +473,12 @@ QUnit.test("No data -> set visualRange = wholeRange -> set data < wholeRange - t
 
     chart.option({ dataSource });
 
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 1, endValue: 5 }, "Case 5");
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 0, endValue: 6 }, "Case 5");
     assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 10, endValue: 50 }, "Case 5");
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 5 }, "Case 5");
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 0, endValue: 6 }, "Case 5");
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 50 }, "Case 5");
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, "argumentAxis.visualRange", "Case 5");
-    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 1, endValue: 5 }, "Case 5");
+    assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 0, endValue: 6 }, "Case 5");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, "valueAxis.visualRange", "Case 5");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 10, endValue: 50 }, "Case 5");
 });
@@ -879,6 +879,27 @@ QUnit.test("Data -> set visualRange = data range -> update data - take new data 
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 1, endValue: 5 }, "Case 5");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, "valueAxis.visualRange", "Case 5");
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 10, endValue: 50 }, "Case 5");
+});
+
+// T753244
+QUnit.test("No data -> set Data(one point)", function(assert) {
+    const dataSource = [ ];
+    const newDataSource = [
+        { arg: 5, val: 50 }
+    ];
+
+    let [chart, onOptionChanged] = this.createChart({
+        dataSource,
+        argumentAxis: { visualRange: { length: 2 } }
+    });
+    onOptionChanged.reset();
+
+    chart.option({ dataSource: newDataSource });
+
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), {
+        startValue: 3,
+        endValue: 5
+    });
 });
 
 QUnit.module("Visual range on updates. Argument axis. Auto mode. Discrete", moduleSetup);
