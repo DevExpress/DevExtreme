@@ -180,7 +180,7 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
-        this._diagramInstance.onToggleFullscreen = this._toggleFullscreen.bind(this);
+        this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -410,16 +410,10 @@ class Diagram extends Widget {
             ));
         }
     }
-    _toggleFullscreen() {
-        this._setFullscreen(!this._fullscreen);
-    }
-    _setFullscreen(fullscreen) {
-        this._fullscreen = fullscreen;
+    _onToggleFullscreen(fullscreen) {
         this._changeNativeFullscreen(fullscreen);
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullscreen);
         this._diagramInstance.updateLayout();
-        const { DiagramCommand } = getDiagram();
-        this._toolbarInstance._setItemValue(DiagramCommand.Fullscreen, this._fullscreen);
     }
     _changeNativeFullscreen(setModeOn) {
         let window = getWindow();
