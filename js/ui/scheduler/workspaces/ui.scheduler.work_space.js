@@ -2192,9 +2192,14 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getCellWidth: function() {
-        var cell = this._getCells().first().get(0);
+        const cells = this._getCells();
+        const cell = cells.first().get(0);
+        const cell2 = cells[1];
 
-        return cell && cell.getBoundingClientRect().width;
+        const cellWidth = cell && cell.getBoundingClientRect().width || 0;
+        const cellWidth2 = cell2 && cell2.getBoundingClientRect().width || 0;
+
+        return (cellWidth + cellWidth2) / 2;
     },
 
     getCellMinWidth: function() {
