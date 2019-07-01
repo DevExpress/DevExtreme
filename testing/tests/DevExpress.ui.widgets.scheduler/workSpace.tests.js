@@ -1060,12 +1060,12 @@ QUnit.testStart(function() {
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
 
         assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(63).position().top, "Top cell coordinates are right");
-        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(63).position().left, "Left cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(63).position().left, 0.01, "Left cell coordinates are right");
 
         coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 7, 1, 0), 0, false);
 
         assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().top, "Top cell coordinates are right");
-        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, "Left cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, 0.01, "Left cell coordinates are right");
     });
 
     QUnit.test("Work space should find cell coordinates by date in allDay row, groupByDate = true", function(assert) {
@@ -1076,13 +1076,13 @@ QUnit.testStart(function() {
 
         assert.equal(coords.top, 0, "Top cell coordinates are right");
         assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
-        assert.equal(coords.left, $element.find(".dx-scheduler-all-day-table tbody td").eq(3).position().left, "Left cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-all-day-table tbody td").eq(3).position().left, 0.01, "Left cell coordinates are right");
 
         coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
 
         assert.equal(coords.top, 0, "Top cell coordinates are right");
         assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
-        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(8).position().left, "Left cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(8).position().left, 0.01, "Left cell coordinates are right");
     });
 })("Work Space Week with grouping by date");
 
@@ -1183,7 +1183,7 @@ QUnit.testStart(function() {
             expectedCoordinates = $element.find(".dx-scheduler-date-table tbody td").eq(10).position();
 
         assert.roughEqual(coords.top, Math.floor(expectedCoordinates.top), 1.001, "Cell coordinates are right");
-        assert.equal(coords.left, expectedCoordinates.left, "Cell coordinates are right");
+        assert.roughEqual(coords.left, expectedCoordinates.left, 0.01, "Cell coordinates are right");
     });
 
     QUnit.test("Work space should find cell coordinates by date depend on start day hour", function(assert) {
@@ -1195,7 +1195,7 @@ QUnit.testStart(function() {
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
         assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, 1, "Cell coordinates are right");
-        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().left, "Cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().left, 0.01, "Cell coordinates are right");
     });
 
     QUnit.test("Work space should find cell coordinates by date depend on end day hour", function(assert) {
@@ -1207,7 +1207,7 @@ QUnit.testStart(function() {
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
         assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, 1, "Cell coordinates are right");
-        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().left, "Cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().left, 0.01, "Cell coordinates are right");
     });
 
     QUnit.test("Get date range", function(assert) {
