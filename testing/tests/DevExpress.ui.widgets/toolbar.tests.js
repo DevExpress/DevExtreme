@@ -1392,15 +1392,15 @@ QUnit.module("Waiting fonts for material theme", {
 });
 
 QUnit.test("Toolbar calls font-waiting function for labels (T736793)", function(assert) {
-    const estimatedData = [
+    var estimatedData = [
         { args: [ "text1", "400" ], description: "call for the first label" },
         { args: [ "text2", "400" ], description: "call for the second label" },
         { args: [ "text3", "400" ], description: "call for the third label" }
     ];
 
-    let executionCount = 0;
-    let origIsMaterial = themes.isMaterial;
-    let done = assert.async(3);
+    var executionCount = 0,
+        origIsMaterial = themes.isMaterial,
+        done = assert.async(3);
 
     themes.isMaterial = function() { return true; };
 
