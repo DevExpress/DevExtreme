@@ -78,8 +78,12 @@
     }
 
     .dx-row {
-        .dx-filemanager-file-actions-button .dx-button-content {
-            padding: 10px 14px;
+        .dx-filemanager-file-actions-button {
+            float: right;
+
+            .dx-button-content {
+                padding: 10px 14px;
+            }
         }
 
         &.dx-selection .dx-filemanager-file-actions-button,
@@ -162,16 +166,27 @@
             height: 100%;
         }
 
-        .dx-filemanager-details-item-thumbnail {
-            font-size: 18px;
+        .dx-filemanager-details-item-name-wrapper {
+            display: flex;
+            align-items: flex-start;
+
+            .dx-filemanager-details-item-name {
+                flex: 1 auto;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 }
 
 .dx-filemanager-file-actions-button {
     visibility: hidden;
-    float: right;
     text-align: center;
+
+    &.dx-widget {
+        line-height: 100%;
+    }
 
     .dx-button {
         border: none;
@@ -194,6 +209,23 @@
 }
 
 .dx-filemanager-dirs-tree {
+    .dx-treeview-item-content {
+        display: flex;
+        align-items: flex-end;
+
+        .dx-filemanager-dirs-tree-item-text {
+            flex: 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .dx-filemanager-file-actions-button {
+        margin-top: 1px;
+        margin-bottom: -1px;
+    }
+
     .dx-filemanager-focused-item .dx-filemanager-file-actions-button,
     .dx-treeview-item.dx-state-hover .dx-filemanager-file-actions-button {
         visibility: visible;

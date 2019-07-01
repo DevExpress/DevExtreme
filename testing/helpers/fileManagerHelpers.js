@@ -17,6 +17,7 @@ export const Consts = {
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
     CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
     TOOLBAR_SEPARATOR_ITEM: "dx-filemanager-toolbar-separator-item",
+    DETAILS_ITEM_NAME_CLASS: "dx-filemanager-details-item-name",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
     BUTTON_TEXT_CLASS: "dx-button-text",
@@ -101,6 +102,10 @@ export class FileManagerWrapper {
 
     findDetailsItem(itemName) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:contains('${itemName}')`);
+    }
+
+    getDetailsItemName(index) {
+        return this._$element.find(`.${Consts.DETAILS_ITEM_NAME_CLASS}`).eq(index).text();
     }
 
     getRowActionButtonInDetailsView(index) {

@@ -16,6 +16,7 @@ import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button"
 
 const FILE_MANAGER_DIRS_TREE_CLASS = "dx-filemanager-dirs-tree";
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = "dx-filemanager-focused-item";
+const FILE_MANAGER_DIRS_TREE_ITEM_TEXT_CLASS = "dx-filemanager-dirs-tree-item-text";
 const TREE_VIEW_ITEM_CLASS = "dx-treeview-item";
 
 class FileManagerFilesTreeView extends Widget {
@@ -85,11 +86,15 @@ class FileManagerFilesTreeView extends Widget {
         const $itemWrapper = $itemElement.closest(this._filesTreeViewItemSelector);
         $itemWrapper.data("item", itemData);
 
+        const $image = getImageContainer(itemData.icon);
+
+        const $text = $("<span>")
+            .text(itemData.text)
+            .addClass(FILE_MANAGER_DIRS_TREE_ITEM_TEXT_CLASS);
+
         const $button = $("<div>");
-        $itemElement.append(
-            getImageContainer(itemData.icon),
-            $("<span>").text(itemData.text),
-            $button);
+
+        $itemElement.append($image, $text, $button);
 
         this._createFileActionsButton($button, {
             onClick: e => this._onFileItemActionButtonClick(e)
