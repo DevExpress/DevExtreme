@@ -573,9 +573,6 @@ QUnit.module("web font checker", () => {
         themes.waitWebFont("test text", 400).then((success) => {
             assert.ok(true, "The font was not loaded, but waiting successfully resolved");
             done();
-        }, (fail) => {
-            assert.ok(false, "The font was not loaded, waiting was rejected");
-            done();
         });
     });
 

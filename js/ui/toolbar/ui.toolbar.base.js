@@ -151,23 +151,20 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _waitParentAnimationFinished: function() {
-        const $element = this.$element(),
-            timeout = 15;
+        const $element = this.$element();
+        const timeout = 15;
         return new Promise(resolve => {
-            const check = function() {
-                let animated = true;
-                $element.parents().each(function(_, parent) {
+            const check = () => {
+                $element.parents().each((_, parent) => {
                     if(fx.isAnimating($(parent))) {
-                        animated = false;
+                        return false;
                     }
                 });
-                animated && resolve();
-                return animated;
+                resolve();
+                return true;
             };
-            const runCheck = function() {
-                setTimeout(function() {
-                    check() || runCheck();
-                }, timeout);
+            const runCheck = () => {
+                setTimeout(() => check() || runCheck(), timeout);
             };
             ($element.width() > 0 && check()) || runCheck();
         });
