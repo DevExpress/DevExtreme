@@ -1183,7 +1183,7 @@ QUnit.testStart(function() {
             expectedCoordinates = $element.find(".dx-scheduler-date-table tbody td").eq(10).position();
 
         assert.roughEqual(coords.top, Math.floor(expectedCoordinates.top), 1.001, "Cell coordinates are right");
-        assert.equal(coords.left, expectedCoordinates.left, "Cell coordinates are right");
+        assert.roughEqual(coords.left, expectedCoordinates.left, 0.01, "Cell coordinates are right");
     });
 
     QUnit.test("Work space should find cell coordinates by date depend on start day hour", function(assert) {
