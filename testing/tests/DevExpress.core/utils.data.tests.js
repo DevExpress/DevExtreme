@@ -148,6 +148,13 @@ QUnit.module("getter", () => {
         assert.strictEqual(emptyResultOfMonoGetter, undefined);
         assert.strictEqual(emptyResultOfPolyGetter, undefined);
     });
+
+    test("Issue #8552", (assert) => {
+        // https://github.com/DevExpress/DevExtreme/issues/8552
+        var getter = GETTER([ "B.Id", "B.Key" ]);
+        var obj = { B: { Id: "Id", Key: "Key" } };
+        assert.deepEqual(getter(obj), obj);
+    });
 });
 
 
