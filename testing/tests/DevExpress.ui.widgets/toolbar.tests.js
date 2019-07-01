@@ -1392,10 +1392,24 @@ QUnit.module("Waiting fonts for material theme", {
 });
 
 QUnit.test("Toolbar calls font-waiting function for labels (T736793)", function(assert) {
-    var origIsMaterial = themes.isMaterial;
+    var estimatedData = [
+        { args: [ "text1", "400" ], description: "call for the first label" },
+        { args: [ "text2", "400" ], description: "call for the second label" },
+        { args: [ "text3", "400" ], description: "call for the third label" }
+    ];
+
+    var executionCount = 0,
+        origIsMaterial = themes.isMaterial,
+        done = assert.async(3);
+
     themes.isMaterial = function() { return true; };
 
-    var spy = sinon.spy(themes, "waitWebFont");
+    themes.waitWebFont = function(text, fontWeight) {
+        var data = estimatedData[executionCount];
+        assert.deepEqual([text, fontWeight], data.args, data.description);
+        executionCount++;
+        done();
+    };
 
     $("#toolbar").dxToolbar({
         items: [
@@ -1407,10 +1421,7 @@ QUnit.test("Toolbar calls font-waiting function for labels (T736793)", function(
         height: 50
     });
 
-    assert.deepEqual(spy.args[0], ["text1", "400"], "call for the first label");
-    assert.deepEqual(spy.args[1], ["text2", "400"], "call for the second label");
-    assert.deepEqual(spy.args[2], ["text3", "400"], "call for the third label");
-
+    this.clock.tick();
     themes.isMaterial = origIsMaterial;
 });
 

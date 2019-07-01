@@ -373,7 +373,7 @@ function waitWebFont(text, fontWeight) {
 
         const runCheck = () => {
             if(i++ > attempts) {
-                reject();
+                resolve();
                 return;
             }
 
