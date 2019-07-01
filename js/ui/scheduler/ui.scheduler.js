@@ -2633,7 +2633,11 @@ var Scheduler = Widget.inherit({
                 }
 
                 if(!options.skipHoursProcessing) {
-                    updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
+                    this.fire(
+                        "convertDateByTimezoneBack",
+                        updatedStartDate,
+                        this.fire("getField", "startDateTimeZone", appointmentData)
+                    );
                 }
             }
         }
