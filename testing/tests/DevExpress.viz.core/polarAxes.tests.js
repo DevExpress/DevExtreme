@@ -85,7 +85,10 @@ var environment = {
         this.range.max = 100;
 
         this.translator = new TranslatorStubCtor();
-        this.translator.getBusinessRange.returns(new RangeStubCtor());
+
+        var br = new RangeStubCtor();
+        br.isEmpty.returns(true);
+        this.translator.getBusinessRange.returns(br);
 
         sinon.stub(translator2DModule, "Translator2D", function() {
             return that.translator;
@@ -1977,9 +1980,7 @@ QUnit.module("Circular polar axis. Set business range", {
         this.axis.validate();
     },
 
-    afterEach() {
-        environment.afterEach.call(this);
-    }
+    afterEach: environment.afterEach
 });
 
 QUnit.test("Set business range when period is set", function(assert) {
