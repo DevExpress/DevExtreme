@@ -289,50 +289,12 @@ var NativeStrategy = Class.inherit({
         this._$container.scrollLeft(-location.left - distance.left);
     },
 
-    isWheelEvent: function(e) {
-        return e.type === "dxmousewheel";
-    },
-
     validate: function(e) {
         if(this.option("disabled")) {
             return false;
         }
 
-        return this.isWheelEvent(e) ? this._validateWheel(e) : this._validateMove();
-    },
-
-    _validateWheel: function(e) {
-        var location = this.location();
-        var direction = this._wheelDirection(e);
-        var reachedMin = this._reachedMin(location, direction);
-        var reachedMax = this._reachedMax(location, direction);
-
-        var contentGreaterThanContainer = !reachedMin || !reachedMax;
-        var locatedNotAtBound = !reachedMin && !reachedMax;
-        var scrollFromMin = (reachedMin && e.delta > 0);
-        var scrollFromMax = (reachedMax && e.delta < 0);
-        var validated = contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
-
-        return validated;
-    },
-
-    _validateMove: function() {
         return this._allowedDirection();
-    },
-
-    getDirection: function(e) {
-        return this.isWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
-    },
-
-    _wheelDirection: function(e) {
-        switch(this.option("direction")) {
-            case HORIZONTAL:
-                return HORIZONTAL;
-            case VERTICAL:
-                return VERTICAL;
-            default:
-                return e && e.shiftKey ? HORIZONTAL : VERTICAL;
-        }
     },
 
     verticalOffset: function() {
