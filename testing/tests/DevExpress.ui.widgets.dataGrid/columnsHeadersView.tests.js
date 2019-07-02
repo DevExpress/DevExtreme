@@ -2057,6 +2057,23 @@ QUnit.test("Get context menu items with grouping operations (showWhenGrouped col
     assert.strictEqual(items[2].value, "ungroupAll", "value menu item 3");
 });
 
+QUnit.test("Grouped column caption should displayed when the showWhenGrouped option is enabled (T752775)", function(assert) {
+    // arrange
+    var that = this,
+        $groupedColumnElement,
+        columnHeadersView = that.columnHeadersView,
+        $testElement = $('#container');
+
+    $.extend(this.columns, [{ caption: 'Column 1', showWhenGrouped: true, groupIndex: 0 }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
+
+    // act
+    columnHeadersView.render($testElement);
+
+    // assert
+    $groupedColumnElement = $(columnHeadersView.getCellElement(0, 0));
+    assert.strictEqual($groupedColumnElement.text(), "Column 1", "caption for grouped column displayed");
+});
+
 QUnit.test("Get context menu items with grouping operations (grouped panel item)", function(assert) {
     // arrange
     var $testElement = $('#container'),

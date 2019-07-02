@@ -1058,7 +1058,7 @@ Axis.prototype = {
     _getVisualRangeUpdateMode(viewport, newRange, oppositeValue) {
         let value = this._options.visualRangeUpdateMode;
         const translator = this._translator;
-        const range = translator.getBusinessRange();
+        const range = this._seriesData;
 
         if(this.isArgumentAxis) {
             if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
@@ -1106,7 +1106,7 @@ Axis.prototype = {
         return value;
     },
 
-    _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized) {
+    _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, newRange) {
         const that = this;
         const visualRange = this.visualRange();
 
@@ -1114,7 +1114,7 @@ Axis.prototype = {
             return;
         }
 
-        let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, that._seriesData, oppositeVisualRangeUpdateMode);
+        let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
         if(!that.isArgumentAxis) {
             const viewport = that.getViewport();
             if(!isDefined(viewport.startValue) &&
@@ -1179,9 +1179,9 @@ Axis.prototype = {
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
 
+        that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, range);
         that._seriesData = new Range(range);
         const dataIsEmpty = that._seriesData.isEmpty();
-        that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized);
         that._prevDataWasEmpty = dataIsEmpty;
 
         that._seriesData.addRange({

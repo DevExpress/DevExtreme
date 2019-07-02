@@ -1305,6 +1305,26 @@ QUnit.module("widget options", moduleSetup, () => {
         assert.equal($input.val(), "", "input text has been cleared");
     });
 
+    QUnit.testInActiveWindow("don't rise valueChange event on focusout in readonly state with searchEnabled", (assert) => {
+        const valueChangedMock = sinon.spy();
+        const $element = $("#selectBox").dxSelectBox({
+                items: [1, 2, 3],
+                searchEnabled: true,
+                readOnly: true,
+                onValueChanged: valueChangedMock,
+                value: 4
+            }),
+            element = $element.dxSelectBox("instance"),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input.trigger("focusin");
+        $input.trigger("blur");
+
+        assert.equal(element.option("value"), 4, "value should not be changed");
+        assert.equal($input.val(), "", "non-exist value should not be displayed");
+        assert.notOk(valueChangedMock.called, "valueChange event should not be rised");
+    });
+
     QUnit.testInActiveWindow("allowClearing option on init", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
                 items: [1, 2, 3],

@@ -3758,3 +3758,19 @@ QUnit.test("Tail of long appointment should have a right position, groupByDate =
 
     assert.roughEqual($appointmentTail.position().left, $cell.position().left, 1.001, "Tail has a right position");
 });
+
+QUnit.test("Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recruiting students",
+            startDate: new Date(2018, 2, 26, 10, 0),
+            endDate: new Date(2018, 2, 26, 11, 0),
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 3, 27)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, "Scheduler appointments are rendered without compact ones");
+});

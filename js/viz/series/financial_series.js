@@ -126,10 +126,10 @@ exports.stock = _extend({}, scatterSeries, {
 
             return {
                 argument: data[argumentField],
-                highValue: data[highValueField],
-                lowValue: data[lowValueField],
-                closeValue: data[closeValueField],
-                openValue: data[openValueField],
+                highValue: this._processEmptyValue(data[highValueField]),
+                lowValue: this._processEmptyValue(data[lowValueField]),
+                closeValue: this._processEmptyValue(data[closeValueField]),
+                openValue: this._processEmptyValue(data[openValueField]),
                 reductionValue: reductionValue,
                 tag: data[that.getTagField()],
                 isReduction: isReduction,

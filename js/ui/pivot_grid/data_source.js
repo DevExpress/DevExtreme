@@ -148,7 +148,7 @@ module.exports = Class.inherit((function() {
             needIndexUpdate = false,
             d = new Deferred();
 
-        if(headerItem.children && headerItem.children.length === children.length) {
+        if(headerItem.children && headerItem.children.length) {
             for(var i = 0; i < children.length; i++) {
                 var child = children[i];
                 if(child.index !== undefined) {
@@ -1369,42 +1369,97 @@ module.exports = Class.inherit((function() {
             });
         },
 
-        _processPagingCacheByArea: function(options, pageSize, area) {
+        _getItemsByStoreLoadOption: function(options, area) {
+            var headerName = area + "s",
+                items = this._data[headerName],
+                oppositeArea = area === "row" ? "column" : "row",
+                headerItem;
+
+            if(options.path && options.area === area) {
+                headerItem = findHeaderItem(items, options.path);
+                items = headerItem && headerItem.children || [];
+            }
+            if(options.oppositePath && options.area === oppositeArea) {
+                headerItem = findHeaderItem(items, options.oppositePath);
+                items = headerItem && headerItem.children || [];
+            }
+
+            return items;
+        },
+
+        _updateSkipTakeByCache: function(options, area, items) {
             var takeField = area + "Take",
                 skipField = area + "Skip",
-                items = this._data[area + "s"],
                 oppositeArea = area === "row" ? "column" : "row",
                 item;
 
-            if(options[takeField]) {
-                if(options.path && options.area === area) {
-                    let headerItem = findHeaderItem(items, options.path);
-                    items = headerItem && headerItem.children || [];
-                }
-                if(options.oppositePath && options.area === oppositeArea) {
-                    let headerItem = findHeaderItem(items, options.oppositePath);
-                    items = headerItem && headerItem.children || [];
-                }
-
-                do {
-                    item = items[options[skipField]];
-                    if(item && item.index !== undefined) {
-                        if(this._hasPagingValues(options, oppositeArea, item.index)) {
-                            options[skipField]++;
-                            options[takeField]--;
-                        } else {
-                            break;
-                        }
+            do {
+                item = items[options[skipField]];
+                if(item && item.index !== undefined) {
+                    if(this._hasPagingValues(options, oppositeArea, item.index) && !options.delayed) {
+                        options[skipField]++;
+                        options[takeField]--;
+                    } else {
+                        break;
                     }
-                } while(item && item.index !== undefined && options[takeField]);
-
-                if(options[takeField]) {
-                    var start = Math.floor(options[skipField] / pageSize) * pageSize;
-                    var end = Math.ceil((options[skipField] + options[takeField]) / pageSize) * pageSize;
-
-                    options[skipField] = start;
-                    options[takeField] = end - start;
                 }
+            } while(item && item.index !== undefined && options[takeField]);
+        },
+
+        _convertSkipTakeToFiltersIfNeed: function(options, area, items) {
+            var takeField = area + "Take",
+                skipField = area + "Skip",
+                headerName = area + "s",
+                filterValues = [],
+                item;
+
+            for(var index = 0; index < options[takeField]; index++) {
+                item = items[options[skipField] + index];
+                if(item && item.index !== undefined && item.value) {
+                    filterValues.push(item.key || item.value);
+                }
+            }
+
+            if(filterValues.length && filterValues.length === options[takeField] || !options[headerName].length) {
+                let path = headerName === options.headerName ? (options.path || []) : (options.oppositePath || []);
+                let field = options[headerName][path.length];
+                if(field) {
+                    options.filters = options.filters.concat([extend({}, field, { filterValues: filterValues })]);
+                    options[skipField] = undefined;
+                    options[takeField] = undefined;
+                }
+            } else if(options[takeField]) {
+                let path = headerName === options.headerName ? (options.oppositePath || []) : (options.path || []);
+                if(path.length) {
+                    options.delayed = true;
+                }
+            }
+        },
+
+        _normalizeSkipTakeByPageSize: function(options, area, pageSize) {
+            var takeField = area + "Take",
+                skipField = area + "Skip";
+
+            if(options[takeField]) {
+                var start = Math.floor(options[skipField] / pageSize) * pageSize;
+                var end = Math.ceil((options[skipField] + options[takeField]) / pageSize) * pageSize;
+
+                options[skipField] = start;
+                options[takeField] = end - start;
+            }
+        },
+
+        _processPagingCacheByArea: function(options, pageSize, area) {
+            var takeField = area + "Take";
+
+            if(options[takeField]) {
+                var items = this._getItemsByStoreLoadOption(options, area);
+
+                this._updateSkipTakeByCache(options, area, items);
+
+                this._convertSkipTakeToFiltersIfNeed(options, area, items);
+
+                this._normalizeSkipTakeByPageSize(options, area, pageSize);
             }
         },
 
@@ -1425,43 +1480,54 @@ module.exports = Class.inherit((function() {
                 descriptions = this._descriptions,
                 reload = options.reload || (this.paginate() && that._isFieldsModified),
                 paginate = this.paginate(),
-                headerName = DESCRIPTION_NAME_BY_AREA[options.area];
+                headerName = DESCRIPTION_NAME_BY_AREA[options.area],
+                storeLoadOptions,
+                delayedStoreLoadOptions = [];
 
             options = options || {};
 
             if(store) {
-                extend(options, descriptions);
-                options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns", that._lastLoadOptions);
-                options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows", that._lastLoadOptions);
+                if(!options.storeLoadOptions) {
+                    extend(options, descriptions);
+                    options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns", that._lastLoadOptions);
+                    options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows", that._lastLoadOptions);
 
-                if(paginate) {
-                    options.pageSize = this._pageSize;
-                }
+                    if(paginate) {
+                        options.pageSize = this._pageSize;
+                    }
 
-                if(headerName) {
-                    options.headerName = headerName;
-                }
+                    if(headerName) {
+                        options.headerName = headerName;
+                    }
 
-                that.beginLoading();
-                deferred.always(function() {
-                    that.endLoading();
-                });
+                    that.beginLoading();
+                    deferred.always(function() {
+                        that.endLoading();
+                    });
 
-                let storeLoadOptions = [options];
+                    storeLoadOptions = [options];
 
-                that.fireEvent("customizeStoreLoadOptions", [storeLoadOptions, reload]);
+                    that.fireEvent("customizeStoreLoadOptions", [storeLoadOptions, reload]);
 
-                if(!reload) {
+                    if(!reload) {
+                        that._processPagingCache(storeLoadOptions);
+                    }
+
+                    delayedStoreLoadOptions = storeLoadOptions.filter(options => {
+                        return options.delayed;
+                    });
+
+                    storeLoadOptions = storeLoadOptions.filter(options => {
+                        return !(options.rows.length && options.rowTake === 0) && !(options.columns.length && options.columnTake === 0) && !options.delayed;
+                    });
+
+                    if(!storeLoadOptions.length) {
+                        that._update(deferred);
+                        return;
+                    }
+                } else {
+                    storeLoadOptions = options.storeLoadOptions;
                     that._processPagingCache(storeLoadOptions);
-                }
-
-                storeLoadOptions = storeLoadOptions.filter(options => {
-                    return !(options.rows.length && options.rowTake === 0) && !(options.columns.length && options.columnTake === 0);
-                });
-
-                if(!storeLoadOptions.length) {
-                    that._update(deferred);
-                    return;
                 }
 
                 let results = storeLoadOptions.map(options => store.load(options));
@@ -1470,17 +1536,24 @@ module.exports = Class.inherit((function() {
                     for(let i = 0; i < results.length; i++) {
                         var options = storeLoadOptions[i],
                             data = results[i],
-                            isLast = i === results.length - 1;
+                            isLast = i === results.length - 1,
+                            deferredToResolve = isLast && !delayedStoreLoadOptions.length ? deferred : false;
 
                         if(options.path) {
-                            that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false, options.oppositePath);
+                            that.applyPartialDataSource(options.area, options.path, data, deferredToResolve, options.oppositePath);
                         } else if(paginate && !reload && isDataExists(that._data)) {
-                            that.mergePartialDataSource(data, isLast ? deferred : false);
+                            that.mergePartialDataSource(data, deferredToResolve);
                         } else {
                             extend(that._data, data);
                             that._lastLoadOptions = options;
-                            that._update(isLast ? deferred : false);
+                            that._update(deferredToResolve);
                         }
+                    }
+                    if(delayedStoreLoadOptions.length) {
+                        that._loadCore({
+                            storeLoadOptions: delayedStoreLoadOptions,
+                            pageSize: options.pageSize
+                        }, deferred);
                     }
                 }).fail(deferred.reject);
             } else {

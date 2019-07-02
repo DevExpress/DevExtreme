@@ -361,7 +361,7 @@ var baseScatterMethods = {
 
         return (data) => {
             const pointData = {
-                value: data[valueField],
+                value: this._processEmptyValue(data[valueField]),
                 argument: data[argumentField],
                 tag: data[tagField],
                 data: data
