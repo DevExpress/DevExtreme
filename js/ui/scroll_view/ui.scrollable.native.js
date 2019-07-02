@@ -289,11 +289,11 @@ var NativeStrategy = Class.inherit({
         this._$container.scrollLeft(-location.left - distance.left);
     },
 
-    validate: function(e) {
-        if(this.option("disabled")) {
-            return false;
-        }
+    validate: function() {
+        return !this.option("disabled") && this._allowedDirection();
+    },
 
+    getDirection: function() {
         return this._allowedDirection();
     },
 
