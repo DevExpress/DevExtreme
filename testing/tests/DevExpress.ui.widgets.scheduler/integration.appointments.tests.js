@@ -4393,3 +4393,20 @@ QUnit.test("The itemData argument of the drop down appointment template is shoul
     }];
     this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
 });
+
+QUnit.test("Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recruiting students",
+            startDate: new Date(2018, 2, 26, 10, 0),
+            endDate: new Date(2018, 2, 26, 11, 0),
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 3, 27)
+    });
+
+    var $appointment = $(this.instance.$element).find(".dx-scheduler-appointment");
+    assert.equal($appointment.length, 30, "Scheduler appointments are rendered without compact ones");
+});
