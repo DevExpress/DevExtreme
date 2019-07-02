@@ -364,25 +364,15 @@ function waitWebFont(text, fontWeight) {
     const attempts = 135;
     let i = 0;
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         const check = () => {
-            const loaded = isWebFontLoaded(text, fontWeight);
-            loaded && resolve();
-            return loaded;
-        };
-
-        const runCheck = () => {
-            if(i++ > attempts) {
+            if(isWebFontLoaded(text, fontWeight) || i++ > attempts) {
+                clearInterval(intervalId);
                 resolve();
-                return;
             }
-
-            setTimeout(() => {
-                check() || runCheck();
-            }, timeout);
         };
 
-        check() || runCheck();
+        const intervalId = setInterval(check, timeout);
     });
 }
 
