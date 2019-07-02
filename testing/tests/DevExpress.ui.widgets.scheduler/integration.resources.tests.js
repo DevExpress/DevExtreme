@@ -443,35 +443,23 @@ QUnit.module("Integration: Multiple resources", {
 });
 
 QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", function(assert) {
+    const getData = function(count) {
+        let result = [];
+        for(let i = 0; i < count; i++) {
+            result.push({
+                facilityId: i,
+                facilityName: i.toString(),
+            });
+        }
+        return result;
+    };
+
     this.createInstance({
         groups: ['facilityId'],
         crossScrollingEnabled: true,
         dataSource: [],
         resources: [{
-            dataSource: [
-                {
-                    facilityId: 1,
-                    facilityName: 'A',
-                },	{
-                    facilityId: 2,
-                    facilityName: 'B',
-                },	{
-                    facilityId: 3,
-                    facilityName: 'C',
-                },	{
-                    facilityId: 4,
-                    facilityName: 'D',
-                },	{
-                    facilityId: 5,
-                    facilityName: 'E',
-                },	{
-                    facilityId: 6,
-                    facilityName: 'F',
-                },	{
-                    facilityId: 7,
-                    facilityName: 'G',
-                }
-            ],
+            dataSource: getData(10),
             displayExpr: 'facilityName',
             valueExpr: 'facilityId',
             fieldExpr: 'facilityId',
