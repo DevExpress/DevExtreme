@@ -1,5 +1,5 @@
 var fitIntoRange = require("../../core/utils/math").fitIntoRange;
-var toFixed = require("../../core/utils/number").toFixed;
+var toFixed = require("../utils").toFixed;
 
 var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
     ESCAPING_CHAR = "'",

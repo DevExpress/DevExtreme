@@ -1,4 +1,4 @@
-import { sign } from "./math";
+import { sign } from "../core/utils/math";
 
 const DECIMAL_BASE = 10;
 

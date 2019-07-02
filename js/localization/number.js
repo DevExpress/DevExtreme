@@ -6,7 +6,7 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     ldmlNumber = require("./ldml/number"),
     config = require("../core/config"),
     errors = require("../core/errors"),
-    toFixed = require("../core/utils/number").toFixed;
+    toFixed = require("./utils").toFixed;
 
 var MAX_LARGE_NUMBER_POWER = 4,
     DECIMAL_BASE = 10;

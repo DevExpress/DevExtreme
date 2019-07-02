@@ -1,8 +1,8 @@
-import { toFixed } from "core/utils/number";
+import { toFixed } from "localization/utils";
 
 const { module: testModule, test } = QUnit;
 
-testModule("number utils", () => {
+testModule("Localization utils", () => {
     test("toFixed", (assert) => {
         assert.strictEqual(toFixed(4.645, 2), "4.65");
         assert.strictEqual(toFixed(4.645, 1), "4.6");
