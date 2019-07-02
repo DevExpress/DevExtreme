@@ -1,12 +1,19 @@
-import { adjust } from "./math";
+import { sign } from "./math";
+
 const DECIMAL_BASE = 10;
+
+function roundByAbs(value) {
+    const valueSign = sign(value);
+
+    return valueSign * Math.round(Math.abs(value));
+}
 
 function toFixed(value, precision) {
     const precisionMultiplier = Math.pow(DECIMAL_BASE, precision);
     const roundMultiplier = precisionMultiplier * DECIMAL_BASE;
-    const adjustedValue = Math.round(adjust(value * roundMultiplier, precision)) / DECIMAL_BASE;
+    const intermediateValue = roundByAbs(value * roundMultiplier) / DECIMAL_BASE;
 
-    return (Math.round(adjustedValue) / precisionMultiplier).toFixed(precision);
+    return (roundByAbs(intermediateValue) / precisionMultiplier).toFixed(precision);
 }
 
 export {
