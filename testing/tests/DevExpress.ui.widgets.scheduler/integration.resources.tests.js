@@ -436,7 +436,7 @@ QUnit.module("Integration: Multiple resources", {
             this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
         };
         $("#qunit-fixture").html(
-            '<div style="width: 1000px; height: 500px;"><div id="scheduler" style="height: 100%;">\
+            '<div style="width: 400px; height: 500px;"><div id="scheduler" style="height: 100%;">\
                 <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
                 </div></div>');
     }
@@ -470,37 +470,7 @@ QUnit.test("Scheduler with multiple resources and fixed height container has vis
                 },	{
                     facilityId: 7,
                     facilityName: 'G',
-                },	{
-                    facilityId: 8,
-                    facilityName: 'H',
-                },	{
-                    facilityId: 9,
-                    facilityName: 'I',
-                },	{
-                    facilityId: 10,
-                    facilityName: 'J',
-                },	{
-                    facilityId: 11,
-                    facilityName: 'K',
-                },	{
-                    facilityId: 12,
-                    facilityName: 'L',
-                },	{
-                    facilityId: 13,
-                    facilityName: 'M',
-                },	{
-                    facilityId: 14,
-                    facilityName: 'N',
-                },	{
-                    facilityId: 15,
-                    facilityName: 'O',
-                },	{
-                    facilityId: 16,
-                    facilityName: 'P',
-                },	{
-                    facilityId: 17,
-                    facilityName: 'Q',
-                },
+                }
             ],
             displayExpr: 'facilityName',
             valueExpr: 'facilityId',
