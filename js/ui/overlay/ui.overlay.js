@@ -1082,9 +1082,27 @@ var Overlay = Widget.inherit({
         var $scrollTerminator = this._wrapper();
         var terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
+        var isWheelEvent = this.isWheelEvent;
+        var getDirectionFromEvent = this._getDirectionFromEvent.bind(this);
+        var isScrolledInMaxDirection = this._isScrolledInMaxDirection;
+        var tryGetScrollableContainer = this._tryGetScrollableContainer;
+
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
-            validate: function() {
+            validate: function(e) {
+                var originalEvent = e.originalEvent && e.originalEvent.originalEvent;
+
+                if(originalEvent && isWheelEvent(e)) {
+                    var scrollableContainer = tryGetScrollableContainer(originalEvent.target);
+                    if(scrollableContainer) {
+                        var direction = getDirectionFromEvent(originalEvent);
+
+                        if(isScrolledInMaxDirection(scrollableContainer, direction)) {
+                            e.preventDefault();
+                        }
+                    }
+                }
+
                 return true;
             },
             getDirection: function() {
@@ -1101,6 +1119,47 @@ var Overlay = Widget.inherit({
                 e.preventDefault();
             }
         });
+    },
+
+    isWheelEvent(e) {
+        return e.type === "dxmousewheel";
+    },
+
+    _getDirectionFromEvent(event) {
+        var delta = (event.deltaY || event.detail);
+        var direction;
+
+        if(delta <= 0) {
+            direction = event.shiftKey ? "LEFT" : "UP";
+        } else {
+            direction = event.shiftKey ? "RIGHT" : "DOWN";
+        }
+        return direction;
+    },
+
+    _isScrolledInMaxDirection(container, direction) {
+        if(direction === "UP") {
+            return !container.scrollTop;
+        }
+        if(direction === "DOWN") {
+            return (container.clientHeight + container.scrollTop) >= container.scrollHeight;
+        }
+        if(direction === "LEFT") {
+            return !container.scrollLeft;
+        }
+        if(direction === "RIGHT") {
+            return (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
+        }
+    },
+
+    _tryGetScrollableContainer(element) {
+        const scrollableClass = `.dx-scrollable-container`;
+
+        if($(element).is(scrollableClass)) {
+            return element;
+        } else {
+            return $(element).parents(scrollableClass).get(0);
+        }
     },
 
     _getDragTarget: function() {
