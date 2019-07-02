@@ -599,6 +599,12 @@ QUnit.test("fromScreenPoint", function(assert) {
     assert.deepEqual(this.projection.fromScreenPoint([670, 275]), [22.5, -7.5]);
 });
 
+QUnit.test("toScreenPoint", function(assert) {
+    this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
+
+    assert.deepEqual(this.projection.toScreenPoint([22.5, -7.5]), [670, 275]);
+});
+
 // TODO: Use fake engine!
 QUnit.module('Viewport', {
     beforeEach: function() {

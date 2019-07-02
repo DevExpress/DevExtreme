@@ -371,7 +371,15 @@ var dxVectorMap = require("../core/base_widget").inherit({
 
     convertCoordinates: function(coordinates) {
         coordinates = coordinates && coordinates.length ? coordinates : [arguments[0], arguments[1]];
-        return this._projection.fromScreenPoint(coordinates);
+        return this.convertToGeo(coordinates[0], coordinates[1]);
+    },
+
+    convertToGeo: function(x, y) {
+        return this._projection.fromScreenPoint([x, y]);
+    },
+
+    convertToXY: function(longitude, latitude) {
+        return this._projection.toScreenPoint([longitude, latitude]);
     }
 });
 

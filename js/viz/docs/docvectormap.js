@@ -573,6 +573,23 @@ var dxVectorMap = {
     * @param1 x:number
     * @param2 y:number
     * @return Array<number>
+    * @deprecated dxVectorMapMethods.convertToGeo
     */
-    convertCoordinates: function() { }
+    convertCoordinates: function() { },
+    /**
+    * @name dxVectorMapMethods.convertToGeo
+    * @publicName convertToGeo(x, y)
+    * @param1 x:number
+    * @param2 y:number
+    * @return Array<number>
+    */
+    convertToGeo: function() { },
+    /**
+    * @name dxVectorMapMethods.convertToXY
+    * @publicName convertToXY(longitude, latitude)
+    * @param1 longitude:number
+    * @param2 latitude:number
+    * @return Array<number>
+    */
+    convertToXY: function() { }
 };
