@@ -1082,26 +1082,11 @@ var Overlay = Widget.inherit({
         var $scrollTerminator = this._wrapper();
         var terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        var isWheelEvent = this.isWheelEvent;
-        var getDirectionFromEvent = this._getDirectionFromEvent.bind(this);
-        var isScrolledInMaxDirection = this._isScrolledInMaxDirection;
-        var tryGetScrollableContainer = this._tryGetScrollableContainer;
-
+        var that = this;
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
             validate: function(e) {
-                var originalEvent = e.originalEvent && e.originalEvent.originalEvent;
-
-                if(originalEvent && isWheelEvent(e)) {
-                    var scrollableContainer = tryGetScrollableContainer(originalEvent.target);
-                    if(scrollableContainer) {
-                        var direction = getDirectionFromEvent(originalEvent);
-
-                        if(isScrolledInMaxDirection(scrollableContainer, direction)) {
-                            e.preventDefault();
-                        }
-                    }
-                }
+                that._validateWheel(e);
 
                 return true;
             },
@@ -1121,35 +1106,37 @@ var Overlay = Widget.inherit({
         });
     },
 
-    isWheelEvent(e) {
+    _validateWheel(e) {
+        if(this._isWheelEvent(e)) {
+            var scrollableContainer = this._tryGetScrollableContainer(e.target);
+
+            if(scrollableContainer) {
+                if(this._isScrolledInMaxDirection(e, scrollableContainer)) {
+                    e.preventDefault();
+                }
+            }
+        }
+    },
+
+    _isWheelEvent(e) {
         return e.type === "dxmousewheel";
     },
 
-    _getDirectionFromEvent(event) {
-        var delta = (event.deltaY || event.detail);
-        var direction;
+    _isScrolledInMaxDirection(e, container) {
+        var isReachedMax;
+        var isReachedMin;
 
-        if(delta <= 0) {
-            direction = event.shiftKey ? "LEFT" : "UP";
+        if(e.delta > 0) {
+            isReachedMax = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
         } else {
-            direction = event.shiftKey ? "RIGHT" : "DOWN";
+            if(e.shiftKey) {
+                isReachedMin = (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
+            } else {
+                isReachedMin = (container.clientHeight + container.scrollTop) >= container.scrollHeight;
+            }
         }
-        return direction;
-    },
 
-    _isScrolledInMaxDirection(container, direction) {
-        if(direction === "UP") {
-            return !container.scrollTop;
-        }
-        if(direction === "DOWN") {
-            return (container.clientHeight + container.scrollTop) >= container.scrollHeight;
-        }
-        if(direction === "LEFT") {
-            return !container.scrollLeft;
-        }
-        if(direction === "RIGHT") {
-            return (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
-        }
+        return (isReachedMax || isReachedMin);
     },
 
     _tryGetScrollableContainer(element) {
