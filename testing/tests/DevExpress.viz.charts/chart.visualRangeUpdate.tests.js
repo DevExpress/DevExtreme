@@ -3781,12 +3781,14 @@ QUnit.test("Data -> update data and visualRange, argument reset mode - take give
         valueAxis: { visualRange: [10, 30] }
     });
     onOptionChanged.reset();
+    chart._change_AXES_AND_PANES = sinon.spy();
 
     chart.option({
         dataSource: newDataSource,
         valueAxis: { visualRange: [20, 40] }
     });
 
+    assert.strictEqual(chart._change_AXES_AND_PANES.callCount, 0);
     assert.deepEqual(chart.option("argumentAxis.visualRange"), [1, 5]);
     assert.deepEqual(chart.option("valueAxis.visualRange"), [20, 40]);
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 5 });
