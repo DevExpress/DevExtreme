@@ -514,21 +514,33 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
 });
 
 QUnit.test("down arrow should move focus through the groups", function(assert) {
-    this.element.dxAutocomplete({
-        dataSource: [{
-            key: "Marketing",
-            items: [
-                { "Id": 1, "lastName": "Meier", "firstName": "Max" }
-            ]
-        }, {
-            key: "Consulting",
-            items: [
-                { "Id": 3, "lastName": "Keller", "firstName": "Karl" },
-            ]
-        }],
-        grouped: true,
-        focusStateEnabled: true
-    });
+    var $element = $("#widget").dxAutocomplete({
+            searchExpr: "text",
+            value: null,
+            valueExpr: "text",
+            dataSource: [{
+                key: "Group 1",
+                items: [
+                    { "Id": 1, "text": "Item 1" }
+                ]
+            }, {
+                key: "Group 2",
+                items: [
+                    { "Id": 3, "text": "Item 2" },
+                ]
+            }],
+            grouped: true,
+            focusStateEnabled: true
+        }),
+        instance = $element.dxAutocomplete("instance"),
+        keyboard = keyboardMock($element.find("." + TEXTEDITOR_INPUT_CLASS));
+
+    keyboard
+        .type("e")
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_TAB);
+
+    assert.equal(instance.option("value"), "Item 2", "value is correct");
 });
 
 QUnit.testInActiveWindow("key_tab for autocomplete current value", function(assert) {
