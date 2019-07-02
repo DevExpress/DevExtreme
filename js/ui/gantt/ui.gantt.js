@@ -14,15 +14,15 @@ class Gantt extends Widget {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
 
-        this._initTreeList();
-        this._initSplitter();
+        this._$treeList = $("<div>")
+            .appendTo(this.$element());
+        this._$splitter = $("<div>")
+            .addClass(GANTT_SPLITTER_CLASS)
+            .appendTo(this.$element());
     }
 
-    _initTreeList() {
-        const $treeList = $("<div>")
-            .appendTo(this.$element());
-
-        this._treeList = this._createComponent($treeList, dxTreeList, {
+    _render() {
+        this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this.option("tasks"),
             width: "100%",
             selection: { mode: "single" },
@@ -36,12 +36,6 @@ class Gantt extends Widget {
             onRowCollapsed: () => this._updateGanttView(),
             onRowExpanded: () => this._updateGanttView()
         });
-    }
-
-    _initSplitter() {
-        $("<div>")
-            .addClass(GANTT_SPLITTER_CLASS)
-            .appendTo(this.$element());
     }
 
     _initGanttView() {
