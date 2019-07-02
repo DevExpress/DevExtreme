@@ -18,4 +18,5 @@ ui.dxTreeView = require("../../../ui/tree_view");
 ui.dxFilterBuilder = require("../../../ui/filter_builder");
 ui.dxFileManager = require("../../../ui/file_manager");
 ui.dxDiagram = require("../../../ui/diagram");
+ui.dxGantt = require("../../../ui/gantt");
 /// BUNDLER_PARTS_END

@@ -183,7 +183,8 @@ namespace StyleCompiler
                 "htmlEditor",
                 "floatingActionButton",
                 "fileManager",
-                "diagram"
+                "diagram",
+                "gantt"
             });
 
             // Non-themeable components that have only common styles
