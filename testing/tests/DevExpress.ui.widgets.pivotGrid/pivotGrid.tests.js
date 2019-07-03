@@ -1533,8 +1533,10 @@ QUnit.test("contextMenu in field chooser", function(assert) {
 
     // assert
     assert.equal(contextMenuPreparing.callCount, 1, "contextMenuPreparing event fired only once");
-    assert.strictEqual(contextMenuPreparing.getCall(0).args[0].component.NAME, "dxPivotGrid", "handler was called by dxPivotGrid component");
-    assert.strictEqual(contextMenuPreparing.getCall(0).args[0].field.dataField, "id", "field's dataField is id");
+
+    var args = contextMenuPreparing.getCall(0).args[0];
+    assert.strictEqual(args.component.NAME, "dxPivotGrid", "handler was called by dxPivotGrid component");
+    assert.deepEqual(args.field, args.component.getDataSource().field(0), "field");
 });
 
 QUnit.test("contextMenu on Total node when rowHeaderLayout is 'tree'", function(assert) {
