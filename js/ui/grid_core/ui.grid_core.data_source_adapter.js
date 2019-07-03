@@ -114,7 +114,8 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         dispose: function(isSharedDataSource) {
             var that = this,
-                dataSource = that._dataSource;
+                dataSource = that._dataSource,
+                store = dataSource.store();
 
             dataSource.off("changed", that._dataChangedHandler);
             dataSource.off("customizeStoreLoadOptions", that._dataLoadingHandler);
@@ -122,7 +123,8 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.off("loadingChanged", that._loadingChangedHandler);
             dataSource.off("loadError", that._loadErrorHandler);
             dataSource.off("changing", that._changingHandler);
-            dataSource.store().off("push", that._pushHandler);
+            store && store.off("push", that._pushHandler);
+
             if(!isSharedDataSource) {
                 dataSource.dispose();
             }
