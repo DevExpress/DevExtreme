@@ -2132,8 +2132,10 @@ Axis.prototype = {
                 startValue,
                 endValue
             };
-        } else if(_isArray(args[0]) || isPlainObject(args[0])) {
+        } else if(_isArray(args[0])) {
             visualRange = args[0];
+        } else if(isPlainObject(args[0])) {
+            visualRange = extend({}, args[0]);
         } else {
             visualRange = [args[0], args[1]];
         }
