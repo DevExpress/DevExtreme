@@ -246,9 +246,9 @@ QUnit.test("Render Fields Tree", function(assert) {
 // T752911
 QUnit.test("Render Fields Tree with groups and without isMeasure", function(assert) {
     var fields = [
-            { dataField: 'a', dataType: 'date' },
-            { dataField: 'b', groupName: "b", dataType: 'date', levels: [{ groupName: "b", groupInterval: "year", groupIndex: 0 }] },
-            { dataField: 'c', dataType: 'date' }
+            { dataField: 'a' },
+            { dataField: 'b', groupName: "b", levels: [{ groupName: "b", groupIndex: 0 }] },
+            { dataField: 'c' }
         ],
         dataSourceOptions = {
             fields: fields
@@ -269,7 +269,7 @@ QUnit.test("Render Fields Tree with groups and without isMeasure", function(asse
     assert.deepEqual(fieldsDataSource, [
         { field: fields[0], icon: undefined, index: 0, isDefault: undefined, isMeasure: undefined, key: "a", selected: false, text: "a" },
         { field: fields[1], icon: undefined, index: 1, isDefault: undefined, isMeasure: undefined, key: "b", selected: false, text: "b" },
-        { field: { dataField: "c", dataType: "date", index: 2 }, icon: undefined, index: 2, isDefault: undefined, isMeasure: undefined, key: "c", selected: false, text: "c" }
+        { field: { dataField: "c", index: 2 }, icon: undefined, index: 2, isDefault: undefined, isMeasure: undefined, key: "c", selected: false, text: "c" }
     ]);
 });
 
