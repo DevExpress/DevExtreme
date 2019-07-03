@@ -511,6 +511,18 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
 
         assert.equal(this.instance.option("value"), "3.4");
     });
+
+    QUnit.test("precision should correctly round the value", (assert) => {
+        this.instance.option({
+            format: {
+                type: "fixedPoint",
+                precision: 2
+            },
+            value: 4.645
+        });
+
+        assert.strictEqual(this.instance.option("text"), "4.65");
+    });
 });
 
 QUnit.module("format: minimum and maximum", moduleConfig, () => {

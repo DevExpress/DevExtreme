@@ -1,4 +1,5 @@
 var fitIntoRange = require("../../core/utils/math").fitIntoRange;
+var toFixed = require("../utils").toFixed;
 
 var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
     ESCAPING_CHAR = "'",
@@ -129,7 +130,7 @@ function getFormatter(format, config) {
             floatPrecision = fitIntoRange(maxFloatPrecision, 0, MAXIMUM_NUMBER_LENGTH - integerLength),
             groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
 
-        var valueParts = value.toFixed(floatPrecision < 0 ? 0 : floatPrecision).split(".");
+        var valueParts = toFixed(value, floatPrecision < 0 ? 0 : floatPrecision).split(".");
 
         var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
             valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
