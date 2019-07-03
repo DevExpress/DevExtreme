@@ -438,9 +438,11 @@ QUnit.module("Integration: Multiple resources", {
             this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
         };
         $("#qunit-fixture").html(
-            `<div style="width: 400px; height: 500px;"><div id="scheduler" style="height: 100%;">
-                <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
-                </div></div>`);
+            `<div style="width: 400px; height: 500px;">
+                <div id="scheduler" style="height: 100%;">
+                    <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
+                </div>
+            </div>`);
     },
     afterEach: function() {
         $("#qunit-fixture").css({ top: "-10000px", left: "-10000px" });
