@@ -68,8 +68,8 @@ var compareOrder = [
     },
 
     function(a, b) {
-        var aValue = +(!!(a.field && a.field.levels && a.field.levels.length)),
-            bValue = -(!!(b.field && b.field.levels && b.field.levels.length));
+        var aValue = +(!!(a.isMeasure === false && a.field && a.field.levels && a.field.levels.length)),
+            bValue = -(!!(b.isMeasure === false && b.field && b.field.levels && b.field.levels.length));
 
         return aValue + bValue;
     },
