@@ -5,7 +5,8 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     ldmlNumber = require("./ldml/number"),
     config = require("../core/config"),
-    errors = require("../core/errors");
+    errors = require("../core/errors"),
+    toFixed = require("./utils").toFixed;
 
 var MAX_LARGE_NUMBER_POWER = 4,
     DECIMAL_BASE = 10;
@@ -166,7 +167,7 @@ var numberLocalization = dependencyInjector({
             if(format === "decimal") {
                 value = this._addZeroes(value, formatConfig.precision);
             } else {
-                value = formatConfig.precision === null ? value.toPrecision() : value.toFixed(formatConfig.precision);
+                value = formatConfig.precision === null ? value.toPrecision() : toFixed(value, formatConfig.precision);
             }
         }
 
