@@ -1503,6 +1503,42 @@ QUnit.test("contextMenu", function(assert) {
     assert.ok(testItemClicked, "Test item clicked");
 });
 
+// T753856
+QUnit.test("contextMenu in field chooser", function(assert) {
+    var contextMenuPreparing = sinon.spy(),
+        pivotGrid = createPivotGrid({
+            dataSource: {
+                fields: [{
+                    dataField: "id",
+                    area: "row"
+                }],
+                store: [{
+                    "id": 1
+                }]
+            },
+            fieldChooser: {
+                enabled: true
+            },
+            onContextMenuPreparing: contextMenuPreparing
+        }, assert);
+
+    this.clock.tick();
+
+    // act
+    pivotGrid.getFieldChooserPopup().show();
+
+    this.clock.tick(500);
+
+    $(".dx-area").eq(1).find(".dx-area-field-content").eq(0).trigger("dxcontextmenu");
+
+    // assert
+    assert.equal(contextMenuPreparing.callCount, 1, "contextMenuPreparing event fired only once");
+
+    var args = contextMenuPreparing.getCall(0).args[0];
+    assert.strictEqual(args.component.NAME, "dxPivotGrid", "handler was called by dxPivotGrid component");
+    assert.deepEqual(args.field, args.component.getDataSource().field(0), "field");
+});
+
 QUnit.test("contextMenu on Total node when rowHeaderLayout is 'tree'", function(assert) {
     this.dataSource.rows[0].children = [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }];
     this.dataSource.fields.push({ area: "row" });
