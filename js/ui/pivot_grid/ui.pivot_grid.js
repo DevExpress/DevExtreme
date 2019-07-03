@@ -1093,8 +1093,8 @@ var PivotGrid = Widget.inherit({
                 headerFilter: that.option("headerFilter"),
                 encodeHtml: that.option("encodeHtml"),
                 applyChangesMode: fieldChooserOptions.applyChangesMode,
-                onContextMenuPreparing: function() {
-                    that._trigger("onContextMenuPreparing");
+                onContextMenuPreparing: function(e) {
+                    that._trigger("onContextMenuPreparing", e);
                 }
             },
             popupOptions = {
