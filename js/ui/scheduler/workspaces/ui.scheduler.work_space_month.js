@@ -74,6 +74,17 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return date;
     },
 
+    getCellWidth: function() {
+        const cells = this._getCells();
+        const cell = cells.first().get(0);
+        const cell2 = cells[1];
+
+        const cellWidth = cell && cell.getBoundingClientRect().width || 0;
+        const cellWidth2 = cell2 && cell2.getBoundingClientRect().width || 0;
+
+        return (cellWidth + cellWidth2) / 2;
+    },
+
     _calculateHiddenInterval: function() {
         return 0;
     },
