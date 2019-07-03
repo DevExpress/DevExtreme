@@ -21,6 +21,8 @@ import createStrip from "./strip";
 const convertTicksToValues = constants.convertTicksToValues;
 const patchFontOptions = vizUtils.patchFontOptions;
 const getVizRangeObject = vizUtils.getVizRangeObject;
+const getLog = vizUtils.getLogExt;
+const raiseTo = vizUtils.raiseToExt;
 const _math = Math;
 const _abs = _math.abs;
 const _max = _math.max;
@@ -53,11 +55,13 @@ const dateIntervals = {
     week: 604800000
 };
 
-function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIsEmpty, adjustDivisionFactor) {
+function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIsEmpty, adjustDivisionFactor, { allowNegatives, linearThreshold }) {
     return tickGeneratorModule.tickGenerator({
         axisType: options.type,
         dataType: options.dataType,
         logBase: options.logarithmBase,
+        allowNegatives,
+        linearThreshold,
 
         axisDivisionFactor: adjustDivisionFactor(options.axisDivisionFactor || DEFAULT_AXIS_DIVISION_FACTOR),
         minorAxisDivisionFactor: adjustDivisionFactor(options.minorAxisDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR),
@@ -232,7 +236,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
     });
 
     return function(tickInterval, skipTickGeneration, min, max, breaks) {
-        return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration, viewPort.isEmpty(), v => v)(
+        return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration, viewPort.isEmpty(), v => v, viewPort)(
             {
                 min: min,
                 max: max,
@@ -920,9 +924,11 @@ Axis.prototype = {
     calculateInterval: function(value, prevValue) {
         var options = this._options;
 
-        return (!options || (options.type !== constants.logarithmic)) ?
-            _abs(value - prevValue) :
-            vizUtils.getLog(value / prevValue, options.logarithmBase);
+        if(!options || (options.type !== constants.logarithmic)) {
+            return _abs(value - prevValue);
+        }
+        const { allowNegatives, linearThreshold } = new Range(this.getTranslator().getBusinessRange());
+        return _abs(getLog(value, options.logarithmBase, allowNegatives, linearThreshold) - getLog(prevValue, options.logarithmBase, allowNegatives, linearThreshold));
     },
 
     _processCanvas: function(canvas) {
@@ -1042,9 +1048,10 @@ Axis.prototype = {
         const isDiscrete = this._options.type === constants.discrete;
         const isLogarithmic = this._options.type === constants.logarithmic;
 
+        const disabledNegatives = this._options.allowNegatives === false;
         if(isLogarithmic) {
-            range.startValue = range.startValue <= 0 ? null : range.startValue;
-            range.endValue = range.endValue <= 0 ? null : range.endValue;
+            range.startValue = disabledNegatives && range.startValue <= 0 ? null : range.startValue;
+            range.endValue = disabledNegatives && range.endValue <= 0 ? null : range.endValue;
         }
         if(!isDiscrete && isDefined(range.startValue) && isDefined(range.endValue) && range.startValue > range.endValue) {
             let tmp = range.endValue;
@@ -1139,10 +1146,10 @@ Axis.prototype = {
 
     getVisualRangeLength(range) {
         const currentBusinessRange = range || this._translator.getBusinessRange();
-        const { type, logarithmBase } = this._options;
+        const { type } = this._options;
         let length;
         if(type === constants.logarithmic) {
-            length = adjust(vizUtils.getLog(currentBusinessRange.maxVisible / currentBusinessRange.minVisible, logarithmBase));
+            length = adjust(this.calculateInterval(currentBusinessRange.maxVisible, currentBusinessRange.minVisible));
         } else if(type === constants.discrete) {
             const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
             length = categoriesInfo.categories.length;
@@ -1163,7 +1170,8 @@ Axis.prototype = {
         }
 
         if(type === constants.logarithmic) {
-            center = vizUtils.raiseTo(adjust(vizUtils.getLog(currentBusinessRange.maxVisible * currentBusinessRange.minVisible, logarithmBase)) / 2, logarithmBase);
+            const { allowNegatives, linearThreshold, minVisible, maxVisible } = currentBusinessRange;
+            center = raiseTo(adjust(getLog(maxVisible, logarithmBase, allowNegatives, linearThreshold) + getLog(minVisible, logarithmBase, allowNegatives, linearThreshold)) / 2, logarithmBase, allowNegatives, linearThreshold);
         } else if(type === constants.discrete) {
             const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
             const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
@@ -1191,6 +1199,13 @@ Axis.prototype = {
             base: options.logarithmBase,
             invert: options.inverted
         });
+
+        if(options.type === constants.logarithmic) {
+            that._seriesData.addRange({
+                linearThreshold: options.linearThreshold,
+                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
+            });
+        }
 
         if(!isDiscrete) {
             if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
@@ -1331,7 +1346,7 @@ Axis.prototype = {
             customTicks = options.customTicks,
             customMinorTicks = options.customMinorTicks;
 
-        return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration, that._translator.getBusinessRange().isEmpty(), that._adjustDivisionFactor.bind(that))(
+        return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration, that._translator.getBusinessRange().isEmpty(), that._adjustDivisionFactor.bind(that), viewPort)(
             {
                 min: viewPort.minVisible,
                 max: viewPort.maxVisible,

@@ -35,6 +35,12 @@ var dxRangeSelector = {
         */
         logarithmBase: 10,
         /**
+        * @name dxRangeSelectorOptions.scale.linearThreshold
+        * @type number
+        * @default 0
+        */
+        linearThreshold,
+        /**
         * @name dxRangeSelectorOptions.scale.minorTickCount
         * @type number
         * @default undefined

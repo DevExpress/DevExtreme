@@ -608,19 +608,9 @@ QUnit.test("Numeric from numbers. logarithmic axis", function(assert) {
             argumentAxisType: "logarithmic"
         }), incidentOccurred);
 
-    checkParsedData(parsedData, { "arg": { arg: [1, 2, null, null, 5], val: [null, 22, 33, null, null] } }, { assert: assert });
+    checkParsedData(parsedData, { "arg": { arg: [1, 2, 0, -4, 5], val: [0, 22, 33, -44, 0] } }, { assert: assert });
 
-    assert.equal(incidentOccurred.callCount, 5);
-    assert.equal(incidentOccurred.getCall(0).args[0], "E2004");
-    assert.equal(incidentOccurred.getCall(0).args[1][0], "val");
-    assert.equal(incidentOccurred.getCall(1).args[0], "E2004");
-    assert.equal(incidentOccurred.getCall(1).args[1][0], "arg");
-    assert.equal(incidentOccurred.getCall(2).args[0], "E2004");
-    assert.equal(incidentOccurred.getCall(2).args[1][0], "arg");
-    assert.equal(incidentOccurred.getCall(3).args[0], "E2004");
-    assert.equal(incidentOccurred.getCall(3).args[1][0], "val");
-    assert.equal(incidentOccurred.getCall(4).args[0], "E2004");
-    assert.equal(incidentOccurred.getCall(4).args[1][0], "val");
+    assert.equal(incidentOccurred.callCount, 0);
 });
 
 // T463066
@@ -655,8 +645,8 @@ QUnit.test("Numeric from string. logarithmic axis", function(assert) {
 
     checkParsedData(parsedData, {
         "arg": {
-            val: [null, 22, 33, null, null],
-            arg: [1, 2, null, null, 5]
+            val: [0, 22, 33, -44, 0],
+            arg: [1, 2, 0, -4, 5]
         }
     }, { assert: assert });
 });

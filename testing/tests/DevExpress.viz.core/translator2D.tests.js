@@ -1387,6 +1387,54 @@ QUnit.test('GetInterval. Base = 2', function(assert) {
     assert.equal(translator.getInterval(), 100);
 });
 
+
+QUnit.module('Logarithmic translator. Allow Negatives', {
+    beforeEach: function() {
+        this.createTranslator = function(range, _, options) {
+            return new translator2DModule.Translator2D($.extend({ axisType: 'logarithmic', dataType: 'numeric', interval: 1, invert: false, base: 10, allowNegatives: true }, range),
+                { width: 1200, height: 2000, left: 0, top: 500, right: 0, bottom: 500 },
+                $.extend({}, { isHorizontal: true, breaksSize: 0 }, options));
+        };
+    }
+});
+
+QUnit.test('Translate. Big numbers. linearThreshold -1', function(assert) {
+    const translator = this.createTranslator({ min: -100, max: 100, linearThreshold: -1 });
+
+    assert.equal(translator.to(-100), 0, "min -> start");
+
+    assert.equal(translator.to(-10), 150);
+    assert.equal(translator.to(-1), 300);
+    assert.equal(translator.to(-0.1), 450);
+
+    assert.equal(translator.to(0), 600, "0 -> center");
+
+    assert.equal(translator.to(1), 900);
+    assert.equal(translator.to(10), 1050);
+
+    assert.equal(translator.to(100), 1200, "max -> end");
+});
+
+QUnit.test('Untranslate. Big numbers. linearThreshold -1', function(assert) {
+    const translator = this.createTranslator({ min: -100, max: 100, linearThreshold: -1 });
+    assert.equal(translator.from(0), -100);
+    assert.equal(translator.from(600), 0);
+    assert.equal(translator.from(1200), 100);
+
+    assert.equal(translator.from(900), 1);
+    assert.equal(translator.from(1050), 10);
+
+    assert.equal(translator.from(300), -1);
+    assert.equal(translator.from(150), -10);
+});
+
+QUnit.test('get scale', function(assert) {
+    const translator = this.createTranslator({ min: -1000, max: 1000, linearThreshold: -10 });
+
+    assert.strictEqual(translator.getScale(), 1, "without args");
+    assert.strictEqual(translator.getScale(-1000, 1000), 1, "full range");
+});
+
 QUnit.module('Discrete translator', {
     beforeEach: function() {
         this.createTranslator = function(range, canvas, options) {

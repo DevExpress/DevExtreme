@@ -28,7 +28,9 @@ QUnit.module("Creation", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
 
         this.simpleData = { argument: 1, value: 10 };
@@ -180,7 +182,9 @@ QUnit.module("Updating", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     }
 });
@@ -372,6 +376,8 @@ QUnit.module("Update type of point", {
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
             _options: {},
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; },
             getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; },
             getValueAxis: function() {
                 return {
@@ -540,6 +546,8 @@ QUnit.module("Draw", {
         this.series = {
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return true; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; },
             getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
             getValueAxis: function() {
                 return {
@@ -624,6 +632,8 @@ QUnit.module("Label", {
         this.series = {
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return true; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; },
             getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
             getValueAxis: function() {
                 return {
@@ -743,6 +753,8 @@ QUnit.module("Deleting", {
         this.series = {
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; },
             getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
             getValueAxis: function() {
                 return {
@@ -1269,7 +1281,9 @@ QUnit.module("Dispose", {
                         });
                     }
                 };
-            }
+            },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
 
         this.groups = {
@@ -1351,7 +1365,9 @@ QUnit.module("API", {
                         });
                     }
                 };
-            }
+            },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         sinon.spy(labelModule, "Label");
     },
@@ -1513,7 +1529,10 @@ QUnit.test("getBoundingRect", function(assert) {
 
 // Helpers
 function createSimplePoint(coord) {
-    var point = createPoint({}, [{}], { widgetType: "chart", visible: true, styles: { normal: { r: 6 }, hover: { r: 6 } } });
+    var point = createPoint({
+        _argumentChecker: function() { return true; },
+        _valueChecker: function() { return true; }
+    }, [{}], { widgetType: "chart", visible: true, styles: { normal: { r: 6 }, hover: { r: 6 } } });
     point.x = coord.x;
     point.y = coord.y;
     return point;
