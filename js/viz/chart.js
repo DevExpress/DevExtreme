@@ -1279,6 +1279,8 @@ var dxChart = AdvancedChart.inherit({
         } else {
             options[index]._customVisualRange = value;
         }
+
+        that._axesReinitialized = true;
     },
 
     // API
@@ -1432,6 +1434,8 @@ var dxChart = AdvancedChart.inherit({
 
     _notify() {
         const that = this;
+
+        that.callBase();
         if(that.option("disableTwoWayBinding") === true) { // for dashboards T732396
             return;
         }

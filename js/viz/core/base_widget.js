@@ -609,7 +609,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
                 partialChangeOptionsName.push(name);
             } else {
                 options.forEach(op => {
-                    fullName.indexOf(op) >= 0 && (partialChangeOptionsName.push(op));
+                    fullName.indexOf(op) >= 0 && partialChangeOptionsName.push(op);
                 });
                 if(sections.length === 1) {
                     if(typeUtils.type(value) === "object") {
@@ -623,9 +623,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             }
         }
 
-        return partialChangeOptionsName.filter((value, index, self) => {
-            return self.indexOf(value) === index;
-        });
+        return partialChangeOptionsName.filter((value, index, self) => self.indexOf(value) === index);
     },
 
     _checkOptionsForPartialUpdate: function(optionObject, options) {
