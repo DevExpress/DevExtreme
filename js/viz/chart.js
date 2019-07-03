@@ -354,7 +354,15 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _partialOptionChangesMap: {
-        visualRange: "VISUAL_RANGE"
+        visualRange: "VISUAL_RANGE",
+        _customVisualRange: "VISUAL_RANGE",
+        strips: "REFRESH_AXES",
+        constantLines: "REFRESH_AXES"
+    },
+
+    _partialOptionChangesPath: {
+        argumentAxis: ["strips", "constantLines", "visualRange", "_customVisualRange"],
+        valueAxis: ["strips", "constantLines", "visualRange", "_customVisualRange"]
     },
 
     _initCore: function() {
@@ -1126,6 +1134,8 @@ var dxChart = AdvancedChart.inherit({
         } else {
             options[index]._customVisualRange = value;
         }
+
+        that._axesReinitialized = true;
     },
 
     // API
@@ -1230,27 +1240,44 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _optionChanged(arg) {
-        if(!this._optionChangedLocker) {
+        const that = this;
+        if(!that._optionChangedLocker) {
             if(arg.fullName.indexOf("visualRange") > 0) {
                 let axisPath;
                 if(arg.fullName) {
                     axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
                 }
                 if(axisPath === "argumentAxis") {
-                    this.getArgumentAxis().visualRange(arg.value);
+                    that.getArgumentAxis().visualRange(arg.value);
                     return;
                 }
-                const axis = this._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
+                const axis = that._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
                 if(axis) {
                     axis.visualRange(arg.value);
                 }
+            } else if(that.getPartialChangeOptionsName(arg).indexOf("visualRange") > -1) {
+                if(arg.name === "argumentAxis") {
+                    that.getArgumentAxis().visualRange(arg.value.visualRange);
+                } else if(arg.name === "valueAxis") {
+                    if((typeUtils.type(arg.value) === "object")) {
+                        that._valueAxes[0].visualRange(arg.value.visualRange);
+                    } else {
+                        arg.value.forEach((v, index) => {
+                            if(_isDefined(v.visualRange) && _isDefined(that._valueAxes[index])) {
+                                that._valueAxes[index].visualRange(arg.value[index].visualRange);
+                            }
+                        });
+                    }
+                }
             }
         }
-        this.callBase(arg);
+        that.callBase(arg);
     },
 
     _notify() {
         const that = this;
+
+        that.callBase();
         if(that.option("disableTwoWayBinding") === true) { // for dashboards T732396
             return;
         }

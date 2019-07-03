@@ -976,7 +976,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT",
-        "FORCE_RENDER", "VISUAL_RANGE", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
+        "FORCE_RENDER", "REFRESH_AXES", "VISUAL_RANGE", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
 
     _change_ANIMATION: function() {
         this._renderer.updateAnimationOptions(this._getAnimationOptions());
@@ -1021,6 +1021,16 @@ var BaseChart = BaseWidget.inherit({
 
     _change_REFRESH_SERIES_REINIT: function() {
         this._refreshSeries(REINIT_REFRESH_ACTION);
+    },
+
+    _change_REFRESH_AXES() {
+        const that = this;
+
+        _setCanvasValues(that._canvas);
+        that._reinitAxes();
+
+        that._correctAxes();
+        that._forceRender();
     },
 
     _change_SCROLL_BAR: function() {
