@@ -101,7 +101,7 @@ var ResizingController = modules.ViewController.inherit({
                 if(changeType && changeType !== "updateSelection" && changeType !== "updateFocusedRow" && !isDelayed) {
                     when(resizeDeferred).done(function() {
                         that._setAriaRowColCount();
-                        that.component._fireContentReadyAction();
+                        that.fireContentReadyAction();
                     });
                 }
             };
@@ -110,6 +110,10 @@ var ResizingController = modules.ViewController.inherit({
                 that._dataController.changed.add(that._refreshSizesHandler);
             });
         }
+    },
+
+    fireContentReadyAction: function() {
+        this.component._fireContentReadyAction();
     },
 
     _setAriaRowColCount: function() {
@@ -763,7 +767,7 @@ var GridView = modules.View.inherit({
         if($rootElement && $groupElement) {
             resizingController.resize();
             if(that._dataController.isLoaded()) {
-                that.component._fireContentReadyAction();
+                that._resizingController.fireContentReadyAction();
             }
         }
     }
