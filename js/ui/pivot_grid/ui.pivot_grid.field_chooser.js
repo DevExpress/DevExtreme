@@ -418,7 +418,10 @@ var FieldChooser = BaseFieldChooser.inherit({
             area;
 
         if(targetFieldElement.length) {
-            field = targetFieldElement.data("field");
+            let fieldCopy = targetFieldElement.data("field");
+            if(fieldCopy) {
+                field = this.getDataSource().field(fieldCopy.index) || fieldCopy;
+            }
         }
 
         if(targetGroupElement.length) {
