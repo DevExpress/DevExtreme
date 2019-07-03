@@ -17,9 +17,10 @@ function adjustValue(value, precision) {
 }
 
 function toFixed(value, precision) {
-    const adjustedValue = precision > 0 ? adjustValue(...arguments) : value;
+    const valuePrecision = precision || 0;
+    const adjustedValue = valuePrecision > 0 ? adjustValue(...arguments) : value;
 
-    return (adjustedValue).toFixed(precision);
+    return (adjustedValue).toFixed(valuePrecision);
 }
 
 export {
