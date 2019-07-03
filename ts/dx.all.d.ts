@@ -9147,8 +9147,13 @@ declare module DevExpress.viz {
         center(centerCoordinates: Array<number>): void;
         /** @name dxVectorMap.clearSelection() */
         clearSelection(): void;
+        /** @deprecated */
         /** @name dxVectorMap.convertCoordinates(x, y) */
         convertCoordinates(x: number, y: number): Array<number>;
+        /** @name dxVectorMap.convertToGeo(x, y) */
+        convertToGeo(x: number, y: number): Array<number>;
+        /** @name dxVectorMap.convertToXY(longitude, latitude) */
+        convertToXY(longitude: number, latitude: number): Array<number>;
         /** @name dxVectorMap.getLayerByIndex(index) */
         getLayerByIndex(index: number): MapLayer;
         /** @name dxVectorMap.getLayerByName(name) */

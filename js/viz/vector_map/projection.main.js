@@ -300,12 +300,10 @@ Projection.prototype = {
 
     moveCenter: function(shift) {
         var that = this,
-            current,
-            center;
+            current;
         if(that._moveCenter) {
-            current = that._toScreen(that._toTransformed(that._engine.project(that._center)));
-            center = that._engine.unproject(that._fromTransformed(that._fromScreen([current[0] + shift[0], current[1] + shift[1]])));
-            that._changeCenter(center);
+            current = that.toScreenPoint(that._center);
+            that._changeCenter(that.fromScreenPoint([current[0] + shift[0], current[1] + shift[1]]));
         }
     },
 
@@ -347,6 +345,10 @@ Projection.prototype = {
 
     fromScreenPoint: function(coordinates) {
         return this._engine.unproject(this._fromTransformed(this._fromScreen(coordinates)));
+    },
+
+    toScreenPoint: function(coordinates) {
+        return this._toScreen(this._toTransformed(this._engine.project(coordinates)));
     },
 
     _eventNames: ["engine", "screen", "center", "zoom", "max-zoom"]

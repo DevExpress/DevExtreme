@@ -376,6 +376,24 @@ QUnit.test('convertCoordinates / scalar arguments', function(assert) {
     assert.deepEqual(this.projection.fromScreenPoint.lastCall.args, [[10, 20]], 'projection is called');
 });
 
+QUnit.test('convertToGeo', function(assert) {
+    var coords = { tag: 'coords' };
+    this.createMap();
+    this.projection.stub('fromScreenPoint').returns(coords);
+
+    assert.deepEqual(this.map.convertToGeo(10, 20), coords, 'result');
+    assert.deepEqual(this.projection.fromScreenPoint.lastCall.args, [[10, 20]], 'projection is called');
+});
+
+QUnit.test('convertToXY', function(assert) {
+    var coords = { tag: 'coords' };
+    this.createMap();
+    this.projection.stub('toScreenPoint').returns(coords);
+
+    assert.deepEqual(this.map.convertToXY(10, 20), coords, 'result');
+    assert.deepEqual(this.projection.toScreenPoint.lastCall.args, [[10, 20]], 'projection is called');
+});
+
 QUnit.module("Map - option changing", $.extend({}, commons.environment, {
     createMap: function() {
         commons.environment.createMap.apply(this, arguments);
