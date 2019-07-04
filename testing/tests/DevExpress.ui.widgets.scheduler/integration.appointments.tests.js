@@ -55,7 +55,7 @@ function skipTestOnMobile(assert) {
 
 QUnit.module("T712431", () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
-    const MIN_APPOINTMENT_WIDTH = 936;
+    const MIN_APPOINTMENT_WIDTH = 941;
 
     QUnit.test(`Appointment width should be not less ${MIN_APPOINTMENT_WIDTH}px with width control 1100px`, function(assert) {
         const data = [
