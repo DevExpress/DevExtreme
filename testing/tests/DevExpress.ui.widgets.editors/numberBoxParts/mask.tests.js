@@ -374,6 +374,19 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.input.val(), "<<123.4>>", "value is correct");
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret is good");
     });
+
+    QUnit.test("NumberBox should keep selected range after the ValueChange event", (assert) => {
+        this.instance.option({
+            format: "#0.#;<<#0.#>>",
+            value: 123.4
+        });
+
+        this.keyboard.caret({ start: 1, end: 2 }).press("-").change();
+        this.clock.tick();
+
+        assert.equal(this.input.val(), "<<123.4>>", "value is correct");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret preserved");
+    });
 });
 
 QUnit.module("format: fixed point format", moduleConfig, () => {

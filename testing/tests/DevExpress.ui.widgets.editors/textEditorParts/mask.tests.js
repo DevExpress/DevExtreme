@@ -1,8 +1,8 @@
-var $ = require("jquery"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    caretWorkaround = require("./caretWorkaround.js");
+import $ from "jquery";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import caretWorkaround from "./caretWorkaround.js";
 
-require("ui/text_box/ui.text_editor");
+import "ui/text_box/ui.text_editor";
 
 var testMaskRule = function(title, config) {
     QUnit.test(title, function(assert) {
@@ -636,6 +636,24 @@ QUnit.test("all selected chars should be deleted on del key", function(assert) {
 
     assert.equal($input.val(), "x__", "printed only one char");
     assert.equal(keyboard.caret().start, 1, "caret position set to start");
+});
+
+QUnit.test("it should correctly handle selected range changing when input is missed", (assert) => {
+    assert.expect(1);
+
+    $("#texteditor").dxTextEditor({
+        onInitialized: ({ component }) => {
+            let isPassed = true;
+
+            try {
+                component._caret({ start: 0, end: 1 });
+            } catch(e) {
+                isPassed = false;
+            }
+
+            assert.ok(isPassed, "In case an input isn't ready, _caret doesn't generate an error");
+        }
+    });
 });
 
 QUnit.module("showMaskMode", moduleConfig);
