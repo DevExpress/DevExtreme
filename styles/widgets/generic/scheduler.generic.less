@@ -163,7 +163,7 @@
 
 .dx-scheduler-work-space-day {
     &:not(.dx-scheduler-work-space-vertical-grouped) {
-        .dx-scheduler-scrollable-offset-mixin(0, @GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+        .dx-scheduler-scrollable-offset-mixin(@GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP, @GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
     }
 
     &:not(.dx-scheduler-work-space-grouped) {
