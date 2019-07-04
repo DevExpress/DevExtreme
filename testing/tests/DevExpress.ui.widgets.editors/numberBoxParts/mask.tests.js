@@ -34,13 +34,15 @@ const moduleConfig = {
 QUnit.module("format: api value changing", moduleConfig, () => {
     QUnit.test("number type of input should be converted to tel on mobile device when inputMode is unsupported", assert => {
         const realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
-        const realChrome = browser.chrome;
-        const realVersion = browser.version;
+        const realBrowser = browser;
         const $element = $("<div>").appendTo("body");
 
         try {
             browser.chrome = true;
             browser.version = "50.0";
+            browser.chrome = false;
+            browser.safari = false;
+            browser.msie = false;
 
             const instance = $element.dxNumberBox({
                 useMaskBehavior: true,
@@ -53,8 +55,10 @@ QUnit.module("format: api value changing", moduleConfig, () => {
             instance.option("mode", "number");
             assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
         } finally {
-            browser.chrome = realChrome;
-            browser.version = realVersion;
+            browser.chrome = realBrowser.chrome;
+            browser.safari = realBrowser.safari;
+            browser.msie = realBrowser.msie;
+            browser.version = realBrowser.version;
             realDeviceMock.restore();
             $element.remove();
         }
