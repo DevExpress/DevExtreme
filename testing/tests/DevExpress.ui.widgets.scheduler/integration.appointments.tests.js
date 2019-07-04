@@ -16,19 +16,14 @@ import { DataSource } from "data/data_source/data_source";
 import CustomStore from "data/custom_store";
 import dataUtils from "core/element_data";
 import dateSerialization from "core/utils/date_serialization";
-import { SchedulerTestWrapper } from "./helpers.js";
+import { SchedulerTestWrapper, initTestMarkup, createWrapper } from "./helpers.js";
 
 import "ui/scheduler/ui.scheduler";
 import "ui/switch";
 import "common.css!";
 import "generic_light.css!";
 
-QUnit.testStart(function() {
-    $("#qunit-fixture").html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+QUnit.testStart(() => initTestMarkup());
 
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
@@ -56,6 +51,35 @@ function skipTestOnMobile(assert) {
     }
     return isMobile;
 }
+
+
+QUnit.module("T712431", () => {
+    // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
+    const MIN_APPOINTMENT_WIDTH = 936;
+
+    QUnit.test(`Appointment width should be not less ${MIN_APPOINTMENT_WIDTH}px with width control 1100px`, function(assert) {
+        const data = [
+            {
+                text: "Website Re-Design Plan 2",
+                startDate: new Date(2017, 4, 7, 9, 30),
+                endDate: new Date(2017, 4, 12, 17, 20)
+            }
+        ];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            width: 1100,
+            height: 600
+        });
+
+        const appointment = scheduler.appointments.getAppointment();
+        assert.ok(appointment.outerWidth() > MIN_APPOINTMENT_WIDTH);
+    });
+});
 
 QUnit.module("Integration: Appointments", {
     beforeEach: function() {

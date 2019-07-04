@@ -74,6 +74,19 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return date;
     },
 
+    // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
+    // TODO: there is a test for this bug, when changing the layout, the test will also be useless
+    getCellWidth: function() {
+        const cells = this._getCells();
+        const firstCell = cells.eq(0).get(0);
+        const secondCell = cells.eq(1).get(0);
+
+        const firstCellWidth = firstCell && firstCell.getBoundingClientRect().width || 0;
+        const secondCellWidth = secondCell && secondCell.getBoundingClientRect().width || 0;
+
+        return (firstCellWidth + secondCellWidth) / 2;
+    },
+
     _calculateHiddenInterval: function() {
         return 0;
     },
