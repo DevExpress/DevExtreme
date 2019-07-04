@@ -3871,7 +3871,7 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
     assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
 });
 
-QUnit.skip("Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)", function(assert) {
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)", function(assert) {
     var tasks = [{
         text: "Recurrence task",
         start: new Date(2017, 2, 13),
@@ -3906,7 +3906,7 @@ QUnit.skip("Scheduler appointment popup should be opened correctly for recurrenc
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
 });
 
-QUnit.skip("Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)", function(assert) {
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)", function(assert) {
     var tasks = [{
         text: "Task",
         start: new Date(2017, 2, 13),
@@ -4392,4 +4392,21 @@ QUnit.test("The itemData argument of the drop down appointment template is shoul
         text: "Task 3"
     }];
     this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+});
+
+QUnit.test("Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recruiting students",
+            startDate: new Date(2018, 2, 26, 10, 0),
+            endDate: new Date(2018, 2, 26, 11, 0),
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 3, 27)
+    });
+
+    var $appointment = $(this.instance.$element).find(".dx-scheduler-appointment");
+    assert.equal($appointment.length, 30, "Scheduler appointments are rendered without compact ones");
 });

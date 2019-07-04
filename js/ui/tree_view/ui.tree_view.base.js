@@ -1048,7 +1048,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
-        node.internalFields.expanded = state;
 
         this._updateExpandedItemsUI(node, state, e);
     },
@@ -1883,9 +1882,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName expandAll()
     */
     expandAll: function() {
-        each(this._dataAdapter.getData(), (function(_, node) {
-            this._toggleExpandedState(node.internalFields.key, true);
-        }).bind(this));
+        const dataAdapter = this._dataAdapter;
+        each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
+        this.repaint();
     },
 
     /**

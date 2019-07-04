@@ -410,10 +410,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _renderInputType: function() {
         var isNumberType = this.option("mode") === "number",
-            isMobileDevice = devices.real().deviceType !== "desktop";
+            isDesktop = devices.real().deviceType === "desktop";
 
         if(this._useMaskBehavior() && isNumberType) {
-            this._setInputType(isMobileDevice ? "tel" : "text");
+            this._setInputType(isDesktop || this._isSupportInputMode() ? "text" : "tel");
         } else {
             this.callBase();
         }
@@ -461,10 +461,30 @@ var NumberBoxMask = NumberBoxBase.inherit({
         eventsEngine.off(this._input(), "." + NUMBER_FORMATTER_NAMESPACE);
     },
 
+    _isInputFromPaste: function(e) {
+        var inputType = e.originalEvent && e.originalEvent.inputType;
+
+        if(typeUtils.isDefined(inputType)) {
+            return inputType === "insertFromPaste";
+        } else {
+            return this._isValuePasted;
+        }
+    },
+
     _attachFormatterEvents: function() {
         var $input = this._input();
 
-        eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), function(e) {
+            this._formatValue(e);
+            this._isValuePasted = false;
+        }.bind(this));
+
+        if(browser.msie && browser.version < 12) {
+            eventsEngine.on($input, eventUtils.addNamespace("paste", NUMBER_FORMATTER_NAMESPACE), function() {
+                this._isValuePasted = true;
+            }.bind(this));
+        }
+
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
             if(!this._caretTimeout) {
                 this._caretTimeout = setTimeout(function() {
@@ -589,7 +609,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._setInputText(formatted);
     },
 
-    _formatValue: function() {
+    _formatValue: function(e) {
         var normalizedText = this._getInputVal(),
             caret = this._caret(),
             textWithoutMinus = this._removeMinusFromText(normalizedText, caret),
@@ -597,7 +617,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         normalizedText = textWithoutMinus;
 
-        if(this._isValueIncomplete(textWithoutMinus)) {
+        if(!this._isInputFromPaste(e) && this._isValueIncomplete(textWithoutMinus)) {
             this._formattedValue = normalizedText;
             if(wasMinusRemoved) {
                 this._setTextByParsedValue();
