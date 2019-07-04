@@ -674,13 +674,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(e);
         }
 
-        this._saveValueChangeEvent(e);
+        var caret = this._caret();
 
+        this._saveValueChangeEvent(e);
         this._lastKey = null;
         this._lastKeyName = null;
 
         this._adjustParsedValue();
         this.option("value", this._parsedValue);
+
+        if(caret) {
+            this._caret(caret);
+        }
     },
 
     _optionChanged: function(args) {
