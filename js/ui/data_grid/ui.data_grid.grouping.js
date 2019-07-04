@@ -88,6 +88,8 @@ var GroupingDataSourceAdapterExtender = (function() {
                         groupInfo.isExpanded = isExpand;
                     }
                 }, false, true);
+
+                that.resetPagesCache();
             }
             return true;
         },
