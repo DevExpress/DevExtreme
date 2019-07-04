@@ -781,6 +781,25 @@ QUnit.test("onItemExpanded should be called after animation completed", function
     }
 });
 
+QUnit.test("onItemExpanded event should not be called when the expandAll is called", function(assert) {
+    const itemExpandedHandler = sinon.stub();
+    const treeView = initTree({
+        items: [{
+            id: 1,
+            text: "Item 1",
+            items: [{
+                id: 2,
+                text: "Nested items"
+            }]
+        }],
+        onItemExpanded: itemExpandedHandler
+    }).dxTreeView("instance");
+
+    treeView.expandAll();
+
+    assert.equal(itemExpandedHandler.callCount, 0, "the expandItem event never called");
+});
+
 QUnit.test("Expand event handler has correct arguments", function(assert) {
     var treeView = initTree({
             items: [{ id: 1, text: "Item 1", items: [{ id: 2, text: "Nested items" }] }],
