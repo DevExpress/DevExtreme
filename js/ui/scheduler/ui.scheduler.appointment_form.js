@@ -10,6 +10,7 @@ import "./ui.scheduler.recurrence_editor";
 import "./timezones/ui.scheduler.timezone_editor";
 import "../text_area";
 import "../tag_box";
+import "../switch";
 
 const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
 
