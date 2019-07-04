@@ -11620,6 +11620,74 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.equal($rows.find("col").get(0).style.width, "1000px", "column width in detail grid is corrent");
 });
 
+// T749068
+QUnit.test("Row heights should be synchronized after expand master detail row in second nested DataGrid", function(assert) {
+    // arrange
+    var nestedDataGrid,
+        secondNestedDataGrid;
+
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1" }, { dataField: "field2" }],
+        columnFixing: { enabled: true },
+        columnAutoWidth: true,
+        keyExpr: "id",
+        dataSource: [{ id: 1 }, { id: 2 }],
+        masterDetail: {
+            enabled: true,
+            template: function(container) {
+                nestedDataGrid = $("<div>").appendTo(container).dxDataGrid({
+                    columns: [{ dataField: "field1" }, { dataField: "field2" }],
+                    columnFixing: { enabled: true },
+                    columnAutoWidth: true,
+                    keyExpr: "id",
+                    dataSource: [{ id: 1 }, { id: 2 }],
+                    masterDetail: {
+                        enabled: true,
+                        template: function(container) {
+                            secondNestedDataGrid = $("<div>").appendTo(container).dxDataGrid({
+                                keyExpr: "id",
+                                dataSource: [{ id: 1 }, { id: 2 }],
+                                masterDetail: {
+                                    enabled: true
+                                }
+                            }).dxDataGrid("instance");
+                        }
+                    }
+                }).dxDataGrid("instance");
+            }
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.expandRow(1);
+    this.clock.tick();
+
+    nestedDataGrid.expandRow(1);
+    this.clock.tick();
+
+    secondNestedDataGrid.expandRow(1);
+    this.clock.tick();
+
+    // assert
+    var $rows = $(dataGrid.getRowElement(1));
+    var $nestedRows = $(nestedDataGrid.getRowElement(1));
+
+    assert.equal($rows.length, 2, "two rows: main row + fixed row");
+    assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
+
+    assert.equal($nestedRows.length, 2, "two rows: main row + fixed row");
+    assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), "nested row heights are synchronized");
+
+    // act
+    secondNestedDataGrid.collapseRow(1);
+    this.clock.tick();
+
+    // assert
+    assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), "nested row heights are synchronized after collapse");
+});
+
 // T607490
 QUnit.test("Scrollable should be updated after expand master detail row with nested DataGrid", function(assert) {
     // arrange
