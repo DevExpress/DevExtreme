@@ -116,6 +116,7 @@ registerDecorator(
             this._list._createComponent($toggle, Button, {
                 icon: "toggle-delete",
                 onClick: (function(e) {
+                    fx.stop(this._$buttonContainer, false);
                     this._toggleDeleteReady($itemElement);
                     e.event.stopPropagation();
                 }).bind(this),
@@ -139,6 +140,7 @@ registerDecorator(
 
         _swipeEndHandler: function($itemElement, args) {
             if(args.targetOffset !== 0) {
+                fx.stop(this._$buttonContainer, false);
                 this._toggleDeleteReady($itemElement);
             }
 
