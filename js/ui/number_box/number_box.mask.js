@@ -418,10 +418,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _renderInputType: function() {
         var isNumberType = this.option("mode") === "number",
-            isMobileDevice = devices.real().deviceType !== "desktop";
+            isDesktop = devices.real().deviceType === "desktop";
 
         if(this._useMaskBehavior() && isNumberType) {
-            this._setInputType(isMobileDevice ? "tel" : "text");
+            this._setInputType(isDesktop || this._isSupportInputMode() ? "text" : "tel");
         } else {
             this.callBase();
         }

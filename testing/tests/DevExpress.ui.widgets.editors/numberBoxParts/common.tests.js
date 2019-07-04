@@ -59,7 +59,7 @@ QUnit.module("basics", {}, () => {
 
     QUnit.test("input should have inputmode attribute for numeric keyboard on mobile devices", function(assert) {
         const $element = $("#numberbox").dxNumberBox();
-        assert.equal($element.find("." + INPUT_CLASS).attr("inputmode"), "numeric", "inputmode is correct");
+        assert.equal($element.find("." + INPUT_CLASS).attr("inputmode"), "decimal", "inputmode is correct");
     });
 
     QUnit.test("onContentReady fired after the widget is fully ready", (assert) => {
