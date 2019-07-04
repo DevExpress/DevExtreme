@@ -656,10 +656,16 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _caret: function(position) {
-        if(!arguments.length) {
-            return caret(this._input());
+        var $input = this._input();
+
+        if(!$input.length) {
+            return;
         }
-        caret(this._input(), position);
+
+        if(!arguments.length) {
+            return caret($input);
+        }
+        caret($input, position);
     },
 
     _hasSelection: function() {
