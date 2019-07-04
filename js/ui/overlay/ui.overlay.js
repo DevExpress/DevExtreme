@@ -1134,14 +1134,8 @@ var Overlay = Widget.inherit({
         return result;
     },
 
-    _tryGetScrollableContainer(element) {
-        const scrollableClass = `.dx-scrollable-container`;
-
-        if($(element).is(scrollableClass)) {
-            return element;
-        } else {
-            return $(element).parents(scrollableClass).get(0);
-        }
+    _tryGetScrollableContainer(targetElement) {
+        return $(targetElement).closest(`.dx-scrollable-container`).get(0);
     },
 
     _getDragTarget: function() {

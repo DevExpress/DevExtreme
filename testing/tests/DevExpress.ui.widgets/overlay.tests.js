@@ -3398,9 +3398,6 @@ testModule("scrollable interaction", {
 
             _attachEvents() {
                 this.$scrollable.on(wheelEvent.name, this.wheelEventHandler);
-                this.$scrollable.on("scroll", function(e) {
-                    e.stopImmediatePropagation();
-                });
             }
 
             getNativePointerMock() {
@@ -3413,11 +3410,10 @@ testModule("scrollable interaction", {
             }
 
             checkAsserts(expectedValues) {
-                let { scrollOffset, isDefaultPrevented, visible } = expectedValues;
+                let { scrollOffset, isDefaultPrevented } = expectedValues;
 
                 QUnit.assert.deepEqual(this.scrollable.scrollOffset(), scrollOffset, "scrollOffset");
                 QUnit.assert.strictEqual(this.wheelEventHandler.firstCall.args[0].isDefaultPrevented(), isDefaultPrevented, "wheelEvent prevented");
-                QUnit.assert.strictEqual(this.$overlay.dxOverlay("option", "visible"), visible, "overlay.visible");
             }
         }
 
@@ -3444,8 +3440,7 @@ testModule("scrollable interaction", {
 
                     helper.checkAsserts({
                         scrollOffset: { top: 0, left: 0 },
-                        isDefaultPrevented: true,
-                        visible: true
+                        isDefaultPrevented: true
                     });
                 });
 
@@ -3460,8 +3455,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(-30);
                         helper.checkAsserts({
                             scrollOffset: { top: maxScrollOffset, left: 0 },
-                            isDefaultPrevented: true,
-                            visible: true
+                            isDefaultPrevented: true
                         });
                     }
 
@@ -3470,8 +3464,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(-30, true);
                         helper.checkAsserts({
                             scrollOffset: { top: 0, left: maxScrollOffset },
-                            isDefaultPrevented: true,
-                            visible: true
+                            isDefaultPrevented: true
                         });
                     }
 
@@ -3482,8 +3475,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(-30, true);
                         helper.checkAsserts({
                             scrollOffset: { top: maxScrollOffset, left: maxScrollOffset },
-                            isDefaultPrevented: true,
-                            visible: true
+                            isDefaultPrevented: true
                         });
                     }
                 });
@@ -3500,8 +3492,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(30);
                         helper.checkAsserts({
                             scrollOffset: { top: centerScrollPosition, left: 0 },
-                            isDefaultPrevented: false,
-                            visible: true
+                            isDefaultPrevented: false
                         });
                     }
 
@@ -3510,8 +3501,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(30, true);
                         helper.checkAsserts({
                             scrollOffset: { top: 0, left: centerScrollPosition },
-                            isDefaultPrevented: false,
-                            visible: true
+                            isDefaultPrevented: false
                         });
                     }
 
@@ -3520,15 +3510,13 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(30);
                         helper.checkAsserts({
                             scrollOffset: { top: centerScrollPosition, left: centerScrollPosition },
-                            isDefaultPrevented: false,
-                            visible: true
+                            isDefaultPrevented: false
                         });
                         helper.wheelEventHandler.reset();
                         pointerMock.start().wheel(30, true);
                         helper.checkAsserts({
                             scrollOffset: { top: centerScrollPosition, left: centerScrollPosition },
-                            isDefaultPrevented: false,
-                            visible: true
+                            isDefaultPrevented: false
                         });
                     }
                 });
@@ -3545,8 +3533,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(30);
                         helper.checkAsserts({
                             scrollOffset: { top: centerScrollPosition, left: 0 },
-                            isDefaultPrevented: false,
-                            visible: true
+                            isDefaultPrevented: false
                         });
                     }
 
@@ -3555,8 +3542,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(30, true);
                         helper.checkAsserts({
                             scrollOffset: { top: 0, left: centerScrollPosition },
-                            isDefaultPrevented: false,
-                            visible: true
+                            isDefaultPrevented: false
                         });
                     }
 
@@ -3567,8 +3553,7 @@ testModule("scrollable interaction", {
                         pointerMock.start().wheel(30, true);
                         helper.checkAsserts({
                             scrollOffset: { top: centerScrollPosition, left: centerScrollPosition },
-                            isDefaultPrevented: false,
-                            visible: true
+                            isDefaultPrevented: false
                         });
                     }
                 });
