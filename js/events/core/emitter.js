@@ -19,7 +19,7 @@ var Emitter = Class.inherit({
     },
 
     validate: function(e) {
-        return e.type !== "dxmousewheel";
+        return !eventUtils.isMouseWheelEvent(e);
     },
 
     validatePointers: function(e) {

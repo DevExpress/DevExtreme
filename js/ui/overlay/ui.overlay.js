@@ -1107,7 +1107,7 @@ var Overlay = Widget.inherit({
     },
 
     _validateWheel(e) {
-        if(this._isWheelEvent(e)) {
+        if(eventUtils.isMouseWheelEvent(e)) {
             var scrollableContainer = this._tryGetScrollableContainer(e.target);
 
             if(scrollableContainer) {
@@ -1118,25 +1118,20 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _isWheelEvent(e) {
-        return e.type === "dxmousewheel";
-    },
-
     _isScrolledInMaxDirection(e, container) {
-        var isReachedMax;
-        var isReachedMin;
+        var result;
 
         if(e.delta > 0) {
-            isReachedMax = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
+            result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
         } else {
             if(e.shiftKey) {
-                isReachedMin = (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
+                result = (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
             } else {
-                isReachedMin = (container.clientHeight + container.scrollTop) >= container.scrollHeight;
+                result = (container.clientHeight + container.scrollTop) >= container.scrollHeight;
             }
         }
 
-        return (isReachedMax || isReachedMin);
+        return result;
     },
 
     _tryGetScrollableContainer(element) {
