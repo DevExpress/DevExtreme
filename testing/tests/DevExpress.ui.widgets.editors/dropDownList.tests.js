@@ -18,31 +18,30 @@ import "ui/drop_down_editor/ui.drop_down_list";
 import "common.css!";
 import "generic_light.css!";
 
-QUnit.testStart(function() {
-    var markup =
+QUnit.testStart(() => {
+    const markup =
         '<div id="dropDownList"></div>';
 
     $("#qunit-fixture").html(markup);
 });
 
-var LIST_ITEM_SELECTOR = ".dx-list-item",
+const LIST_ITEM_SELECTOR = ".dx-list-item";
+const STATE_FOCUSED_CLASS = "dx-state-focused";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
-    STATE_FOCUSED_CLASS = "dx-state-focused",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
-
-var moduleConfig = {
-    beforeEach: function() {
+const moduleConfig = {
+    beforeEach: () => {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
+    afterEach: () => {
         this.clock.restore();
         fx.off = false;
     }
 };
 
 QUnit.module("focus policy", {
-    beforeEach: function() {
+    beforeEach: () => {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
 
@@ -54,98 +53,96 @@ QUnit.module("focus policy", {
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },
-    afterEach: function() {
+    afterEach: () => {
         this.clock.restore();
         fx.off = false;
     }
+}, () => {
+    QUnit.test("focus removed from list on type some text", (assert) => {
+        if(devices.real().platform !== "generic") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.instance.option("opened", true);
+        this.clock.tick(500);
+        this.keyboard.keyDown("down");
+        const $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
+        assert.equal(isRenderer(this.instance._list.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
+        assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS), "first list element is focused");
+
+        this.keyboard.type("some text");
+        assert.ok(!$firstItem.hasClass(STATE_FOCUSED_CLASS), "first list element is not focused");
+    });
+
+    QUnit.testInActiveWindow("popup should not focus when we selecting an item", (assert) => {
+        this.instance.option("opened", true);
+
+        const mouseDownStub = sinon.stub();
+        const $popupContent = $(this.instance._popup.$content());
+
+        $popupContent
+            .on("mousedown", mouseDownStub)
+            .trigger("mousedown")
+            .trigger("mouseup");
+
+        assert.notOk(mouseDownStub.getCall(0).args[0].isDefaultPrevented(), "mousedown isn't prevented");
+
+        if(devices.real().deviceType === "desktop") {
+            assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element save focused state after click on popup content");
+        }
+    });
+
+    QUnit.test("hover and focus states for list should be initially disabled on mobile devices only", (assert) => {
+        this.instance.option("opened", true);
+
+        const list = $(".dx-list").dxList("instance");
+
+        if(devices.real().deviceType === "desktop") {
+            assert.ok(list.option("hoverStateEnabled"), "hover state should be enabled on desktop");
+            assert.ok(list.option("focusStateEnabled"), "focus state should be enabled on desktop");
+        } else {
+            assert.notOk(list.option("hoverStateEnabled"), "hover state should be disabled on mobiles");
+            assert.notOk(list.option("focusStateEnabled"), "focus state should be disabled on mobiles");
+        }
+    });
+
+    QUnit.test("changing hover and focus states for list should be enabled on desktop only", (assert) => {
+        this.instance.option("opened", true);
+
+        const list = $(".dx-list").dxList("instance");
+
+        this.instance.option({ hoverStateEnabled: false, focusStateEnabled: false });
+
+        if(devices.real().deviceType === "desktop") {
+            assert.notOk(list.option("hoverStateEnabled"), "hover state should be changed to disabled on desktop");
+            assert.notOk(list.option("focusStateEnabled"), "focus state should be changed to disabled on desktop");
+        } else {
+            this.instance.option({ hoverStateEnabled: true, focusStateEnabled: true });
+
+            assert.notOk(list.option("hoverStateEnabled"), "hover state should not be changed on mobiles");
+            assert.notOk(list.option("focusStateEnabled"), "focus state should not be changed on mobiles");
+        }
+    });
+
+    QUnit.test("setFocusPolicy should correctly renew subscription", (assert) => {
+        if(devices.real().platform !== "generic") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+        const setFocusPolicySpy = sinon.spy(this.instance, "_setFocusPolicy");
+
+        this.instance.option("onChange", noop);
+        this.instance.option("onKeyUp", noop);
+
+        this.$input.trigger("input");
+
+        assert.equal(setFocusPolicySpy.callCount, 1, "setFocusPollicy called once");
+    });
 });
-
-QUnit.test("focus removed from list on type some text", function(assert) {
-    if(devices.real().platform !== "generic") {
-        assert.ok(true, "test does not actual for mobile devices");
-        return;
-    }
-
-    this.instance.option("opened", true);
-    this.clock.tick(500);
-    this.keyboard.keyDown("down");
-    var $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
-    assert.equal(isRenderer(this.instance._list.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
-    assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS), "first list element is focused");
-
-    this.keyboard.type("some text");
-    assert.ok(!$firstItem.hasClass(STATE_FOCUSED_CLASS), "first list element is not focused");
-});
-
-QUnit.testInActiveWindow("popup should not focus when we selecting an item", function(assert) {
-
-    this.instance.option("opened", true);
-
-    var mouseDownStub = sinon.stub(),
-        $popupContent = $(this.instance._popup.$content());
-
-    $popupContent
-        .on("mousedown", mouseDownStub)
-        .trigger("mousedown")
-        .trigger("mouseup");
-
-    assert.notOk(mouseDownStub.getCall(0).args[0].isDefaultPrevented(), "mousedown isn't prevented");
-
-    if(devices.real().deviceType === "desktop") {
-        assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element save focused state after click on popup content");
-    }
-});
-
-QUnit.test("hover and focus states for list should be initially disabled on mobile devices only", function(assert) {
-    this.instance.option("opened", true);
-
-    var list = $(".dx-list").dxList("instance");
-
-    if(devices.real().deviceType === "desktop") {
-        assert.ok(list.option("hoverStateEnabled"), "hover state should be enabled on desktop");
-        assert.ok(list.option("focusStateEnabled"), "focus state should be enabled on desktop");
-    } else {
-        assert.notOk(list.option("hoverStateEnabled"), "hover state should be disabled on mobiles");
-        assert.notOk(list.option("focusStateEnabled"), "focus state should be disabled on mobiles");
-    }
-});
-
-QUnit.test("changing hover and focus states for list should be enabled on desktop only", function(assert) {
-    this.instance.option("opened", true);
-
-    var list = $(".dx-list").dxList("instance");
-
-    this.instance.option({ hoverStateEnabled: false, focusStateEnabled: false });
-
-    if(devices.real().deviceType === "desktop") {
-        assert.notOk(list.option("hoverStateEnabled"), "hover state should be changed to disabled on desktop");
-        assert.notOk(list.option("focusStateEnabled"), "focus state should be changed to disabled on desktop");
-    } else {
-        this.instance.option({ hoverStateEnabled: true, focusStateEnabled: true });
-
-        assert.notOk(list.option("hoverStateEnabled"), "hover state should not be changed on mobiles");
-        assert.notOk(list.option("focusStateEnabled"), "focus state should not be changed on mobiles");
-    }
-});
-
-QUnit.test("setFocusPolicy should correctly renew subscription", function(assert) {
-    if(devices.real().platform !== "generic") {
-        assert.ok(true, "test does not actual for mobile devices");
-        return;
-    }
-    var setFocusPolicySpy = sinon.spy(this.instance, "_setFocusPolicy");
-
-    this.instance.option("onChange", noop);
-    this.instance.option("onKeyUp", noop);
-
-    this.$input.trigger("input");
-
-    assert.equal(setFocusPolicySpy.callCount, 1, "setFocusPollicy called once");
-});
-
 
 QUnit.module("keyboard navigation", {
-    beforeEach: function() {
+    beforeEach: () => {
         fx.off = true;
 
         this.$element = $("#dropDownList").dxDropDownList({
@@ -160,336 +157,388 @@ QUnit.module("keyboard navigation", {
         this.$list = this.instance._$list;
         this.keyboard = keyboardMock(this.$input);
     },
-    afterEach: function() {
+    afterEach: () => {
         fx.off = false;
         this.clock.restore();
     }
-});
+}, () => {
+    QUnit.test("focusout should not be fired on input element", (assert) => {
+        const onFocusOutStub = sinon.stub();
+        this.instance.option("onFocusOut", onFocusOutStub);
 
-QUnit.test("focusout should not be fired on input element", function(assert) {
-    var onFocusOutStub = sinon.stub();
-    this.instance.option("onFocusOut", onFocusOutStub);
+        this.$element.focusin();
+        this.keyboard.keyDown("tab");
 
-    this.$element.focusin();
-    this.keyboard.keyDown("tab");
-
-    assert.equal(onFocusOutStub.callCount, 0, "onFocusOut wasn't fired");
-});
-
-QUnit.test("focusout should be prevented when list clicked", function(assert) {
-    assert.expect(1);
-
-    this.instance.open();
-
-    var $list = $(this.instance.content()).find(".dx-list");
-
-    $list.on("mousedown", function(e) {
-        // note: you should not prevent pointerdown because it will prevent click on ios real devices
-        // you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
-        assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
+        assert.equal(onFocusOutStub.callCount, 0, "onFocusOut wasn't fired");
     });
 
-    $list.trigger("mousedown");
-});
+    QUnit.test("focusout should be prevented when list clicked", (assert) => {
+        assert.expect(1);
 
-QUnit.test("list should not have tab index to prevent its focusing when scrollbar clicked", function(assert) {
-    this.instance.option({
-        items: [1, 2, 3, 4, 5, 6],
-        opened: true,
-        value: null
+        this.instance.open();
+
+        const $list = $(this.instance.content()).find(".dx-list");
+
+        $list.on("mousedown", e => {
+            // note: you should not prevent pointerdown because it will prevent click on ios real devices
+            // you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+            assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
+        });
+
+        $list.trigger("mousedown");
     });
 
-    var $content = $(this.instance.content()),
-        $list = $content.find(".dx-list");
+    QUnit.test("list should not have tab index to prevent its focusing when scrollbar clicked", (assert) => {
+        this.instance.option({
+            items: [1, 2, 3, 4, 5, 6],
+            opened: true,
+            value: null
+        });
 
-    assert.notOk($list.attr("tabIndex"), "list have no tabindex");
-});
+        const $content = $(this.instance.content());
+        const $list = $content.find(".dx-list");
 
-QUnit.testInActiveWindow("popup hides on tab", function(assert) {
-    this.$input.focusin();
-    assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
-
-    this.instance.open();
-    this.keyboard.keyDown("tab");
-    assert.equal(this.instance.option("opened"), false, "popup is hidden");
-});
-
-QUnit.test("event should be a parameter for onValueChanged function after select an item via tab", function(assert) {
-    var valueChangedHandler = sinon.spy();
-
-    this.instance.option({
-        opened: true,
-        onValueChanged: valueChangedHandler
+        assert.notOk($list.attr("tabIndex"), "list have no tabindex");
     });
 
-    var $content = $(this.instance.content()),
-        list = $content.find(".dx-list").dxList("instance"),
-        $listItem = $content.find(LIST_ITEM_SELECTOR).eq(0);
+    QUnit.testInActiveWindow("popup hides on tab", (assert) => {
+        this.$input.focusin();
+        assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
 
-    list.option("focusedElement", $listItem);
-    this.keyboard.keyDown("tab");
+        this.instance.open();
+        this.keyboard.keyDown("tab");
+        assert.equal(this.instance.option("opened"), false, "popup is hidden");
+    });
 
-    assert.ok(valueChangedHandler.getCall(0).args[0].event, "event is defined");
-});
+    QUnit.test("event should be a parameter for onValueChanged function after select an item via tab", (assert) => {
+        const valueChangedHandler = sinon.spy();
 
-QUnit.test("No item should be chosen after pressing tab", function(assert) {
-    this.instance.option("opened", true);
+        this.instance.option({
+            opened: true,
+            onValueChanged: valueChangedHandler
+        });
 
-    this.$input.focusin();
-    this.keyboard.keyDown("tab");
+        const $content = $(this.instance.content());
+        const list = $content.find(".dx-list").dxList("instance");
+        const $listItem = $content.find(LIST_ITEM_SELECTOR).eq(0);
 
-    assert.equal(this.instance.option("value"), null, "value was set correctly");
-});
+        list.option("focusedElement", $listItem);
+        this.keyboard.keyDown("tab");
 
-QUnit.test("DropDownList does not crushed after pressing pageup, pagedown keys when list doesn't have focused item", function(assert) {
-    assert.expect(0);
+        assert.ok(valueChangedHandler.getCall(0).args[0].event, "event is defined");
+    });
 
-    this.instance.option("opened", true);
-    this.$input.focusin();
+    QUnit.test("No item should be chosen after pressing tab", (assert) => {
+        this.instance.option("opened", true);
 
-    try {
-        this.keyboard.keyDown("pagedown");
-        this.keyboard.keyDown("pageup");
-    } catch(e) {
-        assert.ok(false, "exception was threw");
-    }
-});
+        this.$input.focusin();
+        this.keyboard.keyDown("tab");
 
-QUnit.module("displayExpr", moduleConfig);
+        assert.equal(this.instance.option("value"), null, "value was set correctly");
+    });
 
-QUnit.test("displayExpr has item in argument", function(assert) {
-    var args = [];
+    QUnit.test("DropDownList does not crushed after pressing pageup, pagedown keys when list doesn't have focused item", (assert) => {
+        assert.expect(0);
 
-    var dataSource = [1, 2, 3];
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: dataSource,
-        deferRendering: false,
-        value: 2,
-        displayExpr: function(item) {
-            args.push(item);
+        this.instance.option("opened", true);
+        this.$input.focusin();
+
+        try {
+            this.keyboard.keyDown("pagedown");
+            this.keyboard.keyDown("pageup");
+        } catch(e) {
+            assert.ok(false, "exception was threw");
         }
     });
-
-    $dropDownList.dxDropDownList("option", "opened", true);
-    this.clock.tick();
-
-    assert.deepEqual(args, [2].concat(dataSource), "displayExpr args is correct");
 });
 
-QUnit.test("submit value should be equal to the displayExpr in case value is object and valueExpr isn't an object field", function(assert) {
-    const $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [{ text: "test" }],
-        deferRendering: false,
-        value: { text: "test" },
-        displayExpr: "text",
-        useHiddenSubmitElement: true
-    });
-    const $submitInput = $dropDownList.find("input[type='hidden']");
+QUnit.module("displayExpr", moduleConfig, () => {
+    QUnit.test("displayExpr has item in argument", (assert) => {
+        const args = [];
 
-    assert.equal($submitInput.val(), "test", "the submit value is correct");
-});
-
-QUnit.test("submit value should be equal to the primitive value type", function(assert) {
-    const $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: ["test"],
-        deferRendering: false,
-        value: "test",
-        displayExpr: (item) => {
-            if(item) {
-                return item + "123";
+        const dataSource = [1, 2, 3];
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource,
+            deferRendering: false,
+            value: 2,
+            displayExpr(item) {
+                args.push(item);
             }
-        },
-        useHiddenSubmitElement: true
+        });
+
+        $dropDownList.dxDropDownList("option", "opened", true);
+        this.clock.tick();
+
+        assert.deepEqual(args, [2].concat(dataSource), "displayExpr args is correct");
     });
-    const $submitInput = $dropDownList.find("input[type='hidden']");
 
-    assert.equal($submitInput.val(), "test", "the submit value is correct");
+    QUnit.test("submit value should be equal to the displayExpr in case value is object and valueExpr isn't an object field", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [{ text: "test" }],
+            deferRendering: false,
+            value: { text: "test" },
+            displayExpr: "text",
+            useHiddenSubmitElement: true
+        });
+        const $submitInput = $dropDownList.find("input[type='hidden']");
+
+        assert.equal($submitInput.val(), "test", "the submit value is correct");
+    });
+
+    QUnit.test("submit value should be equal to the primitive value type", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: ["test"],
+            deferRendering: false,
+            value: "test",
+            displayExpr: (item) => {
+                if(item) {
+                    return item + "123";
+                }
+            },
+            useHiddenSubmitElement: true
+        });
+        const $submitInput = $dropDownList.find("input[type='hidden']");
+
+        assert.equal($submitInput.val(), "test", "the submit value is correct");
+    });
 });
 
+QUnit.module("items & dataSource", moduleConfig, () => {
+    QUnit.test("default value is null", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList();
+        const instance = $dropDownList.dxDropDownList("instance");
 
-QUnit.module("items & dataSource", moduleConfig);
+        assert.strictEqual(instance.option("value"), null, "value is null on default");
+    });
 
-QUnit.test("default value is null", function(assert) {
-    var $dropDownList = $("#dropDownList").dxDropDownList(),
-        instance = $dropDownList.dxDropDownList("instance");
-
-    assert.strictEqual(instance.option("value"), null, "value is null on default");
-});
-
-QUnit.test("widget should render with empty items", function(assert) {
-    var $dropDownList = $("#dropDownList").dxDropDownList({
+    QUnit.test("widget should render with empty items", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
             items: null,
             opened: true
-        }),
-        instance = $dropDownList.dxDropDownList("instance");
+        });
 
-    assert.ok(instance, "widget was rendered");
-});
+        const instance = $dropDownList.dxDropDownList("instance");
 
-QUnit.test("items option contains items from dataSource after load", function(assert) {
-    var dataSource = [1, 2, 3];
-
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: dataSource,
-        deferRendering: false
+        assert.ok(instance, "widget was rendered");
     });
 
-    this.clock.tick();
-    assert.deepEqual($dropDownList.dxDropDownList("option", "items"), dataSource, "displayExpr args is correct");
-});
+    QUnit.test("items option contains items from dataSource after load", (assert) => {
+        const dataSource = [1, 2, 3];
 
-QUnit.test("all items", function(assert) {
-    var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        items: items,
-        opened: true
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource,
+            deferRendering: false
+        });
+
+        this.clock.tick();
+        assert.deepEqual($dropDownList.dxDropDownList("option", "items"), dataSource, "displayExpr args is correct");
     });
 
-    this.clock.tick();
-    assert.deepEqual($dropDownList.dxDropDownList("option", "items"), items, "rendered all items");
-});
+    QUnit.test("all items", (assert) => {
+        const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            items,
+            opened: true
+        });
 
-QUnit.test("widget should be openable if dataSource is null", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [1]
-    }).dxDropDownList("instance");
-
-    dropDownList.option("dataSource", null);
-    dropDownList.open();
-    assert.ok(true, "Widget works correctly");
-});
-
-QUnit.test("itemTemplate accepts template", function(assert) {
-    var $template = $("<div>").text("test");
-    $("#dropDownList").dxDropDownList({
-        items: [1],
-        displayExpr: 'this',
-        opened: true,
-        itemTemplate: new Template($template)
+        this.clock.tick();
+        assert.deepEqual($dropDownList.dxDropDownList("option", "items"), items, "rendered all items");
     });
 
-    this.clock.tick();
+    QUnit.test("calcNextItem private method should work", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1, 2, 3, 4],
+            opened: true,
+            value: 2
+        });
 
-    assert.equal($.trim($(".dx-list-item").text()), "test", "template rendered");
-});
+        const dropDownList = $dropDownList.dxDropDownList("instance");
 
-QUnit.test("contentReady action fires when dataSource loaded", function(assert) {
-    var contentReadyFired = 0;
-
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [1],
-        deferRendering: true,
-        onContentReady: function() {
-            contentReadyFired++;
-        }
+        assert.strictEqual(dropDownList._calcNextItem(1), 3, "step forward");
+        assert.strictEqual(dropDownList._calcNextItem(-1), 1, "step backward");
     });
 
-    assert.equal(contentReadyFired, 0, "no content ready before opening");
-    $dropDownList.dxDropDownList("open");
-    this.clock.tick();
+    QUnit.test("items private method should work", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1, 2, 3, 4],
+            opened: true,
+            value: 2
+        });
 
-    assert.equal(contentReadyFired, 1, "content ready fired when content is rendered");
+        const dropDownList = $dropDownList.dxDropDownList("instance");
 
-    $dropDownList.dxDropDownList("close");
-    $dropDownList.dxDropDownList("open");
-
-    assert.equal(contentReadyFired, 1, "content ready not fired when reopen dropdown");
-});
-
-QUnit.test("contentReady action fires when readOnly=true", function(assert) {
-    var contentReadyActionStub = sinon.stub();
-
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        readOnly: true,
-        dataSource: [1],
-        onContentReady: contentReadyActionStub,
-        deferRendering: true
+        assert.deepEqual(dropDownList._items(), [1, 2, 3, 4], "items are correct");
     });
 
-    $dropDownList.dxDropDownList("open");
+    QUnit.test("fitIntoRange private method should work", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1, 2, 3, 4],
+            opened: true,
+            value: 2
+        });
 
-    assert.ok(contentReadyActionStub.called, "content ready fired when content is rendered");
-});
+        const dropDownList = $dropDownList.dxDropDownList("instance");
 
-QUnit.test("contentReady action fires when disabled=true", function(assert) {
-    var contentReadyActionStub = sinon.stub();
-
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        disabled: true,
-        dataSource: [1],
-        onContentReady: contentReadyActionStub,
-        deferRendering: true
+        assert.deepEqual(dropDownList._fitIntoRange(1, 2, 4), 4, "smaller than min");
+        assert.deepEqual(dropDownList._fitIntoRange(3, 2, 4), 3, "in range");
+        assert.deepEqual(dropDownList._fitIntoRange(5, 2, 4), 2, "larger than max");
     });
 
-    $dropDownList.dxDropDownList("open");
+    QUnit.test("getSelectedIndex private method should work", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            opened: true,
+            valueExpr: "id",
+            value: 2
+        });
 
-    assert.ok(contentReadyActionStub.called, "content ready fired when content is rendered");
-});
+        const dropDownList = $dropDownList.dxDropDownList("instance");
 
-QUnit.test("dataSource with Guid key", function(assert) {
-    var guidKey1 = "bd330029-8106-6d2d-5371-f27325155e99";
-    var dataSource = new DataSource({
-        load: function() {
-            return [{ key: new Guid(guidKey1), value: "one" }];
-        },
-        byKey: function(key, extra) {
-            return { key: new Guid(guidKey1), value: "one" };
-        },
-
-        key: "key",
-        keyType: "Guid"
+        assert.deepEqual(dropDownList._getSelectedIndex(), 1, "index is correct");
     });
 
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: dataSource,
-        value: { key: new Guid(guidKey1), value: "one" },
-        valueExpr: "this",
-        displayExpr: "value"
+    QUnit.test("widget should be openable if dataSource is null", assert => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1]
+        }).dxDropDownList("instance");
+
+        dropDownList.option("dataSource", null);
+        dropDownList.open();
+        assert.ok(true, "Widget works correctly");
     });
 
-    assert.equal($dropDownList.dxDropDownList("option", "text"), "one", "value displayed");
-});
+    QUnit.test("itemTemplate accepts template", (assert) => {
+        const $template = $("<div>").text("test");
+        $("#dropDownList").dxDropDownList({
+            items: [1],
+            displayExpr: 'this',
+            opened: true,
+            itemTemplate: new Template($template)
+        });
 
-QUnit.test("set item when key is 0", function(assert) {
-    var data = [{ key: 0, value: "one" }];
-    var store = new CustomStore({
-        load: function() {
-            return data;
-        },
-        byKey: function(key) {
-            return key === data[0].key
-                ? data[0]
-                : null;
-        },
-        key: "key"
+        this.clock.tick();
+
+        assert.equal($.trim($(".dx-list-item").text()), "test", "template rendered");
     });
 
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        displayExpr: "value",
-        valueExpr: "this",
-        dataSource: store
+    QUnit.test("contentReady action fires when dataSource loaded", (assert) => {
+        let contentReadyFired = 0;
+
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1],
+            deferRendering: true,
+            onContentReady() {
+                contentReadyFired++;
+            }
+        });
+
+        assert.equal(contentReadyFired, 0, "no content ready before opening");
+        $dropDownList.dxDropDownList("open");
+        this.clock.tick();
+
+        assert.equal(contentReadyFired, 1, "content ready fired when content is rendered");
+
+        $dropDownList.dxDropDownList("close");
+        $dropDownList.dxDropDownList("open");
+
+        assert.equal(contentReadyFired, 1, "content ready not fired when reopen dropdown");
     });
 
-    var dropDownList = $dropDownList.dxDropDownList("instance");
-    dropDownList.option("value", { key: 0, value: "one" });
+    QUnit.test("contentReady action fires when readOnly=true", assert => {
+        const contentReadyActionStub = sinon.stub();
 
-    this.clock.tick();
-    var $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
-    assert.equal($input.val(), "one", "item displayed");
-});
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            readOnly: true,
+            dataSource: [1],
+            onContentReady: contentReadyActionStub,
+            deferRendering: true
+        });
 
-QUnit.test("composite keys should be supported (T431267)", function(assert) {
-    var data = [
+        $dropDownList.dxDropDownList("open");
+
+        assert.ok(contentReadyActionStub.called, "content ready fired when content is rendered");
+    });
+
+    QUnit.test("contentReady action fires when disabled=true", assert => {
+        const contentReadyActionStub = sinon.stub();
+
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            disabled: true,
+            dataSource: [1],
+            onContentReady: contentReadyActionStub,
+            deferRendering: true
+        });
+
+        $dropDownList.dxDropDownList("open");
+
+        assert.ok(contentReadyActionStub.called, "content ready fired when content is rendered");
+    });
+
+    QUnit.test("dataSource with Guid key", assert => {
+        const guidKey1 = "bd330029-8106-6d2d-5371-f27325155e99";
+        const dataSource = new DataSource({
+            load() {
+                return [{ key: new Guid(guidKey1), value: "one" }];
+            },
+            byKey(key, extra) {
+                return { key: new Guid(guidKey1), value: "one" };
+            },
+
+            key: "key",
+            keyType: "Guid"
+        });
+
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource,
+            value: { key: new Guid(guidKey1), value: "one" },
+            valueExpr: "this",
+            displayExpr: "value"
+        });
+
+        assert.equal($dropDownList.dxDropDownList("option", "text"), "one", "value displayed");
+    });
+
+    QUnit.test("set item when key is 0", (assert) => {
+        const data = [{ key: 0, value: "one" }];
+        const store = new CustomStore({
+            load() {
+                return data;
+            },
+            byKey(key) {
+                return key === data[0].key
+                    ? data[0]
+                    : null;
+            },
+            key: "key"
+        });
+
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            displayExpr: "value",
+            valueExpr: "this",
+            dataSource: store
+        });
+
+        const dropDownList = $dropDownList.dxDropDownList("instance");
+        dropDownList.option("value", { key: 0, value: "one" });
+
+        this.clock.tick();
+        const $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
+        assert.equal($input.val(), "one", "item displayed");
+    });
+
+    QUnit.test("composite keys should be supported (T431267)", assert => {
+        const data = [
             { a: 1, b: 1, value: "one" },
             { a: 1, b: 2, value: "two" }
-        ],
-        dropDownList = $("#dropDownList").dxDropDownList({
+        ];
+
+        const dropDownList = $("#dropDownList").dxDropDownList({
             dataSource: new CustomStore({
-                load: function() {
+                load() {
                     return data;
                 },
-                byKey: function(key) {
-                    return data.reduce(function(_, current) {
+                byKey(key) {
+                    return data.reduce((_, current) => {
                         if(current.a === key.a && current.b === key.b) {
                             return current;
                         }
@@ -499,829 +548,839 @@ QUnit.test("composite keys should be supported (T431267)", function(assert) {
             })
         }).dxDropDownList("instance");
 
-    dropDownList.option("value", data[1]);
-    assert.deepEqual(dropDownList.option("selectedItem"), data[1], "the selected item is set correctly");
-});
-
-QUnit.test("T321572: dxSelectBox - Use clear button with custom store leads to duplicate items", function(assert) {
-    var productSample = [{
-        "ID": 1,
-        "Name": "HD Video Player"
-    }, {
-        "ID": 2,
-        "Name": "SuperHD Player"
-    }, {
-        "ID": 3,
-        "Name": "SuperPlasma 50"
-    }, {
-        "ID": 4,
-        "Name": "SuperLED 50"
-    }, {
-        "ID": 5,
-        "Name": "SuperLED 42"
-    }, {
-        "ID": 6,
-        "Name": "SuperLCD 55"
-    }, {
-        "ID": 7,
-        "Name": "SuperLCD 42"
-    }, {
-        "ID": 8,
-        "Name": "SuperPlasma 65"
-    }, {
-        "ID": 9,
-        "Name": "SuperLCD 70"
-    }];
-
-    var $element = $("#dropDownList").dxDropDownList({
-        displayExpr: "Name",
-        valueExpr: "ID",
-        dataSource: new DataSource({
-            store: new CustomStore({
-                key: "ID",
-                byKey: noop,
-                load: function(options) {
-                    return productSample.slice(options.skip, options.skip + options.take);
-                },
-                pageSize: 5
-            })
-        }),
-        placeholder: "Choose Product",
-        showClearButton: true,
-        opened: true
+        dropDownList.option("value", data[1]);
+        assert.deepEqual(dropDownList.option("selectedItem"), data[1], "the selected item is set correctly");
     });
 
-    var scrollView = $(".dx-scrollview").dxScrollView("instance");
+    QUnit.test("T321572: dxSelectBox - Use clear button with custom store leads to duplicate items", assert => {
+        const productSample = [{
+            "ID": 1,
+            "Name": "HD Video Player"
+        }, {
+            "ID": 2,
+            "Name": "SuperHD Player"
+        }, {
+            "ID": 3,
+            "Name": "SuperPlasma 50"
+        }, {
+            "ID": 4,
+            "Name": "SuperLED 50"
+        }, {
+            "ID": 5,
+            "Name": "SuperLED 42"
+        }, {
+            "ID": 6,
+            "Name": "SuperLCD 55"
+        }, {
+            "ID": 7,
+            "Name": "SuperLCD 42"
+        }, {
+            "ID": 8,
+            "Name": "SuperPlasma 65"
+        }, {
+            "ID": 9,
+            "Name": "SuperLCD 70"
+        }];
 
-    scrollView.scrollToElement($(".dx-list-item").last());
-    scrollView.scrollToElement($(".dx-list-item").last());
+        const $element = $("#dropDownList").dxDropDownList({
+            displayExpr: "Name",
+            valueExpr: "ID",
+            dataSource: new DataSource({
+                store: new CustomStore({
+                    key: "ID",
+                    byKey: noop,
+                    load(options) {
+                        return productSample.slice(options.skip, options.skip + options.take);
+                    },
+                    pageSize: 5
+                })
+            }),
+            placeholder: "Choose Product",
+            showClearButton: true,
+            opened: true
+        });
 
-    var dataSource = $element.dxDropDownList("option", "dataSource");
+        const scrollView = $(".dx-scrollview").dxScrollView("instance");
 
-    assert.ok(dataSource.isLastPage(), "last page is loaded");
+        scrollView.scrollToElement($(".dx-list-item").last());
+        scrollView.scrollToElement($(".dx-list-item").last());
 
-    $(".dx-list-item").last().trigger("dxclick");
-    $($element.find(".dx-clear-button-area")).trigger("dxclick");
+        const dataSource = $element.dxDropDownList("option", "dataSource");
 
-    assert.ok(dataSource.isLastPage(), "last page is not changed");
-});
+        assert.ok(dataSource.isLastPage(), "last page is loaded");
 
-QUnit.test("items value should be escaped", function(assert) {
-    var $element = $("#dropDownList").dxDropDownList({
-        dataSource: [{
-            "CustId": -1,
-            "Customer": "<None>"
-        }],
-        displayExpr: 'Customer',
-        valueExpr: 'CustId'
+        $(".dx-list-item").last().trigger("dxclick");
+        $($element.find(".dx-clear-button-area")).trigger("dxclick");
+
+        assert.ok(dataSource.isLastPage(), "last page is not changed");
     });
 
-    var instance = $element.dxDropDownList("instance");
-    instance.option("opened", true);
+    QUnit.test("items value should be escaped", assert => {
+        const $element = $("#dropDownList").dxDropDownList({
+            dataSource: [{
+                "CustId": -1,
+                "Customer": "<None>"
+            }],
+            displayExpr: 'Customer',
+            valueExpr: 'CustId'
+        });
 
-    assert.equal($.trim($(".dx-list-item").text()), "<None>", "template rendered");
-});
+        const instance = $element.dxDropDownList("instance");
+        instance.option("opened", true);
 
-QUnit.test("searchTimeout should be refreshed after next symbol entered", function(assert) {
-    var loadHandler = sinon.spy(),
-        $element = $("#dropDownList").dxDropDownList({
+        assert.equal($.trim($(".dx-list-item").text()), "<None>", "template rendered");
+    });
+
+    QUnit.test("searchTimeout should be refreshed after next symbol entered", (assert) => {
+        const loadHandler = sinon.spy();
+
+        const $element = $("#dropDownList").dxDropDownList({
             searchEnabled: true,
             dataSource: new CustomStore({
                 load: loadHandler,
                 byKey: noop
             }),
             searchTimeout: 100
-        }),
-        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
-        kb = keyboardMock($input);
+        });
 
-    kb.type("1");
-    this.clock.tick(100);
-    assert.equal(loadHandler.callCount, 1, "dataSource loaded after search timeout");
+        const $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+        const kb = keyboardMock($input);
 
-    kb.type("2");
-    this.clock.tick(60);
-    kb.type("3");
-    this.clock.tick(60);
-    assert.equal(loadHandler.callCount, 1, "new time should start when new character is entered. DataSource should not load again");
+        kb.type("1");
+        this.clock.tick(100);
+        assert.equal(loadHandler.callCount, 1, "dataSource loaded after search timeout");
 
-    this.clock.tick(40);
-    assert.equal(loadHandler.callCount, 2, "dataSource loaded when full time is over after last input character");
-});
+        kb.type("2");
+        this.clock.tick(60);
+        kb.type("3");
+        this.clock.tick(60);
+        assert.equal(loadHandler.callCount, 1, "new time should start when new character is entered. DataSource should not load again");
 
-QUnit.test("dropDownList should search for a pasted value", function(assert) {
-    var $element = $("#dropDownList").dxDropDownList({
+        this.clock.tick(40);
+        assert.equal(loadHandler.callCount, 2, "dataSource loaded when full time is over after last input character");
+    });
+
+    QUnit.test("dropDownList should search for a pasted value", (assert) => {
+        const $element = $("#dropDownList").dxDropDownList({
             searchEnabled: true,
             dataSource: ["1", "2", "3"]
-        }),
-        instance = $element.dxDropDownList("instance"),
-        searchSpy = sinon.spy(instance, "_searchDataSource"),
-        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
-        kb = keyboardMock($input);
+        });
 
-    kb.input("2");
-    this.clock.tick(600);
+        const instance = $element.dxDropDownList("instance");
+        const searchSpy = sinon.spy(instance, "_searchDataSource");
+        const $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+        const kb = keyboardMock($input);
 
-    assert.equal(searchSpy.callCount, 1, "widget searched for a suitable values");
-});
+        kb.input("2");
+        this.clock.tick(600);
 
-QUnit.test("dropDownList should search in grouped DataSource", function(assert) {
-    var $element = $("#dropDownList").dxDropDownList({
+        assert.equal(searchSpy.callCount, 1, "widget searched for a suitable values");
+    });
+
+    QUnit.test("dropDownList should search in grouped DataSource", (assert) => {
+        const $element = $("#dropDownList").dxDropDownList({
             grouped: true,
             searchEnabled: true,
             valueExpr: "name",
             displayExpr: "name",
             searchExpr: "name",
             dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }]
-        }),
-        instance = $element.dxDropDownList("instance"),
-        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
-        kb = keyboardMock($input),
-        expectedValue = { key: "b", items: [{ name: "2", key: "b" }] };
+        });
 
-    kb.type("2");
-    this.clock.tick(500);
+        const instance = $element.dxDropDownList("instance");
+        const $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+        const kb = keyboardMock($input);
+        const expectedValue = { key: "b", items: [{ name: "2", key: "b" }] };
 
-    assert.deepEqual(instance.option("items")[0], expectedValue, "widget searched for a suitable values");
-});
+        kb.type("2");
+        this.clock.tick(500);
 
-QUnit.test("valueExpr should not be passed to the list if it is 'this'", function(assert) {
-    // note: selection can not work with this and function as keyExpr.
-    // Allowing of this breaks the case when store key is specified and deferred datasource is used
-    $("#dropDownList").dxDropDownList({
-        dataSource: [{ id: 1, text: "Item 1" }],
-        displayExpr: 'text',
-        valueExpr: 'this',
-        opened: true
+        assert.deepEqual(instance.option("items")[0], expectedValue, "widget searched for a suitable values");
     });
 
-    var list = $(".dx-list").dxList("instance");
+    QUnit.test("valueExpr should not be passed to the list if it is 'this'", assert => {
+        // note: selection can not work with this and function as keyExpr.
+        // Allowing of this breaks the case when store key is specified and deferred datasource is used
+        $("#dropDownList").dxDropDownList({
+            dataSource: [{ id: 1, text: "Item 1" }],
+            displayExpr: 'text',
+            valueExpr: 'this',
+            opened: true
+        });
 
-    assert.equal(list.option("keyExpr"), null, "keyExpr is correct");
-});
+        const list = $(".dx-list").dxList("instance");
 
-QUnit.test("valueExpr should be passed to the list's keyExpr option", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [{ id: 1, text: "Item 1" }],
-        displayExpr: 'text',
-        valueExpr: "id",
-        opened: true
-    }).dxDropDownList("instance");
-
-    var list = $(".dx-list").dxList("instance");
-
-    assert.equal(list.option("keyExpr"), "id", "keyExpr should be passed on init");
-
-    dropDownList.option("valueExpr", "this");
-    assert.equal(list.option("keyExpr"), null, "keyExpr should be cleared when valueExpr was changed to 'this'");
-
-    dropDownList.option("valueExpr", "text");
-    assert.equal(list.option("keyExpr"), "text", "keyExpr should be passed on optionChanged");
-});
-
-QUnit.test("value option should be case-sensitive", function(assert) {
-    var $element = $("#dropDownList").dxDropDownList({
-        dataSource: [{ text: "first" }, { text: "First" }],
-        displayExpr: "text",
-        valueExpr: "text"
+        assert.equal(list.option("keyExpr"), null, "keyExpr is correct");
     });
 
-    var instance = $element.dxDropDownList("instance");
-    var $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+    QUnit.test("valueExpr should be passed to the list's keyExpr option", assert => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [{ id: 1, text: "Item 1" }],
+            displayExpr: 'text',
+            valueExpr: "id",
+            opened: true
+        }).dxDropDownList("instance");
 
-    assert.equal($input.val(), "");
+        const list = $(".dx-list").dxList("instance");
 
-    instance.option("value", "First");
-    assert.equal($input.val(), "First");
-});
+        assert.equal(list.option("keyExpr"), "id", "keyExpr should be passed on init");
 
-QUnit.test("set items on init when items of a data source are loaded", function(assert) {
-    var arrayStore = new ArrayStore({
+        dropDownList.option("valueExpr", "this");
+        assert.equal(list.option("keyExpr"), null, "keyExpr should be cleared when valueExpr was changed to 'this'");
+
+        dropDownList.option("valueExpr", "text");
+        assert.equal(list.option("keyExpr"), "text", "keyExpr should be passed on optionChanged");
+    });
+
+    QUnit.test("value option should be case-sensitive", assert => {
+        const $element = $("#dropDownList").dxDropDownList({
+            dataSource: [{ text: "first" }, { text: "First" }],
+            displayExpr: "text",
+            valueExpr: "text"
+        });
+
+        const instance = $element.dxDropDownList("instance");
+        const $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+
+        assert.equal($input.val(), "");
+
+        instance.option("value", "First");
+        assert.equal($input.val(), "First");
+    });
+
+    QUnit.test("set items on init when items of a data source are loaded", assert => {
+        const arrayStore = new ArrayStore({
             data: [{ id: 1, text: "first" }, { id: 2, text: "second" }],
             key: "id"
-        }),
-        customStore = new CustomStore({
-            load: function(options) {
+        });
+
+        const customStore = new CustomStore({
+            load(options) {
                 return arrayStore.load(options);
             },
 
-            byKey: function(key) {
+            byKey(key) {
                 return arrayStore.byKey(key);
             },
 
             key: "id"
-        }),
-        dataSource = new DataSource({
+        });
+
+        const dataSource = new DataSource({
             store: customStore
         });
 
-    var createDropDownList = function() {
-        return $("<div/>")
-            .appendTo($("#dropDownList"))
-            .dxDropDownList({
-                dataSource: dataSource,
-                displayExpr: "text",
-                valueExpr: "id",
-                opened: true,
-                value: 1
-            }).dxDropDownList("instance");
-    };
+        const createDropDownList = () => {
+            return $("<div/>")
+                .appendTo($("#dropDownList"))
+                .dxDropDownList({
+                    dataSource,
+                    displayExpr: "text",
+                    valueExpr: "id",
+                    opened: true,
+                    value: 1
+                }).dxDropDownList("instance");
+        };
 
-    createDropDownList();
-    $("#dropDownList").empty();
+        createDropDownList();
+        $("#dropDownList").empty();
 
-    var spy = sinon.spy(customStore, "byKey"),
-        instance = createDropDownList(),
-        $listItem = $(instance._$list.find(LIST_ITEM_SELECTOR).eq(1));
+        const spy = sinon.spy(customStore, "byKey");
+        const instance = createDropDownList();
+        const $listItem = $(instance._$list.find(LIST_ITEM_SELECTOR).eq(1));
 
-    $listItem.trigger("dxclick");
+        $listItem.trigger("dxclick");
 
-    assert.equal(spy.callCount, 0, "byKey is not called when items are loaded");
+        assert.equal(spy.callCount, 0, "byKey is not called when items are loaded");
+    });
 });
 
-QUnit.module("selectedItem", moduleConfig);
+QUnit.module("selectedItem", moduleConfig, () => {
+    QUnit.test("selectedItem", (assert) => {
+        const items = [
+            { key: 1, value: "one" },
+            { key: 2, value: "two" }
+        ];
 
-QUnit.test("selectedItem", function(assert) {
-    var items = [
-        { key: 1, value: "one" },
-        { key: 2, value: "two" }
-    ];
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            items,
+            valueExpr: "key",
+            opened: true,
+            value: 1
+        }).dxDropDownList("instance");
 
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        items: items,
-        valueExpr: "key",
-        opened: true,
-        value: 1
-    }).dxDropDownList("instance");
+        this.clock.tick();
 
-    this.clock.tick();
-
-    assert.deepEqual(dropDownList.option("selectedItem"), items[0], "selected item");
-});
-
-QUnit.test("selectedItem and value should be reset on loading new items", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        items: [1, 2, 3, 4],
-        value: 1,
-        selectedItem: 1
-    }).dxDropDownList("instance");
-
-    this.clock.tick();
-
-    dropDownList.option("items", ["a", "b", "s", "d"]);
-    this.clock.tick();
-
-    assert.strictEqual(dropDownList.option("value"), 1, "value is unchanged");
-    assert.strictEqual(dropDownList.option("selectedItem"), null, "selected item was reset");
-});
-
-QUnit.test("selectedItem and value should be reset on loading new dataSource", function(assert) {
-
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: ["1", "2", "3", "4"],
-        value: "1",
-        selectedItem: "1"
-    }).dxDropDownList("instance");
-
-    this.clock.tick();
-
-    dropDownList.option("dataSource", ["a", "b", "s", "d"]);
-    this.clock.tick();
-
-    assert.strictEqual(dropDownList.option("value"), "1", "value is unchanged");
-    assert.strictEqual(dropDownList.option("selectedItem"), null, "selected item was reset");
-});
-
-QUnit.test("selectedItem and value should not be reset on loading new dataSource, if the same element is contained in new dataSource", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [],
-        value: 2,
-        selectedItem: 2
-    }).dxDropDownList("instance");
-
-    this.clock.tick();
-
-    dropDownList.option("dataSource", [5, 2, 6, 7]);
-    this.clock.tick();
-
-    assert.strictEqual(dropDownList.option("value"), 2, "value is correct");
-    assert.strictEqual(dropDownList.option("selectedItem"), 2, "selected item was not reset");
-});
-
-QUnit.test("'null' value processed correctly", function(assert) {
-    var store = new ArrayStore({
-        key: "k",
-        data: [
-            { k: 1, v: "a" },
-            { k: 2, v: "b" }
-        ]
+        assert.deepEqual(dropDownList.option("selectedItem"), items[0], "selected item");
     });
 
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [0, 2, 3, 4],
-        value: 0,
-        selectedItem: 0
-    }).dxDropDownList("instance");
+    QUnit.test("selectedItem and value should be reset on loading new items", (assert) => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            items: [1, 2, 3, 4],
+            value: 1,
+            selectedItem: 1
+        }).dxDropDownList("instance");
 
-    try {
-        dropDownList.option("dataSource", store);
+        this.clock.tick();
 
-        assert.strictEqual(dropDownList.option("value"), 0, "value is unchanged");
-        assert.strictEqual(dropDownList.option("selectedItem"), null, "selectedItem is null");
-    } catch(e) {
-        assert.ok(false, "value was unwrapped incorrectly");
-    }
+        dropDownList.option("items", ["a", "b", "s", "d"]);
+        this.clock.tick();
 
-});
+        assert.strictEqual(dropDownList.option("value"), 1, "value is unchanged");
+        assert.strictEqual(dropDownList.option("selectedItem"), null, "selected item was reset");
+    });
 
-QUnit.test("onSelectionChanged args should provide selectedItem (T193115)", function(assert) {
-    assert.expect(2);
+    QUnit.test("selectedItem and value should be reset on loading new dataSource", (assert) => {
 
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: {
-            load: function() {
-                return [1, 2, 3, 4, 5];
-            },
-            byKey: function(key) {
-                var deferred = $.Deferred();
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: ["1", "2", "3", "4"],
+            value: "1",
+            selectedItem: "1"
+        }).dxDropDownList("instance");
 
-                setTimeout(function() {
-                    deferred.resolve(key);
-                });
+        this.clock.tick();
 
-                return deferred.promise();
-            }
-        },
-        value: 2,
-        onSelectionChanged: function(e) {
-            assert.ok(Object.prototype.hasOwnProperty.call(e, "selectedItem"), "onSelectionChanged fired on creation when selectedItem is loaded");
+        dropDownList.option("dataSource", ["a", "b", "s", "d"]);
+        this.clock.tick();
+
+        assert.strictEqual(dropDownList.option("value"), "1", "value is unchanged");
+        assert.strictEqual(dropDownList.option("selectedItem"), null, "selected item was reset");
+    });
+
+    QUnit.test("selectedItem and value should not be reset on loading new dataSource, if the same element is contained in new dataSource", (assert) => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [],
+            value: 2,
+            selectedItem: 2
+        }).dxDropDownList("instance");
+
+        this.clock.tick();
+
+        dropDownList.option("dataSource", [5, 2, 6, 7]);
+        this.clock.tick();
+
+        assert.strictEqual(dropDownList.option("value"), 2, "value is correct");
+        assert.strictEqual(dropDownList.option("selectedItem"), 2, "selected item was not reset");
+    });
+
+    QUnit.test("'null' value processed correctly", assert => {
+        const store = new ArrayStore({
+            key: "k",
+            data: [
+                { k: 1, v: "a" },
+                { k: 2, v: "b" }
+            ]
+        });
+
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [0, 2, 3, 4],
+            value: 0,
+            selectedItem: 0
+        }).dxDropDownList("instance");
+
+        try {
+            dropDownList.option("dataSource", store);
+
+            assert.strictEqual(dropDownList.option("value"), 0, "value is unchanged");
+            assert.strictEqual(dropDownList.option("selectedItem"), null, "selectedItem is null");
+        } catch(e) {
+            assert.ok(false, "value was unwrapped incorrectly");
         }
+
     });
 
-    this.clock.tick();
+    QUnit.test("onSelectionChanged args should provide selectedItem (T193115)", (assert) => {
+        assert.expect(2);
 
-    $dropDownList.dxDropDownList("option", "onSelectionChanged", function(e) {
-        assert.equal(e.selectedItem, 1, "selectedItem provided in onValueChanged");
-    });
-
-    $dropDownList.dxDropDownList("option", "value", 1);
-
-    this.clock.tick();
-});
-
-QUnit.test("selectedItem should be chosen synchronously if item is already loaded", function(assert) {
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: {
-            store: new CustomStore({
-                load: function(options) {
-                    var result = [];
-                    for(var i = options.skip; i < options.take; i++) {
-                        result.push(i);
-                    }
-                    return result;
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: {
+                load() {
+                    return [1, 2, 3, 4, 5];
                 },
-                byKey: function(key) {
-                    assert.ok(false, "dataSource.byKey should not be called to fetch selected item");
-                }
-            }),
-            pageSize: 1,
-            paginate: true
-        },
-        opened: true
-    });
+                byKey(key) {
+                    const deferred = $.Deferred();
 
-    this.clock.tick();
+                    setTimeout(() => {
+                        deferred.resolve(key);
+                    });
 
-    $(".dx-list").dxList("_loadNextPage");
-
-    this.clock.tick();
-
-    $dropDownList.dxDropDownList("option", "value", 0);
-
-    assert.equal($dropDownList.dxDropDownList("option", "selectedItem"), 0, "selectedItem is fetched");
-});
-
-QUnit.test("selectedItem should be chosen correctly if deferRendering = false and dataSource is async", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: {
-            store: new CustomStore({
-                load: function(options) {
-                    var deferred = $.Deferred();
-                    setTimeout(function() {
-                        deferred.resolve([1, 2, 3, 4, 5, 6, 7]);
-                    }, 100);
                     return deferred.promise();
-                },
-                byKey: function(key) {
-                    var res = $.Deferred();
-                    setTimeout(function() { res.resolve(key); }, 10);
-                    return res.promise();
                 }
-            }),
-        },
-        opened: false,
-        value: 1,
-        deferRendering: false
-    }).dxDropDownList("instance");
+            },
+            value: 2,
+            onSelectionChanged(e) {
+                assert.ok(Object.prototype.hasOwnProperty.call(e, "selectedItem"), "onSelectionChanged fired on creation when selectedItem is loaded");
+            }
+        });
 
-    dropDownList.option("opened", true);
-    this.clock.tick(1000);
+        this.clock.tick();
 
-    assert.equal(dropDownList._list.option("selectedItem"), 1, "selectedItem is correct");
-});
+        $dropDownList.dxDropDownList("option", "onSelectionChanged", e => {
+            assert.equal(e.selectedItem, 1, "selectedItem provided in onValueChanged");
+        });
 
-QUnit.test("reset()", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [1, 2, 3, 4],
-        value: 2,
-        selectedItem: 2
-    }).dxDropDownList("instance");
+        $dropDownList.dxDropDownList("option", "value", 1);
 
-    // act
-    dropDownList.reset();
-    // assert
-    assert.strictEqual(dropDownList.option("value"), null, "Value should be reset");
-    assert.strictEqual(dropDownList.option("selectedItem"), null, "Value should be reset");
-});
-
-QUnit.test("onSelectionChanged action should not be fired when selectedItem was not changed", function(assert) {
-    var selectionChangedHandler = sinon.spy();
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: [],
-        value: "unknown value",
-        valueExpr: 'id',
-        displayExpr: 'name',
-        acceptCustomValue: true,
-        onSelectionChanged: selectionChangedHandler
-    }).dxDropDownList("instance");
-
-    dropDownList.option("dataSource", [{ id: 0, name: "zero" }, { id: 1, name: "one" }]);
-
-    assert.strictEqual(selectionChangedHandler.callCount, 0, "selectionChanged action was not fired");
-});
-
-
-QUnit.module("popup", moduleConfig);
-
-QUnit.test("popup max height should fit in the window", function(assert) {
-    var items = ["item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3",
-        "item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3",
-        "item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3",
-        "item 1", "item 2", "item 3", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3"];
-
-    $("#dropDownList").dxDropDownList({
-        items: items,
-        opened: true
-    }).dxDropDownList("instance");
-
-    assert.ok($('.dx-overlay-content').height() <= Math.ceil($(window).height() * 0.5));
-});
-
-QUnit.test("skip gesture event class attach only when popup is opened", function(assert) {
-    var SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event";
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        items: [1, 2, 3]
+        this.clock.tick();
     });
 
-    assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, "skip gesture event class was not added when popup is closed");
+    QUnit.test("selectedItem should be chosen synchronously if item is already loaded", (assert) => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: {
+                store: new CustomStore({
+                    load(options) {
+                        const result = [];
+                        for(let i = options.skip; i < options.take; i++) {
+                            result.push(i);
+                        }
+                        return result;
+                    },
+                    byKey(key) {
+                        assert.ok(false, "dataSource.byKey should not be called to fetch selected item");
+                    }
+                }),
+                pageSize: 1,
+                paginate: true
+            },
+            opened: true
+        });
 
-    $dropDownList.dxDropDownList("option", "opened", true);
-    assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), true, "skip gesture event class was added after popup was opened");
+        this.clock.tick();
 
-    $dropDownList.dxDropDownList("option", "opened", false);
-    assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, "skip gesture event class was removed after popup was closed");
-});
+        $(".dx-list").dxList("_loadNextPage");
 
-QUnit.test("After load new page scrollTop should not be changed", function(assert) {
-    this.clock.restore();
+        this.clock.tick();
 
-    var data = [],
-        done = assert.async();
+        $dropDownList.dxDropDownList("option", "value", 0);
 
-    for(var i = 100; i >= 0; i--) {
-        data.push(i);
-    }
-
-    $("#qunit-fixture")
-        .css("left", 0)
-        .css("top", 0);
-
-    $("#dropDownList").dxDropDownList({
-        searchEnabled: true,
-        dataSource: {
-            store: new ArrayStore(data),
-            paginate: true,
-            pageSize: 40
-        },
-        opened: true,
-        searchTimeout: 0,
-        width: 200
+        assert.equal($dropDownList.dxDropDownList("option", "selectedItem"), 0, "selectedItem is fetched");
     });
 
-    var listInstance = $(".dx-list").dxList("instance");
+    QUnit.test("selectedItem should be chosen correctly if deferRendering = false and dataSource is async", (assert) => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: {
+                store: new CustomStore({
+                    load(options) {
+                        const deferred = $.Deferred();
+                        setTimeout(() => {
+                            deferred.resolve([1, 2, 3, 4, 5, 6, 7]);
+                        }, 100);
+                        return deferred.promise();
+                    },
+                    byKey(key) {
+                        const res = $.Deferred();
+                        setTimeout(() => {
+                            res.resolve(key);
+                        }, 10);
+                        return res.promise();
+                    }
+                }),
+            },
+            opened: false,
+            value: 1,
+            deferRendering: false
+        }).dxDropDownList("instance");
 
-    listInstance.option("pageLoadMode", "scrollBottom");
-    listInstance.option("useNativeScrolling", "true");
-    listInstance.option("useNative", "true");
+        dropDownList.option("opened", true);
+        this.clock.tick(1000);
 
-    listInstance.scrollTo(1000);
-    var scrollTop = listInstance.scrollTop();
+        assert.equal(dropDownList._list.option("selectedItem"), 1, "selectedItem is correct");
+    });
 
-    setTimeout(function() {
-        assert.ok(listInstance.scrollTop() === scrollTop, "scrollTop is correctly after new page load");
-        done();
+    QUnit.test("reset()", assert => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [1, 2, 3, 4],
+            value: 2,
+            selectedItem: 2
+        }).dxDropDownList("instance");
+
+        // act
+        dropDownList.reset();
+        // assert
+        assert.strictEqual(dropDownList.option("value"), null, "Value should be reset");
+        assert.strictEqual(dropDownList.option("selectedItem"), null, "Value should be reset");
+    });
+
+    QUnit.test("onSelectionChanged action should not be fired when selectedItem was not changed", assert => {
+        const selectionChangedHandler = sinon.spy();
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: [],
+            value: "unknown value",
+            valueExpr: 'id',
+            displayExpr: 'name',
+            acceptCustomValue: true,
+            onSelectionChanged: selectionChangedHandler
+        }).dxDropDownList("instance");
+
+        dropDownList.option("dataSource", [{ id: 0, name: "zero" }, { id: 1, name: "one" }]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 0, "selectionChanged action was not fired");
     });
 });
 
-QUnit.testInActiveWindow("After search and load new page scrollTop should not be changed", function(assert) {
-    if(browser.msie) {
-        assert.ok(true, "test does not actual for IE");
-        return;
-    }
+QUnit.module("popup", moduleConfig, () => {
+    QUnit.test("popup max height should fit in the window", assert => {
+        const items = ["item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3",
+            "item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3",
+            "item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3",
+            "item 1", "item 2", "item 3", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3"];
 
-    this.clock.restore();
+        $("#dropDownList").dxDropDownList({
+            items,
+            opened: true
+        }).dxDropDownList("instance");
 
-    var data = [],
-        done = assert.async();
-
-    for(var i = 100; i >= 0; i--) {
-        data.push(i);
-    }
-
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        searchEnabled: true,
-        dataSource: {
-            store: new ArrayStore(data),
-            paginate: true,
-            pageSize: 40
-        },
-        searchTimeout: 0
+        assert.ok($('.dx-overlay-content').height() <= Math.ceil($(window).height() * 0.5));
     });
 
-    $dropDownList.dxDropDownList("instance").open();
+    QUnit.test("skip gesture event class attach only when popup is opened", assert => {
+        const SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event";
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            items: [1, 2, 3]
+        });
 
-    var listInstance = $(".dx-list").dxList("instance");
+        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, "skip gesture event class was not added when popup is closed");
 
-    listInstance.option("pageLoadMode", "scrollBottom");
-    listInstance.option("useNativeScrolling", "true");
-    listInstance.option("useNative", "true");
+        $dropDownList.dxDropDownList("option", "opened", true);
+        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), true, "skip gesture event class was added after popup was opened");
 
-    var $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
-    var keyboard = keyboardMock($input);
+        $dropDownList.dxDropDownList("option", "opened", false);
+        assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, "skip gesture event class was removed after popup was closed");
+    });
 
-    $dropDownList.focusin();
+    QUnit.test("After load new page scrollTop should not be changed", (assert) => {
+        this.clock.restore();
 
-    keyboard
-        .type("5")
-        .press("backspace");
+        const data = [];
+        const done = assert.async();
 
-    listInstance.scrollTo(1000);
+        for(let i = 100; i >= 0; i--) {
+            data.push(i);
+        }
 
-    var scrollTop = listInstance.scrollTop();
+        $("#qunit-fixture")
+            .css("left", 0)
+            .css("top", 0);
 
-    setTimeout(function() {
-        assert.roughEqual(listInstance.scrollTop(), scrollTop, 2, "scrollTop is correctly after new page load");
-        assert.ok(listInstance.scrollTop() === scrollTop, "scrollTop was not changed after loading new page");
-        done();
+        $("#dropDownList").dxDropDownList({
+            searchEnabled: true,
+            dataSource: {
+                store: new ArrayStore(data),
+                paginate: true,
+                pageSize: 40
+            },
+            opened: true,
+            searchTimeout: 0,
+            width: 200
+        });
+
+        const listInstance = $(".dx-list").dxList("instance");
+
+        listInstance.option("pageLoadMode", "scrollBottom");
+        listInstance.option("useNativeScrolling", "true");
+        listInstance.option("useNative", "true");
+
+        listInstance.scrollTo(1000);
+        const scrollTop = listInstance.scrollTop();
+
+        setTimeout(() => {
+            assert.ok(listInstance.scrollTop() === scrollTop, "scrollTop is correctly after new page load");
+            done();
+        });
+    });
+
+    QUnit.testInActiveWindow("After search and load new page scrollTop should not be changed", (assert) => {
+        if(browser.msie) {
+            assert.ok(true, "test does not actual for IE");
+            return;
+        }
+
+        this.clock.restore();
+
+        const data = [];
+        const done = assert.async();
+
+        for(let i = 100; i >= 0; i--) {
+            data.push(i);
+        }
+
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            searchEnabled: true,
+            dataSource: {
+                store: new ArrayStore(data),
+                paginate: true,
+                pageSize: 40
+            },
+            searchTimeout: 0
+        });
+
+        $dropDownList.dxDropDownList("instance").open();
+
+        const listInstance = $(".dx-list").dxList("instance");
+
+        listInstance.option("pageLoadMode", "scrollBottom");
+        listInstance.option("useNativeScrolling", "true");
+        listInstance.option("useNative", "true");
+
+        const $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
+        const keyboard = keyboardMock($input);
+
+        $dropDownList.focusin();
+
+        keyboard
+            .type("5")
+            .press("backspace");
+
+        listInstance.scrollTo(1000);
+
+        const scrollTop = listInstance.scrollTop();
+
+        setTimeout(() => {
+            assert.roughEqual(listInstance.scrollTop(), scrollTop, 2, "scrollTop is correctly after new page load");
+            assert.ok(listInstance.scrollTop() === scrollTop, "scrollTop was not changed after loading new page");
+            done();
+        });
+    });
+
+    QUnit.test("popup should be configured with templatesRenderAsynchronously=false (T470619)", assert => {
+        const data = ["item-1", "item-2", "item-3"];
+
+        $("#dropDownList").dxDropDownList({
+            dataSource: new DataSource(data),
+            value: data[0],
+            opened: true
+        });
+
+        const popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
+
+        assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
+    });
+
+    QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", (assert) => {
+        const data = ["item-1"];
+
+        $("#dropDownList").dxDropDownList({
+            dataSource: new DataSource(data),
+            value: data[0],
+            opened: true
+        });
+
+        const popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
+
+        assert.strictEqual(popup.option("autoResizeEnabled"), false, "autoResizeEnabled should have false value");
     });
 });
 
-QUnit.test("popup should be configured with templatesRenderAsynchronously=false (T470619)", function(assert) {
-    var data = ["item-1", "item-2", "item-3"];
+QUnit.module("dataSource integration", moduleConfig, () => {
+    QUnit.test("guid integration", (assert) => {
+        const value = "6fd3d2c5-904d-4e6f-a302-3e277ef36630";
+        const data = [new Guid(value)];
+        const dataSource = new DataSource(data);
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource,
+            value
+        });
 
-    $("#dropDownList").dxDropDownList({
-        dataSource: new DataSource(data),
-        value: data[0],
-        opened: true
+        this.clock.tick();
+
+        assert.deepEqual($dropDownList.dxDropDownList("option", "selectedItem"), data[0], "value found");
     });
-
-    var popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
-
-    assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
 });
 
-QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", (assert) => {
-    const data = ["item-1"];
+QUnit.module("action options", moduleConfig, () => {
+    QUnit.test("onItemClick action", (assert) => {
+        assert.expect(3);
 
-    $("#dropDownList").dxDropDownList({
-        dataSource: new DataSource(data),
-        value: data[0],
-        opened: true
-    });
+        const items = ["item 1", "item 2", "item 3"];
 
-    const popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
-
-    assert.strictEqual(popup.option("autoResizeEnabled"), false, "autoResizeEnabled should have false value");
-});
-
-
-QUnit.module("dataSource integration", moduleConfig);
-
-QUnit.test("guid integration", function(assert) {
-    var value = "6fd3d2c5-904d-4e6f-a302-3e277ef36630";
-    var data = [new Guid(value)];
-    var dataSource = new DataSource(data);
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: dataSource,
-        value: value
-    });
-
-    this.clock.tick();
-
-    assert.deepEqual($dropDownList.dxDropDownList("option", "selectedItem"), data[0], "value found");
-});
-
-
-QUnit.module("action options", moduleConfig);
-
-QUnit.test("onItemClick action", function(assert) {
-    assert.expect(3);
-
-    var items = ["item 1", "item 2", "item 3"],
-        $dropDownList = $("#dropDownList").dxDropDownList({
+        const $dropDownList = $("#dropDownList").dxDropDownList({
             dataSource: items,
             opened: true
-        }),
-        instance = $dropDownList.dxDropDownList("instance");
+        });
 
-    this.clock.tick();
+        const instance = $dropDownList.dxDropDownList("instance");
 
-    var $listItem = instance._$list.find(LIST_ITEM_SELECTOR).eq(1);
+        this.clock.tick();
 
-    instance.option("onItemClick", function(e) {
-        assert.deepEqual($(e.itemElement)[0], $listItem[0], "itemElement is correct");
-        assert.strictEqual(e.itemData, items[1], "itemData is correct");
-        assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
+        const $listItem = instance._$list.find(LIST_ITEM_SELECTOR).eq(1);
+
+        instance.option("onItemClick", e => {
+            assert.deepEqual($(e.itemElement)[0], $listItem[0], "itemElement is correct");
+            assert.strictEqual(e.itemData, items[1], "itemData is correct");
+            assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
+        });
+
+        $($listItem).trigger("dxclick");
     });
-
-    $($listItem).trigger("dxclick");
 });
 
-QUnit.module("render input addons", moduleConfig);
-
-QUnit.test("dropDownButton rendered correctly when dataSource is async", function(assert) {
-    var $dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: {
-            load: function() {
-                var deferred = $.Deferred();
-                setTimeout(function() {
-                    deferred.resolve([1, 2, 3, 4, 5, 6, 7]);
-                }, 1000);
-                return deferred.promise();
+QUnit.module("render input addons", moduleConfig, () => {
+    QUnit.test("dropDownButton rendered correctly when dataSource is async", (assert) => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: {
+                load() {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve([1, 2, 3, 4, 5, 6, 7]);
+                    }, 1000);
+                    return deferred.promise();
+                },
+                byKey(key) {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve(key);
+                    }, 1000);
+                    return deferred.promise();
+                }
             },
-            byKey: function(key) {
-                var deferred = $.Deferred();
-                setTimeout(function() {
-                    deferred.resolve(key);
-                }, 1000);
-                return deferred.promise();
-            }
-        },
-        showDropDownButton: true,
-        openOnFieldClick: false,
-        value: 1
+            showDropDownButton: true,
+            openOnFieldClick: false,
+            value: 1
+        });
+
+        this.clock.tick(1000);
+
+        assert.ok($dropDownList.find(".dx-dropdowneditor-button").length, "dropDownButton rendered");
+    });
+});
+
+QUnit.module("aria accessibility", moduleConfig, () => {
+    QUnit.test("aria-owns should point to list", assert => {
+        const $input = $("#dropDownList").dxDropDownList({ opened: true }).find("." + TEXTEDITOR_INPUT_CLASS);
+        const $list = $(".dx-list");
+
+        assert.notEqual($input.attr("aria-owns"), undefined, "aria-owns exists");
+        assert.equal($input.attr("aria-owns"), $list.attr("id"), "aria-owns equals list's id");
     });
 
-    this.clock.tick(1000);
-
-    assert.ok($dropDownList.find(".dx-dropdowneditor-button").length, "dropDownButton rendered");
-});
-
-QUnit.module("aria accessibility", moduleConfig);
-
-QUnit.test("aria-owns should point to list", function(assert) {
-    var $input = $("#dropDownList").dxDropDownList({ opened: true }).find("." + TEXTEDITOR_INPUT_CLASS),
-        $list = $(".dx-list");
-
-    assert.notEqual($input.attr("aria-owns"), undefined, "aria-owns exists");
-    assert.equal($input.attr("aria-owns"), $list.attr("id"), "aria-owns equals list's id");
-});
-
-QUnit.test("input's aria-activedescendant attribute should point to the focused item", function(assert) {
-    var $dropDownList = $("#dropDownList").dxDropDownList({
+    QUnit.test("input's aria-activedescendant attribute should point to the focused item", assert => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
             dataSource: [1, 2, 3],
             opened: true,
             focusStateEnabled: true
-        }),
-        $list = $(".dx-list"),
-        list = $list.dxList("instance"),
-        $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS),
-        $item = $list.find(".dx-list-item:eq(1)");
+        });
 
-    list.option("focusedElement", $item);
+        const $list = $(".dx-list");
+        const list = $list.dxList("instance");
+        const $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
+        const $item = $list.find(".dx-list-item:eq(1)");
 
-    assert.notEqual($input.attr("aria-activedescendant"), undefined, "aria-activedescendant exists");
-    assert.equal($input.attr("aria-activedescendant"), $item.attr("id"), "aria-activedescendant and id of the focused item are equals");
-});
+        list.option("focusedElement", $item);
 
-QUnit.test("list's aria-target should point to the widget's input (T247414)", function(assert) {
-    assert.expect(1);
+        assert.notEqual($input.attr("aria-activedescendant"), undefined, "aria-activedescendant exists");
+        assert.equal($input.attr("aria-activedescendant"), $item.attr("id"), "aria-activedescendant and id of the focused item are equals");
+    });
 
-    var dropDownList = $("#dropDownList").dxDropDownList({ opened: true }).dxDropDownList("instance"),
-        list = $(".dx-list").dxList("instance");
+    QUnit.test("list's aria-target should point to the widget's input (T247414)", assert => {
+        assert.expect(1);
 
-    // todo: make getAriaTarget an option
-    assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
+        const dropDownList = $("#dropDownList").dxDropDownList({ opened: true }).dxDropDownList("instance");
+        const list = $(".dx-list").dxList("instance");
+
+        // todo: make getAriaTarget an option
+        assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
+    });
 });
 
 QUnit.module("dropdownlist with groups", {
-    beforeEach: function() {
+    beforeEach: () => {
         this.dataSource = new DataSource({
             store: [{ id: 1, group: "first" }, { id: 2, group: "second" }],
             key: "id",
             group: "group"
         });
     }
-});
+}, () => {
+    QUnit.test("grouped option", (assert) => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: this.dataSource,
+            opened: true,
+            grouped: true
+        }).dxDropDownList("instance");
 
-QUnit.test("grouped option", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: this.dataSource,
-        opened: true,
-        grouped: true
-    }).dxDropDownList("instance");
+        const list = $(".dx-list").dxList("instance");
+        assert.strictEqual(list.option("grouped"), true, "grouped option is passed to the list");
+        assert.deepEqual(list.option("items"), dropDownList.option("items"), "items is equal");
 
-    var list = $(".dx-list").dxList("instance");
-    assert.strictEqual(list.option("grouped"), true, "grouped option is passed to the list");
-    assert.deepEqual(list.option("items"), dropDownList.option("items"), "items is equal");
+        dropDownList.option("grouped", false);
 
-    dropDownList.option("grouped", false);
+        assert.strictEqual(list.option("grouped"), false, "grouped option is passed to the list");
+    });
 
-    assert.strictEqual(list.option("grouped"), false, "grouped option is passed to the list");
-});
+    QUnit.test("groupTemplate option", (assert) => {
+        const groupTemplate1 = new Template("<div>Test</div>");
 
-QUnit.test("groupTemplate option", function(assert) {
-    var groupTemplate1 = new Template("<div>Test</div>"),
-        dropDownList = $("#dropDownList").dxDropDownList({
+        const dropDownList = $("#dropDownList").dxDropDownList({
             dataSource: this.dataSource,
             opened: true,
             grouped: true,
             groupTemplate: groupTemplate1
         }).dxDropDownList("instance");
 
-    var list = $(".dx-list").dxList("instance");
-    assert.strictEqual(list.option("groupTemplate"), groupTemplate1, "groupTemplate has been passed on init");
+        const list = $(".dx-list").dxList("instance");
+        assert.strictEqual(list.option("groupTemplate"), groupTemplate1, "groupTemplate has been passed on init");
 
-    var groupTemplate2 = new Template("<div>Test</div>");
-    dropDownList.option("groupTemplate", groupTemplate2);
+        const groupTemplate2 = new Template("<div>Test</div>");
+        dropDownList.option("groupTemplate", groupTemplate2);
 
-    assert.strictEqual(list.option("groupTemplate"), groupTemplate2, "groupTemplate has been passed on option changing");
-});
+        assert.strictEqual(list.option("groupTemplate"), groupTemplate2, "groupTemplate has been passed on option changing");
+    });
 
-QUnit.test("itemElement argument of groupTemplate option is correct", function(assert) {
-    $("#dropDownList").dxDropDownList({
-        dataSource: this.dataSource,
-        opened: true,
-        grouped: true,
-        groupTemplate: function(itemData, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElement is correct");
-            return $("<div>");
-        }
-    }).dxDropDownList("instance");
-});
+    QUnit.test("itemElement argument of groupTemplate option is correct", (assert) => {
+        $("#dropDownList").dxDropDownList({
+            dataSource: this.dataSource,
+            opened: true,
+            grouped: true,
+            groupTemplate(itemData, itemIndex, itemElement) {
+                assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElement is correct");
+                return $("<div>");
+            }
+        }).dxDropDownList("instance");
+    });
 
-QUnit.test("selectedItem for grouped dropdownlist", function(assert) {
-    var dropDownList = $("#dropDownList").dxDropDownList({
-        dataSource: this.dataSource,
-        opened: true,
-        grouped: true,
-        valueExpr: "id",
-        displayExpr: "id",
-        value: 2
-    }).dxDropDownList("instance");
+    QUnit.test("selectedItem for grouped dropdownlist", (assert) => {
+        const dropDownList = $("#dropDownList").dxDropDownList({
+            dataSource: this.dataSource,
+            opened: true,
+            grouped: true,
+            valueExpr: "id",
+            displayExpr: "id",
+            value: 2
+        }).dxDropDownList("instance");
 
-    assert.strictEqual(dropDownList.option("selectedItem").id, 2, "selectedItem is correct");
+        assert.strictEqual(dropDownList.option("selectedItem").id, 2, "selectedItem is correct");
+    });
 });
 
 QUnit.module(
     "data source from url",
     {
-        afterEach: function() {
+        afterEach: () => {
             ajaxMock.clear();
         }
     },
-    function() {
-        var TEST_URL = "/a3211c1d-c725-4185-acc0-0a59a4152aae";
+    () => {
+        const TEST_URL = "/a3211c1d-c725-4185-acc0-0a59a4152aae";
 
-        function setupAjaxMock(responseFactory) {
+        const setupAjaxMock = (responseFactory) => {
             ajaxMock.setup({
                 url: TEST_URL,
-                callback: function() {
+                callback() {
                     this.responseText = responseFactory();
                 }
             });
-        }
+        };
 
-        function appendWidgetContainer() {
+        const appendWidgetContainer = () => {
             return $("#qunit-fixture").append("<div id=test-drop-down></div>");
-        }
+        };
 
-        QUnit.test("initial value", function(assert) {
-            var done = assert.async();
+        QUnit.test("initial value", assert => {
+            const done = assert.async();
 
             appendWidgetContainer();
-            setupAjaxMock(function() {
-                return [ { value: 123, text: "Expected Text" } ];
+            setupAjaxMock(() => {
+                return [{ value: 123, text: "Expected Text" }];
             });
 
             $("#test-drop-down").dxDropDownList({
@@ -1332,21 +1391,21 @@ QUnit.module(
             });
 
             window
-                .waitFor(function() {
+                .waitFor(() => {
                     return $("#test-drop-down").dxDropDownList("option", "displayValue") === "Expected Text";
                 })
-                .done(function() {
+                .done(() => {
                     assert.expect(0);
                     done();
                 });
         });
 
-        QUnit.test("search", function(assert) {
-            var done = assert.async();
+        QUnit.test("search", assert => {
+            const done = assert.async();
 
             appendWidgetContainer();
-            setupAjaxMock(function() {
-                return [ "a", "z" ];
+            setupAjaxMock(() => {
+                return ["a", "z"];
             });
 
             $("#test-drop-down").dxDropDownList({
@@ -1359,13 +1418,13 @@ QUnit.module(
             keyboardMock($("#test-drop-down ." + TEXTEDITOR_INPUT_CLASS)).type("z");
 
             window
-                .waitFor(function() {
-                    var popup = $("#test-drop-down").dxDropDownList("instance")._popup.$content(),
-                        items = popup.find(".dx-list-item");
+                .waitFor(() => {
+                    const popup = $("#test-drop-down").dxDropDownList("instance")._popup.$content();
+                    const items = popup.find(".dx-list-item");
 
                     return items.length === 1 && $(items[0]).text() === "z";
                 })
-                .done(function() {
+                .done(() => {
                     assert.expect(0);
                     done();
                 });

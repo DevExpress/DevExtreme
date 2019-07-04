@@ -13,7 +13,6 @@ var $ = require("../core/renderer"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
-    dataQuery = require("../data/query"),
     DropDownList = require("./drop_down_editor/ui.drop_down_list");
 
 var DISABLED_STATE_SELECTOR = ".dx-state-disabled",
@@ -387,12 +386,6 @@ var SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
-    _fitIntoRange: function(value, start, end) {
-        if(value > end) return start;
-        if(value < start) return end;
-        return value;
-    },
-
     _setNextValue: function(step) {
         var dataSourceIsLoaded = this._dataSource.isLoaded()
             ? new Deferred().resolve()
@@ -404,34 +397,6 @@ var SelectBox = DropDownList.inherit({
 
             this._setValue(value);
         }).bind(this));
-    },
-
-    _calcNextItem: function(step) {
-        var items = this._items();
-        var nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
-        return items[nextIndex];
-    },
-
-    _items: function() {
-        var items = this._getPlainItems(!this._list && this._dataSource.items());
-
-        var availableItems = new dataQuery(items).filter("disabled", "<>", true).toArray();
-
-        return availableItems;
-    },
-
-    _getSelectedIndex: function() {
-        var items = this._items();
-        var selectedItem = this.option("selectedItem");
-        var result = -1;
-        each(items, (function(index, item) {
-            if(this._isValueEquals(item, selectedItem)) {
-                result = index;
-                return false;
-            }
-        }).bind(this));
-
-        return result;
     },
 
     _setSelectedItem: function(item) {

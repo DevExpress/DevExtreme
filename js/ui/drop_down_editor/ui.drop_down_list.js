@@ -12,6 +12,8 @@ var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     eventUtils = require("../../events/utils"),
     devices = require("../../core/devices"),
+    dataQuery = require("../../data/query"),
+    each = require("../../core/utils/iterator").each,
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
     ChildDefaultTemplate = require("../widget/child_default_template"),
@@ -324,6 +326,44 @@ var DropDownList = DropDownEditor.inherit({
         if(this._list && this._list.initialOption("focusStateEnabled")) {
             this._focusInput();
         }
+    },
+
+    _fitIntoRange: function(value, start, end) {
+        if(value > end) {
+            return start;
+        }
+        if(value < start) {
+            return end;
+        }
+        return value;
+    },
+
+    _items: function() {
+        var items = this._getPlainItems(!this._list && this._dataSource.items());
+
+        var availableItems = new dataQuery(items).filter("disabled", "<>", true).toArray();
+
+        return availableItems;
+    },
+
+    _calcNextItem: function(step) {
+        var items = this._items();
+        var nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
+        return items[nextIndex];
+    },
+
+    _getSelectedIndex: function() {
+        var items = this._items();
+        var selectedItem = this.option("selectedItem");
+        var result = -1;
+        each(items, (function(index, item) {
+            if(this._isValueEquals(item, selectedItem)) {
+                result = index;
+                return false;
+            }
+        }).bind(this));
+
+        return result;
     },
 
     _createPopup: function() {
