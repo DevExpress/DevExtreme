@@ -691,7 +691,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._adjustParsedValue();
         this.option("value", this._parsedValue);
 
-
         if(caret) {
             this._caret(caret);
         }
