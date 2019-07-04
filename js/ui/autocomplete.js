@@ -27,7 +27,7 @@ var Autocomplete = DropDownList.inherit({
             upArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(item && !item.prev().length) {
+                if(item && !this._calcNextItem(-1)) {
                     this._clearFocusedItem();
                     return false;
                 }
@@ -36,7 +36,7 @@ var Autocomplete = DropDownList.inherit({
             downArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(item && !item.next().length) {
+                if(item && !this._calcNextItem(1)) {
                     this._clearFocusedItem();
                     return false;
                 }
