@@ -3398,6 +3398,9 @@ testModule("scrollable interaction", {
 
             _attachEvents() {
                 this.$scrollable.on(wheelEvent.name, this.wheelEventHandler);
+                this.$scrollable.on("scroll", function(e) {
+                    e.stopImmediatePropagation();
+                });
             }
 
             getNativePointerMock() {
