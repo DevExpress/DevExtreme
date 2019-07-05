@@ -1086,7 +1086,7 @@ var Overlay = Widget.inherit({
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
             validate: function(e) {
-                that._validateWheel(e);
+                that._tryPreventDefaultForScrollable(e);
 
                 return true;
             },
@@ -1106,7 +1106,7 @@ var Overlay = Widget.inherit({
         });
     },
 
-    _validateWheel(e) {
+    _tryPreventDefaultForScrollable(e) {
         if(eventUtils.isMouseWheelEvent(e)) {
             var scrollableContainer = this._tryGetScrollableContainer(e.target);
 

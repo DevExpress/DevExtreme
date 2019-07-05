@@ -133,21 +133,11 @@ var NativeStrategy = Class.inherit({
                 top: -location.top,
                 left: -location.left
             },
-            reachedLeft: this._reachedMax(location, HORIZONTAL),
-            reachedTop: this._reachedMax(location, VERTICAL),
-            reachedRight: this._reachedMin(location, HORIZONTAL),
-            reachedBottom: this._reachedMin(location, VERTICAL)
+            reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
+            reachedRight: this._isDirection(HORIZONTAL) ? location.left <= this._containerSize.width - this._componentContentSize.width : undefined,
+            reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
+            reachedBottom: this._isDirection(VERTICAL) ? location.top <= this._containerSize.height - this._componentContentSize.height : undefined
         };
-    },
-
-    _reachedMax: function(location, direction) {
-        return this._isDirection(direction) ? location[direction === VERTICAL ? "top" : "left"] >= 0 : undefined;
-    },
-
-    _reachedMin: function(location, direction) {
-        var props = direction === VERTICAL ? ["top", "height"] : ["left", "width"];
-
-        return this._isDirection(direction) ? location[props[0]] <= this._containerSize[props[1]] - this._componentContentSize[props[1]] : undefined;
     },
 
     handleScroll: function(e) {
