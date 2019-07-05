@@ -430,28 +430,33 @@ exports.VirtualScrollController = Class.inherit((function() {
         getItemSize: function() {
             return this._viewportItemSize * this._sizeRatio;
         },
-        getContentOffset: function(type) {
+        getItemOffset: function(itemIndex, isEnd) {
             var that = this,
                 virtualItemsCount = that.virtualItemsCount(),
-                isEnd = type === "end",
-                itemCount;
+                itemCount = itemIndex;
 
             if(!virtualItemsCount) return 0;
-
-            itemCount = isEnd ? virtualItemsCount.end : virtualItemsCount.begin;
 
             var offset = 0,
                 totalItemsCount = that._dataSource.totalItemsCount();
 
-            Object.keys(that._itemSizes).forEach(itemIndex => {
+            Object.keys(that._itemSizes).forEach(currentItemIndex => {
                 if(!itemCount) return;
-                if(isEnd ? (itemIndex >= totalItemsCount - virtualItemsCount.end) : (itemIndex < virtualItemsCount.begin)) {
-                    offset += that._itemSizes[itemIndex];
+                if(isEnd ? (currentItemIndex >= totalItemsCount - itemIndex) : (currentItemIndex < itemIndex)) {
+                    offset += that._itemSizes[currentItemIndex];
                     itemCount--;
                 }
             });
 
             return Math.floor(offset + itemCount * that._viewportItemSize * that._sizeRatio);
+        },
+        getContentOffset: function(type) {
+            var isEnd = type === "end",
+                virtualItemsCount = this.virtualItemsCount();
+
+            if(!virtualItemsCount) return 0;
+
+            return this.getItemOffset(isEnd ? virtualItemsCount.end : virtualItemsCount.begin, isEnd);
         },
         getVirtualContentSize: function() {
             var that = this,
@@ -532,6 +537,9 @@ exports.VirtualScrollController = Class.inherit((function() {
         endPageIndex: function() {
             var endPageIndex = getEndPageIndex(this);
             return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
+        },
+        pageSize: function() {
+            return this._dataSource.pageSize();
         },
         load: function() {
             var pageIndexForLoad,
