@@ -1768,7 +1768,7 @@ QUnit.module("Layout manager", () => {
         selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
 
         // assert
-        assert.deepEqual(selectBox.option("value"), undefined);
+        assert.deepEqual(selectBox.option("value"), null);
     });
 
     test("Update value in dxSelectBox editor when data option is changed", (assert) => {

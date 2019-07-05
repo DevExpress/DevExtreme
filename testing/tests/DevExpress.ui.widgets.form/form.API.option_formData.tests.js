@@ -37,22 +37,21 @@ QUnit.test("Set { formData: null, items: [dataField1] }, call option(formData, {
 QUnit.test("Set { formData: null, items: [dataField1] }, call option(formData, null)", function(assert) {
     var form = $("#form").dxForm({ formData: null, items: ["dataField1"] }).dxForm("instance");
     form.option("formData", null);
-    assert.propEqual(form.option("formData"), { dataField1: "" });
+    assert.propEqual(form.option("formData"), {});
     assert.equal(form.getEditor("dataField1").option("value"), "");
 });
 
 QUnit.test("Set { formData: {}, items: [dataField1] }, call option(formData, null)", function(assert) {
     var form = $("#form").dxForm({ formData: {}, items: ["dataField1"] }).dxForm("instance");
     form.option("formData", null);
-    assert.propEqual(form.option("formData"), { dataField1: "" });
+    assert.propEqual(form.option("formData"), {});
     assert.equal(form.getEditor("dataField1").option("value"), "");
 });
 
 QUnit.test("Set { formData: {}, items: [dataField1] }, call option(formData, {})", function(assert) {
     var form = $("#form").dxForm({ formData: {}, items: ["dataField1"] }).dxForm("instance");
-    var formData = {};
-    form.option("formData", formData);
-    assert.equal(form.option("formData"), formData);
+    form.option("formData", {});
+    assert.propEqual(form.option("formData"), {});
     assert.equal(form.getEditor("dataField1").option("value"), "");
 });
 
