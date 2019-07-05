@@ -235,5 +235,5 @@ QUnit.test("Appointment should rendered correctly if end date appointment coinci
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
         cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).first().outerWidth();
 
-    assert.roughEqual($appointment.outerWidth(), cellWidth, 1, 'Appointment width is correct after translation oт STD');
+    assert.roughEqual($appointment.outerWidth(), cellWidth, 1.1, 'Appointment width is correct after translation oт STD');
 });
