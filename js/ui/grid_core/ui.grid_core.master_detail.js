@@ -3,6 +3,7 @@ import gridCoreUtils from "./ui.grid_core.utils";
 import { grep } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
 import { isDefined } from "../../core/utils/type";
+import { when } from "../../core/utils/deferred";
 
 var MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
@@ -221,7 +222,40 @@ module.exports = {
                         that.callBase(args);
                     }
                 };
-            })()
+            })(),
+            resizing: {
+                fireContentReadyAction: function() {
+                    this.callBase.apply(this, arguments);
+
+                    this._updateParentDataGrids(this.component.$element());
+                },
+                _updateParentDataGrids: function($element) {
+                    var $masterDetailRow = $element.closest("." + MASTER_DETAIL_ROW_CLASS);
+
+                    if($masterDetailRow.length) {
+                        when(this._updateMasterDataGrid($masterDetailRow)).done(() => {
+                            this._updateParentDataGrids($masterDetailRow.parent());
+                        });
+                    }
+                },
+                _updateMasterDataGrid: function($masterDetailRow) {
+                    var options = $($masterDetailRow).data("options"),
+                        masterDataGrid = $($masterDetailRow).closest("." + this.getWidgetContainerClass()).parent().data("dxDataGrid");
+
+                    if(options && masterDataGrid) {
+                        if(masterDataGrid.getView("rowsView").isFixedColumns()) {
+                            var $rows = $(masterDataGrid.getRowElement(options.rowIndex));
+                            if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
+                                return masterDataGrid.updateDimensions();
+                            }
+                        } else {
+                            var scrollable = masterDataGrid.getScrollable();
+                            // T607490
+                            return scrollable && scrollable.update();
+                        }
+                    }
+                }
+            }
         },
         views: {
             rowsView: (function() {
@@ -240,34 +274,6 @@ module.exports = {
                         }
 
                         return template;
-                    },
-
-                    _cellPrepared: function($cell, options) {
-                        var that = this,
-                            component = that.component;
-
-                        that.callBase.apply(that, arguments);
-
-                        if(options.rowType === "detail" && options.column.command === "detail") {
-                            $cell.find("." + that.getWidgetContainerClass()).each(function() {
-                                var dataGrid = $(this).parent().data("dxDataGrid");
-
-                                if(dataGrid) {
-                                    dataGrid.on("contentReady", function() {
-                                        if(that._isFixedColumns) {
-                                            var $rows = $(component.getRowElement(options.rowIndex));
-                                            if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
-                                                component.updateDimensions();
-                                            }
-                                        } else {
-                                            var scrollable = component.getScrollable();
-                                            // T607490
-                                            scrollable && scrollable.update();
-                                        }
-                                    });
-                                }
-                            });
-                        }
                     },
 
                     _isDetailRow: function(row) {

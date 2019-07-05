@@ -173,6 +173,13 @@ interface JQuery {
     dxGallery(options: DevExpress.ui.dxGalleryOptions): JQuery;
 }
 interface JQuery {
+    dxGantt(): JQuery;
+    dxGantt(options: "instance"): DevExpress.ui.dxGantt;
+    dxGantt(options: string): any;
+    dxGantt(options: string, ...params: any[]): any;
+    dxGantt(options: DevExpress.ui.dxGanttOptions): JQuery;
+}
+interface JQuery {
     dxHtmlEditor(): JQuery;
     dxHtmlEditor(options: "instance"): DevExpress.ui.dxHtmlEditor;
     dxHtmlEditor(options: string): any;
@@ -2640,6 +2647,8 @@ declare module DevExpress.ui {
         items?: Array<string | dxGalleryItem | any>;
         /** @name dxGallery.Options.loop */
         loop?: boolean;
+        /** @name dxGallery.Options.noDataText */
+        noDataText?: string;
         /** @name dxGallery.Options.selectedIndex */
         selectedIndex?: number;
         /** @name dxGallery.Options.showIndicator */
@@ -2672,6 +2681,22 @@ declare module DevExpress.ui {
         imageAlt?: string;
         /** @name dxGalleryItem.imageSrc */
         imageSrc?: string;
+    }
+    /** @name dxGantt.Options */
+    export interface dxGanttOptions extends WidgetOptions<dxGantt> {
+        /** @name dxGantt.Options.dependencies */
+        dependencies?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxGantt.Options.resourceAssignments */
+        resourceAssignments?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxGantt.Options.resources */
+        resources?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxGantt.Options.tasks */
+        tasks?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+    }
+    /** @name dxGantt */
+    export class dxGantt extends Widget {
+        constructor(element: Element, options?: dxGanttOptions)
+        constructor(element: JQuery, options?: dxGanttOptions)
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -9124,8 +9149,13 @@ declare module DevExpress.viz {
         center(centerCoordinates: Array<number>): void;
         /** @name dxVectorMap.clearSelection() */
         clearSelection(): void;
+        /** @deprecated */
         /** @name dxVectorMap.convertCoordinates(x, y) */
         convertCoordinates(x: number, y: number): Array<number>;
+        /** @name dxVectorMap.convertToGeo(x, y) */
+        convertToGeo(x: number, y: number): Array<number>;
+        /** @name dxVectorMap.convertToXY(longitude, latitude) */
+        convertToXY(longitude: number, latitude: number): Array<number>;
         /** @name dxVectorMap.getLayerByIndex(index) */
         getLayerByIndex(index: number): MapLayer;
         /** @name dxVectorMap.getLayerByName(name) */
@@ -9456,6 +9486,8 @@ declare module DevExpress {
         static notify(message: string, type?: string, displayTime?: number): void;
         /** @name ui.notify(options,type,displayTime) */
         static notify(options: any, type?: string, displayTime?: number): void;
+        /** @name ui.repaintFloatingActionButton() */
+        static repaintFloatingActionButton(): void;
         /** @name ui.setTemplateEngine(name) */
         static setTemplateEngine(templateEngineName: string): void;
         /** @name ui.setTemplateEngine(options) */

@@ -12898,6 +12898,28 @@ QUnit.test("assign loaded dataSource", function(assert) {
     assert.equal(this.dataController.pageCount(), 2, "page count");
 });
 
+// T752955
+QUnit.test("There are no exceptions when disposing of the shared dataSource", function(assert) {
+    // arrange
+    this.setupDataGridModules({
+        dataSource: this.dataSource
+    });
+
+    this.clock.tick();
+
+    try {
+        // act
+        this.dataSource.dispose();
+        this.dataController.dataSource().dispose(true);
+
+        // assert
+        assert.ok(true, "No exception");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    }
+});
+
 QUnit.module("Exporting", {
     beforeEach: function() {
         this.array = [

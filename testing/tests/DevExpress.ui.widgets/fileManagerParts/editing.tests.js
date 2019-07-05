@@ -73,7 +73,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
     test("rename file in items area", function(assert) {
         let $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
-        assert.equal($cell.get(0).childNodes[0].textContent, "File 1.txt", "has target file");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
 
         $cell.trigger("dxclick");
         this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
@@ -93,7 +93,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         this.clock.tick(400);
 
         $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
-        assert.equal($cell.get(0).childNodes[0].textContent, "Testfile 11.txt", "file renamed");
+        assert.equal(this.wrapper.getDetailsItemName(0), "Testfile 11.txt", "file renamed");
 
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
@@ -200,7 +200,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         const initialCount = $rows.length;
 
         const $cell = $rows.find("td").eq(1);
-        assert.equal($cell.get(0).childNodes[0].textContent, "File 1.txt", "has target file");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
 
         $cell.trigger("dxclick");
         this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
@@ -228,7 +228,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         const initialCount = $rows.length;
 
         const $cell = $rows.find("td").eq(1);
-        assert.equal($cell.get(0).childNodes[0].textContent, "File 1-1.txt", "has target file");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1-1.txt", "has target file");
 
         $cell.trigger("dxclick");
         this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
@@ -282,9 +282,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $folderNodes.eq(3).trigger("dxclick");
         this.clock.tick(400);
 
-        const $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
-        assert.equal($cells.get(0).childNodes[0].textContent, "File 1-1.txt", "file moved with target folder");
-        assert.equal($cells.get(1).childNodes[0].textContent, "File 1-2.jpg", "file moved with target folder");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1-1.txt", "file moved with target folder");
+        assert.equal(this.wrapper.getDetailsItemName(1), "File 1-2.jpg", "file moved with target folder");
     });
 
     test("copy folder in folders area", function(assert) {
@@ -323,16 +322,15 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $folderNodes.eq(4).trigger("dxclick");
         this.clock.tick(400);
 
-        const $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
-        assert.equal($cells.get(0).childNodes[0].textContent, "File 1-1.txt", "file copied with target folder");
-        assert.equal($cells.get(1).childNodes[0].textContent, "File 1-2.jpg", "file copied with target folder");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1-1.txt", "file copied with target folder");
+        assert.equal(this.wrapper.getDetailsItemName(1), "File 1-2.jpg", "file copied with target folder");
     });
 
     test("move file in items area", function(assert) {
         let $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         const initialCount = $cells.length;
         const $cell = $cells.eq(0);
-        assert.equal($cell.get(0).childNodes[0].textContent, "File 1.txt", "has target file");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
 
         $cell.trigger("dxclick");
         this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
@@ -353,22 +351,21 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         assert.equal($cells.length, initialCount - 1, "file count decreased");
-        assert.equal($cells.get(0).childNodes[0].textContent, "File 2.jpg", "first file is not target file");
-        assert.equal($cells.get(1).childNodes[0].textContent, "File 3.xml", "second file is not target file");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 2.jpg", "first file is not target file");
+        assert.equal(this.wrapper.getDetailsItemName(1), "File 3.xml", "second file is not target file");
 
         $folderNodes = this.wrapper.getFolderNodes();
         $folderNodes.eq(3).trigger("dxclick");
         this.clock.tick(400);
 
-        $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
-        assert.equal($cells.get(0).childNodes[0].textContent, "File 1.txt", "file moved to another folder");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file moved to another folder");
     });
 
     test("copy file in items area", function(assert) {
         let $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         const initialCount = $cells.length;
         const $cell = $cells.eq(0);
-        assert.equal($cell.get(0).childNodes[0].textContent, "File 1.txt", "has target file");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
 
         $cell.trigger("dxclick");
         this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
@@ -389,15 +386,14 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         assert.equal($cells.length, initialCount, "file count not changed");
-        assert.equal($cells.get(0).childNodes[0].textContent, "File 1.txt", "first file is the target file");
-        assert.equal($cells.get(1).childNodes[0].textContent, "File 2.jpg", "second file is not target file");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "first file is the target file");
+        assert.equal(this.wrapper.getDetailsItemName(1), "File 2.jpg", "second file is not target file");
 
         $folderNodes = this.wrapper.getFolderNodes();
         $folderNodes.eq(3).trigger("dxclick");
         this.clock.tick(400);
 
-        $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
-        assert.equal($cells.get(0).childNodes[0].textContent, "File 1.txt", "file moved to another folder");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file moved to another folder");
     });
 
 });

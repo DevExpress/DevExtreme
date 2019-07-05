@@ -107,6 +107,23 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         fullscreenButton.trigger("dxclick");
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
     });
+    test("diagram should be focused after change font family", (assert) => {
+        const fontSelectBox = this.$element.find(TOOLBAR_SELECTOR).find(".dx-selectbox").eq(0).dxSelectBox("instance");
+        fontSelectBox.focus();
+        fontSelectBox.open();
+        const item = $(document).find(".dx-list-item-content").filter(function() {
+            return $(this).text().toLowerCase().indexOf("arial black") >= 0;
+        });
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        item.trigger("dxclick");
+        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+    });
+    test("diagram should be focused after set font bold", (assert) => {
+        const boldButton = findToolbarItem(this.$element, "bold");
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        boldButton.trigger("dxclick");
+        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+    });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
     test("should load default items", (assert) => {

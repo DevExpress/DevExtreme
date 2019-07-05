@@ -2149,6 +2149,31 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, "There is 2 columns in hiding queue");
     clock.restore();
 });
+
+// T745930
+QUnit.test("Native scrollbars should not be visible if columns are not hidden by hidingPriority", function(assert) {
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1100,
+        loadingTimeout: undefined,
+        dataSource: [{
+            OrderNumber: 35703,
+            Employee: "Harv Mudd"
+        }],
+        columnAutoWidth: true,
+        scrolling: { useNative: true },
+        columns: [{
+            dataField: "OrderNumber",
+            hidingPriority: 0,
+            width: 130
+        },
+        "Employee"]
+    }).dxDataGrid("instance");
+
+    assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(true), 0, "Horizontal scrollbar is hidden");
+    assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(false), 0, "Vertical scrollbar is hidden");
+});
+
 // TODO jsdmitry: wait fix T381435
 /* QUnit.test("Columns hiding - do not hide fixed columns", function(assert) {
     // arrange
@@ -7669,6 +7694,54 @@ QUnit.test("scroll should works correctly if row height and totalCount are large
     clock.restore();
 });
 
+// T750279
+QUnit.test("scroll should works correctly if page size is small and totalCount are large", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 600,
+        dataSource: {
+            load: function(options) {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    var items = [];
+
+                    for(var i = options.skip; i < options.skip + options.take; i++) {
+                        items.push({ id: i + 1 });
+                    }
+                    d.resolve({ data: items, totalCount: 1000000 });
+                });
+
+                return d;
+            }
+        },
+        remoteOperations: true,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    clock.tick(1000);
+    dataGrid.getScrollable().scrollTo(100000);
+    clock.tick(1000);
+
+    // assert
+    var topVisibleRowData = dataGrid.getTopVisibleRowData();
+    var visibleRows = dataGrid.getVisibleRows();
+
+    assert.ok(topVisibleRowData.id > 1, "top visible row data is not first");
+    assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 10, "visible rows are in viewport");
+
+    clock.restore();
+});
+
 QUnit.module("Rendered on server", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -11545,6 +11618,74 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
     // T641332
     assert.equal($rows.find("col").get(0).style.width, "1000px", "column width in detail grid is corrent");
+});
+
+// T749068
+QUnit.test("Row heights should be synchronized after expand master detail row in second nested DataGrid", function(assert) {
+    // arrange
+    var nestedDataGrid,
+        secondNestedDataGrid;
+
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1" }, { dataField: "field2" }],
+        columnFixing: { enabled: true },
+        columnAutoWidth: true,
+        keyExpr: "id",
+        dataSource: [{ id: 1 }, { id: 2 }],
+        masterDetail: {
+            enabled: true,
+            template: function(container) {
+                nestedDataGrid = $("<div>").appendTo(container).dxDataGrid({
+                    columns: [{ dataField: "field1" }, { dataField: "field2" }],
+                    columnFixing: { enabled: true },
+                    columnAutoWidth: true,
+                    keyExpr: "id",
+                    dataSource: [{ id: 1 }, { id: 2 }],
+                    masterDetail: {
+                        enabled: true,
+                        template: function(container) {
+                            secondNestedDataGrid = $("<div>").appendTo(container).dxDataGrid({
+                                keyExpr: "id",
+                                dataSource: [{ id: 1 }, { id: 2 }],
+                                masterDetail: {
+                                    enabled: true
+                                }
+                            }).dxDataGrid("instance");
+                        }
+                    }
+                }).dxDataGrid("instance");
+            }
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.expandRow(1);
+    this.clock.tick();
+
+    nestedDataGrid.expandRow(1);
+    this.clock.tick();
+
+    secondNestedDataGrid.expandRow(1);
+    this.clock.tick();
+
+    // assert
+    var $rows = $(dataGrid.getRowElement(1));
+    var $nestedRows = $(nestedDataGrid.getRowElement(1));
+
+    assert.equal($rows.length, 2, "two rows: main row + fixed row");
+    assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
+
+    assert.equal($nestedRows.length, 2, "two rows: main row + fixed row");
+    assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), "nested row heights are synchronized");
+
+    // act
+    secondNestedDataGrid.collapseRow(1);
+    this.clock.tick();
+
+    // assert
+    assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), "nested row heights are synchronized after collapse");
 });
 
 // T607490
