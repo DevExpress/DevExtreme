@@ -1408,6 +1408,11 @@ QUnit.module("widget sizing render", {}, () => {
     });
 
     QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "this test doesn't actual for the mobile devices");
+            return;
+        }
+
         const $element = $("#dateBox");
         const instance = $element.dxDateBox({
             pickerType: "calendar",
