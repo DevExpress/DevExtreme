@@ -330,7 +330,7 @@ export class Plaque {
         }
 
         const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
-        const shadow = renderer.shadowFilter().attr(shadowSettings);
+        const shadow = this._shadow = renderer.shadowFilter().attr(shadowSettings);
 
         const group = this._root = renderer.g().append(this.root);
         if(options.type) {
@@ -357,6 +357,7 @@ export class Plaque {
     clear() {
         if(this._root) {
             this._root.remove();
+            this._shadow.remove();
             this._root = null;
         }
         return this;

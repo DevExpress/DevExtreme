@@ -90,6 +90,10 @@ Tooltip.prototype = {
         const textGroupHtml = that._textGroupHtml;
         const textHtml = that._textHtml;
 
+        if(this.plaque) {
+            this.plaque.clear();
+        }
+
         this.plaque = new Plaque({
             opacity: that._options.opacity,
             color: that._options.color,
