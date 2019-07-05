@@ -758,7 +758,7 @@ var LayoutManager = Widget.inherit({
 
     _renderEditor: function(options) {
         var dataValue = this._getDataByField(options.dataField),
-            defaultEditorOptions = { value: dataValue },
+            defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {},
             isDeepExtend = true,
             editorOptions;
 

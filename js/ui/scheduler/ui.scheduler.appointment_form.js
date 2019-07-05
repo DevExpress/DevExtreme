@@ -99,7 +99,8 @@ const SchedulerAppointmentForm = {
                             previousValue = dateSerialization.deserializeDate(args.previousValue),
                             endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
                             endValue = dateSerialization.deserializeDate(endDateEditor.option("value"));
-                        if(!that._appointmentForm._lockDateShiftFlag && !!endValue && endValue < value) {
+                        if(!that._appointmentForm._lockDateShiftFlag && typeUtils.isDefined(value) && typeUtils.isDefined(endValue)
+                            && !!endValue && endValue < value) {
                             var duration = endValue.getTime() - previousValue.getTime();
                             endDateEditor.option("value", new Date(value.getTime() + duration));
                         }
