@@ -1600,8 +1600,8 @@ QUnit.test("Position when page's body has relative position and margins and page
 
     // assert
     wrapper = $('.test-title-class');
-    assert.strictEqual(wrapper.css("left"), "450px");
-    assert.strictEqual(wrapper.css("top"), "301px");
+    assert.strictEqual(wrapper.css("left"), "340px");
+    assert.strictEqual(wrapper.css("top"), "181px");
 });
 
 QUnit.test("Floor plaque coordinates", function(assert) {
