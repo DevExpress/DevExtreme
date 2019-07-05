@@ -61,13 +61,13 @@ function skipTestOnMobile(assert) {
 
 QUnit.module("T712431", () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
-    var MIN_APPOINTMENT_WIDTH = 936;
+    var APPOINTMENT_WIDTH = 941;
 
     var createInstance = function(options) {
         return $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
     };
 
-    QUnit.test(`Appointment width should be not less 936px with width control 1100px`, function(assert) {
+    QUnit.test('Appointment width should be not less 941px with width control 1100px', function(assert) {
         var data = [
             {
                 text: "Website Re-Design Plan 2",
@@ -87,7 +87,7 @@ QUnit.module("T712431", () => {
         });
 
         var appointment = $(".dx-scheduler-appointment");
-        assert.ok(appointment.outerWidth() > MIN_APPOINTMENT_WIDTH);
+        assert.roughEqual(appointment.outerWidth(), APPOINTMENT_WIDTH, 1);
     });
 });
 
