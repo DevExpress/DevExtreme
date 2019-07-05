@@ -5,6 +5,7 @@ import { combineFilters } from "./ui.grid_core.utils";
 import { equalByValue } from "../../core/utils/common";
 import { isDefined } from "../../core/utils/type";
 import { Deferred, when } from "../../core/utils/deferred";
+import { getIndexByKey } from "./ui.grid_core.utils";
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
@@ -167,7 +168,27 @@ exports.FocusController = core.ViewController.inherit((function() {
                         }).fail(result.reject);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
-                            that._triggerUpdateFocusedRow(key, result);
+                            var rowsScrollController = dataController._rowsScrollController;
+                            if(rowsScrollController) {
+                                setTimeout(function() {
+                                    var rowIndex = getIndexByKey(key, dataController.items(true));
+                                    if(rowIndex >= 0) {
+                                        var offset = rowsScrollController.getItemOffset(rowIndex + dataController.getRowIndexOffset() - dataController.getRowIndexDelta()),
+                                            scrollable = that.getView("rowsView").getScrollable();
+
+                                        var triggerUpdateFocusedRow = function() {
+                                            that.component.off("contentReady", triggerUpdateFocusedRow);
+                                            that._triggerUpdateFocusedRow(key, result);
+                                        };
+
+                                        that.component.on("contentReady", triggerUpdateFocusedRow);
+                                        scrollable.scrollTo({ y: offset });
+                                    }
+                                });
+                            } else {
+                                that._triggerUpdateFocusedRow(key, result);
+                            }
+
                         }).fail(result.reject);
                     }
                 }).fail(result.reject);
@@ -499,14 +520,19 @@ module.exports = {
                 },
                 processUpdateFocusedRow: function() {
                     var prevPageIndex = this._prevPageIndex,
-                        operationTypes = this._dataSource.operationTypes(),
+                        operationTypes = this._dataSource.operationTypes() || {},
                         focusController = this.getController("focus"),
-                        reload = operationTypes && operationTypes.reload,
+                        reload = operationTypes.reload,
                         isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
                         focusedRowKey = this.option("focusedRowKey"),
-                        paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
+                        prevRenderingPageIndex = this._prevRenderingPageIndex || 0,
+                        renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0,
+                        pageIndex = this.pageIndex(),
+                        paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex;
 
-                    this._prevPageIndex = this.pageIndex();
+                    this._prevPageIndex = pageIndex;
+                    this._prevRenderingPageIndex = renderingPageIndex;
+
                     if(reload && focusedRowKey !== undefined) {
                         focusController.navigateToRow(focusedRowKey).done(function(focusedRowIndex) {
                             if(focusedRowIndex < 0) {
@@ -517,7 +543,7 @@ module.exports = {
                         if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
                             focusController._focusRowByIndex();
                         }
-                    } else {
+                    } else if(renderingPageIndex === prevRenderingPageIndex) {
                         focusController._focusRowByKeyOrIndex();
                     }
                 },
