@@ -386,16 +386,31 @@ var SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
+    _setNextItem: function(step) {
+        var item = this._calcNextItem(step),
+            value = this._valueGetter(item);
+
+        this._setValue(value);
+    },
+
     _setNextValue: function(step) {
         var dataSourceIsLoaded = this._dataSource.isLoaded()
             ? new Deferred().resolve()
             : this._dataSource.load();
 
         dataSourceIsLoaded.done((function() {
-            var item = this._calcNextItem(step),
-                value = this._valueGetter(item);
+            var selectedIndex = this._getSelectedIndex(),
+                isLastPage = this._dataSource.isLastPage(),
+                isLastItem = selectedIndex === this._items().length - 1;
 
-            this._setValue(value);
+            if(!isLastPage && isLastItem && step > 0) {
+                if(!this._popup) {
+                    this._createPopup();
+                }
+                this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+            } else {
+                this._setNextItem(step);
+            }
         }).bind(this));
     },
 
