@@ -1626,6 +1626,7 @@ QUnit.test("Remove old plaque on update options", function(assert) {
 
     // assert
     assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+    assert.ok(this.renderer.shadowFilter.lastCall.returnValue.remove.called);
 });
 
 QUnit.module("Movements. Out of visible borders", {
