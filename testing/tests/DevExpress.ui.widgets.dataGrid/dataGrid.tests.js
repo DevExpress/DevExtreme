@@ -3387,7 +3387,8 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
         },
         scrolling: {
             mode: "virtual",
-            rowRenderingMode: "virtual"
+            rowRenderingMode: "virtual",
+            useNative: false
         },
         onFocusedRowChanged: function(e) {
             focusedRowChangedArgs.push(e);
