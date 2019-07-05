@@ -15,7 +15,6 @@ var $ = require("../core/renderer"),
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
-    dataQuery = require("../data/query"),
     DropDownList = require("./drop_down_editor/ui.drop_down_list"),
     themes = require("./themes"),
     clickEvent = require("../events/click");
@@ -441,12 +440,6 @@ var SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
-    _fitIntoRange: function(value, start, end) {
-        if(value > end) return start;
-        if(value < start) return end;
-        return value;
-    },
-
     _setNextItem: function(step) {
         var item = this._calcNextItem(step),
             value = this._valueGetter(item);
@@ -473,34 +466,6 @@ var SelectBox = DropDownList.inherit({
                 this._setNextItem(step);
             }
         }).bind(this));
-    },
-
-    _calcNextItem: function(step) {
-        var items = this._items();
-        var nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
-        return items[nextIndex];
-    },
-
-    _items: function() {
-        var items = this._getPlainItems(!this._list && this._dataSource.items());
-
-        var availableItems = new dataQuery(items).filter("disabled", "<>", true).toArray();
-
-        return availableItems;
-    },
-
-    _getSelectedIndex: function() {
-        var items = this._items();
-        var selectedItem = this.option("selectedItem");
-        var result = -1;
-        each(items, (function(index, item) {
-            if(this._isValueEquals(item, selectedItem)) {
-                result = index;
-                return false;
-            }
-        }).bind(this));
-
-        return result;
     },
 
     _setSelectedItem: function(item) {
@@ -634,6 +599,10 @@ var SelectBox = DropDownList.inherit({
     },
 
     _restoreInputText: function() {
+        if(this.option("readOnly")) {
+            return;
+        }
+
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
             var initialSelectedItem = this.option("selectedItem");
 

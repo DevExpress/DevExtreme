@@ -779,7 +779,7 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "min":
             case "max":
-                this._validateValue(this.dateOption("value"));
+                this._applyInternalValidation(this.dateOption("value"));
                 this._invalidate();
                 break;
             case "dateSerializationFormat":

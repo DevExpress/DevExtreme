@@ -41,7 +41,8 @@ var DEFAULT_DATA_TYPE = "string",
         "format",
         "lookup",
         "trueText",
-        "calculateFilterExpression"
+        "calculateFilterExpression",
+        "name"
     ];
 
 function getFormattedValueText(field, value) {
@@ -275,6 +276,9 @@ function addItem(item, group) {
 
 function getField(dataField, fields) {
     for(var i = 0; i < fields.length; i++) {
+        if(fields[i].name === dataField) {
+            return fields[i];
+        }
         if(fields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
             return fields[i];
         }

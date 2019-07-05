@@ -455,7 +455,12 @@ module("keyboard navigation", moduleConfig, () => {
 });
 
 if(devices.current().deviceType === "desktop") {
-    registerKeyHandlerTestHelper.runTests(QUnit, "dxRadioGroup");
+    registerKeyHandlerTestHelper.runTests({
+        createWidget: ($element, options) => $element.dxRadioGroup(
+            $.extend({
+                items: [{ text: "text" }]
+            }, options)).dxRadioGroup("instance"),
+        checkInitialize: true });
 }
 
 module("focus policy", moduleConfig, () => {

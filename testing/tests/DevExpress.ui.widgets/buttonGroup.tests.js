@@ -102,5 +102,11 @@ QUnit.module("option changed", {
 });
 
 if(devices.current().deviceType === "desktop") {
-    registerKeyHandlerTestHelper.runTests(QUnit, "dxButtonGroup");
+    registerKeyHandlerTestHelper.runTests({
+        createWidget: ($element, options) => $element.dxButtonGroup(
+            $.extend({
+                items: [{ text: "text" }]
+            }, options)).dxButtonGroup("instance"),
+        checkInitialize: true
+    });
 }

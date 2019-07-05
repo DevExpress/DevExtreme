@@ -1,11 +1,12 @@
-/* global DATA, internals, initTree */
+/* global DATA, internals, initTree, makeSlowDataSource */
 
 import $ from "jquery";
 import { noop } from "core/utils/common";
 import fx from "animation/fx";
 
-const TREEVIEW_NODE_CONTAINER_CLASS = "dx-treeview-node-container";
-const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = "dx-treeview-node-container-opened";
+const TREEVIEW_NODE_CLASS = "dx-treeview-node";
+const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
+const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CLASS}-container-opened`;
 
 const { module, test } = QUnit;
 
@@ -15,6 +16,10 @@ const checkFunctionArguments = (assert, actualArgs, expectedArgs) => {
     assert.deepEqual(actualArgs.node, expectedArgs.node, "arg is OK");
     assert.deepEqual($(actualArgs.itemElement).get(0), expectedArgs.itemElement.get(0), "arg is OK");
 };
+
+const isNodeExpanded = $node => $node.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length > 0;
+
+const getNodeItemId = $node => $node.data("itemId");
 
 module("Expanded items", {
     beforeEach() {
@@ -181,11 +186,11 @@ module("Expanded items", {
         const data = $.extend(true, [], DATA[5]);
         data[0].disabled = true;
         const $treeView = initTree({
-                items: data
-            }),
-            treeView = $treeView.dxTreeView("instance"),
-            $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
-            $icon = $firstItem.parent().find("> ." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+            items: data
+        });
+        const treeView = $treeView.dxTreeView("instance");
+        const $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0);
+        const $icon = $firstItem.parent().find("> ." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
 
         $icon.trigger("dxclick");
 
@@ -471,5 +476,218 @@ module("Expanded items", {
         assert.notOk(nodes[0].expanded, "item 1");
         assert.notOk(nodes[0].items[0].expanded, "item 11");
         assert.notOk(nodes[0].items[0].items[0].expanded, "item 111");
+    });
+
+    test("Disabled item doesn't expand when using the expandAll method", function(assert) {
+        const $treeView = initTree({
+            items: [{
+                text: "1",
+                id: 1,
+                items: [{
+                    text: "11",
+                    id: 11,
+                    disabled: true,
+                    items: [{
+                        text: "111",
+                        id: 111
+                    }]
+                }]
+            }]
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        treeView.expandAll();
+
+        const $nodes = $treeView.find(`.${TREEVIEW_NODE_CLASS}`);
+        const $node1 = $nodes.eq(0);
+        const $node2 = $nodes.eq(1);
+        const $node3 = $nodes.eq(2);
+
+        assert.equal($nodes.length, 3, "nodes count");
+        assert.ok(isNodeExpanded($node1), "first node is expanded");
+        assert.equal(getNodeItemId($node1), 1, "id for first node");
+
+        assert.ok(isNodeExpanded($node2), "second node is expanded");
+        assert.equal(getNodeItemId($node2), 11, "id for second node");
+
+        assert.notOk(isNodeExpanded($node3), "third node is expanded");
+        assert.equal(getNodeItemId($node3), 111, "id for third node");
+    });
+
+    test("Disabled item doesn't expand when using the expandAll method and the expandNodesRecursive is enabled", function(assert) {
+        const $treeView = initTree({
+            expandNodesRecursive: true,
+            items: [{
+                text: "1",
+                id: 1,
+                items: [{
+                    text: "11",
+                    id: 11,
+                    disabled: true,
+                    items: [{
+                        text: "111",
+                        id: 111
+                    }]
+                }]
+            }]
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        treeView.expandAll();
+
+        const $nodes = $treeView.find(`.${TREEVIEW_NODE_CLASS}`);
+        const $node1 = $nodes.eq(0);
+        const $node2 = $nodes.eq(1);
+        const $node3 = $nodes.eq(2);
+
+        assert.equal($nodes.length, 3, "nodes count");
+        assert.ok(isNodeExpanded($node1), "first node is expanded");
+        assert.equal(getNodeItemId($node1), 1, "id for first node");
+
+        assert.ok(isNodeExpanded($node2), "second node is expanded");
+        assert.equal(getNodeItemId($node2), 11, "id for second node");
+
+        assert.notOk(isNodeExpanded($node3), "third node is expanded");
+        assert.equal(getNodeItemId($node3), 111, "id for third node");
+    });
+
+    test("Expand all items when the expandNodesRecursive is enabled", function(assert) {
+        const $treeView = initTree({
+            expandNodesRecursive: true,
+            items: [{
+                text: "1",
+                id: 1,
+                items: [{
+                    text: "11",
+                    id: 11,
+                    items: [{
+                        text: "111",
+                        id: 111
+                    }]
+                }]
+            }]
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        treeView.expandAll();
+
+        const $nodes = $treeView.find(`.${TREEVIEW_NODE_CLASS}`);
+        const $node1 = $nodes.eq(0);
+        const $node2 = $nodes.eq(1);
+        const $node3 = $nodes.eq(2);
+
+        assert.equal($nodes.length, 3, "nodes count");
+        assert.ok(isNodeExpanded($node1), "first node is expanded");
+        assert.equal(getNodeItemId($node1), 1, "id for first node");
+
+        assert.ok(isNodeExpanded($node2), "second node is expanded");
+        assert.equal(getNodeItemId($node2), 11, "id for second node");
+
+        assert.notOk(isNodeExpanded($node3), "third node is expanded");
+        assert.equal(getNodeItemId($node3), 111, "id for third node");
+    });
+
+    test("Content ready event is thrown once when the expandAll is called", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const $treeView = initTree({
+            items: [{
+                text: "1",
+                id: 1,
+                items: [{
+                    text: "11",
+                    id: 11,
+                    items: [{
+                        text: "111",
+                        id: 111
+                    }]
+                }]
+            }],
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        treeView.expandAll();
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
+    });
+
+    test("Content ready event is thrown once when the expandAll is called with the slow data source", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const $treeView = initTree({
+            dataSource: makeSlowDataSource($.extend(true, [],
+                [
+                    { id: 1, parentId: 0, text: "Animals" },
+                    { id: 2, parentId: 1, text: "Cat" },
+                    { id: 3, parentId: 2, text: "Dog" },
+                    { id: 4, parentId: 3, text: "Cow" }
+                ]
+            )),
+            dataStructure: "plain",
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        this.clock.tick(400);
+
+        treeView.expandAll();
+
+        this.clock.tick(400);
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
+    });
+
+    test("Content ready event is thrown once when the expandAll is called with the slow data source and the virtual mode", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const $treeView = initTree({
+            dataSource: makeSlowDataSource($.extend(true, [],
+                [
+                    { id: 1, parentId: 0, text: "Animals" },
+                    { id: 2, parentId: 1, text: "Cat" },
+                    { id: 3, parentId: 2, text: "Dog" },
+                    { id: 4, parentId: 3, text: "Cow" }
+                ]
+            )),
+            dataStructure: "plain",
+            virtualModeEnabled: true,
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        this.clock.tick(400);
+
+        treeView.expandAll();
+
+        this.clock.tick(400);
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown once");
+    });
+
+    test("Content ready event is thrown once when the expandAll is called with load data on demand", function(assert) {
+        const contentReadyStub = sinon.stub();
+        const data = [
+            { id: 1, parentID: 0, text: "Animals" },
+            { id: 2, parentID: 1, text: "Cat" },
+            { id: 21, parentID: 1, text: "Pussy Cat", hasItems: false },
+            { id: 3, parentID: 2, text: "Dog" },
+            { id: 4, parentID: 3, text: "Cow", hasItems: false }
+        ];
+        const $treeView = initTree({
+            createChildren: parent => {
+                const parentID = parent ? parent.itemData.id : 0;
+                return data.filter(item => item.parentID === parentID);
+            },
+            rootValue: 1,
+            dataStructure: "plain",
+            onContentReady: contentReadyStub
+        });
+        const treeView = $treeView.dxTreeView("instance");
+
+        this.clock.tick(400);
+
+        treeView.expandAll();
+
+        this.clock.tick(400);
+
+        assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
     });
 });

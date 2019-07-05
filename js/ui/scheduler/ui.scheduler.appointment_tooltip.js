@@ -167,8 +167,7 @@ var appointmentTooltip = {
         var button = new Button($("<div>").addClass(APPOINTMENT_TOOLTIP_DELETE_BUTTONS_CLASS), {
             icon: "trash",
             onClick: function() {
-                var startDate = this.instance._getStartDate(singleAppointmentData, true);
-                this.instance._checkRecurringAppointment(appointmentData, singleAppointmentData, startDate, function() {
+                this.instance._checkRecurringAppointment(appointmentData, singleAppointmentData, singleAppointmentData.startDate, function() {
                     this.instance.deleteAppointment(appointmentData);
                 }.bind(this), true);
                 this.hide();

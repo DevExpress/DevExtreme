@@ -144,6 +144,16 @@ var NumberBoxBase = TextEditor.inherit({
         });
     },
 
+    _isSupportInputMode: function() {
+        var version = parseFloat(browser.version);
+
+        return (
+            browser.chrome && version >= 66
+            || browser.safari && version >= 12
+            || browser.msie && version >= 75
+        );
+    },
+
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
@@ -156,14 +166,8 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    var version = parseFloat(browser.version);
-                    return devices.real().platform !== "generic"
-                        && !(
-                            browser.chrome && version >= 66
-                            || browser.safari && version >= 12
-                            || browser.msie && version >= 75
-                        );
-                },
+                    return devices.real().platform !== "generic" && !this._isSupportInputMode();
+                }.bind(this),
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
@@ -183,7 +187,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _applyInputAttributes: function($input, customAttributes) {
-        $input.attr("inputmode", "numeric");
+        $input.attr("inputmode", "decimal");
         this.callBase($input, customAttributes);
     },
 
@@ -282,8 +286,8 @@ var NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            "valuemin": this.option("min") || "undefined",
-            "valuemax": this.option("max") || "undefined"
+            "valuemin": commonUtils.ensureDefined(this.option("min"), null),
+            "valuemax": commonUtils.ensureDefined(this.option("max"), null)
         });
     },
 
