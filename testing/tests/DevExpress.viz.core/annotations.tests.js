@@ -1095,6 +1095,32 @@ QUnit.test("Draw plague bound text bbox if it greater than passed size", functio
     checkCloudPath(assert, plaque, [-100, -50, 100, -50, 200, -100, 100, -50, 100, 50, -100, 50], [90, 0, 0]);
 });
 
+QUnit.module("Custom annotaion", environment);
+
+QUnit.test("Use functional template to draw custom annotation", function(assert) {
+    const template = sinon.spy();
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "custom", template } ], {})[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    const annotationGroup = this.renderer.g.getCall(1).returnValue;
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-custom-annotation" }]);
+
+    assert.equal(template.callCount, 1);
+    assert.deepEqual(template.getCall(0).args, [this.renderer.g.getCall(3).returnValue.element, { argument: 0, x: 0, y: 0, type: "custom", template }]);
+});
+
+QUnit.test("No template option - do not fail", function(assert) {
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "custom" } ], {})[0];
+    this.renderer.g.reset();
+
+    annotation.draw(this.widget, this.group);
+
+    const annotationGroup = this.renderer.g.getCall(1).returnValue;
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-custom-annotation" }]);
+});
+
 QUnit.module("Tooltip", environment);
 
 QUnit.test("customizeTooltip in item", function(assert) {
