@@ -1408,8 +1408,8 @@ QUnit.module("widget sizing render", {}, () => {
     });
 
     QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
-        if(devices.real().deviceType !== "desktop") {
-            assert.ok(true, "this test doesn't actual for the mobile devices");
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
             return;
         }
 
