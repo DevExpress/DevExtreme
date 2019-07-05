@@ -1,4 +1,4 @@
-import { Selector } from "testcafe";
+import { Selector, ClientFunction } from "testcafe";
 
 export default class DataGridTestHelper {
     dataGrid: Selector;
@@ -17,6 +17,24 @@ export default class DataGridTestHelper {
 
     isRowRemoved(rowIndex: number) : Promise<boolean> {
         return this.getDataRow(rowIndex).hasClass("dx-row-removed");
+    }
+
+    async scrollTo(options) : Promise<void> {
+        var selector = this.dataGrid;
+        return await ClientFunction(() => {
+            $(selector())["dxDataGrid"]("instance").getScrollable().scrollTo(options);
+        },
+            { dependencies: { selector, options } }
+        )()
+    }
+
+    async getScrollLeft() : Promise<number> {
+        var selector = this.dataGrid;
+        return await ClientFunction(() => {
+            return $(selector())["dxDataGrid"]("instance").getScrollable().scrollLeft();
+        },
+            { dependencies: { selector } }
+        )()
     }
 }
 
