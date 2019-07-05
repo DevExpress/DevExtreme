@@ -1618,6 +1618,17 @@ QUnit.test("Floor plaque coordinates", function(assert) {
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.lastCall.args, [-69, -214]);
 });
 
+QUnit.test("Remove old plaque on update options", function(assert) {
+    this.tooltip.update(this.options);
+    this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 80, offset: 30 });
+    // act
+    this.tooltip.setOptions(this.options);
+
+    // assert
+    assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+    assert.ok(this.renderer.shadowFilter.lastCall.returnValue.remove.called);
+});
+
 QUnit.module("Movements. Out of visible borders", {
     beforeEach: function() {
         var that = this,
