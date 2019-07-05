@@ -14399,6 +14399,81 @@ QUnit.test("The data passed to the editCellTemplate callback should be updated a
     assert.strictEqual(template.callCount, 2, "editCellTemplate call count");
 });
 
+QUnit.test("In popup editing mode need to repaint only changed fields with repaintChangesOnly (T753269)", function(assert) {
+    // arrange
+    var that = this,
+        $popupContent,
+        selectBox,
+        orders = [
+            { Id: 1, Name: "Paul Henriot", City: "Reims", Country: "France" },
+            { Id: 2, Name: "Karin Josephs", City: "Münster", Country: "Germany" }
+        ],
+        countries = [{ Country: "France" }, { Country: "Germany" }],
+        cities = [{ City: "Reims" }, { City: "Münster" }],
+        cityFireCount = 0,
+        countryFireCount = 0,
+        getLookupConfig = function(data, columnName) {
+            return {
+                dataSource: {
+                    key: columnName,
+                    load: function() {
+                        var d = $.Deferred();
+                        setTimeout(() => d.resolve(data));
+                        return d.promise();
+                    },
+                    byKey: function(key) {
+                        if(columnName === "City") {
+                            cityFireCount++;
+                        } else if(columnName === "Country") {
+                            countryFireCount++;
+                        }
+                        return data[key];
+                    }
+                },
+                valueExpr: columnName,
+                displayExpr: columnName
+            };
+        };
+
+    that.options.dataSource = orders;
+    that.options.keyExpr = "Id";
+    that.options.repaintChangesOnly = true;
+    that.options.remoteOperations = true;
+    that.options.columns = [
+        "Id", "Name",
+        { dataField: "City", lookup: getLookupConfig(cities, "City") },
+        { dataField: "Country", lookup: getLookupConfig(countries, "Country") }
+    ];
+    that.options.onEditorPrepared = function(e) {
+        if(e.dataField === "City" && e.parentType === "dataRow") {
+            $(e.editorElement).dxSelectBox("instance").on("valueChanged", function(args) {
+                that.cellValue(e.row.rowIndex, "Name", "test");
+            });
+        }
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.clock.tick();
+
+    // act
+    that.editRow(0);
+    that.clock.tick();
+
+    // arrange
+    that.preparePopupHelpers();
+
+    // act
+    $popupContent = $(that.editPopupInstance.content());
+    selectBox = $popupContent.find(".dx-selectbox").dxSelectBox("instance");
+    selectBox.option("value", "Münster");
+
+    // assert
+    assert.equal(countryFireCount, 1, "Not changed field was rendered once");
+    assert.equal(cityFireCount, 2, "Changed field was repaint on update");
+});
+
 QUnit.test("Popup should have scrollbar", function(assert) {
     // arrange
     var that = this,
