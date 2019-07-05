@@ -81,7 +81,7 @@ const SpeedDialItem = Overlay.inherit({
 
         eventsEngine.off(overlayContent, eventName);
         eventsEngine.on(overlayContent, eventName, (e) => {
-            this._clickAction(extend({ event: e, element: this.$element() }));
+            this._clickAction({ event: e, element: this.$element() });
         });
     },
 
