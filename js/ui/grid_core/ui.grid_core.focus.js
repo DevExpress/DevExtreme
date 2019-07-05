@@ -168,22 +168,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                         }).fail(result.reject);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
-                            var rowsScrollController = dataController._rowsScrollController;
-                            if(rowsScrollController) {
+                            if(that.option("scrolling.rowRenderingMode") === "virtual") {
                                 setTimeout(function() {
-                                    var rowIndex = getIndexByKey(key, dataController.items(true));
-                                    if(rowIndex >= 0) {
-                                        var offset = rowsScrollController.getItemOffset(rowIndex + dataController.getRowIndexOffset() - dataController.getRowIndexDelta()),
-                                            scrollable = that.getView("rowsView").getScrollable();
-
-                                        var triggerUpdateFocusedRow = function() {
-                                            that.component.off("contentReady", triggerUpdateFocusedRow);
-                                            that._triggerUpdateFocusedRow(key, result);
-                                        };
-
-                                        that.component.on("contentReady", triggerUpdateFocusedRow);
-                                        scrollable.scrollTo({ y: offset });
-                                    }
+                                    that._navigateToVirtualRow(key, result);
                                 });
                             } else {
                                 that._triggerUpdateFocusedRow(key, result);
@@ -195,6 +182,27 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
 
             return result.promise();
+        },
+
+        _navigateToVirtualRow: function(key, result) {
+            var that = this,
+                dataController = this.getController("data"),
+                rowsScrollController = dataController._rowsScrollController,
+                rowIndex = getIndexByKey(key, dataController.items(true)),
+                scrollable = that.getView("rowsView").getScrollable();
+
+            if(rowsScrollController && scrollable && rowIndex >= 0) {
+                var focusedRowIndex = rowIndex + dataController.getRowIndexOffset() - dataController.getRowIndexDelta(),
+                    offset = rowsScrollController.getItemOffset(focusedRowIndex);
+
+                var triggerUpdateFocusedRow = function() {
+                    that.component.off("contentReady", triggerUpdateFocusedRow);
+                    that._triggerUpdateFocusedRow(key, result);
+                };
+
+                that.component.on("contentReady", triggerUpdateFocusedRow);
+                scrollable.scrollTo({ y: offset });
+            }
         },
 
         _triggerUpdateFocusedRow: function(key, result) {
@@ -520,15 +528,16 @@ module.exports = {
                 },
                 processUpdateFocusedRow: function() {
                     var prevPageIndex = this._prevPageIndex,
+                        pageIndex = this.pageIndex(),
+                        prevRenderingPageIndex = this._prevRenderingPageIndex || 0,
+                        renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0,
                         operationTypes = this._dataSource.operationTypes() || {},
                         focusController = this.getController("focus"),
                         reload = operationTypes.reload,
                         isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
                         focusedRowKey = this.option("focusedRowKey"),
-                        prevRenderingPageIndex = this._prevRenderingPageIndex || 0,
-                        renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0,
-                        pageIndex = this.pageIndex(),
-                        paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex;
+                        paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex,
+                        pagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
 
                     this._prevPageIndex = pageIndex;
                     this._prevRenderingPageIndex = renderingPageIndex;
@@ -543,7 +552,7 @@ module.exports = {
                         if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
                             focusController._focusRowByIndex();
                         }
-                    } else if(renderingPageIndex === prevRenderingPageIndex) {
+                    } else if(!pagingByRendering) {
                         focusController._focusRowByKeyOrIndex();
                     }
                 },
