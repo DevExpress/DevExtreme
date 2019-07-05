@@ -4031,6 +4031,45 @@ QUnit.module("datebox validation", {}, () => {
         assert.ok(dateBox.option("isValid"), "datebox is valid");
     });
 
+    QUnit.test("dxDateBox should become invalid if min/max options changed", assert => {
+        const dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 14),
+            value: new Date(2015, 6, 18),
+            max: new Date(2015, 6, 20),
+            pickerType: "calendar"
+        }).dxDateBox("instance");
+
+        dateBox.option("min", new Date(2015, 6, 19));
+        assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+
+        dateBox.option("min", new Date(2015, 6, 14));
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+
+        dateBox.option("max", new Date(2015, 6, 17));
+        assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+
+        dateBox.option("max", new Date(2015, 6, 20));
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+    });
+
+    QUnit.test("required validator should not be triggered when another validation rule has been changed", (assert) => {
+        const dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 14),
+            value: null,
+            max: new Date(2015, 6, 20),
+            pickerType: "calendar"
+        }).dxValidator({
+            validationRules: [{ type: "required", message: "Date is required" }]
+        }).dxDateBox("instance");
+
+        dateBox.option({
+            min: new Date(2015, 6, 13),
+            max: new Date(2015, 6, 21)
+        });
+
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+    });
+
     QUnit.testInActiveWindow("DateBox should validate value after remove an invalid characters", assert => {
         const $element = $("#dateBox");
         const dateBox = $element.dxDateBox({

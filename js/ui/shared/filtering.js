@@ -42,12 +42,12 @@ module.exports = (function() {
             startFilterExpression = [selector, ">=", filterValue[0]];
             endFilterExpression = [selector, "<=", filterValue[1]];
 
-            if(isDateType(column.dataType)) {
-                if(isZeroTime(filterValue[1])) {
-                    endFilterValue = new Date(filterValue[1].getTime());
+            if(isDateType(column.dataType) && isZeroTime(filterValue[1])) {
+                endFilterValue = new Date(filterValue[1].getTime());
+                if(column.dataType === "date") {
                     endFilterValue.setDate(filterValue[1].getDate() + 1);
-                    endFilterExpression = [selector, "<", endFilterValue];
                 }
+                endFilterExpression = [selector, "<", endFilterValue];
             }
 
             return [startFilterExpression, "and", endFilterExpression];

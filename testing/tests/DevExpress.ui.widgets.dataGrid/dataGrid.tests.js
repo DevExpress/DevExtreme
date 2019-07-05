@@ -2149,6 +2149,31 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, "There is 2 columns in hiding queue");
     clock.restore();
 });
+
+// T745930
+QUnit.test("Native scrollbars should not be visible if columns are not hidden by hidingPriority", function(assert) {
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1100,
+        loadingTimeout: undefined,
+        dataSource: [{
+            OrderNumber: 35703,
+            Employee: "Harv Mudd"
+        }],
+        columnAutoWidth: true,
+        scrolling: { useNative: true },
+        columns: [{
+            dataField: "OrderNumber",
+            hidingPriority: 0,
+            width: 130
+        },
+        "Employee"]
+    }).dxDataGrid("instance");
+
+    assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(true), 0, "Horizontal scrollbar is hidden");
+    assert.strictEqual(dataGrid.getView("rowsView").getScrollbarWidth(false), 0, "Vertical scrollbar is hidden");
+});
+
 // TODO jsdmitry: wait fix T381435
 /* QUnit.test("Columns hiding - do not hide fixed columns", function(assert) {
     // arrange
@@ -7665,6 +7690,54 @@ QUnit.test("scroll should works correctly if row height and totalCount are large
 
     assert.ok(topVisibleRowData.id > 1, "top visible row data is not first");
     assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 3, "rows in viewport are rendered");
+
+    clock.restore();
+});
+
+// T750279
+QUnit.test("scroll should works correctly if page size is small and totalCount are large", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 600,
+        dataSource: {
+            load: function(options) {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    var items = [];
+
+                    for(var i = options.skip; i < options.skip + options.take; i++) {
+                        items.push({ id: i + 1 });
+                    }
+                    d.resolve({ data: items, totalCount: 1000000 });
+                });
+
+                return d;
+            }
+        },
+        remoteOperations: true,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    clock.tick(1000);
+    dataGrid.getScrollable().scrollTo(100000);
+    clock.tick(1000);
+
+    // assert
+    var topVisibleRowData = dataGrid.getTopVisibleRowData();
+    var visibleRows = dataGrid.getVisibleRows();
+
+    assert.ok(topVisibleRowData.id > 1, "top visible row data is not first");
+    assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 10, "visible rows are in viewport");
 
     clock.restore();
 });
@@ -15275,5 +15348,40 @@ QUnit.testInActiveWindow("Validation message should be positioned relative cell 
     assert.ok(overlayTarget.hasClass("dx-editor-cell"), "target in material theme");
 
     themes.isMaterial = origIsMaterial;
+    clock.restore();
+});
+
+QUnit.testInActiveWindow("Focus on edited cell after the edit button in command column was chosen (T747484)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            keyExpr: "name",
+            focusedRowEnabled: true,
+            useLegacyKeyboardNavigation: false,
+            dataSource: [
+                { name: 'Alex', phone: "555555" },
+                { name: 'Dan', phone: "111111" }
+            ],
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                texts: {
+                    editRow: "Edit",
+                    saveRowChanges: "Save",
+                    cancelRowChanges: "Cancel"
+                }
+            },
+            columns: [ { type: 'buttons' }, "name", "phone"]
+        });
+
+    clock.tick();
+
+    // act
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger("dxpointerdown").click();
+    clock.tick();
+
+    // assert
+    assert.ok($(dataGrid.getRowElement(0)).find(".dx-editor-cell").eq(0).hasClass("dx-focused"), "first editable cell is active");
+
     clock.restore();
 });

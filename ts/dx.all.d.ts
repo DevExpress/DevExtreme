@@ -2431,6 +2431,8 @@ declare module DevExpress.ui {
         format?: format;
         /** @name dxFilterBuilderField.lookup */
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
+        /** @name dxFilterBuilderField.name */
+        name?: string;
         /** @name dxFilterBuilderField.trueText */
         trueText?: string;
     }
@@ -5970,6 +5972,8 @@ declare module DevExpress.viz {
         color?: string;
         /** @name BaseWidget.Options.tooltip.container */
         container?: string | Element | JQuery;
+        /** @name BaseWidget.Options.tooltip.cornerRadius */
+        cornerRadius?: number;
         /** @name BaseWidget.Options.tooltip.enabled */
         enabled?: boolean;
         /** @name BaseWidget.Options.tooltip.font */
@@ -9452,6 +9456,8 @@ declare module DevExpress {
         static notify(message: string, type?: string, displayTime?: number): void;
         /** @name ui.notify(options,type,displayTime) */
         static notify(options: any, type?: string, displayTime?: number): void;
+        /** @name ui.repaintFloatingActionButton() */
+        static repaintFloatingActionButton(): void;
         /** @name ui.setTemplateEngine(name) */
         static setTemplateEngine(templateEngineName: string): void;
         /** @name ui.setTemplateEngine(options) */

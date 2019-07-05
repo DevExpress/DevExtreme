@@ -1,4 +1,4 @@
-/* global DATA, internals, initTree, stripFunctions */
+/* global DATA, internals, initTree, makeSlowDataSource, stripFunctions */
 
 import $ from "jquery";
 import commonUtils from "core/utils/common";
@@ -781,6 +781,25 @@ QUnit.test("onItemExpanded should be called after animation completed", function
     }
 });
 
+QUnit.test("onItemExpanded event should not be called when the expandAll is called", function(assert) {
+    const itemExpandedHandler = sinon.stub();
+    const treeView = initTree({
+        items: [{
+            id: 1,
+            text: "Item 1",
+            items: [{
+                id: 2,
+                text: "Nested items"
+            }]
+        }],
+        onItemExpanded: itemExpandedHandler
+    }).dxTreeView("instance");
+
+    treeView.expandAll();
+
+    assert.equal(itemExpandedHandler.callCount, 0, "the expandItem event never called");
+});
+
 QUnit.test("Expand event handler has correct arguments", function(assert) {
     var treeView = initTree({
             items: [{ id: 1, text: "Item 1", items: [{ id: 2, text: "Nested items" }] }],
@@ -887,4 +906,21 @@ QUnit.test("Fire contentReady event when search", function(assert) {
     instance.option("searchValue", "2");
 
     assert.strictEqual(contentReadyHandler.callCount, 2, "onContentReady was second time");
+});
+
+QUnit.test("ContentReady event rise once when the data source is remote by first rendering", function(assert) {
+    var contentReadyHandler = sinon.spy();
+
+    initTree({
+        dataSource: makeSlowDataSource([{
+            id: 1,
+            text: "Item 1",
+            parentId: 0
+        }]),
+        onContentReady: contentReadyHandler
+    }).dxTreeView("instance");
+
+    this.clock.tick(300);
+
+    assert.strictEqual(contentReadyHandler.callCount, 1, "onContentReady was first time");
 });

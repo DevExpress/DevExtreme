@@ -1177,6 +1177,28 @@ QUnit.test("calculateFilterExpression for column with dataType is date when filt
     ], "calculate filter expression for end date with time");
 });
 
+// T753401
+QUnit.test("calculateFilterExpression for column with dataType is dateTime when filterOperation is 'between'", function(assert) {
+    // arrange
+    var column,
+        dateStart,
+        dateEnd;
+
+    this.applyOptions({
+        columns: [{ dataField: 'TestField', dataType: 'datetime', selectedFilterOperation: "between" }]
+    });
+    column = this.columnsController.getColumns()[0];
+
+    // act, assert
+    dateStart = new Date(2016, 7, 1, 0, 0, 0);
+    dateEnd = new Date(2017, 7, 1, 0, 0, 0);
+    assert.deepEqual(column.calculateFilterExpression([dateStart, dateEnd], "between"), [
+        ['TestField', '>=', dateStart],
+        "and",
+        ['TestField', '<', dateEnd]
+    ], "calculate filter expression for end date with time");
+});
+
 QUnit.test("calculateFilterExpression for column with dataType is 'datetime'", function(assert) {
     // arrange
     this.applyOptions({

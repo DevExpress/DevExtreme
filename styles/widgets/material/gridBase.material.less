@@ -270,11 +270,6 @@
                 font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                 line-height: @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT;
             }
-
-            & > td.dx-command-adaptive {
-                padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING - 2px;
-                padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING - 2px;
-            }
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
@@ -914,7 +909,7 @@
                 outline: none;
             }
 
-            &.dx-data-row:not(.dx-edit-row) {
+            &.dx-data-row {
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
                 & .dx-command-edit .dx-link {
@@ -925,6 +920,19 @@
                     & .dx-@{widgetName}-group-closed {
                         color: ~"@{@{widgetName}-row-focused-color}";
                     }
+                }
+
+                & .dx-command-edit .dx-link:focus {
+                    background-color: ~"@{@{widgetName}-base-background-color}";
+                    color: ~"@{@{widgetName}-link-color}";
+                }
+            }
+
+            &.dx-data-row.dx-edit-row {
+                & > td.dx-editor-cell:not(.dx-command-select),
+                & > tr > td.dx-editor-cell:not(.dx-command-select) {
+                    background-color: ~"@{@{widgetName}-base-background-color}";
+                    color: ~"@{@{widgetName}-base-color}";
                 }
             }
 

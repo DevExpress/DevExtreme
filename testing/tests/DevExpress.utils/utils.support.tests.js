@@ -1,52 +1,59 @@
 import { detectTouchEvents, detectPointerEvent } from "core/utils/support";
 
-const createWindowMock = (...properties) => { return { hasProperty: name => properties.indexOf(name) > -1 }; };
+const createHasPropertyMock = (...properties) => { return name => properties.indexOf(name) > -1; };
 
 QUnit.module("Touch events detection", () => {
     QUnit.test("touch = true when 'ontouchstart' exists and 'maxTouchPoints' > 0 (e.g. Chrome 70+ w/ touch monitor)", assert => {
-        const windowMock = createWindowMock();
+        const hasWindowProperty = createHasPropertyMock();
 
-        assert.ok(detectTouchEvents(windowMock, 2), "touch events are detected");
+        assert.ok(detectTouchEvents(hasWindowProperty, 2), "touch events are detected");
     });
 
     QUnit.test("touch = true when window has 'ontouchstart' property (e.g. mobile devices, Chrome 69- w/ touch display)", assert => {
-        const windowMock = createWindowMock("ontouchstart");
+        const hasWindowProperty = createHasPropertyMock("ontouchstart");
 
-        assert.ok(detectTouchEvents(windowMock, 2), "touch events are detected");
+        assert.ok(detectTouchEvents(hasWindowProperty, 2), "touch events are detected");
     });
 
     QUnit.test("touch = false when callPhantom is defined (PhantomJS)", assert => {
-        const windowMock = createWindowMock("ontouchstart", "callPhantom");
+        const hasWindowProperty = createHasPropertyMock("ontouchstart", "callPhantom");
 
-        assert.notOk(detectTouchEvents(windowMock, 2), "touch events are not detected");
+        assert.notOk(detectTouchEvents(hasWindowProperty, 2), "touch events are not detected");
     });
 
     QUnit.test("touch = false when 'ontouchstart' not exists and 'maxTouchPoints' = 0 (e.g. non-touch display)", assert => {
-        const windowMock = createWindowMock();
+        const hasWindowProperty = createHasPropertyMock();
 
-        assert.notOk(detectTouchEvents(windowMock, 0), "touch events are not detected");
+        assert.notOk(detectTouchEvents(hasWindowProperty, 0), "touch events are not detected");
     });
 });
 
 QUnit.module("Pointer event detection", () => {
-    QUnit.test("pointerEvent = true when 'PointerEvent' exists (Surface pro, edge 17+, latest IE11)", assert => {
-        const windowMock = createWindowMock("PointerEvent");
-        const navigatorMock = {};
+    QUnit.test("pointerEvent isn't defined when 'PointerEvent' exists (Surface pro, edge 17+, latest IE11)", assert => {
+        const hasWindowProperty = createHasPropertyMock("PointerEvent");
+        const pointerEnabled = undefined;
 
-        assert.ok(detectPointerEvent(windowMock, navigatorMock), "PointerEvent detected");
+        assert.ok(detectPointerEvent(hasWindowProperty, pointerEnabled), "PointerEvent detected");
     });
 
-    QUnit.test("pointerEvent = true when 'pointerEnabled' exists (surface with old IE11)", assert => {
-        const windowMock = createWindowMock();
-        const navigatorMock = { pointerEnabled: true };
+    QUnit.test("pointerEvent = true when 'pointerEnabled' not exists (surface with old IE11)", assert => {
+        const hasWindowProperty = createHasPropertyMock();
+        const pointerEnabled = true;
 
-        assert.ok(detectPointerEvent(windowMock, navigatorMock), "PointerEvent detected");
+        assert.ok(detectPointerEvent(hasWindowProperty, pointerEnabled), "PointerEvent detected");
+    });
+
+    QUnit.test("pointerEvent = false when 'pointerEnabled' exists (WebBrowser control)", assert => {
+        const hasWindowProperty = createHasPropertyMock("PointerEvent");
+        const pointerEnabled = false;
+
+        assert.notOk(detectPointerEvent(hasWindowProperty, pointerEnabled), "PointerEvent isn't detected");
     });
 
     QUnit.test("pointerEvent = false when 'pointerEnabled' or 'PointerEvent' not exists", assert => {
-        const windowMock = createWindowMock();
+        const hasWindowProperty = createHasPropertyMock();
+        const pointerEnabled = undefined;
 
-        assert.notOk(detectPointerEvent(windowMock, {}), "PointerEvent isn't detected");
+        assert.notOk(detectPointerEvent(hasWindowProperty, pointerEnabled), "PointerEvent isn't detected");
     });
 });
-

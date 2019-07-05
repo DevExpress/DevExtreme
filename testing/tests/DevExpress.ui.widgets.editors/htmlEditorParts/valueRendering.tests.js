@@ -85,22 +85,6 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, "<p>Test1</p><p>Test2</p>");
     });
 
-    test("onContentReady should trigger after processing transcluded content", (assert) => {
-        const initialMarkup = "<custom-tag></custom-tag><h1>Hi!</h1><p>Test         </p>";
-        const expectedValue = "<h1>Hi!</h1><p>Test</p>";
-
-        $("#htmlEditor")
-            .html(initialMarkup)
-            .dxHtmlEditor({
-                onContentReady: ({ component }) => {
-                    assert.strictEqual(component.option("value"), expectedValue, "value is synchronized with the transcluded content");
-                }
-            })
-            .dxHtmlEditor("instance");
-
-        this.clock.tick();
-    });
-
     test("change value by user", (assert) => {
         const done = assert.async();
         const expectedValue = "<p>Hi! <strong>Test.</strong></p><p>New line</p>";
@@ -230,6 +214,16 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         instance.setSelection(1, 0);
         instance.format("align", "center");
         this.clock.tick();
+    });
+
+    test("editor should have an empty string value when all content has been removed", (assert) => {
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "test"
+            }).dxHtmlEditor("instance");
+
+        instance.delete(0, 4);
+        assert.equal(instance.option("value"), "", "value is empty line");
     });
 });
 

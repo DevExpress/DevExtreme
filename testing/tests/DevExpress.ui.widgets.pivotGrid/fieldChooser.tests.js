@@ -246,6 +246,36 @@ QUnit.test("Render Fields Tree", function(assert) {
     ]);
 });
 
+// T752911
+QUnit.test("Render Fields Tree with groups and without isMeasure", function(assert) {
+    var fields = [
+            { dataField: 'a' },
+            { dataField: 'b', groupName: "b", levels: [{ groupName: "b", groupIndex: 0 }] },
+            { dataField: 'c' }
+        ],
+        dataSourceOptions = {
+            fields: fields
+        };
+
+    // act
+    this.setup(dataSourceOptions);
+
+    // assert
+    assert.ok(this.fieldChooser);
+    assert.ok(this.dataSource);
+    assert.equal(this.$container.find(".dx-treeview").length, 1, "tree view count");
+
+    var fieldsDataSource = this.$container.find(".dx-treeview").dxTreeView("option", "dataSource");
+
+    assert.ok(fieldsDataSource, "fields dataSource exists");
+    assert.equal(fieldsDataSource.length, 3, "fields dataSource length");
+    assert.deepEqual(fieldsDataSource, [
+        { field: fields[0], icon: undefined, index: 0, isDefault: undefined, isMeasure: undefined, key: "a", selected: false, text: "a" },
+        { field: fields[1], icon: undefined, index: 1, isDefault: undefined, isMeasure: undefined, key: "b", selected: false, text: "b" },
+        { field: { dataField: "c", index: 2 }, icon: undefined, index: 2, isDefault: undefined, isMeasure: undefined, key: "c", selected: false, text: "c" }
+    ]);
+});
+
 QUnit.test("Create areas with draggable items", function(assert) {
     var fields = [
         { dataField: "field1", caption: "Field 1", area: "row" }

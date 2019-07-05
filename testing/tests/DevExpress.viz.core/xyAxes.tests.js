@@ -678,6 +678,11 @@ QUnit.test("measuring label on axis with empty range - do not render texts", fun
 
 QUnit.test("IncidentOccured on measure labels", function(assert) {
     this.renderSettings.isArgumentAxis = true;
+    this.translator.getBusinessRange = function() {
+        return {
+            isEmpty: function() { return true; }
+        };
+    };
     var axis = this.createSimpleAxis({ label: { visible: true } });
 
     axis.setMarginOptions({ checkInterval: true });

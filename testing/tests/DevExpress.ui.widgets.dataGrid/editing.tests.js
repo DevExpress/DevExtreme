@@ -11732,6 +11732,29 @@ QUnit.test("Editing controller should correct the editing row index after expand
     assert.equal(that.editingController.getEditRowIndex(), 2, "editing row index was not changed after collapse the above row");
 });
 
+// T752381
+QUnit.test("Close edit form after collapse group row", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $('#container');
+
+    that.rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", groupIndex: 0 }, "age", "lastName"]
+    });
+
+    // act
+    that.editRow(3);
+    that.collapseRow(["Alex"]);
+
+    // assert
+    assert.strictEqual(that.editingController.getEditRowIndex(), -1, "edit form was closed");
+});
+
 var generateDataSource = function(countItem, countColumn) {
     var items = [];
 

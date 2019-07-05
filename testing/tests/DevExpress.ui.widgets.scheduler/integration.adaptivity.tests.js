@@ -1,6 +1,6 @@
 import $ from "jquery";
 import fx from "animation/fx";
-import { SchedulerTestWrapper, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from "./helpers.js";
+import { SchedulerTestWrapper, initTestMarkup, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from "./helpers.js";
 import { getSimpleDataArray } from './data.js';
 import resizeCallbacks from "core/utils/resize_callbacks";
 import devices from "core/devices";
@@ -12,13 +12,7 @@ import "ui/scheduler/ui.scheduler";
 
 const { testStart, test, module } = QUnit;
 
-testStart(() => {
-    $("#qunit-fixture").html(
-        `<div id="scheduler">
-            <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
-        </div>`
-    );
-});
+testStart(() => initTestMarkup());
 
 const createInstance = function(options) {
     const defaultOption = {

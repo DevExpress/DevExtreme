@@ -3564,6 +3564,7 @@ var dxChartCommonAnnotationConfig = {
         * @name dxChartCommonAnnotationConfig.border.cornerRadius
         * @type number
         * @default 0
+        * @default 4 @for Material 
         */
         cornerRadius: 0
     },
