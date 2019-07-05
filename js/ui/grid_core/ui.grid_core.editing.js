@@ -1699,7 +1699,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 editMode = getEditMode(that);
 
             if(editMode === EDIT_MODE_POPUP) {
-                editForm && editForm.repaint();
+                if(that.option("repaintChangesOnly")) {
+                    row.update && row.update(row);
+                } else {
+                    editForm && editForm.repaint();
+                }
             } else {
                 that._dataController.updateItems({
                     changeType: "update",
@@ -1795,8 +1799,23 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         getFormEditorTemplate: function(cellOptions, item) {
-            var that = this;
-            return function(options, $container) {
+            var that = this,
+                column = this.component.columnOption(item.dataField);
+
+            return function(options, container) {
+                var templateOptions = extend({}, cellOptions),
+                    $container = $(container);
+
+                templateOptions.column = column;
+
+                templateOptions.row.watch && templateOptions.row.watch(function() {
+                    return templateOptions.column.selector(templateOptions.row.data);
+                }, function(newValue) {
+                    templateOptions.value = newValue;
+                    $container.contents().remove();
+                    that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                });
+
                 that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
             };
         },
