@@ -667,11 +667,11 @@ QUnit.test("Two rival appointments should have correct positions", function(asse
 
     assert.equal(firstAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(firstAppointmentPosition.top, 26, 1.5, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), 0.6, "appointment has a right size");
+    assert.roughEqual($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), 1.1, "appointment has a right size");
 
     assert.equal(secondAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(secondAppointmentPosition.top, 46, 1.5, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(1).outerWidth(), $tableCell.outerWidth(), 0.6, "appointment has a right size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), $tableCell.outerWidth(), 1.1, "appointment has a right size");
 });
 
 QUnit.test("Collapsing appointments should have specific class", function(assert) {
@@ -720,11 +720,11 @@ QUnit.test("Four rival appointments should have correct positions", function(ass
 
     assert.equal(firstAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(firstAppointmentPosition.top, 26, 1.5, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), 0.6, "appointment has a right size");
+    assert.roughEqual($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), 1.1, "appointment has a right size");
 
     assert.equal(secondAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(secondAppointmentPosition.top, 46, 1.5, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(1).outerWidth(), $tableCell.outerWidth(), 0.6, "appointment has a right size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), $tableCell.outerWidth(), 1.1, "appointment has a right size");
 
     assert.roughEqual(thirdAppointmentPosition.left, 21, 1.5, "appointment is rendered in right place");
     assert.roughEqual(thirdAppointmentPosition.top, 3, 1.5, "appointment is rendered in right place");
@@ -758,7 +758,7 @@ QUnit.test("Rival duplicated appointments should have correct positions", functi
 
     assert.equal(firstAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(firstAppointmentPosition.top, 26, 1.5, "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), 0.6, "appointment has a right size");
+    assert.roughEqual($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), 1.1, "appointment has a right size");
 
     assert.equal(secondAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(secondAppointmentPosition.top, 46, 1.5, "appointment is rendered in right place");
