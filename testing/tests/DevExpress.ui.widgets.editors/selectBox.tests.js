@@ -3792,6 +3792,34 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.strictEqual(instance.option("value"), 4, "downArrow");
     });
 
+    QUnit.test("downArrow should load next page", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+                dataSource: {
+                    store: [1, 2, 3, 4, 5, 6],
+                    paginate: true,
+                    pageSize: 2
+                },
+                value: null,
+                focusStateEnabled: true,
+                opened: false,
+                deferRendering: true
+            }),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+            instance = $element.dxSelectBox("instance"),
+            keyboard = keyboardMock($input);
+
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+
+        const $list = $(instance.content()).find(".dx-list");
+
+        assert.ok($list.length, "list is rendered");
+        assert.strictEqual(instance.option("value"), 4, "value is correct");
+        assert.strictEqual($list.find(".dx-list-item").text(), "1234", "all previous list items are loaded");
+    });
+
     QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
             dataSource: new DataSource({
