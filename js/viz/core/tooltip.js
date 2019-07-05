@@ -249,12 +249,13 @@ Tooltip.prototype = {
         that._renderer.resize(plaqueBBox.width, plaqueBBox.height);
 
         // move wrapper
+        const offset = that._wrapper.css({ left: 0, top: 0 }).offset();
         const left = plaqueBBox.x;
         const top = plaqueBBox.y;
 
         that._wrapper.css({
-            left,
-            top
+            left: left - offset.left,
+            top: top - offset.top
         });
 
         this.plaque.moveRoot(-left, -top);
