@@ -10598,6 +10598,31 @@ QUnit.test("refresh", function(assert) {
     assert.ok(reloadResolved);
 });
 
+// T754759
+QUnit.test("visible rows are not duplicated after dataSource reload when scrolling is virtual", function(assert) {
+    // arrange
+    var data = [];
+    for(let i = 0; i < 10; i++) {
+        data.push({ id: i });
+    }
+
+    var dataSource = new DataSource(data),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: dataSource,
+            height: 100,
+            remoteOperations: true,
+            scrolling: { mode: "virtual" },
+            paging: { pageSize: 2 },
+            loadingTimeout: undefined
+        }).dxDataGrid("instance");
+
+    // act
+    dataSource.reload();
+
+    // assert
+    assert.deepEqual(dataGrid.getVisibleRows().map(item => item.data.id), [0, 1, 2, 3], "visible row keys");
+});
+
 // T750728
 QUnit.test("Toolbar should be updated immediately after option change", function(assert) {
     var titleText = "Custom Title";
