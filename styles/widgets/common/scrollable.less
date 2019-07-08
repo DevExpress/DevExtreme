@@ -53,6 +53,11 @@
     &.dx-scrollable-disabled .dx-scrollable-container {
         touch-action: auto;
     }
+    &.dx-scrollable-disabled {
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    }
 
     &.dx-scrollable-scrollbars-hidden {
         ::-webkit-scrollbar {
@@ -211,5 +216,11 @@
 .dx-scrollable-simulated {
     .dx-scrollable-content {
         overflow-anchor: none;
+    }
+
+    &.dx-scrollable-disabled {
+        .dx-scrollable-scrollbar {
+            pointer-events: none;
+        }
     }
 }

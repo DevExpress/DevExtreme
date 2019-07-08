@@ -1907,13 +1907,14 @@ QUnit.module("Hoverable interaction", () => {
                     const checkAsserts = (isHoverable) => {
                         assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
                         assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                        assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
                     };
 
                     const scrollBarClass = direction === "vertical" ? SCROLLBAR_VERTICAL_CLASS : SCROLLBAR_HORIZONTAL_CLASS;
                     const $scrollBar = $scrollable.find(`.${scrollBarClass}`);
                     const scrollBar = Scrollbar.getInstance($scrollBar);
 
-                    const isScrollbarHoverable = disabled === false && (showScrollbarMode === "onHover" || showScrollbarMode === "always");
+                    const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
                     checkAsserts(isScrollbarHoverable);
                 });
             });

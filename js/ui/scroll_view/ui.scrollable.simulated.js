@@ -139,7 +139,7 @@ var Scroller = Class.inherit({
             direction: this._direction,
             visible: this._scrollByThumb,
             visibilityMode: this._visibilityModeNormalize(this._scrollbarVisible),
-            expandable: this._scrollByThumb && !this._disabled
+            expandable: this._scrollByThumb
         });
         this._$scrollbar = this._scrollbar.$element();
     },
@@ -590,7 +590,6 @@ var SimulatedStrategy = Class.inherit({
     _scrollerOptions: function(direction) {
         return {
             direction: direction,
-            disabled: this.option("disabled"),
             $content: this._$content,
             $container: this._$container,
             $wrapper: this._$wrapper,
