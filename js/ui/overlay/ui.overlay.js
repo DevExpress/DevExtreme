@@ -1082,12 +1082,9 @@ var Overlay = Widget.inherit({
         var $scrollTerminator = this._wrapper();
         var terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        var that = this;
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
             validate: function(e) {
-                that._tryPreventDefaultForScrollable(e);
-
                 return true;
             },
             getDirection: function() {
@@ -1104,38 +1101,6 @@ var Overlay = Widget.inherit({
                 e.preventDefault();
             }
         });
-    },
-
-    _tryPreventDefaultForScrollable(e) {
-        if(eventUtils.isMouseWheelEvent(e)) {
-            var scrollableContainer = this._tryGetScrollableContainer(e.target);
-
-            if(scrollableContainer) {
-                if(this._isScrolledInMaxDirection(e, scrollableContainer)) {
-                    e.preventDefault();
-                }
-            }
-        }
-    },
-
-    _isScrolledInMaxDirection(e, container) {
-        var result;
-
-        if(e.delta > 0) {
-            result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
-        } else {
-            if(e.shiftKey) {
-                result = (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
-            } else {
-                result = (container.clientHeight + container.scrollTop) >= container.scrollHeight;
-            }
-        }
-
-        return result;
-    },
-
-    _tryGetScrollableContainer(targetElement) {
-        return $(targetElement).closest(`.dx-scrollable-container`).get(0);
     },
 
     _getDragTarget: function() {
