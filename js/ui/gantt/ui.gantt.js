@@ -141,6 +141,11 @@ class Gantt extends Widget {
                 */
                 keyExpr: GANTT_KEY_FIELD
             },
+            /**
+            * @name dxGanttOptions.resources
+            * @type Object
+            * @default null
+            */
             resources: {
                 /**
                 * @name dxGanttOptions.resources.dataSource
@@ -156,6 +161,11 @@ class Gantt extends Widget {
                 */
                 keyExpr: GANTT_KEY_FIELD
             },
+            /**
+            * @name dxGanttOptions.resourceAssignments
+            * @type Object
+            * @default null
+            */
             resourceAssignments: {
                 /**
                 * @name dxGanttOptions.resourceAssignments.dataSource
