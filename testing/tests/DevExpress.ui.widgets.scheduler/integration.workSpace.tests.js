@@ -21,6 +21,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import dragEvents from "events/drag";
 import CustomStore from "data/custom_store";
 import { isRenderer } from "core/utils/type";
+import translator from "animation/translator";
 import config from "core/config";
 
 import "ui/scheduler/ui.scheduler";
@@ -1845,4 +1846,33 @@ QUnit.test("Current time indicator calculates position correctly with workWeek v
     const position = { top: $dateTimeIndicator.style.top, left: $dateTimeIndicator.style.left };
 
     assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator positioned correctly");
+});
+
+QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", function(assert) {
+    const date = new Date(2019, 5, 1, 9, 40);
+
+    this.createInstance({
+        dataSource: [],
+        views: ["timelineDay", "day", "timelineWeek", "week", "timelineMonth"],
+        currentView: "timelineDay",
+        currentDate: date,
+        firstDayOfWeek: 0,
+        startDayHour: 0,
+        endDayHour: 20,
+        cellDuration: 60,
+        groups: ["priority"],
+        height: 580,
+    });
+
+    this.instance.scrollToTime(date.getHours() - 1, 30, date);
+    let scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineDay");
+
+    this.instance.option("currentView", "timelineWeek");
+
+    this.instance.scrollToTime(date.getHours() - 1, 30, date);
+    scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
 });
