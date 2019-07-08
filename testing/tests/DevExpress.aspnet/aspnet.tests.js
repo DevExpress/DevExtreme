@@ -315,6 +315,8 @@
             "<% var a = '<script>alert(1)</script>'; %><%- a %>",
             "<script>alert(1)</script>"
         );
+
+        testTemplate("obj", "<%- obj.text %>", "Test button");
     });
 
     QUnit.test("Transcluded content (T691770, T693379)", function(assert) {
