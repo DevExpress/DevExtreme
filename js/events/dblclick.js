@@ -1,5 +1,5 @@
 /**
-  * @name ui events.dxdblclick
+  * @name UI Events.dxdblclick
   * @type eventType
   * @type_function_param1 event:event
   * @module events/dblclick
