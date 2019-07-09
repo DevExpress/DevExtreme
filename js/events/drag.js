@@ -71,21 +71,21 @@ var dropTargetRegistration = {
 };
 
 /**
-* @name ui events.dxdragenter
+* @name UI Events.dxdragenter
 * @type eventType
 * @type_function_param1 event:event
 * @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
 /**
-* @name ui events.dxdrop
+* @name UI Events.dxdrop
 * @type eventType
 * @type_function_param1 event:event
 * @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
 /**
-* @name ui events.dxdragleave
+* @name UI Events.dxdragleave
 * @type eventType
 * @type_function_param1 event:event
 * @type_function_param1_field1 draggingElement:Node
@@ -303,14 +303,14 @@ var DragEmitter = GestureEmitter.inherit({
 });
 
 /**
- * @name ui events.dxdragstart
+ * @name UI Events.dxdragstart
  * @type eventType
  * @type_function_param1 event:event
  * @type_function_param1_field1 cancel:boolean
  * @module events/drag
 */
 /**
-  * @name ui events.dxdrag
+  * @name UI Events.dxdrag
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 offset:number
@@ -318,7 +318,7 @@ var DragEmitter = GestureEmitter.inherit({
   * @module events/drag
 */
 /**
-  * @name ui events.dxdragend
+  * @name UI Events.dxdragend
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 offset:number

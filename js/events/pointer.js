@@ -9,56 +9,56 @@ import MouseStrategy from "./pointer/mouse";
 import MouseAndTouchStrategy from "./pointer/mouse_and_touch";
 
 /**
-  * @name ui events.dxpointerdown
+  * @name UI Events.dxpointerdown
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
 */
 /**
-  * @name ui events.dxpointermove
+  * @name UI Events.dxpointermove
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
 */
 /**
-  * @name ui events.dxpointerup
+  * @name UI Events.dxpointerup
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
 */
 /**
-  * @name ui events.dxpointercancel
+  * @name UI Events.dxpointercancel
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
 */
 /**
-  * @name ui events.dxpointerover
+  * @name UI Events.dxpointerover
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
 */
 /**
-  * @name ui events.dxpointerout
+  * @name UI Events.dxpointerout
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
 */
 /**
-  * @name ui events.dxpointerenter
+  * @name UI Events.dxpointerenter
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
 */
 /**
-  * @name ui events.dxpointerleave
+  * @name UI Events.dxpointerleave
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
