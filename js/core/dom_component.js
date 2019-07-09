@@ -41,13 +41,11 @@ var DOMComponent = Component.inherit({
             * @type_function_param1_field6 value:any
             * @action
             * @extends Action
-            * @inheritdoc
             */
             /**
             * @name DOMComponentOptions.onDisposing
             * @action
             * @extends Action
-            * @inheritdoc
             */
 
             /**

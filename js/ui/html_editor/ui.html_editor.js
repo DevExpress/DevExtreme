@@ -33,7 +33,6 @@ const HtmlEditor = Editor.inherit({
              * @name dxHtmlEditorOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -57,7 +56,6 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
 
             /**
@@ -133,7 +131,6 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorToolbarItem.location
             * @default "before"
-            * @inheritdoc
             */
 
             /**

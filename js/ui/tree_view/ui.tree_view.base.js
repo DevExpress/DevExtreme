@@ -146,7 +146,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewOptions.items
             * @type Array<dxTreeViewItem>
-            * @inheritdoc
             */
             /**
             * @name dxTreeViewOptions.animationEnabled
@@ -229,7 +228,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field8 event:event
             * @type_function_param1_field9 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -244,7 +242,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field8 event:event
             * @type_function_param1_field9 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -257,7 +254,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -271,7 +267,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field7 event:event
             * @type_function_param1_field8 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -389,25 +384,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxTreeViewItem

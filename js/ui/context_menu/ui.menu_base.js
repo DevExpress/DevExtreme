@@ -139,50 +139,42 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @name dxMenuBaseOptions.onItemHold
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.itemHoldTimeout
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.noDataText
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
             keyExpr: null,
 
             /**
             * @name dxMenuBaseOptions.parentIdExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.expandedExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
