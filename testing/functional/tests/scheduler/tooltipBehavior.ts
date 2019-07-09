@@ -37,7 +37,6 @@ test("Tooltip shouldn't hide after scroll in browser height is small (T755449)",
 }).before(async () => await createScheduler());
 
 test("Tooltip should hide after scroll", async t => {
-
     await t.resizeWindow(600, 600);
     await t.click(scheduler.getAppointment());
 
