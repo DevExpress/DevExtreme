@@ -19,8 +19,6 @@ const createFileManagerItem = (parentPath, dataObj) => {
     return item;
 };
 
-const FOLDER_COUNT = 3;
-
 const itemData = [
     { id: "Root\\Files\\Documents", name: "Documents", dateModified: "2019-02-14T07:44:15.4265625Z", isDirectory: true, size: 0 },
     { id: "Root\\Files\\Images", name: "Images", dateModified: "2019-02-14T07:44:15.4885105Z", isDirectory: true, size: 0 },
@@ -36,9 +34,6 @@ const fileManagerItems = [
     createFileManagerItem("Root/Files", itemData[3]),
     createFileManagerItem("Root/Files", itemData[4])
 ];
-
-const fileManagerFolders = fileManagerItems.slice(0, FOLDER_COUNT);
-const fileManagerFiles = fileManagerItems.slice(FOLDER_COUNT);
 
 const moduleConfig = {
 
@@ -58,7 +53,7 @@ const moduleConfig = {
 
 QUnit.module("Web API Provider", moduleConfig, () => {
 
-    test("get folders test", function(assert) {
+    test("get directory file items", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -70,28 +65,9 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             callback: request => assert.equal(request.method, "GET")
         });
 
-        this.provider.getFolders("Root/Files")
+        this.provider.getItems("Root/Files")
             .done(folders => {
-                assert.deepEqual(folders, fileManagerFolders, "folders received");
-                done();
-            });
-    });
-
-    test("get files test", function(assert) {
-        const done = assert.async();
-
-        ajaxMock.setup({
-            url: this.options.endpointUrl + "?command=GetDirContents&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
-            responseText: {
-                success: true,
-                result: itemData
-            },
-            callback: request => assert.equal(request.method, "GET")
-        });
-
-        this.provider.getFiles("Root/Files")
-            .done(files => {
-                assert.deepEqual(files, fileManagerFiles, "files received");
+                assert.deepEqual(folders, fileManagerItems, "folders received");
                 done();
             });
     });

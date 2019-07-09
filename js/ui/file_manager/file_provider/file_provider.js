@@ -1,10 +1,12 @@
 import { compileGetter } from "../../../core/utils/data";
-import { pathCombine, getFileExtension, getParentPath, getName } from "../ui.file_manager.utils";
+import { pathCombine, getFileExtension } from "../ui.file_manager.utils";
 import { ensureDefined } from "../../../core/utils/common";
 import { deserializeDate } from "../../../core/utils/date_serialization";
 import { each } from "../../../core/utils/iterator";
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
+
+const FILE_MANAGER_ROOT_DIR_KEY = "__DX-FM-ROOT__";
 
 /**
 * @name FileProvider
@@ -18,6 +20,11 @@ class FileProvider {
     constructor(options) {
         options = ensureDefined(options, {});
 
+        /**
+         * @name FileProviderOptions.keyExpr
+         * @type string|function(fileItem)
+         */
+        this._keyGetter = compileGetter(this._getKeyExpr(options));
         /**
          * @name FileProviderOptions.nameExpr
          * @type string|function(fileItem)
@@ -45,15 +52,7 @@ class FileProvider {
         this._thumbnailGetter = compileGetter(options.thumbnailExpr || "thumbnail");
     }
 
-    getFolders(path) {
-        return this.getItems(path, "folder");
-    }
-
-    getFiles(path) {
-        return this.getItems(path, "file");
-    }
-
-    getItems(path, itemType) {
+    getItems(path) {
         return [];
     }
 
@@ -93,13 +92,10 @@ class FileProvider {
     }
 
     _convertDataObjectsToFileItems(entries, path, itemType) {
-        const useFolders = itemType === "folder";
         const result = [];
         each(entries, (_, entry) => {
             const fileItem = this._createFileItem(entry, path);
-            if(!itemType || fileItem.isDirectory === useFolders) {
-                result.push(fileItem);
-            }
+            result.push(fileItem);
         });
         return result;
     }
@@ -120,6 +116,11 @@ class FileProvider {
             fileItem.hasSubDirs = this._hasSubDirs(dataObj);
         }
 
+        fileItem.key = this._keyGetter(dataObj);
+        if(!fileItem.key) {
+            fileItem.key = fileItem.relativeName;
+        }
+
         fileItem.thumbnail = this._thumbnailGetter(dataObj) || "";
         fileItem.dataItem = dataObj;
         return fileItem;
@@ -127,6 +128,18 @@ class FileProvider {
 
     _hasSubDirs(dataObj) {
         return true;
+    }
+
+    _getKeyExpr(options) {
+        return options.keyExpr || this._defaultKeyExpr;
+    }
+
+    _defaultKeyExpr(fileItem) {
+        if(arguments.length === 2) {
+            fileItem.__KEY__ = arguments[1];
+            return;
+        }
+        return Object.prototype.hasOwnProperty.call(fileItem, "__KEY__") ? fileItem.__KEY__ : null;
     }
 
     _getNameExpr(options) {
@@ -143,8 +156,9 @@ class FileManagerItem {
     constructor(parentPath, name, isDirectory) {
         this.parentPath = parentPath;
         this.name = name;
-        this.relativeName = pathCombine(this.parentPath, name);
+        this.key = this.relativeName = pathCombine(this.parentPath, name);
         this.isDirectory = isDirectory || false;
+        this.isRoot = false;
 
         this.size = 0;
         this.dateModified = new Date();
@@ -157,24 +171,13 @@ class FileManagerItem {
         return this.isDirectory ? "" : getFileExtension(this.name);
     }
 
-    getParent() {
-        if(this.isRoot()) {
-            return null;
-        }
-
-        return new FileManagerItem(getParentPath(this.parentPath), getName(this.parentPath), true);
-    }
-
-    isRoot() {
-        return !this.relativeName;
-    }
-
     equals(item) {
-        return item && this.relativeName === item.relativeName;
+        return item && this.key === item.key;
     }
 
     createClone() {
         const result = new FileManagerItem(this.parentPath, this.name, this.isDirectory);
+        result.key = this.key;
         result.size = this.size;
         result.dateModified = this.dateModified;
         result.thumbnail = this.thumbnail;
@@ -185,5 +188,14 @@ class FileManagerItem {
     }
 }
 
+class FileManagerRootItem extends FileManagerItem {
+    constructor() {
+        super("", "Files", true);
+        this.key = FILE_MANAGER_ROOT_DIR_KEY;
+        this.isRoot = true;
+    }
+}
+
 module.exports.FileProvider = FileProvider;
 module.exports.FileManagerItem = FileManagerItem;
+module.exports.FileManagerRootItem = FileManagerRootItem;

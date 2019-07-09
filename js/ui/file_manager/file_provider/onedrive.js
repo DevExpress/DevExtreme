@@ -55,8 +55,8 @@ class OneDriveFileProvider extends FileProvider {
         return `Bearer ${this._accessToken}`;
     }
 
-    getItems(path, itemType) {
-        return this._getItems(path, itemType);
+    getItems(path) {
+        return this._getItems(path);
     }
 
     initiateFileUpload(uploadInfo) {
@@ -81,10 +81,10 @@ class OneDriveFileProvider extends FileProvider {
             .then(() => this._cancelUploadSession(uploadInfo.customData.uploadUrl));
     }
 
-    _getItems(path, itemType) {
+    _getItems(path) {
         return this._ensureAccessTokenAcquired()
             .then(() => this._getEntriesByPath(path))
-            .then(entries => this._convertDataObjectsToFileItems(entries.children, path, itemType));
+            .then(entries => this._convertDataObjectsToFileItems(entries.children, path));
     }
 
     _ensureAccessTokenAcquired() {
