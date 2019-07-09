@@ -53,7 +53,7 @@ var dxChart = {
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:chartSeriesObject
     * @notUsedInTheme
-    * @action 
+    * @action
     */
     onSeriesClick: function() {},
     /**
