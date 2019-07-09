@@ -70,7 +70,6 @@ var Button = Widget.inherit({
              * @name dxButtonOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -177,7 +176,6 @@ var Button = Widget.inherit({
                     * @name dxButtonOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

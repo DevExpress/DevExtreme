@@ -8,7 +8,6 @@ var dxVectorMap = {
     /**
     * @name dxVectorMapOptions.margin
     * @hidden
-    * @inheritdoc
     */
     margin: undefined,
     /**
@@ -293,7 +292,6 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.tooltip.format
         * @hidden
-        * @inheritdoc
         */
         format: undefined
     },
@@ -379,7 +377,6 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.font
         * @type Font
-        * @inheritdoc
         * @default '#2b2b2b' @prop color
         */
         font: {
@@ -388,7 +385,6 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.markerSize
         * @type number
-        * @inheritdoc
         * @default 12
         */
         markerSize: 12,
