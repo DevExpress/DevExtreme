@@ -1892,30 +1892,36 @@ QUnit.test("content size should be rounded to prevent unexpected scrollbar appea
 
 QUnit.module("Hoverable interaction", () => {
     [false, true].forEach((disabled) => {
-        ["vertical", "horizontal"].forEach((direction) => {
-            ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
-                QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}`, (assert) => {
-                    const $scrollable = $("#scrollable").dxScrollable({
-                        useNative: false,
-                        useSimulatedScrollbar: true,
-                        showScrollbar: showScrollbarMode,
-                        direction: direction,
-                        disabled: disabled,
-                        scrollByThumb: true
+        [false, true].forEach((onInitialize) => {
+            ["vertical", "horizontal"].forEach((direction) => {
+                ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
+                    QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
+                        const $scrollable = $("#scrollable").dxScrollable({
+                            useNative: false,
+                            useSimulatedScrollbar: true,
+                            showScrollbar: showScrollbarMode,
+                            direction: direction,
+                            disabled: onInitialize ? disabled : false,
+                            scrollByThumb: true
+                        });
+
+                        const checkAsserts = (isHoverable) => {
+                            assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
+                            assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                            assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                        };
+
+                        if(!onInitialize) {
+                            $scrollable.dxScrollable("instance").option("disabled", disabled);
+                        }
+
+                        const scrollBarClass = direction === "vertical" ? SCROLLBAR_VERTICAL_CLASS : SCROLLBAR_HORIZONTAL_CLASS;
+                        const $scrollBar = $scrollable.find(`.${scrollBarClass}`);
+                        const scrollBar = Scrollbar.getInstance($scrollBar);
+
+                        const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
+                        checkAsserts(isScrollbarHoverable);
                     });
-
-                    const checkAsserts = (isHoverable) => {
-                        assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
-                        assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
-                        assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
-                    };
-
-                    const scrollBarClass = direction === "vertical" ? SCROLLBAR_VERTICAL_CLASS : SCROLLBAR_HORIZONTAL_CLASS;
-                    const $scrollBar = $scrollable.find(`.${scrollBarClass}`);
-                    const scrollBar = Scrollbar.getInstance($scrollBar);
-
-                    const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
-                    checkAsserts(isScrollbarHoverable);
                 });
             });
         });
