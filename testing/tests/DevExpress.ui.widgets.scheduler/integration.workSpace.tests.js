@@ -1846,3 +1846,26 @@ QUnit.test("Current time indicator calculates position correctly with workWeek v
 
     assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator positioned correctly");
 });
+
+QUnit.test("Custom dataCellTemplate enables vertical scroll of Month view (T745074)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: [{
+            type: 'month',
+            dataCellTemplate: function(cellData) {
+                var wrapper = $('<div style="height:500px !important">')
+                    .addClass('dx-template-wrapper');
+                wrapper.append($('<div>')
+                    .text(cellData.text)
+                );
+                return wrapper;
+            },
+        }],
+        currentView: "month",
+        height: 600,
+    });
+
+    let $verticalScrollbar = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollbar-vertical");
+
+    assert.ok($verticalScrollbar.is(":visible"), "Scroll is visible");
+});
