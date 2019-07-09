@@ -19,7 +19,7 @@ var toMs = dateUtils.dateToMilliseconds;
 
 var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _toggleFixedScrollableClass: function() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
+        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace() && !this._hasDataCellTemplate());
     },
 
     _getElementClass: function() {
