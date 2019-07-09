@@ -69,6 +69,8 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
 
     SIMPLE_ITEM_TYPE = "simple",
 
+    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
+
     DATA_OPTIONS = ["dataSource", "items"],
     EDITORS_WITH_ARRAY_VALUE = ["dxTagBox", "dxRangeSlider"];
 
@@ -641,7 +643,8 @@ var LayoutManager = Widget.inherit({
 
         this._itemsRunTimeInfo.add(item, instance, item.guid, $container);
 
-        var $validationTarget = $editor.children().first();
+        const editorElem = $editor.children().first();
+        const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
 
         if($validationTarget && $validationTarget.data("dx-validation-target")) {
             that._renderValidator($validationTarget, item);
