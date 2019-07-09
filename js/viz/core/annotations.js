@@ -1,5 +1,5 @@
 import { getDocument } from "../../core/dom_adapter";
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isFunction } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
 import { patchFontOptions } from "./utils";
@@ -93,6 +93,27 @@ function imageAnnotation(options) {
     });
 }
 
+function customAnnotation(options) {
+    function processTemplate(template) {
+        let renderingTemplate;
+        if(isFunction(template)) {
+            renderingTemplate = {
+                render: function(options) {
+                    template(options.container, options.model);
+                }
+            };
+        } else {
+            renderingTemplate = { render() {} };
+        }
+
+        return renderingTemplate;
+    }
+    return coreAnnotation(options, function(widget, group, { width, height }) {
+        const template = processTemplate(options.template);
+        template.render({ container: group.element, model: options });
+    });
+}
+
 function createAnnotation(item, commonOptions, customizeAnnotation) {
     let options = extend(true, {}, commonOptions, item);
     if(customizeAnnotation && customizeAnnotation.call) {
@@ -103,6 +124,8 @@ function createAnnotation(item, commonOptions, customizeAnnotation) {
         return imageAnnotation(options);
     } else if(options.type === "text") {
         return labelAnnotation(options);
+    } else if(options.type === "custom") {
+        return customAnnotation(options);
     }
 }
 
