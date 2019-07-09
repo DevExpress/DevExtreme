@@ -575,7 +575,13 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             scrollable = this.getScrollable(),
             offset = this.option("rtlEnabled") ? this.getScrollableContainer().get(0).getBoundingClientRect().width : 0;
 
-        scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
+        if(this.option("templatesRenderAsynchronously")) {
+            setTimeout(function() {
+                scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
+            });
+        } else {
+            scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
+        }
     }
 });
 
