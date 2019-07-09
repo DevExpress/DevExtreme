@@ -1705,6 +1705,43 @@ QUnit.test("freeSpaceRow height should not be changed after editing next cell", 
     clock.restore();
 });
 
+// T751778
+QUnit.test("row should not dissapear after insert if dataSource was assigned during saving", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        array = [{ id: "1" }],
+        $grid = $("#dataGrid").dxDataGrid({
+            dataSource: array,
+            editing: {
+                mode: "cell",
+                allowAdding: true
+            },
+            keyExpr: "id",
+            loadingTimeout: 100
+        }),
+        dataGrid = $grid.dxDataGrid("instance");
+
+    // act
+    clock.tick(100);
+
+    dataGrid.addRow();
+    dataGrid.cellValue(0, 0, "2");
+    dataGrid.closeEditCell();
+    clock.tick();
+    dataGrid.option("dataSource", array);
+    clock.tick();
+
+    // assert
+    assert.equal($(dataGrid.getCellElement(0, 0)).find(".dx-texteditor-input").val(), "2", "first row doesn't dissapear");
+    assert.equal($(dataGrid.getCellElement(1, 0)).text(), "1", "second row cell text");
+    // act
+    clock.tick(100);
+    assert.equal($(dataGrid.getCellElement(0, 0)).text(), "1", "first row doesn't dissapear");
+    assert.equal($(dataGrid.getCellElement(1, 0)).text(), "2", "second row cell text");
+
+    clock.restore();
+});
+
 QUnit.test("Lose focus on start of resize columns", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
