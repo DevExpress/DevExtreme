@@ -172,6 +172,12 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 }
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
+
+    constructor(scheduler) {
+        super(scheduler);
+        this.skipHidingOnScroll = false;
+    }
+
     _showCore(target, dataList, isSingleBehavior) {
         this.behavior = this._createBehavior(isSingleBehavior, target);
         super._showCore(target, dataList, isSingleBehavior);
@@ -232,10 +238,18 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
             target: target,
+            onShowing: this._onTooltipShowing.bind(this),
+            closeOnTargetScroll: () => this.skipHidingOnScroll,
+            animation: undefined,
             maxHeight: MAX_TOOLTIP_HEIGHT,
             rtlEnabled: this.scheduler.option("rtlEnabled"),
             contentTemplate: () => list.$element()
         });
+    }
+
+    _onTooltipShowing() {
+        this.skipHidingOnScroll = true;
+        setTimeout(() => this.skipHidingOnScroll = false);
     }
 
     _createTooltipElement() {
