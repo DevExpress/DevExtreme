@@ -384,8 +384,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             var options = templateParameters.options,
                 model = options.model,
                 doc = domAdapter.getDocument();
-
-            if(!isAsync || $(options.container).closest(doc).length) {
+            if((!isAsync || $(options.container).closest(doc).length) && options.model.row.rowType === "data") {
                 templateParameters.template.render(options);
 
                 if(model && model.column) {
