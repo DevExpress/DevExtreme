@@ -148,32 +148,27 @@ function clickedOnFieldsArea($targetElement) {
 /**
 * @name dxPivotGridOptions.activeStateEnabled
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridOptions.hoverStateEnabled
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridOptions.focusStateEnabled
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridOptions.accessKey
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridMethods.registerKeyHandler
 * @publicName registerKeyHandler(key, handler)
 * @hidden
-* @inheritdoc
 */
 
 var PivotGrid = Widget.inherit({

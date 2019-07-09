@@ -147,7 +147,6 @@ var DropDownMenu = Widget.inherit({
              * @name dxDropDownMenuOptions.activeStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -155,7 +154,6 @@ var DropDownMenu = Widget.inherit({
              * @name dxDropDownMenuOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 

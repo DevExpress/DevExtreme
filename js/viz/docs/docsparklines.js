@@ -8,39 +8,33 @@ var BaseSparkline = {
     /**
     * @name BaseSparklineOptions.redrawOnResize
     * @hidden
-    * @inheritdoc
     */
     redrawOnResize: undefined,
     /**
     * @name BaseSparklineOptions.title
     * @hidden
-    * @inheritdoc
     */
     title: undefined,
     /**
     * @name BaseSparklineOptions.export
     * @hidden
-    * @inheritdoc
     */
     "export": undefined,
     /**
     * @name BaseSparklineOptions.loadingIndicator
     * @hidden
-    * @inheritdoc
     */
     loadingIndicator: undefined,
     /**
     * @name basesparklinemethods.showLoadingIndicator
     * @publicName showLoadingIndicator()
     * @hidden
-    * @inheritdoc
     */
     showLoadingIndicator: function() { },
     /**
     * @name basesparklinemethods.hideLoadingIndicator
     * @publicName hideLoadingIndicator()
     * @hidden
-    * @inheritdoc
     */
     hideLoadingIndicator: function() { },
     /**
@@ -52,7 +46,6 @@ var BaseSparkline = {
         * @name BaseSparklineOptions.tooltip.enabled
         * @type boolean
         * @default true
-        * @inheritdoc
         */
         enabled: true,
         /**

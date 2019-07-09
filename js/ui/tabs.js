@@ -71,7 +71,6 @@ var Tabs = CollectionWidget.inherit({
              * @name dxTabsOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -106,7 +105,6 @@ var Tabs = CollectionWidget.inherit({
             /**
             * @name dxTabsOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
@@ -117,14 +115,12 @@ var Tabs = CollectionWidget.inherit({
             /**
              * @name dxTabsOptions.activeStateEnabled
              * @default true
-             * @inheritdoc
              */
 
             /**
              * @name dxTabsOptions.items
              * @type Array<string, dxTabsItem, object>
              * @fires dxTabsOptions.onOptionChanged
-             * @inheritdoc
              */
 
             activeStateEnabled: true,
@@ -184,7 +180,6 @@ var Tabs = CollectionWidget.inherit({
                     * @name dxTabsOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

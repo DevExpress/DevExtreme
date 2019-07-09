@@ -163,7 +163,6 @@ var DropDownEditor = TextBox.inherit({
             * @name dxDropDownEditorOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -200,7 +199,6 @@ var DropDownEditor = TextBox.inherit({
             * @name dxDropDownEditorOptions.buttons
             * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
             * @default undefined
-            * @inheritdoc
             */
             buttons: void 0,
 
@@ -216,43 +214,36 @@ var DropDownEditor = TextBox.inherit({
             /**
             * @name dxDropDownEditorOptions.mask
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskChar
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskRules
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskInvalidMessage
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.useMaskedValue
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.mode
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxDropDownEditorOptions.showMaskMode
              * @hidden
-             * @inheritdoc
              */
         });
     },

@@ -161,7 +161,6 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions.position
             * @type Enums.PositionAlignment|positionConfig|function
-            * @inheritdoc
             */
 
             /**
@@ -191,13 +190,11 @@ var Popup = Overlay.inherit({
             /**
              * @name dxPopupOptions.width
              * @fires dxPopupOptions.onResize
-             * @inheritdoc
              */
 
             /**
              * @name dxPopupOptions.height
              * @fires dxPopupOptions.onResize
-             * @inheritdoc
              */
 
             /**
@@ -270,17 +267,14 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions.animation
                     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} @for iOS
-                    * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions.animation.show
                     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} @for iOS
-                    * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions.animation.hide
                     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} @for iOS
-                    * @inheritdoc
                     */
                     animation: this._iosAnimation
                 }
@@ -322,7 +316,6 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

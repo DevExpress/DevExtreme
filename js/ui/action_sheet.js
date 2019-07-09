@@ -93,70 +93,59 @@ var ActionSheet = CollectionWidget.inherit({
             /**
             * @name dxActionSheetOptions.noDataText
             * @hidden
-            * @inheritdoc
             */
             noDataText: "",
 
             /**
             * @name dxActionSheetOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.onSelectionChanged
             * @action
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxActionSheetOptions.items
              * @type Array<string, dxActionSheetItem, object>
              * @fires dxActionSheetOptions.onOptionChanged
-             * @inheritdoc
              */
 
             /**
@@ -498,14 +487,12 @@ var ActionSheet = CollectionWidget.inherit({
     * @name dxActionSheetMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxActionSheetMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 
 });

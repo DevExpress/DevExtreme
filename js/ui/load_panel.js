@@ -41,14 +41,12 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.width
-            * @inheritdoc
             * @default 222
             */
             width: 222,
 
             /**
             * @name dxLoadPanelOptions.height
-            * @inheritdoc
             * @default 90
             */
             height: 90,
@@ -56,7 +54,6 @@ var LoadPanel = Overlay.inherit({
             /**
             * @name dxLoadPanelOptions.position
             * @type Enums.PositionAlignment|positionConfig|function
-            * @inheritdoc
             */
 
             /**
@@ -74,20 +71,17 @@ var LoadPanel = Overlay.inherit({
             * @name dxLoadPanelOptions.animation.show
             * @type animationConfig
             * @default null
-            * @inheritdoc
             */
             /**
             * @name dxLoadPanelOptions.animation.hide
             * @type animationConfig
             * @default null
-            * @inheritdoc
             */
             animation: null,
 
             /**
             * @name dxLoadPanelOptions.disabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
@@ -122,14 +116,12 @@ var LoadPanel = Overlay.inherit({
             * @name dxLoadPanelOptions.closeOnBackButton
             * @default false
             * @hidden
-            * @inheritdoc
             */
             closeOnBackButton: false,
 
             /**
             * @name dxLoadPanelOptions.resizeEnabled
             * @hidden
-            * @inheritdoc
             */
             resizeEnabled: false,
 
@@ -143,24 +135,20 @@ var LoadPanel = Overlay.inherit({
             /**
             * @name dxLoadPanelOptions.dragEnabled
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLoadPanelOptions.contentTemplate
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -172,7 +160,6 @@ var LoadPanel = Overlay.inherit({
                 * @name dxLoadPanelOptions.shadingColor
                 * @default 'transparent'
                 * @default '' @for Android|iOS|Windows_Mobile
-                * @inheritdoc
                 */
                 device: { platform: "generic" },
                 options: {
@@ -192,28 +179,24 @@ var LoadPanel = Overlay.inherit({
 
                     /**
                     * @name dxLoadPanelOptions.width
-                    * @inheritdoc
                     * @default 60 @for Material
                     */
                     width: 60,
 
                     /**
                     * @name dxLoadPanelOptions.height
-                    * @inheritdoc
                     * @default 60 @for Material
                     */
                     height: 60,
 
                     /**
                     * @name dxLoadPanelOptions.maxHeight
-                    * @inheritdoc
                     * @default 60 @for Material
                     */
                     maxHeight: 60,
 
                     /**
                     * @name dxLoadPanelOptions.maxWidth
-                    * @inheritdoc
                     * @default 60 @for Material
                     */
                     maxWidth: 60
@@ -353,14 +336,12 @@ var LoadPanel = Overlay.inherit({
     * @name dxLoadPanelMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxLoadPanelMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

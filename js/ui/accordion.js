@@ -52,7 +52,6 @@ var Accordion = CollectionWidget.inherit({
              * @name dxAccordionOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -127,7 +126,6 @@ var Accordion = CollectionWidget.inherit({
              * @name dxAccordionOptions.items
              * @type Array<string, dxAccordionItem, object>
              * @fires dxAccordionOptions.onOptionChanged
-             * @inheritdoc
              */
 
             /**
@@ -158,7 +156,6 @@ var Accordion = CollectionWidget.inherit({
                     * @name dxAccordionOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

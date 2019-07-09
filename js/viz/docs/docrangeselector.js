@@ -561,7 +561,6 @@ var dxRangeSelector = {
     /**
     * @name dxRangeSelectorOptions.tooltip
     * @hidden
-    * @inheritdoc
     */
     tooltip: undefined,
     /**

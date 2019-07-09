@@ -338,7 +338,6 @@ var FileUploader = Editor.inherit({
             /**
             * @name dxFileUploaderOptions.validationMessageMode
             * @hidden
-            * @inheritdoc
             */
             validationMessageMode: "always",
 
@@ -374,7 +373,6 @@ var FileUploader = Editor.inherit({
                     * @name dxFileUploaderOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

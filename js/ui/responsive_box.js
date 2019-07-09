@@ -98,28 +98,24 @@ var ResponsiveBox = CollectionWidget.inherit({
             /**
             * @name dxResponsiveBoxOptions.height
             * @default '100%'
-            * @inheritdoc
             */
             height: "100%",
 
             /**
             * @name dxResponsiveBoxOptions.width
             * @default '100%'
-            * @inheritdoc
             */
             width: "100%",
 
             /**
             * @name dxResponsiveBoxOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
             /**
             * @name dxResponsiveBoxOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
             focusStateEnabled: false,
 
@@ -128,60 +124,49 @@ var ResponsiveBox = CollectionWidget.inherit({
             /**
             * @name dxResponsiveBoxOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxResponsiveBoxOptions.hint
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.noDataText
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.onSelectionChanged
             * @action
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
             /**
              * @name dxResponsiveBoxOptions.items
              * @type Array<string, dxResponsiveBoxItem, object>
              * @fires dxResponsiveBoxOptions.onOptionChanged
-             * @inheritdoc
              */
 
             onLayoutChanged: null,
@@ -734,14 +719,12 @@ var ResponsiveBox = CollectionWidget.inherit({
     * @name dxResponsiveBoxMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxResponsiveBoxMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 /**

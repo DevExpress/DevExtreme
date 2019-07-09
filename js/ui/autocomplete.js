@@ -84,7 +84,6 @@ var Autocomplete = DropDownList.inherit({
 
             /**
              * @name dxAutocompleteOptions.showDropDownButton
-             * @inheritdoc
              * @default false
              */
             showDropDownButton: false,
@@ -99,19 +98,16 @@ var Autocomplete = DropDownList.inherit({
             /**
             * @name dxAutocompleteOptions.acceptCustomValue
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions.searchEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions.showDataBeforeSearch
             * @hidden
-            * @inheritdoc
             */
         });
     },

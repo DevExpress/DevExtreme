@@ -225,7 +225,6 @@ var CollectionWidget = Widget.inherit({
             * @type dxElement
             * @default null
             * @hidden
-            * @inheritdoc
             */
             focusedElement: null,
 

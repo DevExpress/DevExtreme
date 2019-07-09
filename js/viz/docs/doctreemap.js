@@ -8,7 +8,6 @@ var dxTreeMap = {
     /**
     * @name dxTreeMapOptions.margin
     * @hidden
-    * @inheritdoc
     */
     margin: undefined,
     /**
@@ -403,7 +402,6 @@ var dxTreeMap = {
     /**
     * @name dxTreeMapOptions.tooltip
     * @type object
-    * @inheritdoc
     */
     tooltip: {
         /**

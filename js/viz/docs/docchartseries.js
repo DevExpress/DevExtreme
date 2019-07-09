@@ -959,7 +959,6 @@ var AreaSeries = {
     /**
     * @name dxChartSeriesTypes.AreaSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -974,14 +973,12 @@ var AreaSeries = {
     /**
     * @name dxChartSeriesTypes.AreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.AreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
@@ -1001,7 +998,6 @@ var AreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.AreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1024,7 +1020,6 @@ var BarSeries = {
     /**
     * @name dxChartSeriesTypes.BarSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1052,7 +1047,6 @@ var BarSeries = {
     selectionMode: 'onlyPoint',
     /**
     * @name dxChartSeriesTypes.BarSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1081,7 +1075,6 @@ var CandleStickSeries = {
     /**
     * @name dxChartSeriesTypes.CandleStickSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1110,20 +1103,17 @@ var CandleStickSeries = {
     /**
     * @name dxChartSeriesTypes.CandleStickSeries.hoverStyle
     * @type object
-    * @inheritdoc
     */
     hoverStyle: {
         /**
         * @name dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching
         * @type object
-        * @inheritdoc
         */
         hatching: {
             /**
             * @name dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction
             * @default 'none'
             * @type Enums.HatchingDirection
-            * @inheritdoc
             */
             direction: 'none'
         }
@@ -1131,27 +1121,23 @@ var CandleStickSeries = {
     /**
     * @name dxChartSeriesTypes.CandleStickSeries.selectionStyle
     * @type object
-    * @inheritdoc
     */
     selectionStyle: {
         /**
         * @name dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching
         * @type object
-        * @inheritdoc
         */
         hatching: {
             /**
             * @name dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction
             * @default 'none'
             * @type Enums.HatchingDirection
-            * @inheritdoc
             */
             direction: 'none'
         }
     },
     /**
     * @name dxChartSeriesTypes.CandleStickSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1174,14 +1160,12 @@ var FullStackedAreaSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedAreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.FullStackedAreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
@@ -1215,7 +1199,6 @@ var FullStackedAreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.FullStackedAreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1238,21 +1221,18 @@ var FullStackedSplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
     /**
     * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1280,7 +1260,6 @@ var FullStackedSplineAreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1303,7 +1282,6 @@ var FullStackedBarSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedBarSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1318,7 +1296,6 @@ var FullStackedBarSeries = {
         * @name dxChartSeriesTypes.FullStackedBarSeries.label.position
         * @type Enums.RelativePosition
         * @default 'inside'
-        * @inheritdoc
         */
         position: 'inside'
     },
@@ -1338,7 +1315,6 @@ var FullStackedBarSeries = {
     selectionMode: 'onlyPoint',
     /**
     * @name dxChartSeriesTypes.FullStackedBarSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1361,7 +1337,6 @@ var FullStackedLineSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedLineSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1389,7 +1364,6 @@ var FullStackedLineSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.FullStackedLineSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1412,7 +1386,6 @@ var FullStackedSplineSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedSplineSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1440,7 +1413,6 @@ var FullStackedSplineSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.FullStackedSplineSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1464,7 +1436,6 @@ var LineSeries = {
     /**
     * @name dxChartSeriesTypes.LineSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1492,7 +1463,6 @@ var LineSeries = {
     selectionMode: 'includePoints',
     /**
    * @name dxChartSeriesTypes.LineSeries.aggregation
-   * @inheritdoc
    * @type object
    */
     aggregation: {
@@ -1515,7 +1485,6 @@ var RangeAreaSeries = {
     /**
     * @name dxChartSeriesTypes.RangeAreaSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1530,14 +1499,12 @@ var RangeAreaSeries = {
     /**
     * @name dxChartSeriesTypes.RangeAreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.RangeAreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
@@ -1557,7 +1524,6 @@ var RangeAreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.RangeAreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1580,7 +1546,6 @@ var RangeBarSeries = {
     /**
     * @name dxChartSeriesTypes.RangeBarSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1608,7 +1573,6 @@ var RangeBarSeries = {
     selectionMode: 'onlyPoint',
     /**
     * @name dxChartSeriesTypes.RangeBarSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1631,7 +1595,6 @@ var ScatterSeries = {
     /**
     * @name dxChartSeriesTypes.ScatterSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1645,7 +1608,6 @@ var ScatterSeries = {
     },
     /**
    * @name dxChartSeriesTypes.ScatterSeries.aggregation
-   * @inheritdoc
    * @type object
    */
     aggregation: {
@@ -1668,7 +1630,6 @@ var SplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.SplineAreaSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1683,14 +1644,12 @@ var SplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.SplineAreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.SplineAreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
@@ -1710,7 +1669,6 @@ var SplineAreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.SplineAreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1733,7 +1691,6 @@ var SplineSeries = {
     /**
     * @name dxChartSeriesTypes.SplineSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1761,7 +1718,6 @@ var SplineSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.SplineSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1784,7 +1740,6 @@ var StackedAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StackedAreaSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1799,14 +1754,12 @@ var StackedAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StackedAreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.StackedAreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
@@ -1826,7 +1779,6 @@ var StackedAreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.StackedAreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1849,7 +1801,6 @@ var StackedSplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StackedSplineAreaSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1864,14 +1815,12 @@ var StackedSplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StackedSplineAreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.StackedSplineAreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
@@ -1891,7 +1840,6 @@ var StackedSplineAreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.StackedSplineAreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1914,7 +1862,6 @@ var StackedBarSeries = {
     /**
     * @name dxChartSeriesTypes.StackedBarSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -1929,7 +1876,6 @@ var StackedBarSeries = {
         * @name dxChartSeriesTypes.StackedBarSeries.label.position
         * @type Enums.RelativePosition
         * @default 'inside'
-        * @inheritdoc
         */
         position: 'inside'
     },
@@ -1949,7 +1895,6 @@ var StackedBarSeries = {
     selectionMode: 'onlyPoint',
     /**
     * @name dxChartSeriesTypes.StackedBarSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -1972,7 +1917,6 @@ var StackedLineSeries = {
     /**
     * @name dxChartSeriesTypes.StackedLineSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -2000,7 +1944,6 @@ var StackedLineSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.StackedLineSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -2023,7 +1966,6 @@ var StackedSplineSeries = {
     /**
     * @name dxChartSeriesTypes.StackedSplineSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -2051,7 +1993,6 @@ var StackedSplineSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.StackedSplineSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -2074,48 +2015,41 @@ var StepAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StepAreaSeries.border
     * @type object
-    * @inheritdoc
     */
     border: {
         /**
         * @name dxChartSeriesTypes.StepAreaSeries.border.visible
         * @type boolean
         * @default true
-        * @inheritdoc
         */
         visible: true
     },
     /**
     * @name dxChartSeriesTypes.StepAreaSeries.point
     * @type object
-    * @inheritdoc
     **/
     point: {
         /**
         * @name dxChartSeriesTypes.StepAreaSeries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
     /**
     * @name dxChartSeriesTypes.StepAreaSeries.hoverStyle
     * @type object
-    * @inheritdoc
     */
     hoverStyle: {
         /**
         * @name dxChartSeriesTypes.StepAreaSeries.hoverStyle.border
         * @type object
-        * @inheritdoc
         */
         border: {
             /**
             * @name dxChartSeriesTypes.StepAreaSeries.hoverStyle.border.visible
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             visible: true
         }
@@ -2123,7 +2057,6 @@ var StepAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StepAreaSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -2138,20 +2071,17 @@ var StepAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StepAreaSeries.selectionStyle
     * @type object
-    * @inheritdoc
     */
     selectionStyle: {
         /**
         * @name dxChartSeriesTypes.StepAreaSeries.selectionStyle.border
         * @type object
-        * @inheritdoc
         */
         border: {
             /**
             * @name dxChartSeriesTypes.StepAreaSeries.selectionStyle.border.visible
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             visible: true
         }
@@ -2172,7 +2102,6 @@ var StepAreaSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.StepAreaSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -2195,7 +2124,6 @@ var StepLineSeries = {
     /**
     * @name dxChartSeriesTypes.StepLineSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -2223,7 +2151,6 @@ var StepLineSeries = {
     selectionMode: 'includePoints',
     /**
     * @name dxChartSeriesTypes.StepLineSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {
@@ -2252,7 +2179,6 @@ var StockSeries = {
     /**
     * @name dxChartSeriesTypes.StockSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -2280,7 +2206,6 @@ var StockSeries = {
     selectionMode: 'onlyPoint',
     /**
    * @name dxChartSeriesTypes.StockSeries.aggregation
-   * @inheritdoc
    * @type object
    */
     aggregation: {
@@ -2302,7 +2227,6 @@ var BubbleSeries = {
     /**
     * @name dxChartSeriesTypes.BubbleSeries.label
     * @type object
-    * @inheritdoc
     */
     label: {
         /**
@@ -2330,7 +2254,6 @@ var BubbleSeries = {
     selectionMode: 'onlyPoint',
     /**
     * @name dxChartSeriesTypes.BubbleSeries.aggregation
-    * @inheritdoc
     * @type object
     */
     aggregation: {

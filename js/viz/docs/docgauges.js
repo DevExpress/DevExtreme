@@ -490,7 +490,6 @@ var dxLinearGauge = {
         * @name dxLinearGaugeOptions.scale.scaleDivisionFactor
         * @type number
         * @default 25
-        * @inheritdoc
         */
         scaleDivisionFactor: 25,
         /**
@@ -744,7 +743,6 @@ var dxBarGauge = {
         /**
         * @name dxBarGaugeOptions.legend.visible
         * @type boolean
-        * @inheritdoc
         * @default false
         */
         visible: false,

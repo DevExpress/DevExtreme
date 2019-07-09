@@ -200,14 +200,12 @@ var dxSankey = {
     /**
     * @name dxSankeyOptions.tooltip
     * @type object
-    * @inheritdoc
     */
     tooltip: {
         /**
         * @name dxSankeyOptions.tooltip.enabled
         * @type boolean
         * @default true
-        * @inheritdoc
         */
         enabled: true,
         /**

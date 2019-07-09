@@ -271,7 +271,6 @@ const TagBox = SelectBox.inherit({
 
             /**
              * @name dxTagBoxOptions.showDropDownButton
-             * @inheritdoc
              * @default false
              */
             showDropDownButton: false,
@@ -382,76 +381,64 @@ const TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions.closeAction
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.hiddenAction
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.itemRender
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.openAction
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.shownAction
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.valueChangeEvent
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.onCopy
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.onCut
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.onPaste
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.spellcheck
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.displayValue
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
         });
     },

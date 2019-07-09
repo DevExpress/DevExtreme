@@ -103,7 +103,6 @@ var ODataStore = Store.inherit({
         /**
          * @name ODataStoreOptions.onLoading
          * @action
-         * @inheritdoc
          */
         this._extractServiceOptions(options);
 

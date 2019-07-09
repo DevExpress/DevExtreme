@@ -24,7 +24,6 @@ var polarPointObject = {
     * @name polarPointObjectMethods.getBoundingRect
     * @publicName getBoundingRect()
     * @hidden
-    * @inheritdoc
     */
     getBoundingRect: function() { }
 };

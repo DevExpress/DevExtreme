@@ -99,56 +99,47 @@ var Toolbar = ToolbarBase.inherit({
             /**
             * @name dxToolbarOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.onSelectionChanged
             * @action
             * @hidden
-            * @inheritdoc
             */
         });
 
@@ -383,14 +374,12 @@ var Toolbar = ToolbarBase.inherit({
     * @name dxToolbarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxToolbarMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

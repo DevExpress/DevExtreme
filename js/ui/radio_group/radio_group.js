@@ -128,7 +128,6 @@ class RadioGroup extends Editor {
                 * @name dxRadioGroupOptions.focusStateEnabled
                 * @type boolean
                 * @default true @for desktop
-                * @inheritdoc
                 */
                 focusStateEnabled: true
             }
@@ -156,7 +155,6 @@ class RadioGroup extends Editor {
              * @name dxRadioGroupOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -164,7 +162,6 @@ class RadioGroup extends Editor {
             * @name dxRadioGroupOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -180,14 +177,12 @@ class RadioGroup extends Editor {
             /**
             * @name dxRadioGroupOptions.value
             * @ref
-            * @inheritdoc
             */
 
             /**
             * @name dxRadioGroupOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
         }));
     }

@@ -57,7 +57,6 @@ var DropDownBox = DropDownEditor.inherit({
         return extend(this.callBase(), {
             /**
              * @name dxDropDownBoxOptions.attr
-             * @inheritdoc
              * @hidden
              */
 
@@ -120,13 +119,11 @@ var DropDownBox = DropDownEditor.inherit({
              * @name dxDropDownBoxOptions.itemTemplate
              * @type template
              * @default "item"
-             * @inheritdoc
              * @hidden
              */
 
             /**
              * @name dxDropDownBoxOptions.openOnFieldClick
-             * @inheritdoc
              * @default true
              */
             openOnFieldClick: true,

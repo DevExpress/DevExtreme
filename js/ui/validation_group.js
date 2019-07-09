@@ -23,26 +23,22 @@ const ValidationGroup = DOMComponent.inherit({
         /**
         * @name dxValidationGroupOptions.rtlEnabled
         * @hidden
-        * @inheritdoc
         */
 
         /**
         * @name dxValidationGroupMethods.beginUpdate
         * @publicName beginUpdate()
         * @hidden
-        * @inheritdoc
         */
         /**
         * @name dxValidationGroupMethods.defaultOptions
         * @publicName defaultOptions(rule)
         * @hidden
-        * @inheritdoc
         */
         /**
         * @name dxValidationGroupMethods.endUpdate
         * @publicName endUpdate()
         * @hidden
-        * @inheritdoc
         */
     },
 

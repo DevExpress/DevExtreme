@@ -36,7 +36,6 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
      * @name dxToolbarOptions.items
      * @type Array<string, dxToolbarItem, object>
      * @fires dxToolbarOptions.onOptionChanged
-     * @inheritdoc
      */
 
     /**
@@ -462,14 +461,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     * @name dxToolbarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxToolbarMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

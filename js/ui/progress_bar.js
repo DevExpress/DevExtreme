@@ -62,7 +62,6 @@ var ProgressBar = TrackBar.inherit({
             /**
             * @name dxProgressBarOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -73,19 +72,16 @@ var ProgressBar = TrackBar.inherit({
             /**
             * @name dxProgressBarOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxProgressBarOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxProgressBarOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -262,14 +258,12 @@ var ProgressBar = TrackBar.inherit({
     * @name dxProgressBarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxProgressBarMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

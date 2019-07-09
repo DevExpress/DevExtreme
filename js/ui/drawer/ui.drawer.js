@@ -136,19 +136,16 @@ const Drawer = Widget.inherit({
             /**
             * @name dxDrawerOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDrawerOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDrawerOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -620,14 +617,12 @@ const Drawer = Widget.inherit({
     * @name dxDrawerMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxDrawerMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

@@ -24,13 +24,11 @@ var TextArea = TextBox.inherit({
             /**
             * @name dxTextAreaOptions.mode
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions.showClearButton
             * @hidden
-            * @inheritdoc
             */
 
             /**
@@ -64,43 +62,36 @@ var TextArea = TextBox.inherit({
             /**
             * @name dxTextAreaOptions.mask
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions.maskChar
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions.maskRules
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions.maskInvalidMessage
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions.useMaskedValue
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxTextAreaOptions.showMaskMode
              * @hidden
-             * @inheritdoc
              */
 
             /**
             * @name dxTextAreaOptions.buttons
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -274,7 +265,6 @@ var TextArea = TextBox.inherit({
     * @name dxTextAreaMethods.getButton
     * @publicName getButton(name)
     * @hidden
-    * @inheritdoc
     */
 });
 

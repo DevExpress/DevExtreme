@@ -72,7 +72,6 @@ var ContextMenu = MenuBase.inherit((function() {
                 /**
                 * @name dxContextMenuOptions.items
                 * @type Array<dxContextMenuItem>
-                * @inheritdoc
                 */
                 /**
                 * @name dxContextMenuOptions.showEvent
@@ -185,30 +184,25 @@ var ContextMenu = MenuBase.inherit((function() {
                 /**
                  * @name dxContextMenuOptions.itemHoldAction
                  * @hidden
-                 * @inheritdoc
                  */
 
                 /**
                 * @name dxContextMenuOptions.onItemReordered
                 * @hidden
-                * @inheritdoc
                 */
 
                 /**
                 * @name dxContextMenuOptions.selectedItems
                 * @hidden
-                * @inheritdoc
                 */
                 /**
                 * @name dxContextMenuItem
                 * @inherits dxMenuBaseItem
                 * @type object
-                * @inheritdoc
                 */
                 /**
                 * @name dxContextMenuItem.items
                 * @type Array<dxContextMenuItem>
-                * @inheritdoc
                 */
 
                 onLeftFirstItem: null,
