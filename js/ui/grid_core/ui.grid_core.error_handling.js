@@ -37,6 +37,8 @@ var ErrorHandlingController = modules.ViewController.inherit({
                     $errorRow = $(tableElement).children("tbody").children("tr").eq(errorRowIndex);
                     that.removeErrorRow($errorRow);
                 });
+
+                that.component._fireContentReadyAction();
             }));
 
             $("<td>")
@@ -160,7 +162,11 @@ module.exports = {
                             errorHandlingController.renderErrorRow(error, undefined, $popupContent);
                         }
                     });
-                    that.changed.add(function() {
+                    that.changed.add(function(e) {
+                        if(e && e.changeType === "loadError") {
+                            return;
+                        }
+
                         var errorHandlingController = that.getController("errorHandling"),
                             editingController = that.getController("editing");
 
