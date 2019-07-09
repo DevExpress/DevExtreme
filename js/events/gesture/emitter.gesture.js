@@ -157,7 +157,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _getTouchBoundary: function(e) {
-        return (this.immediate || eventUtils.isMouseWheelEvent(e)) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
+        return (this.immediate || eventUtils.isDxMouseWheelEvent(e)) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
     },
 
     _adjustStartEvent: function(e) {
@@ -183,7 +183,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _clearSelection: function(e) {
-        if(eventUtils.isMouseWheelEvent(e) || eventUtils.isTouchEvent(e)) {
+        if(eventUtils.isDxMouseWheelEvent(e) || eventUtils.isTouchEvent(e)) {
             return;
         }
 

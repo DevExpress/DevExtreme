@@ -281,13 +281,15 @@ var NativeStrategy = Class.inherit({
     },
 
     validate: function(e) {
-        if(eventUtils.isMouseWheelEvent(e)) {
-            if(this._isScrolledInMaxDirection(e)) {
-                return false;
-            }
+        if(this.option("disabled")) {
+            return false;
         }
 
-        return !this.option("disabled") && this._allowedDirection();
+        if(eventUtils.isDxMouseWheelEvent(e) && this._isScrolledInMaxDirection(e)) {
+            return false;
+        }
+
+        return !!this._allowedDirection();
     },
 
     _isScrolledInMaxDirection(e) {

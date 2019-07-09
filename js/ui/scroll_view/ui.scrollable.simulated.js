@@ -291,7 +291,7 @@ var Scroller = Class.inherit({
     }),
 
     _prepareThumbScrolling: function(e) {
-        if(eventUtils.isMouseWheelEvent(e.originalEvent)) {
+        if(eventUtils.isDxMouseWheelEvent(e.originalEvent)) {
             return;
         }
 
@@ -627,7 +627,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _suppressDirections: function(e) {
-        if(eventUtils.isMouseWheelEvent(e.originalEvent)) {
+        if(eventUtils.isDxMouseWheelEvent(e.originalEvent)) {
             this._prepareDirections(true);
             return;
         }
@@ -979,7 +979,7 @@ var SimulatedStrategy = Class.inherit({
             return true;
         }
 
-        return eventUtils.isMouseWheelEvent(e) ? this._validateWheel(e) : this._validateMove(e);
+        return eventUtils.isDxMouseWheelEvent(e) ? this._validateWheel(e) : this._validateMove(e);
     },
 
     _validateWheel: function(e) {
@@ -1014,7 +1014,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     getDirection: function(e) {
-        return eventUtils.isMouseWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
+        return eventUtils.isDxMouseWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
     },
 
     _wheelProp: function() {
