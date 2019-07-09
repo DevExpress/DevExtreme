@@ -2,6 +2,9 @@ import { getImageSourceType, getImageContainer } from "core/utils/icon";
 
 const { module: testModule, test } = QUnit;
 
+const ICON_CLASS = "dx-icon";
+const SVG_ICON_CLASS = "dx-svg-icon";
+
 testModule("icon utils", {
     beforeEach: () => {
         this.sourceArray = [{ // 1
@@ -101,22 +104,26 @@ testModule("icon utils", {
             var $iconElement = getImageContainer(source);
             switch(result) {
                 case "dxIcon":
-                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
-                    assert.ok($iconElement.hasClass("dx-icon-" + source), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.notOk($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(`${ICON_CLASS}-${source}`), `correct for ${result}`);
                     assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
                     break;
                 case "fontIcon":
-                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.notOk($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
                     assert.ok($iconElement.hasClass(source), `correct for ${result}`);
                     assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
                     break;
                 case "image":
-                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.notOk($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
                     assert.strictEqual($iconElement.attr("src"), source, `correct for ${result}`);
                     assert.strictEqual($iconElement.get(0).tagName, "IMG", `correct for ${result}`);
                     break;
                 case "svg":
-                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
                     assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
                     assert.strictEqual($iconElement.children().get(0).tagName.toUpperCase(), "SVG", `correct for ${result}`);
                     break;

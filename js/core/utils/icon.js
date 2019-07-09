@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 
 const ICON_CLASS = "dx-icon";
+const SVG_ICON_CLASS = "dx-svg-icon";
 
 const getImageSourceType = (source) => {
     if(!source || typeof source !== "string") {
@@ -35,7 +36,7 @@ const getImageContainer = (source) => {
         case "dxIcon":
             return $("<i>").addClass(`${ICON_CLASS} ${ICON_CLASS}-${source}`);
         case "svg":
-            return $("<i>").addClass(ICON_CLASS).append(source);
+            return $("<i>").addClass(`${ICON_CLASS} ${SVG_ICON_CLASS}`).append(source);
         default:
             return null;
     }
