@@ -60,7 +60,6 @@ const ButtonGroup = Widget.inherit({
              * @name dxButtonGroupOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -68,7 +67,6 @@ const ButtonGroup = Widget.inherit({
              * @name dxButtonGroupOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 

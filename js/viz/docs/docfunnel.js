@@ -415,7 +415,6 @@ var dxFunnel = {
         /**
         * @name dxFunnelOptions.legend.visible
         * @type boolean
-        * @inheritdoc
         * @default false
         */
         visible: false,
@@ -449,7 +448,6 @@ var dxFunnel = {
    /**
     * @name dxFunnelOptions.tooltip
     * @type object
-    * @inheritdoc
     */
     tooltip: {
         /**

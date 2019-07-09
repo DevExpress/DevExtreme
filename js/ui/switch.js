@@ -59,7 +59,6 @@ var Switch = Editor.inherit({
             * @name dxSwitchOptions.hoverStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             hoverStateEnabled: true,
 
@@ -67,7 +66,6 @@ var Switch = Editor.inherit({
             * @name dxSwitchOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -99,7 +97,6 @@ var Switch = Editor.inherit({
             * @name dxSwitchOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
         });
     },
@@ -117,7 +114,6 @@ var Switch = Editor.inherit({
                     * @name dxSwitchOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

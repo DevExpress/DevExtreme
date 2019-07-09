@@ -111,26 +111,22 @@ var MultiView = CollectionWidget.inherit({
             /**
             * @name dxMultiViewOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMultiViewOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMultiViewOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxMultiViewOptions.items
              * @type Array<string, dxMultiViewItem, object>
              * @fires dxMultiViewOptions.onOptionChanged
-             * @inheritdoc
              */
 
             _itemAttributes: { role: "tabpanel" },
@@ -153,7 +149,6 @@ var MultiView = CollectionWidget.inherit({
                     * @name dxMultiViewOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -489,7 +484,6 @@ var MultiView = CollectionWidget.inherit({
 /**
 * @name dxMultiViewItem.visible
 * @hidden
-* @inheritdoc
 */
 
 registerComponent("dxMultiView", MultiView);

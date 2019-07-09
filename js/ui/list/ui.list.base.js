@@ -139,7 +139,6 @@ var ListBase = CollectionWidget.inherit({
              * @name dxListOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -332,14 +331,12 @@ var ListBase = CollectionWidget.inherit({
             /**
             * @name dxListOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxListOptions.activeStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -358,7 +355,6 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -372,7 +368,6 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -386,14 +381,12 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
              * @name dxListOptions.items
              * @type Array<string, dxListItem, object>
              * @fires dxListOptions.onOptionChanged
-             * @inheritdoc
              */
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
@@ -471,7 +464,6 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
