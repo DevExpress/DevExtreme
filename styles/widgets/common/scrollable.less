@@ -52,6 +52,10 @@
     &.dx-scrollable-disabled,
     &.dx-scrollable-disabled .dx-scrollable-container {
         touch-action: auto;
+
+        ::-webkit-scrollbar {
+            pointer-events: none;
+        }
     }
 
     &.dx-scrollable-scrollbars-hidden {
