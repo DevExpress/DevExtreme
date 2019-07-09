@@ -894,6 +894,44 @@ QUnit.test("Parsed data should have all fields from source data", function(asser
     }, { assert: assert });
 });
 
+QUnit.test("Two axes, first string discrete, second numeric discrete", function(assert) {
+    var groupData1 = createGroupsData({
+            argumentAxisType: "discrete",
+            valueAxisType: "discrete",
+            argumentCategories: ["A", "B", "C"],
+            valueCategories: ["1", "2", "3"],
+            argumentField: "arg",
+            valueFields: ["val"]
+        }),
+        groupData2 = createGroupsData({
+            argumentAxisType: "discrete",
+            valueAxisType: "discrete",
+            argumentCategories: ["A", "B", "C"],
+            valueCategories: [10, 20, 30],
+            argumentField: "arg",
+            valueFields: ["val1"]
+        }),
+        groupsData1 = {};
+
+    groupsData1.groups = groupData1.groups.concat(groupData2.groups);
+    groupsData1.argumentOptions = groupData1.argumentOptions;
+
+    var parsedData = testValidateData([
+        { arg: "A", val: "1", val1: 10 }
+    ], groupsData1);
+
+    checkParsedData(parsedData, {
+        "arg": {
+            val: ["1"],
+            val1: [10],
+            arg: ["A"]
+        }
+    }, { assert: assert, compare: "deepEqual" });
+
+    assert.deepEqual(groupsData1.groups[0].valueOptions.categories, ["1", "2", "3"], "value categories");
+    assert.deepEqual(groupsData1.groups[1].valueOptions.categories, [10, 20, 30], "value categories");
+});
+
 QUnit.module("Skip data");
 
 QUnit.test("Null/undefined values", function(assert) {
@@ -913,26 +951,6 @@ QUnit.test("Null/undefined values", function(assert) {
     }, { assert: assert });
 
     assert.deepEqual(groupsData.groups[0].valueOptions.categories, [2, null, 7, 10], "value categories");
-});
-
-QUnit.test("Null/undefined values, ignoreEmptyPoints is defined", function(assert) {
-    var groupsData = createGroupsData({
-        ignoreEmptyPoints: true,
-        valueCategories: [2, null, 7, undefined, 10]
-    });
-
-    var parsedData = testValidateData([{ arg: 25, val: 1 }, { arg: 11, val: null }, { arg: 15 }, { arg: 22, val: 2 }, { arg: 33, val: 3 }], groupsData, null, { checkTypeForAllData: true });
-
-    assert.deepEqual(groupsData.groups[0].series[0].updateDataType.lastCall.args[0].valueType, "numeric");
-
-    checkParsedData(parsedData, {
-        "arg": {
-            val: [1, undefined, undefined, 2, 3],
-            arg: [25, 11, 15, 22, 33]
-        }
-    }, { assert: assert });
-
-    assert.deepEqual(groupsData.groups[0].valueOptions.categories, [2, 7, 10], "value categories");
 });
 
 QUnit.test("Infinity as values", function(assert) {
@@ -979,21 +997,6 @@ QUnit.test("Null/undefined sizes", function(assert) {
     checkParsedData(parsedData, {
         "arg": {
             size: [1, null, undefined, 2, 3]
-        }
-    }, { assert: assert });
-});
-
-QUnit.test("Null/undefined sizes, ignoreEmptyPoints is defined", function(assert) {
-    var groups = createGroupsData({
-        ignoreEmptyPoints: true,
-        sizeField: "size"
-    });
-
-    var parsedData = testValidateData([{ arg: 25, val: 1, size: 1 }, { arg: 11, val: 1, size: null }, { arg: 15, val: 1 }, { arg: 22, val: 1, size: 2 }, { arg: 33, val: 1, size: 3 }], groups, null, { checkTypeForAllData: true });
-
-    checkParsedData(parsedData, {
-        "arg": {
-            size: [1, undefined, undefined, 2, 3]
         }
     }, { assert: assert });
 });

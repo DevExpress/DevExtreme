@@ -1006,9 +1006,6 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
         legend = commons.getLegendStub(),
         updateCall = legend.update.lastCall;
 
-    assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), legend], "legend and title layouted");
-    assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart._canvas, "legend and title layouted - canvas");
-
     assert.strictEqual(updateCall.args[1]._incidentOccurred, chart._incidentOccurred, "pass incidentOccurred function");
     assert.strictEqual(updateCall.args[0][0].text, "First series", "Correct text for series");
     assert.deepEqual(updateCall.args[0][0].states, { hover: undefined, selection: undefined, normal: {} }, "States");
@@ -1034,31 +1031,6 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
         seriesIndex: "id",
         seriesName: "text"
     }, "correct getFormatObject function");
-});
-
-QUnit.test("Create chart with bottom title. Not header block", function(assert) {
-    // arrange
-    var stubSeries = new MockSeries({
-        name: "First series",
-        visible: true,
-        showInLegend: true
-    });
-    chartMocks.seriesMockData.series.push(stubSeries);
-
-    // act
-    var chart = this.createChart({
-        series: {
-            type: "line"
-        },
-        title: {
-            verticalAlignment: "bottom"
-        }
-    });
-
-    // assert
-    var legend = commons.getLegendStub();
-
-    assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), legend], "legend and title layouted");
 });
 
 QUnit.test("Hidden marker for simple series. First drawing", function(assert) {
@@ -1099,18 +1071,6 @@ QUnit.test("Hidden marker for simple series. Opacity < 0.3", function(assert) {
 
     assert.strictEqual(legend.update.lastCall.args[0][0].textOpacity, 0.3, "Text opacity is correct");
     assert.strictEqual(legend.update.lastCall.args[0][0].states.normal.opacity, 0.1, "Opacity is correct");
-});
-
-QUnit.test("Legend visible after zooming", function(assert) {
-    var chart = this.createChart({
-        legend: {
-            position: "inside"
-        }
-    });
-    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 0, endValue: 1 });
-
-    assert.equal(this.layoutManager.layoutElements.callCount, 2);
-    assert.deepEqual(this.layoutManager.layoutElements.lastCall.args[0], []);
 });
 
 QUnit.test("Set visible property in legend items", function(assert) {

@@ -1,11 +1,21 @@
+.dx-size-default() {
+    @MATERIAL_VALIDATION_MESSAGE_PADDING: 6px;
+    @MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: 10px;
+}
+
+.dx-size-compact() {
+    @MATERIAL_VALIDATION_MESSAGE_PADDING: 4px;
+    @MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN: 6px;
+}
+
 .dx-invalid-message > .dx-overlay-content {
     background-color: transparent;
     color: @VALIDATION_MESSAGE_BACKGROUND_COLOR;
-    padding: 6px 0 0;
+    padding: @MATERIAL_VALIDATION_MESSAGE_PADDING 0 0;
 }
 
 .dx-validationsummary > .dx-validationsummary-item:not(:last-child) {
-    margin-bottom: 10px;
+    margin-bottom: @MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN;
 }
 
 .dx-form-validation-summary {

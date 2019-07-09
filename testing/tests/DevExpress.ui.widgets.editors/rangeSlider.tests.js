@@ -1,6 +1,5 @@
 var $ = require("jquery"),
     Tooltip = require("ui/tooltip"),
-    config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
     fx = require("animation/fx");
@@ -132,31 +131,6 @@ QUnit.test("value change should have jQuery event", function(assert) {
     pointerMock(el).start().move(240 + el.offset().left).down();
 });
 
-QUnit.test("design mode", function(assert) {
-    config({ designMode: false });
-
-    try {
-        var el = $("#slider").dxRangeSlider({
-            max: 500,
-            min: 0,
-            start: 0,
-            end: 500,
-            useInkRipple: false
-        }).css("width", 500);
-
-        var instance = el.dxRangeSlider("instance");
-
-        el.click({
-            offsetX: 124
-        });
-
-        assert.equal(instance.option("start"), 0);
-        assert.equal(instance.option("end"), 500);
-
-    } finally {
-        config({ designMode: false });
-    }
-});
 
 QUnit.module("slider with tooltip");
 

@@ -527,6 +527,7 @@ function getPrecisionForSlider(startValue, endValue, screenDelta) {
 }
 
 var dxRangeSelector = require("../core/base_widget").inherit({
+    _toggleParentsScrollSubscription() {},
     _eventsMap: {
         "onValueChanged": { name: VALUE_CHANGED }
     },
@@ -1033,8 +1034,17 @@ function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) 
     }
 }
 
+function getShiftDirection() {
+    return 1;
+}
+
+function getTickStartPositionShift(length) {
+    return length % 2 === 1 ? -Math.floor(length / 2) : -length / 2;
+}
+
 function AxisWrapper(params) {
-    this._axis = new axisModule.Axis({
+    const that = this;
+    that._axis = new axisModule.Axis({
         renderer: params.renderer,
         axesContainerGroup: params.root,
         scaleBreaksGroup: params.scaleBreaksGroup,
@@ -1046,7 +1056,9 @@ function AxisWrapper(params) {
         axisClass: "range-selector",
         isArgumentAxis: true
     });
-    this._updateSelectedRangeCallback = params.updateSelectedRange;
+    that._updateSelectedRangeCallback = params.updateSelectedRange;
+    that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getShiftDirection;
+    that._axis.getTickStartPositionShift = getTickStartPositionShift;
 }
 
 AxisWrapper.prototype = {
@@ -1064,7 +1076,7 @@ AxisWrapper.prototype = {
         var axis = this._axis;
         axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - Math.ceil(options.width / 2)));
         axis.validate();
-        axis.setBusinessRange(businessRange, undefined, undefined, true);
+        axis.setBusinessRange(businessRange, true);
         if(seriesDataSource !== undefined && seriesDataSource.isShowChart()) {
             axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
         }

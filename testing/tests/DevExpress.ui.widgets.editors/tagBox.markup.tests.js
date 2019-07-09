@@ -21,7 +21,8 @@ var EMPTY_INPUT_CLASS = "dx-texteditor-empty",
     TAGBOX_SINGLE_LINE_CLASS = "dx-tagbox-single-line",
     TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template",
     TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template",
-    SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event";
+    SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event",
+    TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container";
 
 var moduleSetup = {
     beforeEach: function() {
@@ -62,6 +63,7 @@ QUnit.test("tagbox should have base class", function(assert) {
     assert.equal($tagContent.length, 2, "each tag has tag content");
     assert.deepEqual(this.getTexts($tagContent), ["1", "2"], "each tag content has correct text");
     assert.equal($tagContent.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).length, 2, "each tag has remove button");
+    assert.ok($tags.eq(0).parent().hasClass(TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS), "tags are placed in the element with TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS");
 });
 
 QUnit.test("tagbox should render custom values in tags", function(assert) {
@@ -234,6 +236,29 @@ QUnit.test("option elements should have displayed text of selected items as valu
 
     $options.each(function(index) {
         assert.equal(this.value, value[index].text, "the 'value' attribute is set for the option " + index);
+    });
+});
+
+QUnit.test("the submit value must be equal to the value of the widget", function(assert) {
+    var items = ["test-1", "test-2", "test-3"],
+        value = [items[0], items[2]],
+        $options = $("#tagBox")
+            .dxTagBox({
+                items: items,
+                value: value,
+                valueExpr: "this",
+                displayExpr: function(item) {
+                    if(item) {
+                        return item.split("-").join("+");
+                    }
+                }
+            })
+            .find("option");
+
+    assert.equal($options.length, value.length, "all options are rendered");
+
+    $options.each(function(index) {
+        assert.deepEqual(this.value, value[index], "the 'value' attribute is set for the option " + index);
     });
 });
 

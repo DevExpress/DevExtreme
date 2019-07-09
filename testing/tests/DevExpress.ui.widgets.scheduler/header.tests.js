@@ -1,13 +1,24 @@
 var $ = require("jquery"),
     SchedulerHeader = require("ui/scheduler/ui.scheduler.header"),
     Tabs = require("ui/tabs"),
-    DropDownMenu = require("ui/drop_down_menu");
+    DropDownMenu = require("ui/drop_down_menu"),
+    devices = require("core/devices");
+
+require("ui/scheduler/ui.scheduler");
 
 require("common.css!");
 require("generic_light.css!");
 
+
+var TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button";
+
 QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="scheduler-header"></div>');
+    var markup = '\
+        <div id="scheduler-header"></div>\
+        <div id="scheduler"></div>\
+    ';
+
+    $("#qunit-fixture").html(markup);
 });
 
 QUnit.module("Header", {
@@ -54,6 +65,34 @@ QUnit.test("Header should contain a navigator", function(assert) {
     var $element = this.instance.$element();
 
     assert.equal($element.find(".dx-scheduler-navigator").length, 1);
+});
+
+QUnit.test("option('width', 740)", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "This behavior is designed for desktop only");
+        return;
+    }
+
+    var $element = $("#scheduler").dxScheduler({
+        views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
+        width: 740
+    });
+
+    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2);
+});
+
+QUnit.test("option('width', 770)", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "This behavior is designed for desktop only");
+        return;
+    }
+
+    var $element = $("#scheduler").dxScheduler({
+        views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
+        width: 770
+    });
+
+    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0);
 });
 
 QUnit.module("Header Options", {

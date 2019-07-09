@@ -1,15 +1,8 @@
-import $ from "jquery";
-
 import "common.css!";
+import "./htmlEditorParts/initFixture.js";
 
-QUnit.testStart(() => {
-    var markup = '<div id="htmlEditor"></div>';
-
-    $("#qunit-fixture").html(markup);
-});
-
-import "./htmlEditorParts/quillRegistrator.tests.js";
 import "./htmlEditorParts/converters.tests.js";
+import "./htmlEditorParts/quillRegistrator.tests.js";
 import "./htmlEditorParts/markup.tests.js";
 import "./htmlEditorParts/valueRendering.tests.js";
 import "./htmlEditorParts/toolbarModule.tests.js";
@@ -23,3 +16,5 @@ import "./htmlEditorParts/paste.tests.js";
 import "./htmlEditorParts/events.tests.js";
 import "./htmlEditorParts/resizingModule.tests.js";
 import "./htmlEditorParts/resizingIntegration.tests.js";
+import "./htmlEditorParts/mentionModule.tests.js";
+import "./htmlEditorParts/mentionIntegration.tests.js";

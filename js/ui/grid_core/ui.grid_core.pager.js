@@ -20,6 +20,7 @@ var PagerView = modules.View.inherit({
                 if(pager) {
                     pager.option({
                         pageCount: dataController.pageCount(),
+                        totalCount: dataController.totalCount(),
                         hasKnownLastPage: dataController.hasKnownLastPage()
                     });
                 } else {
@@ -64,7 +65,12 @@ var PagerView = modules.View.inherit({
                     setTimeout(function() {
                         dataController.pageSize(pageSize);
                     });
-                }
+                },
+                onKeyDown: e => {
+                    let keyboardController = that.getController("keyboardNavigation");
+                    keyboardController && keyboardController.executeAction("onKeyDown", e);
+                },
+                useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation")
             };
 
         if(isDefined(pagerOptions.infoText)) {

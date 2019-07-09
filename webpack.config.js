@@ -19,6 +19,8 @@ module.exports = {
         'globalize/message': 'window.Globalize',
         'quill': 'window.Quill',
         'turndown': 'window.TurndownService',
-        'showdown': 'window.showdown'
+        'showdown': 'window.showdown',
+        'exceljs': 'window.ExcelJS',
+        "devexpress-diagram": 'window.DevExpress.diagram'
     }
 };

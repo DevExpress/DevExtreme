@@ -264,7 +264,6 @@ var NativeStrategy = Class.inherit({
         eventsEngine.off(this._$element, "." + SCROLLABLE_NATIVE);
         eventsEngine.off(this._$container, "." + SCROLLABLE_NATIVE);
         this._removeScrollbars();
-        clearTimeout(this._gestureEndTimer);
         clearTimeout(this._hideScrollbarTimeout);
     },
 

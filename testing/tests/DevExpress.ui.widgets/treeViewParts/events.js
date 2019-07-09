@@ -1,22 +1,23 @@
-/* global DATA, internals, initTree, stripFunctions */
+/* global DATA, internals, initTree, makeSlowDataSource, stripFunctions */
 
-var $ = require("jquery"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    holdEvent = require("events/hold"),
-    fx = require("animation/fx"),
-    devices = require("core/devices"),
-    contextMenuEvent = require("events/contextmenu"),
-    dblclickEvent = require("events/dblclick"),
-    checkEventArgs = function(assert, e) {
-        assert.ok(e.component);
-        assert.ok(e.element);
-        assert.ok(e.itemData);
-        assert.ok(e.itemElement);
-        assert.ok(typeUtils.isDefined(e.itemIndex));
-        assert.ok(e.event);
-        assert.ok(e.node);
-    };
+import $ from "jquery";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import holdEvent from "events/hold";
+import devices from "core/devices";
+import fx from "animation/fx";
+import contextMenuEvent from "events/contextmenu";
+import dblclickEvent from "events/dblclick";
+
+const checkEventArgs = function(assert, e) {
+    assert.ok(e.component);
+    assert.ok(e.element);
+    assert.ok(e.itemData);
+    assert.ok(e.itemElement);
+    assert.ok(typeUtils.isDefined(e.itemIndex));
+    assert.ok(e.event);
+    assert.ok(e.node);
+};
 
 QUnit.module("Events", {
     beforeEach: function() {
@@ -470,19 +471,19 @@ QUnit.test("'onSelectionChanged' should have right arguments for nested items (s
 
     var nodes = args.component.getNodes();
 
-    assert.ok(nodes[0].hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0], "selected"));
     assert.strictEqual(nodes[0].selected, undefined);
 
-    assert.ok(nodes[0].items[0].hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0], "selected"));
     assert.strictEqual(nodes[0].items[0].selected, undefined);
-    assert.ok(nodes[0].items[0].parent.hasOwnProperty("selected"));
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0].parent, "selected"));
     assert.strictEqual(nodes[0].items[0].parent.selected, undefined);
 
     assert.ok(nodes[0].items[0].items[0].selected);
-    assert.ok(nodes[0].items[0].items[0].parent.hasOwnProperty("selected"), undefined);
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0].items[0].parent, "selected"));
 
     assert.ok(!nodes[0].items[0].items[1].selected);
-    assert.ok(nodes[0].items[0].items[1].parent.hasOwnProperty("selected"), undefined);
+    assert.ok(Object.prototype.hasOwnProperty.call(nodes[0].items[0].items[1].parent, "selected"));
 
     assert.ok(nodes[0].items[0].items[0].items[0].selected);
     assert.ok(nodes[0].items[0].items[0].items[0].parent.selected);
@@ -780,6 +781,25 @@ QUnit.test("onItemExpanded should be called after animation completed", function
     }
 });
 
+QUnit.test("onItemExpanded event should not be called when the expandAll is called", function(assert) {
+    const itemExpandedHandler = sinon.stub();
+    const treeView = initTree({
+        items: [{
+            id: 1,
+            text: "Item 1",
+            items: [{
+                id: 2,
+                text: "Nested items"
+            }]
+        }],
+        onItemExpanded: itemExpandedHandler
+    }).dxTreeView("instance");
+
+    treeView.expandAll();
+
+    assert.equal(itemExpandedHandler.callCount, 0, "the expandItem event never called");
+});
+
 QUnit.test("Expand event handler has correct arguments", function(assert) {
     var treeView = initTree({
             items: [{ id: 1, text: "Item 1", items: [{ id: 2, text: "Nested items" }] }],
@@ -886,4 +906,21 @@ QUnit.test("Fire contentReady event when search", function(assert) {
     instance.option("searchValue", "2");
 
     assert.strictEqual(contentReadyHandler.callCount, 2, "onContentReady was second time");
+});
+
+QUnit.test("ContentReady event rise once when the data source is remote by first rendering", function(assert) {
+    var contentReadyHandler = sinon.spy();
+
+    initTree({
+        dataSource: makeSlowDataSource([{
+            id: 1,
+            text: "Item 1",
+            parentId: 0
+        }]),
+        onContentReady: contentReadyHandler
+    }).dxTreeView("instance");
+
+    this.clock.tick(300);
+
+    assert.strictEqual(contentReadyHandler.callCount, 1, "onContentReady was first time");
 });

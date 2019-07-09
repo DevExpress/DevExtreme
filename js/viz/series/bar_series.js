@@ -100,7 +100,11 @@ var baseBarSeriesMethods = {
 
     _defaultAggregator: "sum",
 
-    _defineDrawingState() {}
+    _defineDrawingState() {},
+
+    usePointsToDefineAutoHiding() {
+        return false;
+    }
 };
 
 exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
@@ -123,6 +127,50 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
         if(!firstDrawing) {
             animateFunc(that._drawnPoints, complete);
         }
+    },
+
+    checkSeriesViewportCoord(axis, coord) {
+        if(this._points.length === 0) {
+            return false;
+        }
+        if(axis.isArgumentAxis) {
+            return true;
+        }
+        const translator = axis.getTranslator();
+        const range = this.getViewport();
+        let min = translator.translate(range.categories ? range.categories[0] : range.min);
+        let max = translator.translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
+        const rotated = this.getOptions().rotated;
+        const inverted = axis.getOptions().inverted;
+
+        return ((rotated && !inverted || !rotated && inverted)) ? coord >= min && coord <= max : coord >= max && coord <= min;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        let oppositeCoord = null;
+        const { rotated } = this._options;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
+        const coordName = isOpposite ? "vy" : "vx";
+        const oppositeCoordName = isOpposite ? "vx" : "vy";
+        const points = this.getPoints();
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            let tmpCoord;
+
+            if(isArgument) {
+                tmpCoord = p.getCenterCoord()[coordName[1]] === coord ? p[oppositeCoordName] : undefined;
+            } else {
+                tmpCoord = p[coordName] === coord ? p[oppositeCoordName] : undefined;
+            }
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
     }
 });
 

@@ -1,12 +1,14 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isFunction } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import { executeAsync } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
+import Callbacks from "../../core/utils/callbacks";
+import { Deferred } from "../../core/utils/deferred";
 
 import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
@@ -31,7 +33,6 @@ const HtmlEditor = Editor.inherit({
              * @name dxHtmlEditorOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -55,7 +56,6 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
 
             /**
@@ -82,13 +82,24 @@ const HtmlEditor = Editor.inherit({
             * @default null
             */
             variables: null,
-
             /**
-            * @name dxHtmlEditorOptions.resizing
-            * @type dxHtmlEditorResizing
+            * @name dxHtmlEditorOptions.mediaResizing
+            * @type dxHtmlEditorMediaResizing
             * @default null
             */
-            resizing: null,
+            mediaResizing: null,
+            /**
+            * @name dxHtmlEditorOptions.mentions
+            * @type Array<dxHtmlEditorMention>
+            * @default null
+            */
+            mentions: null,
+            /**
+             * @name dxHtmlEditorOptions.customizeModules
+             * @type function
+             * @type_function_param1 config:object
+             */
+            customizeModules: null,
 
             formDialogOptions: null
 
@@ -120,7 +131,6 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorToolbarItem.location
             * @default "before"
-            * @inheritdoc
             */
 
             /**
@@ -139,20 +149,88 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxHtmlEditorResizing
+            * @name dxHtmlEditorMediaResizing
             * @type object
             */
             /**
-            * @name dxHtmlEditorResizing.enabled
+            * @name dxHtmlEditorMediaResizing.enabled
             * @type boolean
             * @default false
             */
             /**
-            * @name dxHtmlEditorResizing.allowedTargets
+            * @name dxHtmlEditorMediaResizing.allowedTargets
             * @type Array<string>
             * @default ["images"]
             */
+
+            /**
+            * @name dxHtmlEditorMention
+            * @type object
+            */
+            /**
+            * @name dxHtmlEditorMention.dataSource
+            * @type Array<string>|DataSource|DataSourceOptions
+            * @default null
+            */
+            /**
+            * @name dxHtmlEditorMention.marker
+            * @type string
+            * @default "@"
+            */
+            /**
+            * @name dxHtmlEditorMention.minSearchLength
+            * @type number
+            * @default 0
+            */
+            /**
+            * @name dxHtmlEditorMention.searchTimeout
+            * @type number
+            * @default 500
+            */
+            /**
+            * @name dxHtmlEditorMention.itemTemplate
+            * @type template|function
+            * @default "item"
+            * @type_function_param1 itemData:object
+            * @type_function_param2 itemIndex:number
+            * @type_function_param3 itemElement:dxElement
+            * @type_function_return string|Node|jQuery
+            */
+            /**
+            * @name dxHtmlEditorMention.displayExpr
+            * @type string|function(item)
+            * @default "this"
+            * @type_function_param1 item:object
+            * @type_function_return string
+            */
+            /**
+            * @name dxHtmlEditorMention.searchExpr
+            * @type getter|Array<getter>
+            * @default "this"
+            */
+            /**
+            * @name dxHtmlEditorMention.valueExpr
+            * @type string|function
+            * @default "this"
+            */
+            /**
+            * @name dxHtmlEditorMention.template
+            * @type template|function
+            * @default null
+            * @type_function_param1 mentionData:object
+            * @type_function_param1_field1 marker:string
+            * @type_function_param1_field2 id:string|number
+            * @type_function_param1_field3 value:any
+            * @type_function_param2 contentElement:dxElement
+            * @type_function_return string|Node|jQuery
+            */
         });
+    },
+
+    _init: function() {
+        this.callBase();
+        this._cleanCallback = Callbacks();
+        this._contentInitializedCallback = Callbacks();
     },
 
     _getAnonymousTemplateName: function() {
@@ -244,13 +322,20 @@ const HtmlEditor = Editor.inherit({
     },
 
     _render: function() {
-        if(!this._quillRegistrator) {
-            this._quillRegistrator = new QuillRegistrator();
-        }
-
         this._prepareConverters();
 
         this.callBase();
+    },
+
+    _prepareQuillRegistrator: function() {
+        if(!this._quillRegistrator) {
+            this._quillRegistrator = new QuillRegistrator();
+        }
+    },
+
+    _getRegistrator: function() {
+        this._prepareQuillRegistrator();
+        return this._quillRegistrator;
     },
 
     _prepareConverters: function() {
@@ -268,15 +353,26 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderContentImpl: function() {
+        this._contentRenderedDeferred = new Deferred();
+
+        const renderContentPromise = this._contentRenderedDeferred.promise();
+
         this.callBase();
         this._renderHtmlEditor();
         this._renderFormDialog();
+
+        return renderContentPromise;
     },
 
     _renderHtmlEditor: function() {
+        const customizeModules = this.option("customizeModules");
         const modulesConfig = this._getModulesConfig();
 
-        this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
+        if(isFunction(customizeModules)) {
+            customizeModules(modulesConfig);
+        }
+
+        this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
             readOnly: this.option("readOnly") || this.option("disabled"),
             modules: modulesConfig,
@@ -289,8 +385,21 @@ const HtmlEditor = Editor.inherit({
 
         if(this._hasTranscludedContent()) {
             this._updateContentTask = executeAsync(() => {
-                this._updateHtmlContent(this._deltaConverter.toHtml());
+                this._applyTranscludedContent();
             });
+        } else {
+            this._finalizeContentRendering();
+        }
+    },
+
+    _applyTranscludedContent: function() {
+        const markup = this._deltaConverter.toHtml();
+        const newDelta = this._quillInstance.clipboard.convert(markup);
+
+        if(newDelta.ops.length) {
+            this._quillInstance.setContents(newDelta);
+        } else {
+            this._finalizeContentRendering();
         }
     },
 
@@ -299,12 +408,13 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
-        const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
+        const wordListMatcher = getWordMatcher(this._getRegistrator().getQuill());
         let modulesConfig = extend({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
-            resizing: this._getModuleConfigByOption("resizing"),
+            resizing: this._getModuleConfigByOption("mediaResizing"),
+            mentions: this._getModuleConfigByOption("mentions"),
             clipboard: {
                 matchVisual: false,
                 matchers: [
@@ -319,13 +429,20 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModuleConfigByOption: function(userOptionName) {
-        let userConfig = this.option(userOptionName);
+        const optionValue = this.option(userOptionName);
+        let config = {};
 
-        if(!isDefined(userConfig)) {
+        if(!isDefined(optionValue)) {
             return undefined;
         }
 
-        return extend(this._getBaseModuleConfig(), userConfig);
+        if(Array.isArray(optionValue)) {
+            config[userOptionName] = optionValue;
+        } else {
+            config = optionValue;
+        }
+
+        return extend(this._getBaseModuleConfig(), config);
     },
 
     _getBaseModuleConfig: function() {
@@ -334,7 +451,7 @@ const HtmlEditor = Editor.inherit({
 
     _getCustomModules: function() {
         const modules = {};
-        const moduleNames = this._quillRegistrator.getRegisteredModuleNames();
+        const moduleNames = this._getRegistrator().getRegisteredModuleNames();
 
         moduleNames.forEach(modulePath => {
             modules[modulePath] = this._getBaseModuleConfig();
@@ -345,13 +462,22 @@ const HtmlEditor = Editor.inherit({
 
     _textChangeHandler: function(newDelta, oldDelta, source) {
         const htmlMarkup = this._deltaConverter.toHtml();
-
-
         const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
 
         if(this.option("value") !== value) {
             this._isEditorUpdating = true;
             this.option("value", value);
+        }
+
+        this._finalizeContentRendering();
+    },
+
+    _finalizeContentRendering: function() {
+        if(this._contentRenderedDeferred) {
+            this.clearHistory();
+            this._contentInitializedCallback.fire();
+            this._contentRenderedDeferred.resolve();
+            this._contentRenderedDeferred = undefined;
         }
     },
 
@@ -414,6 +540,8 @@ const HtmlEditor = Editor.inherit({
             case "placeholder":
             case "variables":
             case "toolbar":
+            case "mentions":
+            case "customizeModules":
                 this._invalidate();
                 break;
             case "valueType": {
@@ -435,7 +563,7 @@ const HtmlEditor = Editor.inherit({
             case "formDialogOptions":
                 this._renderFormDialog();
                 break;
-            case "resizing":
+            case "mediaResizing":
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
@@ -454,13 +582,13 @@ const HtmlEditor = Editor.inherit({
 
     _clean: function() {
         if(this._quillInstance) {
-            const toolbar = this._quillInstance.getModule("toolbar");
-
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
-            toolbar && toolbar.clean();
+            this._cleanCallback.fire();
         }
 
         this._abortUpdateContentTask();
+        this._cleanCallback.empty();
+        this._contentInitializedCallback.empty();
         this.callBase();
     },
 
@@ -483,25 +611,33 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    addCleanCallback(callback) {
+        this._cleanCallback.add(callback);
+    },
+
+    addContentInitializedCallback(callback) {
+        this._contentInitializedCallback.add(callback);
+    },
+
     /**
-    * @name dxHtmlEditorMethods.registerModules
-    * @publicName registerModules(modules)
+    * @name dxHtmlEditorMethods.register
+    * @publicName register(components)
     * @param1 modules:Object
     */
-    registerModules: function(modules) {
-        this._quillRegistrator.registerModules(modules);
+    register: function(components) {
+        this._getRegistrator().registerModules(components);
 
         this.repaint();
     },
 
     /**
-    * @name dxHtmlEditorMethods.getModule
-    * @publicName getModule(modulePath)
-    * @param1 modulePath:string
+    * @name dxHtmlEditorMethods.get
+    * @publicName get(componentPath)
+    * @param1 componentPath:string
     * @return Object
     */
-    getModule: function(modulePath) {
-        return this._quillRegistrator.getQuill().import(modulePath);
+    get: function(modulePath) {
+        return this._getRegistrator().getQuill().import(modulePath);
     },
 
     /**

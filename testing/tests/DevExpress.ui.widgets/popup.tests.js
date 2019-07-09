@@ -5,10 +5,15 @@ import { value as viewPort } from "core/utils/view_port";
 import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import { isRenderer } from "core/utils/type";
+import browser from "core/utils/browser";
+import { compare as compareVersions } from "core/utils/version";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "common.css!";
 import "ui/popup";
+
+const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
+const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 
 QUnit.testStart(function() {
     var markup =
@@ -75,6 +80,8 @@ var POPUP_CLASS = "dx-popup",
     POPUP_TITLE_CLASS = "dx-popup-title",
     POPUP_TITLE_CLOSEBUTTON_CLASS = "dx-closebutton",
     POPUP_NORMAL_CLASS = "dx-popup-normal",
+    POPUP_CONTENT_FLEX_HEIGHT_CLASS = "dx-popup-flex-height",
+    POPUP_CONTENT_INHERIT_HEIGHT_CLASS = "dx-popup-inherit-height",
 
     POPUP_DRAGGABLE_CLASS = "dx-popup-draggable",
 
@@ -393,7 +400,14 @@ QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarBut
 });
 
 
-QUnit.module("dimensions");
+QUnit.module("dimensions", {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+});
 
 QUnit.test("content must not overlap bottom buttons", function(assert) {
     var $popup = $("#popup").dxPopup({
@@ -577,11 +591,11 @@ QUnit.test("popup height can be changed according to the content if height = aut
             minHeight: 50
         }).dxPopup("instance");
 
-    const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0),
-        popupHeight = $popup.height();
+    const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+    const popupHeight = $popup.height();
 
     $("<div>").height(50).appendTo($content);
-    assert.strictEqual($popup.height(), popupHeight + 50, "popup height has been changed");
+    assert.strictEqual($popup.height(), (popupHeight + 50), "popup height has been changed (except IE11)");
 
     $("<div>").height(450).appendTo($content);
     assert.strictEqual($popup.height(), 400, "popup height has been changed, it is equal to the maxHeight");
@@ -592,6 +606,14 @@ QUnit.test("popup height can be changed according to the content if height = aut
     popup.option("autoResizeEnabled", false);
     $("<div>").height(450).appendTo($content);
     assert.strictEqual($popup.height(), 50, "popup height does not change if autoResizeEnabled = false");
+
+    popup.option("autoResizeEnabled", true);
+    assert.strictEqual($popup.height(), 400, "popup height has been changed after 'autoResizeEnabled' change");
+
+    popup.option("width", "auto");
+    $content.empty();
+
+    assert.strictEqual($popup.height(), (IS_IE11 ? 400 : 50), "popup with auto width can change height (except IE11)");
 });
 
 QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
@@ -658,6 +680,65 @@ QUnit.test("popup height should support any maxHeight and minHeight option value
     popup.option("minHeight", "auto");
     assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).innerHeight() + popupContentPadding, "popup minHeight: auto");
 });
+
+QUnit.test("popup overlay should have correct height strategy classes for all browsers", assert => {
+    const popup = $("#popup").dxPopup({
+        visible: true,
+        height: "auto",
+        showTitle: false,
+        contentTemplate: () => $("<div>")
+    }).dxPopup("instance");
+
+    const $popup = popup.$content().parent();
+
+    if(IS_OLD_SAFARI) {
+        assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width for old safari");
+        assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width for old safari");
+    } else {
+        assert.ok($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width");
+        assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width");
+    }
+
+
+    popup.option("width", "auto");
+
+    if(IS_IE11) {
+        assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width for IE11");
+        assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), "has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with auto width for IE11");
+    } else {
+        assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), "has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width");
+    }
+
+});
+
+
+QUnit.test("popup height should support TreeView with Search if height = auto (T724029)", assert => {
+    if(IS_OLD_SAFARI) {
+        assert.expect(0);
+        return;
+    }
+
+    const $content = $(
+        '<div class="dx-treeview">\
+            <div style="height: 30px;"></div>\
+            <div class="dx-scrollable" style="height: calc(100% - 30px)">\
+                <div style="height: 100px;"></div>\
+            </div>\
+        </div>');
+
+    $("#popup").dxPopup({
+        visible: true,
+        height: "auto",
+        showTitle: false,
+        contentTemplate: () => $content,
+        maxHeight: 100
+    });
+
+    let treeviewContentHeight = 0;
+    $content.children().each(function(_, item) { treeviewContentHeight += $(item).height(); });
+    assert.roughEqual($content.height(), treeviewContentHeight, 1, "treeview content can not be heighter than container");
+});
+
 
 QUnit.test("fullScreen", function(assert) {
     this.instance.option({
@@ -954,7 +1035,7 @@ QUnit.test("popup content should update height after resize", function(assert) {
         pointer = pointerMock($handle).start();
 
     pointer.dragStart().drag(-100, -100);
-    assert.equal(popup.$content().outerHeight(), $overlayContent.height(), "size of popup and overlay is equal");
+    assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, "size of popup and overlay is equal");
 });
 
 QUnit.test("popup content position should be reset after show/hide", function(assert) {
@@ -1094,6 +1175,7 @@ QUnit.module("rendering", {
 });
 
 QUnit.test("anonymous content template rendering", function(assert) {
+    var $inner = $("#popupWithAnonymousTmpl .testContent");
     var $popup = $("#popupWithAnonymousTmpl").dxPopup({
         visible: true
     });
@@ -1101,6 +1183,7 @@ QUnit.test("anonymous content template rendering", function(assert) {
     var $content = $popup.dxPopup("$content");
 
     assert.equal($.trim($content.text()), "TestContent", "content rendered");
+    assert.equal($content.find(".testContent").get(0), $inner[0], "content should not lost the link");
 });
 
 QUnit.test("custom content template is applied even if there is 'content' template in popup", function(assert) {

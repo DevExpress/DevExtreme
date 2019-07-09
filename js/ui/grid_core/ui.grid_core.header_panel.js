@@ -68,7 +68,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
 
     init: function() {
         this.callBase();
-        this.createAction("onToolbarPreparing", { excludeValidators: ["designMode", "disabled", "readOnly"] });
+        this.createAction("onToolbarPreparing", { excludeValidators: ["disabled", "readOnly"] });
     },
 
     render: function() {

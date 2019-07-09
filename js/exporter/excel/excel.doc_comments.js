@@ -36,6 +36,10 @@
 * @type string
 */
 /**
+* @name ExcelDataGridCell.groupIndex
+* @type number
+*/
+/**
 * @name ExcelDataGridCell.data
 * @type object
 */

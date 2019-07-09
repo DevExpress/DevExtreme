@@ -1,4 +1,4 @@
-import eventsUtils from "../../events/utils";
+import { addNamespace, normalizeKeyName } from "../../events/utils";
 import { isFunction } from "../../core/utils/type";
 import { clipboardText } from "../../core/utils/dom";
 import { extend } from "../../core/utils/extend";
@@ -10,55 +10,101 @@ import dateLocalization from "../../localization/date";
 import { getRegExpInfo } from "../../localization/ldml/date.parser";
 import { getFormat } from "../../localization/ldml/date.format";
 import { isString } from "../../core/utils/type";
+import { sign } from "../../core/utils/math";
 import DateBoxBase from "./ui.date_box.base";
 
-const MASK_EVENT_NAMESPACE = "dateBoxMask",
-    FORWARD = 1,
-    BACKWARD = -1;
+const MASK_EVENT_NAMESPACE = "dateBoxMask";
+const FORWARD = 1;
+const BACKWARD = -1;
 
-let DateBoxMask = DateBoxBase.inherit({
+const DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys(e) {
-        if(!this._useMaskBehavior() || this.option("opened") || (e && e.altKey)) {
-            return this.callBase(e);
-        }
+        const originalHandlers = this.callBase(e);
+        const callOriginalHandler = (e) => originalHandlers[normalizeKeyName(e)].apply(this, [e]);
+        const applyHandler = (e, maskHandler) => {
+            if(this._shouldUseOriginalHandler(e)) {
+                return callOriginalHandler.apply(this, [e]);
+            } else {
+                return maskHandler.apply(this, [e]);
+            }
+        };
 
-        return extend(this.callBase(e), {
+        return extend({}, originalHandlers, {
             del: (e) => {
-                this._revertPart(FORWARD);
-                this._isAllSelected() || e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._revertPart(FORWARD);
+                    this._isAllSelected() || event.preventDefault();
+                });
             },
             backspace: (e) => {
-                this._revertPart(BACKWARD);
-                this._isAllSelected() || e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._revertPart(BACKWARD);
+                    this._isAllSelected() || event.preventDefault();
+                });
             },
             home: (e) => {
-                this._selectFirstPart();
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectFirstPart();
+                    event.preventDefault();
+                });
             },
             end: (e) => {
-                this._selectLastPart();
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectLastPart();
+                    event.preventDefault();
+                });
             },
-            escape: this._revertChanges,
-            enter: this._enterHandler,
+            escape: (e) => {
+                return applyHandler(e, (event) => {
+                    this._revertChanges(event);
+                });
+            },
+            enter: (e) => {
+                return applyHandler(e, (event) => {
+                    this._enterHandler(event);
+                });
+            },
             leftArrow: (e) => {
-                this._selectNextPart(BACKWARD);
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectNextPart(BACKWARD);
+                    event.preventDefault();
+                });
             },
             rightArrow: (e) => {
-                this._selectNextPart(FORWARD);
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._selectNextPart(FORWARD);
+                    event.preventDefault();
+                });
             },
             upArrow: (e) => {
-                this._partIncrease(FORWARD);
-                e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._upDownArrowHandler(FORWARD);
+                    event.preventDefault();
+                });
             },
             downArrow: (e) => {
-                this._partIncrease(BACKWARD);
-                e.preventDefault();
-            },
+                return applyHandler(e, (event) => {
+                    this._upDownArrowHandler(BACKWARD);
+                    event.preventDefault();
+                });
+            }
         });
+    },
+
+    _shouldUseOriginalHandler(e) {
+        return !this._useMaskBehavior() || this.option("opened") || (e && e.altKey);
+    },
+
+    _upDownArrowHandler(step) {
+        this._setNewDateIfEmpty();
+
+        const originalValue = this._getActivePartValue(this._initialMaskValue);
+        const currentValue = this._getActivePartValue();
+        const delta = currentValue - originalValue;
+
+        this._loadMaskValue(this._initialMaskValue);
+        this._partIncrease(delta + step);
     },
 
     _getDefaultOptions() {
@@ -131,6 +177,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _setNewDateIfEmpty() {
         if(!this._maskValue) {
             this._maskValue = new Date();
+            this._initialMaskValue = new Date();
             this._renderDateParts();
         }
     },
@@ -141,6 +188,9 @@ let DateBoxMask = DateBoxBase.inherit({
         const formatLength = this._getActivePartProp("pattern").length;
 
         this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
+        if(isNaN(this._searchValue)) {
+            this._searchValue = char;
+        }
 
         this._setActivePartValue(this._searchValue);
 
@@ -166,7 +216,8 @@ let DateBoxMask = DateBoxBase.inherit({
             endLimit = limits.max - limits.min;
 
         for(let i = 0; i <= endLimit; i++) {
-            this._partIncrease(1);
+            this._loadMaskValue(this._initialMaskValue);
+            this._partIncrease(i + 1);
             if(this._getActivePartProp("text").toLowerCase().indexOf(startString) === 0) {
                 this._searchValue = startString;
                 return;
@@ -236,9 +287,9 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _attachMaskEvents() {
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), () => {
+        eventsEngine.on(this._input(), addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
+        eventsEngine.on(this._input(), addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
+        eventsEngine.on(this._input(), addNamespace("drop", MASK_EVENT_NAMESPACE), () => {
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart();
         });
@@ -267,6 +318,10 @@ let DateBoxMask = DateBoxBase.inherit({
     _selectNextPart(step = 0) {
         if(!this.option("text")) {
             return;
+        }
+
+        if(step) {
+            this._initialMaskValue = new Date(this._maskValue);
         }
 
         let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
@@ -329,13 +384,14 @@ let DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
-    _loadMaskValue() {
-        const value = this.dateOption("value");
+    _loadMaskValue(value = this.dateOption("value")) {
         this._maskValue = value && new Date(value);
+        this._initialMaskValue = value && new Date(value);
     },
 
     _saveMaskValue() {
         const value = this._maskValue && new Date(this._maskValue);
+        this._initialMaskValue = new Date(value);
         this.dateOption("value", value);
     },
 
@@ -355,13 +411,29 @@ let DateBoxMask = DateBoxBase.inherit({
     _partIncrease(step) {
         this._setNewDateIfEmpty();
 
-        let limits = this._getActivePartLimits(),
-            newValue = step + this._getActivePartValue();
+        const { max, min } = this._getActivePartLimits();
 
-        newValue = newValue > limits.max ? limits.min : newValue;
-        newValue = newValue < limits.min ? limits.max : newValue;
+        let limitDelta = max - min;
+
+        // take AM\PM into account
+        if(limitDelta === 1) {
+            limitDelta++;
+        }
+
+        let newValue = step + this._getActivePartValue();
+
+        if(newValue > max) {
+            newValue = this._applyLimits(newValue, { limitBase: min, limitClosest: max, limitDelta });
+        } else if(newValue < min) {
+            newValue = this._applyLimits(newValue, { limitBase: max, limitClosest: min, limitDelta });
+        }
 
         this._setActivePartValue(newValue);
+    },
+
+    _applyLimits(newValue, { limitBase, limitClosest, limitDelta }) {
+        const delta = (newValue - limitClosest) % limitDelta;
+        return delta ? limitBase + delta - 1 * sign(delta) : limitClosest;
     },
 
     _maskClickHandler() {

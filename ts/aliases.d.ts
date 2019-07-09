@@ -139,12 +139,6 @@ declare module DevExpress.ui {
     /** @deprecated Use DevExpress.ui.dxNavBarItem */
     export type dxNavBarItemTemplate = DevExpress.ui.dxNavBarItem;
 
-    /** @deprecated Use DevExpress.ui.dxPanoramaItem */
-    export type dxPanoramaItemTemplate = DevExpress.ui.dxPanoramaItem;
-
-    /** @deprecated Use DevExpress.ui.dxPivotItem */
-    export type dxPivotItemTemplate = DevExpress.ui.dxPivotItem;
-
     /** @deprecated Use DevExpress.ui.dxResponsiveBoxItem */
     export type dxResponsiveBoxItemTemplate = DevExpress.ui.dxResponsiveBoxItem;
 

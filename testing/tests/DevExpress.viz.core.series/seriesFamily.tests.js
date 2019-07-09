@@ -221,6 +221,7 @@ var pointsForStacking = {
             new MockPoint({ argument: "Second", value: 0 })
         ];
     },
+
     points1DateArgument: function() {
         return [
             new MockPoint({ argument: new Date(0), value: 13 }),
@@ -228,6 +229,28 @@ var pointsForStacking = {
             new MockPoint({ argument: new Date(4), value: 29 })
         ];
     },
+    points1DateValue: function() {
+        return [
+            new MockPoint({ argument: "First", value: new Date(10) }),
+            new MockPoint({ argument: "Second", value: new Date(11) }),
+            new MockPoint({ argument: "Third", value: new Date(12) })
+        ];
+    },
+    points2DateValue: function() {
+        return [
+            new MockPoint({ argument: "First", value: new Date(20) }),
+            new MockPoint({ argument: "Second", value: new Date(21) }),
+            new MockPoint({ argument: "Third", value: new Date(22) })
+        ];
+    },
+    points3DateValue: function() {
+        return [
+            new MockPoint({ argument: "First", value: new Date(30) }),
+            new MockPoint({ argument: "Second", value: new Date(31) }),
+            new MockPoint({ argument: "Third", value: new Date(32) })
+        ];
+    },
+
     points1WithSameArguments: function() {
         return [
             new MockPoint({ argument: "A", value: 13 }),
@@ -335,7 +358,7 @@ function checkStackedPoints(assert, points1, points2, points3) {
 
         assert.strictEqual(point.correctedValue, undefined, "Value should not be corrected");
 
-        bound[valueType][i] = (currentBound) ? currentBound + value : value;
+        bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
     });
 
     if(points2) {
@@ -344,9 +367,9 @@ function checkStackedPoints(assert, points1, points2, points3) {
                 valueType = (value >= 0) ? "positive" : "negative",
                 currentBound = bound[valueType][i];
 
-            assert.strictEqual(points2[i].correctedValue, point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
+            assert.strictEqual(points2[i].correctedValue && points2[i].correctedValue.valueOf(), point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
 
-            bound[valueType][i] = (currentBound) ? currentBound + value : value;
+            bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
         });
     }
     if(points3) {
@@ -355,9 +378,9 @@ function checkStackedPoints(assert, points1, points2, points3) {
                 valueType = (value >= 0) ? "positive" : "negative",
                 currentBound = bound[valueType][i];
 
-            assert.strictEqual(points3[i].correctedValue, point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
+            assert.strictEqual(points3[i].correctedValue && points3[i].correctedValue.valueOf(), point.value !== null ? currentBound : undefined, "Value should be corrected with first series values");
 
-            bound[valueType][i] = (currentBound) ? currentBound + value : value;
+            bound[valueType][i] = (currentBound) ? currentBound.valueOf() + value.valueOf() : value.valueOf();
         });
     }
 }
@@ -458,13 +481,14 @@ function checkPercentValue(assert, point, total) {
 }
 
 function getArgAxis(visibleArea, interval) {
+    const translator = new MockTranslator({
+        interval: interval || 100,
+        translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
+        from: { 0: 0, 10: 10 }
+    });
     return {
         getTranslator: function() {
-            return new MockTranslator({
-                interval: interval || 100,
-                translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
-                from: { 0: 0, 10: 10 }
-            });
+            return translator;
         },
         getVisibleArea() {
             return visibleArea && [visibleArea.min, visibleArea.max] || [];
@@ -548,8 +572,7 @@ QUnit.test("creation params", function(assert) {
         pane: "pane-option",
         equalBarWidth: "equalBarWidth-option",
         minBubbleSize: "minBubbleSize-option",
-        maxBubbleSize: "maxBubbleSize-option",
-        rotated: "rotated-option"
+        maxBubbleSize: "maxBubbleSize-option"
     });
 
     assert.ok(family);
@@ -559,7 +582,6 @@ QUnit.test("creation params", function(assert) {
     assert.equal(family._options.equalBarWidth, "equalBarWidth-option", "equalBarWidth");
     assert.equal(family._options.minBubbleSize, "minBubbleSize-option", "minBubbleSize");
     assert.equal(family._options.maxBubbleSize, "maxBubbleSize-option", "maxBubbleSize");
-    assert.equal(family.rotated, 'rotated-option', "rotated");
 });
 
 QUnit.test("update API method", function(assert) {
@@ -1038,7 +1060,7 @@ QUnit.test("Set five series, only width is specified, negative value", function(
     checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
-QUnit.test("Set five series. rotated", function(assert) {
+QUnit.test("Set five series. inverted", function(assert) {
     var series1 = createSeries({ points: pointsForStacking.points1() }),
         series2 = createSeries({ points: pointsForStacking.points2() }),
         series3 = createSeries({ points: pointsForStacking.points3() }),
@@ -1048,7 +1070,13 @@ QUnit.test("Set five series. rotated", function(assert) {
         expectedSpacing = 3,
         expectedWidth = 12;
 
-    createSeriesFamily("bar", series, { equalBarWidth: true, rotated: true });
+    series.forEach(s => {
+        s.getArgumentAxis().getTranslator().isInverted = function() {
+            return true;
+        };
+    });
+
+    createSeriesFamily("bar", series, { equalBarWidth: true });
 
     checkSeries(assert, series5, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series4, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -1528,7 +1556,7 @@ QUnit.test("Set five series", function(assert) {
     checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
-QUnit.test("Set five series. rotated", function(assert) {
+QUnit.test("Set five series. inverted", function(assert) {
     var series1 = createSeries({ points: pointsForStacking.points1() }),
         series2 = createSeries({ points: pointsForStacking.points2() }),
         series3 = createSeries({ points: pointsForStacking.points3() }),
@@ -1538,7 +1566,9 @@ QUnit.test("Set five series. rotated", function(assert) {
         expectedSpacing = 3,
         expectedWidth = 12;
 
-    createSeriesFamily("rangebar", series, { equalBarWidth: true, rotated: true });
+    series1.getArgumentAxis().getTranslator().isInverted = () => true;
+
+    createSeriesFamily("rangebar", series, { equalBarWidth: true });
 
     checkSeries(assert, series5, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series4, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -2017,7 +2047,7 @@ QUnit.test("Set single series date argument - matching points", function(assert)
     checkStackedPoints(assert, points1);
 });
 
-QUnit.test("Set three series - 2 groups. rotated", function(assert) {
+QUnit.test("Set three series - 2 groups. inverted", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
@@ -2037,7 +2067,8 @@ QUnit.test("Set three series - 2 groups. rotated", function(assert) {
         expectedWidth = 32,
         expectedOffset = 19.5;
 
-    createSeriesFamily("stackedbar", series, { equalBarWidth: true, rotated: true });
+    series1.getArgumentAxis().getTranslator().isInverted = () => true;
+    createSeriesFamily("stackedbar", series, { equalBarWidth: true });
 
     checkSeries(assert, series3, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -2046,7 +2077,7 @@ QUnit.test("Set three series - 2 groups. rotated", function(assert) {
     checkStackedPoints(assert, points3);
 });
 
-QUnit.test("Set three series. rotated", function(assert) {
+QUnit.test("Set three series. inverted", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
@@ -2066,7 +2097,9 @@ QUnit.test("Set three series. rotated", function(assert) {
         expectedWidth = 20,
         expectedOffset = 25;
 
-    createSeriesFamily("stackedbar", series, { equalBarWidth: true, rotated: true });
+    series1.getArgumentAxis().getTranslator().isInverted = () => true;
+
+    createSeriesFamily("stackedbar", series, { equalBarWidth: true });
 
     checkSeries(assert, series3, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, 0);
@@ -2074,6 +2107,29 @@ QUnit.test("Set three series. rotated", function(assert) {
     checkStackedPoints(assert, points1);
     checkStackedPoints(assert, points2);
     checkStackedPoints(assert, points3);
+});
+
+QUnit.test("Set three series - datetime value", function(assert) {
+    var points1 = pointsForStacking.points1DateValue(),
+        points2 = pointsForStacking.points2DateValue(),
+        points3 = pointsForStacking.points3DateValue(),
+        series1 = createSeries({
+            points: points1,
+            stack: "0"
+        }),
+        series2 = createSeries({
+            points: points2,
+            stack: "0"
+        }),
+        series3 = createSeries({
+            points: points3,
+            stack: "0"
+        }),
+        series = [series1, series2, series3];
+
+    createSeriesFamily("stackedbar", series, { equalBarWidth: true });
+
+    checkStackedPoints(assert, points1, points2, points3);
 });
 
 QUnit.module("Stacked Bar series - single column. Negative values");
@@ -2694,7 +2750,7 @@ QUnit.test("Set three series - custom min size is not specify", function(assert)
     checkStackedPointHeight(assert, family.series[2], 1, 1, 1, val4, val5, val6);
 });
 
-QUnit.test("Set three series. rotated", function(assert) {
+QUnit.test("Set three series. inverted", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
@@ -2714,7 +2770,9 @@ QUnit.test("Set three series. rotated", function(assert) {
         expectedWidth = 32,
         expectedOffset = 19.5;
 
-    createSeriesFamily("fullstackedbar", series, { equalBarWidth: true, rotated: true });
+    series1.getArgumentAxis().getTranslator().isInverted = () => true;
+
+    createSeriesFamily("fullstackedbar", series, { equalBarWidth: true });
 
     checkSeries(assert, series3, expectedWidth, -expectedOffset);
     checkSeries(assert, series2, expectedWidth, expectedOffset);
@@ -3790,7 +3848,7 @@ QUnit.test("Set five series", function(assert) {
     checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
-QUnit.test("Set five series. rotated", function(assert) {
+QUnit.test("Set five series. inverted", function(assert) {
     var series1 = createSeries({ points: pointsForStacking.points1() }),
         series2 = createSeries({ points: pointsForStacking.points2() }),
         series3 = createSeries({ points: pointsForStacking.points3() }),
@@ -3800,7 +3858,9 @@ QUnit.test("Set five series. rotated", function(assert) {
         expectedSpacing = 3,
         expectedWidth = 12;
 
-    createSeriesFamily("candlestick", series, { rotated: true });
+    series1.getArgumentAxis().getTranslator().isInverted = () => true;
+
+    createSeriesFamily("candlestick", series, { });
 
     checkSeries(assert, series5, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series4, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
@@ -3905,7 +3965,7 @@ QUnit.test("Set five series", function(assert) {
     checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
-QUnit.test("Set five series. rotated", function(assert) {
+QUnit.test("Set five series. inverted", function(assert) {
     var series1 = createSeries({ points: pointsForStacking.points1() }),
         series2 = createSeries({ points: pointsForStacking.points2() }),
         series3 = createSeries({ points: pointsForStacking.points3() }),
@@ -3915,7 +3975,8 @@ QUnit.test("Set five series. rotated", function(assert) {
         expectedSpacing = 3,
         expectedWidth = 12;
 
-    createSeriesFamily("stock", series, { rotated: true });
+    series1.getArgumentAxis().getTranslator().isInverted = () => true;
+    createSeriesFamily("stock", series, { });
 
     checkSeries(assert, series5, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
     checkSeries(assert, series4, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);

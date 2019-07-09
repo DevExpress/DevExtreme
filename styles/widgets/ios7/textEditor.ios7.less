@@ -15,24 +15,24 @@
 @TEXTEDITOR_INVALID_BADGE_WIDTH: 22px;
 @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING: 4px;
 
-.validation-icon-position(@padding: 0) {
+.validation-icon-position() {
     &.dx-invalid {
         .dx-texteditor-input {
-            padding-right: @padding + @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+            padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
         }
 
         &.dx-rtl .dx-texteditor-input {
             padding: @TEXTEDITOR_INPUT_PADDING;
-            padding-left: @padding + @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+            padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
         }
 
-        .dx-texteditor-container {
+        .dx-texteditor-input-container {
             &:after {
-                right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING + @padding;
+                right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
 
                 .dx-rtl &,
                 .dx-rtl& {
-                    left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING + @padding;
+                    left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
                     right: auto;
                 }
             }
@@ -51,8 +51,8 @@
     border-radius: @TEXTEDITOR_BORDER_RADIUS;
     overflow: hidden;
 
-    .dx-hairlines &{
-        border-width: .5px;
+    .dx-hairlines & {
+        border-width: 0.5px;
     }
 }
 
@@ -81,12 +81,8 @@
 }
 
 .dx-show-clear-button {
-    .dx-texteditor-input {
-        padding-right: @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT * 2;
-    }
-
     &:not(.dx-texteditor-empty) {
-        .validation-icon-position(@CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT);
+        .validation-icon-position();
     }
 }
 
@@ -139,8 +135,9 @@
 
 .dx-texteditor {
     .validation-icon-position();
-    &.dx-invalid{
-        .dx-texteditor-container {
+
+    &.dx-invalid {
+        .dx-texteditor-input-container {
             &:after {
                 .dx-invalid-ios7-badge();
             }
@@ -177,7 +174,7 @@
     }
 }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (min-resolution: 192dpi) {
     .dx-clear-button-area {
         .dx-icon-clear {
             top: @CLEAR_ICON_TOP + @CLEAR_ICON_RETINA_CORRECTION;

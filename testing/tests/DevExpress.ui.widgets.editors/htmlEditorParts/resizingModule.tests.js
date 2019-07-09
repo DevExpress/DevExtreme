@@ -110,7 +110,7 @@ module("Resizing module", moduleConfig, () => {
     test("'option' can apply a set of options", (assert) => {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
-        resizingInstance.option("resizing", { allowedTargets: ["video"], enabled: true });
+        resizingInstance.option("mediaResizing", { allowedTargets: ["video"], enabled: true });
 
         assert.ok(resizingInstance.enabled, "'enabled' option has been applied");
         assert.deepEqual(resizingInstance.allowedTargets, ["video"], "'allowedTargets' option has been applied");

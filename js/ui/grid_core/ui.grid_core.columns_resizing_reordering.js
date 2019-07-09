@@ -227,6 +227,7 @@ var ColumnsSeparatorView = SeparatorView.inherit({
         if($element && (this._isShown || force)) {
             if(this._isTransparent) {
                 $element.addClass(columnsSeparatorTransparent);
+                $element.css("left", "");
                 $element.show();
             } else {
                 if($element.hasClass(columnsSeparatorTransparent)) {

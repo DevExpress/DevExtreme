@@ -105,8 +105,8 @@ QUnit.test("set selectedRows for single selection. Array parameter with one obje
     assert.ok(!this.dataController.items()[2].focused);
 });
 
-QUnit.test("pass selection options to selection controller", function(assert) {
-    var createSelection = sinon.spy(this.selectionController, "_createSelection");
+QUnit.test("check selection options for selection controller", function(assert) {
+    var selectionOptions;
 
     this.applyOptions({
         selection: {
@@ -118,12 +118,12 @@ QUnit.test("pass selection options to selection controller", function(assert) {
         selectedRowKeys: "rowKeys",
     });
 
-    assert.ok(createSelection.calledOnce);
-    assert.strictEqual(createSelection.lastCall.args[0].maxFilterLengthInRequest, 10);
-    assert.strictEqual(createSelection.lastCall.args[0].mode, "single");
-    assert.strictEqual(createSelection.lastCall.args[0].deferred, false);
-    assert.strictEqual(createSelection.lastCall.args[0].selectionFilter, "filterValue");
-    assert.strictEqual(createSelection.lastCall.args[0].selectedKeys, "rowKeys");
+    selectionOptions = this.selectionController._getSelectionConfig();
+    assert.strictEqual(selectionOptions.maxFilterLengthInRequest, 10);
+    assert.strictEqual(selectionOptions.mode, "single");
+    assert.strictEqual(selectionOptions.deferred, false);
+    assert.strictEqual(selectionOptions.selectionFilter, "filterValue");
+    assert.strictEqual(selectionOptions.selectedKeys, "rowKeys");
 });
 
 QUnit.test("set selectedRows. Array parameter with one object and parameter preserve is true", function(assert) {

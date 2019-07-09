@@ -1177,6 +1177,28 @@ QUnit.test("calculateFilterExpression for column with dataType is date when filt
     ], "calculate filter expression for end date with time");
 });
 
+// T753401
+QUnit.test("calculateFilterExpression for column with dataType is dateTime when filterOperation is 'between'", function(assert) {
+    // arrange
+    var column,
+        dateStart,
+        dateEnd;
+
+    this.applyOptions({
+        columns: [{ dataField: 'TestField', dataType: 'datetime', selectedFilterOperation: "between" }]
+    });
+    column = this.columnsController.getColumns()[0];
+
+    // act, assert
+    dateStart = new Date(2016, 7, 1, 0, 0, 0);
+    dateEnd = new Date(2017, 7, 1, 0, 0, 0);
+    assert.deepEqual(column.calculateFilterExpression([dateStart, dateEnd], "between"), [
+        ['TestField', '>=', dateStart],
+        "and",
+        ['TestField', '<', dateEnd]
+    ], "calculate filter expression for end date with time");
+});
+
 QUnit.test("calculateFilterExpression for column with dataType is 'datetime'", function(assert) {
     // arrange
     this.applyOptions({
@@ -8406,6 +8428,45 @@ QUnit.test("getFixedColumns in rtl mode when there are fixed and grouped columns
     assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
 });
 
+// T739558
+QUnit.test("getVisibleColumns after resetting state adding several baand columns using the addColumn method", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        columns: []
+    });
+
+    this.columnsController.addColumn({
+        caption: "Band Column 1", columns: [
+            { dataField: "TestField1", caption: "Column 1" },
+            { dataField: "TestField2", caption: "Column 2" }
+        ]
+    });
+
+    this.columnsController.addColumn({
+        caption: "Band Column 2", columns: [
+            { dataField: "TestField3", caption: "Column 3" },
+            { dataField: "TestField4", caption: "Column 4" }
+        ]
+    });
+
+    // act
+    this.columnsController.reset();
+
+    // assert
+    visibleColumns = this.columnsController.getVisibleColumns(0);
+    assert.strictEqual(visibleColumns.length, 2, "column count on the first level");
+    assert.strictEqual(visibleColumns[0].caption, "Band Column 1", "caption of the first column");
+    assert.strictEqual(visibleColumns[1].caption, "Band Column 2", "caption of the second column");
+
+    visibleColumns = this.columnsController.getVisibleColumns(1);
+    assert.strictEqual(visibleColumns.length, 4, "column count on the second level");
+    assert.strictEqual(visibleColumns[0].dataField, "TestField1", "dataField of the first column");
+    assert.strictEqual(visibleColumns[1].dataField, "TestField2", "dataField of the second column");
+    assert.strictEqual(visibleColumns[2].dataField, "TestField3", "dataField of the third column");
+    assert.strictEqual(visibleColumns[3].dataField, "TestField4", "dataField of the fourth column");
+});
 
 QUnit.module("onOptionChanged", {
     beforeEach: function() {

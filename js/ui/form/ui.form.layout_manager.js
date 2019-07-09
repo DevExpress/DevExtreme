@@ -440,9 +440,11 @@ var LayoutManager = Widget.inherit({
             colCountByScreen = this.option("colCountByScreen");
 
         if(colCountByScreen) {
-            var screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg",
-                currentColCount = colCountByScreen[screenFactor];
-            colCount = currentColCount || colCount;
+            var screenFactor = this.option("form").getTargetScreenFactor();
+            if(!screenFactor) {
+                screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
+            }
+            colCount = colCountByScreen[screenFactor] || colCount;
         }
 
         if(colCount === "auto") {
@@ -756,7 +758,7 @@ var LayoutManager = Widget.inherit({
 
     _renderEditor: function(options) {
         var dataValue = this._getDataByField(options.dataField),
-            defaultEditorOptions = { value: dataValue },
+            defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {},
             isDeepExtend = true,
             editorOptions;
 
@@ -838,12 +840,13 @@ var LayoutManager = Widget.inherit({
         var wrapperClass = "." + FIELD_ITEM_CONTENT_WRAPPER_CLASS,
             toggleInvalidClass = function(e) {
                 $(e.element).parents(wrapperClass)
-                    .toggleClass(INVALID_CLASS, e.event.type === "focusin" && e.component.option("isValid") === false);
+                    .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option("isValid") === false);
             };
 
         editorInstance
             .on("focusIn", toggleInvalidClass)
-            .on("focusOut", toggleInvalidClass);
+            .on("focusOut", toggleInvalidClass)
+            .on("enterKey", toggleInvalidClass);
     },
 
     _createEditor: function($container, renderOptions, editorOptions) {

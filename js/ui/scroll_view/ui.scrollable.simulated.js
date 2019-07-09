@@ -38,6 +38,7 @@ var SCROLLABLE_SIMULATED = "dxSimulatedScrollable",
     MIN_VELOCITY_LIMIT = 1,
     FRAME_DURATION = math.round(1000 / 60),
     SCROLL_LINE_HEIGHT = 20,
+    VALIDATE_WHEEL_TIMEOUT = 500,
 
     BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5,
     BOUNCE_DURATION = isSluggishPlatform ? 300 : 400,
@@ -994,7 +995,18 @@ var SimulatedStrategy = Class.inherit({
         var locatedNotAtBound = !reachedMin && !reachedMax;
         var scrollFromMin = (reachedMin && e.delta > 0);
         var scrollFromMax = (reachedMax && e.delta < 0);
-        return contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+        var validated = contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+
+        validated = validated || this._validateWheelTimer !== undefined;
+
+        if(validated) {
+            clearTimeout(this._validateWheelTimer);
+            this._validateWheelTimer = setTimeout(() => {
+                this._validateWheelTimer = undefined;
+            }, VALIDATE_WHEEL_TIMEOUT);
+        }
+
+        return validated;
     },
 
     _validateMove: function(e) {
@@ -1039,7 +1051,7 @@ var SimulatedStrategy = Class.inherit({
         this._detachEventHandlers();
         this._$element.removeClass(SCROLLABLE_SIMULATED_CLASS);
         this._eventForUserAction = null;
-        clearTimeout(this._gestureEndTimer);
+        clearTimeout(this._validateWheelTimer);
     },
 
     _detachEventHandlers: function() {

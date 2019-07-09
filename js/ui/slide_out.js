@@ -45,7 +45,6 @@ var SlideOut = CollectionWidget.inherit({
              * @name dxSlideOutOptions.items
              * @type Array<string, dxSlideOutItem, object>
              * @fires dxSlideOutOptions.onOptionChanged
-             * @inheritdoc
              */
 
             /**
@@ -143,37 +142,31 @@ var SlideOut = CollectionWidget.inherit({
             /**
             * @name dxSlideOutOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -456,14 +449,12 @@ var SlideOut = CollectionWidget.inherit({
     * @name dxSlideOutMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxSlideOutMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 }).include(DataConverterMixin);
 

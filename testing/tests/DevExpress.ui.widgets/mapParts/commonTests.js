@@ -1,7 +1,6 @@
 var $ = require("jquery"),
     testing = require("./utils.js"),
     Map = require("ui/map"),
-    config = require("core/config"),
     GoogleStaticProvider = require("ui/map/provider.google_static"),
     ajaxMock = require("../../../helpers/ajaxMock.js");
 
@@ -64,53 +63,6 @@ QUnit.test("map container should be rendered", function(assert) {
     });
 
     assert.ok($map.children("." + MAP_CONTAINER_CLASS), "map container rendered");
-});
-
-
-QUnit.module("design mode", {
-    beforeEach: function() {
-        var fakeURL = "/fakeGoogleUrl?";
-
-        GoogleStaticProvider.remapConstant(fakeURL);
-
-        ajaxMock.setup({
-            url: fakeURL,
-            responseText: ""
-        });
-
-        config({ designMode: true });
-    },
-    afterEach: function() {
-        ajaxMock.clear();
-
-        config({ designMode: false });
-    }
-});
-
-QUnit.test("widget should have shield in design mode", function(assert) {
-    var $map = $("#map").dxMap({
-        disabled: true,
-        provider: "googleStatic"
-    });
-
-    assert.equal($map.find("." + MAP_SHIELD_CLASS).length, 1);
-});
-
-QUnit.test("events should be recaptured", function(assert) {
-    assert.expect(0);
-
-    var done = assert.async();
-
-    var $map = $("#map").dxMap({
-        provider: "googleStatic"
-    });
-
-    var $container = $map.parent();
-    $container.on("mousedown", function() {
-        done();
-    });
-
-    $map.trigger($.Event("mousedown", { button: 0 }));
 });
 
 

@@ -21,7 +21,7 @@ require("../../helpers/l10n/cldrNumberDataRu.js");
 require("../../helpers/l10n/cldrCalendarDataRu.js");
 
 require("common.css!");
-require("android5_light.css!");
+require("generic_light.css!");
 
 require("ui/date_box/ui.date_view");
 require("ui/date_box/ui.date_view_roller");

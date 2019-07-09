@@ -2,9 +2,13 @@ import { isString, isDefined } from "../../core/utils/type";
 import Class from "../../core/class";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
-import DataSourceModule from "../../data/data_source/data_source";
+import { DataSource } from "../../data/data_source/data_source";
 import { when, Deferred } from "../../core/utils/deferred";
-import pivotGridUtils, { getFiltersByPath } from "./ui.pivot_grid.utils";
+import { getFiltersByPath,
+    capitalizeFirstLetter,
+    getExpandedLevel,
+    discoverObjectFields,
+    setDefaultFieldValueFormatting } from "./ui.pivot_grid.utils";
 import { deserializeDate } from "../../core/utils/date_serialization";
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {
@@ -30,7 +34,7 @@ function getFieldFilterSelector(field) {
         if(groupInterval.toLowerCase() === "quarter") {
             groupInterval = "Month";
         }
-        selector = selector + "." + pivotGridUtils.capitalizeFirstLetter(groupInterval);
+        selector = selector + "." + capitalizeFirstLetter(groupInterval);
     }
 
     return selector;
@@ -61,6 +65,10 @@ function getFilterExpressionForFilterValue(field, filterValue) {
 
 function createFieldFilterExpressions(field, operation) {
     var fieldFilterExpressions = [];
+
+    if(field.searchValue) {
+        return [field.dataField, "contains", field.searchValue];
+    }
 
     if(field.filterType === "exclude") {
         operation = operation || "and";
@@ -308,18 +316,24 @@ function parseResult(data, total, descriptions, result) {
 }
 
 function getFiltersForDimension(fields) {
-    return (fields || []).filter(f => f.filterValues && f.filterValues.length);
+    return (fields || []).filter(f => f.filterValues && f.filterValues.length || f.searchValue);
 }
 
 function getExpandedIndex(options, axis) {
-    if(axis === options.headerName) {
-        return options.path.length;
+    if(options.headerName) {
+        if(axis === options.headerName) {
+            return options.path.length;
+        } else if(options.oppositePath) {
+            return options.oppositePath.length;
+        }
     }
     return 0;
 }
 
 function getFiltersForExpandedDimension(options) {
-    return getFiltersByPath(options[options.headerName], options.path);
+    return getFiltersByPath(options[options.headerName], options.path).concat(
+        getFiltersByPath(options[options.headerName === "rows" ? "columns" : "rows"], options.oppositePath || [])
+    );
 }
 
 function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapsedFieldIndex) {
@@ -397,8 +411,8 @@ function getFirstCollapsedIndex(fields) {
 }
 
 function getRequestsData(options) {
-    var rowExpandedLevel = pivotGridUtils.getExpandedLevel(options, "rows"),
-        columnExpandedLevel = pivotGridUtils.getExpandedLevel(options, "columns"),
+    var rowExpandedLevel = getExpandedLevel(options, "rows"),
+        columnExpandedLevel = getExpandedLevel(options, "columns"),
         columnTotalsOptions,
         filters = options.filters || [],
         columnExpandedIndex = getExpandedIndex(options, "columns"),
@@ -414,7 +428,9 @@ function getRequestsData(options) {
     columnTotalsOptions = getGrandTotalRequest(options, "columns", columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
 
     if(options.rows.length && options.columns.length) {
-        data = data.concat(columnTotalsOptions);
+        if(!options.headerName) {
+            data = data.concat(columnTotalsOptions);
+        }
 
         for(var i = rowExpandedIndex; i < rowExpandedLevel + 1; i++) {
             var rows = options.rows.slice(rowExpandedIndex, i + 1),
@@ -445,14 +461,14 @@ function prepareFields(fields) {
             prepareFields(levels);
         }
 
-        pivotGridUtils.setDefaultFieldValueFormatting(field);
+        setDefaultFieldValueFormatting(field);
     });
 }
 
 module.exports = Class.inherit((function() {
     return {
         ctor: function(options) {
-            this._dataSource = new DataSourceModule.DataSource(options);
+            this._dataSource = new DataSource(options);
             this._store = this._dataSource.store();
         },
 
@@ -463,7 +479,7 @@ module.exports = Class.inherit((function() {
                 skip: 0,
                 take: 20
             }).done(function(data) {
-                d.resolve(pivotGridUtils.discoverObjectFields(data, fields));
+                d.resolve(discoverObjectFields(data, fields));
             }).fail(d.reject);
 
             return d;
@@ -527,7 +543,7 @@ module.exports = Class.inherit((function() {
             return this._dataSource.filter.apply(this._dataSource, arguments);
         },
 
-        supportSorting: function() {
+        supportPaging: function() {
             return false;
         },
 
@@ -544,7 +560,7 @@ module.exports = Class.inherit((function() {
 
                 filterExp = createFilterExpressions(filters);
 
-            return new DataSourceModule.DataSource({
+            return new DataSource({
                 load: function(loadOptions) {
                     return store.load(extend({}, loadOptions, {
                         filter: mergeFilters(filterExp, loadOptions.filter),

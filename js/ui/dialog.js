@@ -14,10 +14,11 @@ import { getWindow } from "../core/utils/window";
 import { trigger } from "../events/core/events_engine";
 import { value as getViewport } from "../core/utils/view_port";
 
-import themes from "./themes";
 import messageLocalization from "../localization/message";
 import errors from "./widget/ui.errors";
 import Popup from "./popup";
+
+import { ensureDefined } from "../core/utils/common";
 
 const window = getWindow();
 
@@ -42,7 +43,6 @@ const FakeDialogComponent = Component.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
 
         return this.callBase().concat([
             {
@@ -56,29 +56,6 @@ const FakeDialogComponent = Component.inherit({
                 options: {
                     lWidth: "60%",
                     pWidth: "80%"
-                }
-            },
-            {
-                device: function(device) {
-                    return !device.phone && themes.isWin8(themeName);
-                },
-                options: {
-                    width: function() {
-                        return $(window).width();
-                    }
-                }
-            },
-            {
-                device: function(device) {
-                    return device.phone && themes.isWin8(themeName);
-                },
-                options: {
-                    position: {
-                        my: "top center",
-                        at: "top center",
-                        of: window,
-                        offset: "0 0"
-                    }
                 }
             }
         ]);
@@ -103,6 +80,7 @@ exports.title = "";
  * @param1_field3 buttons:Array<dxButtonOptions>
  * @param1_field4 showTitle:boolean
  * @param1_field5 message:String:deprecated(messageHtml)
+ * @param1_field6 dragEnabled:boolean
  * @static
  * @module ui/dialog
  * @export custom
@@ -160,15 +138,13 @@ exports.custom = function(options) {
 
     const popupInstance = new Popup($element, extend({
         title: options.title || exports.title,
-        showTitle: function() {
-            const isTitle = options.showTitle === undefined ? true : options.showTitle;
-            return isTitle;
-        }(),
+        showTitle: ensureDefined(options.showTitle, true),
+        dragEnabled: ensureDefined(options.dragEnabled, true),
         height: "auto",
         width: function() {
             const isPortrait = $(window).height() > $(window).width(),
                 key = (isPortrait ? "p" : "l") + "Width",
-                widthOption = options.hasOwnProperty(key) ? options[key] : options["width"];
+                widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options["width"];
 
             return isFunction(widthOption) ? widthOption() : widthOption;
         },
@@ -261,7 +237,7 @@ exports.custom = function(options) {
  * @export alert
  */
 exports.alert = function(messageHtml, title, showTitle) {
-    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle };
+    const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
     return exports.custom(options).show();
 };
@@ -286,7 +262,8 @@ exports.confirm = function(messageHtml, title, showTitle) {
             buttons: [
                 { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
                 { text: messageLocalization.format("No"), onClick: function() { return false; } }
-            ]
+            ],
+            dragEnabled: showTitle
         };
 
     return exports.custom(options).show();

@@ -36,6 +36,14 @@ const ButtonCollection = CollectionWidget.inherit({
 
     _itemClass() {
         return BUTTON_GROUP_ITEM_CLASS;
+    },
+
+    _itemSelectHandler: function(e) {
+        if(this.option("selectionMode") === "single" && this.isItemSelected(e.currentTarget)) {
+            return;
+        }
+
+        this.callBase(e);
     }
 });
 
@@ -52,7 +60,6 @@ const ButtonGroup = Widget.inherit({
              * @name dxButtonGroupOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -60,7 +67,6 @@ const ButtonGroup = Widget.inherit({
              * @name dxButtonGroupOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -125,7 +131,20 @@ const ButtonGroup = Widget.inherit({
              * @type_function_param1_field5 removedItems:array<any>
              * @action
              */
-            onSelectionChanged: null
+            onSelectionChanged: null,
+
+            /**
+            * @name dxButtonGroupOptions.onItemClick
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 itemIndex:number
+            * @type_function_param1_field7 event:event
+            * @action
+            */
+            onItemClick: null
         });
     },
 
@@ -170,6 +189,15 @@ const ButtonGroup = Widget.inherit({
         }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
     },
 
+    _init() {
+        this.callBase();
+        this._createItemClickAction();
+    },
+
+    _createItemClickAction() {
+        this._itemClickAction = this._createActionByOption("onItemClick");
+    },
+
     _initMarkup() {
         this.setAria("role", "group");
         this.$element().addClass(BUTTON_GROUP_CLASS);
@@ -200,6 +228,7 @@ const ButtonGroup = Widget.inherit({
             .appendTo(this.$element());
 
         const selectedItems = this.option("selectedItems");
+
         const options = {
             selectionMode: this.option("selectionMode"),
             items: this.option("items"),
@@ -211,7 +240,7 @@ const ButtonGroup = Widget.inherit({
             accessKey: this.option("accessKey"),
             tabIndex: this.option("tabIndex"),
             noDataText: "",
-            selectionRequired: this.option("selectionMode") === "single",
+            selectionRequired: false,
             onItemRendered: e => {
                 const width = this.option("width");
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
@@ -219,10 +248,13 @@ const ButtonGroup = Widget.inherit({
             onSelectionChanged: e => {
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
+            },
+            onItemClick: e => {
+                this._itemClickAction(e);
             }
         };
 
-        if(selectedItems.length) {
+        if(isDefined(selectedItems) && selectedItems.length) {
             options.selectedItems = selectedItems;
         }
         this._buttonsCollection = this._createComponent($buttons, ButtonCollection, options);
@@ -233,17 +265,7 @@ const ButtonGroup = Widget.inherit({
         this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
     },
 
-    _setOptionSilent: function(name, value) {
-        this._cancelOptionChange = name;
-        this.option(name, value);
-        this._cancelOptionChange = false;
-    },
-
     _optionChanged(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "stylingMode":
             case "selectionMode":
@@ -259,6 +281,9 @@ const ButtonGroup = Widget.inherit({
             case "selectedItemKeys":
             case "selectedItems":
                 this._buttonsCollection.option(args.name, args.value);
+                break;
+            case "onItemClick":
+                this._createItemClickAction();
                 break;
             case "onSelectionChanged":
                 break;

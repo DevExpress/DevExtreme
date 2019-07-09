@@ -37,6 +37,7 @@ import { MockColumnsController, MockDataController, setupDataGridModules, getCel
 import domUtils from "core/utils/dom";
 import browser from "core/utils/browser";
 import typeUtils from "core/utils/type";
+import commonUtils from "core/utils/common";
 import config from "core/config";
 import errors from "ui/widget/ui.errors";
 import devices from "core/devices";
@@ -91,7 +92,8 @@ QUnit.module('Editing', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            var event = $.Event("dxclick");
+            var isLink = $targetElement.hasClass("dx-link");
+            var event = $.Event(isLink ? "click" : "dxclick");
             $($targetElement).trigger(event);
             this.clock.tick();
             return event;
@@ -1359,7 +1361,7 @@ QUnit.test('Not remove row with message', function(assert) {
         assert.ok(!this.dataController.refreshed, 'not refreshed data');
 
         // act
-        testElement.find('tbody > tr').first().find('a').trigger('dxclick'); // show confirm
+        testElement.find('tbody > tr').first().find('a').trigger('click'); // show confirm
         this.clock.tick();
 
         // assert
@@ -1593,6 +1595,7 @@ QUnit.test('Close Editing Cell when batch mode on click outside dataGrid', funct
     testElement.find('input').first().trigger('change');
 
     // act
+    $(document).trigger('dxpointerdown');
     $(document).trigger('dxclick');
     this.clock.tick();
 
@@ -1602,6 +1605,52 @@ QUnit.test('Close Editing Cell when batch mode on click outside dataGrid', funct
 
     this.editingController.saveEditData();
 
+    assert.deepEqual(updateArgs, ['test1', { "name": "Test update cell" }]);
+});
+
+// T749034
+QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
+    if(devices.real().deviceType === "desktop") {
+        assert.ok(true, "test is not actual for desktop");
+        return;
+    }
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        updateArgs,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'cell',
+        texts: {
+            editRow: "Edit"
+        }
+    };
+
+    that.dataControllerOptions.store = {
+        key: function() { },
+        update: function(key, values) {
+            updateArgs = [key, values];
+            return $.Deferred().resolve(key, values);
+        }
+    };
+
+    rowsView.render(testElement);
+    testElement.find('td').first().trigger('dxclick'); // Edit
+    this.clock.tick();
+
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
+
+    // act
+    testElement.find('input').first().val('Test update cell');
+    $(document).trigger('dxpointerdown');
+    testElement.find('input').first().trigger('change');
+    $(document).trigger('dxclick');
+    this.clock.tick();
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
     assert.deepEqual(updateArgs, ['test1', { "name": "Test update cell" }]);
 });
 
@@ -1629,12 +1678,42 @@ QUnit.test('Not close Editing Cell in batch mode on click editor popup', functio
 
     // act
     this.clock.tick();
+    $($calendar).trigger('dxpointerdown');
     $($calendar).trigger('dxclick');
     this.clock.tick();
 
     // assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
     assert.equal($(".dx-calendar").length, 1, 'popup calendar count');
+});
+
+// T727856
+QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up in another cell', function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "focus is not actual for mobile devices");
+        return;
+    }
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+
+    rowsView.render(testElement);
+    testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
+    this.clock.tick();
+
+    // act
+    testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxpointerdown');
+    testElement.find('tbody').first().trigger('dxclick'); // chrome 73+
+    this.clock.tick();
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is not closed');
 });
 
 // T318313
@@ -1663,6 +1742,7 @@ QUnit.test('Close Editing Cell when grid in popup', function(assert) {
     assert.equal(getInputElements($popupContent).length, 1, "has input");
 
     // act
+    $($popupContent).trigger("dxpointerdown");
     $($popupContent).trigger("dxclick");
     that.clock.tick();
 
@@ -1697,6 +1777,7 @@ QUnit.test('Not close Editing Cell in batch mode on click detached element', fun
 
     // act
     this.clock.tick();
+    $($otherMonthDay).trigger('dxpointerdown');
     $($otherMonthDay).trigger('dxclick');
     this.clock.tick();
 
@@ -1729,6 +1810,7 @@ if(!device.win) {
         assert.equal($focusOverlay.length, 1, 'focus overlay count');
 
         // act
+        $($focusOverlay).trigger('dxpointerdown');
         $($focusOverlay).trigger('dxclick');
         this.clock.tick();
 
@@ -1985,6 +2067,7 @@ QUnit.test('Close Editing Cell when batch mode on click inside freespace row', f
     testElement.find('input').first().trigger('change');
 
     // act
+    testElement.find(".dx-freespace-row").first().trigger('dxpointerdown');
     testElement.find(".dx-freespace-row").first().trigger('dxclick');
 
     this.clock.tick();
@@ -2572,6 +2655,138 @@ QUnit.test("Set editor mode via editorOptions", function(assert) {
     assert.strictEqual(textEditor.option("mode"), "password", "editor mode");
 });
 
+QUnit.test("Batch mode - Edit cell on click (startEditAction is 'click')", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "click"
+    };
+    sinon.spy(that.editingController, "editCell");
+
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find("td").first().trigger("dxclick");
+
+    // assert
+    assert.strictEqual(that.editingController.editCell.callCount, 1, "count call editCell");
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+});
+
+QUnit.test("Batch mode - Edit Cell on double click (startEditAction is 'dblClick')", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    sinon.spy(that.editingController, "editCell");
+
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find("td").first().trigger("dxdblclick");
+
+    // assert
+    assert.strictEqual(that.editingController.editCell.callCount, 1, "count call editCell");
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+});
+
+QUnit.test("Batch mode - Closing edited cell should work on click when startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    sinon.spy(that.editingController, "editCell");
+
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find("td").first().trigger("dxdblclick");
+
+    // assert
+    assert.strictEqual(that.editingController.editCell.callCount, 1, "count call editCell");
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+
+    // arrange
+    sinon.spy(that.editingController, "closeEditCell");
+
+    // act
+    $testElement.find("td").eq(1).trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(that.editingController.closeEditCell.callCount, 1, "count call closeEditCell");
+    assert.strictEqual(getInputElements($testElement).length, 0, "hasn't input");
+});
+
+QUnit.test("Batch mode - Clicking on the edited cell should not close it when startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    rowsView.render($testElement);
+
+    $testElement.find("td").first().trigger("dxdblclick");
+
+    // assert
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+    assert.strictEqual($testElement.find("td").first().find("input").length, 1);
+
+    // act
+    $testElement.find("td").first().trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(getInputElements($testElement).length, 1, "has input");
+});
+
+QUnit.test("Batch mode - The allowUpdating callback should not be called on click when startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container"),
+        allowUpdating = sinon.spy();
+
+    that.options.editing = {
+        allowUpdating: allowUpdating,
+        mode: "batch",
+        startEditAction: "dblClick"
+    };
+    rowsView.render($testElement);
+    allowUpdating.reset();
+
+    // act
+    $testElement.find("td").first().trigger("click");
+
+    // assert
+    assert.strictEqual(allowUpdating.callCount, 0, "allowUpdating isn't called");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -2611,7 +2826,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
             initViews: true
         });
 
@@ -2622,7 +2837,8 @@ QUnit.module('Editing with real dataController', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
     },
@@ -3395,7 +3611,7 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
         countCallOnRowInserted++;
 
         // assert
-        assert.deepEqual(params.data, {}, "parameter data");
+        assert.deepEqual(params.data, { fieldTest: "testKey" }, "parameter data"); // T726008
         assert.strictEqual(params.key, "testKey", "parameter key");
     };
 
@@ -3409,6 +3625,50 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
 
     // assert
     assert.strictEqual(countCallOnRowInserted, 1, "count call onRowInserted");
+});
+
+QUnit.test("onRowUpdated - Check data after update row when custom store", function(assert) {
+    // arrange
+    var that = this,
+        countCallOnRowUpdated = 0,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true
+    };
+    that.options.dataSource = {
+        load: function() {
+            var d = $.Deferred();
+
+            d.resolve(that.array);
+
+            return d.promise();
+        },
+        update: function(key, values) {
+            var d = $.Deferred();
+            return d.resolve({ id: 2, name: "Updated", fromServer: true }).promise();
+        }
+    };
+
+    that.options.onRowUpdated = function(params) {
+        countCallOnRowUpdated++;
+
+        // assert
+        assert.deepEqual(params.data, { id: 2, name: "Updated", fromServer: true }, "parameter data"); // T726008
+        assert.strictEqual(params.key, that.array[1], "parameter key");
+    };
+
+    that.dataController.init();
+    rowsView.render($testElement);
+    that.editingController.optionChanged({ name: "onRowUpdated" });
+
+    // act
+    that.cellValue(1, "name", "Updated");
+    that.saveEditData();
+
+    // assert
+    assert.strictEqual(countCallOnRowUpdated, 1, "count call onRowUpdated");
 });
 
 // T147816
@@ -3780,6 +4040,7 @@ QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(as
     testElement.find("input").first().val("Test1");
     testElement.find("input").first().trigger("change");
 
+    $(document).trigger("dxpointerdown"); // Save
     $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
@@ -3812,6 +4073,7 @@ QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(as
     testElement.find("input").first().val("Test2");
     testElement.find("input").first().trigger("change");
 
+    $(document).trigger("dxpointerdown"); // Save
     $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
@@ -4103,6 +4365,7 @@ QUnit.test("Update cell when edit mode bath and set onRowUpdated", function(asse
     testElement.find("input").first().val("Test");
     testElement.find("input").first().trigger("change");
 
+    $(document).trigger("dxpointerdown"); // Save
     $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
@@ -4150,6 +4413,7 @@ QUnit.test("Highlight modified boolean editor", function(assert) {
     // act
     $($checkbox).trigger("dxclick");
 
+    $(document).trigger("dxpointerdown"); // Save
     $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
@@ -4566,6 +4830,40 @@ QUnit.test("Remove row when set onRowRemoved", function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, "count rows");
 });
 
+// T741746
+QUnit.test("deleteRow should not work if adding is started", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row count");
+
+    // act
+    that.addRow();
+    that.deleteRow(2);
+
+    // assert
+    assert.ok(that.editingController.isEditing(), "editing is started");
+    assert.equal(testElement.find('.dx-data-row').length, 8, "row is not removed");
+
+    // act
+    that.cancelEditData();
+    that.deleteRow(2);
+
+    // assert
+    assert.notOk(that.editingController.isEditing(), "no editing");
+    assert.equal(testElement.find('.dx-data-row').length, 6, "row is removed");
+});
+
 // T100624
 QUnit.test('Edit Cell when the width of the columns in percent', function(assert) {
     // arrange
@@ -4624,6 +4922,7 @@ QUnit.test("Close current editor when clicked on not editable cells_B255594", fu
     this.selectionController.init();
 
     // act
+    $(".dx-select-checkbox").closest("td").first().trigger("dxpointerdown");
     $(".dx-select-checkbox").closest("td").first().trigger("dxclick");
 
     // assert
@@ -4663,6 +4962,7 @@ QUnit.test('Column currency format after editing', function(assert) {
     // act
     testElement.find('td').first().next().find('input').val('123');
     testElement.find('td').first().next().find('input').trigger('change');
+    $(document).trigger("dxpointerdown");
     $(document).trigger("dxclick");
 
     this.clock.tick();
@@ -4841,6 +5141,7 @@ QUnit.test('Close editing cell when using "cell" edit mode on click outside data
     testElement.find('input').first().trigger('change');
 
     // act
+    $(document).trigger('dxpointerdown');
     $(document).trigger('dxclick');
     this.clock.tick();
 
@@ -4880,6 +5181,7 @@ QUnit.test('Cell should be closed on click outside dataGrid after changes in sev
     testElement.find('input').first().trigger('change');
 
     // act
+    $(document).trigger('dxpointerdown');
     $(document).trigger('dxclick');
     this.clock.tick();
 
@@ -6036,8 +6338,10 @@ QUnit.test("EditorPreparing and EditorPrepared events should have correct parame
     assert.strictEqual(editorPreparingHandler.getCall(0).args[0].command, "select", "The editorPreparing event argument - select column");
     assert.strictEqual(editorPreparedHandler.getCall(0).args[0].command, "select", "The editorPrepared event argument - select column");
     expectedProperties.forEach(function(item) {
-        assert.ok(editorPreparingHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPreparing event argument - The '" + item + "' property existed");
-        assert.ok(editorPreparedHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPrepared event argument - The '" + item + "' property existed");
+        var firstArg = editorPreparingHandler.getCall(0).args[0];
+        var hasFirstArgOwnProperty = Object.prototype.hasOwnProperty.bind(firstArg);
+        assert.ok(hasFirstArgOwnProperty(item), "The editorPreparing event argument - The '" + item + "' property existed");
+        assert.ok(hasFirstArgOwnProperty(item), "The editorPrepared event argument - The '" + item + "' property existed");
     });
 });
 
@@ -7124,6 +7428,176 @@ QUnit.test("The button column should not be shown in the edit form", function(as
     assert.strictEqual($testElement.find(".dx-datagrid-edit-form-item").length, 5, "count editor of the form");
 });
 
+// T729713
+QUnit.test("Cell mode - The editCellTemplate of the column should not be called when editing another column", function(assert) {
+    // arrange
+    var that = this,
+        $inputElement,
+        rowsView = that.rowsView,
+        $testElement = $("#container"),
+        editCellTemplate = sinon.spy(function(_, options) {
+            return $("<div>").dxTextBox({
+                value: options.value,
+                onValueChanged: function(e) {
+                    options.setValue(e.value);
+                }
+            });
+        });
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+
+    rowsView.render($testElement);
+    that.columnOption("name", "editCellTemplate", editCellTemplate);
+
+    // act
+    $(rowsView.getCellElement(0, 0)).trigger("dxclick");
+    that.clock.tick();
+
+    $inputElement = getInputElements($(rowsView.getCellElement(0, 0))).first();
+    $inputElement.val("test");
+
+    // assert
+    assert.strictEqual(editCellTemplate.callCount, 1);
+
+    // act
+    eventsEngine.trigger($inputElement[0], "change");
+    $(rowsView.getCellElement(0, 1)).trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(editCellTemplate.callCount, 1);
+});
+
+// T725319
+QUnit.test("Load panel should be hidden when changing loadPanel.enabled while loading", function(assert) {
+    // arrange
+    fx.off = true;
+
+    try {
+        var that = this,
+            $testElement = $("#container");
+
+        that.options.editing = {
+            mode: "row",
+            allowUpdating: true,
+            allowDeleting: true,
+            texts: {
+                confirmDeleteMessage: "",
+                editRow: ""
+            }
+        };
+        that.options.loadPanel = {
+            enabled: true
+        };
+        that.options.onRowRemoving = function(e) {
+            setTimeout(() => {
+                that.option("loadPanel.enabled", false);
+                that.rowsView.beginUpdate();
+                that.rowsView.optionChanged({ name: "loadPanel", fullName: "loadPanel.enabled" });
+                that.rowsView.endUpdate();
+            }, 10);
+            e.cancel = $.Deferred().promise();
+        };
+        that.isReady = function() {
+            that.dataController.isReady();
+        };
+
+        that.rowsView.render($testElement);
+        that.editingController.optionChanged({ name: "onRowRemoving" });
+
+        // act
+        that.deleteRow(0);
+        that.clock.tick(10);
+
+        // assert
+        assert.notOk(that.rowsView._loadPanel, "hasn't loadPanel");
+    } finally {
+        fx.off = false;
+    }
+});
+
+// T737789
+QUnit.test("The command column caption should be applied", function(assert) {
+    // arrange
+    var that = this,
+        $commandCellElement,
+        columnHeadersView = that.columnHeadersView,
+        $testElement = $('#container');
+
+    that.options.showColumnHeaders = true;
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: "buttons",
+        caption: "Command Column",
+        alignment: "right",
+        buttons: ["edit", "delete"]
+    });
+    that.columnsController.reset();
+
+    // act
+    columnHeadersView.render($testElement);
+
+    // assert
+    $commandCellElement = $(columnHeadersView.getCellElement(0, 5));
+    assert.ok($commandCellElement.hasClass("dx-command-edit"), "has command column");
+    assert.strictEqual($commandCellElement.text(), "Command Column", "caption");
+    assert.strictEqual($commandCellElement.css("textAlign"), "right", "alignment");
+});
+
+// T741679
+QUnit.test("A dependent cascading editor should be updated when a master cell value is changed if showEditorAlways is enabled in batch mode", function(assert) {
+    // arrange
+    var that = this,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+    that.options.dataSource.store = [{ StateID: 1, CityID: 1 }, { StateID: 2, CityID: 2 }];
+    that.options.columns = [{
+        dataField: "StateID",
+        showEditorAlways: true,
+        setCellValue: function(rowData, value) {
+            rowData.StateID = value;
+            rowData.CityID = value;
+        },
+        lookup: {
+            dataSource: [{ id: 1, name: "California" }, { id: 2, name: "Texas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }, {
+        dataField: "CityID",
+        lookup: {
+            dataSource: [{ id: 1, name: "Arcadia" }, { id: 2, name: "Dallas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }];
+    that.dataController.init();
+    that.columnsController.init();
+    rowsView.render($testElement);
+
+    selectBoxInstance = $(rowsView.getCellElement(0, 0)).find(".dx-selectbox").dxSelectBox("instance");
+    selectBoxInstance.option("value", 2);
+
+    // act
+    $(rowsView.getCellElement(1, 0)).trigger("dxclick");
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(0, 1)).text(), "Dallas", "text of the second column of the first row");
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
@@ -7487,7 +7961,7 @@ QUnit.test("Changing edit icon in the 'buttons' command column if repaintChanges
 QUnit.test("Custom button click should be prevented", function(assert) {
     // arrange
     var $linkElement,
-        event = $.Event("dxclick");
+        event = $.Event("click");
 
     this.options.columns = [
         {
@@ -8721,6 +9195,56 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.strictEqual(tooltipInstance.option("position").my, "top right", "position.my of the tooltip");
     assert.strictEqual(tooltipInstance.option("position").at, "top left", "position.at of the tooltip");
+
+    // act
+    eventsEngine.trigger($testElement.find("tbody td").eq(2).find(".dx-dropdowneditor-button")[0], "dxclick");
+    that.clock.tick();
+
+    // assert
+    // T724201
+    assert.notOk(selectBoxInstance.option("opened"), "drop-down editor is not opened");
+    tooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip is restored");
+    assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip is restored");
+});
+
+// T741739
+QUnit.testInActiveWindow("Tooltip should be positioned by left side if column dataType and alignment are not defined", function(assert) {
+    // arrange
+    var that = this,
+        tooltipInstance,
+        rowsView = that.rowsView,
+        $testElement = renderer("#container");
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: "test",
+                validationRules: [{ type: "required" }]
+            },
+            "lastName",
+            "age"
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 0, "");
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    // assert
+    tooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    assert.ok($testElement.find("tbody td").eq(0).hasClass("dx-datagrid-invalid"), "failed validation");
+    assert.ok(tooltipInstance.option("visible"), "tooltip is visible");
+    assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip");
+    assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip");
 });
 
 // T523770
@@ -10698,6 +11222,7 @@ QUnit.testInActiveWindow("SelectBox should be closed on focus another editor if 
         // act
         $cellElements.find(".dx-texteditor-input").last().focus();
         $cellElements.find(".dx-texteditor-input").last().trigger("dxpointerdown");
+        $cellElements.find(".dx-texteditor-input").last().trigger("dxclick");
         this.clock.tick();
 
         // assert
@@ -10988,7 +11513,8 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
         // };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
 
@@ -11204,6 +11730,29 @@ QUnit.test("Editing controller should correct the editing row index after expand
     that.collapseRow(that.dataController.getKeyByRowIndex(0));
     // assert
     assert.equal(that.editingController.getEditRowIndex(), 2, "editing row index was not changed after collapse the above row");
+});
+
+// T752381
+QUnit.test("Close edit form after collapse group row", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $('#container');
+
+    that.rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", groupIndex: 0 }, "age", "lastName"]
+    });
+
+    // act
+    that.editRow(3);
+    that.collapseRow(["Alex"]);
+
+    // assert
+    assert.strictEqual(that.editingController.getEditRowIndex(), -1, "edit form was closed");
 });
 
 var generateDataSource = function(countItem, countColumn) {
@@ -12054,7 +12603,7 @@ QUnit.test("Edit link call editRow", function(assert) {
     // act
     var $links = testElement.find(".dx-row").eq(rowIndex).find(".dx-link-edit");
     assert.equal($links.length, 1, "edit links count");
-    $($links.eq(0)).trigger("dxclick");
+    $($links.eq(0)).trigger("click");
     this.clock.tick();
 
     // assert
@@ -12688,15 +13237,15 @@ QUnit.testInActiveWindow("Focus editor after click on a label", function(assert)
     $labels = testElement.find(".dx-datagrid-edit-form label");
 
     $labels.eq(0).trigger("click");
-    assert.ok(testElement.find("input[id*='name']").parent().parent().hasClass("dx-state-focused"), "input with 'name' id");
+    assert.ok(testElement.find("input[id*='name']").parent().parent().parent().hasClass("dx-state-focused"), "input with 'name' id");
     $labels.eq(1).trigger("click");
-    assert.ok(testElement.find("input[id*='age']").parent().parent().hasClass("dx-state-focused"), "input with 'age' id");
+    assert.ok(testElement.find("input[id*='age']").parent().parent().parent().hasClass("dx-state-focused"), "input with 'age' id");
     $labels.eq(2).trigger("click");
-    assert.ok(testElement.find("input[id*='lastName']").parent().parent().hasClass("dx-state-focused"), "input with 'lastName' id");
+    assert.ok(testElement.find("input[id*='lastName']").parent().parent().parent().hasClass("dx-state-focused"), "input with 'lastName' id");
     $labels.eq(3).trigger("click");
-    assert.ok(testElement.find("input[id*='phone']").parent().parent().hasClass("dx-state-focused"), "input with 'phone' id");
+    assert.ok(testElement.find("input[id*='phone']").parent().parent().parent().hasClass("dx-state-focused"), "input with 'phone' id");
     $labels.eq(4).trigger("click");
-    assert.ok(testElement.find("input[id*='room']").parent().parent().hasClass("dx-state-focused"), "input with 'room' id");
+    assert.ok(testElement.find("input[id*='room']").parent().parent().parent().hasClass("dx-state-focused"), "input with 'room' id");
 });
 
 // T369851
@@ -13064,6 +13613,149 @@ QUnit.test("Edit row when row as tbody", function(assert) {
     assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-datagrid-edit-form"), "detail form row");
 });
 
+QUnit.test("Edit form when form items are specified with editorType", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ dataField: "name", editorType: "dxAutocomplete" }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when group form items are specified and simple form items have editor type", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ itemType: "group", items: [{ dataField: "name", editorType: "dxAutocomplete" }] }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when tabbed form items are specified and simple form items have editor type", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ itemType: "tabbed", tabs: [ { items: [{ dataField: "name", editorType: "dxAutocomplete" }] }] }]
+    };
+
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when formItem is specified with editorType in the column", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.columns[0].formItem = { editorType: "dxAutocomplete" };
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when formItem is specified with editorType in the column and the editorName is overridden on the onEditorPreparing event", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.onEditorPreparing = (e) => {
+        if(e.dataField === "name") {
+            e.editorName = "dxAutocomplete";
+        }
+    };
+    this.columns[0].formItem = { editorType: "dxColorBox" };
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
+QUnit.test("Edit form when the editorType is specified in the column.formItem and editing.form.items", function(assert) {
+    // arrange
+    var $editorElement;
+
+    this.options.editing.form = {
+        items: [{ dataField: "name", editorType: "dxColorBox" }]
+    };
+    this.columns[0].formItem = { editorType: "dxAutocomplete" };
+    this.setupModules(this);
+
+    var rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    $editorElement = $(rowsView.getCellElement(0, 0)).find(".dx-autocomplete");
+    assert.strictEqual($editorElement.length, 1, "editor element");
+    assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
@@ -13403,7 +14095,7 @@ QUnit.test("EditorPreparing event have the correct parameters", function(assert)
 
     // assert
     expectedProperties.forEach(function(item) {
-        assert.ok(spyArgs[0].hasOwnProperty(item), "The '" + item + "' property existed");
+        assert.ok(Object.prototype.hasOwnProperty.call(spyArgs[0], item), "The '" + item + "' property existed");
     });
 });
 
@@ -13707,6 +14399,81 @@ QUnit.test("The data passed to the editCellTemplate callback should be updated a
     assert.strictEqual(template.callCount, 2, "editCellTemplate call count");
 });
 
+QUnit.test("In popup editing mode need to repaint only changed fields with repaintChangesOnly (T753269)", function(assert) {
+    // arrange
+    var that = this,
+        $popupContent,
+        selectBox,
+        orders = [
+            { Id: 1, Name: "Paul Henriot", City: "Reims", Country: "France" },
+            { Id: 2, Name: "Karin Josephs", City: "Münster", Country: "Germany" }
+        ],
+        countries = [{ Country: "France" }, { Country: "Germany" }],
+        cities = [{ City: "Reims" }, { City: "Münster" }],
+        cityFireCount = 0,
+        countryFireCount = 0,
+        getLookupConfig = function(data, columnName) {
+            return {
+                dataSource: {
+                    key: columnName,
+                    load: function() {
+                        var d = $.Deferred();
+                        setTimeout(() => d.resolve(data));
+                        return d.promise();
+                    },
+                    byKey: function(key) {
+                        if(columnName === "City") {
+                            cityFireCount++;
+                        } else if(columnName === "Country") {
+                            countryFireCount++;
+                        }
+                        return data[key];
+                    }
+                },
+                valueExpr: columnName,
+                displayExpr: columnName
+            };
+        };
+
+    that.options.dataSource = orders;
+    that.options.keyExpr = "Id";
+    that.options.repaintChangesOnly = true;
+    that.options.remoteOperations = true;
+    that.options.columns = [
+        "Id", "Name",
+        { dataField: "City", lookup: getLookupConfig(cities, "City") },
+        { dataField: "Country", lookup: getLookupConfig(countries, "Country") }
+    ];
+    that.options.onEditorPrepared = function(e) {
+        if(e.dataField === "City" && e.parentType === "dataRow") {
+            $(e.editorElement).dxSelectBox("instance").on("valueChanged", function(args) {
+                that.cellValue(e.row.rowIndex, "Name", "test");
+            });
+        }
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.clock.tick();
+
+    // act
+    that.editRow(0);
+    that.clock.tick();
+
+    // arrange
+    that.preparePopupHelpers();
+
+    // act
+    $popupContent = $(that.editPopupInstance.content());
+    selectBox = $popupContent.find(".dx-selectbox").dxSelectBox("instance");
+    selectBox.option("value", "Münster");
+
+    // assert
+    assert.equal(countryFireCount, 1, "Not changed field was rendered once");
+    assert.equal(cityFireCount, 2, "Changed field was repaint on update");
+});
+
 QUnit.test("Popup should have scrollbar", function(assert) {
     // arrange
     var that = this,
@@ -13772,6 +14539,35 @@ QUnit.test("No exceptions on editing data when validationRules and editCellTempl
     } finally {
         fx.off = false;
         errors.log.restore();
+    }
+});
+
+// T721896
+QUnit.test("Validator should be rendered if deferUpdate is used in editCellTemplate", function(assert) {
+    // arrange
+    this.columns[0].editCellTemplate = function(container, options) {
+        // deferUpdate is called in template in devextreme-react
+        commonUtils.deferUpdate(() => {
+            $("<div>").appendTo(container).dxTextBox({
+                value: options.value
+            });
+        });
+    };
+
+    this.setupModules(this);
+    this.renderRowsView();
+    fx.off = true;
+
+    try {
+        // act
+        this.editRow(0);
+
+        // assert
+        this.preparePopupHelpers();
+        var $popupContent = this.getEditPopupContent();
+        assert.equal($popupContent.find(".dx-validator").length, 2, "two validators are rendered");
+    } finally {
+        fx.off = false;
     }
 });
 

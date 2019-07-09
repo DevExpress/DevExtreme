@@ -193,7 +193,8 @@
         "dxScheduler-recurrenceMonthly": "Monthly",
         "dxScheduler-recurrenceYearly": "Yearly",
 
-        "dxScheduler-recurrenceEvery": "Every",
+        "dxScheduler-recurrenceRepeatEvery": "Repeat Every",
+        "dxScheduler-recurrenceRepeatOn": "Repeat On",
         "dxScheduler-recurrenceEnd": "End repeat",
         "dxScheduler-recurrenceAfter": "After",
         "dxScheduler-recurrenceOn": "On",
@@ -282,6 +283,13 @@
         "dxHtmlEditor-dialogImageWidthField": "Width (px)",
         "dxHtmlEditor-dialogImageHeightField": "Height (px)",
         "dxHtmlEditor-heading": "Heading",
-        "dxHtmlEditor-normalText": "Normal text"
+        "dxHtmlEditor-normalText": "Normal text",
+
+        "dxFileManager-newFolderName": "Untitled folder",
+        "dxFileManager-errorNoAccess": "Access denied. The operation cannot be completed.",
+        "dxFileManager-errorDirectoryExistsFormat": "Directory '{0}' already exists.",
+        "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",
+        "dxFileManager-errorFileNotFoundFormat": "File '{0}' not found",
+        "dxFileManager-errorDefault": "Unspecified error."
     }
 }

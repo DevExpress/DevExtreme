@@ -33,7 +33,7 @@ QUnit.performanceTest("dxOverlay should not force relayout on creation", functio
         $("#element").dxOverlay({});
     };
 
-    assert.measureStyleRecalculation(measureFunction, 2);
+    assert.measureStyleRecalculation(measureFunction, 1);
 });
 
 QUnit.performanceTest("dxOverlay should be rendered with minimum count of relayouts", function(assert) {
@@ -85,5 +85,5 @@ QUnit.performanceTest("dxPopup should be rendered with minimum count of relayout
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 12);
+    assert.measureStyleRecalculation(measureFunction, 13);
 });

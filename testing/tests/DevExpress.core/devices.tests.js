@@ -8,8 +8,7 @@ var $ = require("jquery"),
     viewPort = require("core/utils/view_port"),
     viewPortChanged = viewPort.changeCallback,
     resizeCallbacks = require("core/utils/resize_callbacks"),
-    config = require("core/config"),
-    errors = require("ui/widget/ui.errors");
+    config = require("core/config");
 
 var userAgents = {
     iphone_6: "Mozilla/5.0 (iPhone; CPU OS 6_0_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25",
@@ -199,64 +198,6 @@ QUnit.test("win8 by device name", function(assert) {
     assert.equal(device.deviceType, "desktop", "correct deviceType");
 });
 
-QUnit.test("win8 forcing deprecated theme warnings", function(assert) {
-    var originalLog = errors.log;
-
-    try {
-        var logList = [];
-
-        errors.log = function() {
-            logList.push($.makeArray(arguments));
-            return originalLog.apply(errors, arguments);
-        };
-
-        devices.current("win8");
-        assert.equal(logList[0][0], "W0010");
-    } finally {
-        errors.log = originalLog;
-    }
-});
-
-QUnit.test("win8Phone forcing deprecated theme warnings", function(assert) {
-    var originalLog = errors.log;
-
-    try {
-        var logList = [];
-
-        errors.log = function() {
-            logList.push($.makeArray(arguments));
-            return originalLog.apply(errors, arguments);
-        };
-
-        devices.current("win8Phone");
-        assert.equal(logList[0][0], "W0010");
-    } finally {
-        errors.log = originalLog;
-    }
-});
-
-QUnit.test("win8 forcing by config deprecated theme warnings", function(assert) {
-    var originalLog = errors.log;
-
-    try {
-        var logList = [];
-
-        errors.log = function() {
-            logList.push($.makeArray(arguments));
-            return originalLog.apply(errors, arguments);
-        };
-
-        devices.current({
-            platform: "win",
-            version: [8]
-        });
-
-        assert.equal(logList[0][0], "W0010");
-    } finally {
-        errors.log = originalLog;
-    }
-});
-
 QUnit.test("winphone10 by device name", function(assert) {
     devices.current("win10Phone");
     var device = devices.current();
@@ -273,46 +214,6 @@ QUnit.test("win10 by device name", function(assert) {
     assert.equal(device.platform, "win", "correct platform");
     assert.equal(device.version.toString(), "10", "correct version");
     assert.equal(device.deviceType, "desktop", "correct deviceType");
-});
-
-QUnit.test("win10Phone forcing deprecated theme warnings", function(assert) {
-    var originalLog = errors.log;
-
-    try {
-        var logList = [];
-
-        errors.log = function() {
-            logList.push($.makeArray(arguments));
-            return originalLog.apply(errors, arguments);
-        };
-
-        devices.current("win10Phone");
-        assert.equal(logList[0][0], "W0010");
-    } finally {
-        errors.log = originalLog;
-    }
-});
-
-QUnit.test("win10 forcing by config deprecated theme warnings", function(assert) {
-    var originalLog = errors.log;
-
-    try {
-        var logList = [];
-
-        errors.log = function() {
-            logList.push($.makeArray(arguments));
-            return originalLog.apply(errors, arguments);
-        };
-
-        devices.current({
-            platform: "win",
-            version: [10]
-        });
-
-        assert.equal(logList[0][0], "W0010");
-    } finally {
-        errors.log = originalLog;
-    }
 });
 
 QUnit.test("msSurface by device name (T463075)", function(assert) {

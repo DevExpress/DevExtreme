@@ -10,10 +10,13 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     overflow: hidden;
     height: 100%;
+    display: flex;
 
     .dx-texteditor {
         border: none;
         margin: 0;
+        display: flex;
+        flex-grow: 1;
     }
 
     .dx-texteditor-input {
@@ -26,9 +29,13 @@
     }
 }
 
+.dx-dropdowneditor-field-template-wrapper {
+    .dx-editor-content-wrapper();
+}
+
 .dx-dropdowneditor-active {
     .dx-dropdowneditor-icon {
-        opacity: .35;
+        opacity: 0.35;
     }
 }
 
@@ -40,6 +47,7 @@
 
     .dx-button-content {
         text-align: center;
+        white-space: nowrap;
     }
 
     .dx-rtl &,
@@ -69,6 +77,6 @@
     }
 
     .dx-dropdowneditor-icon {
-        opacity: .2;
+        opacity: 0.2;
     }
 }

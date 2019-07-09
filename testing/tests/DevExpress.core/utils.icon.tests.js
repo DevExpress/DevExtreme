@@ -1,87 +1,88 @@
 import { getImageSourceType, getImageContainer } from "core/utils/icon";
 
-const { module, test } = QUnit;
+const { module: testModule, test } = QUnit;
 
-module("icon utils", {
+testModule("icon utils", {
     beforeEach: () => {
-        this.sourceArray = [{// 1
+        this.sourceArray = [{ // 1
             source: "data:image/png;base64,qwertyuiopasdfghjklzxcvbmnQWERTYUIOPLKJHGFDSAZXCVBNM/+0987654321",
             result: "image"
         },
-        {// 2
+        { // 2
             source: "../folder/123.jgp",
             result: "image"
         },
-        {// 3
+        { // 3
             source: "localhost/JFLSKDksjdhfolHWThr30oi",
             result: "image"
         },
-        {// 4
+        { // 4
             source: "glyphicon glyphicon-icon",
             result: "fontIcon"
         },
-        {// 5
+        { // 5
             source: "glyphicon-icon glyphicon",
             result: "fontIcon"
         },
-        {// 6
+        { // 6
             source: "fa fa-icon",
             result: "fontIcon"
         },
-        {// 7
+        { // 7
             source: "fa-lg fa-icon fa",
             result: "fontIcon"
         },
-        {// 8
+        { // 8
             source: "ion ion-icon",
             result: "fontIcon"
         },
-        {// 9
+        { // 9
             source: "ionicons ion-icon",
             result: "fontIcon"
-        }, {// 10
+        },
+        { // 10
             source: "icon_-190",
             result: "dxIcon"
         },
-        {// 11
+        { // 11
             source: "my my-icon",
             result: "fontIcon"
         },
-        {// 12
+        { // 12
             source: "<svg></svg>",
             result: "svg"
         },
-        {// 13
+        { // 13
             source: `<svg>
                 <path />
             </svg>`,
             result: "svg"
         },
-        {// 14
+        { // 14
             source: `<svg>
                 <path />
             </svg>
             <html>`,
             result: false
         },
-        {// 15
+        { // 15
             source: `test
             <svg>
             <path />
             </svg>`,
             result: false
         },
-        {// 16
+        { // 16
             source: `  <svg>
             <path />
             </svg>`,
             result: "svg"
         },
-        {// 17
+        { // 17
             source: "http://test.test/image.jpg",
             result: "image"
         },
-        {// 18
+        { // 18
             source: "image.png",
             result: "image"
         }];

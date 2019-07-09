@@ -5,20 +5,34 @@
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
-export DEVEXTREME_QUNIT_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
-    npm i eslint eslint-plugin-spellcheck
+    npm i eslint eslint-plugin-spellcheck stylelint stylelint-config-standard npm-run-all
     npm run lint
 }
 
 function run_ts {
+    target=./ts/dx.all.d.ts
+    cp $target $target.current
+
     npm i
-    npx gulp ts-check npm-dts-check
+    npm run update-ts
+
+    if ! diff $target.current $target -U 5 > $target.diff; then
+        echo "FAIL: $target is outdated:"
+        cat $target.diff | sed "1,2d"
+        exit 1
+    else
+        echo "TS is up-to-date"
+    fi
+
+    npx gulp ts-compilation-check ts-jquery-check npm-ts-modules-check
 }
 
 function run_test {
+    export DEVEXTREME_QUNIT_CI=true
+
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true&nojquery=true"
     local runner_pid
@@ -83,6 +97,21 @@ function run_test {
     exit $runner_result
 }
 
+function run_test_themebuilder {
+    dotnet build build/build-dotnet.sln
+    npm i
+    npm run build-themes
+    npm run build-themebuilder-assets
+    cd themebuilder
+    npm i
+    npm run test
+}
+
+function run_test_functional {
+    npm i
+    npm run build
+    npm run test-functional -- --browsers chrome:headless
+}
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
@@ -90,6 +119,8 @@ case "$TARGET" in
     "lint") run_lint ;;
     "ts") run_ts ;;
     "test") run_test ;;
+    "test_themebuilder") run_test_themebuilder ;;
+    "test_functional") run_test_functional ;;
 
     *)
         echo "Unknown target"

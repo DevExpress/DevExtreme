@@ -582,10 +582,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "selectionMode":
                 if(args.value === "multi") {
@@ -628,13 +624,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _clearSelectedItems: function() {
         this._setOptionSilent("selectedItems", []);
         this._syncSelectionOptions("selectedItems");
-    },
-
-    // TODO: move this ability to component?
-    _setOptionSilent: function(name, value) {
-        this._cancelOptionChange = name;
-        this.option(name, value);
-        this._cancelOptionChange = false;
     },
 
     _waitDeletingPrepare: function($itemElement) {

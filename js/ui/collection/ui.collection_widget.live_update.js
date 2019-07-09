@@ -19,6 +19,10 @@ export default CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._customizeStoreLoadOptions = (e) => {
+            var dataSource = this._dataSource;
+            if(dataSource && !dataSource.isLoaded()) {
+                this._correctionIndex = 0;
+            }
             if(this._correctionIndex && e.storeLoadOptions) {
                 e.storeLoadOptions.skip += this._correctionIndex;
             }

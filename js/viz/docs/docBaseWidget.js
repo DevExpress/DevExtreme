@@ -284,8 +284,38 @@ var BaseWidget = {
                 color: '#232323',
                 size: 16,
                 opacity: undefined
-            }
-        }
+            },
+            /**
+            * @name BaseWidgetOptions.title.subtitle.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+            * @name BaseWidgetOptions.title.subtitle.textOverflow
+            * @type Enums.VizTextOverflow
+            * @default "ellipsis"
+            */
+            textOverflow: "ellipsis",
+            /**
+            * @name BaseWidgetOptions.title.subtitle.offset
+            * @type number
+            * @default 0
+            */
+            offset: 0
+        },
+        /**
+        * @name BaseWidgetOptions.title.wordWrap
+        * @type Enums.VizWordWrap
+        * @default "normal"
+        */
+        wordWrap: "normal",
+        /**
+        * @name BaseWidgetOptions.title.textOverflow
+        * @type Enums.VizTextOverflow
+        * @default "ellipsis"
+        */
+        textOverflow: "ellipsis"
     },
     /**
     * @name BaseWidgetOptions.export
@@ -505,7 +535,13 @@ var BaseWidget = {
             * @default 2
             */
             blur: 2
-        }
+        },
+        /**
+        * @name BaseWidgetOptions.tooltip.cornerRadius
+        * @type number
+        * @default 0
+        * @default 4 @for Material
+        */
     },
     /**
     * @name BaseWidgetOptions.loadingIndicator
@@ -866,6 +902,12 @@ var BaseLegend = {
     */
     title: {
         /**
+        * @name BaseLegend.title.horizontalAlignment
+        * @type Enums.HorizontalAlignment
+        * @default undefined
+        */
+        horizontalAlignment: undefined,
+        /**
         * @name BaseLegend.title.verticalAlignment
         * @type Enums.VerticalEdge
         * @default 'top'
@@ -891,9 +933,21 @@ var BaseLegend = {
             /**
             * @name BaseLegend.title.margin.bottom
             * @type number
-            * @default 14
+            * @default 9
             */
-            bottom: 14
+            bottom: 9,
+            /**
+            * @name BaseLegend.title.margin.left
+            * @type number
+            * @default 0
+            */
+            left: 0,
+            /**
+            * @name BaseLegend.title.margin.right
+            * @type number
+            * @default 0
+            */
+            right: 0
         },
         /**
         * @name BaseLegend.title.font
@@ -941,7 +995,13 @@ var BaseLegend = {
                 color: '#232323',
                 size: 14,
                 opacity: undefined
-            }
+            },
+            /**
+            * @name BaseLegend.title.subtitle.offset
+            * @type number
+            * @default 0
+            */
+            offset: 0
         }
     }    
 };

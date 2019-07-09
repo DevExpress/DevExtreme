@@ -7,6 +7,7 @@
         &.dx-tagbox-only-select {
             .dx-texteditor-input {
                 .hide-input-cursor(); // T278002
+
                 min-width: 0;
                 width: 0.1px; // T393423, T437866
                 padding-left: 0;
@@ -26,27 +27,36 @@
             cursor: default;
         }
     }
+
+    &:not(.dx-tagbox-single-line) {
+        .dx-texteditor-input-container {
+            flex-wrap: wrap;
+            align-items: stretch;
+        }
+    }
 }
 
 
 .dx-tag {
     max-width: calc(100% - 1px);
     display: inline-block;
+    align-self: flex-start;
 }
 
 .dx-tag-container {
-    padding: 0;
-    padding-right: 4px;
-    outline: none;
+    &.dx-texteditor-input-container {
+        padding: 0;
+        padding-right: 4px;
+        outline: none;
+
+        .dx-tagbox-single-line & {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
 
     .dx-texteditor-container& {
         white-space: normal;
-    }
-
-    .dx-tagbox-single-line & {
-        overflow-x: hidden;
-        white-space: nowrap;
-        position: static;
     }
 }
 
@@ -58,7 +68,7 @@
     text-align: center;
     cursor: pointer;
 
-    &:before{
+    &:before {
         content: ".";
         color: transparent;
         display: inline-block;
@@ -71,7 +81,8 @@
     top: 0;
     right: 0;
 
-    &:before, &:after {
+    &:before,
+    &:after {
         position: absolute;
         top: 50%;
         content: "";

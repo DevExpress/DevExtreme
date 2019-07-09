@@ -45,13 +45,14 @@ exports.pie = _extend({}, barSeries, {
     },
 
     adjustLabels: function(moveLabelsFromCenter) {
-        (this._points || []).forEach(function(point) {
-            if(point._label.isVisible()) {
-                point.setLabelTrackerData();
-                point.setLabelEllipsis(moveLabelsFromCenter);
-                point.updateLabelCoord(moveLabelsFromCenter);
+        return (this._points || []).reduce((r, p) => {
+            if(p._label.isVisible()) {
+                p.setLabelTrackerData();
+                r = p.applyWordWrap(moveLabelsFromCenter) || r;
+                p.updateLabelCoord(moveLabelsFromCenter);
+                return r;
             }
-        });
+        }, false);
     },
 
     _applyElementsClipRect: _noop,

@@ -2,7 +2,8 @@ import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 import { MockTranslator } from "../../helpers/chartMocks.js";
 
 const originalLabel = labelModule.Label;
@@ -1490,6 +1491,13 @@ QUnit.test("Set default coords. Rotated", function(assert) {
 
     assert.strictEqual(point.x, "default_position", "X");
     assert.strictEqual(point.y, 50, "Y");
+});
+
+QUnit.test("getCenterCoord", function(assert) {
+    const point = createPoint(this.series, this.data, this.options);
+    point.translate();
+
+    assert.deepEqual(point.getCenterCoord(), { x: 50, y: 100 });
 });
 
 QUnit.module("getBoundingRect", {});

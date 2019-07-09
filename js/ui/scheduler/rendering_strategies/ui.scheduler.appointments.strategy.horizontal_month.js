@@ -1,6 +1,5 @@
-var noop = require("../../../core/utils/common").noop,
-    extend = require("../../../core/utils/extend").extend,
-    HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line");
+import HorizontalMonthLineAppointmentsStrategy from "./ui.scheduler.appointments.strategy.horizontal_month_line";
+import { extend } from "../../../core/utils/extend";
 
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
     MONTH_APPOINTMENT_MIN_OFFSET = 26,
@@ -8,9 +7,9 @@ var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
     MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36,
     MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
-var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
+class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsStrategy {
 
-    _getAppointmentParts: function(appointmentGeometry, appointmentSettings, startDate) {
+    _getAppointmentParts(appointmentGeometry, appointmentSettings, startDate) {
         var deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth,
             height = appointmentGeometry.height,
             fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex),
@@ -19,7 +18,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth) || fullWeekAppointmentWidth,
             result = [],
             totalWidth = appointmentGeometry.reducedWidth + tailWidth,
-            currentPartTop = appointmentSettings.top + this._defaultHeight,
+            currentPartTop = appointmentSettings.top + this.getDefaultCellHeight(),
             left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
         if(this.instance._groupOrientation === "vertical") {
@@ -40,7 +39,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
                 cellIndex: 0
             }));
 
-            currentPartTop += this._defaultHeight;
+            currentPartTop += this.getDefaultCellHeight();
             totalWidth += fullWeekAppointmentWidth;
         }
 
@@ -61,15 +60,17 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         }
 
         return result;
-    },
+    }
 
-    _calculateMultiWeekAppointmentLeftOffset: function(max, width) {
+    _calculateMultiWeekAppointmentLeftOffset(max, width) {
         return this._isRtl() ? max : max - width;
-    },
+    }
 
-    _correctRtlCoordinatesParts: noop,
+    _correctRtlCoordinatesParts() {
 
-    _getFullWeekAppointmentWidth: function(groupIndex) {
+    }
+
+    _getFullWeekAppointmentWidth(groupIndex) {
         this.instance.fire("getFullWeekAppointmentWidth", {
             groupIndex: groupIndex,
             callback: (function(width) {
@@ -78,67 +79,76 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         });
 
         return this._maxFullWeekAppointmentWidth;
-    },
+    }
 
-    _getAppointmentDefaultHeight: function() {
+    _getAppointmentDefaultHeight() {
         return this._getAppointmentHeightByTheme();
-    },
+    }
 
-    _checkLongCompactAppointment: function(item, result) {
+    _getAppointmentMinHeight() {
+        return this._getAppointmentDefaultHeight();
+    }
+
+    _checkLongCompactAppointment(item, result) {
         this._splitLongCompactAppointment(item, result);
 
         return result;
-    },
+    }
 
-    _columnCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top),
-            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition);
+    _columnCondition(a, b) {
+        var isSomeEdge = this._isSomeEdge(a, b);
+
+        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
+            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge),
+            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition, isSomeEdge);
 
         return rowCondition ? rowCondition : columnCondition ? columnCondition : cellPositionCondition ? cellPositionCondition : a.isStart - b.isStart;
-    },
+    }
 
-    createTaskPositionMap: function(items) {
-        return this.callBase(items, true);
-    },
+    createTaskPositionMap(items) {
+        return super.createTaskPositionMap(items, true);
+    }
 
-    _getSortedPositions: function(map) {
-        return this.callBase(map, true);
-    },
+    _getSortedPositions(map) {
+        return super._getSortedPositions(map, true);
+    }
 
-    _customizeAppointmentGeometry: function(coordinates) {
+    _customizeAppointmentGeometry(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);
 
         return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
-    },
+    }
 
-    _getDefaultRatio: function() {
+    _getDefaultRatio() {
         return MONTH_APPOINTMENT_HEIGHT_RATIO;
-    },
+    }
 
-    _getOffsets: function() {
+    _getOffsets() {
         return {
             unlimited: MONTH_APPOINTMENT_MIN_OFFSET,
             auto: MONTH_APPOINTMENT_MAX_OFFSET
         };
-    },
+    }
 
-    getCompactAppointmentGroupMaxWidth: function(intervalCount) {
+    getDropDownAppointmentWidth(intervalCount) {
+        if(this.instance.fire("isAdaptive")) {
+            return this.getDropDownButtonAdaptiveSize();
+        }
         var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
         return this.getDefaultCellWidth() - offset;
-    },
+    }
 
-    needCorrectAppointmentDates: function() {
+    needCorrectAppointmentDates() {
         return false;
-    },
+    }
 
-    _needVerticalGroupBounds: function() {
+    _needVerticalGroupBounds() {
         return false;
-    },
+    }
 
-    _needHorizontalGroupBounds: function() {
+    _needHorizontalGroupBounds() {
         return true;
     }
-});
+}
 
 module.exports = HorizontalMonthRenderingStrategy;

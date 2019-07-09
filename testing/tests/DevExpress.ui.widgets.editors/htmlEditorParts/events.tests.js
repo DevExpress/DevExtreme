@@ -18,11 +18,13 @@ module("Events", moduleConfig, () => {
     test("focusIn event by API", (assert) => {
         const focusInStub = sinon.stub();
         const focusOutStub = sinon.stub();
+        const clock = sinon.useFakeTimers();
 
         this.instance.on("focusIn", focusInStub);
         this.instance.on("focusOut", focusOutStub);
 
         this.instance.focus();
+        clock.tick();
 
         assert.strictEqual(focusInStub.callCount, 1, "Editor is focused");
         assert.strictEqual(focusOutStub.callCount, 0, "Editor isn't blurred");
@@ -31,6 +33,7 @@ module("Events", moduleConfig, () => {
 
         assert.strictEqual(focusInStub.callCount, 1, "Editor is focused");
         assert.strictEqual(focusOutStub.callCount, 1, "Editor is blurred");
+        clock.restore();
     });
 
     test("focus events should toggle 'dx-state-focused' class", (assert) => {

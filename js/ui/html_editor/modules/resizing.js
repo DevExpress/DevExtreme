@@ -128,7 +128,7 @@ class ResizingModule {
     }
 
     option(option, value) {
-        if(option === "resizing") {
+        if(option === "mediaResizing") {
             Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
             return;
         }

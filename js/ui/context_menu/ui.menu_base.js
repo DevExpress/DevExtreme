@@ -6,8 +6,7 @@ var $ = require("../../core/renderer"),
     inkRipple = require("../widget/utils.ink_ripple"),
     HierarchicalCollectionWidget = require("../hierarchical_collection/ui.hierarchical_collection_widget"),
     MenuBaseEditStrategy = require("./ui.menu_base.edit.strategy"),
-    devices = require("../../core/devices"),
-    themes = require("../themes");
+    devices = require("../../core/devices");
 
 var DX_MENU_CLASS = "dx-menu",
     DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + "-no-icons",
@@ -140,50 +139,42 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @name dxMenuBaseOptions.onItemHold
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.itemHoldTimeout
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.noDataText
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
             keyExpr: null,
 
             /**
             * @name dxMenuBaseOptions.parentIdExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.expandedExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
@@ -254,19 +245,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @default true
             */
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    useInkRipple: true
-                }
-            }
-        ]);
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
@@ -710,10 +688,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     _syncSelectionOptions: commonUtils.asyncNoop,
 
     _optionChanged: function(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "showSubmenuMode":
                 break;

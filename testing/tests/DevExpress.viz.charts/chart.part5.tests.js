@@ -639,10 +639,10 @@ QUnit.test("ScrollBar option changed", function(assert) {
         color: "new"
     }]);
 
-    assert.ok(scrollBar.init.calledOnce);
+    assert.equal(scrollBar.init.callCount, 1, "scroll bar init calls");
     assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
-    assert.ok(scrollBar.setPosition.calledOnce);
+    assert.equal(scrollBar.setPosition.callCount, 1);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);
 });
 
@@ -673,7 +673,7 @@ QUnit.test("Options changed - hide scrollBar", function(assert) {
     assert.deepEqual(scrollBarClassModule.ScrollBar.lastCall.args, [chart._renderer, chart._scrollBarGroup]);
     assert.ok(scrollBar.update.calledOnce);
 
-    assert.ok(scrollBar.dispose.calledOnce, "scrollBar disposed");
+    assert.equal(scrollBar.dispose.callCount, 1, "scrollBar disposed");
 
     assert.ok(chart._scrollBarGroup.linkRemove.called);
 });
@@ -712,10 +712,10 @@ QUnit.test("Options changed - show scrollBar", function(assert) {
 
     range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
-    assert.ok(scrollBar.init.calledOnce);
+    assert.equal(scrollBar.init.callCount, 1, "scroll bar init calls");
     assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
-    assert.ok(scrollBar.setPosition.calledOnce);
+    assert.equal(scrollBar.setPosition.callCount, 1);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);
 });
 

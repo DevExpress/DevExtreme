@@ -224,7 +224,7 @@ QUnit.test("Create clipRects", function(assert) {
     assert.equal(chart._canvasClipRect._stored_settings.x, 80);
     assert.equal(chart._canvasClipRect._stored_settings.y, 10);
 
-    checkRectCommon(assert, chart, 1, undefined, undefined, undefined, undefined, {
+    checkRectCommon(assert, chart, 0, undefined, undefined, undefined, undefined, {
         fill: "gray",
         opacity: 0.0001
     });
@@ -923,8 +923,8 @@ QUnit.test("Update clipRects. After update elements & canvas", function(assert) 
     });
     dirtyCanvas = chart.DEBUG_dirtyCanvas;
 
-    assert.ok(chart._canvasClipRect.attr.calledTwice);
-    assert.deepEqual(chart._canvasClipRect.attr.firstCall.args, [{ x: dirtyCanvas.left, y: dirtyCanvas.top, width: dirtyCanvas.width - dirtyCanvas.left - dirtyCanvas.right, height: dirtyCanvas.height - dirtyCanvas.top - dirtyCanvas.bottom }]);
+    assert.equal(chart._canvasClipRect.attr.callCount, 1);
+    assert.deepEqual(chart._canvasClipRect.attr.lastCall.args, [{ x: dirtyCanvas.left, y: dirtyCanvas.top, width: dirtyCanvas.width - dirtyCanvas.left - dirtyCanvas.right, height: dirtyCanvas.height - dirtyCanvas.top - dirtyCanvas.bottom }]);
 });
 
 QUnit.test("Not Update clipRects and canvases. After zoomArgument", function(assert) { // TODO fix it
@@ -2177,6 +2177,5 @@ QUnit.test("B251248. Break animations chart on update", function(assert) {
 
     chart._renderer.stopAllAnimations = sinon.spy();
     chart.option("series", []);
-    assert.ok(chart._renderer.stopAllAnimations.calledTwice);
-    assert.ok(chart._renderer.stopAllAnimations.withArgs(true).calledTwice);
+    assert.equal(chart._renderer.stopAllAnimations.withArgs(true).callCount, 1);
 });

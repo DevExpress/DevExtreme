@@ -119,11 +119,15 @@ registerDecorator(
         },
 
         _renderSelectAll: function() {
-            var $selectAll = this._$selectAll = $("<div>").addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
+            var $selectAll = this._$selectAll = $("<div>").addClass(SELECT_DECORATOR_SELECT_ALL_CLASS),
+                list = this._list,
+                downArrowHandler = list._supportedKeys().downArrow.bind(list);
 
-            this._selectAllCheckBox = this._list._createComponent($("<div>")
+            this._selectAllCheckBox = list._createComponent($("<div>")
                 .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
                 .appendTo($selectAll), CheckBox);
+
+            this._selectAllCheckBox.registerKeyHandler("downArrow", downArrowHandler);
 
             $("<div>").addClass(SELECT_DECORATOR_SELECT_ALL_LABEL_CLASS)
                 .text(this._list.option("selectAllText"))

@@ -178,18 +178,6 @@ QUnit.test("Two Series, one of them is not visible", function(assert) {
     assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["D", "E", "F"]);
 });
 
-QUnit.test("Pass groupData categories to axis.setBusinesRange", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ["A", "D", "E", "C", "F"] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: "A", val: 1 }, { arg: "B", val: 2 }, { arg: "C", val: 3 }, { arg: "D", val: 1 }, { arg: "E", val: 2 }, { arg: "F", val: 3 }],
-        series: [{ type: "line" }]
-    });
-
-    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["A", "D", "E", "C", "F"]);
-    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[1], ["A", "B", "C", "D", "E", "F"]);
-});
-
 var assertRange = commonMethodsForTests.assertRange;
 
 // /////////////////////////////////////////////////////

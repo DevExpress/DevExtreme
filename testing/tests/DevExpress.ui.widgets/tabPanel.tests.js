@@ -2,9 +2,11 @@ import $ from "jquery";
 import fx from "animation/fx";
 import support from "core/utils/support";
 import domUtils from "core/utils/dom";
+import devices from "core/devices";
 import TabPanel from "ui/tab_panel";
 import pointerMock from "../../helpers/pointerMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
 
@@ -51,8 +53,8 @@ QUnit.test("container should consider tabs height", (assert) => {
 
     const $container = $tabPanel.find("." + TABPANEL_CONTAINER_CLASS);
     const $tabs = $tabPanel.find("." + TABS_CLASS);
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 QUnit.test("container should consider tabs height for async datasource", (assert) => {
@@ -74,8 +76,8 @@ QUnit.test("container should consider tabs height for async datasource", (assert
 
     clock.tick();
 
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 QUnit.test("container should consider tabs height for async templates", (assert) => {
@@ -90,8 +92,8 @@ QUnit.test("container should consider tabs height for async templates", (assert)
 
     clock.tick();
 
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 QUnit.test("container should consider tabs height when it rendered in hiding area", (assert) => {
@@ -104,8 +106,8 @@ QUnit.test("container should consider tabs height when it rendered in hiding are
 
     const $container = $tabPanel.find("." + TABPANEL_CONTAINER_CLASS);
     const $tabs = $tabPanel.find("." + TABS_CLASS);
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 
@@ -523,6 +525,22 @@ QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(asse
     assert.ok(!$(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
 });
 
+if(devices.current().deviceType === "desktop") {
+    const createWidget = ($element) => {
+        let widget = $element.dxTabPanel({
+            focusStateEnabled: true,
+            items: [{ text: "text" }]
+        }).dxTabPanel("instance");
+
+        $element.attr("tabIndex", 1);
+
+        return widget;
+    };
+
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, checkInitialize: false });
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: `Tabs: ` });
+}
+
 QUnit.module("aria accessibility");
 
 QUnit.test("active tab should have aria-controls attribute pointing to active multiview item", (assert) => {
@@ -565,128 +583,4 @@ QUnit.test("dataSource loading should be fired once", (assert) => {
     });
 
     assert.equal(dataSourceLoadCalled, 1, "dataSource load called once");
-});
-
-QUnit.module("Live Update", {
-    beforeEach() {
-        this.itemRenderedSpy = sinon.spy();
-        this.titleRenderedSpy = sinon.spy();
-        this.itemDeletedSpy = sinon.spy();
-        this.data = [{
-            id: 0,
-            text: "0",
-            content: "0 content"
-        },
-        {
-            id: 1,
-            text: "1",
-            content: "1 content"
-        }];
-        this.createTabPanel = () => {
-            const tabPanel = $("#tabPanel").dxTabPanel({
-                items: this.data,
-                repaintChangesOnly: true,
-                onItemRendered: this.itemRenderedSpy,
-                onTitleRendered: this.titleRenderedSpy,
-                onItemDeleted: this.itemDeletedSpy
-            }).dxTabPanel("instance");
-
-            this.itemRenderedSpy.reset();
-            this.titleRenderedSpy.reset();
-            this.itemDeletedSpy.reset();
-
-            return tabPanel;
-        };
-    }
-}, () => {
-    QUnit.test("remove item", function(assert) {
-        let tabPanel = this.createTabPanel();
-
-        this.data.pop();
-        tabPanel.option("items", this.data);
-
-        assert.equal(this.itemRenderedSpy.callCount, 0, "items are not refreshed after remove");
-        assert.equal(this.itemDeletedSpy.callCount, 1, "removed items count");
-        assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, "1", "check removed item");
-    });
-
-    QUnit.test("repaintChangesOnly, update item instance", function(assert) {
-        const tabPanel = this.createTabPanel();
-
-        this.data[0] = {
-            id: 0,
-            text: "0 Updated",
-            content: "0 content"
-        };
-        tabPanel.option("items", this.data);
-
-        assert.equal(this.titleRenderedSpy.callCount, 1, "only one item is updated after reload");
-        assert.deepEqual(this.titleRenderedSpy.firstCall.args[0].itemData.text, "0 Updated", "check updated item");
-    });
-
-    QUnit.test("repaintChangesOnly, add item", function(assert) {
-        const tabPanel = this.createTabPanel();
-
-        this.data.push({
-            id: 2,
-            text: "2 Inserted",
-            content: "2 content"
-        });
-        tabPanel.option("items", this.data);
-
-        assert.equal(this.titleRenderedSpy.callCount, 1, "only one item is updated after push");
-        assert.deepEqual(this.titleRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
-        assert.ok($(this.titleRenderedSpy.firstCall.args[0].itemElement).parent().hasClass("dx-tabs-wrapper"), "check item container");
-    });
-
-    QUnit.test("repaintChangesOnly, add item and render its content", function(assert) {
-        const tabPanel = this.createTabPanel();
-
-        this.data.push({
-            id: 2,
-            text: "2 Inserted",
-            content: "2 content"
-        });
-        tabPanel.option("items", this.data);
-        tabPanel.option("selectedIndex", 2);
-
-        assert.equal(this.titleRenderedSpy.callCount, 1, "only one title is updated after push");
-        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
-        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
-    });
-
-    QUnit.test("should not rerender items if the badge/disabled/visible changed", (assert) => {
-        const tabPanel = $("#tabPanel").dxTabPanel({
-            items: [{ title: "title" }],
-            itemTemplate() { return $("<div id='itemContent'>"); }
-        }).dxTabPanel("instance");
-
-        const contentElement = $('#itemContent').get(0);
-
-        tabPanel.option("items[0].badge", 'badge text');
-        tabPanel.option("items[0].disabled", true);
-        tabPanel.option("items[0].visible", false);
-
-        assert.strictEqual(tabPanel.option('items[0].badge'), 'badge text');
-        assert.strictEqual(tabPanel.option('items[0].disabled'), true);
-        assert.strictEqual(tabPanel.option('items[0].visible'), false);
-        assert.strictEqual(contentElement, $('#itemContent').get(0));
-    });
-
-    // T704910
-    QUnit.test("Fix showing of 'No data to display' text after add first item", function(assert) {
-        this.data = [];
-        const tabPanel = this.createTabPanel();
-        const $tabPanelElement = tabPanel.$element();
-
-        assert.ok($tabPanelElement.find(".dx-empty-message").length);
-
-        this.data.push({
-            id: 2,
-            text: "2 Inserted",
-            content: "2 content"
-        });
-        tabPanel.option("items", this.data);
-        assert.notOk($tabPanelElement.find(".dx-empty-message").length);
-    });
 });

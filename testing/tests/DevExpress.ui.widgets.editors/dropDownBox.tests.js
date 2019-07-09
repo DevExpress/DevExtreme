@@ -5,6 +5,7 @@ import fx from "animation/fx";
 import DropDownBox from "ui/drop_down_box";
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
+import browser from "core/utils/browser";
 
 import "common.css!";
 
@@ -39,6 +40,8 @@ var moduleConfig = {
         this.clock.restore();
     }
 };
+
+const isIE11 = (browser.msie && parseInt(browser.version) === 11);
 
 QUnit.module("common", moduleConfig);
 
@@ -426,6 +429,11 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
 });
 
 QUnit.test("Dropdownbox popup should change height according to the content", assert => {
+    if(isIE11) {
+        assert.expect(0);
+        return;
+    }
+
     const $content = $("<div>").attr("id", "content"),
         instance = new DropDownBox($("#dropDownBox"), {
             opened: true,

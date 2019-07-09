@@ -76,10 +76,6 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         }
     },
 
-    usePointsToDefineAutoHiding() {
-        return true;
-    },
-
     getValueFields: function() {
         return [this._options.valueField || "val"];
     },

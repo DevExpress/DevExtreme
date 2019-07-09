@@ -117,7 +117,7 @@ exports.stock = _extend({}, scatterSeries, {
 
             let isReduction = false;
 
-            if(reductionValue !== null) {
+            if(_isDefined(reductionValue)) {
                 if(_isDefined(prevLevelValue)) {
                     isReduction = reductionValue < prevLevelValue;
                 }
@@ -126,10 +126,10 @@ exports.stock = _extend({}, scatterSeries, {
 
             return {
                 argument: data[argumentField],
-                highValue: data[highValueField],
-                lowValue: data[lowValueField],
-                closeValue: data[closeValueField],
-                openValue: data[openValueField],
+                highValue: this._processEmptyValue(data[highValueField]),
+                lowValue: this._processEmptyValue(data[lowValueField]),
+                closeValue: this._processEmptyValue(data[closeValueField]),
+                openValue: this._processEmptyValue(data[openValueField]),
                 reductionValue: reductionValue,
                 tag: data[that.getTagField()],
                 isReduction: isReduction,
@@ -252,6 +252,34 @@ exports.stock = _extend({}, scatterSeries, {
         options.sizePointNormalState = DEFAULT_FINANCIAL_POINT_SIZE;
 
         return options;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        let oppositeCoord = null;
+        const points = this.getVisiblePoints();
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            let tmpCoord;
+
+            if(isArgument) {
+                tmpCoord = p.vx === coord ? (p.openY + p.closeY) / 2 : undefined;
+            } else {
+                const coords = [Math.min(p.lowY, p.highY), Math.max(p.lowY, p.highY)];
+                tmpCoord = coord >= coords[0] && coord <= coords[1] ? p.vx : undefined;
+            }
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return false;
     }
 });
 

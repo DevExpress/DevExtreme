@@ -1,11 +1,11 @@
-require("../../../testing/content/orders.js");
+import "../../../testing/content/orders.js";
 
-var $ = require("jquery"),
-    RemoteStore = require("ui/pivot_grid/remote_store"),
-    pivotGridDataSource = require("ui/pivot_grid/data_source"),
-    pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
-    ArrayStore = require("data/array_store"),
-    DataSource = require("data/data_source");
+import $ from "jquery";
+import RemoteStore from "ui/pivot_grid/remote_store";
+import pivotGridDataSource from "ui/pivot_grid/data_source";
+import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
+import ArrayStore from "data/array_store";
+import DataSource from "data/data_source";
 
 function getCustomArrayStore(data) {
     var arrayStore = new ArrayStore(data);
@@ -1275,6 +1275,21 @@ QUnit.test("Filter by dayOfWeek", function(assert) {
     });
 });
 
+QUnit.test("Search", function(assert) {
+    var store = new RemoteStore({
+        load: function(loadOptions) {
+            assert.deepEqual(loadOptions.filter, ["ShipCountry", "contains", "ru"]);
+            return $.Deferred();
+        }
+    });
+
+    store.load({
+        columns: [],
+        rows: [{ dataField: "ShipCountry", searchValue: "ru" }],
+        values: [{ summaryType: 'count' }],
+    });
+});
+
 QUnit.test("Include filter by Quarter", function(assert) {
     var store = new RemoteStore({
         load: function(loadOptions) {
@@ -1481,6 +1496,7 @@ QUnit.test("Expanded column after expanded item. when no row fields", function(a
 });
 
 QUnit.test("Expand row", function(assert) {
+    var loadSpy = sinon.spy(this.externalStore, "load");
     this.load({
         rows: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }],
         columns: [{ dataField: "ShipVia" }],
@@ -1496,6 +1512,7 @@ QUnit.test("Expand row", function(assert) {
 
         assert.equal(data.columns.length, 3, "rows count");
         assert.equal(data.columns[0].value, 1, "first column value is correct");
+        assert.equal(loadSpy.callCount, 1);
     });
 });
 

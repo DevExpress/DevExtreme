@@ -7,7 +7,9 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     AsyncCollectionWidget = require("../collection/ui.collection_widget.async"),
-    BindableTemplate = require("../widget/bindable_template");
+    Promise = require("../../core/polyfills/promise"),
+    BindableTemplate = require("../widget/bindable_template"),
+    fx = require("../../animation/fx");
 
 var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_BEFORE_CLASS = "dx-toolbar-before",
@@ -34,7 +36,6 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
      * @name dxToolbarOptions.items
      * @type Array<string, dxToolbarItem, object>
      * @fires dxToolbarOptions.onOptionChanged
-     * @inheritdoc
      */
 
     /**
@@ -81,7 +82,8 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
             this._getTemplate("dx-polymorph-widget").render({
                 container: $container,
-                model: rawModel
+                model: rawModel,
+                parent: this
             });
         }.bind(this), ["text", "html", "widget", "options"], this.option("integrationOptions.watchMethod"));
 
@@ -147,9 +149,36 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         this.setAria("role", "toolbar");
     },
 
+    _waitParentAnimationFinished: function() {
+        const $element = this.$element();
+        const timeout = 15;
+        return new Promise(resolve => {
+            const check = () => {
+                $element.parents().each((_, parent) => {
+                    if(fx.isAnimating($(parent))) {
+                        return false;
+                    }
+                });
+                resolve();
+                return true;
+            };
+            const runCheck = () => {
+                setTimeout(() => check() || runCheck(), timeout);
+            };
+            ($element.width() > 0 && check()) || runCheck();
+        });
+    },
+
     _render: function() {
         this.callBase();
         this._renderItemsAsync();
+
+        if(themes.isMaterial()) {
+            Promise.all([
+                this._waitParentAnimationFinished(),
+                this._checkWebFontForLabelsLoaded()
+            ]).then(this._dimensionChanged.bind(this));
+        }
     },
 
     _postProcessRenderItems: function() {
@@ -179,6 +208,17 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                     .appendTo($container);
             }
         });
+    },
+
+    _checkWebFontForLabelsLoaded: function() {
+        const $labels = this.$element().find(TOOLBAR_LABEL_SELECTOR);
+        const promises = [];
+        $labels.each((_, label) => {
+            const text = $(label).text();
+            const fontWeight = $(label).css("fontWeight");
+            promises.push(themes.waitWebFont(text, fontWeight));
+        });
+        return Promise.all(promises);
     },
 
     _arrangeItems: function(elementWidth) {
@@ -421,14 +461,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     * @name dxToolbarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxToolbarMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

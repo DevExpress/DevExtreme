@@ -708,43 +708,6 @@ QUnit.module("Views integration", {
 });
 
 
-QUnit.module("Design mode", {
-    beforeEach: () => {
-        fx.off = true;
-        config({ designMode: true });
-
-        this.$element = $("<div>").appendTo("body");
-        this.calendar = this.$element.dxCalendar({
-            value: new Date(2015, 5, 13)
-        }).dxCalendar("instance");
-
-        this.$navigatorNext = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS));
-        this.$navigatorPrev = this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS));
-    },
-    afterEach: () => {
-        this.$element.remove();
-        fx.off = false;
-        config({ designMode: false });
-    }
-}, () => {
-    QUnit.test("Calendar must create disabled views in design mode", (assert) => {
-        assert.deepEqual(getCurrentViewInstance(this.calendar).option("disabled"), true);
-    });
-
-    // TODO: get rid of mocking private method
-    QUnit.test("In design mode, navigator links should do nothing", (assert) => {
-        this.calendar._navigate = () => {
-            assert.ok(false);
-        };
-
-        assert.expect(0);
-
-        $(this.$navigatorNext).trigger("dxclick");
-        $(this.$navigatorPrev).trigger("dxclick");
-    });
-});
-
-
 QUnit.module("Keyboard navigation", {
     beforeEach: () => {
         fx.off = true;

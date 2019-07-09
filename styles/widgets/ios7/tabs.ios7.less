@@ -42,7 +42,7 @@
 }
 
 .dx-tabs-nav-button-right {
-    border-radius:0 6px 6px 0;
+    border-radius: 0 6px 6px 0;
 }
 
 .dx-tab {
@@ -59,6 +59,7 @@
         display: inline-block;
         vertical-align: middle;
         .dx-icon-sizing(18px);
+
         color: @IOS7_TABS_ICON_COLOR;
     }
 
@@ -72,7 +73,8 @@
     }
 }
 
-.dx-tab, .dx-tabs {
+.dx-tab,
+.dx-tabs {
     &.dx-state-disabled {
         opacity: 1;
 
@@ -85,7 +87,7 @@
 
 .dx-tab-selected {
     background: @IOS7_TABS_SELECTED;
-    transition: background linear .1s;
+    transition: background linear 0.1s;
 
     .dx-icon {
         color: @IOS7_TABS_SELECTED_TEXT;
@@ -114,7 +116,7 @@
 .dx-rtl .dx-tab {
     &:first-child {
         border-right: 1px solid @IOS7_TABS_TAB_BORDER;
-        border-radius:0 6px 6px 0;
+        border-radius: 0 6px 6px 0;
     }
 
     &:last-child {

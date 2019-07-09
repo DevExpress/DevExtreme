@@ -59,6 +59,10 @@ function sortAxes(axes, onlyAxisToNotify) {
     return axes;
 }
 
+function isNotEmptyAxisBusinessRange(axis) {
+    return !axis.getTranslator().getBusinessRange().isEmpty();
+}
+
 module.exports = {
     name: "zoom_and_pan",
     init: function() {
@@ -87,16 +91,21 @@ module.exports = {
                 axes = axes.concat(actionData.valueAxes);
             }
 
-            axes.some(axis => {
-                return axis.getTranslator().getBusinessRange().isEmpty()
-                    || axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
-            }) && cancelEvent(e);
+            axes.reduce((isPrevented, axis) => {
+                if(isPrevented) {
+                    return isPrevented;
+                }
+                if(isNotEmptyAxisBusinessRange(axis)) {
+                    return axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
+                }
+                return isPrevented;
+            }, false) && cancelEvent(e);
         }
 
         function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
             function zoomAxes(axes, criteria, coordField, e, actionData) {
                 let zoom = { zoomed: false };
-                criteria && axes.forEach(axis => {
+                criteria && axes.filter(isNotEmptyAxisBusinessRange).forEach(axis => {
                     const options = axis.getOptions();
                     const viewport = axis.visualRange();
                     const scale = axis.getTranslator().getEventScale(e);
@@ -195,9 +204,10 @@ module.exports = {
                     axes = axes.concat(actionData.valueAxes);
                 }
 
-                axes.forEach(axis => {
+                axes.filter(isNotEmptyAxisBusinessRange).forEach(axis => {
                     axis.handleZooming(null, { start: true }, e, actionField);
                 });
+                zoomStarted = zoomStarted && axes.length;
             }
             zoomStarted && chart._requestChange(["VISUAL_RANGE"]);
         }
@@ -252,7 +262,7 @@ module.exports = {
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
-            chart._tracker.stopCurrentHandling();
+            chart._stopCurrentHandling();
         }
 
         const zoomAndPan = {

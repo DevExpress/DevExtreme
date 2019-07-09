@@ -1,5 +1,5 @@
 define(function(require) {
-    require("/artifacts/transpiled/bundles/dx.mobile.js");
+    require("/artifacts/transpiled/bundles/dx.all.js");
 
     QUnit.module("config.useJQuery");
 

@@ -63,33 +63,39 @@ function addChange(settings) {
 }
 
 function createChainExecutor() {
-    var chain = [];
-
-    executeChain.add = function(item) { chain.push(item); };
-    return executeChain;
-
-    function executeChain() {
+    var executeChain = function() {
         var i,
-            ii = chain.length,
+            ii = executeChain._chain.length,
             result;
         for(i = 0; i < ii; ++i) {
-            result = chain[i].apply(this, arguments);
+            result = executeChain._chain[i].apply(this, arguments);
         }
 
         return result;
-    }
+    };
+    executeChain._chain = [];
+    executeChain.add = function(item) { executeChain._chain.push(item); };
+    executeChain.copy = function(executor) { executeChain._chain = executor._chain.slice(); };
+
+    return executeChain;
 }
 
 function expand(target, name, expander) {
     var current = target[name];
     if(!current) {
         current = expander;
-    } else if(current.add) {
-        current.add(expander);
     } else {
-        current = createChainExecutor();
-        current.add(target[name]);
-        current.add(expander);
+        if(!current.add) {
+            current = createChainExecutor();
+            current.add(target[name]);
+            current.add(expander);
+        } else {
+            if(Object.prototype.hasOwnProperty.call(target, name) === false) {
+                current = createChainExecutor();
+                current.copy(target[name]);
+            }
+            current.add(expander);
+        }
     }
     target[name] = current;
 }
@@ -150,6 +156,8 @@ exports.replaceInherit = isServerSide
                 initialChanges = proto._initialChanges,
                 themeDependentChanges = proto._themeDependentChanges,
                 optionChangesMap = proto._optionChangesMap,
+                partialOptionChangesMap = proto._partialOptionChangesMap,
+                partialOptionChangesPath = proto._partialOptionChangesPath,
                 optionChangesOrder = proto._optionChangesOrder,
                 layoutChangesOrder = proto._layoutChangesOrder,
                 customChangesOrder = proto._customChangesOrder,
@@ -162,6 +170,8 @@ exports.replaceInherit = isServerSide
             proto._initialChanges = combineLists(initialChanges, proto._initialChanges);
             proto._themeDependentChanges = combineLists(themeDependentChanges, proto._themeDependentChanges);
             proto._optionChangesMap = combineMaps(optionChangesMap, proto._optionChangesMap);
+            proto._partialOptionChangesMap = combineMaps(partialOptionChangesMap, proto._partialOptionChangesMap);
+            proto._partialOptionChangesPath = combineMaps(partialOptionChangesPath, proto._partialOptionChangesPath);
             proto._optionChangesOrder = combineLists(optionChangesOrder, proto._optionChangesOrder);
             proto._layoutChangesOrder = combineLists(layoutChangesOrder, proto._layoutChangesOrder);
             proto._customChangesOrder = combineLists(customChangesOrder, proto._customChangesOrder);

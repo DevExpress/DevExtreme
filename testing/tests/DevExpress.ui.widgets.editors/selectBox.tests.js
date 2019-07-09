@@ -1305,6 +1305,26 @@ QUnit.module("widget options", moduleSetup, () => {
         assert.equal($input.val(), "", "input text has been cleared");
     });
 
+    QUnit.testInActiveWindow("don't rise valueChange event on focusout in readonly state with searchEnabled", (assert) => {
+        const valueChangedMock = sinon.spy();
+        const $element = $("#selectBox").dxSelectBox({
+                items: [1, 2, 3],
+                searchEnabled: true,
+                readOnly: true,
+                onValueChanged: valueChangedMock,
+                value: 4
+            }),
+            element = $element.dxSelectBox("instance"),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input.trigger("focusin");
+        $input.trigger("blur");
+
+        assert.equal(element.option("value"), 4, "value should not be changed");
+        assert.equal($input.val(), "", "non-exist value should not be displayed");
+        assert.notOk(valueChangedMock.called, "valueChange event should not be rised");
+    });
+
     QUnit.testInActiveWindow("allowClearing option on init", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
                 items: [1, 2, 3],
@@ -3772,6 +3792,34 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.strictEqual(instance.option("value"), 4, "downArrow");
     });
 
+    QUnit.test("downArrow should load next page", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+                dataSource: {
+                    store: [1, 2, 3, 4, 5, 6],
+                    paginate: true,
+                    pageSize: 2
+                },
+                value: null,
+                focusStateEnabled: true,
+                opened: false,
+                deferRendering: true
+            }),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+            instance = $element.dxSelectBox("instance"),
+            keyboard = keyboardMock($input);
+
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+
+        const $list = $(instance.content()).find(".dx-list");
+
+        assert.ok($list.length, "list is rendered");
+        assert.strictEqual(instance.option("value"), 4, "value is correct");
+        assert.strictEqual($list.find(".dx-list-item").text(), "1234", "all previous list items are loaded");
+    });
+
     QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
             dataSource: new DataSource({
@@ -4122,6 +4170,23 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
             .keyDown("down");
 
         assert.equal($input.val(), 1, "chosen value is correct");
+    });
+
+    QUnit.test("Down key should not loop if dataSource is loading", (assert) => {
+        const ds = new DataSource(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+        const $element = $("#selectBox").dxSelectBox({
+            dataSource: ds,
+            pageSize: 5,
+            opened: true,
+            value: "9"
+        });
+
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        ds.beginLoading();
+        keyboardMock($input)
+            .keyDown("down");
+
+        assert.equal($input.val(), "9", "chosen value is correct");
     });
 
     QUnit.testInActiveWindow("value should be reset to the previous one on the 'tab' press if popup is closed", (assert) => {
@@ -4655,7 +4720,7 @@ QUnit.module("focus policy", {
             }
         });
 
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focusin();
 
@@ -4676,7 +4741,7 @@ QUnit.module("focus policy", {
         });
 
         // act
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type("b");
 
         this.clock.tick(TIME_TO_WAIT);
@@ -4694,7 +4759,7 @@ QUnit.module("focus policy", {
         });
 
         try {
-            const $input = this.$element.find("input");
+            const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             $input.focusin();
 
             keyboardMock($input).type("b");

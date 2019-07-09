@@ -173,6 +173,7 @@ function setCanvasValues(canvas) {
         canvas.originalLeft = canvas.left;
         canvas.originalRight = canvas.right;
     }
+    return canvas;
 }
 
 function normalizeBBoxField(value) {

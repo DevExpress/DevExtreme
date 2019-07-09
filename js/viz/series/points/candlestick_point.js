@@ -189,12 +189,34 @@ module.exports = _extend({}, barPoint, {
     getTooltipParams: function(location) {
         var that = this;
         if(that.graphic) {
-            var x,
+            var minValue = _min(that.lowY, that.highY),
+                maxValue = _max(that.lowY, that.highY),
+                visibleArea = that._getVisibleArea(),
+                rotated = that._options.rotated,
+                minVisible = rotated ? visibleArea.minX : visibleArea.minY,
+                maxVisible = rotated ? visibleArea.maxX : visibleArea.maxY,
+                min = _max(minVisible, minValue),
+                max = _min(maxVisible, maxValue);
+
+            const centerCoord = that.getCenterCoord();
+
+            if(location === 'edge') {
+                centerCoord[rotated ? "x" : "y"] = rotated ? max : min;
+            }
+
+            centerCoord.offset = 0;
+            return centerCoord;
+        }
+    },
+
+    getCenterCoord() {
+        if(this.graphic) {
+            var that = this,
+                x,
                 y,
                 minValue = _min(that.lowY, that.highY),
                 maxValue = _max(that.lowY, that.highY),
                 visibleArea = that._getVisibleArea(),
-                edgeLocation = location === 'edge',
                 rotated = that._options.rotated,
                 minVisible = rotated ? visibleArea.minX : visibleArea.minY,
                 maxVisible = rotated ? visibleArea.maxX : visibleArea.maxY,
@@ -202,16 +224,15 @@ module.exports = _extend({}, barPoint, {
                 max = _min(maxVisible, maxValue),
                 center = min + (max - min) / 2;
 
-
             if(rotated) {
                 y = that.x;
-                x = edgeLocation ? max : center;
+                x = center;
             } else {
                 x = that.x;
-                y = edgeLocation ? min : center;
+                y = center;
             }
 
-            return { x: x, y: y, offset: 0 };
+            return { x: x, y: y };
         }
     },
 

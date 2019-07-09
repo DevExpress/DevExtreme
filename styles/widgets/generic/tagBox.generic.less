@@ -38,29 +38,15 @@
     }
 }
 
-.dx-dropdowneditor-button-visible .dx-tag-container {
-    padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-}
-
-.dx-show-clear-button {
-    .dx-tag-container {
-        padding-right: @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-    }
-
-    &.dx-dropdowneditor-button-visible .dx-tag-container {
-        padding-right: @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-    }
-}
-
 .dx-tagbox-single-line {
-    &.dx-dropdowneditor-button-visible {
-        .dx-texteditor-container {
-            width: calc(~"100% - "@GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE);
-        }
-    }
-
     .dx-tag-container {
         padding-right: 0;
+    }
+}
+
+.dx-tagbox:not(.dx-tagbox-single-line) {
+    .dx-texteditor-input {
+        height: auto;
     }
 }
 
@@ -77,7 +63,8 @@
     width: @GENERIC_TAGBOX_REMOVE_BUTTON_WIDTH;
     height: 100%;
 
-    &:before, &:after {
+    &:before,
+    &:after {
         right: 4px + @GENERIC_TAGBOX_REMOVE_BUTTON_RIGHT;
         margin-top: -5px;
         width: 3px;
@@ -93,7 +80,8 @@
     }
 
     &:active {
-        &:before, &:after {
+        &:before,
+        &:after {
             background: @tagbox-tag-button-remove-active-bg;
         }
     }
@@ -106,12 +94,14 @@
     }
 
     .dx-tag-remove-button {
-        &:before, &:after {
+        &:before,
+        &:after {
             background-color: @tagbox-tag-focused-button-remove-bg;
         }
 
         &:active {
-            &:before, &:after {
+            &:before,
+            &:after {
                 background: @tagbox-tag-button-remove-active-bg;
             }
         }
@@ -120,7 +110,6 @@
 
 .dx-tagbox.dx-invalid {
     .dx-texteditor-container {
-
         &:after {
             right: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
 
@@ -155,23 +144,6 @@
         &:after {
             right: auto;
             left: @GENERIC_TAGBOX_REMOVE_BUTTON_RIGHT;
-        }
-    }
-
-    &.dx-dropdowneditor-button-visible .dx-tag-container {
-        padding-right: 0;
-        padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-    }
-
-    &.dx-show-clear-button {
-        .dx-tag-container {
-            padding-right: 0;
-            padding-left: @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-        }
-
-        &.dx-dropdowneditor-button-visible .dx-tag-container {
-            padding-right: 0;
-            padding-left: @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE + @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
         }
     }
 }

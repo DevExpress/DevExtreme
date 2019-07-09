@@ -80,10 +80,73 @@ function getPrecision(value) {
     return positionOfDelimiter >= 0 ? positionOfDelimiter : mantissa[1].length;
 }
 
+function getRoot(x, n) {
+    if(x < 0 && n % 2 !== 1) {
+        return NaN;
+    }
+
+    var y = Math.pow(Math.abs(x), 1 / n);
+    return n % 2 === 1 && x < 0 ? -y : y;
+}
+
+function solveCubicEquation(a, b, c, d) {
+    var min = 1e-8;
+    if(Math.abs(a) < min) {
+        a = b; b = c; c = d;
+        if(Math.abs(a) < min) {
+            a = b; b = c;
+            if(Math.abs(a) < min) {
+                return [];
+            }
+            return [-b / a];
+        }
+
+        var D2 = b * b - 4 * a * c;
+        if(Math.abs(D2) < min) {
+            return [-b / (2 * a)];
+        } else if(D2 > 0) {
+            return [(-b + Math.sqrt(D2)) / (2 * a), (-b - Math.sqrt(D2)) / (2 * a)];
+        }
+        return [];
+    }
+
+    var p = (3 * a * c - b * b) / (3 * a * a);
+    var q = (2 * b * b * b - 9 * a * b * c + 27 * a * a * d) / (27 * a * a * a);
+    var roots;
+    var u;
+
+    if(Math.abs(p) < min) {
+        roots = [getRoot(-q, 3)];
+    } else if(Math.abs(q) < min) {
+        roots = [0].concat(p < 0 ? [Math.sqrt(-p), -Math.sqrt(-p)] : []);
+    } else {
+        var D3 = q * q / 4 + p * p * p / 27;
+        if(Math.abs(D3) < min) {
+            roots = [-1.5 * q / p, 3 * q / p];
+        } else if(D3 > 0) {
+            u = getRoot(-q / 2 - Math.sqrt(D3), 3);
+            roots = [u - p / (3 * u)];
+        } else {
+            u = 2 * Math.sqrt(-p / 3);
+            var t = Math.acos(3 * q / p / u) / 3;
+            var k = 2 * Math.PI / 3;
+            roots = [u * Math.cos(t), u * Math.cos(t - k), u * Math.cos(t - 2 * k)];
+        }
+    }
+
+    for(var i = 0; i < roots.length; i++) {
+        roots[i] -= b / (3 * a);
+    }
+
+    return roots;
+}
+
 exports.sign = sign;
 exports.fitIntoRange = fitIntoRange;
 exports.inRange = inRange;
 exports.adjust = adjust;
 exports.getPrecision = getPrecision;
 exports.getExponent = getExponent;
+exports.getRoot = getRoot;
+exports.solveCubicEquation = solveCubicEquation;
 

@@ -549,6 +549,20 @@ QUnit.test("change valueAxis option", function(assert) {
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
 });
 
+QUnit.test("Change valueAxis.title", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries());
+
+    var chart = this.createChart({
+        series: [
+            { type: "line" }
+        ]
+    });
+    // Act
+    chart.option("valueAxis.title", "new title");
+    // Assert
+    assert.equal(chart.series[0].getValueAxis().getOptions().title, "new title", "series axis");
+});
+
 QUnit.test("change panes option only. no additional panes created", function(assert) {
     var chart = this.createChart({
         title: {
@@ -588,16 +602,13 @@ QUnit.test("change some options check calls", function(assert) {
             },
         };
 
-    var renderOpts = [];
-    chart._doRender = function(opt) {
-        renderOpts.push(opt);
-    };
+    var spy = chart._doRender = sinon.spy();
     // Act
     this.validateData.reset();
     chart.option($.extend({}, newOptions));
     // assert
-    assert.equal(renderOpts.length, 2);
-    assert.deepEqual(renderOpts[1], { force: true });
+    assert.equal(spy.callCount, 1);
+    assert.deepEqual(spy.lastCall.args, [{ force: true }]);
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
@@ -842,6 +853,124 @@ QUnit.test("palette option changed. palette as array", function(assert) {
     assert.ok(!chart.verticalAxesDisposed, "Vertical Axes should not be disposed");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
+});
+
+QUnit.test("Reject data initialiazation after options updating. Axis strips", function(assert) {
+    // arrange
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    var chart = this.createChart({
+        series: { name: "series1", type: "line" },
+        argumentAxis: {
+            strips: [{
+                color: "#d7ebf9"
+            }]
+        }
+    });
+
+    chart._dataInit = sinon.spy();
+    chart._change_AXES_AND_PANES = sinon.spy();
+    chart._tracker.update.reset();
+
+    // Act
+    chart.option({
+        argumentAxis: {
+            strips: [{
+                startValue: 20,
+                endValue: 40,
+                color: "#d7ebf9"
+            }]
+        }
+    });
+
+    chart.option("argumentAxis", {
+        strips: [{
+            startValue: 30,
+            endValue: 60,
+            color: "#aaebf9"
+        }]
+    });
+
+    chart.option("argumentAxis.strips", [{
+        startValue: 15,
+        endValue: 30,
+        color: "#d7aaf9"
+    }]);
+
+    chart.option("argumentAxis.strips[0]", {
+        startValue: 20,
+        endValue: 40,
+        color: "#d7ebaa"
+    });
+
+    chart.option("valueAxis", [{
+        strips: [{
+            startValue: 3,
+            endValue: 6,
+            color: "#d7ebf9"
+        }]
+    }]);
+    // assert
+    var updateCount = 0;
+    chart._tracker.update.getCalls().forEach(function(c) {
+        c.args[1] === "undefined" && updateCount++;
+    });
+
+    assert.strictEqual(chart._change_AXES_AND_PANES.callCount, 0, "Full updating axes not called");
+    assert.strictEqual(updateCount, 0, "Reset decorations  not called");
+    assert.strictEqual(chart._dataInit.callCount, 0, "Data initialization not called");
+});
+
+QUnit.test("Reject data initialiazation after options updating. Axis constant lines", function(assert) {
+    // arrange
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    var chart = this.createChart({
+        series: { name: "series1", type: "line" },
+        argumentAxis: {
+            constantLines: [{
+                value: 40
+            }]
+        }
+    });
+
+    chart._dataInit = sinon.spy();
+    chart._change_AXES_AND_PANES = sinon.spy();
+    chart._tracker.update.reset();
+
+    // Act
+    chart.option({
+        argumentAxis: {
+            constantLines: [{
+                value: 20
+            }]
+        }
+    });
+
+    chart.option("argumentAxis", {
+        constantLines: [{
+            value: 30
+        }]
+    });
+
+    chart.option("argumentAxis.constantLines", [{ value: 15 }]);
+
+    chart.option("argumentAxis.constantLines[0]", { value: 20 });
+
+    chart.option("valueAxis", [{
+        constantLines: [{
+            value: 3
+        }]
+    }]);
+    // assert
+    var updateCount = 0;
+    chart._tracker.update.getCalls().forEach(function(c) {
+        c.args[1] === "undefined" && updateCount++;
+    });
+
+    assert.strictEqual(chart._change_AXES_AND_PANES.callCount, 0, "Full updating axes not called");
+    assert.strictEqual(updateCount, 0, "Reset decorations  not called");
+    assert.strictEqual(chart._dataInit.callCount, 0, "Data initialization not called");
 });
 
 QUnit.test("animation option changed", function(assert) {

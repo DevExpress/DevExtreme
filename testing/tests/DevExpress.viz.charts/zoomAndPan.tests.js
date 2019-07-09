@@ -242,6 +242,59 @@ QUnit.test("Argument and value", function(assert) {
     assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
 });
 
+QUnit.test("Argument and value. Multiple axis chart with empty axis", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                visualRange: {
+                    startValue: 3,
+                    endValue: 7
+                }
+            },
+            valueAxis: [{
+                visualRange: {
+                    startValue: 2,
+                    endValue: 4
+                }
+            }, {
+                name: "axis2"
+            }],
+            zoomAndPan: {
+                valueAxis: "pan",
+                argumentAxis: "pan"
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
+
+    // act
+    this.pointer.start({ x: 150, y: 100 }).dragStart().drag(50, 200).dragEnd();
+
+    assert.equal(onZoomStart.callCount, 2);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+
+    assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis);
+    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 2, endValue: 4 });
+
+    assert.equal(onZoomEnd.callCount, 2);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 4 });
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 3, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, 1);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
+});
+
 QUnit.test("Argument and value. Rotated", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
@@ -543,6 +596,24 @@ QUnit.test("Allow zoom-out by minVisualRangeLength option", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxmousewheel");
     assert.roughEqual(onZoomEnd.getCall(0).args[0].shift, 0.02, 0.005);
     assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 0.9);
+});
+
+QUnit.test("T741577. Reset initial whole range after dataSource is changed", function(assert) {
+    const chart = this.createChart({
+        zoomAndPan: {
+            valueAxis: "zoom",
+            allowMouseWheel: true
+        }
+    });
+
+    chart.option("dataSource", [{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(-10);
+    assert.deepEqual(chart.getValueAxis().visualRange(), {
+        startValue: 1,
+        endValue: 2
+    });
 });
 
 QUnit.test("Zoom-in argument axis", function(assert) {
@@ -2664,11 +2735,9 @@ QUnit.test("Pan - do nothing", function(assert) {
     });
 
     // act
-    const e = this.pointer.start({ x: 100, y: 250, cancelable: true }).dragStart().lastEvent();
+    this.pointer.start({ x: 100, y: 250, cancelable: true }).dragStart().drag(400, 240).dragEnd();
 
     // assert
-    assert.strictEqual(e.cancel, true);
-    assert.strictEqual(e.originalEvent.cancel, true);
     assert.equal(onZoomStart.callCount, 0);
     assert.equal(onZoomEnd.callCount, 0);
 });

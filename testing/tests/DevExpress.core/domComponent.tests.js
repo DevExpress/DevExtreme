@@ -776,7 +776,7 @@ QUnit.test("element method should return correct component element", function(as
 });
 
 $.each(["onInitialized", "onOptionChanged", "onDisposing"], function(_, action) {
-    QUnit.test("'" + action + "' action should be fired even in disabled, readOnly & designMode", function(assert) {
+    QUnit.test("'" + action + "' action should be fired even in disabled & readOnly", function(assert) {
         var config = {
             value: true
         };
@@ -789,7 +789,6 @@ $.each(["onInitialized", "onOptionChanged", "onDisposing"], function(_, action) 
 
         $component.addClass("dx-state-disabled");
         $component.addClass("dx-state-readonly");
-        coreConfig({ designMode: true });
 
         var component = new this.TestComponent($component, config);
         component.option("value", false);

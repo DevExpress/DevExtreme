@@ -74,7 +74,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             totalCount: function() {
-                return options.totalCount;
+                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {
@@ -87,6 +87,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getRowIndexOffset: function() {
+                return 0;
+            },
+
+            getRowIndexDelta: function() {
                 return 0;
             },
 
@@ -208,9 +212,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getCombinedFilter: commonUtils.noop,
+
             getRowIndexByKey: function() {
                 return -1;
             },
+
+            loadingOperationTypes: function() {
+                return {};
+            },
+
             skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),

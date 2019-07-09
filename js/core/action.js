@@ -176,14 +176,6 @@ var createValidatorByTargetElement = function(condition) {
 };
 
 Action.registerExecutor({
-    "designMode": {
-        validate: function(e) {
-            if(config().designMode) {
-                e.cancel = true;
-            }
-        }
-    },
-
     "disabled": {
         validate: createValidatorByTargetElement(function($target) {
             return $target.is(".dx-state-disabled, .dx-state-disabled *");

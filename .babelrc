@@ -1,5 +1,5 @@
 {
     "presets": ["env"],
     "plugins": ["transform-es2015-modules-commonjs", "add-module-exports"],
-    "ignore": ["**/*.json"]
+    "ignore": ["**/*.json", "**/sinon.js"]
 }

@@ -620,6 +620,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             visible: true,
             adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
+            alignment: "center",
             width: "auto",
             cellTemplate: adaptiveCellTemplate,
             fixedPosition: "right"
@@ -961,7 +962,7 @@ module.exports = {
                     var that = this;
 
                     if(browser.msie && parseInt(browser.version) <= 11) {
-                        setTimeout(function() {
+                        this._updateScrollableTimeoutID = setTimeout(function() {
                             that.getView("rowsView")._updateScrollable();
                         });
                     }
@@ -1004,6 +1005,10 @@ module.exports = {
                 init: function() {
                     this._adaptiveColumnsController = this.getController("adaptiveColumns");
                     this.callBase();
+                },
+                dispose: function() {
+                    this.callBase.apply(this, arguments);
+                    clearTimeout(this._updateScrollableTimeoutID);
                 }
             },
             data: {

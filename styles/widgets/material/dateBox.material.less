@@ -6,10 +6,10 @@
 }
 
 .dx-size-compact() {
-    @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: 15px;
-    @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE: 15px;
-    @MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN: 0 14px;
-    @MATERIAL_DATEBOX_INPUT_MIN_HEIGHT: 23px;
+    @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: 10px;
+    @MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE: 18px;
+    @MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN: 0 34px;
+    @MATERIAL_DATEBOX_INPUT_MIN_HEIGHT: 33px;
 }
 
 
@@ -145,7 +145,7 @@
 }
 
 .dx-datebox-wrapper-list .dx-popup-content {
-    padding: 0px;
+    padding: 0;
 }
 
 .dx-datebox {
@@ -153,7 +153,8 @@
         line-height: normal;
     }
 
-    &, &:not(.dx-texteditor-empty) {
+    &,
+    &:not(.dx-texteditor-empty) {
         &.dx-auto-width {
             .invalid-dropdowneditor-input-padding();
         }

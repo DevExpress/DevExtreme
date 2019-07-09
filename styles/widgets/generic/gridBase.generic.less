@@ -4,7 +4,7 @@
     @GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 10px;
     @GENERIC_GRID_BASE_MENU_ITEM_PADDING: 6px 5px 7px;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING: 20px;
-    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
+    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0 @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 10px;
     @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 10px;
     @GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 70px;
@@ -23,7 +23,7 @@
     @GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM: 5px;
     @GENERIC_GRID_BASE_MENU_ITEM_PADDING: 5px 3px 3px;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING: 10px;
-    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0px @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
+    @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS: 0 @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 5px;
     @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 5px;
     @GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
@@ -41,8 +41,8 @@
     @GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
     @GENERIC_GRID_BASE_BORDER_COLOR: ~"@{@{widgetName}-border-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
-    @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
-    @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
+    @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px ~"@{@{widgetName}-drag-header-shadow-color}";
+    @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
     @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
     .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
@@ -51,7 +51,8 @@
         }
     }
 
-    .dx-@{widgetName}, .dx-@{widgetName}-container {
+    .dx-@{widgetName},
+    .dx-@{widgetName}-container {
         .dx-menu-item-has-icon {
             .dx-icon {
                 color: ~"@{@{widgetName}-menu-icon-color}";
@@ -126,7 +127,8 @@
         line-height: inherit;
 
         .dx-row-alt {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 background-color: ~"@{@{widgetName}-row-alternation-bg}";
             }
 
@@ -166,14 +168,12 @@
             & > td {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
             }
-            & > td.dx-command-adaptive {
-                padding: @GENERIC_GRID_BASE_CELL_PADDING - 2px @GENERIC_GRID_BASE_CELL_PADDING;
-            }
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
             .dx-command-edit-with-icons .dx-link {
                 .dx-icon-sizing(@GENERIC_COMMAND_EDIT_ICON_SIZE);
+
                 margin: 0 @GENERIC_COMMAND_EDIT_ICON_MARGIN;
             }
         }
@@ -187,13 +187,15 @@
         padding: @GENERIC_GRID_BASE_CELL_PADDING;
     }
 
-    .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
+    .dx-@{widgetName}-headers,
+    .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
             padding: @GENERIC_GRID_BASE_CELL_PADDING;
-            min-height: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + 2 * @GENERIC_GRID_BASE_CELL_PADDING
+            min-height: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + 2 * @GENERIC_GRID_BASE_CELL_PADDING;
         }
 
-        .dx-numberbox, .dx-textbox {
+        .dx-numberbox,
+        .dx-textbox {
             &.dx-show-clear-button.dx-texteditor-empty:not(.dx-invalid) {
                 .dx-texteditor-input {
                     padding-right: @GENERIC_GRID_BASE_CELL_PADDING;
@@ -209,40 +211,6 @@
             padding-left: @GENERIC_GRID_BASE_CELL_PADDING;
             padding-top: @GENERIC_GRID_BASE_CELL_PADDING;
             padding-bottom: @GENERIC_GRID_BASE_CELL_PADDING;
-        }
-
-        .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button {
-                .dx-texteditor-input {
-                    padding-right: @GENERIC_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                }
-
-                &.dx-invalid {
-                    .dx-texteditor-input {
-                        padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-                    }
-
-                    &.dx-rtl .dx-texteditor-input {
-                        padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-                        padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-                    }
-                }
-            }
-
-            &.dx-invalid {
-                .dx-texteditor-input {
-                    padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
-                }
-
-                &.dx-rtl .dx-texteditor-input {
-                    padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-                    padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
-                }
-            }
-
-            .dx-texteditor-input {
-                padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-            }
         }
 
         .dx-searchbox {
@@ -264,7 +232,7 @@
         }
 
         .dx-icon-clear {
-            left: 0px;
+            left: 0;
         }
 
         .dx-texteditor {
@@ -298,7 +266,7 @@
     }
 
     .dx-@{widgetName}-checkbox-size {
-        line-height: normal;
+        line-height: 1em;
 
         &.dx-checkbox-checked .dx-checkbox-icon {
             font-size: @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE;
@@ -348,7 +316,7 @@
         .dx-overlay-content {
             background-color: ~"@{@{widgetName}-columnchooser-bg}";
             border-radius: ~"@{@{widgetName}-columnchooser-overlay-border-radius}";
-            box-shadow: 0px 1px 3px ~"@{@{widgetName}-columnchooser-shadow-color}";
+            box-shadow: 0 1px 3px ~"@{@{widgetName}-columnchooser-shadow-color}";
 
             .dx-popup-title {
                 padding-top: 7px;
@@ -364,7 +332,7 @@
                     font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
                     border: ~"@{@{widgetName}-border}";
                     padding: @GENERIC_GRID_BASE_CELL_PADDING;
-                    box-shadow: 0px 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}";
+                    box-shadow: 0 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}";
                 }
             }
         }
@@ -415,7 +383,7 @@
                 min-width: @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
 
                 &.dx-@{widgetName}-group-space {
-                    padding-top: @GENERIC_GRID_BASE_CELL_PADDING
+                    padding-top: @GENERIC_GRID_BASE_CELL_PADDING;
                 }
             }
         }
@@ -526,7 +494,7 @@
 
             .dx-editor-container.dx-highlight-outline::after {
                 border-color: ~"@{@{widgetName}-cell-modified-border-color}";
-                left: 0px;
+                left: 0;
             }
 
             .dx-texteditor {
@@ -546,15 +514,18 @@
         &.dx-menu {
             background-color: transparent;
             height: 100%;
+
             .dx-menu-item {
                 .dx-menu-item-content {
                     padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
+
                     .dx-icon {
-                        margin: 0px 3px;
+                        margin: 0 3px;
                     }
                 }
             }
         }
+
         .dx-menu-item-content {
             .dx-icon.dx-icon-filter-operation-default {
                 margin-top: 2px;
@@ -642,14 +613,17 @@
     }
 
     .dx-@{widgetName}-rowsview {
-        border-top: ~"@{@{widgetName}-border}";
+        .dx-@{widgetName}-borders &,
+        .dx-@{widgetName}-headers + & {
+            border-top: ~"@{@{widgetName}-border}";
+        }
 
         .dx-row {
             border-top: @GENERIC_GRID_BASE_ROW_BORDER;
             border-bottom: @GENERIC_GRID_BASE_ROW_BORDER;
 
             &.dx-edit-row:first-child > td {
-                border-top-width: 0px;
+                border-top-width: 0;
                 border-bottom: ~"@{@{widgetName}-border}";
             }
 
@@ -660,14 +634,16 @@
         }
 
         .dx-master-detail-row {
-            > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
+            > .dx-@{widgetName}-group-space,
+            .dx-master-detail-cell {
                 border-top: ~"@{@{widgetName}-border}";
                 border-bottom: ~"@{@{widgetName}-border}";
             }
         }
 
         .dx-master-detail-row:not(.dx-@{widgetName}-edit-form) {
-            > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
+            > .dx-@{widgetName}-group-space,
+            .dx-master-detail-cell {
                 background-color: ~"@{@{widgetName}-master-detail-cell-bg}";
             }
         }
@@ -739,25 +715,39 @@
             &:focus {
                 outline: none;
             }
-            &.dx-data-row:not(.dx-edit-row) {
+
+            &.dx-data-row {
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
-                & .dx-command-edit .dx-link {
+                & .dx-command-edit:not(.dx-focused) .dx-link {
                     background-color: ~"@{@{widgetName}-row-focused-bg}";
                     color: ~"@{@{widgetName}-row-focused-color}";
+
+                    .dx-texteditor-input {
+                        border-radius: 0;
+                    }
 
                     & .dx-@{widgetName}-group-opened,
                     & .dx-@{widgetName}-group-closed {
                         color: ~"@{@{widgetName}-row-focused-color}";
                     }
                 }
+
+                & .dx-command-edit .dx-link:focus {
+                    background-color: ~"@{@{widgetName}-base-background-color}";
+                    color: ~"@{@{widgetName}-base-color}";
+                }
+
                 & > td,
                 & > tr:last-child > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
                 }
+
                 &:not(.dx-row-lines) {
-                    & > td, & > tr:first-child > td {
+                    & > td,
+                    & > tr:first-child > td {
                         border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                        border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
                     }
                 }
             }
@@ -770,12 +760,17 @@
                 & .dx-@{widgetName}-group-closed {
                     color: ~"@{@{widgetName}-row-focused-color}";
                 }
+
+                & .dx-datagrid-summary-item {
+                    color: ~"@{@{widgetName}-row-focused-color}";
+                }
             }
         }
 
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
                 color: ~"@{@{widgetName}-row-selected-color}";
 
@@ -793,28 +788,33 @@
                     color: ~"@{@{widgetName}-base-color}";
                 }
             }
+
             &:not(.dx-row-lines):not(.dx-row-focused) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
                 }
+
                 & > tr:first-child > td {
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
                 }
+
                 & > tr:last-child > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                 }
             }
 
             &.dx-column-lines {
-                & > td, & > tr > td {
+                & > td,
+                & > tr > td {
                     border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
                     border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
                 }
             }
 
             &.dx-row-lines {
-                & > td, & > tr > td {
+                & > td,
+                & > tr > td {
                     border-bottom-color: ~"@{@{widgetName}-row-selected-border-color}";
                 }
             }
@@ -845,6 +845,21 @@
         &.dx-widget {
             color: ~"@{@{widgetName}-base-color}";
         }
+
+        .dx-page,
+        .dx-page-size,
+        .dx-navigate-button {
+            outline: none;
+        }
+
+        &.dx-state-focused {
+            .dx-page:focus,
+            .dx-page-size:focus,
+            .dx-navigate-button:focus {
+                outline: 2px solid @datagrid-focused-border-color;
+                outline-offset: -2px;
+            }
+        }
     }
 
     .dx-@{widgetName}-summary-item {
@@ -862,7 +877,7 @@
         }
 
         .dx-revert-button {
-            margin: 0px 1px;
+            margin: 0 1px;
             margin-left: 1px;
             .dx-button-styling-variant(
                 @button-danger-bg, @button-danger-border-color, @button-danger-color,
@@ -871,11 +886,10 @@
                 darken(@button-danger-bg, 20%), @button-danger-border-color, @button-danger-color,
                 @button-danger-color
             );
+
             > .dx-button-content {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
             }
-
-
         }
     }
 
@@ -917,7 +931,7 @@
             .dx-menu {
                 .dx-menu-item-has-submenu.dx-menu-item-has-icon {
                     .dx-icon {
-                         margin: 0px 3px;
+                        margin: 0 3px;
                     }
                 }
             }
@@ -928,8 +942,10 @@
         }
 
         .dx-@{widgetName}-rowsview {
-            .dx-selection.dx-row, .dx-selection.dx-row:hover {
-                & > td, & > tr > td {
+            .dx-selection.dx-row,
+            .dx-selection.dx-row:hover {
+                & > td,
+                & > tr > td {
                     &:not(.dx-focused) {
                         &.dx-@{widgetName}-group-space {
                             border-left-color: ~"@{@{widgetName}-selection-bg}";

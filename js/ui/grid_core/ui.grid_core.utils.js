@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import { equalByValue } from "../../core/utils/common";
 import { isDefined, isFunction } from "../../core/utils/type";
+import { when } from "../../core/utils/deferred";
 import { getGroupInterval } from "../shared/filtering";
 import { format } from "../../core/utils/string";
 import { each } from "../../core/utils/iterator";
@@ -12,6 +13,7 @@ import { normalizeSortingInfo } from "../../data/utils";
 import formatHelper from "../../format_helper";
 import { deepExtendArraySafe } from "../../core/utils/object";
 import { getWindow } from "../../core/utils/window";
+import eventsEngine from "../../events/core/events_engine";
 
 var DATAGRID_SELECTION_DISABLED_CLASS = "dx-selection-disabled",
     DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
@@ -76,6 +78,14 @@ module.exports = (function() {
 
     var setEmptyText = function($container) {
         $container.get(0).textContent = "\u00A0";
+    };
+
+    var getWidgetInstance = function($element) {
+        var editorData = $element.data && $element.data(),
+            dxComponents = editorData && editorData.dxComponents,
+            widgetName = dxComponents && dxComponents[0];
+
+        return widgetName && editorData[widgetName];
     };
 
     return {
@@ -465,11 +475,35 @@ module.exports = (function() {
             } catch(e) {}
         },
 
-        getLastResizableColumnIndex: function(columns) {
-            var lastColumnIndex = columns.length - 1;
+        focusAndSelectElement: function(component, $element) {
+            eventsEngine.trigger($element, "focus");
+
+            let isSelectTextOnEditingStart = component.option("editing.selectTextOnEditStart"),
+                keyboardController = component.getController("keyboardNavigation"),
+                isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
+
+            if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is(".dx-texteditor-input")) {
+                var editor = getWidgetInstance($element.closest(".dx-texteditor"));
+
+                when(editor && editor._loadItemDeferred).done(function() {
+                    $element.get(0).select();
+                });
+            }
+        },
+
+        getWidgetInstance: getWidgetInstance,
+
+        getLastResizableColumnIndex: function(columns, resultWidths) {
             var hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
-            while(lastColumnIndex >= 0 && columns[lastColumnIndex] && (columns[lastColumnIndex].command || columns[lastColumnIndex] === "adaptiveHidden" || columns[lastColumnIndex].fixed || (hasResizableColumns && columns[lastColumnIndex].allowResizing === false))) {
-                lastColumnIndex--;
+
+            for(var lastColumnIndex = columns.length - 1; columns[lastColumnIndex]; lastColumnIndex--) {
+                var column = columns[lastColumnIndex],
+                    width = resultWidths && resultWidths[lastColumnIndex],
+                    allowResizing = !hasResizableColumns || column.allowResizing !== false;
+
+                if(!column.command && !column.fixed && width !== "adaptiveHidden" && allowResizing) {
+                    break;
+                }
             }
 
             return lastColumnIndex;

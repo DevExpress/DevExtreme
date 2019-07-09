@@ -293,10 +293,18 @@ QUnit.test("The 'max' option should be converted to Date obj before send to work
 
 QUnit.test("Scheduler should not throw an error when the details form is opened for the first time", function(assert) {
     var errorLogStub = sinon.stub(errors, "log");
-    this.createInstance();
-    this.instance.showAppointmentPopup({ startDate: new Date() });
-    assert.notOk(errorLogStub.called, "Exception was not thrown");
-    errorLogStub.restore();
+
+    try {
+        errorLogStub.withArgs("W1002").returns(true)
+            .throws("Non W1002 Exception");
+
+        this.createInstance();
+        this.instance.showAppointmentPopup({ startDate: new Date() });
+
+        assert.ok(true, "exception was not thrown");
+    } finally {
+        errorLogStub.restore();
+    }
 });
 
 QUnit.test("The 'scrollingEnabled' option of an appointment form should be 'true'", function(assert) {

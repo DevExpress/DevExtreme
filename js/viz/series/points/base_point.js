@@ -440,7 +440,7 @@ Point.prototype = {
     correctCoordinates: _noop,
     coordsIn: _noop,
     getTooltipParams: _noop,
-    setLabelEllipsis: _noop,
+    applyWordWrap: _noop,
     setLabelTrackerData: _noop,
     updateLabelCoord: _noop,
     drawLabel: _noop,
@@ -514,5 +514,11 @@ Point.prototype = {
     },
     getLabels: function() {
         return [this._label];
+    },
+    getCenterCoord() {
+        return {
+            x: this.x,
+            y: this.y
+        };
     }
 };

@@ -1102,6 +1102,27 @@ QUnit.test("scrollable should have correct scrollPosition when content is croppe
     assert.equal($scrollable.dxScrollable("instance").scrollLeft(), 50);
 });
 
+QUnit.test("scrollable prevents anchor events", function(assert) {
+    var $input = $("<input>").css("height", "40px");
+    var scrollable = $("#scrollable")
+        .append($input)
+        .dxScrollable({
+            useNative: false
+        })
+        .dxScrollable("instance");
+
+    $input
+        .focus()
+        .css("height", "auto");
+    var scrollPosition = scrollable.scrollTop();
+
+    $input
+        .parent()
+        .append($("<input>"));
+
+    assert.strictEqual(scrollable.scrollTop(), scrollPosition, "Scrollable save content position");
+});
+
 
 QUnit.module("horizontal direction", moduleConfig);
 
@@ -2504,6 +2525,64 @@ QUnit.test("mousewheel for vertical direction", function(assert) {
     assert.equal(scrollable.scrollOffset().top, distance, "scrolled vertically");
 });
 
+// T737554
+QUnit.test("preventDefault should be called on immediate mousewheel at the end of content", function(assert) {
+    var $scrollable = $("#scrollable");
+    var lastWheelEventArgs;
+    $scrollable.on("dxmousewheel", function(e) {
+        lastWheelEventArgs = e;
+    });
+
+    $scrollable.dxScrollable({
+        useNative: false,
+        direction: "vertical",
+        inertiaEnabled: false,
+        bounceEnabled: false
+    });
+    var scrollable = $scrollable.dxScrollable("instance");
+
+    var $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS);
+
+    var pointer = pointerMock($container)
+        .start()
+        .wheel(-50);
+
+    pointer.wheel(-50);
+
+    assert.equal(scrollable.scrollOffset().top, 50, "scrolled vertically");
+    assert.strictEqual(lastWheelEventArgs.isDefaultPrevented(), true, "default is prevented for wheel event");
+});
+
+// T737554
+QUnit.test("preventDefault should not be called on delayed mousewheel at the end of content", function(assert) {
+    var $scrollable = $("#scrollable");
+    var lastWheelEventArgs;
+    $scrollable.on("dxmousewheel", function(e) {
+        lastWheelEventArgs = e;
+    });
+
+    $scrollable.dxScrollable({
+        useNative: false,
+        direction: "vertical",
+        inertiaEnabled: false,
+        bounceEnabled: false
+    });
+    var scrollable = $scrollable.dxScrollable("instance");
+
+    var $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS);
+
+    var pointer = pointerMock($container)
+        .start()
+        .wheel(-50);
+
+    this.clock.tick(500);
+
+    pointer.wheel(-50);
+
+    assert.equal(scrollable.scrollOffset().top, 50, "scrolled vertically");
+    assert.strictEqual(lastWheelEventArgs.isDefaultPrevented(), false, "default is prevented for wheel event");
+});
+
 QUnit.test("mousewheel calls update before validation", function(assert) {
     var distance = 10;
 
@@ -2949,53 +3028,6 @@ QUnit.test("B250273 - dxList: showScrollbar option does not work on device.", fu
     $scrollable.dxScrollable("option", "showScrollbar", false);
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true, "scrollable has class scrollbars_disabled");
     assert.equal($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).length, 0);
-});
-
-QUnit.test("B252134 - Scrolling works in design mode", function(assert) {
-    config({ designMode: true });
-
-    try {
-        var startCalled = 0,
-            stopCalled = 0,
-            endCalled = 0,
-            updateCalled = 0,
-
-            $scrollable = $("#scrollable").dxScrollable({
-                useNative: false,
-
-                onStart: function() {
-                    startCalled++;
-                },
-
-                onStop: function() {
-                    stopCalled++;
-                },
-
-                onEnd: function() {
-                    endCalled++;
-                },
-
-                update: function() {
-                    updateCalled++;
-                }
-            }),
-            $container = $scrollable.find("." + SCROLLABLE_CONTENT_CLASS);
-
-        pointerMock($container)
-            .start()
-            .down()
-            .move(0, 500)
-            .up();
-
-        assert.equal(startCalled, 0);
-        assert.equal(stopCalled, 0);
-        assert.equal(endCalled, 0);
-        assert.equal(updateCalled, 0);
-
-        assert.equal(translator.locate($container).top, 0);
-    } finally {
-        config({ designMode: false });
-    }
 });
 
 QUnit.test("simulated scrollable should stop animators on disposing", function(assert) {
@@ -3868,6 +3900,8 @@ QUnit.test("clientWidth", function(assert) {
         useNative: true
     });
     var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+
+    $container.css({ overflowY: "hidden" });
 
     assert.equal($scrollable.dxScrollable("clientWidth"), $container.width(), "client width equals to container width");
 });

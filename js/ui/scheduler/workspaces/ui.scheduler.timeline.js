@@ -17,7 +17,6 @@ var TIMELINE_CLASS = "dx-scheduler-timeline",
     HEADER_ROW_CLASS = "dx-scheduler-header-row";
 
 var HORIZONTAL = "horizontal",
-    DATE_TABLE_CELL_HEIGHT = 75,
     DATE_TABLE_CELL_BORDER = 1,
     toMs = dateUtils.dateToMilliseconds;
 
@@ -220,7 +219,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
                     var templateOptions = {
                         model: {
                             text: text,
-                            date: firstViewDate
+                            date: new Date(firstViewDate)
                         },
                         container: $th,
                         index: i
@@ -341,7 +340,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _setTableSizes: function() {
-        var cellHeight = DATE_TABLE_CELL_HEIGHT,
+        var cellHeight = this.getCellHeight(),
             minHeight = this._getWorkSpaceMinHeight(),
             $groupCells = this._$sidebarTable
                 .find("tr");
@@ -567,12 +566,22 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return 0;
     },
 
+    getWorkSpaceLeftOffset: function() {
+        return 0;
+    },
+
     scrollToTime: function(hours, minutes, date) {
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable(),
             offset = this.option("rtlEnabled") ? this.getScrollableContainer().get(0).getBoundingClientRect().width : 0;
 
-        scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
+        if(this.option("templatesRenderAsynchronously")) {
+            setTimeout(function() {
+                scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
+            });
+        } else {
+            scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
+        }
     }
 });
 

@@ -59,34 +59,6 @@ var isRealWidthSet = function($element) {
     return false;
 };
 
-var calculateWidth = function(value, $input, $element) {
-    var IE_ROUNDING_ERROR = 10;
-    var NATIVE_BUTTONS_WIDTH = 48;
-    var $longestValueElement = $("<div>").text(value).css({
-        "fontStyle": $input.css("fontStyle"),
-        "fontVariant": $input.css("fontVariant"),
-        "fontWeight": $input.css("fontWeight"),
-        "fontSize": $input.css("fontSize"),
-        "fontFamily": $input.css("fontFamily"),
-        "letterSpacing": $input.css("letterSpacing"),
-        "border": $input.css("border"),
-        "visibility": "hidden",
-        "whiteSpace": "nowrap",
-        "position": "absolute",
-        "float": "left"
-    });
-
-    $longestValueElement.appendTo($element);
-    var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
-        rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
-        leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft);
-
-    var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
-    $longestValueElement.remove();
-
-    return width;
-};
-
 var DateBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {
@@ -250,8 +222,9 @@ var DateBox = DropDownEditor.inherit({
              * @type dxCalendarOptions
              * @default {}
              */
-            calendarOptions: {}
+            calendarOptions: {},
 
+            useHiddenSubmitElement: true
         });
     },
 
@@ -411,13 +384,8 @@ var DateBox = DropDownEditor.inherit({
 
     _initMarkup: function() {
         this.$element().addClass(DATEBOX_CLASS);
-        this._renderSubmitElement();
 
         this.callBase();
-
-        if(this.option("isValid")) {
-            this._validateValue(this.dateOption("value"));
-        }
 
         this._refreshFormatClass();
         this._refreshPickerTypeClass();
@@ -456,16 +424,6 @@ var DateBox = DropDownEditor.inherit({
         $element.addClass(DATEBOX_CLASS + "-" + this._pickerType);
     },
 
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
-    },
-
     _updateSize: function() {
         var $element = this.$element(),
             widthOption = this.option("width"),
@@ -478,12 +436,42 @@ var DateBox = DropDownEditor.inherit({
             return;
         }
 
-        var $input = this._input(),
-            format = this._strategy.getDisplayFormat(this.option("displayFormat")),
+        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
 
-        $element.width(calculateWidth(longestValue, $input, this.$element()));
+        $element.width(this._calculateWidth(longestValue));
         this._isSizeUpdatable = true;
+    },
+
+    _calculateWidth: function(value) {
+        var IE_ROUNDING_ERROR = 10;
+        var NATIVE_BUTTONS_WIDTH = 48;
+        var $input = this._input();
+        var $longestValueElement = $("<div>").text(value).css({
+            "fontStyle": $input.css("fontStyle"),
+            "fontVariant": $input.css("fontVariant"),
+            "fontWeight": $input.css("fontWeight"),
+            "fontSize": $input.css("fontSize"),
+            "fontFamily": $input.css("fontFamily"),
+            "letterSpacing": $input.css("letterSpacing"),
+            "border": $input.css("border"),
+            "visibility": "hidden",
+            "whiteSpace": "nowrap",
+            "position": "absolute",
+            "float": "left"
+        });
+
+        $longestValueElement.appendTo(this.$element());
+        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
+            rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
+            leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft),
+            beforeButtonsWidth = this._$beforeButtonsContainer ? parseFloat(window.getComputedStyle(this._$beforeButtonsContainer.get(0)).width) : 0,
+            afterButtonsWidth = this._$afterButtonsContainer ? parseFloat(window.getComputedStyle(this._$afterButtonsContainer.get(0)).width) : 0;
+
+        var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + beforeButtonsWidth + afterButtonsWidth + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
+        $longestValueElement.remove();
+
+        return width;
     },
 
     _attachChildKeyboardEvents: function() {
@@ -556,7 +544,18 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _readOnlyPropValue: function() {
-        return this.callBase() && !this._isNativeType() || this._pickerType === PICKER_TYPE.rollers;
+        if(this._pickerType === PICKER_TYPE.rollers) {
+            return true;
+        }
+
+        var platform = devices.real().platform,
+            isCustomValueDisabled = this._isNativeType() && (platform === "ios" || platform === "android");
+
+        if(isCustomValueDisabled) {
+            return this.option("readOnly");
+        }
+
+        return this.callBase();
     },
 
     _isClearButtonVisible: function() {
@@ -564,17 +563,21 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption("value"),
-            dateSerializationFormat = this.option("dateSerializationFormat");
+        var value = this.dateOption("value");
 
         this.option("text", this._getDisplayedText(value));
+        this._strategy.renderValue();
 
+        return this.callBase();
+    },
+
+    _setSubmitValue: function() {
+        var value = this.dateOption("value");
+        var dateSerializationFormat = this.option("dateSerializationFormat");
         var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option("type")];
         var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
-        this._$submitElement.val(submitValue);
 
-        this._strategy.renderValue();
-        return this.callBase();
+        this._getSubmitElement().val(submitValue);
     },
 
     _getDisplayedText: function(value) {
@@ -742,8 +745,11 @@ var DateBox = DropDownEditor.inherit({
         this._refresh();
     },
 
-    _applyButtonHandler: function() {
-        this.dateValue(this._strategy.getValue());
+    _applyButtonHandler: function(e) {
+        var value = this._strategy.getValue();
+        if(this._validateValue(value)) {
+            this.dateValue(value, e.event);
+        }
         this.callBase();
     },
 
@@ -780,11 +786,10 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "min":
             case "max":
-                this._validateValue(this.dateOption("value"));
+                this._applyInternalValidation(this.dateOption("value"));
                 this._invalidate();
                 break;
             case "dateSerializationFormat":
-            case "readOnly":
             case "interval":
             case "disabledDates":
             case "calendarOptions":
@@ -817,6 +822,12 @@ var DateBox = DropDownEditor.inherit({
                 this._updateSize();
                 break;
             case "showDropDownButton":
+                this._updateSize();
+                break;
+            case "readOnly":
+                this.callBase.apply(this, arguments);
+                this._updateSize();
+                break;
             case "invalidDateMessage":
             case "dateOutOfRangeMessage":
             case "adaptivityEnabled":

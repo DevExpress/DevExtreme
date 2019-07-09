@@ -7,12 +7,10 @@
     height: 100%;
 }
 
-.dx-box-item-content {
-    -webkit-flex-direction: column;
+.dx-box-item-content { // stylelint-disable-line no-duplicate-selectors
     flex-direction: column;
     max-width: 100%;
 }
-
 
 .dx-box-flex {
     .dx-box-item,
@@ -20,16 +18,13 @@
         & > .dx-scrollable,
         & > .dx-treeview,
         & > .dx-treeview > .dx-scrollable {
-            display: -webkit-flex;
             display: flex;
-            -webkit-flex-grow: 1;
             flex-grow: 1;
-            -webkit-flex-direction: column;
             flex-direction: column;
             height: auto;
 
             & > .dx-scrollable-wrapper {
-                display:  flex;
+                display: flex;
                 flex-grow: 1;
                 flex-direction: column;
                 height: auto;

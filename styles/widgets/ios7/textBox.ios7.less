@@ -8,8 +8,8 @@
         border: none;
 
         .dx-icon-search {
-            width: 0px;
-            height: 0px;
+            width: 0;
+            height: 0;
         }
     }
 
@@ -40,6 +40,10 @@
 
     .dx-texteditor-input {
         padding-left: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET * 2;
+        background-color: @IOS7_SEARCHBOX_BACKGROUND;
+    }
+
+    .dx-texteditor-buttons-container {
         background-color: @IOS7_SEARCHBOX_BACKGROUND;
     }
 
@@ -137,7 +141,7 @@
     }
 }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (min-resolution: 192dpi) {
     .dx-searchbox {
         .dx-placeholder {
             &:before {

@@ -602,6 +602,61 @@ QUnit.test("Custom store with remote paging and with local filtering", function(
     assert.strictEqual(loadArgs[0].skip, undefined, "skip is not exists");
     assert.strictEqual(loadArgs[0].take, undefined, "take is not exists");
     assert.strictEqual(loadArgs[0].filter, undefined, "filter is not exists");
+
+    // act
+    loadArgs = [];
+    source.filter(null);
+    source.load();
+
+    // assert
+    assert.strictEqual(source.items().length, 2, "items are not filtered");
+    assert.strictEqual(loadArgs.length, 1);
+    assert.strictEqual(loadArgs[0].skip, 0, "skip is not exists");
+    assert.strictEqual(loadArgs[0].take, 20, "take is not exists");
+    assert.strictEqual(loadArgs[0].filter, undefined, "filter is not exists");
+});
+
+// T748688
+QUnit.test("Custom store with remote paging and with local sorting", function(assert) {
+    // arrange
+    var loadArgs = [];
+    var source = createDataSource({
+        remoteOperations: { paging: true },
+        pageSize: 2,
+        load: function(e) {
+            loadArgs.push(e);
+            if(e.take === 2) {
+                return $.Deferred().resolve([{ x: 1 }, { x: 2 }]);
+            } else {
+                return $.Deferred().resolve([{ x: 1 }, { x: 2 }, { x: 3 }]);
+            }
+        }
+    });
+
+    // act
+    source.sort([{ selector: "x", desc: true }]);
+    source.load();
+
+    // assert
+    assert.strictEqual(source.items().length, 2, "items are paged");
+    assert.strictEqual(source.items()[0].x, 3, "items are sorted");
+    assert.strictEqual(loadArgs.length, 1);
+    assert.strictEqual(loadArgs[0].skip, undefined, "skip is not exists");
+    assert.strictEqual(loadArgs[0].take, undefined, "take is not exists");
+    assert.strictEqual(loadArgs[0].sort, undefined, "sort is not exists");
+
+    // act
+    loadArgs = [];
+    source.sort(null);
+    source.load();
+
+    // assert
+    assert.strictEqual(source.items().length, 2, "items are paged");
+    assert.strictEqual(source.items()[0].x, 1, "items are not sorted");
+    assert.strictEqual(loadArgs.length, 1);
+    assert.strictEqual(loadArgs[0].skip, 0, "skip is not exists");
+    assert.strictEqual(loadArgs[0].take, 2, "take is not exists");
+    assert.strictEqual(loadArgs[0].sort, undefined, "sort is not exists");
 });
 
 QUnit.module("DataSource when not requireTotalCount", {
@@ -3531,6 +3586,122 @@ QUnit.test("Exception when store not returned totalCount after full reload", fun
         assert.ok(e.message.indexOf("E4021") >= 0, "name of error");
     }
 });
+
+// T754708
+QUnit.test("The collapseAll method should work after expanding group row", function(assert) {
+    // arrange
+    var dataSource = this.createDataSource({
+        group: "field2",
+        pageSize: 2
+    });
+
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    }, {
+        key: 3, items: null
+    }], "loaded items");
+
+    dataSource.changeRowExpand([2]); // expand group row
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            isContinuationOnNextPage: true,
+            items: [
+                {
+                    field1: 1,
+                    field2: 2,
+                    field3: 3
+                }
+            ],
+            key: 2
+        }
+    ], "loaded items");
+
+    // act
+    dataSource.collapseAll();
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    }, {
+        key: 3, items: null
+    }], "loaded items");
+});
+
+// T754708
+QUnit.test("The expandAll method  should work after collapsing group row", function(assert) {
+    // arrange
+    var dataSource = this.createDataSource({
+        group: "field2",
+        pageSize: 2
+    });
+
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    }, {
+        key: 3, items: null
+    }], "loaded items");
+
+    dataSource.expandAll();
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            isContinuationOnNextPage: true,
+            items: [
+                {
+                    field1: 1,
+                    field2: 2,
+                    field3: 3
+                }
+            ],
+            key: 2
+        }
+    ], "loaded items");
+
+    dataSource.changeRowExpand([2]); // collapse group row
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    },
+    {
+        isContinuationOnNextPage: true,
+        items: [],
+        key: 3
+    }], "loaded items");
+
+    // act
+    dataSource.expandAll();
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            isContinuationOnNextPage: true,
+            items: [
+                {
+                    field1: 1,
+                    field2: 2,
+                    field3: 3
+                }
+            ],
+            key: 2
+        }
+    ], "loaded items");
+});
+
 
 $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "Grouping with remoteOperations and with remote groupPaging"], function(moduleIndex, moduleName) {
 

@@ -15,7 +15,6 @@ var $ = require("../../core/renderer"),
     dateUtils = require("../../core/utils/date"),
     dateSerialization = require("../../core/utils/date_serialization"),
     devices = require("../../core/devices"),
-    config = require("../../core/config"),
     fx = require("../../animation/fx"),
     windowUtils = require("../../core/utils/window"),
     messageLocalization = require("../../localization/message"),
@@ -62,7 +61,6 @@ var Calendar = Editor.inherit({
             * @name dxCalendarOptions.hoverStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             hoverStateEnabled: true,
 
@@ -70,7 +68,6 @@ var Calendar = Editor.inherit({
             * @name dxCalendarOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -182,7 +179,6 @@ var Calendar = Editor.inherit({
             * @name dxCalendarOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
 
             /**
@@ -222,7 +218,6 @@ var Calendar = Editor.inherit({
                     * @name dxCalendarOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -670,7 +665,7 @@ var Calendar = Editor.inherit({
             firstDayOfWeek: this.option("firstDayOfWeek"),
             value: this._dateOption("value"),
             rtl: this.option("rtlEnabled"),
-            disabled: this.option("disabled") || config().designMode,
+            disabled: this.option("disabled"),
             tabIndex: undefined,
             focusStateEnabled: this.option("focusStateEnabled"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
@@ -966,7 +961,7 @@ var Calendar = Editor.inherit({
 
     _setSubmitValue: function(value) {
         var dateValue = this._convertToDate(value);
-        this._$submitElement.val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
+        this._getSubmitElement().val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
     },
 
     _getSubmitElement: function() {

@@ -147,7 +147,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allowResize: true,
             allowAllDayResize: true,
             onAppointmentDblClick: null,
-            _appointmentGroupButtonOffset: 0
+            _collectorOffset: 0
         });
     },
 
@@ -199,7 +199,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _isRepaintAll: function(appointments) {
         if(this.invoke("isCurrentViewAgenda")) {
-            return false;
+            return true;
         }
         for(let i = 0; i < appointments.length; i++) {
             const appointment = appointments[i];
@@ -237,8 +237,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _repaintAppointments: function(appointments) {
         const isRepaintAll = this._isRepaintAll(appointments);
 
-        const allDayFragment = $(domAdapter.createDocumentFragment());
-        const commonFragment = $(domAdapter.createDocumentFragment());
+        const allDayFragment = $(this._getAppointmentContainer(true));
+        const commonFragment = $(this._getAppointmentContainer(false));
 
         if(isRepaintAll) {
             this._getAppointmentContainer(true).html("");
@@ -307,19 +307,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _clearDropDownItemsElements: function() {
-        var $items = this._getDropDownAppointments();
-        if(!$items.length) {
-            return;
-        }
-
-        each($items, function(_, $item) {
-            $($item).detach();
-            $($item).remove();
-        });
-    },
-
-    _getDropDownAppointments: function() {
-        return this._itemContainer().find(".dx-scheduler-dropdown-appointments");
+        this.invoke("clearCompactAppointments");
     },
 
     _findItemElementByItem: function(item) {
@@ -906,14 +894,15 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
                 left = virtualCoordinates.left;
 
-            var buttonWidth = this.invoke("getCompactAppointmentGroupMaxWidth", virtualGroup.isAllDay),
+            var buttonWidth = this.invoke("getDropDownAppointmentWidth", virtualGroup.isAllDay),
+                buttonHeight = this.invoke("getDropDownAppointmentHeight"),
                 rtlOffset = 0;
 
             if(this.option("rtlEnabled")) {
                 rtlOffset = buttonWidth;
             }
 
-            this.notifyObserver("renderDropDownAppointments", {
+            this.notifyObserver("renderCompactAppointments", {
                 $container: $container,
                 coordinates: {
                     top: virtualCoordinates.top,
@@ -922,11 +911,17 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
+                width: buttonWidth - this.option("_collectorOffset"),
+                height: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
-                isCompact: !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments")
+                isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
+                applyOffset: this._isGroupCompact(virtualGroup)
             });
         }).bind(this));
+    },
+
+    _isGroupCompact: function(virtualGroup) {
+        return !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments");
     },
 
     _sortAppointmentsByStartDate: function(appointments) {

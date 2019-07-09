@@ -1,36 +1,29 @@
-var $ = require("jquery");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import errors from "ui/widget/ui.errors";
+import translator from "animation/translator";
+import dateLocalization from "localization/date";
+import messageLocalization from "localization/message";
+import dblclickEvent from "events/dblclick";
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import Color from "color";
+import tooltip from "ui/tooltip/ui.tooltip";
+import devices from "core/devices";
+import config from "core/config";
+import dragEvents from "events/drag";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import dataUtils from "core/element_data";
+import dateSerialization from "core/utils/date_serialization";
+import { SchedulerTestWrapper, initTestMarkup, createWrapper } from "./helpers.js";
 
-QUnit.testStart(function() {
-    $("#qunit-fixture").html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+import "ui/scheduler/ui.scheduler";
+import "ui/switch";
+import "common.css!";
+import "generic_light.css!";
 
-require("common.css!");
-require("generic_light.css!");
-
-
-var noop = require("core/utils/common").noop,
-    errors = require("ui/widget/ui.errors"),
-    translator = require("animation/translator"),
-    dateLocalization = require("localization/date"),
-    messageLocalization = require("localization/message"),
-    dblclickEvent = require("events/dblclick"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    Color = require("color"),
-    tooltip = require("ui/tooltip/ui.tooltip"),
-    devices = require("core/devices"),
-    config = require("core/config"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    dataUtils = require("core/element_data"),
-    dateSerialization = require("core/utils/date_serialization");
-
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
+QUnit.testStart(() => initTestMarkup());
 
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
@@ -47,11 +40,56 @@ function getOffset() {
     }
 }
 
+function isDeviceDesktop() {
+    return devices.current().deviceType === "desktop";
+}
+
+function skipTestOnMobile(assert) {
+    const isMobile = !isDeviceDesktop();
+    if(isMobile) {
+        assert.ok(true, "Test skipped on mobile");
+    }
+    return isMobile;
+}
+
+
+QUnit.module("T712431", () => {
+    // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
+    const APPOINTMENT_WIDTH = 941;
+
+    QUnit.test(`Appointment width should be not less ${APPOINTMENT_WIDTH}px with width control 1100px`, function(assert) {
+        const data = [
+            {
+                text: "Website Re-Design Plan 2",
+                startDate: new Date(2017, 4, 7, 9, 30),
+                endDate: new Date(2017, 4, 12, 17, 20)
+            }
+        ];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            width: 1100,
+            height: 600
+        });
+
+        const appointment = scheduler.appointments.getAppointment();
+        assert.roughEqual(appointment.outerWidth(), APPOINTMENT_WIDTH, 1);
+    });
+});
+
 QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
+            this.clock.tick(300);
+            this.instance.focus();
+
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || "backgroundColor";
@@ -74,21 +112,6 @@ QUnit.module("Integration: Appointments", {
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
-    },
-    checkItemDataInDropDownTemplate: function(assert, dataSource, currentDate) {
-        this.createInstance({
-            dataSource: dataSource,
-            height: 600,
-            maxAppointmentsPerCell: 1,
-            currentDate: currentDate,
-            currentView: "month",
-            views: ["month"],
-            dropDownAppointmentTemplate: function(itemData) {
-                assert.ok(dataSource.indexOf(itemData) > -1, "appointment data contains in the data source");
-            }
-        });
-
-        $(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance").open();
     }
 });
 
@@ -168,7 +191,7 @@ QUnit.test("Tasks should have right boundOffset", function(assert) {
         draggableBounds = $appointment.dxDraggable("instance").option("boundOffset"),
         allDayPanelHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").first().outerHeight();
 
-    assert.equal(draggableBounds.top, -allDayPanelHeight, "bounds are OK");
+    assert.roughEqual(draggableBounds.top, -allDayPanelHeight, 1, "bounds are OK");
 });
 
 QUnit.test("Draggable rendering option 'immediate' should be turned off", function(assert) {
@@ -513,6 +536,28 @@ QUnit.test("Scheduler tasks should have a right height when currentView is chang
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
 });
 
+QUnit.test("Short tasks should have a right height (T725948)", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                endDate: "2019-03-20T12:06:41.000Z",
+                startDate: "2019-03-20T12:06:40.000Z"
+            }
+        ],
+        currentView: "day",
+        views: ["day"],
+        height: 800,
+        currentDate: new Date(2019, 2, 20),
+        firstDayOfWeek: 1,
+        cellDuration: 15
+    });
+    this.clock.tick();
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+
+    assert.roughEqual($appointment.height(), 3, 0.5, "Task has a right height");
+});
+
 QUnit.test("Two not rival appointments with fractional coordinates should have correct positions(ie)", function(assert) {
     this.createInstance({
         dataSource: [
@@ -599,7 +644,7 @@ QUnit.test("DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.test("Recurrence repeat-end editor should be closed after reopening appointment popup", function(assert) {
+QUnit.test("Recurrence repeat-type editor should have default 'never' value after reopening appointment popup", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -614,23 +659,25 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(firstAppointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
-        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor,
+        repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "daily");
 
-    repeatEndEditor.option("value", true);
+    repeatTypeEditor.option("value", "count");
     $(".dx-scheduler-appointment-popup").find(".dx-popup-done").trigger("dxclick");
 
     this.instance.showAppointmentPopup(secondAppointment);
 
-    form = this.instance.getAppointmentDetailsForm(),
-    repeatOnEditor = form.getEditor("repeatOnOff"),
-    repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+    form = this.instance.getAppointmentDetailsForm();
+    recurrenceEditor = form.getEditor("recurrenceRule");
+    freqEditor = recurrenceEditor._freqEditor;
+    repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "daily");
 
-    assert.notOk(repeatEndEditor.option("value"), "Switch is closed");
+    assert.ok(repeatTypeEditor.option("value"), 'never', "Repeat-type editor value is ok");
 });
 
 QUnit.test("Disabled appointment could not be focused", function(assert) {
@@ -669,10 +716,9 @@ QUnit.test("Appointment dates should not be normalized before sending to the det
 
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger("dxclick");
+    this.scheduler.appointments.click();
     this.clock.tick(300);
-    var $tooltip = $(".dx-scheduler-appointment-tooltip");
-    $tooltip.find(".dx-scheduler-appointment-tooltip-buttons").find(".dx-button").eq(1).trigger("dxclick");
+    this.scheduler.tooltip.clickOnItem();
 
     try {
         var args = spy.getCall(0).args[0];
@@ -708,14 +754,14 @@ QUnit.test("Appointment labels should be localized before sending to the details
         formItems = detailsForm.option("items");
 
     assert.equal(formItems[0].label.text, messageLocalization.format("dxScheduler-editorLabelTitle"), "Title is OK");
-    assert.equal(formItems[1].itemType, "empty", "Item is empty");
-    assert.equal(formItems[2].label.text, messageLocalization.format("dxScheduler-allDay"), "All-day is OK");
-    assert.equal(formItems[3].label.text, messageLocalization.format("dxScheduler-editorLabelStartDate"), "Start date is OK");
-    assert.equal(formItems[4].label.text, " ", "Start date tz is OK");
-    assert.equal(formItems[5].label.text, messageLocalization.format("dxScheduler-editorLabelEndDate"), "End date is OK");
-    assert.equal(formItems[6].label.text, " ", "End date tz is OK");
-    assert.equal(formItems[7].itemType, "empty", "Item is empty");
-    assert.equal(formItems[8].label.text, messageLocalization.format("dxScheduler-editorLabelDescription"), "Description is OK");
+    assert.equal(formItems[1].label.text, messageLocalization.format("dxScheduler-editorLabelStartDate"), "Start date is OK");
+    assert.equal(formItems[2].label.text, " ", "Start date tz is OK");
+    assert.equal(formItems[3].label.text, messageLocalization.format("dxScheduler-editorLabelEndDate"), "End date is OK");
+    assert.equal(formItems[4].label.text, " ", "End date tz is OK");
+    assert.equal(formItems[5].label.text, messageLocalization.format("dxScheduler-allDay"), "All-day is OK");
+    assert.equal(formItems[6].itemType, "empty", "Item is empty");
+    assert.equal(formItems[7].label.text, messageLocalization.format("dxScheduler-editorLabelDescription"), "Description is OK");
+    assert.equal(formItems[8].itemType, "empty", "Item is empty");
     assert.equal(formItems[9].label.text, messageLocalization.format("dxScheduler-editorLabelRecurrence"), "Recurrence is OK");
 });
 
@@ -1321,7 +1367,7 @@ QUnit.test("Appointment should have correct position while vertical dragging", f
 
     var currentPosition = translator.locate($appointment);
 
-    assert.equal(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, "Appointment position is correct");
+    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 1, "Appointment position is correct");
     pointer.dragEnd();
 });
 
@@ -1366,6 +1412,68 @@ QUnit.test("Appointment should have correct position while vertical dragging, cr
 
     assert.roughEqual(startPosition.top, currentPosition.top - headerPanelHeight - dragDistance, 1.001, "Appointment position is correct");
     pointer.dragEnd();
+});
+
+QUnit.test("Appointment should be dragged correctly in grouped timeline (T739132)", function(assert) {
+    let data = new DataSource({
+        store: [{
+            "text": "Google AdWords Strategy",
+            "ownerId": [2],
+            "startDate": new Date(2017, 4, 2, 9, 0),
+            "endDate": new Date(2017, 4, 2, 10, 30),
+            "priority": 1
+        }]
+    });
+
+    let priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2017, 4, 1),
+        startDayHour: 8,
+        endDayHour: 20,
+        cellDuration: 60,
+        editing: true,
+        groups: ["priority"],
+        resources: [{
+            fieldExpr: "priority",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }]
+    });
+
+    this.clock.tick();
+
+    let updatedItem = {
+        "text": "Google AdWords Strategy",
+        "ownerId": [2],
+        "startDate": new Date(2017, 4, 1, 8, 0),
+        "endDate": new Date(2017, 4, 1, 9, 30),
+        "priority": 1
+    };
+
+    this.scheduler.appointments.getAppointment(0).trigger(dragEvents.start);
+    this.scheduler.workSpace.getCell(0).trigger(dragEvents.enter);
+    this.scheduler.appointments.getAppointment().trigger(dragEvents.end);
+
+    let dataSourceItem = this.instance.option("dataSource").items()[0];
+
+    this.clock.tick();
+    assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, "New data is correct");
+    assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, "New data is correct");
 });
 
 QUnit.test("Appointment should have correct position while dragging from group", function(assert) {
@@ -1611,19 +1719,22 @@ QUnit.test("Appointment should push correct data to the onAppointmentUpdating ev
                 label: "Priority"
             }
         ],
-        onAppointmentUpdating: function(e) {
-            assert.equal(e.oldData.priorityId, 1, "Appointment was located in the first group");
-            assert.equal(e.newData.priorityId, 2, "Appointment located in the second group now");
-        },
+        onAppointmentUpdating: function(e) {},
         width: 800
     });
-    var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
+
+    var stub = sinon.stub(this.instance._options, "onAppointmentUpdating");
+    var $appointment = this.scheduler.appointments.getAppointment(0);
 
     $appointment.trigger(dragEvents.start);
-    $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
+    this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
 
-    assert.expect(2);
+    const result = stub.getCall(0).args[0];
+
+    assert.equal(result.oldData.priorityId, 1, "Appointment was located in the first group");
+    assert.equal(result.newData.priorityId, 2, "Appointment located in the second group now");
+
     this.clock.tick();
 });
 
@@ -1647,7 +1758,82 @@ QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is c
     assert.notDeepEqual(appointmentsInst.option("items"), items, "Appointments are repainted");
 });
 
+QUnit.test("Appointment should not twitch on drag start with horizontal dragging", function(assert) {
+    if(skipTestOnMobile(assert)) return;
+    let resourcesData = [
+        {
+            text: "Samantha Bright",
+            id: 1,
+            color: "#cb6bb2"
+        }, {
+            text: "John Heart",
+            id: 2,
+            color: "#56ca85"
+        }
+    ];
+
+    let priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    let data = [{
+        "text": "Google AdWords Strategy",
+        "ownerId": [2],
+        "startDate": new Date(2017, 4, 1, 9, 0),
+        "endDate": new Date(2017, 4, 1, 10, 30),
+        "priority": 1
+    }, {
+        "text": "New Brochures",
+        "ownerId": [1],
+        "startDate": new Date(2017, 4, 1, 11, 30),
+        "endDate": new Date(2017, 4, 1, 14, 15),
+        "priority": 2
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineDay"],
+        currentView: "timelineDay",
+        currentDate: new Date(2017, 4, 1),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20,
+        cellDuration: 60,
+        groups: ["priority"],
+        resources: [{
+            fieldExpr: "ownerId",
+            allowMultiple: true,
+            dataSource: resourcesData,
+            label: "Owner",
+            useColorAsDefault: true
+        }, {
+            fieldExpr: "priority",
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: "Priority"
+        }],
+        height: 400
+    });
+    let $appointment = this.scheduler.appointments.getAppointment(),
+        dragDistance = 50;
+
+    const defaultPosition = translator.locate($appointment);
+    let pointer = pointerMock($appointment).start();
+    pointer.dragStart().drag(dragDistance, 0);
+    let startPosition = translator.locate($appointment);
+    assert.roughEqual(defaultPosition.left, startPosition.left - dragDistance, 1, "Appointment start position does not twitch after drag start");
+});
+
 QUnit.test("Appointment should have correct position while horizontal dragging", function(assert) {
+    if(skipTestOnMobile(assert)) return;
     this.createInstance({
         height: 500,
         editing: true,
@@ -1660,9 +1846,38 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
         }]
     });
 
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+    let $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
         dragDistance = 150,
         timePanelWidth = this.instance.$element().find(".dx-scheduler-time-panel").outerWidth(true);
+
+    let pointer = pointerMock($appointment).start(),
+        startPosition = translator.locate($appointment);
+
+    pointer.dragStart().drag(dragDistance, 0);
+
+    let currentPosition = translator.locate($appointment);
+
+    assert.roughEqual(startPosition.left, currentPosition.left - dragDistance + timePanelWidth, 2, "Appointment position is correct");
+    pointer.dragEnd();
+});
+
+QUnit.test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", function(assert) {
+    if(skipTestOnMobile(assert)) return;
+    this.createInstance({
+        height: 500,
+        editing: true,
+        currentDate: new Date(2015, 1, 9),
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 1),
+            endDate: new Date(2015, 1, 9, 1, 30)
+        }],
+        crossScrollingEnabled: true,
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        dragDistance = 150;
 
 
     var pointer = pointerMock($appointment).start(),
@@ -1672,11 +1887,12 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
 
     var currentPosition = translator.locate($appointment);
 
-    assert.equal(startPosition.left, currentPosition.left - dragDistance + timePanelWidth, "Appointment position is correct");
+    assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
     pointer.dragEnd();
 });
 
 QUnit.test("Appointment should have correct position while horizontal dragging in scrolled date table, crossScrollingEnabled = true", function(assert) {
+    if(skipTestOnMobile(assert)) return;
     this.createInstance({
         height: 500,
         width: 800,
@@ -2409,434 +2625,6 @@ QUnit.test("Rival appointments should have correct positions on month view, rtl 
     assert.notEqual($longAppointment.position().top, $shortAppointment.position().top, "Appointments positions are correct");
 });
 
-QUnit.test("DropDown appointment button should have correct coordinates", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: ["month"],
-        width: 840,
-        currentView: "month",
-        firstDayOfWeek: 1
-    });
-
-    sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
-
-    this.instance.option("dataSource", [
-        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
-    ]);
-
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
-
-    assert.equal($dropDownButton.length, 0, "DropDown button has not been rendered yet");
-
-    this.instance.addAppointment({ startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) });
-
-    $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
-    var buttonCoordinates = translator.locate($dropDownButton),
-        expectedCoordinates = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(9).position();
-
-    assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
-    assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left, 1.001, "Left coordinate is OK");
-    assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
-});
-
-QUnit.test("DropDown appointment button should have correct width when intervalCount is set", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: [{ type: "month", intervalCount: 2 }],
-        width: 850,
-        maxAppointmentsPerCell: 2,
-        currentView: "month",
-        firstDayOfWeek: 1
-    });
-
-    this.instance.option("dataSource", [
-        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
-    ]);
-
-    var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
-        $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
-
-    assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 60, 1.5, "DropDown button has correct width");
-
-    this.instance.option("views", ["month"]);
-
-    $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
-
-    assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 36, 1.5, "DropDown button has correct width");
-});
-
-QUnit.test("DropDown appointment buttons should have correct quantity with multiday appointments", function(assert) {
-    this.createInstance({
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 20),
-        width: 470,
-        height: 650
-    });
-
-    this.instance.option("dataSource", [
-        { text: 'a', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-        { text: 'b', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-        { text: 'c', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) },
-        { text: 'd', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) },
-        { text: 'e', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) },
-        { text: 'f', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) }
-    ]);
-
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
-
-    assert.equal($dropDownButton.length, 3, "There are 3 drop down buttons");
-});
-
-QUnit.test("Many dropDown appts with one multi day task should be grouped correctly", function(assert) {
-    this.createInstance({
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2015, 4, 29),
-        width: 800,
-        height: 500
-    });
-
-    this.instance.option("dataSource", [
-        { text: '1', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: '2', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: '3', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: '4', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: '5', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: '6', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: '7', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: '8', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 29, 1) },
-        { text: 'long appt', startDate: new Date(2015, 4, 29), endDate: new Date(2015, 4, 31, 1) }
-    ]);
-
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(ddAppointments.length, 7, "There are 7 drop down appts");
-});
-
-QUnit.test("Many dropDown appts should be grouped correctly with one multi day task which started before dropDown (T525443)", function(assert) {
-    this.createInstance({
-        views: ['month'],
-        currentView: 'month',
-        maxAppointmentsPerCell: 1,
-        currentDate: new Date(2017, 5, 25),
-        width: 800,
-        height: 950
-    });
-
-    this.instance.option("dataSource", [
-        { text: 'long appt', startDate: new Date(2017, 5, 8, 9, 0), endDate: new Date(2017, 5, 20, 9, 15) },
-        { text: '1', startDate: new Date(2017, 5, 11, 9, 30), endDate: new Date(2017, 5, 11, 11, 30) },
-        { text: '2', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
-        { text: '3', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
-        { text: '4', startDate: new Date(2017, 5, 11, 8, 0), endDate: new Date(2017, 5, 11, 23, 59) },
-        { text: '5', startDate: new Date(2017, 5, 11, 9, 45), endDate: new Date(2017, 5, 11, 11, 15) },
-        { text: '6', startDate: new Date(2017, 5, 11, 11, 0), endDate: new Date(2017, 5, 11, 12, 0) },
-        { text: '7', startDate: new Date(2017, 5, 11, 11, 0), endDate: new Date(2017, 5, 11, 13, 30) },
-        { text: '8', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
-        { text: '9', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
-        { text: '10', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
-        { text: '11', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
-        { text: '12', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
-        { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) }
-    ]);
-
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(ddAppointments.length, 13, "There are 13 drop down appts");
-});
-
-QUnit.test("DropDown appointment button should have correct coordinates: rtl mode", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: ["month"],
-        width: 840,
-        currentView: "month",
-        firstDayOfWeek: 1,
-        rtlEnabled: true
-    });
-
-    sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
-
-    this.instance.option("dataSource", [
-        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
-    ]);
-
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments"),
-        buttonCoordinates = translator.locate($dropDownButton),
-        $relatedCell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(9),
-        expectedCoordinates = $relatedCell.position(),
-        rtlOffset = $relatedCell.outerWidth() - 36;
-
-    assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
-    assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, "Left coordinate is OK");
-    assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
-});
-
-QUnit.test("DropDown appointment buttons should have correct quantity with multiday appointments", function(assert) {
-    this.createInstance({
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 20),
-        width: 470,
-        height: 650
-    });
-
-    this.instance.option("dataSource", [
-        { text: 'a', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-        { text: 'b', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-        { text: 'c', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) },
-        { text: 'd', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) },
-        { text: 'e', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) },
-        { text: 'f', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 15) }
-    ]);
-
-    var $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
-
-    assert.equal($dropDownButton.length, 3, "There are 3 drop down buttons");
-});
-
-QUnit.test("DropDown appointment should raise the onAppointmentClick event", function(assert) {
-    var spy = sinon.spy();
-    var appointments = [
-        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
-    ];
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: ["month"],
-        width: 840,
-        currentView: "month",
-        firstDayOfWeek: 1,
-        onAppointmentClick: function(args) {
-            assert.equal(args.component, instance, "dxScheduler is 'component'");
-            assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
-            assert.deepEqual(args.appointmentData, appointments[4], "Appointment data is OK");
-            assert.equal($(args.appointmentElement).get(0), dropDown._list.$element().find(".dx-list-item").eq(2).get(0), "Appointment element is OK");
-            assert.ok(args.event instanceof $.Event, "Event is OK");
-
-            assert.notOk(args.hasOwnProperty('itemData'));
-            assert.notOk(args.hasOwnProperty('itemIndex'));
-            assert.notOk(args.hasOwnProperty('itemElement'));
-        }
-    });
-
-    var showAppointmentPopup = this.instance.showAppointmentPopup;
-    this.instance.showAppointmentPopup = spy;
-    try {
-        var instance = this.instance;
-
-        sinon.stub(instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
-
-        instance.option("dataSource", appointments);
-
-        var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-        dropDown.open();
-        $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
-
-    } finally {
-        this.instance.showAppointmentPopup = showAppointmentPopup;
-    }
-});
-
-QUnit.test("DropDown appointment should process the onAppointmentClick event correctly if e.cancel = true", function(assert) {
-    var spy = sinon.spy();
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: ["month"],
-        width: 840,
-        currentView: "month",
-        firstDayOfWeek: 1,
-        onAppointmentClick: function(e) {
-            e.cancel = true;
-        }
-    });
-    var showAppointmentPopup = this.instance.showAppointmentPopup;
-    this.instance.showAppointmentPopup = spy;
-    try {
-        var appointments = [
-            { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
-            { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
-            { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
-            { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
-            { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
-            { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
-            { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
-        ];
-
-        var instance = this.instance;
-
-        instance.option("dataSource", appointments);
-
-        var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-        dropDown.open();
-        $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
-
-        assert.notOk(spy.calledOnce, "showAppointmentPopup wasn't called");
-    } finally {
-        this.instance.showAppointmentPopup = showAppointmentPopup;
-    }
-});
-
-QUnit.test("DropDown appointment should be painted depend on resource color", function(assert) {
-    var appointments = [
-        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-
-        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-        { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
-    ];
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: ["month"],
-        width: 840,
-        currentView: "month",
-        firstDayOfWeek: 1,
-        resources: [
-            {
-                field: "roomId",
-                dataSource: [
-                    { id: 1, color: "#ff0000" },
-                    { id: 2, color: "#0000ff" }
-                ]
-            }
-        ]
-    });
-
-    sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
-
-    this.instance.option("dataSource", appointments);
-
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-});
-
-QUnit.test("DropDown appointment should be painted depend on resource color when resourses store is asynchronous", function(assert) {
-    var appointments = [
-        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-
-        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-        { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
-    ];
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: ["month"],
-        width: 840,
-        currentView: "month",
-        firstDayOfWeek: 1,
-        resources: [
-            {
-                field: "roomId",
-                allowMultiple: true,
-                dataSource: new DataSource({
-                    store: new CustomStore({
-                        load: function() {
-                            var d = $.Deferred();
-                            setTimeout(function() {
-                                d.resolve([
-                                    { id: 1, text: "Room 1", color: "#ff0000" },
-                                    { id: 2, text: "Room 2", color: "#0000ff" }
-                                ]);
-                            }, 300);
-
-                            return d.promise();
-                        }
-                    })
-                })
-            }
-        ]
-    });
-
-    sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
-
-    this.instance.option("dataSource", appointments);
-
-    this.clock.tick(300);
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "borderLeftColor"), "#ff0000", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "borderLeftColor"), "#0000ff", "Appointment color is OK");
-});
-
-QUnit.test("DropDown appointments should not be duplicated when items option change (T503748)", function(assert) {
-    this.createInstance({
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 20),
-        dataSource: [
-            { text: 'a', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-            { text: 'b', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-            { text: 'c', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-            { text: 'd', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-            { text: 'e', startDate: new Date(2016, 8, 14), endDate: new Date(2016, 8, 15) },
-            { text: 'f', startDate: new Date(2016, 8, 12), endDate: new Date(2016, 8, 12, 2) }
-        ],
-        width: 470,
-        height: 650
-    });
-
-    this.instance.addAppointment({
-        text: "g",
-        startDate: new Date(2016, 8, 12),
-        endDate: new Date(2016, 8, 12, 1)
-    });
-
-    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    dropDown.open();
-    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
-
-    assert.equal(ddAppointments.length, 3, "There are 3 drop down appts");
-});
-
 QUnit.test("Recurrence appointment should be rendered correctly when currentDate was changed: month view", function(assert) {
     var appointment = {
         startDate: new Date(2015, 1, 14, 0),
@@ -3013,86 +2801,7 @@ QUnit.test("Appointment should be rendered correctly with expressions on custom 
     assert.equal($appointment.find(".custom-title").text(), "abc", "Text is correct on init");
 });
 
-QUnit.test("DropDown appointment should be rendered correctly with expressions on custom template", function(assert) {
-    var startDate = new Date(2015, 1, 4, 1),
-        endDate = new Date(2015, 1, 4, 2);
-    var appointments = [{
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 1"
-    }, {
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 2"
-    }, {
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 3"
-    }];
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 4),
-        views: ["month"],
-        currentView: "month",
-        firstDayOfWeek: 1,
-        dataSource: appointments,
-        startDateExpr: "Start",
-        endDateExpr: "End",
-        textExpr: "Text",
-        height: 500,
-        maxAppointmentsPerCell: "auto",
-        dropDownAppointmentTemplate: function(data) {
-            return "<div class='custom-title'>" + data.Text + "</div>";
-        }
-    });
-
-    $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
-
-    var $appointment = $(".dx-dropdownmenu-list .dx-item").first();
-
-    assert.equal($appointment.find(".custom-title").text(), "Item 2", "Text is correct on init");
-});
-
-QUnit.test("DropDown button should be rendered correctly when appointmentCollectorTemplate is used", function(assert) {
-    var startDate = new Date(2015, 1, 4, 1),
-        endDate = new Date(2015, 1, 4, 2);
-    var appointments = [{
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 1"
-    }, {
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 2"
-    }, {
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 3"
-    }];
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 4),
-        views: ["month"],
-        currentView: "month",
-        firstDayOfWeek: 1,
-        dataSource: appointments,
-        startDateExpr: "Start",
-        endDateExpr: "End",
-        textExpr: "Text",
-        height: 500,
-        maxAppointmentsPerCell: "auto",
-        appointmentCollectorTemplate: function(data) {
-            return "<div class='button-title'>Appointment count is " + data.appointmentCount + "</div>";
-        }
-    });
-
-    var $dropDown = $(".dx-scheduler-dropdown-appointments").eq(0);
-
-    assert.equal($dropDown.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
-});
-
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
-
     var startDate = new Date(2015, 1, 4, 1),
         endDate = new Date(2015, 1, 4, 2);
     var appointment = {
@@ -3126,56 +2835,6 @@ QUnit.test("dxScheduler should render custom appointment template with render fu
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
 
     assert.equal($appointment.text(), "text", "container is correct");
-});
-
-QUnit.test("dxScheduler should render dropDownAppointment appointment template with render function that returns dom node", function(assert) {
-    var startDate = new Date(2015, 1, 4, 1),
-        endDate = new Date(2015, 1, 4, 2);
-    var appointments = [{
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 1"
-    }, {
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 2"
-    }, {
-        Start: startDate.getTime(),
-        End: endDate.getTime(),
-        Text: "Item 3"
-    }];
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 4),
-        views: ["month"],
-        currentView: "month",
-        firstDayOfWeek: 1,
-        dataSource: appointments,
-        startDateExpr: "Start",
-        endDateExpr: "End",
-        textExpr: "Text",
-        height: 500,
-        maxAppointmentsPerCell: "auto",
-        dropDownAppointmentTemplate: "dropDownAppointmentTemplate",
-        integrationOptions: {
-            templates: {
-                "dropDownAppointmentTemplate": {
-                    render: function(args) {
-                        var $element = $("<span>")
-                            .addClass("dx-template-wrapper")
-                            .text("text");
-
-                        return $element.get(0);
-                    }
-                }
-            }
-        }
-    });
-
-    $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
-    var $appointment = $(".dx-dropdownmenu-list .dx-item").first();
-
-    assert.equal($appointment.text(), "text", "Text is correct on init");
 });
 
 QUnit.test("Appointment should have right position, if it's startDate time less than startDayHour option value", function(assert) {
@@ -3278,24 +2937,48 @@ QUnit.test("Rival long appointments should have right position on timeline month
     assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
 });
 
-QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
+QUnit.test("Long appointment part should not be rendered on timeline month view (T678380)", function(assert) {
     var appointment = {
-        startDate: new Date(2016, 1, 25, 8, 0),
-        endDate: new Date(2016, 2, 1, 8, 0)
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
     };
 
     this.createInstance({
-        currentDate: new Date(2016, 2, 1),
+        currentDate: new Date(2019, 3, 2),
         currentView: "timelineMonth",
+        views: ["timelineMonth"],
+        recurrenceRuleExpr: null,
         startDayHour: 8,
         firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
         dataSource: [appointment]
     });
 
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).get(0),
-        $cell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0);
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "appointment-part was not rendered");
+});
 
-    assert.roughEqual($appointment.getBoundingClientRect().width, $cell.getBoundingClientRect().width, 1.1, "appointment-part width is correct");
+QUnit.test("Long appointment part should not be rendered on timeline workWeek view (T678380)", function(assert) {
+    var appointment = {
+        "text": "Ends april 1st at 7:59 am",
+        "startDate": new Date(2019, 2, 20, 9, 0),
+        "endDate": new Date(2019, 3, 1, 7, 59)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2019, 3, 2),
+        currentView: "timelineWorkWeek",
+        views: ["timelineWorkWeek"],
+        recurrenceRuleExpr: null,
+        startDayHour: 8,
+        firstDayOfWeek: 0,
+        endDayHour: 18,
+        cellDuration: 60,
+        dataSource: [appointment]
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "appointment-part was not rendered");
 });
 
 QUnit.test("Appointment should have right width on timeline week view", function(assert) {
@@ -3498,30 +3181,6 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
         cellsToAppointment = 10;
 
     assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, "Task has a right width");
-});
-
-QUnit.test("DropDown appointment button should have correct width on timeline view", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        views: [{ type: "timelineDay", name: "timelineDay" }],
-        width: 850,
-        maxAppointmentsPerCell: 2,
-        currentView: "timelineDay"
-    });
-
-    this.instance.option("dataSource", [
-        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
-        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
-    ]);
-
-    var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
-        $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0);
-
-    assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 4, 1.5, "DropDown button has correct width");
 });
 
 QUnit.test("Appointment with zero-duration should be rendered correctly(T443143)", function(assert) {
@@ -4124,45 +3783,18 @@ QUnit.test("Tail of long appointment should have a right position, groupByDate =
     assert.roughEqual($appointmentTail.position().left, $cell.position().left, 1.001, "Tail has a right position");
 });
 
-QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source", function(assert) {
-    var dataSource = [{
-        startDate: new Date(2015, 4, 24, 9),
-        endDate: new Date(2015, 4, 24, 11),
-        allDay: true,
-        text: "Task 1"
-    }, {
-        startDate: new Date(2015, 4, 24, 15),
-        endDate: new Date(2015, 4, 24, 20),
-        allDay: true,
-        text: "Task 2"
-    }, {
-        startDate: new Date(2015, 4, 24, 45),
-        endDate: new Date(2015, 4, 24, 55),
-        allDay: true,
-        text: "Task 3"
-    }];
-    this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
-});
+QUnit.test("Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recruiting students",
+            startDate: new Date(2018, 2, 26, 10, 0),
+            endDate: new Date(2018, 2, 26, 11, 0),
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 3, 27)
+    });
 
-QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule", function(assert) {
-    var dataSource = [{
-        startDate: new Date(2015, 4, 24, 9),
-        endDate: new Date(2015, 4, 24, 11),
-        recurrenceRule: "FREQ=DAILY;COUNT=3",
-        allDay: true,
-        text: "Task 1"
-    }, {
-        startDate: new Date(2015, 4, 24, 19),
-        endDate: new Date(2015, 4, 24, 31),
-        allDay: true,
-        recurrenceRule: "FREQ=DAILY;COUNT=2",
-        text: "Task 2"
-    }, {
-        startDate: new Date(2015, 4, 24, 24),
-        endDate: new Date(2015, 4, 24, 34),
-        allDay: true,
-        recurrenceRule: "FREQ=DAILY;COUNT=4",
-        text: "Task 3"
-    }];
-    this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, "Scheduler appointments are rendered without compact ones");
 });

@@ -593,6 +593,66 @@ QUnit.test('labels straight lines (indent = 0)', function(assert) {
         ['60.0', '60.0', '100.0', '100.0']);
 });
 
+// T725337
+QUnit.test("Half circle up - leave margin on bottom", function(assert) {
+    this.$container.width(800).height(200).dxBarGauge({
+        resolveLabelOverlapping: "none",
+        animation: false,
+        geometry: {
+            startAngle: 180,
+            endAngle: 0
+        },
+        values: [100]
+    });
+    this.checkBars(assert, { x: 400, y: 195, startAngle: 0, endAngle: 180 }, [[165, 49]], [[180, 0]]);
+    this.checkTexts(assert, { x: 400, y: 195, textRadius: 185, lineWidth: 2 },
+        [[49, 90]],
+        [[595, 188]],
+        ['100.0']);
+});
+
+// T725337
+QUnit.test("Half circle down - leave margin on top", function(assert) {
+    this.$container.width(800).height(200).dxBarGauge({
+        resolveLabelOverlapping: "none",
+        animation: false,
+        geometry: {
+            startAngle: 0,
+            endAngle: 180
+        },
+        values: [100]
+    });
+    this.checkBars(assert, { x: 400, y: 5, startAngle: -180, endAngle: 0 }, [[165, 49]], [[0, -180]]);
+});
+
+// T725337
+QUnit.test("Half circle left - leave margin on right", function(assert) {
+    this.$container.width(300).height(800).dxBarGauge({
+        resolveLabelOverlapping: "none",
+        animation: false,
+        geometry: {
+            startAngle: 90,
+            endAngle: -90
+        },
+        values: [100]
+    });
+    this.checkBars(assert, { x: 10, y: 400, startAngle: -90, endAngle: 90 }, [[250, 75]], [[90, -90]]);
+});
+
+// T725337
+QUnit.test("Half circle right - leave margin on left", function(assert) {
+    this.$container.width(300).height(800).dxBarGauge({
+        resolveLabelOverlapping: "none",
+        animation: false,
+        geometry: {
+            startAngle: -90,
+            endAngle: 90
+        },
+        values: [100]
+    });
+    this.checkBars(assert, { x: 290, y: 400, startAngle: 90, endAngle: 270 }, [[250, 75]], [[270, 90]]);
+});
+
 QUnit.module('Colors', $.extend({}, environment, {
     checkColors: function(assert, backgroundColor, colors, lineColor, textColor) {
         var elements = this.getBarsGroup().children,

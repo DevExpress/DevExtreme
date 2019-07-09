@@ -1,3 +1,11 @@
+.dx-size-default() {
+    @MATERIAL_PROGRESSBAR_STATUS_PADDING: 8px;
+}
+
+.dx-size-compact() {
+    @MATERIAL_PROGRESSBAR_STATUS_PADDING: 4px;
+}
+
 @MATERIAL_BAR_HEIGHT: 4px;
 @MATERIAL_BACKGROUND_WIDTH: 90%;
 @MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT: -90deg, transparent 5%, @progressbar-range-indeterminate-color, transparent 95%;
@@ -11,7 +19,6 @@
     position: relative;
     background-color: @progressbar-range-bg;
     margin-top: -1px;
-
     box-sizing: content-box;
 }
 
@@ -19,9 +26,9 @@
     height: @MATERIAL_BAR_HEIGHT;
     background-color: @progressbar-bg;
     background-size: @MATERIAL_BACKGROUND_WIDTH 5px;
-
     animation: loader 2s linear infinite;
     .gradient-linear(@MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
+
     background-repeat: repeat;
 }
 
@@ -37,7 +44,7 @@
 }
 
 .dx-progressbar-status {
-    padding-top: 8px;
+    padding-top: @MATERIAL_PROGRESSBAR_STATUS_PADDING;
     color: @progressbar-label-color;
 
     .dx-progressbar .dx-position-right & {
@@ -46,32 +53,14 @@
 }
 
 .dx-rtl {
-    .dx-progressbar, &.dx-progressbar {
+    .dx-progressbar,
+    &.dx-progressbar {
         .dx-progressbar-animating-container {
             animation: loader-rtl 2s linear infinite;
             .gradient-linear(@MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
+
             background-repeat: repeat;
         }
-    }
-}
-
-@-webkit-keyframes loader {
-    0% {
-        background-position-x: 0;
-    }
-
-    100% {
-        background-position-x: 900%;
-    }
-}
-
-@-moz-keyframes loader {
-    0% {
-        background-position-x: 0;
-    }
-
-    100% {
-        background-position-x: 900%;
     }
 }
 
@@ -82,26 +71,6 @@
 
     100% {
         background-position-x: 900%;
-    }
-}
-
-@-webkit-keyframes loader-rtl {
-    0% {
-        background-position-x: 0;
-    }
-
-    100% {
-        background-position-x: -900%;
-    }
-}
-
-@-moz-keyframes loader-rtl {
-    0% {
-        background-position-x: 0;
-    }
-
-    100% {
-        background-position-x: -900%;
     }
 }
 

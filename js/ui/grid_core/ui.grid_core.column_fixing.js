@@ -7,6 +7,7 @@ import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import browser from "../../core/utils/browser";
+import translator from "../../animation/translator";
 
 var CONTENT_CLASS = "content",
     CONTENT_FIXED_CLASS = "content-fixed",
@@ -196,12 +197,19 @@ var baseFixedColumns = {
             isEmptyCell,
             transparentColumnIndex,
             alignByFixedColumnCellCount,
-            column = options.column;
+            column = options.column,
+            isFixedTableRendering = that._isFixedTableRendering,
+            isGroupCell = options.rowType === "group" && isDefined(column.groupIndex);
 
-        if(!that._isFixedTableRendering && that._isFixedColumns) {
+        // T747718
+        if(isFixedTableRendering && isGroupCell && !column.command) {
+            $cell.css("pointerEvents", "none");
+        }
+
+        if(!isFixedTableRendering && that._isFixedColumns) {
             isEmptyCell = column.fixed || column.command;
 
-            if(options.rowType === "group" && isDefined(column.groupIndex)) {
+            if(isGroupCell) {
                 isEmptyCell = false;
                 if(options.row.summaryCells && options.row.summaryCells.length) {
                     columns = that._columnsController.getVisibleColumns();
@@ -219,7 +227,7 @@ var baseFixedColumns = {
             }
 
             if(isEmptyCell) {
-                if(that.option("legacyRendering") || (column.command || options.rowType === "group")) {
+                if(that.option("legacyRendering") || (column.command && column.type !== "buttons" || options.rowType === "group")) {
                     $cell
                         .html("&nbsp;")
                         .addClass(column.cssClass);
@@ -666,7 +674,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             column = options.columns[columnIndex];
 
         if(options.isFixed) {
-            return column.fixed && (result || column.fixedPosition === "right") || column.command === "edit";
+            return column.fixed && (result || column.fixedPosition === "right");
         }
 
         return result && !column.fixed;
@@ -804,8 +812,40 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
     },
 
+    _getElasticScrollTop: function(e) {
+        let maxScrollTop,
+            scrollableContent,
+            scrollableContainer,
+            elasticScrollTop = 0,
+            scrollbarWidth = this.getScrollbarWidth(true);
+
+        if(e.scrollOffset.top < 0) {
+            elasticScrollTop = -e.scrollOffset.top;
+        } else if(e.reachedBottom) {
+            scrollableContent = this._findContentElement();
+            scrollableContainer = e.component._container();
+            maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - scrollableContainer.height(), 0);
+            elasticScrollTop = maxScrollTop - e.scrollOffset.top;
+        }
+
+        return elasticScrollTop;
+    },
+
+    _applyElasticScrolling: function(e) {
+        if(this._fixedTableElement) {
+            let elasticScrollTop = this._getElasticScrollTop(e);
+
+            if(Math.ceil(elasticScrollTop) !== 0) {
+                translator.move(this._fixedTableElement, { top: elasticScrollTop });
+            } else {
+                this._fixedTableElement.css("transform", "");
+            }
+        }
+    },
+
     _handleScroll: function(e) {
         this._updateFixedTablePosition(e.scrollOffset.top, true);
+        this._applyElasticScrolling(e);
         this.callBase(e);
     },
 

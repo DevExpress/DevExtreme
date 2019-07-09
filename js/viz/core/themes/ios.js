@@ -9,8 +9,8 @@ themeModule.registerTheme({
     backgroundColor: "#ffffff",
     primaryTitleColor: BLACK,
     secondaryTitleColor: SECONDARY_TEXT_COLOR,
-    axisColor: "#ececec",
-    axisLabelColor: SECONDARY_TEXT_COLOR,
+    gridColor: "#ececec",
+    axisColor: SECONDARY_TEXT_COLOR,
     legend: {
         font: {
             color: BLACK

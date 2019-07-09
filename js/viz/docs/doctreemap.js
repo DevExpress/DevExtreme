@@ -8,7 +8,6 @@ var dxTreeMap = {
     /**
     * @name dxTreeMapOptions.margin
     * @hidden
-    * @inheritdoc
     */
     margin: undefined,
     /**
@@ -72,6 +71,7 @@ var dxTreeMap = {
      * @name dxTreeMapOptions.resolveLabelOverflow
      * @type Enums.TreeMapResolveLabelOverflow
      * @default 'hide'
+     * @deprecated dxTreeMapOptions.tile.label.textOverflow
      */
     resolveLabelOverflow: 'hide',
     /**
@@ -186,7 +186,19 @@ var dxTreeMap = {
                 color: undefined,
                 opacity: undefined,
                 weight: undefined
-            }
+            },
+            /**
+            * @name dxTreeMapOptions.tile.label.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+            * @name dxTreeMapOptions.tile.label.textOverflow
+            * @type Enums.VizTextOverflow
+            * @default "ellipsis"
+            */
+           textOverflow: "ellipsis"
         }
     },
     /**
@@ -307,7 +319,13 @@ var dxTreeMap = {
                 color: undefined,
                 opacity: undefined,
                 weight: undefined
-            }
+            },
+            /**
+            * @name dxTreeMapOptions.group.label.textOverflow
+            * @type Enums.VizTextOverflow
+            * @default "ellipsis"
+            */
+           textOverflow: "ellipsis"
         },
         /**
         * @name dxTreeMapOptions.group.hoverEnabled
@@ -384,7 +402,6 @@ var dxTreeMap = {
     /**
     * @name dxTreeMapOptions.tooltip
     * @type object
-    * @inheritdoc
     */
     tooltip: {
         /**

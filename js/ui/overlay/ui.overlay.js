@@ -151,7 +151,6 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -634,6 +633,7 @@ var Overlay = Widget.inherit({
         });
 
         if(this._parentHidden) {
+            this._isHidden = true;
             return deferred.resolve();
         }
 
@@ -1230,22 +1230,24 @@ var Overlay = Widget.inherit({
 
     _renderGeometryImpl: function() {
         this._stopAnimation();
-
         this._normalizePosition();
-        this._fixHeightAfterSafariAddressBarResizing();
         this._renderShading();
+        this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
         var resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
     },
 
-    _renderShading: function() {
+    _fixWrapperPosition: function() {
         var $wrapper = this._$wrapper,
             $container = this._getContainer();
 
         $wrapper.css("position", this._isWindow($container) && !iOS ? "fixed" : "absolute");
+    },
 
+    _renderShading: function() {
+        this._fixWrapperPosition();
         this._renderShadingDimensions();
         this._renderShadingPosition();
     },
@@ -1565,6 +1567,7 @@ var Overlay = Widget.inherit({
     */
     repaint: function() {
         this._renderGeometry();
+        domUtils.triggerResizeEvent(this._$content);
     }
 });
 

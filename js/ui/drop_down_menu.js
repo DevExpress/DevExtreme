@@ -147,7 +147,6 @@ var DropDownMenu = Widget.inherit({
              * @name dxDropDownMenuOptions.activeStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -155,7 +154,6 @@ var DropDownMenu = Widget.inherit({
              * @name dxDropDownMenuOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -276,7 +274,6 @@ var DropDownMenu = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
         this._defaultTemplates["content"] = new ChildDefaultTemplate("content", this);
     },
 
@@ -415,7 +412,7 @@ var DropDownMenu = Widget.inherit({
             pageLoadMode: "scrollBottom",
             indicateLoading: false,
             noDataText: "",
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            itemTemplate: this.option("itemTemplate"),
             onItemClick: (function(e) {
                 if(this.option("closeOnClick")) {
                     this.option("opened", false);

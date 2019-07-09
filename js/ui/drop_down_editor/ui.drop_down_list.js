@@ -12,9 +12,10 @@ var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     eventUtils = require("../../events/utils"),
     devices = require("../../core/devices"),
+    dataQuery = require("../../data/query"),
+    each = require("../../core/utils/iterator").each,
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
-    themes = require("../themes"),
     ChildDefaultTemplate = require("../widget/child_default_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
     DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
@@ -208,27 +209,22 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions.fieldTemplate
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.fieldRender
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.contentTemplate
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.contentRender
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.applyValueMode
             * @hidden
-            * @inheritdoc
             */
 
             popupWidthExtension: 0
@@ -243,14 +239,6 @@ var DropDownList = DropDownEditor.inherit({
                 },
                 options: {
                     popupPosition: { offset: { v: -6 } }
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    popupWidthExtension: 32
                 }
             },
             {
@@ -275,7 +263,6 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions.value
             * @ref
-            * @inheritdoc
             */
             value: true,
             selectedItem: true,
@@ -333,6 +320,44 @@ var DropDownList = DropDownEditor.inherit({
         if(this._list && this._list.initialOption("focusStateEnabled")) {
             this._focusInput();
         }
+    },
+
+    _fitIntoRange: function(value, start, end) {
+        if(value > end) {
+            return start;
+        }
+        if(value < start) {
+            return end;
+        }
+        return value;
+    },
+
+    _items: function() {
+        var items = this._getPlainItems(!this._list && this._dataSource.items());
+
+        var availableItems = new dataQuery(items).filter("disabled", "<>", true).toArray();
+
+        return availableItems;
+    },
+
+    _calcNextItem: function(step) {
+        var items = this._items();
+        var nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
+        return items[nextIndex];
+    },
+
+    _getSelectedIndex: function() {
+        var items = this._items();
+        var selectedItem = this.option("selectedItem");
+        var result = -1;
+        each(items, (function(index, item) {
+            if(this._isValueEquals(item, selectedItem)) {
+                result = index;
+                return false;
+            }
+        }).bind(this));
+
+        return result;
     },
 
     _createPopup: function() {
@@ -576,7 +601,7 @@ var DropDownList = DropDownEditor.inherit({
             noDataText: this.option("noDataText"),
             grouped: this.option("grouped"),
             onContentReady: this._listContentReadyHandler.bind(this),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            itemTemplate: this.option("itemTemplate"),
             indicateLoading: false,
             keyExpr: this._getCollectionKeyExpr(),
             displayExpr: this._displayGetterExpr(),
@@ -838,6 +863,17 @@ var DropDownList = DropDownEditor.inherit({
 
     _setCollectionWidgetOption: function() {
         this._setListOption.apply(this, arguments);
+    },
+
+    _setSubmitValue: function() {
+        var value = this.option("value"),
+            submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
+
+        this._getSubmitElement().val(submitValue);
+    },
+
+    _shouldUseDisplayValue: function(value) {
+        return this.option("valueExpr") === "this" && typeUtils.isObject(value);
     },
 
     _optionChanged: function(args) {

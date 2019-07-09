@@ -23,5 +23,17 @@ module.exports = [
     { themeId: 31, name: "material", colorScheme: "purple-dark", text: "Purple Dark", group: "Material Design" },
     { themeId: 27, name: "material", colorScheme: "teal-light", text: "Teal Light", group: "Material Design" },
     { themeId: 32, name: "material", colorScheme: "teal-dark", text: "Teal Dark", group: "Material Design" },
+
+    { themeId: 33, name: "material", colorScheme: "blue-light-compact", text: "Blue Light Compact", group: "Material Design (Compact)" },
+    { themeId: 34, name: "material", colorScheme: "blue-dark-compact", text: "Blue Dark Compact", group: "Material Design (Compact)" },
+    { themeId: 35, name: "material", colorScheme: "orange-light-compact", text: "Orange Light Compact", group: "Material Design (Compact)" },
+    { themeId: 36, name: "material", colorScheme: "orange-dark-compact", text: "Orange Dark Compact", group: "Material Design (Compact)" },
+    { themeId: 37, name: "material", colorScheme: "lime-light-compact", text: "Lime Light Compact", group: "Material Design (Compact)" },
+    { themeId: 38, name: "material", colorScheme: "lime-dark-compact", text: "Lime Dark Compact", group: "Material Design (Compact)" },
+    { themeId: 39, name: "material", colorScheme: "purple-light-compact", text: "Purple Light Compact", group: "Material Design (Compact)" },
+    { themeId: 40, name: "material", colorScheme: "purple-dark-compact", text: "Purple Dark Compact", group: "Material Design (Compact)" },
+    { themeId: 41, name: "material", colorScheme: "teal-light-compact", text: "Teal Light Compact", group: "Material Design (Compact)" },
+    { themeId: 42, name: "material", colorScheme: "teal-dark-compact", text: "Teal Dark Compact", group: "Material Design (Compact)" },
+
     { themeId: 3, name: "ios7", colorScheme: "default", text: "iOS", group: "Mobile" }
 ];

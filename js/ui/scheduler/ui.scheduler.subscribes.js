@@ -41,7 +41,8 @@ const subscribes = {
             allDay = this.appointmentTakesAllDay(appointmentData),
             startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0],
             originalStartDate = options.originalStartDate || startDate,
-            renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
+            renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance(),
+            firstDayOfWeek = this.option("firstDayOfWeek");
 
         let recurrenceOptions = {
             rule: recurrenceRule,
@@ -49,14 +50,18 @@ const subscribes = {
             start: originalStartDate,
             end: endDate,
             min: startViewDate,
-            max: dateRange[1]
+            max: dateRange[1],
+            firstDayOfWeek: firstDayOfWeek
         };
 
-        let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions);
+        let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions),
+            initialDates;
 
         if(!dates.length) {
             dates.push(startDate);
+            initialDates = dates;
         } else {
+            initialDates = dates;
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption("startDayHour"));
             });
@@ -75,8 +80,8 @@ const subscribes = {
                 longParts = dateUtils.getDatesOfInterval(dates[i], endDateOfPart, {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
-
-                resultDates = resultDates.concat(longParts);
+                const maxDate = new Date(dateRange[1]);
+                resultDates = resultDates.concat(longParts.filter(el => new Date(el) < maxDate));
             }
 
             dates = resultDates;
@@ -85,7 +90,7 @@ const subscribes = {
         let itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
-        options.callback(this._getCoordinates(dates, itemResources, allDay));
+        options.callback(this._getCoordinates(initialDates, dates, itemResources, allDay));
     },
 
     isGroupedByDate: function() {
@@ -288,8 +293,12 @@ const subscribes = {
         return this.getLayoutManager().getRenderingStrategyInstance().getDeltaTime(e, initialSize, itemData);
     },
 
-    getCompactAppointmentGroupMaxWidth: function(isAllDay) {
-        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount, isAllDay);
+    getDropDownAppointmentWidth: function(isAllDay) {
+        return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentWidth(this._getViewCountConfig().intervalCount, isAllDay);
+    },
+
+    getDropDownAppointmentHeight: function() {
+        return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentHeight();
     },
 
     getStartDate: function(appointmentData, skipNormalize) {
@@ -333,14 +342,6 @@ const subscribes = {
 
     getWorkSpaceDateTableOffset: function() {
         return this.getWorkSpaceDateTableOffset();
-    },
-
-    getDateTableWidth: function() {
-        return this._workSpace.getDateTableWidth();
-    },
-
-    getTimePanelWidth: function() {
-        return this._workSpace.getTimePanelWidth();
     },
 
     correctAppointmentCoordinates: function(options) {
@@ -445,8 +446,12 @@ const subscribes = {
         options.callback(updatedEndDate);
     },
 
-    renderDropDownAppointments: function(options) {
-        this._dropDownAppointments.render(options, this);
+    renderCompactAppointments: function(options) {
+        this._compactAppointmentsHelper.render(options);
+    },
+
+    clearCompactAppointments: function() {
+        this._compactAppointmentsHelper.clear();
     },
 
     supportCompactDropDownAppointments: function() {
@@ -507,6 +512,10 @@ const subscribes = {
         this.recurrenceEditorVisibilityChanged(visible);
     },
 
+    resizePopup: function() {
+        this.resizePopup();
+    },
+
     getField: function(field, obj) {
         if(!typeUtils.isDefined(this._dataAccessors.getter[field])) {
             return;
@@ -558,7 +567,9 @@ const subscribes = {
             min: dateRange[0],
             max: dateRange[1],
             resources: resources,
-            allDay: allDay
+            allDay: allDay,
+            firstDayOfWeek: this.option('firstDayOfWeek'),
+            recurrenceException: this._getRecurrenceException.bind(this),
         }, this._subscribes["convertDateByTimezone"].bind(this));
     },
 
@@ -820,12 +831,20 @@ const subscribes = {
         options.callback(result);
     },
 
+    fixWrongEndDate: function(appointment, startDate, endDate) {
+        return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
+    },
+
     getEndDayHour: function() {
         return this.option("endDayHour");
     },
 
     getStartDayHour: function() {
         return this.option("startDayHour");
+    },
+
+    isAdaptive: function() {
+        return this.option("adaptivityEnabled");
     }
 };
 module.exports = subscribes;

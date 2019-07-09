@@ -294,9 +294,8 @@ var stubInvokeMethod = function(instance, options) {
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1.5, "Shader has correct height");
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1.5, "Top shader has correct height");
         assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom shader has correct height");
-
         assert.roughEqual($shader.outerWidth(), 3 * cellWidth, 2, "Shader has correct width");
-        assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1, "Top shader has correct width");
+        assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1.5, "Top shader has correct width");
         assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1, "Bottom shader has correct width");
     });
 
@@ -320,7 +319,7 @@ var stubInvokeMethod = function(instance, options) {
         assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom shader has correct height");
 
         assert.roughEqual($shader.outerWidth(), 3 * cellWidth, 2, "Indicator has correct width");
-        assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1, "Top shader has correct width");
+        assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1.5, "Top shader has correct width");
         assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1, "Bottom shader has correct width");
     });
 
@@ -386,7 +385,7 @@ var stubInvokeMethod = function(instance, options) {
             containerHeight = $indicator.parent().outerHeight();
 
         assert.roughEqual($indicator.outerHeight(), containerHeight, 1, "Shader has correct height");
-        assert.equal($indicator.css("marginTop"), -containerHeight + "px", "Shader has correct margin");
+        assert.roughEqual(parseInt($indicator.css("marginTop")), -containerHeight, 1.5, "Shader has correct margin");
     });
 
     QUnit.test("TimePanel currentTime cell should have specific class, Day view", function(assert) {
@@ -448,6 +447,31 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
         assert.equal($indicators.eq(1).position().left, 100);
         assert.equal($indicators.eq(1).position().top, 23.5 * cellHeight);
+    });
+
+    QUnit.test("DateTimeIndicator should have correct positions, Day view with groups and allDay customization, verticalGrouping (T737095)", function(assert) {
+        let $style = $("<style>").text('.dx-scheduler-work-space-vertical-grouped .dx-scheduler-all-day-table-row { height: 150px } .dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-day .dx-scheduler-all-day-title { height: 150px !important } ');
+
+        try {
+            $style.appendTo("head");
+
+            this.instance.option({
+                shadeUntilCurrentTime: false,
+                indicatorTime: new Date(2017, 8, 5, 12, 45)
+            });
+
+            this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+            var $element = this.instance.$element(),
+                $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+                cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).get(0).getBoundingClientRect().height;
+
+            assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight + 150, "Indicator top is 9.5 cells + allDay panel height");
+
+            assert.equal($indicators.eq(1).position().top, 21.5 * cellHeight + 2 * 150, "Second indicator top is 21.5 cells + two allDay panel height");
+        } finally {
+            $style.remove();
+        }
     });
 
     QUnit.test("DateTimeIndicator should have correct positions, Day view with groups without allDay panels, verticalGrouping", function(assert) {
@@ -627,8 +651,8 @@ var stubInvokeMethod = function(instance, options) {
         assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom indicator has correct height");
 
         assert.roughEqual($shader.outerWidth(), 898, 1, "Indicator has correct width");
-        assert.roughEqual($topShader.outerWidth(), 4 * cellWidth, 1, "Top indicator has correct width");
-        assert.roughEqual($bottomShader.outerWidth(), 3 * cellWidth, 1, "Bottom indicator has correct width");
+        assert.roughEqual($topShader.outerWidth(), 4 * cellWidth, 1.5, "Top indicator has correct width");
+        assert.roughEqual($bottomShader.outerWidth(), 3 * cellWidth, 1.5, "Bottom indicator has correct width");
     });
 
     QUnit.test("Shader should have limited height, Week view", function(assert) {

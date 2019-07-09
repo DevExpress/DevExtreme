@@ -22,12 +22,13 @@ var $ = require("../../core/renderer"),
     Popup = require("../popup");
 
 var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
-    DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS = "dx-dropdowneditor-input-wrapper",
+    DROP_DOWN_EDITOR_INPUT_WRAPPER = "dx-dropdowneditor-input-wrapper",
     DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
     DROP_DOWN_EDITOR_OVERLAY_FLIPPED = "dx-dropdowneditor-overlay-flipped",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
-    DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable";
+    DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable",
+    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-template-wrapper";
 
 /**
 * @name dxDropDownEditor
@@ -162,7 +163,6 @@ var DropDownEditor = TextBox.inherit({
             * @name dxDropDownEditorOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -195,54 +195,55 @@ var DropDownEditor = TextBox.inherit({
              */
             showDropDownButton: true,
 
+            /**
+            * @name dxDropDownEditorOptions.buttons
+            * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
+            * @default undefined
+            */
+            buttons: void 0,
+
             dropDownOptions: {},
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
             applyButtonText: messageLocalization.format("OK"),
             cancelButtonText: messageLocalization.format("Cancel"),
             buttonsLocation: "default",
-            showPopupTitle: false
+            showPopupTitle: false,
+            useHiddenSubmitElement: false
 
             /**
             * @name dxDropDownEditorOptions.mask
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskChar
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskRules
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskInvalidMessage
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.useMaskedValue
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.mode
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxDropDownEditorOptions.showMaskMode
              * @hidden
-             * @inheritdoc
              */
         });
     },
@@ -262,9 +263,8 @@ var DropDownEditor = TextBox.inherit({
         return this.callBase().concat([
             {
                 device: function(device) {
-                    var isGeneric = device.platform === "generic",
-                        isWin10 = device.platform === "win" && device.version && device.version[0] === 10;
-                    return isGeneric || isWin10;
+                    var isGeneric = device.platform === "generic";
+                    return isGeneric;
                 },
                 options: {
                     popupPosition: { offset: { v: 0 } }
@@ -274,7 +274,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS);
+        return this.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER);
     },
 
     _init: function() {
@@ -296,12 +296,15 @@ var DropDownEditor = TextBox.inherit({
 
     _initPopupInitializedAction: function() {
         this._popupInitializedAction = this._createActionByOption("onPopupInitialized", {
-            excludeValidators: ["disabled", "readOnly", "designMode"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
     _initMarkup: function() {
+        this._renderSubmitElement();
+
         this.callBase();
+
         this.$element()
             .addClass(DROP_DOWN_EDITOR_CLASS);
 
@@ -324,7 +327,7 @@ var DropDownEditor = TextBox.inherit({
     _renderInput: function() {
         this.callBase();
 
-        this.$element().wrapInner($("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS));
+        this.$element().wrapInner($("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
         this._$container = this.$element().children().eq(0);
 
         this.setAria({
@@ -364,6 +367,10 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderValue: function() {
+        if(this.option("useHiddenSubmitElement")) {
+            this._setSubmitValue();
+        }
+
         const promise = this.callBase();
 
         promise.always(this._renderField.bind(this));
@@ -376,14 +383,18 @@ var DropDownEditor = TextBox.inherit({
         this._disposeKeyboardProcessor();
 
         // NOTE: to prevent buttons disposition
-        this.$beforeButtonsContainer && this.$beforeButtonsContainer[0].parentNode.removeChild(this.$beforeButtonsContainer[0]);
-        this.$afterButtonsContainer && this.$afterButtonsContainer[0].parentNode.removeChild(this.$afterButtonsContainer[0]);
+        var beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
+        var afterButtonsContainerParent = this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode;
+        beforeButtonsContainerParent && beforeButtonsContainerParent.removeChild(this._$beforeButtonsContainer[0]);
+        afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
 
         $container.empty();
 
+        var $templateWrapper = $("<div>").addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
+
         fieldTemplate.render({
             model: data,
-            container: domUtils.getPublicElement($container),
+            container: domUtils.getPublicElement($templateWrapper),
             onRendered: () => {
                 if(!this._input().length) {
                     throw errors.Error("E1010");
@@ -397,8 +408,8 @@ var DropDownEditor = TextBox.inherit({
             }
         });
 
-        $container.prepend(this.$beforeButtonsContainer);
-        $container.append(this.$afterButtonsContainer);
+        $container.prepend(this._$beforeButtonsContainer);
+        $container.append(this._$afterButtonsContainer);
     },
 
     _fieldRenderData: function() {
@@ -746,6 +757,26 @@ var DropDownEditor = TextBox.inherit({
         }
     },
 
+    _renderSubmitElement: function() {
+        if(this.option("useHiddenSubmitElement")) {
+            this._$submitElement = $("<input>")
+                .attr("type", "hidden")
+                .appendTo(this.$element());
+        }
+    },
+
+    _setSubmitValue: function() {
+        this._getSubmitElement().val(this.option("value"));
+    },
+
+    _getSubmitElement: function() {
+        if(this.option("useHiddenSubmitElement")) {
+            return this._$submitElement;
+        } else {
+            return this.callBase();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "opened":
@@ -789,6 +820,14 @@ var DropDownEditor = TextBox.inherit({
                 break;
             case "showPopupTitle":
                 this._setPopupOption("showTitle", args.value);
+                break;
+            case "useHiddenSubmitElement":
+                if(this._$submitElement) {
+                    this._$submitElement.remove();
+                    this._$submitElement = undefined;
+                }
+
+                this._renderSubmitElement();
                 break;
             default:
                 this.callBase(args);

@@ -99,7 +99,6 @@ var ColorBox = DropDownEditor.inherit({
 
             /**
              * @name dxColorBoxOptions.showDropDownButton
-             * @inheritdoc
              * @hidden
              */
 
@@ -118,7 +117,6 @@ var ColorBox = DropDownEditor.inherit({
             * @name dxColorBoxOptions.applyValueMode
             * @type Enums.EditorApplyValueMode
             * @default "useButtons"
-            * @inheritdoc
             */
             applyValueMode: "useButtons",
 
@@ -148,31 +146,26 @@ var ColorBox = DropDownEditor.inherit({
             /**
             * @name dxColorBoxOptions.value
             * @type string
-            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.maxLength
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.showClearButton
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.valueChangeEvent
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.spellcheck
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -348,7 +341,7 @@ var ColorBox = DropDownEditor.inherit({
 
         this._$colorResultPreview = $("<div>")
             .addClass(COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS)
-            .appendTo(this._$colorBoxInputContainer);
+            .appendTo(this._$textEditorInputContainer);
 
         if(!this.option("value")) {
             this._$colorBoxInputContainer.addClass(COLOR_BOX_COLOR_IS_NOT_DEFINED);

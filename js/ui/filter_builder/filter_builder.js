@@ -48,10 +48,10 @@ const FILTER_BUILDER_CLASS = "dx-filterbuilder",
 
 var ACTIONS = [{
         name: "onEditorPreparing",
-        config: { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" }
+        config: { excludeValidators: ["disabled", "readOnly"], category: "rendering" }
     }, {
         name: "onEditorPrepared",
-        config: { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" }
+        config: { excludeValidators: ["disabled", "readOnly"], category: "rendering" }
     }, {
         name: "onValueChanged",
         config: { excludeValidators: ["disabled", "readOnly"] }
@@ -171,6 +171,12 @@ var FilterBuilder = Widget.inherit({
 
             /**
             * @name dxFilterBuilderField.dataField
+            * @type string
+            * @default undefined
+            */
+
+            /**
+            * @name dxFilterBuilderField.name
             * @type string
             * @default undefined
             */
@@ -515,14 +521,17 @@ var FilterBuilder = Widget.inherit({
                 this._invalidate();
                 break;
             case "value":
-                if(!this._disableInvalidateForValue) {
+                var disableInvalidateForValue = this._disableInvalidateForValue;
+                if(!disableInvalidateForValue) {
                     this._initModel();
                     this._invalidate();
                 }
+                this._disableInvalidateForValue = false;
                 this.executeAction("onValueChanged", {
                     value: args.value,
                     previousValue: args.previousValue
                 });
+                this._disableInvalidateForValue = disableInvalidateForValue;
                 break;
             default:
                 this.callBase(args);
@@ -817,7 +826,7 @@ var FilterBuilder = Widget.inherit({
         var that = this,
             allowHierarchicalFields = this.option("allowHierarchicalFields"),
             items = utils.getItems(fields, allowHierarchicalFields),
-            item = utils.getField(field.dataField, items),
+            item = utils.getField(field.name || field.dataField, items),
             getFullCaption = function(item, items) {
                 return allowHierarchicalFields ? utils.getCaptionWithParents(item, items) : item.caption;
             };
@@ -827,12 +836,11 @@ var FilterBuilder = Widget.inherit({
             menu: {
                 items: items,
                 dataStructure: "plain",
-                keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: (e) => {
                     if(item !== e.itemData) {
                         item = e.itemData;
-                        condition[0] = item.dataField;
+                        condition[0] = item.name || item.dataField;
                         condition[2] = item.dataType === "object" ? null : "";
                         utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
                         $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();

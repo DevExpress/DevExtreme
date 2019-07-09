@@ -317,23 +317,6 @@ var Editor = Widget.inherit({
         return null;
     },
 
-    _getOptionsFromContainer: function(args) {
-        var options = {};
-
-        if(args.name === args.fullName) {
-            options = args.value;
-        } else {
-            var option = args.fullName.split(".").pop();
-            options[option] = args.value;
-        }
-
-        return options;
-    },
-
-    _setValidationTooltipOptions: function(optionName, value) {
-        this._setWidgetOption("_validationMessage", arguments);
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "onValueChanged":
@@ -346,8 +329,7 @@ var Editor = Widget.inherit({
                 this._renderValidationState();
                 break;
             case "validationTooltipOptions":
-                this._setValidationTooltipOptions(this._getOptionsFromContainer(args));
-                this._cacheInnerOptions("validationTooltipOptions", args.value);
+                this._innerOptionChanged(this._validationMessage, args);
                 break;
             case "readOnly":
                 this._toggleReadOnlyState();

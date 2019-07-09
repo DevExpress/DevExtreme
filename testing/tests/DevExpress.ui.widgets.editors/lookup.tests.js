@@ -68,6 +68,8 @@ var OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     LOOKUP_SEARCH_WRAPPER_CLASS = "dx-lookup-search-wrapper",
     LOOKUP_FIELD_CLASS = "dx-lookup-field",
 
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
+
     FOCUSED_CLASS = "dx-state-focused";
 
 var toSelector = function(val) {
@@ -1419,6 +1421,30 @@ QUnit.test("onValueChanged argument should contains an event property after sele
     assert.strictEqual(event.type, "dxclick");
 });
 
+QUnit.test("Lookup should catch delayed data", function(assert) {
+    const items = [{
+        "ID": 1,
+        "Name": "John"
+    }, {
+        "ID": 2,
+        "Name": "Olivia"
+    }];
+
+    this.element.dxLookup({
+        dataSource: [],
+        displayExpr: 'Name',
+        valueExpr: "ID",
+        value: 1,
+        title: "Select employee"
+    });
+
+    setTimeout(() => {
+        $("#lookup").dxLookup("instance").option("dataSource", items);
+    }, 100);
+    this.clock.tick(100);
+
+    assert.equal(this.$field.text(), "John", "display field work in text");
+});
 
 QUnit.module("hidden input");
 
@@ -2142,7 +2168,7 @@ QUnit.test("popup does not close when filtering datasource has item equal select
     $lookup.dxLookup("option", "opened", true);
 
     var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-    keyboardMock($popupContent.find("input")).type("y");
+    keyboardMock($popupContent.find("." + TEXTEDITOR_INPUT_CLASS)).type("y");
 
     assert.ok($lookup.dxLookup("option", "opened"), "lookup stays opened");
 });
@@ -2400,7 +2426,7 @@ QUnit.test("Popup height should be decrease after a loading of new page and sear
 
     var listHeight = $list.outerHeight();
 
-    var $input = $(".dx-lookup-search").find("input");
+    var $input = $(".dx-lookup-search").find("." + TEXTEDITOR_INPUT_CLASS);
     var keyboard = keyboardMock($input);
 
     keyboard.type("a");
@@ -2754,7 +2780,7 @@ QUnit.test("T320459 - the 'space' key press should prevent default behavior whil
             opened: true,
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $popupInput = $($(lookup.content()).find("input")),
+        $popupInput = $($(lookup.content()).find("." + TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($popupInput),
         event;
 
@@ -2830,7 +2856,7 @@ QUnit.test("search should be execute after paste", function(assert) {
             searchMode: "contains"
         });
 
-        var $input = $(toSelector(POPUP_CONTENT_CLASS) + " input");
+        var $input = $(toSelector(POPUP_CONTENT_CLASS) + " " + toSelector(TEXTEDITOR_INPUT_CLASS));
         $($input.val("o")).trigger("input");
         clock.tick();
         assert.equal($(".dx-list-item").length, 2, "filters execute on input event");
@@ -3021,13 +3047,21 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
     try {
 
-        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "blue" }).dxLookup("instance");
+        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple", "red", "green", "yellow"], value: "blue" }).dxLookup("instance");
 
         $(lookup.field()).trigger("dxclick");
 
         var $popup = $(".dx-popup-wrapper");
 
         assert.roughEqual($popup.find(".dx-overlay-content").position().top, -3.5, 1, "offset of the lookup if first item is selected");
+
+        lookup._list.scrollTo(100);
+
+        lookup.close();
+
+        $(lookup.field()).trigger("dxclick");
+
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -3.5, 1, "offset of the lookup after scrolling and without item selecting");
 
         lookup.close();
 
