@@ -19,7 +19,7 @@ var toMs = dateUtils.dateToMilliseconds;
 
 var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _toggleFixedScrollableClass: function() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
+        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace() && !this._hasDataCellTemplate());
     },
 
     _getElementClass: function() {
@@ -72,17 +72,6 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         this._setStartDayHour(date);
 
         return date;
-    },
-
-    // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
-    // TODO: there is a test for this bug, when changing the layout, the test will also be useless
-    getCellWidth: function() {
-        const DAYS_IN_WEEK = 7;
-
-        let averageWidth = 0;
-        this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += element.getBoundingClientRect().width);
-
-        return averageWidth / DAYS_IN_WEEK;
     },
 
     _calculateHiddenInterval: function() {
