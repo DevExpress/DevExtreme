@@ -281,7 +281,6 @@ var TextEditorBase = Editor.inherit({
              * @name dxTextEditorOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -289,7 +288,6 @@ var TextEditorBase = Editor.inherit({
              * @name dxTextEditorOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -308,7 +306,6 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
 
             /**

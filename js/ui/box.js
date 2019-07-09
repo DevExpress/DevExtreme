@@ -456,14 +456,12 @@ class Box extends CollectionWidget {
             /**
             * @name dxBoxOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
             /**
             * @name dxBoxOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
             focusStateEnabled: false,
 
@@ -476,60 +474,49 @@ class Box extends CollectionWidget {
             /**
             * @name dxBoxOptions.hint
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.noDataText
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.onSelectionChanged
             * @action
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxBoxOptions.items
              * @type Array<string, dxBoxItem, object>
              * @fires dxBoxOptions.onOptionChanged
-             * @inheritdoc
              */
         });
     }
@@ -731,14 +718,12 @@ class Box extends CollectionWidget {
     * @name dxBoxMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxBoxMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 }
 /**
