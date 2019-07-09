@@ -43,12 +43,14 @@ const resourceAssignments = [
     { "id": 3, "taskId": 6, "resourceId": 2 },
     { "id": 4, "taskId": 6, "resourceId": 3 },
 ];
-const tasksOnlyOptions = { tasks: tasks };
+const tasksOnlyOptions = {
+    tasks: { dataSource: tasks }
+};
 const allSourcesOptions = {
-    tasks: tasks,
-    dependencies: dependencies,
-    resources: resources,
-    resourceAssignments: resourceAssignments
+    tasks: { dataSource: tasks },
+    dependencies: { dataSource: dependencies },
+    resources: { dataSource: resources },
+    resourceAssignments: { dataSource: resourceAssignments }
 };
 
 const moduleConfig = {

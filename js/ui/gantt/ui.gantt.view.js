@@ -45,11 +45,11 @@ export class GanttView extends Widget {
     }
     getGanttViewStartDate() {
         const tasks = this.getGanttTasksData();
-        return tasks.reduce((min, t) => t.start < min ? t.start : min, new Date());
+        return tasks.length > 0 ? tasks.reduce((min, t) => t.start < min ? t.start : min, tasks[0].start) : new Date();
     }
     getGanttViewEndDate() {
         const tasks = this.getGanttTasksData();
-        return tasks.reduce((max, t) => t.end > max ? t.end : max, new Date());
+        return tasks.length > 0 ? tasks.reduce((max, t) => t.end > max ? t.end : max, tasks[0].end) : new Date();
     }
     getGanttTasksData() {
         return this.option("tasks");

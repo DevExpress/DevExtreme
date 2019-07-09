@@ -2685,13 +2685,13 @@ declare module DevExpress.ui {
     /** @name dxGantt.Options */
     export interface dxGanttOptions extends WidgetOptions<dxGantt> {
         /** @name dxGantt.Options.dependencies */
-        dependencies?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.resourceAssignments */
-        resourceAssignments?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.resources */
-        resources?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.tasks */
-        tasks?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {

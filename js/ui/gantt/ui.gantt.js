@@ -9,6 +9,8 @@ const GANTT_CLASS = "dx-gantt";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 
+const GANTT_KEY_FIELD = "id";
+
 class Gantt extends Widget {
     _initMarkup() {
         super._initMarkup();
@@ -23,7 +25,7 @@ class Gantt extends Widget {
 
     _render() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
-            dataSource: this.option("tasks"),
+            dataSource: this.option("tasks.dataSource"),
             width: "100%",
             selection: { mode: "single" },
             sorting: { mode: "none" },
@@ -49,9 +51,9 @@ class Gantt extends Widget {
         this._ganttView = this._createComponent($ganttView, GanttView, {
             height: this._treeList._$element.get(0).offsetHeight,
             tasks: this._getTasks(),
-            dependencies: this.option("dependencies"),
-            resources: this.option("resources"),
-            resourceAssignments: this.option("resourceAssignments"),
+            dependencies: this.option("dependencies.dataSource"),
+            resources: this.option("resources.dataSource"),
+            resourceAssignments: this.option("resourceAssignments.dataSource"),
             onSelectionChanged: (e) => { this._onGanttViewSelectionChanged(e); },
             onScroll: (e) => { this._onGanttViewScroll(e); }
         });
@@ -101,28 +103,84 @@ class Gantt extends Widget {
         return extend(super._getDefaultOptions(), {
             /**
             * @name dxGanttOptions.tasks
-            * @type Array<object>|DataSource|DataSourceOptions
+            * @type Object
             * @default null
             */
-            tasks: null,
+            tasks: {
+                /**
+                * @name dxGanttOptions.tasks.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxGanttOptions.tasks.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: GANTT_KEY_FIELD
+            },
             /**
             * @name dxGanttOptions.dependencies
-            * @type Array<object>|DataSource|DataSourceOptions
+            * @type Object
             * @default null
             */
-            dependencies: null,
+            dependencies: {
+                /**
+                * @name dxGanttOptions.dependencies.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxGanttOptions.dependencies.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: GANTT_KEY_FIELD
+            },
             /**
             * @name dxGanttOptions.resources
-            * @type Array<object>|DataSource|DataSourceOptions
+            * @type Object
             * @default null
             */
-            resources: null,
+            resources: {
+                /**
+                * @name dxGanttOptions.resources.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxGanttOptions.resources.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: GANTT_KEY_FIELD
+            },
             /**
             * @name dxGanttOptions.resourceAssignments
-            * @type Array<object>|DataSource|DataSourceOptions
+            * @type Object
             * @default null
             */
-            resourceAssignments: null
+            resourceAssignments: {
+                /**
+                * @name dxGanttOptions.resourceAssignments.dataSource
+                * @type Array<Object>|DataSource|DataSourceOptions
+                * @default null
+                */
+                dataSource: null,
+                /**
+                * @name dxGanttOptions.resourceAssignments.keyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "id"
+                */
+                keyExpr: GANTT_KEY_FIELD
+            }
         });
     }
 
