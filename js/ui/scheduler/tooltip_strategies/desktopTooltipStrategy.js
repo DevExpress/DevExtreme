@@ -247,8 +247,9 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     }
 
     _onTooltipShowing() {
+        clearTimeout(this.skipHidingOnScrollTimeId);
         this.skipHidingOnScroll = true;
-        setTimeout(() => this.skipHidingOnScroll = false, 0);
+        this.skipHidingOnScrollTimeId = setTimeout(() => this.skipHidingOnScroll = false, 0);
     }
 
     _createTooltipElement() {
