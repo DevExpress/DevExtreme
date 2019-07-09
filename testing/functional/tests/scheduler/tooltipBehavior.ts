@@ -7,8 +7,11 @@ fixture `Tooltip behavior when scrolling`
 
 const scheduler = new SchedulerTestHelper("#container");
 const scrollBrowser = ClientFunction(() => window.scrollBy(0,500));
+const disableAnimation = ClientFunction(() => (window as any).DevExpress.fx.off = true);
 
-const createScheduler = () => {
+const createScheduler = async () => {
+    await disableAnimation();
+
     createWidget("dxScheduler", {
         dataSource: [{
             text: "Website Re-Design Plan",
@@ -34,6 +37,7 @@ test("Tooltip shouldn't hide after scroll in browser height is small (T755449)",
 }).before(async () => await createScheduler());
 
 test("Tooltip should hide after scroll", async t => {
+
     await t.resizeWindow(600, 600);
     await t.click(scheduler.getAppointment());
 

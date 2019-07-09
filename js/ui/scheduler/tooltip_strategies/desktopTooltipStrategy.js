@@ -240,7 +240,6 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             target: target,
             onShowing: this._onTooltipShowing.bind(this),
             closeOnTargetScroll: () => this.skipHidingOnScroll,
-            animation: undefined,
             maxHeight: MAX_TOOLTIP_HEIGHT,
             rtlEnabled: this.scheduler.option("rtlEnabled"),
             contentTemplate: () => list.$element()
@@ -249,7 +248,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _onTooltipShowing() {
         this.skipHidingOnScroll = true;
-        setTimeout(() => this.skipHidingOnScroll = false);
+        setTimeout(() => this.skipHidingOnScroll = false, 0);
     }
 
     _createTooltipElement() {
