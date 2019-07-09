@@ -690,6 +690,58 @@ QUnit.test("Fix group footer presents at the end of virtual pages", function(ass
     assert.equal(visibleRows[8].rowType, "groupFooter", "group footer row");
 });
 
+// T756152
+QUnit.test("CellTemplate should not be rendered on the group row when summary is enabled", function(assert) {
+    // arrange
+    var loadResult = [{
+        ID: 1,
+        OrderNumber: 777,
+        TotalValue: 12175,
+        BoolValue: true,
+        CustomerName: "Test1"
+    }, {
+        ID: 4,
+        OrderNumber: 777,
+        TotalValue: 16550,
+        BoolValue: false,
+        CustomerName: "Test1"
+    }];
+
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: loadResult,
+        keyExpr: "ID",
+        showBorders: true,
+        groupPanel: {
+            visible: true
+        },
+        columns: [
+            {
+                dataField: "CustomerName",
+                groupIndex: 0
+            }, "OrderNumber", "TotalValue", {
+                dataField: "BoolValue",
+                cellTemplate: function(container, options) {
+                    $("<div>").dxCheckBox({
+                        value: options.data.BoolValue,
+                        disabled: true
+                    }).appendTo(container);
+                }
+            }
+        ],
+        summary: {
+            groupItems: [{
+                column: "TotalValue",
+                summaryType: "sum",
+                alignByColumn: true
+            }]
+        }
+    });
+
+    // assert
+    assert.equal($(".dx-group-row").eq(0).find(".dx-checkbox").length, 0, "group row does not contain checkbox");
+});
+
 // T601360
 QUnit.test("Update cell after infinit scrolling and editing must processing after all pages has been loaded", function(assert) {
     // arrange
