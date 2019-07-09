@@ -2870,7 +2870,6 @@ if(devices.current().deviceType === "desktop") {
                 this.$scrollable = this._getScrollable();
 
                 this.strategy = this.$scrollable.dxScrollable("instance")._strategy;
-                this.validateHandler = sinon.spy(this.strategy, "validate");
             }
 
             _getScrollable() {
@@ -2885,28 +2884,20 @@ if(devices.current().deviceType === "desktop") {
             getScrollableContainer() {
                 return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
             }
-
-            checkValidateFunc(expectedValue) {
-                QUnit.assert.strictEqual(this.validateHandler.callCount, 1, "validate callCount");
-                QUnit.assert.strictEqual(!!this.validateHandler.firstCall.returnValue, expectedValue, "validate result");
-                this.validateHandler.reset();
-            }
         }
 
-        QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, () => {
+        QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, (assert) => {
             let helper = new ValidateMouseWheelEventTestHelper(direction);
             let event = helper.getEvent();
 
             event.delta = 1;
-            helper.strategy.validate(event);
-            helper.checkValidateFunc(false);
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = 1");
 
             event.delta = -1;
-            helper.strategy.validate(event);
-            helper.checkValidateFunc(true);
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
         });
 
-        QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, () => {
+        QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, (assert) => {
             let helper = new ValidateMouseWheelEventTestHelper(direction);
             let event = helper.getEvent();
             let $container = helper.getScrollableContainer();
@@ -2915,15 +2906,13 @@ if(devices.current().deviceType === "desktop") {
             $container.scrollLeft(50);
 
             event.delta = 1;
-            helper.strategy.validate(event);
-            helper.checkValidateFunc(true);
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
 
             event.delta = -1;
-            helper.strategy.validate(event);
-            helper.checkValidateFunc(false);
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = -1");
         });
 
-        QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, () => {
+        QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, (assert) => {
             let helper = new ValidateMouseWheelEventTestHelper(direction);
             let event = helper.getEvent();
             let $container = helper.getScrollableContainer();
@@ -2932,12 +2921,10 @@ if(devices.current().deviceType === "desktop") {
             $container.scrollLeft(25);
 
             event.delta = 1;
-            helper.strategy.validate(event);
-            helper.checkValidateFunc(true);
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
 
             event.delta = -1;
-            helper.strategy.validate(event);
-            helper.checkValidateFunc(true);
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
         });
     });
 }
