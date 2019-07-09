@@ -62,7 +62,6 @@ import gridCore from "ui/data_grid/ui.data_grid.core";
 import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
 import { DataSource } from "data/data_source/data_source";
 import ArrayStore from "data/array_store";
-import CustomStore from "data/custom_store";
 import messageLocalization from "localization/message";
 import setTemplateEngine from "ui/set_template_engine";
 import fx from "animation/fx";
@@ -1707,44 +1706,38 @@ QUnit.test("freeSpaceRow height should not be changed after editing next cell", 
 });
 
 // T751778
-QUnit.test("row should not dissapear after insert if load was unsuccessful", function(assert) {
+QUnit.test("row should not dissapear after insert if dataSource was assigned during saving", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
-        store = [{ id: 1 }],
-        loadResult = store,
+        array = [{ id: "1" }],
         $grid = $("#dataGrid").dxDataGrid({
-            dataSource: new CustomStore({
-                load: () => {
-                    return loadResult;
-                },
-                insert: (values) => {
-                    store.push(values);
-                }
-            }),
+            dataSource: array,
             editing: {
                 mode: "cell",
                 allowAdding: true
-            }
+            },
+            keyExpr: "id",
+            loadingTimeout: 100
         }),
         dataGrid = $grid.dxDataGrid("instance");
 
     // act
-    clock.tick();
-    setTimeout(() => {
-        loadResult = $.Deferred().reject("error");
-    }, 100);
-
-    dataGrid.addRow();
-    dataGrid.cellValue(0, 0, 1);
-
     clock.tick(100);
 
+    dataGrid.addRow();
+    dataGrid.cellValue(0, 0, "2");
     dataGrid.closeEditCell();
+    clock.tick();
+    dataGrid.option("dataSource", array);
     clock.tick();
 
     // assert
-    assert.ok(dataGrid.getRowElement(0));
-    assert.ok(dataGrid.getRowElement(1));
+    assert.equal($(dataGrid.getCellElement(0, 0)).find(".dx-texteditor-input").val(), "2", "first row doesn't dissapear");
+    assert.equal($(dataGrid.getCellElement(1, 0)).text(), "1", "second row cell text");
+    // act
+    clock.tick(100);
+    assert.equal($(dataGrid.getCellElement(0, 0)).text(), "1", "first row doesn't dissapear");
+    assert.equal($(dataGrid.getCellElement(1, 0)).text(), "2", "second row cell text");
 
     clock.restore();
 });
