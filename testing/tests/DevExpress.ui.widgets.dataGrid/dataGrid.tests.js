@@ -62,6 +62,7 @@ import gridCore from "ui/data_grid/ui.data_grid.core";
 import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
 import { DataSource } from "data/data_source/data_source";
 import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
 import messageLocalization from "localization/message";
 import setTemplateEngine from "ui/set_template_engine";
 import fx from "animation/fx";
@@ -1701,6 +1702,49 @@ QUnit.test("freeSpaceRow height should not be changed after editing next cell", 
     assert.ok($grid.find(".dx-freespace-row").is(":visible"), "Free space row is visible");
     assert.equal(dataGrid.totalCount(), -1, "totalCount");
     assert.equal(dataGrid.getController("data").isLoading(), true, "isLoading");
+
+    clock.restore();
+});
+
+// T751778
+QUnit.test("row should not dissapear after insert if load was unsuccessful", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        store = [{ id: 1 }],
+        loadResult = store,
+        $grid = $("#dataGrid").dxDataGrid({
+            dataSource: new CustomStore({
+                load: () => {
+                    return loadResult;
+                },
+                insert: (values) => {
+                    store.push(values);
+                }
+            }),
+            editing: {
+                mode: "cell",
+                allowAdding: true
+            }
+        }),
+        dataGrid = $grid.dxDataGrid("instance");
+
+    // act
+    clock.tick();
+    setTimeout(() => {
+        loadResult = $.Deferred().reject("error");
+    }, 100);
+
+    dataGrid.addRow();
+    dataGrid.cellValue(0, 0, 1);
+
+    clock.tick(100);
+
+    dataGrid.closeEditCell();
+    clock.tick();
+
+    // assert
+    assert.ok(dataGrid.getRowElement(0));
+    assert.ok(dataGrid.getRowElement(1));
 
     clock.restore();
 });
