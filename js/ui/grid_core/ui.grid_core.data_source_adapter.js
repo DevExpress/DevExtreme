@@ -441,11 +441,11 @@ module.exports = gridCore.Controller.inherit((function() {
             this.loadingChanged.fire(isLoading);
         },
         _handleLoadError: function(error) {
+            this.loadError.fire(error);
             this.changed.fire({
                 changeType: "loadError",
                 error: error
             });
-            this.loadError.fire(error);
         },
         _handleDataChanged: function(args) {
             var that = this,
