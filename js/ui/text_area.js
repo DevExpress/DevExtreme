@@ -1,6 +1,8 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
+    windowUtils = require("../core/utils/window"),
+    window = windowUtils.getWindow(),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     eventUtils = require("../events/utils"),
@@ -210,7 +212,8 @@ var TextArea = TextBox.inherit({
 
         var heightDifference = sizeUtils.getVerticalOffsets(this._$element.get(0), false)
             + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
-            + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false);
+            + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
+            + sizeUtils.getElementBoxParams("height", window.getComputedStyle($input.get(0))).margin;
 
         this._renderDimensions();
 
