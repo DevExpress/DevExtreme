@@ -22,10 +22,6 @@ var SLEEP = 0,
     IMMEDIATE_TOUCH_BOUNDARY = 0,
     IMMEDIATE_TIMEOUT = 180;
 
-var isMouseWheelEvent = function(e) {
-    return e && e.type === "dxmousewheel";
-};
-
 var supportPointerEvents = function() {
     return styleUtils.styleProp("pointer-events");
 };
@@ -161,7 +157,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _getTouchBoundary: function(e) {
-        return (this.immediate || isMouseWheelEvent(e)) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
+        return (this.immediate || eventUtils.isDxMouseWheelEvent(e)) ? IMMEDIATE_TOUCH_BOUNDARY : TOUCH_BOUNDARY;
     },
 
     _adjustStartEvent: function(e) {
@@ -187,7 +183,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _clearSelection: function(e) {
-        if(isMouseWheelEvent(e) || eventUtils.isTouchEvent(e)) {
+        if(eventUtils.isDxMouseWheelEvent(e) || eventUtils.isTouchEvent(e)) {
             return;
         }
 
