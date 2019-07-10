@@ -140,8 +140,8 @@
     }
 }
 
-.dx-scrollable-customizable-scrollbars .dx-scrollable-container {
-    /*IE*/
+.dx-scrollable-customizable-scrollbars:not(.dx-scrollable-disabled) .dx-scrollable-container {
+    /* IE */
     -ms-scrollbar-base-color: @scrollable-scrollbar-msie-base-color;
     -ms-scrollbar-arrow-color: @scrollable-scrollbar-msie-arrow-color;
     -ms-scrollbar-shadow-color: @scrollable-scrollbar-msie-shadow-color;
