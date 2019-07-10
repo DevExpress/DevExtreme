@@ -111,7 +111,7 @@ QUnit.test("Validate with template wrapper", assert => {
         items: [{
             dataField: 'name',
             template(data, itemTemplate) {
-                let templateWrapper = $("<div>").addClass("dx-template-wrapper");
+                const templateWrapper = $("<div>").addClass("dx-template-wrapper");
                 $("<div>").dxTextBox({}).appendTo(templateWrapper);
                 templateWrapper.appendTo(itemTemplate);
             },
