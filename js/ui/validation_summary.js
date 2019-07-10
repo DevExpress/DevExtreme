@@ -23,13 +23,11 @@ var ValidationSummary = CollectionWidget.inherit({
             /**
             * @name dxValidationSummaryOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
             focusStateEnabled: false,
             /**
             * @name dxValidationSummaryOptions.noDataText
             * @hidden
-            * @inheritdoc
             */
             noDataText: null
             /**
@@ -42,127 +40,105 @@ var ValidationSummary = CollectionWidget.inherit({
             /**
             * @name dxValidationSummaryOptions.dataSource
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.itemRender
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.disabled
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.hint
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.itemHoldTimeout
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.rtlEnabled
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.visible
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.width
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.height
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.onItemHold
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.onItemRendered
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.onItemSelect
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxValidationSummaryOptions.onSelectionChanged
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.onItemContextMenu
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxValidationSummaryOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -320,21 +296,18 @@ var ValidationSummary = CollectionWidget.inherit({
     * @name dxValidationSummaryMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxValidationSummaryMethods.getDataSource
     * @publicName getDataSource()
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxValidationSummaryMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 
 }).include(ValidationMixin);

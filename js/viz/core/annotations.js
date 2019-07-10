@@ -151,7 +151,12 @@ const chartPlugin = {
             }
 
             if(isDefined(argument)) {
-                coords[argCoordName] = argAxis.getTranslator().translate(argument);
+                if(series) {
+                    const center = series.getPointCenterByArg(argument);
+                    center && (coords[argCoordName] = center[argCoordName]);
+                } else {
+                    coords[argCoordName] = argAxis.getTranslator().translate(argument);
+                }
                 !isDefined(pane) && (pane = argAxis.pane);
             }
 
@@ -168,10 +173,8 @@ const chartPlugin = {
                     coords[valCoordName] = argAxis.getAxisPosition();
                 } else if(isDefined(axis) && !isDefined(series)) {
                     coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
-                } else if(isDefined(series)) {
-                    if(series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
-                        coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
-                    }
+                } else if(isDefined(series) && series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
+                    coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
                 }
             }
 
@@ -181,9 +184,6 @@ const chartPlugin = {
                 } else if(isDefined(series)) {
                     if(series.checkSeriesViewportCoord(axis, coords[valCoordName])) {
                         coords[argCoordName] = series.getSeriesPairCoord(coords[valCoordName], false);
-                    }
-                    if(!isDefined(coords[argCoordName])) {
-                        coords[argCoordName] = axis.getAxisPosition();
                     }
                 }
             }

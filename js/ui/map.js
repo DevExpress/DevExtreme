@@ -126,14 +126,12 @@ var Map = Widget.inherit({
 
             /**
             * @name dxMapOptions.width
-            * @inheritdoc
             * @default 300
             */
             width: 300,
 
             /**
             * @name dxMapOptions.height
-            * @inheritdoc
             * @default 300
             */
             height: 300,
@@ -355,7 +353,6 @@ var Map = Widget.inherit({
                     * @name dxMapOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

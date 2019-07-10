@@ -718,6 +718,67 @@ QUnit.test("clear selection and filtering in field chooser treeview on popup hid
     assert.ok(resetTreeView.calledOnce, 'resetTreeView was called');
 });
 
+// T752355
+QUnit.test("add field to column area in field chooser when enabled state storing", function(assert) {
+    var pivotGrid = createPivotGrid({
+        fieldChooser: {
+            applyChangesMode: "onDemand",
+            enabled: true
+        },
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return $.Deferred().resolve({
+                    fields: [{ dataField: "field2", area: "column" }]
+                });
+            }
+        },
+        dataSource: [{
+            field1: "",
+            field2: ""
+        }]
+    }, assert);
+
+    this.clock.tick();
+
+    // act, assert
+    pivotGrid.getFieldChooserPopup().show();
+    this.clock.tick(500);
+
+    function normalizeField(field) {
+        return { area: field.area, areaIndex: field.areaIndex, dataField: field.dataField };
+    }
+
+    assert.equal($(".dx-checkbox-checked").length, 1, "one checked checkbox");
+
+    assert.deepEqual(pivotGrid.getDataSource().state().fields.map(normalizeField), [{
+        "area": undefined,
+        "areaIndex": undefined,
+        "dataField": "field1"
+    }, {
+        "area": "column",
+        "areaIndex": 0,
+        "dataField": "field2"
+    }], "field's state when one field is in column area");
+
+    $(".dx-checkbox").eq(0).trigger("dxclick");
+    assert.equal($(".dx-checkbox-checked").length, 2, "two checked checkboxes");
+
+    $(".dx-button").eq(2).trigger("dxclick");
+    this.clock.tick(500);
+
+    assert.deepEqual(pivotGrid.getDataSource().state().fields.map(normalizeField), [{
+        "area": "column",
+        "areaIndex": 1,
+        "dataField": "field1"
+    }, {
+        "area": "column",
+        "areaIndex": 0,
+        "dataField": "field2"
+    }], "field's state when two fields are in column area");
+});
+
 QUnit.test("Field panel headerFilter with search", function(assert) {
     createPivotGrid({
         dataSource: this.dataSource,
@@ -1440,6 +1501,42 @@ QUnit.test("contextMenu", function(assert) {
 
     // assert
     assert.ok(testItemClicked, "Test item clicked");
+});
+
+// T753856
+QUnit.test("contextMenu in field chooser", function(assert) {
+    var contextMenuPreparing = sinon.spy(),
+        pivotGrid = createPivotGrid({
+            dataSource: {
+                fields: [{
+                    dataField: "id",
+                    area: "row"
+                }],
+                store: [{
+                    "id": 1
+                }]
+            },
+            fieldChooser: {
+                enabled: true
+            },
+            onContextMenuPreparing: contextMenuPreparing
+        }, assert);
+
+    this.clock.tick();
+
+    // act
+    pivotGrid.getFieldChooserPopup().show();
+
+    this.clock.tick(500);
+
+    $(".dx-area").eq(1).find(".dx-area-field-content").eq(0).trigger("dxcontextmenu");
+
+    // assert
+    assert.equal(contextMenuPreparing.callCount, 1, "contextMenuPreparing event fired only once");
+
+    var args = contextMenuPreparing.getCall(0).args[0];
+    assert.strictEqual(args.component.NAME, "dxPivotGrid", "handler was called by dxPivotGrid component");
+    assert.deepEqual(args.field, args.component.getDataSource().field(0), "field");
 });
 
 QUnit.test("contextMenu on Total node when rowHeaderLayout is 'tree'", function(assert) {

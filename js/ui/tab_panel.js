@@ -1,21 +1,21 @@
-var $ = require("../core/renderer"),
-    support = require("../core/utils/support"),
-    extend = require("../core/utils/extend").extend,
-    devices = require("../core/devices"),
-    registerComponent = require("../core/component_registrator"),
-    MultiView = require("./multi_view"),
-    Tabs = require("./tabs"),
-    TabPanelItem = require("./tab_panel/item").default,
-    iconUtils = require("../core/utils/icon"),
-    getPublicElement = require("../core/utils/dom").getPublicElement,
-    BindableTemplate = require("./widget/bindable_template"),
-    windowUtils = require("../core/utils/window");
+import $ from "../core/renderer";
+import support from "../core/utils/support";
+import { extend } from "../core/utils/extend";
+import devices from "../core/devices";
+import registerComponent from "../core/component_registrator";
+import MultiView from "./multi_view";
+import Tabs from "./tabs";
+import { default as TabPanelItem } from "./tab_panel/item";
+import iconUtils from "../core/utils/icon";
+import { getPublicElement } from "../core/utils/dom";
+import BindableTemplate from "./widget/bindable_template";
+import windowUtils from "../core/utils/window";
 
-var TABPANEL_CLASS = "dx-tabpanel",
-    TABPANEL_TABS_CLASS = "dx-tabpanel-tabs",
-    TABPANEL_CONTAINER_CLASS = "dx-tabpanel-container",
+const TABPANEL_CLASS = "dx-tabpanel";
+const TABPANEL_TABS_CLASS = "dx-tabpanel-tabs";
+const TABPANEL_CONTAINER_CLASS = "dx-tabpanel-container";
 
-    TABS_ITEM_TEXT_CLASS = "dx-tab-text";
+const TABS_ITEM_TEXT_CLASS = "dx-tab-text";
 
 /**
 * @name dxTabPanel
@@ -37,7 +37,6 @@ var TabPanel = MultiView.inherit({
              * @name dxTabPanelOptions.items
              * @type Array<string, dxTabPanelItem, object>
              * @fires dxTabPanelOptions.onOptionChanged
-             * @inheritdoc
              */
 
             /**
@@ -55,7 +54,6 @@ var TabPanel = MultiView.inherit({
              * @name dxTabPanelOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -131,7 +129,6 @@ var TabPanel = MultiView.inherit({
             /**
             * @name dxTabPanelItem.visible
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxTabPanelItem.title
@@ -159,7 +156,6 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -173,7 +169,6 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions.swipeEnabled
                     * @type boolean
                     * @default false @for non-touch_devices
-                    * @inheritdoc
                     */
                     swipeEnabled: false
                 }
@@ -186,7 +181,6 @@ var TabPanel = MultiView.inherit({
                     * @type boolean
                     * @default false
                     * @default true @for Android|iOS|Windows_Mobile
-                    * @inheritdoc
                     */
                     animationEnabled: false
                 }
@@ -364,6 +358,14 @@ var TabPanel = MultiView.inherit({
         if(visible) {
             this._tabs._dimensionChanged();
             this._updateLayout();
+        }
+    },
+
+    registerKeyHandler: function(key, handler) {
+        this.callBase(key, handler);
+
+        if(this._tabs) {
+            this._tabs.registerKeyHandler(key, handler);
         }
     },
 

@@ -245,7 +245,12 @@ var lineMethods = {
     }
 };
 
-var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods);
+var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods, {
+    getPointCenterByArg(arg) {
+        const value = this.getArgumentAxis().getTranslator().translate(arg);
+        return { x: value, y: value };
+    }
+});
 
 exports.chart["stepline"] = _extend({}, lineSeries, {
     _calculateStepLinePoints(points) {
@@ -284,7 +289,13 @@ exports.chart["stepline"] = _extend({}, lineSeries, {
 
         for(let i = 0; i < nearestPoints.length; i++) {
             const p = nearestPoints[i];
-            const tmpCoord = isArgument && coord !== p[1][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
+            let tmpCoord;
+
+            if(isArgument) {
+                tmpCoord = coord !== p[1][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
+            } else {
+                tmpCoord = coord === p[0][coordName] ? p[0][oppositeCoordName] : p[1][oppositeCoordName];
+            }
 
             if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
                 oppositeCoord = tmpCoord;

@@ -97,6 +97,18 @@
 
     .dx-filemanager-files-view {
         background: @base-bg;
+
+        &.dx-filemanager-details {
+            .dx-filemanager-details-item-thumbnail {
+                font-size: @MATERIAL_BASE_ICON_SIZE;
+            }
+        }
+    }
+
+    .dx-filemanager-details {
+        .dx-filemanager-details-item-name-wrapper {
+            align-items: center;
+        }
     }
 }
 
@@ -129,15 +141,6 @@
             max-width: 350px;
         }
     }
-
-    .dx-row {
-        .dx-filemanager-file-actions-button {
-            .dx-button {
-                margin: -4px 0;
-                height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT - 4;
-            }
-        }
-    }
 }
 
 .dx-filemanager-file-actions-button {
@@ -146,7 +149,7 @@
         height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT;
 
         .dx-button-content {
-            padding: 2px 6px;
+            padding: @FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING 6px;
         }
     }
 }

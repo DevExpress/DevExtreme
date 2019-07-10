@@ -231,6 +231,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                 } else {
                     dataSource.pageIndex(that.pageIndex());
                     if(dataSource.paginate()) {
+                        options.pageIndex = that.pageIndex();
                         storeLoadOptions.skip = that.pageIndex() * that.pageSize();
                     }
                 }
@@ -917,7 +918,7 @@ module.exports = {
 
                             if(isRefresh || change.changeType === "append" || change.changeType === "prepend") {
                                 change.cancel = true;
-                                isRefresh && rowsScrollController.reset();
+                                isRefresh && rowsScrollController.reset(true);
                                 rowsScrollController.load();
                             } else {
                                 if(change.changeType === "update") {

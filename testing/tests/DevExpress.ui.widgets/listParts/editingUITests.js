@@ -398,6 +398,25 @@ QUnit.test("toggling delete toggle button should switch delete ready class", (as
     assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "delete ready class added if toggle pressed");
 });
 
+QUnit.test("animation should stop after first click, toggle", (assert) => {
+    const fxStopSpy = sinon.spy(fx, "stop");
+    const $list = $("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "toggle"
+    });
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item = $items.eq(0);
+    const $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+
+    $deleteToggle.trigger("dxclick");
+    const $buttonContainer = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS));
+
+    assert.strictEqual(fxStopSpy.callCount, 3);
+    assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], "stop is called on button container");
+    assert.strictEqual(fxStopSpy.getCall(1).args[1], false, "without jump to end");
+    fx.stop.restore();
+});
 
 const STATIC_DELETE_BUTTON_CLASS = "dx-list-static-delete-button";
 
@@ -472,6 +491,24 @@ QUnit.test("item swiping should not add delete ready class if widget is disabled
     const startEvent = pointerMock($item).start().swipeStart().lastEvent();
 
     assert.ok(startEvent.cancel, "swipe canceled in disabled widget");
+});
+
+QUnit.test("animation should stop after first click, slideButton", (assert) => {
+    const fxStopSpy = sinon.spy(fx, "stop");
+    const $list = $("#templated-list").dxList({
+        items: ["0", "1", "2"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideButton"
+    });
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item = $items.eq(0);
+    pointerMock($item).start().swipeEnd(1);
+    const $buttonContainer = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS));
+
+    assert.strictEqual(fxStopSpy.callCount, 3);
+    assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], "stop is called on button container");
+    assert.strictEqual(fxStopSpy.getCall(1).args[1], false, "without jump to end");
+    fx.stop.restore();
 });
 
 

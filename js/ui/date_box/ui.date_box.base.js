@@ -786,7 +786,7 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "min":
             case "max":
-                this._validateValue(this.dateOption("value"));
+                this._applyInternalValidation(this.dateOption("value"));
                 this._invalidate();
                 break;
             case "dateSerializationFormat":
@@ -822,6 +822,10 @@ var DateBox = DropDownEditor.inherit({
                 this._updateSize();
                 break;
             case "showDropDownButton":
+                this._updateSize();
+                break;
+            case "readOnly":
+                this.callBase.apply(this, arguments);
                 this._updateSize();
                 break;
             case "invalidDateMessage":

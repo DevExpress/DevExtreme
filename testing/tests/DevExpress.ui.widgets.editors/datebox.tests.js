@@ -1406,6 +1406,32 @@ QUnit.module("widget sizing render", {}, () => {
 
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
     });
+
+    QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            readOnly: true,
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option({
+            readOnly: false,
+            value: new Date()
+        });
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
+    });
 });
 
 QUnit.module("datebox and calendar integration", () => {
@@ -4027,6 +4053,45 @@ QUnit.module("datebox validation", {}, () => {
 
         dateBox.option("value", new Date(2015, 6, 10));
         dateBox.option("min", new Date(2015, 6, 5));
+
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+    });
+
+    QUnit.test("dxDateBox should become invalid if min/max options changed", assert => {
+        const dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 14),
+            value: new Date(2015, 6, 18),
+            max: new Date(2015, 6, 20),
+            pickerType: "calendar"
+        }).dxDateBox("instance");
+
+        dateBox.option("min", new Date(2015, 6, 19));
+        assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+
+        dateBox.option("min", new Date(2015, 6, 14));
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+
+        dateBox.option("max", new Date(2015, 6, 17));
+        assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+
+        dateBox.option("max", new Date(2015, 6, 20));
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+    });
+
+    QUnit.test("required validator should not be triggered when another validation rule has been changed", (assert) => {
+        const dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 14),
+            value: null,
+            max: new Date(2015, 6, 20),
+            pickerType: "calendar"
+        }).dxValidator({
+            validationRules: [{ type: "required", message: "Date is required" }]
+        }).dxDateBox("instance");
+
+        dateBox.option({
+            min: new Date(2015, 6, 13),
+            max: new Date(2015, 6, 21)
+        });
 
         assert.ok(dateBox.option("isValid"), "datebox is valid");
     });

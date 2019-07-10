@@ -2144,7 +2144,8 @@ function createGridView(options, userOptions) {
 
             var gridView = this.createGridView(this.defaultOptions, {
                     scrolling: {
-                        useNative: true
+                        useNative: true,
+                        disabled: false
                     }
                 }),
                 fixedContent,

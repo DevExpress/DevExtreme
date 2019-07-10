@@ -33,26 +33,22 @@ const SpeedDialAction = Widget.inherit({
             /**
             * @name dxSpeedDialActionOptions.visible
             * @hidden
-            * @inheritdoc
             */
             visible: false,
 
             /**
             * @name dxSpeedDialActionOptions.width
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSpeedDialActionOptions.height
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSpeedDialActionOptions.disabled
             * @hidden
-            * @inheritdoc
             */
 
             activeStateEnabled: true,

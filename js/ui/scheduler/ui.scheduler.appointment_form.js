@@ -10,6 +10,7 @@ import "./ui.scheduler.recurrence_editor";
 import "./timezones/ui.scheduler.timezone_editor";
 import "../text_area";
 import "../tag_box";
+import "../switch";
 
 const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
 
@@ -98,7 +99,8 @@ const SchedulerAppointmentForm = {
                             previousValue = dateSerialization.deserializeDate(args.previousValue),
                             endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
                             endValue = dateSerialization.deserializeDate(endDateEditor.option("value"));
-                        if(!that._appointmentForm._lockDateShiftFlag && !!endValue && endValue < value) {
+                        if(!that._appointmentForm._lockDateShiftFlag && typeUtils.isDefined(endValue) && typeUtils.isDefined(value)
+                            && !!endValue && endValue < value) {
                             var duration = endValue.getTime() - previousValue.getTime();
                             endDateEditor.option("value", new Date(value.getTime() + duration));
                         }

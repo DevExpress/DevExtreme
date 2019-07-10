@@ -1450,15 +1450,18 @@ var EditingController = modules.ViewController.inherit((function() {
                         })).always(function() {
                             that._fireSaveEditDataEvents(editData);
                             that._afterSaveEditData();
+                        }).done(function() {
                             result.resolve();
+                        }).fail(function(error) {
+                            result.resolve(error);
                         });
                     } else {
                         dataSource && dataSource.endLoading();
                         result.resolve();
                     }
-                }).fail(function() {
+                }).fail(function(error) {
                     dataSource && dataSource.endLoading();
-                    result.resolve();
+                    result.resolve(error);
                 });
 
                 return result.always(function() {
@@ -1592,7 +1595,7 @@ var EditingController = modules.ViewController.inherit((function() {
          * @name GridBaseMethods.closeEditCell
          * @publicName closeEditCell()
          */
-        closeEditCell: function() {
+        closeEditCell: function(isError) {
             var that = this,
                 editMode = getEditMode(that),
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
@@ -1603,9 +1606,9 @@ var EditingController = modules.ViewController.inherit((function() {
                 result = deferredUtils.Deferred();
                 setTimeout(function() {
                     if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                        that.saveEditData().done(function() {
+                        that.saveEditData().done(function(error) {
                             if(!that.hasChanges()) {
-                                that.closeEditCell();
+                                that.closeEditCell(!!error);
                             }
                         });
                     } else if(oldEditRowIndex >= 0) {
@@ -1615,10 +1618,12 @@ var EditingController = modules.ViewController.inherit((function() {
                         that._editColumnIndex = -1;
 
                         that._beforeCloseEditCellInBatchMode(rowIndices);
-                        dataController.updateItems({
-                            changeType: "update",
-                            rowIndices: rowIndices
-                        });
+                        if(!isError) {
+                            dataController.updateItems({
+                                changeType: "update",
+                                rowIndices: rowIndices
+                            });
+                        }
                     }
                     result.resolve();
                 });
@@ -1699,7 +1704,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 editMode = getEditMode(that);
 
             if(editMode === EDIT_MODE_POPUP) {
-                editForm && editForm.repaint();
+                if(that.option("repaintChangesOnly")) {
+                    row.update && row.update(row);
+                } else {
+                    editForm && editForm.repaint();
+                }
             } else {
                 that._dataController.updateItems({
                     changeType: "update",
@@ -1795,8 +1804,23 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         getFormEditorTemplate: function(cellOptions, item) {
-            var that = this;
-            return function(options, $container) {
+            var that = this,
+                column = this.component.columnOption(item.dataField);
+
+            return function(options, container) {
+                var templateOptions = extend({}, cellOptions),
+                    $container = $(container);
+
+                templateOptions.column = column;
+
+                templateOptions.row.watch && templateOptions.row.watch(function() {
+                    return templateOptions.column.selector(templateOptions.row.data);
+                }, function(newValue) {
+                    templateOptions.value = newValue;
+                    $container.contents().remove();
+                    that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+                });
+
                 that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
             };
         },

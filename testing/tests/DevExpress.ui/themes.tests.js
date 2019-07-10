@@ -7,7 +7,7 @@ import viewPortUtils from "core/utils/view_port";
 const viewPortChanged = viewPortUtils.changeCallback;
 import "style-compiler-test-server/known-css-files";
 
-const { test } = QUnit;
+const { test, testInActiveWindow } = QUnit;
 
 QUnit.module("Selector check", () => {
     if(document.documentMode < 9) {
@@ -568,13 +568,10 @@ QUnit.module("web font checker", () => {
         assert.equal(diff, 0, "Element's count are the same after method call");
     });
 
-    test("waitWebFont: function reject by timeout if the font is not loaded", (assert) => {
+    testInActiveWindow("waitWebFont: function resolve by timeout if the font is not loaded", (assert) => {
         const done = assert.async();
         themes.waitWebFont("test text", 400).then((success) => {
-            assert.ok(false, "The font was not loaded, but waiting successfully resolved");
-            done();
-        }, (fail) => {
-            assert.ok(true, "The font was not loaded, waiting was rejected");
+            assert.ok(true, "The font was not loaded, but waiting successfully resolved");
             done();
         });
     });
