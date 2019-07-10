@@ -5429,6 +5429,42 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
+    QUnit.testInActiveWindow("onFocusedRowChanged should fire after refresh() if empty dataSource, focusedRow=0 and row added (T743864)", function(assert) {
+        // arrange
+        var focusedRowChangedFiresCount = 0;
+
+        this.options = {
+            useKeyboard: true,
+            dataSource: [],
+            editing: {
+                mode: 'row',
+                allowAdding: true
+            },
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            onFocusedRowChanged: () => ++focusedRowChangedFiresCount
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        this.addRow();
+        this.cellValue(0, 0, "Test0");
+        this.cellValue(0, 1, "Test1");
+        this.cellValue(0, 2, "5");
+        this.saveEditData();
+        this.refresh();
+        // assert
+        assert.equal(focusedRowChangedFiresCount, 1, "onFocusedRowChanged fires count");
+
+        // act
+        this.refresh();
+        // assert
+        assert.equal(focusedRowChangedFiresCount, 2, "onFocusedRowChanged fires count");
+    });
+
     // T684122
     QUnit.testInActiveWindow("Focus should not be restored on dataSource change after click in another grid", function(assert) {
         // arrange
