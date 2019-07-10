@@ -3136,7 +3136,7 @@ testModule("focus policy", {
         assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
     });
 
-    test("tab target inside of wrapper but outside of content should not be outside", (assert) => {
+    QUnit.testInActiveWindow("tab target inside of wrapper but outside of content should not be outside", (assert) => {
         const overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
             visible: true,
             shading: true,
@@ -3209,9 +3209,7 @@ testModule("scrollable interaction", {
             assert.ok(false, "scroll should not be fired");
         });
 
-        pointerMock($shader)
-            .start()
-            .wheel(10);
+        pointerMock($shader).start().wheel(10);
 
         $($shader.parent()).off(".TEST");
     });
