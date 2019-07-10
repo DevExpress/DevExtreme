@@ -35,6 +35,7 @@ const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisi
 const SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled";
 const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = "dx-scrollable-scrollbar-active";
 const RTL_CLASS = "dx-rtl";
+
 const SCROLLBAR_HOVERABLE_CLASS = "dx-scrollbar-hoverable";
 
 const SCROLLBAR_MIN_HEIGHT = 15;
@@ -2873,6 +2874,78 @@ QUnit.test("scroll should work on mousewheel after draging on horizontal bar", f
     assert.equal(scrollable.scrollOffset().top, distance, "scrolled vertically");
 });
 
+if(devices.current().deviceType === "desktop") {
+    ["vertical", "horizontal"].forEach((direction) => {
+        class ValidateMouseWheelEventTestHelper {
+            constructor(direction) {
+                this._direction = direction;
+                this._wheelEvent = {
+                    type: "dxmousewheel",
+                    pointerType: "mouse",
+                    shiftKey: direction === "vertical" ? false : true
+                };
+
+                this.$scrollable = this._getScrollable();
+
+                this.strategy = this.$scrollable.dxScrollable("instance")._strategy;
+            }
+
+            _getScrollable() {
+                return $("#scrollable").dxScrollable({
+                    useNative: true,
+                    direction: this._direction
+                });
+            }
+
+            getEvent() { return this._wheelEvent; }
+
+            getScrollableContainer() {
+                return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            }
+        }
+
+        QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
+        });
+
+        QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+            let $container = helper.getScrollableContainer();
+
+            $container.scrollTop(50);
+            $container.scrollLeft(50);
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = -1");
+        });
+
+        QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+            let $container = helper.getScrollableContainer();
+
+            $container.scrollTop(25);
+            $container.scrollLeft(25);
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
+        });
+    });
+}
 
 QUnit.module("initViewport integration", moduleConfig);
 
