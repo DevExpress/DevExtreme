@@ -11768,6 +11768,36 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.equal($rows.find("col").get(0).style.width, "1000px", "column width in detail grid is corrent");
 });
 
+QUnit.test("Should update grid after error row rendered (T755293)", function(assert) {
+    // arrange act
+    var eventArray = [],
+        errorCloseButton,
+        dataGrid = createDataGrid({
+            columns: [{ dataField: "field1", fixed: true }, { dataField: "field2" }],
+            dataSource: {
+                load: function() {
+                    return $.Deferred().reject('Load error');
+                }
+            },
+            onDataErrorOccurred: () => eventArray.push("onDataErrorOccurred"),
+            onContentReady: () => eventArray.push("onContentReady")
+        });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(eventArray[0], "onDataErrorOccurred", "onDataErrorOccurred event fired first");
+    assert.equal(eventArray[1], "onContentReady", "onContentReady event fired second");
+
+    // act
+    errorCloseButton = $(dataGrid._$element.find(".dx-closebutton").eq(0));
+    errorCloseButton.trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.equal(eventArray[2], "onContentReady", "onContentReady event fired after closing error row");
+});
+
 // T607490
 QUnit.test("Scrollable should be updated after expand master detail row with nested DataGrid", function(assert) {
     // arrange
