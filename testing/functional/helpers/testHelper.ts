@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 
 export async function createWidget(widgetName: string, options: any) {
     await ClientFunction(() => {
-        $("#container")[widgetName](options);
+        (window as any).widget = $("#container")[widgetName](options)[widgetName]("instance");
     },
         {
             dependencies:

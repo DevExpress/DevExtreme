@@ -148,9 +148,10 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return result.reject().promise();
             }
 
-            var rowIndexByKey = that._getFocusedRowIndexByKey(key);
+            let rowIndexByKey = that._getFocusedRowIndexByKey(key),
+                isPaginate = dataController.getDataSource().paginate();
 
-            if(rowIndex >= 0 && rowIndex === rowIndexByKey) {
+            if(!isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
                 that._triggerUpdateFocusedRow(key, result);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
