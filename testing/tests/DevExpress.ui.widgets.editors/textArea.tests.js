@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
-require("common.css!");
-require("ui/text_area");
+import "common.css!";
+import "ui/text_area";
 
 QUnit.testStart(function() {
     var markup =
@@ -11,6 +11,9 @@ QUnit.testStart(function() {
             <div id="textarea"></div>\
             <div id="widget"></div>\
             <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="container">\
+                <div id="withContainer"></div>\
+            </div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -364,4 +367,28 @@ QUnit.test("vertical scroll bar is hidden in auto resize mode", function(assert)
     instance.option("autoResizeEnabled", true);
 
     assert.equal($input.css("overflow-y"), "hidden", "vertical scroll bar is hidden after enabling auto resize");
+});
+
+
+QUnit.test("widget can not scroll container to the top on change content height (T755402)", function(assert) {
+    const container = $("#container").css({
+        "overflow": "scroll",
+        "height": "60px"
+    });
+
+    const $element = $("#withContainer").dxTextArea({
+            autoResizeEnabled: true,
+            valueChangeEvent: "keyup"
+        }),
+        $input = $element.find(".dx-texteditor-input");
+
+    $($input).trigger("focus");
+    keyboardMock($input).type("\n\n");
+    keyboardMock($input).type("\n\n");
+    keyboardMock($input).type("\n\n");
+    keyboardMock($input).type("\n\n");
+    keyboardMock($input).type("\n\n");
+    container.scrollTop(20);
+    keyboardMock($input).type("\n\n");
+    assert.strictEqual(container.scrollTop(), 20);
 });
