@@ -27,20 +27,21 @@ const createScheduler = async () => {
 }
 
 test("Tooltip shouldn't hide after scroll in browser height is small (T755449)", async t => {
-    await t.resizeWindow(600, 400);
-    await t.click(scheduler.getAppointment());
-    await t.expect(scheduler.isTooltipVisible()).ok();
+    await t.resizeWindow(600, 400)
+        .click(scheduler.getAppointment())
+        .expect(scheduler.isTooltipVisible()).ok();
 
     await scrollBrowser();
+
     await t.expect(scheduler.isTooltipVisible()).notOk();
 
 }).before(async () => await createScheduler());
 
 test("Tooltip should hide after scroll", async t => {
-    await t.resizeWindow(600, 600);
-    await t.click(scheduler.getAppointment());
+    await t.resizeWindow(600, 600)
+        .click(scheduler.getAppointment())
+        .expect(scheduler.isTooltipVisible()).ok();
 
-    await t.expect(scheduler.isTooltipVisible()).ok();
     await scrollBrowser();
 
     await t.expect(scheduler.isTooltipVisible()).notOk();
