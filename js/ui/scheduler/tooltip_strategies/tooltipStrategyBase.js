@@ -37,6 +37,7 @@ export class TooltipStrategyBase {
             this._showCore(target, dataList, isSingleItemBehavior);
         }
     }
+
     _showCore(target, dataList, isSingleItemBehavior) {
         if(!this.tooltip) {
             this.list = this._createList(target, dataList);
@@ -50,6 +51,9 @@ export class TooltipStrategyBase {
 
         this.tooltip.option("visible", true);
         this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
+    }
+
+    dispose() {
     }
 
     hide() {
