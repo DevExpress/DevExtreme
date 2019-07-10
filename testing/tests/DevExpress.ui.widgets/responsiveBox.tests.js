@@ -1,28 +1,41 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    registerComponent = require("core/component_registrator"),
-    Widget = require("ui/widget/ui.widget"),
-    ResponsiveBox = require("ui/responsive_box"),
-    responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js");
+import $ from "jquery";
+import devices from "core/devices";
+import registerComponent from "core/component_registrator";
+import Widget from "ui/widget/ui.widget";
+import ResponsiveBox from "ui/responsive_box";
+import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import { extend } from "core/utils/extend";
 
-require("common.css!");
-require("ui/box");
+import "ui/scroll_view/ui.scrollable";
+import "ui/tree_view";
+import "ui/box";
 
-QUnit.testStart(function() {
-    var markup =
-        '<div id="responsiveBox"></div>\
-        \
-        <div id="responsiveBoxWithTemplate">\
-            <div data-options="dxItem: { location: { row: 0 , col: 0 } }">test</div>\
-        </div>';
+import "common.css!";
+
+QUnit.testStart(() => {
+    const markup =
+        `<div id="container">
+            <div id="responsiveBox"></div>
+        </div>
+        <div id="responsiveBoxWithTemplate">
+            <div data-options="dxItem: { location: { row: 0 , col: 0 } }">test</div>
+        </div>`;
 
     $("#qunit-fixture").html(markup);
 });
 
-var BOX_CLASS = "dx-box",
-    BOX_ITEM_CLASS = "dx-box-item";
+const BOX_CLASS = "dx-box";
+const BOX_ITEM_CLASS = "dx-box-item";
+const SCROLLABLE_CONTAINER = "dx-scrollable-container";
 
-var moduleConfig = {
+const dataSource = [
+    { location: { col: 0, row: 0 } },
+    { location: { col: 1, row: 0 } },
+    { location: { col: 0, row: 1 } },
+    { location: { col: 0, row: 1 } }
+];
+
+const moduleConfig = {
     beforeEach: function() {
         responsiveBoxScreenMock.setup.call(this);
     },
@@ -596,4 +609,109 @@ QUnit.test("responsive box should render layout correctly after item option chan
 
     assert.equal($("#responsiveBox").find(".dx-item").eq(0).get(0).style.display, "flex", "Layout is correct");
     assert.equal($("#responsiveBox").find(".dx-item").eq(0).get(0).style.flex, "1 1 auto", "Layout is correct");
+});
+
+const checkScrolling = (assert, { cols, rows, dataSource }, checkHorizontalScrolling) => {
+    cols = cols || [{ ratio: 1 }, { ratio: 1 }];
+    rows = rows || [{ ratio: 1 }, { ratio: 1 }];
+
+    const $responsiveBox = $("#responsiveBox").dxResponsiveBox({ cols, rows, dataSource });
+    const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+
+    assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
+    if(checkHorizontalScrolling) {
+        assert.ok(scrollableContainer.scrollWidth > scrollableContainer.clientWidth, "The horizontal scrolling");
+    }
+};
+
+QUnit.module("Scrolling with the Scrollable", {
+    beforeEach: function() {
+        this.dataSource = extend(true, [], dataSource);
+        this.dataSource[0].template = () =>
+            $(`
+                <div style="width: 200px; height: 200px">
+                    <div style="width: 500px; height: 500px"/>
+                </div>
+            `).dxScrollable({ direction: "both" });
+    }
+}, () => {
+    QUnit.test("default rendering", function(assert) {
+        checkScrolling(assert, {
+            dataSource: this.dataSource
+        }, true);
+    });
+
+    QUnit.test("set the ratio = 2 of row", function(assert) {
+        checkScrolling(assert, {
+            rows: [{ ratio: 2 }, { ratio: 1 }],
+            dataSource: this.dataSource
+        }, true);
+    });
+
+    QUnit.test("set the ratio = 2 of column", function(assert) {
+        checkScrolling(assert, {
+            cols: [{ ratio: 2 }, { ratio: 1 }],
+            dataSource: this.dataSource
+        }, true);
+    });
+
+    QUnit.test("set the colSpan", function(assert) {
+        this.dataSource[0].location.colspan = 2;
+        checkScrolling(assert, {
+            dataSource: this.dataSource
+        }, true);
+    });
+
+    QUnit.test("set the rowSpan", function(assert) {
+        this.dataSource[0].location.rowspan = 2;
+        checkScrolling(assert, {
+            dataSource: this.dataSource
+        }, true);
+    });
+});
+
+QUnit.module("Scrolling with the TreeView", {
+    beforeEach: function() {
+        this.dataSource = extend(true, [], dataSource);
+        this.dataSource[0].template = () =>
+            $("<div/>")
+                .height(50)
+                .dxTreeView({
+                    dataSource: [{
+                        id: "1",
+                        text: "Item1",
+                        expanded: true,
+                        items: [{
+                            id: "1_1",
+                            text: "Item1_1",
+                            expanded: true,
+                            items: [{
+                                id: "1_2",
+                                text: "Item1_2",
+                                expanded: true
+                            }]
+                        }]
+                    }]
+                });
+    }
+}, () => {
+    QUnit.test("default rendering", function(assert) {
+        checkScrolling(assert, {
+            dataSource: this.dataSource
+        });
+    });
+
+    QUnit.test("set the ratio = 2 of row", function(assert) {
+        checkScrolling(assert, {
+            rows: [{ ratio: 2 }, { ratio: 1 }],
+            dataSource: this.dataSource
+        });
+    });
+
+    QUnit.test("set the rowSpan", function(assert) {
+        dataSource[0].location.rowspan = 2;
+        checkScrolling(assert, {
+            dataSource: this.dataSource
+        });
+    });
 });
