@@ -736,6 +736,33 @@ QUnit.test("Operation filter should generates correctly when sorting, remoteOper
     assert.equal(JSON.stringify(filter), '[["name","<","Dan"],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', "Operation filter");
 });
 
+// T755462
+QUnit.test("Check the filter generator for the boolean field", function(assert) {
+    // act, assert
+    var filter = this.dataController._generateBooleanFilter("isRoom", true, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",true]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", false, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","=",null]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", true, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), undefined, "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", false, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","=",true]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", null, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",null]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", null, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), undefined, "filter");
+});
+
 QUnit.test("Get page index by simple key", function(assert) {
     // arrange
     var count = 0,
