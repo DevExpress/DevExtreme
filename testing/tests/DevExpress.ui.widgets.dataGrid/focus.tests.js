@@ -15,6 +15,7 @@ import "data/odata/store";
 import $ from "jquery";
 import eventUtils from "events/utils";
 import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
+import ArrayStore from "data/array_store";
 
 var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
 
@@ -1562,6 +1563,82 @@ QUnit.testInActiveWindow("Page with focused row should loads after sorting", fun
     assert.equal(this.pageIndex(), 2, "PageIndex");
     assert.strictEqual(this.dataController.getVisibleRows()[focusedRowIndex].data, this.data[1], "Focused row data is on the page");
     assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Dan", "Focused row key column text");
+});
+
+// T755462
+QUnit.testInActiveWindow("The page with focused row should load without errors after sorting the boolean column", function(assert) {
+    // arrange
+    var focusedRowIndex;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", isRoom: true },
+        { name: "Dan", phone: "2222222", isRoom: true },
+        { name: "Ben", phone: "333333", isRoom: true },
+        { name: "Sean", phone: "4545454", isRoom: true },
+        { name: "Smith", phone: "555555", isRoom: false },
+        { name: "Zeb", phone: "6666666", isRoom: false }
+    ];
+
+    var store = new ArrayStore(this.data),
+        loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+
+    this.options = {
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        paging: {
+            pageSize: 2
+        },
+        sorting: {
+            mode: "single"
+        },
+        columns: [
+            "name", "phone",
+            { dataField: "isRoom", allowSorting: true, dataType: "boolean" }
+        ],
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        remoteOperations: true,
+        dataSource: {
+            load: loadSpy,
+            key: "name",
+            totalCount: function(options) {
+                return store.totalCount(options);
+            }
+        }
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    loadSpy.reset();
+    this.getController("columns").changeSortOrder(2, "asc");
+    this.clock.tick();
+
+    // assert
+    focusedRowIndex = this.option("focusedRowIndex");
+    assert.strictEqual(this.pageIndex(), 1, "pageIndex");
+    assert.strictEqual(this.dataController.getVisibleRows()[focusedRowIndex].data, this.data[0], "Focused row data is on the page");
+
+    // loadSpy.getCall(0) - load first page
+    // loadSpy.getCall(1) - load second page
+    // loadSpy.getCall(2) - load focused row
+    assert.deepEqual(loadSpy.getCall(3).args[0].filter, [
+        ["isRoom", "<>", true], "or", [
+            ["isRoom", "=", true ], "and", [
+                ["name", "<", "Alex"], "or", [
+                    ["name", "=", "Alex"], "and", ["name", "<", "Alex" ]
+                ]
+            ]
+        ]
+    ]); // load data before a focused row
 });
 
 QUnit.testInActiveWindow("DataGrid - Should paginate to the defined focusedRowKey", function(assert) {
