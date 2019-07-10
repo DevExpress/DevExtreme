@@ -998,12 +998,13 @@ QUnit.test("Draw text inside plaque", function(assert) {
 });
 
 QUnit.test("Text params", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {})[0];
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 }, cssClass: "annotation_class" } ], {})[0];
 
     annotation.draw(this.widget, this.group);
 
     assert.deepEqual(this.renderer.text.firstCall.args, ["some text"]);
     assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20 }]);
+    assert.strictEqual(this.renderer.text.firstCall.returnValue.attr.lastCall.args[0]["class"], "annotation_class");
 });
 
 QUnit.test("Merge common and item options", function(assert) {

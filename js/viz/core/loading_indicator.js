@@ -55,7 +55,7 @@ LoadingIndicator.prototype = {
 
     setOptions: function(options) {
         this._rect.attr({ fill: options.backgroundColor });
-        this._text.css(_patchFontOptions(options.font)).attr({ text: options.text });
+        this._text.css(_patchFontOptions(options.font)).attr({ text: options.text, "class": options.cssClass });
         this[options.show ? "show" : "hide"]();
     },
 
