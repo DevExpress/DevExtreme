@@ -1786,6 +1786,7 @@ const Scheduler = Widget.inherit({
     },
 
     _dispose: function() {
+        this._appointmentTooltip && this._appointmentTooltip.dispose();
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 

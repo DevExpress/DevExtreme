@@ -246,8 +246,11 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         });
     }
 
-    _onTooltipShowing() {
+    dispose() {
         clearTimeout(this.skipHidingOnScrollTimeId);
+    }
+
+    _onTooltipShowing() {
         this.skipHidingOnScroll = true;
         this.skipHidingOnScrollTimeId = setTimeout(() => this.skipHidingOnScroll = false, 0);
     }
