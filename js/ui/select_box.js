@@ -64,6 +64,8 @@ var SelectBox = DropDownList.inherit({
                     this._clearFilter();
                 }
 
+                this._isNotActiveInput = true;
+
                 parent.tab && parent.tab.apply(this, arguments);
             },
             upArrow: function() {
@@ -579,6 +581,7 @@ var SelectBox = DropDownList.inherit({
         this.callBase(e);
 
         this._restoreInputText();
+        this._isNotActiveInput = undefined;
     },
 
     _clearTextValue: function() {
@@ -587,6 +590,10 @@ var SelectBox = DropDownList.inherit({
 
     _shouldOpenPopup: function() {
         return this._needPassDataSourceToList();
+    },
+
+    _isFocused: function() {
+        return this.callBase() && !this._isNotActiveInput;
     },
 
     _renderValueChangeEvent: function() {
@@ -861,6 +868,8 @@ var SelectBox = DropDownList.inherit({
 
     _clean: function() {
         delete this._inkRipple;
+        this._isNotActiveInput = undefined;
+
         this.callBase();
     }
 });
