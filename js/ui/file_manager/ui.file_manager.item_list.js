@@ -75,17 +75,17 @@ class FileManagerItemListBase extends Widget {
         this._actions.onSelectionChanged();
     }
 
-    _raiseSelectedItemOpened(item) {
-        this._actions.onSelectedItemOpened({ item });
+    _raiseSelectedItemOpened(fileItemInfo) {
+        this._actions.onSelectedItemOpened({ fileItemInfo });
     }
 
-    _getItemThumbnail(item) {
+    _getItemThumbnail(fileInfo) {
         const itemThumbnailGetter = this.option("getItemThumbnail");
-        return itemThumbnailGetter ? itemThumbnailGetter(item) : { thumbnail: "" };
+        return itemThumbnailGetter ? itemThumbnailGetter(fileInfo) : { thumbnail: "" };
     }
 
-    _getItemThumbnailContainer(item) {
-        const { thumbnail, cssClass } = this._getItemThumbnail(item);
+    _getItemThumbnailContainer(fileInfo) {
+        const { thumbnail, cssClass } = this._getItemThumbnail(fileInfo);
 
         const $itemThumbnail = getImageContainer(thumbnail)
             .addClass(this._getItemThumbnailCssClass());
@@ -117,7 +117,7 @@ class FileManagerItemListBase extends Widget {
         return this.option("contextMenu");
     }
 
-    refreshData() {
+    refresh() {
 
     }
 

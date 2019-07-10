@@ -751,6 +751,8 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name FileProvider.Options.isDirectoryExpr */
         isDirectoryExpr?: string | Function;
+        /** @name FileProvider.Options.keyExpr */
+        keyExpr?: string | Function;
         /** @name FileProvider.Options.nameExpr */
         nameExpr?: string | Function;
         /** @name FileProvider.Options.sizeExpr */

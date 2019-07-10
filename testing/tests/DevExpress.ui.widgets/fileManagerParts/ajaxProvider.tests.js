@@ -30,7 +30,7 @@ const moduleConfig = {
 
 QUnit.module("Ajax File Provider", moduleConfig, () => {
 
-    test("get folders", function(assert) {
+    test("get directory file items", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -38,13 +38,13 @@ QUnit.module("Ajax File Provider", moduleConfig, () => {
             responseText: fileItems
         });
 
-        this.provider.getFolders("")
-            .done(folders => {
-                assert.equal(folders.length, 2);
-                assert.equal(folders[0].name, "F1");
-                assert.ok(folders[0].isDirectory);
-                assert.equal(folders[1].name, "F2");
-                assert.ok(folders[1].isDirectory);
+        this.provider.getItems("")
+            .done(dirs => {
+                assert.equal(dirs.length, 2);
+                assert.equal(dirs[0].name, "F1");
+                assert.ok(dirs[0].isDirectory);
+                assert.equal(dirs[1].name, "F2");
+                assert.ok(dirs[1].isDirectory);
                 done();
             });
     });
