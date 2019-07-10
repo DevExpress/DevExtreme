@@ -102,8 +102,8 @@ QUnit.test("TopLeft alignments", function(assert) {
     assert.strictEqual(options.verticalAlignment, "top");
     assert.strictEqual(options.horizontalAlignment, "left");
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "left" });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], { align: "left" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "left");
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0].align, "left");
 });
 
 QUnit.test("TopCenter alignments", function(assert) {
@@ -114,8 +114,8 @@ QUnit.test("TopCenter alignments", function(assert) {
     assert.strictEqual(options.verticalAlignment, "top");
     assert.strictEqual(options.horizontalAlignment, "center");
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "center" });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "center");
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0].align, "center");
 });
 
 QUnit.test("BottomRight alignments", function(assert) {
@@ -126,8 +126,8 @@ QUnit.test("BottomRight alignments", function(assert) {
     assert.strictEqual(options.verticalAlignment, "bottom");
     assert.strictEqual(options.horizontalAlignment, "right");
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "right" });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], { align: "right" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "right");
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0].align, "right");
 });
 
 QUnit.module("margin options parsing", environment);
@@ -224,8 +224,10 @@ QUnit.test("Update", function(assert) {
         verticalAlignment: "top",
         margin: 20,
         text: "title",
+        cssClass: "title_class",
         subtitle: {
-            text: "subtitle"
+            text: "subtitle",
+            cssClass: "subtitle_class"
         }
     });
 
@@ -240,7 +242,9 @@ QUnit.test("Update", function(assert) {
     });
     assert.equal(title.DEBUG_getOptions().subtitle.text, "subtitle");
     assert.strictEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(4).args[0].align, "left");
+    assert.strictEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(4).args[0]["class"], "title_class");
     assert.strictEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(2).args[0].align, "left");
+    assert.strictEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(2).args[0]["class"], "subtitle_class");
 });
 
 QUnit.test("Update to empty text", function(assert) {
@@ -313,13 +317,13 @@ QUnit.test("Drawing with subtitle", function(assert) {
     this.createTitle().draw();
 
     const titleElement = this.renderer.text.getCall(0).returnValue;
-    assert.deepEqual(titleElement.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(titleElement.attr.getCall(0).args[0].align, "center");
     assert.deepEqual(titleElement.attr.getCall(1).args[0], { text: "A", y: 0 });
     assert.deepEqual(titleElement.attr.getCall(2).args[0], { text: "test" });
     assert.deepEqual(titleElement.attr.getCall(3).args[0], { y: -12 });
 
     const subtitleElement = this.renderer.text.getCall(1).returnValue;
-    assert.deepEqual(subtitleElement.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(subtitleElement.attr.getCall(0).args[0].align, "center");
     assert.deepEqual(subtitleElement.attr.getCall(1).args[0], { text: "subtitle", y: 0 });
     assert.deepEqual(subtitleElement.move.lastCall.args, [0, 8]);
 
@@ -341,7 +345,7 @@ QUnit.test("Second Draw", function(assert) {
 QUnit.test("Draw with size", function(assert) {
     assert.ok(this.createTitle().draw({ width: 50, height: 20 }));
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "center");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], { text: "A", y: 0 });
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(2).args[0], { text: this.options.text });
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(1).args[0], { text: this.options.subtitle.text, y: 0 });

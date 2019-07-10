@@ -882,11 +882,12 @@ QUnit.test("item size > legend canvas", function(assert) {
 QUnit.module("Label align", environment);
 
 QUnit.test("text align. right", function(assert) {
+    this.options.cssClass = "legend_class";
     this.createSimpleLegend().draw(200, 200);
     this.checkItems(assert, [
-        { id: 0, label: { align: "left" } },
-        { id: 0, label: { align: "left" } },
-        { id: 0, label: { align: "left" } }
+        { id: 0, label: { align: "left", "class": "legend_class" } },
+        { id: 0, label: { align: "left", "class": "legend_class" } },
+        { id: 0, label: { align: "left", "class": "legend_class" } }
     ]);
 });
 
