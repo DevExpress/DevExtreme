@@ -2079,6 +2079,8 @@ declare module DevExpress.ui {
         openOnFieldClick?: boolean;
         /** @name dxDropDownBox.Options.valueChangeEvent */
         valueChangeEvent?: string;
+        /** @name dxDropDownBox.Options.valueFormatter */
+        valueFormatter?: ((value: string | Array<any>) => string);
     }
     /** @name dxDropDownBox */
     export class dxDropDownBox extends dxDropDownEditor {

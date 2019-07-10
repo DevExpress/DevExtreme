@@ -73,11 +73,10 @@ module("Basic markup", () => {
         assert.equal(input.val(), "0", "value rendered correctly");
     });
 
-
-    test("T220209 - the 'valueFormat' option", (assert) => {
+    test("T220209 - the 'valueFormatter' option", (assert) => {
         const $textEditor = $("#texteditor").dxTextEditor({
             value: "First",
-            valueFormat: function(value) {
+            valueFormatter: function(value) {
                 return value + " format";
             }
         });
