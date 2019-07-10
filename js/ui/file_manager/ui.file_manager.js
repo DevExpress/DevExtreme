@@ -41,9 +41,9 @@ class FileManager extends Widget {
         this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
 
         this._controller = new FileItemsController({
-            "rootText": "",
-            "fileProvider": this.option("fileProvider"),
-            "onSelectedDirectoryChanged": this._onSelectedDirectoryChanged.bind(this)
+            rootText: "",
+            fileProvider: this.option("fileProvider"),
+            onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option("permissions"));
 

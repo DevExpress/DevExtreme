@@ -6,8 +6,6 @@ import { each } from "../../../core/utils/iterator";
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
-const FILE_MANAGER_ROOT_DIR_KEY = "__DX-FM-ROOT__";
-
 /**
 * @name FileProvider
 * @type object
@@ -191,7 +189,6 @@ class FileManagerItem {
 class FileManagerRootItem extends FileManagerItem {
     constructor() {
         super("", "Files", true);
-        this.key = FILE_MANAGER_ROOT_DIR_KEY;
         this.isRoot = true;
     }
 }

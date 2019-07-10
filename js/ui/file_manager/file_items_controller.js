@@ -115,73 +115,64 @@ export default class FileItemsController {
         const providerDirKey = parentDirectoryInfo.fileItem.isRoot ? "" : parentDirectoryInfo.fileItem.key;
         loadItemsDeferred = when(this._fileProvider.getItems(providerDirKey))
             .then(fileItems => {
-                parentDirectoryInfo.items = [ ];
-                for(let i = 0; i < fileItems.length; i++) {
-                    const fileItem = fileItems[i];
-                    const info = fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo);
-                    parentDirectoryInfo.items.push(info);
-                }
+                parentDirectoryInfo.items = fileItems.map(fileItem =>
+                    fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
+                );
                 parentDirectoryInfo.itemsLoaded = true;
                 return parentDirectoryInfo.items;
             });
 
-        const that = this;
         this._loadedItems[dirKey] = loadItemsDeferred;
         loadItemsDeferred.then(() => {
-            delete that._loadedItems[dirKey];
+            delete this._loadedItems[dirKey];
         });
 
         return loadItemsDeferred;
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const that = this;
         return when(this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name))
-            .done(() => that._resetDirectoryState(parentDirectoryInfo));
+            .done(() => this._resetDirectoryState(parentDirectoryInfo));
     }
 
     renameItem(fileItemInfo, name) {
-        const that = this;
         return when(this._fileProvider.renameItem(fileItemInfo.fileItem, name))
             .done(() => {
-                that._resetDirectoryState(fileItemInfo.parentDirectory);
-                that.setCurrentDirectory(fileItemInfo.parentDirectory);
+                this._resetDirectoryState(fileItemInfo.parentDirectory);
+                this.setCurrentDirectory(fileItemInfo.parentDirectory);
             });
     }
 
     moveItems(itemInfos, destinationDirectory) {
-        const that = this;
         const items = itemInfos.map(i => i.fileItem);
         return when(this._fileProvider.moveItems(items, destinationDirectory.fileItem))
             .done(() => {
                 for(let i = 0; i < itemInfos.length; i++) {
-                    that._resetDirectoryState(itemInfos[i].parentDirectory);
+                    this._resetDirectoryState(itemInfos[i].parentDirectory);
                 }
-                that._resetDirectoryState(destinationDirectory);
-                that.setCurrentDirectory(destinationDirectory);
+                this._resetDirectoryState(destinationDirectory);
+                this.setCurrentDirectory(destinationDirectory);
             });
     }
 
     copyItems(itemInfos, destinationDirectory) {
-        const that = this;
         const items = itemInfos.map(i => i.fileItem);
         return when(this._fileProvider.copyItems(items, destinationDirectory.fileItem))
             .done(() => {
-                that._resetDirectoryState(destinationDirectory);
-                that.setCurrentDirectory(destinationDirectory);
+                this._resetDirectoryState(destinationDirectory);
+                this.setCurrentDirectory(destinationDirectory);
                 destinationDirectory.expanded = true;
             });
     }
 
     deleteItems(itemInfos) {
-        const that = this;
         const items = itemInfos.map(i => i.fileItem);
         return when(this._fileProvider.deleteItems(items))
             .done(() => {
                 for(let i = 0; i < itemInfos.length; i++) {
                     const parentDir = itemInfos[i].parentDirectory;
-                    that._resetDirectoryState(parentDir);
-                    that.setCurrentDirectory(parentDir);
+                    this._resetDirectoryState(parentDir);
+                    this.setCurrentDirectory(parentDir);
                 }
             });
     }

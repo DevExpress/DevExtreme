@@ -49,7 +49,7 @@ class FileManagerFilesTreeView extends Widget {
 
         this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
 
-        eventsEngine.on($treeView, "click", treeViewOptions.onItemClick.bind(this));
+        eventsEngine.on($treeView, "click", treeViewOptions.onItemClick);
     }
 
     _render() {
@@ -133,7 +133,6 @@ class FileManagerFilesTreeView extends Widget {
             this._$focusedElement.toggleClass(FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS, false);
         }
         this._$focusedElement = $element || $();
-        this._$focusedElement.dirInfo = directoryInfo;
         this._$focusedElement.toggleClass(FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS, true);
     }
 
