@@ -292,6 +292,8 @@ var NativeStrategy = Class.inherit({
         return !!this._allowedDirection();
     },
 
+    // TODO: rtl
+    // TODO: horizontal scroll when shift is pressed
     _isScrolledInMaxDirection(e) {
         let container = this._$container.get(0);
         let result;
