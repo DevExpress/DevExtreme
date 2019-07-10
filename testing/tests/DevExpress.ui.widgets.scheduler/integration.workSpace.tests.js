@@ -1876,3 +1876,26 @@ QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view 
 
     assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
 });
+
+QUnit.test("Custom dataCellTemplate enables vertical scroll of Month view (T745074)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: [{
+            type: 'month',
+            dataCellTemplate: function(cellData) {
+                var wrapper = $('<div style="height:500px !important">')
+                    .addClass('dx-template-wrapper');
+                wrapper.append($('<div>')
+                    .text(cellData.text)
+                );
+                return wrapper;
+            },
+        }],
+        currentView: "month",
+        height: 600,
+    });
+
+    let $verticalScrollbar = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollbar-vertical");
+
+    assert.ok($verticalScrollbar.is(":visible"), "Scroll is visible");
+});
