@@ -386,7 +386,7 @@ Label.prototype = {
                 disposeItem(that, "_connector");
             }
 
-            that._text.attr({ text: text, align: options.textAlignment });
+            that._text.attr({ text: text, align: options.textAlignment, "class": options.cssClass });
             that._updateBackground(that._text.getBBox());
             that._setVisibility("visible", true);
             that._drawn = true;
