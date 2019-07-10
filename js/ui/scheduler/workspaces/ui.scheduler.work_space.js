@@ -334,7 +334,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _hasDataCellTemplate: function() {
-        return this.option("dataCellTemplate");
+        return !!this.option("dataCellTemplate");
     },
 
     _getGroupIndexByCell: function($cell) {
