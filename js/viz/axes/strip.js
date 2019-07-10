@@ -25,7 +25,7 @@ export default function createStrip(axis, options) {
             return axis._renderer
                 .text(labelOptions.text, coords.x, coords.y)
                 .css(patchFontOptions(extend({}, axis.getOptions().label.font, labelOptions.font)))
-                .attr({ align: "center" })
+                .attr({ align: "center", "class": labelOptions.cssClass })
                 .append(axis._axisStripLabelGroup);
         },
 

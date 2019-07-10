@@ -397,14 +397,10 @@ Axis.prototype = {
         return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, getConstantLineSharpDirection(value, this._getCanvasStartEnd()));
     },
 
-    _drawConstantLineLabelText: function(text, x, y, constantLineLabelOptions, group) {
-        var that = this,
-            options = that._options,
-            labelOptions = options.label;
-
-        return that._renderer.text(text, x, y)
-            .css(patchFontOptions(extend({}, labelOptions.font, constantLineLabelOptions.font)))
-            .attr({ align: "center" })
+    _drawConstantLineLabelText: function(text, x, y, { font, cssClass }, group) {
+        return this._renderer.text(text, x, y)
+            .css(patchFontOptions(extend({}, this._options.label.font, font)))
+            .attr({ align: "center", "class": cssClass })
             .append(group);
     },
 
@@ -899,7 +895,8 @@ Axis.prototype = {
         that._hasLabelFormat = labelOpt.format !== "" && isDefined(labelOpt.format);
         that._textOptions = {
             opacity: labelOpt.opacity,
-            align: "center"
+            align: "center",
+            "class": labelOpt.cssClass
         };
         that._textFontStyles = vizUtils.patchFontOptions(labelOpt.font);
 

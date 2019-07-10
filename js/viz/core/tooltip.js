@@ -112,7 +112,7 @@ Tooltip.prototype = {
                 textHtml.html(state.html);
             } else {
                 textHtml.html("");
-                that._text.css({ fill: state.textColor }).attr({ text: state.text }).append(group.attr({ align: options.textAlignment }));
+                that._text.css({ fill: state.textColor }).attr({ text: state.text, "class": options.cssClass }).append(group.attr({ align: options.textAlignment }));
             }
             this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
         }, true, (tooltip, g) => {

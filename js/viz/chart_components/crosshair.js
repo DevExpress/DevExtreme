@@ -1,19 +1,19 @@
-var math = Math,
-    mathAbs = math.abs,
-    mathMin = math.min,
-    mathMax = math.max,
-    mathFloor = math.floor,
-    vizUtils = require("../core/utils"),
-    extend = require("../../core/utils/extend").extend,
-    HORIZONTAL = "horizontal",
-    VERTICAL = "vertical",
-    LABEL_BACKGROUND_PADDING_X = 8,
-    LABEL_BACKGROUND_PADDING_Y = 4,
-    CENTER = "center",
-    RIGHT = "right",
-    LEFT = "left",
-    TOP = "top",
-    BOTTOM = "bottom";
+import { patchFontOptions } from "../core/utils";
+import { extend } from "../../core/utils/extend";
+const math = Math;
+const mathAbs = math.abs;
+const mathMin = math.min;
+const mathMax = math.max;
+const mathFloor = math.floor;
+const HORIZONTAL = "horizontal";
+const VERTICAL = "vertical";
+const LABEL_BACKGROUND_PADDING_X = 8;
+const LABEL_BACKGROUND_PADDING_Y = 4;
+const CENTER = "center";
+const RIGHT = "right";
+const LEFT = "left";
+const TOP = "top";
+const BOTTOM = "bottom";
 
 exports.getMargins = function() {
     return {
@@ -176,8 +176,9 @@ Crosshair.prototype = {
                 }
                 align = position === TOP || position === BOTTOM ? CENTER : (position === RIGHT ? LEFT : RIGHT);
                 background = renderer.rect(0, 0, 0, 0).attr({ fill: labelOptions.backgroundColor || options.line.stroke }).append(group);
-                text = renderer.text("0", 0, 0).css(vizUtils.patchFontOptions(options.label.font)).attr({
-                    align: align
+                text = renderer.text("0", 0, 0).css(patchFontOptions(options.label.font)).attr({
+                    align: align,
+                    "class": labelOptions.cssClass
                 }).append(group);
 
                 labels.push({ text: text, background: background, axis: axis, options: labelOptions, pos: { coord: currentLabelPos, side: position }, startXY: { x: x, y: y } });

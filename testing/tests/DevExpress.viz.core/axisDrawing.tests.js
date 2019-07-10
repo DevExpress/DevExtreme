@@ -2215,6 +2215,7 @@ QUnit.test("Check styles", function(assert) {
             indentFromAxis: 10,
             alignment: "left",
             opacity: 0.34,
+            cssClass: "label_class",
             font: {
                 color: "#123456",
                 size: 10,
@@ -2232,7 +2233,7 @@ QUnit.test("Check styles", function(assert) {
     this.axis.draw(this.canvas);
 
     // assert
-    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args, [{ opacity: 0.34, align: "center" }], "Text args");
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args, [{ opacity: 0.34, align: "center", "class": "label_class" }], "Text args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.getCall(0).args, [{
         fill: "#123456",
         "font-family": "Tahoma2",
@@ -4319,7 +4320,7 @@ QUnit.test("Horizontal top", function(assert) {
     assert.equal(renderer.text.callCount, 1, "Text call count");
 
     assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 50, 30]);
-    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.firstCall.args[0], { opacity: 0.34, align: "center" });
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.firstCall.args[0], { opacity: 0.34, align: "center", "class": undefined });
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.lastCall.args[0], { translateY: 30 - 5 - (2 + 6) }, "Text args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.lastCall.args[0], {
         "fill": "#123456",
@@ -4389,7 +4390,7 @@ QUnit.test("Vertical left", function(assert) {
 
     // assert
     assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 10, 50]);
-    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.33, rotate: 270, align: "center" });
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.33, rotate: 270, align: "center", "class": undefined });
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], {
         translateX: 10 - 5 - (2 + 6)
     }, "Text args");
@@ -4423,7 +4424,7 @@ QUnit.test("Vertical right", function(assert) {
 
     // assert
     assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 90, 50]);
-    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.33, rotate: 90, align: "center" });
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.33, rotate: 90, align: "center", "class": undefined });
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], {
         translateX: 90 + 5 - 2
     }, "Text args");
@@ -4516,7 +4517,7 @@ QUnit.test("Vertical. Inverted", function(assert) {
 
     // assert
     assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 10, 50]);
-    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.33, rotate: 270, align: "center" });
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.33, rotate: 270, align: "center", "class": undefined });
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], {
         translateX: 10 - 5 - (2 + 6)
     }, "Text args");

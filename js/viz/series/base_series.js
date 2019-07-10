@@ -107,7 +107,8 @@ function getLabelOptions(labelOptions, defaultColor) {
         connector: connectorAttr,
         rotationAngle: opt.rotationAngle,
         wordWrap: opt.wordWrap,
-        textOverflow: opt.textOverflow
+        textOverflow: opt.textOverflow,
+        cssClass: opt.cssClass
     };
 }
 

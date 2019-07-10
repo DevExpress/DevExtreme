@@ -684,7 +684,7 @@ QUnit.test("draw labels", function(assert) {
     for(var i = 0; i < this.renderer.text.callCount; i++) {
         assert.deepEqual(this.renderer.text.getCall(i).args, ["" + i * 2000]);
 
-        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(0).args[0], { opacity: 1, align: "center" });
+        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(0).args[0], { opacity: 1, align: "center", "class": undefined });
         assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(1).args, [{
             x: Math.round(20 + axis.getRadius() * Math.cos(33 * Math.PI / 180)),
             y: Math.round(50 + axis.getRadius() * Math.sin(33 * Math.PI / 180))
@@ -815,13 +815,14 @@ QUnit.test("create strips with label, option 'startAngle' > 0", function(assert)
 });
 
 QUnit.test("adjusted strip labels", function(assert) {
-    this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "green", label: { text: "strip label" } }], label: { visible: false } });
+    this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "green", label: { text: "strip label", cssClass: "strip_class" } }], label: { visible: false } });
 
     assert.ok(this.renderer.arc.called);
     assert.ok(this.renderer.text.called);
 
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.firstCall.args, [{
-        align: "center"
+        align: "center",
+        "class": "strip_class"
     }]);
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.lastCall.args, [{
         translateY: 46
@@ -869,11 +870,12 @@ QUnit.test("create constant lines with label, option 'startAngle' > 0", function
 });
 
 QUnit.test("adjust constant line labels", function(assert) {
-    this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
+    this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true, cssClass: "constant_line_label" } }], label: { visible: false } });
 
     assert.ok(this.renderer.text.called);
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.firstCall.args, [{
-        align: "center"
+        align: "center",
+        "class": "constant_line_label"
     }]);
 });
 

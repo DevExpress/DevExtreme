@@ -70,6 +70,7 @@ function labelAnnotation(options) {
         const text = widget._renderer
             .text(options.text)
             .css(patchFontOptions(options.font))
+            .attr({ "class": options.cssClass })
             .append(group);
 
         if(isDefined(width) || isDefined(height)) {
