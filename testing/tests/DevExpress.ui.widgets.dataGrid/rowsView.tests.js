@@ -1328,7 +1328,7 @@ QUnit.test('Render rows after "refresh" from data controller', function(assert) 
 });
 
 QUnit.test('Custom function template for column', function(assert) {
-    var rows = [{ values: [true] }, { values: [false] }, { values: [true] }],
+    var rows = [{ values: [true], rowType: "data" }, { values: [false], rowType: "data" }, { values: [true], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: function(container, options) {
@@ -1359,7 +1359,7 @@ QUnit.test('Custom function template for column', function(assert) {
 
 // T116631
 QUnit.test('Click in cellTemplate should be not prevented', function(assert) {
-    var rows = [{ values: [1] }, { values: [2] }, { values: [3] }],
+    var rows = [{ values: [1], rowType: "data" }, { values: [2], rowType: "data" }, { values: [3], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: function(container, options) {
@@ -1419,7 +1419,7 @@ QUnit.test('Custom function template options for lookup column', function(assert
 
 
 QUnit.test('Custom extern column template with allowRenderToDetachedContainer', function(assert) {
-    var rows = [{ values: ['1'] }, { values: ['2'] }, { values: ['3'] }],
+    var rows = [{ values: ['1'], rowType: "data" }, { values: ['2'], rowType: "data" }, { values: ['3'], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: 'testTemplate'
@@ -1447,7 +1447,7 @@ QUnit.test('Custom extern column template with allowRenderToDetachedContainer', 
 });
 
 QUnit.test('Custom extern column template without allowRenderToDetachedContainer', function(assert) {
-    var rows = [{ values: ['1'] }, { values: ['2'] }, { values: ['3'] }],
+    var rows = [{ values: ['1'], rowType: "data" }, { values: ['2'], rowType: "data" }, { values: ['3'], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: 'testTemplate'
@@ -1488,7 +1488,7 @@ QUnit.test('Custom extern column template without allowRenderToDetachedContainer
 });
 
 QUnit.test('Custom extern column template without allowRenderToDetachedContainer and detached root rowsView element', function(assert) {
-    var rows = [{ values: ['1'] }, { values: ['2'] }, { values: ['3'] }],
+    var rows = [{ values: ['1'], rowType: "data" }, { values: ['2'], rowType: "data" }, { values: ['3'], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: 'testTemplate'

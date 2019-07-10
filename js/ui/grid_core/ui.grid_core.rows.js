@@ -531,8 +531,10 @@ module.exports = {
 
                     if(options.rowType === "group" && isDefined(column.groupIndex) && !column.showWhenGrouped && !column.command) {
                         template = column.groupCellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultGroupTemplate(column) };
+                    } else if((options.rowType === "data" || column.command) && column.cellTemplate) {
+                        template = column.cellTemplate;
                     } else {
-                        template = column.cellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
+                        template = { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
                     }
 
                     return template;
