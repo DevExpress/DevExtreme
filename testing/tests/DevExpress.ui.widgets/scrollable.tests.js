@@ -20,31 +20,32 @@ import { isRenderer } from "core/utils/type";
 
 import "common.css!";
 
-var SCROLLABLE_CLASS = "dx-scrollable",
-    SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
-    SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper",
-    SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
-    SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar",
-    SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll",
-    SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content",
-    SCROLLBAR_VERTICAL_CLASS = "dx-scrollbar-vertical",
-    SCROLLBAR_HORIZONTAL_CLASS = "dx-scrollbar-horizontal",
-    SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native",
-    SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden",
-    SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible",
-    SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled",
-    SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = "dx-scrollable-scrollbar-active",
-    RTL_CLASS = "dx-rtl";
+const SCROLLABLE_CLASS = "dx-scrollable";
+const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
+const SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper";
+const SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content";
+const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
+const SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll";
+const SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content";
+const SCROLLBAR_VERTICAL_CLASS = "dx-scrollbar-vertical";
+const SCROLLBAR_HORIZONTAL_CLASS = "dx-scrollbar-horizontal";
+const SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native";
+const SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden";
+const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible";
+const SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled";
+const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = "dx-scrollable-scrollbar-active";
+const RTL_CLASS = "dx-rtl";
+const SCROLLBAR_HOVERABLE_CLASS = "dx-scrollbar-hoverable";
 
-var SCROLLBAR_MIN_HEIGHT = 15,
-    INERTIA_TIMEOUT = 100;
+const SCROLLBAR_MIN_HEIGHT = 15;
+const INERTIA_TIMEOUT = 100;
 
-var ACCELERATION = simulatedStrategy.ACCELERATION,
-    MIN_VELOCITY_LIMIT = simulatedStrategy.MIN_VELOCITY_LIMIT,
-    FRAME_DURATION = simulatedStrategy.FRAME_DURATION,
-    SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
+const ACCELERATION = simulatedStrategy.ACCELERATION;
+const MIN_VELOCITY_LIMIT = simulatedStrategy.MIN_VELOCITY_LIMIT;
+const FRAME_DURATION = simulatedStrategy.FRAME_DURATION;
+const SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
 
-var GESTURE_LOCK_KEY = "dxGestureLock";
+const GESTURE_LOCK_KEY = "dxGestureLock";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -1840,28 +1841,6 @@ QUnit.test("scrollbar add active class when click on scrollbar area", function(a
     assert.equal($scrollbar.hasClass(SCROLLBAR_ACTIVE_CLASS), false, "active class was removed after mouse up");
 });
 
-QUnit.test("dx-state-hover-enabled class attached only when showScrollbar is visible", function(assert) {
-    var HOVERED_CLASS = "dx-scrollbar-hoverable";
-    var $scrollable = $("#scrollable").dxScrollable({
-        showScrollbar: 'onScroll',
-        useNative: false,
-        useSimulatedScrollbar: true,
-        direction: "vertical",
-        scrollByThumb: true
-    });
-    var scrollable = $scrollable.dxScrollable("instance"),
-        scrollBar = Scrollbar.getInstance($scrollable.find("." + SCROLLBAR_VERTICAL_CLASS));
-
-    assert.equal(scrollBar.option("hoverStateEnabled"), false, "hoverStateEnabled option is false for onScroll mode");
-    assert.equal($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).hasClass(HOVERED_CLASS), false, "dx-scrollbar-hoverable was not attached when showScrollbar is onScroll");
-
-    scrollable.option("showScrollbar", "onHover");
-
-    scrollBar = Scrollbar.getInstance($scrollable.find("." + SCROLLBAR_VERTICAL_CLASS));
-    assert.equal(scrollBar.option("hoverStateEnabled"), true, "hoverStateEnabled option is true for onHover mode");
-    assert.equal($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).hasClass(HOVERED_CLASS), true, "dx-scrollbar-hoverable was attached when showScrollbar is onHover");
-});
-
 QUnit.test("useSimulatedScrollbar is false when useNative option set to true", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         useNative: true
@@ -1909,6 +1888,44 @@ QUnit.test("content size should be rounded to prevent unexpected scrollbar appea
     });
 
     assert.ok(scrollbar.$element().is(":hidden"), "scrollbar is not visible");
+});
+
+QUnit.module("Hoverable interaction", () => {
+    [false, true].forEach((disabled) => {
+        [false, true].forEach((onInitialize) => {
+            ["vertical", "horizontal"].forEach((direction) => {
+                ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
+                    QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
+                        const $scrollable = $("#scrollable").dxScrollable({
+                            useNative: false,
+                            useSimulatedScrollbar: true,
+                            showScrollbar: showScrollbarMode,
+                            direction: direction,
+                            disabled: onInitialize ? disabled : false,
+                            scrollByThumb: true
+                        });
+
+                        const checkAsserts = (isHoverable) => {
+                            assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
+                            assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                            assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                        };
+
+                        if(!onInitialize) {
+                            $scrollable.dxScrollable("instance").option("disabled", disabled);
+                        }
+
+                        const scrollBarClass = direction === "vertical" ? SCROLLBAR_VERTICAL_CLASS : SCROLLBAR_HORIZONTAL_CLASS;
+                        const $scrollBar = $scrollable.find(`.${scrollBarClass}`);
+                        const scrollBar = Scrollbar.getInstance($scrollBar);
+
+                        const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
+                        checkAsserts(isScrollbarHoverable);
+                    });
+                });
+            });
+        });
+    });
 });
 
 QUnit.module("api", moduleConfig);

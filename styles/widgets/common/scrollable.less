@@ -51,7 +51,12 @@
 
     &.dx-scrollable-disabled,
     &.dx-scrollable-disabled .dx-scrollable-container {
+        -ms-overflow-style: none;
         touch-action: auto;
+
+        ::-webkit-scrollbar {
+            pointer-events: none;
+        }
     }
 
     &.dx-scrollable-scrollbars-hidden {
@@ -211,5 +216,11 @@
 .dx-scrollable-simulated {
     .dx-scrollable-content {
         overflow-anchor: none;
+    }
+
+    &.dx-scrollable-disabled {
+        .dx-scrollable-scrollbar {
+            pointer-events: none;
+        }
     }
 }
