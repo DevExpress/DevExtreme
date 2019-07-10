@@ -20,31 +20,31 @@ import { isRenderer } from "core/utils/type";
 
 import "common.css!";
 
-var SCROLLABLE_CLASS = "dx-scrollable",
-    SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
-    SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper",
-    SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
-    SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar",
-    SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll",
-    SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content",
-    SCROLLBAR_VERTICAL_CLASS = "dx-scrollbar-vertical",
-    SCROLLBAR_HORIZONTAL_CLASS = "dx-scrollbar-horizontal",
-    SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native",
-    SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden",
-    SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible",
-    SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled",
-    SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = "dx-scrollable-scrollbar-active",
-    RTL_CLASS = "dx-rtl";
+const SCROLLABLE_CLASS = "dx-scrollable";
+const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
+const SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper";
+const SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content";
+const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
+const SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll";
+const SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content";
+const SCROLLBAR_VERTICAL_CLASS = "dx-scrollbar-vertical";
+const SCROLLBAR_HORIZONTAL_CLASS = "dx-scrollbar-horizontal";
+const SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native";
+const SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden";
+const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible";
+const SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled";
+const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = "dx-scrollable-scrollbar-active";
+const RTL_CLASS = "dx-rtl";
 
-var SCROLLBAR_MIN_HEIGHT = 15,
-    INERTIA_TIMEOUT = 100;
+const SCROLLBAR_MIN_HEIGHT = 15;
+const INERTIA_TIMEOUT = 100;
 
-var ACCELERATION = simulatedStrategy.ACCELERATION,
-    MIN_VELOCITY_LIMIT = simulatedStrategy.MIN_VELOCITY_LIMIT,
-    FRAME_DURATION = simulatedStrategy.FRAME_DURATION,
-    SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
+const ACCELERATION = simulatedStrategy.ACCELERATION;
+const MIN_VELOCITY_LIMIT = simulatedStrategy.MIN_VELOCITY_LIMIT;
+const FRAME_DURATION = simulatedStrategy.FRAME_DURATION;
+const SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
 
-var GESTURE_LOCK_KEY = "dxGestureLock";
+const GESTURE_LOCK_KEY = "dxGestureLock";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -2856,6 +2856,78 @@ QUnit.test("scroll should work on mousewheel after draging on horizontal bar", f
     assert.equal(scrollable.scrollOffset().top, distance, "scrolled vertically");
 });
 
+if(devices.current().deviceType === "desktop") {
+    ["vertical", "horizontal"].forEach((direction) => {
+        class ValidateMouseWheelEventTestHelper {
+            constructor(direction) {
+                this._direction = direction;
+                this._wheelEvent = {
+                    type: "dxmousewheel",
+                    pointerType: "mouse",
+                    shiftKey: direction === "vertical" ? false : true
+                };
+
+                this.$scrollable = this._getScrollable();
+
+                this.strategy = this.$scrollable.dxScrollable("instance")._strategy;
+            }
+
+            _getScrollable() {
+                return $("#scrollable").dxScrollable({
+                    useNative: true,
+                    direction: this._direction
+                });
+            }
+
+            getEvent() { return this._wheelEvent; }
+
+            getScrollableContainer() {
+                return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            }
+        }
+
+        QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
+        });
+
+        QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+            let $container = helper.getScrollableContainer();
+
+            $container.scrollTop(50);
+            $container.scrollLeft(50);
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = -1");
+        });
+
+        QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+            let $container = helper.getScrollableContainer();
+
+            $container.scrollTop(25);
+            $container.scrollLeft(25);
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
+        });
+    });
+}
 
 QUnit.module("initViewport integration", moduleConfig);
 
