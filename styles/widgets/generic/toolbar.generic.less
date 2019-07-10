@@ -143,8 +143,11 @@
 .dx-toolbar-menu-section {
     border-bottom: 1px solid @base-border-color;
 
-    .dx-toolbar-hidden-button .dx-button-content {
-        padding: 0;
+    .dx-toolbar-hidden-button,
+    .dx-toolbar-item-auto-hide {
+        .dx-button-content {
+            padding: 0;
+        }
     }
 
     .dx-button-content {
