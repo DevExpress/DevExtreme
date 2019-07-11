@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     Deferred = deferredUtils.Deferred,
     errors = require("../core/errors"),
+    domAdapter = require("../core/dom_adapter"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
@@ -63,8 +64,6 @@ var SelectBox = DropDownList.inherit({
                 if(this._wasSearch()) {
                     this._clearFilter();
                 }
-
-                this._isNotActiveInput = true;
 
                 parent.tab && parent.tab.apply(this, arguments);
             },
@@ -581,7 +580,6 @@ var SelectBox = DropDownList.inherit({
         this.callBase(e);
 
         this._restoreInputText();
-        this._isNotActiveInput = undefined;
     },
 
     _clearTextValue: function() {
@@ -593,7 +591,8 @@ var SelectBox = DropDownList.inherit({
     },
 
     _isFocused: function() {
-        return this.callBase() && !this._isNotActiveInput;
+        var activeElement = domAdapter.getActiveElement();
+        return this.callBase() && $(activeElement).closest(this._input()).length > 0;
     },
 
     _renderValueChangeEvent: function() {
@@ -868,7 +867,6 @@ var SelectBox = DropDownList.inherit({
 
     _clean: function() {
         delete this._inkRipple;
-        this._isNotActiveInput = undefined;
 
         this.callBase();
     }

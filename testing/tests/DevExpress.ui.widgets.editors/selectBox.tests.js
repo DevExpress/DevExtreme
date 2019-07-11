@@ -4567,8 +4567,7 @@ QUnit.module("acceptCustomValue mode", moduleSetup, () => {
 
         keyboard
             .type("test")
-            .press("tab")
-            .change();
+            .press("tab");
 
         assert.notOk(instance.option("opened"), "popup is closed");
     });
