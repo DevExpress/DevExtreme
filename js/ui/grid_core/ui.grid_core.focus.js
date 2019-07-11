@@ -328,7 +328,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return;
             }
 
-            $focusedRow = $row || $rowsViewElement.find(FOCUSED_ROW_SELECTOR);
+            $focusedRow = $row && $row.length ? $row : $rowsViewElement.find(FOCUSED_ROW_SELECTOR);
 
             if($focusedRow.length > 0) {
                 var focusedRowRect = $focusedRow[0].getBoundingClientRect(),
