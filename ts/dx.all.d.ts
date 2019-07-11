@@ -1556,12 +1556,15 @@ declare module DevExpress.ui {
     }
     /** @name dxButtonGroup.Options */
     export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
+        /** @name dxButtonGroup.Options.buttonTemplate */
+        buttonTemplate?: template | ((buttonData: any, buttonContent: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxButtonGroup.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxButtonGroup.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
+        /** @deprecated */
         /** @name dxButtonGroup.Options.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        itemTemplate?: template | Function;
         /** @name dxButtonGroup.Options.items */
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
