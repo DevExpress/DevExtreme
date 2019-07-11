@@ -269,7 +269,7 @@ var DragEmitter = GestureEmitter.inherit({
         if(isDraggingElement) {
             return false;
         }
-        
+
         var targetPosition = getItemPosition(config, $target);
         if(e.pageX < targetPosition.left) {
             return false;
@@ -277,7 +277,7 @@ var DragEmitter = GestureEmitter.inherit({
         if(e.pageY < targetPosition.top) {
             return false;
         }
-        
+
         var targetSize = getItemSize(config, $target);
         if(e.pageX > targetPosition.left + targetSize.width) {
             return false;
@@ -285,7 +285,7 @@ var DragEmitter = GestureEmitter.inherit({
         if(e.pageY > targetPosition.top + targetSize.height) {
             return false;
         }
-        
+
         return $target;
     },
 
