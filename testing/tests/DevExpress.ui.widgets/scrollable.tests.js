@@ -1911,7 +1911,7 @@ QUnit.module("Hoverable interaction", () => {
                             assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
 
                             if(browser.msie) {
-                                assert.ok($scrollBar.css("pointer-events"), "pointer-events prop is read");
+                                assert.ok($scrollBar.css("pointer-events"), "pointer-events prop is defined");
                             }
                             assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
                         };
