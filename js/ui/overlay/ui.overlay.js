@@ -65,6 +65,13 @@ var OVERLAY_CLASS = "dx-overlay",
         "right top": { my: 'right top', at: 'right top' },
         "left bottom": { my: 'left bottom', at: 'left bottom' },
         "left top": { my: 'left top', at: 'left top' }
+    },
+
+    UPDATE_GEOMETRY_SOURCE = {
+        OPTION_CHANGE: "optionChange",
+        VISIBILITY_CHANGE: "visibilityChange",
+        DIMENSION_CHANGE: "dimensionChange",
+        REPAINT: "repaint"
     };
 
 var realDevice = devices.real(),
@@ -456,6 +463,7 @@ var Overlay = Widget.inherit({
         eventsEngine.on(this._$wrapper, "focusin", function(e) { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
+        this._renderGeometrySource = UPDATE_GEOMETRY_SOURCE;
     },
 
     _initOptions: function(options) {
@@ -789,7 +797,7 @@ var Overlay = Widget.inherit({
             this._actions.onShowing();
 
             this._moveToContainer();
-            this._renderGeometry();
+            this._renderGeometry(this._renderGeometrySource.VISIBILITY_CHANGE);
 
             domUtils.triggerShownEvent(this._$content);
             domUtils.triggerResizeEvent(this._$content);
@@ -1222,13 +1230,13 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderGeometry: function() {
+    _renderGeometry: function(source) {
         if(this.option("visible") && windowUtils.hasWindow()) {
-            this._renderGeometryImpl();
+            this._renderGeometryImpl(source);
         }
     },
 
-    _renderGeometryImpl: function() {
+    _renderGeometryImpl: function(source) {
         this._stopAnimation();
         this._normalizePosition();
         this._renderShading();
@@ -1379,7 +1387,7 @@ var Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._renderGeometry();
+        this._renderGeometry(this._renderGeometrySource.DIMENSION_CHANGE);
     },
 
     _clean: function() {
@@ -1439,11 +1447,11 @@ var Overlay = Widget.inherit({
         switch(args.name) {
             case "dragEnabled":
                 this._renderDrag();
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "resizeEnabled":
                 this._renderResize();
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "shading":
             case "shadingColor":
@@ -1456,11 +1464,11 @@ var Overlay = Widget.inherit({
             case "minHeight":
             case "maxHeight":
             case "boundaryOffset":
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "position":
                 this._positionChangeHandled = false;
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "visible":
                 this._renderVisibilityAnimate(value).done((function() {
@@ -1566,7 +1574,7 @@ var Overlay = Widget.inherit({
     * @publicName repaint()
     */
     repaint: function() {
-        this._renderGeometry();
+        this._renderGeometry(this._renderGeometrySource.REPAINT);
         domUtils.triggerResizeEvent(this._$content);
     }
 });

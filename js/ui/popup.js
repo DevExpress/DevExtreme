@@ -627,16 +627,19 @@ var Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function() {
+    _renderGeometryImpl: function(source) {
+        if(source !== this._renderGeometrySource.DIMENSION_CHANGE) {
+            this._resetContentHeight();
+        }
         this.callBase.apply(this, arguments);
         this._setContentHeight();
     },
 
-    // _resetContentHeight: function() {
-    //     this._$popupContent.css({
-    //         "height": "auto"
-    //     });
-    // },
+    _resetContentHeight: function() {
+        this._$popupContent.css({
+            "height": "auto"
+        });
+    },
 
     _renderDrag: function() {
         this.callBase();
@@ -801,11 +804,11 @@ var Popup = Overlay.inherit({
             case "title":
             case "titleTemplate":
                 this._renderTitle();
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "bottomTemplate":
                 this._renderBottom();
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "onTitleRendered":
                 this._createTitleRenderAction(args.value);
@@ -818,19 +821,19 @@ var Popup = Overlay.inherit({
                 this._renderBottom();
 
                 if(!isPartialUpdate) {
-                    this._renderGeometry();
+                    this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 }
                 break;
             case "dragEnabled":
                 this._renderDrag();
                 break;
             case "autoResizeEnabled":
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "showCloseButton":

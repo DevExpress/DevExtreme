@@ -601,12 +601,12 @@ var Popover = Popup.inherit({
             case "title":
             case "titleTemplate":
                 this.callBase(args);
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "boundaryOffset":
             case "arrowPosition":
             case "arrowOffset":
-                this._renderGeometry();
+                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
                 break;
             case "fullScreen":
                 if(args.value) {
