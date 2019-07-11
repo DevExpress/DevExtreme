@@ -790,6 +790,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 });
 
                 translator.move($appointment, coordinates);
+            },
+            adjustDropPosition = function(event, $element) {
+                var offset = $element.offset();
+                event.pageX = offset.left;
+                event.pageY = offset.top;
             };
         this.notifyObserver("getDraggableAppointmentArea", {
             callback: function(result) {
@@ -818,6 +823,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             },
             onDrag: function(args) {
                 correctCoordinates(args.element);
+                adjustDropPosition(args.event, args.element);
             },
             onDragEnd: function(args) {
                 correctCoordinates(args.element, true);
