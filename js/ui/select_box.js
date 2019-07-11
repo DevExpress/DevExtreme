@@ -867,7 +867,6 @@ var SelectBox = DropDownList.inherit({
 
     _clean: function() {
         delete this._inkRipple;
-
         this.callBase();
     }
 });
