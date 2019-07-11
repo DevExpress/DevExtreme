@@ -196,6 +196,13 @@ var TextArea = TextBox.inherit({
         this.callBase();
     },
 
+    _getHeightDifference($input) {
+        return sizeUtils.getVerticalOffsets(this._$element.get(0), false)
+            + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
+            + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
+            + sizeUtils.getElementBoxParams("height", window.getComputedStyle($input.get(0))).margin;
+    },
+
     _updateInputHeight: function() {
         var $input = this._input();
         var autoHeightResizing = this.option("height") === undefined && this.option("autoResizeEnabled");
@@ -210,10 +217,7 @@ var TextArea = TextBox.inherit({
 
         $input.css("height", 0);
 
-        var heightDifference = sizeUtils.getVerticalOffsets(this._$element.get(0), false)
-            + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
-            + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
-            + sizeUtils.getElementBoxParams("height", window.getComputedStyle($input.get(0))).margin;
+        var heightDifference = this._getHeightDifference($input);
 
         this._renderDimensions();
 
