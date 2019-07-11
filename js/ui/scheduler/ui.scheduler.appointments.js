@@ -791,8 +791,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 translator.move($appointment, coordinates);
             },
-            adjustDropPosition = function(event, $element) {
-                var offset = $element.offset();
+            adjustDropPosition = function(event, element) {
+                var offset = $(element).offset();
                 event.pageX = offset.left;
                 event.pageY = offset.top;
             };
