@@ -360,19 +360,24 @@ function isWebFontLoaded(text, fontWeight) {
 }
 
 function waitWebFont(text, fontWeight) {
-    const timeout = 15;
-    const attempts = 135;
-    let i = 0;
+    const interval = 15;
+    const timeout = 2000;
 
     return new Promise(resolve => {
         const check = () => {
-            if(isWebFontLoaded(text, fontWeight) || i++ > attempts) {
-                clearInterval(intervalId);
-                resolve();
+            if(isWebFontLoaded(text, fontWeight)) {
+                clear();
             }
         };
 
-        const intervalId = setInterval(check, timeout);
+        const clear = () => {
+            clearInterval(intervalId);
+            clearTimeout(timeoutId);
+            resolve();
+        };
+
+        const intervalId = setInterval(check, interval);
+        const timeoutId = setTimeout(clear, timeout);
     });
 }
 
