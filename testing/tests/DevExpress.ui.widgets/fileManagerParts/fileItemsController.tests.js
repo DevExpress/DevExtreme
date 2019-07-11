@@ -45,9 +45,9 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
     });
 
     test("get directory contents", function(assert) {
-        const done = assert.async();
         const selectedDir = this.controller.getCurrentDirectory();
 
+        const done1 = assert.async();
         this.controller
             .getDirectoryContents(selectedDir)
             .done(items => {
@@ -55,22 +55,26 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(items[0].fileItem.name, "F1");
                 assert.equal(items[1].fileItem.name, "F2");
                 assert.equal(items[2].fileItem.name, "File1");
-                done();
+                done1();
             });
 
+        const done2 = assert.async();
         this.controller
             .getDirectories(selectedDir)
             .done(directories => {
                 assert.equal(directories.length, 2);
                 assert.equal(directories[0].fileItem.name, "F1");
                 assert.equal(directories[1].fileItem.name, "F2");
+                done2();
             });
 
+        const done3 = assert.async();
         this.controller
             .getFiles(selectedDir)
             .done(files => {
                 assert.equal(files.length, 1);
                 assert.equal(files[0].fileItem.name, "File1");
+                done3();
             });
     });
 
