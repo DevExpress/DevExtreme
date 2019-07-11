@@ -233,7 +233,7 @@ QUnit.test('Create horizontal numeric translator when business range delta = 0, 
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = this.createTranslator(range, canvas);
+    translator = this.createTranslator(range, canvas, { shiftZeroValue: true });
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 0, 'range min is correct');

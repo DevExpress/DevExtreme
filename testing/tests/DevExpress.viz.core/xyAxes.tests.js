@@ -222,7 +222,8 @@ QUnit.test("Linear axis updates translator on option changed", function(assert) 
     var axis = new Axis({
             renderer: this.renderer,
             axisType: "xyAxes",
-            drawingType: "linear"
+            drawingType: "linear",
+            isArgumentAxis: true
         }),
         translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -237,6 +238,7 @@ QUnit.test("Linear axis updates translator on option changed", function(assert) 
     assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
     assert.equal(translator.update.lastCall.args[2].isHorizontal, true);
     assert.equal(translator.update.lastCall.args[2].interval, 0.2);
+    assert.strictEqual(translator.update.lastCall.args[2].shiftZeroValue, false); // T756714
 });
 
 QUnit.test("Linear axis updates translator, valueMarginsEnabled = true - stick false", function(assert) {
