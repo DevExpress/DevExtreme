@@ -3453,6 +3453,42 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
     clock.restore();
 });
 
+QUnit.test("Focused row should be visible if it's on the first page and page height larger than container one (T756177)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rect,
+        rowsViewRect,
+        data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "333333", room: 4 },
+            { name: "Sean", phone: "4545454", room: 3 },
+            { name: "Smith", phone: "555555", room: 2 },
+            { name: "Zeb", phone: "6666666", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 100,
+            dataSource: data,
+            keyExpr: "name",
+            focusedRowEnabled: true,
+            focusedRowKey: "Sean",
+            scrolling: { mode: "virtual" }
+        }).dxDataGrid("instance"),
+        rowsView = dataGrid.getView("rowsView");
+
+    // act
+    clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(3).hasClass("dx-row-focused"), "Focused row");
+    rect = rowsView.getRow(3)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
 QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual", function(assert) {
     // arrange
     var data = [];
