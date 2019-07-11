@@ -543,7 +543,7 @@ QUnit.test("Allday appointment should stay in allDayContainer after small draggi
     var $appointment = $("#allDayContainer .dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
-    pointer.dragStart().drag(0, -30);
+    pointer.dragStart().drag(0, 30);
     pointer.dragEnd();
 
     assert.equal($("#allDayContainer .dx-scheduler-appointment").length, 1, "appointment is in allDayContainer");
