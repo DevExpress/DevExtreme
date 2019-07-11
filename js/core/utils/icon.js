@@ -1,11 +1,18 @@
-var $ = require("../../core/renderer");
+import $ from "../../core/renderer";
 
-var getImageSourceType = function(source) {
+const ICON_CLASS = "dx-icon";
+const SVG_ICON_CLASS = "dx-svg-icon";
+
+const getImageSourceType = (source) => {
     if(!source || typeof source !== "string") {
         return false;
     }
 
-    if(/data:.*base64|\.|\//.test(source)) {
+    if(/^\s*<svg[^>]*>[^]*<\/svg>\s*$/i.test(source)) {
+        return "svg";
+    }
+
+    if(/data:.*base64|\.|[^<\s]\//.test(source)) {
         return "image";
     }
 
@@ -13,19 +20,23 @@ var getImageSourceType = function(source) {
         return "dxIcon";
     }
 
-    return "fontIcon";
+    if(/^([\w-_]\s?)+$/.test(source)) {
+        return "fontIcon";
+    }
+
+    return false;
 };
 
-var getImageContainer = function(source) {
-    var imageType = getImageSourceType(source),
-        ICON_CLASS = "dx-icon";
-    switch(imageType) {
+const getImageContainer = (source) => {
+    switch(getImageSourceType(source)) {
         case "image":
             return $("<img>").attr("src", source).addClass(ICON_CLASS);
         case "fontIcon":
-            return $("<i>").addClass(ICON_CLASS + " " + source);
+            return $("<i>").addClass(`${ICON_CLASS} ${source}`);
         case "dxIcon":
-            return $("<i>").addClass(ICON_CLASS + " " + ICON_CLASS + "-" + source);
+            return $("<i>").addClass(`${ICON_CLASS} ${ICON_CLASS}-${source}`);
+        case "svg":
+            return $("<i>").addClass(`${ICON_CLASS} ${SVG_ICON_CLASS}`).append(source);
         default:
             return null;
     }
