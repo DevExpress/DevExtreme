@@ -11,6 +11,7 @@ import "ui/tree_view";
 import "ui/box";
 
 import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
@@ -144,8 +145,8 @@ QUnit.test("root box and it's items should have correct height (T566515)", funct
 
     var $rootItems = $rootBox.find("." + BOX_ITEM_CLASS);
 
-    assert.roughEqual($rootItems.eq(0).height(), 16, 2.1, "Height of the root item is OK");
-    assert.roughEqual($rootItems.eq(1).height(), 16, 2.1, "Height of the root item is OK");
+    assert.equal($rootItems.eq(0).height(), 19, "Height of the root item is OK");
+    assert.equal($rootItems.eq(1).height(), 19, "Height of the root item is OK");
 });
 
 QUnit.test("check width of colspan", function(assert) {
