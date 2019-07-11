@@ -628,16 +628,15 @@ var Popup = Overlay.inherit({
     },
 
     _renderGeometryImpl: function() {
-        this._resetContentHeight();
         this.callBase.apply(this, arguments);
         this._setContentHeight();
     },
 
-    _resetContentHeight: function() {
-        this._$popupContent.css({
-            "height": "auto"
-        });
-    },
+    // _resetContentHeight: function() {
+    //     this._$popupContent.css({
+    //         "height": "auto"
+    //     });
+    // },
 
     _renderDrag: function() {
         this.callBase();
