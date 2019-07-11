@@ -1841,7 +1841,7 @@ function createGridView(options, userOptions) {
                     { caption: "Column 5", minWidth: 150 }
                 ]
             }),
-            $testElement = $("<div />").width(410).appendTo($("#container"));
+            $testElement = $("<div />").width(400).appendTo($("#container"));
 
         // act
         gridView.render($testElement);
@@ -2144,8 +2144,7 @@ function createGridView(options, userOptions) {
 
             var gridView = this.createGridView(this.defaultOptions, {
                     scrolling: {
-                        useNative: true,
-                        disabled: false
+                        useNative: true
                     }
                 }),
                 fixedContent,
