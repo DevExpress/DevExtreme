@@ -1,8 +1,12 @@
-var $ = require("jquery"),
-    iconUtils = require("core/utils/icon");
+import { getImageSourceType, getImageContainer } from "core/utils/icon";
 
-QUnit.module('icon utils', {
-    beforeEach: function() {
+const { module: testModule, test } = QUnit;
+
+const ICON_CLASS = "dx-icon";
+const SVG_ICON_CLASS = "dx-svg-icon";
+
+testModule("icon utils", {
+    beforeEach: () => {
         this.sourceArray = [{ // 1
             source: "data:image/png;base64,qwertyuiopasdfghjklzxcvbmnQWERTYUIOPLKJHGFDSAZXCVBNM/+0987654321",
             result: "image"
@@ -46,39 +50,89 @@ QUnit.module('icon utils', {
         { // 11
             source: "my my-icon",
             result: "fontIcon"
+        },
+        { // 12
+            source: "<svg></svg>",
+            result: "svg"
+        },
+        { // 13
+            source: `<svg>
+                <path />
+            </svg>`,
+            result: "svg"
+        },
+        { // 14
+            source: `<svg>
+                <path />
+            </svg>
+            <html>`,
+            result: false
+        },
+        { // 15
+            source: `test
+            <svg>
+            <path />
+            </svg>`,
+            result: false
+        },
+        { // 16
+            source: `  <svg>
+            <path />
+            </svg>`,
+            result: "svg"
+        },
+        { // 17
+            source: "http://test.test/image.jpg",
+            result: "image"
+        },
+        { // 18
+            source: "image.png",
+            result: "image"
         }];
     }
-});
+}, () => {
+    test("getImageSourceType", (assert) => {
+        assert.expect(18);
 
-QUnit.test('getImageSourceType', function(assert) {
-    assert.expect(11);
-
-    $.each(this.sourceArray, function(index, value) {
-        assert.equal(iconUtils.getImageSourceType(value.source), value.result);
+        this.sourceArray.forEach(({ source, result }) => {
+            assert.strictEqual(getImageSourceType(source), result);
+        });
     });
-});
 
-QUnit.test('getImageContainer', function(assert) {
-    $.each(this.sourceArray, function(index, value) {
-        var $iconElement = iconUtils.getImageContainer(value.source);
-        switch(value.result) {
-            case "dxIcon":
-                assert.ok($iconElement.hasClass("dx-icon"), "correct for " + value.result);
-                assert.ok($iconElement.hasClass("dx-icon-" + value.source), "correct for " + value.result);
-                assert.equal($iconElement.get(0).tagName, "I", "correct for " + value.result);
-                break;
-            case "fontIcon":
-                assert.ok($iconElement.hasClass("dx-icon"), "correct for " + value.result);
-                assert.ok($iconElement.hasClass(value.source), "correct for " + value.result);
-                assert.equal($iconElement.get(0).tagName, "I", "correct for " + value.result);
-                break;
-            case "image":
-                assert.ok($iconElement.hasClass("dx-icon"), "correct for " + value.result);
-                assert.equal($iconElement.attr("src"), value.source, "correct for " + value.result);
-                assert.equal($iconElement.get(0).tagName, "IMG", "correct for " + value.result);
-                break;
-            default:
-                break;
-        }
+    test("getImageContainer", (assert) => {
+        this.sourceArray.forEach(({ source, result }) => {
+            var $iconElement = getImageContainer(source);
+            switch(result) {
+                case "dxIcon":
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.notOk($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(`${ICON_CLASS}-${source}`), `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
+                    break;
+                case "fontIcon":
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.notOk($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(source), `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
+                    break;
+                case "image":
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.notOk($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
+                    assert.strictEqual($iconElement.attr("src"), source, `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "IMG", `correct for ${result}`);
+                    break;
+                case "svg":
+                    assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
+                    assert.strictEqual($iconElement.children().get(0).tagName.toUpperCase(), "SVG", `correct for ${result}`);
+                    break;
+                case false:
+                    assert.strictEqual($iconElement, null, "element isn't created");
+                    break;
+                default:
+                    break;
+            }
+        });
     });
 });
