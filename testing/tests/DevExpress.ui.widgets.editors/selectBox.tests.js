@@ -4556,6 +4556,22 @@ QUnit.module("acceptCustomValue mode", moduleSetup, () => {
         assert.equal($selectBox.dxSelectBox("option", "value"), "0", "0 value was be set");
     });
 
+    QUnit.test("press on tab should close popup after custom value input if search is enabled", (assert) => {
+        const $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            acceptCustomValue: true,
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+        const instance = $selectBox.dxSelectBox("instance");
+
+        keyboard
+            .type("test")
+            .press("tab");
+
+        assert.notOk(instance.option("opened"), "popup is closed");
+    });
+
     QUnit.test("custom value should be added on enter key when acceptCustomValue=true", (assert) => {
         const onCustomItemCreating = sinon.stub().returns("Custom item");
         const $selectBox = $("#selectBox").dxSelectBox({
