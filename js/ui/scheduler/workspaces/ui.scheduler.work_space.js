@@ -333,10 +333,6 @@ var SchedulerWorkSpace = Widget.inherit({
         return $cell.hasClass(ALL_DAY_TABLE_CELL_CLASS);
     },
 
-    _hasDataCellTemplate: function() {
-        return !!this.option("dataCellTemplate");
-    },
-
     _getGroupIndexByCell: function($cell) {
         var cellsInRow = this._getCellCount(),
             currentCellIndex = $cell.index() + 1,
@@ -2234,6 +2230,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getCellHeight: function() {
         var cell = this._getCells().first().get(0);
+
         return cell && cell.getBoundingClientRect().height;
     },
 
