@@ -422,6 +422,8 @@ QUnit.test("Show header filter", function(assert) {
     assert.ok($popupContent.find(".dx-empty-message").length, "no data");
     // T291384
     assert.strictEqual(that.headerFilterView.getPopupContainer().option("position.collision"), "flip fit");
+    // T756320
+    assert.strictEqual(that.headerFilterView.getPopupContainer().option("closeOnTargetScroll"), false, "closeOnTargetScroll should be false");
 });
 
 // T435785
