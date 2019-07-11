@@ -84,14 +84,14 @@ var dxChart = {
     * @name dxChartOptions.barGroupPadding
     * @type number
     * @default 0.3
-    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
     */
     barGroupPadding: 0.3,
     /**
     * @name dxChartOptions.barGroupWidth
     * @type number
     * @default undefined
-    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
     */
     barGroupWidth: undefined,
     /**
@@ -1907,7 +1907,7 @@ var dxChart = {
         * @name dxChartOptions.tooltip.location
         * @type Enums.ChartTooltipLocation
         * @default 'center'
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandlestickSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
         */
         location: 'center'
     },
@@ -2170,7 +2170,7 @@ var dxPieChart = {
     * @name dxPieChartOptions.innerRadius
     * @type number
     * @default 0.5
-    * @propertyOf dxChartSeriesTypes.DoughnutSeries
+    * @propertyOf dxPieChartSeriesTypes.DoughnutSeries
     */
     innerRadius: 0.5,
     /**
@@ -2300,7 +2300,7 @@ var dxPolarChart = {
     * @name dxPolarChartOptions.negativesAsZeroes
     * @type boolean
     * @default false
-    * @propertyOf dxChartSeriesTypes.stackedbarpolarseries
+    * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
     */
     negativesAsZeroes: false,
     /**
