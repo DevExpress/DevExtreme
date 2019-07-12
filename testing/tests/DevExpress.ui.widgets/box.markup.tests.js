@@ -68,18 +68,6 @@ QUnit.module("render", () => {
 
         assert.ok($box.hasClass("dx-box-test"), "class attached");
     });
-
-    QUnit.test("scrollable content doesn't out the bounds of the scrollable container when direction of the Box is a row", (assert) => {
-        $("#boxWithScrollable").dxBox({
-            direction: "row",
-            _layoutStrategy: "flex"
-        });
-
-        const $scrollable = $("#isScrollable").dxScrollable({ height: 100 });
-        const scrollableContainer = $scrollable.find(".dx-scrollable-container").get(0);
-
-        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight);
-    });
 });
 
 QUnit.module("layouting", () => {
