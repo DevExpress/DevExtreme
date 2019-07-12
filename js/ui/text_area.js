@@ -1,10 +1,13 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
+    windowUtils = require("../core/utils/window"),
+    window = windowUtils.getWindow(),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     eventUtils = require("../events/utils"),
     pointerEvents = require("../events/pointer"),
+    sizeUtils = require("../core/utils/size"),
     TextBox = require("./text_box");
 
 var TEXTAREA_CLASS = "dx-textarea",
@@ -193,17 +196,29 @@ var TextArea = TextBox.inherit({
         this.callBase();
     },
 
+    _getHeightDifference($input) {
+        return sizeUtils.getVerticalOffsets(this._$element.get(0), false)
+            + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
+            + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
+            + sizeUtils.getElementBoxParams("height", window.getComputedStyle($input.get(0))).margin;
+    },
+
     _updateInputHeight: function() {
         var $input = this._input();
+        var autoHeightResizing = this.option("height") === undefined && this.option("autoResizeEnabled");
 
-        if(!this.option("autoResizeEnabled") || this.option("height") !== undefined) {
+        if(!autoHeightResizing) {
             $input.css("height", "");
             return;
+        } else {
+            this._resetDimensions();
+            this._$element.css("height", this._$element.outerHeight());
         }
 
-        this._resetDimensions();
         $input.css("height", 0);
-        var heightDifference = this._$element.outerHeight() - $input.outerHeight();
+
+        var heightDifference = this._getHeightDifference($input);
+
         this._renderDimensions();
 
         var minHeight = this.option("minHeight"),
@@ -219,6 +234,10 @@ var TextArea = TextBox.inherit({
         }
 
         $input.css("height", inputHeight);
+
+        if(autoHeightResizing) {
+            this._$element.css("height", "auto");
+        }
     },
 
     _renderInputType: noop,
