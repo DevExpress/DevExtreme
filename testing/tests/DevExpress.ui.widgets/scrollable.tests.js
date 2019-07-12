@@ -1897,6 +1897,7 @@ QUnit.module("Hoverable interaction", () => {
             ["vertical", "horizontal"].forEach((direction) => {
                 ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
                     QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
+                        const done = assert.async();
                         const $scrollable = $("#scrollable").dxScrollable({
                             useNative: false,
                             useSimulatedScrollbar: true,
