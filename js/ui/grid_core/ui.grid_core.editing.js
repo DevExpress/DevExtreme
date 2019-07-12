@@ -76,12 +76,7 @@ var EDIT_FORM_CLASS = "edit-form",
     ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL],
     FORM_BASED_MODES = [EDIT_MODE_FORM, EDIT_MODE_POPUP],
-    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM],
-    BUTTON_LOCALIZATION_NAMES = {
-        add: "dxDataGrid-editingAddRow",
-        edit: "dxDataGrid-editingEditRow",
-        delete: "dxDataGrid-editingDeleteRow"
-    };
+    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
 
 var EDIT_LINK_CLASS = {
         save: "dx-link-save",
@@ -1975,7 +1970,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                     $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
-                    let localizationName = BUTTON_LOCALIZATION_NAMES[button.name];
+                    let localizationName = this.getButtonLocalizationNames()[button.name];
                     localizationName && $button.attr("aria-label", messageLocalization.format(localizationName));
                 } else {
                     $button.text(button.text);
@@ -1991,6 +1986,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 }));
                 options.rtlEnabled ? $container.prepend($button, "&nbsp;") : $container.append($button, "&nbsp;");
             }
+        },
+
+        getButtonLocalizationNames() {
+            return {
+                edit: "dxDataGrid-editingEditRow",
+                save: "dxDataGrid-editingSaveRowChanges",
+                delete: "dxDataGrid-editingDeleteRow",
+                undelete: "dxDataGrid-editingUndeleteRow",
+                cancel: "dxDataGrid-editingCancelRowChanges"
+            };
         },
 
         prepareEditButtons: function(headerPanel) {
