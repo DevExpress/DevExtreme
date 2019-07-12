@@ -201,8 +201,7 @@ var TextArea = TextBox.inherit({
 
     _getHeightDifference($input) {
         return sizeUtils.getVerticalOffsets(this._$element.get(0), false)
-            + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
-            + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
+            + sizeUtils.getVerticalOffsets($input.parent().get(0), false)
             + sizeUtils.getElementBoxParams("height", window.getComputedStyle($input.get(0))).margin;
     },
 
