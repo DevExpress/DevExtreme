@@ -1,15 +1,13 @@
-var noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    adjust = require("../../core/utils/math").adjust,
-    dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
-    isDefined = typeUtils.isDefined,
-    isNumber = typeUtils.isNumeric,
-    isExponential = typeUtils.isExponential,
-    _math = Math,
-    _round = _math.round,
-    _sqrt = Math.sqrt;
+import { noop } from "../../core/utils/common";
+import { isDefined, isNumeric, isExponential, isFunction } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { dateToMilliseconds } from "../../core/utils/date";
+import { adjust, sign } from "../../core/utils/math";
+import { each } from "../../core/utils/iterator";
+
+const _math = Math;
+const _round = _math.round;
+const _sqrt = Math.sqrt;
 
 var PI = Math.PI,
     MAX_PIXEL_COUNT = 1E10,
@@ -27,59 +25,59 @@ var cosFunc = Math.cos,
     _Number = Number,
     _NaN = NaN;
 
-var getLog = function(value, base) {
+export function getLog(value, base) {
     if(!value) {
         return _NaN;
     }
     return Math.log(value) / Math.log(base);
-};
+}
 
-var getAdjustedLog10 = function(value) {
+export function getAdjustedLog10(value) {
     return adjust(getLog(value, 10));
-};
+}
 
-var raiseTo = function(power, base) {
+export function raiseTo(power, base) {
     return Math.pow(base, power);
-};
+}
 
 //  Translates angle to [0, 360)
 //  Expects number, no validation
-var normalizeAngle = function(angle) {
+export function normalizeAngle(angle) {
     return ((angle % 360) + 360) % 360;
-};
+}
 
 //  Maps angle in trigonometric space to angle in 'renderer' space
 //  Expects numbers, no validation
-var convertAngleToRendererSpace = function(angle) {
+export function convertAngleToRendererSpace(angle) {
     return 90 - angle;
-};
+}
 
 //  Maps angle in degrees to angle in radians
 //  Expects number, no validation
-var degreesToRadians = function(value) {
+export function degreesToRadians(value) {
     return PI * value / 180;
-};
+}
 
 //  Calculates sin and cos for <angle> in degrees
 //  Expects number, no validation
-var getCosAndSin = function(angle) {
+export function getCosAndSin(angle) {
     var angleInRadians = degreesToRadians(angle);
     return { cos: cosFunc(angleInRadians), sin: sinFunc(angleInRadians) };
-};
+}
 
 //  Because Math.log(1000) / Math.LN10 < 3 though it is exactly 3
 //  Same happens for 1E6, 1E9, 1E12, 1E13, 1E15, ...
-var DECIMAL_ORDER_THRESHOLD = 1E-14;
+const DECIMAL_ORDER_THRESHOLD = 1E-14;
 //    ____________________
 //   /       2          2
 // \/ (y2-y1)  + (x2-x1)
-var getDistance = function(x1, y1, x2, y2) {
+export function getDistance(x1, y1, x2, y2) {
     var diffX = x2 - x1,
         diffY = y2 - y1;
     return Math.sqrt(diffY * diffY + diffX * diffX);
-};
+}
 
-var getDecimalOrder = function(number) {
+export function getDecimalOrder(number) {
     var n = abs(number), cn;
     if(!_isNaN(n)) {
         if(n > 0) {
@@ -90,9 +88,9 @@ var getDecimalOrder = function(number) {
         return 0;
     }
     return _NaN;
-};
+}
 
-var getAppropriateFormat = function(start, end, count) {
+export function getAppropriateFormat(start, end, count) {
     var order = max(getDecimalOrder(start), getDecimalOrder(end)),
         precision = -getDecimalOrder(abs(end - start) / count),
         format;
@@ -110,24 +108,24 @@ var getAppropriateFormat = function(start, end, count) {
         return { type: format, precision: precision };
     }
     return null;
-};
+}
 
-var roundValue = function(value, precision) {
+export function roundValue(value, precision) {
     if(precision > 20) {
         precision = 20;
     }
-    if(isNumber(value)) {
+    if(isNumeric(value)) {
         if(isExponential(value)) {
             return _Number(value.toExponential(precision));
         } else {
             return _Number(value.toFixed(precision));
         }
     }
-};
+}
 
-var getPower = function(value) {
+export function getPower(value) {
     return value.toExponential().split("e")[1];
-};
+}
 
 function map(array, callback) {
     var i = 0,
@@ -180,7 +178,7 @@ function normalizeBBoxField(value) {
     return -MAX_PIXEL_COUNT < value && value < +MAX_PIXEL_COUNT ? value : 0;
 }
 
-function normalizeBBox(bBox) {
+export function normalizeBBox(bBox) {
     var xl = normalizeBBoxField(floor(bBox.x)),
         yt = normalizeBBoxField(floor(bBox.y)),
         xr = normalizeBBoxField(ceil(bBox.width + bBox.x)),
@@ -196,7 +194,7 @@ function normalizeBBox(bBox) {
 }
 
 // Angle is expected to be from right-handed cartesian (not svg) space - positive is counterclockwise
-function rotateBBox(bBox, center, angle) {
+export function rotateBBox(bBox, center, angle) {
     var cos = _Number(cosFunc(angle * PI_DIV_180).toFixed(3)),
         sin = _Number(sinFunc(angle * PI_DIV_180).toFixed(3)),
         w2 = bBox.width / 2,
@@ -280,7 +278,7 @@ extend(exports, {
     },
 
     processSeriesTemplate: function(seriesTemplate, items) {
-        var customizeSeries = typeUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
+        var customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
             nameField = seriesTemplate.nameField,
             generatedSeries = {},
             seriesOrder = [],
@@ -403,7 +401,7 @@ extend(exports, {
     }
 });
 
-function getVizRangeObject(value) {
+export function getVizRangeObject(value) {
     if(Array.isArray(value)) {
         return { startValue: value[0], endValue: value[1] };
     } else {
@@ -411,14 +409,14 @@ function getVizRangeObject(value) {
     }
 }
 
-function convertVisualRangeObject(visualRange, convertToVisualRange) {
+export function convertVisualRangeObject(visualRange, convertToVisualRange) {
     if(convertToVisualRange) {
         return visualRange;
     }
     return [visualRange.startValue, visualRange.endValue];
 }
 
-function getAddFunction(range, correctZeroLevel) {
+export function getAddFunction(range, correctZeroLevel) {
     // T170398
     if(range.dataType === "datetime") {
         return function(rangeValue, marginValue, sign = 1) {
@@ -439,9 +437,9 @@ function getAddFunction(range, correctZeroLevel) {
     };
 }
 
-function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
-    const minDefined = typeUtils.isDefined(visualRange.startValue);
-    const maxDefined = typeUtils.isDefined(visualRange.endValue);
+export function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
+    const minDefined = isDefined(visualRange.startValue);
+    const maxDefined = isDefined(visualRange.endValue);
     const nonDiscrete = options.axisType !== "discrete";
 
     dataRange = dataRange || wholeRange;
@@ -453,7 +451,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     let rangeLength = visualRange.length;
     const categories = dataRange.categories;
 
-    if(nonDiscrete && !typeUtils.isDefined(min) && !typeUtils.isDefined(max)) {
+    if(nonDiscrete && !isDefined(min) && !isDefined(max)) {
         return {
             startValue: min,
             endValue: max
@@ -462,7 +460,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
 
     if(isDefined(rangeLength)) {
         if(nonDiscrete) {
-            if(options.dataType === "datetime" && !isNumber(rangeLength)) {
+            if(options.dataType === "datetime" && !isNumeric(rangeLength)) {
                 rangeLength = dateToMilliseconds(rangeLength);
             }
 
@@ -506,11 +504,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     };
 }
 
-function sign(value) {
-    return value < 0 ? -1 : 1;
-}
-
-function getLogExt(value, base, allowNegatives = false, linearThreshold) {
+export function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     if(!allowNegatives) {
         return getLog(value, base);
     }
@@ -524,7 +518,7 @@ function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold - 1).toFixed(Math.abs(linearThreshold))));
 }
 
-function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
+export function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
     if(!allowNegatives) {
         return raiseTo(value, base);
     }
@@ -541,28 +535,3 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
 
     return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
 }
-
-exports.getVizRangeObject = getVizRangeObject;
-exports.convertVisualRangeObject = convertVisualRangeObject;
-exports.adjustVisualRange = adjustVisualRange;
-exports.getAddFunction = getAddFunction;
-exports.getLog = getLog;
-exports.getLogExt = getLogExt;
-exports.getAdjustedLog10 = getAdjustedLog10;
-exports.raiseTo = raiseTo;
-exports.raiseToExt = raiseToExt;
-exports.sign = sign;
-
-exports.normalizeAngle = normalizeAngle;
-exports.convertAngleToRendererSpace = convertAngleToRendererSpace;
-exports.degreesToRadians = degreesToRadians;
-exports.getCosAndSin = getCosAndSin;
-exports.getDecimalOrder = getDecimalOrder;
-exports.getAppropriateFormat = getAppropriateFormat;
-exports.getDistance = getDistance;
-
-exports.roundValue = roundValue;
-exports.getPower = getPower;
-
-exports.rotateBBox = rotateBBox;
-exports.normalizeBBox = normalizeBBox;
