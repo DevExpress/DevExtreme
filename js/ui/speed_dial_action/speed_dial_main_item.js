@@ -67,6 +67,13 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         this._renderClick();
     },
 
+    _init() {
+        this.callBase();
+        if(this.option("actions").length === 1) {
+            this._renderEvents(this.option("actions")[0]);
+        }
+    },
+
     _renderCloseIcon() {
         this._$closeIcon = this._renderButtonIcon(
             this._$closeIcon,
@@ -81,7 +88,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             this._createActionByOption("onClick") :
             this._createAction(this._clickHandler);
 
-        this._setClickAction();
+        this._setClickAction(this.option("actions")[0]);
     },
 
     _defaultActionArgs() {

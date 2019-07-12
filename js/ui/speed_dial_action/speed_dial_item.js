@@ -42,6 +42,11 @@ const SpeedDialItem = Overlay.inherit({
         this._renderClick();
     },
 
+    _init() {
+        this.callBase();
+        this._renderEvents(this.option("actionComponent"));
+    },
+
     _renderButtonIcon($element, icon, iconClass) {
         !!$element && $element.remove();
 
@@ -68,6 +73,34 @@ const SpeedDialItem = Overlay.inherit({
         }
     },
 
+    _actionEvents: [
+        "click",
+        "contentReady",
+        "disposing"
+    ],
+
+    _clickEvent: null,
+
+    _renderEvents(action) {
+        if(action) {
+            this._actionEvents.forEach((actionEvent, i) => {
+                this.off(actionEvent);
+                this.on(actionEvent, () => {
+                    const actionArgs = i === 0 ? {
+                        component: action,
+                        element: this.$element(),
+                        event: this._clickEvent
+                    } : {
+                        component: action,
+                        element: this.$element()
+                    };
+
+                    action.fireEvent(actionEvent, actionArgs);
+                });
+            });
+        }
+    },
+
     _fixWrapperPosition() {
         const $wrapper = this._$wrapper;
         const $container = this._getContainer();
@@ -81,13 +114,14 @@ const SpeedDialItem = Overlay.inherit({
 
         eventsEngine.off(overlayContent, eventName);
         eventsEngine.on(overlayContent, eventName, (e) => {
+            this._clickEvent = e;
             this._clickAction({ event: e, element: this.$element() });
         });
     },
 
     _defaultActionArgs() {
         return {
-            component: this.option('actionComponent')
+            component: this.option("actionComponent")
         };
     },
 
