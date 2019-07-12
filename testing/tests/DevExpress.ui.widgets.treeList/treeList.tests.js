@@ -18,7 +18,7 @@ import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import { DataSource } from "data/data_source/data_source";
-
+import { ColumnWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 fx.off = true;
 
@@ -569,6 +569,48 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(1).attr("aria-level"), "1", "second data row - value of 'aria-level' attribute");
     assert.equal($dataRows.eq(2).attr("aria-expanded"), undefined, "third data row hasn't the 'aria-expanded' attribute");
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
+});
+
+QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-treelist"),
+        clock = sinon.useFakeTimers(),
+        treeList = createTreeList({
+            dataSource: [
+                { id: 0, parentId: -1, c0: "c0" },
+                { id: 1, parentId: 0, c0: "c1" }
+            ],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["add", "edit", "delete", "save", "cancel"]
+                },
+                "id"
+            ],
+            editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    // act
+    treeList.editRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    clock.restore();
 });
 
 // T632028
