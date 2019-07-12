@@ -70,7 +70,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { ColumnWrapper, FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -348,7 +348,7 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
 QUnit.test("Command column accessibility structure", function(assert) {
     // arrange
     createDataGrid({
-        columns: ["field1", "field2" ],
+        columns: ["field1", "field2"],
         editing: { mode: "row", allowAdding: true }
     });
 
@@ -356,6 +356,37 @@ QUnit.test("Command column accessibility structure", function(assert) {
     assert.equal($(".dx-row.dx-header-row").eq(0).attr("role"), "row");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("role"), "columnheader");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"), 3);
+});
+
+QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-datagrid"),
+        clock = sinon.useFakeTimers();
+
+    createDataGrid({
+        dataSource: [{ id: "id" }],
+        columns: [
+            {
+                type: "buttons",
+                width: 110,
+                buttons: ["add", "edit", "delete"]
+            },
+            "id"
+        ],
+        editing: {
+            mode: "row",
+            allowUpdating: true,
+            allowDeleting: true,
+            useIcons: true
+        }
+    });
+
+    clock.tick();
+
+    // assert
+    wrapper.getCommandButtons().each((_, button) => assert.ok($(button).attr("aria-label").length > 0));
+
+    clock.restore();
 });
 
 QUnit.test("Customize text called for column only (T653374)", function(assert) {
