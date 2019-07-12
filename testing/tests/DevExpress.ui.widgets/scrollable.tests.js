@@ -1909,9 +1909,14 @@ QUnit.module("Hoverable interaction", () => {
                         const checkAsserts = (isHoverable) => {
                             assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
                             assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                            assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, "scrollable-disabled-class");
 
-                            if(browser.msie && parseInt(browser.version) >= 12) {
-                                assert.ok(true, "skip for Edge");
+                            if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
+                                let done = assert.async();
+                                setTimeout(() => {
+                                    assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                                    done();
+                                });
                             } else {
                                 assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
                             }
