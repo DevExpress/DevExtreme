@@ -506,6 +506,10 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     };
 }
 
+function sign(value) {
+    return value < 0 ? -1 : 1;
+}
+
 function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     if(!allowNegatives) {
         return getLog(value, base);
@@ -517,7 +521,7 @@ function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     if(transformValue < 0) {
         return 0;
     }
-    return adjust(_math.sign(value) * transformValue, Number(Math.pow(base, linearThreshold - 1).toFixed(Math.abs(linearThreshold))));
+    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold - 1).toFixed(Math.abs(linearThreshold))));
 }
 
 function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
@@ -535,7 +539,7 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
         return 0;
     }
 
-    return adjust(_math.sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
+    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
 }
 
 exports.getVizRangeObject = getVizRangeObject;
@@ -547,6 +551,7 @@ exports.getLogExt = getLogExt;
 exports.getAdjustedLog10 = getAdjustedLog10;
 exports.raiseTo = raiseTo;
 exports.raiseToExt = raiseToExt;
+exports.sign = sign;
 
 exports.normalizeAngle = normalizeAngle;
 exports.convertAngleToRendererSpace = convertAngleToRendererSpace;

@@ -1,4 +1,4 @@
-import { getLogExt as getLog, getCategoriesInfo, raiseToExt, getLog as mathLog, raiseTo as mathRaise } from "../core/utils";
+import { getLogExt as getLog, getCategoriesInfo, raiseToExt, getLog as mathLog, raiseTo as mathRaise, sign } from "../core/utils";
 import dateUtils from "../../core/utils/date";
 import { isDefined, isString } from "../../core/utils/type";
 import { adjust } from "../../core/utils/math";
@@ -708,7 +708,7 @@ function numericGenerator(options) {
 }
 
 
-const correctValueByIntervalLog = (post, getRound, getValue) => (value, interval) => Math.sign(value) * adjust(post(getRound(value)(adjust(getValue(value) / interval)) * interval));
+const correctValueByIntervalLog = (post, getRound, getValue) => (value, interval) => sign(value) * adjust(post(getRound(value)(adjust(getValue(value) / interval)) * interval));
 
 function logarithmicGenerator(options) {
     const base = options.logBase;

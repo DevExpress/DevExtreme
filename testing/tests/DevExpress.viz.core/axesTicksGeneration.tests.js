@@ -1458,13 +1458,13 @@ QUnit.test("Adjust first tick by interval", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ min: -1.5e-77, max: 100, linearThreshold: -77 });
+    this.axis.setBusinessRange({ min: -1.5e-39, max: 100, linearThreshold: -12 });
 
     // act
     this.axis.createTicks(canvas(450));
 
-    assert.deepEqual(this.axis._tickInterval, 10);
-    assert.deepEqual(this.axis._majorTicks.map(value)[0], -1e-80);
+    assert.deepEqual(this.axis._tickInterval, 2);
+    assert.deepEqual(this.axis._majorTicks.map(value)[0], -1e-40);
 });
 
 QUnit.module("Logarithmic. Misc", environment);
