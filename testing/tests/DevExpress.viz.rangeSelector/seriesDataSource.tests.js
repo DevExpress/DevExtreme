@@ -727,7 +727,8 @@ QUnit.test("getBoundRange valueAxis has logarithmic type", function(assert) {
             series: {}
         },
         renderer: new vizMocks.Renderer(),
-        argumentAxis: this.argumentAxis
+        argumentAxis: this.argumentAxis,
+        valueAxis: this.valueAxis
     });
     var boundRange = seriesDataSource.getBoundRange();
     // assert

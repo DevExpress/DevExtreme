@@ -83,7 +83,9 @@ var environment = {
             _visibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 },
             getVisibleArea: function() { return this._visibleArea; },
             getValueAxis: getMockAxisFunction(this.renderer, () => this.translators.val),
-            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg)
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg),
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     },
     afterEach: function() {
@@ -109,7 +111,9 @@ QUnit.module("Translation. Rangearea", {
             },
             getValueAxis: getMockAxisFunction(this.renderer, () => that.continuousTranslators.val),
             getArgumentAxis: getMockAxisFunction(this.renderer, () => that.continuousTranslators.arg),
-            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         var translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "default": 70 },
             translateYData = { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "default": 600 };
@@ -379,7 +383,9 @@ QUnit.module("Draw Point", {
             },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 600, minY: 0, maxY: 800 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 600, minY: 0, maxY: 800 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.translators = {
             arg: new MockTranslator({
@@ -1075,7 +1081,9 @@ QUnit.module("Update Point", {
             },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 600, minY: 0, maxY: 800 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 600, minY: 0, maxY: 800 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.translators = {
             arg: new MockTranslator({
@@ -1889,7 +1897,9 @@ QUnit.module("Tooltip", {
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 10, maxX: 600, minY: 5, maxY: 810 }; }
+            getVisibleArea: function() { return { minX: 10, maxX: 600, minY: 5, maxY: 810 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
@@ -2100,7 +2110,9 @@ QUnit.module("API", {
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 300, minY: 0, maxY: 300 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 300, minY: 0, maxY: 300 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         sinon.spy(labelModule, "Label");
 
@@ -2253,7 +2265,9 @@ QUnit.module("Check points in visible area", {
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
             getValueAxis: getMockAxisFunction(this.renderer, () => this.translators.val, [0, 210]),
-            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg, [0, 100])
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg, [0, 100]),
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.data = { argument: 1, value: 1, minValue: 1 };
 
@@ -2456,7 +2470,9 @@ QUnit.module("Point translators. Rangebar", {
             getLabelVisibility: function() { return false; },
             getValueAxis: getMockAxisFunction(this.renderer, () => this.translators.val),
             getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg),
-            getVisibleArea: function() { return { minX: 0, maxX: 800, minY: 0, maxY: 800 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 800, minY: 0, maxY: 800 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     },
     setContinuousTranslators: function() {
@@ -2529,7 +2545,9 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
             getLabelVisibility: function() { return false; },
             getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, [200, 300]),
             getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, [100, 500]),
-            getVisibleArea: function() { return { minX: 100, maxX: 500, minY: 200, maxY: 300 }; }
+            getVisibleArea: function() { return { minX: 100, maxX: 500, minY: 200, maxY: 300 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         var translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, "canvas_position_default": 100 },
             translateYData = { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, "canvas_position_default": 300 };
@@ -2660,7 +2678,9 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
             getLabelVisibility: function() { return false; },
             getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, [200, 300]),
             getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, [100, 500]),
-            getVisibleArea: function() { return { minX: 200, maxX: 300, minY: 100, maxY: 500 }; }
+            getVisibleArea: function() { return { minX: 200, maxX: 300, minY: 100, maxY: 500 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         var translateYData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, "canvas_position_default": 100 },
             translateXData = { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, "canvas_position_default": 300 };
@@ -2787,7 +2807,9 @@ QUnit.module("HasValue method. RangeBar", {
         this.series = {
             name: "series1",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     }
 });

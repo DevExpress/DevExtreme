@@ -1565,6 +1565,12 @@ var dxChart = {
         */
         logarithmBase: 10,
         /**
+        * @name dxChartOptions.argumentAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
+        /**
         * @name dxChartOptions.argumentAxis.argumentType
         * @type Enums.ChartDataType
         * @default undefined
@@ -1873,6 +1879,12 @@ var dxChart = {
         * @default 10
         */
         logarithmBase: 10,
+        /**
+        * @name dxChartOptions.valueAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
         /**
         * @name dxChartOptions.valueAxis.valueType
         * @type Enums.ChartDataType
@@ -2889,6 +2901,12 @@ var dxPolarChart = {
         */
         logarithmBase: 10,
         /**
+        * @name dxPolarChartOptions.argumentAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
+        /**
         * @name dxPolarChartOptions.argumentAxis.argumentType
         * @type Enums.ChartDataType
         * @default undefined
@@ -3112,6 +3130,12 @@ var dxPolarChart = {
         * @default 10
         */
         logarithmBase: 10,
+        /**
+        * @name dxPolarChartOptions.valueAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
         /**
         * @name dxPolarChartOptions.valueAxis.valueType
         * @type Enums.ChartDataType

@@ -241,6 +241,8 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
             axisType: scaleOptions.type,
             dataType: scaleOptions.valueType,
             logBase: scaleOptions.logarithmBase,
+            allowNegatives: true,
+            linearThreshold: Math.abs(scaleOptions.linearThreshold || 0),
 
             axisDivisionFactor: scaleOptions.axisDivisionFactor,
             minorAxisDivisionFactor: scaleOptions.minorAxisDivisionFactor,
@@ -1103,6 +1105,10 @@ AxisWrapper.prototype = {
             startValue: value[0].valueOf() === startValue.valueOf(),
             endValue: value[1].valueOf() === endValue.valueOf()
         };
+    },
+
+    getOptions() {
+        return this._axis.getOptions() || {};
     }
 };
 
