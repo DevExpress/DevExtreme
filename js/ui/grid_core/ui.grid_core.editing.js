@@ -76,7 +76,12 @@ var EDIT_FORM_CLASS = "edit-form",
     ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL],
     FORM_BASED_MODES = [EDIT_MODE_FORM, EDIT_MODE_POPUP],
-    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
+    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM],
+    BUTTON_LOCALIZATION_NAMES = {
+        add: "dxDataGrid-editingAddRow",
+        edit: "dxDataGrid-editingEditRow",
+        delete: "dxDataGrid-editingDeleteRow"
+    };
 
 var EDIT_LINK_CLASS = {
         save: "dx-link-save",
