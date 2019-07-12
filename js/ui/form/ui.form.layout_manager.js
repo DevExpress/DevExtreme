@@ -1,80 +1,77 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Guid = require("../../core/guid"),
-    FormItemsRunTimeInfo = require("./ui.form.items_runtime_info").default,
-    registerComponent = require("../../core/component_registrator"),
-    typeUtils = require("../../core/utils/type"),
-    domUtils = require("../../core/utils/dom"),
-    isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
-    isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
-    unwrap = require("../../core/utils/variable_wrapper").unwrap,
-    windowUtils = require("../../core/utils/window"),
-    stringUtils = require("../../core/utils/string"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    dataUtils = require("../../core/utils/data"),
-    removeEvent = require("../../core/remove_event"),
-    clickEvent = require("../../events/click"),
-    normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
-    errors = require("../widget/ui.errors"),
-    messageLocalization = require("../../localization/message"),
-    styleUtils = require("../../core/utils/style"),
-    inflector = require("../../core/utils/inflector"),
-    Widget = require("../widget/ui.widget"),
-    Validator = require("../validator"),
-    ResponsiveBox = require("../responsive_box"),
-    themes = require("../themes");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import Guid from "../../core/guid";
+import { default as FormItemsRunTimeInfo } from "./ui.form.items_runtime_info";
+import registerComponent from "../../core/component_registrator";
+import typeUtils from "../../core/utils/type";
+import domUtils from "../../core/utils/dom";
+import { isWrapped, isWritableWrapped, unwrap } from "../../core/utils/variable_wrapper";
+import windowUtils from "../../core/utils/window";
+import stringUtils from "../../core/utils/string";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { inArray, normalizeIndexes } from "../../core/utils/array";
+import dataUtils from "../../core/utils/data";
+import removeEvent from "../../core/remove_event";
+import clickEvent from "../../events/click";
+import errors from "../widget/ui.errors";
+import messageLocalization from "../../localization/message";
+import styleUtils from "../../core/utils/style";
+import inflector from "../../core/utils/inflector";
+import Widget from "../widget/ui.widget";
+import Validator from "../validator";
+import ResponsiveBox from "../responsive_box";
+import themes from "../themes";
 
-require("../text_box");
-require("../number_box");
-require("../check_box");
-require("../date_box");
-require("../button");
+import "../text_box";
+import "../number_box";
+import "../check_box";
+import "../date_box";
+import "../button";
 
-var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
-    FIELD_ITEM_CLASS = "dx-field-item",
-    FIELD_EMPTY_ITEM_CLASS = "dx-field-empty-item",
-    FIELD_BUTTON_ITEM_CLASS = "dx-field-button-item",
-    FIELD_ITEM_REQUIRED_CLASS = "dx-field-item-required",
-    FIELD_ITEM_OPTIONAL_CLASS = "dx-field-item-optional",
-    FIELD_ITEM_REQUIRED_MARK_CLASS = "dx-field-item-required-mark",
-    FIELD_ITEM_OPTIONAL_MARK_CLASS = "dx-field-item-optional-mark",
-    FIELD_ITEM_LABEL_CLASS = "dx-field-item-label",
-    FIELD_ITEM_LABEL_ALIGN_CLASS = "dx-field-item-label-align",
-    FIELD_ITEM_LABEL_CONTENT_CLASS = "dx-field-item-label-content",
-    FIELD_ITEM_LABEL_TEXT_CLASS = "dx-field-item-label-text",
-    FIELD_ITEM_LABEL_LOCATION_CLASS = "dx-field-item-label-location-",
-    FIELD_ITEM_CONTENT_CLASS = "dx-field-item-content",
-    FIELD_ITEM_CONTENT_LOCATION_CLASS = "dx-field-item-content-location-",
-    FIELD_ITEM_CONTENT_WRAPPER_CLASS = "dx-field-item-content-wrapper",
-    FIELD_ITEM_HELP_TEXT_CLASS = "dx-field-item-help-text",
-    SINGLE_COLUMN_ITEM_CONTENT = "dx-single-column-item-content",
+const FORM_EDITOR_BY_DEFAULT = "dxTextBox";
+const FIELD_ITEM_CLASS = "dx-field-item";
+const FIELD_EMPTY_ITEM_CLASS = "dx-field-empty-item";
+const FIELD_BUTTON_ITEM_CLASS = "dx-field-button-item";
+const FIELD_ITEM_REQUIRED_CLASS = "dx-field-item-required";
+const FIELD_ITEM_OPTIONAL_CLASS = "dx-field-item-optional";
+const FIELD_ITEM_REQUIRED_MARK_CLASS = "dx-field-item-required-mark";
+const FIELD_ITEM_OPTIONAL_MARK_CLASS = "dx-field-item-optional-mark";
+const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label";
+const FIELD_ITEM_LABEL_ALIGN_CLASS = "dx-field-item-label-align";
+const FIELD_ITEM_LABEL_CONTENT_CLASS = "dx-field-item-label-content";
+const FIELD_ITEM_LABEL_TEXT_CLASS = "dx-field-item-label-text";
+const FIELD_ITEM_LABEL_LOCATION_CLASS = "dx-field-item-label-location-";
+const FIELD_ITEM_CONTENT_CLASS = "dx-field-item-content";
+const FIELD_ITEM_CONTENT_LOCATION_CLASS = "dx-field-item-content-location-";
+const FIELD_ITEM_CONTENT_WRAPPER_CLASS = "dx-field-item-content-wrapper";
+const FIELD_ITEM_HELP_TEXT_CLASS = "dx-field-item-help-text";
+const SINGLE_COLUMN_ITEM_CONTENT = "dx-single-column-item-content";
 
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS = "dx-label-h-align",
-    LABEL_VERTICAL_ALIGNMENT_CLASS = "dx-label-v-align",
+const LABEL_HORIZONTAL_ALIGNMENT_CLASS = "dx-label-h-align";
+const LABEL_VERTICAL_ALIGNMENT_CLASS = "dx-label-v-align";
 
-    FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager",
-    LAYOUT_MANAGER_FIRST_ROW_CLASS = "dx-first-row",
-    LAYOUT_MANAGER_FIRST_COL_CLASS = "dx-first-col",
-    LAYOUT_MANAGER_LAST_COL_CLASS = "dx-last-col",
-    LAYOUT_MANAGER_ONE_COLUMN = "dx-layout-manager-one-col",
+const FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager";
+const LAYOUT_MANAGER_FIRST_ROW_CLASS = "dx-first-row";
+const LAYOUT_MANAGER_FIRST_COL_CLASS = "dx-first-col";
+const LAYOUT_MANAGER_LAST_COL_CLASS = "dx-last-col";
+const LAYOUT_MANAGER_ONE_COLUMN = "dx-layout-manager-one-col";
 
-    FLEX_LAYOUT_CLASS = "dx-flex-layout",
+const FLEX_LAYOUT_CLASS = "dx-flex-layout";
 
-    INVALID_CLASS = "dx-invalid",
+const INVALID_CLASS = "dx-invalid";
 
-    LAYOUT_STRATEGY_FLEX = "flex",
-    LAYOUT_STRATEGY_FALLBACK = "fallback",
+const LAYOUT_STRATEGY_FLEX = "flex";
+const LAYOUT_STRATEGY_FALLBACK = "fallback";
 
-    SIMPLE_ITEM_TYPE = "simple",
+const SIMPLE_ITEM_TYPE = "simple";
 
-    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
+const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 
-    DATA_OPTIONS = ["dataSource", "items"],
-    EDITORS_WITH_ARRAY_VALUE = ["dxTagBox", "dxRangeSlider"];
+const DATA_OPTIONS = ["dataSource", "items"];
+const EDITORS_WITH_ARRAY_VALUE = ["dxTagBox", "dxRangeSlider"];
 
-var LayoutManager = Widget.inherit({
+const LayoutManager = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             layoutData: {},
@@ -1072,7 +1069,13 @@ var LayoutManager = Widget.inherit({
         }
     },
 
-    _optionChanged: function(args) {
+    _resetWidget(instance) {
+        const defaultOptions = instance._getDefaultOptions();
+        instance._setOptionSilent("value", defaultOptions.value);
+        instance.option("isValid", true);
+    },
+
+    _optionChanged(args) {
         if(args.fullName.search("layoutData.") === 0) {
             return;
         }
@@ -1090,17 +1093,16 @@ var LayoutManager = Widget.inherit({
 
                 if(this.option("items")) {
                     if(!typeUtils.isEmptyObject(args.value)) {
-                        this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
+                        this._itemsRunTimeInfo.each((_, itemRunTimeInfo) => {
                             if(typeUtils.isDefined(itemRunTimeInfo.item)) {
-                                var dataField = itemRunTimeInfo.item.dataField;
+                                const dataField = itemRunTimeInfo.item.dataField;
 
                                 if(dataField && typeUtils.isDefined(itemRunTimeInfo.widgetInstance)) {
-                                    var valueGetter = dataUtils.compileGetter(dataField),
-                                        dataValue = valueGetter(args.value);
+                                    const valueGetter = dataUtils.compileGetter(dataField);
+                                    const dataValue = valueGetter(args.value);
 
                                     if(dataValue === undefined) {
-                                        itemRunTimeInfo.widgetInstance.reset();
-                                        itemRunTimeInfo.widgetInstance.option("isValid", true);
+                                        this._resetWidget(itemRunTimeInfo.widgetInstance);
                                     } else {
                                         itemRunTimeInfo.widgetInstance.option("value", dataValue);
                                     }
