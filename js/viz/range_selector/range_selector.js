@@ -242,7 +242,7 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
             dataType: scaleOptions.valueType,
             logBase: scaleOptions.logarithmBase,
             allowNegatives: true,
-            linearThreshold: Math.min(Math.abs(scaleOptions.startValue), Math.abs(scaleOptions.linearThreshold || 0)),
+            linearThreshold: Math.abs(scaleOptions.linearThreshold || 0),
 
             axisDivisionFactor: scaleOptions.axisDivisionFactor,
             minorAxisDivisionFactor: scaleOptions.minorAxisDivisionFactor,

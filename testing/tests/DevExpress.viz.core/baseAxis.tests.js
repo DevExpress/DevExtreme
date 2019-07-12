@@ -3804,17 +3804,17 @@ QUnit.test("Pass linearThreshold to translator range", function(assert) {
     assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].linearThreshold, 1);
 });
 
-QUnit.test("Merge minLog value from options and businessRange", function(assert) {
+QUnit.test("Get minLog value from options", function(assert) {
     this.updateOptions({
         type: "logarithmic",
-        linearThreshold: -10
+        linearThreshold: 2
     });
 
     this.axis.validate();
     this.axis.setBusinessRange({
         linearThreshold: 1
     });
-    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].linearThreshold, -10);
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].linearThreshold, 2);
 });
 
 QUnit.test("take linearThreshold on addRange", function(assert) {

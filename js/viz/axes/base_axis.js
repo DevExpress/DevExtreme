@@ -1202,9 +1202,11 @@ Axis.prototype = {
 
         if(options.type === constants.logarithmic) {
             that._seriesData.addRange({
-                linearThreshold: options.linearThreshold,
                 allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
             });
+            if(!isNaN(options.linearThreshold)) {
+                that._seriesData.linearThreshold = options.linearThreshold;
+            }
         }
 
         if(!isDiscrete) {

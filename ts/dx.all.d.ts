@@ -6574,6 +6574,8 @@ declare module DevExpress.viz {
         hoverMode?: 'allArgumentPoints' | 'none';
         /** @name dxChart.Options.argumentAxis.label */
         label?: dxChartArgumentAxisLabel;
+        /** @name dxChart.Options.argumentAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
         /** @deprecated */
@@ -6895,6 +6897,8 @@ declare module DevExpress.viz {
         endOnTick?: boolean;
         /** @name dxChart.Options.valueAxis.label */
         label?: dxChartValueAxisLabel;
+        /** @name dxChart.Options.valueAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
         /** @deprecated */
@@ -8304,6 +8308,8 @@ declare module DevExpress.viz {
         hoverMode?: 'allArgumentPoints' | 'none';
         /** @name dxPolarChart.Options.argumentAxis.label */
         label?: dxPolarChartArgumentAxisLabel;
+        /** @name dxPolarChart.Options.argumentAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxPolarChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
         /** @name dxPolarChart.Options.argumentAxis.minorTick */
@@ -8517,6 +8523,8 @@ declare module DevExpress.viz {
         endOnTick?: boolean;
         /** @name dxPolarChart.Options.valueAxis.label */
         label?: dxPolarChartValueAxisLabel;
+        /** @name dxPolarChart.Options.valueAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxPolarChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
         /** @name dxPolarChart.Options.valueAxis.maxValueMargin */
