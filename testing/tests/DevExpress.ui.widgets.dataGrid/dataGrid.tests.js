@@ -361,30 +361,72 @@ QUnit.test("Command column accessibility structure", function(assert) {
 QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
     // arrange
     var wrapper = new ColumnWrapper(".dx-datagrid"),
-        clock = sinon.useFakeTimers();
-
-    createDataGrid({
-        dataSource: [{ id: "id" }],
-        columns: [
-            {
-                type: "buttons",
-                width: 110,
-                buttons: ["add", "edit", "delete"]
-            },
-            "id"
-        ],
-        editing: {
-            mode: "row",
-            allowUpdating: true,
-            allowDeleting: true,
-            useIcons: true
-        }
-    });
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, c0: "c0" }],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["edit", "delete", "save", "cancel"]
+                },
+                "id"
+            ],
+            editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
 
     clock.tick();
 
     // assert
-    wrapper.getCommandButtons().each((_, button) => assert.ok($(button).attr("aria-label").length > 0));
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    // act
+    dataGrid.editRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    clock.restore();
+});
+
+QUnit.test("Undelete command buttons should contains aria-label accessibility attribute if rendered as icon and batch edit mode (T755185)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-datagrid"),
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, c0: "c0" }],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["undelete"]
+                },
+                "id"
+            ],
+            editing: {
+                mode: "batch",
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.deleteRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
 
     clock.restore();
 });
