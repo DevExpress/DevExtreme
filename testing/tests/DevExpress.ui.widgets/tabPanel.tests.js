@@ -51,8 +51,8 @@ QUnit.test("container should consider tabs height", (assert) => {
 
     const $container = $tabPanel.find("." + TABPANEL_CONTAINER_CLASS);
     const $tabs = $tabPanel.find("." + TABS_CLASS);
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 QUnit.test("container should consider tabs height for async datasource", (assert) => {
@@ -74,8 +74,8 @@ QUnit.test("container should consider tabs height for async datasource", (assert
 
     clock.tick();
 
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 QUnit.test("container should consider tabs height for async templates", (assert) => {
@@ -90,8 +90,8 @@ QUnit.test("container should consider tabs height for async templates", (assert)
 
     clock.tick();
 
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 QUnit.test("container should consider tabs height when it rendered in hiding area", (assert) => {
@@ -104,8 +104,8 @@ QUnit.test("container should consider tabs height when it rendered in hiding are
 
     const $container = $tabPanel.find("." + TABPANEL_CONTAINER_CLASS);
     const $tabs = $tabPanel.find("." + TABS_CLASS);
-    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.1, "padding correct");
-    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
+    assert.roughEqual(parseFloat($container.css("padding-top")), $tabs.outerHeight(), 0.5, "padding correct");
+    assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
 

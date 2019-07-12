@@ -1355,13 +1355,14 @@ QUnit.module("widget sizing render", {}, () => {
             width: undefined
         }).dxDateBox("instance");
 
-        const initialWidth = $element.outerWidth();
+        const { width: initialWidth } = $element.get(0).getBoundingClientRect();
 
         $parent.css("transform", "scale(0.5)");
         component.repaint();
         $parent.css("transform", "scale(1)");
+        const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
 
-        assert.equal(component.$element().outerWidth(), initialWidth, "component has correct width");
+        assert.strictEqual(actualWidth, initialWidth, "component has correct width");
     });
 
     QUnit.test("change width", assert => {

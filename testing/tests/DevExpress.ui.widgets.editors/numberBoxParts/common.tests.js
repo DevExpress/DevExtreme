@@ -440,7 +440,7 @@ QUnit.module("basics", {}, () => {
 
         $numberBoxInput.blur();
         mouse.wheel(-20);
-        assert.equal(numberBox.option("value"), 100.6);
+        assert.roughEqual(numberBox.option("value"), 100.6, 1.001);
     });
 
     QUnit.test("mousewheel action should not work in disabled state", assert => {
