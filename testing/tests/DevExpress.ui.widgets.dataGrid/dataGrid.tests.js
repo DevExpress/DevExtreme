@@ -14653,6 +14653,36 @@ QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invali
     }
 });
 
+// T756639
+QUnit.test("Rows should be synchronized after expand if column fixing is enabled and deferUpdate is used in masterDetail template", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        dataSource: [{ id: 1 }],
+        columnFixing: {
+            enabled: true
+        },
+        masterDetail: {
+            enabled: true,
+            template: function($container, options) {
+                // deferUpdate is called in template in devextreme-react
+                commonUtils.deferUpdate(function() {
+                    $("<div>").addClass("my-detail").css("height", 400).appendTo($container);
+                });
+            }
+        }
+    });
+
+    dataGrid.expandRow(1);
+
+    // assert
+    var $masterDetailRows = $(dataGrid.getRowElement(1));
+    assert.strictEqual($masterDetailRows.eq(1).find(".my-detail").length, 1, "masterDetail template is rendered");
+    assert.ok($masterDetailRows.eq(1).height() > 400, "masterDetail row height is applied");
+    assert.strictEqual($masterDetailRows.eq(0).height(), $masterDetailRows.eq(1).height(), "main and fixed master detail row are synchronized");
+});
+
 QUnit.module("API methods");
 
 QUnit.test("get methods for grid without options", function(assert) {
