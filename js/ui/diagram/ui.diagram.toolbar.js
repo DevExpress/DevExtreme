@@ -199,8 +199,10 @@ class DiagramToolbar extends DiagramPanel {
                 showEvent: "dxclick",
                 position: { at: "left bottom" },
                 onItemClick: ({ itemData }) => {
-                    const parameter = this._getExecCommandParameter(itemData);
-                    actionHandler.call(this, itemData.command, parameter);
+                    if(itemData.command !== undefined) {
+                        const parameter = this._getExecCommandParameter(itemData);
+                        actionHandler.call(this, itemData.command, parameter);
+                    }
                 },
                 onInitialized: ({ component }) => this._onContextMenuInitialized(component, item),
                 onDisposing: ({ component }) => this._onContextMenuDisposing(component, item)
