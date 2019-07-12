@@ -50,7 +50,6 @@ QUnit.module("create one action", () => {
     });
 });
 
-
 QUnit.module("maxSpeedDialActionCount option", () => {
     test("check action buttons count", (assert) => {
         const $container = $("#fabs");
@@ -69,7 +68,6 @@ QUnit.module("maxSpeedDialActionCount option", () => {
         assert.equal($("." + FAB_CLASS).length - 1, 5, "five actions is created");
     });
 });
-
 
 QUnit.module("create multiple actions", (hooks) => {
     let firstInstance;
@@ -306,4 +304,39 @@ QUnit.module("check action buttons position", (hooks) => {
         assert.equal($fabWrapper.eq(1).css("position"), expectedPosition, "second action has the same position with main fab");
     });
 });
+
+
+QUnit.module("check action buttons click args", (hooks) => {
+    hooks.afterEach(() => {
+        $("#fab-one").dxSpeedDialAction("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
+    }),
+
+    test("component", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction({
+            onClick: function(e) {
+                assert.equal(e.component, firstSDA, "component in args matches with first SDA instance");
+            }
+        }).dxSpeedDialAction("instance");
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        let $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        const secondSDA = $("#fab-two").dxSpeedDialAction({
+            icon: "edit",
+            onClick: function(e) {
+                assert.equal(e.component, secondSDA, "component in args matches with second SDA instance");
+            }
+        }).dxSpeedDialAction("instance");
+
+        const $fabElement = $("." + FAB_CLASS);
+        const $fabContent = $fabElement.find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+        $fabContent.eq(2).trigger("dxclick");
+    });
+});
+
 
