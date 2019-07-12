@@ -3377,13 +3377,13 @@ declare module DevExpress.ui {
         /** @name dxOverlay.content() */
         content(): DevExpress.core.dxElement;
         /** @name dxOverlay.hide() */
-        hide(): Promise<void> & JQueryPromise<void>;
+        hide(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxOverlay.repaint() */
         repaint(): void;
         /** @name dxOverlay.show() */
-        show(): Promise<void> & JQueryPromise<void>;
+        show(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxOverlay.toggle(showing) */
-        toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
+        toggle(showing: boolean): Promise<boolean> & JQueryPromise<boolean>;
     }
     /** @name dxPivotGrid.Options */
     export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
@@ -3588,9 +3588,9 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxPopoverOptions)
         constructor(element: JQuery, options?: dxPopoverOptions)
         /** @name dxOverlay.show() */
-        show(): Promise<void> & JQueryPromise<void>;
+        show(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxPopover.show(target) */
-        show(target: string | Element | JQuery): Promise<void> & JQueryPromise<void>;
+        show(target: string | Element | JQuery): Promise<boolean> & JQueryPromise<boolean>;
     }
     /** @name dxPopup.Options */
     export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
