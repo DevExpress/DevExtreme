@@ -1,25 +1,22 @@
-import { getDiagram } from "./diagram_importer";
-
 const ShapeCategories = {
     load: function(showCustomShapes) {
-        const ShapeCategories = getDiagram().ShapeCategories;
         var result = [
             {
-                category: ShapeCategories.General,
+                category: "General",
                 title: 'General'
             },
             {
-                category: ShapeCategories.Flowchart,
+                category: "Flowchart",
                 title: 'Flow Chart'
             },
             {
-                category: ShapeCategories.Containers,
+                category: "Containers",
                 title: 'Containers'
             }
         ];
         if(showCustomShapes) {
             result.push({
-                category: ShapeCategories.Custom,
+                category: "Custom",
                 title: 'Custom'
             });
         }
