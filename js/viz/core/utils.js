@@ -127,7 +127,7 @@ export function getPower(value) {
     return value.toExponential().split("e")[1];
 }
 
-function map(array, callback) {
+export function map(array, callback) {
     var i = 0,
         len = array.length,
         result = [],
@@ -160,11 +160,11 @@ function decreaseFields(object, keys, eachDecrease, decrease) {
     return dec;
 }
 
-function normalizeEnum(value) {
+export function normalizeEnum(value) {
     return String(value).toLowerCase();
 }
 
-function setCanvasValues(canvas) {
+export function setCanvasValues(canvas) {
     if(canvas) {
         canvas.originalTop = canvas.top;
         canvas.originalBottom = canvas.bottom;
@@ -217,189 +217,184 @@ export function rotateBBox(bBox, center, angle) {
     });
 }
 
-extend(exports, {
-    decreaseGaps: function(object, keys, decrease) {
-        var arrayGaps;
-        do {
-            arrayGaps = selectByKeys(object, keys);
-            arrayGaps.push(_math.ceil(decrease / arrayGaps.length));
-            decrease = decreaseFields(object, keys, _math.min.apply(null, arrayGaps), decrease);
-        } while(decrease > 0 && arrayGaps.length > 1);
-        return decrease;
-    },
 
-    normalizeEnum: normalizeEnum,
+export function decreaseGaps(object, keys, decrease) {
+    var arrayGaps;
+    do {
+        arrayGaps = selectByKeys(object, keys);
+        arrayGaps.push(_math.ceil(decrease / arrayGaps.length));
+        decrease = decreaseFields(object, keys, _math.min.apply(null, arrayGaps), decrease);
+    } while(decrease > 0 && arrayGaps.length > 1);
+    return decrease;
+}
 
-    parseScalar: function(value, defaultValue) {
-        return value !== undefined ? value : defaultValue;
-    },
 
-    enumParser: function(values) {
-        var stored = {}, i, ii;
-        for(i = 0, ii = values.length; i < ii; ++i) {
-            stored[normalizeEnum(values[i])] = 1;
-        }
-        return function(value, defaultValue) {
-            var _value = normalizeEnum(value);
-            return stored[_value] ? _value : defaultValue;
-        };
-    },
+export function parseScalar(value, defaultValue) {
+    return value !== undefined ? value : defaultValue;
+}
 
-    patchFontOptions: function(options) {
-        var fontOptions = {};
-        each(options || {}, function(key, value) {
-            if(/^(cursor|opacity)$/i.test(key)) {
-                // TODO check other properties, add tests
-            } else if(key === "color") {
-                key = "fill";
-            } else {
-                key = "font-" + key;
-            }
-            fontOptions[key] = value;
-        });
-        return fontOptions;
-    },
-
-    convertPolarToXY: function(centerCoords, startAngle, angle, radius) {
-        var shiftAngle = 90,
-            cosSin;
-
-        angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
-        cosSin = getCosAndSin(angle);
-
-        return { x: _round(centerCoords.x + radius * cosSin.cos), y: _round(centerCoords.y + radius * cosSin.sin) };
-    },
-
-    convertXYToPolar: function(centerCoords, x, y) {
-        var radius = getDistance(centerCoords.x, centerCoords.y, x, y),
-            angle = _math.atan2(y - centerCoords.y, x - centerCoords.x);
-
-        return { phi: _round(normalizeAngle(angle * 180 / _math.PI)), r: _round(radius) };
-    },
-
-    processSeriesTemplate: function(seriesTemplate, items) {
-        var customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
-            nameField = seriesTemplate.nameField,
-            generatedSeries = {},
-            seriesOrder = [],
-            series,
-            i = 0,
-            length,
-            data;
-
-        items = items || [];
-        for(length = items.length; i < length; i++) {
-            data = items[i];
-            if(nameField in data) {
-                series = generatedSeries[data[nameField]];
-                if(!series) {
-                    series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
-                    seriesOrder.push(series.name);
-                }
-            }
-        }
-        return map(seriesOrder, function(orderedName) {
-            var group = generatedSeries[orderedName];
-            return extend(group, customizeSeries.call(null, group.name));
-        });
-    },
-
-    getCategoriesInfo: function(categories, startValue, endValue) {
-        if(categories.length === 0) {
-            return { categories: [] };
-        }
-        startValue = isDefined(startValue) ? startValue : categories[0];
-        endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
-
-        var categoriesValue = map(categories, function(category) {
-                return isDefined(category) ? category.valueOf() : null;
-            }),
-            visibleCategories,
-            indexStartValue = categoriesValue.indexOf(startValue.valueOf()),
-            indexEndValue = categoriesValue.indexOf(endValue.valueOf()),
-            swapBuf,
-            inverted = false,
-            lastIdx;
-
-        indexStartValue < 0 && (indexStartValue = 0);
-        indexEndValue < 0 && (indexEndValue = categories.length - 1);
-        if(indexEndValue < indexStartValue) {
-            swapBuf = indexEndValue;
-            indexEndValue = indexStartValue;
-            indexStartValue = swapBuf;
-            inverted = true;
-        }
-
-        visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
-        lastIdx = visibleCategories.length - 1;
-        return {
-            categories: visibleCategories,
-            start: visibleCategories[inverted ? lastIdx : 0],
-            end: visibleCategories[inverted ? 0 : lastIdx],
-            inverted: inverted
-        };
-    },
-
-    setCanvasValues: setCanvasValues,
-
-    updatePanesCanvases: function(panes, canvas, rotated) {
-        var weightSum = 0;
-        each(panes, function(_, pane) {
-            pane.weight = pane.weight || 1;
-            weightSum += pane.weight;
-        });
-        var distributedSpace = 0,
-            padding = panes.padding || 10,
-            paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom,
-            oneWeight = (paneSpace - padding * (panes.length - 1)) / weightSum,
-            startName = rotated ? "left" : "top",
-            endName = rotated ? "right" : "bottom";
-        each(panes, function(_, pane) {
-            var calcLength = _round(pane.weight * oneWeight);
-            pane.canvas = pane.canvas || {};
-            extend(pane.canvas, canvas);
-            pane.canvas[startName] = canvas[startName] + distributedSpace;
-            pane.canvas[endName] = canvas[endName] + (paneSpace - calcLength - distributedSpace);
-
-            distributedSpace = distributedSpace + calcLength + padding;
-            setCanvasValues(pane.canvas);
-        });
-    },
-
-    unique: function(array) {
-        var values = {};
-        return map(array, function(item) {
-            var result = !values[item] ? item : null;
-            values[item] = true;
-            return result;
-        });
-    },
-
-    map: map,
-
-    getVerticallyShiftedAngularCoords: function(bBox, dy, center) {
-        // TODO: Use center instead of left top corner - that is more correct and allows to get rid of "isPositive"
-        //   horizontalOffset1 = bBox.x + bBox.width / 2 - center.x
-        //   horizontalOffset2 = bBox.y + bBox.height / 2 - center.y
-        //   verticalOffset2 = newCoord.y + bBox.height / 2 - center.y
-        var isPositive = bBox.x + bBox.width / 2 >= center.x,
-            horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x,
-            verticalOffset1 = bBox.y - center.y,
-            verticalOffset2 = verticalOffset1 + dy,
-            horizontalOffset2 = _round(_sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2)),
-            dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
-        return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
-    },
-
-    mergeMarginOptions(opt1, opt2) {
-        return {
-            checkInterval: opt1.checkInterval || opt2.checkInterval,
-            size: Math.max(opt1.size || 0, opt2.size || 0),
-            percentStick: opt1.percentStick || opt2.percentStick,
-            sizePointNormalState: Math.max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
-        };
+export function enumParser(values) {
+    var stored = {}, i, ii;
+    for(i = 0, ii = values.length; i < ii; ++i) {
+        stored[normalizeEnum(values[i])] = 1;
     }
-});
+    return function(value, defaultValue) {
+        var _value = normalizeEnum(value);
+        return stored[_value] ? _value : defaultValue;
+    };
+}
+
+export function patchFontOptions(options) {
+    var fontOptions = {};
+    each(options || {}, function(key, value) {
+        if(/^(cursor|opacity)$/i.test(key)) {
+            // TODO check other properties, add tests
+        } else if(key === "color") {
+            key = "fill";
+        } else {
+            key = "font-" + key;
+        }
+        fontOptions[key] = value;
+    });
+    return fontOptions;
+}
+
+export function convertPolarToXY(centerCoords, startAngle, angle, radius) {
+    var shiftAngle = 90,
+        cosSin;
+
+    angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
+    cosSin = getCosAndSin(angle);
+
+    return { x: _round(centerCoords.x + radius * cosSin.cos), y: _round(centerCoords.y + radius * cosSin.sin) };
+}
+
+export function convertXYToPolar(centerCoords, x, y) {
+    var radius = getDistance(centerCoords.x, centerCoords.y, x, y),
+        angle = _math.atan2(y - centerCoords.y, x - centerCoords.x);
+
+    return { phi: _round(normalizeAngle(angle * 180 / _math.PI)), r: _round(radius) };
+}
+
+export function processSeriesTemplate(seriesTemplate, items) {
+    var customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
+        nameField = seriesTemplate.nameField,
+        generatedSeries = {},
+        seriesOrder = [],
+        series,
+        i = 0,
+        length,
+        data;
+
+    items = items || [];
+    for(length = items.length; i < length; i++) {
+        data = items[i];
+        if(nameField in data) {
+            series = generatedSeries[data[nameField]];
+            if(!series) {
+                series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
+                seriesOrder.push(series.name);
+            }
+        }
+    }
+    return map(seriesOrder, function(orderedName) {
+        var group = generatedSeries[orderedName];
+        return extend(group, customizeSeries.call(null, group.name));
+    });
+}
+
+export function getCategoriesInfo(categories, startValue, endValue) {
+    if(categories.length === 0) {
+        return { categories: [] };
+    }
+    startValue = isDefined(startValue) ? startValue : categories[0];
+    endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
+
+    var categoriesValue = map(categories, function(category) {
+            return isDefined(category) ? category.valueOf() : null;
+        }),
+        visibleCategories,
+        indexStartValue = categoriesValue.indexOf(startValue.valueOf()),
+        indexEndValue = categoriesValue.indexOf(endValue.valueOf()),
+        swapBuf,
+        inverted = false,
+        lastIdx;
+
+    indexStartValue < 0 && (indexStartValue = 0);
+    indexEndValue < 0 && (indexEndValue = categories.length - 1);
+    if(indexEndValue < indexStartValue) {
+        swapBuf = indexEndValue;
+        indexEndValue = indexStartValue;
+        indexStartValue = swapBuf;
+        inverted = true;
+    }
+
+    visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
+    lastIdx = visibleCategories.length - 1;
+    return {
+        categories: visibleCategories,
+        start: visibleCategories[inverted ? lastIdx : 0],
+        end: visibleCategories[inverted ? 0 : lastIdx],
+        inverted: inverted
+    };
+}
+
+export function updatePanesCanvases(panes, canvas, rotated) {
+    var weightSum = 0;
+    each(panes, function(_, pane) {
+        pane.weight = pane.weight || 1;
+        weightSum += pane.weight;
+    });
+    var distributedSpace = 0,
+        padding = panes.padding || 10,
+        paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom,
+        oneWeight = (paneSpace - padding * (panes.length - 1)) / weightSum,
+        startName = rotated ? "left" : "top",
+        endName = rotated ? "right" : "bottom";
+    each(panes, function(_, pane) {
+        var calcLength = _round(pane.weight * oneWeight);
+        pane.canvas = pane.canvas || {};
+        extend(pane.canvas, canvas);
+        pane.canvas[startName] = canvas[startName] + distributedSpace;
+        pane.canvas[endName] = canvas[endName] + (paneSpace - calcLength - distributedSpace);
+
+        distributedSpace = distributedSpace + calcLength + padding;
+        setCanvasValues(pane.canvas);
+    });
+}
+
+export function unique(array) {
+    var values = {};
+    return map(array, function(item) {
+        var result = !values[item] ? item : null;
+        values[item] = true;
+        return result;
+    });
+}
+
+export function getVerticallyShiftedAngularCoords(bBox, dy, center) {
+    // TODO: Use center instead of left top corner - that is more correct and allows to get rid of "isPositive"
+    //   horizontalOffset1 = bBox.x + bBox.width / 2 - center.x
+    //   horizontalOffset2 = bBox.y + bBox.height / 2 - center.y
+    //   verticalOffset2 = newCoord.y + bBox.height / 2 - center.y
+    var isPositive = bBox.x + bBox.width / 2 >= center.x,
+        horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x,
+        verticalOffset1 = bBox.y - center.y,
+        verticalOffset2 = verticalOffset1 + dy,
+        horizontalOffset2 = _round(_sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2)),
+        dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
+    return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
+}
+
+export function mergeMarginOptions(opt1, opt2) {
+    return {
+        checkInterval: opt1.checkInterval || opt2.checkInterval,
+        size: Math.max(opt1.size || 0, opt2.size || 0),
+        percentStick: opt1.percentStick || opt2.percentStick,
+        sizePointNormalState: Math.max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
+    };
+}
+
 
 export function getVizRangeObject(value) {
     if(Array.isArray(value)) {
