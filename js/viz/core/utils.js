@@ -2,7 +2,7 @@ var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    adjust = require("../../core/utils/math").adjust,
+    mathUtils = require("../../core/utils/math"),
     dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
@@ -26,6 +26,8 @@ var cosFunc = Math.cos,
     _isNaN = isNaN,
     _Number = Number,
     _NaN = NaN;
+
+const { adjust, sign } = mathUtils;
 
 var getLog = function(value, base) {
     if(!value) {
@@ -506,10 +508,6 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     };
 }
 
-function sign(value) {
-    return value < 0 ? -1 : 1;
-}
-
 function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     if(!allowNegatives) {
         return getLog(value, base);
@@ -551,7 +549,6 @@ exports.getLogExt = getLogExt;
 exports.getAdjustedLog10 = getAdjustedLog10;
 exports.raiseTo = raiseTo;
 exports.raiseToExt = raiseToExt;
-exports.sign = sign;
 
 exports.normalizeAngle = normalizeAngle;
 exports.convertAngleToRendererSpace = convertAngleToRendererSpace;
