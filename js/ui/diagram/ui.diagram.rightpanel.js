@@ -106,6 +106,10 @@ class DiagramRightPanel extends DiagramPanel {
     _setEnabled(enabled) {
         this._formInstance.option("disabled", !enabled);
     }
+    _setItemEnabled(key, enabled) {
+        var editorInstance = this._formInstance.getEditor(key.toString());
+        editorInstance.option('disabled', !enabled);
+    }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             container: null
@@ -122,6 +126,9 @@ class OptionsDiagramBar extends DiagramBar {
     }
     setEnabled(enabled) {
         this._owner._setEnabled(enabled);
+    }
+    setItemEnabled(key, enabled) {
+        this._owner._setItemEnabled(key, enabled);
     }
     setItemSubItems(key, items) {
         this._owner._setItemSubItems(key, items);
