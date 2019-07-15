@@ -27,17 +27,24 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return deltaTime;
     }
 
+    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
+        coordinates.top = coordinates.top + this.getCompactAppointmentTopOffset(isAllDay);
+    }
+
     getAppointmentGeometry(coordinates) {
-        var result,
-            allDay = coordinates.allDay;
+        return super.getAppointmentGeometry(this._getAppointmentGeometryCore(coordinates));
+    }
 
-        if(allDay) {
-            result = this._getAllDayAppointmentGeometry(coordinates);
-        } else {
-            result = this._getVerticalAppointmentGeometry(coordinates);
+    _getAppointmentGeometryCore(coordinates) {
+        if(coordinates.allDay) {
+            return this._getAllDayAppointmentGeometry(coordinates);
         }
+        return this._isAdaptive() && coordinates.isCompact ? this._getAdaptiveGeometry(coordinates) : this._getVerticalAppointmentGeometry(coordinates);
+    }
 
-        return super.getAppointmentGeometry(result);
+    _getAdaptiveGeometry(coordinates) {
+        const config = this._calculateGeometryConfig(coordinates);
+        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     }
 
     _getItemPosition(item) {

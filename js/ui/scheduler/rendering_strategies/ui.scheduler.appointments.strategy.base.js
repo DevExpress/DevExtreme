@@ -615,8 +615,17 @@ class BaseRenderingStrategy {
     getAppointmentDataCalculator() {
     }
 
+    _isAdaptive() {
+        return this.instance.fire("isAdaptive");
+    }
+
+    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
+        coordinates.top = coordinates.top + this.getCompactAppointmentTopOffset(isAllDay);
+        coordinates.left = coordinates.left + this.getCompactAppointmentLeftOffset();
+    }
+
     _customizeCoordinates(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
-        var index = coordinates.index,
+        let index = coordinates.index,
             appointmentHeight = height / appointmentCountPerCell,
             appointmentTop = coordinates.top + (index * appointmentHeight),
             top = appointmentTop + topOffset,
@@ -633,10 +642,7 @@ class BaseRenderingStrategy {
             top = coordinates.top + compactAppointmentTopOffset;
             left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
 
-            if(this.instance.fire("isAdaptive")) {
-                coordinates.top = top;
-                coordinates.left = coordinates.left + compactAppointmentLeftOffset;
-            }
+            this._isAdaptive() && this._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
 
             appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
