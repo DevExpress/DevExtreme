@@ -217,6 +217,7 @@ var CollectionWidget = Widget.inherit({
             * @type_function_return string|Node|jQuery
             */
 
+            showItemDataTitle: false,
             _itemAttributes: {},
             itemTemplateProperty: "template",
             focusOnSelectedItem: true,
@@ -566,6 +567,7 @@ var CollectionWidget = Widget.inherit({
         switch(args.name) {
             case "items":
             case "_itemAttributes":
+            case "showItemDataTitle":
             case "itemTemplateProperty":
                 this._cleanRenderedItems();
                 this._invalidate();
@@ -898,6 +900,9 @@ var CollectionWidget = Widget.inherit({
         $container = $container || this._itemContainer();
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
+        if(this.option("showItemDataTitle")) {
+            $itemFrame.attr("title", itemData);
+        }
         $itemFrame.attr(this.option("_itemAttributes"));
         this._attachItemClickEvent(itemData, $itemFrame);
         var $itemContent = this._getItemContent($itemFrame);

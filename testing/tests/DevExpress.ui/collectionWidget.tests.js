@@ -232,6 +232,21 @@ module("render", {
         assert.equal($.trim($item.text()), "First Template", "item has correct template");
     });
 
+    test("showItemDataTitle", (assert) => {
+        const $element = $("#cmp-with-template");
+        const instance = new TestComponent(
+            $element, {
+                showItemDataTitle: true,
+                items: [1]
+            });
+
+        const $item = instance.itemElements().eq(0);
+        assert.strictEqual($item.attr("title"), "1", "title is correct");
+
+        instance.option("showItemDataTitle", false);
+        assert.strictEqual(instance.itemElements().eq(0).attr("title"), undefined, "title was removed");
+    });
+
     test("item takes new template", assert => {
         const componentWithTemplate = new TestComponent("#cmp-with-template", { itemTemplate: "testTemplate" });
         const component = new TestComponent("#cmp", { itemTemplate: componentWithTemplate._getTemplateByOption("itemTemplate") });
