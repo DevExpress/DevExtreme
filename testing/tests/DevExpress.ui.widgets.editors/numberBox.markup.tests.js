@@ -98,10 +98,10 @@ QUnit.test("placeholder is visible when value is invalid", function(assert) {
     assert.equal($placeholder.data("dx_placeholder"), "Placeholder", "text is correct");
 });
 
-QUnit.test("T220209 - the 'valueFormatter' option", function(assert) {
+QUnit.test("T220209 - the 'displayValueFormatter' option", function(assert) {
     var $numberBox = this.$element.dxNumberBox({
         value: 5,
-        valueFormatter: function(value) {
+        displayValueFormatter: function(value) {
             return (value < 10 ? "0" : "") + value;
         }
     });
