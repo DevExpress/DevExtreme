@@ -42,7 +42,9 @@ QUnit.module("Draw point. Bubble", {
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 600, minY: 0, maxY: 600 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 600, minY: 0, maxY: 600 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.groups = {
             markers: this.group
@@ -217,7 +219,9 @@ QUnit.module("Tooltip", {
             name: "series",
             areLabelsVisible: function() { return false; },
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.groups = {
             markers: this.group
@@ -334,7 +338,9 @@ QUnit.module("Draw Label", {
             _visibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 },
             getVisibleArea: function() { return this._visibleArea; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.label = sinon.createStubInstance(labelModule.Label);
         this.labelFactory = labelModule.Label = sinon.spy(function() {
@@ -457,7 +463,9 @@ QUnit.module("get point radius", {
             name: "series",
             areLabelsVisible: function() { return false; },
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.groups = {
             markers: this.group

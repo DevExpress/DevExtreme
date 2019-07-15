@@ -70,7 +70,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { ColumnWrapper, FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -348,7 +348,7 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
 QUnit.test("Command column accessibility structure", function(assert) {
     // arrange
     createDataGrid({
-        columns: ["field1", "field2" ],
+        columns: ["field1", "field2"],
         editing: { mode: "row", allowAdding: true }
     });
 
@@ -356,6 +356,79 @@ QUnit.test("Command column accessibility structure", function(assert) {
     assert.equal($(".dx-row.dx-header-row").eq(0).attr("role"), "row");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("role"), "columnheader");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"), 3);
+});
+
+QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-datagrid"),
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, c0: "c0" }],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["edit", "delete", "save", "cancel"]
+                },
+                "id"
+            ],
+            editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    // act
+    dataGrid.editRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    clock.restore();
+});
+
+QUnit.test("Undelete command buttons should contains aria-label accessibility attribute if rendered as icon and batch edit mode (T755185)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-datagrid"),
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, c0: "c0" }],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["undelete"]
+                },
+                "id"
+            ],
+            editing: {
+                mode: "batch",
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.deleteRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    clock.restore();
 });
 
 QUnit.test("Customize text called for column only (T653374)", function(assert) {
@@ -3446,6 +3519,42 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
     // assert
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
     rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
+QUnit.test("Focused row should be visible if it's on the first page and page height larger than container one (T756177)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rect,
+        rowsViewRect,
+        data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "333333", room: 4 },
+            { name: "Sean", phone: "4545454", room: 3 },
+            { name: "Smith", phone: "555555", room: 2 },
+            { name: "Zeb", phone: "6666666", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 100,
+            dataSource: data,
+            keyExpr: "name",
+            focusedRowEnabled: true,
+            focusedRowKey: "Sean",
+            scrolling: { mode: "virtual" }
+        }).dxDataGrid("instance"),
+        rowsView = dataGrid.getView("rowsView");
+
+    // act
+    clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(3).hasClass("dx-row-focused"), "Focused row");
+    rect = rowsView.getRow(3)[0].getBoundingClientRect();
     rowsViewRect = rowsView.element()[0].getBoundingClientRect();
     assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
     assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
@@ -14652,6 +14761,36 @@ QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invali
     } finally {
         clock.restore();
     }
+});
+
+// T756639
+QUnit.test("Rows should be synchronized after expand if column fixing is enabled and deferUpdate is used in masterDetail template", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        dataSource: [{ id: 1 }],
+        columnFixing: {
+            enabled: true
+        },
+        masterDetail: {
+            enabled: true,
+            template: function($container, options) {
+                // deferUpdate is called in template in devextreme-react
+                commonUtils.deferUpdate(function() {
+                    $("<div>").addClass("my-detail").css("height", 400).appendTo($container);
+                });
+            }
+        }
+    });
+
+    dataGrid.expandRow(1);
+
+    // assert
+    var $masterDetailRows = $(dataGrid.getRowElement(1));
+    assert.strictEqual($masterDetailRows.eq(1).find(".my-detail").length, 1, "masterDetail template is rendered");
+    assert.ok($masterDetailRows.eq(1).height() > 400, "masterDetail row height is applied");
+    assert.strictEqual($masterDetailRows.eq(0).height(), $masterDetailRows.eq(1).height(), "main and fixed master detail row are synchronized");
 });
 
 QUnit.module("API methods");

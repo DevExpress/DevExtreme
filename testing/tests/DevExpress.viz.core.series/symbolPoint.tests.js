@@ -62,7 +62,9 @@ var environment = {
                 _visibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 },
                 getVisibleArea: function() { return this._visibleArea; },
                 getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
-                getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
+                getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+                _argumentChecker: function() { return true; },
+                _valueChecker: function() { return true; }
             };
         },
         afterEach: function() {
@@ -100,7 +102,9 @@ QUnit.module("Point coordinates translation", {
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     },
     setContinuousTranslators: function() {
@@ -231,7 +235,9 @@ QUnit.module("Correct value", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getValueAxis: function() { return { validateUnit: that.validateUnit }; }
+            getValueAxis: function() { return { validateUnit: that.validateUnit }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.data = {
             argument: 1,
@@ -483,7 +489,9 @@ QUnit.module("HasValue method", {
         this.series = {
             name: "series1",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     }
 });
@@ -521,7 +529,9 @@ QUnit.module("Check object in visible area", {
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.data = { argument: 1, value: 1 };
 
@@ -721,7 +731,9 @@ QUnit.module("Draw point", {
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 2100 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 2100 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.translators = {
             arg: new MockTranslator({
@@ -1111,7 +1123,9 @@ QUnit.test("Draw point with hover state", function(assert) {
 QUnit.test("Draw point without state", function(assert) {
     var point = createPoint({
         isFullStackedSeries: function() { return false; },
-        getLabelVisibility: function() { return false; }
+        getLabelVisibility: function() { return false; },
+        _argumentChecker: function() { return true; },
+        _valueChecker: function() { return true; }
     }, { argument: "4", value: 3 }, this.options);
     point.selectedState = false;
     point.series.setPointSelectedState = function(point) {
@@ -1618,7 +1632,9 @@ QUnit.module("Update point", {
             isVisible: function() { return true; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.translators = {
             arg: new MockTranslator({
@@ -2072,7 +2088,9 @@ QUnit.module("Point visibility", {
             isVisible: function() { return true; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.translators = {
             arg: new MockTranslator({
@@ -2294,7 +2312,9 @@ QUnit.module("Tooltip", {
             getLabelVisibility: function() { return false; },
             getArgumentAxis() {
                 return axis;
-            }
+            },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
@@ -2561,7 +2581,9 @@ QUnit.module("Get coordinates", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     }
 });
@@ -2661,7 +2683,9 @@ QUnit.module("Get default coordinates", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     }
 });
@@ -3186,7 +3210,9 @@ QUnit.module("Calculate tracker size", {
         };
         this.series = {
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     }
 });
@@ -3226,7 +3252,9 @@ QUnit.module("Tracker size calculation on MS Touch Devices", {
         };
         this.series = {
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
     }
 });
@@ -3296,7 +3324,9 @@ QUnit.module("get point radius", {
         };
         this.series = {
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.groups = {
             markers: this.group,
@@ -3371,7 +3401,9 @@ QUnit.module("API", {
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
-            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; }
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.translators = {
             arg: new MockTranslator({

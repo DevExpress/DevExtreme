@@ -1543,12 +1543,15 @@ declare module DevExpress.ui {
     }
     /** @name dxButtonGroup.Options */
     export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
+        /** @name dxButtonGroup.Options.buttonTemplate */
+        buttonTemplate?: template | ((buttonData: any, buttonContent: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxButtonGroup.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxButtonGroup.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
+        /** @deprecated */
         /** @name dxButtonGroup.Options.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        itemTemplate?: template | Function;
         /** @name dxButtonGroup.Options.items */
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
@@ -3357,13 +3360,13 @@ declare module DevExpress.ui {
         /** @name dxOverlay.content() */
         content(): DevExpress.core.dxElement;
         /** @name dxOverlay.hide() */
-        hide(): Promise<void> & JQueryPromise<void>;
+        hide(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxOverlay.repaint() */
         repaint(): void;
         /** @name dxOverlay.show() */
-        show(): Promise<void> & JQueryPromise<void>;
+        show(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxOverlay.toggle(showing) */
-        toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
+        toggle(showing: boolean): Promise<boolean> & JQueryPromise<boolean>;
     }
     /** @name dxPivotGrid.Options */
     export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
@@ -3568,9 +3571,9 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxPopoverOptions)
         constructor(element: JQuery, options?: dxPopoverOptions)
         /** @name dxOverlay.show() */
-        show(): Promise<void> & JQueryPromise<void>;
+        show(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxPopover.show(target) */
-        show(target: string | Element | JQuery): Promise<void> & JQueryPromise<void>;
+        show(target: string | Element | JQuery): Promise<boolean> & JQueryPromise<boolean>;
     }
     /** @name dxPopup.Options */
     export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
@@ -6563,6 +6566,8 @@ declare module DevExpress.viz {
         hoverMode?: 'allArgumentPoints' | 'none';
         /** @name dxChart.Options.argumentAxis.label */
         label?: dxChartArgumentAxisLabel;
+        /** @name dxChart.Options.argumentAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
         /** @deprecated */
@@ -6884,6 +6889,8 @@ declare module DevExpress.viz {
         endOnTick?: boolean;
         /** @name dxChart.Options.valueAxis.label */
         label?: dxChartValueAxisLabel;
+        /** @name dxChart.Options.valueAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
         /** @deprecated */
@@ -8293,6 +8300,8 @@ declare module DevExpress.viz {
         hoverMode?: 'allArgumentPoints' | 'none';
         /** @name dxPolarChart.Options.argumentAxis.label */
         label?: dxPolarChartArgumentAxisLabel;
+        /** @name dxPolarChart.Options.argumentAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxPolarChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
         /** @name dxPolarChart.Options.argumentAxis.minorTick */
@@ -8506,6 +8515,8 @@ declare module DevExpress.viz {
         endOnTick?: boolean;
         /** @name dxPolarChart.Options.valueAxis.label */
         label?: dxPolarChartValueAxisLabel;
+        /** @name dxPolarChart.Options.valueAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxPolarChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
         /** @name dxPolarChart.Options.valueAxis.maxValueMargin */
@@ -8757,7 +8768,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.onValueChanged */
         onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
         /** @name dxRangeSelector.Options.scale */
-        scale?: { aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
+        scale?: { aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
         /** @name dxRangeSelector.Options.selectedRangeColor */
         selectedRangeColor?: string;
         /** @name dxRangeSelector.Options.selectedRangeUpdateMode */

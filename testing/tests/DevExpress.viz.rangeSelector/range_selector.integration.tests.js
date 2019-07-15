@@ -693,3 +693,15 @@ QUnit.test("RS with DX dataSource", function(assert) {
             })
         });
 });
+
+QUnit.test("Scale from dataSource. calculate linearThreshold", function(assert) {
+    var rangeSelector = this.createRangeSelector({
+        dataSource: [{ arg: -100, val: 1 }, { arg: -0.0001, val: 1 }, { arg: 1000, val: 1 }],
+        scale: {
+            type: "logarithmic"
+        }
+    });
+
+    assert.deepEqual(rangeSelector.getValue(), [-100, 1000]);
+    assert.equal(rangeSelector._axis.getTranslator().getBusinessRange().linearThreshold, -4);
+});

@@ -1,4 +1,4 @@
-import { getLog, getCategoriesInfo } from "../core/utils";
+import { getLogExt as getLog, getCategoriesInfo, raiseToExt, getLog as mathLog, raiseTo as mathRaise, sign } from "../core/utils";
 import dateUtils from "../../core/utils/date";
 import { isDefined, isString } from "../../core/utils/type";
 import { adjust } from "../../core/utils/math";
@@ -64,8 +64,11 @@ function discreteGenerator(options) {
 }
 
 const getValue = value => value;
-const getLogValue = base => value => getLog(value, base);
-const raiseTo = base => value => mathPow(base, value);
+const getLogValue = (base, allowNegatives, linearThreshold) => value => getLog(value, base, allowNegatives, linearThreshold);
+const raiseTo = (base, allowNegatives, linearThreshold) => value => raiseToExt(value, base, allowNegatives, linearThreshold);
+const mathRaiseTo = base => value => mathRaise(value, base);
+const logAbsValue = base => value => mathLog(mathAbs(value), base);
+
 const correctValueByInterval = (post, round, getValue) => (value, interval) => adjust(post(round(adjust(getValue(value) / interval)) * interval));
 
 function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOnTick) {
@@ -128,14 +131,14 @@ function getBusinessDelta(data, breaks) {
     return mathAbs(data.max - data.min - spacing);
 }
 
-function getBusinessDeltaLog(base) {
-    const getLog = getLogValue(base);
+function getBusinessDeltaLog(base, allowNegatives, linearThreshold) {
+    const getLog = getLogValue(base, allowNegatives, linearThreshold);
     return function(data, breaks) {
         let spacing = 0;
         if(breaks) {
             spacing = breaks.reduce((prev, item) => prev + mathAbs(getLog(item.to / item.from)), 0);
         }
-        return mathCeil(mathAbs(getLog(data.max / data.min)) - spacing);
+        return mathCeil(mathAbs(getLog(data.max) - getLog(data.min)) - spacing);
     };
 }
 
@@ -356,8 +359,8 @@ function addInterval(value, interval, isNegative) {
     return dateUtils.addInterval(value, interval, isNegative);
 }
 
-function addIntervalLog(base) {
-    return (value, interval, isNegative) => raiseTo(base)(addInterval(getLog(value, base), interval, isNegative));
+function addIntervalLog(log, raise) {
+    return (value, interval, isNegative) => raise(addInterval(log(value), interval, isNegative));
 }
 
 function addIntervalDate(value, interval, isNegative) {
@@ -445,7 +448,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
             addInterval = addIntervalWithBreaks(addInterval, breaks, correctMinValue);
         }
 
-        minorTickInterval = updateTickInterval(minorTickInterval, firstMajor, factor);
+        minorTickInterval = updateTickInterval(minorTickInterval, firstMajor, firstMajor, factor);
 
         if(minorTickInterval === 0) {
             return [];
@@ -453,6 +456,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
 
         // min to first tick
         let cur = correctTickValue(correctMinValue(min, tickInterval, min), minorTickInterval);
+        minorTickInterval = updateTickInterval(minorTickInterval, firstMajor, cur, factor);
         let ticks = [];
 
         while(cur < firstMajor && (!tickBalance || tickBalance > 0)) {
@@ -469,7 +473,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
                 return r;
             }
 
-            minorTickInterval = updateTickInterval(minorTickInterval, tick, factor);
+            minorTickInterval = updateTickInterval(minorTickInterval, tick, r.prevTick, factor);
             let cur = correctTickValue(r.prevTick, minorTickInterval);
             while(cur < tick && (!tickBalance || tickBalance > 0)) {
                 cur !== r.prevTick && r.minors.push(cur);
@@ -484,7 +488,8 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
         ticks = ticks.concat(middleTicks.minors);
 
         // last tick to max
-        minorTickInterval = updateTickInterval(minorTickInterval, ceil(max, tickInterval, min), factor);
+        const maxValue = ceil(max, tickInterval, min);
+        minorTickInterval = updateTickInterval(minorTickInterval, maxValue, maxValue, factor);
         cur = correctTickValue(lastMajor, minorTickInterval);
         let prev;
         while(cur < max && cur !== prev) {
@@ -702,24 +707,37 @@ function numericGenerator(options) {
     );
 }
 
+
+const correctValueByIntervalLog = (post, getRound, getValue) => (value, interval) => sign(value) * adjust(post(getRound(value)(adjust(getValue(value) / interval)) * interval));
+
 function logarithmicGenerator(options) {
     const base = options.logBase;
-    const raise = raiseTo(base);
-    const log = getLogValue(base);
-    const floor = correctValueByInterval(raise, mathFloor, log);
-    const ceil = correctValueByInterval(raise, mathCeil, log);
+    const raise = raiseTo(base, options.allowNegatives, options.linearThreshold);
+    const log = getLogValue(base, options.allowNegatives, options.linearThreshold);
+
+    const absLog = logAbsValue(base);
+    const absRaise = mathRaiseTo(base);
+
+    const absFloor = value => value < 0 ? mathCeil : mathFloor;
+    const absCeil = value => value < 0 ? mathFloor : mathCeil;
+
+
+    const floor = correctValueByIntervalLog(absRaise, absFloor, absLog);
+    const ceil = correctValueByIntervalLog(absRaise, absCeil, absLog);
     const ceilNumber = correctValueByInterval(getValue, mathCeil, getValue);
 
     return generator(
         options,
-        getBusinessDeltaLog(base),
+        getBusinessDeltaLog(base, options.allowNegatives, options.linearThreshold),
         getCalculateTickIntervalLog(options.skipCalculationLimits),
         calculateMinorTickInterval,
         getTickIntervalByCustomTicks(log, getValue),
         getTickIntervalByCustomTicks(getValue, getValue),
         getValue,
-        calculateTicks(addIntervalLog(base), correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick), getAdjustIntervalLog(options.skipCalculationLimits), resolveEndOnTickLog(base), resolveExtraTickForHiddenDataPointLog(base)),
-        calculateMinorTicks((_, tick, factor) => tick / factor, addInterval, floor, ceilNumber, ceil),
+        calculateTicks(addIntervalLog(log, raise), correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick), getAdjustIntervalLog(options.skipCalculationLimits), resolveEndOnTickLog(base), resolveExtraTickForHiddenDataPointLog(base)),
+        calculateMinorTicks((_, tick, prevTick, factor) => {
+            return Math.max(Math.abs(tick), Math.abs(prevTick)) / factor;
+        }, addInterval, floor, ceilNumber, ceil),
         getScaleBreaksProcessor(getValue, log, (value, correction) => raise(log(value) + correction))
     );
 }

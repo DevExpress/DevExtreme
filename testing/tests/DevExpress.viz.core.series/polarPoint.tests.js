@@ -52,6 +52,8 @@ var defaultStyle = {
                     return that.argTranslator;
                 }
             });
+            series._argumentChecker.returns(true);
+            series._valueChecker.returns(true);
 
             this.createLabel = sinon.stub(labelModule, "Label", function() {
                 label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });

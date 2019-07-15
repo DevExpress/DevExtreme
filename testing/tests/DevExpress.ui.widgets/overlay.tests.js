@@ -2325,6 +2325,24 @@ testModule("API", moduleConfig, () => {
         assert.strictEqual(overlay.option("visible"), false);
     });
 
+    test("toggle should be resolved with visibility state", (assert) => {
+        const done = assert.async();
+
+        const $overlay = $("#overlay").dxOverlay({
+            visible: false
+        });
+        const overlay = $overlay.dxOverlay("instance");
+
+        overlay.toggle().done((isVisible) => {
+            assert.strictEqual(isVisible, true, "visibility is true");
+
+            overlay.toggle().done((isVisible) => {
+                assert.strictEqual(isVisible, false, "visibility is false");
+                done();
+            });
+        });
+    });
+
     test("toggle with args", (assert) => {
         const $overlay = $("#overlay").dxOverlay({
             visible: false

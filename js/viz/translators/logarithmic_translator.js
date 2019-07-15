@@ -1,15 +1,15 @@
 var vizUtils = require("../core/utils"),
     isDefined = require("../../core/utils/type").isDefined,
-    raiseTo = vizUtils.raiseTo,
-    getLog = vizUtils.getLog;
+    raiseTo = vizUtils.raiseToExt,
+    getLog = vizUtils.getLogExt;
 
 module.exports = {
     _fromValue: function(value) {
-        return value !== null ? getLog(value, this._canvasOptions.base) : value;
+        return value !== null ? getLog(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
     },
 
     _toValue: function(value) {
-        return value !== null ? raiseTo(value, this._canvasOptions.base) : value;
+        return value !== null ? raiseTo(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
     },
 
     getMinBarSize: function(minBarSize) {

@@ -1969,6 +1969,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
 
                     $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
+
+                    let localizationName = this.getButtonLocalizationNames()[button.name];
+                    localizationName && $button.attr("aria-label", messageLocalization.format(localizationName));
                 } else {
                     $button.text(button.text);
                 }
@@ -1983,6 +1986,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 }));
                 options.rtlEnabled ? $container.prepend($button, "&nbsp;") : $container.append($button, "&nbsp;");
             }
+        },
+
+        getButtonLocalizationNames() {
+            return {
+                edit: "dxDataGrid-editingEditRow",
+                save: "dxDataGrid-editingSaveRowChanges",
+                delete: "dxDataGrid-editingDeleteRow",
+                undelete: "dxDataGrid-editingUndeleteRow",
+                cancel: "dxDataGrid-editingCancelRowChanges"
+            };
         },
 
         prepareEditButtons: function(headerPanel) {
