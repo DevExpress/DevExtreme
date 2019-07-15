@@ -28,7 +28,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
-        coordinates.top = coordinates.top + this.getCompactAppointmentTopOffset(isAllDay);
+        if(isAllDay) {
+            super._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
+        } else {
+            const cellHeight = this.getDefaultCellHeight();
+            coordinates.top = cellHeight * coordinates.rowIndex + (cellHeight - this.getDropDownButtonAdaptiveSize()) / 2;
+        }
     }
 
     getAppointmentGeometry(coordinates) {
