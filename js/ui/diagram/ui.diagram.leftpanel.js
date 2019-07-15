@@ -12,10 +12,8 @@ class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._dataSources = this.option("dataSources") || {};
         this._customShapes = this.option("customShapes") || [];
         this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
-        this._onDataToolboxRenderedAction = this._createActionByOption("onDataToolboxRendered");
     }
     _initMarkup() {
         super._initMarkup();
@@ -42,18 +40,6 @@ class DiagramLeftPanel extends DiagramPanel {
                 }
             });
         }
-        for(var key in this._dataSources) {
-            if(Object.prototype.hasOwnProperty.call(this._dataSources, key)) {
-                result.push({
-                    key,
-                    title: this._dataSources[key].title,
-                    onTemplate: (widget, $element, data) => {
-                        this._onDataToolboxRenderedAction({ key: data.key, $element });
-                    }
-                });
-                this._hasDataSources = true;
-            }
-        }
         return result;
     }
     _renderAccordion($container) {
@@ -69,7 +55,7 @@ class DiagramLeftPanel extends DiagramPanel {
             }
         });
         // TODO option for expanded item
-        if(this._customShapes.length > 0 || this._hasDataSources) {
+        if(this._customShapes.length > 0) {
             this._accordionInstance.collapseItem(0);
             this._accordionInstance.expandItem(data.length - 1);
         }
@@ -87,10 +73,6 @@ class DiagramLeftPanel extends DiagramPanel {
         switch(args.name) {
             case "customShapes":
                 this._customShapes = args.value || [];
-                this._invalidate();
-                break;
-            case "dataSources":
-                this._dataSources = args.value || {};
                 this._invalidate();
                 break;
             default:
