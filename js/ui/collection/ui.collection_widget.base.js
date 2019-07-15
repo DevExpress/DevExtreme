@@ -901,7 +901,7 @@ var CollectionWidget = Widget.inherit({
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
         if(this.option("showItemDataTitle")) {
-            $itemFrame.attr("title", itemData);
+            $itemFrame.attr("title", this._displayGetter(itemData));
         }
         $itemFrame.attr(this.option("_itemAttributes"));
         this._attachItemClickEvent(itemData, $itemFrame);

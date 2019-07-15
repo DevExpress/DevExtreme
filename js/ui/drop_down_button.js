@@ -439,6 +439,7 @@ let DropDownButton = Widget.inherit({
             selectionMode: "single",
             focusStateEnabled: this.option("focusStateEnabled"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
+            showItemDataTitle: true,
             selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
             grouped: this.option("grouped"),
             keyExpr: this.option("keyExpr"),
