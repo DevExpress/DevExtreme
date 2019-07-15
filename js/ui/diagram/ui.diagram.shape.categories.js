@@ -2,20 +2,24 @@ import { getDiagram } from "./diagram_importer";
 
 const ShapeCategories = {
     load: function(showCustomShapes) {
-        const ShapeCategory = getDiagram().ShapeCategory;
+        const ShapeCategories = getDiagram().ShapeCategories;
         var result = [
             {
-                category: ShapeCategory.General,
+                category: ShapeCategories.General,
                 title: 'General'
             },
             {
-                category: ShapeCategory.Flowchart,
+                category: ShapeCategories.Flowchart,
                 title: 'Flow Chart'
+            },
+            {
+                category: ShapeCategories.Containers,
+                title: 'Containers'
             }
         ];
         if(showCustomShapes) {
             result.push({
-                category: ShapeCategory.Custom,
+                category: ShapeCategories.Custom,
                 title: 'Custom'
             });
         }
