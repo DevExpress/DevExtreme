@@ -126,7 +126,6 @@ class Diagram extends Widget {
     _invalidateLeftPanel() {
         if(this._leftPanel) {
             this._leftPanel.option({
-                dataSources: this._getDataSources(),
                 customShapes: this._getCustomShapes(),
             });
         }
