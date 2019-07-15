@@ -39,6 +39,7 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
+    WRAP_ITEM_TEXT_CLASS = "dx-wrap-item-text",
     SELECT_ALL_SELECTOR = ".dx-list-select-all",
 
     LIST_ITEM_DATA_KEY = "dxListItemData",
@@ -343,6 +344,8 @@ var ListBase = CollectionWidget.inherit({
             _itemAttributes: { "role": "option" },
 
             useInkRipple: false,
+
+            wrapItemText: false,
 
             /**
             * @name dxListOptions.onItemClick
@@ -906,6 +909,10 @@ var ListBase = CollectionWidget.inherit({
         if(this.option("onItemSwipe")) {
             this._attachSwipeEvent($(args.itemElement));
         }
+
+        if(this.option("wrapItemText")) {
+            $(args.itemElement).addClass(WRAP_ITEM_TEXT_CLASS);
+        }
     },
 
     _attachSwipeEvent: function($itemElement) {
@@ -1104,6 +1111,9 @@ var ListBase = CollectionWidget.inherit({
             case "collapsibleGroups":
             case "groupTemplate":
                 this._invalidate();
+                break;
+            case "wrapItemText":
+                this._itemElements().toggleClass(WRAP_ITEM_TEXT_CLASS, args.value);
                 break;
             case "onGroupRendered":
                 this._createGroupRenderAction();

@@ -828,6 +828,20 @@ QUnit.module("options", moduleSetup, () => {
         assert.equal(element.text(), "12345");
         assert.deepEqual(element.dxList("instance").option("items"), [1, 2, 3, 4, 5]);
     });
+
+    QUnit.test("wrapItemText option", (assert) => {
+        const element = this.element.dxList({
+            items: [1],
+            wrapItemText: true
+        });
+        const instance = element.dxList("instance");
+        const $item = instance.itemElements().eq(0);
+
+        assert.ok($item.hasClass("dx-wrap-item-text"), "class was added");
+
+        instance.option("wrapItemText", false);
+        assert.notOk($item.hasClass("dx-wrap-item-text"), "class was removed");
+    });
 });
 
 QUnit.module("options changed", moduleSetup, () => {

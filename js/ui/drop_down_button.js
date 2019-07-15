@@ -219,9 +219,16 @@ let DropDownButton = Widget.inherit({
              */
             dropDownContentTemplate: "content",
 
+            /**
+             * @name dxDropDownButtonOptions.wrapItemText
+             * @type boolean
+             * @default false
+             */
+            wrapItemText: false,
+
             grouped: false,
             groupTemplate: "group",
-            buttonGroupOptions: {},
+            buttonGroupOptions: {}
         });
     },
 
@@ -437,6 +444,7 @@ let DropDownButton = Widget.inherit({
         const selectedItemKey = this.option("selectedItemKey");
         return {
             selectionMode: "single",
+            wrapItemText: true,
             focusStateEnabled: this.option("focusStateEnabled"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
             showItemDataTitle: true,
@@ -655,6 +663,7 @@ let DropDownButton = Widget.inherit({
             case "grouped":
             case "noDataText":
             case "groupTemplate":
+            case "wrapItemText":
                 this._setListOption(name, value);
                 break;
             case "dropDownContentTemplate":

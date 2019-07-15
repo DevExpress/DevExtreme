@@ -900,9 +900,6 @@ var CollectionWidget = Widget.inherit({
         $container = $container || this._itemContainer();
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
-        if(this.option("showItemDataTitle")) {
-            $itemFrame.attr("title", this._displayGetter(itemData));
-        }
         $itemFrame.attr(this.option("_itemAttributes"));
         this._attachItemClickEvent(itemData, $itemFrame);
         var $itemContent = this._getItemContent($itemFrame);
@@ -1010,7 +1007,11 @@ var CollectionWidget = Widget.inherit({
         };
     },
 
-    _postprocessRenderItem: commonUtils.noop,
+    _postprocessRenderItem: function(args) {
+        if(this.option("showItemDataTitle")) {
+            $(args.itemElement).attr("title", this._displayGetter(args.itemData));
+        }
+    },
 
     _executeItemRenderAction: function(index, itemData, itemElement) {
         this._getItemRenderAction()({
