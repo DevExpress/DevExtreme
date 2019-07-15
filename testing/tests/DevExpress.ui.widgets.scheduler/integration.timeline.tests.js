@@ -437,7 +437,7 @@ QUnit.test("Appointment has correct render with timelineWeek view & endHour outs
         width: 1500,
     });
 
-    var appointmentsCount = $(this.instance.$element).find('.dx-scheduler');
+    var appointmentsCount = this.instance.$element().find(".dx-scheduler-appointment").length;
 
     assert.ok(appointmentsCount > 0, "Appointments are rendered");
 });
