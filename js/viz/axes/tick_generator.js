@@ -1,7 +1,7 @@
-import { getLogExt as getLog, getCategoriesInfo, raiseToExt, getLog as mathLog, raiseTo as mathRaise, sign } from "../core/utils";
+import { getLogExt as getLog, getCategoriesInfo, raiseToExt, getLog as mathLog, raiseTo as mathRaise } from "../core/utils";
 import dateUtils from "../../core/utils/date";
 import { isDefined, isString } from "../../core/utils/type";
-import { adjust } from "../../core/utils/math";
+import { adjust, sign } from "../../core/utils/math";
 import { extend } from "../../core/utils/extend";
 
 const convertDateUnitToMilliseconds = dateUtils.convertDateUnitToMilliseconds;
