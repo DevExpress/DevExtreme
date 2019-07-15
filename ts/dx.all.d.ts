@@ -2123,6 +2123,8 @@ declare module DevExpress.ui {
         text?: string;
         /** @name dxDropDownButton.Options.useSelectMode */
         useSelectMode?: boolean;
+        /** @name dxDropDownButton.Options.wrapItemText */
+        wrapItemText?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {

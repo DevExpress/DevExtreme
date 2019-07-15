@@ -345,6 +345,33 @@ QUnit.module("list integration", {}, () => {
         assert.strictEqual(list.option("selectionMode"), "single", "selectionMode is always single. The widget uses selectedItems to prevent extra dataSource loads");
     });
 
+    QUnit.test("showItemDataTitle should be true for the list", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton", {
+            items: [{ key: 1, name: "Item 1", icon: "box" }],
+            deferRendering: false
+        });
+
+        const list = getList(dropDownButton);
+
+        assert.strictEqual(list.option("showItemDataTitle"), true, "option is true");
+    });
+
+    QUnit.test("wrapItemText option", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton", {
+            items: ["Text"],
+            deferRendering: false,
+            wrapItemText: true
+        });
+
+        const list = getList(dropDownButton);
+        const $item = list.itemElements().eq(0);
+
+        assert.ok($item.hasClass("dx-wrap-item-text"), "class was added");
+
+        dropDownButton.option("wrapItemText", false);
+        assert.notOk($item.hasClass("dx-wrap-item-text"), "class was removed");
+    });
+
     QUnit.test("list selection should depend on selectedItemKey option", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1" }, { key: 2, name: "Item 2" }],
