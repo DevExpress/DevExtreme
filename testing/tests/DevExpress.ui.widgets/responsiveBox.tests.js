@@ -4,7 +4,6 @@ import registerComponent from "core/component_registrator";
 import Widget from "ui/widget/ui.widget";
 import ResponsiveBox from "ui/responsive_box";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
-import { extend } from "core/utils/extend";
 
 import "ui/scroll_view/ui.scrollable";
 import "ui/tree_view";
@@ -28,13 +27,6 @@ QUnit.testStart(() => {
 const BOX_CLASS = "dx-box";
 const BOX_ITEM_CLASS = "dx-box-item";
 const SCROLLABLE_CONTAINER = "dx-scrollable-container";
-
-const dataSource = [
-    { location: { col: 0, row: 0 } },
-    { location: { col: 1, row: 0 } },
-    { location: { col: 0, row: 1 } },
-    { location: { col: 0, row: 1 } }
-];
 
 const moduleConfig = {
     beforeEach: function() {
@@ -612,107 +604,151 @@ QUnit.test("responsive box should render layout correctly after item option chan
     assert.equal($("#responsiveBox").find(".dx-item").eq(0).get(0).style.flex, "1 1 auto", "Layout is correct");
 });
 
-const checkScrolling = (assert, { cols, rows, dataSource }, checkHorizontalScrolling) => {
-    cols = cols || [{ ratio: 1 }, { ratio: 1 }];
-    rows = rows || [{ ratio: 1 }, { ratio: 1 }];
+QUnit.module("Scrolling with the Scrollable", () => {
+    const scrollableTemplate = () =>
+        $(`
+            <div style="width: 200px; height: 200px">
+                <div style="width: 500px; height: 500px"/>
+            </div>
+        `).dxScrollable({ direction: "both" });
 
-    const $responsiveBox = $("#responsiveBox").dxResponsiveBox({ cols, rows, dataSource });
-    const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
-
-    assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
-    if(checkHorizontalScrolling) {
+    QUnit.test("Set { cols: {ratio: 1}, row: {ratio: 1}, location: {col: 0, row: 0} }", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            dataSource: [{
+                location: { col: 0, row: 0 },
+                template: scrollableTemplate
+            }]
+        });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
         assert.ok(scrollableContainer.scrollWidth > scrollableContainer.clientWidth, "The horizontal scrolling");
-    }
-};
-
-QUnit.module("Scrolling with the Scrollable", {
-    beforeEach: function() {
-        this.dataSource = extend(true, [], dataSource);
-        this.dataSource[0].template = () =>
-            $(`
-                <div style="width: 200px; height: 200px">
-                    <div style="width: 500px; height: 500px"/>
-                </div>
-            `).dxScrollable({ direction: "both" });
-    }
-}, () => {
-    QUnit.test("default rendering", function(assert) {
-        checkScrolling(assert, {
-            dataSource: this.dataSource
-        }, true);
     });
 
-    QUnit.test("set the ratio = 2 of row", function(assert) {
-        checkScrolling(assert, {
+    QUnit.test("Set { cols: [{ratio: 1}], row: [{ratio: 2}, {ratio: 1}], location: {col: 0, row: 0}, location: {col: 0, row: 1}}", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }],
             rows: [{ ratio: 2 }, { ratio: 1 }],
-            dataSource: this.dataSource
-        }, true);
+            dataSource: [{
+                location: { col: 0, row: 0 },
+                template: scrollableTemplate
+            }, {
+                location: { col: 0, row: 1 }
+            }]
+        });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
+        assert.ok(scrollableContainer.scrollWidth > scrollableContainer.clientWidth, "The horizontal scrolling");
     });
 
-    QUnit.test("set the ratio = 2 of column", function(assert) {
-        checkScrolling(assert, {
+    QUnit.test("Set { cols: [{ratio: 2}, {ratio: 1}], row: [{ratio: 1}], location: {col: 0, row: 0}, location: {col: 1, row: 0}}", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
             cols: [{ ratio: 2 }, { ratio: 1 }],
-            dataSource: this.dataSource
-        }, true);
+            rows: [{ ratio: 1 }],
+            dataSource: [{
+                location: { col: 0, row: 0 },
+                template: scrollableTemplate
+            }, {
+                location: { col: 1, row: 0 }
+            }]
+        });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
+        assert.ok(scrollableContainer.scrollWidth > scrollableContainer.clientWidth, "The horizontal scrolling");
     });
 
-    QUnit.test("set the colSpan", function(assert) {
-        this.dataSource[0].location.colspan = 2;
-        checkScrolling(assert, {
-            dataSource: this.dataSource
-        }, true);
+    QUnit.test("Set { cols: [{ratio: 1}, {ratio: 1}], row: [{ratio: 1}], location: {col: 0, row: 0, colspan: 2}}", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            dataSource: [{
+                location: { col: 0, row: 0, colspan: 2 },
+                template: scrollableTemplate
+            }]
+        });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
+        assert.ok(scrollableContainer.scrollWidth > scrollableContainer.clientWidth, "The horizontal scrolling");
     });
 
-    QUnit.test("set the rowSpan", function(assert) {
-        this.dataSource[0].location.rowspan = 2;
-        checkScrolling(assert, {
-            dataSource: this.dataSource
-        }, true);
+    QUnit.test("Set { cols: [{ratio: 1}], row: [{ratio: 1}, {ratio: 1}], location: {col: 0, row: 0, rowspan: 2}}", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }],
+            rows: [{ ratio: 1 }, { ratio: 1 }],
+            dataSource: [{
+                location: { col: 0, row: 0, rowspan: 2 },
+                template: scrollableTemplate
+            }]
+        });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
+        assert.ok(scrollableContainer.scrollWidth > scrollableContainer.clientWidth, "The horizontal scrolling");
+    });
+
+    QUnit.test("Set { cols: [{ratio: 1}, {ratio: 1}], row: [{ratio: 1}, {ratio: 1}], location: {col: 0, row: 0, colspan: 2, rowspan: 2}}", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }, { ratio: 1 }],
+            rows: [{ ratio: 1 }, { ratio: 1 }],
+            dataSource: [{
+                location: { col: 0, row: 0, colspan: 2, rowspan: 2 },
+                template: scrollableTemplate
+            }]
+        });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
+        assert.ok(scrollableContainer.scrollWidth > scrollableContainer.clientWidth, "The horizontal scrolling");
     });
 });
 
-QUnit.module("Scrolling with the TreeView", {
-    beforeEach: function() {
-        this.dataSource = extend(true, [], dataSource);
-        this.dataSource[0].template = () =>
-            $("<div/>")
-                .height(50)
-                .dxTreeView({
-                    dataSource: [{
-                        id: "1",
-                        text: "Item1",
-                        expanded: true,
-                        items: [{
-                            id: "1_1",
-                            text: "Item1_1",
-                            expanded: true,
-                            items: [{
-                                id: "1_2",
-                                text: "Item1_2",
-                                expanded: true
-                            }]
-                        }]
-                    }]
-                });
-    }
-}, () => {
-    QUnit.test("default rendering", function(assert) {
-        checkScrolling(assert, {
-            dataSource: this.dataSource
+QUnit.module("Scrolling with the TreeView", () => {
+    const scrollableTemplate = () =>
+        $("<div/>")
+            .height(50)
+            .dxTreeView({
+                dataSource: [{
+                    template: () => `<div style="width: 500px; height: 500px"></div>`
+                }]
+            });
+
+    QUnit.test("Set { cols: {ratio: 1}, row: {ratio: 1}, location: {col: 0, row: 0} }", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }],
+            rows: [{ ratio: 1 }],
+            dataSource: [{
+                location: { col: 0, row: 0 },
+                template: scrollableTemplate
+            }]
         });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
     });
 
-    QUnit.test("set the ratio = 2 of row", function(assert) {
-        checkScrolling(assert, {
+    QUnit.test("Set { cols: [{ratio: 1}], row: [{ratio: 2}, {ratio: 1}], location: {col: 0, row: 0}, location: {col: 0, row: 1}}", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }],
             rows: [{ ratio: 2 }, { ratio: 1 }],
-            dataSource: this.dataSource
+            dataSource: [{
+                location: { col: 0, row: 0 },
+                template: scrollableTemplate
+            }, {
+                location: { col: 0, row: 1 }
+            }]
         });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
     });
 
-    QUnit.test("set the rowSpan", function(assert) {
-        dataSource[0].location.rowspan = 2;
-        checkScrolling(assert, {
-            dataSource: this.dataSource
+    QUnit.test("Set { cols: [{ratio: 1}], row: [{ratio: 1}, {ratio: 1}], location: {col: 0, row: 0, rowspan: 2}}", assert => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            cols: [{ ratio: 1 }],
+            rows: [{ ratio: 1 }, { ratio: 1 }],
+            dataSource: [{
+                location: { col: 0, row: 0, rowspan: 2 },
+                template: scrollableTemplate
+            }]
         });
+        const scrollableContainer = $responsiveBox.find(`.${SCROLLABLE_CONTAINER}`).get(0);
+        assert.ok(scrollableContainer.scrollHeight > scrollableContainer.clientHeight, "The vertical scrolling");
     });
 });
