@@ -687,6 +687,7 @@ class Diagram extends Widget {
                 * @type Array<String>
                 */
             ],
+
             /**
              * @name dxDiagramOptions.export
              * @type object
