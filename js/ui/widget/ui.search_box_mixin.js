@@ -1,9 +1,10 @@
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
-    messageLocalization = require("../../localization/message"),
-    TextBox = require("../text_box"),
-    errors = require("../widget/ui.errors"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import { extend } from "../../core/utils/extend";
+import messageLocalization from "../../localization/message";
+import TextBox from "../text_box";
+import errors from "../widget/ui.errors";
+import { Deferred } from "../../core/utils/deferred";
+import domUtils from "../../core/utils/dom";
 
 /**
 * @name SearchBoxMixin
@@ -124,12 +125,15 @@ module.exports = {
     },
 
     _getAriaTarget: function() {
+        if(this.option("searchEnabled")) {
+            return this._itemContainer(true);
+        }
         return this.$element();
     },
 
     _focusTarget: function() {
         if(this.option("searchEnabled")) {
-            return this._itemContainer();
+            return this._itemContainer(true);
         }
 
         return this.callBase();
@@ -146,10 +150,19 @@ module.exports = {
         return searchMode === "equals" ? "=" : searchMode;
     },
 
+    _cleanAria: function($target) {
+        this.setAria({
+            "role": undefined,
+            "activedescendant": undefined
+        }, $target);
+        domUtils.toggleAttr($target, "tabIndex");
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "searchEnabled":
             case "searchEditorOptions":
+                this._cleanAria(this.option("searchEnabled") ? this.$element() : this._itemContainer());
                 this._invalidate();
                 break;
             case "searchExpr":
