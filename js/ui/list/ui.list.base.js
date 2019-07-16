@@ -584,6 +584,8 @@ var ListBase = CollectionWidget.inherit({
 
         this._feedbackShowTimeout = LIST_FEEDBACK_SHOW_TIMEOUT;
         this._createGroupRenderAction();
+
+        this.setAria("role", "listbox");
     },
 
     _scrollBottomMode: function() {
@@ -859,7 +861,6 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _initMarkup: function() {
-        this.setAria("role", "listbox");
         this._itemElementsCache = $();
 
         this.$element().addClass(LIST_CLASS);
