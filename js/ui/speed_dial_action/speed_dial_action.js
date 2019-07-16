@@ -99,6 +99,15 @@ const SpeedDialAction = Widget.inherit({
         }
     },
 
+    _createActionByOption(optionName, config) {
+        const emptyFunc = () => {
+            const result = () => {};
+            return result;
+        };
+
+        return optionName === "onInitialized" ? emptyFunc : this.callBase(optionName, config);
+    },
+
     _render() {
         if(!getSwatchContainer(this.$element())) {
             ready(() => initAction(this));
