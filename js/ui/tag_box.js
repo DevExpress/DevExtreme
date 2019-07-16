@@ -811,13 +811,24 @@ const TagBox = SelectBox.inherit({
             dataSource
                 .store()
                 .load({ filter, customQueryParams, expand })
-                .done(function(items) {
+                .done((data) => {
+                    const items = this._getItemsFromLoadResult(data);
                     const mappedItems = dataSource._applyMapFunction(items);
                     d.resolve(mappedItems.filter(clientFilterFunction));
                 })
                 .fail(d.reject);
 
             return d.promise();
+        }
+    },
+
+    _getItemsFromLoadResult: function(result) {
+        if(Array.isArray(result)) {
+            return result;
+        }
+
+        if(isObject(result) && Array.isArray(result.data)) {
+            return result.data;
         }
     },
 
