@@ -135,12 +135,12 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
-             * @name dxDropDownBoxOptions.valueFormatter
+             * @name dxDropDownBoxOptions.displayValueFormatter
              * @type function(value)
              * @type_function_param1 value:string|Array<any>
              * @type_function_return string
              */
-            valueFormatter: function(value) {
+            displayValueFormatter: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
             },
             useHiddenSubmitElement: true

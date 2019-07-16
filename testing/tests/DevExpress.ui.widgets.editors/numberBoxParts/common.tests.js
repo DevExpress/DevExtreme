@@ -576,10 +576,10 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual($input.val(), "", "value is still cleared");
     });
 
-    QUnit.test("T220209 - the 'valueFormatter' option", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
-            valueFormatter(value) {
+            displayValueFormatter(value) {
                 return (value < 10 ? "0" : "") + value;
             }
         });
@@ -588,7 +588,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "05", "input value is correct");
     });
 
-    QUnit.test("T220209 - the 'valueFormatter' option when value is changed using keyboard", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using keyboard", (assert) => {
         if(devices.real().platform !== "generic") {
             assert.ok(true, "this test is actual only for desktop ");
             return;
@@ -596,7 +596,7 @@ QUnit.module("basics", {}, () => {
 
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
-            valueFormatter(value) {
+            displayValueFormatter(value) {
                 return (value < 10 ? "0" : "") + value;
             }
         });
@@ -614,10 +614,10 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "50", "input value is correct");
     });
 
-    QUnit.test("T220209 - the 'valueFormatter' option when value is changed using spin buttons", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using spin buttons", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
-            valueFormatter(value) {
+            displayValueFormatter(value) {
                 return (value < 10 ? "0" : "") + value;
             },
             showSpinButtons: true
