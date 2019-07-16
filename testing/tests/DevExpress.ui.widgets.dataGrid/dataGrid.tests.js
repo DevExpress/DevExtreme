@@ -1581,6 +1581,28 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
+// T757579
+QUnit.test("Export icons must be the same size", function(assert) {
+    // arrange
+    $("#dataGrid").dxDataGrid({
+        dataSource: [],
+        "export": {
+            enabled: true,
+            fileName: "Test",
+            allowExportSelectedData: true
+        }
+    });
+
+    // act
+    $(".dx-datagrid-export-button").trigger("dxclick");
+    var exportAllButton = $(".dx-icon-exportxlsx");
+    var exportSelectedButton = $(".dx-icon-exportselected");
+
+    // assert
+    assert.equal(exportAllButton.width(), exportSelectedButton.width(), "same width");
+    assert.equal(exportAllButton.height(), exportSelectedButton.height(), "same height");
+});
+
 // T571282
 QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
     // arrange
