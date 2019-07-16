@@ -72,8 +72,8 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         }
     },
 
-    _itemContainer: function(overload) {
-        if(this._scrollableContainer && overload) {
+    _itemContainer: function(isSearchMode) {
+        if(this._scrollableContainer && isSearchMode) {
             return $(this._scrollableContainer.content());
         }
 
