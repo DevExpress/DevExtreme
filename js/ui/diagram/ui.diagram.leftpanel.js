@@ -3,7 +3,6 @@ import $ from "../../core/renderer";
 import DiagramPanel from "./diagram.panel";
 import Accordion from "../accordion";
 import ScrollView from "../scroll_view";
-import ShapeCategories from "./ui.diagram.shape.categories";
 import { Deferred } from "../../core/utils/deferred";
 
 const DIAGRAM_LEFT_PANEL_CLASS = "dx-diagram-left-panel";
@@ -12,7 +11,7 @@ class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._customShapes = this.option("customShapes") || [];
+        this._toolboxData = this.option("toolboxData") || [];
         this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
     }
     _initMarkup() {
@@ -30,15 +29,25 @@ class DiagramLeftPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         var result = [];
-        var categories = ShapeCategories.load(this._customShapes.length > 0);
-        for(var i = 0; i < categories.length; i++) {
-            result.push({
-                category: categories[i].category,
-                title: categories[i].title,
+        for(var i = 0; i < this._toolboxData.length; i++) {
+            var simpleCategory = typeof this._toolboxData[i] === "string";
+            var category = simpleCategory ? this._toolboxData[i] : this._toolboxData[i].category;
+            var title = simpleCategory ? this._toolboxData[i] : this._toolboxData[i].title;
+            var groupObj = {
+                category,
+                title: title || category,
+                style: this._toolboxData[i].style,
+                shapes: this._toolboxData[i].shapes,
                 onTemplate: (widget, $element, data) => {
-                    this._onShapeCategoryRenderedAction({ category: data.category, $element });
+                    this._onShapeCategoryRenderedAction({
+                        category: data.category,
+                        style: data.style,
+                        shapes: data.shapes,
+                        $element
+                    });
                 }
-            });
+            };
+            result.push(groupObj);
         }
         return result;
     }
@@ -54,10 +63,12 @@ class DiagramLeftPanel extends DiagramPanel {
                 this._updateScrollAnimateSubscription(e.component);
             }
         });
-        // TODO option for expanded item
-        if(this._customShapes.length > 0) {
-            this._accordionInstance.collapseItem(0);
-            this._accordionInstance.expandItem(data.length - 1);
+        for(var i = 0; i < data.length; i++) {
+            if(data[i] === false) {
+                this._accordionInstance.collapseItem(i);
+            } else if(data[i] === true) {
+                this._accordionInstance.expandItem(i);
+            }
         }
     }
 
