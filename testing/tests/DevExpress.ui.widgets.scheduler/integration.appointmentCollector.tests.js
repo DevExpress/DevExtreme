@@ -923,13 +923,16 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option("currentView", "week");
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const cell = this.scheduler.workSpace.getCell(1);
 
-        let collectorCoordinates = translator.locate($collector);
-        let expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+        const collectorCoordinates = translator.locate($collector);
 
-        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, "Left coordinate is OK");
-        assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+        const expectedLeft = cell.position().left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET;
+        assert.roughEqual(collectorCoordinates.left, expectedLeft, 1.001, "Left coordinate is OK");
+
+        const expectedTop = ((cell.height() - $collector.height()) / 2);
+        assert.roughEqual(collectorCoordinates.top, expectedTop, 1.001, "Top coordinate is OK");
     });
 
     QUnit.test("Adaptive collector should have correct coordinates coordinates on week view in compact theme", (assert) => {
@@ -938,13 +941,15 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
             this.createInstance();
             this.instance.option("currentView", "week");
 
-            let $collector = this.scheduler.appointments.compact.getButton(0);
+            const $collector = this.scheduler.appointments.compact.getButton(0);
+            const cell = this.scheduler.workSpace.getCell(1);
+            const collectorCoordinates = translator.locate($collector);
 
-            let collectorCoordinates = translator.locate($collector);
-            let expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+            const expectedLeft = cell.position().left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET;
+            assert.roughEqual(collectorCoordinates.left, expectedLeft, 1.001, "Left coordinate is OK");
 
-            assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, "Left coordinate is OK");
-            assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
+            const expectedTop = ((cell.height() - $collector.height()) / 2);
+            assert.roughEqual(collectorCoordinates.top, expectedTop, 1.001, "Top coordinate is OK");
         } finally {
             this.themeMock.restore();
         }
