@@ -154,6 +154,11 @@ exports.plugin = {
 
         _setContentSize() {
             this._loadingIndicator.setSize(this._canvas);
+        },
+        endUpdate() {
+            if(this._initialized && this._dataIsReady()) {
+                this._fulfillLoadingIndicatorHiding();
+            }
         }
     },
     customize: function(constructor) {
