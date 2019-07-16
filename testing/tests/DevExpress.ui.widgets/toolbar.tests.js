@@ -326,7 +326,7 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
 
             let $button = this.element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
 
-            assert.strictEqual($button.dxButton("option", "disabled"), !!isButtonDisabled, "button.disabled");
+            assert.strictEqual($button.dxButton("option", "disabled"), isButtonDisabled, "button.disabled");
             assert.strictEqual(this.element.dxToolbar("option", "disabled"), isToolbarDisabled, "toolbar.disabled");
         });
 

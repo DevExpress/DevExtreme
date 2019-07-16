@@ -52,6 +52,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     * @type object
     */
 
+    _getSyncOptions: function() {
+        return ["rtlEnabled"];
+    },
+
     _initTemplates: function() {
         this.callBase();
 
@@ -78,12 +82,6 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 }
             } else {
                 $container.text(String(data));
-            }
-
-            if(rawModel && rawModel.options) {
-                if(!rawModel.options.disabled) {
-                    rawModel.options.disabled = false;
-                }
             }
 
             this._getTemplate("dx-polymorph-widget").render({
