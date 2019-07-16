@@ -983,21 +983,7 @@ var DataSource = Class.inherit({
 
         function handleSuccess(data, extra) {
             function processResult() {
-                var loadResult;
-
-                if(data && !Array.isArray(data) && data.data) {
-                    extra = data;
-                    data = data.data;
-                }
-
-                if(!Array.isArray(data)) {
-                    data = [data];
-                }
-
-                loadResult = extend({
-                    data: data,
-                    extra: extra
-                }, loadOptions);
+                var loadResult = extend(that.normalizeLoadResult(data, extra), loadOptions);
 
                 that.fireEvent("customizeLoadResult", [loadResult]);
                 when(loadResult.data).done(function(data) {
@@ -1024,6 +1010,22 @@ var DataSource = Class.inherit({
         return this.store().load(loadOptions.storeLoadOptions)
             .done(handleSuccess)
             .fail(pendingDeferred.reject);
+    },
+
+    normalizeLoadResult(data, extra) {
+        if(data && !Array.isArray(data) && data.data) {
+            extra = data;
+            data = data.data;
+        }
+
+        if(!Array.isArray(data)) {
+            data = [data];
+        }
+
+        return {
+            data,
+            extra
+        };
     },
 
     _processStoreLoadResult: function(loadResult, pendingDeferred) {
