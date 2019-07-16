@@ -1,6 +1,8 @@
 import { ClientFunction } from 'testcafe';
 
-export async function createWidget(widgetName: string, options: any) {
+const offAnimation = ClientFunction(() => (window as any).DevExpress.fx.off = true);
+
+export async function createWidget(widgetName: string, options: any, disableAnimation: boolean = false) {
     await ClientFunction(() => {
         $("#container")[widgetName](options);
     },
@@ -12,6 +14,8 @@ export async function createWidget(widgetName: string, options: any) {
             }
         }
     )()
+
+    disableAnimation && await offAnimation();
 }
 
 export function getContainerFileUrl() {
