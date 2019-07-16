@@ -1897,7 +1897,6 @@ QUnit.module("Hoverable interaction", () => {
             ["vertical", "horizontal"].forEach((direction) => {
                 ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
                     QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
-                        const done = assert.async();
                         const $scrollable = $("#scrollable").dxScrollable({
                             useNative: false,
                             useSimulatedScrollbar: true,
@@ -1908,15 +1907,19 @@ QUnit.module("Hoverable interaction", () => {
                         });
 
                         const checkAsserts = (isHoverable) => {
-                            setTimeout(() => {
-                                assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
-                                assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
-                                if(browser.msie) {
-                                    assert.ok($scrollBar.css("pointer-events"), "pointer-events prop is defined");
-                                }
+                            assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
+                            assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                            assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, "scrollable-disabled-class");
+
+                            if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
+                                let done = assert.async();
+                                setTimeout(() => {
+                                    assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                                    done();
+                                }, 300);
+                            } else {
                                 assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
-                                done();
-                            });
+                            }
                         };
 
                         if(!onInitialize) {
