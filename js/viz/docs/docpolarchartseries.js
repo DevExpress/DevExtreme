@@ -772,7 +772,6 @@ var CommonPolarChartSeries = {
 * @publicName AreaSeries
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-* @hidePropertyOf
 */
 var areaPolarSeries = {
     /**
@@ -808,7 +807,6 @@ var areaPolarSeries = {
 * @publicName BarSeries
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-* @hidePropertyOf
 */
 var barPolarSeries = {
     /**
@@ -831,7 +829,6 @@ var barPolarSeries = {
 * @publicName LineSeries
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-* @hidePropertyOf
 */
 var linePolarSeries = {
     /**
@@ -855,7 +852,6 @@ var linePolarSeries = {
 * @publicName ScatterSeries
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-* @hidePropertyOf
 */
 var scatterPolarSeries = {};
 /**
@@ -863,7 +859,6 @@ var scatterPolarSeries = {};
 * @publicName StackedBarSeries
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
-* @hidePropertyOf
 */
 var stackedbarPolarSeries = {
     /**
