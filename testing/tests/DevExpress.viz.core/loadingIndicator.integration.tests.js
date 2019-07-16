@@ -107,6 +107,18 @@ QUnit.test("Hidden when theme is changed", function(assert) {
     assert.deepEqual(this.loadingIndicator.fulfillHiding.lastCall.args, [], "fulfilled");
 });
 
+QUnit.test("Hidden when option is set to the same value", function(assert) {
+    var widget = this.createWidget({
+        theme: "test-theme"
+    });
+    widget.showLoadingIndicator();
+    this.loadingIndicator.scheduleHiding.reset();
+    this.loadingIndicator.fulfillHiding.reset();
+    widget.option("theme", "test-theme");
+    assert.deepEqual(this.loadingIndicator.scheduleHiding.lastCall.args, [], "schedule");
+    assert.deepEqual(this.loadingIndicator.fulfillHiding.lastCall.args, [], "fulfilled");
+});
+
 QUnit.test("Hidden when data source is changed", function(assert) {
     var widget = this.createWidget();
     widget.showLoadingIndicator();

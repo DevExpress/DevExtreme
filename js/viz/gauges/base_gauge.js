@@ -30,6 +30,7 @@ var dxBaseGauge = BaseWidget.inherit({
 
     _beginValueChanging: function() {
         this._resetIsReady();
+        this._onBeginUpdate();
         ++this._valueChangingLocker;
     },
 
