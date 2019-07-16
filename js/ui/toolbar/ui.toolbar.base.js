@@ -4,7 +4,7 @@ import commonUtils from "../../core/utils/common";
 import { isPlainObject } from "../../core/utils/type";
 import registerComponent from "../../core/component_registrator";
 import { inArray } from "../../core/utils/array";
-import { extend, extendFromObject } from "../../core/utils/extend";
+import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import AsyncCollectionWidget from "../collection/ui.collection_widget.async";
 import Promise from "../../core/polyfills/promise";
@@ -80,8 +80,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 $container.text(String(data));
             }
 
-            if(rawModel) {
-                extendFromObject(rawModel.options, { disabled: rawModel.options ? !!rawModel.options.disabled : false }, true);
+            if(rawModel && rawModel.options) {
+                if(!rawModel.options.disabled) {
+                    rawModel.options.disabled = false;
+                }
             }
 
             this._getTemplate("dx-polymorph-widget").render({
