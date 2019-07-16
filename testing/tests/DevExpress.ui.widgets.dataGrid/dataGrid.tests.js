@@ -1581,6 +1581,7 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
+// T757579
 QUnit.test("Export icons must be the same size", function(assert) {
     // arrange
     $("#dataGrid").dxDataGrid({
