@@ -319,6 +319,7 @@ testComponentDefaults(DropDownButton, {}, {
     keyExpr: "this",
     displayExpr: "this",
     useSelectMode: false,
+    wrapItemText: false,
     opened: false,
     splitButton: false,
     showArrowIcon: true,
@@ -352,6 +353,7 @@ testComponentDefaults(DropDownList,
     {},
     {
         groupTemplate: "group",
+        wrapItemText: false,
         grouped: false
     }
 );
@@ -425,7 +427,8 @@ testComponentDefaults(List,
 testComponentDefaults(List,
     { platform: "generic" },
     {
-        itemDeleteMode: "static"
+        itemDeleteMode: "static",
+        wrapItemText: false
     }
 );
 

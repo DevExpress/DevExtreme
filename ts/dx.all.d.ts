@@ -2127,6 +2127,8 @@ declare module DevExpress.ui {
         text?: string;
         /** @name dxDropDownButton.Options.useSelectMode */
         useSelectMode?: boolean;
+        /** @name dxDropDownButton.Options.wrapItemText */
+        wrapItemText?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
@@ -2219,6 +2221,8 @@ declare module DevExpress.ui {
         value?: any;
         /** @name dxDropDownList.Options.valueChangeEvent */
         valueChangeEvent?: string;
+        /** @name dxDropDownList.Options.wrapItemText */
+        wrapItemText?: boolean;
     }
     /** @name dxDropDownList */
     export class dxDropDownList extends dxDropDownEditor {
