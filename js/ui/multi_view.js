@@ -234,11 +234,11 @@ var MultiView = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _afterItemElementDeleted: function($item, deletedActionArgs) {
+    _afterItemElementDeleted: function($item, deletedActionArgs, isPartialRefresh) {
         this.callBase($item, deletedActionArgs);
         if(this._deferredItems) {
             this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
-            if(this.option("items")) {
+            if(this.option("items") && !isPartialRefresh) {
                 for(var i = deletedActionArgs.itemIndex; i < this.option("items").length; i++) {
                     var currentItem = this.option("items")[i];
                     var $currentItem = this._findItemElementByItem(currentItem);
@@ -249,6 +249,11 @@ var MultiView = CollectionWidget.inherit({
                 }
             }
         }
+    },
+
+    _executeItemRenderAction: function(index, itemData, itemElement) {
+        index = (this.option("items") || []).indexOf(itemData);
+        this.callBase(index, itemData, itemElement);
     },
 
     _renderItemContent: function(args) {
@@ -283,6 +288,13 @@ var MultiView = CollectionWidget.inherit({
     _updateItems: function(selectedIndex, newIndex) {
         this._updateItemsPosition(selectedIndex, newIndex);
         this._updateItemsVisibility(selectedIndex, newIndex);
+    },
+
+    _modifyByChanges: function() {
+        this.callBase.apply(this, arguments);
+
+        var selectedItemIndices = this._getSelectedItemIndices();
+        this._updateItemsVisibility(selectedItemIndices[0]);
     },
 
     _updateItemsPosition: function(selectedIndex, newIndex) {

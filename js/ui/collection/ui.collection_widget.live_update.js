@@ -70,7 +70,7 @@ export default CollectionWidget.inherit({
     _partialRefresh: function() {
         if(this.option("repaintChangesOnly")) {
             let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), this._isItemEquals);
-            if(result) {
+            if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
                 return true;
@@ -116,6 +116,13 @@ export default CollectionWidget.inherit({
         });
     },
 
+    _updateSelectedIndexAfterRemove: function(removeIndex) {
+        var selectedIndex = this.option("selectedIndex");
+        if(selectedIndex > removeIndex) {
+            this.option("selectedIndex", selectedIndex - 1);
+        }
+    },
+
     _removeByChange: function(keyInfo, items, change, isPartialRefresh) {
         let index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key),
             removedItem = isPartialRefresh ? change.oldItem : items[index];
@@ -126,7 +133,8 @@ export default CollectionWidget.inherit({
             this._waitDeletingPrepare($removedItemElement).done(()=>{
                 if(isPartialRefresh) {
                     this._updateIndicesAfterIndex(index - 1);
-                    this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
+                    this._afterItemElementDeleted($removedItemElement, deletedActionArgs, true);
+                    this._updateSelectedIndexAfterRemove(index);
                     this._normalizeSelectedItems();
                 } else {
                     this._deleteItemElementByIndex(index);
