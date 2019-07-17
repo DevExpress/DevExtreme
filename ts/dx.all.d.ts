@@ -701,19 +701,6 @@ declare module DevExpress.ui {
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
-    /** @name DiagramDataSourceParameters */
-    export interface DiagramDataSourceParameters {
-        /** @name DiagramDataSourceParameters.edges */
-        edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
-        /** @name DiagramDataSourceParameters.key */
-        key?: string;
-        /** @name DiagramDataSourceParameters.layout */
-        layout?: 'tree' | 'sugiyama';
-        /** @name DiagramDataSourceParameters.nodes */
-        nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
-        /** @name DiagramDataSourceParameters.title */
-        title?: string;
-    }
     /** @name Editor.Options */
     export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
         /** @name Editor.Options.isValid */
@@ -2003,7 +1990,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.customShapes */
-        customShapes?: Array<{ allowHasText?: boolean, connectionPoints?: Array<{ side?: 'north' | 'east' | 'south' | 'west', x?: number, y?: number }>, defaultHeight?: number, defaultText?: string, defaultWidth?: number, id?: number, svgHeight?: number, svgLeft?: number, svgTop?: number, svgUrl?: string, svgWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string }>;
+        customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, baseType?: string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, svgHeight?: number, svgLeft?: number, svgTop?: number, svgUrl?: string, svgWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
@@ -2016,15 +2003,13 @@ declare module DevExpress.ui {
         onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
         /** @name dxDiagram.Options.readOnly */
         readOnly?: boolean;
+        /** @name dxDiagram.Options.toolbox */
+        toolbox?: Array<{ category?: string, expanded?: boolean, shapes?: Array<string>, style?: 'icons' | 'texts', title?: string }>;
     }
     /** @name dxDiagram */
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
         constructor(element: JQuery, options?: dxDiagramOptions)
-        /** @name dxDiagram.createDataSource(parameters) */
-        createDataSource(parameters: DiagramDataSourceParameters): void;
-        /** @name dxDiagram.deleteDataSource(key) */
-        deleteDataSource(key: string): void;
         /** @name dxDiagram.getData() */
         getData(): string;
         /** @name dxDiagram.setData(data, updateExistingItemsOnly) */
@@ -2076,6 +2061,8 @@ declare module DevExpress.ui {
         acceptCustomValue?: boolean;
         /** @name dxDropDownBox.Options.contentTemplate */
         contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxDropDownBox.Options.displayValueFormatter */
+        displayValueFormatter?: ((value: string | Array<any>) => string);
         /** @name dxDropDownBox.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
         /** @name dxDropDownBox.Options.fieldTemplate */
@@ -2084,8 +2071,6 @@ declare module DevExpress.ui {
         openOnFieldClick?: boolean;
         /** @name dxDropDownBox.Options.valueChangeEvent */
         valueChangeEvent?: string;
-        /** @name dxDropDownBox.Options.valueFormatter */
-        valueFormatter?: ((value: string | Array<any>) => string);
     }
     /** @name dxDropDownBox */
     export class dxDropDownBox extends dxDropDownEditor {

@@ -256,13 +256,13 @@ var NumberBoxBase = TextEditor.inherit({
     _forceValueRender: function() {
         var value = this.option("value"),
             number = Number(value),
-            formattedValue = isNaN(number) ? "" : this._applyValueFormatter(value);
+            formattedValue = isNaN(number) ? "" : this._applyDisplayValueFormatter(value);
 
         this._renderDisplayText(formattedValue);
     },
 
-    _applyValueFormatter: function(value) {
-        return this.option("valueFormatter")(value);
+    _applyDisplayValueFormatter: function(value) {
+        return this.option("displayValueFormatter")(value);
     },
 
     _renderProps: function() {
@@ -364,7 +364,7 @@ var NumberBoxBase = TextEditor.inherit({
         }
 
         var $input = this._input(),
-            formattedValue = this._applyValueFormatter(this.option("value"));
+            formattedValue = this._applyDisplayValueFormatter(this.option("value"));
 
         $input.val(null);
         $input.val(formattedValue);
@@ -377,7 +377,7 @@ var NumberBoxBase = TextEditor.inherit({
             valueHasDigits = inputValue !== "." && inputValue !== "-";
 
         if(this._isValueValid() && !this._validateValue(value)) {
-            $input.val(this._applyValueFormatter(value));
+            $input.val(this._applyDisplayValueFormatter(value));
             return;
         }
 
@@ -399,7 +399,7 @@ var NumberBoxBase = TextEditor.inherit({
 
         if(!isValueIncomplete && !isValueCorrect && parsedValue !== null) {
             if(Number(inputValue) !== parsedValue) {
-                this._input().val(this._applyValueFormatter(parsedValue));
+                this._input().val(this._applyDisplayValueFormatter(parsedValue));
             }
         }
     },

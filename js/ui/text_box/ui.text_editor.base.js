@@ -298,7 +298,7 @@ var TextEditorBase = Editor.inherit({
             */
             text: undefined,
 
-            valueFormatter: function(value) {
+            displayValueFormatter: function(value) {
                 return isDefined(value) && value !== false ? value : "";
             },
 
@@ -479,12 +479,12 @@ var TextEditorBase = Editor.inherit({
 
         var text = this.option("text"),
             displayValue = this.option("displayValue"),
-            valueFormatter = this.option("valueFormatter");
+            displayValueFormatter = this.option("displayValueFormatter");
 
         if(displayValue !== undefined && value !== null) {
-            text = valueFormatter(displayValue);
+            text = displayValueFormatter(displayValue);
         } else if(!isDefined(text)) {
-            text = valueFormatter(value);
+            text = displayValueFormatter(value);
         }
 
         this.option("text", text);
@@ -807,7 +807,7 @@ var TextEditorBase = Editor.inherit({
                 this._buttonCollection.clean();
                 this._renderButtonContainers();
                 break;
-            case "valueFormatter":
+            case "displayValueFormatter":
                 this._invalidate();
                 break;
             default:
