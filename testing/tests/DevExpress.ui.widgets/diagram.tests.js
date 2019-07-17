@@ -147,6 +147,15 @@ QUnit.module("Context Menu", moduleConfig, () => {
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
 });
+QUnit.module("Options", moduleConfig, () => {
+    test("should change readOnly property", (assert) => {
+        assert.notOk(this.instance._diagramInstance.settings.readOnly);
+        this.instance.option("readOnly", true);
+        assert.ok(this.instance._diagramInstance.settings.readOnly);
+        this.instance.option("readOnly", false);
+        assert.notOk(this.instance._diagramInstance.settings.readOnly);
+    });
+});
 
 function findToolbarItem($diagram, label) {
     return $diagram.find(TOOLBAR_SELECTOR).find(".dx-widget").filter(function() {
