@@ -2597,7 +2597,7 @@ declare module DevExpress.ui {
         /** @name dxFormSimpleItem.name */
         name?: string;
         /** @name dxFormSimpleItem.template */
-        template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxFormSimpleItem.validationRules */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
         /** @name dxFormSimpleItem.visible */

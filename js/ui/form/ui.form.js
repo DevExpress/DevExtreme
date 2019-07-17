@@ -299,6 +299,7 @@ var Form = Widget.inherit({
              * @type_function_param1_field2 dataField:string
              * @type_function_param1_field3 editorOptions:object
              * @type_function_param1_field4 editorType:string
+             * @type_function_param1_field5 name:string
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */

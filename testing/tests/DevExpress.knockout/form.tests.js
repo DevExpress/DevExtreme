@@ -1,43 +1,46 @@
-var $ = require("jquery"),
-    ko = require("knockout"),
-    Form = require("ui/form/ui.form"),
-    fx = require("animation/fx"),
-    internals = Form.__internals;
+import $ from "jquery";
+import ko from "knockout";
+import { __internals as internals } from "ui/form/ui.form";
+import fx from "animation/fx";
 
-require("ui/text_area");
-require("ui/select_box");
-require("integration/knockout");
+import "ui/text_area";
+import "ui/select_box";
+import "integration/knockout";
 
-QUnit.testStart(function() {
-    var markup =
-        '<div id="simpleDataForm" data-bind="dxForm: { formData: formData }"></div>\
-        \
-        <div id="simpleTemplateForm" data-bind="dxForm: { formData: formData, items: items }">\
-            <div data-options="dxTemplate:{ name:\'simpleTemplate\' }">\
-                <span>KO template</span>\
-                <div data-bind="dxTextArea: {\
-                    value: editorOptions.value,\
-                    onValueChanged: function(args) {\
-                        $data.component.updateData($data.dataField, args.value)\
-                    }\
-                }"></div>\
-            </div>\
-            <div data-options="dxTemplate:{ name:\'tabTemplate\' }">\
-                <div id="tabTemplate">Test tab template</div>\
-            </div>\
-        </div>\
-        <div id="formWithItems" data-bind="dxForm: { formData: formData, items: items }"></div>\
-        <div id="formWithCustomOptions" data-bind="dxForm: formOptions"></div>';
+QUnit.testStart(() => {
+    const markup =
+        `<div id="simpleDataForm" data-bind="dxForm: { formData: formData }"></div>
+        <div id="simpleTemplateForm" data-bind="dxForm: { formData: formData, items: items }">
+            <div data-options="dxTemplate:{ name:'simpleTemplate' }">
+                <span>KO template</span>
+                <div data-bind="dxTextArea: {
+                    value: editorOptions.value,
+                    onValueChanged: function(args) {
+                        $data.component.updateData($data.dataField, args.value)
+                    }
+                }"></div>
+            </div>
+            <div data-options="dxTemplate:{ name:'tabTemplate' }">
+                <div id="tabTemplate">Test tab template</div>
+            </div>
+        </div>
+        <div id="simpleTemplateForm2" data-bind="dxForm: { items: items }">
+            <div data-options="dxTemplate:{ name:'simpleTemplate2' }">
+               <span id="name" data-bind="text: $data.name"></span>
+            </div>
+        </div>
+        <div id="formWithItems" data-bind="dxForm: { formData: formData, items: items }"></div>
+        <div id="formWithCustomOptions" data-bind="dxForm: formOptions"></div>`;
 
     $("#qunit-fixture").html(markup);
 });
 
-var moduleSetup = {
-    beforeEach: function() {
+const moduleSetup = {
+    beforeEach() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
+    afterEach() {
         fx.off = false;
         this.clock.restore();
     }
@@ -585,4 +588,17 @@ QUnit.test("The formData is empty object when formData has 'undefined' value", f
 
     // assert
     assert.deepEqual(viewModel.formData(), { });
+});
+
+QUnit.test("The name argument should contains in the template of the simple item", assert => {
+    // arrange
+    const viewModel = {
+        items: [{ name: "TestName", template: "simpleTemplate2" }]
+    };
+    const $form = $("#simpleTemplateForm2");
+
+    ko.applyBindings(viewModel, $form.get(0));
+
+    // assert
+    assert.strictEqual($("#name").text(), "TestName", "the name argument of template");
 });
