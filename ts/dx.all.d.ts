@@ -7065,6 +7065,8 @@ declare module DevExpress.viz {
         series?: string;
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+        /** @name dxChartCommonAnnotationConfig.template */
+        template?: DevExpress.core.template | ((annotationItem: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxChartCommonAnnotationConfig.text */
         text?: string;
         /** @name dxChartCommonAnnotationConfig.textOverflow */
@@ -7072,7 +7074,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.type */
-        type?: 'text' | 'image';
+        type?: 'text' | 'image' | 'custom';
         /** @name dxChartCommonAnnotationConfig.value */
         value?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.width */

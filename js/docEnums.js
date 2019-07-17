@@ -208,7 +208,7 @@
 
 /**
  * @typedef {string} Enums.AnnotationType
- * @enum {'text'|'image'}
+ * @enum {'text'|'image'|'custom'}
  */
 
 /**
