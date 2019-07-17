@@ -931,7 +931,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         const expectedLeft = cell.position().left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET;
         assert.roughEqual(collectorCoordinates.left, expectedLeft, 1.001, "Left coordinate is OK");
 
-        const expectedTop = ((cell.height() - $collector.height()) / 2);
+        const expectedTop = Math.round((cell.height() - $collector.height()) / 2);
         assert.roughEqual(collectorCoordinates.top, expectedTop, 1.001, "Top coordinate is OK");
     });
 
@@ -948,7 +948,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
             const expectedLeft = cell.position().left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET;
             assert.roughEqual(collectorCoordinates.left, expectedLeft, 1.001, "Left coordinate is OK");
 
-            const expectedTop = ((cell.height() - $collector.height()) / 2);
+            const expectedTop = Math.round((cell.height() - $collector.height()) / 2);
             assert.roughEqual(collectorCoordinates.top, expectedTop, 1.001, "Top coordinate is OK");
         } finally {
             this.themeMock.restore();
