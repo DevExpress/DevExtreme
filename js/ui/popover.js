@@ -597,12 +597,6 @@ var Popover = Popup.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "showTitle":
-            case "title":
-            case "titleTemplate":
-                this.callBase(args);
-                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
-                break;
             case "boundaryOffset":
             case "arrowPosition":
             case "arrowOffset":
