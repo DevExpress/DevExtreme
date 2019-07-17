@@ -82,8 +82,8 @@ class DiagramLeftPanel extends DiagramPanel {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "customShapes":
-                this._customShapes = args.value || [];
+            case "toolboxData":
+                this._toolboxData = this.option("toolboxData") || [];
                 this._invalidate();
                 break;
             default:

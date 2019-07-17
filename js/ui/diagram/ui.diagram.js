@@ -776,15 +776,13 @@ class Diagram extends Widget {
                 break;
             case "customShapes":
                 this._updateCustomShapes(args.value, args.previousValue);
+                this._invalidate();
                 break;
             case "toolbox":
                 this._invalidateLeftPanel();
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();
-                break;
-            case "dataSources":
-                this._invalidateLeftPanel();
                 break;
             case "export":
                 this._toolbarInstance.option("export", this.option("export"));
