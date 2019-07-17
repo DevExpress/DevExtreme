@@ -9,6 +9,7 @@ import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramLeftPanel from "./ui.diagram.leftpanel";
 import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
+import DiagramToolbox from "./ui.diagram.toolbox";
 import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
 import Tooltip from "../tooltip";
@@ -31,8 +32,6 @@ const DIAGRAM_PARENT_KEY_FIELD = "parentId";
 const DIAGRAM_ITEMS_FIELD = "items";
 const DIAGRAM_FROM_FIELD = "from";
 const DIAGRAM_TO_FIELD = "to";
-
-const DIAGRAM_CONNECTION_POINT_SIDES = ["north", "east", "south", "west"];
 
 const DIAGRAM_NAMESPACE = "dxDiagramEvent";
 const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("fullscreenchange", DIAGRAM_NAMESPACE);
@@ -94,12 +93,14 @@ class Diagram extends Widget {
             .appendTo($parent);
 
         this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
-            customShapes: this._getCustomShapes(),
+            toolboxData: this._getToolboxData(),
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
                 var $toolboxContainer = $(e.$element);
-                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
+                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8,
+                    { 'data-toggle': 'shape-toolbox-tooltip' },
+                    e.shapes || e.category, e.style === "texts");
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
@@ -126,7 +127,7 @@ class Diagram extends Widget {
     _invalidateLeftPanel() {
         if(this._leftPanel) {
             this._leftPanel.option({
-                customShapes: this._getCustomShapes(),
+                toolboxData: this._getToolboxData(),
             });
         }
     }
@@ -308,11 +309,18 @@ class Diagram extends Widget {
     _getCustomShapes() {
         return this.option("customShapes") || [];
     }
+    _getToolboxData() {
+        var toolbox = this.option("toolbox");
+        if(!toolbox || !toolbox.length) {
+            toolbox = DiagramToolbox.createDefault();
+        }
+        return toolbox;
+    }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
             this._diagramInstance.removeCustomShapes(customShapes.map(
                 function(s) {
-                    return s.id;
+                    return s.type;
                 }
             ));
         }
@@ -321,7 +329,9 @@ class Diagram extends Widget {
             this._diagramInstance.addCustomShapes(customShapes.map(
                 function(s) {
                     return {
-                        id: s.id,
+                        category: s.category,
+                        type: s.type,
+                        baseType: s.baseType,
                         title: s.title,
                         svgUrl: s.svgUrl,
                         svgLeft: s.svgLeft,
@@ -331,13 +341,19 @@ class Diagram extends Widget {
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
                         defaultText: s.defaultText,
-                        allowHasText: s.allowHasText,
+                        allowEditText: s.allowEditText,
                         textLeft: s.textLeft,
                         textTop: s.textTop,
                         textWidth: s.textWidth,
                         textHeight: s.textHeight,
+                        defaultImageUrl: s.defaultImageUrl,
+                        allowEditImage: s.allowEditImage,
+                        imageLeft: s.imageLeft,
+                        imageTop: s.imageTop,
+                        imageWidth: s.imageWidth,
+                        imageHeight: s.imageHeight,
                         connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
-                            return { 'x': pt.x, 'y': pt.y, 'side': DIAGRAM_CONNECTION_POINT_SIDES.indexOf(pt.side) };
+                            return { 'x': pt.x, 'y': pt.y };
                         })
                     };
                 }
@@ -540,8 +556,16 @@ class Diagram extends Widget {
             */
             customShapes: [
                 /**
-                * @name dxDiagramOptions.customShapes.id
-                * @type Number
+                * @name dxDiagramOptions.customShapes.category
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.type
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.baseType
+                * @type String
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.title
@@ -580,7 +604,7 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.allowHasText
+                * @name dxDiagramOptions.customShapes.allowEditText
                 * @type Boolean
                 */
                 /**
@@ -600,6 +624,30 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.defaultImageUrl
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.allowEditImage
+                * @type Boolean
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageLeft
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageTop
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageHeight
+                * @type Number
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.connectionPoints
                 * @type Array<Object>
                 */
@@ -611,11 +659,35 @@ class Diagram extends Widget {
                 * @name dxDiagramOptions.customShapes.connectionPoints.y
                 * @type Number
                 */
+            ],
+            /**
+            * @name dxDiagramOptions.toolbox
+            * @type Array<Object>
+            * @default []
+            */
+            toolbox: [
                 /**
-                * @name dxDiagramOptions.customShapes.connectionPoints.side
-                * @type Enums.DiagramConnectionPointSide
+                * @name dxDiagramOptions.toolbox.category
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.title
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.style
+                * @type Enums.DiagramToolboxStyle
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.expanded
+                * @type Boolean
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.shapes
+                * @type Array<String>
                 */
             ],
+
             /**
              * @name dxDiagramOptions.export
              * @type object
@@ -704,13 +776,13 @@ class Diagram extends Widget {
                 break;
             case "customShapes":
                 this._updateCustomShapes(args.value, args.previousValue);
+                this._invalidate();
+                break;
+            case "toolbox":
                 this._invalidateLeftPanel();
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();
-                break;
-            case "dataSources":
-                this._invalidateLeftPanel();
                 break;
             case "export":
                 this._toolbarInstance.option("export", this.option("export"));

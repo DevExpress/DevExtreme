@@ -1033,6 +1033,6 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramConnectionPointSide
- * @enum {'north'|'east'|'south'|'west'}
+ * @typedef {string} Enums.DiagramToolboxStyle
+ * @enum {'icons'|'texts'}
  */
