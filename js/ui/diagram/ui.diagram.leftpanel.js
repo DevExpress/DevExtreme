@@ -64,6 +64,7 @@ class DiagramLeftPanel extends DiagramPanel {
                 this._updateScrollAnimateSubscription(e.component);
             }
         });
+
         for(var i = 0; i < data.length; i++) {
             if(data[i] === false) {
                 this._accordionInstance.collapseItem(i);
