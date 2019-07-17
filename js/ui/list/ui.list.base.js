@@ -640,6 +640,10 @@ var ListBase = CollectionWidget.inherit({
 
         this._$container = $(this._scrollView.content());
 
+        if(this.option("wrapItemText")) {
+            this._$container.addClass(WRAP_ITEM_TEXT_CLASS);
+        }
+
         this._createScrollViewActions();
     },
 
@@ -909,10 +913,6 @@ var ListBase = CollectionWidget.inherit({
         if(this.option("onItemSwipe")) {
             this._attachSwipeEvent($(args.itemElement));
         }
-
-        if(this.option("wrapItemText")) {
-            $(args.itemElement).addClass(WRAP_ITEM_TEXT_CLASS);
-        }
     },
 
     _attachSwipeEvent: function($itemElement) {
@@ -1113,7 +1113,7 @@ var ListBase = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case "wrapItemText":
-                this._itemElements().toggleClass(WRAP_ITEM_TEXT_CLASS, args.value);
+                this._$container.toggleClass(WRAP_ITEM_TEXT_CLASS, args.value);
                 break;
             case "onGroupRendered":
                 this._createGroupRenderAction();

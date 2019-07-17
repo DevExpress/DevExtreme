@@ -835,12 +835,12 @@ QUnit.module("options", moduleSetup, () => {
             wrapItemText: true
         });
         const instance = element.dxList("instance");
-        const $item = instance.itemElements().eq(0);
+        const $container = instance._itemContainer();
 
-        assert.ok($item.hasClass("dx-wrap-item-text"), "class was added");
+        assert.ok($container.hasClass("dx-wrap-item-text"), "class was added");
 
         instance.option("wrapItemText", false);
-        assert.notOk($item.hasClass("dx-wrap-item-text"), "class was removed");
+        assert.notOk($container.hasClass("dx-wrap-item-text"), "class was removed");
     });
 });
 

@@ -364,12 +364,12 @@ QUnit.module("list integration", {}, () => {
         });
 
         const list = getList(dropDownButton);
-        const $item = list.itemElements().eq(0);
+        const $itemContainer = list._itemContainer();
 
-        assert.ok($item.hasClass("dx-wrap-item-text"), "class was added");
+        assert.ok($itemContainer.hasClass("dx-wrap-item-text"), "class was added");
 
         dropDownButton.option("wrapItemText", false);
-        assert.notOk($item.hasClass("dx-wrap-item-text"), "class was removed");
+        assert.notOk($itemContainer.hasClass("dx-wrap-item-text"), "class was removed");
     });
 
     QUnit.test("list selection should depend on selectedItemKey option", (assert) => {

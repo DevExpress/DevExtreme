@@ -899,10 +899,6 @@ var CollectionWidget = Widget.inherit({
         $container = $container || this._itemContainer();
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
-        if(this.option("showItemDataTitle")) {
-            var displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
-            $itemFrame.attr("title", displayValue);
-        }
         $itemFrame.attr(this.option("_itemAttributes"));
         this._attachItemClickEvent(itemData, $itemFrame);
         var $itemContent = this._getItemContent($itemFrame);
@@ -990,6 +986,11 @@ var CollectionWidget = Widget.inherit({
             $itemToReplace.replaceWith($itemFrame);
         } else {
             this._appendItemToContainer.call(this, $container, $itemFrame, index);
+        }
+
+        if(this.option("showItemDataTitle")) {
+            var displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
+            $itemFrame.attr("title", displayValue);
         }
 
         return $itemFrame;
