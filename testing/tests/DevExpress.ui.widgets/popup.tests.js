@@ -1356,3 +1356,34 @@ QUnit.test("popup title should be rendered before content", function(assert) {
         }
     });
 });
+
+QUnit.module("renderGeometry source", () => {
+    QUnit.test("option change", (assert) => {
+        const instance = $("#popup").dxPopup({
+            visible: true
+        }).dxPopup("instance");
+        const options = instance.option();
+        const newOptions = {
+            fullScreen: !options.fullScreen,
+            autoResizeEnabled: !options.autoResizeEnabled,
+            showTitle: !options.showTitle,
+            title: "test",
+            titleTemplate: () => $("<div>").text("title template"),
+            bottomTemplate: () => $("<div>").text("bottom template"),
+            toolbarItems: [{ text: "text" }],
+            useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
+            useFlatToolbarButtons: !options.useFlatToolbarButtons
+        };
+        const renderGeometrySpy = sinon.spy(instance, "_renderGeometry");
+
+        for(const optionName in newOptions) {
+            const initialCallCount = renderGeometrySpy.callCount;
+
+            instance.option(optionName, newOptions[optionName]);
+
+            const renderGeometrySource = renderGeometrySpy.lastCall.args[0];
+            assert.ok(initialCallCount < renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
+            assert.strictEqual(renderGeometrySource, instance._renderGeometrySource.OPTION_CHANGE);
+        }
+    });
+});
