@@ -865,7 +865,8 @@ const LayoutManager = Widget.inherit({
                 dataField: renderOptions.dataField,
                 editorType: renderOptions.editorType,
                 editorOptions: editorOptions,
-                component: that._getComponentOwner()
+                component: that._getComponentOwner(),
+                name: renderOptions.name
             };
 
             template.render({
