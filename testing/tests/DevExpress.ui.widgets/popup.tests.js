@@ -7,6 +7,7 @@ import config from "core/config";
 import { isRenderer } from "core/utils/type";
 import browser from "core/utils/browser";
 import { compare as compareVersions } from "core/utils/version";
+import resizeCallbacks from "core/utils/resize_callbacks";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "common.css!";
@@ -547,6 +548,35 @@ QUnit.test("maxHeight should affect popup content height correctly", function(as
         $popupContent.outerHeight(true) + $popupTitle.outerHeight(true) + $popupBottom.outerHeight(true),
         $overlayContent.height()
     );
+});
+
+QUnit.test("Popup should keep nested scroll position on dimension changed", (assert) => {
+    const SCROLLABLE_CONTAINER_CLASS = "test-scroll";
+
+    $("#popup").dxPopup({
+        visible: true,
+        contentTemplate: function($container) {
+            const $content = $("<div>").height(3000);
+            const $wrapper = $("<div>");
+
+            $wrapper
+                .addClass(SCROLLABLE_CONTAINER_CLASS)
+                .css({
+                    height: "100%",
+                    overflow: "auto"
+                })
+                .append($content)
+                .appendTo($container);
+        }
+    });
+
+    const $scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+
+    $scrollableContainer.scrollTop(100);
+    assert.strictEqual($scrollableContainer.scrollTop(), 100, "scroll position changed");
+
+    resizeCallbacks.fire();
+    assert.strictEqual($scrollableContainer.scrollTop(), 100, "scroll position still the same");
 });
 
 
