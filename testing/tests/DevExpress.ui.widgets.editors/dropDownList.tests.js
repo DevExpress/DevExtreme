@@ -311,6 +311,21 @@ QUnit.module("items & dataSource", moduleConfig, () => {
         assert.strictEqual(instance.option("value"), null, "value is null on default");
     });
 
+    QUnit.test("wrapItemText option", (assert) => {
+        const $dropDownList = $("#dropDownList").dxDropDownList({
+            items: [1],
+            deferRendering: false,
+            wrapItemText: true
+        });
+        const instance = $dropDownList.dxDropDownList("instance");
+        const $itemContainer = $(instance.content()).find(".dx-scrollview-content");
+
+        assert.ok($itemContainer.hasClass("dx-wrap-item-text"), "class was added");
+
+        instance.option("wrapItemText", false);
+        assert.notOk($itemContainer.hasClass("dx-wrap-item-text"), "class was removed");
+    });
+
     QUnit.test("widget should render with empty items", assert => {
         const $dropDownList = $("#dropDownList").dxDropDownList({
             items: null,

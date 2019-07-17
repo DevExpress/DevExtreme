@@ -353,6 +353,7 @@ testComponentDefaults(DropDownList,
     {},
     {
         groupTemplate: "group",
+        wrapItemText: false,
         grouped: false
     }
 );

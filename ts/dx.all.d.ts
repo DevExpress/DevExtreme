@@ -2217,6 +2217,8 @@ declare module DevExpress.ui {
         value?: any;
         /** @name dxDropDownList.Options.valueChangeEvent */
         valueChangeEvent?: string;
+        /** @name dxDropDownList.Options.wrapItemText */
+        wrapItemText?: boolean;
     }
     /** @name dxDropDownList */
     export class dxDropDownList extends dxDropDownEditor {
