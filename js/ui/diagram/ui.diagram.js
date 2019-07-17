@@ -75,6 +75,7 @@ class Diagram extends Widget {
         this._renderContextMenu($content);
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
+        this._toggleReadOnlyState();
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -452,6 +453,12 @@ class Diagram extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
+            * @name dxDiagramOptions.readOnly
+            * @type boolean
+            * @default false
+            */
+            readOnly: false,
+            /**
             * @name dxDiagramOptions.onDataChanged
             * @extends Action
             * @type function(e)
@@ -763,8 +770,17 @@ class Diagram extends Widget {
         }
     }
 
+    _toggleReadOnlyState() {
+        const { DiagramCommand } = getDiagram();
+        this._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleReadOnly).execute(this.option("readOnly"));
+        this._leftPanel._setEnabled(!this.option("readOnly"));
+    }
+
     _optionChanged(args) {
         switch(args.name) {
+            case "readOnly":
+                this._toggleReadOnlyState();
+                break;
             case "nodes":
                 this._refreshNodesDataSource();
                 break;

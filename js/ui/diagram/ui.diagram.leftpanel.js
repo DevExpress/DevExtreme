@@ -90,6 +90,10 @@ class DiagramLeftPanel extends DiagramPanel {
                 super._optionChanged(args);
         }
     }
+
+    _setEnabled(enabled) {
+        this._accordionInstance.option('disabled', !enabled);
+    }
 }
 
 module.exports = DiagramLeftPanel;

@@ -2001,6 +2001,8 @@ declare module DevExpress.ui {
         nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
         onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
+        /** @name dxDiagram.Options.readOnly */
+        readOnly?: boolean;
         /** @name dxDiagram.Options.toolbox */
         toolbox?: Array<{ category?: string, expanded?: boolean, shapes?: Array<string>, style?: 'icons' | 'texts', title?: string }>;
     }
