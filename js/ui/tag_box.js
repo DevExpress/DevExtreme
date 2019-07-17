@@ -17,6 +17,7 @@ import messageLocalization from "../localization/message";
 import { addNamespace, normalizeKeyName } from "../events/utils";
 import { name as clickEvent } from "../events/click";
 import caret from "./text_box/utils.caret";
+import { normalizeLoadResult } from "../data/data_source/data_source";
 
 import SelectBox from "./select_box";
 import BindableTemplate from "./widget/bindable_template";
@@ -811,7 +812,8 @@ const TagBox = SelectBox.inherit({
             dataSource
                 .store()
                 .load({ filter, customQueryParams, expand })
-                .done(function(items) {
+                .done(function(result) {
+                    const { data: items } = normalizeLoadResult(...arguments);
                     const mappedItems = dataSource._applyMapFunction(items);
                     d.resolve(mappedItems.filter(clientFilterFunction));
                 })
