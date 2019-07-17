@@ -872,8 +872,19 @@ QUnit.module("Form", () => {
         // assert
         assert.equal(buttonValidationGroup, "test", "Button validationGroup is OK");
     });
-});
 
+    test("The name argument should be defined in the template of a simple item", (assert) => {
+        const templateStub = sinon.stub();
+        $("#form").dxForm({
+            items: [{
+                name: "TestName",
+                template: templateStub
+            }]
+        });
+
+        assert.equal(templateStub.getCall(0).args[0].name, "TestName", "name argument");
+    });
+});
 
 QUnit.module("Grouping", () => {
     test("Render groups", (assert) => {
@@ -1253,7 +1264,6 @@ QUnit.module("Grouping", () => {
         assert.equal(changeItemOptionSpy.args[0][2], false, "option's value is correct");
     });
 });
-
 
 QUnit.module("Tabs", {
     beforeEach: () => {
