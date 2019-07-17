@@ -1145,7 +1145,7 @@ QUnit.module("regressions", moduleConfig, () => {
 
     QUnit.test("TextEditor cannot change table column percent width (T756307)", (assert) => {
         const markup =
-            '<table id="test-table"style="width: 280px" >\
+            '<table id="test-table" style="width: 280px" >\
                 <thead>\
                     <th style="width: 50%;">head 1</th>\
                     <th style="width: 50%;">head 2</th>\
