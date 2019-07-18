@@ -105,8 +105,8 @@ class Gantt extends Widget {
     _initScrollSync(treeList) {
         const treeListScrollable = treeList.getScrollable();
         if(treeListScrollable) {
-            treeListScrollable.off("scroll", (e) => { this._onTreeListScroll(e); });
-            treeListScrollable.on("scroll", (e) => { this._onTreeListScroll(e); });
+            treeListScrollable.off("scroll", this._onTreeListScroll);
+            treeListScrollable.on("scroll", this._onTreeListScroll);
         }
     }
     _getTreeListRowHeight() {
