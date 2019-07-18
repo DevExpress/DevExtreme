@@ -888,7 +888,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     attrValue = attrValue.toString();
                 }
 
-                domUtils.toggleAttr(option.target, attrName, attrValue);
+                option.target.attr(attrName, attrValue);
             };
 
             if(!$.isPlainObject(arguments[0])) {

@@ -523,7 +523,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderHint: function() {
-        domUtils.toggleAttr(this.$element(), "title", this.option("hint"));
+        this.$element().attr("title", this.option("hint"));
     },
 
     _renderContent: function() {
@@ -976,7 +976,7 @@ var Widget = DOMComponent.inherit({
                 attrValue = attrValue.toString();
             }
 
-            domUtils.toggleAttr(option.target, attrName, attrValue);
+            option.target.attr(attrName, attrValue);
         };
 
         if(!typeUtils.isPlainObject(arguments[0])) {
