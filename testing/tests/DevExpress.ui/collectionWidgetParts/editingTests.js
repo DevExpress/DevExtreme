@@ -902,7 +902,7 @@ module("selecting of item keys", {
 
         instance.option("selectedItems", ["item 2", "unexisting"]);
 
-        const $item = this.$element.find("." + ITEM_CLASS).eq(1);
+        const $item = this.$element.find(`.${ITEM_CLASS}`).eq(1);
 
         assert.deepEqual(instance.option("selectedItems"), [items[1]], "selectedItems is correct");
         assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
