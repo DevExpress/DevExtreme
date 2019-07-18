@@ -4,6 +4,10 @@
 .dx-diagram {
     border-color: @diagram-border-color;
 
+    .dxdi-control .dxdi-canvas { // stylelint-disable-line selector-class-pattern
+        background-color: darken(@overlay-content-bg, 15%);
+    }
+
     .dx-diagram-toolbar-wrapper:first-child {
         border-bottom: 1px solid @diagram-toolbar-border-color;
     }
