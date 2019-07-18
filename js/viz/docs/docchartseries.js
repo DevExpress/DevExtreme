@@ -953,7 +953,6 @@ var commonSeries = {
 * @name dxChartSeriesTypes.AreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var AreaSeries = {
     /**
@@ -1014,7 +1013,6 @@ var AreaSeries = {
 * @name dxChartSeriesTypes.BarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var BarSeries = {
     /**
@@ -1063,7 +1061,6 @@ var BarSeries = {
 * @name dxChartSeriesTypes.CandleStickSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var CandleStickSeries = {
     /**
@@ -1154,7 +1151,6 @@ var CandleStickSeries = {
 * @name dxChartSeriesTypes.FullStackedAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var FullStackedAreaSeries = {
     /**
@@ -1215,7 +1211,6 @@ var FullStackedAreaSeries = {
 * @name dxChartSeriesTypes.FullStackedSplineAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var FullStackedSplineAreaSeries = {
     /**
@@ -1276,7 +1271,6 @@ var FullStackedSplineAreaSeries = {
 * @name dxChartSeriesTypes.FullStackedBarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var FullStackedBarSeries = {
     /**
@@ -1331,7 +1325,6 @@ var FullStackedBarSeries = {
 * @name dxChartSeriesTypes.FullStackedLineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var FullStackedLineSeries = {
     /**
@@ -1380,7 +1373,6 @@ var FullStackedLineSeries = {
 * @name dxChartSeriesTypes.FullStackedSplineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var FullStackedSplineSeries = {
     /**
@@ -1430,7 +1422,6 @@ var FullStackedSplineSeries = {
 * @name dxChartSeriesTypes.LineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var LineSeries = {
     /**
@@ -1479,7 +1470,6 @@ var LineSeries = {
 * @name dxChartSeriesTypes.RangeAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var RangeAreaSeries = {
     /**
@@ -1540,7 +1530,6 @@ var RangeAreaSeries = {
 * @name dxChartSeriesTypes.RangeBarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var RangeBarSeries = {
     /**
@@ -1589,7 +1578,6 @@ var RangeBarSeries = {
 * @name dxChartSeriesTypes.ScatterSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var ScatterSeries = {
     /**
@@ -1624,7 +1612,6 @@ var ScatterSeries = {
 * @name dxChartSeriesTypes.SplineAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var SplineAreaSeries = {
     /**
@@ -1685,7 +1672,6 @@ var SplineAreaSeries = {
 * @name dxChartSeriesTypes.SplineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var SplineSeries = {
     /**
@@ -1734,7 +1720,6 @@ var SplineSeries = {
 * @name dxChartSeriesTypes.StackedAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StackedAreaSeries = {
     /**
@@ -1795,7 +1780,6 @@ var StackedAreaSeries = {
 * @name dxChartSeriesTypes.StackedSplineAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StackedSplineAreaSeries = {
     /**
@@ -1856,7 +1840,6 @@ var StackedSplineAreaSeries = {
 * @name dxChartSeriesTypes.StackedBarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StackedBarSeries = {
     /**
@@ -1911,7 +1894,6 @@ var StackedBarSeries = {
 * @name dxChartSeriesTypes.StackedLineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StackedLineSeries = {
     /**
@@ -1960,7 +1942,6 @@ var StackedLineSeries = {
 * @name dxChartSeriesTypes.StackedSplineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StackedSplineSeries = {
     /**
@@ -2009,7 +1990,6 @@ var StackedSplineSeries = {
 * @name dxChartSeriesTypes.StepAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StepAreaSeries = {
     /**
@@ -2118,7 +2098,6 @@ var StepAreaSeries = {
 * @name dxChartSeriesTypes.StepLineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StepLineSeries = {
     /**
@@ -2167,7 +2146,6 @@ var StepLineSeries = {
 * @name dxChartSeriesTypes.StockSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var StockSeries = {
     /**
@@ -2221,7 +2199,6 @@ var StockSeries = {
 * @name dxChartSeriesTypes.BubbleSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
-* @hidePropertyOf
 */
 var BubbleSeries = {
     /**
