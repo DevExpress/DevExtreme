@@ -1897,7 +1897,6 @@ QUnit.module("Hoverable interaction", () => {
             ["vertical", "horizontal"].forEach((direction) => {
                 ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
                     QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
-                        const done = assert.async();
                         const $scrollable = $("#scrollable").dxScrollable({
                             useNative: false,
                             useSimulatedScrollbar: true,
@@ -1907,28 +1906,24 @@ QUnit.module("Hoverable interaction", () => {
                             scrollByThumb: true
                         });
 
-                        const checkAsserts = (isHoverable) => {
-                            setTimeout(() => {
-                                assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
-                                assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
-                                if(browser.msie) {
-                                    assert.ok($scrollBar.css("pointer-events"), "pointer-events prop is defined");
-                                }
-                                assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
-                                done();
-                            });
-                        };
-
                         if(!onInitialize) {
                             $scrollable.dxScrollable("instance").option("disabled", disabled);
                         }
 
-                        const scrollBarClass = direction === "vertical" ? SCROLLBAR_VERTICAL_CLASS : SCROLLBAR_HORIZONTAL_CLASS;
-                        const $scrollBar = $scrollable.find(`.${scrollBarClass}`);
+                        const $scrollBar = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
                         const scrollBar = Scrollbar.getInstance($scrollBar);
 
                         const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
-                        checkAsserts(isScrollbarHoverable);
+
+                        assert.strictEqual(scrollBar.option("hoverStateEnabled"), isScrollbarHoverable, "scrollbar.hoverStateEnabled");
+                        assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                        assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, "scrollable-disabled-class");
+
+                        if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
+                            assert.ok(true, "Skip assert for Edge. The pointer-event property processed with a timeout");
+                        } else {
+                            assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                        }
                     });
                 });
             });
