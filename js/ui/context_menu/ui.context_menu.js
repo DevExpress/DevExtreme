@@ -907,6 +907,8 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _renderVisibility: function(showing) {
+            this._cachedJQEvent = undefined;
+
             return showing ? this._show() : this._hide();
         },
 

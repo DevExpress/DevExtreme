@@ -630,6 +630,27 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
 
         assert.strictEqual(onShowingHandler.firstCall.args[0].jQEvent, undefined, "cached event was cleared");
     });
+
+    QUnit.test("Context menu should clear cached event on repaint", (assert) => {
+        const menuTargetSelector = "#menuTarget";
+        let onShowingHandler = sinon.spy();
+
+        const instance = new ContextMenu($("#simpleMenu"), {
+            items: [{ text: "item 1" }],
+            target: menuTargetSelector,
+            onShowing: onShowingHandler
+        });
+
+        $(menuTargetSelector).trigger($.Event("dxcontextmenu", {
+            pageX: 120,
+            pageY: 50
+        }));
+
+        onShowingHandler.reset();
+        instance.repaint();
+
+        assert.strictEqual(onShowingHandler.firstCall.args[0].jQEvent, undefined, "cached event was cleared");
+    });
 });
 
 QUnit.module("Showing and hiding submenus", moduleConfig, () => {
