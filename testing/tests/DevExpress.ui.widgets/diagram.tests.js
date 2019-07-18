@@ -124,6 +124,20 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         boldButton.trigger("dxclick");
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
+    test("Auto Layout button should be disabled when there is no selection", (assert) => {
+        const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
+        assert.ok(button.option("disabled"));
+    });
+    test("Auto Layout button should be disabled in Read Only mode", (assert) => {
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
+        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick"); // Select All
+        const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
+        assert.notOk(button.option("disabled"));
+        this.instance.option("readOnly", true);
+        assert.ok(button.option("disabled"));
+    });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
     test("should load default items", (assert) => {

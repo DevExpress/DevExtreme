@@ -204,16 +204,23 @@ class DiagramToolbar extends DiagramPanel {
                         actionHandler.call(this, itemData.command, parameter);
                     }
                 },
-                onInitialized: ({ component }) => this._onContextMenuInitialized(component, item),
+                onInitialized: ({ component }) => this._onContextMenuInitialized(component, item, widget),
                 onDisposing: ({ component }) => this._onContextMenuDisposing(component, item)
             });
         }
     }
-    _onContextMenuInitialized(widget, item) {
+    _onContextMenuInitialized(widget, item, rootButton) {
         this._contextMenus.push(widget);
-        item.items.forEach((item, index) => {
-            this._itemHelpers[item.command] = new ContextMenuItemHelper(widget, index);
-        });
+        this._addContextMenuHelper(item.items, widget, [], rootButton);
+    }
+    _addContextMenuHelper(items, widget, indexPath, rootButton) {
+        if(items) {
+            items.forEach((item, index) => {
+                let itemIndexPath = indexPath.concat(index);
+                this._itemHelpers[item.command] = new ContextMenuItemHelper(widget, itemIndexPath, rootButton);
+                this._addContextMenuHelper(item.items, widget, itemIndexPath, rootButton);
+            });
+        }
     }
     _onContextMenuDisposing(widget, item) {
         this._contextMenus = this._contextMenus.filter(cm => cm !== widget);
@@ -275,11 +282,17 @@ class DiagramToolbar extends DiagramPanel {
 
 class ToolbarDiagramBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getToolbar().reduce((commands, i) => {
-            if(i.command !== undefined) {
-                commands.push(i.command);
+        return this.getKeys(DiagramCommands.getToolbar());
+    }
+    getKeys(items) {
+        return items.reduce((commands, item) => {
+            if(item.command !== undefined) {
+                commands.push(item.command);
             }
-            return i.items ? commands.concat(i.items.filter(ci => ci.command !== undefined).map(ci => ci.command)) : commands;
+            if(item.items) {
+                commands = commands.concat(this.getKeys(item.items));
+            }
+            return commands;
         }, []);
     }
     setItemValue(key, value) {
@@ -310,12 +323,26 @@ class ToolbarItemHelper {
 }
 
 class ContextMenuItemHelper extends ToolbarItemHelper {
-    constructor(widget, index) {
+    constructor(widget, indexPath, rootButton) {
         super(widget);
-        this._index = index;
+        this._indexPath = indexPath;
+        this._rootButton = rootButton;
     }
     setEnabled(enabled) {
-        this._widget.option(`items[${this._index}].disabled`, !enabled);
+        let optionText = this._indexPath.reduce((r, i) => {
+            return r + `items[${i}].`;
+        }, "") + "disabled";
+        this._widget.option(optionText, !enabled);
+        let rootEnabled = this._hasEnabledCommandItems(this._widget.option("items"));
+        this._rootButton.option("disabled", !rootEnabled);
+    }
+    _hasEnabledCommandItems(items) {
+        if(items) {
+            return items.some(item =>
+                item.command !== undefined && !item.disabled || this._hasEnabledCommandItems(item.items)
+            );
+        }
+        return false;
     }
     setValue(value) { }
 }
