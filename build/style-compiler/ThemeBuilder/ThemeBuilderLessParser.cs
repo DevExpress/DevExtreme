@@ -30,10 +30,17 @@ namespace StyleCompiler.ThemeBuilder
                 Match match = Regex.Match(line, "@([a-z]+)\\s(.+)", RegexOptions.IgnoreCase);
                 dataFields.Add(match.Groups[1].Value, match.Groups[2].Value);
             }
+
             ThemeBuilderMetadata data = new ThemeBuilderMetadata
             {
-                Name = dataFields["name"].Trim()
+                Name = dataFields["name"].Trim(),
+                Type = dataFields["type"].Trim()
             };
+
+            string typeValues = null;
+            if(dataFields.TryGetValue("typeValues", out typeValues)) {
+                data.TypeValues = typeValues;
+            }
 
             return data;
         }

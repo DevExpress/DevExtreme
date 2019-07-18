@@ -10,6 +10,7 @@ namespace StyleCompiler.ThemeBuilder.Tests
         {
             Assert.Equal(expected.Key, metadata.Key);
             Assert.Equal(expected.Name, metadata.Name);
+            Assert.Equal(expected.Type, metadata.Type);
         }
 
         [Fact]
@@ -24,67 +25,78 @@ namespace StyleCompiler.ThemeBuilder.Tests
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_SLIDEOUT_BACKGROUND",
-                Name = "Slide out background"
+                Name = "Slide out background",
+                Type = "color"
             }, metadata1[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_TOOLBAR_BORDER_COLOR",
-                Name = "Toolbar border color"
+                Name = "Toolbar border color",
+                Type = "color"
             }, metadata2[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_DIALOG_BUTTONS_BEFORE_COLOR",
-                Name = "Button color"
+                Name = "Button color",
+                Type = "color"
             }, metadata2[1]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_BUTTON_SUCCESS_BACKGROUND",
-                Name = "Button background"
+                Name = "Button background",
+                Type = "color"
             }, metadata2[2]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_TOOLBAR_LABEL_COLOR",
-                Name = "Label color"
+                Name = "Label color",
+                Type = "color"
             }, metadata3[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_TOAST_TEXT_COLOR",
-                Name = "Toast color"
+                Name = "Toast color",
+                Type = "color"
             }, metadata3[1]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@UNKNOWN_COLOR",
-                Name = "Some color"
+                Name = "Some color",
+                Type = "color"
             }, metadata3[2]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@FONT_SIZE",
-                Name = "Font size"
+                Name = "Font size",
+                Type = "text"
             }, metadata4[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@RGBA_COLOR",
-                Name = "rgba color"
+                Name = "rgba color",
+                Type = "color"
             }, metadata4[1]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@INHERITED_COLOR",
-                Name = "Inherited color"
+                Name = "Inherited color",
+                Type = "color"
             }, metadata5[2]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@COMPLEX_COLOR",
-                Name = "Complex color"
+                Name = "Complex color",
+                Type = "color"
             }, metadata5[3]);
         }
 
