@@ -58,11 +58,13 @@ class DiagramLeftPanel extends DiagramPanel {
             collapsible: true,
             displayExpr: "title",
             dataSource: data,
+            disabled: this.option("disabled"),
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element, data),
             onContentReady: (e) => {
                 this._updateScrollAnimateSubscription(e.component);
             }
         });
+
         for(var i = 0; i < data.length; i++) {
             if(data[i] === false) {
                 this._accordionInstance.collapseItem(i);
@@ -82,6 +84,9 @@ class DiagramLeftPanel extends DiagramPanel {
 
     _optionChanged(args) {
         switch(args.name) {
+            case "disabled":
+                this._accordionInstance.option('disabled', args.value);
+                break;
             case "toolboxData":
                 this._toolboxData = this.option("toolboxData") || [];
                 this._invalidate();
@@ -89,10 +94,6 @@ class DiagramLeftPanel extends DiagramPanel {
             default:
                 super._optionChanged(args);
         }
-    }
-
-    _setEnabled(enabled) {
-        this._accordionInstance.option('disabled', !enabled);
     }
 }
 

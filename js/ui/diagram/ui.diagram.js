@@ -75,7 +75,6 @@ class Diagram extends Widget {
         this._renderContextMenu($content);
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
-        this._toggleReadOnlyState();
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -95,6 +94,7 @@ class Diagram extends Widget {
 
         this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
             toolboxData: this._getToolboxData(),
+            disabled: this.option("readOnly"),
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
@@ -128,7 +128,14 @@ class Diagram extends Widget {
     _invalidateLeftPanel() {
         if(this._leftPanel) {
             this._leftPanel.option({
-                toolboxData: this._getToolboxData(),
+                toolboxData: this._getToolboxData()
+            });
+        }
+    }
+    _setLeftPanelEnabled(enabled) {
+        if(this._leftPanel) {
+            this._leftPanel.option({
+                disabled: !enabled
             });
         }
     }
@@ -181,6 +188,7 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
+        this._toggleReadOnlyState();
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
@@ -773,7 +781,7 @@ class Diagram extends Widget {
     _toggleReadOnlyState() {
         const { DiagramCommand } = getDiagram();
         this._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleReadOnly).execute(this.option("readOnly"));
-        this._leftPanel._setEnabled(!this.option("readOnly"));
+        this._setLeftPanelEnabled(!this.option("readOnly"));
     }
 
     _optionChanged(args) {
