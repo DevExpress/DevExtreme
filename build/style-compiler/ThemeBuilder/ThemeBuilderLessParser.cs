@@ -32,44 +32,10 @@ namespace StyleCompiler.ThemeBuilder
             }
             ThemeBuilderMetadata data = new ThemeBuilderMetadata
             {
-                Name = dataFields["name"].Trim(),
-                Group = dataFields["group"].Trim(),
-                Type = dataFields["type"].Trim()
+                Name = dataFields["name"].Trim()
             };
 
-
-            ApplyAdditionalFields(new string[] {
-                "paletteColorOpacity",
-                "colorFunctions",
-                "isLastSubGroupItem",
-                "typeValues"}, (fieldName) =>
-                {
-                    string fieldValue = null;
-                    if (dataFields.TryGetValue(fieldName, out fieldValue))
-                    {
-                        string propertyName = fieldName.First().ToString().ToUpperInvariant() + fieldName.Substring(1);
-                        var property = data.GetType().GetProperty(propertyName);
-
-                        if (property.PropertyType.Name == "Boolean")
-                        {
-                            property.SetValue(data, Convert.ToBoolean(fieldValue), null);
-                        }
-                        else
-                        {
-                            property.SetValue(data, fieldValue.Trim(), null);
-                        }
-                    }
-                });
-
             return data;
-        }
-
-        void ApplyAdditionalFields(string[] fields, Action<string> fn)
-        {
-            foreach (string field in fields)
-            {
-                fn.Invoke(field);
-            }
         }
 
         public List<ThemeBuilderMetadata> GenerateThemeBuilderMetadata()

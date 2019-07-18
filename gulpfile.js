@@ -43,7 +43,6 @@ function gulpDefault(callback) {
         'style-compiler-tb-assets',
         'npm',
         'themebuilder-npm',
-        'style-compiler-generic-legacy',
         callback);
 }
 

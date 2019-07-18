@@ -10,12 +10,6 @@ namespace StyleCompiler.ThemeBuilder.Tests
         {
             Assert.Equal(expected.Key, metadata.Key);
             Assert.Equal(expected.Name, metadata.Name);
-            Assert.Equal(expected.Type, metadata.Type);
-            Assert.Equal(expected.Group, metadata.Group);
-            Assert.Equal(expected.PaletteColorOpacity, metadata.PaletteColorOpacity);
-            Assert.Equal(expected.Inherit, metadata.Inherit);
-            Assert.Equal(expected.IsLastSubGroupItem, metadata.IsLastSubGroupItem);
-            Assert.Equal(expected.ColorFunctions, metadata.ColorFunctions);
         }
 
         [Fact]
@@ -30,93 +24,67 @@ namespace StyleCompiler.ThemeBuilder.Tests
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_SLIDEOUT_BACKGROUND",
-                Name = "Slide out background",
-                Type = "color",
-                Group = "slideout",
-                PaletteColorOpacity = ".7"
+                Name = "Slide out background"
             }, metadata1[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_TOOLBAR_BORDER_COLOR",
-                Name = "Toolbar border color",
-                Type = "color",
-                Group = "toolbar"
+                Name = "Toolbar border color"
             }, metadata2[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_DIALOG_BUTTONS_BEFORE_COLOR",
-                Name = "Button color",
-                Type = "color",
-                Group = "button"
+                Name = "Button color"
             }, metadata2[1]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_BUTTON_SUCCESS_BACKGROUND",
-                Name = "Button background",
-                Type = "color",
-                Group = "button"
+                Name = "Button background"
             }, metadata2[2]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_TOOLBAR_LABEL_COLOR",
-                Name = "Label color",
-                Type = "color",
-                Group = "label"
+                Name = "Label color"
             }, metadata3[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@ANDROID_TOAST_TEXT_COLOR",
-                Name = "Toast color",
-                Type = "color",
-                Group = "toast"
+                Name = "Toast color"
             }, metadata3[1]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@UNKNOWN_COLOR",
-                Name = "Some color",
-                Type = "color",
-                Group = "unknown"
+                Name = "Some color"
             }, metadata3[2]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@FONT_SIZE",
-                Name = "Font size",
-                Type = "text",
-                Group = "common"
+                Name = "Font size"
             }, metadata4[0]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@RGBA_COLOR",
-                Name = "rgba color",
-                Type = "color",
-                Group = "common",
-                IsLastSubGroupItem = false
+                Name = "rgba color"
             }, metadata4[1]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@INHERITED_COLOR",
-                Name = "Inherited color",
-                Type = "color",
-                Group = "calculated",
-                IsLastSubGroupItem = true
+                Name = "Inherited color"
             }, metadata5[2]);
 
             CheckMetadata(new ThemeBuilderMetadata
             {
                 Key = "@COMPLEX_COLOR",
-                Name = "Complex color",
-                Type = "color",
-                Group = "complex",
-                ColorFunctions = "lighten 20, saturate 10"
+                Name = "Complex color"
             }, metadata5[3]);
         }
 
