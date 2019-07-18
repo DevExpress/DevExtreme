@@ -802,6 +802,113 @@ module("selecting of item keys", {
         assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
         assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
     });
+
+    test("using items and selectedItems", function(assert) {
+        const items = ["item 1", "item 2", "item 3"];
+        const instance = new TestComponent(this.$element, {
+            items: [],
+            selectionMode: "multiple"
+        });
+
+        instance.option("items", items);
+        instance.option("selectedItems", ["item 2"]);
+
+        const $item = this.$element.find(`.${ITEM_CLASS}`).eq(1);
+
+        assert.deepEqual(instance.option("selectedItems"), [items[1]], "selectedItems is correct");
+        assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
+        assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
+        assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
+    });
+
+    test("using dataSource and selectedItems", function(assert) {
+        const items = ["item 1", "item 2", "item 3"];
+        const instance = new TestComponent(this.$element, {
+            dataSource: [],
+            selectionMode: "multiple"
+        });
+
+        instance.option("dataSource", items);
+        instance.option("selectedItems", ["item 2"]);
+
+        const $item = this.$element.find(`.${ITEM_CLASS}`).eq(1);
+
+        assert.deepEqual(instance.option("selectedItems"), [items[1]], "selectedItems is correct");
+        assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
+        assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
+        assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
+    });
+
+    test("using dataSource(items change after initialize) and selectedItems", function(assert) {
+        const items = ["item 1", "item 2", "item 3"];
+        const instance = new TestComponent(this.$element, {
+            dataSource: [],
+            selectionMode: "multiple"
+        });
+
+        instance.option("items", items);
+        instance.option("selectedItems", ["item 2"]);
+
+        const $item = this.$element.find(`.${ITEM_CLASS}`).eq(1);
+
+        assert.deepEqual(instance.option("selectedItems"), [items[1]], "selectedItems is correct");
+        assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
+        assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
+        assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
+    });
+
+    test("using items and selectedItems with unexisting key", function(assert) {
+        const items = ["item 1", "item 2", "item 3"];
+        const instance = new TestComponent(this.$element, {
+            items: [],
+            selectionMode: "multiple"
+        });
+
+        instance.option("items", items);
+        instance.option("selectedItems", ["item 2", "unexisting"]);
+
+        const $item = this.$element.find(`.${ITEM_CLASS}`).eq(1);
+
+        assert.deepEqual(instance.option("selectedItems"), [items[1]], "selectedItems is correct");
+        assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
+        assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
+        assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
+    });
+
+    test("using dataSource and selectedItems with unexisting key", function(assert) {
+        const items = ["item 1", "item 2", "item 3"];
+        const instance = new TestComponent(this.$element, {
+            dataSource: [],
+            selectionMode: "multiple"
+        });
+
+        instance.option("dataSource", items);
+        instance.option("selectedItems", ["item 2", "unexisting"]);
+
+        const $item = this.$element.find(`.${ITEM_CLASS}`).eq(1);
+
+        assert.deepEqual(instance.option("selectedItems"), [items[1]], "selectedItems is correct");
+        assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
+        assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
+        assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
+    });
+
+    test("using dataSource and selectedItems with unexisting key", function(assert) {
+        const items = ["item 1", "item 2", "item 3"];
+        const instance = new TestComponent(this.$element, {
+            dataSource: items,
+            selectionMode: "multiple"
+        });
+
+        instance.option("selectedItems", ["item 2", "unexisting"]);
+
+        const $item = this.$element.find(`.${ITEM_CLASS}`).eq(1);
+
+        assert.deepEqual(instance.option("selectedItems"), [items[1]], "selectedItems is correct");
+        assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is correct");
+        assert.deepEqual(instance.option("selectedItem"), items[1], "selectedItem is correct");
+        assert.ok($item.hasClass("dx-item-selected"), "item has selected class");
+    });
 });
 
 
