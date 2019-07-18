@@ -2690,6 +2690,8 @@ declare module DevExpress.ui {
         resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.tasks */
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
+        /** @name dxGantt.Options.treeListWidth */
+        treeListWidth?: number;
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {

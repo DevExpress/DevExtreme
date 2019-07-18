@@ -10,26 +10,39 @@ const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 
 const GANTT_KEY_FIELD = "id";
+const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
 class Gantt extends Widget {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
 
-        this._$treeList = $("<div>")
+        this._$treeListWrapper = $("<div>")
+            .width(this.option("treeListWidth"))
             .appendTo(this.$element());
+        this._$treeList = $("<div>")
+            .width(this.option("treeListWidth"))
+            .appendTo(this._$treeListWrapper);
         this._$splitter = $("<div>")
             .addClass(GANTT_SPLITTER_CLASS)
+            .appendTo(this.$element());
+        this._$ganttView = $("<div>")
+            .addClass(GANTT_VIEW_CLASS)
             .appendTo(this.$element());
     }
 
     _render() {
+        this._renderTreeList();
+    }
+    _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this.option("tasks.dataSource"),
-            width: "100%",
+            columns: this.option("columns"),
+            columnResizingMode: "widget",
+            height: "100%",
             selection: { mode: "single" },
             sorting: { mode: "none" },
-            scrolling: { showScrollbar: "never", mode: "standard" },
+            scrolling: { showScrollbar: "onHover", mode: "standard" },
             allowColumnResizing: true,
             autoExpandAll: true,
             showRowLines: true,
@@ -44,12 +57,10 @@ class Gantt extends Widget {
         if(this._ganttView) {
             return;
         }
-        const $ganttView = $("<div>")
-            .addClass(GANTT_VIEW_CLASS)
-            .appendTo(this.$element());
 
-        this._ganttView = this._createComponent($ganttView, GanttView, {
+        this._ganttView = this._createComponent(this._$ganttView, GanttView, {
             height: this._treeList._$element.get(0).offsetHeight,
+            rowHeight: this._getTreeListRowHeight(),
             tasks: this._getTasks(),
             dependencies: this.option("dependencies.dataSource"),
             resources: this.option("resources.dataSource"),
@@ -71,16 +82,16 @@ class Gantt extends Widget {
     _onGanttViewScroll(e) {
         const treeListScrollable = this._treeList.getScrollable();
         if(treeListScrollable) {
-            const diff = e.scrollableElement.scrollTop - treeListScrollable.scrollTop();
+            const diff = e.scrollTop - treeListScrollable.scrollTop();
             if(diff !== 0) {
-                treeListScrollable.scrollBy(diff);
+                treeListScrollable.scrollBy({ top: diff });
             }
         }
     }
-    _onTreeListScroll(e) {
-        const ganttViewScrollable = this._ganttView._getScrollable();
-        if(ganttViewScrollable.scrollTop !== e.scrollOffset.top) {
-            ganttViewScrollable.scrollTop = e.scrollOffset.top;
+    _onTreeListScroll(treeListScrollView) {
+        const ganttViewTaskAreaContainer = this._ganttView._getTaskAreaContainer();
+        if(ganttViewTaskAreaContainer.scrollTop !== treeListScrollView.component.scrollTop()) {
+            ganttViewTaskAreaContainer.scrollTop = treeListScrollView.component.scrollTop();
         }
     }
 
@@ -92,11 +103,25 @@ class Gantt extends Widget {
         return this._treeList.getVisibleRows().map(r => r.data);
     }
     _initScrollSync(treeList) {
-        const scrollable = treeList.getScrollable();
-        if(scrollable) {
-            scrollable.off("scroll", (e) => { this._onTreeListScroll(e); });
-            scrollable.on("scroll", (e) => { this._onTreeListScroll(e); });
+        const treeListScrollable = treeList.getScrollable();
+        if(treeListScrollable) {
+            treeListScrollable.off("scroll");
+            treeListScrollable.on("scroll", (e) => { this._onTreeListScroll(e); });
         }
+    }
+    _getTreeListRowHeight() {
+        const rowElement = this._treeList._$element.find(".dx-row-lines")[0];
+        if(rowElement) {
+            const borderWidth = this._treeList.option("showRowLines") ? 1 : 0;
+            return rowElement.offsetHeight + borderWidth;
+        }
+        return GANTT_DEFAULT_ROW_HEIGHT;
+    }
+
+    _updateWidth() {
+        const treeListWidth = this.option("treeListWidth");
+        this._$treeListWrapper.width(treeListWidth);
+        this._$treeList.width(treeListWidth);
     }
 
     _getDefaultOptions() {
@@ -180,7 +205,13 @@ class Gantt extends Widget {
                 * @default "id"
                 */
                 keyExpr: GANTT_KEY_FIELD
-            }
+            },
+            /**
+            * @name dxGanttOptions.treeListWidth
+            * @type number
+            * @default 300
+            */
+            treeListWidth: 300
         });
     }
 
@@ -197,6 +228,9 @@ class Gantt extends Widget {
                 break;
             case "resourceAssignments":
                 // TODO
+                break;
+            case "treeListWidth":
+                this._updateWidth();
                 break;
             default:
                 super._optionChanged(args);

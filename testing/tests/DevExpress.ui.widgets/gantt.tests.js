@@ -100,4 +100,13 @@ QUnit.module("Options", moduleConfig, () => {
         const element = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(element.length, resourceAssignments.length);
     });
+
+    test("treeListWidth", (assert) => {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        const treeListElement = this.$element.find(TREELIST_SELECTOR)[0];
+        assert.equal(treeListElement.offsetWidth, 300);
+        this.instance.option("treeListWidth", 500);
+        assert.equal(treeListElement.offsetWidth, 500);
+    });
 });
