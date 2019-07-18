@@ -1,5 +1,5 @@
-import { isString } from "../../core/utils/type";
-import errors from "../../core/errors";
+import { isString } from "../utils/type";
+import errors from "../errors";
 
 let templateEngines = {};
 let currentTemplateEngine;
