@@ -66,7 +66,7 @@ QUnit.module("Selector check", () => {
                     return false;
                 }
             } else {
-                if(!/^[#.](dx|ql)-/.test(part)) {
+                if(!/^[#.](dx|ql|dxdi)-/.test(part)) {
                     return false;
                 }
             }
