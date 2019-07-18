@@ -600,7 +600,7 @@ var Popover = Popup.inherit({
             case "boundaryOffset":
             case "arrowPosition":
             case "arrowOffset":
-                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
+                this._renderGeometry();
                 break;
             case "fullScreen":
                 if(args.value) {

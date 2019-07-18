@@ -627,8 +627,8 @@ var Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function(source) {
-        if(source !== this._renderGeometrySource.DIMENSION_CHANGE) {
+    _renderGeometryImpl: function(isDimensionChanged) {
+        if(!isDimensionChanged) {
             this._resetContentHeight();
         }
         this.callBase.apply(this, arguments);
@@ -804,11 +804,11 @@ var Popup = Overlay.inherit({
             case "title":
             case "titleTemplate":
                 this._renderTitle();
-                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
+                this._renderGeometry();
                 break;
             case "bottomTemplate":
                 this._renderBottom();
-                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
+                this._renderGeometry();
                 break;
             case "onTitleRendered":
                 this._createTitleRenderAction(args.value);
@@ -821,19 +821,19 @@ var Popup = Overlay.inherit({
                 this._renderBottom();
 
                 if(!isPartialUpdate) {
-                    this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
+                    this._renderGeometry();
                 }
                 break;
             case "dragEnabled":
                 this._renderDrag();
                 break;
             case "autoResizeEnabled":
-                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
+                this._renderGeometry();
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
-                this._renderGeometry(this._renderGeometrySource.OPTION_CHANGE);
+                this._renderGeometry();
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "showCloseButton":

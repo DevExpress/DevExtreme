@@ -1891,7 +1891,7 @@ QUnit.test("popover should clear hide timeout when hide method is called", funct
     assert.ok(instance.option("visible"), "Hiding has been cancelled");
 });
 
-QUnit.module("renderGeometry source", () => {
+QUnit.module("renderGeometry", () => {
     QUnit.test("option change", (assert) => {
         fixtures.simple.create();
         try {
@@ -1912,9 +1912,9 @@ QUnit.module("renderGeometry source", () => {
 
                 instance.option(optionName, newOptions[optionName]);
 
-                const renderGeometrySource = renderGeometrySpy.lastCall.args[0];
+                const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
                 assert.ok(initialCallCount < renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
-                assert.strictEqual(renderGeometrySource, instance._renderGeometrySource.OPTION_CHANGE);
+                assert.notOk(isDimensionChanged);
             }
         } finally {
             fixtures.simple.drop();

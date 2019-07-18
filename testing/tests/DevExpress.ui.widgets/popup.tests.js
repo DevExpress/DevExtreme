@@ -1387,7 +1387,7 @@ QUnit.test("popup title should be rendered before content", function(assert) {
     });
 });
 
-QUnit.module("renderGeometry source", () => {
+QUnit.module("renderGeometry", () => {
     QUnit.test("option change", (assert) => {
         const instance = $("#popup").dxPopup({
             visible: true
@@ -1411,9 +1411,9 @@ QUnit.module("renderGeometry source", () => {
 
             instance.option(optionName, newOptions[optionName]);
 
-            const renderGeometrySource = renderGeometrySpy.lastCall.args[0];
+            const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
             assert.ok(initialCallCount < renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
-            assert.strictEqual(renderGeometrySource, instance._renderGeometrySource.OPTION_CHANGE);
+            assert.notOk(isDimensionChanged);
         }
     });
 });

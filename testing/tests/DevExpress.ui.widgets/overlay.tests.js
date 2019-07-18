@@ -3476,12 +3476,11 @@ testModule("overlay utils", moduleConfig, () => {
     });
 });
 
-testModule("renderGeometry source", {
+testModule("renderGeometry", {
     beforeEach: () => {
         fx.off = true;
         this.overlayInstance = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance");
         this.renderGeometrySpy = sinon.spy(this.overlayInstance, "_renderGeometry");
-        this.renderGeometrySources = this.overlayInstance._renderGeometrySource;
     },
     afterEach: () => {
         zIndex.clearStack();
@@ -3495,24 +3494,24 @@ testModule("renderGeometry source", {
         this.overlayInstance.show();
         assert.ok(this.renderGeometrySpy.calledOnce, "render geometry called once");
 
-        const renderGeometrySource = this.renderGeometrySpy.getCall(0).args[0];
-        assert.strictEqual(renderGeometrySource, this.renderGeometrySources.VISIBILITY_CHANGE);
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(0).args[0];
+        assert.notOk(isDimensionChanged);
     });
 
     test("dimension change", (assert) => {
         this.overlayInstance.show();
         resizeCallbacks.fire();
 
-        const renderGeometrySource = this.renderGeometrySpy.getCall(1).args[0];
-        assert.strictEqual(renderGeometrySource, this.renderGeometrySources.DIMENSION_CHANGE);
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.ok(isDimensionChanged);
     });
 
     test("repaint", (assert) => {
         this.overlayInstance.show();
         this.overlayInstance.repaint();
 
-        const renderGeometrySource = this.renderGeometrySpy.getCall(1).args[0];
-        assert.strictEqual(renderGeometrySource, this.renderGeometrySources.REPAINT);
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.notOk(isDimensionChanged);
     });
 
     test("option change", (assert) => {
@@ -3536,9 +3535,9 @@ testModule("renderGeometry source", {
 
             this.overlayInstance.option(optionName, newOptions[optionName]);
 
-            const renderGeometrySource = this.renderGeometrySpy.lastCall.args[0];
+            const isDimensionChanged = !!this.renderGeometrySpy.lastCall.args[0];
             assert.ok(initialCallCount < this.renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
-            assert.strictEqual(renderGeometrySource, this.renderGeometrySources.OPTION_CHANGE);
+            assert.notOk(isDimensionChanged);
         }
     });
 });
