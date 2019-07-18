@@ -1,7 +1,6 @@
 import Widget from "../widget/ui.widget";
 import { getGanttViewCore } from "./gantt_importer";
-
-const GANTT_VIEW_HEADER_HEIGHT = 48;
+import { TaskAreaContainer } from "./ui.gantt.task.area.container";
 
 export class GanttView extends Widget {
     _init() {
@@ -12,12 +11,11 @@ export class GanttView extends Widget {
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
-        this._ganttViewCore = new GanttView(this);
-        this._ganttViewCore.createView();
-        this._ganttViewCore.setViewType(2);
+        this._ganttViewCore = new GanttView(this.$element().get(0), this);
+        this._ganttViewCore.setViewType(4);
     }
 
-    _getScrollable() {
+    _getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
     }
     _selectTask(id) {
@@ -28,28 +26,16 @@ export class GanttView extends Widget {
         this.lastSelectedId = id;
     }
     _update() {
-        this._ganttViewCore.loadOptionsFromTreeList();
+        this._ganttViewCore.loadOptionsFromGanttOwner();
         this._ganttViewCore.resetAndUpdate();
     }
+    _updateView() {
+        this._ganttViewCore.updateView();
+    }
 
-    // IGanttView
-    getGanttSize() {
-        let height = this.option("height") - GANTT_VIEW_HEADER_HEIGHT;
-        return { width: 700, height: height };
-    }
-    getGanttTickSize() {
-        return { width: 100, height: 34 };
-    }
-    getGanttContainer() {
-        return this.$element().get(0);
-    }
-    getGanttViewStartDate() {
-        const tasks = this.getGanttTasksData();
-        return tasks.length > 0 ? tasks.reduce((min, t) => t.start < min ? t.start : min, tasks[0].start) : new Date();
-    }
-    getGanttViewEndDate() {
-        const tasks = this.getGanttTasksData();
-        return tasks.length > 0 ? tasks.reduce((max, t) => t.end > max ? t.end : max, tasks[0].end) : new Date();
+    // IGanttOwner
+    getRowHeight() {
+        return this.option("rowHeight");
     }
     getGanttTasksData() {
         return this.option("tasks");
@@ -69,22 +55,16 @@ export class GanttView extends Widget {
     getGanttViewSettings() {
         return {};
     }
+    getExternalTaskAreaContainer(element) {
+        if(!this._taskAreaContainer) {
+            this._taskAreaContainer = new TaskAreaContainer(element, this);
+        }
+        return this._taskAreaContainer;
+    }
     changeGanttTaskSelection(id, selected) {
         this._onSelectionChanged({ id: id, selected: selected });
     }
-    onGanttScroll(scrollableElement) {
-        this._onScroll({ scrollableElement: scrollableElement });
-    }
-    areAlternateRowsEnabled() {
-        return true;
-    }
-    areVerticalBordersEnabled() {
-        return true;
-    }
-    areHorizontalBordersEnabled() {
-        return true;
-    }
-    allowSelectTask() {
-        return true;
+    onGanttScroll(scrollTop) {
+        this._onScroll({ scrollTop: scrollTop });
     }
 }
