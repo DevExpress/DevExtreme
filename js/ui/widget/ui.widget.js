@@ -523,7 +523,8 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderHint: function() {
-        this.$element().attr("title", this.option("hint"));
+        var hint = this.option("hint");
+        this.$element().attr("title", hint ? hint : null);
     },
 
     _renderContent: function() {
