@@ -901,7 +901,6 @@ var ContextMenu = MenuBase.inherit((function() {
                     break;
                 case "closeOnOutsideClick":
                     break;
-
                 default:
                     this.callBase(args);
             }
@@ -914,6 +913,12 @@ var ContextMenu = MenuBase.inherit((function() {
         _toggleVisibility: noop,
 
         _show: function(event) {
+            if(typeUtils.isDefined(event)) {
+                this._cachedJQEvent = event;
+            } else {
+                event = this._cachedJQEvent;
+            }
+
             var args = { jQEvent: event },
                 promise = new Deferred().reject().promise();
 
@@ -995,6 +1000,7 @@ var ContextMenu = MenuBase.inherit((function() {
             }
 
             this.setAria("owns", undefined);
+            this._cachedJQEvent = undefined;
 
             return promise || new Deferred().reject().promise();
         },
