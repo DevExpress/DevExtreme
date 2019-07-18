@@ -6,7 +6,7 @@ import registerComponent from "core/component_registrator";
 import { DataSource } from "data/data_source/data_source";
 import Store from "data/abstract_store";
 import ArrayStore from "data/array_store";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import support from "core/utils/support";
 import holdEvent from "events/hold";
 import CollectionWidget from "ui/collection/ui.collection_widget.edit";
@@ -47,25 +47,25 @@ class TestComponent extends CollectionWidget {
 QUnit.testStart(() => {
     const markup = `
         <div id="cmp"></div>
-        
+
         <div id="cmp-with-template">
             <div data-options="dxTemplate : { name: 'testTemplate' } ">
                 First Template
             </div>
         </div>
-        
+
         <div id="cmp-with-zero-template">
             <div data-options="dxTemplate: { name: '0' }">zero</div>
         </div>
-        
+
         <script type="text/html" id="externalTemplate">
             Test
         </script>
-        
+
         <script type="text/html" id="externalTemplateNoRootElement">
             Outer text <div>Test</div>
         </script>
-        
+
         <div id="container-with-jq-template">
             <div data-options="dxTemplate : { name: 'firstTemplate' } ">
                 First Template

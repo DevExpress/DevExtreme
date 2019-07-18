@@ -1,17 +1,13 @@
-var TemplateBase = require("./ui.template_base"),
-    domUtils = require("../utils/dom");
+import { TemplateBase } from "./template_base";
+import { normalizeTemplateElement } from "../utils/dom";
 
-var FunctionTemplate = TemplateBase.inherit({
-
-    ctor: function(render) {
+export class FunctionTemplate extends TemplateBase {
+    constructor(render) {
+        super();
         this._render = render;
-    },
-
-    _renderCore: function(options) {
-        return domUtils.normalizeTemplateElement(this._render(options));
     }
 
-});
-
-
-module.exports = FunctionTemplate;
+    _renderCore(options) {
+        return normalizeTemplateElement(this._render(options));
+    }
+}

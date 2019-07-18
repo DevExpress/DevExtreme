@@ -1,58 +1,26 @@
-var $ = require("../renderer"),
-    TemplateBase = require("./ui.template_base"),
-    eventsEngine = require("../../events/core/events_engine"),
-    removeEvent = require("../remove_event"),
-    iteratorUtils = require("../utils/iterator"),
-    isPrimitive = require("../utils/type").isPrimitive;
+import $ from "../renderer";
+import { TemplateBase } from "./template_base";
+import { on } from "../../events/core/events_engine";
+import removeEvent from "../remove_event";
+import { isPrimitive } from "../utils/type";
 
-var watchChanges = (function() {
+const watchChanges = (function() {
+    const globalWatch = (data, watchMethod, callback) => watchMethod(() => data, callback);
 
-    var start = function(rawData, watchMethod, fields, fieldsMap, callback) {
-        var globalDispose,
-            fieldsDispose;
+    const fieldsWatch = function(data, watchMethod, fields, fieldsMap, callback) {
+        const resolvedData = {};
+        const missedFields = fields.slice();
 
-        globalDispose = globalWatch(rawData, watchMethod, function(dataWithRawFields) {
-            fieldsDispose && fieldsDispose();
-
-            if(isPrimitive(dataWithRawFields)) {
-                callback(dataWithRawFields);
-                return;
-            }
-
-            fieldsDispose = fieldsWatch(dataWithRawFields, watchMethod, fields, fieldsMap, function(data) {
-                callback(data);
-            });
-        });
-
-        return function() {
-            fieldsDispose && fieldsDispose();
-            globalDispose && globalDispose();
-        };
-    };
-
-    var globalWatch = function(data, watchMethod, callback) {
-        return watchMethod(
-            function() { return data; },
-            callback
-        );
-    };
-
-    var fieldsWatch = function(data, watchMethod, fields, fieldsMap, callback) {
-        var resolvedData = {},
-            missedFields = fields.slice();
-
-        var watchHandlers = iteratorUtils.map(fields, function(name) {
-            var fieldGetter = fieldsMap[name];
+        const watchHandlers = fields.map(function(name) {
+            const fieldGetter = fieldsMap[name];
 
             return watchMethod(
-                fieldGetter ?
-                    function() { return fieldGetter(data); } :
-                    function() { return data[name]; },
+                fieldGetter ? () => fieldGetter(data) : () => data[name],
                 function(value) {
                     resolvedData[name] = value;
 
                     if(missedFields.length) {
-                        var index = missedFields.indexOf(name);
+                        const index = missedFields.indexOf(name);
                         if(index >= 0) {
                             missedFields.splice(index, 1);
                         }
@@ -66,35 +34,50 @@ var watchChanges = (function() {
         });
 
         return function() {
-            iteratorUtils.each(watchHandlers, function(_, dispose) {
-                dispose();
-            });
+            watchHandlers.forEach(dispose => dispose());
         };
     };
 
-    return start;
+    return function(rawData, watchMethod, fields, fieldsMap, callback) {
+        let fieldsDispose;
+
+        const globalDispose = globalWatch(rawData, watchMethod, function(dataWithRawFields) {
+            fieldsDispose && fieldsDispose();
+
+            if(isPrimitive(dataWithRawFields)) {
+                callback(dataWithRawFields);
+                return;
+            }
+
+            fieldsDispose = fieldsWatch(dataWithRawFields, watchMethod, fields, fieldsMap, callback);
+        });
+
+        return function() {
+            fieldsDispose && fieldsDispose();
+            globalDispose && globalDispose();
+        };
+    };
 
 })();
 
-module.exports = TemplateBase.inherit({
-
-    ctor: function(render, fields, watchMethod, fieldsMap) {
+export class BindableTemplate extends TemplateBase {
+    constructor(render, fields, watchMethod, fieldsMap) {
+        super();
         this._render = render;
         this._fields = fields;
         this._fieldsMap = fieldsMap || {};
         this._watchMethod = watchMethod;
-    },
+    }
 
-    _renderCore: function(options) {
-        var $container = $(options.container);
+    _renderCore(options) {
+        const $container = $(options.container);
 
-        var dispose = watchChanges(options.model, this._watchMethod, this._fields, this._fieldsMap, function(data) {
+        const dispose = watchChanges(options.model, this._watchMethod, this._fields, this._fieldsMap, data => {
             $container.empty();
             this._render($container, data, options.model);
-        }.bind(this));
-        eventsEngine.on($container, removeEvent, dispose);
+        });
+        on($container, removeEvent, dispose);
 
         return $container.contents();
     }
-
-});
+}

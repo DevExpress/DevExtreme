@@ -14,7 +14,7 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     Swipeable = require("../events/gesture/swipeable"),
-    BindableTemplate = require("./widget/bindable_template"),
+    BindableTemplate = require("../core/templates/bindable_template").BindableTemplate,
     Deferred = require("../core/utils/deferred").Deferred;
 
 var GALLERY_CLASS = "dx-gallery",

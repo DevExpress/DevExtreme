@@ -22,7 +22,7 @@ var $ = require("../../core/renderer"),
     ScrollView = require("../scroll_view"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.live_update").default,
-    BindableTemplate = require("../widget/bindable_template"),
+    BindableTemplate = require("../../core/templates/bindable_template").BindableTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
 

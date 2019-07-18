@@ -7,7 +7,7 @@ import angular from "angular";
 import registerComponent from "core/component_registrator";
 import DOMComponent from "core/dom_component";
 import Widget from "ui/widget/ui.widget";
-import NgTemplate from "integration/angular/template";
+import { NgTemplate } from "integration/angular/template";
 import CollectionWidget from "ui/collection/ui.collection_widget.edit";
 
 import "integration/angular";

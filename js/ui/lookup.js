@@ -16,7 +16,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     Popover = require("./popover"),
     TextBox = require("./text_box"),
-    ChildDefaultTemplate = require("./widget/child_default_template"),
+    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate,
     translator = require("../animation/translator");
 
 var LOOKUP_CLASS = "dx-lookup",
@@ -632,8 +632,8 @@ var Lookup = DropDownList.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["group"] = new ChildDefaultTemplate("group", this);
-        this._defaultTemplates["title"] = new ChildDefaultTemplate("title", this);
+        this._defaultTemplates["group"] = new ChildDefaultTemplate("group");
+        this._defaultTemplates["title"] = new ChildDefaultTemplate("title");
     },
 
     _initMarkup: function() {

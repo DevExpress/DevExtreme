@@ -9,14 +9,14 @@
 
             module.exports = factory(
                 require("jquery"),
-                require("ui/set_template_engine"),
+                require("core/templates/template_engine_registry").setTemplateEngine,
                 require("aspnet")
             );
         });
     } else {
         factory(
             window.jQuery,
-            DevExpress.ui.setTemplateEngine,
+            DevExpress.setTemplateEngine,
             DevExpress.aspnet
         );
     }

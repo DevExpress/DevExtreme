@@ -1,7 +1,7 @@
 import $ from "jquery";
 import { noop } from "core/utils/common";
 import devices from "core/devices";
-import Template from "ui/widget/template";
+import { Template } from "core/templates/template";
 import Guid from "core/guid";
 import { DataSource } from "data/data_source/data_source";
 import ArrayStore from "data/array_store";

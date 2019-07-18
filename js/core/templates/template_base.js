@@ -1,64 +1,65 @@
-var $ = require("../renderer"),
-    domAdapter = require("../dom_adapter"),
-    Callbacks = require("../utils/callbacks"),
-    domUtils = require("../utils/dom"),
-    Class = require("../class"),
-    abstract = Class.abstract;
+import $ from "../renderer";
+import { getBody } from "../dom_adapter";
+import Callbacks from "../utils/callbacks";
+import { contains, triggerShownEvent } from "../utils/dom";
+import errors from "../errors";
 
-
-var renderedCallbacks = Callbacks();
+export const renderedCallbacks = Callbacks();
 
 /**
- * @name dxTemplate
- * @section uiWidgetMarkupComponents
- * @type object
- */
+* @name dxTemplate
+* @section uiWidgetMarkupComponents
+* @type object
+*/
 
 /**
- * @name dxTemplateOptions.name
- * @type string
- */
+* @name dxTemplateOptions.name
+* @type string
+*/
 
-var TemplateBase = Class.inherit({
+/**
+* @name template
+* @type String|function|Node|jQuery
+* @section Common
+*/
 
-    render: function(options) {
+export class TemplateBase {
+    render(options) {
         options = options || {};
 
-        var onRendered = options.onRendered;
+        const onRendered = options.onRendered;
         delete options.onRendered;
 
-        var $result = this._renderCore(options);
+        const $result = this._renderCore(options);
 
         this._ensureResultInContainer($result, options.container);
         renderedCallbacks.fire($result, options.container);
 
         onRendered && onRendered();
         return $result;
-    },
+    }
 
-    _ensureResultInContainer: function($result, container) {
+    _ensureResultInContainer($result, container) {
         if(!container) {
             return;
         }
 
-        var $container = $(container);
-        var resultInContainer = domUtils.contains($container.get(0), $result.get(0));
+        const $container = $(container);
+        const resultInContainer = contains($container.get(0), $result.get(0));
         $container.append($result);
         if(resultInContainer) {
             return;
         }
 
-        var resultInBody = domAdapter.getBody().contains($container.get(0));
+        const resultInBody = getBody().contains($container.get(0));
         if(!resultInBody) {
             return;
         }
 
-        domUtils.triggerShownEvent($result);
-    },
+        triggerShownEvent($result);
+    }
 
-    _renderCore: abstract
-
-});
-
-module.exports = TemplateBase;
-module.exports.renderedCallbacks = renderedCallbacks;
+    _renderCore() {
+        throw errors.Error("E0001");
+    }
+}

@@ -18,7 +18,7 @@ var $ = require("../../core/renderer"),
     fx = require("../../animation/fx"),
     windowUtils = require("../../core/utils/window"),
     messageLocalization = require("../../localization/message"),
-    FunctionTemplate = require("../widget/function_template");
+    FunctionTemplate = require("../../core/templates/function_template").FunctionTemplate;
 
 var CALENDAR_CLASS = "dx-calendar",
     CALENDAR_BODY_CLASS = "dx-calendar-body",
@@ -449,7 +449,7 @@ var Calendar = Editor.inherit({
         this._defaultTemplates["cell"] = new FunctionTemplate(function(options) {
             var data = options.model;
             $(options.container).append($("<span>").text(data && data.text || String(data)));
-        }, this);
+        });
     },
 
     _updateCurrentDate: function(date) {

@@ -8,7 +8,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     AsyncCollectionWidget = require("../collection/ui.collection_widget.async"),
     Promise = require("../../core/polyfills/promise"),
-    BindableTemplate = require("../widget/bindable_template"),
+    BindableTemplate = require("../../core/templates/bindable_template").BindableTemplate,
     fx = require("../../animation/fx");
 
 var TOOLBAR_CLASS = "dx-toolbar",

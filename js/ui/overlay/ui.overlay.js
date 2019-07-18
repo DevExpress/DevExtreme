@@ -30,7 +30,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     Resizable = require("../resizable"),
-    EmptyTemplate = require("../widget/empty_template"),
+    EmptyTemplate = require("../../core/templates/empty_template").EmptyTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     zIndexPool = require("./z_index"),
     swatch = require("../widget/swatch_container");
@@ -567,7 +567,7 @@ var Overlay = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _isTopOverlay: function() {

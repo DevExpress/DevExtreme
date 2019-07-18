@@ -1,13 +1,8 @@
-var $ = require("../renderer"),
-    TemplateBase = require("./ui.template_base");
+import $ from "../renderer";
+import { TemplateBase } from "./template_base";
 
-var EmptyTemplate = TemplateBase.inherit({
-
-    _renderCore: function() {
+export class EmptyTemplate extends TemplateBase {
+    _renderCore() {
         return $();
     }
-
-});
-
-
-module.exports = EmptyTemplate;
+}

@@ -8,7 +8,7 @@ var $ = require("../core/renderer"),
     ActionSheetStrategy = require("./toolbar/ui.toolbar.strategy.action_sheet"),
     DropDownMenuStrategy = require("./toolbar/ui.toolbar.strategy.drop_down_menu"),
     ToolbarBase = require("./toolbar/ui.toolbar.base"),
-    ChildDefaultTemplate = require("./widget/child_default_template");
+    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate;
 
 var STRATEGIES = {
     actionSheet: ActionSheetStrategy,
@@ -173,7 +173,7 @@ var Toolbar = ToolbarBase.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["actionSheetItem"] = new ChildDefaultTemplate("item", this);
+        this._defaultTemplates["actionSheetItem"] = new ChildDefaultTemplate("item");
     },
 
     _initMarkup: function() {

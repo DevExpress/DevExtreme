@@ -1,9 +1,8 @@
-var TemplateBase = require("./ui.template_base");
+import { TemplateBase } from "./template_base";
 
-module.exports = TemplateBase.inherit({
-
-    ctor: function(name) {
+export class ChildDefaultTemplate extends TemplateBase {
+    constructor(name) {
+        super();
         this.name = name;
     }
-
-});
+}
