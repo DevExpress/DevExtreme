@@ -2032,11 +2032,12 @@ QUnit.module("aria accessibility", {}, () => {
     QUnit.test("default render", (assert) => {
         const $element = $("#numberbox").dxNumberBox({});
         const $input = $element.find(".dx-texteditor-input");
+        const inputElement = $input.get(0);
 
         assert.equal($input.attr("role"), "spinbutton", "aria role is correct");
         assert.equal($input.attr("aria-valuenow"), "0", "required 'aria-valuenow' attribute is defined");
-        assert.ok($input.hasAttribute("aria-valuemin"), "required 'aria-valuemin' attribute is defined");
-        assert.ok($input.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemin"), "required 'aria-valuemin' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
     });
 
     QUnit.test("aria properties", (assert) => {
