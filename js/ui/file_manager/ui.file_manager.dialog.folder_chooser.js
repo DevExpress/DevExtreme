@@ -10,9 +10,7 @@ const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = "dx-filemanager-dialog-folder-c
 class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     show() {
-        if(this._filesTreeView) {
-            this._filesTreeView.refreshData();
-        }
+        this._filesTreeView && this._filesTreeView.refresh();
         super.show();
     }
 
@@ -29,20 +27,31 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
         super._createContentTemplate(element);
 
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
-            getItems: this.option("getItems")
+            getDirectories: this.option("getDirectories"),
+            getCurrentDirectory: this._getDialogSelectedDirectory.bind(this),
+            onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this)
         });
 
         this._$contentElement.append(this._filesTreeView.$element());
     }
 
     _getDialogResult() {
-        return { folder: this._filesTreeView.getCurrentFolder() };
+        return { folder: this._getDialogSelectedDirectory() };
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             getItems: null
         });
+    }
+
+    _getDialogSelectedDirectory() {
+        return this._selectedDirectoryInfo || this.option("getCurrentDirectory")();
+    }
+
+    _onFilesTreeViewDirectoryClick({ itemData }) {
+        this._selectedDirectoryInfo = itemData;
+        this._filesTreeView.updateCurrentDirectory();
     }
 
 }

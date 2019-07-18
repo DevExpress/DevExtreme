@@ -701,19 +701,6 @@ declare module DevExpress.ui {
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
-    /** @name DiagramDataSourceParameters */
-    export interface DiagramDataSourceParameters {
-        /** @name DiagramDataSourceParameters.edges */
-        edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
-        /** @name DiagramDataSourceParameters.key */
-        key?: string;
-        /** @name DiagramDataSourceParameters.layout */
-        layout?: 'tree' | 'sugiyama';
-        /** @name DiagramDataSourceParameters.nodes */
-        nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
-        /** @name DiagramDataSourceParameters.title */
-        title?: string;
-    }
     /** @name Editor.Options */
     export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
         /** @name Editor.Options.isValid */
@@ -751,6 +738,8 @@ declare module DevExpress.ui {
         dateModifiedExpr?: string | Function;
         /** @name FileProvider.Options.isDirectoryExpr */
         isDirectoryExpr?: string | Function;
+        /** @name FileProvider.Options.keyExpr */
+        keyExpr?: string | Function;
         /** @name FileProvider.Options.nameExpr */
         nameExpr?: string | Function;
         /** @name FileProvider.Options.sizeExpr */
@@ -1554,12 +1543,15 @@ declare module DevExpress.ui {
     }
     /** @name dxButtonGroup.Options */
     export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
+        /** @name dxButtonGroup.Options.buttonTemplate */
+        buttonTemplate?: template | ((buttonData: any, buttonContent: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxButtonGroup.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxButtonGroup.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
+        /** @deprecated */
         /** @name dxButtonGroup.Options.itemTemplate */
-        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        itemTemplate?: template | Function;
         /** @name dxButtonGroup.Options.items */
         items?: Array<dxButtonGroupItem>;
         /** @name dxButtonGroup.Options.keyExpr */
@@ -1998,7 +1990,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.customShapes */
-        customShapes?: Array<{ allowHasText?: boolean, connectionPoints?: Array<{ side?: 'north' | 'east' | 'south' | 'west', x?: number, y?: number }>, defaultHeight?: number, defaultText?: string, defaultWidth?: number, id?: number, svgHeight?: number, svgLeft?: number, svgTop?: number, svgUrl?: string, svgWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string }>;
+        customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, baseType?: string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, svgHeight?: number, svgLeft?: number, svgTop?: number, svgUrl?: string, svgWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
@@ -2009,15 +2001,15 @@ declare module DevExpress.ui {
         nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
         onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
+        /** @name dxDiagram.Options.readOnly */
+        readOnly?: boolean;
+        /** @name dxDiagram.Options.toolbox */
+        toolbox?: Array<{ category?: string, expanded?: boolean, shapes?: Array<string>, style?: 'icons' | 'texts', title?: string }>;
     }
     /** @name dxDiagram */
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
         constructor(element: JQuery, options?: dxDiagramOptions)
-        /** @name dxDiagram.createDataSource(parameters) */
-        createDataSource(parameters: DiagramDataSourceParameters): void;
-        /** @name dxDiagram.deleteDataSource(key) */
-        deleteDataSource(key: string): void;
         /** @name dxDiagram.getData() */
         getData(): string;
         /** @name dxDiagram.setData(data, updateExistingItemsOnly) */
@@ -2069,6 +2061,8 @@ declare module DevExpress.ui {
         acceptCustomValue?: boolean;
         /** @name dxDropDownBox.Options.contentTemplate */
         contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxDropDownBox.Options.displayValueFormatter */
+        displayValueFormatter?: ((value: string | Array<any>) => string);
         /** @name dxDropDownBox.Options.dropDownOptions */
         dropDownOptions?: dxPopupOptions;
         /** @name dxDropDownBox.Options.fieldTemplate */
@@ -2133,6 +2127,8 @@ declare module DevExpress.ui {
         text?: string;
         /** @name dxDropDownButton.Options.useSelectMode */
         useSelectMode?: boolean;
+        /** @name dxDropDownButton.Options.wrapItemText */
+        wrapItemText?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
@@ -2225,6 +2221,8 @@ declare module DevExpress.ui {
         value?: any;
         /** @name dxDropDownList.Options.valueChangeEvent */
         valueChangeEvent?: string;
+        /** @name dxDropDownList.Options.wrapItemText */
+        wrapItemText?: boolean;
     }
     /** @name dxDropDownList */
     export class dxDropDownList extends dxDropDownEditor {
@@ -3370,13 +3368,13 @@ declare module DevExpress.ui {
         /** @name dxOverlay.content() */
         content(): DevExpress.core.dxElement;
         /** @name dxOverlay.hide() */
-        hide(): Promise<void> & JQueryPromise<void>;
+        hide(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxOverlay.repaint() */
         repaint(): void;
         /** @name dxOverlay.show() */
-        show(): Promise<void> & JQueryPromise<void>;
+        show(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxOverlay.toggle(showing) */
-        toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
+        toggle(showing: boolean): Promise<boolean> & JQueryPromise<boolean>;
     }
     /** @name dxPivotGrid.Options */
     export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
@@ -3581,9 +3579,9 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxPopoverOptions)
         constructor(element: JQuery, options?: dxPopoverOptions)
         /** @name dxOverlay.show() */
-        show(): Promise<void> & JQueryPromise<void>;
+        show(): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxPopover.show(target) */
-        show(target: string | Element | JQuery): Promise<void> & JQueryPromise<void>;
+        show(target: string | Element | JQuery): Promise<boolean> & JQueryPromise<boolean>;
     }
     /** @name dxPopup.Options */
     export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
@@ -6576,6 +6574,8 @@ declare module DevExpress.viz {
         hoverMode?: 'allArgumentPoints' | 'none';
         /** @name dxChart.Options.argumentAxis.label */
         label?: dxChartArgumentAxisLabel;
+        /** @name dxChart.Options.argumentAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
         /** @deprecated */
@@ -6897,6 +6897,8 @@ declare module DevExpress.viz {
         endOnTick?: boolean;
         /** @name dxChart.Options.valueAxis.label */
         label?: dxChartValueAxisLabel;
+        /** @name dxChart.Options.valueAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
         /** @deprecated */
@@ -8306,6 +8308,8 @@ declare module DevExpress.viz {
         hoverMode?: 'allArgumentPoints' | 'none';
         /** @name dxPolarChart.Options.argumentAxis.label */
         label?: dxPolarChartArgumentAxisLabel;
+        /** @name dxPolarChart.Options.argumentAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxPolarChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
         /** @name dxPolarChart.Options.argumentAxis.minorTick */
@@ -8519,6 +8523,8 @@ declare module DevExpress.viz {
         endOnTick?: boolean;
         /** @name dxPolarChart.Options.valueAxis.label */
         label?: dxPolarChartValueAxisLabel;
+        /** @name dxPolarChart.Options.valueAxis.linearThreshold */
+        linearThreshold?: number;
         /** @name dxPolarChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
         /** @name dxPolarChart.Options.valueAxis.maxValueMargin */
@@ -8770,7 +8776,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.onValueChanged */
         onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
         /** @name dxRangeSelector.Options.scale */
-        scale?: { aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
+        scale?: { aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
         /** @name dxRangeSelector.Options.selectedRangeColor */
         selectedRangeColor?: string;
         /** @name dxRangeSelector.Options.selectedRangeUpdateMode */

@@ -415,8 +415,17 @@ Point.prototype = {
         }
     },
 
+    isArgumentCorrect() {
+        return this.series._argumentChecker(this.argument);
+    },
+
+    isValueCorrect() {
+        const valueChecker = this.series._valueChecker;
+        return valueChecker(this.getMinValue()) && valueChecker(this.getMaxValue());
+    },
+
     hasValue: function() {
-        return this.value !== null && this.minValue !== null;
+        return this.value !== null && this.minValue !== null && this.isArgumentCorrect() && this.isValueCorrect();
     },
     hasCoords: _noop,
     correctPosition: _noop,

@@ -9,6 +9,7 @@ import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramLeftPanel from "./ui.diagram.leftpanel";
 import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
+import DiagramToolbox from "./ui.diagram.toolbox";
 import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
 import Tooltip from "../tooltip";
@@ -31,8 +32,6 @@ const DIAGRAM_PARENT_KEY_FIELD = "parentId";
 const DIAGRAM_ITEMS_FIELD = "items";
 const DIAGRAM_FROM_FIELD = "from";
 const DIAGRAM_TO_FIELD = "to";
-
-const DIAGRAM_CONNECTION_POINT_SIDES = ["north", "east", "south", "west"];
 
 const DIAGRAM_NAMESPACE = "dxDiagramEvent";
 const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("fullscreenchange", DIAGRAM_NAMESPACE);
@@ -94,16 +93,17 @@ class Diagram extends Widget {
             .appendTo($parent);
 
         this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
-            dataSources: this._getDataSources(),
-            customShapes: this._getCustomShapes(),
+            toolboxData: this._getToolboxData(),
+            disabled: this.option("readOnly"),
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
                 var $toolboxContainer = $(e.$element);
-                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
+                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8,
+                    { 'data-toggle': 'shape-toolbox-tooltip' },
+                    e.shapes || e.category, e.style === "texts");
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
-            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0]),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
     }
@@ -128,8 +128,14 @@ class Diagram extends Widget {
     _invalidateLeftPanel() {
         if(this._leftPanel) {
             this._leftPanel.option({
-                dataSources: this._getDataSources(),
-                customShapes: this._getCustomShapes(),
+                toolboxData: this._getToolboxData()
+            });
+        }
+    }
+    _setLeftPanelEnabled(enabled) {
+        if(this._leftPanel) {
+            this._leftPanel.option({
+                disabled: !enabled
             });
         }
     }
@@ -182,6 +188,7 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
+        this._toggleReadOnlyState();
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
@@ -227,69 +234,6 @@ class Diagram extends Widget {
             data,
             keepExistingItems
         });
-    }
-
-    _getDataSources() {
-        return this.option("dataSources") || {};
-    }
-    _createDiagramDataSource(parameters) {
-        const key = parameters.key || "0";
-        const title = parameters.title || "Data Source";
-        const nodes = parameters.nodes || {};
-        const edges = parameters.edges || {};
-
-        const data = {
-            key, title,
-            nodeDataSource: nodes.dataSource,
-            edgeDataSource: edges.dataSource,
-            nodeDataImporter: {
-                getKey: this._createGetter(nodes.keyExpr || DIAGRAM_KEY_FIELD),
-                setKey: this._createSetter(nodes.keyExpr || DIAGRAM_KEY_FIELD),
-                getText: this._createGetter(nodes.textExpr || DIAGRAM_TEXT_FIELD),
-                setText: this._createSetter(nodes.textExpr || DIAGRAM_TEXT_FIELD),
-                getType: this._createGetter(nodes.typeExpr || DIAGRAM_TYPE_FIELD),
-                setType: this._createSetter(nodes.typeExpr || DIAGRAM_TYPE_FIELD),
-
-                getParentKey: this._createGetter(nodes.parentKeyExpr || DIAGRAM_PARENT_KEY_FIELD),
-                setParentKey: this._createSetter(nodes.parentKeyExpr || DIAGRAM_PARENT_KEY_FIELD),
-                getItems: this._createGetter(nodes.itemsExpr || DIAGRAM_ITEMS_FIELD),
-                setItems: this._createSetter(nodes.itemsExpr || DIAGRAM_ITEMS_FIELD)
-            },
-            edgeDataImporter: {
-                getKey: this._createGetter(edges.keyExpr || DIAGRAM_KEY_FIELD),
-                setKey: this._createSetter(edges.keyExpr || DIAGRAM_KEY_FIELD),
-                getFrom: this._createGetter(edges.fromExpr || DIAGRAM_FROM_FIELD),
-                setFrom: this._createSetter(edges.fromExpr || DIAGRAM_FROM_FIELD),
-                getTo: this._createGetter(edges.toExpr || DIAGRAM_TO_FIELD),
-                setTo: this._createSetter(edges.toExpr || DIAGRAM_TO_FIELD)
-            },
-            layoutType: this._getDataSourceLayoutType(parameters.layout)
-        };
-        const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.ImportDataSource).execute(data);
-
-        var dataSources = this._getDataSources();
-        dataSources[key] = data;
-        this.option("dataSources", dataSources);
-    }
-    _getDataSourceLayoutType(layout) {
-        const { DataLayoutType } = getDiagram();
-        switch(layout) {
-            case "tree":
-                return DataLayoutType.Tree;
-            case "sugiyama":
-                return DataLayoutType.Sugiyama;
-        }
-    }
-    _deleteDiagramDataSource(key) {
-        var dataSources = this._getDataSources();
-        if(dataSources[key]) {
-            const { DiagramCommand } = getDiagram();
-            this._diagramInstance.commandManager.getCommand(DiagramCommand.CloseDataSource).execute(key);
-
-            delete dataSources[key];
-            this.option("dataSources", dataSources);
-        }
     }
 
     _nodesDataSourceChanged(nodes) {
@@ -374,11 +318,18 @@ class Diagram extends Widget {
     _getCustomShapes() {
         return this.option("customShapes") || [];
     }
+    _getToolboxData() {
+        var toolbox = this.option("toolbox");
+        if(!toolbox || !toolbox.length) {
+            toolbox = DiagramToolbox.createDefault();
+        }
+        return toolbox;
+    }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
             this._diagramInstance.removeCustomShapes(customShapes.map(
                 function(s) {
-                    return s.id;
+                    return s.type;
                 }
             ));
         }
@@ -387,7 +338,9 @@ class Diagram extends Widget {
             this._diagramInstance.addCustomShapes(customShapes.map(
                 function(s) {
                     return {
-                        id: s.id,
+                        category: s.category,
+                        type: s.type,
+                        baseType: s.baseType,
                         title: s.title,
                         svgUrl: s.svgUrl,
                         svgLeft: s.svgLeft,
@@ -397,13 +350,19 @@ class Diagram extends Widget {
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
                         defaultText: s.defaultText,
-                        allowHasText: s.allowHasText,
+                        allowEditText: s.allowEditText,
                         textLeft: s.textLeft,
                         textTop: s.textTop,
                         textWidth: s.textWidth,
                         textHeight: s.textHeight,
+                        defaultImageUrl: s.defaultImageUrl,
+                        allowEditImage: s.allowEditImage,
+                        imageLeft: s.imageLeft,
+                        imageTop: s.imageTop,
+                        imageWidth: s.imageWidth,
+                        imageHeight: s.imageHeight,
                         connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
-                            return { 'x': pt.x, 'y': pt.y, 'side': DIAGRAM_CONNECTION_POINT_SIDES.indexOf(pt.side) };
+                            return { 'x': pt.x, 'y': pt.y };
                         })
                     };
                 }
@@ -499,112 +458,14 @@ class Diagram extends Widget {
         this._raiseDataChangeAction();
     }
 
-    /**
-     * @name DiagramDataSourceParameters
-     * @type object
-     */
-    /**
-    * @name DiagramDataSourceParameters.key
-    * @type string
-    * @default null
-    */
-    /**
-    * @name DiagramDataSourceParameters.title
-    * @type string
-    * @default null
-    */
-    /**
-    * @name DiagramDataSourceParameters.nodes
-    * @type object
-    * @default null
-    */
-    /**
-    * @name DiagramDataSourceParameters.nodes.dataSource
-    * @type Array<Object>|DataSource|DataSourceOptions
-    * @default null
-    */
-    /**
-    * @name DiagramDataSourceParameters.nodes.keyExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "id"
-    */
-    /**
-    * @name DiagramDataSourceParameters.nodes.textExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "text"
-    */
-    /**
-    * @name DiagramDataSourceParameters.nodes.typeExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "type"
-    */
-    /**
-    * @name DiagramDataSourceParameters.nodes.parentKeyExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "parentId"
-    */
-    /**
-    * @name DiagramDataSourceParameters.nodes.itemsExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "items"
-    */
-    /**
-    * @name DiagramDataSourceParameters.edges
-    * @type Object
-    * @default null
-    */
-    /**
-    * @name DiagramDataSourceParameters.edges.dataSource
-    * @type Array<Object>|DataSource|DataSourceOptions
-    * @default null
-    */
-    /**
-    * @name DiagramDataSourceParameters.edges.keyExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "id"
-    */
-    /**
-    * @name DiagramDataSourceParameters.edges.fromExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "from"
-    */
-    /**
-    * @name DiagramDataSourceParameters.edges.toExpr
-    * @type string|function(data)
-    * @type_function_param1 data:object
-    * @default "to"
-    */
-    /**
-     * @name DiagramDataSourceParameters.layout
-     * @type Enums.DiagramAutoLayout
-     * @default undefined
-     */
-    /**
-    * @name dxDiagramMethods.createDataSource
-    * @publicName createDataSource(parameters)
-    * @param1 parameters:DiagramDataSourceParameters
-    */
-    createDataSource(parameters) {
-        this._createDiagramDataSource(parameters);
-    }
-    /**
-    * @name dxDiagramMethods.deleteDataSource
-    * @publicName deleteDataSource(key)
-    * @param1 key:string
-    */
-    deleteDataSource(key) {
-        this._deleteDiagramDataSource(key);
-    }
-
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            /**
+            * @name dxDiagramOptions.readOnly
+            * @type boolean
+            * @default false
+            */
+            readOnly: false,
             /**
             * @name dxDiagramOptions.onDataChanged
             * @extends Action
@@ -710,8 +571,16 @@ class Diagram extends Widget {
             */
             customShapes: [
                 /**
-                * @name dxDiagramOptions.customShapes.id
-                * @type Number
+                * @name dxDiagramOptions.customShapes.category
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.type
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.baseType
+                * @type String
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.title
@@ -750,7 +619,7 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.allowHasText
+                * @name dxDiagramOptions.customShapes.allowEditText
                 * @type Boolean
                 */
                 /**
@@ -770,6 +639,30 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.defaultImageUrl
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.allowEditImage
+                * @type Boolean
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageLeft
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageTop
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.imageHeight
+                * @type Number
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.connectionPoints
                 * @type Array<Object>
                 */
@@ -781,11 +674,35 @@ class Diagram extends Widget {
                 * @name dxDiagramOptions.customShapes.connectionPoints.y
                 * @type Number
                 */
+            ],
+            /**
+            * @name dxDiagramOptions.toolbox
+            * @type Array<Object>
+            * @default []
+            */
+            toolbox: [
                 /**
-                * @name dxDiagramOptions.customShapes.connectionPoints.side
-                * @type Enums.DiagramConnectionPointSide
+                * @name dxDiagramOptions.toolbox.category
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.title
+                * @type String
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.style
+                * @type Enums.DiagramToolboxStyle
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.expanded
+                * @type Boolean
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.shapes
+                * @type Array<String>
                 */
             ],
+
             /**
              * @name dxDiagramOptions.export
              * @type object
@@ -861,8 +778,17 @@ class Diagram extends Widget {
         }
     }
 
+    _toggleReadOnlyState() {
+        const { DiagramCommand } = getDiagram();
+        this._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleReadOnly).execute(this.option("readOnly"));
+        this._setLeftPanelEnabled(!this.option("readOnly"));
+    }
+
     _optionChanged(args) {
         switch(args.name) {
+            case "readOnly":
+                this._toggleReadOnlyState();
+                break;
             case "nodes":
                 this._refreshNodesDataSource();
                 break;
@@ -874,13 +800,13 @@ class Diagram extends Widget {
                 break;
             case "customShapes":
                 this._updateCustomShapes(args.value, args.previousValue);
+                this._invalidate();
+                break;
+            case "toolbox":
                 this._invalidateLeftPanel();
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();
-                break;
-            case "dataSources":
-                this._invalidateLeftPanel();
                 break;
             case "export":
                 this._toolbarInstance.option("export", this.option("export"));

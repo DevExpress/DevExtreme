@@ -3,7 +3,7 @@ import core from "./ui.grid_core.modules";
 import { each } from "../../core/utils/iterator";
 import { combineFilters } from "./ui.grid_core.utils";
 import { equalByValue } from "../../core/utils/common";
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isBoolean } from "../../core/utils/type";
 import { Deferred, when } from "../../core/utils/deferred";
 import { getIndexByKey } from "./ui.grid_core.utils";
 
@@ -148,9 +148,10 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return result.reject().promise();
             }
 
-            var rowIndexByKey = that._getFocusedRowIndexByKey(key);
+            let rowIndexByKey = that._getFocusedRowIndexByKey(key),
+                isPaginate = dataController.getDataSource().paginate();
 
-            if(rowIndex >= 0 && rowIndex === rowIndexByKey) {
+            if(!isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
                 that._triggerUpdateFocusedRow(key, result);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
@@ -327,7 +328,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return;
             }
 
-            $focusedRow = $row || $rowsViewElement.find(FOCUSED_ROW_SELECTOR);
+            $focusedRow = $row && $row.length ? $row : $rowsViewElement.find(FOCUSED_ROW_SELECTOR);
 
             if($focusedRow.length > 0) {
                 var focusedRowRect = $focusedRow[0].getBoundingClientRect(),
@@ -605,8 +606,20 @@ module.exports = {
                     var combinedFilter = this.getCombinedFilter();
                     return combineFilters([filter, combinedFilter, groupFilter]);
                 },
+                _generateBooleanFilter: function(selector, value, sortInfo) {
+                    let result;
+
+                    if(value === false) {
+                        result = [selector, "=", sortInfo.desc ? true : null];
+                    } else if(value === true ? !sortInfo.desc : sortInfo.desc) {
+                        result = [selector, "<>", value];
+                    }
+
+                    return result;
+                },
                 _generateOperationFilterByKey: function(key, rowData, useGroup) {
                     var that = this,
+                        booleanFilter,
                         dataSource = that._dataSource,
                         filter = that._generateFilterByKey(key, "<"),
                         sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering);
@@ -631,9 +644,17 @@ module.exports = {
                             }
 
                             value = getter ? getter(rowData) : rowData[selector];
-
                             filter = [[selector, "=", value], "and", filter];
-                            filter = [[selector, sortInfo.desc ? ">" : "<", value], "or", filter];
+
+                            if(value === null || isBoolean(value)) {
+                                booleanFilter = that._generateBooleanFilter(selector, value, sortInfo);
+
+                                if(booleanFilter) {
+                                    filter = [booleanFilter, "or", filter];
+                                }
+                            } else {
+                                filter = [[selector, sortInfo.desc ? ">" : "<", value], "or", filter];
+                            }
                         });
                     }
 

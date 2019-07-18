@@ -540,13 +540,15 @@ extend(legendPrototype, {
     },
 
     _createLabel: function(data, group) {
-        var labelFormatObject = this._getCustomizeObject(data),
-            align = getAlign(this._options.itemTextPosition),
-            text = this._options.customizeText.call(labelFormatObject, labelFormatObject),
-            fontStyle = _isDefined(data.textOpacity) ? _extend({}, this._options.font, { opacity: data.textOpacity }) : this._options.font;
+        const labelFormatObject = this._getCustomizeObject(data);
+        const options = this._options;
+        const align = getAlign(options.itemTextPosition);
+        const text = options.customizeText.call(labelFormatObject, labelFormatObject);
+        const fontStyle = _isDefined(data.textOpacity) ? _extend({}, options.font, { opacity: data.textOpacity }) : options.font;
+
         return this._renderer.text(text, 0, 0)
             .css(patchFontOptions(fontStyle))
-            .attr({ align: align })
+            .attr({ align: align, "class": options.cssClass })
             .append(group);
     },
 

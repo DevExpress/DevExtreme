@@ -86,14 +86,6 @@ function parseAxisCategories(groupsData, parsers) {
     }
 }
 
-function filterForLogAxis(val, field, incidentOccurred) {
-    if(val <= 0 && val !== null) {
-        incidentOccurred("E2004", [field]);
-        val = null;
-    }
-    return val;
-}
-
 function eigen(x) {
     return x;
 }
@@ -124,15 +116,12 @@ function validUnit(unit, field, incidentOccurred) {
     }
 }
 
-// TODO: Too much complication because of logarithmic only
 function createParserUnit(type, axisType, incidentOccurred) {
     var parser = type ? _getParser(type) : eigen,
-        filter = axisType === LOGARITHMIC ? filterForLogAxis : eigen,
         filterInfinity = axisType !== DISCRETE ? function(x) { return isFinite(x) || x === undefined ? x : null; } : eigen;
 
     return function(unit, field) {
-        var filterLogValues = function(x) { return filter(x, field, incidentOccurred); },
-            parseUnit = filterLogValues(filterInfinity(parser(unit)));
+        var parseUnit = filterInfinity(parser(unit));
 
         if(parseUnit === undefined) {
             validUnit(unit, field, incidentOccurred);

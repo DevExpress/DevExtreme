@@ -139,12 +139,10 @@ var Resizable = DOMComponent.inherit({
             /**
              * @name dxResizableOptions.width
              * @fires dxResizableOptions.onResize
-             * @inheritdoc
              */
             /**
              * @name dxResizableOptions.height
              * @fires dxResizableOptions.onResize
-             * @inheritdoc
              */
 
             roundStepValue: true

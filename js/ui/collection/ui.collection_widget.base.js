@@ -225,7 +225,6 @@ var CollectionWidget = Widget.inherit({
             * @type dxElement
             * @default null
             * @hidden
-            * @inheritdoc
             */
             focusedElement: null,
 
@@ -568,6 +567,7 @@ var CollectionWidget = Widget.inherit({
             case "items":
             case "_itemAttributes":
             case "itemTemplateProperty":
+            case "showItemDataTitle":
                 this._cleanRenderedItems();
                 this._invalidate();
                 break;
@@ -986,6 +986,11 @@ var CollectionWidget = Widget.inherit({
             $itemToReplace.replaceWith($itemFrame);
         } else {
             this._appendItemToContainer.call(this, $container, $itemFrame, index);
+        }
+
+        if(this.option("showItemDataTitle")) {
+            var displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
+            $itemFrame.attr("title", displayValue);
         }
 
         return $itemFrame;

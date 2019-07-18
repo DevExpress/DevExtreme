@@ -923,13 +923,11 @@ const Scheduler = Widget.inherit({
             /**
                 * @name dxSchedulerOptions.activeStateEnabled
                 * @hidden
-                * @inheritdoc
                 */
 
             /**
                 * @name dxSchedulerOptions.hoverStateEnabled
                 * @hidden
-                * @inheritdoc
                 */
             /**
                 * @name dxSchedulerAppointment
@@ -1044,7 +1042,6 @@ const Scheduler = Widget.inherit({
                         * @name dxSchedulerOptions.focusStateEnabled
                         * @type boolean
                         * @default true @for desktop
-                        * @inheritdoc
                         */
                     focusStateEnabled: true
                 }
@@ -1786,6 +1783,7 @@ const Scheduler = Widget.inherit({
     },
 
     _dispose: function() {
+        this._appointmentTooltip && this._appointmentTooltip.dispose();
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 
@@ -3202,7 +3200,6 @@ const Scheduler = Widget.inherit({
         * @name dxSchedulerMethods.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * @hidden
-        * @inheritdoc
         */
 
 }).include(AsyncTemplateMixin, DataHelperMixin);

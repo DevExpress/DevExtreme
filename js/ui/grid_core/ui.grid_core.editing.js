@@ -1450,15 +1450,18 @@ var EditingController = modules.ViewController.inherit((function() {
                         })).always(function() {
                             that._fireSaveEditDataEvents(editData);
                             that._afterSaveEditData();
+                        }).done(function() {
                             result.resolve();
+                        }).fail(function(error) {
+                            result.resolve(error);
                         });
                     } else {
                         dataSource && dataSource.endLoading();
                         result.resolve();
                     }
-                }).fail(function() {
+                }).fail(function(error) {
                     dataSource && dataSource.endLoading();
-                    result.resolve();
+                    result.resolve(error);
                 });
 
                 return result.always(function() {
@@ -1592,7 +1595,7 @@ var EditingController = modules.ViewController.inherit((function() {
          * @name GridBaseMethods.closeEditCell
          * @publicName closeEditCell()
          */
-        closeEditCell: function() {
+        closeEditCell: function(isError) {
             var that = this,
                 editMode = getEditMode(that),
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
@@ -1603,9 +1606,9 @@ var EditingController = modules.ViewController.inherit((function() {
                 result = deferredUtils.Deferred();
                 setTimeout(function() {
                     if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                        that.saveEditData().done(function() {
+                        that.saveEditData().done(function(error) {
                             if(!that.hasChanges()) {
-                                that.closeEditCell();
+                                that.closeEditCell(!!error);
                             }
                         });
                     } else if(oldEditRowIndex >= 0) {
@@ -1615,10 +1618,12 @@ var EditingController = modules.ViewController.inherit((function() {
                         that._editColumnIndex = -1;
 
                         that._beforeCloseEditCellInBatchMode(rowIndices);
-                        dataController.updateItems({
-                            changeType: "update",
-                            rowIndices: rowIndices
-                        });
+                        if(!isError) {
+                            dataController.updateItems({
+                                changeType: "update",
+                                rowIndices: rowIndices
+                            });
+                        }
                     }
                     result.resolve();
                 });
@@ -1964,6 +1969,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
 
                     $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
+
+                    let localizationName = this.getButtonLocalizationNames()[button.name];
+                    localizationName && $button.attr("aria-label", messageLocalization.format(localizationName));
                 } else {
                     $button.text(button.text);
                 }
@@ -1978,6 +1986,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 }));
                 options.rtlEnabled ? $container.prepend($button, "&nbsp;") : $container.append($button, "&nbsp;");
             }
+        },
+
+        getButtonLocalizationNames() {
+            return {
+                edit: "dxDataGrid-editingEditRow",
+                save: "dxDataGrid-editingSaveRowChanges",
+                delete: "dxDataGrid-editingDeleteRow",
+                undelete: "dxDataGrid-editingUndeleteRow",
+                cancel: "dxDataGrid-editingCancelRowChanges"
+            };
         },
 
         prepareEditButtons: function(headerPanel) {

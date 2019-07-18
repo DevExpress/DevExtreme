@@ -107,7 +107,8 @@ function getLabelOptions(labelOptions, defaultColor) {
         connector: connectorAttr,
         rotationAngle: opt.rotationAngle,
         wordWrap: opt.wordWrap,
-        textOverflow: opt.textOverflow
+        textOverflow: opt.textOverflow,
+        cssClass: opt.cssClass
     };
 }
 
@@ -167,6 +168,14 @@ function getData(pointData) {
 exports.Series = Series;
 
 exports.mixins = seriesNS.mixins;
+
+function getValueChecker(axisType, axis) {
+    if(!axis || axisType !== "logarithmic" || axis.getOptions().allowNegatives !== false) {
+        return () => true;
+    } else {
+        return value => value > 0;
+    }
+}
 
 Series.prototype = {
     constructor: Series,
@@ -346,7 +355,18 @@ Series.prototype = {
         that.argumentAxisType = settings.argumentAxisType;
         that.valueAxisType = settings.valueAxisType;
         that.showZero = settings.showZero;
+        this._argumentChecker = getValueChecker(settings.argumentAxisType, that.getArgumentAxis());
+        this._valueChecker = getValueChecker(settings.valueAxisType, that.getValueAxis());
+
         return that;
+    },
+
+    _argumentChecker: function() {
+        return true;
+    },
+
+    _valueChecker: function() {
+        return true;
     },
 
     getOptions: function() {

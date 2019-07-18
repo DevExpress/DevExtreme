@@ -13,7 +13,7 @@ const TOOLBAR_SELECTOR = ".dx-diagram-toolbar";
 const CONTEXT_MENU_SELECTOR = ".dx-has-context-menu:last";
 const TOOLBAR_ITEM_ACTIVE_CLASS = "dx-format-active";
 const MAIN_ELEMENT_SELECTOR = ".dxdi-control";
-const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":19, "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
+const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
 const DX_MENU_ITEM_SELECTOR = ".dx-menu-item";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
 
@@ -114,15 +114,15 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         const item = $(document).find(".dx-list-item-content").filter(function() {
             return $(this).text().toLowerCase().indexOf("arial black") >= 0;
         });
-        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         item.trigger("dxclick");
-        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test("diagram should be focused after set font bold", (assert) => {
         const boldButton = findToolbarItem(this.$element, "bold");
-        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         boldButton.trigger("dxclick");
-        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
 });
 QUnit.module("Context Menu", moduleConfig, () => {
@@ -145,6 +145,15 @@ QUnit.module("Context Menu", moduleConfig, () => {
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
         $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick");
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
+    });
+});
+QUnit.module("Options", moduleConfig, () => {
+    test("should change readOnly property", (assert) => {
+        assert.notOk(this.instance._diagramInstance.settings.readOnly);
+        this.instance.option("readOnly", true);
+        assert.ok(this.instance._diagramInstance.settings.readOnly);
+        this.instance.option("readOnly", false);
+        assert.notOk(this.instance._diagramInstance.settings.readOnly);
     });
 });
 

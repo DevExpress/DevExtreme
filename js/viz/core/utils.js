@@ -2,7 +2,7 @@ var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    adjust = require("../../core/utils/math").adjust,
+    mathUtils = require("../../core/utils/math"),
     dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
@@ -26,6 +26,8 @@ var cosFunc = Math.cos,
     _isNaN = isNaN,
     _Number = Number,
     _NaN = NaN;
+
+const { adjust, sign } = mathUtils;
 
 var getLog = function(value, base) {
     if(!value) {
@@ -428,8 +430,8 @@ function getAddFunction(range, correctZeroLevel) {
 
     if(range.axisType === "logarithmic") {
         return function(rangeValue, marginValue, sign = 1) {
-            var log = getLog(rangeValue, range.base) + sign * marginValue;
-            return raiseTo(log, range.base);
+            var log = getLogExt(rangeValue, range.base) + sign * marginValue;
+            return raiseToExt(log, range.base);
         };
     }
 
@@ -506,13 +508,47 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     };
 }
 
+function getLogExt(value, base, allowNegatives = false, linearThreshold) {
+    if(!allowNegatives) {
+        return getLog(value, base);
+    }
+    if(value === 0) {
+        return 0;
+    }
+    const transformValue = getLog(Math.abs(value), base) - (linearThreshold - 1);
+    if(transformValue < 0) {
+        return 0;
+    }
+    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold - 1).toFixed(Math.abs(linearThreshold))));
+}
+
+function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
+    if(!allowNegatives) {
+        return raiseTo(value, base);
+    }
+
+    if(value === 0) {
+        return 0;
+    }
+
+    const transformValue = raiseTo(Math.abs(value) + (linearThreshold - 1), base);
+
+    if(transformValue < 0) {
+        return 0;
+    }
+
+    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
+}
+
 exports.getVizRangeObject = getVizRangeObject;
 exports.convertVisualRangeObject = convertVisualRangeObject;
 exports.adjustVisualRange = adjustVisualRange;
 exports.getAddFunction = getAddFunction;
 exports.getLog = getLog;
+exports.getLogExt = getLogExt;
 exports.getAdjustedLog10 = getAdjustedLog10;
 exports.raiseTo = raiseTo;
+exports.raiseToExt = raiseToExt;
 
 exports.normalizeAngle = normalizeAngle;
 exports.convertAngleToRendererSpace = convertAngleToRendererSpace;

@@ -778,14 +778,12 @@ var areaPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.areapolarseries.point
     * @type object
-    * @inheritdoc
     */
     point: {
         /**
         * @name dxPolarChartSeriesTypes.areapolarseries.point.visible
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         visible: false
     },
@@ -871,13 +869,11 @@ var stackedbarPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.stackedbarpolarseries.label
     * @type object
-    * @inheritdoc
     */
     /**
     * @name dxPolarChartSeriesTypes.stackedbarpolarseries.label.position
     * @type Enums.RelativePosition
     * @default 'inside'
-    * @inheritdoc
     */
     /**
     * @name dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode

@@ -222,7 +222,8 @@ QUnit.test("Linear axis updates translator on option changed", function(assert) 
     var axis = new Axis({
             renderer: this.renderer,
             axisType: "xyAxes",
-            drawingType: "linear"
+            drawingType: "linear",
+            isArgumentAxis: true
         }),
         translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -237,6 +238,7 @@ QUnit.test("Linear axis updates translator on option changed", function(assert) 
     assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
     assert.equal(translator.update.lastCall.args[2].isHorizontal, true);
     assert.equal(translator.update.lastCall.args[2].interval, 0.2);
+    assert.strictEqual(translator.update.lastCall.args[2].shiftZeroValue, false); // T756714
 });
 
 QUnit.test("Linear axis updates translator, valueMarginsEnabled = true - stick false", function(assert) {
@@ -644,7 +646,7 @@ QUnit.test("measuring label, label creation", function(assert) {
     assert.equal(text.args[0][2], 0, "y coord");
 
     assert.deepEqual(text.returnValues[0].css.args[0][0], { fill: "color" }, "font style");
-    assert.deepEqual(text.returnValues[0].attr.args[0][0], { opacity: undefined, align: "center" }, "text options");
+    assert.deepEqual(text.returnValues[0].attr.args[0][0], { opacity: undefined, align: "center", "class": undefined }, "text options");
 
     assert.equal(text.returnValues[0].append.args[0][0], this.renderer.root, "group");
     assert.ok(text.returnValues[0].remove.called, "text is removed");
@@ -2407,6 +2409,7 @@ QUnit.test("Estimate draws title text and remove it", function(assert) {
             font: {
                 weight: "bold"
             },
+            cssClass: "css_class",
             opacity: 0.3,
             alignment: "center"
         }
@@ -2420,7 +2423,8 @@ QUnit.test("Estimate draws title text and remove it", function(assert) {
     var textElement = this.renderer.text.getCall(1).returnValue;
     assert.deepEqual(textElement.attr.lastCall.args[0], {
         opacity: 0.3,
-        align: "center"
+        align: "center",
+        "class": "css_class"
     }, "lebel settings");
 
     assert.deepEqual(textElement.css.lastCall.args[0], {

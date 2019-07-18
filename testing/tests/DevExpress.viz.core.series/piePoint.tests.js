@@ -80,7 +80,9 @@ function environmentWithStubLabels() {
             containerBackgroundColor: "#ffffff"
         },
         getLabelVisibility: function() { return true; },
-        getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
+        getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
+        _argumentChecker: function() { return true; },
+        _valueChecker: function() { return true; }
     };
     this.stubLabel = function(point, labelBBox) {
         point._label = sinon.createStubInstance(labelModule.Label);
@@ -129,7 +131,9 @@ function environment() {
         _options: {},
         getLabelVisibility: function() { return false; },
         hidePointTooltip: noop,
-        getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
+        getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
+        _argumentChecker: function() { return true; },
+        _valueChecker: function() { return true; }
     };
     this.opt = {
         widgetType: "pie",
@@ -213,7 +217,9 @@ QUnit.module("Values correction", {
         this.point = createPoint({
             name: "series1",
             _options: {},
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         }, { value: 10, argument: 5 }, {
             widgetType: "pie",
             styles: {
@@ -267,7 +273,9 @@ QUnit.module("Point radiuses correction", {
         this.point = createPoint({
             name: "series1",
             _options: {},
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         }, { value: 10, argument: 5 }, {
             widgetType: "pie",
             styles: {
@@ -319,7 +327,9 @@ QUnit.module("coordsIn API", {
             name: "series1",
             _options: {},
             getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.options = {
             widgetType: "pie",
@@ -490,7 +500,9 @@ QUnit.module("Draw Point", {
             _options: {},
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
-            hidePointTooltip: noop
+            hidePointTooltip: noop,
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.options = {
             widgetType: "pie",
@@ -651,7 +663,9 @@ QUnit.test("Draw point without state", function(assert) {
 
     point.series = {
         areLabelsVisible: function() { return false; },
-        getLabelVisibility: function() { return false; }
+        getLabelVisibility: function() { return false; },
+        _argumentChecker: function() { return true; },
+        _valueChecker: function() { return true; }
     };
     point.selectedState = false;
     point.series.setPointSelectedState = function(point) {
@@ -875,7 +889,9 @@ QUnit.module("Tooltip", {
             getOptions: function() {
                 return this._options;
             },
-            _options: {}
+            _options: {},
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
@@ -1325,7 +1341,9 @@ QUnit.module("Connector", {
                 containerBackgroundColor: "#ffffff"
             },
             getLabelVisibility: function() { return true; },
-            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.label = sinon.createStubInstance(labelModule.Label);
         this.label.getLayoutOptions.returns(this.options.label);
@@ -1380,7 +1398,9 @@ QUnit.module("show/hide API", {
             },
             getLabelVisibility: function() { return false; },
             hidePointTooltip: function() { },
-            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
+            _argumentChecker: function() { return true; },
+            _valueChecker: function() { return true; }
         };
         this.opt = {
             type: "pie",

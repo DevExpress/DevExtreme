@@ -195,6 +195,13 @@ var DropDownList = DropDownEditor.inherit({
             },
 
             /**
+             * @name dxDropDownListOptions.wrapItemText
+             * @type boolean
+             * @default false
+             */
+            wrapItemText: false,
+
+            /**
             * @name dxDropDownListOptions.onValueChanged
             * @extends Action
             * @type function(e)
@@ -209,27 +216,22 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions.fieldTemplate
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.fieldRender
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.contentTemplate
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.contentRender
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions.applyValueMode
             * @hidden
-            * @inheritdoc
             */
 
             popupWidthExtension: 0
@@ -268,7 +270,6 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions.value
             * @ref
-            * @inheritdoc
             */
             value: true,
             selectedItem: true,
@@ -606,6 +607,7 @@ var DropDownList = DropDownEditor.inherit({
             templateProvider: this.option("templateProvider"),
             noDataText: this.option("noDataText"),
             grouped: this.option("grouped"),
+            wrapItemText: this.option("wrapItemText"),
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this.option("itemTemplate"),
             indicateLoading: false,
@@ -928,6 +930,7 @@ var DropDownList = DropDownEditor.inherit({
                 break;
             case "grouped":
             case "groupTemplate":
+            case "wrapItemText":
             case "noDataText":
                 this._setListOption(args.name);
                 break;

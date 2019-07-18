@@ -19,8 +19,9 @@ class FileManagerEditingControl extends Widget {
     _initMarkup() {
         super._initMarkup();
 
+        this._controller = this.option("controller");
+
         this._model = this.option("model");
-        this._provider = this._model.provider;
         this._initActions();
 
         this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
@@ -28,8 +29,9 @@ class FileManagerEditingControl extends Widget {
 
         const $chooseFolderDialog = $("<div>").appendTo(this.$element());
         this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
-            provider: this._provider,
-            getItems: this._model.getFolders,
+            provider: this._controller._fileProvider,
+            getDirectories: this._controller.getDirectories.bind(this._controller),
+            getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
             onClosed: this._onDialogClosed.bind(this)
         });
 
@@ -104,33 +106,33 @@ class FileManagerEditingControl extends Widget {
                 affectsAllItems: true,
                 dialog: this._createFolderDialog,
                 getDialogArgument: () => messageLocalization.format("dxFileManager-newFolderName"),
-                action: ([item], { name }) => this._provider.createFolder(item, name),
+                action: ([item], { name }) => this._controller.createDirectory(item, name),
                 getSuccessMessage: items => "Folder created"
             },
 
             rename: {
                 dialog: this._renameItemDialog,
-                getDialogArgument: ([{ name }]) => name,
-                action: ([item], { name }) => this._provider.renameItem(item, name),
+                getDialogArgument: ([{ fileItem }]) => fileItem.name,
+                action: ([item], { name }) => this._controller.renameItem(item, name),
                 getSuccessMessage: items => "Item renamed"
             },
 
             delete: {
                 dialog: this._confirmationDialog,
                 getDialogArgument: ([{ name }]) => name,
-                action: (items, arg) => this._provider.deleteItems(items),
+                action: (items, arg) => this._controller.deleteItems(items),
                 getSuccessMessage: items => "Items deleted"
             },
 
             move: {
                 dialog: this._chooseFolderDialog,
-                action: (items, arg) => this._provider.moveItems(items, arg.folder),
+                action: (items, arg) => this._controller.moveItems(items, arg.folder),
                 getSuccessMessage: items => "Items moved"
             },
 
             copy: {
                 dialog: this._chooseFolderDialog,
-                action: (items, arg) => this._provider.copyItems(items, arg.folder),
+                action: (items, arg) => this._controller.copyItems(items, arg.folder),
                 getSuccessMessage: items => "Items copied"
             },
 
@@ -166,23 +168,23 @@ class FileManagerEditingControl extends Widget {
     }
 
     _tryEditAction(action, arg) {
-        let items = arg;
-        if(!items) {
-            items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
+        let itemInfos = arg;
+        if(!itemInfos) {
+            itemInfos = action.useCurrentFolder ? [ this._getCurrentDirectory() ] : this._model.getMultipleSelectedItems();
         }
-        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isDirectory);
+        const onlyFiles = !action.affectsAllItems && itemInfos.every(info => !info.fileItem.isDirectory);
         const dialogArgumentGetter = action.getDialogArgument || noop;
 
-        this._showDialog(action.dialog, dialogArgumentGetter(items))
-            .then(dialogResult => action.action(items, dialogResult))
+        this._showDialog(action.dialog, dialogArgumentGetter(itemInfos))
+            .then(dialogResult => action.action(itemInfos, dialogResult))
             .then(result => {
                 whenSome(
                     result,
-                    () => this._raiseOnSuccess(action.getSuccessMessage(items), onlyFiles),
-                    info => this._onFileProviderError(info, items)
+                    () => this._raiseOnSuccess(action.getSuccessMessage(itemInfos), onlyFiles),
+                    info => this._onFileProviderError(info, itemInfos)
                 );
             },
-            info => this._onFileProviderError(info, items));
+            info => this._onFileProviderError(info, itemInfos));
     }
 
     _onFileProviderError(errorInfo, fileItems) {
@@ -191,7 +193,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _tryUpload(destinationFolder) {
-        this._uploadFolder = destinationFolder && destinationFolder[0] || this._model.getCurrentFolder();
+        this._uploadFolder = destinationFolder && destinationFolder[0] || this._getCurrentDirectory();
         this._fileUploader.tryUpload();
     }
 
@@ -257,6 +259,10 @@ class FileManagerEditingControl extends Widget {
         const fileItemName = fileItem ? fileItem.name : null;
         const message = FileManagerMessages.get(errorId, fileItemName);
         this._actions.onError({ message });
+    }
+
+    _getCurrentDirectory() {
+        return this._controller.getCurrentDirectory();
     }
 
 }

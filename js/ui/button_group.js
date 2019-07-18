@@ -16,6 +16,65 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     SHAPE_STANDARD_CLASS = "dx-shape-standard";
 
 const ButtonCollection = CollectionWidget.inherit({
+    _initTemplates() {
+        this.callBase();
+
+        /**
+         * @name dxButtonGroupItem
+         * @inherits CollectionWidgetItem
+         * @type object
+         */
+        /**
+         * @name dxButtonGroupItem.hint
+         * @type String
+         */
+        /**
+         * @name dxButtonGroupItem.type
+         * @type Enums.ButtonType
+         * @default 'normal'
+         */
+        /**
+         * @name dxButtonGroupItem.icon
+         * @type String
+         */
+        /**
+         * @name dxButtonGroupItem.html
+         * @hidden
+         */
+        this._defaultTemplates["item"] = new BindableTemplate((($container, data, model) => {
+            this._prepareItemStyles($container);
+            this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
+                template: model.template || this.option("buttonTemplate")
+            }));
+        }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
+    },
+
+    _getBasicButtonOptions() {
+        return {
+            focusStateEnabled: false,
+            onClick: null,
+            hoverStateEnabled: this.option("hoverStateEnabled"),
+            activeStateEnabled: this.option("activeStateEnabled"),
+            stylingMode: this.option("stylingMode")
+        };
+    },
+
+    _getDefaultOptions: function _getDefaultOptions() {
+        return extend(this.callBase(), {
+            itemTemplateProperty: null
+        });
+    },
+
+    _prepareItemStyles($item) {
+        const itemIndex = $item.data("dxItemIndex");
+        itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
+
+        const items = this.option("items");
+        items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
+
+        $item.addClass(SHAPE_STANDARD_CLASS);
+    },
+
     _renderItemContent(options) {
         options.container = $(options.container).parent();
         this.callBase(options);
@@ -60,7 +119,6 @@ const ButtonGroup = Widget.inherit({
              * @name dxButtonGroupOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -68,7 +126,6 @@ const ButtonGroup = Widget.inherit({
              * @name dxButtonGroupOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -116,13 +173,18 @@ const ButtonGroup = Widget.inherit({
             /**
              * @name dxButtonGroupOptions.itemTemplate
              * @type template|function
-             * @default "item"
-             * @type_function_param1 itemData:object
-             * @type_function_param2 itemIndex:number
-             * @type_function_param3 itemElement:dxElement
+             * @deprecated dxButtonGroupOptions.buttonTemplate
+             */
+
+            /**
+             * @name dxButtonGroupOptions.buttonTemplate
+             * @type template|function
+             * @default "content"
+             * @type_function_param1 buttonData:object
+             * @type_function_param2 buttonContent:dxElement
              * @type_function_return string|Node|jQuery
              */
-            itemTemplate: "item",
+            buttonTemplate: "content",
 
             /**
              * @name dxButtonGroupOptions.onSelectionChanged
@@ -150,45 +212,12 @@ const ButtonGroup = Widget.inherit({
         });
     },
 
-    _prepareItemStyles($item) {
-        const itemIndex = $item.data("dxItemIndex");
-        itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
-
-        const items = this.option("items");
-        items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
-
-        $item.addClass(SHAPE_STANDARD_CLASS);
-    },
-
-    _initTemplates() {
+    _setDeprecatedOptions: function() {
         this.callBase();
 
-        /**
-         * @name dxButtonGroupItem
-         * @inherits CollectionWidgetItem
-         * @type object
-         */
-        /**
-         * @name dxButtonGroupItem.hint
-         * @type String
-         */
-        /**
-         * @name dxButtonGroupItem.type
-         * @type Enums.ButtonType
-         * @default 'normal'
-         */
-        /**
-         * @name dxButtonGroupItem.icon
-         * @type String
-         */
-        /**
-         * @name dxButtonGroupItem.html
-         * @hidden
-         */
-        this._defaultTemplates["item"] = new BindableTemplate((($container, data, model) => {
-            this._prepareItemStyles($container);
-            this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions()));
-        }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
+        extend(this._deprecatedOptions, {
+            "itemTemplate": { since: "19.2", alias: "buttonTemplate" }
+        });
     },
 
     _init() {
@@ -214,16 +243,6 @@ const ButtonGroup = Widget.inherit({
         })({ addedItems: addedItems, removedItems: removedItems });
     },
 
-    _getBasicButtonOptions() {
-        return {
-            focusStateEnabled: false,
-            stylingMode: this.option("stylingMode"),
-            hoverStateEnabled: this.option("hoverStateEnabled"),
-            activeStateEnabled: this.option("activeStateEnabled"),
-            onClick: null
-        };
-    },
-
     _renderButtons() {
         const $buttons = $("<div>")
             .addClass(BUTTON_GROUP_WRAPPER_CLASS)
@@ -235,10 +254,13 @@ const ButtonGroup = Widget.inherit({
             selectionMode: this.option("selectionMode"),
             items: this.option("items"),
             keyExpr: this.option("keyExpr"),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            buttonTemplate: this.option("buttonTemplate"),
             scrollingEnabled: false,
             selectedItemKeys: this.option("selectedItemKeys"),
             focusStateEnabled: this.option("focusStateEnabled"),
+            hoverStateEnabled: this.option("hoverStateEnabled"),
+            activeStateEnabled: this.option("activeStateEnabled"),
+            stylingMode: this.option("stylingMode"),
             accessKey: this.option("accessKey"),
             tabIndex: this.option("tabIndex"),
             noDataText: "",
@@ -272,7 +294,7 @@ const ButtonGroup = Widget.inherit({
             case "stylingMode":
             case "selectionMode":
             case "keyExpr":
-            case "itemTemplate":
+            case "buttonTemplate":
             case "items":
             case "activeStateEnabled":
             case "focusStateEnabled":

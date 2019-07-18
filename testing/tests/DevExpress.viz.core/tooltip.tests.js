@@ -938,6 +938,7 @@ QUnit.test("Show preparations. Certain container", function(assert) {
 
 QUnit.test("Show. W/o params", function(assert) {
     this.options.customizeTooltip = null;
+    this.options.cssClass = "tooltip_class";
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
@@ -971,7 +972,7 @@ QUnit.test("Show. W/o params", function(assert) {
     assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: "#939393" }]);
 
     assert.equal(this.tooltip._text.attr.callCount, 1, "text attrs");
-    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: "some-text" }]);
+    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: "some-text", "class": "tooltip_class" }]);
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml styles");
     assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, "textGroupHtml width");

@@ -37,7 +37,6 @@ var TabPanel = MultiView.inherit({
              * @name dxTabPanelOptions.items
              * @type Array<string, dxTabPanelItem, object>
              * @fires dxTabPanelOptions.onOptionChanged
-             * @inheritdoc
              */
 
             /**
@@ -55,7 +54,6 @@ var TabPanel = MultiView.inherit({
              * @name dxTabPanelOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -131,7 +129,6 @@ var TabPanel = MultiView.inherit({
             /**
             * @name dxTabPanelItem.visible
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxTabPanelItem.title
@@ -159,7 +156,6 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -173,7 +169,6 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions.swipeEnabled
                     * @type boolean
                     * @default false @for non-touch_devices
-                    * @inheritdoc
                     */
                     swipeEnabled: false
                 }
@@ -186,7 +181,6 @@ var TabPanel = MultiView.inherit({
                     * @type boolean
                     * @default false
                     * @default true @for Android|iOS|Windows_Mobile
-                    * @inheritdoc
                     */
                     animationEnabled: false
                 }

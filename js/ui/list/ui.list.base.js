@@ -39,6 +39,7 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
+    WRAP_ITEM_TEXT_CLASS = "dx-wrap-item-text",
     SELECT_ALL_SELECTOR = ".dx-list-select-all",
 
     LIST_ITEM_DATA_KEY = "dxListItemData",
@@ -139,7 +140,6 @@ var ListBase = CollectionWidget.inherit({
              * @name dxListOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -332,20 +332,20 @@ var ListBase = CollectionWidget.inherit({
             /**
             * @name dxListOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxListOptions.activeStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             activeStateEnabled: true,
 
             _itemAttributes: { "role": "option" },
 
             useInkRipple: false,
+
+            wrapItemText: false,
 
             /**
             * @name dxListOptions.onItemClick
@@ -358,7 +358,6 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -372,7 +371,6 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -386,14 +384,12 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
              * @name dxListOptions.items
              * @type Array<string, dxListItem, object>
              * @fires dxListOptions.onOptionChanged
-             * @inheritdoc
              */
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
@@ -471,7 +467,6 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -644,6 +639,10 @@ var ListBase = CollectionWidget.inherit({
         });
 
         this._$container = $(this._scrollView.content());
+
+        if(this.option("wrapItemText")) {
+            this._$container.addClass(WRAP_ITEM_TEXT_CLASS);
+        }
 
         this._createScrollViewActions();
     },
@@ -1112,6 +1111,9 @@ var ListBase = CollectionWidget.inherit({
             case "collapsibleGroups":
             case "groupTemplate":
                 this._invalidate();
+                break;
+            case "wrapItemText":
+                this._$container.toggleClass(WRAP_ITEM_TEXT_CLASS, args.value);
                 break;
             case "onGroupRendered":
                 this._createGroupRenderAction();

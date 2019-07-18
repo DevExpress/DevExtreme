@@ -151,7 +151,6 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -1513,22 +1512,26 @@ var Overlay = Widget.inherit({
     * @name dxOverlaymethods.toggle
     * @publicName toggle(showing)
     * @param1 showing:boolean
-    * @return Promise<void>
+    * @return Promise<boolean>
     */
     toggle: function(showing) {
         showing = showing === undefined ? !this.option("visible") : showing;
+        var result = new Deferred();
 
         if(showing === this.option("visible")) {
-            return new Deferred().resolve().promise();
+            return result.resolveWith(this, [showing]).promise();
         }
 
         var animateDeferred = new Deferred();
         this._animateDeferred = animateDeferred;
         this.option("visible", showing);
 
-        return animateDeferred.promise().done((function() {
+        animateDeferred.promise().done((function() {
             delete this._animateDeferred;
+            result.resolveWith(this, [showing]);
         }).bind(this));
+
+        return result.promise();
     },
 
     $content: function() {
@@ -1538,7 +1541,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods.show
     * @publicName show()
-    * @return Promise<void>
+    * @return Promise<boolean>
     */
     show: function() {
         return this.toggle(true);
@@ -1547,7 +1550,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods.hide
     * @publicName hide()
-    * @return Promise<void>
+    * @return Promise<boolean>
     */
     hide: function() {
         return this.toggle(false);
