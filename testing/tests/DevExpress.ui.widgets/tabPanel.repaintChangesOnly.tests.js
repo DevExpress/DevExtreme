@@ -340,7 +340,7 @@ QUnit.module("repaintChangesOnly", {
             this.checkItemRendered(assert, [{ data: item2, index: 1 }, { data: item1_, index: 0 }]);
             this.checkItemDeleted(assert, [item1]);
 
-            this.checkContainsElements(assert, [item1.text, item1.content, item2.text]);
+            this.checkContainsElements(assert, [item1.text, item1.content, item2.text, item2.content]);
             this.checkContainsEmptyMessage(assert, false);
         });
 
