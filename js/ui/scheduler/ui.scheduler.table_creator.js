@@ -125,7 +125,7 @@ var SchedulerTableCreator = {
         var rows = [];
 
         if(type === this.VERTICAL) {
-            rows = this._makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
+            rows = this._makeVerticalGroupedRowsNew(groups, cssClasses, cellTemplate, rowCount);
         } else {
             rows = this._makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
         }
@@ -239,6 +239,122 @@ var SchedulerTableCreator = {
 
     },
 
+    _makeVerticalGroupedRowsNew: function(groups, cssClasses, cellTemplate, rowCount) {
+        var cellTemplates = [],
+            repeatCount = 1,
+            arr = [],
+            i;
+
+        var cellIterator = function(cell) {
+            if(cell.template) {
+                cellTemplates.push(cell.template);
+            }
+        };
+
+        for(i = 0; i < groups.length; i++) {
+            if(i > 0) {
+                repeatCount = groups[i - 1].items.length * repeatCount;
+            }
+
+            var cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
+            cells.forEach(cellIterator);
+            arr.push(cells);
+        }
+
+        var rows = [],
+            groupCount = arr.length,
+            maxCellCount = arr[groupCount - 1].length;
+
+        for(i = 0; i < maxCellCount; i++) {
+            rows.push($("<div>").addClass(cssClasses.groupHeaderRowClass));
+        }
+
+        for(i = groupCount - 1; i >= 0; i--) {
+            var currentColumnLength = arr[i].length,
+                rowspan = maxCellCount / currentColumnLength;
+
+            for(var j = 0; j < currentColumnLength; j++) {
+                var currentRowIndex = j * rowspan,
+                    row = rows[currentRowIndex];
+
+                row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
+            }
+        }
+
+        let result = $("<div>").addClass("dx-scheduler-flex-container").append(rows);
+
+        return {
+            elements: result,
+            cellTemplates: cellTemplates
+        };
+    },
+
+    // _makeVerticalGroupedRowNewRecursive: function(groups, array, index, cssClasses, cellTemplate) {
+    //     var prevResult, currentCells, result = [];
+    //     if(index < groups.length - 1) {
+    //         prevResult = this._makeVerticalGroupedRowNewRecursive(groups, array, index + 1, cssClasses, cellTemplate);
+    //     }
+    //     currentCells = this._makeFlexGroupedRowCells(groups[index], cssClasses, cellTemplate);
+    //     if(prevResult) {
+    //         currentCells.forEach(function(element) {
+    //             element = $(element).append(prevResult);
+    //             result.push($("<div>").append(element));
+    //         });
+    //     } else {
+    //         result = currentCells;
+    //     }
+    //     return $("<div>").append(result);
+    // },
+
+    _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+        repeatByDate = repeatByDate || 1;
+        repeatCount = repeatCount * repeatByDate;
+
+        var cells = [],
+            items = group.items,
+            itemCount = items.length;
+
+        for(var i = 0; i < repeatCount; i++) {
+            for(var j = 0; j < itemCount; j++) {
+                var $container = $("<div>"),
+                    cell = {};
+
+                if(cellTemplate && cellTemplate.render) {
+                    var templateOptions = {
+                        model: items[j],
+                        container: getPublicElement($container),
+                        index: i * itemCount + j
+                    };
+
+                    if(group.data) {
+                        templateOptions.model.data = group.data[j];
+                    }
+
+                    cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
+                } else {
+                    $container.text(items[j].text);
+                    $container = $("<div>").append($container);
+                }
+
+                $container.addClass(cssClasses.groupHeaderContentClass);
+
+                var cssClass;
+
+                if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
+                    cssClass = cssClasses.groupHeaderClass(j);
+                } else {
+                    cssClass = cssClasses.groupHeaderClass;
+                }
+
+                cell.element = $("<div>").addClass(cssClass).append($container);
+
+                cells.push(cell);
+            }
+        }
+
+        return cells;
+    },
+
     _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate, rowCount) {
         var cellTemplates = [],
             repeatCount = 1,
@@ -258,7 +374,6 @@ var SchedulerTableCreator = {
 
             var cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
             cells.forEach(cellIterator);
-
             arr.push(cells);
         }
 
