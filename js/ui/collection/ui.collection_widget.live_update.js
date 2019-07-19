@@ -138,8 +138,8 @@ export default CollectionWidget.inherit({
             this._waitDeletingPrepare($removedItemElement).done(()=>{
                 if(isPartialRefresh) {
                     this._updateIndicesAfterIndex(index - 1);
-                    this._updateSelectionAfterRemoveByChange(index);
                     this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
+                    this._updateSelectionAfterRemoveByChange(index);
                 } else {
                     this._deleteItemElementByIndex(index);
                     this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
