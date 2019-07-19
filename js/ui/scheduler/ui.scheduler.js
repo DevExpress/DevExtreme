@@ -2901,7 +2901,7 @@ const Scheduler = Widget.inherit({
         return startDate;
     },
 
-    _getEndDate: function(appointment) {
+    _getEndDate: function(appointment, skipNormalize) {
         var endDate = this.fire("getField", "endDate", appointment);
 
         if(endDate) {
@@ -2912,7 +2912,7 @@ const Scheduler = Widget.inherit({
 
             endDate = this.fire("convertDateByTimezone", endDate, endDateTimeZone);
 
-            this.fire("updateAppointmentEndDate", {
+            !skipNormalize && this.fire("updateAppointmentEndDate", {
                 endDate: endDate,
                 callback: function(result) {
                     endDate = result;
