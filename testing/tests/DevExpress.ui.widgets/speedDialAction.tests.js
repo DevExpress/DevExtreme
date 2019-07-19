@@ -305,7 +305,6 @@ QUnit.module("check action buttons position", (hooks) => {
     });
 });
 
-
 QUnit.module("check action buttons click args", (hooks) => {
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
@@ -336,6 +335,59 @@ QUnit.module("check action buttons click args", (hooks) => {
 
         $fabMainContent.trigger("dxclick");
         $fabContent.eq(2).trigger("dxclick");
+    });
+});
+
+QUnit.module("check action buttons events", (hooks) => {
+    hooks.afterEach(() => {
+        $("#fab-one").dxSpeedDialAction("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
+    }),
+
+    test("one action", (assert) => {
+        const firstSDA = $("#fab-one")
+            .dxSpeedDialAction()
+            .dxSpeedDialAction("instance")
+            .on("contentReady", (e) => {
+                assert.ok(e.component, "first SDA content ready component in args");
+                assert.ok(e.actionElement, "first SDA content ready actionElement in args");
+                assert.ok(e.element, " first SDA content ready element in args");
+            })
+            .on("optionChanged", (e) => {
+                assert.ok("first SDA icon option changed");
+            })
+            .on("disposing", (e) => {
+                assert.ok("first SDA disposing after second SDA creating");
+            })
+            .on("initialized", (e) => {
+                assert.ok(e.component, "first SDA initialized component in args");
+                assert.ok(e.actionElement, "first SDA initialized actionElement in args");
+                assert.ok(e.element, "first SDA initialized element in args");
+            })
+            .on("click", (e) => {
+                assert.ok(e.component, "first SDA click component in args");
+                assert.ok(e.actionElement, "first SDA click actionElement in args");
+                assert.ok(e.element, "first SDA click element in args");
+                assert.ok(e.event, "first SDA click event in args");
+            });
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        let $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        firstSDA.option("icon", "edit");
+
+        $("#fab-two")
+            .dxSpeedDialAction()
+            .dxSpeedDialAction("instance")
+            .on("contentReady", (e) => {
+                assert.ok(e.component, "second SDA content ready component in args");
+                assert.ok(e.actionElement, "second SDA content ready actionElement in args");
+                assert.ok(e.element, "second SDA content ready element in args");
+            });
+
+        $fabMainContent.trigger("dxclick");
     });
 });
 

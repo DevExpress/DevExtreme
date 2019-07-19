@@ -13,6 +13,15 @@ const FAB_ICON_CLASS = "dx-fa-button-icon";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
 const SpeedDialItem = Overlay.inherit({
+    _actionEvents: [
+        "initialized",
+        "disposing",
+        "contentReady",
+        "click"
+    ],
+
+    _clickActionArgs: null,
+
     _getDefaultOptions() {
         return extend(this.callBase(), {
             shading: false,
@@ -44,7 +53,7 @@ const SpeedDialItem = Overlay.inherit({
 
     _init() {
         this.callBase();
-        this._renderEvents(this.option("actionComponent"));
+        this._renderEvents();
     },
 
     _renderButtonIcon($element, icon, iconClass) {
@@ -73,26 +82,18 @@ const SpeedDialItem = Overlay.inherit({
         }
     },
 
-    _actionEvents: [
-        "initialized",
-        "optionChanged",
-        "disposing",
-        "contentReady",
-        "click",
-    ],
+    _getActionComponent() {
+        return this.option("actionComponent") || this.option("actions")[0];
+    },
 
-    _clickEvent: null,
-
-    _renderEvents(action) {
-        if(!action) action = this.option("actions")[0];
-
-        this._actionEvents.forEach((actionEvent, i) => {
+    _renderEvents() {
+        this._actionEvents.forEach((actionEvent) => {
             this.on(actionEvent, () => {
-                action.$element = () => { return this.$element(); };
-
-                action._createActionByOption("on" + actionEvent)((i === (this._actionEvents.length - 1) ? {
-                    event: this._clickEvent
-                } : { }));
+                this._getActionComponent()._createActionByOption("on" + actionEvent)(
+                    actionEvent === "click" ?
+                        this._clickActionArgs :
+                        { actionElement: this.$element() }
+                );
             });
         });
     },
@@ -110,14 +111,19 @@ const SpeedDialItem = Overlay.inherit({
 
         eventsEngine.off(overlayContent, eventName);
         eventsEngine.on(overlayContent, eventName, (e) => {
-            this._clickEvent = e;
-            this._clickAction({ event: e, element: this.$element() });
+            this._clickActionArgs = {
+                event: e,
+                actionElement: this.element(),
+                element: this._getActionComponent().$element()
+            };
+
+            this._clickAction(this._clickActionArgs);
         });
     },
 
     _defaultActionArgs() {
         return {
-            component: this.option("actionComponent")
+            component: this._getActionComponent()
         };
     },
 

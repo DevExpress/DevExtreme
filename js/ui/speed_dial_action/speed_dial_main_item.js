@@ -84,14 +84,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         this._setClickAction();
     },
 
-    _defaultActionArgs() {
-        const actions = this.option("actions");
-
-        return {
-            component: actions.length === 1 ? actions[0] : this
-        };
-    },
-
     _clickHandler() {
         const actions = this._actionItems;
         actions.forEach(action => {
