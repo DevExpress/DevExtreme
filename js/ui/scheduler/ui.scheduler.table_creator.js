@@ -313,8 +313,6 @@ var SchedulerTableCreator = {
                     $container = $("<div>").append($container);
                 }
 
-                $container.addClass(cssClasses.groupHeaderContentClass);
-
                 var cssClass;
 
                 if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
