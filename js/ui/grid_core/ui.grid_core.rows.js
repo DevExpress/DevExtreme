@@ -1339,7 +1339,7 @@ module.exports = {
                     return $cells;
                 },
 
-                getTopVisibleItemIndex: function() {
+                getTopVisibleItemIndex: function(isFloor) {
                     var that = this,
                         itemIndex = 0,
                         prevOffsetTop = 0,
@@ -1361,7 +1361,7 @@ module.exports = {
                             if(rowElement.length) {
                                 offsetTop = rowElement.offset().top - contentElementOffsetTop;
                                 if(offsetTop > scrollPosition) {
-                                    if(scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop) && itemIndex) {
+                                    if(isFloor || scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop) && itemIndex) {
                                         itemIndex--;
                                     }
                                     break;

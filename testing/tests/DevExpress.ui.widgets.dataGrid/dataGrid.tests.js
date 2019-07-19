@@ -431,6 +431,79 @@ QUnit.test("Scroll position after grouping when RTL", function(assert) {
     });
 });
 
+QUnit.test("Should not cut border of selected cell by 'Add row' (T748046)", function(assert) {
+    // arrange
+    var rowsViewPosition,
+        firstCellPosition,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            width: 400,
+            height: 200,
+            showBorders: true,
+            editing: {
+                mode: "cell",
+                allowAdding: true
+            },
+            dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
+        }),
+        scrollable;
+
+    clock.tick();
+    scrollable = $(".dx-scrollable").dxScrollable("instance");
+
+    scrollable.scrollTo({ y: 5 });
+    clock.tick();
+
+    // act
+    dataGrid.addRow();
+    clock.tick();
+
+    rowsViewPosition = dataGrid.getView("rowsView").element()[0].getBoundingClientRect();
+    firstCellPosition = dataGrid.getCellElement(0, 0).getBoundingClientRect();
+
+    // assert
+    assert.equal(firstCellPosition.top - rowsViewPosition.top, 1, "first row has zero top offset");
+
+    clock.restore();
+});
+
+QUnit.test("Added row should be scrolled to the top of the grid (T748046)", function(assert) {
+    // arrange
+    var rowsViewPosition,
+        firstCellPosition,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            width: 400,
+            height: 200,
+            showBorders: true,
+            showRowLines: true,
+            editing: {
+                mode: "cell",
+                allowAdding: true
+            },
+            dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
+        }),
+        scrollable;
+
+    clock.tick();
+    scrollable = $(".dx-scrollable").dxScrollable("instance");
+
+    scrollable.scrollTo({ y: 20 });
+    clock.tick();
+
+    // act
+    dataGrid.addRow();
+    clock.tick();
+
+    rowsViewPosition = dataGrid.getView("rowsView").element()[0].getBoundingClientRect();
+    firstCellPosition = dataGrid.getCellElement(0, 0).getBoundingClientRect();
+
+    // assert
+    assert.equal(firstCellPosition.top - rowsViewPosition.top, 1, "first row has zero top offset");
+
+    clock.restore();
+});
+
 QUnit.test("Scroller state", function(assert) {
     var dataGrid = createDataGrid({ width: 120, height: 230 });
     assert.ok(dataGrid);
