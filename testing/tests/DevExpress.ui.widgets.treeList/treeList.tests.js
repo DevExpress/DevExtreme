@@ -1237,3 +1237,61 @@ QUnit.test("Should not generate exception when selection mode is multiple and fo
     // assert
     assert.ok(true, "No exceptions");
 });
+
+QUnit.module("Scroll", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+// T757537
+QUnit.test("TreeList should not hang when scrolling", function(assert) {
+    // arrange
+    var scrollable,
+        contentReadySpy = sinon.spy(),
+        treeList = createTreeList({
+            dataSource: [
+                { id: 1, parentId: 0 },
+                { id: 2, parentId: 0 },
+                { id: 3, parentId: 0 },
+                { id: 4, parentId: 0 },
+                { id: 5, parentId: 0 },
+                { id: 6, parentId: 0 },
+                { id: 7, parentId: 0 },
+                { id: 8, parentId: 0 },
+                { id: 9, parentId: 0 },
+                { id: 10, parentId: 0 },
+                { id: 11, parentId: 0 },
+                { id: 12, parentId: 0 },
+                { id: 13, parentId: 0 },
+                { id: 14, parentId: 0 },
+                { id: 15, parentId: 0 }
+            ],
+            paging: {
+                pageSize: 5
+            },
+            height: 200,
+            columnAutoWidth: true,
+            onContentReady: contentReadySpy
+        }),
+        done = assert.async();
+
+    this.clock.tick(100);
+    this.clock.restore();
+    scrollable = treeList.getScrollable();
+    contentReadySpy.reset();
+
+    // act
+    scrollable.scrollTo({ y: 200 });
+    scrollable.scrollTo({ y: 500 });
+
+    setTimeout(function() {
+        // assert
+        assert.strictEqual(treeList.pageIndex(), 2, "page index");
+        assert.strictEqual(contentReadySpy.callCount, 3, "onContentReady");
+        done();
+    }, 1000);
+});
