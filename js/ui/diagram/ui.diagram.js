@@ -833,9 +833,6 @@ class Diagram extends Widget {
             case "toolbox":
                 this._invalidateLeftPanel();
                 break;
-            case "toolbar":
-                this._invalidate();
-                break;
             case "contextMenu":
                 this._invalidate();
                 break;
