@@ -49,10 +49,16 @@ function generateHasKeyCache(keyInfo, array) {
     if(keyInfo.key() && !array._hasKeyMap) {
         var hasKeyMap = {};
         for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
-            hasKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = true;
+            hasKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = array[i];
         }
 
         array._hasKeyMap = hasKeyMap;
+    }
+}
+
+function getCacheValue(array, key) {
+    if(array._hasKeyMap) {
+        return array._hasKeyMap[JSON.stringify(key)];
     }
 }
 
@@ -64,9 +70,9 @@ function getHasKeyCacheValue(array, key) {
     return true;
 }
 
-function setHasKeyCacheValue(array, key) {
+function setHasKeyCacheValue(array, key, data) {
     if(array._hasKeyMap) {
-        array._hasKeyMap[JSON.stringify(key)] = true;
+        array._hasKeyMap[JSON.stringify(key)] = data;
     }
 }
 
@@ -94,12 +100,14 @@ function update(keyInfo, array, key, data, isBatch) {
             return !isBatch && rejectedPromise(errors.Error("E4017"));
         }
 
-        let index = indexByKey(keyInfo, array, key);
-        if(index < 0) {
-            return !isBatch && rejectedPromise(errors.Error("E4009"));
+        target = getCacheValue(array, key);
+        if(!target) {
+            let index = indexByKey(keyInfo, array, key);
+            if(index < 0) {
+                return !isBatch && rejectedPromise(errors.Error("E4009"));
+            }
+            target = array[index];
         }
-
-        target = array[index];
     } else {
         target = key;
     }
@@ -142,7 +150,7 @@ function insert(keyInfo, array, data, index, isBatch) {
         array.push(obj);
     }
 
-    setHasKeyCacheValue(array, keyValue);
+    setHasKeyCacheValue(array, keyValue, obj);
 
     if(!isBatch) {
         return trivialPromise(config().useLegacyStoreResult ? data : obj, keyValue);
