@@ -57,7 +57,9 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_CONTENT_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        this._renderLeftPanel($contentWrapper);
+        if(this.option("toolbox.visible")) {
+            this._renderLeftPanel($contentWrapper);
+        }
 
         const $drawerWrapper = $("<div>")
             .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
@@ -72,7 +74,9 @@ class Diagram extends Widget {
 
         this._renderRightPanel($drawer);
 
-        this._renderContextMenu($content);
+        if(this.option("contextMenu.enabled")) {
+            this._renderContextMenu($content);
+        }
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
     }
@@ -93,7 +97,7 @@ class Diagram extends Widget {
             .appendTo($parent);
 
         this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
-            toolboxData: this._getToolboxData(),
+            toolboxGroups: this._getToolboxGroups(),
             disabled: this.option("readOnly"),
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
@@ -128,7 +132,7 @@ class Diagram extends Widget {
     _invalidateLeftPanel() {
         if(this._leftPanel) {
             this._leftPanel.option({
-                toolboxData: this._getToolboxData()
+                toolboxGroups: this._getToolboxGroups()
             });
         }
     }
@@ -318,12 +322,12 @@ class Diagram extends Widget {
     _getCustomShapes() {
         return this.option("customShapes") || [];
     }
-    _getToolboxData() {
-        var toolbox = this.option("toolbox");
-        if(!toolbox || !toolbox.length) {
-            toolbox = DiagramToolbox.createDefault();
+    _getToolboxGroups() {
+        var groups = this.option("toolbox.groups");
+        if(!groups) {
+            groups = DiagramToolbox.createDefaultGroups();
         }
-        return toolbox;
+        return groups;
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
@@ -342,11 +346,11 @@ class Diagram extends Widget {
                         type: s.type,
                         baseType: s.baseType,
                         title: s.title,
-                        svgUrl: s.svgUrl,
-                        svgLeft: s.svgLeft,
-                        svgTop: s.svgTop,
-                        svgWidth: s.svgWidth,
-                        svgHeight: s.svgHeight,
+                        svgUrl: s.backgroundImageUrl,
+                        svgLeft: s.backgroundImageLeft,
+                        svgTop: s.backgroundImageTop,
+                        svgWidth: s.backgroundImageWidth,
+                        svgHeight: s.backgroundImageHeight,
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
                         defaultText: s.defaultText,
@@ -580,30 +584,30 @@ class Diagram extends Widget {
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.baseType
-                * @type String
+                * @type Enums.DiagramShapeType|String
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.title
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.svgUrl
+                * @name dxDiagramOptions.customShapes.backgroundImageUrl
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.svgLeft
+                * @name dxDiagramOptions.customShapes.backgroundImageLeft
                 * @type Number
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.svgTop
+                * @name dxDiagramOptions.customShapes.backgroundImageTop
                 * @type Number
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.svgWidth
+                * @name dxDiagramOptions.customShapes.backgroundImageWidth
                 * @type Number
                 */
                 /**
-                * @name dxDiagramOptions.customShapes.svgHeight
+                * @name dxDiagramOptions.customShapes.backgroundImageHeight
                 * @type Number
                 */
                 /**
@@ -677,37 +681,61 @@ class Diagram extends Widget {
             ],
             /**
             * @name dxDiagramOptions.toolbox
-            * @type Array<Object>
-            * @default []
+            * @type Object
+            * @default {}
             */
-            toolbox: [
+            toolbox: {
                 /**
-                * @name dxDiagramOptions.toolbox.category
+                * @name dxDiagramOptions.toolbox.visible
+                * @type boolean
+                * @default true
+                */
+                visible: true,
+                /**
+                * @name dxDiagramOptions.toolbox.groups
+                * @type Array<Object>|Array<Enums.DiagramShapeCategory>
+                * @default undefined
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.groups.category
+                * @type Enums.DiagramShapeCategory|String
+                */
+                /**
+                * @name dxDiagramOptions.toolbox.groups.title
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.toolbox.title
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.toolbox.style
+                * @name dxDiagramOptions.toolbox.groups.style
                 * @type Enums.DiagramToolboxStyle
                 */
                 /**
-                * @name dxDiagramOptions.toolbox.expanded
+                * @name dxDiagramOptions.toolbox.groups.expanded
                 * @type Boolean
                 */
                 /**
-                * @name dxDiagramOptions.toolbox.shapes
-                * @type Array<String>
+                * @name dxDiagramOptions.toolbox.groups.shapes
+                * @type Array<Enums.DiagramShapeType>|Array<String>
                 */
-            ],
+            },
+            /**
+            * @name dxDiagramOptions.contextMenu
+            * @type Object
+            * @default {}
+            */
+            contextMenu: {
+                /**
+                * @name dxDiagramOptions.contextMenu.enabled
+                * @type boolean
+                * @default true
+                */
+                enabled: true,
+            },
 
             /**
              * @name dxDiagramOptions.export
              * @type object
              */
-            "export": {
+            export: {
                 /**
                  * @name dxDiagramOptions.export.fileName
                  * @type string
@@ -804,6 +832,9 @@ class Diagram extends Widget {
                 break;
             case "toolbox":
                 this._invalidateLeftPanel();
+                break;
+            case "contextMenu":
+                this._invalidate();
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();

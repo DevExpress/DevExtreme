@@ -15,6 +15,35 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return [
             {
+                widget: "dxButton",
+                icon: "export",
+                text: "Export",
+                items: [
+                    {
+                        command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to SVG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to PNG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
+                        }
+                    },
+                    {
+                        command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
+                        text: "Export to JPEG",
+                        getParameter: (widget) => {
+                            return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
+                        }
+                    }
+                ]
+            },
+            SEPARATOR,
+            {
                 command: DiagramCommand.Undo,
                 hint: 'Undo',
                 icon: "undo",
@@ -140,34 +169,6 @@ const DiagramCommands = {
             SEPARATOR,
             {
                 widget: "dxButton",
-                icon: "export",
-                text: "Export",
-                items: [
-                    {
-                        command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
-                        text: "Export to SVG",
-                        getParameter: (widget) => {
-                            return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
-                        }
-                    },
-                    {
-                        command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
-                        text: "Export to PNG",
-                        getParameter: (widget) => {
-                            return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
-                        }
-                    },
-                    {
-                        command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
-                        text: "Export to JPEG",
-                        getParameter: (widget) => {
-                            return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
-                        }
-                    }
-                ]
-            },
-            {
-                widget: "dxButton",
                 text: "Auto Layout",
                 showText: "always",
                 items: [
@@ -187,6 +188,23 @@ const DiagramCommands = {
                     }
                 ]
             },
+            SEPARATOR,
+            {
+                widget: "text",
+                text: "Zoom:"
+            },
+            {
+                command: DiagramCommand.ZoomLevel,
+                widget: "dxSelectBox",
+                text: "Zoom Level",
+                cssClass: CSS_CLASSES.SMALL_SELECT
+            },
+            {
+                command: DiagramCommand.ToggleAutoZoom,
+                text: "Auto",
+                widget: "dxCheckBox"
+            },
+            SEPARATOR,
             {
                 command: DiagramCommand.Fullscreen,
                 hint: "Fullscreen",
@@ -200,7 +218,7 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return [
             {
-                command: DiagramCommand.Units,
+                command: DiagramCommand.ViewUnits,
                 text: "Units",
                 widget: "dxSelectBox"
             },
@@ -237,12 +255,6 @@ const DiagramCommands = {
                 command: DiagramCommand.GridSize,
                 text: "Grid Size",
                 widget: "dxSelectBox"
-            },
-            {
-                command: DiagramCommand.ZoomLevel,
-                text: "Zoom Level",
-                widget: "dxSelectBox",
-                beginGroup: true
             }
         ];
     },
