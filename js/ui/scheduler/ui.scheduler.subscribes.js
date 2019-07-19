@@ -321,8 +321,8 @@ const subscribes = {
         return cellWidth;
     },
 
-    getEndDate: function(appointmentData) {
-        return this._getEndDate(appointmentData);
+    getEndDate: function(appointmentData, skipNormalize) {
+        return this._getEndDate(appointmentData, skipNormalize);
     },
 
     getRenderingStrategy: function() {
@@ -441,9 +441,13 @@ const subscribes = {
     updateAppointmentEndDate: function(options) {
         let endDate = new Date(options.endDate),
             endDayHour = this._getCurrentViewOption("endDayHour"),
+            startDayHour = this._getCurrentViewOption("startDayHour"),
             updatedEndDate = endDate;
 
         if(endDate.getHours() >= endDayHour) {
+            updatedEndDate.setHours(endDayHour, 0, 0, 0);
+        } else if(startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60))) {
+            updatedEndDate = new Date(updatedEndDate.getTime() - toMs("day"));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
         options.callback(updatedEndDate);
