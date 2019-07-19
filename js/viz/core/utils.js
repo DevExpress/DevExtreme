@@ -28,6 +28,7 @@ var cosFunc = Math.cos,
     _NaN = NaN;
 
 const { adjust, sign } = mathUtils;
+const PANE_PADDING = 10;
 
 var getLog = function(value, base) {
     if(!value) {
@@ -353,7 +354,7 @@ extend(exports, {
             weightSum += pane.weight;
         });
         var distributedSpace = 0,
-            padding = panes.padding || 10,
+            padding = PANE_PADDING,
             paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom,
             oneWeight = (paneSpace - padding * (panes.length - 1)) / weightSum,
             startName = rotated ? "left" : "top",
@@ -563,3 +564,4 @@ exports.getPower = getPower;
 
 exports.rotateBBox = rotateBBox;
 exports.normalizeBBox = normalizeBBox;
+exports.PANE_PADDING = PANE_PADDING;
