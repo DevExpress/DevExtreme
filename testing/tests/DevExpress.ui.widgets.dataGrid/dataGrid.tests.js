@@ -6279,20 +6279,15 @@ QUnit.test("ColumnChooser's treeView get correct default config (without checkbo
 
 QUnit.test("Rows after push are showed correctly when virtual scrolling and grouping are enabled", function(assert) {
     // arrange
-    this.clock = sinon.useFakeTimers();
+    var clock = sinon.useFakeTimers();
     var data = [];
     for(let i = 0; i < 25; i++) {
         data.push({ id: i, field: 123 });
     }
-    var dataSource = new DataSource({
-        store: new ArrayStore({
-            data: data,
-            key: "id"
-        })
-    });
 
-    createDataGrid({
-        dataSource: dataSource,
+    var dataGrid = createDataGrid({
+        dataSource: data,
+        keyExpr: "id",
         height: 800,
         scrolling: {
             mode: "virtual"
@@ -6305,28 +6300,16 @@ QUnit.test("Rows after push are showed correctly when virtual scrolling and grou
         }]
     });
 
-    this.clock.tick(500);
-
-    // assert
-    assert.equal($(".dx-row").length, 52, "all rows count");
-    assert.equal($(".dx-row.dx-data-row.dx-column-lines").length, 25, "data rows count");
-    assert.equal($(".dx-row.dx-column-lines.dx-group-row").length, 25, "group rows count");
-    assert.equal($(".dx-row.dx-virtual-row.dx-column-lines").length, 0, "no virtual rows");
+    clock.tick();
 
     // act
-    setTimeout(() => {
-        dataSource.store().push([{ type: "update", key: 1, data: { id: 1, field: 125 } }]);
-    }, 1000);
+    dataGrid.getDataSource().store().push([{ type: "update", key: 1, data: { id: 1, field: 125 } }]);
 
-    this.clock.tick(1000);
-
+    clock.tick();
     // assert
-    assert.equal($(".dx-row").length, 52, "all rows count");
-    assert.equal($(".dx-row.dx-data-row.dx-column-lines").length, 25, "data rows count");
-    assert.equal($(".dx-row.dx-column-lines.dx-group-row").length, 25, "group rows count");
-    assert.equal($(".dx-row.dx-virtual-row.dx-column-lines").length, 0, "no virtual rows");
+    assert.equal($(dataGrid.getRowElement(0)).position().top, 0, "first row position");
 
-    this.clock.restore();
+    clock.restore();
 });
 
 // T756338
@@ -6340,31 +6323,25 @@ QUnit.test("keyOf should not be called too often after push with row updates", f
     });
 
     createDataGrid({
-        dataSource: new DataSource({
-            store: arrayStore
-        }),
-        height: 800,
-        scrolling: {
-            mode: "virtual"
-        }
+        dataSource: arrayStore
     });
 
     var keyOfSpy = sinon.spy(arrayStore, "keyOf");
 
-    this.clock.tick(500);
+    this.clock.tick();
 
     // assert
     assert.equal(keyOfSpy.callCount, 5, "keyOf call count");
 
     // act
-    setTimeout(() => {
-        arrayStore.push([{ type: "update", key: 1, data: { id: 1 } }]);
-    }, 1000);
+    for(let i = 0; i < 5; i++) {
+        arrayStore.push([{ type: "update", key: i, data: { id: i } }]);
+    }
 
-    this.clock.tick(1000);
+    this.clock.tick();
 
     // assert
-    assert.equal(keyOfSpy.callCount, 35, "keyOf call count");
+    assert.equal(keyOfSpy.callCount, 55, "keyOf call count");
 
     this.clock.restore();
 });
