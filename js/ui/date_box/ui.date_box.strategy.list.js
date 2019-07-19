@@ -198,7 +198,7 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     _getBoundaryDate: function(boundary) {
         var boundaryValue = BOUNDARY_VALUES[boundary],
-            currentValue = this.dateBox.dateOption("value") || new Date();
+            currentValue = new Date(this.dateBox.dateOption("value"));
 
         return new Date(
             currentValue.getFullYear(),
