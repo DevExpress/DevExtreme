@@ -314,7 +314,7 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
 
 [true, false, undefined].forEach((isToolbarDisabled) => {
     [true, false, undefined].forEach((isButtonDisabled) => {
-        QUnit.test(`Save disabled state for nested components on initialize, toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled}`, function(assert) {
+        QUnit.test(`new dxToolbar({toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled})`, function(assert) {
             this.element.dxToolbar({
                 disabled: isToolbarDisabled,
                 items: [{
@@ -330,7 +330,7 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
             assert.strictEqual(this.element.dxToolbar("option", "disabled"), isToolbarDisabled, "toolbar.disabled");
         });
 
-        QUnit.test(`Save disabled state for nested components after initialize, toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled}`, function(assert) {
+        QUnit.test(`new dxToolbar({toolbar.disabled: undef, button.disabled: undef}), toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled}`, function(assert) {
             this.element.dxToolbar({
                 items: [{
                     location: 'before',
@@ -347,7 +347,7 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
             assert.strictEqual(this.element.dxToolbar("option", "disabled"), isToolbarDisabled, "toolbar.disabled");
         });
 
-        QUnit.test(`Save disabled state for nested components after initialize, button.disabled: ${isButtonDisabled}, toolbar.disabled: ${isToolbarDisabled}`, function(assert) {
+        QUnit.test(`new dxToolbar({toolbar.disabled: undef, button.disabled: undef}), button.disabled: ${isButtonDisabled}, toolbar.disabled: ${isToolbarDisabled}`, function(assert) {
             this.element.dxToolbar({
                 items: [{
                     location: 'before',

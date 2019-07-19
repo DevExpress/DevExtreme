@@ -270,7 +270,7 @@ var DOMComponent = Component.inherit({
         this.$element().toggleClass(RTL_DIRECTION_CLASS, rtl);
     },
 
-    _getSyncOptions: function() {
+    _getCreateComponentSynchronizableOptions: function() {
         return ["rtlEnabled", "disabled"];
     },
 
@@ -279,7 +279,7 @@ var DOMComponent = Component.inherit({
 
         config = config || {};
 
-        var synchronizableOptions = commonUtils.grep(this._getSyncOptions(), function(value) {
+        var synchronizableOptions = commonUtils.grep(this._getCreateComponentSynchronizableOptions(), function(value) {
             return !(value in config);
         });
 

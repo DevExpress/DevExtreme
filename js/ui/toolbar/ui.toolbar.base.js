@@ -52,7 +52,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     * @type object
     */
 
-    _getSyncOptions: function() {
+    _getCreateComponentSynchronizableOptions: function() {
         return ["rtlEnabled"];
     },
 
