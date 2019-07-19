@@ -1,23 +1,14 @@
 const DiagramToolbox = {
-    createDefault: function() {
-        return [
-            {
-                category: "general",
-                title: 'General'
-            },
-            {
-                category: "flowchart",
-                title: 'Flow Chart'
-            },
-            {
-                category: "orgChart",
-                title: 'Org Chart'
-            },
-            {
-                category: "containers",
-                title: 'Containers'
-            }
-        ];
+    groups: {
+        "general": { category: "general", title: 'General' },
+        "flowchart": { category: "flowchart", title: 'Flowchart' },
+        "orgChart": { category: "orgChart", title: 'Org Chart' },
+        "containers": { category: "containers", title: 'Containers' },
+        "custom": { category: "custom", title: 'Custom' }
+    },
+
+    createDefaultGroups: function() {
+        return [ this.groups["general"], this.groups["flowchart"], this.groups["orgChart"], this.groups["containers"] ];
     }
 };
 
