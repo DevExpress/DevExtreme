@@ -39,8 +39,9 @@ class DiagramRightPanel extends DiagramPanel {
         });
     }
     _renderOptions($container) {
+        var commands = DiagramCommands.getPropertyPanelCommands(this.option("commandGroups"));
         this._formInstance = this._createComponent($container, Form, {
-            items: DiagramCommands.getOptions().map(item => {
+            items: commands.map(item => {
                 return extend(true, {
                     editorType: item.widget,
                     dataField: item.command.toString(),
@@ -119,7 +120,7 @@ class DiagramRightPanel extends DiagramPanel {
 
 class OptionsDiagramBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getOptions().map(c => c.command);
+        return DiagramCommands.getPropertyPanelCommands().map(c => c.command);
     }
     setItemValue(key, value) {
         this._owner._setItemValue(key, value);

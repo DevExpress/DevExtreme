@@ -1,7 +1,6 @@
 import $ from "../../core/renderer";
 
 import DiagramPanel from "./diagram.panel";
-import DiagramToolbox from "./ui.diagram.toolbox";
 import Accordion from "../accordion";
 import ScrollView from "../scroll_view";
 import { Deferred } from "../../core/utils/deferred";
@@ -31,11 +30,8 @@ class DiagramLeftPanel extends DiagramPanel {
     _getAccordionDataSource() {
         var result = [];
         for(var i = 0; i < this._toolboxGroups.length; i++) {
-            var simpleCategory = typeof this._toolboxGroups[i] === "string";
-            var category = simpleCategory ? this._toolboxGroups[i] : this._toolboxGroups[i].category;
+            var category = this._toolboxGroups[i].category;
             var title = this._toolboxGroups[i].title;
-            if(!title) title = DiagramToolbox.groups[category] && DiagramToolbox.groups[category].title;
-            if(!title) title = category;
             var groupObj = {
                 category,
                 title: title || category,

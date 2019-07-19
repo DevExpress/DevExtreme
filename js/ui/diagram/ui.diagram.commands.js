@@ -190,22 +190,6 @@ const DiagramCommands = {
             },
             SEPARATOR,
             {
-                widget: "text",
-                text: "Zoom:"
-            },
-            {
-                command: DiagramCommand.ZoomLevel,
-                widget: "dxSelectBox",
-                text: "Zoom Level",
-                cssClass: CSS_CLASSES.SMALL_SELECT
-            },
-            {
-                command: DiagramCommand.ToggleAutoZoom,
-                text: "Auto",
-                widget: "dxCheckBox"
-            },
-            SEPARATOR,
-            {
                 command: DiagramCommand.Fullscreen,
                 hint: "Fullscreen",
                 text: "Fullscreen",
@@ -214,93 +198,164 @@ const DiagramCommands = {
             }
         ];
     },
-    getOptions: function() {
+    getAllPropertyPanelCommands: function() {
         const { DiagramCommand } = getDiagram();
+        return this.propertyPanelCommands ||
+            (this.propertyPanelCommands = {
+                units: {
+                    command: DiagramCommand.ViewUnits,
+                    text: "Units",
+                    widget: "dxSelectBox"
+                },
+                pageSize: {
+                    command: DiagramCommand.PageSize,
+                    text: "Page Size",
+                    widget: "dxSelectBox",
+                    getValue: (v) => JSON.parse(v),
+                    setValue: (v) => JSON.stringify(v)
+                },
+                pageLandscape: {
+                    command: DiagramCommand.PageLandscape,
+                    text: "Page Landscape",
+                    widget: "dxCheckBox"
+                },
+                pageColor: {
+                    command: DiagramCommand.PageColor,
+                    text: "Page Color",
+                    widget: "dxColorBox",
+                },
+                showGrid: {
+                    command: DiagramCommand.ShowGrid,
+                    text: "Show Grid",
+                    widget: "dxCheckBox",
+                },
+                snapToGrid: {
+                    command: DiagramCommand.SnapToGrid,
+                    text: "Snap to Grid",
+                    widget: "dxCheckBox"
+                },
+                gridSize: {
+                    command: DiagramCommand.GridSize,
+                    text: "Grid Size",
+                    widget: "dxSelectBox"
+                },
+                zoomLevel: {
+                    command: DiagramCommand.ZoomLevel,
+                    widget: "dxSelectBox",
+                    text: "Zoom Level"
+                },
+                autoZoom: {
+                    command: DiagramCommand.ToggleAutoZoom,
+                    text: "Auto Zoom",
+                    widget: "dxCheckBox"
+                },
+            });
+    },
+    getPropertyPanelCommandGroups: function(commandGroups) {
+        var commands = this.getAllPropertyPanelCommands();
+        if(commandGroups) {
+            return commandGroups.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
+        }
         return [
             {
-                command: DiagramCommand.ViewUnits,
-                text: "Units",
-                widget: "dxSelectBox"
+                commands: [
+                    commands["units"]
+                ]
             },
             {
-                command: DiagramCommand.PageSize,
-                text: "Page Size",
-                widget: "dxSelectBox",
-                getValue: (v) => JSON.parse(v),
-                setValue: (v) => JSON.stringify(v)
+                commands: [
+                    commands["pageSize"],
+                    commands["pageLandscape"],
+                    commands["pageColor"]
+                ]
             },
             {
-                command: DiagramCommand.PageLandscape,
-                text: "Page Landscape",
-                widget: "dxCheckBox"
+                commands: [
+                    commands["showGrid"],
+                    commands["snapToGrid"],
+                    commands["gridSize"]
+                ]
             },
             {
-                command: DiagramCommand.PageColor,
-                text: "Page Color",
-                widget: "dxColorBox",
-                beginGroup: true
+                commands: [
+                    commands["zoomLevel"],
+                    commands["autoZoom"]
+                ]
             },
-            {
-                command: DiagramCommand.ShowGrid,
-                text: "Show Grid",
-                widget: "dxCheckBox",
-                beginGroup: true
-            },
-            {
-                command: DiagramCommand.SnapToGrid,
-                text: "Snap to Grid",
-                widget: "dxCheckBox"
-            },
-            {
-                command: DiagramCommand.GridSize,
-                text: "Grid Size",
-                widget: "dxSelectBox"
-            }
         ];
     },
-    getContextMenu: function() {
-        const { DiagramCommand } = getDiagram();
-        return [
-            {
-                command: DiagramCommand.Cut,
-                text: "Cut"
-            },
-            {
-                command: DiagramCommand.Copy,
-                text: "Copy"
-            },
-            {
-                command: DiagramCommand.Paste,
-                text: "Paste"
-            },
-            {
-                command: DiagramCommand.SelectAll,
-                text: "Select All",
-                beginGroup: true
-            },
-            {
-                command: DiagramCommand.Delete,
-                text: "Delete",
-                beginGroup: true
-            },
-            {
-                command: DiagramCommand.BringToFront,
-                text: "Bring to Front",
-                beginGroup: true
-            },
-            {
-                command: DiagramCommand.SendToBack,
-                text: "Send to Back"
-            },
-            {
-                command: DiagramCommand.Lock,
-                text: "Lock",
-                beginGroup: true
-            },
-            {
-                command: DiagramCommand.Unlock,
-                text: "Unlock"
+    getPropertyPanelCommands: function(commandGroups) {
+        var groups = DiagramCommands.getPropertyPanelCommandGroups(commandGroups);
+        var commands = [];
+        groups.forEach(function(g) {
+            if(commands.length && g.commands.length) {
+                g.commands[0].beginGroup = true;
             }
+            commands = commands.concat(g.commands);
+        });
+        return commands;
+    },
+    getAllContextMenuCommands: function() {
+        const { DiagramCommand } = getDiagram();
+        return this.contextMenuCommands ||
+            (this.contextMenuCommands = {
+                cut: {
+                    command: DiagramCommand.Cut,
+                    text: "Cut"
+                },
+                copy: {
+                    command: DiagramCommand.Copy,
+                    text: "Copy"
+                },
+                paste: {
+                    command: DiagramCommand.Paste,
+                    text: "Paste"
+                },
+                selectAll: {
+                    command: DiagramCommand.SelectAll,
+                    text: "Select All",
+                    beginGroup: true
+                },
+                delete: {
+                    command: DiagramCommand.Delete,
+                    text: "Delete",
+                    beginGroup: true
+                },
+                bringToFront: {
+                    command: DiagramCommand.BringToFront,
+                    text: "Bring to Front",
+                    beginGroup: true
+                },
+                sendToBack: {
+                    command: DiagramCommand.SendToBack,
+                    text: "Send to Back"
+                },
+                lock: {
+                    command: DiagramCommand.Lock,
+                    text: "Lock",
+                    beginGroup: true
+                },
+                unlock: {
+                    command: DiagramCommand.Unlock,
+                    text: "Unlock"
+                }
+            });
+    },
+    getContextMenuCommands: function(commandNames) {
+        var commands = this.getAllContextMenuCommands();
+        if(commandNames) {
+            return commandNames.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
+        }
+        return [
+            commands["cut"],
+            commands["copy"],
+            commands["paste"],
+            commands["selectAll"],
+            commands["delete"],
+            commands["bringToFront"],
+            commands["sendToBack"],
+            commands["lock"],
+            commands["unlock"]
         ];
     },
     _exportTo(widget, dataURI, format, mimeString) {
