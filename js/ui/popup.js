@@ -627,8 +627,10 @@ var Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function() {
-        this._resetContentHeight();
+    _renderGeometryImpl: function(isDimensionChanged) {
+        if(!isDimensionChanged) {
+            this._resetContentHeight();
+        }
         this.callBase.apply(this, arguments);
         this._setContentHeight();
     },
