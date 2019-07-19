@@ -116,10 +116,15 @@ export default CollectionWidget.inherit({
         });
     },
 
-    _updateSelectedIndexAfterRemove: function(removeIndex) {
+    _updateSelectionAfterRemoveByChange: function(removeIndex) {
         var selectedIndex = this.option("selectedIndex");
+
         if(selectedIndex > removeIndex) {
             this.option("selectedIndex", selectedIndex - 1);
+        } else if(selectedIndex === removeIndex && this.option("selectedItems").length === 1) {
+            this.option("selectedItems", []);
+        } else {
+            this._normalizeSelectedItems();
         }
     },
 
@@ -133,9 +138,8 @@ export default CollectionWidget.inherit({
             this._waitDeletingPrepare($removedItemElement).done(()=>{
                 if(isPartialRefresh) {
                     this._updateIndicesAfterIndex(index - 1);
-                    this._afterItemElementDeleted($removedItemElement, deletedActionArgs, true);
-                    this._updateSelectedIndexAfterRemove(index);
-                    this._normalizeSelectedItems();
+                    this._updateSelectionAfterRemoveByChange(index);
+                    this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
                 } else {
                     this._deleteItemElementByIndex(index);
                     this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
