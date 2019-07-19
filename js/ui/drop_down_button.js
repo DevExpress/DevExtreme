@@ -21,7 +21,7 @@ const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
-const DX_BUTTON_CONTENT_CLASS = "dx-button-content";
+const DX_BUTTON_TEXT_CLASS = "dx-button-text";
 const DX_ICON_RIGHT_CLASS = "dx-icon-right";
 
 /**
@@ -386,7 +386,18 @@ let DropDownButton = Widget.inherit({
             width: this.option("width"),
             height: this.option("height"),
             stylingMode: this.option("stylingMode"),
-            selectionMode: "none"
+            selectionMode: "none",
+            buttonTemplate: ({ text, icon }, buttonContent) => {
+                if(this.option("splitButton") || !this.option("showArrowIcon")) {
+                    return "content";
+                }
+
+                const $firstIcon = getImageContainer(icon);
+                const $textContainer = text ? $("<span>").text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
+                const $secondIcon = getImageContainer("spindown").addClass(DX_ICON_RIGHT_CLASS);
+
+                $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
+            }
         }, this._getInnerOptionsCache("buttonGroupOptions"));
     },
 
@@ -411,13 +422,9 @@ let DropDownButton = Widget.inherit({
                 return this.$element().outerWidth();
             },
             closeOnOutsideClick: (e) => {
-                const $toggleButton = $(e.target).closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
-                if(!$toggleButton.length) {
-                    return true;
-                }
-
-                const $element = $toggleButton.closest(`.${DROP_DOWN_BUTTON_CLASS}`);
-                return $element.get(0) !== this.$element().get(0);
+                const $element = this.$element();
+                const $buttonClicked = $(e.target).closest(`.${DROP_DOWN_BUTTON_CLASS}`);
+                return !$buttonClicked.is($element);
             },
             showTitle: false,
             animation: {
@@ -485,21 +492,18 @@ let DropDownButton = Widget.inherit({
         this.$element().append($popup);
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
         this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
+        this._popup.on("hiding", this._popupHidingHandler.bind(this));
+        this._popup.on("showing", this._popupShowingHandler.bind(this));
         this._renderPopupContent();
         this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
     },
 
-    _renderAdditionalIcon() {
-        if(this.option("splitButton") || !this.option("showArrowIcon")) {
-            return;
-        }
+    _popupHidingHandler() {
+        this.option("opened", false);
+    },
 
-        const $firstButtonContent = this._buttonGroup.$element().find(`.${DX_BUTTON_CONTENT_CLASS}`).eq(0);
-        const $iconElement = getImageContainer("spindown");
-
-        $iconElement
-            .addClass(DX_ICON_RIGHT_CLASS)
-            .appendTo($firstButtonContent);
+    _popupShowingHandler() {
+        this.option("opened", true);
     },
 
     _renderButtonGroup() {
@@ -514,8 +518,6 @@ let DropDownButton = Widget.inherit({
         this._buttonGroup.registerKeyHandler("tab", this.close.bind(this));
         this._buttonGroup.registerKeyHandler("upArrow", this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler("escape", this._escHandler.bind(this));
-
-        this._renderAdditionalIcon();
 
         this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
     },
@@ -595,6 +597,13 @@ let DropDownButton = Widget.inherit({
         });
     },
 
+    _actionButtonOptionChanged({ name, value }) {
+        const newConfig = {};
+        newConfig[name] = value;
+        this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), newConfig));
+        this._popup && this._popup.repaint();
+    },
+
     _optionChanged(args) {
         const { name, value } = args;
         switch(args.name) {
@@ -637,22 +646,12 @@ let DropDownButton = Widget.inherit({
                 this._loadSelectedItem().done(this._updateActionButton.bind(this));
                 break;
             case "icon":
-                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
-                    icon: value
-                }));
-                this._renderAdditionalIcon();
-                break;
             case "text":
-                this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), {
-                    text: value
-                }));
-                this._renderAdditionalIcon();
+                this._actionButtonOptionChanged(args);
                 break;
             case "showArrowIcon":
-                if(!value) {
-                    this._buttonGroup.$element().find(`.${DX_ICON_RIGHT_CLASS}`).remove();
-                }
-                this._renderAdditionalIcon();
+                this._buttonGroup.repaint();
+                this._popup && this._popup.repaint();
                 break;
             case "stylingMode":
             case "width":
