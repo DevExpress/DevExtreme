@@ -22,6 +22,7 @@ const WIDGET_COMMANDS = [
 ];
 const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";
 const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-diagram-toolbar-menu-separator";
+const TOOLBAR_TEXT_CLASS = "dx-diagram-toolbar-text";
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
@@ -68,6 +69,14 @@ class DiagramToolbar extends DiagramPanel {
                 }
             };
         }
+        if(item.widget === "text") {
+            return {
+                template: (data, index, element) => {
+                    $(element).addClass(TOOLBAR_TEXT_CLASS);
+                    $(element).text(item.text);
+                }
+            };
+        }
         return {
             widget: item.widget || "dxButton",
             cssClass: item.cssClass,
@@ -94,14 +103,25 @@ class DiagramToolbar extends DiagramPanel {
     }
     _createSelectBoxItemOptions(hint, items, valueExpr, displayExpr) {
         let options = this._createSelectBoxBaseItemOptions(hint);
-        options = extend(true, options, {
-            options: {
-                items,
-                valueExpr,
-                displayExpr
-            }
-        });
-        const isSelectButton = items.every(i => i.icon !== undefined);
+        if(items) {
+            options = extend(true, options, {
+                options: {
+                    items,
+                    displayExpr,
+                    valueExpr
+                }
+            });
+        } else {
+            options = extend(true, options, {
+                options: {
+                    dataSource: items,
+                    displayExpr: "title",
+                    valueExpr: "value"
+                }
+            });
+        }
+
+        const isSelectButton = items && items.every(i => i.icon !== undefined);
         if(isSelectButton) {
             options = extend(true, options, {
                 options: {
@@ -155,6 +175,7 @@ class DiagramToolbar extends DiagramPanel {
         switch(item.widget) {
             case "dxSelectBox":
             case "dxColorBox":
+            case "dxCheckBox":
                 return {
                     options: {
                         onValueChanged: (e) => {
@@ -259,6 +280,13 @@ class DiagramToolbar extends DiagramPanel {
             this._updateLocked = false;
         }
     }
+    _setItemSubItems(command, items) {
+        this._updateLocked = true;
+        if(command in this._itemHelpers) {
+            this._itemHelpers[command].setItems(items);
+        }
+        this._updateLocked = false;
+    }
     _optionChanged(args) {
         switch(args.name) {
             case "onWidgetCommand":
@@ -304,6 +332,9 @@ class ToolbarDiagramBar extends DiagramBar {
     setEnabled(enabled) {
         this._owner._setEnabled(enabled);
     }
+    setItemSubItems(key, items) {
+        this._owner._setItemSubItems(key, items);
+    }
 }
 
 class ToolbarItemHelper {
@@ -318,6 +349,17 @@ class ToolbarItemHelper {
             this._widget.option("value", value);
         } else if(value !== undefined) {
             this._widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
+        }
+    }
+    setItems(items) {
+        if("items" in this._widget.option()) {
+            this._widget.option('items', items.map(item => {
+                var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
+                return {
+                    'value': value,
+                    'title': item.text
+                };
+            }));
         }
     }
 }

@@ -649,7 +649,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var $element = $(e.element),
             itemData = this._getItemData($element),
             startDate = this.invoke("getStartDate", itemData, true),
-            endDate = this.invoke("getEndDate", itemData);
+            endDate = this.invoke("getEndDate", itemData, true);
 
         var dateRange = this._getDateRange(e, startDate, endDate);
 

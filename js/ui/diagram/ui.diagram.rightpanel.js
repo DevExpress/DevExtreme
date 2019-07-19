@@ -25,7 +25,7 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         return [{
-            title: "Page Properties",
+            title: "Properties",
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
     }

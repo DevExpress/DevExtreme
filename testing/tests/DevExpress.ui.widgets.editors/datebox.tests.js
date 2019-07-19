@@ -3212,12 +3212,36 @@ QUnit.module("datebox w/ time list", {
 
     QUnit.test("list should have items if the 'min' option is specified (T395529)", (assert) => {
         this.dateBox.option({
-            min: new Date(2016, 5, 20),
+            min: new Date(new Date(null).setHours(15)),
             opened: true
         });
 
         const list = $(".dx-list").dxList("instance");
         assert.ok(list.option("items").length > 0, "list is not empty");
+    });
+
+    QUnit.test("selected date should be in 1970 when it was set from the null value", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: null
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), 1970, "year is correct");
+    });
+
+    QUnit.test("selected date should be in value year when value is specified", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: new Date(2018, 5, 6, 14, 12)
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), 2018, "year is correct");
     });
 
     QUnit.test("the value's date part should not be changed if editing input's text by keyboard (T395685)", (assert) => {
