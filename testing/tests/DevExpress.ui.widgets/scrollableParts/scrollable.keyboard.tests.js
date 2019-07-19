@@ -13,7 +13,16 @@ import {
 
 const SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
 
-QUnit.module("keyboard support");
+QUnit.module("keyboard support", {
+    beforeEach: function() {
+        var markup = '\
+            <div id="scrollable" style="height: 50px; width: 50px;">\
+                <div class="content1" style="height: 100px; width: 100px;"></div>\
+                <div class="content2"></div>\
+            </div>';
+        $("#qunit-fixture").html(markup);
+    }
+});
 
 QUnit.test("support arrow keys", function(assert) {
     if(devices.real().deviceType !== "desktop") {

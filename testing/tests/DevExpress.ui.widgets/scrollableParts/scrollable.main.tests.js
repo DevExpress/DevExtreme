@@ -28,6 +28,13 @@ import {
 
 var moduleConfig = {
     beforeEach: function() {
+        var markup = '\
+            <div id="scrollable" style="height: 50px; width: 50px;">\
+                <div class="content1" style="height: 100px; width: 100px;"></div>\
+                <div class="content2"></div>\
+            </div>';
+        $("#qunit-fixture").html(markup);
+
         this.clock = sinon.useFakeTimers();
         this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
         animationFrame.requestAnimationFrame = function(callback) {
@@ -295,45 +302,57 @@ QUnit.test("reset unused position after change direction (both)", function(asser
     assert.equal(scrollable.scrollTop(), 10, "top position was not reset after change direction");
 });
 
-QUnit.module("Hoverable interaction", () => {
-    [false, true].forEach((disabled) => {
-        [false, true].forEach((onInitialize) => {
-            ["vertical", "horizontal"].forEach((direction) => {
-                ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
-                    QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
-                        const $scrollable = $("#scrollable").dxScrollable({
-                            useNative: false,
-                            useSimulatedScrollbar: true,
-                            showScrollbar: showScrollbarMode,
-                            direction: direction,
-                            disabled: onInitialize ? disabled : false,
-                            scrollByThumb: true
+QUnit.module("Hoverable interaction",
+    {
+        beforeEach: () => {
+            var markup = '\
+            <div id="scrollable" style="height: 50px; width: 50px;">\
+                <div class="content1" style="height: 100px; width: 100px;"></div>\
+                <div class="content2"></div>\
+            </div>';
+            $("#qunit-fixture").html(markup);
+        }
+    },
+    () => {
+        [false, true].forEach((disabled) => {
+            [false, true].forEach((onInitialize) => {
+                ["vertical", "horizontal"].forEach((direction) => {
+                    ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
+                        QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
+                            const $scrollable = $("#scrollable").dxScrollable({
+                                useNative: false,
+                                useSimulatedScrollbar: true,
+                                showScrollbar: showScrollbarMode,
+                                direction: direction,
+                                disabled: onInitialize ? disabled : false,
+                                scrollByThumb: true
+                            });
+
+                            if(!onInitialize) {
+                                $scrollable.dxScrollable("instance").option("disabled", disabled);
+                            }
+
+                            const $scrollBar = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
+                            const scrollBar = Scrollbar.getInstance($scrollBar);
+
+                            const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
+
+                            assert.strictEqual(scrollBar.option("hoverStateEnabled"), isScrollbarHoverable, "scrollbar.hoverStateEnabled");
+                            assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                            assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, "scrollable-disabled-class");
+
+                            if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
+                                assert.ok(true, "Skip assert for Edge. The pointer-event property processed with a timeout");
+                            } else {
+                                assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                            }
                         });
-
-                        if(!onInitialize) {
-                            $scrollable.dxScrollable("instance").option("disabled", disabled);
-                        }
-
-                        const $scrollBar = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
-                        const scrollBar = Scrollbar.getInstance($scrollBar);
-
-                        const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
-
-                        assert.strictEqual(scrollBar.option("hoverStateEnabled"), isScrollbarHoverable, "scrollbar.hoverStateEnabled");
-                        assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
-                        assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, "scrollable-disabled-class");
-
-                        if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
-                            assert.ok(true, "Skip assert for Edge. The pointer-event property processed with a timeout");
-                        } else {
-                            assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
-                        }
                     });
                 });
             });
         });
-    });
-});
+    }
+);
 
 QUnit.module("initViewport integration", moduleConfig);
 
@@ -805,7 +824,16 @@ QUnit.testInActiveWindow("scrollable should not reset active element outside (B2
     }
 });
 
-QUnit.module("visibility events integration");
+QUnit.module("visibility events integration", {
+    beforeEach: () => {
+        var markup = '\
+        <div id="scrollable" style="height: 50px; width: 50px;">\
+            <div class="content1" style="height: 100px; width: 100px;"></div>\
+            <div class="content2"></div>\
+        </div>';
+        $("#qunit-fixture").html(markup);
+    }
+});
 
 QUnit.test("scroll should save position on dxhiding and restore on dxshown", function(assert) {
     var $scrollable = $("#scrollable");

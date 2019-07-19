@@ -18,6 +18,13 @@ const GESTURE_LOCK_KEY = "dxGestureLock";
 
 var moduleConfig = {
     beforeEach: function() {
+        var markup = '\
+            <div id="scrollable" style="height: 50px; width: 50px;">\
+                <div class="content1" style="height: 100px; width: 100px;"></div>\
+                <div class="content2"></div>\
+            </div>';
+        $("#qunit-fixture").html(markup);
+
         this.clock = sinon.useFakeTimers();
         this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
         animationFrame.requestAnimationFrame = function(callback) {
