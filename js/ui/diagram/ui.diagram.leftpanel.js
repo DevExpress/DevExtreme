@@ -90,7 +90,7 @@ class DiagramLeftPanel extends DiagramPanel {
             case "disabled":
                 this._accordionInstance.option('disabled', args.value);
                 break;
-            case "_toolboxGroups":
+            case "toolboxGroups":
                 this._toolboxGroups = this.option("_toolboxGroups") || [];
                 this._invalidate();
                 break;
