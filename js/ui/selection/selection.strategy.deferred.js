@@ -167,8 +167,8 @@ module.exports = SelectionStrategy.inherit({
                 removedFilterInfo = that._removeSameFilter(selectionFilter, filter, isDeselect),
                 rootFilterIndex = removedFilterInfo && removedFilterInfo.rootFilterIndex;
 
-            if(isSelectAll && rootFilterIndex >= 0) {
-                selectionFilter = selectionFilter.length > 1 ? selectionFilter[rootFilterIndex] : [];
+            if(isSelectAll && rootFilterIndex !== undefined) {
+                selectionFilter = rootFilterIndex >= 0 && selectionFilter.length > 1 ? selectionFilter[rootFilterIndex] : [];
             } else {
                 removedFilterInfo = that._removeSameFilter(selectionFilter, filter, !isDeselect);
                 lastOperation = removedFilterInfo && removedFilterInfo.lastRemoveOperation;
@@ -222,7 +222,7 @@ module.exports = SelectionStrategy.inherit({
 
             return {
                 lastRemoveOperation: lastRemoveOperation,
-                rootFilterIndex: hasRootFilterIndex ? rootFilterIndex : filterIndex
+                rootFilterIndex: hasRootFilterIndex ? rootFilterIndex : -1
             };
         } else {
             for(var i = 0; i < selectionFilter.length; i++) {

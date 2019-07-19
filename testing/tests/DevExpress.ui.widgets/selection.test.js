@@ -1423,6 +1423,22 @@ QUnit.test("selectAll after deselect one item", function(assert) {
     assert.strictEqual(selection.getSelectAllState(), true, "select all is true");
 });
 
+// T754974
+QUnit.test("selectAll after deselecting two items", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    // act
+    this.dataSource.filter(["age", ">", 15]);
+    selection.selectAll();
+    selection.changeItemSelection(1, { control: true });
+    selection.changeItemSelection(2, { control: true });
+    selection.selectAll();
+
+    // assert
+    assert.deepEqual(selection.selectionFilter(), ["age", ">", 15], "selection filter");
+    assert.strictEqual(selection.getSelectAllState(), true, "select all is true");
+});
+
 QUnit.test("Deselect one item after selectAll", function(assert) {
     var selection = this.createDeferredSelection(this.data);
 
