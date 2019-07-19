@@ -45,28 +45,34 @@ function getItems(keyInfo, items, key, groupCount) {
     return items;
 }
 
-function generateHasKeyCache(keyInfo, array) {
-    if(keyInfo.key() && !array._hasKeyMap) {
-        var hasKeyMap = {};
+function generateDataByKeyMap(keyInfo, array) {
+    if(keyInfo.key() && !array._dataByKeyMap) {
+        var dataByKeyMap = {};
         for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
-            hasKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = true;
+            dataByKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = array[i];
         }
 
-        array._hasKeyMap = hasKeyMap;
+        array._dataByKeyMap = dataByKeyMap;
+    }
+}
+
+function getCacheValue(array, key) {
+    if(array._dataByKeyMap) {
+        return array._dataByKeyMap[JSON.stringify(key)];
     }
 }
 
 function getHasKeyCacheValue(array, key) {
-    if(array._hasKeyMap) {
-        return array._hasKeyMap[JSON.stringify(key)];
+    if(array._dataByKeyMap) {
+        return array._dataByKeyMap[JSON.stringify(key)];
     }
 
     return true;
 }
 
-function setHasKeyCacheValue(array, key) {
-    if(array._hasKeyMap) {
-        array._hasKeyMap[JSON.stringify(key)] = true;
+function setDataByKeyMapValue(array, key, data) {
+    if(array._dataByKeyMap) {
+        array._dataByKeyMap[JSON.stringify(key)] = data;
     }
 }
 
@@ -74,7 +80,7 @@ function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
     batchData.forEach(item => {
         var items = item.type === "insert" ? array : getItems(keyInfo, array, item.key, groupCount);
 
-        generateHasKeyCache(keyInfo, items);
+        generateDataByKeyMap(keyInfo, items);
 
         switch(item.type) {
             case "update": update(keyInfo, items, item.key, item.data, true); break;
@@ -94,12 +100,14 @@ function update(keyInfo, array, key, data, isBatch) {
             return !isBatch && rejectedPromise(errors.Error("E4017"));
         }
 
-        let index = indexByKey(keyInfo, array, key);
-        if(index < 0) {
-            return !isBatch && rejectedPromise(errors.Error("E4009"));
+        target = getCacheValue(array, key);
+        if(!target) {
+            let index = indexByKey(keyInfo, array, key);
+            if(index < 0) {
+                return !isBatch && rejectedPromise(errors.Error("E4009"));
+            }
+            target = array[index];
         }
-
-        target = array[index];
     } else {
         target = key;
     }
@@ -142,7 +150,7 @@ function insert(keyInfo, array, data, index, isBatch) {
         array.push(obj);
     }
 
-    setHasKeyCacheValue(array, keyValue);
+    setDataByKeyMapValue(array, keyValue, obj);
 
     if(!isBatch) {
         return trivialPromise(config().useLegacyStoreResult ? data : obj, keyValue);

@@ -6277,6 +6277,75 @@ QUnit.test("ColumnChooser's treeView get correct default config (without checkbo
     assert.ok(!$overlayWrapper.find(".dx-checkbox").length, "There aren't checkboxes in columnChooser");
 });
 
+QUnit.test("Rows after push are showed correctly when virtual scrolling and grouping are enabled", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var data = [];
+    for(let i = 0; i < 25; i++) {
+        data.push({ id: i, field: 123 });
+    }
+
+    var dataGrid = createDataGrid({
+        dataSource: data,
+        keyExpr: "id",
+        height: 800,
+        scrolling: {
+            mode: "virtual"
+        },
+        columns: [{
+            dataField: "id",
+            groupIndex: 0
+        }, {
+            dataField: "field"
+        }]
+    });
+
+    clock.tick();
+
+    // act
+    dataGrid.getDataSource().store().push([{ type: "update", key: 1, data: { id: 1, field: 125 } }]);
+
+    clock.tick();
+    // assert
+    assert.equal($(dataGrid.getRowElement(0)).position().top, 0, "first row position");
+
+    clock.restore();
+});
+
+// T756338
+QUnit.test("keyOf should not be called too often after push with row updates", function(assert) {
+    // arrange
+    this.clock = sinon.useFakeTimers();
+
+    var arrayStore = new ArrayStore({
+        data: [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+        key: "id"
+    });
+
+    createDataGrid({
+        dataSource: arrayStore
+    });
+
+    var keyOfSpy = sinon.spy(arrayStore, "keyOf");
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(keyOfSpy.callCount, 5, "keyOf call count");
+
+    // act
+    for(let i = 0; i < 5; i++) {
+        arrayStore.push([{ type: "update", key: i, data: { id: i } }]);
+    }
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(keyOfSpy.callCount, 55, "keyOf call count");
+
+    this.clock.restore();
+});
+
 // T364210
 QUnit.test("Load count on start when EdmLiteral in calculatedFilterExpression is used and scrolling mode is virtual", function(assert) {
     var loadCallCount = 0,

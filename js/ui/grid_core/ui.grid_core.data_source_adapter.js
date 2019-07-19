@@ -162,7 +162,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
             this._cachedPagingData = undefined;
 
-            this.resetPagesCache();
+            this.resetPagesCache(true);
 
             if(this._cachedStoreData) {
                 arrayUtils.applyBatch(store, this._cachedStoreData, changes);
