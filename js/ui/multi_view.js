@@ -234,20 +234,10 @@ var MultiView = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _afterItemElementDeleted: function($item, deletedActionArgs, isPartialRefresh) {
+    _afterItemElementDeleted: function($item, deletedActionArgs) {
         this.callBase($item, deletedActionArgs);
         if(this._deferredItems) {
             this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
-            if(this.option("items") && !isPartialRefresh) {
-                for(var i = deletedActionArgs.itemIndex; i < this.option("items").length; i++) {
-                    var currentItem = this.option("items")[i];
-                    var $currentItem = this._findItemElementByItem(currentItem);
-                    if(!$currentItem.length) {
-                        break;
-                    }
-                    this._refreshItem($currentItem, currentItem);
-                }
-            }
         }
     },
 
