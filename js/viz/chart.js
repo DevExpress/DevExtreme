@@ -271,11 +271,50 @@ function shrinkCanvases(isRotated, canvases, verticalMargins, horizontalMargins)
         return pickMaxValue(getMargin(side, margins1, pane), getMargin(side, margins2, pane));
     }
 
-    for(var pane in canvases) {
-        canvases[pane].top = canvases[pane].originalTop + getMaxMargin("top", verticalMargins, horizontalMargins, pane);
-        canvases[pane].bottom = canvases[pane].originalBottom + getMaxMargin("bottom", verticalMargins, horizontalMargins, pane);
-        canvases[pane].left = canvases[pane].originalLeft + getMaxMargin("left", verticalMargins, horizontalMargins, pane);
-        canvases[pane].right = canvases[pane].originalRight + getMaxMargin("right", verticalMargins, horizontalMargins, pane);
+    const getOriginalField = field => `original${field[0].toUpperCase()}${field.slice(1)}`;
+
+    function shrink(canvases, paneNames, sizeField, startMargin, endMargin, oppositeMargins) {
+        paneNames = paneNames.sort((p1, p2) => canvases[p2][startMargin] - canvases[p1][startMargin]);
+        paneNames.forEach(pane => {
+            const canvas = canvases[pane];
+            oppositeMargins.forEach(margin => {
+                canvas[margin] = canvas[getOriginalField(margin)] + getMaxMargin(margin, verticalMargins, horizontalMargins, pane);
+            });
+        });
+
+        const firstPane = canvases[paneNames[0]];
+
+        const weights = paneNames.map((paneName) => {
+            const canvas = canvases[paneName];
+            const size = canvas[sizeField] - canvas[startMargin] - canvas[endMargin];
+            return size / canvas[sizeField];
+        });
+
+        const weightSum = weights.reduce((sum, weight) => sum += weight);
+        const normalizedWeights = weights.map(w => w / weightSum);
+
+        const emptySpace = paneNames.reduce((space, paneName) => {
+            space -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, paneName) + getMaxMargin(endMargin, verticalMargins, horizontalMargins, paneName);
+            return space;
+        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - vizUtils.PANE_PADDING * (paneNames.length - 1);
+
+        paneNames.reduce((offset, pane, index) => {
+            const canvas = canvases[pane];
+            offset -= getMaxMargin(endMargin, verticalMargins, horizontalMargins, pane);
+            canvas[endMargin] = firstPane[sizeField] - offset;
+            offset -= Math.floor(emptySpace * normalizedWeights[index]);
+            canvas[startMargin] = offset;
+            offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + vizUtils.PANE_PADDING;
+
+            return offset;
+        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)]);
+    }
+
+    const paneNames = Object.keys(canvases);
+    if(!isRotated) {
+        shrink(canvases, paneNames, "height", "top", "bottom", ["left", "right"]);
+    } else {
+        shrink(canvases, paneNames, "width", "left", "right", ["top", "bottom"]);
     }
 
     return canvases;
