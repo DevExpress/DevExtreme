@@ -262,49 +262,26 @@ var SchedulerTableCreator = {
         }
 
         var rows = [],
-            groupCount = arr.length,
-            maxCellCount = arr[groupCount - 1].length;
+            groupCount = arr.length;
 
-        for(i = 0; i < maxCellCount; i++) {
+        for(i = 0; i < groupCount; i++) {
             rows.push($("<div>").addClass(cssClasses.groupHeaderRowClass));
         }
 
         for(i = groupCount - 1; i >= 0; i--) {
-            var currentColumnLength = arr[i].length,
-                rowspan = maxCellCount / currentColumnLength;
-
+            var currentColumnLength = arr[i].length;
             for(var j = 0; j < currentColumnLength; j++) {
-                var currentRowIndex = j * rowspan,
-                    row = rows[currentRowIndex];
-
-                row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
+                rows[i].prepend(arr[i][j].element);
             }
         }
 
-        let result = $("<div>").addClass("dx-scheduler-flex-container").append(rows);
+        let result = $("<div>").addClass("dx-scheduler-group-flex-container").append(rows);
 
         return {
             elements: result,
             cellTemplates: cellTemplates
         };
     },
-
-    // _makeVerticalGroupedRowNewRecursive: function(groups, array, index, cssClasses, cellTemplate) {
-    //     var prevResult, currentCells, result = [];
-    //     if(index < groups.length - 1) {
-    //         prevResult = this._makeVerticalGroupedRowNewRecursive(groups, array, index + 1, cssClasses, cellTemplate);
-    //     }
-    //     currentCells = this._makeFlexGroupedRowCells(groups[index], cssClasses, cellTemplate);
-    //     if(prevResult) {
-    //         currentCells.forEach(function(element) {
-    //             element = $(element).append(prevResult);
-    //             result.push($("<div>").append(element));
-    //         });
-    //     } else {
-    //         result = currentCells;
-    //     }
-    //     return $("<div>").append(result);
-    // },
 
     _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
         repeatByDate = repeatByDate || 1;
