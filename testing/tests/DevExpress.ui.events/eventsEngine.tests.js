@@ -559,3 +559,26 @@ QUnit.test("delegate subscription should handle all matched elements", function(
 
     assert.equal(log.length, 3);
 });
+
+QUnit.test("Hover events should be ignored if the target is a child of the current target (T731134)", function(assert) {
+    var container = document.createElement("div");
+    var childNode = document.createElement("div");
+
+    container.appendChild(childNode);
+
+    container.addEventListener = function(type, callback) {
+        if(type === "mouseover") {
+            callback.call(container, new eventsEngine.Event("mouseover", {
+                target: childNode,
+                currentTarget: container,
+                relatedTarget: container
+            }));
+        }
+    };
+
+    var handlerSpy = sinon.spy();
+
+    eventsEngine.on(container, "mouseenter", handlerSpy);
+
+    assert.ok(handlerSpy.notCalled);
+});
