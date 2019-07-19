@@ -1010,8 +1010,10 @@ QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
 // T742885
 QUnit.test("Expand node after filtering when it has many children and they are selected", function(assert) {
     // arrange
-    var clock = sinon.useFakeTimers(),
-        treeList = createTreeList({
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var treeList = createTreeList({
             loadingTimeout: 30,
             height: 200,
             dataSource: {
@@ -1054,16 +1056,19 @@ QUnit.test("Expand node after filtering when it has many children and they are s
             }
         });
 
-    clock.tick(500);
+        clock.tick(500);
 
-    // act
-    treeList.collapseRow(1);
-    clock.tick(100);
+        // act
+        treeList.collapseRow(1);
+        clock.tick(100);
 
-    // assert
-    var items = treeList.getVisibleRows();
-    assert.strictEqual(items.length, 1, "row count");
-    assert.notOk(treeList.isRowExpanded(1), "first node is collapsed");
+        // assert
+        var items = treeList.getVisibleRows();
+        assert.strictEqual(items.length, 1, "row count");
+        assert.notOk(treeList.isRowExpanded(1), "first node is collapsed");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.module("Focused Row", {
@@ -1317,6 +1322,9 @@ QUnit.test("TreeList should not hang when scrolling", function(assert) {
             },
             height: 200,
             columnAutoWidth: true,
+            scrolling: {
+                useNative: false
+            },
             onContentReady: contentReadySpy
         }),
         done = assert.async();
