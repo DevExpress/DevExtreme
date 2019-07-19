@@ -336,3 +336,7 @@ registerTheme({
         }
     }
 }, "generic.light");
+
+registerTheme({
+    name: "generic.contrast.compact"
+}, "generic.contrast");
