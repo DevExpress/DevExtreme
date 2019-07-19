@@ -337,7 +337,7 @@ QUnit.module("repaintChangesOnly", {
             this.clock.tick(1);
 
             this.checkTitleRendered(assert, [item1_]);
-            this.checkItemRendered(assert, [{ data: item1_, index: 0 }]);
+            this.checkItemRendered(assert, [{ data: item2, index: 1 }, { data: item1_, index: 0 }]);
             this.checkItemDeleted(assert, [item1]);
 
             this.checkContainsElements(assert, [item1.text, item1.content, item2.text]);
