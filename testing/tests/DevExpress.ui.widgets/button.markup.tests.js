@@ -1,9 +1,11 @@
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+    config = require("core/config"),
+    checkStyleHelper = require("../../helpers/checkStyleHelper.js").default;
 
 require("ui/button");
 require("common.css!");
+require("generic_light.css!");
 
 QUnit.testStart(function() {
     var markup =
@@ -207,6 +209,62 @@ QUnit.test("dxButton should render custom template with render function that ret
     });
 
     assert.equal($element.text(), "button text", "container is correct");
+});
+
+QUnit.test("Check template styles - not focused", function(assert) {
+    if(!checkStyleHelper.isChromeOnDesktop(assert)) {
+        return;
+    }
+
+    const $template = $("<div>").text("test1");
+    $("#button").dxButton({
+        template: function() { return $template; }
+    });
+    $("#input1").focus();
+
+    checkStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(255, 255, 255)");
+    checkStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
+    checkStyleHelper.checkOverflowX(assert, $template[0], "visible");
+    checkStyleHelper.checkTextOverflow(assert, $template[0], "clip");
+    checkStyleHelper.checkWhiteSpace(assert, $template[0], "normal");
+});
+
+QUnit.testInActiveWindow("Check template styles - focused, text is not empty", function(assert) {
+    if(!checkStyleHelper.isChromeOnDesktop(assert)) {
+        return;
+    }
+
+    const $template = $("<div>").text("test1");
+    const $button = $("#button").dxButton({
+        text: "not empty",
+        template: function() { return $template; }
+    });
+    $button.dxButton("instance").focus();
+
+    checkStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
+    checkStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(217, 217, 217)");
+    checkStyleHelper.checkOverflowX(assert, $template[0], "hidden");
+    checkStyleHelper.checkTextOverflow(assert, $template[0], "ellipsis");
+    checkStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
+});
+
+QUnit.testInActiveWindow("Check template styles - focused, text is empty", function(assert) {
+    if(!checkStyleHelper.isChromeOnDesktop(assert)) {
+        return;
+    }
+
+    const $template = $("<div>").text("test1");
+    const $button = $("#button").dxButton({
+        text: null,
+        template: function() { return $template; }
+    });
+    $button.dxButton("instance").focus();
+
+    checkStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
+    checkStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(217, 217, 217)");
+    checkStyleHelper.checkOverflowX(assert, $template[0], "visible");
+    checkStyleHelper.checkTextOverflow(assert, $template[0], "clip");
+    checkStyleHelper.checkWhiteSpace(assert, $template[0], "normal");
 });
 
 QUnit.module("aria accessibility");
