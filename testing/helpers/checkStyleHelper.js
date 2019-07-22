@@ -7,8 +7,6 @@ function testInChromeOnDesktop(name, testCallback) {
     } else {
         QUnit.testInActiveWindow.call(null, name, testCallback);
     }
-
-    return true;
 }
 
 function checkTextOverflow(assert, element, expectedValue) {
