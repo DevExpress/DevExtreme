@@ -110,10 +110,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             });
         }
 
-        if(actions.length === minActionButtonCount) {
-            actions[0]._options.actionComponent = actions[0];
-            return;
-        }
+        if(actions.length === minActionButtonCount) return;
 
         for(let i = 0; i < actions.length; i++) {
             const action = actions[i];

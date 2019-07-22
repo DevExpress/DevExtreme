@@ -344,20 +344,17 @@ QUnit.module("check action buttons events", (hooks) => {
         $("#fab-two").dxSpeedDialAction("instance").dispose();
     }),
 
-    test("one action", (assert) => {
-        const firstSDA = $("#fab-one")
+    test("trigger and args", (assert) => {
+        $("#fab-one")
             .dxSpeedDialAction()
             .dxSpeedDialAction("instance")
             .on("contentReady", (e) => {
                 assert.ok(e.component, "first SDA content ready component in args");
                 assert.ok(e.actionElement, "first SDA content ready actionElement in args");
-                assert.ok(e.element, " first SDA content ready element in args");
-            })
-            .on("optionChanged", (e) => {
-                assert.ok("first SDA icon option changed");
+                assert.ok(e.element, "first SDA content ready element in args");
             })
             .on("disposing", (e) => {
-                assert.ok("first SDA disposing after second SDA creating");
+                assert.ok(e.actionElement, "first SDA disposing actionElement in args");
             })
             .on("initialized", (e) => {
                 assert.ok(e.component, "first SDA initialized component in args");
@@ -375,8 +372,6 @@ QUnit.module("check action buttons events", (hooks) => {
         let $fabMainContent = $fabMainElement.find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
-
-        firstSDA.option("icon", "edit");
 
         $("#fab-two")
             .dxSpeedDialAction()
