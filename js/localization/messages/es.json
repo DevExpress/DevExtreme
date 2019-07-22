@@ -11,6 +11,7 @@
         "Back": "Volver",
         "OK": "Aceptar",
         "dxCollectionWidget-noDataText": "Sin datos para mostrar",
+        "dxDropDownEditor-selectLabel": "Seleccionar",
         "validation-required": "Obligatorio",
         "validation-required-formatted": "{0} es obligatorio",
         "validation-numeric": "Valor debe ser un número",

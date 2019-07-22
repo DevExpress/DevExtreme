@@ -1,10 +1,13 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
+import messageLocalization from "../../localization/message";
 import TextEditorButton from "../text_box/texteditor_button_collection/button";
 import Button from "../button";
 
 const DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button";
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
+
+const BUTTON_MESSAGE = "dxDropDownEditor-selectLabel";
 
 export default class ClearButton extends TextEditorButton {
     _attachEvents(instance) {
@@ -25,6 +28,7 @@ export default class ClearButton extends TextEditorButton {
         this._addToContainer($element);
 
         const instance = editor._createComponent($element, Button, options);
+        instance.setAria("label", messageLocalization.format(BUTTON_MESSAGE));
 
         this._legacyRender(editor.$element(), $element, options.visible);
 
