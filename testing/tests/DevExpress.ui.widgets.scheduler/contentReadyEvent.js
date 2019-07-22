@@ -45,10 +45,59 @@ const moduleConfig = {
 };
 
 QUnit.module("onContentReade event", moduleConfig, () => {
-    QUnit.test("contentReady action should rise even if dataSource isn't set", function(assert) {
-        createScheduler({
-            onContentReady: e => assert.ok(true, 1, "contentReady is fired")
+    QUnit.test("contentReady action should rise after call repaint", function(assert) {
+        let contentReadyCount = 0;
+        const scheduler = createScheduler({
+            onContentReady: e => contentReadyCount++
         });
+
+        assert.equal(contentReadyCount, 1, "contentReady should be rise after first init control");
+
+        scheduler.instance.repaint();
+        assert.equal(contentReadyCount, 2, "contentReady should be rise after call repaint");
+    });
+
+    QUnit.test("contentReady action should rise on first init, data source load and after call repaint method", function(assert) {
+        let contentReadyCount = 0;
+
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: () => {
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        d.resolve([{
+                            text: "appointment",
+                            startDate: new Date(2016, 2, 15, 1),
+                            endDate: new Date(2016, 2, 15, 2)
+                        }]);
+                    }, 100);
+                    return d.promise();
+                }
+            })
+        });
+
+        const scheduler = createScheduler({
+            dataSource: dataSource,
+            onContentReady: e => contentReadyCount++
+        });
+
+        assert.equal(contentReadyCount, 0, "contentReady should be rise after first init control");
+
+        this.clock.tick(200);
+        assert.equal(contentReadyCount, 1, "contentReady should be rise after dataSource loaded");
+
+        scheduler.instance.repaint();
+        assert.equal(contentReadyCount, 2, "contentReady should be rise after call repaint");
+    });
+
+    QUnit.test("contentReady action should rise even if dataSource isn't set", function(assert) {
+        let contentReadyCount = 0;
+
+        createScheduler({
+            onContentReady: e => contentReadyCount++
+        });
+
+        assert.equal(contentReadyCount, 1, "contentReady is fired");
     });
 
     QUnit.test("contentReady action should rise at the right time", function(assert) {
@@ -57,7 +106,7 @@ QUnit.module("onContentReade event", moduleConfig, () => {
 
         const dataSource = new DataSource({
             store: new CustomStore({
-                load: function() {
+                load: () => {
                     const d = $.Deferred();
                     setTimeout(() => {
                         d.resolve([{
