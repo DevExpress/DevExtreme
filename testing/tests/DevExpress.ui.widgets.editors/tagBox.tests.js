@@ -3308,6 +3308,30 @@ QUnit.module("popup position and size", moduleSetup, () => {
 
         assert.equal($(".dx-list-item").length, 1, "search was completed");
     });
+
+    QUnit.test("load selected item data via custom store", (assert) => {
+        let testPassed = true;
+        try {
+            const $tagBox = $("#tagBox").dxTagBox({
+                dataSource: {
+                    load() {
+                        return new $.Deferred().resolve({ data: [{ id: 2, name: "test" }], totalCount: 1 }).promise();
+                    },
+                    key: "id"
+                },
+                valueExpr: "id",
+                displayExpr: "name",
+                value: [2]
+            });
+            const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+
+            assert.strictEqual(tagText, "test", "correct display value");
+        } catch(e) {
+            testPassed = false;
+        }
+
+        assert.ok(testPassed, "There is no errors during test");
+    });
 });
 
 QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {

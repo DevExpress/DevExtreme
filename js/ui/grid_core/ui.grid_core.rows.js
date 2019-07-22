@@ -1361,8 +1361,10 @@ module.exports = {
                             if(rowElement.length) {
                                 offsetTop = rowElement.offset().top - contentElementOffsetTop;
                                 if(offsetTop > scrollPosition) {
-                                    if(isFloor || scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop) && itemIndex) {
-                                        itemIndex--;
+                                    if(itemIndex) {
+                                        if(isFloor || scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop)) {
+                                            itemIndex--;
+                                        }
                                     }
                                     break;
                                 }
