@@ -4013,3 +4013,43 @@ QUnit.test("SelectAll items with remote filtering and deferred selection", funct
     assert.ok(items[0].isSelected, "first item is selected");
     assert.ok(items[1].isSelected, "second item is selected");
 });
+
+// T754974
+QUnit.test("The getSelectedRowsData method should return correct selected rows data after filtering and selecting/deselecting rows", function(assert) {
+    // arrange
+    var selectedRowsData = [];
+
+    this.setupDataGrid({
+        loadingTimeout: undefined,
+        dataSource: createDataSource(this.data, { key: "id", pageSize: 2 }),
+        remoteOperations: { filtering: true, sorting: true, paging: true },
+        columns: [
+            { dataField: "id", dataType: "number" },
+            { dataField: "name", dataType: "string" },
+            { dataField: "age", dataType: "number", filterValue: "18", selectedFilterOperation: "<>" }
+        ],
+        selection: { mode: "multiple", deferred: true }
+    });
+
+    this.selectAll();
+    this.getSelectedRowsData().done((selectedData) => {
+        selectedRowsData = selectedData;
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(selectedRowsData.length, 5, "selected rows data count");
+
+    // arrange
+    this.deselectRows([1]);
+
+    // act
+    this.selectAll();
+    this.getSelectedRowsData().done((selectedData) => {
+        selectedRowsData = selectedData;
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(selectedRowsData.length, 5, "selected rows data count");
+});
