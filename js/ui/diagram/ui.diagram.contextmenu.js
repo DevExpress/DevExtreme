@@ -62,6 +62,9 @@ class DiagramContextMenu extends Widget {
             case "onVisibleChanged":
                 this._createOnVisibleChangedAction();
                 break;
+            case "commands":
+                this._invalidate();
+                break;
             default:
                 super._optionChanged(args);
         }

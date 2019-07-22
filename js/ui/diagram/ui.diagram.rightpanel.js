@@ -39,7 +39,7 @@ class DiagramRightPanel extends DiagramPanel {
         });
     }
     _renderOptions($container) {
-        var commands = DiagramCommands.getPropertyPanelCommands(this.option("commandGroups"));
+        var commands = DiagramCommands.getPropertyPanelCommands(this.option("propertyGroups"));
         this._formInstance = this._createComponent($container, Form, {
             items: commands.map(item => {
                 return extend(true, {
@@ -95,13 +95,15 @@ class DiagramRightPanel extends DiagramPanel {
     _setItemSubItems(key, items) {
         this._updateLocked = true;
         var editorInstance = this._formInstance.getEditor(key.toString());
-        editorInstance.option('items', items.map(item => {
-            var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
-            return {
-                'value': value,
-                'title': item.text
-            };
-        }));
+        if(editorInstance) {
+            editorInstance.option('items', items.map(item => {
+                var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
+                return {
+                    'value': value,
+                    'title': item.text
+                };
+            }));
+        }
         this._updateLocked = false;
     }
     _setEnabled(enabled) {
@@ -109,7 +111,16 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _setItemEnabled(key, enabled) {
         var editorInstance = this._formInstance.getEditor(key.toString());
-        editorInstance.option('disabled', !enabled);
+        if(editorInstance) editorInstance.option('disabled', !enabled);
+    }
+    _optionChanged(args) {
+        switch(args.name) {
+            case "propertyGroups":
+                this._invalidate();
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {

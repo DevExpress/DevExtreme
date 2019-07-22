@@ -1,4 +1,5 @@
 import { getDiagram } from "./diagram_importer";
+import { extend } from "../../core/utils/extend";
 import { fileSaver } from "../../exporter/file_saver";
 import { isFunction } from "../../core/utils/type";
 import { getWindow } from "../../core/utils/window";
@@ -11,191 +12,220 @@ const CSS_CLASSES = {
 };
 
 const DiagramCommands = {
-    getToolbar: function() {
+    getAllToolbarCommands: function() {
         const { DiagramCommand } = getDiagram();
+        return this.toolbarCommands ||
+            (this.toolbarCommands = {
+                export: {
+                    widget: "dxButton",
+                    icon: "export",
+                    text: "Export",
+                    items: [
+                        {
+                            command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
+                            text: "Export to SVG",
+                            getParameter: (widget) => {
+                                return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
+                            }
+                        },
+                        {
+                            command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
+                            text: "Export to PNG",
+                            getParameter: (widget) => {
+                                return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
+                            }
+                        },
+                        {
+                            command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
+                            text: "Export to JPEG",
+                            getParameter: (widget) => {
+                                return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
+                            }
+                        }
+                    ]
+                },
+                separator: SEPARATOR,
+                undo: {
+                    command: DiagramCommand.Undo,
+                    hint: 'Undo',
+                    icon: "undo",
+                    text: "Undo",
+                },
+                redo: {
+                    command: DiagramCommand.Redo,
+                    hint: "Redo",
+                    icon: "redo",
+                    text: "Redo",
+                },
+                fontName: {
+                    command: DiagramCommand.FontName,
+                    beginGroup: true,
+                    widget: "dxSelectBox",
+                    items: ["Arial", "Arial Black", "Helvetica", "Times New Roman", "Courier New", "Courier", "Verdana", "Georgia", "Comic Sans MS", "Trebuchet MS"]
+                },
+                fontSize: {
+                    command: DiagramCommand.FontSize,
+                    widget: "dxSelectBox",
+                    items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"],
+                    cssClass: CSS_CLASSES.SMALL_SELECT
+                },
+                bold: {
+                    command: DiagramCommand.Bold,
+                    hint: "Bold",
+                    text: "Bold",
+                    icon: "bold"
+                },
+                italic: {
+                    command: DiagramCommand.Italic,
+                    hint: "Italic",
+                    text: "Italic",
+                    icon: "italic"
+                },
+                underline: {
+                    command: DiagramCommand.Underline,
+                    hint: "Underline",
+                    text: "Underline",
+                    icon: "underline"
+                },
+                fontColor: {
+                    command: DiagramCommand.FontColor,
+                    text: "Text Color",
+                    widget: "dxColorBox",
+                    icon: "dx-icon dx-icon-color",
+                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                },
+                strokeColor: {
+                    command: DiagramCommand.StrokeColor,
+                    text: "Line Color",
+                    widget: "dxColorBox",
+                    icon: "dx-icon dx-icon-background",
+                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                },
+                fillColor: {
+                    command: DiagramCommand.FillColor,
+                    text: "Fill Color",
+                    widget: "dxColorBox",
+                    icon: "dx-diagram-i dx-diagram-i-button-fill",
+                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                },
+                textAlignLeft: {
+                    command: DiagramCommand.TextLeftAlign,
+                    hint: "Align Left",
+                    text: "Align Left",
+                    icon: "alignleft",
+                    beginGroup: true
+                },
+                textAlignCenter: {
+                    command: DiagramCommand.TextCenterAlign,
+                    hint: "Align Center",
+                    text: "Center",
+                    icon: "aligncenter"
+                },
+                textAlignRight: {
+                    command: DiagramCommand.TextRightAlign,
+                    hint: "Align Right",
+                    text: "Align Right",
+                    icon: "alignright"
+                },
+                connectorLineType: {
+                    command: DiagramCommand.ConnectorLineOption,
+                    widget: "dxSelectBox",
+                    hint: "Line Type",
+                    items: [
+                        { value: 0, icon: "dx-diagram-i-connector-straight dx-diagram-i", hint: "Straight" },
+                        { value: 1, icon: "dx-diagram-i-connector-orthogonal dx-diagram-i", hint: "Orthogonal" }
+                    ],
+                    displayExpr: "name",
+                    valueExpr: "value",
+                    cssClass: CSS_CLASSES.BUTTON_SELECT
+                },
+                connectorLineStart: {
+                    command: DiagramCommand.ConnectorStartLineEnding,
+                    widget: "dxSelectBox",
+                    items: [
+                        { value: 0, icon: "dx-diagram-i-connector-begin-none dx-diagram-i", hint: "None" },
+                        { value: 1, icon: "dx-diagram-i-connector-begin-arrow dx-diagram-i", hint: "Arrow" }
+                    ],
+                    displayExpr: "name",
+                    valueExpr: "value",
+                    hint: "Line Start",
+                    cssClass: CSS_CLASSES.BUTTON_SELECT
+                },
+                connectorLineEnd: {
+                    command: DiagramCommand.ConnectorEndLineEnding,
+                    widget: "dxSelectBox",
+                    items: [
+                        { value: 0, icon: "dx-diagram-i-connector-end-none dx-diagram-i", hint: "None" },
+                        { value: 1, icon: "dx-diagram-i-connector-end-arrow dx-diagram-i", hint: "Arrow" }
+                    ],
+                    displayExpr: "name",
+                    valueExpr: "value",
+                    hint: "Line End",
+                    cssClass: CSS_CLASSES.BUTTON_SELECT
+                },
+                autoLayout: {
+                    widget: "dxButton",
+                    text: "Auto Layout",
+                    showText: "always",
+                    items: [
+                        {
+                            text: "Tree",
+                            items: [
+                                { command: DiagramCommand.AutoLayoutTreeVertical, text: "Vertical" },
+                                { command: DiagramCommand.AutoLayoutTreeHorizontal, text: "Horizontal" }
+                            ]
+                        },
+                        {
+                            text: "Layered",
+                            items: [
+                                { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Vertical" },
+                                { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Horizontal" }
+                            ]
+                        }
+                    ]
+                },
+                fullscreen: {
+                    command: DiagramCommand.Fullscreen,
+                    hint: "Fullscreen",
+                    text: "Fullscreen",
+                    icon: "dx-diagram-i dx-diagram-i-button-fullscreen",
+                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                }
+            });
+    },
+    getToolbarCommands: function(commandNames) {
+        var commands = this.getAllToolbarCommands();
+        if(commandNames) {
+            return commandNames.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
+        }
         return [
-            {
-                widget: "dxButton",
-                icon: "export",
-                text: "Export",
-                items: [
-                    {
-                        command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
-                        text: "Export to SVG",
-                        getParameter: (widget) => {
-                            return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
-                        }
-                    },
-                    {
-                        command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
-                        text: "Export to PNG",
-                        getParameter: (widget) => {
-                            return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
-                        }
-                    },
-                    {
-                        command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
-                        text: "Export to JPEG",
-                        getParameter: (widget) => {
-                            return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
-                        }
-                    }
-                ]
-            },
-            SEPARATOR,
-            {
-                command: DiagramCommand.Undo,
-                hint: 'Undo',
-                icon: "undo",
-                text: "Undo",
-            },
-            {
-                command: DiagramCommand.Redo,
-                hint: "Redo",
-                icon: "redo",
-                text: "Redo",
-            },
-            SEPARATOR,
-            {
-                command: DiagramCommand.FontName,
-                beginGroup: true,
-                widget: "dxSelectBox",
-                items: ["Arial", "Arial Black", "Helvetica", "Times New Roman", "Courier New", "Courier", "Verdana", "Georgia", "Comic Sans MS", "Trebuchet MS"]
-            },
-            {
-                command: DiagramCommand.FontSize,
-                widget: "dxSelectBox",
-                items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"],
-                cssClass: CSS_CLASSES.SMALL_SELECT
-            },
-            SEPARATOR,
-            {
-                command: DiagramCommand.Bold,
-                hint: "Bold",
-                text: "Bold",
-                icon: "bold"
-            },
-            {
-                command: DiagramCommand.Italic,
-                hint: "Italic",
-                text: "Italic",
-                icon: "italic"
-            },
-            {
-                command: DiagramCommand.Underline,
-                hint: "Underline",
-                text: "Underline",
-                icon: "underline"
-            },
-            SEPARATOR,
-            {
-                command: DiagramCommand.FontColor,
-                text: "Text Color",
-                widget: "dxColorBox",
-                icon: "dx-icon dx-icon-color",
-                cssClass: CSS_CLASSES.BUTTON_COLOR
-            },
-            {
-                command: DiagramCommand.StrokeColor,
-                text: "Line Color",
-                widget: "dxColorBox",
-                icon: "dx-icon dx-icon-background",
-                cssClass: CSS_CLASSES.BUTTON_COLOR
-            },
-            {
-                command: DiagramCommand.FillColor,
-                text: "Fill Color",
-                widget: "dxColorBox",
-                icon: "dx-diagram-i dx-diagram-i-button-fill",
-                cssClass: CSS_CLASSES.BUTTON_COLOR
-            },
-            SEPARATOR,
-            {
-                command: DiagramCommand.TextLeftAlign,
-                hint: "Align Left",
-                text: "Align Left",
-                icon: "alignleft",
-                beginGroup: true
-            },
-            {
-                command: DiagramCommand.TextCenterAlign,
-                hint: "Align Center",
-                text: "Center",
-                icon: "aligncenter"
-            },
-            {
-                command: DiagramCommand.TextRightAlign,
-                hint: "Align Right",
-                text: "Align Right",
-                icon: "alignright"
-            },
-            SEPARATOR,
-            {
-                command: DiagramCommand.ConnectorLineOption,
-                widget: "dxSelectBox",
-                hint: "Line Type",
-                items: [
-                    { value: 0, icon: "dx-diagram-i-connector-straight dx-diagram-i", hint: "Straight" },
-                    { value: 1, icon: "dx-diagram-i-connector-orthogonal dx-diagram-i", hint: "Orthogonal" }
-                ],
-                displayExpr: "name",
-                valueExpr: "value",
-                cssClass: CSS_CLASSES.BUTTON_SELECT
-            },
-            {
-                command: DiagramCommand.ConnectorStartLineEnding,
-                widget: "dxSelectBox",
-                items: [
-                    { value: 0, icon: "dx-diagram-i-connector-begin-none dx-diagram-i", hint: "None" },
-                    { value: 1, icon: "dx-diagram-i-connector-begin-arrow dx-diagram-i", hint: "Arrow" }
-                ],
-                displayExpr: "name",
-                valueExpr: "value",
-                hint: "Line Start",
-                cssClass: CSS_CLASSES.BUTTON_SELECT
-            },
-            {
-                command: DiagramCommand.ConnectorEndLineEnding,
-                widget: "dxSelectBox",
-                items: [
-                    { value: 0, icon: "dx-diagram-i-connector-end-none dx-diagram-i", hint: "None" },
-                    { value: 1, icon: "dx-diagram-i-connector-end-arrow dx-diagram-i", hint: "Arrow" }
-                ],
-                displayExpr: "name",
-                valueExpr: "value",
-                hint: "Line End",
-                cssClass: CSS_CLASSES.BUTTON_SELECT
-            },
-            SEPARATOR,
-            {
-                widget: "dxButton",
-                text: "Auto Layout",
-                showText: "always",
-                items: [
-                    {
-                        text: "Tree",
-                        items: [
-                            { command: DiagramCommand.AutoLayoutTreeVertical, text: "Vertical" },
-                            { command: DiagramCommand.AutoLayoutTreeHorizontal, text: "Horizontal" }
-                        ]
-                    },
-                    {
-                        text: "Layered",
-                        items: [
-                            { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Vertical" },
-                            { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Horizontal" }
-                        ]
-                    }
-                ]
-            },
-            SEPARATOR,
-            {
-                command: DiagramCommand.Fullscreen,
-                hint: "Fullscreen",
-                text: "Fullscreen",
-                icon: "dx-diagram-i dx-diagram-i-button-fullscreen",
-                cssClass: CSS_CLASSES.BUTTON_COLOR
-            }
+            commands["export"],
+            commands["separator"],
+            commands["undo"],
+            commands["redo"],
+            commands["separator"],
+            commands["fontName"],
+            commands["fontSize"],
+            commands["separator"],
+            commands["bold"],
+            commands["italic"],
+            commands["underline"],
+            commands["separator"],
+            commands["fontColor"],
+            commands["strokeColor"],
+            commands["fillColor"],
+            commands["separator"],
+            commands["textAlignLeft"],
+            commands["textAlignCenter"],
+            commands["textAlignRight"],
+            commands["separator"],
+            commands["connectorLineType"],
+            commands["connectorLineStart"],
+            commands["connectorLineEnd"],
+            commands["separator"],
+            commands["autoLayout"],
+            commands["separator"],
+            commands["fullscreen"]
         ];
     },
     getAllPropertyPanelCommands: function() {
@@ -251,49 +281,29 @@ const DiagramCommands = {
                 },
             });
     },
-    getPropertyPanelCommandGroups: function(commandGroups) {
-        var commands = this.getAllPropertyPanelCommands();
-        if(commandGroups) {
-            return commandGroups.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
-        }
+    getDefaultPropertyPanelCommandGroups: function() {
         return [
-            {
-                commands: [
-                    commands["units"]
-                ]
-            },
-            {
-                commands: [
-                    commands["pageSize"],
-                    commands["pageLandscape"],
-                    commands["pageColor"]
-                ]
-            },
-            {
-                commands: [
-                    commands["showGrid"],
-                    commands["snapToGrid"],
-                    commands["gridSize"]
-                ]
-            },
-            {
-                commands: [
-                    commands["zoomLevel"],
-                    commands["autoZoom"]
-                ]
-            },
+            { commands: ["units"] },
+            { commands: ["pageSize", "pageLandscape", "pageColor"] },
+            { commands: ["showGrid", "snapToGrid", "gridSize"] },
+            { commands: ["zoomLevel", "autoZoom"] },
         ];
     },
-    getPropertyPanelCommands: function(commandGroups) {
-        var groups = DiagramCommands.getPropertyPanelCommandGroups(commandGroups);
-        var commands = [];
-        groups.forEach(function(g) {
-            if(commands.length && g.commands.length) {
-                g.commands[0].beginGroup = true;
-            }
-            commands = commands.concat(g.commands);
+    getPropertyPanelCommandsByGroups: function(groups) {
+        var commands = DiagramCommands.getAllPropertyPanelCommands();
+        var result = [];
+        groups.forEach(function(g, gi) {
+            g.commands.forEach(function(cn, ci) {
+                result.push(extend(commands[cn], {
+                    beginGroup: gi > 0 && ci === 0
+                }));
+            });
         });
-        return commands;
+        return result;
+    },
+    getPropertyPanelCommands: function(commandGroups) {
+        commandGroups = commandGroups || DiagramCommands.getDefaultPropertyPanelCommandGroups();
+        return DiagramCommands.getPropertyPanelCommandsByGroups(commandGroups);
     },
     getAllContextMenuCommands: function() {
         const { DiagramCommand } = getDiagram();

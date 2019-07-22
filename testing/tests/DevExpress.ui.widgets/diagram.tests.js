@@ -10,7 +10,10 @@ QUnit.testStart(() => {
 });
 
 const TOOLBAR_SELECTOR = ".dx-diagram-toolbar";
-const CONTEXT_MENU_SELECTOR = ".dx-has-context-menu:last";
+const TOOBOX_ACCORDION_SELECTOR = ".dx-diagram-left-panel .dx-accordion";
+const CONTEXT_MENU_SELECTOR = "div:not(.dx-diagram-toolbar-wrapper) > .dx-has-context-menu";
+const PROPERTIES_PANEL_ACCORDION_SELECTOR = ".dx-diagram-right-panel .dx-accordion";
+const PROPERTIES_PANEL_FORM_SELECTOR = ".dx-diagram-right-panel .dx-accordion .dx-form";
 const TOOLBAR_ITEM_ACTIVE_CLASS = "dx-format-active";
 const MAIN_ELEMENT_SELECTOR = ".dxdi-control";
 const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
@@ -29,9 +32,27 @@ function getToolbarIcon(button) {
 }
 
 QUnit.module("Diagram Toolbar", moduleConfig, () => {
+    test("should not render if toolbar.visible is false", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        let $toolbar = this.$element.find(TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 0);
+    });
     test("should fill toolbar with default items", (assert) => {
         let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
         assert.ok(toolbar.option("dataSource").length > 10);
+    });
+    test("should fill toolbar with custom items", (assert) => {
+        this.instance.option("toolbar.commands", ["export"]);
+        let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
+        assert.equal(toolbar.option("dataSource").length, 2); // + show properties panel
+
+        this.instance.option("propertiesPanel.visible", false);
+        toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
+        assert.equal(toolbar.option("dataSource").length, 1);
+        this.instance.option("propertiesPanel.visible", true);
+        this.instance.option("propertiesPanel.collapsible", false);
+        toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
+        assert.equal(toolbar.option("dataSource").length, 1);
     });
     test("should enable items on diagram request", (assert) => {
         let undoButton = findToolbarItem(this.$element, "undo").dxButton("instance");
@@ -139,10 +160,57 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         assert.ok(button.option("disabled"));
     });
 });
+
+QUnit.module("Diagram Toolbox", moduleConfig, () => {
+    test("should not render if toolbox.visible is false", (assert) => {
+        this.instance.option("toolbox.visible", false);
+        let $accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR);
+        assert.equal($accordion.length, 0);
+    });
+    test("should fill toolbox with default items", (assert) => {
+        let accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion("instance");
+        assert.ok(accordion.option("dataSource").length > 1);
+    });
+    test("should fill toolbox with custom items", (assert) => {
+        this.instance.option("toolbox.groups", ["general"]);
+        let accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion("instance");
+        assert.equal(accordion.option("dataSource").length, 1);
+    });
+});
+
+QUnit.module("Diagram Properties Panel", moduleConfig, () => {
+    test("should not render if propertiesPanel.visible is false", (assert) => {
+        this.instance.option("propertiesPanel.visible", false);
+        let $accordion = this.$element.find(PROPERTIES_PANEL_ACCORDION_SELECTOR);
+        assert.equal($accordion.length, 0);
+    });
+    test("should fill properties panel with default items", (assert) => {
+        let form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm("instance");
+        assert.ok(form.option("items").length > 1);
+    });
+    test("should fill toolbox with custom items", (assert) => {
+        this.instance.option("propertiesPanel.groups", [{ commands: ["units"] }]);
+        let form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm("instance");
+        assert.equal(form.option("items").length, 1);
+    });
+});
+
 QUnit.module("Context Menu", moduleConfig, () => {
+    test("should not render if contextMenu.enabled is false", (assert) => {
+        let $contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR);
+        assert.equal($contextMenu.length, 1);
+        this.instance.option("contextMenu.enabled", false);
+        $contextMenu = this.$element.children(CONTEXT_MENU_SELECTOR);
+        assert.equal($contextMenu.length, 0);
+    });
     test("should load default items", (assert) => {
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.ok(contextMenu.option("items").length > 1);
+    });
+    test("should load custom items", (assert) => {
+        this.instance.option("contextMenu.commands", ["copy"]);
+        const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
+        assert.equal(contextMenu.option("items").length, 1);
     });
     test("should update items on showing", (assert) => {
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
@@ -161,6 +229,7 @@ QUnit.module("Context Menu", moduleConfig, () => {
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
 });
+
 QUnit.module("Options", moduleConfig, () => {
     test("should change readOnly property", (assert) => {
         assert.notOk(this.instance._diagramInstance.settings.readOnly);

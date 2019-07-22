@@ -11,7 +11,6 @@ class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._toolboxGroups = this.option("toolboxGroups") || [];
         this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
     }
     _initMarkup() {
@@ -29,14 +28,15 @@ class DiagramLeftPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         var result = [];
-        for(var i = 0; i < this._toolboxGroups.length; i++) {
-            var category = this._toolboxGroups[i].category;
-            var title = this._toolboxGroups[i].title;
+        var toolboxGroups = this.option("toolboxGroups");
+        for(var i = 0; i < toolboxGroups.length; i++) {
+            var category = toolboxGroups[i].category;
+            var title = toolboxGroups[i].title;
             var groupObj = {
                 category,
                 title: title || category,
-                style: this._toolboxGroups[i].style,
-                shapes: this._toolboxGroups[i].shapes,
+                style: toolboxGroups[i].style,
+                shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
                     this._onShapeCategoryRenderedAction({
                         category: data.category,
@@ -87,7 +87,6 @@ class DiagramLeftPanel extends DiagramPanel {
                 this._accordionInstance.option('disabled', args.value);
                 break;
             case "toolboxGroups":
-                this._toolboxGroups = this.option("_toolboxGroups") || [];
                 this._invalidate();
                 break;
             default:

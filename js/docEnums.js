@@ -1048,13 +1048,13 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramContextMenuCommand
- * @enum {'cut'|'copy'|'paste'|'selectAll'|'delete'|'bringToFront'|'sendToBack'|'lock'|'unlock'}
+ * @typedef {string} Enums.DiagramToolbarCommand
+ * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor','textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullscreen'}
  */
 
 /**
- * @typedef {string} Enums.DiagramPropertiesPanelVisibility
- * @enum {'hidden'|'collapsed'|'visible'}
+ * @typedef {string} Enums.DiagramContextMenuCommand
+ * @enum {'cut'|'copy'|'paste'|'selectAll'|'delete'|'bringToFront'|'sendToBack'|'lock'|'unlock'}
  */
 
 /**
