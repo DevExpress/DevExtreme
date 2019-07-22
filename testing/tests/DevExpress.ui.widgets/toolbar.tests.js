@@ -365,6 +365,30 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
             assert.strictEqual($button.dxButton("option", "disabled"), isButtonDisabled, "button.disabled");
             assert.strictEqual(this.element.dxToolbar("option", "disabled"), isToolbarDisabled, "toolbar.disabled");
         });
+
+        QUnit.test(`new dxToolbar({toolbar.disabled: ${isToolbarDisabled}, button.disabled: not declared})`, function(assert) {
+            this.element.dxToolbar({
+                disabled: isToolbarDisabled,
+                items: [{
+                    location: 'before',
+                    widget: 'dxButton',
+                    options: {
+                        id: "button"
+                    }
+                }]
+            });
+
+            let $button = this.element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
+
+            assert.strictEqual($button.dxButton("option", "disabled"), isToolbarDisabled, "button.disabled");
+            assert.strictEqual(this.element.dxToolbar("option", "disabled"), isToolbarDisabled, "toolbar.disabled");
+
+            this.element.dxToolbar("option", "disabled", !isToolbarDisabled);
+            $button = this.element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
+
+            assert.strictEqual($button.dxButton("option", "disabled"), isToolbarDisabled, "button.disabled");
+            assert.strictEqual(this.element.dxToolbar("option", "disabled"), !isToolbarDisabled, "toolbar.disabled");
+        });
     });
 });
 
