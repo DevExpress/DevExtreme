@@ -1046,3 +1046,18 @@
  * @typedef {string} Enums.DiagramToolboxStyle
  * @enum {'icons'|'texts'}
  */
+
+/**
+ * @typedef {string} Enums.DiagramToolbarCommand
+ * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullscreen'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramContextMenuCommand
+ * @enum {'cut'|'copy'|'paste'|'selectAll'|'delete'|'bringToFront'|'sendToBack'|'lock'|'unlock'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPropertiesPanelCommand
+ * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageLandscape'|'pageColor'}
+ */

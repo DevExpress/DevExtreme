@@ -1990,7 +1990,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.contextMenu */
-        contextMenu?: { enabled?: boolean };
+        contextMenu?: { commands?: Array<'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'bringToFront' | 'sendToBack' | 'lock' | 'unlock'>, enabled?: boolean };
         /** @name dxDiagram.Options.customShapes */
         customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipsis' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
         /** @name dxDiagram.Options.edges */
@@ -2003,8 +2003,12 @@ declare module DevExpress.ui {
         nodes?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
         onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, data?: string }) => any);
+        /** @name dxDiagram.Options.propertiesPanel */
+        propertiesPanel?: { collapsible?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageLandscape' | 'pageColor'> }>, visible?: boolean };
         /** @name dxDiagram.Options.readOnly */
         readOnly?: boolean;
+        /** @name dxDiagram.Options.toolbar */
+        toolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullscreen'>, visible?: boolean };
         /** @name dxDiagram.Options.toolbox */
         toolbox?: { groups?: Array<{ category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, expanded?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipsis' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, style?: 'icons' | 'texts', title?: string }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>, visible?: boolean };
     }

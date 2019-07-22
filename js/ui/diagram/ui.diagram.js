@@ -51,12 +51,16 @@ class Diagram extends Widget {
         const isServerSide = !hasWindow();
         this.$element().addClass(DIAGRAM_CLASS);
 
-        this._renderToolbar();
+        this._toolbarInstance = undefined;
+        if(this.option("toolbar.visible")) {
+            this._renderToolbar();
+        }
 
         const $contentWrapper = $("<div>")
             .addClass(DIAGRAM_CONTENT_WRAPPER_CLASS)
             .appendTo(this.$element());
 
+        this._leftPanel = undefined;
         if(this.option("toolbox.visible")) {
             this._renderLeftPanel($contentWrapper);
         }
@@ -72,8 +76,12 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_CONTENT_CLASS)
             .appendTo($drawer);
 
-        this._renderRightPanel($drawer);
+        this._rightPanel = undefined;
+        if(this.option("propertiesPanel.visible")) {
+            this._renderRightPanel($drawer);
+        }
 
+        this._contextMenu = undefined;
         if(this.option("contextMenu.enabled")) {
             this._renderContextMenu($content);
         }
@@ -84,10 +92,16 @@ class Diagram extends Widget {
         const $toolbarWrapper = $("<div>")
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
+        var toolbarWidgetCommandNames = [];
+        if(this.option("propertiesPanel.visible") && this.option("propertiesPanel.collapsible")) {
+            toolbarWidgetCommandNames.push("options");
+        }
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
+            commands: this.option("toolbar.commands"),
             onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
-            export: this.option("export")
+            export: this.option("export"),
+            widgetCommandNames: toolbarWidgetCommandNames
         });
     }
     _renderLeftPanel($parent) {
@@ -128,8 +142,30 @@ class Diagram extends Widget {
                 }
             });
         });
+
     }
-    _invalidateLeftPanel() {
+    _invalidateContextMenuCommands() {
+        if(this._contextMenu) {
+            this._contextMenu.option({
+                commands: this.option("contextMenu.commands")
+            });
+        }
+    }
+    _invalidatePropertiesPanelGroups() {
+        if(this._rightPanel) {
+            this._rightPanel.option({
+                propertyGroups: this.option("propertiesPanel.groups")
+            });
+        }
+    }
+    _invalidateToolbarCommands() {
+        if(this._toolbarInstance) {
+            this._toolbarInstance.option({
+                commands: this.option("toolbar.commands")
+            });
+        }
+    }
+    _invalidateToolboxGroups() {
         if(this._leftPanel) {
             this._leftPanel.option({
                 toolboxGroups: this._getToolboxGroups()
@@ -145,23 +181,28 @@ class Diagram extends Widget {
     }
 
     _renderRightPanel($parent) {
-        const drawer = this._createComponent($parent, Drawer, {
-            closeOnOutsideClick: true,
-            openedStateMode: "overlap",
+        const isCollapsible = this.option("propertiesPanel.collapsible");
+        var drawer = this._createComponent($parent, Drawer, {
+            closeOnOutsideClick: isCollapsible,
+            opened: !isCollapsible,
+            openedStateMode: isCollapsible ? "overlap" : "shrink",
             position: "right",
             template: ($options) => {
-                this._createComponent($options, DiagramRightPanel, {
+                this._rightPanel = this._createComponent($options, DiagramRightPanel, {
+                    propertyGroups: this.option("propertiesPanel.groups"),
                     onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
                     onPointerUp: this._onPanelPointerUp.bind(this)
                 });
             }
         });
 
-        this._toolbarInstance.option("onWidgetCommand", (e) => {
-            if(e.name === "options") {
-                drawer.toggle();
-            }
-        });
+        if(this._toolbarInstance) {
+            this._toolbarInstance.option("onWidgetCommand", (e) => {
+                if(e.name === "options") {
+                    drawer.toggle();
+                }
+            });
+        }
     }
 
     _onPanelPointerUp() {
@@ -171,7 +212,8 @@ class Diagram extends Widget {
     _renderContextMenu($mainElement) {
         const $contextMenu = $("<div>")
             .appendTo(this.$element());
-        this._createComponent($contextMenu, DiagramContextMenu, {
+        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
+            commands: this.option("contextMenu.commands"),
             container: $mainElement,
             onContentReady: ({ component }) => this._diagramInstance.barManager.registerBar(component.bar),
             onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar)
@@ -323,11 +365,7 @@ class Diagram extends Widget {
         return this.option("customShapes") || [];
     }
     _getToolboxGroups() {
-        var groups = this.option("toolbox.groups");
-        if(!groups) {
-            groups = DiagramToolbox.createDefaultGroups();
-        }
-        return groups;
+        return DiagramToolbox.getGroups(this.option("toolbox.groups"));
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
@@ -718,6 +756,24 @@ class Diagram extends Widget {
                 */
             },
             /**
+            * @name dxDiagramOptions.toolbar
+            * @type Object
+            * @default {}
+            */
+            toolbar: {
+                /**
+                * @name dxDiagramOptions.toolbar.visible
+                * @type boolean
+                * @default true
+                */
+                visible: true,
+                /**
+                * @name dxDiagramOptions.toolbar.commands
+                * @type Array<Enums.DiagramToolbarCommand>
+                * @default undefined
+                */
+            },
+            /**
             * @name dxDiagramOptions.contextMenu
             * @type Object
             * @default {}
@@ -729,6 +785,39 @@ class Diagram extends Widget {
                 * @default true
                 */
                 enabled: true,
+                /**
+                * @name dxDiagramOptions.contextMenu.commands
+                * @type Array<Enums.DiagramContextMenuCommand>
+                * @default undefined
+                */
+            },
+            /**
+            * @name dxDiagramOptions.propertiesPanel
+            * @type Object
+            * @default {}
+            */
+            propertiesPanel: {
+                /**
+                * @name dxDiagramOptions.propertiesPanel.visible
+                * @type Boolean
+                * @default true
+                */
+                visible: true,
+                /**
+                * @name dxDiagramOptions.propertiesPanel.collapsible
+                * @type Boolean
+                * @default true
+                */
+                collapsible: true,
+                /**
+                * @name dxDiagramOptions.propertiesPanel.groups
+                * @type Array<Object>
+                * @default undefined
+                */
+                /**
+                * @name dxDiagramOptions.propertiesPanel.groups.commands
+                * @type Array<Enums.DiagramPropertiesPanelCommand>
+                */
             },
 
             /**
@@ -830,10 +919,22 @@ class Diagram extends Widget {
                 this._updateCustomShapes(args.value, args.previousValue);
                 this._invalidate();
                 break;
-            case "toolbox":
-                this._invalidateLeftPanel();
+            case "contextMenu.commands":
+                this._invalidateContextMenuCommands();
+                break;
+            case "propertiesPanel.groups":
+                this._invalidatePropertiesPanelGroups();
+                break;
+            case "toolbar.commands":
+                this._invalidateToolbarCommands();
+                break;
+            case "toolbox.groups":
+                this._invalidateToolboxGroups();
                 break;
             case "contextMenu":
+            case "propertiesPanel":
+            case "toolbox":
+            case "toolbar":
                 this._invalidate();
                 break;
             case "onDataChanged":
