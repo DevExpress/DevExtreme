@@ -48,7 +48,6 @@ var DIST_GLOBS = [
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',
     '!artifacts/ts/cldr*',
-    '!artifacts/css/dx*legacy*.css',
     '!artifacts/css/dx-diagram.*',
     '!artifacts/css/dx-gantt.*'
 ];

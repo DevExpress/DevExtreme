@@ -43,31 +43,6 @@ namespace StyleCompiler
                     });
                 });
 
-                cli.Command("custom-theme", c =>
-                {
-                    var baseThemeOption = c.Option("--base-theme", "", CommandOptionType.SingleValue);
-                    var baseColorSchemeOption = c.Option("--base-color-scheme", "", CommandOptionType.SingleValue);
-                    var baseSizeSchemeOption = c.Option("--base-size-scheme", "", CommandOptionType.SingleValue);
-                    var customMetaPathOption = c.Option("--custom-meta-path", "", CommandOptionType.SingleValue);
-                    var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
-                    c.OnExecute(delegate
-                    {
-                        EnsureRequiredOptions(baseThemeOption, baseColorSchemeOption, customMetaPathOption, outputPathOption);
-                        CustomThemeGenerator.Generate(
-                            sourcePath,
-                            new ThemeId(
-                                baseThemeOption.Value(),
-                                baseColorSchemeOption.Value(),
-                                baseSizeSchemeOption.Value()
-                            ),
-                            customMetaPathOption.Value(),
-                            outputPathOption.Value()
-                        );
-                        return 0;
-                    });
-
-                });
-
                 cli.Command("test-server", c =>
                 {
                     c.OnExecute(delegate
