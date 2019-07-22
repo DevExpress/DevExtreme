@@ -971,8 +971,8 @@ var Widget = DOMComponent.inherit({
             var attrName = (option.name === "role" || option.name === "id") ? option.name : "aria-" + option.name,
                 attrValue = option.value;
 
-            if(attrValue === null || attrValue === undefined) {
-                attrValue = undefined;
+            if(!typeUtils.isDefined(attrValue)) {
+                attrValue = null;
             } else {
                 attrValue = attrValue.toString();
             }
