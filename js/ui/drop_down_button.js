@@ -36,6 +36,20 @@ let DropDownButton = Widget.inherit({
         return extend(this.callBase(), {
 
             /**
+             * @name dxDropDownButtonItem
+             * @inherits dxListItem
+             * @type object
+             */
+            /**
+             * @name dxDropDownButtonItem.key
+             * @hidden
+             */
+            /**
+             * @name dxDropDownButtonItem.showChevron
+             * @hidden
+             */
+
+            /**
              * @name dxDropDownButtonOptions.itemTemplate
              * @type template|function
              * @default "item"
@@ -176,7 +190,7 @@ let DropDownButton = Widget.inherit({
 
             /**
              * @name dxDropDownButtonOptions.items
-             * @type Array<CollectionWidgetItem, object>
+             * @type Array<dxDropDownButtonItem, object>
              * @default null
              */
             items: null,
