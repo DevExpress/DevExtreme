@@ -354,7 +354,9 @@ QUnit.module("check action buttons events", (hooks) => {
                 assert.ok(e.element, "first SDA content ready element in args");
             })
             .on("disposing", (e) => {
+                assert.ok(e.component, "first SDA disposing component in args");
                 assert.ok(e.actionElement, "first SDA disposing actionElement in args");
+                assert.ok(e.element, "first SDA disposing element in args");
             })
             .on("initialized", (e) => {
                 assert.ok(e.component, "first SDA initialized component in args");
