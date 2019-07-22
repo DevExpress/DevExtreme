@@ -2,10 +2,10 @@ import devices from "core/devices";
 import browser from "core/utils/browser";
 
 function testInChromeOnDesktop(name, testCallback) {
-    if(devices.real().deviceType !== "desktop" || !browser.webkit) {
-        QUnit.skip.call(null, name, testCallback);
-    } else {
+    if(devices.real().deviceType === "desktop" && browser.webkit) {
         QUnit.testInActiveWindow.call(null, name, testCallback);
+    } else {
+        QUnit.skip.call(null, name, testCallback);
     }
 }
 
