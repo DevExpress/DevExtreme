@@ -1,6 +1,6 @@
 import $ from "jquery";
 import fx from "animation/fx";
-import checkStyleHelper from "../../helpers/checkStyleHelper.js";
+import CheckStyleHelper from "../../helpers/checkStyleHelper.js";
 
 import "ui/menu/ui.menu";
 import "ui/menu/ui.submenu";
@@ -74,11 +74,7 @@ QUnit.test("Do not render menu with empty items", (assert) => {
     assert.equal(root.length, 0, "no root");
 });
 
-QUnit.test("Check item template styles - not focused", function(assert) {
-    if(!checkStyleHelper.isChromeOnDesktop(assert)) {
-        return;
-    }
-
+CheckStyleHelper.testInChromeOnDesktop("Check item template styles - not focused", function(assert) {
     const $template = $("<div>").text("test1");
     createMenu({
         items: [{ text: "item1" }],
@@ -86,18 +82,14 @@ QUnit.test("Check item template styles - not focused", function(assert) {
     });
     $("#input1").focus();
 
-    checkStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
-    checkStyleHelper.checkBackgroundColor(assert, $template[0], "rgba(0, 0, 0, 0)");
-    checkStyleHelper.checkOverflowX(assert, $template[0], "visible");
-    checkStyleHelper.checkTextOverflow(assert, $template[0], "clip");
-    checkStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
+    CheckStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
+    CheckStyleHelper.checkBackgroundColor(assert, $template[0], "rgba(0, 0, 0, 0)");
+    CheckStyleHelper.checkOverflowX(assert, $template[0], "visible");
+    CheckStyleHelper.checkTextOverflow(assert, $template[0], "clip");
+    CheckStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
 });
 
-QUnit.testInActiveWindow("Check item template styles - focused", function(assert) {
-    if(!checkStyleHelper.isChromeOnDesktop(assert)) {
-        return;
-    }
-
+CheckStyleHelper.testInChromeOnDesktop("Check item template styles - focused", function(assert) {
     const $template = $("<div>").text("test1");
     const menu = createMenu({
         items: [{ text: "item1" }],
@@ -105,11 +97,11 @@ QUnit.testInActiveWindow("Check item template styles - focused", function(assert
     });
     menu.instance.focus();
 
-    checkStyleHelper.checkColor(assert, $template[0], "rgb(255, 255, 255)");
-    checkStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(51, 122, 183)");
-    checkStyleHelper.checkOverflowX(assert, $template[0], "visible");
-    checkStyleHelper.checkTextOverflow(assert, $template[0], "clip");
-    checkStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
+    CheckStyleHelper.checkColor(assert, $template[0], "rgb(255, 255, 255)");
+    CheckStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(51, 122, 183)");
+    CheckStyleHelper.checkOverflowX(assert, $template[0], "visible");
+    CheckStyleHelper.checkTextOverflow(assert, $template[0], "clip");
+    CheckStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
 });
 
 QUnit.module("Menu - selection", {

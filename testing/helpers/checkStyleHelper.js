@@ -1,11 +1,13 @@
 import devices from "core/devices";
 import browser from "core/utils/browser";
 
-function isChromeOnDesktop(assert) {
+function testInChromeOnDesktop(name, testCallback) {
     if(devices.real().deviceType !== "desktop" || !browser.webkit) {
-        assert.ok(true, "test is designed to run in chrome on desktop only");
-        return false;
+        QUnit.skip.call(null, name, testCallback);
+    } else {
+        QUnit.testInActiveWindow.call(null, name, testCallback);
     }
+
     return true;
 }
 
@@ -44,7 +46,7 @@ function checkColor(assert, element, expectedValue) {
 }
 
 export default {
-    isChromeOnDesktop: isChromeOnDesktop,
+    testInChromeOnDesktop: testInChromeOnDesktop,
     checkTextOverflow: checkTextOverflow,
     checkWhiteSpace: checkWhiteSpace,
     checkOverflowX: checkOverflowX,
