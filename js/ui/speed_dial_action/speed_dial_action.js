@@ -3,6 +3,7 @@ import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import readyCallbacks from "../../core/utils/ready_callbacks";
 import Widget from "../widget/ui.widget";
+import { noop } from "../../core/utils/common";
 import { initAction, disposeAction } from "./speed_dial_main_item";
 import { getSwatchContainer } from "../widget/swatch_container";
 
@@ -100,12 +101,7 @@ const SpeedDialAction = Widget.inherit({
     },
 
     _createActionByOption(optionName, config) {
-        const emptyFunc = () => {
-            const result = () => {};
-            return result;
-        };
-
-        return (optionName === "onInitialized" || optionName === "onDisposing") ? emptyFunc : this.callBase(optionName, config);
+        return (optionName === "onInitialized" || optionName === "onDisposing") ? noop : this.callBase(optionName, config);
     },
 
     _render() {
