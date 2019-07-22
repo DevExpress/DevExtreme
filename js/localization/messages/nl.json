@@ -13,6 +13,8 @@
 
         "dxCollectionWidget-noDataText": "Geen gegevens om te tonen",
 
+        "dxDropDownEditor-selectLabel": "Kiezen",
+
         "validation-required": "Verplicht",
         "validation-required-formatted": "{0} is verplicht",
         "validation-numeric": "Waarde moet numeriek zijn",
