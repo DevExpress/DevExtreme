@@ -1895,9 +1895,7 @@ QUnit.test("Month view; dates are rendered correctly with grouping by date & emp
         height: 700
     });
 
-    const cells = $(".dx-scheduler-date-table-cell");
-
-    let hasNaNCellData = cells.filter((index, cell) => {
+    let hasNaNCellData = this.scheduler.workSpace.getCells().filter((index, cell) => {
         return isNaN(parseInt(cell.innerText));
     }).length;
 
