@@ -1141,33 +1141,4 @@ QUnit.module("regressions", moduleConfig, () => {
         $input.triggerHandler("blur");
         assert.equal(handler.callCount, 2, "'change' event is not fired after focus out without value change");
     });
-
-
-    QUnit.test("TextEditor cannot change table column percent width (T756307)", (assert) => {
-        const markup =
-            '<table id="test-table" style="width: 280px" >\
-                <thead>\
-                    <th style="width: 50%;">head 1</th>\
-                    <th style="width: 50%;">head 2</th>\
-                </thead>\
-                <tr>\
-                    <td>\
-                        <div id="content" style="width: 100%">long content, long content, long content</div>\
-                    </td>\
-                    <td>\
-                        <div id="content-with-editor" style="width: 100%">long content, long content, long content</div>\
-                        <div id="table-texteditor"></div>\
-                    </td>\
-                </tr>\
-            <table>';
-        $("#qunit-fixture").html(markup);
-
-        $("#table-texteditor").dxTextEditor({
-            value: "val",
-            width: "30%"
-        });
-
-        assert.equal($("#content").width(), $("#content-with-editor").width(), "table columns have equal width");
-        $("#test-table").remove();
-    });
 });
