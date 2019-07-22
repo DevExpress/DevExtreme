@@ -2029,11 +2029,15 @@ QUnit.module("number validation", {}, () => {
 });
 
 QUnit.module("aria accessibility", {}, () => {
-    QUnit.test("aria role", (assert) => {
+    QUnit.test("default render", (assert) => {
         const $element = $("#numberbox").dxNumberBox({});
         const $input = $element.find(".dx-texteditor-input");
+        const inputElement = $input.get(0);
 
         assert.equal($input.attr("role"), "spinbutton", "aria role is correct");
+        assert.equal($input.attr("aria-valuenow"), "0", "required 'aria-valuenow' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemin"), "required 'aria-valuemin' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
     });
 
     QUnit.test("aria properties", (assert) => {
@@ -2062,7 +2066,7 @@ QUnit.module("aria accessibility", {}, () => {
         assert.strictEqual($input.attr("aria-valuemax"), "0", "aria max is correct");
     });
 
-    QUnit.test("the dxNumberBox should not have valuemin when max only is specified", (assert) => {
+    QUnit.test("the dxNumberBox should have value[min/max] when max or min only is specified", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             max: 30,
             value: 25
@@ -2070,20 +2074,20 @@ QUnit.module("aria accessibility", {}, () => {
         const numberBox = $element.dxNumberBox("instance");
         const $input = $element.find(".dx-texteditor-input").get(0);
 
-        assert.notOk($input.hasAttribute("aria-valuemin"), "there is no valuemin");
+        assert.ok($input.hasAttribute("aria-valuemin"), "there is valuemin");
 
         numberBox.option({
             min: 4,
             max: undefined
         });
-        assert.notOk($input.hasAttribute("aria-valuemax"), "there is no valuemax");
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemax");
         assert.strictEqual($($input).attr("aria-valuemin"), "4", "valuemin is correct");
 
         numberBox.option({
             min: undefined,
             max: undefined
         });
-        assert.notOk($input.hasAttribute("aria-valuemax"), "there is no valuemin");
-        assert.notOk($input.hasAttribute("aria-valuemax"), "there is no valuemax");
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemin");
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemax");
     });
 });

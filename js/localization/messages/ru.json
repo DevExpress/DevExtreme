@@ -11,6 +11,7 @@
         "Back": "Назад",
         "OK": "OK",
         "dxCollectionWidget-noDataText": "Нет данных для отображения",
+        "dxDropDownEditor-selectLabel": "Выбрать",
         "validation-required": "Поле необходимо заполнить",
         "validation-required-formatted": "Необходимо заполнить: {0}",
         "validation-numeric": "Значение должно быть числом",

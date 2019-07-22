@@ -13,6 +13,8 @@
 
         "dxCollectionWidget-noDataText": "Ni podatkov za prikaz",
 
+        "dxDropDownEditor-selectLabel": "Izberi",
+
         "validation-required": "Obvezen podatek",
         "validation-required-formatted": "Podatek {0} je obvezen",
         "validation-numeric": "Vrednost mora biti število",

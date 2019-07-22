@@ -13,6 +13,8 @@
 
         "dxCollectionWidget-noDataText": "Nessun dato da mostrare",
 
+        "dxDropDownEditor-selectLabel": "Seleziona",
+
         "validation-required": "Richiesto",
         "validation-required-formatted": "{0} è richiesto",
         "validation-numeric": "Il valore deve essere numerico",

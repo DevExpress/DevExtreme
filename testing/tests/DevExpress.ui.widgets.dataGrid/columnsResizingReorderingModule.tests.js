@@ -56,7 +56,6 @@ var ColumnsController = columnsModule.controllers.columns;
 import { RowsView } from "ui/data_grid/ui.data_grid.rows";
 import { GroupingHeaderPanelExtender } from "ui/data_grid/ui.data_grid.grouping";
 import { HeaderPanel } from "ui/data_grid/ui.data_grid.header_panel";
-import domUtils from "core/utils/dom";
 import Action from "core/action";
 import devices from "core/devices";
 import publicComponentUtils from "core/utils/public_component";
@@ -768,7 +767,7 @@ function getEvent(options) {
                             attrValue = attrValue.toString();
                         }
 
-                        domUtils.toggleAttr(option.target, attrName, attrValue);
+                        option.target.attr(attrName, attrValue);
                     };
 
                     if(!$.isPlainObject(arguments[0])) {
@@ -3024,7 +3023,7 @@ function getEvent(options) {
                             attrValue = attrValue.toString();
                         }
 
-                        domUtils.toggleAttr(option.target, attrName, attrValue);
+                        option.target.attr(attrName, attrValue);
                     };
 
                     if(!$.isPlainObject(arguments[0])) {

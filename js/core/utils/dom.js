@@ -152,11 +152,6 @@ var normalizeTemplateElement = function(element) {
     return $element;
 };
 
-var toggleAttr = function($target, attr, value) {
-    value ? $target.attr(attr, value) : $target.removeAttr(attr);
-};
-
-
 var clipboardText = function(event, text) {
     var clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
 
@@ -202,6 +197,5 @@ exports.clearSelection = clearSelection;
 exports.uniqueId = uniqueId;
 exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
-exports.toggleAttr = toggleAttr;
 exports.contains = contains;
 exports.getPublicElement = getPublicElement;

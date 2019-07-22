@@ -11,6 +11,7 @@
         "Back": "Voltar",
         "OK": "OK",
         "dxCollectionWidget-noDataText": "Sem dados",
+        "dxDropDownEditor-selectLabel": "Selecione",
         "validation-required": "Preenchimento obrigatório",
         "validation-required-formatted": "{0} é de preenchimento obrigatório",
         "validation-numeric": "Valor deve ser um número",
