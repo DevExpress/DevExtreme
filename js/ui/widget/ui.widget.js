@@ -971,10 +971,10 @@ var Widget = DOMComponent.inherit({
             var attrName = (option.name === "role" || option.name === "id") ? option.name : "aria-" + option.name,
                 attrValue = option.value;
 
-            if(attrValue === null || attrValue === undefined) {
-                attrValue = undefined;
-            } else {
+            if(typeUtils.isDefined(attrValue)) {
                 attrValue = attrValue.toString();
+            } else {
+                attrValue = null;
             }
 
             option.target.attr(attrName, attrValue);
