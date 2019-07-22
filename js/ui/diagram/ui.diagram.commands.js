@@ -94,7 +94,7 @@ const DiagramCommands = {
                     icon: "dx-icon dx-icon-color",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
                 },
-                strokeColor: {
+                lineColor: {
                     command: DiagramCommand.StrokeColor,
                     text: "Line Color",
                     widget: "dxColorBox",
@@ -212,7 +212,7 @@ const DiagramCommands = {
             commands["underline"],
             commands["separator"],
             commands["fontColor"],
-            commands["strokeColor"],
+            commands["lineColor"],
             commands["fillColor"],
             commands["separator"],
             commands["textAlignLeft"],

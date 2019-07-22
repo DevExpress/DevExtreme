@@ -768,7 +768,7 @@ class Diagram extends Widget {
                 */
                 visible: true,
                 /**
-                * @name dxDiagramOptions.toolbar.groups
+                * @name dxDiagramOptions.toolbar.commands
                 * @type Array<Enums.DiagramToolbarCommand>
                 * @default undefined
                 */
