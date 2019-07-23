@@ -228,6 +228,7 @@ const DiagramCommands = {
             commands["fullscreen"]
         ];
     },
+
     getAllPropertyPanelCommands: function() {
         const { DiagramCommand } = getDiagram();
         return this.propertyPanelCommands ||
@@ -305,6 +306,7 @@ const DiagramCommands = {
         commandGroups = commandGroups || DiagramCommands.getDefaultPropertyPanelCommandGroups();
         return DiagramCommands.getPropertyPanelCommandsByGroups(commandGroups);
     },
+
     getAllContextMenuCommands: function() {
         const { DiagramCommand } = getDiagram();
         return this.contextMenuCommands ||
@@ -368,6 +370,7 @@ const DiagramCommands = {
             commands["unlock"]
         ];
     },
+
     _exportTo(widget, dataURI, format, mimeString) {
         const window = getWindow();
         if(window && window.atob && isFunction(window.Blob)) {
