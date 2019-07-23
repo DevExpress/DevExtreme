@@ -148,7 +148,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
             action._options.actionComponent = action;
 
-            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options, { visible: false })));
         }
     },
 

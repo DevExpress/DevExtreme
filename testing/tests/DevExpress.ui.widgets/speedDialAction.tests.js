@@ -305,7 +305,6 @@ QUnit.module("check action buttons position", (hooks) => {
     });
 });
 
-
 QUnit.module("check action buttons click args", (hooks) => {
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
@@ -336,6 +335,27 @@ QUnit.module("check action buttons click args", (hooks) => {
 
         $fabMainContent.trigger("dxclick");
         $fabContent.eq(2).trigger("dxclick");
+    });
+});
+
+QUnit.module("add visible option", (hooks) => {
+    hooks.afterEach(() => {
+        $("#fab-one").dxSpeedDialAction("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
+    }),
+
+    test("check rendering", (assert) => {
+        $("#fab-one").dxSpeedDialAction();
+
+        const secondSDA = $("#fab-two").dxSpeedDialAction({
+            visible: false
+        }).dxSpeedDialAction("instance");
+
+        assert.equal($("." + FAB_CLASS).length, 1, "one action - second SDA invisible");
+
+        secondSDA.option("visible", true);
+
+        assert.equal($("." + FAB_CLASS).length, 3, "multiple actions - second SDA visible");
     });
 });
 
