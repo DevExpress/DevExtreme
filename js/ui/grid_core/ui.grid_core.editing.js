@@ -270,15 +270,29 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _needToCloseEditableCell: function($targetElement) {
-            var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
-                $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
-                columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
-                rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
-                visibleColumns = this._columnsController.getVisibleColumns(),
-                // TODO jsdmitry: Move this code to _rowClick method of rowsView
-                allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
+            var isDataRow,
+                $targetCell,
+                columnIndex,
+                rowIndex,
+                visibleColumns,
+                allowEditing,
+                $element = this.component.$element(),
+                isDataGridElement = !$element || !!$targetElement.closest($element).length;
 
-            return this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)));
+            if(isDataGridElement) {
+                isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length;
+
+                if(isDataRow) {
+                    $targetCell = $targetElement.closest("." + ROW_CLASS + "> td");
+                    columnIndex = $targetCell[0] && $targetCell[0].cellIndex;
+                    rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent());
+                    visibleColumns = this._columnsController.getVisibleColumns();
+                    // TODO jsdmitry: Move this code to _rowClick method of rowsView
+                    allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
+                }
+            }
+
+            return this.isEditing() && (!isDataGridElement || !isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)));
         },
 
         _closeEditItem: function($targetElement) {
