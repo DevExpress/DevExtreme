@@ -11,7 +11,7 @@ import "generic_light.css!";
 
 initTestMarkup();
 
-const createScheduler = function(options) {
+const createScheduler = (options) => {
     const data = [
         {
             text: "Task 1",
@@ -45,6 +45,38 @@ const moduleConfig = {
 };
 
 QUnit.module("onContentReady event", moduleConfig, () => {
+    QUnit.test("contentReady action should rise after change dataSource", function(assert) {
+        const dataSource1 = [{
+            text: "1",
+            startDate: new Date(2016, 2, 15, 1),
+            endDate: new Date(2016, 2, 15, 2)
+        }];
+
+        const dataSource2 = [{
+            text: "2",
+            startDate: new Date(2016, 2, 15, 1),
+            endDate: new Date(2016, 2, 15, 2)
+        }];
+
+        let contentReadyCount = 0;
+        const scheduler = createScheduler({
+            onContentReady: e => contentReadyCount++,
+            views: ["week"],
+            currentView: "week",
+            currentDate: new Date(2016, 2, 15, 1)
+        });
+
+        assert.equal(contentReadyCount, 1, "contentReady should be rise after first init control");
+
+        scheduler.option("dataSource", dataSource1);
+        assert.equal(scheduler.appointments.getTitleText(), "1", "Appointment should be render");
+        assert.equal(contentReadyCount, 2, "contentReady should be rise after set dataSource");
+
+        scheduler.option("dataSource", dataSource2);
+        assert.equal(scheduler.appointments.getTitleText(), "2", "Appointment should be re-render");
+        assert.equal(contentReadyCount, 3, "contentReady should be rise after change dataSource");
+    });
+
     QUnit.test("contentReady action should rise after call repaint", function(assert) {
         let contentReadyCount = 0;
         const scheduler = createScheduler({
