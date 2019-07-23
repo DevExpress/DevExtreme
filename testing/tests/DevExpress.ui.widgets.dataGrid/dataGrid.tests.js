@@ -458,8 +458,8 @@ QUnit.test("Should not cut border of selected cell by 'Add row' (T748046)", func
     dataGrid.addRow();
     clock.tick();
 
-    rowsViewPosition = $(dataGrid.getView("rowsView").element()).offset();
-    firstCellPosition = $(dataGrid.getCellElement(0, 0)).offset();
+    rowsViewPosition = dataGrid.getView("rowsView").element()[0].getBoundingClientRect();
+    firstCellPosition = dataGrid.getCellElement(0, 0).getBoundingClientRect();
 
     // assert
     assert.equal(firstCellPosition.top - rowsViewPosition.top, 1, "first row has zero top offset");
@@ -495,8 +495,8 @@ QUnit.test("Added row should be scrolled to the top of the grid (T748046)", func
     dataGrid.addRow();
     clock.tick();
 
-    rowsViewPosition = $(dataGrid.getView("rowsView").element()).offset();
-    firstCellPosition = $(dataGrid.getCellElement(0, 0)).offset();
+    rowsViewPosition = dataGrid.getView("rowsView").element()[0].getBoundingClientRect();
+    firstCellPosition = dataGrid.getCellElement(0, 0).getBoundingClientRect();
 
     // assert
     assert.equal(firstCellPosition.top - rowsViewPosition.top, 1, "first row has zero top offset");
