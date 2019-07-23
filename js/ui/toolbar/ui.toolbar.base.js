@@ -154,7 +154,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         const timeout = 15;
         return new Promise(resolve => {
             const check = () => {
-                var readyToResolve = true;
+                let readyToResolve = true;
                 $element.parents().each((_, parent) => {
                     if(fx.isAnimating($(parent))) {
                         readyToResolve = false;
