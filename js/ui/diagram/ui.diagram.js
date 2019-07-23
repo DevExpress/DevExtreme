@@ -92,7 +92,10 @@ class Diagram extends Widget {
         }
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
-        this._updateFullscreenState();
+
+        if(this.option("fullscreen")) {
+            this._updateFullscreenState();
+        }
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
