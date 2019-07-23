@@ -1876,3 +1876,28 @@ QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view 
 
     assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
 });
+
+QUnit.test("Month view; dates are rendered correctly with grouping by date & empty resources in groups (T759160)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["month"],
+        currentView: "month",
+        crossScrollingEnabled: true,
+        groupByDate: true,
+        currentDate: new Date(2018, 4, 21),
+        groups: [],
+        resources: [{
+            fieldExpr: "priorityId",
+            allowMultiple: false,
+            dataSource: [],
+            label: "Priority"
+        }],
+        height: 700
+    });
+
+    let hasNaNCellData = this.scheduler.workSpace.getCells().filter((index, cell) => {
+        return isNaN(parseInt(cell.innerText));
+    }).length;
+
+    assert.notOk(hasNaNCellData, "Container has valid data");
+});
