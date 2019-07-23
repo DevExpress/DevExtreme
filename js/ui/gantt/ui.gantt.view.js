@@ -12,7 +12,7 @@ export class GanttView extends Widget {
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
         this._ganttViewCore = new GanttView(this.$element().get(0), this);
-        this._ganttViewCore.setViewType(4);
+        this._ganttViewCore.setViewType(3);
     }
 
     _getTaskAreaContainer() {
@@ -31,6 +31,9 @@ export class GanttView extends Widget {
     }
     _updateView() {
         this._ganttViewCore.updateView();
+    }
+    _setWidth(value) {
+        this._ganttViewCore.setWidth(value);
     }
 
     // IGanttOwner

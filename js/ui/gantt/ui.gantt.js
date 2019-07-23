@@ -1,16 +1,25 @@
 import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import pointerEvents from "../../events/pointer";
+import { addNamespace } from "../../events/utils";
 import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
+const GANTT_SPLITTER_TRANSPARENT_CLASS = "dx-gantt-splitter-transparent";
+const GANTT_SPLITTER_BORDER_CLASS = "dx-gantt-splitter-border";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 
 const GANTT_KEY_FIELD = "id";
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
+const GANTT_SPLITTER_BORDER_WIDTH = 2;
+
+const MODULE_NAMESPACE = "dxGanttResizing";
 
 class Gantt extends Widget {
     _initMarkup() {
@@ -25,6 +34,12 @@ class Gantt extends Widget {
             .appendTo(this._$treeListWrapper);
         this._$splitter = $("<div>")
             .addClass(GANTT_SPLITTER_CLASS)
+            .addClass(GANTT_SPLITTER_TRANSPARENT_CLASS)
+            .css('left', this.option("treeListWidth"))
+            .height(this.option("height"))
+            .appendTo(this.$element());
+        $("<div>")
+            .addClass(GANTT_SPLITTER_BORDER_CLASS)
             .appendTo(this.$element());
         this._$ganttView = $("<div>")
             .addClass(GANTT_VIEW_CLASS)
@@ -33,6 +48,7 @@ class Gantt extends Widget {
 
     _render() {
         this._renderTreeList();
+        this._renderSplitter();
     }
     _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
@@ -52,6 +68,12 @@ class Gantt extends Widget {
             onRowExpanded: () => this._updateGanttView()
         });
     }
+    _renderSplitter() {
+        const document = domAdapter.getDocument();
+        eventsEngine.on(this._$splitter, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, (e) => { this._startResizingHandler(e); });
+        eventsEngine.on(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, (e) => { this._moveSplitterHandler(e); });
+        eventsEngine.on(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, () => { this._endResizingHandler(); });
+    }
 
     _initGanttView() {
         if(this._ganttView) {
@@ -70,6 +92,29 @@ class Gantt extends Widget {
         });
     }
 
+    _startResizingHandler(e) {
+        e.preventDefault();
+        this._$splitter.removeClass(GANTT_SPLITTER_TRANSPARENT_CLASS);
+        this._isSplitterMove = true;
+        this._splitterLastLeftPos = e.clientX;
+    }
+    _moveSplitterHandler(e) {
+        if(this._isSplitterMove) {
+            let newLeftPos = this._$splitter.position().left - this._splitterLastLeftPos + e.clientX;
+            newLeftPos = Math.max(0, newLeftPos);
+            newLeftPos = Math.min(newLeftPos, this.$element().width());
+            this._splitterLastLeftPos = e.clientX;
+            this._updateWidth(newLeftPos);
+        }
+    }
+    _endResizingHandler() {
+        if(this._isSplitterMove) {
+            this._$splitter.addClass(GANTT_SPLITTER_TRANSPARENT_CLASS);
+            this._isSplitterMove = false;
+            this.option("treeListWidth", this._$splitter.position().left);
+        }
+    }
+
     _onTreeListContentReady(e) {
         if(e.component.getDataSource()) {
             this._initGanttView();
@@ -84,7 +129,7 @@ class Gantt extends Widget {
         if(treeListScrollable) {
             const diff = e.scrollTop - treeListScrollable.scrollTop();
             if(diff !== 0) {
-                treeListScrollable.scrollBy({ top: diff });
+                treeListScrollable.scrollBy({ left: 0, top: diff });
             }
         }
     }
@@ -118,10 +163,11 @@ class Gantt extends Widget {
         return GANTT_DEFAULT_ROW_HEIGHT;
     }
 
-    _updateWidth() {
-        const treeListWidth = this.option("treeListWidth");
+    _updateWidth(treeListWidth) {
         this._$treeListWrapper.width(treeListWidth);
         this._$treeList.width(treeListWidth);
+        this._$splitter.css('left', treeListWidth);
+        this._ganttView._setWidth(this.$element().width() - treeListWidth - GANTT_SPLITTER_BORDER_WIDTH);
     }
 
     _getDefaultOptions() {
@@ -230,7 +276,7 @@ class Gantt extends Widget {
                 // TODO
                 break;
             case "treeListWidth":
-                this._updateWidth();
+                this._updateWidth(args.value);
                 break;
             default:
                 super._optionChanged(args);

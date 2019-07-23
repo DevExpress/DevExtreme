@@ -5,6 +5,15 @@
     border: 1px solid @base-border-color;
 
     .dx-gantt-splitter {
+        width: 4px;
+        background-color: @datagrid-column-separator-bg;
+    }
+
+    .dx-gantt-splitter-transparent {
+        background-color: transparent;
+    }
+
+    .dx-gantt-splitter-border {
         border-left: 2px solid @base-border-color;
     }
 
@@ -119,6 +128,31 @@
         .dx-gantt-titleOut {
             padding-right: 20px;
         }
+    }
+
+    .dx-gantt-task-edit-wrapper {
+        padding-top: 8px;
+
+        .dx-gantt-task-edit-frame {
+            border: 1px solid darken(@base-accent, 10%);
+            border-radius: @base-border-radius;
+        }
+    }
+
+    .dx-gantt-task-edit-wrapper-successor {
+        padding-top: 8px;
+    }
+
+    .dx-gantt-task-edit-dependency-r,
+    .dx-gantt-task-edit-successor-dependency-r,
+    .dx-gantt-task-edit-dependency-l,
+    .dx-gantt-task-edit-successor-dependency-l {
+        background: white;
+        border: 1px solid darken(@base-accent, 10%);
+    }
+
+    .dx-gantt-task-edit-dependency-line {
+        background-color: @base-text-color;
     }
 
     .dx-gantt-sel {
