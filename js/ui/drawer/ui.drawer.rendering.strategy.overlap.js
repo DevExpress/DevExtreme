@@ -19,7 +19,7 @@ class OverlapStrategy extends DrawerStrategy {
             shading: false,
             container: drawer.getOverlayTarget(),
             position: position,
-            width: "auto",
+            width: drawer.option("opened") ? "auto" : 0,
             height: "100%",
             templatesRenderAsynchronously: drawer.option("templatesRenderAsynchronously"),
             animation: {
