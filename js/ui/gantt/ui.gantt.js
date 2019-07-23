@@ -19,7 +19,10 @@ const GANTT_KEY_FIELD = "id";
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 const GANTT_SPLITTER_BORDER_WIDTH = 2;
 
-const MODULE_NAMESPACE = "dxGanttResizing";
+const GANTT_MODULE_NAMESPACE = "dxGanttResizing";
+const GANTT_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, GANTT_MODULE_NAMESPACE);
+const GANTT_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, GANTT_MODULE_NAMESPACE);
+const GANTT_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, GANTT_MODULE_NAMESPACE);
 
 class Gantt extends Widget {
     _initMarkup() {
@@ -70,9 +73,12 @@ class Gantt extends Widget {
     }
     _renderSplitter() {
         const document = domAdapter.getDocument();
-        eventsEngine.on(this._$splitter, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, (e) => { this._startResizingHandler(e); });
-        eventsEngine.on(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, (e) => { this._moveSplitterHandler(e); });
-        eventsEngine.on(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, () => { this._endResizingHandler(); });
+        eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
+        eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
+        eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
+        eventsEngine.on(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME, this._startResizingHandler.bind(this));
+        eventsEngine.on(document, GANTT_POINTER_MOVE_EVENT_NAME, this._moveSplitterHandler.bind(this));
+        eventsEngine.on(document, GANTT_POINTER_UP_EVENT_NAME, this._endResizingHandler.bind(this));
     }
 
     _initGanttView() {
