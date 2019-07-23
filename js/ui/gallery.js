@@ -453,13 +453,48 @@ var Gallery = CollectionWidget.inherit({
 
         var duplicateCount = Math.min(this._itemsPerPage(), itemsCount);
 
+        var $items = this._getRealItems();
+        var $container = this._itemContainer();
+
+
         for(i = 0; i < duplicateCount; i++) {
-            this._renderItem(0, items[i]).addClass(GALLERY_LOOP_ITEM_CLASS);
+            // var $itemFrame = this._renderItemFrame(0, items[i], $container).addClass(GALLERY_LOOP_ITEM_CLASS);
+
+            // this._renderItem(0, items[i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
+            $($items[i]).clone(true).addClass(GALLERY_LOOP_ITEM_CLASS).appendTo($container);
+
+            // this._postprocessRenderItem({
+            //     itemElement: $itemFrame,
+            //     itemContent: $itemContent,
+            //     itemData: items[i],
+            //     itemIndex: 0
+            // });
         }
 
         for(i = 0; i < duplicateCount; i++) {
-            this._renderItem(0, items[lastItemIndex - i]).addClass(GALLERY_LOOP_ITEM_CLASS);
+            // $itemFrame = this._renderItemFrame(0, items[i], $container).addClass(GALLERY_LOOP_ITEM_CLASS);
+            // // this._renderItem(0, items[i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
+            // $itemContent = $($items[lastItemIndex - i]).clone(true).appendTo($itemFrame);
+            $($items[lastItemIndex - i]).clone(true).addClass(GALLERY_LOOP_ITEM_CLASS).appendTo($container);
+            // this._postprocessRenderItem({
+            //     itemElement: $itemFrame,
+            //     itemContent: $itemContent,
+            //     itemData: items[lastItemIndex - i],
+            //     itemIndex: 0
+            // });
         }
+
+        // for(i = 0; i < duplicateCount; i++) {
+        //     this._renderItem(0, items[i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
+        // }
+
+        // for(i = 0; i < duplicateCount; i++) {
+        //     this._renderItem(0, items[lastItemIndex - i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
+        // }
+    },
+
+    _getRealItems: function() {
+        return this.$element().find(".dx-gallery-item:not(." + GALLERY_LOOP_ITEM_CLASS + ")");
     },
 
     _getLoopedItems: function() {
