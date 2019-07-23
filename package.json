@@ -27,7 +27,7 @@
   },
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "0.0.29",
+    "devexpress-diagram": "0.0.30",
     "jszip": "^2.0.0 || ^3.0.0",
     "quill": "^1.3.6",
     "showdown": "^1.8.6",
