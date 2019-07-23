@@ -44,7 +44,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module("onContentReade event", moduleConfig, () => {
+QUnit.module("onContentReady event", moduleConfig, () => {
     QUnit.test("contentReady action should rise after call repaint", function(assert) {
         let contentReadyCount = 0;
         const scheduler = createScheduler({
