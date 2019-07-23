@@ -1033,6 +1033,16 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramUnits
+ * @enum {'in'|'cm'|'px'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPageOrientation
+ * @enum {'portrait'|'landscape'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramShapeCategory
  * @enum {'general'|'flowchart'|'orgChart'|'containers'|'custom'}
  */
