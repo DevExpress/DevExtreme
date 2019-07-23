@@ -148,6 +148,10 @@ export class SchedulerTestWrapper {
         };
     }
 
+    option(name, value) {
+        this.instance.option(name, value);
+    }
+
     isAdaptivity() {
         return this.instance.option("adaptivityEnabled");
     }
