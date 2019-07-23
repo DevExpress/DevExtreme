@@ -238,6 +238,83 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("readOnly", false);
         assert.notOk(this.instance._diagramInstance.settings.readOnly);
     });
+    test("should change zoomLevel property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        this.instance.option("zoomLevel", 1.5);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1.5);
+        this.instance.option("zoomLevel", 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+    });
+    test("should change autoZoom property", (assert) => {
+        assert.notOk(this.instance._diagramInstance.settings.autoZoom);
+        this.instance.option("autoZoom", true);
+        assert.ok(this.instance._diagramInstance.settings.autoZoom);
+        this.instance.option("autoZoom", false);
+        assert.notOk(this.instance._diagramInstance.settings.autoZoom);
+    });
+    test("should change fullscreen property", (assert) => {
+        assert.notOk(this.instance._diagramInstance.settings.fullscreen);
+        this.instance.option("fullscreen", true);
+        assert.ok(this.instance._diagramInstance.settings.fullscreen);
+        this.instance.option("fullscreen", false);
+        assert.notOk(this.instance._diagramInstance.settings.fullscreen);
+    });
+    test("should change showGrid property", (assert) => {
+        assert.ok(this.instance._diagramInstance.settings.showGrid);
+        this.instance.option("showGrid", false);
+        assert.notOk(this.instance._diagramInstance.settings.showGrid);
+        this.instance.option("showGrid", true);
+        assert.ok(this.instance._diagramInstance.settings.showGrid);
+    });
+    test("should change snapToGrid property", (assert) => {
+        assert.ok(this.instance._diagramInstance.settings.snapToGrid);
+        this.instance.option("snapToGrid", false);
+        assert.notOk(this.instance._diagramInstance.settings.snapToGrid);
+        this.instance.option("snapToGrid", true);
+        assert.ok(this.instance._diagramInstance.settings.snapToGrid);
+    });
+    test("should change gridSize property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        this.instance.option("gridSize", 0.25);
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 360);
+        this.instance.option("gridSize", 0.125);
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+    });
+    test("should change viewUnits property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
+        this.instance.option("viewUnits", "cm");
+        assert.equal(this.instance._diagramInstance.settings.viewUnits, 1);
+        this.instance.option("viewUnits", "in");
+        assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
+    });
+    test("should change document.units property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.units, 0);
+        this.instance.option("document.units", "cm");
+        assert.equal(this.instance._diagramInstance.model.units, 1);
+        this.instance.option("document.units", "in");
+        assert.equal(this.instance._diagramInstance.model.units, 0);
+    });
+    test("should change document.pageSize property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
+        this.instance.option("document.pageSize", { width: 3, height: 5 });
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
+    });
+    test("should change document.pageOrientation property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
+        this.instance.option("document.pageOrientation", "landscape");
+        assert.equal(this.instance._diagramInstance.model.pageLandscape, true);
+        this.instance.option("document.pageOrientation", "portrait");
+        assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
+    });
+    test("should change document.pageColor property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+        this.instance.option("document.pageColor", "red");
+        assert.equal(this.instance._diagramInstance.model.pageColor, "red");
+        this.instance.option("document.pageColor", "white");
+        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+    });
 });
 
 function findToolbarItem($diagram, label) {
