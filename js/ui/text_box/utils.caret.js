@@ -1,12 +1,12 @@
-var $ = require("../../core/renderer"),
-    isDefined = require("../../core/utils/type").isDefined,
-    browser = require("../../core/utils/browser"),
-    domAdapter = require("../../core/dom_adapter");
+import $ from "../../core/renderer";
+import { isDefined } from "../../core/utils/type";
+import browser from "../../core/utils/browser";
+import domAdapter from "../../core/dom_adapter";
 
-var isFocusingOnCaretChange = browser.msie || browser.safari;
+const isFocusingOnCaretChange = browser.msie || browser.safari;
 
-var getCaret = function(input) {
-    var range;
+const getCaret = function(input) {
+    let range;
 
     try {
         range = {
@@ -23,7 +23,7 @@ var getCaret = function(input) {
     return range;
 };
 
-var setCaret = function(input, position) {
+const setCaret = function(input, position) {
     if(!domAdapter.getBody().contains(input)) {
         return;
     }
@@ -34,7 +34,7 @@ var setCaret = function(input, position) {
     } catch(e) { }
 };
 
-var caret = function(input, position) {
+const caret = function(input, position) {
     input = $(input).get(0);
 
     if(!isDefined(position)) {
