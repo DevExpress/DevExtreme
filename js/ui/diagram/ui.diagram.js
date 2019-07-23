@@ -92,6 +92,7 @@ class Diagram extends Widget {
         }
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
+        this._updateFullscreenState();
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -261,7 +262,6 @@ class Diagram extends Widget {
         this._updateReadOnlyState();
         this._updateZoomLevelState();
         this._updateAutoZoomState();
-        this._updateFullscreenState();
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -538,7 +538,9 @@ class Diagram extends Widget {
     }
     _updateFullscreenState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.Fullscreen, this.option("fullscreen"));
+        var fullscreen = this.option("fullscreen");
+        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
+        this._onToggleFullscreen(fullscreen);
     }
     _updateShowGridState() {
         const { DiagramCommand } = getDiagram();
