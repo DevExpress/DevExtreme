@@ -72,6 +72,17 @@ class Gantt extends Widget {
         });
     }
     _renderSplitter() {
+        this._detachEventHandlers();
+        this._attachEventHandlers();
+    }
+
+    _detachEventHandlers() {
+        const document = domAdapter.getDocument();
+        eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
+        eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
+        eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
+    }
+    _attachEventHandlers() {
         const document = domAdapter.getDocument();
         eventsEngine.on(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME, this._startResizingHandler.bind(this));
         eventsEngine.on(document, GANTT_POINTER_MOVE_EVENT_NAME, this._moveSplitterHandler.bind(this));
@@ -174,10 +185,7 @@ class Gantt extends Widget {
     }
 
     _dispose() {
-        const document = domAdapter.getDocument();
-        eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
-        eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
-        eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
+        this._detachEventHandlers();
         super._dispose();
     }
 
