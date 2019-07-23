@@ -73,9 +73,6 @@ class Gantt extends Widget {
     }
     _renderSplitter() {
         const document = domAdapter.getDocument();
-        eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
-        eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
-        eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
         eventsEngine.on(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME, this._startResizingHandler.bind(this));
         eventsEngine.on(document, GANTT_POINTER_MOVE_EVENT_NAME, this._moveSplitterHandler.bind(this));
         eventsEngine.on(document, GANTT_POINTER_UP_EVENT_NAME, this._endResizingHandler.bind(this));
@@ -174,6 +171,14 @@ class Gantt extends Widget {
         this._$treeList.width(treeListWidth);
         this._$splitter.css('left', treeListWidth);
         this._ganttView._setWidth(this.$element().width() - treeListWidth - GANTT_SPLITTER_BORDER_WIDTH);
+    }
+
+    _dispose() {
+        const document = domAdapter.getDocument();
+        eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
+        eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
+        eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
+        super._dispose();
     }
 
     _getDefaultOptions() {
