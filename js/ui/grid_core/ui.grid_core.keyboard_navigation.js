@@ -1701,10 +1701,6 @@ module.exports = {
                 init: function() {
                     this.callBase();
                     this._keyboardNavigationController = this.getController("keyboardNavigation");
-                },
-                _delayedInputFocus: function() {
-                    this._keyboardNavigationController._isNeedScroll = true;
-                    this.callBase.apply(this, arguments);
                 }
             },
             data: {
