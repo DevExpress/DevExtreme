@@ -3816,14 +3816,14 @@ QUnit.testInActiveWindow('Insert Row after scrolling', function(assert) {
         that.click(headerPanelElement, '.dx-datagrid-addrow-button');
 
         // assert
-        assert.strictEqual(rowsView.getTopVisibleItemIndex(true), 0);
-        assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 4);
+        assert.strictEqual(rowsView.getTopVisibleItemIndex(), 1);
+        assert.equal(getInputElements(testElement.find('tbody > tr').eq(1)).length, 4);
 
         // act
         testElement.find('input').first().val('Test');
         testElement.find('input').first().trigger('change');
 
-        that.click(testElement.find('tbody > tr').eq(0), '.dx-link:contains(Save)');
+        that.click(testElement.find('tbody > tr').eq(1), '.dx-link:contains(Save)');
 
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'inputs count');
@@ -9401,8 +9401,8 @@ QUnit.test('Show error row on save inserted Row after scrolling when set validat
         that.addRow();
 
         // assert
-        assert.strictEqual(rowsView.getTopVisibleItemIndex(true), 0, "top visible item index");
-        assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 3);
+        assert.strictEqual(rowsView.getTopVisibleItemIndex(), 1, "top visible item index");
+        assert.equal(getInputElements(testElement.find('tbody > tr').eq(1)).length, 3);
         assert.equal(testElement.find('tbody > tr').length, 5, "count rows");
 
         // act
@@ -9410,9 +9410,9 @@ QUnit.test('Show error row on save inserted Row after scrolling when set validat
 
         // assert
         assert.equal(testElement.find('tbody > tr').length, 6, "count rows");
-        assert.ok(testElement.find('tbody > tr').eq(0).hasClass("dx-row-inserted"), "has inserted row");
-        assert.ok(testElement.find('tbody > tr').eq(1).hasClass("dx-error-row"), "has error row");
-        assert.strictEqual(testElement.find('tbody > tr').eq(1).text(), "Test");
+        assert.ok(testElement.find('tbody > tr').eq(1).hasClass("dx-row-inserted"), "has inserted row");
+        assert.ok(testElement.find('tbody > tr').eq(2).hasClass("dx-error-row"), "has error row");
+        assert.strictEqual(testElement.find('tbody > tr').eq(2).text(), "Test");
         done();
     });
 
