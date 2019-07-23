@@ -6,56 +6,32 @@ var $ = require("../../core/renderer"),
 var isFocusingOnCaretChange = browser.msie || browser.safari;
 
 var getCaret = function(input) {
-    if(isObsoleteBrowser(input)) {
-        return getCaretForObsoleteBrowser(input);
+    var range;
+
+    try {
+        range = {
+            start: input.selectionStart,
+            end: input.selectionEnd
+        };
+    } catch(e) {
+        range = {
+            start: 0,
+            end: 0
+        };
     }
 
-    return {
-        start: input.selectionStart,
-        end: input.selectionEnd
-    };
+    return range;
 };
 
 var setCaret = function(input, position) {
-    if(isObsoleteBrowser(input)) {
-        setCaretForObsoleteBrowser(input, position);
-        return;
-    }
     if(!domAdapter.getBody().contains(input)) {
         return;
     }
 
-    input.selectionStart = position.start;
-    input.selectionEnd = position.end;
-};
-
-var isObsoleteBrowser = function(input) {
-    return !input.setSelectionRange;
-};
-
-var getCaretForObsoleteBrowser = function(input) {
-    var range = domAdapter.getSelection().createRange();
-    var rangeCopy = range.duplicate();
-
-    range.move('character', -input.value.length);
-    range.setEndPoint('EndToStart', rangeCopy);
-
-    return {
-        start: range.text.length,
-        end: range.text.length + rangeCopy.text.length
-    };
-};
-
-var setCaretForObsoleteBrowser = function(input, position) {
-    if(!domAdapter.getBody().contains(input)) {
-        return;
-    }
-
-    var range = input.createTextRange();
-    range.collapse(true);
-    range.moveStart("character", position.start);
-    range.moveEnd("character", position.end - position.start);
-    range.select();
+    try {
+        input.selectionStart = position.start;
+        input.selectionEnd = position.end;
+    } catch(e) { }
 };
 
 var caret = function(input, position) {
