@@ -676,7 +676,7 @@ class Diagram extends Widget {
                 * @type Object
                 * @default 8.268
                 */
-                pageSize: DIAGRAM_DEFAULT_PAGE_SIZE,
+                pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
                 /**
                 * @name dxDiagramOptions.document.pageOrientation
                 * @type Enums.DiagramPageOrientation
