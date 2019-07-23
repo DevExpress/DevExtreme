@@ -3229,7 +3229,7 @@ QUnit.module("datebox w/ time list", {
         const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
         $item.trigger("dxclick");
 
-        assert.strictEqual(this.dateBox.option("value").getFullYear(), 1970, "year is correct");
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
     });
 
     QUnit.test("selected date should be in value year when value is specified", (assert) => {
