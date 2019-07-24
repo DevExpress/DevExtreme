@@ -8,6 +8,7 @@ import { addNamespace } from "../../events/utils";
 import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
+import { getWindow } from "../../core/utils/window";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
@@ -23,6 +24,7 @@ const GANTT_MODULE_NAMESPACE = "dxGanttResizing";
 const GANTT_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, GANTT_MODULE_NAMESPACE);
 const GANTT_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, GANTT_MODULE_NAMESPACE);
 const GANTT_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, GANTT_MODULE_NAMESPACE);
+const GANTT_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", GANTT_MODULE_NAMESPACE);
 
 class Gantt extends Widget {
     _initMarkup() {
@@ -51,7 +53,8 @@ class Gantt extends Widget {
 
     _render() {
         this._renderTreeList();
-        this._renderSplitter();
+        this._detachEventHandlers();
+        this._attachEventHandlers();
     }
     _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
@@ -71,22 +74,20 @@ class Gantt extends Widget {
             onRowExpanded: () => this._updateGanttView()
         });
     }
-    _renderSplitter() {
-        this._detachEventHandlers();
-        this._attachEventHandlers();
-    }
 
     _detachEventHandlers() {
         const document = domAdapter.getDocument();
         eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
         eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
         eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
+        eventsEngine.on(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME);
     }
     _attachEventHandlers() {
         const document = domAdapter.getDocument();
         eventsEngine.on(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME, this._startResizingHandler.bind(this));
         eventsEngine.on(document, GANTT_POINTER_MOVE_EVENT_NAME, this._moveSplitterHandler.bind(this));
         eventsEngine.on(document, GANTT_POINTER_UP_EVENT_NAME, this._endResizingHandler.bind(this));
+        eventsEngine.on(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME, this._windowResizeHandler.bind(this));
     }
 
     _initGanttView() {
@@ -127,6 +128,9 @@ class Gantt extends Widget {
             this._isSplitterMove = false;
             this.option("treeListWidth", this._$splitter.position().left);
         }
+    }
+    _windowResizeHandler() {
+        this._updateWidth(this.option("treeListWidth"));
     }
 
     _onTreeListContentReady(e) {
@@ -178,6 +182,7 @@ class Gantt extends Widget {
     }
 
     _updateWidth(treeListWidth) {
+        treeListWidth = Math.min(treeListWidth, this.$element().width() - GANTT_SPLITTER_BORDER_WIDTH);
         this._$treeListWrapper.width(treeListWidth);
         this._$treeList.width(treeListWidth);
         this._$splitter.css('left', treeListWidth);
