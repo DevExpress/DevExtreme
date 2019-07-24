@@ -8,7 +8,9 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     PlainEditStrategy = require("./ui.collection_widget.edit.strategy.plain"),
     compileGetter = require("../../core/utils/data").compileGetter,
-    DataSource = require("../../data/data_source/data_source").DataSource,
+    DataSourceModule = require("../../data/data_source/data_source"),
+    DataSource = DataSourceModule.DataSource,
+    normalizeLoadResult = DataSourceModule.normalizeLoadResult,
     Selection = require("../selection/selection"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
@@ -254,7 +256,13 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 var store = that._dataSource && that._dataSource.store();
 
                 if(store) {
-                    return store.load(options).done(function(items) {
+                    return store.load(options).done(function(loadResult) {
+                        if(that._disposed) {
+                            return;
+                        }
+
+                        var items = normalizeLoadResult(loadResult).data;
+
                         that._dataSource._applyMapFunction(items);
                     });
                 } else {
