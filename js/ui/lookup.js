@@ -1079,7 +1079,8 @@ var Lookup = DropDownList.inherit({
             nextButtonText: this.option("nextButtonText"),
             _keyboardProcessor: this._listKeyboardProcessor,
             onFocusIn: this._onFocusInHandler.bind(this),
-            onSelectionChanged: this._getSelectionChangedHandler()
+            onSelectionChanged: this._getSelectionChangedHandler(),
+            _listAttributes: { "role": "listbox" }
         });
     },
 
