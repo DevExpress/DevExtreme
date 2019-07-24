@@ -320,8 +320,11 @@ const DiagramCommands = {
                     text: "Copy"
                 },
                 paste: {
-                    command: DiagramCommand.Paste,
-                    text: "Paste"
+                    command: DiagramCommand.PasteInPosition,
+                    text: "Paste",
+                    getParameter: (diagramContextMenu) => {
+                        return diagramContextMenu.clickPosition;
+                    }
                 },
                 selectAll: {
                     command: DiagramCommand.SelectAll,
