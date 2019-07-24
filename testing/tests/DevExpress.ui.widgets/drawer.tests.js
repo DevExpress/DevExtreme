@@ -1548,38 +1548,42 @@ QUnit.module("Overlap mode", {
 
     [true, false].forEach((shading) => {
         [true, false].forEach((isOpened) => {
-            QUnit.test(`overlay configuration: opened- ${isOpened}, shading- ${shading}`, assert => {
-                this.createInstance({
-                    shading: shading,
-                    opened: isOpened,
-                    template: ($content) => {
-                        let $div = $("<div/>").css({ height: 200, width: 300 });
-                        return $("<div/>").append($div);
-                    }
+            [0, 100, null, undefined].forEach((minSize) => {
+                QUnit.test(`overlay configuration: opened- ${isOpened}, shading- ${shading}, minSize-${minSize}`, assert => {
+                    this.createInstance({
+                        shading: shading,
+                        opened: isOpened,
+                        minSize: minSize,
+                        template: ($content) => {
+                            let $div = $("<div/>").css({ height: 200, width: 300 });
+                            return $("<div/>").append($div);
+                        }
+                    });
+                    let overlay = this.instance.getOverlay();
+
+                    assert.equal(overlay.option("shading"), false, "overlay.shading");
+                    assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
+
+                    assert.equal(overlay.option("width"), isOpened ? 300 : minSize || 0);
+
+                    assert.equal(overlay.option("position").my, "top left");
+                    assert.equal(overlay.option("position").at, "top left");
+
+                    this.instance.option("position", "right");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "top right");
+                    assert.equal(overlay.option("position").at, "top right");
+
+                    this.instance.option("position", "top");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "top");
+                    assert.equal(overlay.option("position").at, "top");
+
+                    this.instance.option("position", "bottom");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "bottom");
+                    assert.equal(overlay.option("position").at, "bottom");
                 });
-                let overlay = this.instance.getOverlay();
-
-                assert.equal(overlay.option("shading"), false, "overlay.shading");
-                assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
-                assert.equal(overlay.option("width"), isOpened ? 300 : 0);
-
-                assert.equal(overlay.option("position").my, "top left");
-                assert.equal(overlay.option("position").at, "top left");
-
-                this.instance.option("position", "right");
-                overlay = this.instance.getOverlay();
-                assert.equal(overlay.option("position").my, "top right");
-                assert.equal(overlay.option("position").at, "top right");
-
-                this.instance.option("position", "top");
-                overlay = this.instance.getOverlay();
-                assert.equal(overlay.option("position").my, "top");
-                assert.equal(overlay.option("position").at, "top");
-
-                this.instance.option("position", "bottom");
-                overlay = this.instance.getOverlay();
-                assert.equal(overlay.option("position").my, "bottom");
-                assert.equal(overlay.option("position").at, "bottom");
             });
         });
     });
