@@ -276,10 +276,10 @@ QUnit.module("aria accessibility", () => {
 
         QUnit.test(`aria role after initialize, searchEnabled: ${searchEnabled}`, () => {
             let helper = new ariaAccessibilityTestHelper(searchEnabled);
-            helper.element.option("searchEnabled", searchEnabled);
+            helper.element.option("searchEnabled", !searchEnabled);
 
-            helper.checkAsserts({ $target: searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
-            helper.checkAsserts({ $target: searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+            helper.checkAsserts({ $target: !searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
+            helper.checkAsserts({ $target: !searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
         });
 
         QUnit.test("list item", () => {

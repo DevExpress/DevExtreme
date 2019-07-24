@@ -584,8 +584,6 @@ var ListBase = CollectionWidget.inherit({
 
         this._feedbackShowTimeout = LIST_FEEDBACK_SHOW_TIMEOUT;
         this._createGroupRenderAction();
-
-        this.setAria("role", "listbox");
     },
 
     _scrollBottomMode: function() {
@@ -866,6 +864,7 @@ var ListBase = CollectionWidget.inherit({
         this.$element().addClass(LIST_CLASS);
         this.callBase();
         this.option("useInkRipple") && this._renderInkRipple();
+        this.setAria("role", "listbox");
     },
 
     _renderInkRipple: function() {

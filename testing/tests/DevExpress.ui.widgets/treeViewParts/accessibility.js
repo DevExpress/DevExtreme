@@ -39,11 +39,11 @@ module("aria accessibility", () => {
 
         QUnit.test(`aria role after initialize, searchEnabled: ${searchEnabled}`, () => {
             let helper = new ariaAccessibilityTestHelper(searchEnabled);
-            helper.element.option("searchEnabled", searchEnabled);
+            helper.element.option("searchEnabled", !searchEnabled);
             const $itemContainer = helper.element._itemContainer(true);
 
-            helper.checkAsserts({ $target: searchEnabled ? $itemContainer : helper.$element, role: "tree", isActiveDescendant: true, tabIndex: '0' });
-            helper.checkAsserts({ $target: searchEnabled ? helper.$element : $itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+            helper.checkAsserts({ $target: searchEnabled ? helper.$element : $itemContainer, role: "tree", isActiveDescendant: true, tabIndex: '0' });
+            helper.checkAsserts({ $target: searchEnabled ? $itemContainer : helper.$element, role: undefined, isActiveDescendant: false, tabIndex: undefined });
         });
 
         test("aria expanded for items", function(assert) {
