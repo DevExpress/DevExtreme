@@ -22,9 +22,12 @@ class DiagramContextMenu extends Widget {
             target: this.option("container"),
             dataSource: commands,
             displayExpr: "text",
-            onItemClick: ({ itemData }) => this._onItemClick(itemData.command),
+            onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
                 this._tempState = true;
+                if(e.jQEvent) {
+                    this.clickPosition = { x: e.jQEvent.clientX, y: e.jQEvent.clientY };
+                }
                 this._onVisibleChangedAction({ visible: true, component: this });
                 delete this._tempState;
             },
@@ -36,9 +39,15 @@ class DiagramContextMenu extends Widget {
         });
         commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
     }
-    _onItemClick(command) {
-        this.bar.raiseBarCommandExecuted(command);
+    _onItemClick(itemData) {
+        const parameter = this._getExecCommandParameter(itemData);
+        this.bar.raiseBarCommandExecuted(itemData.command, parameter);
         this._contextMenuInstance.hide();
+    }
+    _getExecCommandParameter(itemData) {
+        if(itemData.getParameter) {
+            return itemData.getParameter(this);
+        }
     }
     _setItemEnabled(key, enabled) {
         if(key in this._commandToIndexMap) {
