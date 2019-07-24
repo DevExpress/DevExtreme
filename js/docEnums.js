@@ -1033,6 +1033,41 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramUnits
+ * @enum {'in'|'cm'|'px'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPageOrientation
+ * @enum {'portrait'|'landscape'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramShapeCategory
+ * @enum {'general'|'flowchart'|'orgChart'|'containers'|'custom'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramShapeType
+ * @enum {'text'|'rectangle'|'ellipsis'|'cross'|'triangle'|'diamond'|'heart'|'pentagon'|'octagon'|'star'|'arrowLeft'|'arrowTop'|'arrowRight'|'arrowBottom'|'arrowNorthSouth'|'arrowEastWest'|'process'|'decision'|'terminator'|'predefinedProcess'|'document'|'multipleDocuments'|'manualInput'|'preparation'|'data'|'database'|'hardDisk'|'internalStorage'|'paperTape'|'manualOperation'|'delay'|'storedData'|'display'|'merge'|'or'|'summingJunction'|'verticalContainer'|'horizontalContainer'|'cardWithImageOnLeft'|'cardWithImageOnTop'|'cardWithImageOnRight'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramToolboxStyle
  * @enum {'icons'|'texts'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramToolbarCommand
+ * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullscreen'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramContextMenuCommand
+ * @enum {'cut'|'copy'|'paste'|'selectAll'|'delete'|'bringToFront'|'sendToBack'|'lock'|'unlock'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPropertiesPanelCommand
+ * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageLandscape'|'pageColor'}
  */

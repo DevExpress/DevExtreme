@@ -15,12 +15,12 @@ class DiagramContextMenu extends Widget {
     }
     _initMarkup() {
         super._initMarkup();
-        const items = DiagramCommands.getContextMenu();
+        const commands = DiagramCommands.getContextMenuCommands(this.option("commands"));
         const $contextMenu = $("<div>")
             .appendTo(this.$element());
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             target: this.option("container"),
-            dataSource: items,
+            dataSource: commands,
             displayExpr: "text",
             onItemClick: ({ itemData }) => this._onItemClick(itemData.command),
             onShowing: (e) => {
@@ -34,7 +34,7 @@ class DiagramContextMenu extends Widget {
                 delete this._tempState;
             }
         });
-        items.forEach((item, index) => this._commandToIndexMap[item.command] = index);
+        commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
     }
     _onItemClick(command) {
         this.bar.raiseBarCommandExecuted(command);
@@ -62,6 +62,9 @@ class DiagramContextMenu extends Widget {
             case "onVisibleChanged":
                 this._createOnVisibleChangedAction();
                 break;
+            case "commands":
+                this._invalidate();
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -70,7 +73,7 @@ class DiagramContextMenu extends Widget {
 
 class ContextMenuBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getContextMenu().map(c => c.command);
+        return DiagramCommands.getContextMenuCommands().map(c => c.command);
     }
     setItemEnabled(key, enabled) {
         this._owner._setItemEnabled(key, enabled);

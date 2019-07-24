@@ -11,6 +11,7 @@
         "Back": "戻る",
         "OK": "OK",
         "dxCollectionWidget-noDataText": "表示するデータがありません。",
+        "dxDropDownEditor-selectLabel": "選択",
         "validation-required": "必須",
         "validation-required-formatted": "{0} は必須です。",
         "validation-numeric": "数値を指定してください。",

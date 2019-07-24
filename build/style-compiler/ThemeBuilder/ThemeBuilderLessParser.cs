@@ -30,46 +30,19 @@ namespace StyleCompiler.ThemeBuilder
                 Match match = Regex.Match(line, "@([a-z]+)\\s(.+)", RegexOptions.IgnoreCase);
                 dataFields.Add(match.Groups[1].Value, match.Groups[2].Value);
             }
+
             ThemeBuilderMetadata data = new ThemeBuilderMetadata
             {
                 Name = dataFields["name"].Trim(),
-                Group = dataFields["group"].Trim(),
                 Type = dataFields["type"].Trim()
             };
 
-
-            ApplyAdditionalFields(new string[] {
-                "paletteColorOpacity",
-                "colorFunctions",
-                "isLastSubGroupItem",
-                "typeValues"}, (fieldName) =>
-                {
-                    string fieldValue = null;
-                    if (dataFields.TryGetValue(fieldName, out fieldValue))
-                    {
-                        string propertyName = fieldName.First().ToString().ToUpperInvariant() + fieldName.Substring(1);
-                        var property = data.GetType().GetProperty(propertyName);
-
-                        if (property.PropertyType.Name == "Boolean")
-                        {
-                            property.SetValue(data, Convert.ToBoolean(fieldValue), null);
-                        }
-                        else
-                        {
-                            property.SetValue(data, fieldValue.Trim(), null);
-                        }
-                    }
-                });
+            string typeValues = null;
+            if(dataFields.TryGetValue("typeValues", out typeValues)) {
+                data.TypeValues = typeValues;
+            }
 
             return data;
-        }
-
-        void ApplyAdditionalFields(string[] fields, Action<string> fn)
-        {
-            foreach (string field in fields)
-            {
-                fn.Invoke(field);
-            }
         }
 
         public List<ThemeBuilderMetadata> GenerateThemeBuilderMetadata()
