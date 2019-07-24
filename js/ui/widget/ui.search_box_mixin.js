@@ -4,7 +4,6 @@ import messageLocalization from "../../localization/message";
 import TextBox from "../text_box";
 import errors from "../widget/ui.errors";
 import { Deferred } from "../../core/utils/deferred";
-import domUtils from "../../core/utils/dom";
 
 /**
 * @name SearchBoxMixin
@@ -152,10 +151,10 @@ module.exports = {
 
     _cleanAria: function($target) {
         this.setAria({
-            "role": undefined,
-            "activedescendant": undefined
+            "role": null,
+            "activedescendant": null
         }, $target);
-        domUtils.toggleAttr($target, "tabIndex");
+        $target.attr("tabIndex", null);
     },
 
     _optionChanged: function(args) {
