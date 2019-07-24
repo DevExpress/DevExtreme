@@ -310,7 +310,6 @@ var SchedulerTableCreator = {
                     cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
                 } else {
                     $container.text(items[j].text);
-                    $container = $("<div>").append($container);
                 }
 
                 var cssClass;
