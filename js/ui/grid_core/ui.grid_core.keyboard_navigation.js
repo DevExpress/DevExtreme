@@ -331,6 +331,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 this.setFocusedCellPosition(position.rowIndex, position.columnIndex);
             }
         }
+        return position;
     },
     _getCellPosition: function($cell, direction) {
         var that = this,
@@ -1603,7 +1604,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             columnIndex = that.getView("rowsView").getCellIndex($cellElement),
             rowIndex = this._getRowIndex($cellElement && $cellElement.parent()),
             isEditingCell = that.getController("editing").isEditCell(rowIndex, columnIndex),
-            row = dataController.items()[rowIndex];
+            localRowIndex = Math.min(rowIndex - dataController.getRowIndexOffset(), dataController.items().length - 1),
+            row = dataController.items()[localRowIndex];
 
         if(!isEditingCell && (prevCellIndex !== columnIndex || prevRowIndex !== rowIndex)) {
             dataController = that.getController("data");
