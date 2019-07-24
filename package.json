@@ -1,18 +1,6 @@
 {
   "name": "devextreme",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
   "version": "18.2.9",
-=======
-  "version": "18.2.7",
->>>>>>> 24107e5a9c2d4a210396f0cd79cdad5e12eed6cc
-=======
-  "version": "18.2.8",
->>>>>>> 0f313c38727d440bfdbd7ddb417b4c38b761b5d5
-=======
-  "version": "18.2.9",
->>>>>>> f9fb610cea141533162aa12f5732a8d050aad26a
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
