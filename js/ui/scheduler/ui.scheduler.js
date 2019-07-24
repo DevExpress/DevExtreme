@@ -48,7 +48,9 @@ var $ = require("../../core/renderer"),
     Deferred = deferredUtils.Deferred,
     EmptyTemplate = require("../widget/empty_template"),
     BindableTemplate = require("../widget/bindable_template"),
-    themes = require("../themes");
+    themes = require("../themes"),
+    browser = require("../../core/utils/browser"),
+    support = require("../../core/utils/support");
 
 var toMs = dateUtils.dateToMilliseconds;
 
@@ -60,6 +62,8 @@ var WIDGET_CLASS = "dx-scheduler",
     RECURRENCE_EDITOR_OPENED_ITEM_CLASS = "dx-scheduler-recurrence-rule-item-opened",
     WIDGET_SMALL_WIDTH = 400,
     APPOINTEMENT_POPUP_WIDTH = 610;
+
+var WIDGET_WIN_NO_TOUCH_CLASS = WIDGET_CLASS + '-win-no-touch';
 
 var FULL_DATE_FORMAT = "yyyyMMddTHHmmss",
     UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + "Z";
@@ -1570,7 +1574,10 @@ var Scheduler = Widget.inherit({
         this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
         this._customizeStoreLoadOptions();
 
-        this.$element().addClass(WIDGET_CLASS);
+        this.$element()
+            .addClass(WIDGET_CLASS)
+            .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && support.touch));
+
         this._initEditing();
 
         this._resourcesManager = new SchedulerResourceManager(this.option("resources"));
@@ -2626,7 +2633,11 @@ var Scheduler = Widget.inherit({
                 }
 
                 if(!options.skipHoursProcessing) {
-                    updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
+                    this.fire(
+                        "convertDateByTimezoneBack",
+                        updatedStartDate,
+                        this.fire("getField", "startDateTimeZone", appointmentData)
+                    );
                 }
             }
         }
@@ -2841,7 +2852,7 @@ var Scheduler = Widget.inherit({
         return startDate;
     },
 
-    _getEndDate: function(appointment) {
+    _getEndDate: function(appointment, skipNormalize) {
         var endDate = this.fire("getField", "endDate", appointment);
 
         if(endDate) {
@@ -2852,7 +2863,7 @@ var Scheduler = Widget.inherit({
 
             endDate = this.fire("convertDateByTimezone", endDate, endDateTimeZone);
 
-            this.fire("updateAppointmentEndDate", {
+            !skipNormalize && this.fire("updateAppointmentEndDate", {
                 endDate: endDate,
                 callback: function(result) {
                     endDate = result;

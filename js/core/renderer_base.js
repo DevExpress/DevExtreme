@@ -274,6 +274,10 @@ var appendElements = function(element, nextSibling) {
 var setCss = function(name, value) {
     if(!this[0] || !this[0].style) return;
 
+    if(value === null || (typeof value === "number" && isNaN(value))) {
+        return;
+    }
+
     name = styleUtils.styleProp(name);
     for(var i = 0; i < this.length; i++) {
         this[i].style[name] = styleUtils.normalizeStyleProp(name, value);

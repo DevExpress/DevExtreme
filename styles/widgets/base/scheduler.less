@@ -856,8 +856,8 @@
         border-top: @SCHEDULER_BASE_BORDER;
         height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     }
-    
-    .dx-scheduler-date-table-cell, 
+
+    .dx-scheduler-date-table-cell,
     .dx-scheduler-all-day-table-cell {
         > div {
             pointer-events: none;
@@ -2883,5 +2883,11 @@
                 float: left;
             }
         }
+    }
+}
+
+.dx-scheduler-win-no-touch {
+    .dx-scheduler-appointment {
+        touch-action: none;
     }
 }

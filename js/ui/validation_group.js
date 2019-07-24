@@ -1,11 +1,14 @@
-var $ = require("../core/renderer"),
-    registerComponent = require("../core/component_registrator"),
-    DOMComponent = require("../core/dom_component"),
-    ValidationSummary = require("./validation_summary"),
-    ValidationEngine = require("./validation_engine"),
-    Validator = require("./validator");
+import $ from "../core/renderer";
+import registerComponent from "../core/component_registrator";
+import DOMComponent from "../core/dom_component";
+import ValidationSummary from "./validation_summary";
+import ValidationEngine from "./validation_engine";
+import Validator from "./validator";
 
-var VALIDATION_ENGINE_CLASS = "dx-validationgroup";
+const VALIDATION_ENGINE_CLASS = "dx-validationgroup";
+const VALIDATOR_CLASS = "dx-validator";
+const VALIDATION_SUMMARY_CLASS = "dx-validationsummary";
+
 /**
  * @name dxValidationGroup
  * @inherits DOMComponent
@@ -13,7 +16,7 @@ var VALIDATION_ENGINE_CLASS = "dx-validationgroup";
  * @module ui/validation_group
  * @export default
  */
-var ValidationGroup = DOMComponent.inherit({
+const ValidationGroup = DOMComponent.inherit({
     _getDefaultOptions: function() {
         return this.callBase();
 
@@ -45,18 +48,19 @@ var ValidationGroup = DOMComponent.inherit({
 
     _init: function() {
         this.callBase();
+        ValidationEngine.addGroup(this);
     },
 
     _initMarkup: function() {
-        var $element = this.$element();
+        const $element = this.$element();
         $element.addClass(VALIDATION_ENGINE_CLASS);
 
-        $element.find(".dx-validator").each(function(_, validatorContainer) {
+        $element.find(`.${VALIDATOR_CLASS}`).each(function(_, validatorContainer) {
             Validator.getInstance($(validatorContainer))._initGroupRegistration();
         });
 
 
-        $element.find(".dx-validationsummary").each(function(_, summaryContainer) {
+        $element.find(`.${VALIDATION_SUMMARY_CLASS}`).each(function(_, summaryContainer) {
             ValidationSummary.getInstance($(summaryContainer))._initGroupRegistration();
         });
 
@@ -78,13 +82,6 @@ var ValidationGroup = DOMComponent.inherit({
      */
     reset: function() {
         return ValidationEngine.resetGroup(this);
-    },
-
-    _optionChanged: function(args) {
-        switch(args.name) {
-            default:
-                this.callBase(args);
-        }
     },
 
     _dispose: function() {

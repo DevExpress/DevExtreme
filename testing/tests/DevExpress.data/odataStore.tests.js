@@ -506,6 +506,59 @@ QUnit.test("with expand", function(assert) {
         .always(done);
 });
 
+QUnit.test("with select", function(assert) {
+    assert.expect(3);
+
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata2.org(42)",
+        callback: function(bag) {
+            this.responseText = { d: { selectClause: bag.data.$select } };
+        }
+    });
+
+    ajaxMock.setup({
+        url: "odata3.org(42)",
+        callback: function(bag) {
+            this.responseText = { d: { expandClause: bag.data.$expand, selectClause: bag.data.$select } };
+        }
+    });
+
+    ajaxMock.setup({
+        url: "odata4.org(42)",
+        callback: function(bag) {
+            this.responseText = { value: { selectClause: bag.data.$select } };
+        }
+    });
+
+    var promises = [
+        new ODataStore({ url: "odata2.org" })
+            .byKey(42, { select: ["prop1", "prop2"] })
+            .done((value) => {
+                assert.deepEqual(value, { selectClause: "prop1,prop2" });
+            }),
+
+        new ODataStore({ version: 3, url: "odata3.org" })
+            .byKey(42, { expand: ["prop1"], select: ["prop1.subprop", "prop2"] })
+            .done((value) => {
+                assert.deepEqual(value, { expandClause: "prop1", selectClause: "prop1/subprop,prop2" });
+            }),
+
+        new ODataStore({ version: 4, url: "odata4.org" })
+            .byKey(42, { select: ["prop1.subprop", "prop2"] })
+            .done((value) => {
+                assert.deepEqual(value, { selectClause: "prop2" });
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
 QUnit.test("compound key", function(assert) {
     assert.expect(3);
 

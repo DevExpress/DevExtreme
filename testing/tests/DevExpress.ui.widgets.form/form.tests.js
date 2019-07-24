@@ -1,13 +1,13 @@
 import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
-import keyboardMock from "../../helpers/keyboardMock.js";
 import typeUtils from "core/utils/type";
 import browser from "core/utils/browser";
 import domUtils from "core/utils/dom";
 import { __internals as internals } from "ui/form/ui.form";
 import themes from "ui/themes";
 import device from "core/devices";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from "core/dom_adapter";
 
 import "ui/text_area";
@@ -15,10 +15,10 @@ import "ui/text_area";
 import "common.css!";
 import "generic_light.css!";
 
-var INVALID_CLASS = "dx-invalid";
+const INVALID_CLASS = "dx-invalid";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="form"></div>\
         <div id="form2"></div>';
 
@@ -26,37 +26,22 @@ QUnit.testStart(function() {
 });
 
 QUnit.module("Form");
-QUnit.test("Check that registerKeyHandler proxy works well", function(assert) {
-    // arrange, act
-    var $formContainer = $("#form").dxForm({
-            items:
-            [
-                {
-                    dataField: "name",
-                    editorType: "dxTextBox"
-                },
-                {
-                    dataField: "age",
-                    editorType: "dxNumberBox"
-                }
-            ]
-        }),
-        $inputs = $formContainer.find(".dx-texteditor-input"),
-        counter = 0,
-        handler = function() { counter++; };
 
-    $formContainer.dxForm("instance").registerKeyHandler("tab", handler);
+if(device.current().deviceType === "desktop") {
+    const items = [
+        { dataField: "name", editorType: "dxTextBox" },
+        { dataField: "age", editorType: "dxNumberBox" }
+    ];
 
-    keyboardMock($inputs.eq(0)).keyDown("tab");
-
-    // assert
-    assert.equal(counter, 1, "Custom key handler for the first editor");
-
-    keyboardMock($inputs.eq(1)).keyDown("tab");
-
-    // assert
-    assert.equal(counter, 2, "Custom key handler for the second editor");
-});
+    items.forEach((item) => {
+        registerKeyHandlerTestHelper.runTests({
+            createWidget: ($element) => $element.dxForm({ items: items }).dxForm("instance"),
+            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(".dx-texteditor-input"),
+            checkInitialize: false,
+            testNamePrefix: `Form -> ${item.editorType}:`
+        });
+    });
+}
 
 QUnit.testInActiveWindow("Form's inputs saves value on refresh", function(assert) {
     // arrange, act
@@ -254,7 +239,14 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
     assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 
     assert.deepEqual(values[0], { dataField: "name", value: "" }, "value of name dataField");
-    assert.deepEqual(values[3], { dataField: "room", value: null }, "value of room dataField");
+    assert.deepEqual(values[1], { dataField: "room", value: null }, "value of room dataField");
+
+    values = [];
+    form.option("formData", {});
+
+    assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
+    assert.equal(values.length, 0, "onFieldDataChanged event is not called if the empty object is set to formData a second time");
 });
 
 QUnit.test("Reset editor's value when the formData option is null", function(assert) {
@@ -371,14 +363,27 @@ QUnit.test("Hide helper text when validation message shows for material theme", 
         ]
     }).dxForm("instance");
 
+    var lastName = form.getEditor("lastName"),
+        firstName = form.getEditor("name");
+
+    var isFieldWrapperInvalid = function(editor) {
+        return editor.$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS);
+    };
+
+    lastName.focus();
     form.validate();
-    form.getEditor("lastName").focus();
 
-    assert.ok(form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "invalid css class");
+    triggerKeyUp(lastName.$element(), "Enter");
+    assert.ok(isFieldWrapperInvalid(lastName), "invalid css class");
 
-    form.getEditor("name").focus();
-    assert.ok(!form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
-    assert.ok(!form.getEditor("name").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
+    firstName.focus();
+
+    lastName.focus();
+    assert.ok(isFieldWrapperInvalid(lastName), "invalid css class");
+
+    firstName.focus();
+    assert.ok(!isFieldWrapperInvalid(lastName), "not invalid css class");
+    assert.ok(!isFieldWrapperInvalid(firstName), "not invalid css class");
 
     themes.isMaterial = origIsMaterial;
 

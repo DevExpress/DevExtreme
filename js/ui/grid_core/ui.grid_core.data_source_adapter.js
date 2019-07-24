@@ -424,11 +424,11 @@ module.exports = gridCore.Controller.inherit((function() {
             this.loadingChanged.fire(isLoading);
         },
         _handleLoadError: function(error) {
+            this.loadError.fire(error);
             this.changed.fire({
                 changeType: "loadError",
                 error: error
             });
-            this.loadError.fire(error);
         },
         _handleDataChanged: function(args) {
             var that = this,
@@ -447,7 +447,8 @@ module.exports = gridCore.Controller.inherit((function() {
                 if(dataSource.pageIndex() >= that.pageCount()) {
                     dataSource.pageIndex(that.pageCount() - 1);
                     that.pageIndex(dataSource.pageIndex());
-                    dataSource.reload();
+                    that.resetPagesCache();
+                    dataSource.load();
                     isLoading = true;
                 }
             } else {
@@ -590,6 +591,9 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         reload: function(full) {
             return full ? this._dataSource.reload() : this._dataSource.load();
+        },
+        getCachedStoreData: function() {
+            return this._cachedStoreData;
         }
     };
 })());

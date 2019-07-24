@@ -59,6 +59,38 @@ function skipTestOnMobile(assert) {
     return isMobile;
 }
 
+QUnit.module("T712431", () => {
+    // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
+    var APPOINTMENT_WIDTH = 941;
+
+    var createInstance = function(options) {
+        return $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
+    };
+
+    QUnit.test('Appointment width should be not less 941px with width control 1100px', function(assert) {
+        var data = [
+            {
+                text: "Website Re-Design Plan 2",
+                startDate: new Date(2017, 4, 7, 9, 30),
+                endDate: new Date(2017, 4, 12, 17, 20)
+            }
+        ];
+
+        createInstance({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            width: 1100,
+            height: 600
+        });
+
+        var appointment = $(".dx-scheduler-appointment");
+        assert.roughEqual(appointment.outerWidth(), APPOINTMENT_WIDTH, 1);
+    });
+});
+
 QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
@@ -180,7 +212,7 @@ QUnit.test("Tasks should have right boundOffset", function(assert) {
         draggableBounds = $appointment.dxDraggable("instance").option("boundOffset"),
         allDayPanelHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").first().outerHeight();
 
-    assert.equal(draggableBounds.top, -allDayPanelHeight, "bounds are OK");
+    assert.roughEqual(draggableBounds.top, -allDayPanelHeight, 1, "bounds are OK");
 });
 
 QUnit.test("Draggable rendering option 'immediate' should be turned off", function(assert) {
@@ -633,7 +665,7 @@ QUnit.test("DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.test("Recurrence repeat-end editor should be closed after reopening appointment popup", function(assert) {
+QUnit.test("Recurrence repeat-type editor should have default 'never' value after reopening appointment popup", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -1355,7 +1387,7 @@ QUnit.test("Appointment should have correct position while vertical dragging", f
 
     var currentPosition = translator.locate($appointment);
 
-    assert.equal(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, "Appointment position is correct");
+    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 1, "Appointment position is correct");
     pointer.dragEnd();
 });
 
@@ -4392,4 +4424,21 @@ QUnit.test("The itemData argument of the drop down appointment template is shoul
         text: "Task 3"
     }];
     this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+});
+
+QUnit.test("Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Recruiting students",
+            startDate: new Date(2018, 2, 26, 10, 0),
+            endDate: new Date(2018, 2, 26, 11, 0),
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 3, 27)
+    });
+
+    var $appointment = $(this.instance.$element).find(".dx-scheduler-appointment");
+    assert.equal($appointment.length, 30, "Scheduler appointments are rendered without compact ones");
 });

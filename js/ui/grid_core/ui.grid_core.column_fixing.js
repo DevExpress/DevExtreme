@@ -197,12 +197,19 @@ var baseFixedColumns = {
             isEmptyCell,
             transparentColumnIndex,
             alignByFixedColumnCellCount,
-            column = options.column;
+            column = options.column,
+            isFixedTableRendering = that._isFixedTableRendering,
+            isGroupCell = options.rowType === "group" && isDefined(column.groupIndex);
 
-        if(!that._isFixedTableRendering && that._isFixedColumns) {
+        // T747718
+        if(isFixedTableRendering && isGroupCell && !column.command) {
+            $cell.css("pointerEvents", "none");
+        }
+
+        if(!isFixedTableRendering && that._isFixedColumns) {
             isEmptyCell = column.fixed || column.command;
 
-            if(options.rowType === "group" && isDefined(column.groupIndex)) {
+            if(isGroupCell) {
                 isEmptyCell = false;
                 if(options.row.summaryCells && options.row.summaryCells.length) {
                     columns = that._columnsController.getVisibleColumns();
@@ -817,7 +824,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         } else if(e.reachedBottom) {
             scrollableContent = this._findContentElement();
             scrollableContainer = e.component._container();
-            maxScrollTop = scrollableContent.height() + scrollbarWidth - scrollableContainer.height();
+            maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - scrollableContainer.height(), 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 

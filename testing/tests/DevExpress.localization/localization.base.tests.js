@@ -751,6 +751,7 @@ QUnit.test('Fixed point numeric formats', function(assert) {
 QUnit.test("format fixedPoint with precision", function(assert) {
     assert.equal(localization.formatNumber(1, { type: "fixedPoint", precision: 2 }), "1.00");
     assert.equal(localization.formatNumber(1.1, { type: "fixedPoint", precision: 2 }), "1.10");
+    assert.equal(localization.formatNumber(4.645, { type: "fixedPoint", precision: 2 }), "4.65");
     assert.equal(localization.formatNumber(1.1, { type: "fixedPoint" }), "1");
     assert.equal(localization.formatNumber(1, { type: "fixedPoint", precision: null }), "1");
     assert.equal(localization.formatNumber(1.2, { type: "fixedPoint", precision: null }), "1.2");

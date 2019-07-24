@@ -156,15 +156,15 @@ var ODataStore = Store.inherit({
     * @param1 key:object|string|number
     * @param2 extraOptions:object
     * @param2_field1 expand:string|Array<string>
+    * @param2_field2 select:string|Array<string>
     * @return Promise<any>
     */
     _byKeyImpl: function(key, extraOptions) {
         var params = {};
 
         if(extraOptions) {
-            if(extraOptions.expand) {
-                params["$expand"] = odataUtils.generateExpand(this._version, extraOptions.expand);
-            }
+            params["$expand"] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select);
+            params["$select"] = odataUtils.generateSelect(this._version, extraOptions.select);
         }
 
         return this._sendRequest(this._byKeyUrl(key), "GET", params);

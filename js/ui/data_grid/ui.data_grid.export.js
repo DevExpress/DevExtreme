@@ -358,7 +358,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                     gridColumn: columns[j],
                 });
 
-                if(column.allowExporting && !column.command) {
+                if(this._needColumnExporting(column)) {
                     if(columnWidthsByColumnIndex) {
                         this._updateColumnWidth(column, columnWidthsByColumnIndex[column.index]);
                     }
@@ -372,6 +372,10 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         result.push(columns);
 
         return result;
+    },
+
+    _needColumnExporting: function(column) {
+        return !column.command && (column.allowExporting || column.allowExporting === undefined);
     },
 
     _getFooterSummaryItems: function(summaryCells, isTotal) {
@@ -487,7 +491,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
             for(j = 0; j < columns.length; j++) {
                 column = columns[j];
-                if(!column.command && (column.allowExporting || item.rowType === "group")) {
+                if(this._needColumnExporting(column)) {
                     if(item.values) {
                         if(item.rowType === "group" && !values.length) {
                             values.push(item.key[item.groupIndex]);

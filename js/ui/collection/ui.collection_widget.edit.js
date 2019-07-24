@@ -252,9 +252,14 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     options.userData = that._dataSource._userData;
                 }
                 var store = that._dataSource && that._dataSource.store();
-                return store ? store.load(options).done(function(items) {
-                    that._dataSource._applyMapFunction(items);
-                }) : new Deferred().resolve([]);
+
+                if(store) {
+                    return store.load(options).done(function(items) {
+                        that._dataSource._applyMapFunction(items);
+                    });
+                } else {
+                    return new Deferred().resolve(this.plainItems());
+                }
             },
             dataFields: function() {
                 return that._dataSource && that._dataSource.select();
@@ -582,10 +587,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "selectionMode":
                 if(args.value === "multi") {
@@ -628,13 +629,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _clearSelectedItems: function() {
         this._setOptionSilent("selectedItems", []);
         this._syncSelectionOptions("selectedItems");
-    },
-
-    // TODO: move this ability to component?
-    _setOptionSilent: function(name, value) {
-        this._cancelOptionChange = name;
-        this.option(name, value);
-        this._cancelOptionChange = false;
     },
 
     _waitDeletingPrepare: function($itemElement) {

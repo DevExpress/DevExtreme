@@ -684,6 +684,45 @@ QUnit.module("Filter value", function() {
         assert.deepEqual(instance.option("value"), ["Field", "=", "Test2"]);
         assert.notOk(container.find("input").length, "hasn't input");
     });
+
+    // T750946
+    QUnit.test("Two fields with the same dataField", function(assert) {
+        var container = $("#container");
+
+        var filterBuilder = container.dxFilterBuilder({
+            value: [
+                ["field1", "<>", "K&S Music"]
+            ],
+            fields: [{
+                dataField: "State",
+                caption: "field 1",
+                name: "field1"
+            }, {
+                dataField: "State",
+                caption: "field 2",
+                name: "field2"
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        $("." + FILTER_BUILDER_ITEM_FIELD_CLASS).trigger("dxclick");
+
+        assert.equal($("." + TREE_VIEW_ITEM_CLASS).length, 2, "treeview items count");
+        assert.equal($("." + FILTER_BUILDER_ITEM_FIELD_CLASS).text(), "field 1", "initial field was set correctly");
+
+        $("." + TREE_VIEW_ITEM_CLASS).eq(1).trigger("dxclick");
+        assert.equal($("." + FILTER_BUILDER_ITEM_FIELD_CLASS).text(), "field 2", "field was changed correctly");
+
+        assert.equal($("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Contains", "operation was changed correctly");
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        var valueInput = container.find("input");
+        valueInput.val("K&S Music");
+        valueInput.find("input").trigger("change");
+
+        clickByOutside();
+        assert.deepEqual(filterBuilder.option("value"), ["field2", "contains", "K&S Music"], "expression is correct");
+    });
 });
 
 QUnit.module("Create editor", function() {

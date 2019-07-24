@@ -141,10 +141,11 @@
 }
 
 .dx-scrollable-customizable-scrollbars .dx-scrollable-container {
-    /*IE*/
-    -ms-scrollbar-base-color: @scrollable-scrollbar-custom-bg;
-    -ms-scrollbar-arrow-color: @scrollable-scrollbar-arrow-custom-bg;
-    -ms-scrollbar-track-color: @scrollable-scrollbar-custom-bg;
+    /* IE */
+    -ms-scrollbar-base-color: @scrollable-scrollbar-msie-base-color;
+    -ms-scrollbar-arrow-color: @scrollable-scrollbar-msie-arrow-color;
+    -ms-scrollbar-shadow-color: @scrollable-scrollbar-msie-shadow-color;
+    -ms-scrollbar-track-color: @scrollable-scrollbar-msie-track-color;
 
     /*Chrome and Safari*/
     &::-webkit-scrollbar:horizontal {
@@ -201,7 +202,6 @@
 
 .dx-rtl .dx-scrollable,
 .dx-rtl.dx-scrollable {
-
     .dx-scrollable-scroll {
         float: left;
     }

@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     devices = require("../../core/devices"),
+    browser = require("../../core/utils/browser"),
     TextEditor = require("../text_box/ui.text_editor"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -143,6 +144,16 @@ var NumberBoxBase = TextEditor.inherit({
         });
     },
 
+    _isSupportInputMode: function() {
+        var version = parseFloat(browser.version);
+
+        return (
+            browser.chrome && version >= 66
+            || browser.safari && version >= 12
+            || browser.msie && version >= 75
+        );
+    },
+
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
@@ -155,8 +166,8 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    return devices.real().platform !== "generic";
-                },
+                    return devices.real().platform !== "generic" && !this._isSupportInputMode();
+                }.bind(this),
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
@@ -173,6 +184,11 @@ var NumberBoxBase = TextEditor.inherit({
         this.$element().addClass(WIDGET_CLASS);
 
         this.callBase();
+    },
+
+    _applyInputAttributes: function($input, customAttributes) {
+        $input.attr("inputmode", "decimal");
+        this.callBase($input, customAttributes);
     },
 
     _renderContentImpl: function() {
@@ -270,8 +286,8 @@ var NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            "valuemin": this.option("min") || "undefined",
-            "valuemax": this.option("max") || "undefined"
+            "valuemin": commonUtils.ensureDefined(this.option("min"), null),
+            "valuemax": commonUtils.ensureDefined(this.option("max"), null)
         });
     },
 

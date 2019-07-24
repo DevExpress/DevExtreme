@@ -35,7 +35,8 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     devices = require("core/devices"),
     browser = require("core/utils/browser"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    getSize = require("core/utils/size").getSize;
 
 function sumArray(array) {
     var sum = 0;
@@ -4348,10 +4349,16 @@ QUnit.test("columns area row height calculation when description area is big", f
             }
         }, assert),
 
-        tableElement = pivot.$element().find('table').first();
-    tableElement.find(".dx-area-description-cell").height(80);
+        tableElement = pivot.$element().find('table').first(),
+        descriptionCell = tableElement.find(".dx-area-description-cell");
 
-    var delta = (tableElement.find(".dx-area-description-cell").outerHeight() - 28) / 2;
+    descriptionCell.height(80);
+
+    var delta = (getSize(descriptionCell[0], "height", {
+        paddings: true,
+        borders: true,
+        margins: true
+    }) - 28) / 2;
 
     // act
     pivot.updateDimensions();
@@ -5333,6 +5340,38 @@ QUnit.test('Set column width', function(assert) {
     assert.deepEqual(setColumnWidth([40, 50, 30, 60]), [40, 50, 30, 60]);
     assert.deepEqual(setColumnWidth([40, 50, 30]), [40, 50, 30, 0]);
     assert.deepEqual(setColumnWidth([40, 50, 30, 60, 80]), [40, 50, 30, 140]);
+});
+
+QUnit.test('Set column width in container with transform', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    $("#pivotArea").css({ "transform": "scale(0.5, 0.5)" });
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    function setColumnWidth(widthArray) {
+        headersArea.setColumnsWidth(widthArray);
+        return headersArea.getColumnsWidth();
+    }
+
+    assert.deepEqual(setColumnWidth([40, 50, 30, 60]), [40, 50, 30, 60]);
+});
+
+QUnit.test('Set row height in container with transform', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    $("#pivotArea").css({ "transform": "scale(0.5, 0.5)" });
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    function setRowsHeight(widthArray) {
+        headersArea.setRowsHeight(widthArray);
+        return headersArea.getRowsHeight();
+    }
+
+    assert.deepEqual(setRowsHeight([40, 50, 60, 70]), [40, 50, 60, 70]);
 });
 
 // T696415

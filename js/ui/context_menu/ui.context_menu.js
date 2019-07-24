@@ -887,10 +887,6 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _optionChanged: function(args) {
-            if(this._cancelOptionChange === args.name) {
-                return;
-            }
-
             if(inArray(args.name, ACTIONS) > -1) {
                 this._initActions();
                 return;
@@ -911,19 +907,26 @@ var ContextMenu = MenuBase.inherit((function() {
                     break;
                 case "closeOnOutsideClick":
                     break;
-
                 default:
                     this.callBase(args);
             }
         },
 
         _renderVisibility: function(showing) {
+            this._cachedJQEvent = undefined;
+
             return showing ? this._show() : this._hide();
         },
 
         _toggleVisibility: noop,
 
         _show: function(event) {
+            if(typeUtils.isDefined(event)) {
+                this._cachedJQEvent = event;
+            } else {
+                event = this._cachedJQEvent;
+            }
+
             var args = { jQEvent: event },
                 promise = new Deferred().reject().promise();
 
@@ -1005,6 +1008,7 @@ var ContextMenu = MenuBase.inherit((function() {
             }
 
             this.setAria("owns", undefined);
+            this._cachedJQEvent = undefined;
 
             return promise || new Deferred().reject().promise();
         },

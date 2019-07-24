@@ -924,6 +924,26 @@ testModule("shading", moduleConfig, () => {
         overlay.option("shading", false);
         assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("backgroundColor")));
     });
+
+    test("overlay should adjust height on iOS after positioning (T742021)", (assert) => {
+        assert.expect(1);
+        if(devices.real().platform !== "ios" || devices.real().deviceType === "desktop") {
+            assert.ok(true);
+            return;
+        }
+
+        const overlay = $("#overlay").dxOverlay().dxOverlay("instance");
+        sinon.stub(
+            overlay,
+            "_fixHeightAfterSafariAddressBarResizing",
+            () => {
+                const $wrapper = $(overlay.$content().parent());
+                assert.strictEqual($wrapper.css("position"), "absolute", "overlay wrapper should have a position");
+            }
+        );
+
+        overlay.show();
+    });
 });
 
 
@@ -3103,7 +3123,7 @@ testModule("focus policy", {
         assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
     });
 
-    test("tab target inside of wrapper but outside of content should not be outside", (assert) => {
+    QUnit.testInActiveWindow("tab target inside of wrapper but outside of content should not be outside", (assert) => {
         const overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
             visible: true,
             shading: true,
@@ -3176,9 +3196,7 @@ testModule("scrollable interaction", {
             assert.ok(false, "scroll should not be fired");
         });
 
-        pointerMock($shader)
-            .start()
-            .wheel(10);
+        pointerMock($shader).start().wheel(10);
 
         $($shader.parent()).off(".TEST");
     });

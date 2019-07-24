@@ -7,23 +7,23 @@ var $ = require("../../core/renderer"),
 var PIVOTGRID_EXPAND_CLASS = "dx-expand";
 
 var getRealElementWidth = function(element) {
-    var width = 0,
-        clientRect;
+    let width = 0;
+
+    const offsetWidth = element.offsetWidth;
 
     if(element.getBoundingClientRect) {
-        clientRect = element.getBoundingClientRect();
+        const clientRect = element.getBoundingClientRect();
         width = clientRect.width;
 
         if(!width) {
             width = clientRect.right - clientRect.left;
         }
+        if(width <= offsetWidth - 1) {
+            width = offsetWidth;
+        }
     }
 
-    if(width > 0) {
-        return width;
-    } else {
-        return element.offsetWidth;
-    }
+    return width > 0 ? width : offsetWidth;
 };
 
 function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
@@ -260,20 +260,22 @@ exports.AreaItem = Class.inherit({
     },
 
     _getRowHeight: function(index) {
-        var row = this._getRowElement(index),
-            clientRect,
-            height = 0;
+        const row = this._getRowElement(index);
+        let height = 0;
+
+        const offsetHeight = row.offsetHeight;
 
         if(row && row.lastChild) {
             if(row.getBoundingClientRect) {
-                clientRect = row.getBoundingClientRect();
+                const clientRect = row.getBoundingClientRect();
                 height = clientRect.height;
+
+                if(height <= offsetHeight - 1) {
+                    height = offsetHeight;
+                }
             }
-            if(height > 0) {
-                return height;
-            } else {
-                return row.offsetHeight;
-            }
+
+            return height > 0 ? height : offsetHeight;
         }
         return 0;
     },

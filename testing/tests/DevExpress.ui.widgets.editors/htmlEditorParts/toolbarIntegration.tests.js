@@ -87,7 +87,7 @@ QUnit.module("Toolbar integration", {
 
     test("Apply simple format with selection", (assert) => {
         const done = assert.async();
-        const expected = "<strong>te</strong>st";
+        const expected = "<p><strong>te</strong>st</p>";
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },
@@ -108,7 +108,7 @@ QUnit.module("Toolbar integration", {
     test("Apply format via color dialog located in the adaptive menu", (assert) => {
         const done = assert.async();
         const toolbarClickStub = sinon.stub();
-        const expected = '<span style="color: rgb(250, 250, 250);">te</span>st';
+        const expected = '<p><span style="color: rgb(250, 250, 250);">te</span>st</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: [{ formatName: "color", locateInMenu: "always" }] },
@@ -141,7 +141,7 @@ QUnit.module("Toolbar integration", {
 
     test("Add a link via dialog", (assert) => {
         const done = assert.async();
-        const expected = '<a href="http://test.com" target="_blank">te</a>st';
+        const expected = '<p><a href="http://test.com" target="_blank">te</a>st</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["link"] },
@@ -381,5 +381,56 @@ QUnit.module("Toolbar integration", {
             .type(ORANGE_PIXEL)
             .change()
             .press("enter");
+    });
+
+    test("history buttons are inactive after processing transcluded content", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor").html("<p>test</p>");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        this.clock.tick();
+    });
+
+    test("history buttons are inactive when editor has initial value", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            value: "<p>test</p>",
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
+    });
+
+    test("history buttons are inactive when editor hasn't initial value", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
     });
 });

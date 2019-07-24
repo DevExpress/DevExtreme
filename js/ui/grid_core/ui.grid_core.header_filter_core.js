@@ -188,7 +188,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 shading: false,
                 showTitle: false,
                 showCloseButton: false,
-                closeOnTargetScroll: true,
+                closeOnTargetScroll: false, // T756320
                 dragEnabled: false,
                 closeOnOutsideClick: true,
                 focusStateEnabled: false,
@@ -380,7 +380,8 @@ exports.headerFilterMixin = {
 
     optionChanged: function(args) {
         if(args.name === "headerFilter") {
-            this._invalidate(true, true);
+            var requireReady = this.name === "columnHeadersView";
+            this._invalidate(requireReady, requireReady);
             args.handled = true;
         } else {
             this.callBase(args);

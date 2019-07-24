@@ -32,11 +32,18 @@ const moduleConfig = {
 };
 
 QUnit.module("format: api value changing", moduleConfig, () => {
-    QUnit.test("number type of input should be converted to tel on mobile device", assert => {
+    QUnit.test("number type of input should be converted to tel on mobile device when inputMode is unsupported", assert => {
         const realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
+        const realBrowser = browser;
         const $element = $("<div>").appendTo("body");
 
         try {
+            browser.chrome = true;
+            browser.version = "50.0";
+            browser.chrome = false;
+            browser.safari = false;
+            browser.msie = false;
+
             const instance = $element.dxNumberBox({
                 useMaskBehavior: true,
                 format: "#",
@@ -48,6 +55,10 @@ QUnit.module("format: api value changing", moduleConfig, () => {
             instance.option("mode", "number");
             assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
         } finally {
+            browser.chrome = realBrowser.chrome;
+            browser.safari = realBrowser.safari;
+            browser.msie = realBrowser.msie;
+            browser.version = realBrowser.version;
             realDeviceMock.restore();
             $element.remove();
         }
@@ -367,6 +378,19 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.input.val(), "<<123.4>>", "value is correct");
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret is good");
     });
+
+    QUnit.test("NumberBox should keep selected range after the ValueChange event", (assert) => {
+        this.instance.option({
+            format: "#0.#;<<#0.#>>",
+            value: 123.4
+        });
+
+        this.keyboard.caret({ start: 1, end: 2 }).press("-").change();
+        this.clock.tick();
+
+        assert.equal(this.input.val(), "<<123.4>>", "value is correct");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret preserved");
+    });
 });
 
 QUnit.module("format: fixed point format", moduleConfig, () => {
@@ -510,6 +534,18 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
             .change();
 
         assert.equal(this.instance.option("value"), "3.4");
+    });
+
+    QUnit.test("precision should correctly round the value", (assert) => {
+        this.instance.option({
+            format: {
+                type: "fixedPoint",
+                precision: 2
+            },
+            value: 4.645
+        });
+
+        assert.strictEqual(this.instance.option("text"), "4.65");
     });
 });
 
@@ -937,6 +973,66 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
 
         this.keyboard.type("5");
         assert.equal(this.input.val(), "$ 0.0005 kg", "walue has been reformatted");
+    });
+
+    QUnit.test("paste of value should call valueChanged event on keyup", (assert) => {
+        const valueChangedStub = sinon.stub();
+        const originalIE = browser.msie;
+        const $element = $("<div>").appendTo("body");
+
+        try {
+            browser.msie = false;
+
+            $element.dxNumberBox({
+                valueChangeEvent: "keyup",
+                format: "#,##0.00",
+                value: null,
+                onValueChanged: valueChangedStub
+            });
+
+            const $input = $element.find("." + INPUT_CLASS);
+            const kb = keyboardMock($input);
+
+            $input.val("1.00");
+            kb.input("1.00", "insertFromPaste");
+            kb.keyUp("v");
+
+            assert.ok(valueChangedStub.calledOnce, "valueChanged event was called");
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
+
+
+    QUnit.test("paste of value should call valueChanged event on keyup in IE", (assert) => {
+        const valueChangedStub = sinon.stub();
+        const originalIE = browser.msie;
+        const originalVersion = browser.version;
+        const $element = $("<div>").appendTo("body");
+
+        try {
+            browser.msie = true;
+            browser.version = "11.0";
+
+            $element.dxNumberBox({
+                valueChangeEvent: "keyup",
+                format: "#,##0.00",
+                value: null,
+                onValueChanged: valueChangedStub
+            });
+
+            const $input = $element.find("." + INPUT_CLASS);
+            const kb = keyboardMock($input);
+            kb.paste("1.00");
+            $input.val("1.00");
+            kb.input("1.00", null);
+            kb.keyUp("v");
+
+            assert.ok(valueChangedStub.calledOnce, "valueChanged event was called");
+        } finally {
+            browser.msie = originalIE;
+            browser.version = originalVersion;
+        }
     });
 
     QUnit.test("incomplete values should be limited by max precision", (assert) => {

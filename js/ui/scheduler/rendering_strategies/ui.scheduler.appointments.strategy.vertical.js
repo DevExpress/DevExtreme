@@ -19,11 +19,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             deltaTime = this._getDeltaWidth(args, initialSize) * 24 * 60 * 60000;
         } else {
             var deltaHeight = args.height - initialSize.height;
-
-            if(deltaHeight < 0) {
-                deltaHeight = this._correctOnePxGap(deltaHeight);
-            }
-
             deltaTime = 60000 * Math.round(deltaHeight / this._defaultHeight * this.instance.getAppointmentDurationInMinutes());
         }
         return deltaTime;
@@ -131,13 +126,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return result;
-    },
-
-    _correctOnePxGap: function(deltaHeight) {
-        if(Math.abs(deltaHeight) % this._defaultHeight) {
-            deltaHeight--;
-        }
-        return deltaHeight;
     },
 
     _getMinuteHeight: function() {

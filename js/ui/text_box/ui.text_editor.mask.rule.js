@@ -50,6 +50,10 @@ var BaseMaskRule = Class.inherit({
         return false;
     },
 
+    isEmpty: function() {
+        return this._value === EMPTY_CHAR && this._next.isEmpty();
+    },
+
     adjustedCaret: function(caret, isForwardDirection, char) {
         return isForwardDirection
             ? this._adjustedForward(caret, 0, char)
@@ -87,6 +91,10 @@ var EmptyMaskRule = BaseMaskRule.inherit({
 
     adjustedCaret: function() {
         return 0;
+    },
+
+    isEmpty: function() {
+        return true;
     },
 
     isValid: function() {

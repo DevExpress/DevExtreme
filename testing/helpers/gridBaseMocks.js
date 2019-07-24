@@ -74,7 +74,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             totalCount: function() {
-                return options.totalCount;
+                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {

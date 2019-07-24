@@ -43,7 +43,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                             selectedItemKeys: this.option("selectedRowKeys")
                         });
                     }
-                    originalHandleDataChanged.apply(this, e);
+                    originalHandleDataChanged.apply(this, arguments);
                 },
 
                 loadDescendants: function() {
@@ -68,6 +68,32 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 init: function() {
                     this.callBase.apply(this, arguments);
                     this._selectionStateByKey = {};
+                },
+
+                _getSelectionConfig: function() {
+                    let config = this.callBase.apply(this, arguments);
+
+                    var plainItems = config.plainItems;
+                    config.plainItems = (all) => {
+                        if(all) {
+                            return this._dataController.getCachedStoreData() || [];
+                        }
+
+                        return plainItems.apply(this, arguments).map(item => item.data);
+                    };
+                    config.isItemSelected = (item) => {
+                        let key = this._dataController.keyOf(item);
+
+                        return this.isRowSelected(key);
+                    };
+                    config.isSelectableItem = () => {
+                        return true;
+                    };
+                    config.getItemData = (item) => {
+                        return item;
+                    };
+
+                    return config;
                 },
 
                 renderSelectCheckBoxContainer: function($container, model) {
