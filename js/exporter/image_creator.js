@@ -154,30 +154,40 @@ function drawImage(context, options, shared) {
 }
 
 function drawPath(context, dAttr) {
-    var dArray = dAttr.split(" "),
+    var dArray = dAttr.replace(/,/g, " ").split(/([A-Z])/i).filter(item => item !== ""),
         i = 0,
-        param1,
-        param2;
+        params,
+        prevParams,
+        prevParamsLen;
 
     do {
-        param1 = _number(dArray[i + 1]);
-        param2 = _number(dArray[i + 2]);
+        params = (dArray[i + 1] || "").trim().split(" ");
         switch(dArray[i]) {
             case "M":
-                context.moveTo(param1, param2);
-                i += 3;
+                context.moveTo(_number(params[0]), _number(params[1]));
+                i += 2;
                 break;
             case "L":
-                context.lineTo(param1, param2);
-                i += 3;
+                for(let j = 0; j < params.length / 2; j++) {
+                    context.lineTo(_number(params[j * 2]), _number(params[j * 2 + 1]));
+                }
+                i += 2;
                 break;
             case "C":
-                context.bezierCurveTo(param1, param2, _number(dArray[i + 3]), _number(dArray[i + 4]), _number(dArray[i + 5]), _number(dArray[i + 6]));
-                i += 7;
+                context.bezierCurveTo(_number(params[0]), _number(params[1]), _number(params[2]), _number(params[3]), _number(params[4]), _number(params[5]));
+                i += 2;
+                break;
+            case "a":
+                prevParams = dArray[i - 1].trim().split(" ");
+                prevParamsLen = prevParams.length - 1;
+                arcTo(_number(prevParams[prevParamsLen - 1]), _number(prevParams[prevParamsLen]), _number(prevParams[prevParamsLen - 1]) + _number(params[5]), _number(prevParams[prevParamsLen]) + _number(params[6]), _number(params[0]), _number(params[3]), _number(params[4]), context);
+                i += 2;
                 break;
             case "A":
-                arcTo(_number(dArray[i - 2]), _number(dArray[i - 1]), _number(dArray[i + 6]), _number(dArray[i + 7]), param1, _number(dArray[i + 4]), _number(dArray[i + 5]), context);
-                i += 8;
+                prevParams = dArray[i - 1].trim().split(" ");
+                prevParamsLen = prevParams.length - 1;
+                arcTo(_number(prevParams[prevParamsLen - 1]), _number(prevParams[prevParamsLen]), _number(params[5]), _number(params[6]), _number(params[0]), _number(params[3]), _number(params[4]), context);
+                i += 2;
                 break;
             case "Z":
                 context.closePath();
