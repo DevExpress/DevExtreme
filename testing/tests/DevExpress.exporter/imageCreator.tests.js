@@ -519,7 +519,7 @@ QUnit.test("Path with missed L directive", function(assert) {
 QUnit.test("Path with no spaces between directives and with comma separated coords", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<path d="M36,181L184,98,200,100,300,200L,331,280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<path d="M36,181L184,98,200,100,300,200L331,280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
         imageBlob = getData(markup);
 
     assert.expect(7);
