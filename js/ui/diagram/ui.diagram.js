@@ -265,6 +265,7 @@ class Diagram extends Widget {
         this._updateReadOnlyState();
         this._updateZoomLevelState();
         this._updateAutoZoomState();
+        this._updateSimpleViewState();
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -539,6 +540,10 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.ToggleAutoZoom, this.option("autoZoom"));
     }
+    _updateSimpleViewState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ToggleSimpleView, this.option("simpleView"));
+    }
     _updateFullscreenState() {
         const { DiagramCommand } = getDiagram();
         var fullscreen = this.option("fullscreen");
@@ -616,6 +621,12 @@ class Diagram extends Widget {
             * @default 1
             */
             zoomLevel: 1,
+            /**
+            * @name dxDiagramOptions.simpleView
+            * @type Boolean
+            * @default false
+            */
+            simpleView: false,
             /**
             * @name dxDiagramOptions.autoZoom
             * @type Boolean
@@ -1091,6 +1102,9 @@ class Diagram extends Widget {
                 break;
             case "autoZoom":
                 this._updateAutoZoomState();
+                break;
+            case "simpleView":
+                this._updateSimpleViewState();
                 break;
             case "fullscreen":
                 this._updateFullscreenState();
