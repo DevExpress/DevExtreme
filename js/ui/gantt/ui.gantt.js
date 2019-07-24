@@ -80,7 +80,7 @@ class Gantt extends Widget {
         eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
         eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
         eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
-        eventsEngine.on(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME);
+        eventsEngine.off(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME);
     }
     _attachEventHandlers() {
         const document = domAdapter.getDocument();
