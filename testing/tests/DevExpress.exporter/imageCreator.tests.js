@@ -474,6 +474,90 @@ QUnit.test("Path", function(assert) {
     });
 });
 
+QUnit.test("Path with missed L directive", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 200 100 300 200 L 331 280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(7);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.paths.length, 1, "One path");
+            assert.equal(that.paths[0].length, 5, "Five components on path");
+            assert.deepEqual(that.paths[0][0], {
+                action: "M",
+                x: 36,
+                y: 181
+            }, "First component of path");
+            assert.deepEqual(that.paths[0][1], {
+                action: "L",
+                x: 184,
+                y: 98
+            }, "Second component of path");
+            assert.deepEqual(that.paths[0][2], {
+                action: "L",
+                x: 200,
+                y: 100
+            }, "Third component of path");
+            assert.deepEqual(that.paths[0][3], {
+                action: "L",
+                x: 300,
+                y: 200
+            }, "Fourth component of path");
+            assert.deepEqual(that.paths[0][4], {
+                action: "L",
+                x: 331,
+                y: 280
+            }, "Fifth component of path");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Path with no spaces between directives and with comma separated coords", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<path d="M36,181L184,98,200,100,300,200L,331,280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(7);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.paths.length, 1, "One path");
+            assert.equal(that.paths[0].length, 5, "Five components on path");
+            assert.deepEqual(that.paths[0][0], {
+                action: "M",
+                x: 36,
+                y: 181
+            }, "First component of path");
+            assert.deepEqual(that.paths[0][1], {
+                action: "L",
+                x: 184,
+                y: 98
+            }, "Second component of path");
+            assert.deepEqual(that.paths[0][2], {
+                action: "L",
+                x: 200,
+                y: 100
+            }, "Third component of path");
+            assert.deepEqual(that.paths[0][3], {
+                action: "L",
+                x: 300,
+                y: 200
+            }, "Fourth component of path");
+            assert.deepEqual(that.paths[0][4], {
+                action: "L",
+                x: 331,
+                y: 280
+            }, "Fifth component of path");
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test("Closed path", function(assert) {
     var that = this,
         done = assert.async(),
@@ -578,10 +662,10 @@ QUnit.test("Path with fill none and parent fill", function(assert) {
 QUnit.test("Arc path", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 16 28 A 15 15 0 0 0 14 15 L 99 15 A 0 0 0 0 1 99 15" stroke-width="1" stroke="#ffffff" stroke-linejoin="round" fill="#ff0000"></path>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<path d="M 10 10 L 20 20 16 28 A 15 15 0 0 0 14 15 L 99 15 A 0 0 0 0 1 99 15" stroke-width="1" stroke="#ffffff" stroke-linejoin="round" fill="#ff0000"></path>' + testingMarkupEnd,
         imageBlob = getData(markup);
 
-    assert.expect(13);
+    assert.expect(15);
     $.when(imageBlob).done(function(blob) {
         try {
             assert.equal(that.drawnElements.length, 5, "Canvas elements count");
@@ -592,25 +676,85 @@ QUnit.test("Arc path", function(assert) {
                 lineWidth: 1,
                 globalAlpha: 1
             }, "Style of stroke");
-            assert.equal(that.paths[0].length, 4, "Four components on path");
+            assert.equal(that.paths[0].length, 6, "Four components on path");
             assert.deepEqual(that.paths[0][0], {
                 action: "M",
+                x: 10,
+                y: 10
+            });
+            assert.deepEqual(that.paths[0][1], {
+                action: "L",
+                x: 20,
+                y: 20
+            });
+            assert.deepEqual(that.paths[0][2], {
+                action: "L",
                 x: 16,
                 y: 28
-            }, "First component of path");
-            assert.equal(that.paths[0][1].action, "A", "action");
-            // assert.equal(that.paths[0][1].c, true, "c");
-            assert.equal(that.paths[0][1].r, 15, "radius");
-            assert.roughEqual(that.paths[0][1].sa, 0.3012034806537296, 0.1, "start angle");
-            assert.roughEqual(that.paths[0][1].ea, -0.6065021374442598, 0.1, "end angle");
-            assert.roughEqual(that.paths[0][1].x, 1.6752978321738201, 0.1, "x");
-            assert.roughEqual(that.paths[0][1].y, 23.549954179665566, 0.1, "y");
-            assert.deepEqual(that.paths[0][2], {
+            });
+            assert.equal(that.paths[0][3].action, "A", "action");
+            assert.equal(that.paths[0][3].r, 15, "radius");
+            assert.roughEqual(that.paths[0][3].sa, 0.3012034806537296, 0.1, "start angle");
+            assert.roughEqual(that.paths[0][3].ea, -0.6065021374442598, 0.1, "end angle");
+            assert.roughEqual(that.paths[0][3].x, 1.6752978321738201, 0.1, "x");
+            assert.roughEqual(that.paths[0][3].y, 23.549954179665566, 0.1, "y");
+            assert.deepEqual(that.paths[0][4], {
                 action: "L",
                 x: 99,
                 y: 15
             }, "Third component of path");
-            assert.deepEqual(that.paths[0][3], {
+            assert.deepEqual(that.paths[0][5], {
+                action: "A",
+                c: false,
+                r: 0,
+                sa: 0,
+                ea: 0,
+                x: 99,
+                y: 15
+            }, "Fourth component of path");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Arc path (relative coords)", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<path d="M 10 10 L 20 20 16 28 a 15 15 0 0 0 -2 -13 L 99 15 a 0 0 0 0 1 0 0" stroke-width="1" stroke="#ffffff" stroke-linejoin="round" fill="#ff0000"></path>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(12);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.paths[0].length, 6, "Four components on path");
+            assert.deepEqual(that.paths[0][0], {
+                action: "M",
+                x: 10,
+                y: 10
+            });
+            assert.deepEqual(that.paths[0][1], {
+                action: "L",
+                x: 20,
+                y: 20
+            });
+            assert.deepEqual(that.paths[0][2], {
+                action: "L",
+                x: 16,
+                y: 28
+            }, "First component of path");
+            assert.equal(that.paths[0][3].action, "A", "action");
+            assert.equal(that.paths[0][3].r, 15, "radius");
+            assert.roughEqual(that.paths[0][3].sa, 0.3012034806537296, 0.1, "start angle");
+            assert.roughEqual(that.paths[0][3].ea, -0.6065021374442598, 0.1, "end angle");
+            assert.roughEqual(that.paths[0][3].x, 1.6752978321738201, 0.1, "x");
+            assert.roughEqual(that.paths[0][3].y, 23.549954179665566, 0.1, "y");
+            assert.deepEqual(that.paths[0][4], {
+                action: "L",
+                x: 99,
+                y: 15
+            }, "Third component of path");
+            assert.deepEqual(that.paths[0][5], {
                 action: "A",
                 c: false,
                 r: 0,
