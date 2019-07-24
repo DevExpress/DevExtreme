@@ -239,6 +239,52 @@ var SchedulerTableCreator = {
 
     },
 
+    _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+        repeatByDate = repeatByDate || 1;
+        repeatCount = repeatCount * repeatByDate;
+
+        var cells = [],
+            items = group.items,
+            itemCount = items.length;
+
+        for(var i = 0; i < repeatCount; i++) {
+            for(var j = 0; j < itemCount; j++) {
+                var $container = $("<div>"),
+                    cell = {};
+
+                if(cellTemplate && cellTemplate.render) {
+                    var templateOptions = {
+                        model: items[j],
+                        container: getPublicElement($container),
+                        index: i * itemCount + j
+                    };
+
+                    if(group.data) {
+                        templateOptions.model.data = group.data[j];
+                    }
+
+                    cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
+                } else {
+                    $container.text(items[j].text);
+                }
+
+                var cssClass;
+
+                if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
+                    cssClass = cssClasses.groupHeaderClass(j);
+                } else {
+                    cssClass = cssClasses.groupHeaderClass;
+                }
+
+                cell.element = $("<div>").addClass(cssClass).append($container);
+
+                cells.push(cell);
+            }
+        }
+
+        return cells;
+    },
+
     _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate, rowCount) {
         var cellTemplates = [],
             repeatCount = 1,
@@ -256,34 +302,29 @@ var SchedulerTableCreator = {
                 repeatCount = groups[i - 1].items.length * repeatCount;
             }
 
-            var cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
+            var cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
             cells.forEach(cellIterator);
-
             arr.push(cells);
         }
 
         var rows = [],
-            groupCount = arr.length,
-            maxCellCount = arr[groupCount - 1].length;
+            groupCount = arr.length;
 
-        for(i = 0; i < maxCellCount; i++) {
-            rows.push($("<tr>").addClass(cssClasses.groupHeaderRowClass));
+        for(i = 0; i < groupCount; i++) {
+            rows.push($("<div>").addClass(cssClasses.groupHeaderRowClass));
         }
 
         for(i = groupCount - 1; i >= 0; i--) {
-            var currentColumnLength = arr[i].length,
-                rowspan = maxCellCount / currentColumnLength;
-
+            var currentColumnLength = arr[i].length;
             for(var j = 0; j < currentColumnLength; j++) {
-                var currentRowIndex = j * rowspan,
-                    row = rows[currentRowIndex];
-
-                row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
+                rows[i].prepend(arr[i][j].element);
             }
         }
 
+        let result = $("<div>").addClass("dx-scheduler-group-flex-container").append(rows);
+
         return {
-            elements: rows,
+            elements: result,
             cellTemplates: cellTemplates
         };
     },
