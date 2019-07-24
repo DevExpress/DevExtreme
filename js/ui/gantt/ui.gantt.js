@@ -181,7 +181,7 @@ class Gantt extends Widget {
         this._$treeListWrapper.width(treeListWidth);
         this._$treeList.width(treeListWidth);
         this._$splitter.css('left', treeListWidth);
-        this._ganttView._setWidth(this.$element().width() - treeListWidth - GANTT_SPLITTER_BORDER_WIDTH);
+        this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - GANTT_SPLITTER_BORDER_WIDTH);
     }
 
     _dispose() {
