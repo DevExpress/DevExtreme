@@ -589,6 +589,15 @@ var EditingController = modules.ViewController.inherit((function() {
             return hasEditData && this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
         },
 
+        getEditCell: function() {
+            var rowIndex = this._getVisibleEditRowIndex(),
+                columnIndex = this._editColumnIndex;
+
+            if(rowIndex >= 0 && columnIndex >= 0) {
+                return $(this._rowsView.getCellElement(rowIndex, columnIndex));
+            }
+        },
+
         getPopupContent: function() {
             var editMode = getEditMode(this),
                 popupVisible = this._editPopup && this._editPopup.option("visible");
@@ -2670,6 +2679,12 @@ module.exports = {
                 _rowClick: function(e) {
                     if(!this._editCellByClick(e, "click")) {
                         this.callBase.apply(this, arguments);
+                    } else {
+                        let editCell = this._editingController.getEditCell();
+
+                        if(editCell && editCell.length) {
+                            e.event.target = editCell;
+                        }
                     }
                 },
                 _rowDblClick: function(e) {
