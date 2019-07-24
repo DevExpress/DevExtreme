@@ -280,6 +280,11 @@ const DiagramCommands = {
                     text: "Auto Zoom",
                     widget: "dxCheckBox"
                 },
+                simpleView: {
+                    command: DiagramCommand.ToggleSimpleView,
+                    text: "Simple View",
+                    widget: "dxCheckBox"
+                },
             });
     },
     getDefaultPropertyPanelCommandGroups: function() {
@@ -287,7 +292,7 @@ const DiagramCommands = {
             { commands: ["units"] },
             { commands: ["pageSize", "pageLandscape", "pageColor"] },
             { commands: ["showGrid", "snapToGrid", "gridSize"] },
-            { commands: ["zoomLevel", "autoZoom"] },
+            { commands: ["zoomLevel", "autoZoom", "simpleView"] },
         ];
     },
     getPropertyPanelCommandsByGroups: function(groups) {
