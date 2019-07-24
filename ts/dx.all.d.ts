@@ -4205,6 +4205,8 @@ declare module DevExpress.ui {
         icon?: string;
         /** @name dxSpeedDialAction.Options.onClick */
         onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement }) => any);
+        /** @name dxSpeedDialAction.Options.visible */
+        visible?: boolean;
     }
     /** @name dxSpeedDialAction */
     export class dxSpeedDialAction extends Widget {
