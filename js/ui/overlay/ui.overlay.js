@@ -1222,13 +1222,13 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderGeometry: function() {
+    _renderGeometry: function(isDimensionChanged) {
         if(this.option("visible") && windowUtils.hasWindow()) {
-            this._renderGeometryImpl();
+            this._renderGeometryImpl(isDimensionChanged);
         }
     },
 
-    _renderGeometryImpl: function() {
+    _renderGeometryImpl: function(isDimensionChanged) {
         this._stopAnimation();
         this._normalizePosition();
         this._renderShading();
@@ -1379,7 +1379,7 @@ var Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._renderGeometry();
+        this._renderGeometry(true);
     },
 
     _clean: function() {

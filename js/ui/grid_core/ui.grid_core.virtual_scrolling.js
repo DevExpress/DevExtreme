@@ -177,8 +177,10 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         isLoaded: function() {
             return this._dataSource.isLoaded() && this._isLoaded;
         },
-        resetPagesCache: function() {
-            this._virtualScrollController.reset();
+        resetPagesCache: function(isLiveUpdate) {
+            if(!isLiveUpdate) {
+                this._virtualScrollController.reset();
+            }
             this.callBase.apply(this, arguments);
         },
         _changeRowExpandCore: function() {

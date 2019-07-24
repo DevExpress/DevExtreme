@@ -88,11 +88,15 @@ testModule("icon utils", {
         { // 18
             source: "image.png",
             result: "image"
+        },
+        { // 19
+            source: " custom-icon",
+            result: "fontIcon"
         }];
     }
 }, () => {
     test("getImageSourceType", (assert) => {
-        assert.expect(18);
+        assert.expect(19);
 
         this.sourceArray.forEach(({ source, result }) => {
             assert.strictEqual(getImageSourceType(source), result);
@@ -112,7 +116,7 @@ testModule("icon utils", {
                 case "fontIcon":
                     assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);
                     assert.notOk($iconElement.hasClass(SVG_ICON_CLASS), `correct for ${result}`);
-                    assert.ok($iconElement.hasClass(source), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(source.trim()), `correct for ${result}`);
                     assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
                     break;
                 case "image":

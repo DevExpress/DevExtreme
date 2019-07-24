@@ -44,6 +44,11 @@ module("DropDownEditor markup", {
         assert.ok($dropDownButton.hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS));
     });
 
+    test("dxDropDownEditor button should have correct aria-label attribute", (assert) => {
+        const $dropDownButton = this.rootElement.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+        assert.strictEqual($dropDownButton.attr("aria-label"), "Select", "'aria-label' is correct");
+    });
+
     test("input wrapper must be upper than button", (assert) => {
         const $inputWrapper = this.rootElement.children();
 
