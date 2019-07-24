@@ -895,7 +895,7 @@ var CollectionWidget = Widget.inherit({
         this._renderEmptyMessage();
     },
 
-    _renderItem: function(index, itemData, $container, $itemToReplace, isDuplicate) {
+    _renderItem: function(index, itemData, $container, $itemToReplace) {
         $container = $container || this._itemContainer();
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
@@ -920,9 +920,9 @@ var CollectionWidget = Widget.inherit({
                 itemIndex: index
             });
 
-            if(!isDuplicate) {
-                that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
-            }
+
+            that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
+
         });
 
         return $itemFrame;
