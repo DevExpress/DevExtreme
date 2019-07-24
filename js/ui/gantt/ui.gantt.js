@@ -189,7 +189,7 @@ class Gantt extends Widget {
         this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - GANTT_SPLITTER_BORDER_WIDTH);
     }
 
-    _dispose() {
+    _clean() {
         this._detachEventHandlers();
         super._dispose();
     }
