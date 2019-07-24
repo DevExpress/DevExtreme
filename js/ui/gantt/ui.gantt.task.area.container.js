@@ -20,7 +20,7 @@ export class TaskAreaContainer {
     set scrollTop(value) {
         const diff = value - this._scrollView.scrollTop();
         if(diff !== 0) {
-            this._scrollView.scrollBy({ top: diff });
+            this._scrollView.scrollBy({ left: 0, top: diff });
         }
     }
 
@@ -30,7 +30,7 @@ export class TaskAreaContainer {
     set scrollLeft(value) {
         const diff = value - this._scrollView.scrollLeft();
         if(diff !== 0) {
-            this._scrollView.scrollBy({ left: diff });
+            this._scrollView.scrollBy({ left: diff, top: 0 });
         }
     }
 

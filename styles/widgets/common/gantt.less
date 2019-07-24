@@ -1,5 +1,6 @@
 .dx-gantt {
     display: flex;
+    position: relative;
 
     .dx-gantt-si {
         text-align: center;
@@ -10,6 +11,13 @@
         .dx-scrollbar-vertical {
             display: none;
         }
+    }
+
+    .dx-gantt-splitter {
+        display: block;
+        cursor: col-resize;
+        position: absolute;
+        z-index: 10000;
     }
 
     .dx-gantt-view {

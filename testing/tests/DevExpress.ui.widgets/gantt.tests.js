@@ -13,6 +13,7 @@ const GANTT_VIEW_SELECTOR = ".dx-gantt-view";
 const TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper";
 const TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes";
 const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
+const SPLITTER_SELECTOR = ".dx-gantt-splitter";
 
 const tasks = [
     { "id": 1, "parentId": 0, "title": "Software Development", "start": new Date("2019-02-21T05:00:00.000Z"), "end": new Date("2019-07-04T12:00:00.000Z"), "progress": 31 },
@@ -105,8 +106,11 @@ QUnit.module("Options", moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const treeListElement = this.$element.find(TREELIST_SELECTOR)[0];
+        const splitter = this.$element.find(SPLITTER_SELECTOR)[0];
         assert.equal(treeListElement.offsetWidth, 300);
+        assert.equal(splitter.style.left, "300px");
         this.instance.option("treeListWidth", 500);
         assert.equal(treeListElement.offsetWidth, 500);
+        assert.equal(splitter.style.left, "500px");
     });
 });
