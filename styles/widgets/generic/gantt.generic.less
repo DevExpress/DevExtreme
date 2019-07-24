@@ -1,5 +1,7 @@
-@GANTT_SCALE_ITEM_HEIGHT: 23px;
-@GANTT_HEADER_ITEM_HEIGHT: 45px;
+@gantt_scale_item_height: 23px;
+@gantt_header_item_height: 45px;
+@gantt_task_wrapper_padding_top: 8px;
+@gantt_successor_background_color: white;
 
 .dx-gantt {
     border: 1px solid @base-border-color;
@@ -22,7 +24,7 @@
     }
 
     .dx-header-row {
-        height: @GANTT_HEADER_ITEM_HEIGHT;
+        height: @gantt_header_item_height;
     }
 
     .dx-gantt-header {
@@ -40,7 +42,7 @@
     }
 
     .dx-gantt-tac {
-        height: calc(100% - @GANTT_HEADER_ITEM_HEIGHT);
+        height: calc(100% - @gantt_header_item_height);
     }
 
     .dx-gantt-si {
@@ -50,8 +52,8 @@
 
     .dx-gantt-si,
     .dx-gantt-tsa .dx-gantt-vb {
-        height: @GANTT_SCALE_ITEM_HEIGHT;
-        line-height: @GANTT_SCALE_ITEM_HEIGHT;
+        height: @gantt_scale_item_height;
+        line-height: @gantt_scale_item_height;
     }
 
     .dx-gantt-tsac,
@@ -72,7 +74,7 @@
     }
 
     .dx-gantt-taskWrapper {
-        padding-top: 8px;
+        padding-top: @gantt_task_wrapper_padding_top;
 
         .dx-gantt-task,
         .dx-gantt-titleOut,
@@ -122,7 +124,7 @@
 
         .dx-gantt-titleIn {
             color: #fff;
-            padding: 0 8px;
+            padding: 0 @gantt_task_wrapper_padding_top;
         }
 
         .dx-gantt-titleOut {
@@ -131,7 +133,7 @@
     }
 
     .dx-gantt-task-edit-wrapper {
-        padding-top: 8px;
+        padding-top: @gantt_task_wrapper_padding_top;
 
         .dx-gantt-task-edit-frame {
             border: 1px solid darken(@base-accent, 10%);
@@ -140,14 +142,14 @@
     }
 
     .dx-gantt-task-edit-wrapper-successor {
-        padding-top: 8px;
+        padding-top: @gantt_task_wrapper_padding_top;
     }
 
     .dx-gantt-task-edit-dependency-r,
     .dx-gantt-task-edit-successor-dependency-r,
     .dx-gantt-task-edit-dependency-l,
     .dx-gantt-task-edit-successor-dependency-l {
-        background: white;
+        background: @gantt_successor_background_color;
         border: 1px solid darken(@base-accent, 10%);
     }
 
