@@ -191,7 +191,7 @@ class Gantt extends Widget {
 
     _clean() {
         this._detachEventHandlers();
-        super._dispose();
+        super._clean();
     }
 
     _getDefaultOptions() {
