@@ -71,6 +71,7 @@ function processCategories(range) {
     if(range.categories) {
         range.categories = unique(range.categories);
     }
+    return range;
 }
 
 function getValueForArgument(point, extraPoint, x) {
@@ -177,7 +178,7 @@ module.exports = {
         if(data.length) {
             if(series.argumentAxisType === DISCRETE) {
                 range = {
-                    categories: data.map(function(item) { return item.argument; })
+                    categories: data.map(item => item.argument)
                 };
             } else {
                 let interval;
@@ -193,7 +194,7 @@ module.exports = {
                 };
             }
         }
-        return range;
+        return processCategories(range);
     },
 
     getRangeData: function(series) {
