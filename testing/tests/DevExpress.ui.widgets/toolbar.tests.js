@@ -356,7 +356,7 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
                         const expectedToolbarValue = isToolbarDisabled !== "not declared" ? isToolbarDisabled : false;
                         let expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : isToolbarDisabled;
 
-                        if(!expectedButtonValue !== "not declared") {
+                        if(expectedButtonValue === "not declared") {
                             expectedButtonValue = false;
                         }
 
