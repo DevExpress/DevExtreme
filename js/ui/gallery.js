@@ -392,7 +392,7 @@ var Gallery = CollectionWidget.inherit({
         this._stopItemAnimations();
         this._clearCacheWidth();
 
-        this._renderDuplicateItems();
+        this._cloneDuplicateItems();
 
         this._renderItemSizes();
         this._renderItemPositions();
@@ -437,7 +437,7 @@ var Gallery = CollectionWidget.inherit({
             .appendTo(this._$wrapper);
     },
 
-    _renderDuplicateItems: function() {
+    _cloneDuplicateItems: function() {
         if(!this.option("loop")) {
             return;
         }
@@ -456,41 +456,17 @@ var Gallery = CollectionWidget.inherit({
         var $items = this._getRealItems();
         var $container = this._itemContainer();
 
-
         for(i = 0; i < duplicateCount; i++) {
-            // var $itemFrame = this._renderItemFrame(0, items[i], $container).addClass(GALLERY_LOOP_ITEM_CLASS);
-
-            // this._renderItem(0, items[i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
-            $($items[i]).clone(true).addClass(GALLERY_LOOP_ITEM_CLASS).appendTo($container);
-
-            // this._postprocessRenderItem({
-            //     itemElement: $itemFrame,
-            //     itemContent: $itemContent,
-            //     itemData: items[i],
-            //     itemIndex: 0
-            // });
+            this._cloneItemForDuplicate($items, i, $container);
         }
 
         for(i = 0; i < duplicateCount; i++) {
-            // $itemFrame = this._renderItemFrame(0, items[i], $container).addClass(GALLERY_LOOP_ITEM_CLASS);
-            // // this._renderItem(0, items[i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
-            // $itemContent = $($items[lastItemIndex - i]).clone(true).appendTo($itemFrame);
-            $($items[lastItemIndex - i]).clone(true).addClass(GALLERY_LOOP_ITEM_CLASS).appendTo($container);
-            // this._postprocessRenderItem({
-            //     itemElement: $itemFrame,
-            //     itemContent: $itemContent,
-            //     itemData: items[lastItemIndex - i],
-            //     itemIndex: 0
-            // });
+            this._cloneItemForDuplicate($items, lastItemIndex - i, $container);
         }
+    },
 
-        // for(i = 0; i < duplicateCount; i++) {
-        //     this._renderItem(0, items[i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
-        // }
-
-        // for(i = 0; i < duplicateCount; i++) {
-        //     this._renderItem(0, items[lastItemIndex - i], undefined, undefined, true).addClass(GALLERY_LOOP_ITEM_CLASS);
-        // }
+    _cloneItemForDuplicate: function($items, index, $container) {
+        $items[index] && $($items[index]).clone(true).addClass(GALLERY_LOOP_ITEM_CLASS).css("margin", 0).appendTo($container);
     },
 
     _getRealItems: function() {
@@ -1189,7 +1165,7 @@ var Gallery = CollectionWidget.inherit({
                 this.option("loopItemFocus", args.value);
 
                 if(windowUtils.hasWindow()) {
-                    this._renderDuplicateItems();
+                    this._cloneDuplicateItems();
                     this._renderItemPositions();
                     this._renderNavButtonsVisibility();
                 }

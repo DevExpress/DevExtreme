@@ -420,6 +420,17 @@ QUnit.test("duplicate items are visible for loop gallery", function(assert) {
     assert.ok($loopItems.is(":visible"));
 });
 
+QUnit.test("gallery does not fire itemRendered events for loop items", function(assert) {
+    var itemRendered = sinon.spy();
+    this.$element.dxGallery({
+        items: [0, 1, 2, 3],
+        onItemRendered: itemRendered,
+        loop: true
+    });
+
+    assert.strictEqual(itemRendered.callCount, 4);
+});
+
 QUnit.test("loop works correctly", function(assert) {
     var $gallery = this.$element.dxGallery({
             items: [ 0, 1, 2, 3 ],
