@@ -326,10 +326,6 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
             assert.strictEqual($toolbar.dxToolbar("option", "disabled"), expectedToolbarDisabled, "toolbar.disabled");
         };
 
-        const isDeclared = (value) => {
-            return value !== "not declared";
-        };
-
         [true, false, undefined].forEach((isToolbarDisabledNew) => {
             [true, false, undefined].forEach((isButtonDisabledNew) => {
                 [true, false].forEach((changeDisabledOrder) => {
@@ -347,20 +343,20 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
                             }]
                         };
 
-                        if(isDeclared(isToolbarDisabled)) {
+                        if(isToolbarDisabled !== "not declared") {
                             toolbarOptions.disabled = isToolbarDisabled;
                         }
-                        if(isDeclared(isButtonDisabled)) {
+                        if(isButtonDisabled !== "not declared") {
                             toolbarOptions.items[0].options.disabled = isButtonDisabled;
                         }
 
                         this.element.dxToolbar(toolbarOptions);
 
                         let $button = this.element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
-                        const expectedToolbarValue = isDeclared(isToolbarDisabled) ? isToolbarDisabled : false;
-                        let expectedButtonValue = isDeclared(isButtonDisabled) ? isButtonDisabled : isToolbarDisabled;
+                        const expectedToolbarValue = isToolbarDisabled !== "not declared" ? isToolbarDisabled : false;
+                        let expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : isToolbarDisabled;
 
-                        if(!isDeclared(expectedButtonValue)) {
+                        if(!expectedButtonValue !== "not declared") {
                             expectedButtonValue = false;
                         }
 
