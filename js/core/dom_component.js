@@ -93,7 +93,12 @@ var DOMComponent = Component.inherit({
     ctor: function(element, options) {
         this._$element = $(element);
         publicComponentUtils.attachInstanceToElement(this._$element, this, this._dispose);
+        this._synchronizableOptionsForCreateComponent = this._getCreateComponentSynchronizableOptions();
         this.callBase(options);
+    },
+
+    _getCreateComponentSynchronizableOptions() {
+        return ["rtlEnabled", "disabled"];
     },
 
     _visibilityChanged: abstract,
@@ -270,16 +275,12 @@ var DOMComponent = Component.inherit({
         this.$element().toggleClass(RTL_DIRECTION_CLASS, rtl);
     },
 
-    _getCreateComponentSynchronizableOptions: function() {
-        return ["rtlEnabled", "disabled"];
-    },
-
     _createComponent: function(element, component, config) {
         var that = this;
 
         config = config || {};
 
-        var synchronizableOptions = commonUtils.grep(this._getCreateComponentSynchronizableOptions(), function(value) {
+        var synchronizableOptions = commonUtils.grep(this._synchronizableOptionsForCreateComponent, function(value) {
             return !(value in config);
         });
 

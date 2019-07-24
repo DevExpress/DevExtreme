@@ -52,8 +52,11 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     * @type object
     */
 
-    _getCreateComponentSynchronizableOptions: function() {
-        return ["rtlEnabled"];
+    ctor: function(element, options) {
+        this._userOptions = options || {};
+
+        this.callBase(element, options);
+        this._synchronizableOptionsForCreateComponent = this._synchronizableOptionsForCreateComponent.filter(item => item !== "disabled");
     },
 
     _initTemplates: function() {
