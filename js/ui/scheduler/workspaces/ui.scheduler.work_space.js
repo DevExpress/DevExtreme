@@ -684,6 +684,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _dateTableScrollableConfig: function() {
         var config = {
             useKeyboard: false,
+            useNative: false,
             bounceEnabled: false,
             updateManually: true,
             pushBackValue: 0
