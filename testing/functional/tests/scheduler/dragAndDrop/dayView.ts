@@ -2,13 +2,9 @@ import { ClientFunction } from 'testcafe';
 
 import { getContainerFileUrl } from '../../../helpers/testHelper';
 
-import { AppointmentWrapper } from './lib/helper';
 import { createScheduler, scheduler } from './lib/widget.setup';
-import {
-    majorAppointments,
-    minorAppointments
-} from './lib/appointments.data';
-
+import { majorAppointments, minorAppointments } from './lib/appointment.data';
+import { AppointmentWrapper } from './lib/appointment.wrapper';
 
 fixture
     `Behaviour dragging between table rows in DayView-mode`
@@ -16,21 +12,19 @@ fixture
 
 const dragAndDropAppointment = async (t, wrapper, movementIndex) => {
     const rowIndex = wrapper.row(movementIndex);
+    const message = ` incorrect for [${wrapper.title}] at row ${rowIndex}`;
 
     await t
         .dragToElement(wrapper.element, await scheduler.getDateTableRow(rowIndex))
 
         .expect(await wrapper.height.received)
-        .eql(await wrapper.height.expected,
-            `Incorrect [${wrapper.title}] height at row ${rowIndex}`)
+        .eql(await wrapper.height.expected, `Height ${message}`)
 
         .expect(await wrapper.startTime.received(movementIndex))
-        .eql(await wrapper.startTime.expected(),
-            `Incorrect [${wrapper.title}]'s start time at the row ${rowIndex}`)
+        .eql(await wrapper.startTime.expected(), `Start time ${message}`)
 
         .expect(await wrapper.finalTime.received(movementIndex))
-        .eql(await wrapper.finalTime.expected(),
-            `Incorrect [${wrapper.title}]'s final time at the row ${rowIndex}`)
+        .eql(await wrapper.finalTime.expected(), `Final time ${message}`);
 }
 
 test('Appointments should be replaced on the timeline in DayView mode with maintaining their size and duration', async t => {

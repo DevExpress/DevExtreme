@@ -1,14 +1,7 @@
+import { createWidget, getContainerFileUrl } from '../../../../helpers/testHelper';
+
+import { schedulerDataSource, schedulerResources } from './widget.data';
 import SchedulerTestHelper from '../../../../helpers/scheduler.test.helper';
-
-import {
-    createWidget,
-    getContainerFileUrl
-} from '../../../../helpers/testHelper';
-
-import {
-    schedulerDataSource,
-    schedulerResources
-} from './widget.data';
 
 export const scheduler = new SchedulerTestHelper("#container");
 

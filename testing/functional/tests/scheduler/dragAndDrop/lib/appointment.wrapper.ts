@@ -4,19 +4,13 @@ const durationRatioScale = 50;
 
 export class AppointmentWrapper {
     appointment: any;
-
     title: any;
     element: any;
-
     durationRatio: any;
-
     movementMap: any;
-
     height: any;
-
     startTime: any;
     finalTime: any;
-
     row: any;
 
     constructor(appointment, index) {

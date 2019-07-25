@@ -180,7 +180,7 @@ export const majorAppointments = [{
     ]
 }
 ];
-// datasource вынести
+
 export const minorAppointments = [{
     title: 'Appointment Blue #1',
     durationRatio: 1,
