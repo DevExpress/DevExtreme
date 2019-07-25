@@ -975,64 +975,276 @@ QUnit.test("inactive item should have aria-hidden attribute", function(assert) {
 });
 
 QUnit.module("swipeable disabled state", () => {
-    [true, false].forEach(swipeEnabled => {
-        QUnit.test(`swipeEnabled: ${swipeEnabled}, items:[1]`, assert => {
-            const $multiView = $("#multiView").dxMultiView({
-                items: [1],
-                swipeEnabled: swipeEnabled
-            });
-
-            const swipeable = Swipeable.getInstance($multiView);
-            assert.ok(swipeable.option("disabled"), "swipeable is disabled");
+    QUnit.test("{items: [], swipeEnabled: false}", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: false
         });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
 
-        QUnit.test(`swipeEnabled: ${swipeEnabled}, items: [1, 2]`, assert => {
-            const $multiView = $("#multiView").dxMultiView({
-                items: [1, 2],
-                swipeEnabled: swipeEnabled
-            });
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
 
-            const swipeable = Swipeable.getInstance($multiView);
-            assert.equal(swipeable.option("disabled"), !swipeEnabled, `swipeable is ${swipeEnabled ? "disabled" : "enabled"}`);
+    QUnit.test("{items: [], swipeEnabled: false} -> items: [1, 2]", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: false
         });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
 
-        QUnit.test(`swipeEnabled: ${swipeEnabled} -> swipeEnabled: ${!swipeEnabled}, items: [1]`, assert => {
-            const $multiView = $("#multiView").dxMultiView({
-                items: [1],
-                swipeEnabled: swipeEnabled
-            });
+        multiView.option("items", [1, 2]);
 
-            const multiView = $multiView.dxMultiView("instance");
-            multiView.option("swipeEnabled", !swipeEnabled);
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
 
-            const swipeable = Swipeable.getInstance($multiView);
-            assert.ok(swipeable.option("disabled"), "swipeable is disabled");
+    QUnit.test("{items: [], swipeEnabled: false} -> items: [1, 2], swipeEnabled: true", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: false
         });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
 
-        QUnit.test(`swipeEnabled: ${swipeEnabled}, items:[1, 2] -> items: [1]`, assert => {
-            const $multiView = $("#multiView").dxMultiView({
-                items: [1, 2],
-                swipeEnabled: swipeEnabled
-            });
+        multiView.option("items", [1, 2]);
+        multiView.option("swipeEnabled", true);
 
-            const multiView = $multiView.dxMultiView("instance");
-            multiView.option("items", [1]);
+        assert.equal(swipeable.option("disabled"), false, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
 
-            const swipeable = Swipeable.getInstance($multiView);
-            assert.ok(swipeable.option("disabled"), "swipeable is disabled");
+    QUnit.test("{items: [], swipeEnabled: false} -> swipeEnabled: true", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: false
         });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
 
-        QUnit.test(`swipeEnabled: ${swipeEnabled}, items:[1] -> items:[1, 2]`, assert => {
-            const $multiView = $("#multiView").dxMultiView({
-                items: [1],
-                swipeEnabled: swipeEnabled
-            });
+        multiView.option("swipeEnabled", true);
 
-            const multiView = $multiView.dxMultiView("instance");
-            multiView.option("items", [1, 2]);
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
 
-            const swipeable = Swipeable.getInstance($multiView);
-            assert.equal(swipeable.option("disabled"), !swipeEnabled, `swipeable is ${swipeEnabled ? "disabled" : "enabled"}`);
+    QUnit.test("{items: [], swipeEnabled: true}", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: true
         });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [], swipeEnabled: true} -> items: [1, 2]", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("items", [1, 2]);
+
+        assert.equal(swipeable.option("disabled"), false, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [], swipeEnabled: true} -> items: [1, 2], swipeEnabled: false", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("items", [1, 2]);
+        multiView.option("swipeEnabled", false);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [], swipeEnabled: true} -> swipeEnabled: false", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("swipeEnabled", false);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [], swipeEnabled: true} -> swipeEnabled: false, items: [1, 2]", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("swipeEnabled", false);
+        multiView.option("items", [1, 2]);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1], swipeEnabled: false}", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1],
+            swipeEnabled: false
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1], swipeEnabled: true}", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: false}", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: false
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: false} -> items: [], swipeEnabled: true", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: false
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("items", []);
+        multiView.option("swipeEnabled", true);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: false} -> swipeEnabled: true", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: false
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("swipeEnabled", true);
+
+        assert.equal(swipeable.option("disabled"), false, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: true}", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        assert.equal(swipeable.option("disabled"), false, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: true} -> items: []", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("items", []);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: true} -> items: [1]", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("items", [1]);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: true} -> items: [1,2,3]", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("items", [1, 2, 3]);
+
+        assert.equal(swipeable.option("disabled"), false, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), true, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: true} -> swipeEnabled: false", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("swipeEnabled", false);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
+    });
+
+    QUnit.test("{items: [1, 2], swipeEnabled: true} -> swipeEnabled: false, items: [1,2,3]", (assert) => {
+        const $multiView = $("#multiView").dxMultiView({
+            items: [1, 2],
+            swipeEnabled: true
+        });
+        const multiView = $multiView.dxMultiView("instance");
+        const swipeable = Swipeable.getInstance($multiView);
+
+        multiView.option("swipeEnabled", false);
+        multiView.option("items", [1, 2, 3]);
+
+        assert.equal(swipeable.option("disabled"), true, "Swipeable.disabled");
+        assert.equal(multiView.option("swipeEnabled"), false, "MultiView.swipeEnabled");
     });
 });
