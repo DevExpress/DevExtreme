@@ -1571,7 +1571,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     rowIndices: [rowIndex, rowIndex + 1]
                 });
             } else {
-                dataController.updateItems();
+                dataController.updateItems({
+                    repaintChangesOnly: that.option("repaintChangesOnly")
+                });
             }
 
             if(editMode === EDIT_MODE_POPUP) {
@@ -1672,6 +1674,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
                     if(text && options.column.displayValueMap) {
                         options.column.displayValueMap[value] = text;
+                    }
+                    if(options.values) {
+                        options.values[options.columnIndex] = value;
                     }
                 }
                 params = {
