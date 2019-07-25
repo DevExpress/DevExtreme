@@ -1426,7 +1426,7 @@ QUnit.module("Tabs", {
         });
     });
 
-    [undefined, null, []].map(tabbedItems => {
+    [undefined, null, []].forEach(tabbedItems => {
         test(`The empty tab should not be rendered items when an items option has ${formatTestValue(tabbedItems)} value`, (assert) => {
             const form = $("#form").dxForm({
                 formData: {

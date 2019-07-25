@@ -980,7 +980,7 @@ var Form = Widget.inherit({
         });
     },
 
-    _getItemsForTemplate: function(item) {
+    _tryGetItemsForTemplate: function(item) {
         return item.items || [];
     },
 
@@ -997,7 +997,7 @@ var Form = Widget.inherit({
                         $container = $(container),
                         alignItemLabels = utils.ensureDefined(itemData.alignItemLabels, true);
 
-                    layoutManager = that._renderLayoutManager(that._getItemsForTemplate(itemData), $container, {
+                    layoutManager = that._renderLayoutManager(that._tryGetItemsForTemplate(itemData), $container, {
                         colCount: itemData.colCount,
                         alignItemLabels: alignItemLabels,
                         screenByWidth: this.option("screenByWidth"),
@@ -1057,7 +1057,7 @@ var Form = Widget.inherit({
                 container: domUtils.getPublicElement($groupContent)
             });
         } else {
-            layoutManager = this._renderLayoutManager(this._getItemsForTemplate(item), $groupContent, {
+            layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(item), $groupContent, {
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,

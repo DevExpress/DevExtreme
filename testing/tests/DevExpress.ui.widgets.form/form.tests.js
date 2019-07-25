@@ -2125,7 +2125,7 @@ const formatTestValue = value => Array.isArray(value) ? "[]" : value;
     });
 });
 
-[undefined, null, []].map(tabbedItems => {
+[undefined, null, []].forEach(tabbedItems => {
     QUnit.test(`Change tabbed items from [1] -> ${formatTestValue(tabbedItems)}`, function(assert) {
         const form = $("#form").dxForm({
             formData: {
