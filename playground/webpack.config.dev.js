@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-var baseConfig = require("./webpack.config.js");
+var baseConfig = require("../webpack.config.js");
 
 module.exports = Object.assign({
     watch: true,
@@ -17,7 +17,7 @@ module.exports = Object.assign({
             loader: 'string-replace-loader',
             options: {
                 search: '%VERSION%',
-                replace: require('./package.json').version,
+                replace: require('../package.json').version,
             }
         }]
     }

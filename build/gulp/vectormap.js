@@ -20,17 +20,9 @@ function transformFileName(fileName) {
     return path.join(VECTORMAP_UTILS_PATH, fileName) + '.js';
 }
 
-gulp.task('vectormap-utils', function() {
-    return merge(
-        createVectorMapUtilsStream('browser', '.debug', false),
-        createVectorMapUtilsStream('browser', '', true),
-        createVectorMapUtilsStream('node', '', false)
-    );
-});
-
-gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
-    var stream = merge();
-    var processFiles = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js')).processFiles;
+gulp.task('vectormap-data', ['vectormap-utils'], function() {
+    var streams = [],
+        processFiles = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js')).processFiles;
 
     if(!fs.existsSync(VECTORMAP_DATA_RESULT_PATH)) {
         fs.mkdirSync(VECTORMAP_DATA_RESULT_PATH);
@@ -45,7 +37,7 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
         files.forEach(file => {
             var data = fs.readFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, file), 'utf8');
 
-            stream.add(
+            streams.push(
                 gulp.src('build/gulp/vectormapdata-template.jst')
                     .pipe(template({ data: data }))
                     .pipe(rename(file))
@@ -54,8 +46,8 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
             );
         });
     });
-    return stream;
-}));
+    return streams;
+});
 
 function patchVectorMapUtilsStream(stream, isMinify) {
     return stream.pipe(headerPipes.useStrict())
@@ -81,4 +73,12 @@ function createVectorMapUtilsStream(name, suffix, isMinify) {
     return patchVectorMapUtilsStream(stream, isMinify);
 }
 
-gulp.task('vectormap', gulp.series('vectormap-utils', 'vectormap-data'));
+gulp.task('vectormap-utils', function() {
+    return merge(
+        createVectorMapUtilsStream('browser', '.debug', false),
+        createVectorMapUtilsStream('browser', '', true),
+        createVectorMapUtilsStream('node', '', false)
+    );
+});
+
+gulp.task('vectormap', ['vectormap-utils', 'vectormap-data']);
