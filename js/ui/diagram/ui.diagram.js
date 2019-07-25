@@ -380,6 +380,17 @@ class Diagram extends Widget {
                 return DataLayoutType.Tree;
         }
     }
+    _getAutoZoomValue(option) {
+        const { AutoZoomMode } = getDiagram();
+        switch(option) {
+            case "fitContent":
+                return AutoZoomMode.FitContent;
+            case "fitWidth":
+                return AutoZoomMode.FitToWidth;
+            default:
+                return AutoZoomMode.Disabled;
+        }
+    }
     _isBindingMode() {
         return this._nodes || this._edges;
     }
@@ -538,7 +549,7 @@ class Diagram extends Widget {
     }
     _updateAutoZoomState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.ToggleAutoZoom, this.option("autoZoom"));
+        this._executeDiagramCommand(DiagramCommand.ToggleAutoZoom, this._getAutoZoomValue(this.option("autoZoom")));
     }
     _updateSimpleViewState() {
         const { DiagramCommand } = getDiagram();
@@ -629,7 +640,7 @@ class Diagram extends Widget {
             simpleView: false,
             /**
             * @name dxDiagramOptions.autoZoom
-            * @type Boolean
+            * @type Enums.DiagramAutoZoom
             * @default false
             */
             autoZoom: false,
