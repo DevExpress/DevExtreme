@@ -1990,7 +1990,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.autoZoom */
-        autoZoom?: boolean;
+        autoZoom?: 'fitContent' | 'fitWidth' | 'disabled';
         /** @name dxDiagram.Options.contextMenu */
         contextMenu?: { commands?: Array<'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'bringToFront' | 'sendToBack' | 'lock' | 'unlock'>, enabled?: boolean };
         /** @name dxDiagram.Options.customShapes */
@@ -2017,6 +2017,8 @@ declare module DevExpress.ui {
         readOnly?: boolean;
         /** @name dxDiagram.Options.showGrid */
         showGrid?: boolean;
+        /** @name dxDiagram.Options.simpleView */
+        simpleView?: boolean;
         /** @name dxDiagram.Options.snapToGrid */
         snapToGrid?: boolean;
         /** @name dxDiagram.Options.toolbar */
