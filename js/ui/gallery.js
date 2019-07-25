@@ -457,20 +457,27 @@ var Gallery = CollectionWidget.inherit({
         var $container = this._itemContainer();
 
         for(i = 0; i < duplicateCount; i++) {
-            this._cloneItemForDuplicate($items, i, $container);
+            this._cloneItemForDuplicate($items[i], $container);
         }
 
         for(i = 0; i < duplicateCount; i++) {
-            this._cloneItemForDuplicate($items, lastItemIndex - i, $container);
+            this._cloneItemForDuplicate($items[lastItemIndex - i], $container);
         }
     },
 
-    _cloneItemForDuplicate: function($items, index, $container) {
-        $items[index] && $($items[index]).clone(true).addClass(GALLERY_LOOP_ITEM_CLASS).css("margin", 0).appendTo($container);
+    _cloneItemForDuplicate: function(item, $container) {
+        if(item) {
+            $(item)
+                .clone(true)
+                .addClass(GALLERY_LOOP_ITEM_CLASS)
+                .css("margin", 0)
+                .appendTo($container);
+        }
     },
 
     _getRealItems: function() {
-        return this.$element().find(".dx-gallery-item:not(." + GALLERY_LOOP_ITEM_CLASS + ")");
+        var selector = "." + GALLERY_ITEM_CLASS + ":not(." + GALLERY_LOOP_ITEM_CLASS + ")";
+        return this.$element().find(selector);
     },
 
     _getLoopedItems: function() {

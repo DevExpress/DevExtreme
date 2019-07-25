@@ -920,9 +920,7 @@ var CollectionWidget = Widget.inherit({
                 itemIndex: index
             });
 
-
             that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
-
         });
 
         return $itemFrame;
