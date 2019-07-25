@@ -1,12 +1,12 @@
-import $ from "jquery";
-import SelectBox from "ui/select_box";
-import { DataSource } from "data/data_source/data_source";
-import CustomStore from "data/custom_store";
-import fx from "animation/fx";
-import { hasWindow } from "core/utils/window";
+var $ = require("jquery"),
+    SelectBox = require("ui/select_box"),
+    DataSource = require("data/data_source/data_source").DataSource,
+    CustomStore = require("data/custom_store"),
+    fx = require("animation/fx"),
+    hasWindow = require("core/utils/window").hasWindow;
 
-import "common.css!";
-import "generic_light.css!";
+require("common.css!");
+require("generic_light.css!");
 
 QUnit.testStart(function() {
     const markup =
@@ -34,7 +34,6 @@ QUnit.testStart(function() {
 
 const WIDGET_CLASS = "dx-selectbox";
 const POPUP_CLASS = "dx-selectbox-popup";
-const LIST_CLASS = "dx-list";
 const LIST_ITEM_CLASS = "dx-list-item";
 const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 const PLACEHOLDER_CLASS = "dx-placeholder";
@@ -323,36 +322,4 @@ QUnit.test("T427723: dxSelectBox placed in a custom Angular directive throws the
     } catch(_) {
         assert.ok(false, "exception");
     }
-});
-
-QUnit.module("aria accessibility", moduleSetup, () => {
-    const checkAsserts = (expectedValues) => {
-        let { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
-
-        QUnit.assert.strictEqual($target.attr("role"), role, "role");
-        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
-        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
-        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
-    };
-
-    [true, false].forEach((searchEnabled) => {
-        QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, function() {
-            let $element = $("#selectBox").dxSelectBox({
-                opened: true,
-                searchEnabled: searchEnabled
-            });
-
-            this.clock.tick(TIME_TO_WAIT);
-            let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-            let list = $(`.${LIST_CLASS}`).dxList("instance");
-            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
-            checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
-
-            $element.dxSelectBox("instance").option("searchEnabled", !searchEnabled);
-            $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
-            checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
-        });
-    });
 });
