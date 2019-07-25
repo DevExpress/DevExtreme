@@ -3,7 +3,7 @@ import resizeCallbacks from "core/utils/resize_callbacks";
 import consoleUtils from "core/utils/console";
 import windowUtils from "core/utils/window";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
-import typeUtils from "core/utils/type";
+import { isRenderer } from "core/utils/type";
 import config from "core/config";
 import { __internals as internals } from "ui/form/ui.form";
 
@@ -12,7 +12,13 @@ import "ui/text_area";
 import "common.css!";
 import "generic_light.css!";
 
+const FORM_GROUP_CONTENT_CLASS = "dx-form-group-content";
+const MULTIVIEW_ITEM_CONTENT_CLASS = "dx-multiview-item-content";
+const FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager";
+
 const { test } = QUnit;
+
+const formatTestValue = value => Array.isArray(value) ? "[]" : value;
 
 QUnit.testStart(() => {
     const markup =
@@ -1092,7 +1098,7 @@ QUnit.module("Grouping", () => {
                         itemType: "group",
                         caption: "Bio",
                         template: function(data, container) {
-                            assert.deepEqual(typeUtils.isRenderer(container), !!config().useJQuery, "container is correct");
+                            assert.deepEqual(isRenderer(container), !!config().useJQuery, "container is correct");
                             $("<div>")
                                 .text(data.formData.biography)
                                 .addClass("template-biography")
@@ -1263,6 +1269,25 @@ QUnit.module("Grouping", () => {
         assert.equal(changeItemOptionSpy.args[0][1], "visible", "option's name is correct");
         assert.equal(changeItemOptionSpy.args[0][2], false, "option's value is correct");
     });
+
+    [undefined, null, []].forEach(groupItems => {
+        test(`The empty group should not be rendered items when an items option has ${formatTestValue(groupItems)} value`, (assert) => {
+            const form = $("#form").dxForm({
+                formData: {
+                    field: "Test"
+                },
+                items: [{
+                    itemType: "group",
+                    items: groupItems
+                }]
+            }).dxForm("instance");
+
+            const $layoutManager = $(`.${FORM_GROUP_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+            assert.equal($layoutManager.length, 1, "layout manager is rendered");
+            assert.notOk($layoutManager.children().length, "layout manager content is empty");
+            assert.notOk(form.getEditor("field"), "editor is not created");
+        });
+    });
 });
 
 QUnit.module("Tabs", {
@@ -1406,10 +1431,31 @@ QUnit.module("Tabs", {
                         {
                             items: ["firstName"],
                             tabTemplate: function(tabData, tabIndex, tabElement) {
-                                assert.equal(typeUtils.isRenderer(tabElement), !!config().useJQuery, "tabElement is correct");
+                                assert.equal(isRenderer(tabElement), !!config().useJQuery, "tabElement is correct");
                             }
                         }]
                 }]
+        });
+    });
+
+    [undefined, null, []].forEach(tabbedItems => {
+        test(`The empty tab should not be rendered items when an items option has ${formatTestValue(tabbedItems)} value`, (assert) => {
+            const form = $("#form").dxForm({
+                formData: {
+                    field: "Test"
+                },
+                items: [{
+                    itemType: "tabbed",
+                    tabs: [{
+                        items: tabbedItems
+                    }]
+                }]
+            }).dxForm("instance");
+
+            const $layoutManager = $(`.${MULTIVIEW_ITEM_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+            assert.equal($layoutManager.length, 1, "layout manager is rendered");
+            assert.notOk($layoutManager.children().length, "layout manager content is empty");
+            assert.notOk(form.getEditor("field"), "editor is not created");
         });
     });
 });
