@@ -559,18 +559,12 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
     _setScrollerSpacing: function(hasHeight) {
-        var that = this,
-            scrollable = that._rowsView.getScrollable();
-
-        if(!scrollable && hasHeight) { // T722415
-            commonUtils.deferRender(() => {
-                commonUtils.deferUpdate(() => {
-                    that._setScrollerSpacingCore(hasHeight);
-                });
+        // T722415, T758955
+        commonUtils.deferRender(() => {
+            commonUtils.deferUpdate(() => {
+                this._setScrollerSpacingCore(hasHeight);
             });
-        } else {
-            that._setScrollerSpacingCore(hasHeight);
-        }
+        });
     },
     _updateDimensionsCore: function() {
         var that = this,
