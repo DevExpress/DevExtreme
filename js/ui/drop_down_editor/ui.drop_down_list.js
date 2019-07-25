@@ -538,9 +538,7 @@ var DropDownList = DropDownEditor.inherit({
     _fireContentReadyAction: commonUtils.noop,
 
     _setAriaTargetForList: function() {
-        // TODO: make getAriaTarget option
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
-        this._list.setAria("role", "combobox");
     },
 
     _renderList: function() {
@@ -550,10 +548,10 @@ var DropDownList = DropDownEditor.inherit({
             .appendTo(this._popup.$content());
 
         this._list = this._createComponent($list, List, this._listConfig());
-
         this._refreshList();
 
         this._setAriaTargetForList();
+        this._list.option("_listAttributes", { "role": "combobox" });
 
         this._renderPreventBlur(this._$list);
     },

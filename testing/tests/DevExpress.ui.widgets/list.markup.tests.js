@@ -246,20 +246,48 @@ QUnit.module("nested rendering", {}, () => {
     });
 });
 
-QUnit.module("aria accessibility", {}, () => {
-    QUnit.test("aria role", assert => {
-        const $element = $("#list").dxList();
-        assert.equal($element.attr("role"), "listbox", "aria role is correct");
-    });
+QUnit.module("aria accessibility", () => {
+    class ariaAccessibilityTestHelper {
+        constructor(searchEnabled) {
+            this.element = $("#list").dxList({
+                items: [1, 2, 3],
+                searchEnabled: searchEnabled
+            }).dxList("instance");
+            this.$element = this.element.$element();
+            this.$itemContainer = this.element._itemContainer();
+        }
 
-    QUnit.test("list item role", assert => {
-        assert.expect(2);
+        checkAsserts(expectedValues) {
+            let { role, isActiveDescendant, tabIndex, $target } = expectedValues;
 
-        const items = [0, 1];
-        const $element = $("#list").dxList({ items });
+            QUnit.assert.strictEqual($target.attr("role"), role, "role");
+            QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
+            QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
+        }
+    }
 
-        $element.find(".dx-list-item").each((i, item) => {
-            assert.equal($(item).attr("role"), "option", "role for item " + i + " is correct");
+    [true, false].forEach((searchEnabled) => {
+        QUnit.test(`aria role on initialize, searchEnabled: ${searchEnabled}`, () => {
+            let helper = new ariaAccessibilityTestHelper(searchEnabled);
+
+            helper.checkAsserts({ $target: searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
+            helper.checkAsserts({ $target: searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+        });
+
+        QUnit.test(`aria role after initialize, searchEnabled: ${searchEnabled}`, () => {
+            let helper = new ariaAccessibilityTestHelper(searchEnabled);
+            helper.element.option("searchEnabled", !searchEnabled);
+
+            helper.checkAsserts({ $target: !searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
+            helper.checkAsserts({ $target: !searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+        });
+
+        QUnit.test("list item", () => {
+            let helper = new ariaAccessibilityTestHelper(searchEnabled);
+
+            helper.$element.find(`.${LIST_ITEM_CLASS}`).each((i, item) => {
+                helper.checkAsserts({ $target: $(item), role: "option", isActiveDescendant: false, tabIndex: undefined });
+            });
         });
     });
 });

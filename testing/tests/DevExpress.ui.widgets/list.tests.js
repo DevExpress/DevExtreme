@@ -1,9 +1,9 @@
-var $ = require("jquery");
+import $ from "jquery";
 
-require("common.css!");
+import "common.css!";
 
-QUnit.testStart(function() {
-    var markup =
+QUnit.testStart(() => {
+    const markup =
         '<style>\
             .dx-scrollable-native-win8.dx-scrollable-native.dx-scrollview .dx-scrollable-container .dx-scrollview-content {\
                 height: auto !important;\
@@ -32,8 +32,8 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("./listParts/commonTests.js");
-require("./listParts/editingTests.js");
-require("./listParts/editingUITests.js");
-require("./listParts/dataSourceFromUrlTests.js");
-require("./listParts/liveUpdateTests.js");
+import "./listParts/commonTests.js";
+import "./listParts/editingTests.js";
+import "./listParts/editingUITests.js";
+import "./listParts/dataSourceFromUrlTests.js";
+import "./listParts/liveUpdateTests.js";

@@ -1452,24 +1452,3 @@ QUnit.module("widget sizing render", {
     });
 });
 
-QUnit.module("aria accessibility", {}, () => {
-    QUnit.test("aria role should not change to listbox after it's second rendering (T290859)", assert => {
-        assert.expect(1);
-
-        const $element = $("#widget").dxSelectBox({
-            searchEnabled: true,
-            searchTimeout: 0,
-            opened: true,
-            items: ["item1", "item2", "item3"]
-        });
-
-        const $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-
-        $input.focusin();
-
-        keyboard.type("it");
-
-        assert.equal($input.attr("role"), "combobox", "role was not changed");
-    });
-});
