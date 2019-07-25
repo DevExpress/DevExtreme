@@ -549,7 +549,7 @@ class Diagram extends Widget {
     }
     _updateAutoZoomState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.ToggleAutoZoom, this._getAutoZoomValue(this.option("autoZoom")));
+        this._executeDiagramCommand(DiagramCommand.SwitchAutoZoom, this._getAutoZoomValue(this.option("autoZoom")));
     }
     _updateSimpleViewState() {
         const { DiagramCommand } = getDiagram();

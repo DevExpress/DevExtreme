@@ -1072,7 +1072,7 @@
  * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageLandscape'|'pageColor'}
  */
 
- /**
+/**
  * @typedef {string} Enums.DiagramAutoZoom
  * @enum {'fitContent'|'fitWidth'|'disabled'}
  */
