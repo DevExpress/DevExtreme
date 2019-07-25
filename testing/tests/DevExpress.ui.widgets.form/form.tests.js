@@ -16,6 +16,9 @@ import "common.css!";
 import "generic_light.css!";
 
 const INVALID_CLASS = "dx-invalid";
+const FORM_GROUP_CONTENT_CLASS = "dx-form-group-content";
+const MULTIVIEW_ITEM_CONTENT_CLASS = "dx-multiview-item-content";
+const FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager";
 
 QUnit.testStart(function() {
     const markup =
@@ -2096,6 +2099,54 @@ QUnit.test("Reset editor's value", function(assert) {
     assert.strictEqual(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
     assert.strictEqual(form.getEditor("room").option("value"), null, "editor for the room dataField");
     assert.strictEqual(form.getEditor("isDeveloper").option("value"), false, "editor for the isDeveloper dataField");
+});
+
+const formatTestValue = value => Array.isArray(value) ? "[]" : value;
+
+[undefined, null, []].forEach(groupItems => {
+    QUnit.test(`Change group items from [1] -> ${formatTestValue(groupItems)}`, function(assert) {
+        const form = $("#form").dxForm({
+            formData: {
+                field: "Test"
+            },
+            items: [{
+                itemType: "group",
+                name: "TestGroup",
+                items: ["field"]
+            }]
+        }).dxForm("instance");
+
+        form.itemOption("TestGroup", "items", groupItems);
+
+        const $layoutManager = $(`.${FORM_GROUP_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+        assert.equal($layoutManager.length, 1, "layout manager is rendered");
+        assert.notOk($layoutManager.children().length, "layout manager content is empty");
+        assert.notOk(form.getEditor("field"), "editor is not created");
+    });
+});
+
+[undefined, null, []].forEach(tabbedItems => {
+    QUnit.test(`Change tabbed items from [1] -> ${formatTestValue(tabbedItems)}`, function(assert) {
+        const form = $("#form").dxForm({
+            formData: {
+                field: "Test"
+            },
+            items: [{
+                itemType: "tabbed",
+                tabs: [{
+                    name: "TestTabbedItem",
+                    items: ["field"]
+                }]
+            }]
+        }).dxForm("instance");
+
+        form.itemOption("TestTabbedItem", "items", tabbedItems);
+
+        const $layoutManager = $(`.${MULTIVIEW_ITEM_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+        assert.equal($layoutManager.length, 1, "layout manager is rendered");
+        assert.notOk($layoutManager.children().length, "layout manager content is empty");
+        assert.notOk(form.getEditor("field"), "editor is not created");
+    });
 });
 
 QUnit.module("Adaptivity");

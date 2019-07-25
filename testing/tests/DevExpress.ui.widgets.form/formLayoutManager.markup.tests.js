@@ -1186,7 +1186,6 @@ QUnit.module("Layout manager", () => {
         assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).text(), "Age", "Correct field rendered");
     });
 
-
     test("CustomizeItem work well after option change", (assert) => {
         // arrange, act
         let $editors,
@@ -2079,6 +2078,18 @@ QUnit.module("Layout manager", () => {
         assert.equal(textBox.option("value"), "", "Value is empty string");
         assert.notOk(dateBox.option("isValid"), "'isValid' is false");
         assert.equal(dateBox.option("value"), null, "Value is null");
+    });
+
+    test("Render with empty items", function(assert) {
+        const layoutManager = $("#container").dxLayoutManager({
+            formData: {
+                name: "Test Name"
+            },
+            items: []
+        }).dxLayoutManager("instance");
+
+        assert.equal(layoutManager.$element().children().length, 0, "layout manager content is empty");
+        assert.notOk(layoutManager.getEditor("name"), "editor is not created");
     });
 });
 
