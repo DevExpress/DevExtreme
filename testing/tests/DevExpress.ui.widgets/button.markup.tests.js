@@ -218,11 +218,11 @@ CheckStyleHelper.testInChromeOnDesktop("Check template styles - not focused", fu
     });
     $("#input1").focus();
 
-    CheckStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(255, 255, 255)");
-    CheckStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
-    CheckStyleHelper.checkOverflowX(assert, $template[0], "visible");
-    CheckStyleHelper.checkTextOverflow(assert, $template[0], "clip");
-    CheckStyleHelper.checkWhiteSpace(assert, $template[0], "normal");
+    assert.equal(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+    assert.equal(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(255, 255, 255)", "backgroundColor");
+    assert.equal(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.equal(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.equal(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
 });
 
 CheckStyleHelper.testInChromeOnDesktop("Check template styles - focused, text is not empty", function(assert) {
@@ -233,11 +233,11 @@ CheckStyleHelper.testInChromeOnDesktop("Check template styles - focused, text is
     });
     $button.dxButton("instance").focus();
 
-    CheckStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
-    CheckStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(217, 217, 217)");
-    CheckStyleHelper.checkOverflowX(assert, $template[0], "hidden");
-    CheckStyleHelper.checkTextOverflow(assert, $template[0], "ellipsis");
-    CheckStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
+    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
+    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "hidden", "overflowX");
+    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "ellipsis", "textOverflow");
+    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
 });
 
 CheckStyleHelper.testInChromeOnDesktop("Check template styles - focused, text is empty", function(assert) {
@@ -248,11 +248,11 @@ CheckStyleHelper.testInChromeOnDesktop("Check template styles - focused, text is
     });
     $button.dxButton("instance").focus();
 
-    CheckStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
-    CheckStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(217, 217, 217)");
-    CheckStyleHelper.checkOverflowX(assert, $template[0], "visible");
-    CheckStyleHelper.checkTextOverflow(assert, $template[0], "clip");
-    CheckStyleHelper.checkWhiteSpace(assert, $template[0], "normal");
+    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
+    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
 });
 
 QUnit.module("aria accessibility");

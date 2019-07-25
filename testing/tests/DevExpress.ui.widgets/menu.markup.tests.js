@@ -82,11 +82,11 @@ CheckStyleHelper.testInChromeOnDesktop("Check item template styles - not focused
     });
     $("#input1").focus();
 
-    CheckStyleHelper.checkColor(assert, $template[0], "rgb(51, 51, 51)");
-    CheckStyleHelper.checkBackgroundColor(assert, $template[0], "rgba(0, 0, 0, 0)");
-    CheckStyleHelper.checkOverflowX(assert, $template[0], "visible");
-    CheckStyleHelper.checkTextOverflow(assert, $template[0], "clip");
-    CheckStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
+    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgba(0, 0, 0, 0)", "backgroundColor");
+    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
 });
 
 CheckStyleHelper.testInChromeOnDesktop("Check item template styles - focused", function(assert) {
@@ -97,11 +97,11 @@ CheckStyleHelper.testInChromeOnDesktop("Check item template styles - focused", f
     });
     menu.instance.focus();
 
-    CheckStyleHelper.checkColor(assert, $template[0], "rgb(255, 255, 255)");
-    CheckStyleHelper.checkBackgroundColor(assert, $template[0], "rgb(51, 122, 183)");
-    CheckStyleHelper.checkOverflowX(assert, $template[0], "visible");
-    CheckStyleHelper.checkTextOverflow(assert, $template[0], "clip");
-    CheckStyleHelper.checkWhiteSpace(assert, $template[0], "nowrap");
+    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(255, 255, 255)", "color");
+    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(51, 122, 183)", "backgroundColor");
+    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
 });
 
 QUnit.module("Menu - selection", {

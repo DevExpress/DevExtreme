@@ -10,22 +10,19 @@ function testInChromeOnDesktop(name, testCallback) {
     }
 }
 
-function checkTextOverflow(assert, element, expectedValue) {
-    let style = window.getComputedStyle(element.parentNode);
-    assert.equal(style.textOverflow, expectedValue, "textOverflow");
+function getTextOverflow(element) {
+    return window.getComputedStyle(element).textOverflow;
 }
 
-function checkWhiteSpace(assert, element, expectedValue) {
-    let style = window.getComputedStyle(element);
-    assert.equal(style.whiteSpace, expectedValue, "whiteSpace");
+function getWhiteSpace(element) {
+    return window.getComputedStyle(element).whiteSpace;
 }
 
-function checkOverflowX(assert, element, expectedValue) {
-    let style = window.getComputedStyle(element.parentNode);
-    assert.equal(style.overflowX, expectedValue, "overflowX");
+function getOverflowX(element) {
+    return window.getComputedStyle(element).overflowX;
 }
 
-function checkBackgroundColor(assert, element, expectedValue) {
+function getBackgroundColor(element) {
     let elementBackgroundColor = window.getComputedStyle(element).backgroundColor;
     let currentElement = element.parentNode;
     while(currentElement.parentNode !== document && typeUtils.isDefined(currentElement.parentNode)) {
@@ -36,19 +33,18 @@ function checkBackgroundColor(assert, element, expectedValue) {
         }
         currentElement = currentElement.parentNode;
     }
-    assert.equal(elementBackgroundColor, expectedValue, "backgroundColor");
+    return elementBackgroundColor;
 }
 
-function checkColor(assert, element, expectedValue) {
-    let style = window.getComputedStyle(element);
-    assert.equal(style.color, expectedValue, "color");
+function getColor(element) {
+    return window.getComputedStyle(element).color;
 }
 
 export default {
     testInChromeOnDesktop: testInChromeOnDesktop,
-    checkTextOverflow: checkTextOverflow,
-    checkWhiteSpace: checkWhiteSpace,
-    checkOverflowX: checkOverflowX,
-    checkBackgroundColor: checkBackgroundColor,
-    checkColor: checkColor
+    getTextOverflow: getTextOverflow,
+    getWhiteSpace: getWhiteSpace,
+    getOverflowX: getOverflowX,
+    getBackgroundColor: getBackgroundColor,
+    getColor: getColor,
 };
