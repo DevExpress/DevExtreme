@@ -9,7 +9,7 @@ var lazyPipe = require('lazypipe');
 var webpackStream = require('webpack-stream');
 
 var webpackConfig = require('../../webpack.config.js');
-var webpackConfigDev = require('../../playground/webpack.config.dev.js');
+var webpackConfigDev = require('../../webpack.config.dev.js');
 var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
 var context = require('./context.js');
