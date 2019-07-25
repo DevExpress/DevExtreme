@@ -9,7 +9,7 @@ require("common.css!");
 require("generic_light.css!");
 
 QUnit.testStart(function() {
-    const markup =
+    var markup =
         '<div id="qunit-fixture">\
             <div id="selectBox"></div>\
             \
@@ -32,14 +32,14 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-const WIDGET_CLASS = "dx-selectbox";
-const POPUP_CLASS = "dx-selectbox-popup";
-const LIST_ITEM_CLASS = "dx-list-item";
-const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
-const PLACEHOLDER_CLASS = "dx-placeholder";
-const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const WIDGET_CLASS = "dx-selectbox",
+    POPUP_CLASS = "dx-selectbox-popup",
+    LIST_ITEM_CLASS = "dx-list-item",
+    LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
+    PLACEHOLDER_CLASS = "dx-placeholder",
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
-const TIME_TO_WAIT = 500;
+var TIME_TO_WAIT = 500;
 
 var moduleSetup = {
     beforeEach: function() {
