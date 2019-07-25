@@ -11,8 +11,20 @@ export default class SchedulerTestHelper {
         return this.scheduler.find(`.dx-scheduler-appointment`).nth(index);
     }
 
-    getAppointmentByTitle(title, index = 0) {
-        return this.scheduler.find(`.dx-scheduler-appointment`).withAttribute('title', title).nth(index);
+    getAppointmentByTitle(title) {
+        return this.scheduler.find(`.dx-scheduler-appointment`).withAttribute('title', title).nth(0);
+    }
+
+    getAppointmentBeginTime(appointment) {
+        return appointment.find('.dx-scheduler-appointment-content-date').nth(0).innerText;
+    }
+
+    getAppointmentFinalTime(appointment) {
+        return appointment.find('.dx-scheduler-appointment-content-date').nth(2).innerText;
+    }
+
+    getAppointmentHeight(appointment) {
+        return appointment.getStyleProperty('height');
     }
 
     getDateTableRow(rowIndex = 0) {
@@ -20,7 +32,7 @@ export default class SchedulerTestHelper {
     }
 
     getDateTableCell(rowIndex = 0, cellIndex = 0) {
-        return this.getDateTableRow(rowIndex = 0).find(`.dx-scheduler-date-table-cell`).nth(cellIndex);
+        return this.getDateTableRow(rowIndex).find(`.dx-scheduler-date-table-cell`).nth(cellIndex);
     }
 
     isTooltipVisible() {
