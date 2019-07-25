@@ -76,7 +76,7 @@ gulp.task('style-compiler-themes1', function(callback) {
 });
 
 gulp.task('style-compiler-themes-dev', function(callback) {
-    return gulp.watch("styles/**", ['style-compiler-themes']);
+    return gulp.watch("styles/**", gulp.series('style-compiler-themes'));
 });
 
 gulp.task('style-compiler-tb-assets', function(callback) {
