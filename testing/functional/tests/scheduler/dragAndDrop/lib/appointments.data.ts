@@ -31,7 +31,7 @@ export const pinkData = [{
         {
             row: 5,
             runTime: '11:30 AM',
-            endTime: '12:00 AM'
+            endTime: '12:00 PM'
         },
         {
             row: 8,
@@ -205,7 +205,7 @@ export const pinkData = [{
     ]
 }
 ];
-
+// datasource вынести
 export const blueData = [{
     durationRatio: 1,
     dataSource: {
@@ -242,8 +242,8 @@ export const blueData = [{
         },
         {
             row: 0,
-            runTime: '9:00 PM',
-            endTime: '9:30 PM'
+            runTime: '9:00 AM',
+            endTime: '9:30 AM'
         }
     ]
 },
@@ -284,7 +284,7 @@ export const blueData = [{
         {
             row: 0,
             runTime: '9:00 AM',
-            endTime: '9:30 AM'
+            endTime: '10:00 AM'
         }
     ]
 },
@@ -300,7 +300,7 @@ export const blueData = [{
         {
             row: 8,
             runTime: '1:00 PM',
-            endTime: '1:30 PM'
+            endTime: '2:30 PM'
         },
         {
             row: 5,
