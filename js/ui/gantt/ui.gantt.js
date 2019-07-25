@@ -39,8 +39,7 @@ class Gantt extends Widget {
         this._$splitter = $("<div>")
             .addClass(GANTT_SPLITTER_CLASS)
             .addClass(GANTT_SPLITTER_TRANSPARENT_CLASS)
-            .css('left', this.option("treeListWidth"))
-            .height(this.option("height"))
+            .css("left", this.option("treeListWidth"))
             .appendTo(this.$element());
         this._$splitterBorder = $("<div>")
             .addClass(GANTT_SPLITTER_BORDER_CLASS)
@@ -172,12 +171,8 @@ class Gantt extends Widget {
         }
     }
     _getTreeListRowHeight() {
-        const rowElement = this._treeList._$element.find(".dx-row-lines")[0];
-        if(rowElement) {
-            const borderWidth = this._treeList.option("showRowLines") ? 1 : 0;
-            return rowElement.offsetHeight + borderWidth;
-        }
-        return GANTT_DEFAULT_ROW_HEIGHT;
+        const $row = this._treeList._$element.find(".dx-row-lines");
+        return $row ? $row.last().outerHeight() : GANTT_DEFAULT_ROW_HEIGHT;
     }
 
     _updateWidth(treeListWidth) {
@@ -185,7 +180,7 @@ class Gantt extends Widget {
         treeListWidth = Math.min(treeListWidth, this.$element().width() - splitterBorderWidth);
         this._$treeListWrapper.width(treeListWidth);
         this._$treeList.width(treeListWidth);
-        this._$splitter.css('left', treeListWidth);
+        this._$splitter.css("left", treeListWidth);
         this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
     }
 
