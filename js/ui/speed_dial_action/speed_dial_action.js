@@ -93,7 +93,7 @@ const SpeedDialAction = Widget.inherit({
             case "visible":
                 args.value ?
                     initAction(this) :
-                    disposeAction(this);
+                    disposeAction(this._options.id);
                 break;
             case "animation":
             case "id":
@@ -105,8 +105,6 @@ const SpeedDialAction = Widget.inherit({
 
     _render() {
         this._toggleVisibility(false);
-
-        if(!this.option("visible")) return;
 
         if(!getSwatchContainer(this.$element())) {
             ready(() => initAction(this));

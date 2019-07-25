@@ -181,6 +181,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 });
 
 exports.initAction = function(newAction) {
+    if(!newAction._options.visible) return;
+
     // TODO: workaround for Angular/React/Vue
     delete newAction._options.onInitializing;
 

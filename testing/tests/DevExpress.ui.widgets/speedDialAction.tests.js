@@ -345,17 +345,27 @@ QUnit.module("add visible option", (hooks) => {
     }),
 
     test("check rendering", (assert) => {
-        $("#fab-one").dxSpeedDialAction();
+        const firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
+
+        firstSDA.option("visible", false);
+
+        assert.equal($("." + FAB_CLASS).length, 0, "invisible if change visible option to false");
+
+        firstSDA.option("icon", "edit");
+
+        assert.equal($("." + FAB_CLASS).length, 0, "invisible if change icon option when visible is false");
+
+        firstSDA.option("visible", true);
 
         const secondSDA = $("#fab-two").dxSpeedDialAction({
             visible: false
         }).dxSpeedDialAction("instance");
 
-        assert.equal($("." + FAB_CLASS).length, 1, "one action - second SDA invisible");
+        assert.equal($("." + FAB_CLASS).length, 1, "create one action if second is invisible");
 
         secondSDA.option("visible", true);
 
-        assert.equal($("." + FAB_CLASS).length, 3, "multiple actions - second SDA visible");
+        assert.equal($("." + FAB_CLASS).length, 3, "create two actions if second is visible");
     });
 });
 
