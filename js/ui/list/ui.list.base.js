@@ -1129,6 +1129,8 @@ var ListBase = CollectionWidget.inherit({
             case "badgeExpr":
                 this._invalidate();
                 break;
+            case "_listAttributes":
+                break;
             default:
                 this.callBase(args);
         }
