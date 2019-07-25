@@ -34,8 +34,11 @@ var getMessages = function(directory, locale) {
     return serializeObject(json, true);
 };
 
-gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => {
-    return function() {
+
+gulp.task('localization', ['localization-messages', 'localization-generated-sources']);
+
+gulp.task('localization-messages', function() {
+    return getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => {
         return gulp
             .src('build/gulp/localization-template.jst')
             .pipe(template({
@@ -46,28 +49,28 @@ gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FO
             .pipe(headerPipes.useStrict())
             .pipe(headerPipes.bangLicense())
             .pipe(gulp.dest(RESULT_PATH));
-    };
-})));
+    });
+});
 
-gulp.task('localization-generated-sources', gulp.parallel([{
-    data: require('../../js/localization/messages/en.json'),
-    filename: 'default_messages.js',
-    destination: 'js/localization'
-},
-{
-    data: require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale,
-    filename: 'parentLocales.js',
-    destination: 'js/localization/cldr-data'
-}].map((source) => {
-    return function() {
-        return gulp
+gulp.task('localization-generated-sources', function() {
+    return [
+        {
+            data: require('../../js/localization/messages/en.json'),
+            filename: 'default_messages.js',
+            destination: 'js/localization'
+        },
+        {
+            data: require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale,
+            filename: 'parentLocales.js',
+            destination: 'js/localization/cldr-data'
+        }
+    ].map(source => {
+        gulp
             .src('build/gulp/cldr-data-template.jst')
             .pipe(template({
                 json: serializeObject(source.data)
             }))
             .pipe(rename(source.filename))
             .pipe(gulp.dest(source.destination));
-    };
-})));
-
-gulp.task('localization', gulp.series('localization-messages', 'localization-generated-sources'));
+    });
+});

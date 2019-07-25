@@ -3,13 +3,14 @@ var gulp = require('gulp');
 var gulpIf = require('gulp-if');
 var plumber = require('gulp-plumber');
 var notify = require('gulp-notify');
+var replace = require('gulp-replace');
 var named = require('vinyl-named');
 var webpack = require('webpack');
 var lazyPipe = require('lazypipe');
 var webpackStream = require('webpack-stream');
 
 var webpackConfig = require('../../webpack.config.js');
-var webpackConfigDev = require('../../webpack.config.dev.js');
+var webpackConfigDev = require('../../playground/webpack.config.dev.js');
 var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
 var context = require('./context.js');
@@ -30,6 +31,8 @@ var DEBUG_BUNDLES = BUNDLES.concat([
     '/bundles/dx.custom.js'
 ]);
 
+var VERSION_FILE_PATH = 'core/version.js';
+
 function processBundles(bundles) {
     return bundles.map(function(bundle) {
         return context.TRANSPILED_PATH + bundle;
@@ -45,7 +48,13 @@ function processDevBundles(bundles) {
 function muteWebPack() {
 }
 
-gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
+gulp.task('version-replace', ['transpile'], function() {
+    return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
+        .pipe(replace("%VERSION%", context.version.script))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('js-bundles-prod', ['version-replace'], function() {
     return gulp.src(processBundles(BUNDLES))
         .pipe(named())
         .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
@@ -53,7 +62,7 @@ gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
         .pipe(headerPipes.bangLicense())
         .pipe(compressionPipes.minify())
         .pipe(gulp.dest(context.RESULT_JS_PATH));
-}));
+});
 
 
 var createDebugBundlesStream = function(watch) {
@@ -85,9 +94,9 @@ var createDebugBundlesStream = function(watch) {
 };
 
 
-gulp.task('js-bundles-debug', gulp.series('version-replace', function() {
+gulp.task('js-bundles-debug', ['version-replace'], function() {
     return createDebugBundlesStream(false);
-}));
+});
 
 gulp.task('js-bundles-dev', function() {
     return createDebugBundlesStream(true);

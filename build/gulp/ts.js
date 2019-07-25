@@ -45,7 +45,7 @@ gulp.task('ts-sources', function() {
         .pipe(gulp.dest(OUTPUT_DIR));
 });
 
-gulp.task('ts-jquery-check', gulp.series('ts-sources', function() {
+gulp.task('ts-jquery-check', ['ts-sources'], function() {
     var content = `/// <reference path="${TS_PATH}" />\n`;
 
     content += MODULES
@@ -70,7 +70,7 @@ gulp.task('ts-jquery-check', gulp.series('ts-sources', function() {
         .pipe(ts({
             noEmitOnError: true
         }, ts.reporter.fullReporter()));
-}));
+});
 
 gulp.task('ts-compilation-check', function() {
     return gulp.src(TS_PATH)
@@ -79,4 +79,4 @@ gulp.task('ts-compilation-check', function() {
         }, ts.reporter.fullReporter()));
 });
 
-gulp.task('ts', gulp.series('ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-compilation-check'));
+gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-compilation-check' ]);
