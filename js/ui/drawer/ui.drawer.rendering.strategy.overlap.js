@@ -15,11 +15,13 @@ class OverlapStrategy extends DrawerStrategy {
         const position = this.getOverlayPosition();
         const drawer = this.getDrawerInstance();
 
+        const { opened, minSize } = drawer.option();
+
         drawer._overlay = drawer._createComponent(drawer.content(), Overlay, {
             shading: false,
             container: drawer.getOverlayTarget(),
             position: position,
-            width: "auto",
+            width: opened ? "auto" : minSize || 0,
             height: "100%",
             templatesRenderAsynchronously: drawer.option("templatesRenderAsynchronously"),
             animation: {
