@@ -2,55 +2,59 @@ import { scheduler } from './widget.setup';
 
 const durationRatioScale = 50;
 
-export class Appointment {
-    database: any;
+export class AppointmentWrapper {
+    appointment: any;
 
     title: any;
     element: any;
+
+    durationRatio: any;
+
     movementMap: any;
 
-    appointment: any;
+    height: any;
+
+    startTime: any;
+    finalTime: any;
 
     row: any;
-    runTime: any;
-    endTime: any;
 
-    constructor(map, id) {
-        this.database = map[id];
+    constructor(appointment, index) {
+        this.appointment = appointment[index];
 
-        this.title = map[id].dataSource.text;
+        this.title = this.appointment.title;
         this.element = scheduler.getAppointmentByTitle(this.title);
-        this.movementMap = map[id].movementMap;
 
-        this.appointment = {
-            title: this.title,
-            element: scheduler.getAppointmentByTitle(this.title),
-            height: {
-                expected: `${(map[id].durationRatio * durationRatioScale)}px`,
-                received: scheduler.getAppointmentHeight(this.element)
-            }
+        this.durationRatio = this.appointment.durationRatio;
+
+        this.movementMap = this.appointment.movementMap;
+
+        this.height = {
+            expected: `${(this.appointment.durationRatio * durationRatioScale)}px`,
+            received: scheduler.getAppointmentHeight(this.element)
         }
 
-        this.row = (step) => {
-            return this.movementMap[step].row;
-        }
-
-        this.runTime = {
+        this.startTime = {
             expected: () => {
                 return scheduler.getAppointmentBeginTime(this.element);
             },
-            received: (step) => {
-                return this.movementMap[step].runTime;
+            received: (movementIndex) => {
+                return this.movementMap[movementIndex].startTime;
             }
         }
 
-        this.endTime = {
+        this.finalTime = {
             expected: () => {
                 return scheduler.getAppointmentFinalTime(this.element);
             },
-            received: (step) => {
-                return this.movementMap[step].endTime;
+            received: (movementIndex) => {
+                return this.movementMap[movementIndex].finalTime;
             }
         }
+
+        this.row = (movementIndex) => {
+            return this.movementMap[movementIndex].row;
+        }
+
     }
 }

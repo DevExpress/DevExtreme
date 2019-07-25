@@ -1,20 +1,23 @@
 import SchedulerTestHelper from '../../../../helpers/scheduler.test.helper';
-import { createWidget, getContainerFileUrl } from '../../../../helpers/testHelper';
-import { pinkData, blueData } from './appointments.data';
+
+import {
+    createWidget,
+    getContainerFileUrl
+} from '../../../../helpers/testHelper';
+
+import {
+    schedulerDataSource,
+    schedulerResources
+} from './widget.data';
 
 export const scheduler = new SchedulerTestHelper("#container");
 
 export const createScheduler = async (mode) => {
     await createWidget("dxScheduler", {
-        dataSource: (pinkData.concat(blueData)).reduce((data: any, element: any) => {
-            return (data.concat(element.dataSource));
-        }, []),
+        dataSource: schedulerDataSource,
         resources: [{
-            fieldExpr: "colorId",
-            dataSource: [
-                { id: 0, color: '#ff324a' },
-                { id: 1, color: '#0090c6' }
-            ],
+            fieldExpr: "resourceId",
+            dataSource: schedulerResources,
             label: "Color"
         }],
         views: [mode],
