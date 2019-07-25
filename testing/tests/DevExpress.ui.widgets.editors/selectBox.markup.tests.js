@@ -32,7 +32,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-const WIDGET_CLASS = "dx-selectbox",
+var WIDGET_CLASS = "dx-selectbox",
     POPUP_CLASS = "dx-selectbox-popup",
     LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
