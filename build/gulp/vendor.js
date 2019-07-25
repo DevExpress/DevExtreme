@@ -80,4 +80,4 @@ gulp.task('vendor-css', function() {
     }));
 });
 
-gulp.task('vendor', ['vendor-js', 'vendor-css']);
+gulp.task('vendor', gulp.series('vendor-js', 'vendor-css'));
