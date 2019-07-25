@@ -1656,6 +1656,47 @@ QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
     }
 }));
 
+QUnit.test("reject duplicate points for hiding calculation (T755575)", function(assert) {
+    var chart = moduleSetup.createChart.call(this, {
+        dataSource: [
+            { arg: 100000, val: 5 },
+            { arg: 100000, val: 5 },
+            { arg: 100000, val: 5 },
+            { arg: 100000, val: 5 },
+            { arg: 200000, val: 6 },
+            { arg: 200000, val: 6 },
+            { arg: 300000, val: 7 },
+            { arg: 300000, val: 7 },
+            { arg: 300000, val: 7 },
+            { arg: 300000, val: 7 },
+        ],
+        series: [{}]
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("check density of points continuous series", function(assert) {
+    var chart = moduleSetup.createChart.call(this, {
+        dataSource: [
+            { arg: 100000, val: 4.98 },
+            { arg: 100000, val: 5 },
+            { arg: 150000, val: 5 },
+            { arg: 150000, val: 5.01 },
+            { arg: 150000, val: 5.05 },
+            { arg: 200000, val: 6 },
+            { arg: 200000, val: 6.08 },
+            { arg: 300000, val: 7 },
+            { arg: 350000, val: 7.02 },
+            { arg: 350000, val: 7.04 },
+            { arg: 350000, val: 7.06 },
+        ],
+        series: [{}]
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
 QUnit.test("auto switching point markers visibility", function(assert) {
     var chart = this.createChart({});
 
