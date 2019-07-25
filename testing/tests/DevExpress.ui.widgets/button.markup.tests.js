@@ -1,7 +1,7 @@
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config"),
-    CheckStyleHelper = require("../../helpers/checkStyleHelper.js").default;
+    CheckStyleHelper = require("../../helpers/checkStyleHelper.js");
 
 require("ui/button");
 require("common.css!");

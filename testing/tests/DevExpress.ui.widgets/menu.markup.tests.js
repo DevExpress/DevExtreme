@@ -1,6 +1,6 @@
 import $ from "jquery";
 import fx from "animation/fx";
-import CheckStyleHelper from "../../helpers/checkStyleHelper.js";
+import * as CheckStyleHelper from "../../helpers/checkStyleHelper.js";
 
 import "ui/menu/ui.menu";
 import "ui/menu/ui.submenu";

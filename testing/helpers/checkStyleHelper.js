@@ -2,7 +2,7 @@ import devices from "core/devices";
 import browser from "core/utils/browser";
 import typeUtils from "core/utils/type";
 
-function testInChromeOnDesktop(name, testCallback) {
+export function testInChromeOnDesktop(name, testCallback) {
     if(devices.real().deviceType === "desktop" && browser.webkit) {
         QUnit.testInActiveWindow.call(null, name, testCallback);
     } else {
@@ -10,19 +10,19 @@ function testInChromeOnDesktop(name, testCallback) {
     }
 }
 
-function getTextOverflow(element) {
+export function getTextOverflow(element) {
     return window.getComputedStyle(element).textOverflow;
 }
 
-function getWhiteSpace(element) {
+export function getWhiteSpace(element) {
     return window.getComputedStyle(element).whiteSpace;
 }
 
-function getOverflowX(element) {
+export function getOverflowX(element) {
     return window.getComputedStyle(element).overflowX;
 }
 
-function getBackgroundColor(element) {
+export function getBackgroundColor(element) {
     let elementBackgroundColor = window.getComputedStyle(element).backgroundColor;
     let currentElement = element.parentNode;
     while(currentElement.parentNode !== document.documentElement && typeUtils.isDefined(currentElement.parentNode)) {
@@ -36,15 +36,6 @@ function getBackgroundColor(element) {
     return elementBackgroundColor;
 }
 
-function getColor(element) {
+export function getColor(element) {
     return window.getComputedStyle(element).color;
 }
-
-export default {
-    testInChromeOnDesktop: testInChromeOnDesktop,
-    getTextOverflow: getTextOverflow,
-    getWhiteSpace: getWhiteSpace,
-    getOverflowX: getOverflowX,
-    getBackgroundColor: getBackgroundColor,
-    getColor: getColor,
-};
