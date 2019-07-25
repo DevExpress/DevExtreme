@@ -23,6 +23,7 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'testDetail\' }"><p>Test Details</p></div>\
         </div>\
 \
+        <div id="dataGrid2"></div>\
         <div id="dataGridWithStyle" style="width: 500px;"></div>\
         <div id="form"></div>\
     </div>\
@@ -97,9 +98,9 @@ QUnit.testDone(function() {
 
 QUnit.module("Initialization");
 
-var createDataGrid = function(options) {
+var createDataGrid = function(options, $container) {
     var dataGrid,
-        dataGridElement = $("#dataGrid").dxDataGrid(options);
+        dataGridElement = ($container || $("#dataGrid")).dxDataGrid(options);
 
     QUnit.assert.ok(dataGridElement);
     dataGrid = dataGridElement.dxDataGrid("instance");
@@ -15844,4 +15845,52 @@ QUnit.testInActiveWindow("Focus on edited cell after the edit button in command 
     assert.ok($(dataGrid.getRowElement(0)).find(".dx-editor-cell").eq(0).hasClass("dx-focused"), "first editable cell is active");
 
     clock.restore();
+});
+
+QUnit.module("Editing", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+// T759458
+QUnit.test("The edited cell should be closed on click inside another dataGrid", function(assert) {
+    // arrange
+    var dataGrid1 = createDataGrid({
+            dataSource: [{ field1: "test1", field2: "test2" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            }
+        }),
+        dataGrid2 = createDataGrid({
+            dataSource: [{ field3: "test3", field4: "test4" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            }
+        }, $("#dataGrid2"));
+
+    this.clock.tick(100);
+
+    // act
+    $(dataGrid1.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid1.getCellElement(0, 0)).trigger("dxclick");
+    this.clock.tick(100);
+
+    // assert
+    assert.ok($(dataGrid1.getCellElement(0, 0)).find("input").length > 0, "has input");
+
+    // act
+    $(dataGrid2.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid2.getCellElement(0, 0)).trigger("dxclick");
+    this.clock.tick(100);
+
+    // assert
+    assert.ok($(dataGrid1.getCellElement(0, 0)).find("input").length === 0, "hasn't input");
+    assert.notOk($(dataGrid1.getCellElement(0, 0)).hasClass("dx-editor-cell"), "cell of the first grid isn't editable");
+    assert.ok($(dataGrid2.getCellElement(0, 0)).find("input").length > 0, "has input");
 });
