@@ -25,7 +25,7 @@ function getOverflowX(element) {
 function getBackgroundColor(element) {
     let elementBackgroundColor = window.getComputedStyle(element).backgroundColor;
     let currentElement = element.parentNode;
-    while(currentElement.parentNode !== document && typeUtils.isDefined(currentElement.parentNode)) {
+    while(currentElement.parentNode !== document.documentElement && typeUtils.isDefined(currentElement.parentNode)) {
         let currentStyle = window.getComputedStyle(currentElement);
         if(elementBackgroundColor !== currentStyle.backgroundColor) {
             elementBackgroundColor = currentStyle.backgroundColor;
