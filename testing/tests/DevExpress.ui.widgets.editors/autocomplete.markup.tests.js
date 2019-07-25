@@ -126,7 +126,7 @@ QUnit.module("aria accessibility", {}, () => {
     QUnit.test("aria role should not change to listbox after it's second rendering (T290859)", assert => {
         assert.expect(2);
 
-        const $element = $("#widget").dxSelectBox({
+        const $element = $("#widget").dxAutocomplete({
             searchEnabled: true,
             searchTimeout: 0,
             opened: true,
