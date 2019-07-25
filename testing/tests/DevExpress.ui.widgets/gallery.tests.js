@@ -109,7 +109,7 @@ const ANIMATION_WAIT_TIME = 500;
 const ITEM_WIDTH = 400;
 
 const calculateItemPosition = ($item, $gallery) => {
-    const $container = $gallery.find("." + GALLERY_ITEM_CONTAINER_CLASS);
+    const $container = $gallery.find(`.${GALLERY_ITEM_CONTAINER_CLASS}`);
     const containerPosition = $container.position();
     const itemPosition = $item.position();
 
@@ -143,7 +143,7 @@ QUnit.test("click triggers user handler", function(assert) {
     });
 
     assert.ok(!clicked);
-    $gallery.find("." + GALLERY_ITEM_CLASS).eq(0).trigger("dxclick");
+    $gallery.find(`.${GALLERY_ITEM_CLASS}`).eq(0).trigger("dxclick");
     assert.ok(clicked);
 
     assert.ok(clickEventArgs.event);
@@ -154,7 +154,7 @@ QUnit.test("onContentReady fired after widget completely render", function(asser
     this.$element.dxGallery({
         indicatorEnabled: true,
         onContentReady(e) {
-            assert.ok($(e.element).find("." + GALLERY_INDICATOR_CLASS).length);
+            assert.ok($(e.element).find(`.${GALLERY_INDICATOR_CLASS}`).length);
         },
         items: ["0"]
     });
@@ -167,7 +167,7 @@ QUnit.test("click on item doesn't cause scroll to item", function(assert) {
         width: 500
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     $galleryItems.eq(1).trigger("dxpointerdown");
     this.clock.tick();
@@ -181,9 +181,9 @@ QUnit.test("click on indicator item change selected item", function(assert) {
         loop: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
-    $gallery.find("." + INDICATOR_ITEM_CLASS).eq(3).trigger("dxclick");
+    $gallery.find(`.${INDICATOR_ITEM_CLASS}`).eq(3).trigger("dxclick");
 
     assert.equal(calculateItemPosition($galleryItems.eq(3), $gallery), 0);
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), -1200);
@@ -222,7 +222,7 @@ QUnit.test("click on indicator item should works after showIndicator option chan
 
     gallery.option("showIndicator", false);
     gallery.option("showIndicator", true);
-    $gallery.find("." + INDICATOR_ITEM_CLASS).eq(3).trigger("dxclick");
+    $gallery.find(`.${INDICATOR_ITEM_CLASS}`).eq(3).trigger("dxclick");
 
     assert.equal(gallery.option("selectedIndex"), 3);
 });
@@ -236,13 +236,13 @@ QUnit.test("indicator selected item should be correct after showIndicator option
     const gallery = $gallery.dxGallery("instance");
 
     gallery.option("showIndicator", true);
-    assert.equal($gallery.find("." + GALLERY_SELECTED_ITEM_CLASS).index(), 0);
+    assert.equal($gallery.find(`.${GALLERY_SELECTED_ITEM_CLASS}`).index(), 0);
 });
 
 QUnit.test("B232221 -  backward direction behavior has bugs", assert => {
     const $gallery = $("#gallerySimple").dxGallery({ items: [1, 2, 3, 4], loop: true });
     const instance = $gallery.dxGallery("instance");
-    const items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const itemLeft = i => { return calculateItemPosition(items.eq(i), $("#gallerySimple")); };
 
     instance.prevItem();
@@ -264,7 +264,7 @@ QUnit.test("change selected item by swipe change indicator selected item", funct
     });
 
     const $indicatorItems = () => {
-        return $gallery.find("." + INDICATOR_ITEM_CLASS);
+        return $gallery.find(`.${INDICATOR_ITEM_CLASS}`);
     };
 
     const mouse = this.mouse;
@@ -392,7 +392,7 @@ QUnit.test("create duplicate items, loop=true", function(assert) {
         loop: true
     });
 
-    const $loopItems = $gallery.find("." + GALLERY_LOOP_ITEM_CLASS);
+    const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
     assert.equal($loopItems.length, 2);
 });
 
@@ -402,7 +402,7 @@ QUnit.test("duplicate items is not rendered when loop=false", function(assert) {
         loop: false
     });
 
-    const $loopItems = $gallery.find("." + GALLERY_LOOP_ITEM_CLASS);
+    const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
     assert.equal($loopItems.length, 0);
 });
 
@@ -412,7 +412,7 @@ QUnit.test("duplicate items position", function(assert) {
         loop: true
     });
 
-    const $loopItems = $gallery.find("." + GALLERY_LOOP_ITEM_CLASS);
+    const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
     assert.equal(calculateItemPosition($loopItems.eq(0), $gallery), 1600);
     assert.equal(calculateItemPosition($loopItems.eq(1), $gallery), -400);
 });
@@ -423,7 +423,7 @@ QUnit.test("duplicate items are visible for loop gallery", function(assert) {
         loop: true
     });
 
-    const $loopItems = $gallery.find("." + GALLERY_LOOP_ITEM_CLASS);
+    const $loopItems = $gallery.find(`.${GALLERY_LOOP_ITEM_CLASS}`);
     assert.equal($loopItems.length, 2);
     assert.ok($loopItems.is(":visible"));
 });
@@ -445,7 +445,7 @@ QUnit.test("loop works correctly", function(assert) {
         loop: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const mouse = this.mouse;
 
     assert.ok($gallery.hasClass("dx-gallery-loop"));
@@ -463,7 +463,7 @@ QUnit.test("loop - move to long distances (more then gallery length)", function(
         loop: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const mouse = this.mouse;
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 0);
@@ -480,7 +480,7 @@ QUnit.test("non correct loop behavior", function(assert) {
         items: [ 0, 1, 2, 3 ]
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const mouse = this.mouse;
 
     assert.equal($galleryItems.eq(0).position().left, 0);
@@ -498,7 +498,7 @@ QUnit.test("swipe right, wrong item position", assert => {
         });
 
     const mouse = pointerMock($gallery);
-    const galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     mouse.start().swipeStart().swipe(0.5);
 
@@ -516,7 +516,7 @@ QUnit.test("slideshowDelay", function(assert) {
         slideshowDelay: 25
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     this.clock.tick(37);
 
@@ -530,7 +530,7 @@ QUnit.test("slideshow should immediately terminate after setting 'slideShowDelay
         slideshowDelay: 25
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const gallery = $gallery.dxGallery("instance");
 
     this.clock.tick(5);
@@ -547,7 +547,7 @@ QUnit.test("swipe gesture blocks slideshow", function(assert) {
         slideshowDelay: 25
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const mouse = this.mouse;
 
     mouse.start().swipeStart().swipe(0.1);
@@ -603,7 +603,7 @@ QUnit.test("disable user interaction", function(assert) {
         swipeEnabled: false
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const mouse = this.mouse;
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 0);
@@ -618,7 +618,7 @@ QUnit.test("disabled", function(assert) {
         disabled: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const mouse = this.mouse;
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 0);
@@ -633,7 +633,7 @@ QUnit.test("changing selected index while animation should work correctly", func
     });
 
     const gallery = $gallery.dxGallery("instance");
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     pointerMock($gallery).start().swipeStart().swipeEnd(-1);
     this.clock.tick(ANIMATION_WAIT_TIME);
@@ -650,7 +650,7 @@ QUnit.test("gallery with two items works correctly when loop is enabled", assert
 
     const instance = $gallery.dxGallery("instance");
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     instance.nextItem();
     assert.equal(calculateItemPosition($galleryItems.eq(1), $gallery), 0, "going to next item is correct");
@@ -675,8 +675,8 @@ QUnit.test("navigation buttons must be hidden on last slides", function(assert) 
     });
 
     const instance = $gallery.dxGallery("instance");
-    const prevNavButton = $gallery.find("." + NAV_PREV_BUTTON_CLASS);
-    const nextNavButton = $gallery.find("." + NAV_NEXT_BUTTON_CLASS);
+    const prevNavButton = $gallery.find(`.${NAV_PREV_BUTTON_CLASS}`);
+    const nextNavButton = $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     assert.equal(prevNavButton.css("display"), "none");
     assert.notEqual(nextNavButton.css("display"), "none");
@@ -702,8 +702,8 @@ QUnit.test("navigation buttons must be hidden when no items", function(assert) {
     });
 
     const instance = $gallery.dxGallery("instance");
-    const prevNavButton = $gallery.find("." + NAV_PREV_BUTTON_CLASS);
-    const nextNavButton = $gallery.find("." + NAV_NEXT_BUTTON_CLASS);
+    const prevNavButton = $gallery.find(`.${NAV_PREV_BUTTON_CLASS}`);
+    const nextNavButton = $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     assert.equal(prevNavButton.css("display"), "none");
     assert.equal(nextNavButton.css("display"), "none");
@@ -723,7 +723,7 @@ QUnit.test("no data text should be rendered into wrapper", function(assert) {
     const instance = $gallery.dxGallery("instance");
 
     instance.option("dataSource", []);
-    assert.equal($gallery.find("." + GALLERY_WRAPPER_CLASS).children(".dx-empty-message").length, 1);
+    assert.equal($gallery.find(`.${GALLERY_WRAPPER_CLASS}`).children(".dx-empty-message").length, 1);
 });
 
 QUnit.test("gallery should not hang when initialItemWidth is greater than widget width (T417445)", function(assert) {
@@ -759,16 +759,16 @@ QUnit.test("default", assert => {
         showNavButtons: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 0);
     assert.equal(calculateItemPosition($galleryItems.eq(1), $gallery), 400);
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), 800);
     assert.equal(calculateItemPosition($galleryItems.eq(3), $gallery), 1200);
-    assert.equal($gallery.find("." + NAV_NEXT_BUTTON_CLASS).length, 1);
-    assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).length, 1);
-    assert.equal($gallery.find("." + NAV_NEXT_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
-    assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
+    assert.equal($gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).length, 1);
+    assert.equal($gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).length, 1);
+    assert.equal($gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).hasClass(DX_WIDGET_CLASS), true);
+    assert.equal($gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).hasClass(DX_WIDGET_CLASS), true);
 });
 
 QUnit.test("render with auto height", assert => {
@@ -787,7 +787,7 @@ QUnit.test("selectedIndex option on init", assert => {
         selectedIndex: 2
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), 0);
 });
@@ -817,7 +817,7 @@ QUnit.test("B234431 - displays only first 20 items when bound to array", assert 
 
         const $gallery = $("#gallerySimple").dxGallery({ dataSource: new ArrayStore(items) });
 
-        assert.equal($gallery.find("." + GALLERY_ITEM_CLASS).length, ITEMS_COUNT, "30 items are rendered");
+        assert.equal($gallery.find(`.${GALLERY_ITEM_CLASS}`).length, ITEMS_COUNT, "30 items are rendered");
     } finally {
         executeAsyncMock.teardown();
     }
@@ -829,13 +829,13 @@ QUnit.test("navigation buttons duplication (B233450)", assert => {
 
     instance._refresh();
 
-    assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).length, 1);
-    assert.equal($gallery.find("." + NAV_NEXT_BUTTON_CLASS).length, 1);
+    assert.equal($gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).length, 1);
+    assert.equal($gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).length, 1);
 });
 
 QUnit.test("item template", assert => {
     const $gallery = $("#galleryWithTmpl").dxGallery({ items: [ 1, 2, 3 ] });
-    const items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(items.length, 3, "3 items were rendered");
     assert.equal($gallery.text().replace(/\s+/g, ""), "000");
@@ -851,7 +851,7 @@ const checkItemPositionForCurrentIndex = (items, currentIndex, $gallery, assert)
 
 QUnit.test("paddings support", assert => {
     const $element = $("#galleryWithItemPaddings").dxGallery({ items: [1, 2, 3] });
-    const itemsElements = $element.find("." + GALLERY_ITEM_CLASS);
+    const itemsElements = $element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.expect(2);
     checkItemPositionForCurrentIndex(itemsElements, 0, $("#galleryWithItemPaddings"), assert);
@@ -864,7 +864,7 @@ QUnit.test("paddings support", assert => {
 
 QUnit.test("box-sizing support", assert => {
     const $element = $("#galleryWithBorderBox").dxGallery({ items: [1, 2, 3] });
-    const itemsElements = $element.find("." + GALLERY_ITEM_CLASS);
+    const itemsElements = $element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.expect(2);
     checkItemPositionForCurrentIndex(itemsElements, 0, $("#galleryWithBorderBox"), assert);
@@ -884,7 +884,7 @@ QUnit.test("items changed", assert => {
     const instance = $gallery.dxGallery("instance");
 
     const items = () => {
-        return $gallery.find("." + GALLERY_ITEM_CLASS);
+        return $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     };
 
     assert.equal(items().length, 5, "3 items + 2 duplicates");
@@ -898,7 +898,7 @@ QUnit.test("indicator change", assert => {
     const instance = $gallery.dxGallery("instance");
 
     const indicators = () => {
-        return $gallery.find("." + INDICATOR_ITEM_CLASS);
+        return $gallery.find(`.${INDICATOR_ITEM_CLASS}`);
     };
 
     assert.equal(indicators().length, 2);
@@ -919,13 +919,13 @@ QUnit.test("showNavButtons", assert => {
     const instance = $element.dxGallery("instance");
     const $wrapper = instance._$wrapper;
 
-    assert.equal($wrapper.children("." + NAV_PREV_BUTTON_CLASS).length, 1);
-    assert.equal($wrapper.children("." + NAV_NEXT_BUTTON_CLASS).length, 1);
+    assert.equal($wrapper.children(`.${NAV_PREV_BUTTON_CLASS}`).length, 1);
+    assert.equal($wrapper.children(`.${NAV_NEXT_BUTTON_CLASS}`).length, 1);
 
     instance.option("showNavButtons", false);
 
-    assert.equal($wrapper.children("." + NAV_PREV_BUTTON_CLASS).length, 0);
-    assert.equal($wrapper.children("." + NAV_NEXT_BUTTON_CLASS).length, 0);
+    assert.equal($wrapper.children(`.${NAV_PREV_BUTTON_CLASS}`).length, 0);
+    assert.equal($wrapper.children(`.${NAV_NEXT_BUTTON_CLASS}`).length, 0);
 });
 
 QUnit.test("showNavButtons with 2 items", assert => {
@@ -935,8 +935,8 @@ QUnit.test("showNavButtons with 2 items", assert => {
     });
 
     const instance = $element.dxGallery("instance");
-    const $prevNavButton = $element.find("." + NAV_PREV_BUTTON_CLASS);
-    const $nextNavButton = $element.find("." + NAV_NEXT_BUTTON_CLASS);
+    const $prevNavButton = $element.find(`.${NAV_PREV_BUTTON_CLASS}`);
+    const $nextNavButton = $element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     instance.nextItem();
     assert.equal($prevNavButton.css("display"), "block");
@@ -956,7 +956,7 @@ QUnit.test("'wrapAround' option test when 'stretchImages' = true", assert => {
         stretchImages: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const instance = $gallery.dxGallery("instance");
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 25);
@@ -980,7 +980,7 @@ QUnit.test("'wrapAround' option test when 'stretchImages' = false", assert => {
         stretchImages: false
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 65);
     assert.equal(calculateItemPosition($galleryItems.eq(1), $gallery), 195);
@@ -996,7 +996,7 @@ QUnit.test("'wrapAround' option changed test", assert => {
         selectedIndex: 2
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const instance = $gallery.dxGallery("instance");
 
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), 50);
@@ -1018,7 +1018,7 @@ QUnit.test("Image should have correct sizes across the browsers", assert => {
     const imageWidth = 540;
     const imageHeight = 338;
 
-    const $galleryItemImage = $gallery.find("." + GALLERY_ITEM_IMAGE_CLASS);
+    const $galleryItemImage = $gallery.find(`.${GALLERY_ITEM_IMAGE_CLASS}`);
 
     $galleryItemImage
         .on('load', () => {
@@ -1084,18 +1084,18 @@ QUnit.test("selectedIndex", function(assert) {
     this.instance.option("selectedIndex", 1);
     assert.equal(actionFired, 1, "select action fired");
 
-    const items = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const items = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal(calculateItemPosition(items.eq(1), this.$element), 0);
 });
 
 QUnit.test("loop - ghost items used correctly", function(assert) {
-    let items = this.$element.find("." + GALLERY_ITEM_CLASS);
+    let items = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     this.instance.option("loop", true);
     this.instance.option("selectedIndex", 2);
     this.instance.nextItem();
 
-    items = this.$element.find("." + GALLERY_ITEM_CLASS);
+    items = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition(items.eq(3), this.$element), 1200);
 
@@ -1103,27 +1103,27 @@ QUnit.test("loop - ghost items used correctly", function(assert) {
     this.instance.option("selectedIndex", 2);
     this.instance.nextItem();
 
-    items = this.$element.find("." + GALLERY_ITEM_CLASS);
+    items = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition(items.eq(0), this.$element), -800);
 });
 
 QUnit.test("showNavButtons", function(assert) {
     this.instance.option("showNavButtons", true);
-    assert.equal(this.$element.find("." + NAV_PREV_BUTTON_CLASS).length, 1);
-    assert.equal(this.$element.find("." + NAV_NEXT_BUTTON_CLASS).length, 1);
+    assert.equal(this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`).length, 1);
+    assert.equal(this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`).length, 1);
 
     this.instance.option("showNavButtons", false);
-    assert.equal(this.$element.find("." + NAV_PREV_BUTTON_CLASS).length, 0);
-    assert.equal(this.$element.find("." + NAV_NEXT_BUTTON_CLASS).length, 0);
+    assert.equal(this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`).length, 0);
+    assert.equal(this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`).length, 0);
 });
 
 QUnit.test("showIndicator", function(assert) {
     this.instance.option("showIndicator", true);
-    assert.equal(this.$element.find("." + INDICATOR_ITEM_CLASS).length, 3);
+    assert.equal(this.$element.find(`.${INDICATOR_ITEM_CLASS}`).length, 3);
 
     this.instance.option("showIndicator", false);
-    assert.equal(this.$element.find("." + INDICATOR_ITEM_CLASS).length, 0);
+    assert.equal(this.$element.find(`.${INDICATOR_ITEM_CLASS}`).length, 0);
 });
 
 QUnit.test("slideshowDelay", function(assert) {
@@ -1148,12 +1148,12 @@ QUnit.test("userInteraction", function(assert) {
     this.instance.option("indicatorEnabled", true);
 
     const mouse = pointerMock(this.$element).start().swipeStart().swipe(-0.5).swipeEnd(-1);
-    assert.equal(calculateItemPosition(this.$element.find("." + GALLERY_ITEM_CLASS).eq(0), this.$element), -400);
+    assert.equal(calculateItemPosition(this.$element.find(`.${GALLERY_ITEM_CLASS}`).eq(0), this.$element), -400);
 
     this.instance.option("swipeEnabled", false);
     this.instance.option("indicatorEnabled", false);
     mouse.start().swipeStart().swipe(-0.5).swipeEnd(-1);
-    assert.equal(calculateItemPosition(this.$element.find("." + GALLERY_ITEM_CLASS).eq(0), this.$element), -400);
+    assert.equal(calculateItemPosition(this.$element.find(`.${GALLERY_ITEM_CLASS}`).eq(0), this.$element), -400);
 });
 
 QUnit.module("items visibility", {
@@ -1176,7 +1176,7 @@ QUnit.test("invisible items should have correct class", function(assert) {
 
     instance.option("selectedIndex", 2);
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     $.each($galleryItems, (index, $item) => {
         if(index !== instance.option("selectedIndex")) {
@@ -1188,7 +1188,7 @@ QUnit.test("invisible items should have correct class", function(assert) {
 });
 
 QUnit.test("all items should be visible on swipeStart", function(assert) {
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     const mouse = pointerMock(this.$element);
 
@@ -1201,7 +1201,7 @@ QUnit.test("all items should be visible on swipeStart", function(assert) {
 
 
 QUnit.test("all items should be visible after click on a button", function(assert) {
-    const $nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
+    const $nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
     const instance = this.instance;
     const releaseItems = sinon.stub(instance, "_releaseInvisibleItems");
     const renderItemsVisibility = sinon.stub(instance, "_renderItemVisibility");
@@ -1215,7 +1215,7 @@ QUnit.test("all items should be visible after click on a button", function(asser
 QUnit.test("selected item shouldn't have invisible class", function(assert) {
     this.instance.option("selectedIndex", 2);
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     this.instance.goToItem(1);
     assert.notOk($galleryItems.eq(1).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "selected item has not invisible class");
@@ -1233,7 +1233,7 @@ QUnit.test("there are no invisible items if items count per page > 1", function(
         items: [0, 1, 2]
     });
     this.instance.option("initialItemWidth", 100);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     $.each($galleryItems, (index, $item) => {
         assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "item has not invisible class");
@@ -1248,7 +1248,7 @@ QUnit.test("there are no invisible items if wrapAround=true", function(assert) {
     });
 
     this.instance.option("wrapAround", true);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     $.each($galleryItems, (index, $item) => {
         assert.notOk($($item).hasClass(GALLERY_INVISIBLE_ITEM_CLASS), "item has not invisible class");
@@ -1273,7 +1273,7 @@ QUnit.module("responsiveness", {
 QUnit.test("there is only one image on page if initialItemWith option was not set", function(assert) {
     this.instance.option("width", 500);
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.strictEqual(this.instance.option("initialItemWidth"), undefined, "'initialItemWidth' option is undefined on init");
 
@@ -1290,7 +1290,7 @@ QUnit.test("there is only real images on first page, if gallery is very long, st
         items: [0, 1, 2]
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), this.$element), 175, "position of first item is correct");
     assert.equal($galleryItems.eq(0).width(), 100, "actual item width is correct");
@@ -1307,7 +1307,7 @@ QUnit.test("there is only real images on first page, if gallery is very long, st
         stretchImages: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), this.$element), 0, "position of first item is correct");
     assert.equal(Math.round($galleryItems.eq(0).width()), 300, "actual item width is correct");
@@ -1323,7 +1323,7 @@ QUnit.test("actual width of items test when 'stretchImages' = true", function(as
         stretchImages: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), this.$element), 0, "position of first item is correct");
     assert.equal($galleryItems.eq(0).width(), 200, "actual item width is correct");
@@ -1350,7 +1350,7 @@ QUnit.test("'initialItemWidth' option test when 'stretchImages' = true", functio
         stretchImages: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(1), this.$element), 200, "position of second item is correct");
     assert.equal($galleryItems.eq(0).width(), 200, "actual item width is correct");
@@ -1368,7 +1368,7 @@ QUnit.test("'stretchImages' option test", function(assert) {
         stretchImages: false
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.roughEqual($galleryItems.eq(0).width(), 200, 0.1, "width of the item is correct");
 
@@ -1386,8 +1386,8 @@ QUnit.test("Item positions are correct after click on prevButton for loop mode, 
         showNavButtons: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
-    const $prevNavButton = this.$element.find("." + NAV_PREV_BUTTON_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
+    const $prevNavButton = this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`);
 
     $prevNavButton.trigger("dxclick");
 
@@ -1405,8 +1405,8 @@ QUnit.test("Last item position is correct after click on nextButton for loop mod
         showNavButtons: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
-    const $nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
+    const $nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     $nextNavButton.trigger("dxclick");
     this.clock.tick(200);
@@ -1418,17 +1418,17 @@ QUnit.test("Last item position is correct after click on nextButton for loop mod
 QUnit.test("number of indicators shows the number of pages", function(assert) {
     this.instance.option("items", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
-    assert.equal(this.$element.find("." + INDICATOR_ITEM_CLASS).length, 10, "number of indicators correctly on init");
+    assert.equal(this.$element.find(`.${INDICATOR_ITEM_CLASS}`).length, 10, "number of indicators correctly on init");
 
     this.instance.option("initialItemWidth", 200);
     this.instance.option("width", 400);
 
-    assert.equal(this.$element.find("." + INDICATOR_ITEM_CLASS).length, 5, "number of indicators correctly after dimensionChanged");
+    assert.equal(this.$element.find(`.${INDICATOR_ITEM_CLASS}`).length, 5, "number of indicators correctly after dimensionChanged");
 
     this.instance.option("initialItemWidth", 100);
     this.instance.option("width", 500);
 
-    assert.equal(this.$element.find("." + INDICATOR_ITEM_CLASS).length, 2, "number of indicators correctly after dimensionChanged");
+    assert.equal(this.$element.find(`.${INDICATOR_ITEM_CLASS}`).length, 2, "number of indicators correctly after dimensionChanged");
 });
 
 QUnit.test("click on indicator cause going to the next page", function(assert) {
@@ -1439,8 +1439,8 @@ QUnit.test("click on indicator cause going to the next page", function(assert) {
         initialItemWidth: 100
     });
 
-    const $galleryIndicators = this.$element.find("." + INDICATOR_ITEM_CLASS);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryIndicators = this.$element.find(`.${INDICATOR_ITEM_CLASS}`);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     $galleryIndicators.eq(1).trigger("dxclick");
 
@@ -1459,9 +1459,9 @@ QUnit.test("click on navButton cause going to the next page", function(assert) {
         showNavButtons: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
-    const $nextButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
-    const $prevButton = this.$element.find("." + NAV_PREV_BUTTON_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
+    const $nextButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
+    const $prevButton = this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`);
 
     $nextButton.trigger("dxclick");
 
@@ -1487,8 +1487,8 @@ QUnit.test("last page state must look correctly", function(assert) {
         initialItemWidth: 100
     });
 
-    const $galleryIndicators = this.$element.find("." + INDICATOR_ITEM_CLASS);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryIndicators = this.$element.find(`.${INDICATOR_ITEM_CLASS}`);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     $galleryIndicators.eq(1).trigger("dxclick");
 
@@ -1508,9 +1508,9 @@ QUnit.test("last page state must look correctly, loop = true", function(assert) 
         loop: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
-    const $prevNavButton = this.$element.find("." + NAV_PREV_BUTTON_CLASS);
-    const $nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
+    const $prevNavButton = this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`);
+    const $nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     $nextNavButton.trigger("dxclick");
 
@@ -1542,9 +1542,9 @@ QUnit.test("calculations should accept small error", function(assert) {
         loop: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
-    const $prevNavButton = this.$element.find("." + NAV_PREV_BUTTON_CLASS);
-    const $nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
+    const $prevNavButton = this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`);
+    const $nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     $nextNavButton.trigger("dxclick");
 
@@ -1564,9 +1564,9 @@ QUnit.test("last page indicator must look correctly", function(assert) {
         showNavButtons: true
     });
 
-    const $galleryIndicators = this.$element.find("." + INDICATOR_ITEM_CLASS);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
-    const $nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
+    const $galleryIndicators = this.$element.find(`.${INDICATOR_ITEM_CLASS}`);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
+    const $nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     $nextNavButton.trigger("dxclick");
     assert.ok($galleryIndicators.eq(1).hasClass(GALLERY_SELECTED_ITEM_CLASS));
@@ -1585,7 +1585,7 @@ QUnit.test("item position is correct after swipe-start when there are few items 
     });
 
     const mouse = pointerMock(this.$element);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     mouse.start().swipeStart().swipe(-0.5);
 
@@ -1604,7 +1604,7 @@ QUnit.test("item position is correct after swipe-start when 'wrapAround' = true"
     });
 
     const mouse = pointerMock(this.$element);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     mouse.start().swipeStart().swipe(-0.5);
 
@@ -1623,7 +1623,7 @@ QUnit.test("item position is correct in rtl mode when 'wrapAround' = true", func
         rtlEnabled: true
     });
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), this.$element), 100, "item position is correct");
     assert.equal(calculateItemPosition($galleryItems.eq(1), this.$element), -100, "item position is correct");
@@ -1639,7 +1639,7 @@ QUnit.test("change selected item by swipe when there are few items on the page",
     });
 
     const mouse = pointerMock(this.$element);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     mouse.start().swipeStart().swipe(-0.5).swipeEnd(-1);
 
@@ -1658,7 +1658,7 @@ QUnit.test("last page state must look correctly after swipe", function(assert) {
     });
 
     const mouse = pointerMock(this.$element);
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(4), this.$element), 0, "position of fifth item is correct, shown a second page");
 
@@ -1707,11 +1707,11 @@ QUnit.test("duplicate items count when there are few items on the page", functio
         loop: true
     });
 
-    assert.equal(this.$element.find("." + GALLERY_LOOP_ITEM_CLASS).length, 4);
+    assert.equal(this.$element.find(`.${GALLERY_LOOP_ITEM_CLASS}`).length, 4);
 
     this.instance.option("initialItemWidth", 100);
 
-    assert.equal(this.$element.find("." + GALLERY_LOOP_ITEM_CLASS).length, 8);
+    assert.equal(this.$element.find(`.${GALLERY_LOOP_ITEM_CLASS}`).length, 8);
 });
 
 QUnit.test("duplicate items position when there are few items on the page", function(assert) {
@@ -1725,8 +1725,8 @@ QUnit.test("duplicate items position when there are few items on the page", func
 
     assert.expect(8);
 
-    const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
-    const loopItemsCount = this.$element.find("." + GALLERY_LOOP_ITEM_CLASS).length;
+    const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
+    const loopItemsCount = this.$element.find(`.${GALLERY_LOOP_ITEM_CLASS}`).length;
     let i;
 
     for(i = 0; i < loopItemsCount / 2; i++) {
@@ -1747,8 +1747,8 @@ QUnit.test("navigation buttons must be hidden on last slides when there are few 
         showNavButtons: true
     });
 
-    const prevNavButton = this.$element.find("." + NAV_PREV_BUTTON_CLASS);
-    const nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
+    const prevNavButton = this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`);
+    const nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
     assert.equal(prevNavButton.css("display"), "none");
     assert.notEqual(nextNavButton.css("display"), "none");
@@ -1766,13 +1766,13 @@ QUnit.test("indicator selected state is rendered correctly", function(assert) {
         loop: false
     });
 
-    const $galleryIndicators = this.$element.find("." + INDICATOR_ITEM_CLASS);
+    const $galleryIndicators = this.$element.find(`.${INDICATOR_ITEM_CLASS}`);
 
     $galleryIndicators.eq(2).trigger("dxclick");
 
     this.instance.option("width", 600);
 
-    assert.ok(this.$element.find("." + INDICATOR_ITEM_CLASS).eq(1).hasClass(GALLERY_SELECTED_ITEM_CLASS), "last indicator is selected");
+    assert.ok(this.$element.find(`.${INDICATOR_ITEM_CLASS}`).eq(1).hasClass(GALLERY_SELECTED_ITEM_CLASS), "last indicator is selected");
 });
 
 QUnit.test("loop for the case when all the pictures fit on one page", function(assert) {
@@ -1792,8 +1792,8 @@ QUnit.test("loop for the case when all the pictures fit on one page", function(a
             showNavButtons: true
         });
 
-        const prevNavButton = this.$element.find("." + NAV_PREV_BUTTON_CLASS);
-        const nextNavButton = this.$element.find("." + NAV_NEXT_BUTTON_CLASS);
+        const prevNavButton = this.$element.find(`.${NAV_PREV_BUTTON_CLASS}`);
+        const nextNavButton = this.$element.find(`.${NAV_NEXT_BUTTON_CLASS}`);
 
         nextNavButton.trigger("dxclick");
 
@@ -1822,7 +1822,7 @@ QUnit.test("swipe for the case when all the pictures fit on one page", function(
             loop: true
         });
 
-        const $galleryItems = this.$element.find("." + GALLERY_ITEM_CLASS);
+        const $galleryItems = this.$element.find(`.${GALLERY_ITEM_CLASS}`);
         const mouse = pointerMock(this.$element);
 
         assert.equal(calculateItemPosition($galleryItems.eq(0), this.$element), 0);
@@ -1861,7 +1861,7 @@ QUnit.test("B233068 - When change from 2nd to 4th slide or vice versa, animation
     });
 
     const instance = $gallery.dxGallery("instance");
-    const indicatorItems = $gallery.find("." + INDICATOR_ITEM_CLASS);
+    const indicatorItems = $gallery.find(`.${INDICATOR_ITEM_CLASS}`);
     const renderContainerPosition = instance._renderContainerPosition;
 
     instance._renderContainerPosition = function(offset, animate) {
@@ -1940,7 +1940,7 @@ QUnit.test("goToItem with animation", function(assert) {
     });
 
     const galleryInstance = $gallery.dxGallery("instance");
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     galleryInstance.goToItem(1, true);
     this.clock.tick(ANIMATION_WAIT_TIME);
@@ -1993,7 +1993,7 @@ QUnit.test("prevItem / nextItem with animation", function(assert) {
     });
 
     const galleryInstance = $gallery.dxGallery("instance");
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     galleryInstance.nextItem(true);
     this.clock.tick(ANIMATION_WAIT_TIME);
@@ -2048,10 +2048,10 @@ QUnit.test("click on navButtons switch current item", assert => {
 
     const instance = $gallery.dxGallery("instance");
 
-    $gallery.find("." + NAV_NEXT_BUTTON_CLASS).trigger("dxclick");
+    $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).trigger("dxclick");
     assert.equal(instance.option("selectedIndex"), 1);
 
-    $gallery.find("." + NAV_PREV_BUTTON_CLASS).trigger("dxclick");
+    $gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).trigger("dxclick");
     assert.equal(instance.option("selectedIndex"), 0);
 });
 
@@ -2065,10 +2065,10 @@ QUnit.test("click on navButtons switch current item when loop mode", assert => {
 
     const instance = $gallery.dxGallery("instance");
 
-    $gallery.find("." + NAV_NEXT_BUTTON_CLASS).trigger("dxclick");
+    $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).trigger("dxclick");
     assert.equal(instance.option("selectedIndex"), 0);
 
-    $gallery.find("." + NAV_PREV_BUTTON_CLASS).trigger("dxclick");
+    $gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).trigger("dxclick");
     assert.equal(instance.option("selectedIndex"), 2);
 });
 
@@ -2084,7 +2084,7 @@ QUnit.test("animationDuration", assert => {
 
     try {
         const $element = $("#gallerySimple").dxGallery({ items: [0, 1, 2] });
-        const $container = $element.find("." + GALLERY_ITEM_CONTAINER_CLASS);
+        const $container = $element.find(`.${GALLERY_ITEM_CONTAINER_CLASS}`);
         const instance = $element.dxGallery("instance");
         const originalAnimate = instance._animate;
 
@@ -2160,7 +2160,7 @@ QUnit.test("focused item changed after press right/left arrows", function(assert
         selectOnFocus: true
     });
 
-    const $galleryItems = this.$gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$gallery.find(`.${GALLERY_ITEM_CLASS}`);
     this.$gallery.trigger("focusin");
 
     this.keyboard.keyDown("right");
@@ -2179,7 +2179,7 @@ QUnit.test("selected item changed after press right/left arrows, loop mode", fun
         selectOnFocus: true,
         selectedIndex: 0
     });
-    const $galleryItems = this.$gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = this.$gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     this.$gallery.focusin();
     this.keyboard.keyDown("left");
@@ -2251,16 +2251,16 @@ QUnit.test("default render", assert => {
         rtlEnabled: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 0);
     assert.equal(calculateItemPosition($galleryItems.eq(1), $gallery), -400);
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), -800);
     assert.equal(calculateItemPosition($galleryItems.eq(3), $gallery), -1200);
-    assert.equal($gallery.find("." + NAV_NEXT_BUTTON_CLASS).length, 1);
-    assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).length, 1);
-    assert.equal($gallery.find("." + NAV_NEXT_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
-    assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
+    assert.equal($gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).length, 1);
+    assert.equal($gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).length, 1);
+    assert.equal($gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).hasClass(DX_WIDGET_CLASS), true);
+    assert.equal($gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).hasClass(DX_WIDGET_CLASS), true);
 });
 
 QUnit.test("change selected item by swipe change indicator selected item", function(assert) {
@@ -2270,7 +2270,7 @@ QUnit.test("change selected item by swipe change indicator selected item", funct
     });
 
     const $indicatorItems = () => {
-        return $gallery.find("." + INDICATOR_ITEM_CLASS);
+        return $gallery.find(`.${INDICATOR_ITEM_CLASS}`);
     };
 
     const mouse = this.mouse;
@@ -2296,12 +2296,12 @@ QUnit.test("userInteraction", assert => {
     const mouse = pointerMock($gallery);
 
     mouse.start().swipeStart().swipe(0.5).swipeEnd(1);
-    assert.equal(calculateItemPosition($gallery.find("." + GALLERY_ITEM_CLASS).eq(0), $gallery), 400);
+    assert.equal(calculateItemPosition($gallery.find(`.${GALLERY_ITEM_CLASS}`).eq(0), $gallery), 400);
 
     instance.option("swipeEnabled", false);
     instance.option("indicatorEnabled", false);
     mouse.start().swipeStart().swipe(0.5).swipeEnd(1);
-    assert.equal(calculateItemPosition($gallery.find("." + GALLERY_ITEM_CLASS).eq(0), $gallery), 400);
+    assert.equal(calculateItemPosition($gallery.find(`.${GALLERY_ITEM_CLASS}`).eq(0), $gallery), 400);
 });
 
 QUnit.test("loop works correctly for rtl mode", function(assert) {
@@ -2311,7 +2311,7 @@ QUnit.test("loop works correctly for rtl mode", function(assert) {
         rtlEnabled: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     const mouse = this.mouse;
 
     assert.ok($gallery.hasClass("dx-gallery-loop"));
@@ -2333,7 +2333,7 @@ QUnit.test("gallery with two items works correctly when loop is enabled, rtl mod
 
     const instance = $gallery.dxGallery("instance");
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     instance.nextItem();
     assert.equal(calculateItemPosition($galleryItems.eq(1), $gallery), 0, "going to next item is correct");
@@ -2359,7 +2359,7 @@ QUnit.test("Item positions are correct for responsive gallery, stretchImages=fal
         rtlEnabled: true
     });
 
-    const $galleryItems = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $galleryItems = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal(Math.abs(calculateItemPosition($galleryItems.first(), $gallery)), 95, "position of first item is correct");
 });
@@ -2460,16 +2460,16 @@ QUnit.test("gallery should load next page on next nav button click", assert => {
         }
     });
 
-    let $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    let $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.filter(":visible").length, 2, "rendered items count is correct on init");
 
-    const $nextNavButton = $gallery.find("." + NAV_NEXT_BUTTON_CLASS).trigger("dxclick");
+    const $nextNavButton = $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).trigger("dxclick");
 
-    $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.filter(":visible").length, 4, "rendered items count is correct after loading next dataSource page");
 
     $nextNavButton.trigger("dxclick");
-    $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.filter(":visible").length, 4, "rendered items count is correct, there are items for showing next gallery page");
 });
 
@@ -2483,7 +2483,7 @@ QUnit.test("next navButton is visible if dataSource has next page", assert => {
         }
     });
 
-    const $nextNavButton = $gallery.find("." + NAV_NEXT_BUTTON_CLASS);
+    const $nextNavButton = $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`);
     assert.notEqual($nextNavButton.css("display"), "none", "navButton is visible");
 });
 
@@ -2497,8 +2497,8 @@ QUnit.test("next navButton is invisible for last page and visible after click on
         }
     });
 
-    const $nextNavButton = $gallery.find("." + NAV_NEXT_BUTTON_CLASS);
-    const $prevNavButton = $gallery.find("." + NAV_PREV_BUTTON_CLASS);
+    const $nextNavButton = $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`);
+    const $prevNavButton = $gallery.find(`.${NAV_PREV_BUTTON_CLASS}`);
 
 
     $nextNavButton.trigger("dxclick");
@@ -2518,7 +2518,7 @@ QUnit.test("gallery should load next page on creating if next visible page is no
         }
     });
 
-    const $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.filter(":visible").length, 2, "rendered items count is correct, there are items for showing next gallery page");
 });
 
@@ -2532,9 +2532,9 @@ QUnit.test("items positions are correct after loading new items", assert => {
         }
     });
 
-    $gallery.find("." + NAV_NEXT_BUTTON_CLASS).trigger("dxclick");
+    $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).trigger("dxclick");
 
-    const $thirdItem = $gallery.find("." + GALLERY_ITEM_CLASS).eq(2);
+    const $thirdItem = $gallery.find(`.${GALLERY_ITEM_CLASS}`).eq(2);
     assert.equal(calculateItemPosition($thirdItem, $gallery), ITEM_WIDTH, "item position is correct");
 });
 
@@ -2548,11 +2548,11 @@ QUnit.test("indicators count is correct after loading new items", assert => {
         }
     });
 
-    assert.equal($gallery.find("." + INDICATOR_ITEM_CLASS).length, 2, "indicators count is correct, next page was loaded");
+    assert.equal($gallery.find(`.${INDICATOR_ITEM_CLASS}`).length, 2, "indicators count is correct, next page was loaded");
 
-    $gallery.find("." + NAV_NEXT_BUTTON_CLASS).trigger("dxclick");
+    $gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).trigger("dxclick");
 
-    assert.equal($gallery.find("." + INDICATOR_ITEM_CLASS).length, 3, "indicators count is correct, next page was loaded");
+    assert.equal($gallery.find(`.${INDICATOR_ITEM_CLASS}`).length, 3, "indicators count is correct, next page was loaded");
 });
 
 QUnit.test("next dataSource page should be loaded during swipe gesture", assert => {
@@ -2567,7 +2567,7 @@ QUnit.test("next dataSource page should be loaded during swipe gesture", assert 
     const pointer = pointerMock($gallery).start();
 
     pointer.swipeStart().swipe(-1);
-    const $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.filter(":visible").length, 3, "rendered items count is correct");
 });
 
@@ -2586,7 +2586,7 @@ QUnit.test("width of loaded items is correct", assert => {
     const pointer = pointerMock($gallery).start();
 
     pointer.swipeStart().swipe(-1);
-    const $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.eq(3).width(), 350, "rendered items width is correct");
 });
 
@@ -2601,7 +2601,7 @@ QUnit.test("loading items on init when dataSource pageSize < visible pageSize", 
         }
     });
 
-    const $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    const $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
     assert.equal($items.filter(":visible").length, 4, "items count is correct");
 });
@@ -2617,12 +2617,12 @@ QUnit.test("next dataSource page should be loaded on indicator click", assert =>
         }
     });
 
-    $gallery.find("." + INDICATOR_ITEM_CLASS).eq(1).trigger("dxclick");
+    $gallery.find(`.${INDICATOR_ITEM_CLASS}`).eq(1).trigger("dxclick");
 
-    let $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    let $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.filter(":visible").length, 6, "rendered items count is correct");
 
-    $gallery.find("." + INDICATOR_ITEM_CLASS).eq(2).trigger("dxclick");
-    $items = $gallery.find("." + GALLERY_ITEM_CLASS);
+    $gallery.find(`.${INDICATOR_ITEM_CLASS}`).eq(2).trigger("dxclick");
+    $items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
     assert.equal($items.filter(":visible").length, 8, "rendered items count is correct");
 });
