@@ -9,7 +9,7 @@ import "common.css!";
 import "generic_light.css!";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="qunit-fixture">\
             <div id="selectBox"></div>\
             \
@@ -32,15 +32,15 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var WIDGET_CLASS = "dx-selectbox",
-    POPUP_CLASS = "dx-selectbox-popup",
-    LIST_CLASS = "dx-list",
-    LIST_ITEM_CLASS = "dx-list-item",
-    LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
-    PLACEHOLDER_CLASS = "dx-placeholder",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const WIDGET_CLASS = "dx-selectbox";
+const POPUP_CLASS = "dx-selectbox-popup";
+const LIST_CLASS = "dx-list";
+const LIST_ITEM_CLASS = "dx-list-item";
+const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
+const PLACEHOLDER_CLASS = "dx-placeholder";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
-var TIME_TO_WAIT = 500;
+const TIME_TO_WAIT = 500;
 
 var moduleSetup = {
     beforeEach: function() {
@@ -325,7 +325,7 @@ QUnit.test("T427723: dxSelectBox placed in a custom Angular directive throws the
     }
 });
 
-QUnit.module("aria accessibility", () => {
+QUnit.module("aria accessibility", moduleSetup, () => {
     const checkAsserts = (expectedValues) => {
         let { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
 
@@ -336,11 +336,13 @@ QUnit.module("aria accessibility", () => {
     };
 
     [true, false].forEach((searchEnabled) => {
-        QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, () => {
+        QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, function() {
             let $element = $("#selectBox").dxSelectBox({
                 opened: true,
                 searchEnabled: searchEnabled
             });
+
+            this.clock.tick(TIME_TO_WAIT);
             let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             let list = $(`.${LIST_CLASS}`).dxList("instance");
