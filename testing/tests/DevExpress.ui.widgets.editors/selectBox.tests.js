@@ -4791,7 +4791,7 @@ QUnit.module("focus policy", {
 
 QUnit.module("aria accessibility", () => {
     const checkAsserts = (expectedValues) => {
-        let { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
+        const { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
 
         QUnit.assert.strictEqual($target.attr("role"), role, "role");
         QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
