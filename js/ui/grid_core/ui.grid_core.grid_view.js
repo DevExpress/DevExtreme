@@ -563,12 +563,16 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
     _setScrollerSpacing: function(hasHeight) {
-        // T722415, T758955
-        commonUtils.deferRender(() => {
-            commonUtils.deferUpdate(() => {
-                this._setScrollerSpacingCore(hasHeight);
+        if(this.option("scrolling.useNative")) {
+            // T722415, T758955
+            commonUtils.deferRender(() => {
+                commonUtils.deferUpdate(() => {
+                    this._setScrollerSpacingCore(hasHeight);
+                });
             });
-        });
+        } else {
+            this._setScrollerSpacingCore(hasHeight);
+        }
     },
     _updateDimensionsCore: function() {
         var that = this,
