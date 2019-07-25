@@ -385,10 +385,12 @@ var baseFixedColumns = {
         this.callBase.apply(this, arguments);
 
         if(this._fixedTableElement) {
-            if(this.option("legacyRendering")) {
-                useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
-            } else {
-                useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
+            if(!this.isScrollbarVisible(true)) {
+                if(this.option("legacyRendering")) {
+                    useVisibleColumns = widths && widths.length;
+                } else {
+                    useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
+                }
             }
             if(useVisibleColumns) {
                 columns = this._columnsController.getVisibleColumns();
