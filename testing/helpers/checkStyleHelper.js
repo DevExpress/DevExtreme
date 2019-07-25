@@ -1,5 +1,6 @@
 import devices from "core/devices";
 import browser from "core/utils/browser";
+import typeUtils from "core/utils/type";
 
 function testInChromeOnDesktop(name, testCallback) {
     if(devices.real().deviceType === "desktop" && browser.webkit) {
@@ -27,7 +28,7 @@ function checkOverflowX(assert, element, expectedValue) {
 function checkBackgroundColor(assert, element, expectedValue) {
     let elementBackgroundColor = window.getComputedStyle(element).backgroundColor;
     let currentElement = element.parentNode;
-    for(let i = 0; i < 5; i++) {
+    while(currentElement.parentNode !== document && typeUtils.isDefined(currentElement.parentNode)) {
         let currentStyle = window.getComputedStyle(currentElement);
         if(elementBackgroundColor !== currentStyle.backgroundColor) {
             elementBackgroundColor = currentStyle.backgroundColor;
