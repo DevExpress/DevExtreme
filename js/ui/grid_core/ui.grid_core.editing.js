@@ -76,7 +76,9 @@ var EDIT_FORM_CLASS = "edit-form",
     ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL],
     FORM_BASED_MODES = [EDIT_MODE_FORM, EDIT_MODE_POPUP],
-    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
+    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM],
+
+    TARGET_COMPONENT_NAME = "targetComponent";
 
 var EDIT_LINK_CLASS = {
         save: "dx-link-save",
@@ -223,17 +225,20 @@ var EditingController = modules.ViewController.inherit((function() {
                         isFocusOverlay,
                         isAddRowButton,
                         isCellEditMode,
-                        $target;
+                        $target,
+                        isAnotherComponent,
+                        targetComponent = event[TARGET_COMPONENT_NAME];
 
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
                         $target = $(event.target);
                         isEditorPopup = $target.closest(".dx-dropdowneditor-overlay").length;
                         isDomElement = $target.closest(getWindow().document).length;
+                        isAnotherComponent = targetComponent && targetComponent !== that.component;
                         isAddRowButton = $target.closest("." + that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)).length;
                         isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
 
-                        if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && isDomElement) {
+                        if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && (isDomElement || isAnotherComponent)) {
                             that._closeEditItem.bind(that)($target);
                         }
                     }
@@ -270,15 +275,27 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _needToCloseEditableCell: function($targetElement) {
-            var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
-                $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
-                columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
-                rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
-                visibleColumns = this._columnsController.getVisibleColumns(),
-                // TODO jsdmitry: Move this code to _rowClick method of rowsView
-                allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
+            let $element = this.component.$element(),
+                result = this.isEditing(),
+                isCurrentComponentElement = !$element || !!$targetElement.closest($element).length;
 
-            return this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)));
+            if(isCurrentComponentElement) {
+                let isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length;
+
+                if(isDataRow) {
+                    let $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
+                        columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
+                        rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
+                        visibleColumns = this._columnsController.getVisibleColumns(),
+                        // TODO jsdmitry: Move this code to _rowClick method of rowsView
+                        allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
+
+                    result = result && !allowEditing && !this.isEditCell(rowIndex, columnIndex);
+                }
+
+            }
+
+            return result;
         },
 
         _closeEditItem: function($targetElement) {
@@ -2654,6 +2671,8 @@ module.exports = {
                     return eventName === startEditAction && allowUpdating && allowEditing && editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
                 },
                 _rowClick: function(e) {
+                    e.event[TARGET_COMPONENT_NAME] = this.component;
+
                     if(!this._editCellByClick(e, "click")) {
                         this.callBase.apply(this, arguments);
                     }
