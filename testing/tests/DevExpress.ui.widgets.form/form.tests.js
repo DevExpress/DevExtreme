@@ -2103,7 +2103,7 @@ QUnit.test("Reset editor's value", function(assert) {
 
 const formatTestValue = value => Array.isArray(value) ? "[]" : value;
 
-[undefined, null, []].map(groupItems => {
+[undefined, null, []].forEach(groupItems => {
     QUnit.test(`Change group items from [1] -> ${formatTestValue(groupItems)}`, function(assert) {
         const form = $("#form").dxForm({
             formData: {

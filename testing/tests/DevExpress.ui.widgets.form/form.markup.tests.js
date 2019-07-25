@@ -1258,7 +1258,7 @@ QUnit.module("Grouping", () => {
         assert.equal(changeItemOptionSpy.args[0][2], false, "option's value is correct");
     });
 
-    [undefined, null, []].map(groupItems => {
+    [undefined, null, []].forEach(groupItems => {
         test(`The empty group should not be rendered items when an items option has ${formatTestValue(groupItems)} value`, (assert) => {
             const form = $("#form").dxForm({
                 formData: {
