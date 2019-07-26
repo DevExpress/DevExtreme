@@ -9523,10 +9523,8 @@ declare module DevExpress {
         static notify(options: any, type?: string, displayTime?: number): void;
         /** @name ui.repaintFloatingActionButton() */
         static repaintFloatingActionButton(): void;
-        /** @deprecated */
         /** @name ui.setTemplateEngine(name) */
         static setTemplateEngine(templateEngineName: string): void;
-        /** @deprecated */
         /** @name ui.setTemplateEngine(options) */
         static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     }
