@@ -2,25 +2,33 @@
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             require("integration/jquery"),
+            require("ui/button");
+            require("ui/form");
+            require("ui/popup");
+            require("ui/select_box");
+            require("ui/text_box");
             require("ui/validator");
             require("ui/validation_summary");
-            require("ui/text_box");
-            require("ui/button");
+
+            var aspnet = require("aspnet");
+            window.DevExpress = { aspnet: aspnet }; // for DevExpress.aspnet.createComponent in templates
 
             module.exports = factory(
                 require("jquery"),
                 require("ui/set_template_engine"),
-                require("aspnet")
+                aspnet,
+                function() { return require("ui/widget/ui.errors"); }
             );
         });
     } else {
         factory(
             window.jQuery,
             DevExpress.ui.setTemplateEngine,
-            DevExpress.aspnet
+            DevExpress.aspnet,
+            function() { return window.DevExpress_ui_widget_errors; }
         );
     }
-}(function($, setTemplateEngine, aspnet) {
+}(function($, setTemplateEngine, aspnet, errorsAccessor) {
 
     if(QUnit.urlParams["nojquery"]) {
         return;
@@ -180,15 +188,9 @@
                     <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
                 );
 
-                if(!window.DevExpress || !window.DevExpress.aspnet) {
-                    // modular scenario: DevExpress.aspnet object must be exported manually or from a bundle
-                    window.DevExpress = { aspnet: aspnet };
-                }
-
                 aspnet.setTemplateEngine();
             },
             afterEach: function() {
-                delete window.DevExpress;
                 setTemplateEngine("default");
             }
         },
@@ -375,6 +377,76 @@
         } finally {
             setTemplateEngine("default");
             delete window["MVCx"];
+        }
+    });
+
+    QUnit.test("T758209", function(assert) {
+        aspnet.setTemplateEngine();
+
+        var errors = errorsAccessor();
+        sinon.spy(errors, "log");
+
+        try {
+            var formID = "bd859c15-674f-49bf-a6d0-9368508e8d11";
+            var textBoxID = "682b4545-09d9-4f63-82ed-91570d869eb6";
+
+            window.__createForm = function() {
+                var config = {
+                    formData: { testField: "testValue" },
+                    items: [
+                        {
+                            dataField: "testField",
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                items: [ "testValue" ],
+                                fieldTemplate: $("#popup1_form_fieldTempalte")
+                            }
+                        }
+                    ]
+                };
+                DevExpress.aspnet.createComponent("dxForm", config, formID);
+            };
+
+            window.__createTextBox = function(obj) {
+                DevExpress.aspnet.createComponent("dxTextBox", { value: obj + " in template" }, textBoxID);
+            };
+
+
+            $("#qunit-fixture").html(
+                '<div id="popop1">' +
+                '</div>' +
+
+                '<script id="popup1_contentTemplate" type="text/html">' +
+                '  <div id=' + formID + '></div>' +
+                '  <% __createForm() %>' +
+                '</script>' +
+
+                '<script id="popup1_form_fieldTempalte" type="text/html">' +
+                '  <div id=' + textBoxID + '></div>' +
+                '  <% __createTextBox(obj) %>' +
+                '</script>'
+            );
+
+            $("#popop1").dxPopup({
+                contentTemplate: $("#popup1_contentTemplate"),
+                visible: true
+            });
+
+            errors.log.args.forEach(function(a) {
+                if(a[0] === "E1035") {
+                    throw "E1035 is found in the log";
+                }
+            });
+
+            assert.equal(
+                $("#" + textBoxID).dxTextBox("instance").option("value"),
+                "testValue in template"
+            );
+
+        } finally {
+            setTemplateEngine("default");
+            delete window.__createForm;
+            delete window.__createTextBox;
         }
     });
 

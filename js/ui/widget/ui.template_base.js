@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     abstract = Class.abstract;
 
 
-var renderedCallbacks = Callbacks();
+var renderedCallbacks = Callbacks({ syncStrategy: true });
 
 /**
  * @name dxTemplate
