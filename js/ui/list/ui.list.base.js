@@ -342,6 +342,7 @@ var ListBase = CollectionWidget.inherit({
             activeStateEnabled: true,
 
             _itemAttributes: { "role": "option" },
+            _listAttributes: { "role": "listbox" },
 
             useInkRipple: false,
 
@@ -587,8 +588,6 @@ var ListBase = CollectionWidget.inherit({
 
         this._feedbackShowTimeout = LIST_FEEDBACK_SHOW_TIMEOUT;
         this._createGroupRenderAction();
-
-        this.setAria("role", "listbox");
     },
 
     _scrollBottomMode: function() {
@@ -873,6 +872,8 @@ var ListBase = CollectionWidget.inherit({
         this.$element().addClass(LIST_CLASS);
         this.callBase();
         this.option("useInkRipple") && this._renderInkRipple();
+
+        this.setAria("role", this.option("_listAttributes").role);
     },
 
     _renderInkRipple: function() {
@@ -1137,6 +1138,8 @@ var ListBase = CollectionWidget.inherit({
             case "showChevronExpr":
             case "badgeExpr":
                 this._invalidate();
+                break;
+            case "_listAttributes":
                 break;
             default:
                 this.callBase(args);
