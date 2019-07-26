@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
+import devices from "core/devices";
 import List from "ui/list";
 
 import "ui/list";
@@ -267,20 +268,22 @@ QUnit.module("aria accessibility", () => {
     }
 
     [true, false].forEach((searchEnabled) => {
-        QUnit.test(`aria role on initialize, searchEnabled: ${searchEnabled}`, () => {
-            let helper = new ariaAccessibilityTestHelper(searchEnabled);
+        if(devices.real().deviceType === "desktop") {
+            QUnit.test(`aria role on initialize, searchEnabled: ${searchEnabled}`, () => {
+                let helper = new ariaAccessibilityTestHelper(searchEnabled);
 
-            helper.checkAsserts({ $target: searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
-            helper.checkAsserts({ $target: searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
-        });
+                helper.checkAsserts({ $target: searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
+                helper.checkAsserts({ $target: searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+            });
 
-        QUnit.test(`aria role after initialize, searchEnabled: ${searchEnabled}`, () => {
-            let helper = new ariaAccessibilityTestHelper(searchEnabled);
-            helper.element.option("searchEnabled", !searchEnabled);
+            QUnit.test(`aria role after initialize, searchEnabled: ${searchEnabled}`, () => {
+                let helper = new ariaAccessibilityTestHelper(searchEnabled);
+                helper.element.option("searchEnabled", !searchEnabled);
 
-            helper.checkAsserts({ $target: !searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
-            helper.checkAsserts({ $target: !searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
-        });
+                helper.checkAsserts({ $target: !searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
+                helper.checkAsserts({ $target: !searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+            });
+        }
 
         QUnit.test("list item", () => {
             let helper = new ariaAccessibilityTestHelper(searchEnabled);
