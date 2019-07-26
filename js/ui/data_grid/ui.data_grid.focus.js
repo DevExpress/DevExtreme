@@ -80,6 +80,10 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         groupPath,
                         group = dataSource.group();
 
+                    if(Array.isArray(key)) {
+                        return deferred.resolve(-1).promise();
+                    }
+
                     if(!dataSource._grouping._updatePagingOptions) {
                         that._calculateGlobalRowIndexByFlatData(key, null, true)
                             .done(deferred.resolve)
