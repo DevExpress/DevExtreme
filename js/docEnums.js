@@ -772,6 +772,11 @@
  */
 
 /**
+ * @typedef {string} Enums.VectorMapProjection
+ * @enum {'equirectangular'|'lambert'|'mercator'|'miller'}
+ */
+
+/**
  * @typedef {string} Enums.AnimationType
  * @enum {'css'|'fade'|'fadeIn'|'fadeOut'|'pop'|'slide'|'slideIn'|'slideOut'}
  */
