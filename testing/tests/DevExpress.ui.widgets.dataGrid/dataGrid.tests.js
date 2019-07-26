@@ -3628,6 +3628,57 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     clock.restore();
 });
 
+QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        data = [],
+        dataGrid,
+        focusedCellChangedCount = 0,
+        scrollable,
+        done = assert.async();
+
+    for(var i = 0; i < 50; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    // arrange
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 150,
+        keyExpr: "id",
+        dataSource: data,
+        paging: {
+            pageSize: 10
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+            assert.ok(e.row, "Row object present");
+            assert.equal(e.row.key, 16, "Key");
+            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
+            assert.equal(e.rowIndex, 15, "Global rowIndex");
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+    clock.restore();
+
+    scrollable = dataGrid.getScrollable();
+    scrollable.scrollBy({ y: 600 });
+
+    setTimeout(() => {
+        $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+        setTimeout(() => {
+            // assert
+            assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+            done();
+        });
+    });
+});
+
 // T746556
 QUnit.test("Focused row should not be visible after scrolling if scrolling mode is virtual and rowRenderingMode is virtual", function(assert) {
     // arrange
