@@ -3682,8 +3682,8 @@ var dxChartCommonAnnotationConfig = {
     * @type template|function
     * @default undefined
     * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
-    * @type_function_param2 element:SVGGElement
-    * @type_function_return string|SVGElement|jQuery
+    * @type_function_param2 element:dxElement
+    * @type_function_return string|Node|jQuery
     */
     template: undefined,
     /**
