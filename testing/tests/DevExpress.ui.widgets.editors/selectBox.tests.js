@@ -49,15 +49,16 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-const POPUP_CLASS = "dx-selectbox-popup",
-    POPUP_CONTENT_CLASS = "dx-popup-content",
-    LIST_ITEM_CLASS = "dx-list-item",
-    LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
-    DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button",
-    STATE_FOCUSED_CLASS = "dx-state-focused",
-    TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container",
-    PLACEHOLDER_CLASS = "dx-placeholder",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const POPUP_CLASS = "dx-selectbox-popup";
+const POPUP_CONTENT_CLASS = "dx-popup-content";
+const LIST_CLASS = "dx-list";
+const LIST_ITEM_CLASS = "dx-list-item";
+const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
+const DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button";
+const STATE_FOCUSED_CLASS = "dx-state-focused";
+const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
+const PLACEHOLDER_CLASS = "dx-placeholder";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 const KEY_DOWN = "ArrowDown";
 const KEY_ENTER = "Enter";
@@ -4785,5 +4786,36 @@ QUnit.module("focus policy", {
         } catch(e) {
             assert.ok(false, "Exception: " + e);
         }
+    });
+});
+
+QUnit.module("aria accessibility", () => {
+    const checkAsserts = (expectedValues) => {
+        const { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
+
+        QUnit.assert.strictEqual($target.attr("role"), role, "role");
+        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
+        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
+        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
+    };
+
+    [true, false].forEach((searchEnabled) => {
+        QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, function() {
+            let $element = $("#selectBox").dxSelectBox({
+                opened: true,
+                searchEnabled: searchEnabled
+            });
+
+            let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            let list = $(`.${LIST_CLASS}`).dxList("instance");
+            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+            checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+
+            $element.dxSelectBox("instance").option("searchEnabled", !searchEnabled);
+            $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+            checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+        });
     });
 });
