@@ -1603,8 +1603,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             dataController = that.getController("data"),
             columnIndex = that.getView("rowsView").getCellIndex($cellElement),
             rowIndex = this._getRowIndex($cellElement && $cellElement.parent()),
-            isEditingCell = that.getController("editing").isEditCell(rowIndex, columnIndex),
             localRowIndex = Math.min(rowIndex - dataController.getRowIndexOffset(), dataController.items().length - 1),
+            isEditingCell = that.getController("editing").isEditCell(localRowIndex, columnIndex),
             row = dataController.items()[localRowIndex];
 
         if(!isEditingCell && (prevCellIndex !== columnIndex || prevRowIndex !== rowIndex)) {
