@@ -10,6 +10,7 @@ import themes from "../themes";
 
 const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
+const FAB_LABEL_CLASS = "dx-fa-button-label";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
 const SpeedDialItem = Overlay.inherit({
@@ -38,8 +39,19 @@ const SpeedDialItem = Overlay.inherit({
         this.$element().addClass(FAB_CLASS);
         this.callBase();
         this._renderIcon();
+        this._renderLabel();
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
+    },
+
+    _renderLabel() {
+        if(!this.option("actionComponent")) return;
+
+        const $element = $("<div>").addClass(FAB_LABEL_CLASS);
+
+        $element
+            .html(this.option("label"))
+            .appendTo(this.$content());
     },
 
     _renderButtonIcon($element, icon, iconClass) {
@@ -126,6 +138,9 @@ const SpeedDialItem = Overlay.inherit({
                 break;
             case "onClick":
                 this._renderClick();
+                break;
+            case "label":
+                this._renderLabel();
                 break;
             case "useInkRipple":
                 this._render();

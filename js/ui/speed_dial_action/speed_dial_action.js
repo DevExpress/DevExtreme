@@ -31,6 +31,13 @@ const SpeedDialAction = Widget.inherit({
             onClick: null,
 
             /**
+            * @name dxSpeedDialActionOptions.label
+            * @type string
+            * @default ""
+            */
+            label: "",
+
+            /**
             * @name dxSpeedDialActionOptions.visible
             * @hidden
             */

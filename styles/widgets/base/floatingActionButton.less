@@ -32,12 +32,24 @@
             }
         }
 
+        .dx-fa-button-label {
+            padding: 0 10px;
+            background-color: @button-default-bg;
+            color: @button-default-color;
+            position: absolute;
+            right: @action-button-size + 15;
+            top: 0;
+            line-height: @action-button-size;
+            white-space: nowrap;
+        }
+
         .dx-overlay-content {
             max-width: @action-button-size;
             max-height: @action-button-size;
             background-color: @button-normal-bg;
             color: @button-normal-color;
             box-shadow: @shadow;
+            overflow: visible;
 
             .dx-fa-button-states(@button-normal-bg, @button-normal-color);
         }
