@@ -20,9 +20,9 @@ const dragAndTest = async (t, appointmentWrapper, step) => {
     await t
         .dragToElement(appointmentWrapper.element, await scheduler.getDateTableCell(position))
 
-        .expect(await height.result).eql(await height.expect, `Height ${errorMessage}`)
-        .expect(await startDate.result).eql(await startDate.expect, `Start date ${errorMessage}`)
-        .expect(await endDate.result).eql(await endDate.expect, `End date ${errorMessage}`)
+        .expect(height.result).eql(await height.expect, `Height ${errorMessage}`)
+        .expect(startDate.result).eql(await startDate.expect, `Start date ${errorMessage}`)
+        .expect(endDate.result).eql(await endDate.expect, `End date ${errorMessage}`)
 }
 
 test('Appointments should be replaced on the timeline in DayView mode with maintaining their size and duration', async t => {
