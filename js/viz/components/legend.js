@@ -964,7 +964,10 @@ extend(legendPrototype, {
 
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        var pos = this.getLayoutOptions();
+        if(!this.getOptions().visible) {
+            return null;
+        }
+        const pos = this.getLayoutOptions();
         return {
             horizontalAlignment: this._options.horizontalAlignment,
             verticalAlignment: this._options.verticalAlignment,

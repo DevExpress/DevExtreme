@@ -256,7 +256,10 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        return this._boundingRect && {
+        if(!this._hasText) {
+            return null;
+        }
+        return {
             horizontalAlignment: this._boundingRect.horizontalAlignment,
             verticalAlignment: this._boundingRect.verticalAlignment,
             priority: 0

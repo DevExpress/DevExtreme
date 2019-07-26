@@ -1649,6 +1649,13 @@ QUnit.test("layoutOptions", function(assert) {
     assert.equal(options.priority, 1);
 });
 
+QUnit.test("layoutOptions is null if legend is not visible", function(assert) {
+    this.options.visible = false;
+    var options = this.createSimpleLegend().layoutOptions();
+
+    assert.strictEqual(options, null);
+});
+
 QUnit.test("measure", function(assert) {
     assert.deepEqual(this.createSimpleLegend().measure(100, 200), [36, 26]);
 });

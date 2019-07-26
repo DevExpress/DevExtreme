@@ -535,11 +535,7 @@ QUnit.test("shift title", function(assert) {
 
 QUnit.test("layoutOptions - without text", function(assert) {
     this.title.update({ text: null });
-    assert.deepEqual(this.title.layoutOptions(), {
-        horizontalAlignment: "center",
-        priority: 0,
-        verticalAlignment: "top"
-    });
+    assert.strictEqual(this.title.layoutOptions(), null);
 });
 
 QUnit.test("layoutOptions", function(assert) {
