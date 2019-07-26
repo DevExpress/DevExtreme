@@ -11,7 +11,7 @@ export class AppointmentWrapper {
     height: any;
     startTime: any;
     finalTime: any;
-    row: any;
+    getRow: any;
 
     constructor(appointment, index) {
         this.appointment = appointment[index];
@@ -24,29 +24,29 @@ export class AppointmentWrapper {
         this.movementMap = this.appointment.movementMap;
 
         this.height = {
-            expected: `${(this.appointment.durationRatio * durationRatioScale)}px`,
-            received: scheduler.getAppointmentHeight(this.element)
+            getExpected: `${(this.appointment.durationRatio * durationRatioScale)}px`,
+            getReceived: scheduler.getAppointmentHeight(this.element)
         }
 
         this.startTime = {
-            expected: () => {
+            getExpected: () => {
                 return scheduler.getAppointmentBeginTime(this.element);
             },
-            received: (movementIndex) => {
+            getReceived: (movementIndex) => {
                 return this.movementMap[movementIndex].startTime;
             }
         }
 
         this.finalTime = {
-            expected: () => {
+            getExpected: () => {
                 return scheduler.getAppointmentFinalTime(this.element);
             },
-            received: (movementIndex) => {
+            getReceived: (movementIndex) => {
                 return this.movementMap[movementIndex].finalTime;
             }
         }
 
-        this.row = (movementIndex) => {
+        this.getRow = (movementIndex) => {
             return this.movementMap[movementIndex].row;
         }
 

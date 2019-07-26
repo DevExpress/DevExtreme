@@ -1,6 +1,6 @@
 
-export const majorAppointments = [{
-    title: 'Appointment Pink #1',
+export const pinkAppointments = [{
+    title: 'Pink #1',
     durationRatio: 1,
     movementMap: [
         {
@@ -36,7 +36,7 @@ export const majorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Pink #2',
+    title: 'Pink #2',
     durationRatio: 2,
     movementMap: [
         {
@@ -72,7 +72,7 @@ export const majorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Pink #3',
+    title: 'Pink #3',
     durationRatio: 3,
     movementMap: [
         {
@@ -108,7 +108,7 @@ export const majorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Pink #4',
+    title: 'Pink #4',
     durationRatio: 4,
     movementMap: [
         {
@@ -144,7 +144,7 @@ export const majorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Pink #5',
+    title: 'Pink #5',
     durationRatio: 5,
     movementMap: [
         {
@@ -181,8 +181,8 @@ export const majorAppointments = [{
 }
 ];
 
-export const minorAppointments = [{
-    title: 'Appointment Blue #1',
+export const blueAppointments = [{
+    title: 'Blue #1',
     durationRatio: 1,
     movementMap: [
         {
@@ -218,7 +218,7 @@ export const minorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Blue #2',
+    title: 'Blue #2',
     durationRatio: 2,
     movementMap: [
         {
@@ -254,7 +254,7 @@ export const minorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Blue #3',
+    title: 'Blue #3',
     durationRatio: 3,
     movementMap: [
         {
@@ -290,7 +290,7 @@ export const minorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Blue #4',
+    title: 'Blue #4',
     durationRatio: 4,
     movementMap: [
         {
@@ -326,7 +326,7 @@ export const minorAppointments = [{
     ]
 },
 {
-    title: 'Appointment Blue #5',
+    title: 'Blue #5',
     durationRatio: 5,
     movementMap: [
         {
