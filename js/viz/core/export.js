@@ -312,8 +312,10 @@ export const combineMarkups = function(widgets, options = { }) {
     const totalWidth = exportItems.totalWidth;
     return {
         markup: '<svg ' + backgroundColor + 'height="' + totalHeight + '" width="' + totalWidth + '" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-        + exportItems.items.map(item => item.markup.replace('<svg', '<g transform="translate(' + getHOffset(item) + ',' + getVOffset(item) + ')" ').replace('</svg>', '</g>')).join('')
-        + '</svg>',
+            + exportItems.items.map(item =>
+                `<g transform="translate(${getHOffset(item)},${getVOffset(item)})">${item.markup}</g>`
+            ).join('')
+            + '</svg>',
         width: totalWidth,
         height: totalHeight
     };

@@ -2218,6 +2218,23 @@ QUnit.test("Read computed style of elements. Ignore default opacity", function(a
     });
 });
 
+QUnit.test("Processing of inner SVG", function(assert) {
+    var done = assert.async(),
+        markup = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="1" y="2" width="10" height="30"></rect></svg></svg>',
+        context = window.CanvasRenderingContext2D.prototype,
+        imageBlob = getData(markup);
+
+    assert.expect(1);
+    $.when(imageBlob).done(function() {
+        try {
+            assert.deepEqual(context.rect.lastCall.args, [1, 2, 10, 30]);
+        } finally {
+            done();
+        }
+    });
+
+});
+
 // T403049
 QUnit.test("getElementOptions should work correctly with empty attributs element", function(assert) {
     var done = assert.async();

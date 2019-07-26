@@ -111,7 +111,7 @@ function drawRect(context, options) {
         cornerRadius = options.rx;
 
     if(!cornerRadius) {
-        context.rect(options.x, options.y, options.width, options.height);
+        context.rect(x, y, width, height);
     } else {
         cornerRadius = _min(cornerRadius, width / 2, height / 2);
         context.save();
@@ -535,7 +535,8 @@ function asyncEach(array, callback, d = new Deferred()) {
 function drawCanvasElements(elements, context, parentOptions, shared) {
     return asyncEach(elements, function(element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
-            case "g": {
+            case "g":
+            case "svg": {
                 const options = extend({}, parentOptions, getElementOptions(element));
 
                 context.save();

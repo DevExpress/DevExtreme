@@ -359,7 +359,7 @@ QUnit.test("getMarkup method", function(assert) {
         },
         markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    assert.equal(markup, "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"><svg </svg></g><g transform=\"translate(0,25)\"><svg </svg></g></svg>");
 });
 
 QUnit.test("getMarkup. BackgroundColor in theme", function(assert) {
@@ -374,7 +374,7 @@ QUnit.test("getMarkup. BackgroundColor in theme", function(assert) {
         },
         markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"some_theme_color\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    assert.equal(markup, "<svg data-backgroundcolor=\"some_theme_color\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"><svg </svg></g><g transform=\"translate(0,25)\"><svg </svg></g></svg>");
 });
 
 QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result", function(assert) {
@@ -391,7 +391,7 @@ QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result"
         },
         markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    assert.equal(markup, "<svg data-backgroundcolor=\"\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"><svg </svg></g><g transform=\"translate(0,25)\"><svg </svg></g></svg>");
 });
 
 QUnit.test("Combine widgets markups (combineMarkups), just widget", function(assert) {
@@ -408,7 +408,7 @@ QUnit.test("Combine widgets markups (combineMarkups), just widget", function(ass
 
     assert.deepEqual(markupData, {
         markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"25\" width=\"10\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(0,0)\" ></g>"
+            + "<g transform=\"translate(0,0)\"><svg></svg></g>"
             + "</svg>",
         width: 10,
         height: 25
@@ -429,8 +429,8 @@ QUnit.test("Combine widgets markups (combineMarkups), array of widgets - column"
 
     assert.deepEqual(markupData, {
         markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(0,0)\" ></g>"
-            + "<g transform=\"translate(0,25)\" ></g>"
+            + "<g transform=\"translate(0,0)\"><svg></svg></g>"
+            + "<g transform=\"translate(0,25)\"><svg></svg></g>"
             + "</svg>",
         width: 15,
         height: 40
@@ -454,8 +454,8 @@ QUnit.test("Combine widgets markups (combineMarkups), array of arrays of widgets
 
     assert.deepEqual(markupData, {
         markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"30\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(0,0)\" ></g><g transform=\"translate(10,0)\" ></g>"
-            + "<g transform=\"translate(0,25)\" ></g><g transform=\"translate(20,25)\" ></g>"
+            + "<g transform=\"translate(0,0)\"><svg></svg></g><g transform=\"translate(10,0)\"><svg></svg></g>"
+            + "<g transform=\"translate(0,25)\"><svg></svg></g><g transform=\"translate(20,25)\"><svg></svg></g>"
             + "</svg>",
         width: 30,
         height: 60
@@ -483,8 +483,8 @@ QUnit.test("Combine widgets markups (combineMarkups) in grid layout with center-
 
     assert.deepEqual(markupData, {
         markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"40\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(5,0)\" ></g><g transform=\"translate(22,5)\" ></g>"
-            + "<g transform=\"translate(0,35)\" ></g><g transform=\"translate(25,25)\" ></g>"
+            + "<g transform=\"translate(5,0)\"><svg></svg></g><g transform=\"translate(22,5)\"><svg></svg></g>"
+            + "<g transform=\"translate(0,35)\"><svg></svg></g><g transform=\"translate(25,25)\"><svg></svg></g>"
             + "</svg>",
         width: 40,
         height: 60
@@ -512,8 +512,8 @@ QUnit.test("Combine widgets markups (combineMarkups) in grid layout with bottom-
 
     assert.deepEqual(markupData, {
         markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"40\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(10,0)\" ></g><g transform=\"translate(24,10)\" ></g>"
-            + "<g transform=\"translate(0,45)\" ></g><g transform=\"translate(30,25)\" ></g>"
+            + "<g transform=\"translate(10,0)\"><svg></svg></g><g transform=\"translate(24,10)\"><svg></svg></g>"
+            + "<g transform=\"translate(0,45)\"><svg></svg></g><g transform=\"translate(30,25)\"><svg></svg></g>"
             + "</svg>",
         width: 40,
         height: 60
