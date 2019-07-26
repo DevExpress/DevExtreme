@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { getContainerFileUrl } from '../../../helpers/testHelper';
 
-import { AppointmentWrapper } from './presets/appointment.wrapper';
+import { AppointmentWrapper } from './appointment.wrapper';
 import { pinkColorAppointmentList, blueColorAppointmentList } from './presets/appointment.data';
 import { createScheduler, scheduler } from './presets/widget.setup';
 

@@ -1,4 +1,4 @@
-import { scheduler } from './widget.setup';
+import { scheduler } from './presets/widget.setup';
 
 class TestResult<T> {
     expect: T;
