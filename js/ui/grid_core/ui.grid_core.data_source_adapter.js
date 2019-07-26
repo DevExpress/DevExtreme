@@ -412,7 +412,7 @@ module.exports = gridCore.Controller.inherit((function() {
                     options.extra.totalCount = options.data.length;
                 }
 
-                if(options.extra && options.extra.totalCount >= 0 && storeLoadOptions.requireTotalCount === false) {
+                if(options.extra && options.extra.totalCount >= 0 && (storeLoadOptions.requireTotalCount === false || loadOptions.requireTotalCount === false)) {
                     options.extra.totalCount = -1;
                 }
 

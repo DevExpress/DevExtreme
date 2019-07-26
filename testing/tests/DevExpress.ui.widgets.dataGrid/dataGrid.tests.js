@@ -7345,6 +7345,42 @@ QUnit.test("Scroll to second page should works if scrolling mode is infinite, su
     assert.strictEqual(dataGrid.getVisibleRows()[39].key, 40);
 });
 
+QUnit.test("Scroll to second page should works if scrolling mode is infinite and local data source returns totalCount", function(assert) {
+    // arrange
+    var dataGrid,
+        data = [];
+
+    for(var i = 0; i < 100; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    dataGrid = createDataGrid({
+        height: 100,
+        loadingTimeout: undefined,
+        scrolling: {
+            timeout: 0,
+            mode: "infinite",
+            useNative: false
+        },
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                return $.Deferred().resolve(data, {
+                    totalCount: 100000
+                });
+            }
+        }
+    });
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+    assert.strictEqual(dataGrid.getVisibleRows()[0].key, 1);
+    assert.strictEqual(dataGrid.getVisibleRows()[39].key, 40);
+});
+
 // T742926
 QUnit.test("Scroll should works if error occurs during third page loading if scrolling mode is infinite", function(assert) {
     var error = false;
