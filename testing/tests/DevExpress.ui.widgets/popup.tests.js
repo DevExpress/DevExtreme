@@ -824,6 +824,30 @@ QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in saf
     assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct if fullScreen is changed to 'true' at runtime");
 });
 
+QUnit.test("start scroll position is saved after full screen popup showing", function(assert) {
+    const $body = $("body");
+    let $additionalElement;
+
+    try {
+        $additionalElement = $("<div>").height(2000).appendTo("body");
+
+        this.instance.option({
+            fullScreen: true,
+            visible: false
+        });
+
+        $body.scrollTop(100);
+
+        this.instance.show();
+        this.instance.hide();
+
+        assert.strictEqual($body.scrollTop(), 100);
+    } finally {
+        $body.scrollTop(0);
+        $additionalElement.remove();
+    }
+});
+
 QUnit.test("PopupContent doesn't disappear while fullScreen option changing", function(assert) {
     this.instance.option({
         fullScreen: false,
