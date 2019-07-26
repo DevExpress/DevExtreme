@@ -1760,7 +1760,7 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
     this.clock.tick();
 
     // assert
-    assert.ok(that.rowsView.element().is(":focus"), "rowsView is focused");
+    assert.ok(that.rowsView.element().is(":focus"), $(":focus").attr("class"));
     assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 5 });
     assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
