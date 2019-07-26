@@ -13981,6 +13981,37 @@ QUnit.test("Using watch in masterDetail template if repaintChangesOnly", functio
     assert.ok($detail.text(), "changed", "detail text is changed");
 });
 
+// T800483
+QUnit.test("No error after detail collapse and popup editing form closing if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        dataSource: [{
+            "Id": 1,
+            "CompanyName": "Super Mart of the West"
+        }],
+        keyExpr: "Id",
+        columns: ["CompanyName"],
+        masterDetail: {
+            enabled: true,
+        },
+        editing: {
+            mode: 'popup',
+            allowUpdating: true,
+        }
+    });
+
+    // act
+    dataGrid.expandRow(1);
+    dataGrid.collapseRow(1);
+    dataGrid.editRow(0);
+    dataGrid.cancelEditData();
+
+    // assert
+    assert.notOk($(".dx-datagrid-edit-popup").is(":visible"), "editor popup is hidden");
+});
+
 QUnit.test("push changes for adaptive row", function(assert) {
     // arrange
     var dataSource = new DataSource({

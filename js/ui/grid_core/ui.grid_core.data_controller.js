@@ -911,7 +911,7 @@ module.exports = {
                         each(that._items, function(index, item) {
                             item.rowIndex = index;
                             if(oldItems) {
-                                item.cells = oldItems[index].cells;
+                                item.cells = oldItems[index].cells || [];
                             }
                         });
                     } else {
