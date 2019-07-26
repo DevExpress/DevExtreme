@@ -53,6 +53,8 @@ var OVERLAY_CLASS = "dx-overlay",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
+    PREVENT_SAFARI_SCROLLING_CLASS = "dx-prevent-safari-scrolling",
+
     TAB_KEY = "tab",
 
     POSITION_ALIASES = {
@@ -664,6 +666,9 @@ var Overlay = Widget.inherit({
                     completeShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = false;
                     that._actions.onShown();
+
+                    that._toggleSafariScrolling(false);
+
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -713,6 +718,8 @@ var Overlay = Widget.inherit({
             hidingArgs = { cancel: false };
 
         this._actions.onHiding(hidingArgs);
+
+        that._toggleSafariScrolling(true);
 
         if(hidingArgs.cancel) {
             this._isHidingActionCanceled = true;
@@ -1248,7 +1255,24 @@ var Overlay = Widget.inherit({
         var $wrapper = this._$wrapper,
             $container = this._getContainer();
 
-        $wrapper.css("position", this._isWindow($container) && !iOS ? "fixed" : "absolute");
+        $wrapper.css("position", this._isWindow($container) && this._fixedPositionEnable() ? "fixed" : "absolute");
+    },
+
+    _fixedPositionEnable: function() {
+        return !iOS;
+    },
+
+    _toggleSafariScrolling: function(scrollingEnabled) {
+        if(iOS && this._fixedPositionEnable()) {
+            var body = domAdapter.getBody();
+            $(body).toggleClass(PREVENT_SAFARI_SCROLLING_CLASS, !scrollingEnabled);
+            if(scrollingEnabled) {
+                body.scrollTop = this.offset;
+            } else {
+                this.offset = body.scrollTop;
+            }
+
+        }
     },
 
     _renderShading: function() {
