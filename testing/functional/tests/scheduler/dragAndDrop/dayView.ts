@@ -8,18 +8,17 @@ import { createScheduler, scheduler } from './lib/widget.setup';
 fixture
     `Behaviour dragging between table rows in DayView-mode`.page(getContainerFileUrl());
 
-const dragAndDropAppointment = async (t, appointmentWrapper, position) => {
-    const rowIndex = appointmentWrapper.getRow(position);
-    const message = `incorrect for the "${appointmentWrapper.title}"" at a timeline position ${rowIndex}`;
+const appointmentDragAndDrop = async (t, appointmentWrapper, step) => {
+    const timelinePosition = appointmentWrapper.getRow(step);
+    const errorMessage = `incorrect for the "${appointmentWrapper.title}" at a timeline position [${timelinePosition}]`;
 
     await t
-        .dragToElement(appointmentWrapper.element, await scheduler.getDateTableRow(rowIndex))
+        .dragToElement(appointmentWrapper.element, await scheduler.getDateTableRow(timelinePosition))
 
-        .expect(await appointmentWrapper.getHeightReceived()).eql(await appointmentWrapper.getHeightExpected(), `Height ${message}`)
+        .expect(await appointmentWrapper.getHeightReceived()).eql(await appointmentWrapper.getHeightExpected(), `Height ${errorMessage}`)
 
-        .expect(await appointmentWrapper.getBeginTimeReceived(position)).eql(await appointmentWrapper.getBeginTimeExpected(), `Begin time ${message}`)
-        .expect(await appointmentWrapper.getFinalTimeReceived(position)).eql(await appointmentWrapper.getFinalTimeExpected(), `Final time ${message}`);
-
+        .expect(await appointmentWrapper.getBeginTimeReceived(step)).eql(await appointmentWrapper.getBeginTimeExpected(), `Begin time ${errorMessage}`)
+        .expect(await appointmentWrapper.getFinalTimeReceived(step)).eql(await appointmentWrapper.getFinalTimeExpected(), `Final time ${errorMessage}`)
 }
 
 test('Appointments should be replaced on the timeline in DayView mode with maintaining their size and duration', async t => {
@@ -27,9 +26,9 @@ test('Appointments should be replaced on the timeline in DayView mode with maint
         const pinkColorAppointmentWrapper = await new AppointmentWrapper(pinkColorAppointmentList, index);
         const blueColorAppointmentWrapper = await new AppointmentWrapper(blueColorAppointmentList, index);
 
-        for (let position = 0; position < pinkColorAppointmentWrapper.positionMap.length; position++) {
-            await dragAndDropAppointment(t, pinkColorAppointmentWrapper, position);
-            await dragAndDropAppointment(t, blueColorAppointmentWrapper, position);
+        for (let step = 0; step < pinkColorAppointmentWrapper.positionMap.length; step++) {
+            await appointmentDragAndDrop(t, pinkColorAppointmentWrapper, step);
+            await appointmentDragAndDrop(t, blueColorAppointmentWrapper, step);
         }
     }
 
