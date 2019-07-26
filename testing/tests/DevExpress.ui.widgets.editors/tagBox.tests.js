@@ -564,6 +564,19 @@ QUnit.module("tags", moduleSetup, () => {
         const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
         assert.equal($tag.text(), "", "tag has correct text");
     });
+
+    QUnit.test("onValueChanged has dxclick event on remove button click", assert => {
+        const $element = $("#tagBox").dxTagBox({
+            value: ["123"],
+            onValueChanged: function(e) {
+                assert.equal(e.event.type, "dxclick", "correct event type");
+                assert.deepEqual(e.event.target, $removeButton.get(0), "correct target element");
+            }
+        });
+
+        const $removeButton = $element.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
+        $($removeButton).trigger("dxclick");
+    });
 });
 
 QUnit.module("multi tag support", {
