@@ -2992,23 +2992,25 @@ QUnit.module("aria accessibility", () => {
         QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
     };
 
-    [true, false].forEach((searchEnabled) => {
-        QUnit.test(`aria role for list, searchEnabled: ${searchEnabled}`, () => {
-            let $element = $("#widget").dxLookup({
-                opened: true,
-                searchEnabled: searchEnabled
+    if(devices.real().deviceType === "desktop") {
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`aria role for list, searchEnabled: ${searchEnabled}`, () => {
+                let $element = $("#widget").dxLookup({
+                    opened: true,
+                    searchEnabled: searchEnabled
+                });
+                const $field = $element.find(`.${LOOKUP_FIELD_CLASS}`);
+
+                let list = $(`.${LIST_CLASS}`).dxList("instance");
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+
+                $element.dxLookup("instance").option("searchEnabled", !searchEnabled);
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
             });
-            const $field = $element.find(`.${LOOKUP_FIELD_CLASS}`);
-
-            let list = $(`.${LIST_CLASS}`).dxList("instance");
-            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-            checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
-
-            $element.dxLookup("instance").option("searchEnabled", !searchEnabled);
-            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-            checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
         });
-    });
+    }
 
     QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
         $("#widget").dxLookup({ opened: true });
