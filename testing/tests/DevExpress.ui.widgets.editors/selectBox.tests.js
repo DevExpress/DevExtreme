@@ -4799,23 +4799,25 @@ QUnit.module("aria accessibility", () => {
         QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
     };
 
-    [true, false].forEach((searchEnabled) => {
-        QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, function() {
-            let $element = $("#selectBox").dxSelectBox({
-                opened: true,
-                searchEnabled: searchEnabled
+    if(devices.real().deviceType === "desktop") {
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, function() {
+                let $element = $("#selectBox").dxSelectBox({
+                    opened: true,
+                    searchEnabled: searchEnabled
+                });
+
+                let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                let list = $(`.${LIST_CLASS}`).dxList("instance");
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+                checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+
+                $element.dxSelectBox("instance").option("searchEnabled", !searchEnabled);
+                $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+                checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
             });
-
-            let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-            let list = $(`.${LIST_CLASS}`).dxList("instance");
-            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
-            checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
-
-            $element.dxSelectBox("instance").option("searchEnabled", !searchEnabled);
-            $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
-            checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
         });
-    });
+    }
 });
