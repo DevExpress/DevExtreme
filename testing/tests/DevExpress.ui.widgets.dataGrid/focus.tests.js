@@ -2717,71 +2717,7 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     var that = this,
         focusedCellChangedCount = 0,
         rowsView,
-        scrollable,
-        done = assert.async();
-
-    // arrange
-    that.$element = function() {
-        return $("#container");
-    };
-
-    that.data = generateItems(50);
-
-    that.options = {
-        keyExpr: "id",
-        height: 100,
-        editing: {
-            mode: "batch",
-            allowUpdating: true
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: "virtual"
-        },
-        onFocusedCellChanged: function(e) {
-            ++focusedCellChangedCount;
-            assert.ok(e.row, "Row object present");
-            assert.equal(e.row.key, 13, "Key");
-            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
-            assert.equal(e.rowIndex, 12, "Global rowIndex");
-        },
-        columns: ["id", "field1", "field2"]
-    };
-
-    that.setupModule();
-
-    that.gridView.render($("#container"));
-    rowsView = that.gridView.getView("rowsView");
-    rowsView.height(100);
-    rowsView.resize();
-    scrollable = rowsView.getScrollable();
-
-    that.clock.tick();
-    that.clock.restore();
-
-    setTimeout(() => {
-        // act
-        scrollable.scrollBy({ y: 400 });
-        setTimeout(() => {
-            $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
-            setTimeout(() => {
-                // assert
-                assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
-
-                done();
-            });
-        }, 40);
-    });
-});
-
-QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
-    var that = this,
-        focusedCellChangedCount = 0,
-        rowsView,
-        scrollable,
-        done = assert.async();
+        scrollable;
 
     // arrange
     that.$element = function() {
@@ -2802,7 +2738,7 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
         },
         scrolling: {
             mode: "virtual",
-            rowRenderingMode: "virtual"
+            useNative: false
         },
         onFocusedCellChanged: function(e) {
             ++focusedCellChangedCount;
@@ -2823,21 +2759,69 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     scrollable = rowsView.getScrollable();
 
     that.clock.tick();
-    that.clock.restore();
 
-    setTimeout(() => {
-        // act
-        scrollable.scrollBy({ y: 400 });
-        setTimeout(() => {
-            $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
-            setTimeout(() => {
-                // assert
-                assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+    // act
+    scrollable.scrollBy({ y: 400 });
+    that.clock.tick();
+    $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+});
 
-                done();
-            });
-        }, 40);
-    });
+QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
+    var that = this,
+        focusedCellChangedCount = 0,
+        rowsView,
+        scrollable;
+
+    // arrange
+    that.$element = function() {
+        return $("#container");
+    };
+
+    that.data = generateItems(50);
+
+    that.options = {
+        keyExpr: "id",
+        height: 100,
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+            assert.ok(e.row, "Row object present");
+            assert.equal(e.row.key, 13, "Key");
+            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
+            assert.equal(e.rowIndex, 12, "Global rowIndex");
+        },
+        columns: ["id", "field1", "field2"]
+    };
+
+    that.setupModule();
+
+    that.gridView.render($("#container"));
+    rowsView = that.gridView.getView("rowsView");
+    rowsView.height(100);
+    rowsView.resize();
+    scrollable = rowsView.getScrollable();
+
+    that.clock.tick();
+
+    // act
+    scrollable.scrollBy({ y: 400 });
+    that.clock.tick();
+    $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
 });
 
 QUnit.testInActiveWindow("Setting cancel in onFocusedCellChanging event should prevent focusing next cell", function(assert) {
