@@ -1387,6 +1387,21 @@ QUnit.test("popup title should be rendered before content", function(assert) {
     });
 });
 
+[true, false].forEach((isDeferRendering) => {
+    QUnit.test(`content should be append to the element when render the title with deferRendering=${isDeferRendering}`, function(assert) {
+        const $widgetContainer = $("#popupWithTitleTemplate");
+        $widgetContainer.dxPopup({
+            deferRendering: isDeferRendering,
+            visible: isDeferRendering,
+            titleTemplate: function(container) {
+                const hasParentContainer = !!$(container).closest($widgetContainer).length;
+                assert.ok(hasParentContainer);
+            }
+        });
+    });
+});
+
+
 QUnit.module("renderGeometry", () => {
     QUnit.test("option change", (assert) => {
         const instance = $("#popup").dxPopup({
