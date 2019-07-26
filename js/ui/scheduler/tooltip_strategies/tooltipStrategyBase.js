@@ -1,6 +1,6 @@
 import Button from "../../button";
 import dateUtils from "../../../core/utils/date";
-import FunctionTemplate from "../../widget/function_template";
+import { FunctionTemplate } from "../../../core/templates/function_template";
 import $ from "../../../core/renderer";
 import List from "../../list/ui.list.edit";
 import { extendFromObject } from "../../../core/utils/extend";

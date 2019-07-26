@@ -1,7 +1,7 @@
-import $ from "../../core/renderer";
-import TemplateBase from "./ui.template_base";
-import { normalizeTemplateElement } from "../../core/utils/dom";
-import { getCurrentTemplateEngine, setTemplateEngine, registerTemplateEngine } from "./template_engine_registry";
+import $ from "../renderer";
+import { TemplateBase } from "./template_base";
+import { normalizeTemplateElement } from "../utils/dom";
+import { getCurrentTemplateEngine, registerTemplateEngine, setTemplateEngine } from "./template_engine_registry";
 import "./template_engines";
 
 registerTemplateEngine("default", {
@@ -11,13 +11,13 @@ registerTemplateEngine("default", {
 
 setTemplateEngine("default");
 
-const Template = TemplateBase.inherit({
-
-    ctor: function(element) {
+export class Template extends TemplateBase {
+    constructor(element) {
+        super();
         this._element = element;
-    },
+    }
 
-    _renderCore: function(options) {
+    _renderCore(options) {
         const transclude = options.transclude;
         if(!transclude && !this._compiledTemplate) {
             this._compiledTemplate = getCurrentTemplateEngine().compile(this._element);
@@ -26,12 +26,9 @@ const Template = TemplateBase.inherit({
         return $("<div>").append(
             transclude ? this._element : getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index)
         ).contents();
-    },
-
-    source: function() {
-        return $(this._element).clone();
     }
 
-});
-
-module.exports = Template;
+    source() {
+        return $(this._element).clone();
+    }
+}

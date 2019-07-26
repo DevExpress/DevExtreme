@@ -64,7 +64,7 @@ import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
 import { DataSource } from "data/data_source/data_source";
 import ArrayStore from "data/array_store";
 import messageLocalization from "localization/message";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import fx from "animation/fx";
 import config from "core/config";
 import keyboardMock from "../../helpers/keyboardMock.js";

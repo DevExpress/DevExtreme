@@ -20,7 +20,7 @@ import caret from "./text_box/utils.caret";
 import { normalizeLoadResult } from "../data/data_source/data_source";
 
 import SelectBox from "./select_box";
-import BindableTemplate from "./widget/bindable_template";
+import { BindableTemplate } from "../core/templates/bindable_template";
 
 const TAGBOX_TAG_DATA_KEY = "dxTagData";
 

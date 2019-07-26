@@ -6,7 +6,7 @@ import devices from "../../core/devices";
 import iconUtils from "../../core/utils/icon";
 import HierarchicalDataAdapter from "./ui.data_adapter";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
-import BindableTemplate from "../widget/bindable_template";
+import { BindableTemplate } from "../../core/templates/bindable_template";
 import { isFunction } from "../../core/utils/type";
 import { noop } from "../../core/utils/common";
 

@@ -16,7 +16,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
-    ChildDefaultTemplate = require("../widget/child_default_template"),
+    ChildDefaultTemplate = require("../../core/templates/child_default_template").ChildDefaultTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
 
@@ -320,7 +320,7 @@ var DropDownList = DropDownEditor.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
+        this._defaultTemplates["item"] = new ChildDefaultTemplate("item");
     },
 
     _saveFocusOnWidget: function(e) {

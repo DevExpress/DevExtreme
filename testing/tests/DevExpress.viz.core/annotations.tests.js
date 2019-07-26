@@ -8,12 +8,19 @@ const environment = {
         this.group = this.renderer.g();
 
         this.widget = {
+            _getTemplate(callback) {
+                return {
+                    render(arg) {
+                        callback(arg.model, arg.container);
+                    }
+                };
+            },
             _renderer: this.renderer,
             _getAnnotationCoords: sinon.stub().returns({ x: 100, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } })
         };
     },
     createAnnotations(items, options = {}, customizeAnnotation) {
-        return createAnnotations(items, $.extend(true, { argument: 0 }, options), customizeAnnotation);
+        return createAnnotations(this.widget, items, $.extend(true, { argument: 0 }, options), customizeAnnotation);
     }
 };
 
@@ -165,7 +172,7 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 1 - 10, 160 - 2 - 5]);
 
     assert.equal(this.renderer.image.callCount, 1);
-    assert.deepEqual(this.renderer.image.firstCall.returnValue.append.firstCall.args, [contentGroup]);
+    assert.strictEqual(this.renderer.image.firstCall.returnValue.append.firstCall.args[0].element, contentGroup.element);
 });
 
 QUnit.test("Get size from annotation setting if it less than image size", function(assert) {
@@ -821,7 +828,7 @@ QUnit.module("Check plaque path on pane bounds", {
         environment.beforeEach.call(this);
     },
     createAnnotations(items, options) {
-        return createAnnotations(items, $.extend(true, {
+        return createAnnotations(this.widget, items, $.extend(true, {
             argument: 0,
             border: {
                 width: 1,
@@ -993,7 +1000,7 @@ QUnit.test("Draw text inside plaque", function(assert) {
 
     assert.strictEqual(this.renderer.text.callCount, 1);
     const text = this.renderer.text.firstCall.returnValue;
-    assert.deepEqual(text.append.firstCall.args, [this.renderer.g.getCall(3).returnValue]);
+    assert.deepEqual(text.append.firstCall.args[0].element, this.renderer.g.getCall(3).returnValue.element);
     assert.ok(!text.setMaxSize.called);
 });
 
@@ -1109,17 +1116,13 @@ QUnit.test("Use functional template to draw custom annotation", function(assert)
     assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-custom-annotation" }]);
 
     assert.equal(template.callCount, 1);
-    assert.deepEqual(template.getCall(0).args, [this.renderer.g.getCall(3).returnValue.element, { argument: 0, x: 0, y: 0, type: "custom", template }]);
+    assert.deepEqual(template.getCall(0).args, [{ argument: 0, x: 0, y: 0, type: "custom", template }, this.renderer.g.getCall(3).returnValue.element]);
 });
 
-QUnit.test("No template option - do not fail", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "custom" } ], {})[0];
-    this.renderer.g.reset();
+QUnit.test("No template option - do not create annotations", function(assert) {
+    const annotations = this.createAnnotations([{ x: 0, y: 0, type: "custom" } ], {});
 
-    annotation.draw(this.widget, this.group);
-
-    const annotationGroup = this.renderer.g.getCall(1).returnValue;
-    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-custom-annotation" }]);
+    assert.equal(annotations.length, 0);
 });
 
 QUnit.module("Tooltip", environment);

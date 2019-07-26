@@ -8,7 +8,7 @@ import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import AsyncCollectionWidget from "../collection/ui.collection_widget.async";
 import Promise from "../../core/polyfills/promise";
-import BindableTemplate from "../widget/bindable_template";
+import { BindableTemplate } from "../../core/templates/bindable_template";
 import fx from "../../animation/fx";
 
 const TOOLBAR_CLASS = "dx-toolbar";

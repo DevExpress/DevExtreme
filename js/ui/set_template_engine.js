@@ -10,6 +10,7 @@
 * @static
 * @module ui/set_template_engine
 * @export default
+* @deprecated
 */
 /**
 * @name ui.setTemplateEngine
@@ -20,6 +21,7 @@
 * @static
 * @module ui/set_template_engine
 * @export default
+* @deprecated
 */
 
-module.exports = require("./widget/template_engine_registry").setTemplateEngine;
+module.exports = require("../core/templates/template_engine_registry").setTemplateEngine;

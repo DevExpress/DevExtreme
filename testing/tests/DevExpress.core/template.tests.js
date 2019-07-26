@@ -1,5 +1,5 @@
 import $ from "jquery";
-import TemplateBase, { renderedCallbacks as templateRendered } from "ui/widget/ui.template_base";
+import { TemplateBase, renderedCallbacks as templateRendered } from "core/templates/template_base";
 
 QUnit.module("designer integration");
 
@@ -8,11 +8,11 @@ QUnit.test("template should receive dxshown event when attached to container", f
 
     var $template = $("<div>").text("test");
 
-    var templateClass = TemplateBase.inherit({
-        _renderCore: function() {
+    var templateClass = class extends TemplateBase {
+        _renderCore() {
             return $template;
         }
-    });
+    };
     var template = new templateClass();
 
     var patcher = function($markup) {
@@ -38,11 +38,11 @@ QUnit.module("DevExtreme.AspNet.MVC wrappers integration");
 QUnit.test("templateRendered callbacks should be fired after template appended to container", function(assert) {
     var $template = $("<div>").text("test");
 
-    var templateClass = TemplateBase.inherit({
-        _renderCore: function() {
+    var templateClass = class extends TemplateBase {
+        _renderCore() {
             return $template;
         }
-    });
+    };
     var template = new templateClass();
 
     var callback = function(element, container) {
@@ -64,11 +64,11 @@ QUnit.test("templateRendered callbacks should be fired before template.onRendere
     assert.expect(1);
 
     const $template = $("<div>").text("test");
-    const templateClass = TemplateBase.inherit({
-        _renderCore: function() {
+    const templateClass = class extends TemplateBase {
+        _renderCore() {
             return $template;
         }
-    });
+    };
     const template = new templateClass();
     let isChildCallbackCalled = false;
 
@@ -116,11 +116,11 @@ QUnit.test("template should receive dxshown event when attached to container", f
             assert.ok(true, "shown received");
         });
 
-    var templateClass = TemplateBase.inherit({
-        _renderCore: function() {
+    var templateClass = class extends TemplateBase {
+        _renderCore() {
             return $template;
         }
-    });
+    };
     var template = new templateClass();
 
     var $container = $("<div>").appendTo("#qunit-fixture");
@@ -139,11 +139,11 @@ QUnit.test("template should not receive dxshown event if already attached to con
             assert.ok(false, "shown received");
         });
 
-    var templateClass = TemplateBase.inherit({
-        _renderCore: function(_, __, $container) {
+    var templateClass = class extends TemplateBase {
+        _renderCore(_, __, $container) {
             return $template.appendTo($container);
         }
-    });
+    };
     var template = new templateClass();
 
     var $container = $("<div>").appendTo("#qunit-fixture");
@@ -162,11 +162,11 @@ QUnit.test("template should not receive dxshown event when not attached to conta
             assert.ok(false, "shown received");
         });
 
-    var templateClass = TemplateBase.inherit({
-        _renderCore: function() {
+    var templateClass = class extends TemplateBase {
+        _renderCore() {
             return $template;
         }
-    });
+    };
     var template = new templateClass();
 
     template.render({
@@ -183,11 +183,11 @@ QUnit.test("template should not receive dxshown event when attached to detached 
             assert.ok(false, "shown received");
         });
 
-    var templateClass = TemplateBase.inherit({
-        _renderCore: function() {
+    var templateClass = class extends TemplateBase {
+        _renderCore() {
             return $template;
         }
-    });
+    };
     var template = new templateClass();
 
     var $container = $("<div>");
@@ -200,9 +200,11 @@ QUnit.test("template should not receive dxshown event when attached to detached 
 QUnit.test("template should call onRendered method", function(assert) {
     var renderCoreHandler = sinon.spy(),
         onRenderedHandler = sinon.spy(),
-        TestTemplate = TemplateBase.inherit({
-            _renderCore: renderCoreHandler
-        }),
+        TestTemplate = class extends TemplateBase {
+            _renderCore() {
+                return renderCoreHandler.apply(this, arguments);
+            }
+        },
         template = new TestTemplate();
 
     template.render({ onRendered: onRenderedHandler });
