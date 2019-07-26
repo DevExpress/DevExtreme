@@ -1,12 +1,20 @@
 import { scheduler } from './widget.setup';
 
-const durationRatioScale = 50;
+class TestResult<T> {
+    expect: T;
+    result: T;
+
+    constructor(expect: T, result: T) {
+        this.expect = expect;
+        this.result = result;
+    }
+}
 
 export class AppointmentWrapper {
     appointment: any;
     title: any;
     element: any;
-    durationRatio: any;
+    height: any;
     positionMap: any;
 
     constructor(appointment, index) {
@@ -15,37 +23,34 @@ export class AppointmentWrapper {
         this.title = this.appointment.title;
         this.element = scheduler.getAppointmentByTitle(this.title);
 
-        this.durationRatio = this.appointment.durationRatio;
+        this.height = this.appointment.height;
 
         this.positionMap = this.appointment.positionMap;
 
     }
 
-    getHeightExpected = () => {
-        return `${(this.appointment.durationRatio * durationRatioScale)}px`;
+    getHeight() {
+        return new TestResult(
+            this.height,
+            scheduler.getAppointmentHeight(this.element)
+        );
     }
 
-    getHeightReceived = () => {
-        return scheduler.getAppointmentHeight(this.element);
+    getStartDate(moveIndex) {
+        return new TestResult(
+            this.positionMap[moveIndex].startDate,
+            scheduler.getAppointmentBeginTime(this.element)
+        );
     }
 
-    getBeginTimeExpected = () => {
-        return scheduler.getAppointmentBeginTime(this.element);
+    getEndDate(moveIndex) {
+        return new TestResult(
+            this.positionMap[moveIndex].endDate,
+            scheduler.getAppointmentFinalTime(this.element)
+        );
     }
 
-    getBeginTimeReceived = (moveIndex) => {
-        return this.positionMap[moveIndex].eventBeginTime;
-    }
-
-    getFinalTimeExpected = () => {
-        return scheduler.getAppointmentFinalTime(this.element);
-    }
-
-    getFinalTimeReceived = (moveIndex) => {
-        return this.positionMap[moveIndex].eventFinalTime;
-    }
-
-    getRow = (moveIndex) => {
-        return this.positionMap[moveIndex].timelinePosition;
+    getRow(moveIndex) {
+        return this.positionMap[moveIndex].row;
     }
 }
