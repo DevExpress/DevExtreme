@@ -1259,7 +1259,7 @@ var Overlay = Widget.inherit({
     },
 
     _fixedPositionEnable: function() {
-        return !iOS;
+        return !iOS || this.bodyScrollTop !== undefined;
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
@@ -1267,11 +1267,11 @@ var Overlay = Widget.inherit({
             var body = domAdapter.getBody();
             $(body).toggleClass(PREVENT_SAFARI_SCROLLING_CLASS, !scrollingEnabled);
             if(scrollingEnabled) {
-                body.scrollTop = this.offset;
+                body.scrollTop = this.bodyScrollTop;
+                this.bodyScrollTop = undefined;
             } else {
-                this.offset = body.scrollTop;
+                this.bodyScrollTop = body.scrollTop;
             }
-
         }
     },
 
