@@ -1059,6 +1059,7 @@ const TagBox = SelectBox.inherit({
         const e = args.event;
 
         e.stopPropagation();
+        this._saveValueChangeEvent(e);
 
         const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
         this._removeTagElement($tag);
