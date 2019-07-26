@@ -11,12 +11,25 @@ class TestResult<T> {
 }
 
 export class AppointmentWrapper {
-    appointment: any;
-    title: any;
+    appointment: {
+        title: string,
+        height: string,
+        positionMap: Array<{
+            row: number,
+            startDate: string,
+            endDate: string
+        }>
+    };
+
+    title: string;
     element: any;
 
-    height: any;
-    positionMap: any;
+    height: string;
+    positionMap: Array<{
+        row: number,
+        startDate: string,
+        endDate: string
+    }>;
 
     constructor(appointment, index) {
         this.appointment = appointment[index];
