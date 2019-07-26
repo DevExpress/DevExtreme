@@ -14,19 +14,17 @@ export class AppointmentWrapper {
     appointment: any;
     title: any;
     element: any;
+
     height: any;
     positionMap: any;
 
     constructor(appointment, index) {
         this.appointment = appointment[index];
-
         this.title = this.appointment.title;
         this.element = scheduler.getAppointmentByTitle(this.title);
 
         this.height = this.appointment.height;
-
         this.positionMap = this.appointment.positionMap;
-
     }
 
     getHeight() {

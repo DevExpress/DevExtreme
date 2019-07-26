@@ -1,9 +1,9 @@
 import { ClientFunction } from 'testcafe';
 import { getContainerFileUrl } from '../../../helpers/testHelper';
 
-import { AppointmentWrapper } from './lib/appointment.wrapper';
-import { pinkColorAppointmentList, blueColorAppointmentList } from './lib/appointment.data';
-import { createScheduler, scheduler } from './lib/widget.setup';
+import { AppointmentWrapper } from './presets/appointment.wrapper';
+import { pinkColorAppointmentList, blueColorAppointmentList } from './presets/appointment.data';
+import { createScheduler, scheduler } from './presets/widget.setup';
 
 fixture
     `Behaviour dragging between table rows in DayView-mode`.page(getContainerFileUrl());
