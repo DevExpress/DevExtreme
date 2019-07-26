@@ -3047,3 +3047,21 @@ QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", functi
 
     translateX.forEach((tX, i) => assert.roughEqual(tX, 44, 2.1));
 });
+
+QUnit.test("T801302. Chart do not throws exceptions when a discrete axis has null values", function(assert) {
+    var chart = this.createChart({
+        dataSource: [
+            { arg: 1, val: null },
+            { arg: null, val: 1 },
+            { arg: 3, val: 100000 }
+        ],
+        series: {},
+        commonAxisSettings: {
+            type: "discrete",
+            argumentType: "string",
+            valueType: "string"
+        }
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});

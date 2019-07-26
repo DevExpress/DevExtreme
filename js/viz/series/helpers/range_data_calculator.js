@@ -91,7 +91,7 @@ function getViewportReducer(series) {
         }
     }
 
-    viewportFilter = module.exports.getViewPortFilter(viewport);
+    viewportFilter = getViewPortFilter(viewport);
 
     return function(range, point, index, points) {
         var argument = point.argument;
@@ -118,36 +118,28 @@ function getViewportReducer(series) {
     };
 }
 
+function getViewPortFilter(viewport) {
+    if(viewport.categories) {
+        const dictionary = viewport.categories.reduce((result, category) => {
+            result[category.valueOf()] = true;
+            return result;
+        }, {});
+        return argument =>_isDefined(argument) && dictionary[argument.valueOf()];
+    }
+    if(!_isDefined(viewport.startValue) && !_isDefined(viewport.endValue)) {
+        return () => true;
+    }
+    if(!_isDefined(viewport.endValue)) {
+        return argument => argument >= viewport.startValue;
+    }
+    if(!_isDefined(viewport.startValue)) {
+        return argument => argument <= viewport.endValue;
+    }
+    return argument => argument >= viewport.startValue && argument <= viewport.endValue;
+}
+
 module.exports = {
-    getViewPortFilter(viewport) {
-        if(viewport.categories) {
-            const dictionary = viewport.categories.reduce((result, category) => {
-                result[category.valueOf()] = true;
-                return result;
-            }, {});
-            return function(argument) {
-                return dictionary[argument.valueOf()];
-            };
-        }
-        if(!_isDefined(viewport.startValue) && !_isDefined(viewport.endValue)) {
-            return function() {
-                return true;
-            };
-        }
-        if(!_isDefined(viewport.endValue)) {
-            return function(argument) {
-                return argument >= viewport.startValue;
-            };
-        }
-        if(!_isDefined(viewport.startValue)) {
-            return function(argument) {
-                return argument <= viewport.endValue;
-            };
-        }
-        return function(argument) {
-            return argument >= viewport.startValue && argument <= viewport.endValue;
-        };
-    },
+    getViewPortFilter,
 
     getArgumentRange: function(series) {
         var data = series._data || [],
@@ -231,9 +223,9 @@ module.exports = {
     },
 
     getPointsInViewPort: function(series) {
-        var argumentViewPortFilter = this.getViewPortFilter(series.getArgumentAxis().visualRange() || {}),
+        var argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().visualRange() || {}),
             valueViewPort = series.getValueAxis().visualRange() || {},
-            valueViewPortFilter = this.getViewPortFilter(valueViewPort),
+            valueViewPortFilter = getViewPortFilter(valueViewPort),
             points = series.getPoints(),
             addValue = function(values, point, isEdge) {
                 var minValue = point.getMinValue(),
