@@ -8,17 +8,17 @@ import { createScheduler, scheduler } from './lib/widget.setup';
 fixture
     `Behaviour dragging between table rows in DayView-mode`.page(getContainerFileUrl());
 
-const dragAndDropAppointment = async (t, appointmentWrapper, movementIndex) => {
-    const rowIndex = appointmentWrapper.getRow(movementIndex);
+const dragAndDropAppointment = async (t, appointmentWrapper, moveIndex) => {
+    const rowIndex = appointmentWrapper.getRow(moveIndex);
     const message = ` incorrect for [${appointmentWrapper.title}] at row ${rowIndex}`;
 
     await t
         .dragToElement(appointmentWrapper.element, await scheduler.getDateTableRow(rowIndex))
 
-        .expect(await appointmentWrapper.height.getReceived).eql(await appointmentWrapper.height.getExpected, `Height ${message}`)
+        .expect(await appointmentWrapper.getHeightReceived()).eql(await appointmentWrapper.getHeightExpected(), `Height ${message}`)
 
-        .expect(await appointmentWrapper.startTime.getReceived(movementIndex)).eql(await appointmentWrapper.startTime.getExpected(), `Start time ${message}`)
-        .expect(await appointmentWrapper.finalTime.getReceived(movementIndex)).eql(await appointmentWrapper.finalTime.getExpected(), `Final time ${message}`);
+        .expect(await appointmentWrapper.getBeginTimeReceived(moveIndex)).eql(await appointmentWrapper.getBeginTimeExpected(), `Start time ${message}`)
+        .expect(await appointmentWrapper.getFinalTimeReceived(moveIndex)).eql(await appointmentWrapper.getFinalTimeExpected(), `Final time ${message}`);
 
 }
 
@@ -27,9 +27,9 @@ test('Appointments should be replaced on the timeline in DayView mode with maint
         const pinkColorItem = await new AppointmentWrapper(pinkAppointments, index);
         const blueColorItem = await new AppointmentWrapper(blueAppointments, index);
 
-        for (let movementIndex = 0; movementIndex < pinkColorItem.movementMap.length; movementIndex++) {
-            await dragAndDropAppointment(t, pinkColorItem, movementIndex);
-            await dragAndDropAppointment(t, blueColorItem, movementIndex);
+        for (let moveIndex = 0; moveIndex < pinkColorItem.moveMap.length; moveIndex++) {
+            await dragAndDropAppointment(t, pinkColorItem, moveIndex);
+            await dragAndDropAppointment(t, blueColorItem, moveIndex);
         }
     }
 

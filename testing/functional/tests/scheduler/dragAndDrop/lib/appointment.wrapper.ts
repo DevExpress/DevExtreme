@@ -7,11 +7,7 @@ export class AppointmentWrapper {
     title: any;
     element: any;
     durationRatio: any;
-    movementMap: any;
-    height: any;
-    startTime: any;
-    finalTime: any;
-    getRow: any;
+    moveMap: any;
 
     constructor(appointment, index) {
         this.appointment = appointment[index];
@@ -21,34 +17,35 @@ export class AppointmentWrapper {
 
         this.durationRatio = this.appointment.durationRatio;
 
-        this.movementMap = this.appointment.movementMap;
+        this.moveMap = this.appointment.moveMap;
 
-        this.height = {
-            getExpected: `${(this.appointment.durationRatio * durationRatioScale)}px`,
-            getReceived: scheduler.getAppointmentHeight(this.element)
-        }
+    }
 
-        this.startTime = {
-            getExpected: () => {
-                return scheduler.getAppointmentBeginTime(this.element);
-            },
-            getReceived: (movementIndex) => {
-                return this.movementMap[movementIndex].startTime;
-            }
-        }
+    getHeightExpected = () => {
+        return `${(this.appointment.durationRatio * durationRatioScale)}px`;
+    }
 
-        this.finalTime = {
-            getExpected: () => {
-                return scheduler.getAppointmentFinalTime(this.element);
-            },
-            getReceived: (movementIndex) => {
-                return this.movementMap[movementIndex].finalTime;
-            }
-        }
+    getHeightReceived = () => {
+        return scheduler.getAppointmentHeight(this.element);
+    }
 
-        this.getRow = (movementIndex) => {
-            return this.movementMap[movementIndex].row;
-        }
+    getBeginTimeExpected = () => {
+        return scheduler.getAppointmentBeginTime(this.element);
+    }
 
+    getBeginTimeReceived = (moveIndex) => {
+        return this.moveMap[moveIndex].beginTime;
+    }
+
+    getFinalTimeExpected = () => {
+        return scheduler.getAppointmentFinalTime(this.element);
+    }
+
+    getFinalTimeReceived = (moveIndex) => {
+        return this.moveMap[moveIndex].finalTime;
+    }
+
+    getRow = (moveIndex) => {
+        return this.moveMap[moveIndex].row;
     }
 }
