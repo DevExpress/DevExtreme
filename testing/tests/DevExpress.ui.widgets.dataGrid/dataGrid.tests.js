@@ -13706,6 +13706,44 @@ QUnit.test("Grouping and ungrouping", function(assert) {
     assert.strictEqual($(dataGrid.getRowElement(1)).children().length, 4, "data cell count for second data row is correct");
 });
 
+// T757163
+QUnit.test("cancelEditData in onRowUpdating event for boolean column if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var rowUpdatingCallCount = 0;
+    var dataGrid = createDataGrid({
+        dataSource: [
+            { id: 1, value: true },
+            { id: 2, value: true }
+        ],
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        onRowUpdating: function(e) {
+            rowUpdatingCallCount++;
+            if(e.key === 1) {
+                e.cancel = true;
+                e.component.cancelEditData();
+            }
+        }
+    });
+
+    var $firstCheckBoxCell = $(dataGrid.getCellElement(0, 1));
+    var $secondCheckBoxCell = $(dataGrid.getCellElement(1, 1));
+
+    // act
+    $firstCheckBoxCell.find(".dx-checkbox").dxCheckBox("instance").option("value", false);
+
+    // assert
+    assert.strictEqual(rowUpdatingCallCount, 1, "onRowUpdating is called");
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).find(".dx-checkbox").dxCheckBox("instance").option("value"), true, "first checkbox value is canceled");
+    assert.notStrictEqual($(dataGrid.getCellElement(0, 1)).get(0), $firstCheckBoxCell.get(0), "first checkbox cell is changed");
+    assert.strictEqual($(dataGrid.getCellElement(1, 1)).get(0), $secondCheckBoxCell.get(0), "second checkbox cell is not changed");
+});
+
 QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
     // arrange
     var dataSource = new DataSource({
