@@ -1,6 +1,5 @@
-var $ = require("jquery"),
-    TemplateBase = require("core/templates/template_base").TemplateBase,
-    templateRendered = require("core/templates/template_base").renderedCallbacks;
+import $ from "jquery";
+import { TemplateBase, renderedCallbacks as templateRendered } from "core/templates/template_base";
 
 QUnit.module("designer integration");
 
@@ -59,6 +58,47 @@ QUnit.test("templateRendered callbacks should be fired after template appended t
     });
 
     templateRendered.remove(callback);
+});
+
+QUnit.test("templateRendered callbacks should be fired before template.onRendered", function(assert) {
+    assert.expect(1);
+
+    const $template = $("<div>").text("test");
+    const templateClass = class extends TemplateBase {
+        _renderCore() {
+            return $template;
+        }
+    };
+    const template = new templateClass();
+    let isChildCallbackCalled = false;
+
+    const childCallback = () => {
+        isChildCallbackCalled = true;
+        templateRendered.remove(childCallback);
+    };
+
+    const parentCallback = () => {
+        templateRendered.add(childCallback);
+        templateRendered.remove(parentCallback);
+
+        template.render({
+            model: {},
+            container: $child,
+            onRendered: function() {
+                assert.ok(isChildCallbackCalled, "templateRendered callback should called before 'onRendered'");
+            }
+        });
+    };
+
+    templateRendered.add(parentCallback);
+
+    const $parent = $("<div>").appendTo("#qunit-fixture");
+    const $child = $("<div>").appendTo($parent);
+
+    template.render({
+        model: {},
+        container: $parent
+    });
 });
 
 

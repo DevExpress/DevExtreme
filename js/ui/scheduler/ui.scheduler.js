@@ -1517,9 +1517,8 @@ const Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _fireContentReadyAction(result) {
+    _fireContentReadyAction: function(result) {
         this.callBase();
-
         result && result.resolve();
     },
 
@@ -1838,6 +1837,7 @@ const Scheduler = Widget.inherit({
         if(this._isLoaded()) {
             this._initMarkupCore(this._loadedResources);
             this._dataSourceChangedHandler(this._dataSource.items());
+            this._fireContentReadyAction();
         } else {
             this._loadResources().done((function(resources) {
                 this._initMarkupCore(resources);

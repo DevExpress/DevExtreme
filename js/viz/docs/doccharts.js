@@ -1354,6 +1354,12 @@ var dxChart = {
         */
         aggregationInterval: undefined,
         /**
+        * @name dxChartOptions.argumentAxis.aggregateByCategory
+        * @type boolean
+        * @default false
+        */
+        aggregateByCategory: false,
+        /**
         * @name dxChartOptions.argumentAxis.label
         * @type object
         */

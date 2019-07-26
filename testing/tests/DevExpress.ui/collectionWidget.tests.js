@@ -1885,6 +1885,28 @@ module("Data layer integration", {
 
         assert.equal(contentReadyFired, 1, "onContentReady fired once on loading fail");
     });
+
+    test("collection correctly handle loadResult object", (assert) => {
+        const mapStub = sinon.stub();
+        const instance = new TestWidget("#cmp", {
+            dataSource: {
+                load({ filter }) {
+                    const items = filter ? [{ id: 3, text: "test3" }] : [{ id: 1, text: "test1" }, { id: 2, text: "test2" }];
+                    return $.Deferred().resolve({ data: items }).promise();
+                },
+                key: "id",
+                map: mapStub
+            },
+            selectionMode: "single"
+        });
+
+        instance.option("selectedItemKeys", [3]);
+
+        const filteredItems = mapStub.lastCall.args[2];
+        assert.ok(mapStub.callCount > 1, "the 'map' function was called not only during the initial loading");
+        assert.ok(Array.isArray(filteredItems), "receive array");
+        assert.deepEqual(filteredItems, [{ id: 3, text: "test3" }], "correct data");
+    });
 });
 
 module("aria accessibility", {

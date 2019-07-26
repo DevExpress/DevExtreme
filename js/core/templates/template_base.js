@@ -4,7 +4,7 @@ import Callbacks from "../utils/callbacks";
 import { contains, triggerShownEvent } from "../utils/dom";
 import errors from "../errors";
 
-export const renderedCallbacks = Callbacks();
+export const renderedCallbacks = Callbacks({ syncStrategy: true });
 
 /**
 * @name dxTemplate

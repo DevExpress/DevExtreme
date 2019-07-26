@@ -22,7 +22,6 @@ const WIDGET_COMMANDS = [
 ];
 const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";
 const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-diagram-toolbar-menu-separator";
-const TOOLBAR_TEXT_CLASS = "dx-diagram-toolbar-text";
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
@@ -42,8 +41,11 @@ class DiagramToolbar extends DiagramPanel {
     }
 
     _renderToolbar($toolbar) {
-        let dataSource = this._prepareToolbarItems(DiagramCommands.getToolbar(), "before", this._execDiagramCommand);
-        dataSource = dataSource.concat(this._prepareToolbarItems(WIDGET_COMMANDS, "after", this._execWidgetCommand));
+        const commands = DiagramCommands.getToolbarCommands(this.option("commands"));
+        var widgetCommandNames = this.option("widgetCommandNames") || [];
+        var widgetCommands = WIDGET_COMMANDS.filter(function(c) { return widgetCommandNames.indexOf(c.command) > -1; });
+        let dataSource = this._prepareToolbarItems(commands, "before", this._execDiagramCommand);
+        dataSource = dataSource.concat(this._prepareToolbarItems(widgetCommands, "after", this._execWidgetCommand));
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, {
             dataSource
         });
@@ -66,14 +68,6 @@ class DiagramToolbar extends DiagramPanel {
                 },
                 menuItemTemplate: (data, index, element) => {
                     $(element).addClass(TOOLBAR_MENU_SEPARATOR_CLASS);
-                }
-            };
-        }
-        if(item.widget === "text") {
-            return {
-                template: (data, index, element) => {
-                    $(element).addClass(TOOLBAR_TEXT_CLASS);
-                    $(element).text(item.text);
                 }
             };
         }
@@ -292,6 +286,9 @@ class DiagramToolbar extends DiagramPanel {
             case "onWidgetCommand":
                 this._createOnWidgetCommand();
                 break;
+            case "commands":
+                this._invalidate();
+                break;
             case "export":
                 break;
             default:
@@ -310,7 +307,7 @@ class DiagramToolbar extends DiagramPanel {
 
 class ToolbarDiagramBar extends DiagramBar {
     getCommandKeys() {
-        return this.getKeys(DiagramCommands.getToolbar());
+        return this.getKeys(DiagramCommands.getToolbarCommands());
     }
     getKeys(items) {
         return items.reduce((commands, item) => {

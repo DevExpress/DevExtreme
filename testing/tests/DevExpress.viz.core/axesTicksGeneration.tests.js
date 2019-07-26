@@ -3586,3 +3586,39 @@ QUnit.test("getAggregationInfo with empty range returns nothing", function(asser
 
     assert.strictEqual(aggregationInfo.ticks.length, 0);
 });
+
+QUnit.test("getAggregationInfo on discrete axis with enabled aggregateByCategory", function(assert) {
+    this.createAxis();
+
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "discrete",
+        aggregationInterval: 2,
+        aggregateByCategory: true
+    });
+
+    this.axis.setBusinessRange({ min: 1, max: 10 });
+    this.axis.createTicks(canvas(1000));
+    // act
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
+
+    assert.deepEqual(aggregationInfo, { aggregateByCategory: true });
+});
+
+QUnit.test("Do not take into account aggregateByCategory if axis is not discrete", function(assert) {
+    this.createAxis();
+
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        aggregationInterval: 2,
+        aggregateByCategory: true
+    });
+
+    this.axis.setBusinessRange({ min: 1, max: 10 });
+    this.axis.createTicks(canvas(1000));
+    // act
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
+
+    assert.equal(aggregationInfo.interval, 2);
+});

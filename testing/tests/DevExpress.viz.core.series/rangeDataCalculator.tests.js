@@ -3010,6 +3010,16 @@ QUnit.test("Get argument range when discrete data", function(assert) {
     assert.deepEqual(rangeData.categories, [0, 1, 2], "range data should have all categories");
 });
 
+QUnit.test("Get argument range when discrete data with repetitive categories - get unique categories", function(assert) {
+    var series = createSeries({ type: "line", argumentAxisType: "discrete" });
+    series.updateData([{ arg: 0, val: 0 }, { arg: 0, val: 0 }, { arg: 2, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.deepEqual(rangeData.categories, [0, 2], "range data should have all categories");
+});
+
 QUnit.test("Calculate interval in range data when aggregation is enabled", function(assert) {
     var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
         rangeData,
