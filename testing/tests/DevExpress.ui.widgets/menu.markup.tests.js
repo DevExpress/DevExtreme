@@ -1,6 +1,5 @@
 import $ from "jquery";
 import fx from "animation/fx";
-import * as CheckStyleHelper from "../../helpers/checkStyleHelper.js";
 
 import "ui/menu/ui.menu";
 import "ui/menu/ui.submenu";
@@ -72,36 +71,6 @@ QUnit.test("Do not render menu with empty items", (assert) => {
 
     assert.ok(menu);
     assert.equal(root.length, 0, "no root");
-});
-
-CheckStyleHelper.testInChromeOnDesktop("Check item template parent styles - not focused", function(assert) {
-    const $template = $("<div>").text("test1");
-    createMenu({
-        items: [{ text: "item1" }],
-        itemTemplate: function() { return $template; }
-    });
-    $("#input1").focus();
-
-    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
-    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgba(0, 0, 0, 0)", "backgroundColor");
-    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
-    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
-    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
-});
-
-CheckStyleHelper.testInChromeOnDesktop("Check item template parent styles - focused", function(assert) {
-    const $template = $("<div>").text("test1");
-    const menu = createMenu({
-        items: [{ text: "item1" }],
-        itemTemplate: function() { return $template; }
-    });
-    menu.instance.focus();
-
-    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(255, 255, 255)", "color");
-    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(51, 122, 183)", "backgroundColor");
-    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
-    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
-    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
 });
 
 QUnit.module("Menu - selection", {
