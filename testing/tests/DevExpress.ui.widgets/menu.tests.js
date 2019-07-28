@@ -13,7 +13,7 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     eventsEngine = require("events/core/events_engine"),
     DataSource = require("data/data_source/data_source").DataSource,
-    CheckStyleHelper = require("../../helpers/checkStyleHelper.js");
+    checkStyleHelper = require("../../helpers/checkStyleHelper.js");
 
 require("common.css!");
 require("generic_light.css!");
@@ -390,7 +390,7 @@ QUnit.module("Menu - templates", {
     }
 });
 
-CheckStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when item is not focused", function(assert) {
+checkStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when item is not focused", function(assert) {
     const $template = $("<div>").text("test1");
     createMenu({
         items: [{ text: "item1" }],
@@ -398,14 +398,14 @@ CheckStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when it
     });
     $("#input1").focus();
 
-    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
-    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgba(0, 0, 0, 0)", "backgroundColor");
-    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
-    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
-    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
+    assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+    assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgba(0, 0, 0, 0)", "backgroundColor");
+    assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
 });
 
-CheckStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when item is focused", function(assert) {
+checkStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when item is focused", function(assert) {
     const $template = $("<div>").text("test1");
     const menu = createMenu({
         items: [{ text: "item1" }],
@@ -413,11 +413,11 @@ CheckStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when it
     });
     menu.instance.focus();
 
-    assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(255, 255, 255)", "color");
-    assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(51, 122, 183)", "backgroundColor");
-    assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
-    assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
-    assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
+    assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(255, 255, 255)", "color");
+    assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgb(51, 122, 183)", "backgroundColor");
+    assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
 });
 
 QUnit.module("Menu - selection", {

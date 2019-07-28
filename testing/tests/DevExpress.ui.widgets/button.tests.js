@@ -2,7 +2,7 @@ import $ from "jquery";
 import ValidationEngine from "ui/validation_engine";
 import Validator from "ui/validator";
 import keyboardMock from "../../helpers/keyboardMock.js";
-import * as CheckStyleHelper from "../../helpers/checkStyleHelper.js";
+import * as checkStyleHelper from "../../helpers/checkStyleHelper.js";
 
 import "ui/button";
 import "common.css!";
@@ -354,21 +354,21 @@ QUnit.module("submit behavior", {
 });
 
 QUnit.module("templates", () => {
-    CheckStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is not focused", function(assert) {
+    checkStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is not focused", function(assert) {
         const $template = $("<div>").text("test1");
         $("#button").dxButton({
             template: function() { return $template; }
         });
         $("#input1").focus();
 
-        assert.equal(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
-        assert.equal(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(255, 255, 255)", "backgroundColor");
-        assert.equal(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
-        assert.equal(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
-        assert.equal(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
+        assert.equal(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+        assert.equal(checkStyleHelper.getBackgroundColor($template[0]), "rgb(255, 255, 255)", "backgroundColor");
+        assert.equal(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+        assert.equal(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+        assert.equal(checkStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
     });
 
-    CheckStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is focused, text is not empty", function(assert) {
+    checkStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is focused, text is not empty", function(assert) {
         const $template = $("<div>").text("test1");
         const $button = $("#button").dxButton({
             text: "not empty",
@@ -376,14 +376,14 @@ QUnit.module("templates", () => {
         });
         $button.dxButton("instance").focus();
 
-        assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
-        assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
-        assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "hidden", "overflowX");
-        assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "ellipsis", "textOverflow");
-        assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
+        assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+        assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
+        assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "hidden", "overflowX");
+        assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "ellipsis", "textOverflow");
+        assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
     });
 
-    CheckStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is focused, text is empty", function(assert) {
+    checkStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is focused, text is empty", function(assert) {
         const $template = $("<div>").text("test1");
         const $button = $("#button").dxButton({
             text: null,
@@ -391,10 +391,10 @@ QUnit.module("templates", () => {
         });
         $button.dxButton("instance").focus();
 
-        assert.strictEqual(CheckStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
-        assert.strictEqual(CheckStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
-        assert.strictEqual(CheckStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
-        assert.strictEqual(CheckStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
-        assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
+        assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+        assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
+        assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+        assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+        assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
     });
 });
