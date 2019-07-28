@@ -4,7 +4,6 @@ var $ = require("jquery"),
 
 require("ui/button");
 require("common.css!");
-require("generic_light.css!");
 
 QUnit.testStart(function() {
     var markup =

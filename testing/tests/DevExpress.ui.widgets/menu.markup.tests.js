@@ -5,7 +5,6 @@ import "ui/menu/ui.menu";
 import "ui/menu/ui.submenu";
 
 import "common.css!";
-import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
