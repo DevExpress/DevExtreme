@@ -74,7 +74,7 @@ QUnit.test("Do not render menu with empty items", (assert) => {
     assert.equal(root.length, 0, "no root");
 });
 
-CheckStyleHelper.testInChromeOnDesktop("Check item template styles - not focused", function(assert) {
+CheckStyleHelper.testInChromeOnDesktop("Check item template parent styles - not focused", function(assert) {
     const $template = $("<div>").text("test1");
     createMenu({
         items: [{ text: "item1" }],
@@ -89,7 +89,7 @@ CheckStyleHelper.testInChromeOnDesktop("Check item template styles - not focused
     assert.strictEqual(CheckStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
 });
 
-CheckStyleHelper.testInChromeOnDesktop("Check item template styles - focused", function(assert) {
+CheckStyleHelper.testInChromeOnDesktop("Check item template parent styles - focused", function(assert) {
     const $template = $("<div>").text("test1");
     const menu = createMenu({
         items: [{ text: "item1" }],

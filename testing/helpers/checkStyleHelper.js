@@ -2,7 +2,7 @@ import devices from "core/devices";
 import browser from "core/utils/browser";
 import typeUtils from "core/utils/type";
 
-export function testInChromeOnDesktop(name, testCallback) {
+export function testInChromeOnDesktopActiveWindow(name, testCallback) {
     if(devices.real().deviceType === "desktop" && browser.webkit) {
         QUnit.testInActiveWindow.call(null, name, testCallback);
     } else {
