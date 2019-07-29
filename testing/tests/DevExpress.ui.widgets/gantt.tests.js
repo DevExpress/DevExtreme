@@ -67,6 +67,14 @@ const moduleConfig = {
     }
 };
 
+QUnit.module("Markup", moduleConfig, () => {
+    test("should render treeList", (assert) => {
+        this.createInstance(tasksOnlyOptions);
+        const treeListElements = this.$element.find(TREELIST_SELECTOR);
+        assert.ok(treeListElements.length === 1);
+    });
+});
+
 QUnit.module("Options", moduleConfig, () => {
     test("should render task wrapper for each task", (assert) => {
         this.createInstance(allSourcesOptions);
