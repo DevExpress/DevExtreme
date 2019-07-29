@@ -78,9 +78,10 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         filter = that._generateFilterByKey(key),
                         deferred = new Deferred(),
                         groupPath,
+                        isGroupKey = Array.isArray(key),
                         group = dataSource.group();
 
-                    if(Array.isArray(key)) {
+                    if(isGroupKey) {
                         return deferred.resolve(-1).promise();
                     }
 
