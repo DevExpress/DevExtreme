@@ -3,7 +3,7 @@ import 'ui/gantt';
 import "common.css!";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="widget"></div>\
         <div id="widthRootStyle" style="width: 300px;"></div>';
 

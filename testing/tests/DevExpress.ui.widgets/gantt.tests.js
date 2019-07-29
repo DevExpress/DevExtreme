@@ -9,7 +9,6 @@ QUnit.testStart(() => {
 });
 
 const TREELIST_SELECTOR = ".dx-treelist";
-const GANTT_VIEW_SELECTOR = ".dx-gantt-view";
 const TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper";
 const TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes";
 const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
@@ -67,20 +66,6 @@ const moduleConfig = {
         this.clock.restore();
     }
 };
-
-QUnit.module("Markup", moduleConfig, () => {
-    test("should render treeList", (assert) => {
-        this.createInstance(tasksOnlyOptions);
-        const treeListElements = this.$element.find(TREELIST_SELECTOR);
-        assert.ok(treeListElements.length === 1);
-    });
-    test("should render GanttView", (assert) => {
-        this.createInstance(tasksOnlyOptions);
-        this.clock.tick();
-        const ganttViewElements = this.$element.find(GANTT_VIEW_SELECTOR);
-        assert.ok(ganttViewElements.length === 1);
-    });
-});
 
 QUnit.module("Options", moduleConfig, () => {
     test("should render task wrapper for each task", (assert) => {
