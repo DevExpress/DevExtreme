@@ -752,7 +752,7 @@ var Popup = Overlay.inherit({
         };
     },
 
-    _fixedPositionEnable: function() {
+    _useFixedPosition: function() {
         return this.callBase() || this.option("fullScreen");
     },
 
