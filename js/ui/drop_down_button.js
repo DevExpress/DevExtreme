@@ -1,6 +1,6 @@
 import $ from "../core/renderer";
 import Widget from "./widget/ui.widget";
-import FunctionTemplate from "./widget/function_template";
+import { FunctionTemplate } from "../core/templates/function_template";
 import registerComponent from "../core/component_registrator";
 import ButtonGroup from "./button_group";
 import Popup from "./popup";

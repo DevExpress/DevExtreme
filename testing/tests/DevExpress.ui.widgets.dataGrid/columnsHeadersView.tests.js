@@ -3,7 +3,7 @@ import "generic_light.css!";
 
 import $ from "jquery";
 import dataUtils from "core/element_data";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import typeUtils from "core/utils/type";
 import config from "core/config";
 import devices from "core/devices";

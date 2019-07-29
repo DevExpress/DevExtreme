@@ -130,6 +130,20 @@ QUnit.module("option changed", {
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
     });
 
+    QUnit.test("custom item property should be passed to buttonTemplate function", function(assert) {
+        const templateMock = sinon.stub().returns("Template");
+        const item1 = { text: "button 1", icon: "box", custom: 1 };
+        const item2 = { text: "button 2", icon: "box", custom: 2 };
+        this.createButtonGroup({
+            items: [item1, item2],
+            buttonTemplate: templateMock
+        });
+
+        assert.strictEqual(templateMock.callCount, 2, "template method was called 2 times");
+        assert.deepEqual(templateMock.getCall(0).args[0], item1, "full item should be passed to the template");
+        assert.deepEqual(templateMock.getCall(1).args[0], item2, "full item should be passed to the template");
+    });
+
     QUnit.test("item.template should have higher priority than the buttonTemplate option", function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{

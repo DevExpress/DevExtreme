@@ -23,6 +23,7 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'testDetail\' }"><p>Test Details</p></div>\
         </div>\
 \
+        <div id="dataGrid2"></div>\
         <div id="dataGridWithStyle" style="width: 500px;"></div>\
         <div id="form"></div>\
     </div>\
@@ -63,7 +64,7 @@ import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
 import { DataSource } from "data/data_source/data_source";
 import ArrayStore from "data/array_store";
 import messageLocalization from "localization/message";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import fx from "animation/fx";
 import config from "core/config";
 import keyboardMock from "../../helpers/keyboardMock.js";
@@ -97,9 +98,9 @@ QUnit.testDone(function() {
 
 QUnit.module("Initialization");
 
-var createDataGrid = function(options) {
+var createDataGrid = function(options, $container) {
     var dataGrid,
-        dataGridElement = $("#dataGrid").dxDataGrid(options);
+        dataGridElement = ($container || $("#dataGrid")).dxDataGrid(options);
 
     QUnit.assert.ok(dataGridElement);
     dataGrid = dataGridElement.dxDataGrid("instance");
@@ -7344,6 +7345,42 @@ QUnit.test("Scroll to second page should works if scrolling mode is infinite, su
     assert.strictEqual(dataGrid.getVisibleRows()[39].key, 40);
 });
 
+QUnit.test("Scroll to second page should works if scrolling mode is infinite and local data source returns totalCount", function(assert) {
+    // arrange
+    var dataGrid,
+        data = [];
+
+    for(var i = 0; i < 100; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    dataGrid = createDataGrid({
+        height: 100,
+        loadingTimeout: undefined,
+        scrolling: {
+            timeout: 0,
+            mode: "infinite",
+            useNative: false
+        },
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                return $.Deferred().resolve(data, {
+                    totalCount: 100000
+                });
+            }
+        }
+    });
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+    assert.strictEqual(dataGrid.getVisibleRows()[0].key, 1);
+    assert.strictEqual(dataGrid.getVisibleRows()[39].key, 40);
+});
+
 // T742926
 QUnit.test("Scroll should works if error occurs during third page loading if scrolling mode is infinite", function(assert) {
     var error = false;
@@ -13737,6 +13774,44 @@ QUnit.test("Grouping and ungrouping", function(assert) {
     assert.strictEqual($(dataGrid.getRowElement(1)).children().length, 4, "data cell count for second data row is correct");
 });
 
+// T757163
+QUnit.test("cancelEditData in onRowUpdating event for boolean column if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var rowUpdatingCallCount = 0;
+    var dataGrid = createDataGrid({
+        dataSource: [
+            { id: 1, value: true },
+            { id: 2, value: true }
+        ],
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        onRowUpdating: function(e) {
+            rowUpdatingCallCount++;
+            if(e.key === 1) {
+                e.cancel = true;
+                e.component.cancelEditData();
+            }
+        }
+    });
+
+    var $firstCheckBoxCell = $(dataGrid.getCellElement(0, 1));
+    var $secondCheckBoxCell = $(dataGrid.getCellElement(1, 1));
+
+    // act
+    $firstCheckBoxCell.find(".dx-checkbox").dxCheckBox("instance").option("value", false);
+
+    // assert
+    assert.strictEqual(rowUpdatingCallCount, 1, "onRowUpdating is called");
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).find(".dx-checkbox").dxCheckBox("instance").option("value"), true, "first checkbox value is canceled");
+    assert.notStrictEqual($(dataGrid.getCellElement(0, 1)).get(0), $firstCheckBoxCell.get(0), "first checkbox cell is changed");
+    assert.strictEqual($(dataGrid.getCellElement(1, 1)).get(0), $secondCheckBoxCell.get(0), "second checkbox cell is not changed");
+});
+
 QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
     // arrange
     var dataSource = new DataSource({
@@ -14046,6 +14121,37 @@ QUnit.test("Using watch in masterDetail template if repaintChangesOnly", functio
     // assert
     assert.ok($(dataGrid.element()).find(".detail").is($detail), "detail element isn't updated");
     assert.ok($detail.text(), "changed", "detail text is changed");
+});
+
+// T800483
+QUnit.test("No error after detail collapse and popup editing form closing if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        dataSource: [{
+            "Id": 1,
+            "CompanyName": "Super Mart of the West"
+        }],
+        keyExpr: "Id",
+        columns: ["CompanyName"],
+        masterDetail: {
+            enabled: true,
+        },
+        editing: {
+            mode: 'popup',
+            allowUpdating: true,
+        }
+    });
+
+    // act
+    dataGrid.expandRow(1);
+    dataGrid.collapseRow(1);
+    dataGrid.editRow(0);
+    dataGrid.cancelEditData();
+
+    // assert
+    assert.notOk($(".dx-datagrid-edit-popup").is(":visible"), "editor popup is hidden");
 });
 
 QUnit.test("push changes for adaptive row", function(assert) {
@@ -15912,4 +16018,52 @@ QUnit.testInActiveWindow("Focus on edited cell after the edit button in command 
     assert.ok($(dataGrid.getRowElement(0)).find(".dx-editor-cell").eq(0).hasClass("dx-focused"), "first editable cell is active");
 
     clock.restore();
+});
+
+QUnit.module("Editing", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+// T759458
+QUnit.test("The edited cell should be closed on click inside another dataGrid", function(assert) {
+    // arrange
+    var dataGrid1 = createDataGrid({
+            dataSource: [{ field1: "test1", field2: "test2" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            }
+        }),
+        dataGrid2 = createDataGrid({
+            dataSource: [{ field3: "test3", field4: "test4" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            }
+        }, $("#dataGrid2"));
+
+    this.clock.tick(100);
+
+    // act
+    $(dataGrid1.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid1.getCellElement(0, 0)).trigger("dxclick");
+    this.clock.tick(100);
+
+    // assert
+    assert.ok($(dataGrid1.getCellElement(0, 0)).find("input").length > 0, "has input");
+
+    // act
+    $(dataGrid2.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid2.getCellElement(0, 0)).trigger("dxclick");
+    this.clock.tick(100);
+
+    // assert
+    assert.ok($(dataGrid1.getCellElement(0, 0)).find("input").length === 0, "hasn't input");
+    assert.notOk($(dataGrid1.getCellElement(0, 0)).hasClass("dx-editor-cell"), "cell of the first grid isn't editable");
+    assert.ok($(dataGrid2.getCellElement(0, 0)).find("input").length > 0, "has input");
 });

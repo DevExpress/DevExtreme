@@ -30,7 +30,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     Resizable = require("../resizable"),
-    EmptyTemplate = require("../widget/empty_template"),
+    EmptyTemplate = require("../../core/templates/empty_template").EmptyTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     zIndexPool = require("./z_index"),
     swatch = require("../widget/swatch_container");
@@ -567,7 +567,7 @@ var Overlay = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _isTopOverlay: function() {
@@ -953,8 +953,14 @@ var Overlay = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._$content.appendTo(this.$element());
+        this._appendContentToElement();
         this._renderVisibilityAnimate(this.option("visible"));
+    },
+
+    _appendContentToElement: function() {
+        if(!this._$content.parent().is(this.$element())) {
+            this._$content.appendTo(this.$element());
+        }
     },
 
     _renderContent: function() {
@@ -971,6 +977,8 @@ var Overlay = Widget.inherit({
         }
 
         this._contentAlreadyRendered = true;
+        this._appendContentToElement();
+
         this.callBase();
     },
 
@@ -1002,9 +1010,6 @@ var Overlay = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        const $element = this.$element();
-        this._$content.appendTo($element);
-
         const whenContentRendered = new Deferred();
 
         const contentTemplateOption = this.option("contentTemplate"),

@@ -246,11 +246,13 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
     });
     test("should change autoZoom property", (assert) => {
-        assert.notOk(this.instance._diagramInstance.settings.autoZoom);
-        this.instance.option("autoZoom", true);
-        assert.ok(this.instance._diagramInstance.settings.autoZoom);
-        this.instance.option("autoZoom", false);
-        assert.notOk(this.instance._diagramInstance.settings.autoZoom);
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
+        this.instance.option("autoZoom", "fitContent");
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 1);
+        this.instance.option("autoZoom", "fitWidth");
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 2);
+        this.instance.option("autoZoom", "disabled");
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
     });
     test("should change fullscreen property", (assert) => {
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
@@ -314,6 +316,13 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.model.pageColor, "red");
         this.instance.option("document.pageColor", "white");
         assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+    });
+    test("should change simpleView property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.simpleView, false);
+        this.instance.option("simpleView", true);
+        assert.equal(this.instance._diagramInstance.settings.simpleView, true);
+        this.instance.option("simpleView", false);
+        assert.equal(this.instance._diagramInstance.settings.simpleView, false);
     });
 });
 

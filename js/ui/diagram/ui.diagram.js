@@ -265,6 +265,7 @@ class Diagram extends Widget {
         this._updateReadOnlyState();
         this._updateZoomLevelState();
         this._updateAutoZoomState();
+        this._updateSimpleViewState();
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -377,6 +378,17 @@ class Diagram extends Widget {
                 return DataLayoutType.Sugiyama;
             default:
                 return DataLayoutType.Tree;
+        }
+    }
+    _getAutoZoomValue(option) {
+        const { AutoZoomMode } = getDiagram();
+        switch(option) {
+            case "fitContent":
+                return AutoZoomMode.FitContent;
+            case "fitWidth":
+                return AutoZoomMode.FitToWidth;
+            default:
+                return AutoZoomMode.Disabled;
         }
     }
     _isBindingMode() {
@@ -537,7 +549,11 @@ class Diagram extends Widget {
     }
     _updateAutoZoomState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.ToggleAutoZoom, this.option("autoZoom"));
+        this._executeDiagramCommand(DiagramCommand.SwitchAutoZoom, this._getAutoZoomValue(this.option("autoZoom")));
+    }
+    _updateSimpleViewState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ToggleSimpleView, this.option("simpleView"));
     }
     _updateFullscreenState() {
         const { DiagramCommand } = getDiagram();
@@ -617,8 +633,14 @@ class Diagram extends Widget {
             */
             zoomLevel: 1,
             /**
-            * @name dxDiagramOptions.autoZoom
+            * @name dxDiagramOptions.simpleView
             * @type Boolean
+            * @default false
+            */
+            simpleView: false,
+            /**
+            * @name dxDiagramOptions.autoZoom
+            * @type Enums.DiagramAutoZoom
             * @default false
             */
             autoZoom: false,
@@ -1091,6 +1113,9 @@ class Diagram extends Widget {
                 break;
             case "autoZoom":
                 this._updateAutoZoomState();
+                break;
+            case "simpleView":
+                this._updateSimpleViewState();
                 break;
             case "fullscreen":
                 this._updateFullscreenState();

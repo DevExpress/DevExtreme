@@ -3834,6 +3834,26 @@ QUnit.module("datebox validation", {}, () => {
         assert.ok(dateBox.option("isValid"), "widget is valid");
     });
 
+    QUnit.test("required validator should not block valuechange in datetime strategy", (assert) => {
+        const $dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            opened: true,
+            value: null
+        }).dxValidator({
+            validationRules: [{
+                type: "required"
+            }]
+        });
+        const dateBox = $dateBox.dxDateBox("instance");
+        const $done = $(dateBox.content()).parent().find(".dx-popup-done.dx-button");
+
+        $done.trigger("dxclick");
+
+        assert.ok(dateBox.option("isValid"), "widget is valid");
+        assert.ok(dateBox.option("value"), "value is not empty");
+    });
+
     QUnit.test("widget is still valid after drop down is opened", assert => {
         const startDate = new Date(2015, 1, 1, 8, 12);
 

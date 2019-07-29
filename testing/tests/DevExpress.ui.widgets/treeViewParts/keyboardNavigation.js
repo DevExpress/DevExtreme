@@ -828,5 +828,5 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
 
     assert.ok($treeView.find("." + internals.NODE_CLASS).first().hasClass("dx-state-focused"), "first node is focused");
     assert.ok($treeView.hasClass("dx-state-focused"), "treeview is focused");
-    assert.ok($treeView.children(".dx-scrollable").hasClass("dx-state-focused"), "scrollable is focused");
+    assert.ok($treeView.find(".dx-scrollable-content").hasClass("dx-state-focused"), "scrollable is focused");
 });

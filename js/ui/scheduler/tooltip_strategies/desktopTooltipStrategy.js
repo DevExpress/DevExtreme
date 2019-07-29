@@ -4,7 +4,7 @@ import Tooltip from "../../tooltip";
 import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
 import eventsEngine from "../../../events/core/events_engine";
-import FunctionTemplate from "../../widget/function_template";
+import { FunctionTemplate } from "../../../core/templates/function_template";
 import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";

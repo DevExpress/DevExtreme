@@ -3581,7 +3581,7 @@ var dxChartCommonAnnotationConfig = {
         * @name dxChartCommonAnnotationConfig.border.cornerRadius
         * @type number
         * @default 0
-        * @default 4 @for Material 
+        * @default 4 @for Material
         */
         cornerRadius: 0
     },
@@ -3683,6 +3683,15 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     */
     text: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.template
+    * @type template|function
+    * @default undefined
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param2 element:dxElement
+    * @type_function_return string|Node|jQuery
+    */
+    template: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.description
     * @type string

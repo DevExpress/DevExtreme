@@ -205,7 +205,6 @@ QUnit.test("Generate several various widgets in layout", function(assert) {
     assert.ok($dateBox.width() < $fieldItems.eq(2).width(), "dxDateBox width");
 });
 
-
 QUnit.test("Editors with object value correctly work with values from data", function(assert) {
     // arrange, act
     var layoutManager,
@@ -346,6 +345,19 @@ QUnit.test("Should save layoutData properties by reference (T706177)", (assert) 
     editor.option("value", items[1]);
 });
 
+QUnit.test("Change items from [1] -> []", function(assert) {
+    const layoutManager = $("#container").dxLayoutManager({
+        formData: {
+            name: "TestName"
+        },
+        items: ["name"]
+    }).dxLayoutManager("instance");
+
+    layoutManager.option("items", []);
+
+    assert.equal(layoutManager.$element().children().length, 0, "layout manager content is empty");
+    assert.notOk(layoutManager.getEditor("name"), "editor is not created");
+});
 
 QUnit.module("Render multiple columns");
 
