@@ -3065,3 +3065,20 @@ QUnit.test("T801302. Chart do not throws exceptions when a discrete axis has nul
 
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
+
+QUnit.test("Change series and argumentAxis with visualRange options", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: {}
+    });
+
+    chart.beginUpdate();
+    chart.option({
+        series: {}
+    });
+    chart.option("argumentAxis.tickInterval", 0.2);
+    chart.option("argumentAxis.visualRange", [6, 7]);
+    chart.endUpdate();
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 6, endValue: 7 });
+});
