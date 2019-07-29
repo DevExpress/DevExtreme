@@ -3532,8 +3532,7 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     var data = [],
         dataGrid,
         focusedCellChangedCount = 0,
-        scrollable,
-        done = assert.async();
+        scrollable;
 
     for(var i = 0; i < 50; i++) {
         data.push({ id: i + 1 });
@@ -3550,7 +3549,6 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
         scrolling: {
             mode: "virtual",
             rowRenderingMode: "virtual",
-            useNative: false
         },
         onFocusedCellChanged: function(e) {
             ++focusedCellChangedCount;
@@ -3562,19 +3560,17 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     }).dxDataGrid("instance");
 
     this.clock.tick();
-    this.clock.restore();
 
+    // act
     scrollable = dataGrid.getScrollable();
-    scrollable.scrollBy({ y: 600 });
+    scrollable.scrollTo({ y: 600 });
+    $(scrollable._container()).trigger("scroll");
+    this.clock.tick();
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    this.clock.tick();
 
-    setTimeout(() => {
-        $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
-        setTimeout(() => {
-            // assert
-            assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
-            done();
-        });
-    });
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
 });
 
 // T746556
