@@ -220,8 +220,11 @@ namespace Runner.Controllers
                     if (!isJson)
                     {
                         var k = text.IndexOf("=");
-                        variable = text.Substring(0, k).Trim();
-                        text = text.Substring(k + 1, text.Length - k - 2).Trim();
+                        if (k > 0)
+                        {
+                            variable = text.Substring(0, k).Trim();
+                            text = text.Substring(k + 1, text.Length - k - 2).Trim();
+                        }
                     }
                     return new
                     {
