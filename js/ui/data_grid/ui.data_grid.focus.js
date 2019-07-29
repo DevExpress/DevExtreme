@@ -78,7 +78,12 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         filter = that._generateFilterByKey(key),
                         deferred = new Deferred(),
                         groupPath,
+                        isGroupKey = Array.isArray(key),
                         group = dataSource.group();
+
+                    if(isGroupKey) {
+                        return deferred.resolve(-1).promise();
+                    }
 
                     if(!dataSource._grouping._updatePagingOptions) {
                         that._calculateGlobalRowIndexByFlatData(key, null, true)
