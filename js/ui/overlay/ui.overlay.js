@@ -452,6 +452,8 @@ var Overlay = Widget.inherit({
 
         this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
 
+        $(domAdapter.getBody()).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+
         // NOTE: hack to fix B251087
         eventsEngine.on(this._$wrapper, "MSPointerDown", noop);
         // NOTE: bootstrap integration T342292
@@ -666,9 +668,7 @@ var Overlay = Widget.inherit({
                     completeShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = false;
                     that._actions.onShown();
-
                     that._toggleSafariScrolling(false);
-
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);

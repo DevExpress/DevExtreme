@@ -822,6 +822,7 @@ QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in saf
 
     assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, "class removed from body if fullScreen is changed to 'true' at runtime");
     assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct if fullScreen is changed to 'true' at runtime");
+    this.instance.hide();
 });
 
 QUnit.test("start scroll position is saved after full screen popup hiding", function(assert) {
@@ -1481,5 +1482,7 @@ QUnit.module("renderGeometry", () => {
             assert.ok(initialCallCount < renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
             assert.notOk(isDimensionChanged);
         }
+
+        instance.hide();
     });
 });
