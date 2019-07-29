@@ -1412,8 +1412,12 @@ QUnit.test("Get row index if group by two columns and simple key and remote oper
         ++foundRowCount;
         assert.equal(globalRowIndex, 24, "Alice");
     });
+    dataController.getGlobalRowIndexByKey(["internal"]).done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, -1, "[internal]");
+    });
 
-    assert.equal(foundRowCount, 9, "Found row count");
+    assert.equal(foundRowCount, 10, "Found row count");
 });
 
 QUnit.test("Get row index if group by two columns and simple key and OData", function(assert) {

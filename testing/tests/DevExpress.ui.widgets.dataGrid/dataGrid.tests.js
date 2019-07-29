@@ -3855,6 +3855,34 @@ QUnit.test("Focused row should be visible inside group if OData grouping.autoExp
     assert.ok(dataGrid.isRowFocused("Ben"), "Row focused");
 });
 
+// T800035
+QUnit.test("Group collapsing if focusedRowEnabled is true and key is complex", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [
+            { "OrderID": 10248, "CustomerID": "VINET", "EmployeeID": 5, "ShipCity": "Reims" },
+            { "OrderID": 10249, "CustomerID": "TOMSP", "EmployeeID": 6, "ShipCity": "Münster" }
+        ],
+        loadingTimeout: undefined,
+        keyExpr: ["OrderID", "EmployeeID"],
+        columns: [{ dataField: "CustomerID", groupIndex: 0 }, "ShipCity"],
+        focusedRowEnabled: true,
+        grouping: {
+            autoExpandAll: false
+        },
+    }).dxDataGrid("instance");
+
+    var key = dataGrid.getKeyByRowIndex(1);
+
+    // act;
+    dataGrid.expandRow(key);
+    dataGrid.collapseRow(key);
+
+    // assert
+    assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ["group", "group"], "All visible rows have group type");
+    assert.deepEqual(dataGrid.option("focusedRowIndex"), 1, "Second row is focused");
+});
+
 QUnit.test("DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling", function(assert) {
     // arrange
     var data = [],
