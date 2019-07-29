@@ -5,7 +5,11 @@ import domUtils from "../../core/utils/dom";
 const BACKSPACE_INPUT_TYPE = "deleteContentBackward";
 
 class StandardMaskStrategy extends BaseMaskStrategy {
-    _focusHandler() {
+    getHandleEventNames() {
+        return [...super.getHandleEventNames(), "keyPress"];
+    }
+
+    _focusInHandler() {
         this.editor._showMaskPlaceholder();
         this.editor._direction(this.DIRECTION.FORWARD);
 
@@ -19,7 +23,7 @@ class StandardMaskStrategy extends BaseMaskStrategy {
         }
     }
 
-    _blurHandler() {
+    _focusOutHandler() {
         if(this.editorOption("showMaskMode") === "onFocus" && this.editor._isValueEmpty()) {
             this.editorOption("text", "");
             this.editor._renderDisplayText("");
@@ -100,7 +104,7 @@ class StandardMaskStrategy extends BaseMaskStrategy {
         });
     }
 
-    _dragHandler() {
+    _dropHandler() {
         this._clearDragTimer();
         this._dragTimer = setTimeout((function() {
             this.option("value", this._convertToValue(this._input().val()));

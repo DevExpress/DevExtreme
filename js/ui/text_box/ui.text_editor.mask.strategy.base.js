@@ -31,16 +31,28 @@ export default class BaseMaskStrategy {
     attachEvents() {
         var $input = this.editor._input();
 
-        EventsEngine.on($input, addNamespace("focusin", MASK_EVENT_NAMESPACE), this._focusHandler.bind(this));
-        EventsEngine.on($input, addNamespace("focusout", MASK_EVENT_NAMESPACE), this._blurHandler.bind(this));
-        EventsEngine.on($input, addNamespace("keydown", MASK_EVENT_NAMESPACE), this._keyDownHandler.bind(this));
-        EventsEngine.on($input, addNamespace("keypress", MASK_EVENT_NAMESPACE), this._keyPressHandler.bind(this));
-        EventsEngine.on($input, addNamespace("input", MASK_EVENT_NAMESPACE), this._inputHandler.bind(this));
-        EventsEngine.on($input, addNamespace("paste", MASK_EVENT_NAMESPACE), this._pasteHandler.bind(this));
-        EventsEngine.on($input, addNamespace("cut", MASK_EVENT_NAMESPACE), this._cutHandler.bind(this));
-        EventsEngine.on($input, addNamespace("drop", MASK_EVENT_NAMESPACE), this._dragHandler.bind(this));
+        for(let eventName of this.getHandleEventNames()) {
+            const subscriptionName = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
+            EventsEngine.on($input, subscriptionName, this.getEventHandler(eventName));
+        }
 
         this._attachChangeEventHandlers();
+    }
+
+    getHandleEventNames() {
+        return ["focusIn", "focusOut", "keyDown", "input", "paste", "cut", "drop"];
+    }
+
+    getEventHandler(eventName) {
+        let handler = this[`_${eventName}Handler`];
+
+        // ToDo: remove it
+        if(!handler) {
+            handler = function() {};
+            // console.log(`TODO - refactor, there is no handler for "${eventName}" event`);
+        }
+
+        return handler.bind(this);
     }
 
     detachEvents() {
@@ -58,22 +70,6 @@ export default class BaseMaskStrategy {
             this._changeHandler(e);
         }).bind(this.editor));
     }
-
-    _focusHandler(event) { }
-
-    _blurHandler(event) { }
-
-    _keyDownHandler(event) { }
-
-    _keyPressHandler(event) { }
-
-    _inputHandler(event) { }
-
-    _pasteHandler(event) { }
-
-    _cutHandler(event) { }
-
-    _dragHandler(event) { }
 
     _backspaceHandler(e) {
         this._keyPressHandled = true;
