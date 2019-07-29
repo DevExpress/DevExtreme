@@ -1253,22 +1253,22 @@ var Overlay = Widget.inherit({
         var $wrapper = this._$wrapper,
             $container = this._getContainer();
 
-        $wrapper.css("position", this._isWindow($container) && this._fixedPositionEnable() ? "fixed" : "absolute");
+        $wrapper.css("position", this._isWindow($container) && this._useFixedPosition() ? "fixed" : "absolute");
     },
 
-    _fixedPositionEnable: function() {
-        return !iOS || this.bodyScrollTop !== undefined;
+    _useFixedPosition: function() {
+        return !iOS || this._bodyScrollTop !== undefined;
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
-        if(iOS && this._fixedPositionEnable()) {
+        if(iOS && this._useFixedPosition()) {
             var body = domAdapter.getBody();
             if(scrollingEnabled) {
                 $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
-                window.scrollTo(0, this.bodyScrollTop);
-                this.bodyScrollTop = undefined;
+                window.scrollTo(0, this._bodyScrollTop);
+                this._bodyScrollTop = undefined;
             } else if(this.option("visible")) {
-                this.bodyScrollTop = window.pageYOffset;
+                this._bodyScrollTop = window.pageYOffset;
                 $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
             }
         }
