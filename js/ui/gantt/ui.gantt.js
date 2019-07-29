@@ -8,7 +8,7 @@ import { addNamespace } from "../../events/utils";
 import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
-import { getWindow } from "../../core/utils/window";
+import { getWindow, hasWindow } from "../../core/utils/window";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
@@ -31,15 +31,12 @@ class Gantt extends Widget {
         this.$element().addClass(GANTT_CLASS);
 
         this._$treeListWrapper = $("<div>")
-            .width(this.option("treeListWidth"))
             .appendTo(this.$element());
         this._$treeList = $("<div>")
-            .width(this.option("treeListWidth"))
             .appendTo(this._$treeListWrapper);
         this._$splitter = $("<div>")
             .addClass(GANTT_SPLITTER_CLASS)
             .addClass(GANTT_SPLITTER_TRANSPARENT_CLASS)
-            .css("left", this.option("treeListWidth"))
             .appendTo(this.$element());
         this._$splitterBorder = $("<div>")
             .addClass(GANTT_SPLITTER_BORDER_CLASS)
@@ -51,10 +48,14 @@ class Gantt extends Widget {
 
     _render() {
         this._renderTreeList();
+        this._renderSplitter();
         this._detachEventHandlers();
         this._attachEventHandlers();
     }
     _renderTreeList() {
+        this._$treeListWrapper.width(this.option("treeListWidth"));
+        this._$treeList.width(this.option("treeListWidth"));
+
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this.option("tasks.dataSource"),
             columns: this.option("columns"),
@@ -71,6 +72,9 @@ class Gantt extends Widget {
             onRowCollapsed: () => this._updateGanttView(),
             onRowExpanded: () => this._updateGanttView()
         });
+    }
+    _renderSplitter() {
+        this._$splitter.css("left", this.option("treeListWidth"));
     }
 
     _detachEventHandlers() {
@@ -176,12 +180,14 @@ class Gantt extends Widget {
     }
 
     _updateWidth(treeListWidth) {
-        const splitterBorderWidth = this._$splitterBorder.outerWidth();
-        treeListWidth = Math.min(treeListWidth, this.$element().width() - splitterBorderWidth);
-        this._$treeListWrapper.width(treeListWidth);
-        this._$treeList.width(treeListWidth);
-        this._$splitter.css("left", treeListWidth);
-        this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
+        if(hasWindow()) {
+            const splitterBorderWidth = this._$splitterBorder.outerWidth();
+            treeListWidth = Math.min(treeListWidth, this.$element().width() - splitterBorderWidth);
+            this._$treeListWrapper.width(treeListWidth);
+            this._$treeList.width(treeListWidth);
+            this._$splitter.css("left", treeListWidth);
+            this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
+        }
     }
 
     _clean() {
