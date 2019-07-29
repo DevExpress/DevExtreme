@@ -1265,12 +1265,13 @@ var Overlay = Widget.inherit({
     _toggleSafariScrolling: function(scrollingEnabled) {
         if(iOS && this._fixedPositionEnable()) {
             var body = domAdapter.getBody();
-            $(body).toggleClass(PREVENT_SAFARI_SCROLLING_CLASS, !scrollingEnabled);
             if(scrollingEnabled) {
-                body.scrollTop = this.bodyScrollTop;
+                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this.bodyScrollTop);
                 this.bodyScrollTop = undefined;
-            } else {
-                this.bodyScrollTop = body.scrollTop;
+            } else if(this.option("visible")) {
+                this.bodyScrollTop = window.pageYOffset;
+                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
             }
         }
     },
