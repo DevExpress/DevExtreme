@@ -4737,6 +4737,54 @@ QUnit.test("height from style after updateDimensions when rendering to container
     assert.equal($("#dataGrid").find(".dx-datagrid").height(), 300);
 });
 
+// T758955
+QUnit.test("native scrollBars layout should be correct after width change if fixed columns exist and columnAutoWidth is true", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "test is not actual for mobile devices");
+        return;
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{
+            "CompanyName": "Super Mart of the West",
+            "Phone": "(800) 555-2797",
+            "Address": "702 SW 8th Street",
+            "Fax": "(800) 555-2171"
+        }],
+        columnAutoWidth: true,
+        loadingTimeout: undefined,
+        height: 300,
+        width: 1000,
+        scrolling: {
+            useNative: true,
+        },
+        columns: [{
+            dataField: "CompanyName",
+        }, {
+            dataField: "Phone",
+        }, {
+            dataField: "Address",
+        }, {
+            dataField: "Fax",
+            fixed: true,
+            fixedPosition: 'right',
+            width: 50
+        }]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.option("width", 400);
+
+    // assert
+    if(browser.msie && parseInt(browser.version) > 11) {
+        assert.notEqual($("#dataGrid").find(".dx-datagrid-content-fixed").eq(1).css("margin-right"), "0px", "margin-right is not zero");
+        assert.ok(dataGrid.getView("rowsView").getScrollbarWidth() > 0, "vertical scrollBar exists");
+    } else {
+        assert.equal($("#dataGrid").find(".dx-datagrid-content-fixed").eq(1).css("margin-right"), "0px", "margin-right is zero");
+        assert.ok(dataGrid.getView("rowsView").getScrollbarWidth() === 0, "vertical scrollBar not exists");
+    }
+    assert.notEqual($("#dataGrid").find(".dx-datagrid-content-fixed").eq(1).css("margin-bottom"), "0px", "margin-bottom is not zero");
+});
+
 // T391169
 // T429504
 QUnit.test("min-height from styles when showBorders true", function(assert) {
