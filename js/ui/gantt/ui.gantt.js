@@ -180,14 +180,15 @@ class Gantt extends Widget {
     }
 
     _updateWidth(treeListWidth) {
-        if(hasWindow()) {
-            const splitterBorderWidth = this._$splitterBorder.outerWidth();
-            treeListWidth = Math.min(treeListWidth, this.$element().width() - splitterBorderWidth);
-            this._$treeListWrapper.width(treeListWidth);
-            this._$treeList.width(treeListWidth);
-            this._$splitter.css("left", treeListWidth);
-            this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
+        if(!hasWindow()) {
+            return;
         }
+        const splitterBorderWidth = this._$splitterBorder.outerWidth();
+        treeListWidth = Math.min(treeListWidth, this.$element().width() - splitterBorderWidth);
+        this._$treeListWrapper.width(treeListWidth);
+        this._$treeList.width(treeListWidth);
+        this._$splitter.css("left", treeListWidth);
+        this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
     }
 
     _clean() {

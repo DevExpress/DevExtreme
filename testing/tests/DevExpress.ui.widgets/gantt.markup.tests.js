@@ -1,7 +1,6 @@
-var $ = require("jquery");
-
-require("ui/gantt");
-require("common.css!");
+import $ from "jquery";
+import 'ui/gantt';
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
