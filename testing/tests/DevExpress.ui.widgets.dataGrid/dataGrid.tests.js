@@ -3527,6 +3527,52 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
 });
 
+QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
+    // arrange
+    var data = [],
+        dataGrid,
+        focusedCellChangedCount = 0,
+        scrollable;
+
+    for(var i = 0; i < 50; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    // arrange
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 150,
+        keyExpr: "id",
+        dataSource: data,
+        paging: {
+            pageSize: 10
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+        },
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+            assert.ok(e.row, "Row object present");
+            assert.equal(e.row.key, 16, "Key");
+            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
+            assert.equal(e.rowIndex, 15, "Global rowIndex");
+        }
+    }).dxDataGrid("instance");
+
+    this.clock.tick();
+
+    // act
+    scrollable = dataGrid.getScrollable();
+    scrollable.scrollTo({ y: 600 });
+    $(scrollable._container()).trigger("scroll");
+    this.clock.tick();
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+});
+
 // T746556
 QUnit.test("Focused row should not be visible after scrolling if scrolling mode is virtual and rowRenderingMode is virtual", function(assert) {
     // arrange
