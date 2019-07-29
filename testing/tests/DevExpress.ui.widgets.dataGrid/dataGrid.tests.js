@@ -3529,8 +3529,7 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
 
 QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
     // arrange
-    var clock = sinon.useFakeTimers(),
-        data = [],
+    var data = [],
         dataGrid,
         focusedCellChangedCount = 0,
         scrollable,
@@ -3562,8 +3561,8 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
         }
     }).dxDataGrid("instance");
 
-    clock.tick();
-    clock.restore();
+    this.clock.tick();
+    this.clock.restore();
 
     scrollable = dataGrid.getScrollable();
     scrollable.scrollBy({ y: 600 });
