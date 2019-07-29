@@ -446,9 +446,9 @@ module.exports = {
                     var prevRowIndex = this.option("focusedRowIndex"),
                         prevColumnIndex = this.option("focusedColumnIndex");
 
-                    this.callBase($cell, direction);
-
-                    this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                    if(this.callBase($cell, direction)) {
+                        this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                    }
                 }
             },
 
