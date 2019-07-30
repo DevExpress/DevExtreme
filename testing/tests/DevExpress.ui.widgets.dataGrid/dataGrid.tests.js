@@ -546,7 +546,7 @@ QUnit.test("Should not cut border of selected cell by 'Add row' (T748046)", func
 
     // assert
     if(browser.mozilla) {
-        assert.equal(scrollable.scrollTop(), 1, "in mozilla first row is overlayed by parent container");
+        assert.ok(scrollable.scrollTop() <= 1, "in mozilla first row is overlayed by parent container");
     } else {
         assert.ok(scrollable.scrollTop() <= 0.5, "first row is not overlayed by parent container");
     }
@@ -581,7 +581,7 @@ QUnit.test("Added row should be scrolled to the top of the grid (T748046)", func
 
     // assert
     if(browser.mozilla) {
-        assert.equal(scrollable.scrollTop(), 1, "in mozilla first row is overlayed by parent container");
+        assert.ok(scrollable.scrollTop() <= 1, "in mozilla first row is overlayed by parent container");
     } else {
         assert.ok(scrollable.scrollTop() <= 0.5, "first row is not overlayed by parent container");
     }
