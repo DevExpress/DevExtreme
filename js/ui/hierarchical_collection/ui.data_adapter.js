@@ -1,19 +1,19 @@
-var Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    errors = require("../../ui/widget/ui.errors"),
-    getOperationBySearchMode = require("../../ui/widget/ui.search_box_mixin").getOperationBySearchMode,
-    inArray = require("../../core/utils/array").inArray,
-    query = require("../../data/query"),
-    storeHelper = require("../../data/store_helper"),
-    HierarchicalDataConverter = require("./ui.data_converter");
+import Class from "../../core/class";
+import commonUtils from "../../core/utils/common";
+import iteratorUtils from "../../core/utils/iterator";
+import { each } from "../../core/utils/iterator";
+import typeUtils from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import errors from "../../ui/widget/ui.errors";
+import { getOperationBySearchMode } from "../../ui/widget/ui.search_box_mixin";
+import { inArray } from "../../core/utils/array";
+import query from "../../data/query";
+import storeHelper from "../../data/store_helper";
+import HierarchicalDataConverter from "./ui.data_converter";
 
-var EXPANDED = "expanded",
-    SELECTED = "selected",
-    DISABLED = "disabled";
+const EXPANDED = "expanded";
+const SELECTED = "selected";
+const DISABLED = "disabled";
 
 var DataAdapter = Class.inherit({
 
@@ -427,13 +427,15 @@ var DataAdapter = Class.inherit({
     },
 
     _isAllParentExpanded: function(node) {
-        let parentExpandedStates = [];
+        let result = true;
 
         this._iterateParents(node, (parent) => {
-            parentExpandedStates.push(parent.internalFields.expanded);
+            if(parent.internalFields.expanded !== true) {
+                result = false;
+            }
         });
 
-        return parentExpandedStates.filter(state => state !== true).length === 0;
+        return result;
     },
 
     toggleExpansion: function(key, state) {
