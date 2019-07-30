@@ -11,8 +11,8 @@ export default class SchedulerTestHelper {
         return this.scheduler.find(`.dx-scheduler-appointment`).nth(index);
     }
 
-    getAppointmentByTitle(title) {
-        return this.scheduler.find(`.dx-scheduler-appointment`).withAttribute('title', title).nth(0);
+    getAppointmentByTitle(title, index = 0) {
+        return this.scheduler.find(`.dx-scheduler-appointment`).withAttribute('title', title).nth(index);
     }
 
     getAppointmentBeginTime(appointment) {

@@ -16,7 +16,6 @@ export const createScheduler = async (mode) => {
         views: [mode],
         currentView: mode,
         currentDate: new Date(2018, 3, 20),
-        startDayHour: 9,
-        useColorAsDefault: true
+        startDayHour: 9
     });
 }
