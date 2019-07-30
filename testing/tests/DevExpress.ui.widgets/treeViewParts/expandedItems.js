@@ -3,25 +3,25 @@
 import $ from "jquery";
 import { noop } from "core/utils/common";
 import fx from "animation/fx";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 
 const TREEVIEW_NODE_CLASS = "dx-treeview-node";
-const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
 const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CLASS}-container-opened`;
 
 const { module, test } = QUnit;
 
 const checkFunctionArguments = (assert, actualArgs, expectedArgs) => {
-    assert.strictEqual(actualArgs.event, expectedArgs.event, "arg is OK");
-    assert.deepEqual(actualArgs.itemData, expectedArgs.itemData, "arg is OK");
-    assert.deepEqual(actualArgs.node, expectedArgs.node, "arg is OK");
-    assert.deepEqual($(actualArgs.itemElement).get(0), expectedArgs.itemElement.get(0), "arg is OK");
+    assert.strictEqual(actualArgs.event, expectedArgs.event, "event");
+    assert.deepEqual(actualArgs.itemData, expectedArgs.itemData, "itemData");
+    assert.deepEqual(actualArgs.node, expectedArgs.node, "node");
+    assert.deepEqual($(actualArgs.itemElement).get(0), expectedArgs.itemElement.get(0), "itemElement");
 };
 
+const createInstance = (options) => new TreeViewTestWrapper(options);
 const isNodeExpanded = $node => $node.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length > 0;
-
 const getNodeItemId = $node => $node.data("itemId");
 
-module("Expanded items", {
+let moduleConfig = {
     beforeEach() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
@@ -30,15 +30,17 @@ module("Expanded items", {
         fx.off = false;
         this.clock.restore();
     }
-}, () => {
-    test("Some item has'expanded' field", assert => {
+};
+
+module("Expanded items", moduleConfig, () => {
+    test("Some item has 'expanded' field", assert => {
         const data = $.extend(true, [], DATA[5]);
         data[0].items[1].expanded = true;
-        const $treeView = initTree({
+        const treeView = createInstance({
             items: data
         });
 
-        assert.equal($treeView.find("." + internals.OPENED_NODE_CONTAINER_CLASS).length, 3);
+        assert.equal(treeView.getElement().find("." + internals.OPENED_NODE_CONTAINER_CLASS).length, 2);
     });
 
     test("expansion by itemData", assert => {
@@ -135,6 +137,7 @@ module("Expanded items", {
     test("onItemCollapsed callback", assert => {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
+
         const itemCollapsedHandler = sinon.spy(noop);
         const $treeView = initTree({
             items: data,
@@ -143,12 +146,12 @@ module("Expanded items", {
         const treeView = $treeView.dxTreeView("instance");
 
         const $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0);
+        assert.equal($treeView.find("." + internals.OPENED_NODE_CONTAINER_CLASS).length, 1);
         treeView.collapseItem($firstItem);
 
-        assert.equal($treeView.find("." + internals.OPENED_NODE_CONTAINER_CLASS).length, 1);
-        assert.ok(itemCollapsedHandler.calledOnce);
+        assert.equal($treeView.find("." + internals.OPENED_NODE_CONTAINER_CLASS).length, 0);
 
-        const args = itemCollapsedHandler.getCall(0).args[0];
+        const args = itemCollapsedHandler.firstCall.args[0];
         checkFunctionArguments(assert, args, {
             event: undefined,
             itemData: data[0],
@@ -339,90 +342,6 @@ module("Expanded items", {
         $item.trigger("dxclick");
 
         assert.equal(itemExpanded, 0, "event was not fired");
-    });
-
-    test("not expand parent items in non-recursive case", assert => {
-        const items = [{ text: "1", id: 1, items: [{ text: "11", id: 11, items: [{ text: "111", id: 111 }] }] }];
-        const $treeView = initTree({
-            items: items,
-            expandNodesRecursive: false
-        });
-        const treeView = $treeView.dxTreeView("instance");
-
-        treeView.expandItem(11);
-
-        let $items = $treeView.find(".dx-treeview-node");
-        assert.equal($items.length, 1, "root item was expanded");
-
-        const nodes = treeView.getNodes();
-        assert.notOk(nodes[0].expanded, "root node is collapsed");
-        assert.ok(nodes[0].children[0].expanded, "child node is expanded");
-
-        treeView.expandItem(1);
-
-        $items = $treeView.find(".dx-treeview-node");
-        assert.equal($items.length, 3, "root item was expanded");
-    });
-
-    test("expand parent items in recursive case", assert => {
-        const items = [{ text: "1", id: 1, items: [{ text: "11", id: 11, items: [{ text: "111", id: 111 }] }] }];
-        const $treeView = initTree({
-            items: items
-        });
-        const treeView = $treeView.dxTreeView("instance");
-
-        treeView.expandItem(11);
-
-        const $items = $treeView.find(".dx-treeview-node");
-        assert.equal($items.length, 3, "root item was expanded");
-
-        const nodes = treeView.getNodes();
-        assert.ok(nodes[0].expanded, "root node is expanded");
-        assert.ok(nodes[0].children[0].expanded, "child node is expanded");
-    });
-
-    test("Expand parent items in markup after expand of rendered nested child (T671960)", assert => {
-        const items = [{
-            text: "1",
-            id: 1,
-            items: [{
-                text: "11",
-                id: 11,
-                items: [{
-                    text: "111",
-                    id: 111
-                }]
-            }]
-        }];
-        const $treeView = initTree({
-            items: items
-        });
-        const treeView = $treeView.dxTreeView("instance");
-
-        treeView.expandAll();
-        treeView.collapseAll();
-        treeView.expandItem(111);
-
-        const nodeElements = $treeView.find("." + TREEVIEW_NODE_CONTAINER_CLASS);
-        assert.ok(nodeElements.eq(1).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), "item 11");
-        assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), "item 111");
-    });
-
-    test("expand childless item in recursive case", assert => {
-        const items = [{ text: "1", id: 1, items: [{ text: "11", id: 11 }] }];
-        const $treeView = initTree({
-            items: items
-        });
-        const treeView = $treeView.dxTreeView("instance");
-
-        treeView.expandItem(11);
-
-        const $items = $treeView.find(".dx-treeview-node");
-        assert.equal($items.length, 2, "root item was expanded");
-
-        const nodes = treeView.getNodes();
-        assert.ok(nodes[0].expanded, "root node is expanded");
-        assert.ok(nodes[0].children[0].expanded, "child node is expanded");
     });
 
     test("Expand all method", assert => {
@@ -691,3 +610,170 @@ module("Expanded items", {
         assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
     });
 });
+
+
+QUnit.module("expandItem() method", moduleConfig, () => {
+    test("[] -> expand '1_1_1' -> [{3}] -> expand '1_1' -> [{2}, {3}] -> expand '1' -> [{1},{2},{3}] - expandNodesRecursive: false", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1" }] }] }];
+        const treeView = createInstance({
+            items: items,
+            expandNodesRecursive: false
+        });
+
+        treeView.checkExpanded([], items);
+
+        treeView.instance.expandItem("1_1_1");
+        treeView.checkExpandedItems([2], items);
+        treeView.checkExpandedNodes([]);
+
+        treeView.instance.expandItem("1_1");
+        treeView.checkExpandedItems([1, 2], items);
+        treeView.checkExpandedNodes([]);
+
+        treeView.instance.expandItem("1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+    });
+
+    test("[] -> expand '1_1_1' -> [{1},{2},{3}] -> expand '1_1' -> [{1},{2},{3}] -> expand '1' -> [{1},{2},{3}] - expandNodesRecursive: true", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1" }] }] }];
+        const treeView = createInstance({
+            items: items,
+            expandNodesRecursive: true
+        });
+
+        treeView.checkExpanded([], items);
+
+        treeView.instance.expandItem("1_1_1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+
+        treeView.instance.expandItem("1_1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+
+
+        treeView.instance.expandItem("1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+    });
+
+    test("{3}.expanded=true -> [{3}] -> expand '1_1_1' -> [{3}] -> expand '1_1' -> [{2},{3}] -> expand '1' -> [{1},{2},{3}] - expandNodesRecursive: false", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1", expanded: true }] }] }];
+        const treeView = createInstance({
+            items: items,
+            expandNodesRecursive: false
+        });
+
+        treeView.checkExpandedItems([2], items);
+        treeView.checkExpandedNodes([]);
+
+        treeView.instance.expandItem("1_1_1");
+        treeView.checkExpandedItems([2], items);
+        treeView.checkExpandedNodes([]);
+
+        treeView.instance.expandItem("1_1");
+        treeView.checkExpandedItems([1, 2], items);
+        treeView.checkExpandedNodes([]);
+
+        treeView.instance.expandItem("1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+    });
+
+    test("{3}.expanded=true -> [{1},{2},{3}] -> expand '1_1_1' -> [{1},{2},{3}] -> expand '1_1' -> [{1},{2},{3}] -> expand '1' -> [{1},{2},{3}] - expandNodesRecursive: true", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1", expanded: true }] }] }];
+        const treeView = createInstance({
+            items: items,
+            expandNodesRecursive: true
+        });
+
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+
+        treeView.instance.expandItem("1_1_1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+
+        treeView.instance.expandItem("1_1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+
+
+        treeView.instance.expandItem("1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1]);
+    });
+
+    test("{3}.expanded=true -> collapse {1, 2} -> [{3}] -> expand '1_1_1' -> [{1},{2},{3}] -> expand '1_1' -> [{1},{2},{3}] -> expand '1' -> [{1},{2},{3}] - expandNodesRecursive: true", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1", expanded: true }] }] }];
+        const treeView = createInstance({
+            items: items,
+            expandNodesRecursive: true
+        });
+
+        treeView.instance.collapseItem("1");
+        treeView.instance.collapseItem("1_1");
+
+        treeView.checkExpandedItems([2], items);
+        treeView.checkExpandedNodes([]);
+
+        treeView.instance.expandItem("1_1_1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1, 2]);
+
+        treeView.instance.expandItem("1_1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1, 2]);
+
+        treeView.instance.expandItem("1");
+        treeView.checkExpandedItems([0, 1, 2], items);
+        treeView.checkExpandedNodes([0, 1, 2]);
+    });
+
+    test("Expand parent items in markup after expand of rendered nested child (T671960)", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1" }] }] }];
+        const treeView = createInstance({
+            items: items
+        });
+
+        treeView.instance.expandAll();
+        treeView.instance.collapseAll();
+        treeView.instance.expandItem("1_1_1");
+
+        const nodeContainers = treeView.getNodeContainers();
+        assert.ok(treeView.hasOpenedContainerClass(nodeContainers.eq(1)), "item 11");
+        assert.ok(treeView.hasOpenedContainerClass(nodeContainers.eq(2)), "item 111");
+    });
+
+    test("Opened container class on root - all collapsed", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1" }] }] }];
+        const treeView = createInstance({
+            items: items
+        });
+
+        let nodeContainers = treeView.getNodeContainers();
+        assert.strictEqual(treeView.hasOpenedContainerClass(nodeContainers.first()), false, "opened class on root container");
+
+        treeView.instance.expandItem("1");
+        nodeContainers = treeView.getNodeContainers();
+        assert.strictEqual(treeView.hasOpenedContainerClass(nodeContainers.first()), false, "opened class on root container");
+    });
+
+    test("Opened container class on root - all expanded", assert => {
+        const items = [{ text: "1", id: "1", items: [{ text: "11", id: "1_1", items: [{ text: "111", id: "1_1_1", expanded: true }] }] }];
+        const treeView = createInstance({
+            items: items,
+            expandNodesRecursive: true
+        });
+
+        let nodeContainers = treeView.getNodeContainers();
+        assert.strictEqual(treeView.hasOpenedContainerClass(nodeContainers.first()), false, "opened class on root container");
+
+        treeView.instance.collapseItem("1");
+        nodeContainers = treeView.getNodeContainers();
+        assert.strictEqual(treeView.hasOpenedContainerClass(nodeContainers.first()), false, "opened class on root container");
+    });
+});
+
+

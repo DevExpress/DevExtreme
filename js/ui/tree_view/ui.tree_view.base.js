@@ -936,7 +936,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderSublevel: function($node, node, childNodes) {
-        const $nestedNodeContainer = this._renderNodeContainer($node, node);
+        const $nestedNodeContainer = this._renderNodeContainer($node);
 
         this._renderItems($nestedNodeContainer, childNodes);
 
@@ -1025,8 +1025,18 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const node = this._getNode(itemElement);
         const currentState = node.internalFields.expanded;
 
-        if(node.internalFields.disabled || currentState === state) {
+        if(node.internalFields.disabled) {
             return;
+        }
+
+        if(currentState === state) {
+            if(!this._dataAdapter.options.recursiveExpansion) {
+                return;
+            } else {
+                if(this._dataAdapter._isAllParentExpanded(node)) {
+                    return;
+                }
+            }
         }
 
         if(this._hasChildren(node)) {
@@ -1067,7 +1077,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(node.internalFields.expanded) {
             $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
-            $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
         }
 
         if(node.internalFields.disabled) {
@@ -1090,7 +1099,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $node = this._getNodeElement(node);
         const isHiddenNode = !$node.length || state && $node.is(':hidden');
 
-        if(this.option("expandNodesRecursive") && isHiddenNode) {
+        if(this._dataAdapter.options.recursiveExpansion && isHiddenNode) {
             const parentNode = this._getNode(node.internalFields.parentKey);
 
             if(parentNode) {

@@ -426,6 +426,16 @@ var DataAdapter = Class.inherit({
         }
     },
 
+    _isAllParentExpanded: function(node) {
+        let parentExpandedStates = [];
+
+        this._iterateParents(node, (parent) => {
+            parentExpandedStates.push(parent.internalFields.expanded);
+        });
+
+        return parentExpandedStates.filter(state => state !== true).length === 0;
+    },
+
     toggleExpansion: function(key, state) {
         var node = this.getNodeByKey(key);
         this._setFieldState(node, EXPANDED, state);

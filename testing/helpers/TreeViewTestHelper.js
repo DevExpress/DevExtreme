@@ -6,6 +6,8 @@ const WIDGET_CLASS = "dx-treeview";
 
 const NODE_CLASS = `${WIDGET_CLASS}-node`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+const TREEVIEW_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
+const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CONTAINER_CLASS}-opened`;
 const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
 
@@ -32,11 +34,14 @@ class TreeViewTestWrapper {
     getAllSelectedCheckboxes() { return this.getElement().find(`.${CHECK_BOX_CHECKED_CLASS}`); }
     getToggleItemVisibility($node) { return isDefined($node) ? $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`) : this.getElement().find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`); }
     getNodeLoadIndicator($node) { return isDefined($node) ? $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`) : this.getElement().find(`.${NODE_LOAD_INDICATOR_CLASS}`); }
+    getNodeContainers() { return this.getElement().find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`); }
 
     hasWidgetClass($item) { return $item.hasClass(WIDGET_CLASS); }
     hasItemClass($item) { return $item.hasClass(ITEM_CLASS); }
     hasCheckboxCheckedClass($item) { return $item.hasClass(CHECK_BOX_CHECKED_CLASS); }
     hasSelectedClass($item) { return $item.hasClass(SELECTED_ITEM_CLASS); }
+    hasExpandedClass($node) { return $node.children(`.${TREEVIEW_NODE_CONTAINER_CLASS}`).first().hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS); }
+    hasOpenedContainerClass($nodeContainer) { return $nodeContainer.hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS); }
     hasInvisibleClass($item) { return $item.hasClass(INVISIBLE_ITEM_CLASS); }
 
     checkSelectedNodes(selectedIndexes) {
@@ -56,7 +61,7 @@ class TreeViewTestWrapper {
     }
 
     checkSelectedItems(selectedIndexes, items) {
-        let itemsArray = this.convertTreeToFlatList(items);
+        let itemsArray = this._convertTreeToFlatList(items);
 
         itemsArray.forEach((_, index) => {
             if(selectedIndexes.indexOf(index) === -1) {
@@ -72,7 +77,38 @@ class TreeViewTestWrapper {
         this.checkSelectedNodes(expectedSelectedIndexes);
     }
 
-    convertTreeToFlatList(items) {
+    checkExpandedNodes(expandedIndexes) {
+        let $nodes = this.getNodes();
+
+        expandedIndexes.forEach((index) => {
+            assert.equal(this.hasExpandedClass($nodes.eq(index)), true, `node container ${index} has opened class`);
+        });
+
+        $nodes.each((index) => {
+            if(expandedIndexes.indexOf(index) === -1) {
+                assert.equal(this.hasExpandedClass($nodes.eq(index)), false, `node container  ${index} has no opened class`);
+            }
+        });
+    }
+
+    checkExpandedItems(expectedExpandedIndexes, items) {
+        let itemsArray = this._convertTreeToFlatList(items);
+
+        itemsArray.forEach((_, index) => {
+            if(expectedExpandedIndexes.indexOf(index) === -1) {
+                assert.equal(!!itemsArray[index].expanded, false, `node container ${index} is collapsed`);
+            } else {
+                assert.equal(itemsArray[index].expanded, true, `node container ${index} is expanded`);
+            }
+        });
+    }
+
+    checkExpanded(expectedExpandedIndexes, items) {
+        this.checkExpandedItems(expectedExpandedIndexes, items);
+        this.checkExpandedNodes(expectedExpandedIndexes);
+    }
+
+    _convertTreeToFlatList(items) {
         let itemsArray = [];
         let inOrder = (items) => {
             items.forEach((item) => {
