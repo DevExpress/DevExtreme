@@ -1128,8 +1128,6 @@ declare module DevExpress.ui {
         calculateSortValue?: string | ((rowData: any) => any);
         /** @name GridBaseColumn.caption */
         caption?: string;
-        /** @name GridBaseColumn.cellTemplate */
-        cellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
         /** @name GridBaseColumn.cssClass */
         cssClass?: string;
         /** @name GridBaseColumn.customizeText */
@@ -1138,8 +1136,6 @@ declare module DevExpress.ui {
         dataField?: string;
         /** @name GridBaseColumn.dataType */
         dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
-        /** @name GridBaseColumn.editCellTemplate */
-        editCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
         /** @name GridBaseColumn.editorOptions */
         editorOptions?: any;
         /** @name GridBaseColumn.encodeHtml */
@@ -1162,8 +1158,6 @@ declare module DevExpress.ui {
         formItem?: dxFormSimpleItem;
         /** @name GridBaseColumn.format */
         format?: format;
-        /** @name GridBaseColumn.headerCellTemplate */
-        headerCellTemplate?: DevExpress.core.template | ((columnHeader: DevExpress.core.dxElement, headerInfo: any) => any);
         /** @name GridBaseColumn.headerFilter */
         headerFilter?: { allowSearch?: boolean, dataSource?: Array<any> | ((options: { component?: any, dataSource?: DevExpress.data.DataSourceOptions }) => any) | DevExpress.data.DataSourceOptions, groupInterval?: 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year' | number, height?: number, searchMode?: 'contains' | 'startswith' | 'equals', width?: number };
         /** @name GridBaseColumn.hidingPriority */
@@ -1870,12 +1864,18 @@ declare module DevExpress.ui {
         buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxDataGridColumnButton>;
         /** @name dxDataGridColumn.calculateGroupValue */
         calculateGroupValue?: string | ((rowData: any) => any);
+        /** @name dxDataGridColumn.cellTemplate */
+        cellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { data?: any, component?: dxDataGrid, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, watch?: Function }) => any);
         /** @name dxDataGridColumn.columns */
         columns?: Array<dxDataGridColumn | string>;
+        /** @name dxDataGridColumn.editCellTemplate */
+        editCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { setValue?: any, data?: any, component?: dxDataGrid, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string }) => any);
         /** @name dxDataGridColumn.groupCellTemplate */
-        groupCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
+        groupCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { component?: dxDataGrid, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, summaryItems?: Array<any>, groupContinuesMessage?: string, groupContinuedMessage?: string }) => any);
         /** @name dxDataGridColumn.groupIndex */
         groupIndex?: number;
+        /** @name dxDataGridColumn.headerCellTemplate */
+        headerCellTemplate?: DevExpress.core.template | ((columnHeader: DevExpress.core.dxElement, headerInfo: { component?: dxDataGrid, columnIndex?: number, column?: dxDataGridColumn }) => any);
         /** @name dxDataGridColumn.showWhenGrouped */
         showWhenGrouped?: boolean;
         /** @name dxDataGridColumn.type */
@@ -4767,8 +4767,14 @@ declare module DevExpress.ui {
     export interface dxTreeListColumn extends GridBaseColumn {
         /** @name dxTreeListColumn.buttons */
         buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
+        /** @name dxTreeListColumn.cellTemplate */
+        cellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { data?: any, component?: dxTreeList, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, watch?: Function }) => any);
         /** @name dxTreeListColumn.columns */
         columns?: Array<dxTreeListColumn | string>;
+        /** @name dxTreeListColumn.editCellTemplate */
+        editCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { setValue?: any, data?: any, component?: dxTreeList, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string }) => any);
+        /** @name dxTreeListColumn.headerCellTemplate */
+        headerCellTemplate?: DevExpress.core.template | ((columnHeader: DevExpress.core.dxElement, headerInfo: { component?: dxTreeList, columnIndex?: number, column?: dxTreeListColumn }) => any);
         /** @name dxTreeListColumn.type */
         type?: 'adaptive' | 'buttons';
     }
