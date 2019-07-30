@@ -1,3 +1,117 @@
-@import "../widgets/material/color-schemes/@{color}/material.@{color}.less";
-@import "../widgets/material/color-schemes/material.@{light}.icons.less";
-@import "../widgets/material/color-schemes/material.@{light}.less";
+// Common. For all widgets files (color, size)???
+
+// Color scheme
+@import (once) "../widgets/material/color-schemes/material.@{light}.less";
+@import (once) "../widgets/material/color-schemes/@{color}/material.@{color}.less";
+@import (once) "../widgets/material/color-schemes/material.@{light}.icons.less";
+
+// Size scheme
+@import (once) "../widgets/material/size-schemes/@{size}.less";
+
+// Mixins
+@import (once) "../mixins.less";
+
+// Base (that exists) // for all files too???
+@import (once) "../widgets/base/icons.less";
+@import (once) "../widgets/base/colorView.less";
+@import (once) "../widgets/base/dataGrid.less";
+@import (once) "../widgets/base/pivotGrid.less";
+@import (once) "../widgets/base/treeList.less";
+@import (once) "../widgets/base/treeView.less";
+@import (once) "../widgets/base/validation.less";
+@import (once) "../widgets/base/scheduler.less";
+@import (once) "../widgets/base/filterBuilder.less";
+@import (once) "../widgets/base/recurrenceEditor.less";
+@import (once) "../widgets/base/drawer.less";
+@import (once) "../widgets/base/floatingActionButton.less";
+@import (once) "../widgets/base/diagram.less";
+
+// Less files
+
+
+
+// Widgets
+@import (once) "../widgets/material/typography.material.less";
+@import (once) "../widgets/material/common.material.less";
+@import (once) "../widgets/material/icons.material.less";
+
+
+@import (once) "../widgets/material/widget.material.less";
+@import (once) "../widgets/material/badge.material.less";
+@import (once) "../widgets/material/draggable.material.less";
+@import (once) "../widgets/material/resizable.material.less";
+@import (once) "../widgets/material/box.material.less";
+@import (once) "../widgets/material/responsiveBox.material.less";
+@import (once) "../widgets/material/button.material.less";
+@import (once) "../widgets/material/buttonGroup.material.less";
+@import (once) "../widgets/material/scrollable.material.less";
+@import (once) "../widgets/material/scrollView.material.less";
+@import (once) "../widgets/material/checkBox.material.less";
+@import (once) "../widgets/material/switch.material.less";
+@import (once) "../widgets/material/tabs.material.less";
+@import (once) "../widgets/material/map.material.less";
+@import (once) "../widgets/material/navBar.material.less";
+@import (once) "../widgets/material/textEditor.material.less";
+@import (once) "../widgets/material/textBox.material.less";
+@import (once) "../widgets/material/dropDownEditor.material.less";
+@import (once) "../widgets/material/list.material.less";
+@import (once) "../widgets/material/dropDownList.material.less";
+@import (once) "../widgets/material/textArea.material.less";
+@import (once) "../widgets/material/numberBox.material.less";
+@import (once) "../widgets/material/dateBox.material.less";
+@import (once) "../widgets/material/dateView.material.less";
+@import (once) "../widgets/material/toolbar.material.less";
+@import (once) "../widgets/material/tileView.material.less";
+@import (once) "../widgets/material/overlay.material.less";
+@import (once) "../widgets/material/toast.material.less";
+@import (once) "../widgets/material/popup.material.less";
+@import (once) "../widgets/material/popover.material.less";
+@import (once) "../widgets/material/trackBar.material.less";
+@import (once) "../widgets/material/progressBar.material.less";
+@import (once) "../widgets/material/tooltip.material.less";
+@import (once) "../widgets/material/slider.material.less";
+@import (once) "../widgets/material/rangeSlider.material.less";
+@import (once) "../widgets/material/gallery.material.less";
+@import (once) "../widgets/material/lookup.material.less";
+@import (once) "../widgets/material/actionSheet.material.less";
+@import (once) "../widgets/material/loadIndicator.material.less";
+@import (once) "../widgets/material/loadPanel.material.less";
+@import (once) "../widgets/material/autocomplete.material.less";
+@import (once) "../widgets/material/dropDownMenu.material.less";
+@import (once) "../widgets/material/dropDownButton.material.less";
+@import (once) "../widgets/material/selectBox.material.less";
+@import (once) "../widgets/material/tagBox.material.less";
+@import (once) "../widgets/material/radioButton.material.less";
+@import (once) "../widgets/material/radioGroup.material.less";
+@import (once) "../widgets/material/accordion.material.less";
+@import (once) "../widgets/material/slideOutView.material.less";
+@import (once) "../widgets/material/slideOut.material.less";
+@import (once) "../widgets/material/pager.material.less";
+@import (once) "../widgets/material/colorView.material.less";
+@import (once) "../widgets/material/colorBox.material.less";
+@import (once) "../widgets/material/gridBase.material.less";
+@import (once) "../widgets/material/dataGrid.material.less";
+@import (once) "../widgets/material/pivotGrid.material.less";
+@import (once) "../widgets/material/treeList.material.less";
+@import (once) "../widgets/material/menuBase.material.less";
+@import (once) "../widgets/material/menu.material.less";
+@import (once) "../widgets/material/contextMenu.material.less";
+@import (once) "../widgets/material/calendar.material.less";
+@import (once) "../widgets/material/multiView.material.less";
+@import (once) "../widgets/material/treeView.material.less";
+@import (once) "../widgets/material/fieldset.material.less";
+@import (once) "../widgets/material/tabPanel.material.less";
+@import (once) "../widgets/material/fileUploader.material.less";
+@import (once) "../widgets/material/validation.material.less";
+@import (once) "../widgets/material/timeView.material.less";
+@import (once) "../widgets/material/scheduler.material.less";
+@import (once) "../widgets/material/form.material.less";
+@import (once) "../widgets/material/filterBuilder.material.less";
+@import (once) "../widgets/material/recurrenceEditor.material.less";
+@import (once) "../widgets/material/drawer.material.less";
+@import (once) "../widgets/material/card.material.less";
+@import (once) "../widgets/material/htmlEditor.material.less";
+@import (once) "../widgets/material/floatingActionButton.material.less";
+@import (once) "../widgets/material/fileManager.material.less";
+@import (once) "../widgets/material/diagram.material.less";
+@import (once) "../widgets/material/gantt.material.less";
