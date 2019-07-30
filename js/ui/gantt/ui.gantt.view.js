@@ -82,9 +82,6 @@ export class GanttView extends Widget {
     getGanttWorkTimeRules() {
         return {};
     }
-    getGanttViewSettings() {
-        return {};
-    }
     getExternalTaskAreaContainer(element) {
         if(!this._taskAreaContainer) {
             this._taskAreaContainer = new TaskAreaContainer(element, this);
