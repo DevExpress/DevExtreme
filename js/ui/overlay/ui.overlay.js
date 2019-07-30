@@ -1250,14 +1250,14 @@ var Overlay = Widget.inherit({
     },
 
     _fixWrapperPosition: function() {
-        var $wrapper = this._$wrapper,
-            $container = this._getContainer();
+        var $wrapper = this._$wrapper;
 
-        $wrapper.css("position", this._isWindow($container) && this._useFixedPosition() ? "fixed" : "absolute");
+        $wrapper.css("position", this._useFixedPosition() ? "fixed" : "absolute");
     },
 
     _useFixedPosition: function() {
-        return !iOS || this._bodyScrollTop !== undefined;
+        var $container = this._getContainer();
+        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
