@@ -17,6 +17,26 @@ function rulesFromSheet(sheet) {
     }
 }
 
+function loadCss(frame, cssFileName) {
+    const frameWindow = frame[0].contentWindow;
+    const frameDoc = frameWindow.document;
+    const defaultSheetCount = frameDoc.styleSheets.length;
+    const cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
+
+    frameDoc.write("<link rel=stylesheet href='" + cssUrl + "'>");
+
+    return () => {
+        let ourSheet;
+
+        if(frameDoc.styleSheets.length <= defaultSheetCount) {
+            return false;
+        }
+
+        ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
+        return rulesFromSheet(ourSheet).length > 0;
+    };
+}
+
 QUnit.module("Selector check", () => {
     if(document.documentMode < 9) {
         return; // because :not() selectors are not supported
@@ -102,30 +122,12 @@ QUnit.module("Selector check", () => {
     }
 
     $.each(window.knownCssFiles, function(i, cssFileName) {
-        const cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
-
         test(cssFileName, (assert) => {
-            const done = assert.async(),
-                frame = $("<iframe/>").appendTo("body"),
-                frameWindow = frame[0].contentWindow,
-                frameDoc = frameWindow.document,
-                defaultSheetCount = frameDoc.styleSheets.length;
+            const done = assert.async();
+            const frame = $("<iframe/>").appendTo("body");
 
-            frameDoc.write("<link rel=stylesheet href='" + cssUrl + "'>");
-
-            function isCssLoaded() {
-                let ourSheet;
-
-                if(frameDoc.styleSheets.length <= defaultSheetCount) {
-                    return false;
-                }
-
-                ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
-                return rulesFromSheet(ourSheet).length > 0;
-            }
-
-            window.waitFor(isCssLoaded).done(function() {
-                assert.deepEqual(findBadCssSelectors(frameDoc), [], "Css rule has incorrect selectors");
+            window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                assert.deepEqual(findBadCssSelectors(frame[0].contentWindow.document), [], "Css rule has incorrect selectors");
                 frame.remove();
                 done();
             });
@@ -137,7 +139,6 @@ QUnit.module("Selector check", () => {
 
 QUnit.module("All images are defined with data-uri and will be inlined", () => {
     $.each(window.knownCssFiles, function(i, cssFileName) {
-        const cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
 
         function hasUrlImageProperty(doc) {
             const rulesWithUrl = [];
@@ -160,27 +161,11 @@ QUnit.module("All images are defined with data-uri and will be inlined", () => {
         }
 
         test(cssFileName, (assert) => {
-            const done = assert.async(),
-                frame = $("<iframe/>").appendTo("body"),
-                frameWindow = frame[0].contentWindow,
-                frameDoc = frameWindow.document,
-                defaultSheetCount = frameDoc.styleSheets.length;
+            const done = assert.async();
+            const frame = $("<iframe/>").appendTo("body");
 
-            frameDoc.write("<link rel=stylesheet href='" + cssUrl + "'>");
-
-            function isCssLoaded() {
-                let ourSheet;
-
-                if(frameDoc.styleSheets.length <= defaultSheetCount) {
-                    return false;
-                }
-
-                ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
-                return rulesFromSheet(ourSheet).length > 0;
-            }
-
-            window.waitFor(isCssLoaded).done(function() {
-                assert.deepEqual(hasUrlImageProperty(frameDoc), [], "Css rule has non-encoded url, try to change url() to data-uri() in the less file");
+            window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], "Css rule has non-encoded url, try to change url() to data-uri() in the less file");
                 frame.remove();
                 done();
             });
