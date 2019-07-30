@@ -255,11 +255,11 @@
         "dxHtmlEditor-heading": "見出し",
         "dxHtmlEditor-normalText": "標準テキスト",
 
-        "dxFileManager-newFolderName": "TODO",
-        "dxFileManager-errorNoAccess": "TODO!",
-        "dxFileManager-errorDirectoryExistsFormat": "TODO!",
-        "dxFileManager-errorFileExistsFormat": "TODO!",
-        "dxFileManager-errorFileNotFoundFormat": "TODO!",
-        "dxFileManager-errorDefault": "TODO!"
+        "dxFileManager-newFolderName": "無題のフォルダ",
+        "dxFileManager-errorNoAccess": "アクセスが拒否されました。操作を完了できません。",
+        "dxFileManager-errorDirectoryExistsFormat": "ディレクトリ {0} は既に存在します。",
+        "dxFileManager-errorFileExistsFormat": "ファイル {0} は既に存在します。",
+        "dxFileManager-errorFileNotFoundFormat": "ファイル {0} が見つかりません。",
+        "dxFileManager-errorDefault": "特定できないエラー"
     }
 }

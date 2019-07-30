@@ -519,6 +519,76 @@ QUnit.test("Scroll position after grouping when RTL", function(assert) {
     });
 });
 
+QUnit.test("Should not cut border of selected cell by 'Add row' (T748046)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            width: 400,
+            height: 200,
+            showBorders: true,
+            editing: {
+                mode: "cell",
+                allowAdding: true
+            },
+            dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
+        }),
+        scrollable;
+
+    clock.tick();
+    scrollable = $(".dx-scrollable").dxScrollable("instance");
+
+    scrollable.scrollTo({ y: 5 });
+    clock.tick();
+
+    // act
+    dataGrid.addRow();
+    clock.tick();
+
+    // assert
+    if(browser.mozilla) {
+        assert.ok(scrollable.scrollTop() <= 1, "in mozilla first row is overlayed by parent container");
+    } else {
+        assert.ok(scrollable.scrollTop() <= 0.5, "first row is not overlayed by parent container");
+    }
+
+    clock.restore();
+});
+
+QUnit.test("Added row should be scrolled to the top of the grid (T748046)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            width: 400,
+            height: 200,
+            showBorders: true,
+            editing: {
+                mode: "cell",
+                allowAdding: true
+            },
+            dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
+        }),
+        scrollable;
+
+    clock.tick();
+    scrollable = $(".dx-scrollable").dxScrollable("instance");
+
+    scrollable.scrollTo({ y: 20 });
+    clock.tick();
+
+    // act
+    dataGrid.addRow();
+    clock.tick();
+
+    // assert
+    if(browser.mozilla) {
+        assert.ok(scrollable.scrollTop() <= 1, "in mozilla first row is overlayed by parent container");
+    } else {
+        assert.ok(scrollable.scrollTop() <= 0.5, "first row is not overlayed by parent container");
+    }
+
+    clock.restore();
+});
+
 QUnit.test("Scroller state", function(assert) {
     var dataGrid = createDataGrid({ width: 120, height: 230 });
     assert.ok(dataGrid);
@@ -3527,6 +3597,52 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
 });
 
+QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
+    // arrange
+    var data = [],
+        dataGrid,
+        focusedCellChangedCount = 0,
+        scrollable;
+
+    for(var i = 0; i < 50; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    // arrange
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 150,
+        keyExpr: "id",
+        dataSource: data,
+        paging: {
+            pageSize: 10
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+        },
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+            assert.ok(e.row, "Row object present");
+            assert.equal(e.row.key, 16, "Key");
+            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
+            assert.equal(e.rowIndex, 15, "Global rowIndex");
+        }
+    }).dxDataGrid("instance");
+
+    this.clock.tick();
+
+    // act
+    scrollable = dataGrid.getScrollable();
+    scrollable.scrollTo({ y: 600 });
+    $(scrollable._container()).trigger("scroll");
+    this.clock.tick();
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+});
+
 // T746556
 QUnit.test("Focused row should not be visible after scrolling if scrolling mode is virtual and rowRenderingMode is virtual", function(assert) {
     // arrange
@@ -3853,6 +3969,34 @@ QUnit.test("Focused row should be visible inside group if OData grouping.autoExp
     // assert
     assert.ok(dataGrid.isRowExpanded(["internal0"]), "Row expanded");
     assert.ok(dataGrid.isRowFocused("Ben"), "Row focused");
+});
+
+// T800035
+QUnit.test("Group collapsing if focusedRowEnabled is true and key is complex", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [
+            { "OrderID": 10248, "CustomerID": "VINET", "EmployeeID": 5, "ShipCity": "Reims" },
+            { "OrderID": 10249, "CustomerID": "TOMSP", "EmployeeID": 6, "ShipCity": "Münster" }
+        ],
+        loadingTimeout: undefined,
+        keyExpr: ["OrderID", "EmployeeID"],
+        columns: [{ dataField: "CustomerID", groupIndex: 0 }, "ShipCity"],
+        focusedRowEnabled: true,
+        grouping: {
+            autoExpandAll: false
+        },
+    }).dxDataGrid("instance");
+
+    var key = dataGrid.getKeyByRowIndex(1);
+
+    // act;
+    dataGrid.expandRow(key);
+    dataGrid.collapseRow(key);
+
+    // assert
+    assert.deepEqual(dataGrid.getVisibleRows().map(({ rowType }) => rowType), ["group", "group"], "All visible rows have group type");
+    assert.deepEqual(dataGrid.option("focusedRowIndex"), 1, "Second row is focused");
 });
 
 QUnit.test("DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling", function(assert) {
@@ -4735,6 +4879,54 @@ QUnit.test("height from style after updateDimensions when rendering to container
 
     // assert
     assert.equal($("#dataGrid").find(".dx-datagrid").height(), 300);
+});
+
+// T758955
+QUnit.test("native scrollBars layout should be correct after width change if fixed columns exist and columnAutoWidth is true", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "test is not actual for mobile devices");
+        return;
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{
+            "CompanyName": "Super Mart of the West",
+            "Phone": "(800) 555-2797",
+            "Address": "702 SW 8th Street",
+            "Fax": "(800) 555-2171"
+        }],
+        columnAutoWidth: true,
+        loadingTimeout: undefined,
+        height: 300,
+        width: 1000,
+        scrolling: {
+            useNative: true,
+        },
+        columns: [{
+            dataField: "CompanyName",
+        }, {
+            dataField: "Phone",
+        }, {
+            dataField: "Address",
+        }, {
+            dataField: "Fax",
+            fixed: true,
+            fixedPosition: 'right',
+            width: 50
+        }]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.option("width", 400);
+
+    // assert
+    if(browser.msie && parseInt(browser.version) > 11) {
+        assert.notEqual($("#dataGrid").find(".dx-datagrid-content-fixed").eq(1).css("margin-right"), "0px", "margin-right is not zero");
+        assert.ok(dataGrid.getView("rowsView").getScrollbarWidth() > 0, "vertical scrollBar exists");
+    } else {
+        assert.equal($("#dataGrid").find(".dx-datagrid-content-fixed").eq(1).css("margin-right"), "0px", "margin-right is zero");
+        assert.ok(dataGrid.getView("rowsView").getScrollbarWidth() === 0, "vertical scrollBar not exists");
+    }
+    assert.notEqual($("#dataGrid").find(".dx-datagrid-content-fixed").eq(1).css("margin-bottom"), "0px", "margin-bottom is not zero");
 });
 
 // T391169

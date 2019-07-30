@@ -66,43 +66,11 @@ var addDefaultExport = lazyPipe().pipe(function() {
     });
 });
 
-gulp.task('npm-sources', ['npm-ts-modules-generator'], function() {
-    return merge(
-
-        gulp.src(TRANSPILED_GLOBS)
-            .pipe(compressionPipes.removeDebug())
-            .pipe(addDefaultExport())
-            .pipe(headerPipes.starLicense())
-            .pipe(compressionPipes.beautify())
-            .pipe(gulp.dest(packagePath)),
-
-        gulp.src(JSON_GLOBS)
-            .pipe(gulp.dest(packagePath)),
-
-        gulp.src('build/npm-bin/*.js')
-            .pipe(eol('\n'))
-            .pipe(gulp.dest(packagePath + '/bin')),
-
-        gulp.src('webpack.config.js')
-            .pipe(gulp.dest(packagePath + '/bin')),
-
-        gulp.src('package.json')
-            .pipe(replace(version, context.version.package))
-            .pipe(gulp.dest(packagePath)),
-
-        gulp.src(DIST_GLOBS)
-            .pipe(gulp.dest(packagePath + '/dist')),
-
-        gulp.src('README.md')
-            .pipe(gulp.dest(packagePath))
-    );
-});
-
 var widgetNameByPath = require("./ts").widgetNameByPath;
 var generateJQueryAugmentation = require("./ts").generateJQueryAugmentation;
 var getAugmentationOptionsPath = require("./ts").getAugmentationOptionsPath;
 
-gulp.task('npm-ts-modules-generator', ['ts-sources'], function() {
+gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
     var tsModules = MODULES.map(function(moduleMeta) {
         var relPath = path.relative(path.dirname(moduleMeta.name), 'bundles/dx.all').replace(/\\/g, '/');
         if(!relPath.startsWith('../')) relPath = './' + relPath;
@@ -169,9 +137,41 @@ gulp.task('npm-ts-modules-generator', ['ts-sources'], function() {
             .pipe(headerPipes.starLicense())
             .pipe(gulp.dest(packagePath))
     );
-});
+}));
 
-gulp.task('npm-ts-modules-check', ['npm-ts-modules-generator'], function() {
+gulp.task('npm-sources', gulp.series('npm-ts-modules-generator', function() {
+    return merge(
+
+        gulp.src(TRANSPILED_GLOBS)
+            .pipe(compressionPipes.removeDebug())
+            .pipe(addDefaultExport())
+            .pipe(headerPipes.starLicense())
+            .pipe(compressionPipes.beautify())
+            .pipe(gulp.dest(packagePath)),
+
+        gulp.src(JSON_GLOBS)
+            .pipe(gulp.dest(packagePath)),
+
+        gulp.src('build/npm-bin/*.js')
+            .pipe(eol('\n'))
+            .pipe(gulp.dest(packagePath + '/bin')),
+
+        gulp.src('webpack.config.js')
+            .pipe(gulp.dest(packagePath + '/bin')),
+
+        gulp.src('package.json')
+            .pipe(replace(version, context.version.package))
+            .pipe(gulp.dest(packagePath)),
+
+        gulp.src(DIST_GLOBS)
+            .pipe(gulp.dest(packagePath + '/dist')),
+
+        gulp.src('README.md')
+            .pipe(gulp.dest(packagePath))
+    );
+}));
+
+gulp.task('npm-ts-modules-check', gulp.series('npm-ts-modules-generator', function() {
     var content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
@@ -206,8 +206,8 @@ gulp.task('npm-ts-modules-check', ['npm-ts-modules-generator'], function() {
             allowSyntheticDefaultImports: true,
             noEmitOnError: true
         }, ts.reporter.fullReporter()));
-});
+}));
 
-gulp.task('npm-check', ['npm-ts-modules-check']);
+gulp.task('npm-check', gulp.series('npm-ts-modules-check'));
 
-gulp.task('npm', ['npm-sources', 'npm-check']);
+gulp.task('npm', gulp.series('npm-sources', 'npm-check'));
