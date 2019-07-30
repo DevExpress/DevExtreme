@@ -1,7 +1,7 @@
 
 export const appointmentIds = [1, 2, 3, 5];
 export const dragAndDropRows = [0, 1, 2, 3, 5, 8];
-export const dragAndDropCells = [];
+export const dragAndDropCells = [0, 1, 2, 3];
 
 export const lastRow = Math.max(...dragAndDropRows);
 
@@ -16,11 +16,11 @@ export const heightList = [
 
 export const widthList = [
     '0px',
-    '50px',
-    '100px',
-    '150px',
     '200px',
-    '250px'
+    '400px',
+    '600px',
+    '800px',
+    '1000px'
 ];
 
 export const timeScale = [
