@@ -165,7 +165,7 @@ QUnit.module("All images are defined with data-uri and will be inlined", () => {
             const frame = $("<iframe/>").appendTo("body");
 
             window.waitFor(loadCss(frame, cssFileName)).done(function() {
-                assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], "Css rule has non-encoded url, try to change url() to data-uri() in the less file");
+                assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], "Css rule has non-encoded url, change url() to data-uri() in the less file");
                 frame.remove();
                 done();
             });
