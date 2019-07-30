@@ -27,7 +27,7 @@ function watchForTests() {
     process.chdir(path.join(__dirname, "../"));
 
     require('../gulpfile');
-    gulp.parallel('transpile-watch');
+    gulp.parallel('transpile-watch')();
 }
 
 function waitForRunner() {
