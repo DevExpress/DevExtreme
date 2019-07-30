@@ -329,10 +329,10 @@ class Gantt extends Widget {
                 this._updateWidth(args.value);
                 break;
             case "showResources":
-                this._ganttView.option("showResources", args.value);
+                this._ganttView && this._ganttView.option("showResources", args.value);
                 break;
             case "taskTitlePosition":
-                this._ganttView.option("taskTitlePosition", args.value);
+                this._ganttView && this._ganttView.option("taskTitlePosition", args.value);
                 break;
             default:
                 super._optionChanged(args);
