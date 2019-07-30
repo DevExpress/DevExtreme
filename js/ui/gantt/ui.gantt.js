@@ -17,6 +17,7 @@ const GANTT_SPLITTER_BORDER_CLASS = "dx-gantt-splitter-border";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 
 const GANTT_KEY_FIELD = "id";
+const GANTT_PARENT_ID_FIELD = "parentId";
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
 const GANTT_MODULE_NAMESPACE = "dxGanttResizing";
@@ -58,6 +59,8 @@ class Gantt extends Widget {
 
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this.option("tasks.dataSource"),
+            keyExpr: this.option("tasks.keyExpr"),
+            parentIdExpr: this.option("tasks.parentIdExpr"),
             columns: this.option("columns"),
             columnResizingMode: "widget",
             height: "100%",
@@ -104,6 +107,8 @@ class Gantt extends Widget {
             dependencies: this.option("dependencies.dataSource"),
             resources: this.option("resources.dataSource"),
             resourceAssignments: this.option("resourceAssignments.dataSource"),
+            showResources: this.option("showResources"),
+            taskTitlePosition: this.option("taskTitlePosition"),
             onSelectionChanged: (e) => { this._onGanttViewSelectionChanged(e); },
             onScroll: (e) => { this._onGanttViewScroll(e); }
         });
@@ -216,7 +221,14 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: GANTT_KEY_FIELD,
+                /**
+                * @name dxGanttOptions.tasks.parentIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "parentId"
+                */
+                parentIdExpr: GANTT_PARENT_ID_FIELD
             },
             /**
             * @name dxGanttOptions.dependencies
@@ -283,7 +295,19 @@ class Gantt extends Widget {
             * @type number
             * @default 300
             */
-            treeListWidth: 300
+            treeListWidth: 300,
+            /**
+            * @name dxGanttOptions.showResources
+            * @type boolean
+            * @default true
+            */
+            showResources: true,
+            /**
+            * @name dxGanttOptions.taskTitlePosition
+            * @type Enums.GanttTaskTitlePosition
+            * @default 'inside'
+            */
+            taskTitlePosition: 'inside'
         });
     }
 
@@ -303,6 +327,12 @@ class Gantt extends Widget {
                 break;
             case "treeListWidth":
                 this._updateWidth(args.value);
+                break;
+            case "showResources":
+                this._ganttView.option("showResources", args.value);
+                break;
+            case "taskTitlePosition":
+                this._ganttView.option("taskTitlePosition", args.value);
                 break;
             default:
                 super._optionChanged(args);

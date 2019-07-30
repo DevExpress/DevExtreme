@@ -1081,3 +1081,8 @@
  * @typedef {string} Enums.DiagramAutoZoom
  * @enum {'fitContent'|'fitWidth'|'disabled'}
  */
+
+/**
+ * @typedef {string} Enums.GanttTaskTitlePosition
+ * @enum {'inside'|'outside'|'none'}
+ */
