@@ -8,6 +8,7 @@ import SpeedDialItem from "./speed_dial_item";
 import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
+const FAB_MAIN_CLASS_HAS_TEXT = "dx-fa-button-main-has-text";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
 const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
@@ -30,6 +31,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             },
             maxSpeedDialActionCount: 5,
             hint: "",
+            label: "",
             actions: [],
             visible: true,
             activeStateEnabled: true,
@@ -65,6 +67,12 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         this._moveToContainer();
         this._renderCloseIcon();
         this._renderClick();
+    },
+
+    _renderLabel() {
+        this.callBase();
+        this.$element().toggleClass(FAB_MAIN_CLASS_HAS_TEXT, !!this._$label);
+        !!this._$label && this.$content().css("max-width", this._$icon.outerWidth() + this._$label.outerWidth());
     },
 
     _renderCloseIcon() {
@@ -172,6 +180,10 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._renderCloseIcon();
                 break;
             case "position":
+                this._setPosition();
+                break;
+            case "label":
+                this._renderLabel();
                 this._setPosition();
                 break;
             default:

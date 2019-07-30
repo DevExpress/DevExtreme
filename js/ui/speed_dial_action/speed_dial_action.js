@@ -96,6 +96,7 @@ const SpeedDialAction = Widget.inherit({
         switch(args.name) {
             case "onClick":
             case "icon":
+            case "label":
                 initAction(this);
                 break;
             case "animation":

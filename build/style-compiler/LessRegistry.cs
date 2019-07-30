@@ -181,7 +181,7 @@ namespace StyleCompiler
                 "drawer",
                 "card",
                 "htmlEditor",
-                "floatingActionButton",
+                "speedDialAction",
                 "fileManager",
                 "diagram",
                 "gantt"

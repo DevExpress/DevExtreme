@@ -45,12 +45,20 @@ const SpeedDialItem = Overlay.inherit({
     },
 
     _renderLabel() {
-        if(!this.option("actionComponent")) return;
+        !!this._$label && this._$label.remove();
+        this.$content().css("max-width", "");
+
+        const labelText = this.option("label");
+
+        if(labelText === "") {
+            this._$label = null;
+            return;
+        }
 
         const $element = $("<div>").addClass(FAB_LABEL_CLASS);
 
-        $element
-            .html(this.option("label"))
+        this._$label = $element
+            .html(labelText)
             .appendTo(this.$content());
     },
 
