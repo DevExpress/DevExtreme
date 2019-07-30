@@ -400,7 +400,9 @@ var TextEditorMask = TextEditorBase.inherit({
         }
     },
 
-    _maskBlurHandler: function() {
+    _maskBlurHandler: function(e) {
+        this._changeHandler(e);
+
         if(this.option("showMaskMode") === "onFocus" && this._isValueEmpty()) {
             this.option("text", "");
             this._renderDisplayText("");
@@ -602,6 +604,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._direction(FORWARD_DIRECTION);
         this._adjustCaret();
+        this._changedValue = this._input().val();
         this._displayMask();
         this._maskRulesChain.reset();
     },
