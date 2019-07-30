@@ -46,7 +46,6 @@ namespace StyleCompiler
                                     CheckUnusedLessConsts(paths);
 
                                 var css = LessAggregation.CompileLessPaths(paths);
-                                css = ImageInliner.InlineImages(css, _sourcePath);
                                 css = CssHelper.StripCommentsOnly(css);
                                 return new Dictionary<string, string> {
                                     { "_", css }
