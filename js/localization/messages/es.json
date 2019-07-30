@@ -252,6 +252,13 @@
         "dxHtmlEditor-dialogImageWidthField": "Anchura (px)",
         "dxHtmlEditor-dialogImageHeightField": "Altura (px)",
         "dxHtmlEditor-heading": "Encabezamiento",
-        "dxHtmlEditor-normalText": "Texto normal"
+        "dxHtmlEditor-normalText": "Texto normal",
+		
+		    "dxFileManager-newFolder": "Sin título",
+        "dxFileManager-errorNoAccess": "Acceso denegado. La operación no se puede completar.",
+        "dxFileManager-errorDirectoryExistsFormat": "Carpeta {0} ya existe.",
+        "dxFileManager-errorFileExistsFormat": "Archivo {0} ya existe.",
+        "dxFileManager-errorFileNotFoundFormat": "Archivo {0} no encontrado.",
+        "dxFileManager-errorDefault": "Error no especificado"
     }
 }
