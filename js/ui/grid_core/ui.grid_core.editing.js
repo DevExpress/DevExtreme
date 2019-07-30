@@ -1703,11 +1703,22 @@ var EditingController = modules.ViewController.inherit((function() {
                     type: DATA_EDIT_DATA_UPDATE_TYPE
                 };
 
+                var isShowEditorAlwaysWithoutForceUpdate = options.column.showEditorAlways && !forceUpdateRow;
+                var isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.inserted;
+
+                if(isShowEditorAlwaysWithoutForceUpdate && isUpdateInCellMode && that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex)) {
+                    that._focusEditingCell();
+                    that._updateEditRow(options.row, true);
+                    return;
+                }
+
                 that._addEditData(params, options.row);
                 that._updateEditButtons();
 
-                if(options.column.showEditorAlways && !forceUpdateRow) {
-                    if(editMode === EDIT_MODE_CELL && options.row && !options.row.inserted) {
+                if(isShowEditorAlwaysWithoutForceUpdate) {
+                    if(isUpdateInCellMode) {
+                        that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
+                        that._editColumnIndex = options.columnIndex;
                         return that.saveEditData();
                     } else if(editMode === EDIT_MODE_BATCH) {
                         columns = that._columnsController.getVisibleColumns();
