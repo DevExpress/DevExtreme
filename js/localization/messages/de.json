@@ -255,11 +255,11 @@
         "dxHtmlEditor-heading": "Überschrift",
         "dxHtmlEditor-normalText": "Normaler Text",
 
-        "dxFileManager-newFolderName": "TODO!",
-        "dxFileManager-errorNoAccess": "TODO!",
-        "dxFileManager-errorDirectoryExistsFormat": "TODO!",
-        "dxFileManager-errorFileExistsFormat": "TODO!",
-        "dxFileManager-errorFileNotFoundFormat": "TODO!",
-        "dxFileManager-errorDefault": "TODO!"
+        "dxFileManager-newFolderName": "Ohne Titel",
+        "dxFileManager-errorNoAccess": "Zugriff verweigert. Die Operation kann nicht durchgeführt werden.",
+        "dxFileManager-errorDirectoryExistsFormat": "Ordner {0} existiert bereits.",
+        "dxFileManager-errorFileExistsFormat": "Datei {0} existiert bereits.",
+        "dxFileManager-errorFileNotFoundFormat": "Datei {0} wurde nicht gefunden.",
+        "dxFileManager-errorDefault": "Unbekannter Fehler"
     }
 }
