@@ -135,7 +135,7 @@ QUnit.module("Selector check", () => {
 
 });
 
-QUnit.module("url", () => {
+QUnit.module("All images are defined with data-uri and will be inlined", () => {
     $.each(window.knownCssFiles, function(i, cssFileName) {
         const cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
 
