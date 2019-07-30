@@ -71,8 +71,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
     _renderLabel() {
         this.callBase();
-        this.$element().toggleClass(FAB_MAIN_CLASS_HAS_TEXT, !!this._$label);
-        !!this._$label && this.$content().css("max-width", this._$icon.outerWidth() + this._$label.outerWidth());
+        this.$element().toggleClass(FAB_MAIN_CLASS_HAS_TEXT, this._$label);
+        this._$label && this.$content().css("max-width", this._$icon.outerWidth() + this._$label.outerWidth());
     },
 
     _renderCloseIcon() {
@@ -139,12 +139,13 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             });
 
             const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * i;
+            const actionPositionAtMy = this._$label ? "right" : "center";
             const actionAnimationDelay = 30;
 
             action._options.position = {
                 of: this.$content(),
-                at: "center",
-                my: "center",
+                at: actionPositionAtMy,
+                my: actionPositionAtMy,
                 offset: {
                     x: 0,
                     y: -actionOffsetY
