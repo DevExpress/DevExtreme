@@ -9,6 +9,14 @@ import "style-compiler-test-server/known-css-files";
 
 const { test, testInActiveWindow } = QUnit;
 
+function rulesFromSheet(sheet) {
+    try {
+        return sheet.rules || sheet.cssRules || [];
+    } catch(x) {
+        return [];
+    }
+}
+
 QUnit.module("Selector check", () => {
     if(document.documentMode < 9) {
         return; // because :not() selectors are not supported
@@ -16,14 +24,6 @@ QUnit.module("Selector check", () => {
 
     if(/(iPhone|iPad|iPod|android|Windows Phone 8)/i.test(navigator.userAgent)) {
         return;
-    }
-
-    function rulesFromSheet(sheet) {
-        try {
-            return sheet.rules || sheet.cssRules || [];
-        } catch(x) {
-            return [];
-        }
     }
 
     function simplifySelector(selectorText) {
@@ -133,6 +133,60 @@ QUnit.module("Selector check", () => {
         });
     });
 
+});
+
+QUnit.module("url", () => {
+    $.each(window.knownCssFiles, function(i, cssFileName) {
+        const cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
+
+        function hasUrlImageProperty(doc) {
+            const rulesWithUrl = [];
+            $.each(doc.styleSheets, function() {
+                const rules = rulesFromSheet(this);
+
+                $.each(rules, function() {
+                    if(!this.cssText) {
+                        return;
+                    }
+                    if(/url\((?!"data:image)/.test(this.cssText) &&
+                       /url\((?!"icons)/.test(this.cssText) &&
+                       /url\((?!"fonts)/.test(this.cssText) &&
+                       /url\((?!"https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
+                        rulesWithUrl.push(this.cssText);
+                    }
+                });
+            });
+            return rulesWithUrl;
+        }
+
+        test(cssFileName, (assert) => {
+            const done = assert.async(),
+                frame = $("<iframe/>").appendTo("body"),
+                frameWindow = frame[0].contentWindow,
+                frameDoc = frameWindow.document,
+                defaultSheetCount = frameDoc.styleSheets.length;
+
+            frameDoc.write("<link rel=stylesheet href='" + cssUrl + "'>");
+
+            function isCssLoaded() {
+                let ourSheet;
+
+                if(frameDoc.styleSheets.length <= defaultSheetCount) {
+                    return false;
+                }
+
+                ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
+                return rulesFromSheet(ourSheet).length > 0;
+            }
+
+            window.waitFor(isCssLoaded).done(function() {
+                assert.deepEqual(hasUrlImageProperty(frameDoc), [], "Css rule has non-encoded url, try to change url() to data-uri() in the less file");
+                frame.remove();
+                done();
+            });
+
+        });
+    });
 });
 
 QUnit.module("dx-theme changing", () => {
@@ -599,3 +653,4 @@ QUnit.module("web font checker", () => {
         });
     });
 });
+
