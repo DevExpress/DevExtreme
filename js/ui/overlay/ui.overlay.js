@@ -1250,9 +1250,7 @@ var Overlay = Widget.inherit({
     },
 
     _fixWrapperPosition: function() {
-        var $wrapper = this._$wrapper;
-
-        $wrapper.css("position", this._useFixedPosition() ? "fixed" : "absolute");
+        this._$wrapper.css("position", this._useFixedPosition() ? "fixed" : "absolute");
     },
 
     _useFixedPosition: function() {
