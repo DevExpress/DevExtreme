@@ -188,6 +188,8 @@ exports.initAction = function(newAction) {
 
     let isActionExist = false;
     if(!speedDialMainItem) {
+        delete newAction._options.position;
+
         const $fabMainElement = $("<div>")
             .appendTo(getSwatchContainer(newAction.$element()));
 
@@ -197,7 +199,6 @@ exports.initAction = function(newAction) {
                 visible: true
             })
         );
-
     } else {
         const savedActions = speedDialMainItem.option("actions");
 

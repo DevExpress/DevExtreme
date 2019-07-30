@@ -339,33 +339,52 @@ QUnit.module("check action buttons click args", (hooks) => {
 });
 
 QUnit.module("add visible option", (hooks) => {
+    let firstSDA;
+    let secondSDA;
+
+    hooks.beforeEach(() => {
+        firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
+        secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
+    }),
+
     hooks.afterEach(() => {
-        $("#fab-one").dxSpeedDialAction("instance").dispose();
-        $("#fab-two").dxSpeedDialAction("instance").dispose();
+        firstSDA.dispose();
+        secondSDA.dispose();
     }),
 
     test("check rendering", (assert) => {
-        const firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
-
         firstSDA.option("visible", false);
-
+        secondSDA.option("visible", false);
         assert.equal($("." + FAB_CLASS).length, 0, "invisible if change visible option to false");
 
         firstSDA.option("icon", "edit");
-
         assert.equal($("." + FAB_CLASS).length, 0, "invisible if change icon option when visible is false");
 
         firstSDA.option("visible", true);
-
-        const secondSDA = $("#fab-two").dxSpeedDialAction({
-            visible: false
-        }).dxSpeedDialAction("instance");
-
         assert.equal($("." + FAB_CLASS).length, 1, "create one action if second is invisible");
 
         secondSDA.option("visible", true);
-
         assert.equal($("." + FAB_CLASS).length, 3, "create two actions if second is visible");
+    });
+
+    test("check position", (assert) => {
+        config({
+            floatingActionButtonConfig: {
+                position: "left top"
+            }
+        });
+
+        firstSDA.option("visible", false);
+        secondSDA.option("visible", false);
+
+        firstSDA.option("visible", true);
+        secondSDA.option("visible", true);
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.offset().top, 0, "correct position top");
+        assert.equal($fabMainContent.offset().left, 0, "correct position left");
     });
 });
 
