@@ -1050,7 +1050,7 @@ QUnit.module("popup", moduleConfig, () => {
 
     QUnit.test("popup max height are limited by container bounds", assert => {
         const items = ["item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3"];
-        const specificContainer = $("<div></div>").attr("id", "specific-container").css({ height: 80 }).appendTo("#qunit-fixture");
+        const specificContainer = $("<div>").attr("id", "specific-container").height(80).appendTo("#qunit-fixture");
 
         const instance = $("#dropDownList").dxDropDownList({
             items,
