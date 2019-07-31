@@ -3833,7 +3833,7 @@ QUnit.testInActiveWindow('Insert Row after scrolling', function(assert) {
         done();
     });
 
-    rowsView.element().dxScrollable('instance').scrollTo(25);
+    rowsView.element().dxScrollable('instance').scrollTo(45);
 });
 
 QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(assert) {
@@ -9416,7 +9416,7 @@ QUnit.test('Show error row on save inserted Row after scrolling when set validat
         done();
     });
 
-    rowsView.element().dxScrollable('instance').scrollTo(25);
+    rowsView.element().dxScrollable('instance').scrollTo(45);
 });
 
 // T417962
