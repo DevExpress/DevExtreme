@@ -11,7 +11,10 @@ export class GanttView extends Widget {
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
-        this._ganttViewCore = new GanttView(this.$element().get(0), this);
+        this._ganttViewCore = new GanttView(this.$element().get(0), this, {
+            showResources: this.option("showResources"),
+            taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition"))
+        });
         this._ganttViewCore.setViewType(3);
     }
 
@@ -36,6 +39,30 @@ export class GanttView extends Widget {
         this._ganttViewCore.setWidth(value);
     }
 
+    _getTaskTitlePosition(value) {
+        switch(value) {
+            case 'outside':
+                return 1;
+            case 'none':
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
+    _optionChanged(args) {
+        switch(args.name) {
+            case "showResources":
+                this._ganttViewCore.setShowResources(args.value);
+                break;
+            case "taskTitlePosition":
+                this._ganttViewCore.setTaskTitlePosition(this._getTaskTitlePosition(args.value));
+                break;
+            default:
+                super._optionChanged(args);
+        }
+    }
+
     // IGanttOwner
     getRowHeight() {
         return this.option("rowHeight");
@@ -53,9 +80,6 @@ export class GanttView extends Widget {
         return this.option("resourceAssignments");
     }
     getGanttWorkTimeRules() {
-        return {};
-    }
-    getGanttViewSettings() {
         return {};
     }
     getExternalTaskAreaContainer(element) {
