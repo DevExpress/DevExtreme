@@ -12761,6 +12761,26 @@ QUnit.test("Reset sorting and grouping state when lookup column exists and remot
     assert.strictEqual(dataGrid.columnOption("field2", "groupIndex"), undefined, "grouping is reseted");
 });
 
+// T800495
+QUnit.test("The calculateCellValue arguments should be correct after resetting the state when there is a grouped column", function(assert) {
+    // arrange
+    var calculateCellValue = sinon.spy(),
+        dataGrid = createDataGrid({
+            columns: [{ dataField: "field1", groupIndex: 0, calculateCellValue: calculateCellValue }, "field2"],
+            dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+        });
+
+    this.clock.tick(0);
+    calculateCellValue.reset();
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.deepEqual(calculateCellValue.getCall(0).args[0], { field1: "test1", field2: "test2" }, "calculateCellValue - first call arguments");
+});
+
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {
     var dataGrid = createDataGrid({
         columnChooser: { enabled: true },

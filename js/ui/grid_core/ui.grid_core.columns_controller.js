@@ -2790,13 +2790,13 @@ module.exports = {
                     that._ignoreColumnOptionNames = ignoreColumnOptionNames;
                     that._hasUserState = !!state;
 
+                    updateColumnChanges(that, "filtering");
+                    that.init();
+
                     if(dataSource) {
                         dataSource.sort(null);
                         dataSource.group(null);
                     }
-
-                    updateColumnChanges(that, "filtering");
-                    that.init();
                 },
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {
                     var calculatedColumnOptions = {},
