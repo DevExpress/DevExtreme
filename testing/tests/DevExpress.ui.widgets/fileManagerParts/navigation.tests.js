@@ -106,4 +106,25 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root");
     });
 
+    test("change current directory by public API", function(assert) {
+        const done = assert.async();
+        const inst = this.wrapper.getInstance();
+        assert.equal("", inst.option("path"));
+
+        const that = this;
+        inst.option("onPathChanged", function() {
+            assert.equal("Folder 1/Folder 1.1", inst.option("path"));
+
+            const $folder1Node = that.wrapper.getFolderNode(1);
+            assert.equal($folder1Node.find("span").text(), "Folder 1");
+
+            const $folder11Node = that.wrapper.getFolderNode(2);
+            assert.equal($folder11Node.find("span").text(), "Folder 1.1");
+
+            done();
+        });
+
+        inst.option("path", "Folder 1/Folder 1.1");
+    });
+
 });

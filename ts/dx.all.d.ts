@@ -2306,8 +2306,12 @@ declare module DevExpress.ui {
         fileProvider?: any;
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /** @name dxFileManager.Options.onPathChanged */
+        onPathChanged?: ((e: any) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
+        /** @name dxFileManager.Options.path */
+        path?: string;
         /** @name dxFileManager.Options.permissions */
         permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.selectionMode */
