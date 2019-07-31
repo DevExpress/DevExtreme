@@ -1667,57 +1667,89 @@ var EditingController = modules.ViewController.inherit((function() {
             return skipCurrentRow ? [] : [row.rowIndex];
         },
 
-        updateFieldValue: function(options, value, text, forceUpdateRow) {
+        _prepareEditDataParams: function(options, value, text) {
             var that = this,
                 newData = {},
                 oldData = options.data,
                 rowKey = options.key,
                 $cellElement = $(options.cellElement),
-                editMode = getEditMode(that),
-                params,
-                columns,
-                isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
+                editMode = getEditMode(that);
+
+            if(rowKey !== undefined) {
+                if(editMode === EDIT_MODE_BATCH) {
+                    that._applyModified($cellElement, options);
+                }
+                options.value = value;
+                options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
+                if(text && options.column.displayValueMap) {
+                    options.column.displayValueMap[value] = text;
+                }
+                if(options.values) {
+                    options.values[options.columnIndex] = value;
+                }
+            }
+
+            return {
+                data: newData,
+                key: rowKey,
+                oldData: oldData,
+                type: DATA_EDIT_DATA_UPDATE_TYPE
+            };
+        },
+
+        updateFieldValue: function(options, value, text, forceUpdateRow) {
+            var that = this,
+                rowKey = options.key;
 
             if(rowKey === undefined) {
                 that._dataController.fireError("E1043");
             }
 
             if(options.column.setCellValue) {
-                if(rowKey !== undefined) {
-                    if(editMode === EDIT_MODE_BATCH) {
-                        that._applyModified($cellElement, options);
-                    }
-                    options.value = value;
-                    options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
-                    if(text && options.column.displayValueMap) {
-                        options.column.displayValueMap[value] = text;
-                    }
-                    if(options.values) {
-                        options.values[options.columnIndex] = value;
-                    }
-                }
-                params = {
-                    data: newData,
-                    key: rowKey,
-                    oldData: oldData,
-                    type: DATA_EDIT_DATA_UPDATE_TYPE
-                };
+                var params = this._prepareEditDataParams(options, value, text);
 
-                that._addEditData(params, options.row);
-                that._updateEditButtons();
+                return this._applyEditDataParams(options, params, forceUpdateRow);
+            }
+        },
+        _focusPreviousEditingCellIfNeed: function(options) {
+            var that = this;
 
-                if(options.column.showEditorAlways && !forceUpdateRow) {
-                    if(editMode === EDIT_MODE_CELL && options.row && !options.row.inserted) {
-                        return that.saveEditData();
-                    } else if(editMode === EDIT_MODE_BATCH) {
-                        columns = that._columnsController.getVisibleColumns();
-                        forceUpdateRow = isCustomSetCellValue || columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
-                    }
-                }
+            if(that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex)) {
+                that._focusEditingCell();
+                that._updateEditRow(options.row, true);
+                return true;
+            }
+        },
+        _applyEditDataParams: function(options, params, forceUpdateRow) {
+            var that = this,
+                editMode = getEditMode(that),
+                isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue,
+                showEditorAlways = options.column.showEditorAlways,
+                isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.inserted,
+                focusPreviousEditingCell = showEditorAlways && !forceUpdateRow && isUpdateInCellMode && that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex);
 
-                if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
-                    that._updateEditRow(options.row, forceUpdateRow);
+            if(focusPreviousEditingCell) {
+                that._focusEditingCell();
+                that._updateEditRow(options.row, true);
+                return;
+            }
+
+            that._addEditData(params, options.row);
+            that._updateEditButtons();
+
+            if(showEditorAlways && !forceUpdateRow) {
+                if(isUpdateInCellMode) {
+                    that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
+                    that._editColumnIndex = options.columnIndex;
+                    return that.saveEditData();
+                } else if(editMode === EDIT_MODE_BATCH) {
+                    let columns = that._columnsController.getVisibleColumns();
+                    forceUpdateRow = isCustomSetCellValue || columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
                 }
+            }
+
+            if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
+                that._updateEditRow(options.row, forceUpdateRow);
             }
         },
         _updateEditRowCore: function(row, skipCurrentRow) {
