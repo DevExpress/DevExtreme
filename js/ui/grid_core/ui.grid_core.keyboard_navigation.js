@@ -2015,6 +2015,10 @@ module.exports = {
                 closeEditCell: function() {
                     this.getController("keyboardNavigation")._fastEditingStarted = false;
                     return this.callBase.apply(this, arguments);
+                },
+                _delayedInputFocus: function() {
+                    this._keyboardNavigationController._isNeedScroll = true;
+                    this.callBase.apply(this, arguments);
                 }
             },
             data: {
