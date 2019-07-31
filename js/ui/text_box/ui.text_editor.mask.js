@@ -1,5 +1,6 @@
 var $ = require("../../core/renderer"),
     caret = require("./utils.caret"),
+    devices = require("../../core/devices"),
     each = require("../../core/utils/iterator").each,
     eventUtils = require("../../events/utils"),
     eventsEngine = require("../../events/core/events_engine"),
@@ -12,7 +13,8 @@ var $ = require("../../core/renderer"),
     wheelEvent = require("../../events/core/wheel"),
     MaskRules = require("./ui.text_editor.mask.rule"),
     TextEditorBase = require("./ui.text_editor.base"),
-    StandardMaskStrategy = require("./ui.text_editor.mask.strategy.standard").default;
+    DefaultMaskStrategy = require("./ui.text_editor.mask.strategy.default").default,
+    AndroidMaskStrategy = require("./ui.text_editor.mask.strategy.android").default;
 
 var stubCaret = function() {
     return {};
@@ -133,7 +135,14 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _init: function() {
         this.callBase();
-        this._maskStrategy = new StandardMaskStrategy(this);
+
+        this._initMaskStrategy();
+    },
+
+    _initMaskStrategy: function() {
+        this._maskStrategy = devices.real().android ?
+            new AndroidMaskStrategy(this) :
+            new DefaultMaskStrategy(this);
     },
 
     _initMarkup: function() {
@@ -376,13 +385,16 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _convertToValue: function(text) {
         if(this._isMaskedValueMode()) {
-            text = (text || this._textValue || "")
-                .replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
+            text = this._replaceMaskCharWithEmpty(text || this._textValue || "");
         } else {
             text = text || this._value || "";
         }
 
         return text;
+    },
+
+    _replaceMaskCharWithEmpty: function(text) {
+        return text.replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
     },
 
     _maskKeyHandler: function(e, tryHandleKeyCallback) {

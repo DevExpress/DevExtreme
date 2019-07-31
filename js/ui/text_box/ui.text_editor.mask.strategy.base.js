@@ -1,6 +1,7 @@
 import EventsEngine from "../../events/core/events_engine";
 import { addNamespace } from "../../events/utils";
 import { inArray } from "../../core/utils/array";
+import { clipboardText as getClipboardText } from "../../core/utils/dom";
 
 const MASK_EVENT_NAMESPACE = "dxMask";
 const BLUR_EVENT = "blur beforedeactivate";
@@ -71,44 +72,68 @@ export default class BaseMaskStrategy {
         }).bind(this.editor));
     }
 
-    _backspaceHandler(e) {
-        this._keyPressHandled = true;
+    _focusInHandler() {
+        this.editor._showMaskPlaceholder();
+        this.editor._direction(this.DIRECTION.FORWARD);
 
-        const afterBackspaceHandler = (needAdjustCaret, callBack) => {
-            if(needAdjustCaret) {
-                this.editor._direction(this.DIRECTION.FORWARD);
-                this.editor._adjustCaret();
-            }
-            const currentCaret = this.editor._caret();
-            clearTimeout(this._backspaceHandlerTimeout);
-            this._backspaceHandlerTimeout = setTimeout(function() {
-                callBack(currentCaret);
-            });
-        };
+        if(!this.editor._isValueEmpty() && this.editorOption("isValid")) {
+            this.editor._adjustCaret();
+        } else {
+            var caret = this.editor._maskRulesChain.first();
+            this._caretTimeout = setTimeout(function() {
+                this._caret({ start: caret, end: caret });
+            }.bind(this.editor), 0);
+        }
+    }
 
-        this.editor._maskKeyHandler(e, () => {
-            if(this.editor._hasSelection()) {
-                afterBackspaceHandler(true, (currentCaret) => {
-                    this.editor._displayMask(currentCaret);
-                    this.editor._maskRulesChain.reset();
-                });
-                return;
-            }
+    _focusOutHandler() {
+        if(this.editorOption("showMaskMode") === "onFocus" && this.editor._isValueEmpty()) {
+            this.editorOption("text", "");
+            this.editor._renderDisplayText("");
+        }
+    }
 
-            if(this.editor._tryMoveCaretBackward()) {
-                afterBackspaceHandler(false, (currentCaret) => {
-                    this.editor._caret(currentCaret);
-                });
-                return;
-            }
+    _cutHandler(event) {
+        var caret = this.editor._caret();
+        var selectedText = this.editorInput().val().substring(caret.start, caret.end);
 
-            this.editor._handleKey(EMPTY_CHAR, this.DIRECTION.BACKWARD);
-            afterBackspaceHandler(true, (currentCaret) => {
-                this.editor._displayMask(currentCaret);
-                this.editor._maskRulesChain.reset();
-            });
+        this.editor._maskKeyHandler(event, function() {
+            getClipboardText(event, selectedText);
+            return true;
         });
     }
+
+    _dropHandler() {
+        this._clearDragTimer();
+        this._dragTimer = setTimeout((function() {
+            this.option("value", this._convertToValue(this._input().val()));
+        }).bind(this.editor));
+    }
+
+    _clearDragTimer() {
+        clearTimeout(this._dragTimer);
+    }
+
+    _pasteHandler(e) {
+        this._keyPressHandled = true;
+        var caret = this.editor._caret();
+
+        this.editor._maskKeyHandler(e, function() {
+            var pastingText = getClipboardText(e);
+            var restText = this._maskRulesChain.text().substring(caret.end);
+
+            var accepted = this._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
+            var newCaret = caret.start + accepted;
+
+            this._handleChain({ text: restText, start: newCaret, length: restText.length });
+
+            this._caret({ start: newCaret, end: newCaret });
+
+            return true;
+        });
+    }
+
+    _backspaceHandler(e) { }
 
     _delHandler(e) {
         this._keyPressHandled = true;
@@ -118,5 +143,9 @@ export default class BaseMaskStrategy {
         });
     }
 
-    clean() { }
+    clean() {
+        this._clearDragTimer();
+        clearTimeout(this._backspaceHandlerTimeout);
+        clearTimeout(this._caretTimeout);
+    }
 }
