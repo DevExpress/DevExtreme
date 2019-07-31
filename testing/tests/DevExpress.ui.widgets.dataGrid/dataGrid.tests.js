@@ -10625,41 +10625,6 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     assert.ok($(dataGrid.$element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
-QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mode is cell", function(assert) {
-    if(devices.real().deviceType !== "desktop") {
-        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
-        return;
-    }
-
-    // arrange
-    var dataGrid = createDataGrid({
-            dataSource: [{ name: "name 1", value: 1 }, { name: "name 2", value: 2 }],
-            editing: {
-                mode: "cell",
-                allowUpdating: true
-            },
-            columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
-        }),
-        navigationController = dataGrid.getController("keyboardNavigation");
-
-    this.clock.tick();
-    dataGrid.focus($(dataGrid.getCellElement(0, 0)));
-    this.clock.tick();
-
-    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
-    this.clock.tick();
-
-
-    // act
-    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
-    $(dataGrid.getCellElement(0, 1)).find(".dx-numberbox").dxNumberBox("instance").option("value", 10);
-    this.clock.tick();
-
-    // assert
-    assert.equal($(dataGrid.getCellElement(0, 1)).find(".dx-texteditor-input").eq(0).val(), "10", "editor value is changed");
-    assert.ok($(dataGrid.getCellElement(1, 0)).hasClass("dx-focused"), "first cell in second row is focused");
-});
-
 // T460276
 QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell at the end of table", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -10703,6 +10668,82 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     assert.roughEqual(dataGrid.getTopVisibleRowData().index, rowData.index, 1.01, "scroll position is not changed");
     assert.equal($(dataGrid.$element()).find("input").val(), "198", "editor in second column with correct row index is opened");
     assert.ok($(dataGrid.$element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
+});
+
+// T755201
+QUnit.test("Revert button should appear in cell mode when editing column with boolean dataField and saving is canceled", function(assert) {
+    // arrange
+    createDataGrid({
+        dataSource: [{ value: false, id: 1 }],
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        onRowUpdating: function(e) {
+            var d = $.Deferred();
+            e.cancel = d.promise();
+
+            setTimeout(function() {
+                d.resolve(true);
+            });
+        },
+        columns: ["id", { dataField: "value", allowEditing: true }]
+    });
+    this.clock.tick();
+    this.clock.tick(1000);
+
+    // act
+    $(".dx-checkbox").eq(0).trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.equal($(".dx-checkbox").eq(0).attr("aria-checked"), "true", "checkbox is checked");
+    assert.equal($(".dx-revert-button").length, 1, "reverse button exists");
+
+    // act
+    $(".dx-revert-button").trigger("dxclick");
+
+    // assert
+    assert.equal($(".dx-checkbox").eq(0).attr("aria-checked"), "false", "checkbox is unchecked");
+});
+
+// T755201
+QUnit.test("Focus should return to edited cell after editing column with boolean dataField and canceled saving", function(assert) {
+    // arrange
+    createDataGrid({
+        dataSource: [{ value: false, id: 1 }, { value: false, id: 2 }],
+        keyExpr: "id",
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        onRowUpdating: function(e) {
+            if(e.key === 1) {
+                var d = $.Deferred();
+                e.cancel = d.promise();
+
+                setTimeout(function() {
+                    d.resolve(true);
+                });
+            }
+        },
+        columns: ["id", { dataField: "value", allowEditing: true }]
+    });
+    this.clock.tick();
+
+    // act
+    $(".dx-checkbox").eq(0).trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.equal($(".dx-checkbox").eq(0).attr("aria-checked"), "true", "first checkbox is checked");
+
+    // act
+    $(".dx-checkbox").eq(1).trigger("dxclick");
+
+    // assert
+    assert.equal($(".dx-checkbox").eq(1).attr("aria-checked"), "false", "second checkbox is not checked");
+    assert.ok($(".dx-checkbox").eq(0).hasClass("dx-state-focused"), "first checkbox is focused");
 });
 
 // T553067
