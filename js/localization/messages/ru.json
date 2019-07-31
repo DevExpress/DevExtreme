@@ -254,11 +254,11 @@
         "dxHtmlEditor-heading": "Заголовок",
         "dxHtmlEditor-normalText": "Обычный текст",
 
-        "dxFileManager-newFolder": "TODO!",
-        "dxFileManager-errorNoAccess": "TODO!",
-        "dxFileManager-errorDirectoryExistsFormat": "TODO!",
-        "dxFileManager-errorFileExistsFormat": "TODO!",
-        "dxFileManager-errorFileNotFoundFormat": "TODO!",
-        "dxFileManager-errorDefault": "TODO!"
+        "dxFileManager-newFolder": "Без названия",
+        "dxFileManager-errorNoAccess": "Доступ запрещён. Операция не может быть завершена.",
+        "dxFileManager-errorDirectoryExistsFormat": "Каталог {0} уже существует.",
+        "dxFileManager-errorFileExistsFormat": "Файл {0} уже существует.",
+        "dxFileManager-errorFileNotFoundFormat": "Файл {0} не найден.",
+        "dxFileManager-errorDefault": "Неизвестная ошибка"
     }
 }

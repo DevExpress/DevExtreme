@@ -4,6 +4,7 @@ import AjaxFileProvider from "./file_provider/ajax";
 import OneDriveFileProvider from "./file_provider/onedrive";
 import WebApiFileProvider from "./file_provider/webapi";
 import { pathCombine } from "./ui.file_manager.utils";
+import whenSome from "./ui.file_manager.common";
 
 import { Deferred, when } from "../../core/utils/deferred";
 import { extend } from "../../core/utils/extend";
@@ -75,12 +76,13 @@ export default class FileItemsController {
             return;
         }
 
-        if(this._currentDirectoryInfo && this._currentDirectoryInfo.fileItem.equals(directoryInfo.fileItem)) {
+        if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
             return;
         }
 
+        const requireRaiseSelectedDirectory = this._currentDirectoryInfo.fileItem.key !== directoryInfo.fileItem.key;
         this._currentDirectoryInfo = directoryInfo;
-        this._raiseSelectedDirectoryChanged(directoryInfo);
+        requireRaiseSelectedDirectory && this._raiseSelectedDirectoryChanged(directoryInfo);
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -175,6 +177,76 @@ export default class FileItemsController {
                     this.setCurrentDirectory(parentDir);
                 }
             });
+    }
+
+    refresh() {
+        if(this._lockRefresh) {
+            return this._refreshDeferred;
+        }
+
+        this._lockRefresh = true;
+
+        const cachedRootInfo = {
+            items: this._rootDirectoryInfo.items
+        };
+        const selectedKeyParts = this._getDirectoryPathKeyParts(this.getCurrentDirectory());
+
+        this._resetDirectoryState(this._rootDirectoryInfo);
+
+        this.setCurrentDirectory(null);
+        return this._refreshDeferred = this._loadItemsRecursive(this._rootDirectoryInfo, cachedRootInfo)
+            .then(() => {
+                const dirInfo = this._findSelectedDirectoryByPathKeyParts(selectedKeyParts);
+                this.setCurrentDirectory(dirInfo);
+
+                delete this._lockRefresh;
+            });
+    }
+
+    _loadItemsRecursive(directoryInfo, cachedDirectoryInfo) {
+        return this.getDirectories(directoryInfo)
+            .then(dirInfos => {
+                const itemDeferreds = [ ];
+                for(let i = 0; i < dirInfos.length; i++) {
+                    const cachedItem = cachedDirectoryInfo.items.find(cache => dirInfos[i].fileItem.key === cache.fileItem.key);
+                    if(!cachedItem) continue;
+
+                    dirInfos[i].expanded = cachedItem.expanded;
+                    if(dirInfos[i].expanded) {
+                        itemDeferreds.push(this._loadItemsRecursive(dirInfos[i], cachedItem));
+                    }
+                }
+                return whenSome(itemDeferreds);
+            },
+            () => null);
+    }
+
+    _getDirectoryPathKeyParts(directoryInfo) {
+        let pathParts = [ directoryInfo.fileItem.key ];
+        while(directoryInfo && directoryInfo.parentDirectory) {
+            pathParts.unshift(directoryInfo.parentDirectory.fileItem.key);
+            directoryInfo = directoryInfo.parentDirectory;
+        }
+        return pathParts;
+    }
+
+    _findSelectedDirectoryByPathKeyParts(keyParts) {
+        let selectedDirInfo = this._rootDirectoryInfo;
+        if(keyParts.length < 2 || keyParts[0] !== this._rootDirectoryInfo.fileItem.key) {
+            return selectedDirInfo;
+        }
+
+        let i = 1;
+        let newSelectedDir = selectedDirInfo;
+        while(newSelectedDir && i < keyParts.length) {
+            newSelectedDir = selectedDirInfo.items.find(info => info.fileItem.key === keyParts[i]);
+            if(newSelectedDir) {
+                selectedDirInfo = newSelectedDir;
+            }
+            i++;
+        }
+
+        return selectedDirInfo;
     }
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {

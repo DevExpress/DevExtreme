@@ -158,7 +158,8 @@ class FileManager extends Widget {
 
     _initCommandManager() {
         const actions = extend(this._editing.getCommandActions(), {
-            refresh: () => this._redrawComponent(),
+            refresh: () => this._controller.refresh()
+                .then(() => this._redrawComponent()),
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details"),
             clear: () => this._clearSelection(),
