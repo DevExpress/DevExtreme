@@ -59,31 +59,27 @@ var pieChartSeriesObject = {
 /**
 * @name PieChartLegendItem
 * @type object
+* @inherits BaseLegendItem
 */
 var legendItem = {
-  /**
-  * @name PieChartLegendItem.text
-  * @type any
-  */
-  text: undefined,
-  /**
-  * @name PieChartLegendItem.points
-  * @type Array<piePointObject>
-  */
-  points: [],
-  /**
-  * @name PieChartLegendItem.visible
-  * @type boolean
-  */
-  visible: true,
-  /**
-  * @name PieChartLegendItem.argument
-  * @type string|Date|number
-  */
-  argument: undefined,
-  /**
-  * @name PieChartLegendItem.argumentIndex
-  * @type number
-  */
-  argumentIndex: undefined,
+    /**
+    * @name PieChartLegendItem.text
+    * @type any
+    */
+    text: undefined,
+    /**
+    * @name PieChartLegendItem.points
+    * @type Array<piePointObject>
+    */
+    points: [],
+    /**
+    * @name PieChartLegendItem.argument
+    * @type string|Date|number
+    */
+    argument: undefined,
+    /**
+    * @name PieChartLegendItem.argumentIndex
+    * @type number
+    */
+    argumentIndex: undefined
 };

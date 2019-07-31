@@ -2125,7 +2125,16 @@ var dxPieChart = {
        * @type_function_param1 items:Array<PieChartLegendItem>
        * @type_function_return Array<PieChartLegendItem>
        */
-       customizeItems: undefined
+       customizeItems: undefined,
+       /**
+       * @name dxPieChartOptions.legend.markerTemplate
+       * @type template|function
+       * @default undefined
+       * @type_function_param1 legendItem:PieChartLegendItem
+       * @type_function_param2 element:SVGGElement
+       * @type_function_return string|SVGElement|jQuery
+       */
+       markerTemplate: undefined
     },
     /**
     * @name dxPieChartOptions.resolveLabelOverlapping
@@ -3349,7 +3358,16 @@ var BaseChart = {
         * @type_function_param1 items:Array<BaseChartLegendItem>
         * @type_function_return Array<BaseChartLegendItem>
         */
-        customizeItems: undefined
+        customizeItems: undefined,
+        /**
+        * @name BaseChartOptions.legend.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:BaseChartLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined
     },
     /**
     * @name BaseChartOptions.series

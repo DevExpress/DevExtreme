@@ -375,6 +375,15 @@ var dxVectorMap = {
         */
         customizeItems: undefined,
         /**
+        * @name dxVectorMapOptions.legends.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:VectorMapLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined,
+        /**
         * @name dxVectorMapOptions.legends.font
         * @type Font
         * @default '#2b2b2b' @prop color
