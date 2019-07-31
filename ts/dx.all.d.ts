@@ -4225,6 +4225,8 @@ declare module DevExpress.ui {
     export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
         /** @name dxSpeedDialAction.Options.icon */
         icon?: string;
+        /** @name dxSpeedDialAction.Options.label */
+        label?: string;
         /** @name dxSpeedDialAction.Options.onClick */
         onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement }) => any);
     }
