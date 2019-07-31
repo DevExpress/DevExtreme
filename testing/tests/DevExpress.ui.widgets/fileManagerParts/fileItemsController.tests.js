@@ -256,7 +256,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
                 assert.equal(itemInfos.length, 1);
                 assert.equal(itemInfos[0].fileItem.name, "file1");
-                controller.refresh();
+                return controller.refresh();
             })
             .then(() => {
                 const currentDir = controller.getCurrentDirectory();
@@ -308,7 +308,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
                 assert.equal(itemInfos.length, 1);
                 assert.equal(itemInfos[0].fileItem.name, "file1");
-                controller.refresh();
+                return controller.refresh();
             })
             .then(() => {
                 const currentDir = controller.getCurrentDirectory();
