@@ -31,15 +31,19 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
                 return;
             }
 
-            this.editor._caret({ start: caret.start, end: caret.start });
+            this.editor._caret(caret);
             const length = this._prevCaret.end - this._prevCaret.start;
             const newData = data + (length ? this._getEmptyString(length - data.length) : "");
 
-            this._updateEditorMask({
+            const hasValidChars = this._updateEditorMask({
                 start: this._prevCaret.start,
                 length: length || newData.length,
                 text: newData
             });
+
+            if(!hasValidChars) {
+                this.editor._caret(this._prevCaret);
+            }
         }
     }
 
@@ -48,9 +52,11 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
     }
 
     _updateEditorMask(args) {
-        this.editor._handleChain(args);
+        const updatedCharsCount = this.editor._handleChain(args);
         this.editor._adjustCaret();
         this.editor._displayMask();
+
+        return !!updatedCharsCount;
     }
 }
 
