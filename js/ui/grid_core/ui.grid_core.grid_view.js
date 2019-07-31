@@ -559,7 +559,7 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
     _setScrollerSpacing: function(hasHeight) {
-        if(this.option("scrolling.useNative")) {
+        if(this.option("scrolling.useNative") === true) {
             // T722415, T758955
             commonUtils.deferRender(() => {
                 commonUtils.deferUpdate(() => {
