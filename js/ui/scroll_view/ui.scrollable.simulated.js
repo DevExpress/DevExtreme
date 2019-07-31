@@ -1,51 +1,48 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    math = Math,
-    titleize = require("../../core/utils/inflector").titleize,
-    extend = require("../../core/utils/extend").extend,
-    windowUtils = require("../../core/utils/window"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    isDefined = require("../../core/utils/type").isDefined,
-    translator = require("../../animation/translator"),
-    Class = require("../../core/class"),
-    Animator = require("./animator"),
-    devices = require("../../core/devices"),
-    eventUtils = require("../../events/utils"),
-    commonUtils = require("../../core/utils/common"),
-    Scrollbar = require("./ui.scrollbar"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import { titleize } from "../../core/utils/inflector";
+import { extend } from "../../core/utils/extend";
+import windowUtils from "../../core/utils/window";
+import iteratorUtils from "../../core/utils/iterator";
+import { isDefined } from "../../core/utils/type";
+import translator from "../../animation/translator";
+import Class from "../../core/class";
+import Animator from "./animator";
+import devices from "../../core/devices";
+import eventUtils from "../../events/utils";
+import commonUtils from "../../core/utils/common";
+import Scrollbar from "./ui.scrollbar";
+import { when, Deferred } from "../../core/utils/deferred";
 
-var realDevice = devices.real;
-var isSluggishPlatform = (realDevice.platform === "win" || realDevice.platform === "android");
+const realDevice = devices.real;
+const isSluggishPlatform = (realDevice.platform === "win" || realDevice.platform === "android");
 
-var SCROLLABLE_SIMULATED = "dxSimulatedScrollable",
-    SCROLLABLE_STRATEGY = "dxScrollableStrategy",
-    SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + "Cursor",
-    SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + "Keyboard",
-    SCROLLABLE_SIMULATED_CLASS = "dx-scrollable-simulated",
-    SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden",
-    SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible",
-    SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar",
+const SCROLLABLE_SIMULATED = "dxSimulatedScrollable";
+const SCROLLABLE_STRATEGY = "dxScrollableStrategy";
+const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + "Cursor";
+const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + "Keyboard";
+const SCROLLABLE_SIMULATED_CLASS = "dx-scrollable-simulated";
+const SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden";
+const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible";
+const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
 
-    VERTICAL = "vertical",
-    HORIZONTAL = "horizontal",
+const VERTICAL = "vertical";
+const HORIZONTAL = "horizontal";
 
-    ACCELERATION = isSluggishPlatform ? 0.95 : 0.92,
-    OUT_BOUNDS_ACCELERATION = 0.5,
-    MIN_VELOCITY_LIMIT = 1,
-    FRAME_DURATION = math.round(1000 / 60),
-    SCROLL_LINE_HEIGHT = 20,
-    VALIDATE_WHEEL_TIMEOUT = 500,
+const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
+const OUT_BOUNDS_ACCELERATION = 0.5;
+const MIN_VELOCITY_LIMIT = 1;
+const FRAME_DURATION = Math.round(1000 / 60);
+const SCROLL_LINE_HEIGHT = 20;
+const VALIDATE_WHEEL_TIMEOUT = 500;
 
-    BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5,
-    BOUNCE_DURATION = isSluggishPlatform ? 300 : 400,
-    BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION,
-    BOUNCE_ACCELERATION_SUM = (1 - math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
+const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
+const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
+const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
+const BOUNCE_ACCELERATION_SUM = (1 - Math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
 
-var KEY_CODES = {
+const KEY_CODES = {
     PAGE_UP: "pageUp",
     PAGE_DOWN: "pageDown",
     END: "end",
@@ -65,7 +62,7 @@ var InertiaAnimator = Animator.inherit({
     VELOCITY_LIMIT: MIN_VELOCITY_LIMIT,
 
     _isFinished: function() {
-        return math.abs(this.scroller._velocity) <= this.VELOCITY_LIMIT;
+        return Math.abs(this.scroller._velocity) <= this.VELOCITY_LIMIT;
     },
 
     _step: function() {
@@ -169,7 +166,7 @@ var Scroller = Class.inherit({
 
     _boundLocation: function(location) {
         location = location !== undefined ? location : this._location;
-        return math.max(math.min(location, this._maxOffset), this._minOffset);
+        return Math.max(Math.min(location, this._maxOffset), this._minOffset);
     },
 
     _move: function(location) {
@@ -198,7 +195,7 @@ var Scroller = Class.inherit({
     },
 
     _getRealDimension: function(element, dimension) {
-        return math.round(element.getBoundingClientRect()[dimension]);
+        return Math.round(element.getBoundingClientRect()[dimension]);
     },
 
     _getBaseDimension: function(element, dimension) {
@@ -434,7 +431,7 @@ var Scroller = Class.inherit({
     },
 
     _getMinOffset: function() {
-        this._maxScrollPropValue = math.max(this._contentSize() - this._containerSize(), 0);
+        this._maxScrollPropValue = Math.max(this._contentSize() - this._containerSize(), 0);
         return -this._maxScrollPropValue;
     },
 
@@ -488,7 +485,7 @@ var Scroller = Class.inherit({
         if(!isOverflowHidden) {
             var containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)] * this._getScaleRatio();
 
-            contentSize = math.max(containerScrollSize, contentSize);
+            contentSize = Math.max(containerScrollSize, contentSize);
         }
 
         return contentSize;
@@ -821,7 +818,21 @@ var SimulatedStrategy = Class.inherit({
     _createActionHandler: function(optionName) {
         var that = this,
             actionHandler = that._createActionByOption(optionName);
-        return function() {
+
+        if(optionName === "onScroll") {
+            actionHandler = that._createActionByOption("onScroll", {
+                afterExecute: function(e) {
+                    clearTimeout(that._updateHandlerTimeout);
+                    that._updateHandlerTimeout = setTimeout(() => {
+                        that._eachScroller(function(scroller) {
+                            scroller._update();
+                        });
+                    });
+                }
+            });
+        }
+
+        return () => {
             actionHandler(extend(that._createActionArgs(), arguments));
         };
     },
@@ -1048,6 +1059,7 @@ var SimulatedStrategy = Class.inherit({
         this._$element.removeClass(SCROLLABLE_SIMULATED_CLASS);
         this._eventForUserAction = null;
         clearTimeout(this._validateWheelTimer);
+        clearTimeout(this._updateHandlerTimeout);
     },
 
     _detachEventHandlers: function() {
