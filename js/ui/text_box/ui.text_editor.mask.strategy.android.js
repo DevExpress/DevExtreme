@@ -2,7 +2,7 @@ import BaseMaskStrategy from "./ui.text_editor.mask.strategy.base";
 
 const DELETE_INPUT_TYPE = "deleteContentBackward";
 
-class StandardMaskStrategy extends BaseMaskStrategy {
+class AndroidMaskStrategy extends BaseMaskStrategy {
     getHandleEventNames() {
         return [...super.getHandleEventNames(), "beforeInput"];
     }
@@ -54,4 +54,4 @@ class StandardMaskStrategy extends BaseMaskStrategy {
     }
 }
 
-export default StandardMaskStrategy;
+export default AndroidMaskStrategy;

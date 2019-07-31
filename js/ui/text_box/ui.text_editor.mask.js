@@ -140,7 +140,8 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        this._maskStrategy = devices.real().android ?
+        var device = devices.real();
+        this._maskStrategy = device.android && device.version[0] > 4 ?
             new AndroidMaskStrategy(this) :
             new DefaultMaskStrategy(this);
     },
