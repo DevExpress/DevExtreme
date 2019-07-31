@@ -7092,7 +7092,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
         /** @name dxChartCommonAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotationItem: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        template?: DevExpress.core.template | ((annotationItem: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxChartCommonAnnotationConfig.text */
         text?: string;
         /** @name dxChartCommonAnnotationConfig.textOverflow */
