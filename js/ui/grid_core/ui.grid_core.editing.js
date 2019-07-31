@@ -768,7 +768,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 parentRowIndex = dataController.getRowIndexByKey(parentKey),
                 insertKey = {
                     pageIndex: dataController.pageIndex(),
-                    rowIndex: (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex() : 0)),
+                    rowIndex: (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex(true) : 0)),
                     parentKey: parentKey
                 },
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
