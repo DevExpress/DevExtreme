@@ -5,6 +5,7 @@ import 'generic_light.css!';
 import "ui/text_box";
 import "ui/select_box";
 import "ui/number_box";
+import browser from "core/utils/browser";
 import errors from "ui/widget/ui.errors";
 
 const { module, test } = QUnit;
@@ -166,8 +167,14 @@ module("rendering", () => {
                     }
                 }]
             });
-            const beforeWidth = getComputedStyle($textBox.find(".dx-placeholder").get(0), ':before').width;
-            assert.ok(parseInt(beforeWidth) < $textBox.outerWidth(), "placeholder is smaller than the editor");
+            const beforeStyle = getComputedStyle($textBox.find(".dx-placeholder").get(0), ':before');
+
+            if(browser.msie) {
+                assert.strictEqual(beforeStyle.maxWidth, "100%", "maxWidth of the before element is correct");
+            } else {
+                assert.ok(parseInt(beforeStyle.width) < $textBox.outerWidth(), "placeholder is smaller than the editor");
+            }
+
             $textBox.remove();
         });
 
