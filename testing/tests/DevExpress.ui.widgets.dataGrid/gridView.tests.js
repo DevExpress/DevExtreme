@@ -2278,4 +2278,41 @@ function createGridView(options, userOptions) {
         assert.ok($testElement.find(".dx-master-detail-row").length > 0, "has master detail");
         assert.strictEqual(fixedColumnWidth, $(this.getCellElement(0, 1)).width(), "fixed column width isn't changed");
     });
+
+    // T800761
+    QUnit.test("Fixed column widths should be correct when there is a horizontal scrolling", function(assert) {
+        // arrange
+        var $colElements,
+            $testElement = $('<div />').width(400).appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                columnAutoWidth: false,
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3", field4: "test4" }],
+                columnFixing: { enabled: true },
+                editing: {
+                    mode: "row",
+                    allowUpdating: true,
+                    allowDeleting: true,
+                },
+                columns: [
+                    { dataField: "field1", fixed: true, width: 200 },
+                    { dataField: "field2", width: 250 },
+                    { dataField: "field3", width: 250 },
+                    { dataField: "field4" }
+                ]
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $colElements = gridView.getView("rowsView").element().find(".dx-datagrid-content-fixed").find("col");
+        assert.strictEqual($colElements.length, 5, "col count");
+        assert.strictEqual($colElements.get(0).style.width, "200px", "width of the first cell");
+        assert.strictEqual($colElements.get(1).style.width, "auto", "width of the second cell");
+        assert.strictEqual($colElements.get(2).style.width, "auto", "width of the third cell");
+        assert.strictEqual($colElements.get(3).style.width, "auto", "width of the fourth cell");
+        assert.strictEqual($colElements.get(4).style.width, "100px", "width of the fifth cell");
+    });
 }());
