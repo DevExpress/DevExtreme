@@ -1,6 +1,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
+    isDefined = require("../core/utils/type").isDefined,
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
     registerComponent = require("../core/component_registrator"),
@@ -221,8 +222,8 @@ var TextArea = TextBox.inherit({
 
         this._renderDimensions();
 
-        var minHeight = this.option("minHeight"),
-            maxHeight = this.option("maxHeight"),
+        var minHeight = this._getBoundaryHeight("minHeight"),
+            maxHeight = this._getBoundaryHeight("maxHeight"),
             inputHeight = $input[0].scrollHeight;
 
         if(minHeight !== undefined) {
@@ -237,6 +238,14 @@ var TextArea = TextBox.inherit({
 
         if(autoHeightResizing) {
             this._$element.css("height", "auto");
+        }
+    },
+
+    _getBoundaryHeight: function(optionName) {
+        var boundaryValue = this.option(optionName);
+
+        if(isDefined(boundaryValue)) {
+            return typeof boundaryValue === "number" ? boundaryValue : sizeUtils.parseHeight(boundaryValue, this._$textEditorContainer.get(0));
         }
     },
 
