@@ -37,9 +37,13 @@ module.exports = {
 
     getCurrentScreenFactor: function(screenFactorCallback) {
         var screenFactorFunc = screenFactorCallback || this.defaultScreenFactorFunc;
-        var windowWidth = domAdapter.getDocumentElement()["clientWidth"];
+        var windowWidth = this.getWindowWidth();
 
         return screenFactorFunc(windowWidth);
+    },
+
+    getWindowWidth: function() {
+        return domAdapter.getDocumentElement()["clientWidth"];
     },
 
     getNavigator: function() {

@@ -1,22 +1,19 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    commonUtils = require("../core/utils/common"),
-    typeUtils = require("../core/utils/type"),
-    errors = require("./widget/ui.errors"),
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
-    iteratorUtils = require("../core/utils/iterator"),
-    extend = require("../core/utils/extend").extend,
-    registerComponent = require("../core/component_registrator"),
-    Box = require("./box"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit");
+import $ from "../core/renderer";
+import eventsEngine from "../events/core/events_engine";
+import commonUtils from "../core/utils/common";
+import typeUtils from "../core/utils/type";
+import errors from "./widget/ui.errors";
+import windowUtils from "../core/utils/window";
+import iteratorUtils from "../core/utils/iterator";
+import { extend } from "../core/utils/extend";
+import registerComponent from "../core/component_registrator";
+import Box from "./box";
+import CollectionWidget from "./collection/ui.collection_widget.edit";
 
-var RESPONSIVE_BOX_CLASS = "dx-responsivebox",
-    SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + "-screen-",
-    BOX_ITEM_CLASS = "dx-box-item",
-    BOX_ITEM_DATA_KEY = "dxBoxItemData",
-
-    HD_SCREEN_WIDTH = 1920;
+const RESPONSIVE_BOX_CLASS = "dx-responsivebox";
+const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + "-screen-";
+const BOX_ITEM_CLASS = "dx-box-item";
+const BOX_ITEM_DATA_KEY = "dxBoxItemData";
 
 /**
 * @name dxResponsiveBox
@@ -175,11 +172,15 @@ var ResponsiveBox = CollectionWidget.inherit({
         });
     },
 
-    _init: function() {
-        if(!this.option("screenByWidth")) {
-            this._options.screenByWidth = windowUtils.defaultScreenFactorFunc;
+    _initOptions: function(options) {
+        if(!("screenByWidth" in options)) {
+            options.screenByWidth = windowUtils.defaultScreenFactorFunc;
         }
 
+        this.callBase(options);
+    },
+
+    _init: function() {
         this.callBase();
         this._initLayoutChangedAction();
     },
@@ -202,6 +203,7 @@ var ResponsiveBox = CollectionWidget.inherit({
         this.callBase();
         this.$element().addClass(RESPONSIVE_BOX_CLASS);
 
+        this._currentScreen = this._currentScreen || this._getCurrentScreenFactor();
         // NOTE: Fallback box strategy
         this._updateRootBox();
     },
@@ -239,12 +241,12 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _setScreenSize: function() {
-        var currentScreen = this._getCurrentScreen();
+        this._currentScreen = this._currentScreen || this._getCurrentScreenFactor();
 
         this._removeScreenSizeClass();
 
-        this.$element().addClass(SCREEN_SIZE_CLASS_PREFIX + currentScreen);
-        this.option("currentScreenFactor", currentScreen);
+        this.$element().addClass(SCREEN_SIZE_CLASS_PREFIX + this._currentScreen);
+        this.option("currentScreenFactor", this._currentScreen);
     },
 
     _removeScreenSizeClass: function() {
@@ -347,17 +349,11 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _screenRegExp: function() {
-        var screen = this._getCurrentScreen();
-        return new RegExp("(^|\\s)" + screen + "($|\\s)", "i");
+        return new RegExp("(^|\\s)" + this._currentScreen + "($|\\s)", "i");
     },
 
-    _getCurrentScreen: function() {
-        var width = this._screenWidth();
-        return this.option("screenByWidth")(width);
-    },
-
-    _screenWidth: function() {
-        return windowUtils.hasWindow() ? $(window).width() : HD_SCREEN_WIDTH;
+    _getCurrentScreenFactor: function() {
+        return windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
     },
 
     _createEmptyCell: function() {
@@ -706,7 +702,10 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this._getCurrentScreen() !== this.option("currentScreenFactor")) {
+        const newScreenFactor = this._getCurrentScreenFactor();
+
+        if(newScreenFactor !== this.option("currentScreenFactor")) {
+            this._currentScreen = newScreenFactor;
             this._update();
         }
     },

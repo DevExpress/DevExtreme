@@ -1,15 +1,18 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    registerComponent = require("core/component_registrator"),
-    Widget = require("ui/widget/ui.widget"),
-    ResponsiveBox = require("ui/responsive_box"),
-    responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js");
+import $ from "jquery";
+import devices from "core/devices";
+import registerComponent from "core/component_registrator";
+import Widget from "ui/widget/ui.widget";
+import ResponsiveBox from "ui/responsive_box";
+import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
 
-require("common.css!");
-require("ui/box");
+import "common.css!";
+import "ui/box";
+
+const BOX_CLASS = "dx-box";
+const BOX_ITEM_CLASS = "dx-box-item";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="responsiveBox"></div>\
         \
         <div id="responsiveBoxWithTemplate">\
@@ -19,10 +22,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var BOX_CLASS = "dx-box",
-    BOX_ITEM_CLASS = "dx-box-item";
-
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         responsiveBoxScreenMock.setup.call(this);
     },
@@ -507,6 +507,42 @@ QUnit.test("currentScreenFactor", function(assert) {
     this.updateScreenSize(800);
 
     assert.equal(responsiveBox.option("currentScreenFactor"), "sm", "currentScreenFactor update after restart");
+});
+
+QUnit.test("screenByWidth function call count on initialize", function(assert) {
+    let screenByWidthHandler = sinon.spy();
+    $("#responsiveBox").dxResponsiveBox({
+        rows: [{}],
+        cols: [{}],
+        items: [
+            { location: { row: 0, col: 0 }, text: "item(0,0)" }
+        ],
+        screenByWidth: function() {
+            screenByWidthHandler();
+            return "lg";
+        }
+    });
+
+    assert.strictEqual(screenByWidthHandler.callCount, 1, "screenByWidth.callCount");
+});
+
+QUnit.test("screenByWidth function call count when dimension was changed", function(assert) {
+    let screenByWidthHandler = sinon.spy();
+    $("#responsiveBox").dxResponsiveBox({
+        rows: [{}],
+        cols: [{}],
+        items: [
+            { location: { row: 0, col: 0 }, text: "item(0,0)" }
+        ],
+        screenByWidth: function() {
+            screenByWidthHandler();
+            return "lg";
+        }
+    });
+
+    screenByWidthHandler.reset();
+    this.updateScreenSize(800);
+    assert.strictEqual(screenByWidthHandler.callCount, 1, "screenByWidth.callCount");
 });
 
 QUnit.test("_layoutStrategy pass to internal box", function(assert) {
