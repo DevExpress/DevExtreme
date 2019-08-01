@@ -840,11 +840,13 @@ var DropDownList = DropDownEditor.inherit({
 
     _getMaxHeight: function() {
         var $element = this.$element(),
-            offset = $element.offset(),
-            windowHeight = $(window).height(),
-            maxHeight = Math.max(offset.top, windowHeight - offset.top - $element.outerHeight());
+            containerValue = this.option("dropDownOptions.container"),
+            container = containerValue && $(containerValue),
+            offsetTop = $element.offset().top - (container ? $(container).offset().top : 0),
+            containerHeight = $(container || window).outerHeight(),
+            maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
-        return Math.min(windowHeight * 0.5, maxHeight);
+        return Math.min(containerHeight * 0.5, maxHeight);
     },
 
     _clean: function() {
