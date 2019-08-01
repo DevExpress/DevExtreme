@@ -110,6 +110,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
     },
     afterEach: function() {
         this.clock.restore();
+        this.dispose();
     }
 });
 
