@@ -1656,6 +1656,47 @@ QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
     }
 }));
 
+QUnit.test("reject duplicate points for hiding calculation (T755575)", function(assert) {
+    var chart = moduleSetup.createChart.call(this, {
+        dataSource: [
+            { arg: 100000, val: 5 },
+            { arg: 100000, val: 5 },
+            { arg: 100000, val: 5 },
+            { arg: 100000, val: 5 },
+            { arg: 200000, val: 6 },
+            { arg: 200000, val: 6 },
+            { arg: 300000, val: 7 },
+            { arg: 300000, val: 7 },
+            { arg: 300000, val: 7 },
+            { arg: 300000, val: 7 },
+        ],
+        series: [{}]
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("check density of points continuous series", function(assert) {
+    var chart = moduleSetup.createChart.call(this, {
+        dataSource: [
+            { arg: 100000, val: 4.98 },
+            { arg: 100000, val: 5 },
+            { arg: 150000, val: 5 },
+            { arg: 150000, val: 5.01 },
+            { arg: 150000, val: 5.05 },
+            { arg: 200000, val: 6 },
+            { arg: 200000, val: 6.08 },
+            { arg: 300000, val: 7 },
+            { arg: 350000, val: 7.02 },
+            { arg: 350000, val: 7.04 },
+            { arg: 350000, val: 7.06 },
+        ],
+        series: [{}]
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
 QUnit.test("auto switching point markers visibility", function(assert) {
     var chart = this.createChart({});
 
@@ -3005,4 +3046,39 @@ QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", functi
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
     translateX.forEach((tX, i) => assert.roughEqual(tX, 44, 2.1));
+});
+
+QUnit.test("T801302. Chart do not throws exceptions when a discrete axis has null values", function(assert) {
+    var chart = this.createChart({
+        dataSource: [
+            { arg: 1, val: null },
+            { arg: null, val: 1 },
+            { arg: 3, val: 100000 }
+        ],
+        series: {},
+        commonAxisSettings: {
+            type: "discrete",
+            argumentType: "string",
+            valueType: "string"
+        }
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("Change series and argumentAxis with visualRange options", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: {}
+    });
+
+    chart.beginUpdate();
+    chart.option({
+        series: {}
+    });
+    chart.option("argumentAxis.tickInterval", 0.2);
+    chart.option("argumentAxis.visualRange", [6, 7]);
+    chart.endUpdate();
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 6, endValue: 7 });
 });

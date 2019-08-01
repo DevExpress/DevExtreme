@@ -25,6 +25,11 @@ const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
 const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + "-drawer-wrapper";
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + "-content";
 
+const DIAGRAM_DEFAULT_UNIT = "in";
+const DIAGRAM_DEFAULT_PAGE_SIZE = { width: 5.827, height: 8.268 };
+const DIAGRAM_DEFAULT_PAGE_ORIENTATION = "portrait";
+const DIAGRAM_DEFAULT_PAGE_COLOR = "white";
+
 const DIAGRAM_KEY_FIELD = "id";
 const DIAGRAM_TEXT_FIELD = "text";
 const DIAGRAM_TYPE_FIELD = "type";
@@ -87,6 +92,10 @@ class Diagram extends Widget {
         }
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
+
+        if(this.option("fullscreen")) {
+            this._updateFullscreenState();
+        }
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -234,9 +243,35 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
-        this._toggleReadOnlyState();
+        if(this.option("document.units") !== DIAGRAM_DEFAULT_UNIT) {
+            this._updateDocumentUnitsState();
+        }
+        if(this.option("document.pageSize") &&
+            (this.option("document.pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
+            this.option("document.pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height)) {
+            this._updateDocumentPageSizeState();
+        }
+        if(this.option("document.pageOrientation") !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
+            this._updateDocumentPageOrientationState();
+        }
+        if(this.option("document.pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
+            this._updateDocumentPageColorState();
+        }
+
+        this._updateViewUnitsState();
+        this._updateShowGridState();
+        this._updateSnapToGridState();
+        this._updateGridSizeState();
+        this._updateReadOnlyState();
+        this._updateZoomLevelState();
+        this._updateAutoZoomState();
+        this._updateSimpleViewState();
+
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
+    }
+    _executeDiagramCommand(command, parameter) {
+        this._diagramInstance.commandManager.getCommand(command).execute(parameter);
     }
     _refreshDataSources() {
         this._beginUpdateDiagram();
@@ -271,15 +306,12 @@ class Diagram extends Widget {
     _getDiagramData() {
         let value;
         const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.Export).execute(function(data) { value = data; });
+        this._executeDiagramCommand(DiagramCommand.Export, function(data) { value = data; });
         return value;
     }
     _setDiagramData(data, keepExistingItems) {
         const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute({
-            data,
-            keepExistingItems
-        });
+        this._executeDiagramCommand(DiagramCommand.Import, { data, keepExistingItems });
     }
 
     _nodesDataSourceChanged(nodes) {
@@ -337,7 +369,7 @@ class Diagram extends Widget {
             },
             layoutType: this._getDataBindingLayoutType()
         };
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.BindDocument).execute(data);
+        this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
     _getDataBindingLayoutType() {
         const { DataLayoutType } = getDiagram();
@@ -346,6 +378,17 @@ class Diagram extends Widget {
                 return DataLayoutType.Sugiyama;
             default:
                 return DataLayoutType.Tree;
+        }
+    }
+    _getAutoZoomValue(option) {
+        const { AutoZoomMode } = getDiagram();
+        switch(option) {
+            case "fitContent":
+                return AutoZoomMode.FitContent;
+            case "fitWidth":
+                return AutoZoomMode.FitToWidth;
+            default:
+                return AutoZoomMode.Disabled;
         }
     }
     _isBindingMode() {
@@ -481,6 +524,81 @@ class Diagram extends Widget {
         }
     }
 
+    _getDiagramUnitValue(value) {
+        const { DiagramUnit } = getDiagram();
+        switch(value) {
+            case "in":
+                return DiagramUnit.In;
+            case "cm":
+                return DiagramUnit.Cm;
+            case "px":
+                return DiagramUnit.Px;
+            default:
+                return DiagramUnit.In;
+        }
+    }
+    _updateReadOnlyState() {
+        const { DiagramCommand } = getDiagram();
+        var readOnly = this.option("readOnly");
+        this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
+        this._setLeftPanelEnabled(!readOnly);
+    }
+    _updateZoomLevelState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ZoomLevel, this.option("zoomLevel"));
+    }
+    _updateAutoZoomState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.SwitchAutoZoom, this._getAutoZoomValue(this.option("autoZoom")));
+    }
+    _updateSimpleViewState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ToggleSimpleView, this.option("simpleView"));
+    }
+    _updateFullscreenState() {
+        const { DiagramCommand } = getDiagram();
+        var fullscreen = this.option("fullscreen");
+        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
+        this._onToggleFullscreen(fullscreen);
+    }
+    _updateShowGridState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ShowGrid, this.option("showGrid"));
+    }
+    _updateSnapToGridState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.SnapToGrid, this.option("snapToGrid"));
+    }
+    _updateGridSizeState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.GridSize, this.option("gridSize"));
+    }
+    _updateViewUnitsState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ViewUnits, this._getDiagramUnitValue(this.option("viewUnits")));
+    }
+
+    _updateDocumentUnitsState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("document.units")));
+    }
+    _updateDocumentPageSizeState() {
+        var size = this.option("document.pageSize");
+        if(!size || !size.width || !size.height) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageSize, size);
+    }
+    _updateDocumentPageOrientationState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageLandscape, this.option("document.pageOrientation") === "landscape");
+    }
+    _updateDocumentPageColorState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageColor, this.option("document.pageColor"));
+    }
+
+
     /**
     * @name dxDiagramMethods.getData
     * @publicName getData()
@@ -508,6 +626,96 @@ class Diagram extends Widget {
             * @default false
             */
             readOnly: false,
+            /**
+            * @name dxDiagramOptions.zoomLevel
+            * @type Number
+            * @default 1
+            */
+            zoomLevel: 1,
+            /**
+            * @name dxDiagramOptions.simpleView
+            * @type Boolean
+            * @default false
+            */
+            simpleView: false,
+            /**
+            * @name dxDiagramOptions.autoZoom
+            * @type Enums.DiagramAutoZoom
+            * @default false
+            */
+            autoZoom: false,
+            /**
+            * @name dxDiagramOptions.fullscreen
+            * @type Boolean
+            * @default false
+            */
+            fullscreen: false,
+            /**
+            * @name dxDiagramOptions.showGrid
+            * @type Boolean
+            * @default true
+            */
+            showGrid: true,
+            /**
+            * @name dxDiagramOptions.snapToGrid
+            * @type Boolean
+            * @default true
+            */
+            snapToGrid: true,
+            /**
+            * @name dxDiagramOptions.gridSize
+            * @type Number
+            * @default 0.125
+            */
+            gridSize: 0.125,
+            /**
+            * @name dxDiagramOptions.viewUnits
+            * @type Enums.DiagramUnits
+            * @default "in"
+            */
+            viewUnits: DIAGRAM_DEFAULT_UNIT,
+
+            /**
+            * @name dxDiagramOptions.document
+            * @type Object
+            * @default null
+            */
+            document: {
+                /**
+                * @name dxDiagramOptions.document.units
+                * @type Enums.DiagramUnits
+                * @default "in"
+                */
+                units: DIAGRAM_DEFAULT_UNIT,
+                /**
+                * @name dxDiagramOptions.document.pageSize
+                * @type Object
+                */
+                /**
+                * @name dxDiagramOptions.document.pageSize.width
+                * @type Number
+                * @default 5.827
+                */
+                /**
+                * @name dxDiagramOptions.document.pageSize.height
+                * @type Object
+                * @default 8.268
+                */
+                pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
+                /**
+                * @name dxDiagramOptions.document.pageOrientation
+                * @type Enums.DiagramPageOrientation
+                * @default "portrait"
+                */
+                pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
+                /**
+                * @name dxDiagramOptions.document.pageColor
+                * @type String
+                * @default "white"
+                */
+                pageColor: DIAGRAM_DEFAULT_PAGE_COLOR
+            },
+
             /**
             * @name dxDiagramOptions.onDataChanged
             * @extends Action
@@ -895,16 +1103,52 @@ class Diagram extends Widget {
         }
     }
 
-    _toggleReadOnlyState() {
-        const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleReadOnly).execute(this.option("readOnly"));
-        this._setLeftPanelEnabled(!this.option("readOnly"));
-    }
-
     _optionChanged(args) {
         switch(args.name) {
             case "readOnly":
-                this._toggleReadOnlyState();
+                this._updateReadOnlyState();
+                break;
+            case "zoomLevel":
+                this._updateZoomLevelState();
+                break;
+            case "autoZoom":
+                this._updateAutoZoomState();
+                break;
+            case "simpleView":
+                this._updateSimpleViewState();
+                break;
+            case "fullscreen":
+                this._updateFullscreenState();
+                break;
+            case "showGrid":
+                this._updateShowGridState();
+                break;
+            case "snapToGrid":
+                this._updateSnapToGridState();
+                break;
+            case "gridSize":
+                this._updateGridSizeState();
+                break;
+            case "viewUnits":
+                this._updateViewUnitsState();
+                break;
+            case "document.units":
+                this._updateDocumentUnitsState();
+                break;
+            case "document.pageSize":
+                this._updateDocumentPageSizeState();
+                break;
+            case "document.pageOrientation":
+                this._updateDocumentPageOrientationState();
+                break;
+            case "document.pageColor":
+                this._updateDocumentPageColorState();
+                break;
+            case "document":
+                this._updateDocumentUnitsState();
+                this._updateDocumentPageSizeState();
+                this._updateDocumentPageOrientationState();
+                this._updateDocumentPageColorState();
                 break;
             case "nodes":
                 this._refreshNodesDataSource();

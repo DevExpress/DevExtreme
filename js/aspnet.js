@@ -4,8 +4,8 @@
         define(function(require, exports, module) {
             module.exports = factory(
                 require("jquery"),
-                require("./ui/set_template_engine"),
-                require("./ui/widget/ui.template_base").renderedCallbacks,
+                require("./core/templates/template_engine_registry").setTemplateEngine,
+                require("./core/templates/template_base").renderedCallbacks,
                 require("./core/guid"),
                 require("./ui/validation_engine"),
                 require("./core/utils/iterator"),
@@ -14,12 +14,10 @@
             );
         });
     } else {
-        var ui = DevExpress.ui;
-
         DevExpress.aspnet = factory(
             window.jQuery,
-            ui && ui.setTemplateEngine,
-            ui && ui.templateRendered,
+            DevExpress.setTemplateEngine,
+            DevExpress.templateRendered,
             DevExpress.data.Guid,
             DevExpress.validationEngine,
             DevExpress.utils.iterator,
@@ -126,12 +124,13 @@
 
     function createComponent(name, options, id, validatorOptions) {
         var render = function(_, container) {
+            templateRendered.remove(render);
+
             var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
                 $component = $(selector, container)[name](options);
             if($.isPlainObject(validatorOptions)) {
                 $component.dxValidator(validatorOptions);
             }
-            templateRendered.remove(render);
         };
 
         templateRendered.add(render);

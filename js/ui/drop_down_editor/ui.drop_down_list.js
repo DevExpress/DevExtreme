@@ -16,7 +16,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
-    ChildDefaultTemplate = require("../widget/child_default_template"),
+    ChildDefaultTemplate = require("../../core/templates/child_default_template").ChildDefaultTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
 
@@ -320,7 +320,7 @@ var DropDownList = DropDownEditor.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
+        this._defaultTemplates["item"] = new ChildDefaultTemplate("item");
     },
 
     _saveFocusOnWidget: function(e) {
@@ -545,9 +545,7 @@ var DropDownList = DropDownEditor.inherit({
     _fireContentReadyAction: commonUtils.noop,
 
     _setAriaTargetForList: function() {
-        // TODO: make getAriaTarget option
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
-        this._list.setAria("role", "combobox");
     },
 
     _renderList: function() {
@@ -557,10 +555,10 @@ var DropDownList = DropDownEditor.inherit({
             .appendTo(this._popup.$content());
 
         this._list = this._createComponent($list, List, this._listConfig());
-
         this._refreshList();
 
         this._setAriaTargetForList();
+        this._list.option("_listAttributes", { "role": "combobox" });
 
         this._renderPreventBlur(this._$list);
     },

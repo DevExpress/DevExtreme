@@ -12,7 +12,7 @@ const inArray = arrayUtils.inArray;
 import Locker from "../../core/utils/locker";
 import Widget from "../../ui/widget/ui.widget";
 import Editor from "../../ui/editor/editor";
-import NgTemplate from "./template";
+import { NgTemplate } from "./template";
 import ngModule from "./module";
 import CollectionWidget from "../../ui/collection/ui.collection_widget.edit";
 import dataUtils from "../../core/utils/data";

@@ -1390,6 +1390,12 @@ Axis.prototype = {
             maxVisible = visualRange && isDefined(visualRange.endValue) ? visualRange.endValue : businessRange.maxVisible,
             ticks = [];
 
+        if(options.type === constants.discrete && options.aggregateByCategory) {
+            return {
+                aggregateByCategory: true
+            };
+        }
+
         let aggregationInterval = options.aggregationInterval;
         let aggregationGroupWidth = options.aggregationGroupWidth;
 

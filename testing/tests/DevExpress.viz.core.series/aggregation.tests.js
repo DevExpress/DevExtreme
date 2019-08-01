@@ -992,3 +992,58 @@ QUnit.test("Aggregation methods when all points values are undefined", function(
     assert.strictEqual(this.aggregateData("min", this.data).length, 0, "min should skip a point");
     assert.strictEqual(this.aggregateData("count", this.data)[0].value, 0, "count should return a point with 0 value");
 });
+
+QUnit.test("Aggregate by category", function(assert) {
+    this.getBusinessRange = () => { return { categories: ["A", "B", "C"] }; };
+    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
+        return { aggregateByCategory: true };
+    });
+
+    const points = this.aggregateData("sum", [
+        { arg: "A", val: 2 },
+        { arg: "A", val: 1 },
+        { arg: "B", val: 5 },
+        { arg: "A", val: 4 },
+        { arg: "B", val: 4 }
+    ], "bar", {}, false, "discrete");
+
+    assert.equal(points.length, 2);
+    assert.equal(points[0].argument, "A");
+    assert.equal(points[0].value, 7);
+    assert.equal(points[1].argument, "B");
+    assert.equal(points[1].value, 9);
+});
+
+QUnit.test("Aggregate by category. Check aggregation info", function(assert) {
+    this.getBusinessRange = () => { return { categories: ["A", "B"] }; };
+    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
+        return { aggregateByCategory: true };
+    });
+
+    const calculate = sinon.spy(() => []);
+
+    this.aggregateData("custom", [
+        { arg: "A", val: 2 },
+        { arg: "A", val: 1 },
+        { arg: "B", val: 5 },
+        { arg: "A", val: 4 },
+        { arg: "B", val: 4 }
+    ], "bar", { aggregation: { calculate } }, false, "discrete");
+
+    assert.equal(calculate.callCount, 2);
+    assert.deepEqual(calculate.lastCall.args[0], {
+        aggregationInterval: null,
+        data: [
+            {
+                arg: "B",
+                val: 5
+            },
+            {
+                arg: "B",
+                val: 4
+            }
+        ],
+        intervalEnd: "B",
+        intervalStart: "B"
+    });
+});

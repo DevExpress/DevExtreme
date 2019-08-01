@@ -228,6 +228,7 @@ const DiagramCommands = {
             commands["fullscreen"]
         ];
     },
+
     getAllPropertyPanelCommands: function() {
         const { DiagramCommand } = getDiagram();
         return this.propertyPanelCommands ||
@@ -279,6 +280,11 @@ const DiagramCommands = {
                     text: "Auto Zoom",
                     widget: "dxCheckBox"
                 },
+                simpleView: {
+                    command: DiagramCommand.ToggleSimpleView,
+                    text: "Simple View",
+                    widget: "dxCheckBox"
+                },
             });
     },
     getDefaultPropertyPanelCommandGroups: function() {
@@ -286,7 +292,7 @@ const DiagramCommands = {
             { commands: ["units"] },
             { commands: ["pageSize", "pageLandscape", "pageColor"] },
             { commands: ["showGrid", "snapToGrid", "gridSize"] },
-            { commands: ["zoomLevel", "autoZoom"] },
+            { commands: ["zoomLevel", "autoZoom", "simpleView"] },
         ];
     },
     getPropertyPanelCommandsByGroups: function(groups) {
@@ -305,6 +311,7 @@ const DiagramCommands = {
         commandGroups = commandGroups || DiagramCommands.getDefaultPropertyPanelCommandGroups();
         return DiagramCommands.getPropertyPanelCommandsByGroups(commandGroups);
     },
+
     getAllContextMenuCommands: function() {
         const { DiagramCommand } = getDiagram();
         return this.contextMenuCommands ||
@@ -318,8 +325,11 @@ const DiagramCommands = {
                     text: "Copy"
                 },
                 paste: {
-                    command: DiagramCommand.Paste,
-                    text: "Paste"
+                    command: DiagramCommand.PasteInPosition,
+                    text: "Paste",
+                    getParameter: (diagramContextMenu) => {
+                        return diagramContextMenu.clickPosition;
+                    }
                 },
                 selectAll: {
                     command: DiagramCommand.SelectAll,
@@ -368,6 +378,7 @@ const DiagramCommands = {
             commands["unlock"]
         ];
     },
+
     _exportTo(widget, dataURI, format, mimeString) {
         const window = getWindow();
         if(window && window.atob && isFunction(window.Blob)) {

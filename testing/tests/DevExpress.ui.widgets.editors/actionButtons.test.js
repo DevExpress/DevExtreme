@@ -154,6 +154,24 @@ module("rendering", () => {
             assert.strictEqual($after.text(), "custom");
         });
 
+        test("editor with button should have smaller placeholder than the editor without buttons", (assert) => {
+            const $textBox = $("<div>").appendTo("body").dxTextBox({
+                width: 150,
+                placeholder: "Test long text example",
+                buttons: [{
+                    name: "custom",
+                    location: "after",
+                    options: {
+                        text: "B"
+                    }
+                }]
+            });
+            const beforeWidth = getComputedStyle($textBox.find(".dx-placeholder").get(0), ':before').width;
+            assert.ok(parseInt(beforeWidth) < $textBox.outerWidth(), "placeholder is smaller than the editor");
+            $textBox.remove();
+        });
+
+
         test("should not render 'clear' button if showClearButton is false", (assert) => {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: false,

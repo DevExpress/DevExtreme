@@ -9,7 +9,7 @@ var $ = require("../core/renderer"),
     DataHelperMixin = require("../data_helper"),
     List = require("./list"),
     themes = require("./themes"),
-    ChildDefaultTemplate = require("./widget/child_default_template");
+    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate;
 
 var DROP_DOWN_MENU_CLASS = "dx-dropdownmenu",
     DROP_DOWN_MENU_POPUP_CLASS = "dx-dropdownmenu-popup",
@@ -274,7 +274,7 @@ var DropDownMenu = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["content"] = new ChildDefaultTemplate("content", this);
+        this._defaultTemplates["content"] = new ChildDefaultTemplate("content");
     },
 
     _initMarkup: function() {

@@ -23,7 +23,7 @@ import { noop } from "core/utils/common";
 import { value as viewPort } from "core/utils/view_port";
 import devices from "core/devices";
 import fx from "animation/fx";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import dateLocalization from "localization/date";
 import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
 

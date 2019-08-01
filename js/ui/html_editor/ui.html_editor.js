@@ -4,7 +4,7 @@ import { isDefined, isFunction } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import { executeAsync } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
-import EmptyTemplate from "../widget/empty_template";
+import { EmptyTemplate } from "../../core/templates/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
 import Callbacks from "../../core/utils/callbacks";
@@ -240,7 +240,7 @@ const HtmlEditor = Editor.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate(this);
+        this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate();
     },
 
     _focusTarget: function() {
