@@ -1,45 +1,39 @@
-var $ = require("../core/renderer"),
-    fx = require("../animation/fx"),
-    translator = require("../animation/translator"),
-    mathUtils = require("../core/utils/math"),
-    extend = require("../core/utils/extend").extend,
-    noop = require("../core/utils/common").noop,
-    domUtils = require("../core/utils/dom"),
-    isDefined = require("../core/utils/type").isDefined,
-    devices = require("../core/devices"),
-    getPublicElement = require("../core/utils/dom").getPublicElement,
-    registerComponent = require("../core/component_registrator"),
-    CollectionWidget = require("./collection/ui.collection_widget.live_update").default,
-    Swipeable = require("../events/gesture/swipeable"),
-    Deferred = require("../core/utils/deferred").Deferred;
+import $ from "../core/renderer";
+import fx from "../animation/fx";
+import translator from "../animation/translator";
+import mathUtils from "../core/utils/math";
+import { extend } from "../core/utils/extend";
+import { noop } from "../core/utils/common";
+import { triggerResizeEvent, getPublicElement } from "../core/utils/dom";
+import { isDefined } from "../core/utils/type";
+import devices from "../core/devices";
+import registerComponent from "../core/component_registrator";
+import CollectionWidget from "./collection/ui.collection_widget.live_update";
+import Swipeable from "../events/gesture/swipeable";
+import { Deferred } from "../core/utils/deferred";
 
 
-var MULTIVIEW_CLASS = "dx-multiview",
-    MULTIVIEW_WRAPPER_CLASS = "dx-multiview-wrapper",
-    MULTIVIEW_ITEM_CONTAINER_CLASS = "dx-multiview-item-container",
-    MULTIVIEW_ITEM_CLASS = "dx-multiview-item",
-    MULTIVIEW_ITEM_HIDDEN_CLASS = "dx-multiview-item-hidden",
-    MULTIVIEW_ITEM_DATA_KEY = "dxMultiViewItemData",
+const MULTIVIEW_CLASS = "dx-multiview";
+const MULTIVIEW_WRAPPER_CLASS = "dx-multiview-wrapper";
+const MULTIVIEW_ITEM_CONTAINER_CLASS = "dx-multiview-item-container";
+const MULTIVIEW_ITEM_CLASS = "dx-multiview-item";
+const MULTIVIEW_ITEM_HIDDEN_CLASS = "dx-multiview-item-hidden";
+const MULTIVIEW_ITEM_DATA_KEY = "dxMultiViewItemData";
 
-    MULTIVIEW_ANIMATION_DURATION = 200;
+const MULTIVIEW_ANIMATION_DURATION = 200;
 
-var toNumber = function(value) {
-    return +(value);
-};
+const toNumber = value => +(value);
 
-var position = function($element) {
-    return translator.locate($element).left;
-};
+const position = $element => translator.locate($element).left;
 
-var _translator = {
-    move: function($element, position) {
+const _translator = {
+    move($element, position) {
         translator.move($element, { left: position });
     }
 };
 
-var animation = {
-
-    moveTo: function($element, position, duration, completeAction) {
+const animation = {
+    moveTo($element, position, duration, completeAction) {
         fx.animate($element, {
             type: "slide",
             to: { left: position },
@@ -48,10 +42,9 @@ var animation = {
         });
     },
 
-    complete: function($element) {
+    complete($element) {
         fx.stop($element, true);
     }
-
 };
 
 /**
@@ -60,7 +53,7 @@ var animation = {
 * @module ui/multi_view
 * @export default
 */
-var MultiView = CollectionWidget.inherit({
+const MultiView = CollectionWidget.inherit({
 
     _activeStateUnit: "." + MULTIVIEW_ITEM_CLASS,
 
@@ -313,7 +306,7 @@ var MultiView = CollectionWidget.inherit({
 
         if(isDefined(index) && !hasItemContent) {
             this._deferredItems[index].resolve();
-            domUtils.triggerResizeEvent($item);
+            triggerResizeEvent($item);
         }
     },
 
@@ -360,20 +353,18 @@ var MultiView = CollectionWidget.inherit({
         return mathUtils.sign(directionSignVariable);
     },
 
-    _initSwipeable: function() {
+    _getSwipeDisabledState() {
+        return !this.option("swipeEnabled") || this._itemsCount() <= 1;
+    },
+
+    _initSwipeable() {
         this._createComponent(this.$element(), Swipeable, {
-            disabled: !this.option("swipeEnabled"),
+            disabled: this._getSwipeDisabledState(),
             elastic: false,
             itemSizeFunc: this._itemWidth.bind(this),
-            onStart: (function(args) {
-                this._swipeStartHandler(args.event);
-            }).bind(this),
-            onUpdated: (function(args) {
-                this._swipeUpdateHandler(args.event);
-            }).bind(this),
-            onEnd: (function(args) {
-                this._swipeEndHandler(args.event);
-            }).bind(this)
+            onStart: args => this._swipeStartHandler(args.event),
+            onUpdated: args => this._swipeUpdateHandler(args.event),
+            onEnd: args => this._swipeEndHandler(args.event)
         });
     },
 
@@ -455,6 +446,11 @@ var MultiView = CollectionWidget.inherit({
         }
     },
 
+    _updateSwipeDisabledState() {
+        const disabled = this._getSwipeDisabledState();
+        Swipeable.getInstance(this.$element()).option("disabled", disabled);
+    },
+
     _optionChanged: function(args) {
         var value = args.value;
 
@@ -465,10 +461,14 @@ var MultiView = CollectionWidget.inherit({
             case "animationEnabled":
                 break;
             case "swipeEnabled":
-                Swipeable.getInstance(this.$element()).option("disabled", !value);
+                this._updateSwipeDisabledState();
                 break;
             case "deferRendering":
                 this._invalidate();
+                break;
+            case "items":
+                this._updateSwipeDisabledState();
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
