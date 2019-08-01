@@ -53,6 +53,8 @@ var OVERLAY_CLASS = "dx-overlay",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
+    PREVENT_SAFARI_SCROLLING_CLASS = "dx-prevent-safari-scrolling",
+
     TAB_KEY = "tab",
 
     POSITION_ALIASES = {
@@ -664,6 +666,7 @@ var Overlay = Widget.inherit({
                     completeShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = false;
                     that._actions.onShown();
+                    that._toggleSafariScrolling(false);
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -713,6 +716,8 @@ var Overlay = Widget.inherit({
             hidingArgs = { cancel: false };
 
         this._actions.onHiding(hidingArgs);
+
+        that._toggleSafariScrolling(true);
 
         if(hidingArgs.cancel) {
             this._isHidingActionCanceled = true;
@@ -1245,10 +1250,26 @@ var Overlay = Widget.inherit({
     },
 
     _fixWrapperPosition: function() {
-        var $wrapper = this._$wrapper,
-            $container = this._getContainer();
+        this._$wrapper.css("position", this._useFixedPosition() ? "fixed" : "absolute");
+    },
 
-        $wrapper.css("position", this._isWindow($container) && !iOS ? "fixed" : "absolute");
+    _useFixedPosition: function() {
+        var $container = this._getContainer();
+        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
+    },
+
+    _toggleSafariScrolling: function(scrollingEnabled) {
+        if(iOS && this._useFixedPosition()) {
+            var body = domAdapter.getBody();
+            if(scrollingEnabled) {
+                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._bodyScrollTop);
+                this._bodyScrollTop = undefined;
+            } else if(this.option("visible")) {
+                this._bodyScrollTop = window.pageYOffset;
+                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+            }
+        }
     },
 
     _renderShading: function() {
@@ -1414,6 +1435,7 @@ var Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
+        this._toggleSafariScrolling(true);
 
         this._actions = null;
 
