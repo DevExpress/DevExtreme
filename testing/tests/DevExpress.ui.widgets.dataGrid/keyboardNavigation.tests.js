@@ -22,16 +22,17 @@ import typeUtils from "core/utils/type";
 import eventUtils from "events/utils";
 import eventsEngine from "events/core/events_engine";
 import keyboardNavigationModule from "ui/grid_core/ui.grid_core.keyboard_navigation";
-var KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
 import { RowsView } from "ui/data_grid/ui.data_grid.rows";
 import { setupDataGridModules, MockDataController, MockColumnsController, MockEditingController, MockSelectionController } from "../../helpers/dataGridMocks.js";
 import publicComponentUtils from "core/utils/public_component";
 import { PagerWrapper, HeaderPanelWrapper, FilterPanelWrapper, DataGridWrapper, HeadersWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 import fx from "animation/fx";
 
-var device = devices.real();
-
-var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
+var KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation,
+    device = devices.real(),
+    isDesktopDevice = devices.real().deviceType === "desktop",
+    POINTER_EVENT_NAME = isDesktopDevice ? "dxpointerdown" : "dxpointerup",
+    CLICK_EVENT = eventUtils.addNamespace(POINTER_EVENT_NAME, "dxDataGridKeyboardNavigation");
 
 function testInDesktop(name, testFunc) {
     if(device.deviceType === "desktop") {
@@ -318,7 +319,7 @@ QUnit.testInActiveWindow("Element of view is subscribed to events", function(ass
     callViewsRenderCompleted(this.component._views);
 
     // assert
-    assert.equal(element.eventsInfo[eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation")].subscribeToEventCounter, 1, "dxClick");
+    assert.equal(element.eventsInfo[eventUtils.addNamespace(POINTER_EVENT_NAME, "dxDataGridKeyboardNavigation")].subscribeToEventCounter, 1, "dxClick");
 });
 
 QUnit.testInActiveWindow("Element of view is unsubscribed from events", function(assert) {
@@ -333,7 +334,7 @@ QUnit.testInActiveWindow("Element of view is unsubscribed from events", function
     callViewsRenderCompleted(this.component._views);
 
     // assert
-    assert.equal(element.eventsInfo[eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation")].unsubscribeFromEventCounter, 1, "dxClick");
+    assert.equal(element.eventsInfo[eventUtils.addNamespace(POINTER_EVENT_NAME, "dxDataGridKeyboardNavigation")].unsubscribeFromEventCounter, 1, "dxClick");
 });
 
 QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert) {
@@ -920,7 +921,7 @@ QUnit.testInActiveWindow("Reset focused cell info on click ", function(assert) {
     navigationController._getFocusedCell = function() {
         return $cell;
     };
-    $(document).trigger("dxpointerdown");
+    $(document).trigger(POINTER_EVENT_NAME);
 
     // assert
     assert.deepEqual(navigationController._focusedCellPosition, {}, "focusedCellPosition");
@@ -946,12 +947,40 @@ QUnit.testInActiveWindow("focused cell info is not reset when element of rowvIew
     navigationController._getFocusedCell = function() {
         return $cell;
     };
-    $($cell).trigger("dxpointerdown");
+    $($cell).trigger(POINTER_EVENT_NAME);
 
     // assert
     assert.deepEqual(navigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
     assert.equal($cell.attr("tabIndex"), "0", "tabIndex");
 });
+
+QUnit.test("Test pointer event type ", function(assert) {
+    // arrange
+    var navigationController = new KeyboardNavigationController(this.component);
+
+    // assert
+    assert.ok(navigationController._getPointerEventName(), POINTER_EVENT_NAME);
+});
+
+if(device.deviceType !== "desktop") {
+    QUnit.testInActiveWindow("Test preventing touch pointer event ", function(assert) {
+        // arrange
+        var navigationController = new KeyboardNavigationController(this.component);
+
+        // act
+        navigationController._touchPointerDownPosition = {
+            clientX: 10,
+            clientY: 20
+        };
+
+        // assert
+        assert.ok(navigationController._needPreventTouchPointerEvent({ clientX: 10, clientY: 30 }), "Click handler prevented");
+        assert.ok(navigationController._needPreventTouchPointerEvent({ clientX: 20, clientY: 20 }), "Click handler prevented");
+        assert.notOk(navigationController._needPreventTouchPointerEvent({ clientX: 10, clientY: 20 }), "Click handler not prevented");
+        assert.notOk(navigationController._needPreventTouchPointerEvent({ clientX: 14, clientY: 20 }), "Click handler not prevented");
+        assert.notOk(navigationController._needPreventTouchPointerEvent({ clientX: 10, clientY: 24 }), "Click handler not prevented");
+    });
+}
 
 QUnit.testInActiveWindow("Cell is not focused when view is renderCompleted without keydown event", function(assert) {
     // arrange
@@ -3567,7 +3596,7 @@ QUnit.testInActiveWindow("Focus link elements on tab key", function(assert) {
 
     // act
     var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
-    $cell.focus().trigger("dxpointerdown");
+    $cell.focus().trigger(POINTER_EVENT_NAME);
 
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $cell).preventDefault;
 
@@ -3627,7 +3656,7 @@ QUnit.testInActiveWindow("Focus link elements on shift+tab key", function(assert
 
     // act
     var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(2);
-    $cell.focus().trigger("dxpointerdown");
+    $cell.focus().trigger(POINTER_EVENT_NAME);
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, $cell).preventDefault;
     this.clock.tick();
 
@@ -3645,7 +3674,7 @@ QUnit.testInActiveWindow("Focus link elements on shift+tab key", function(assert
     assert.ok($("#container .dx-datagrid-focus-overlay").hasClass("dx-hidden"), "focus overlay is not visible");
 
     // act
-    var $link1 = $(".link1").first().focus().trigger("dxpointerdown");
+    var $link1 = $(".link1").first().focus().trigger(POINTER_EVENT_NAME);
     isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, $link1).preventDefault;
     this.clock.tick();
 
@@ -3685,7 +3714,7 @@ if(device.deviceType === "desktop") {
 
         // act
         var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
-        $cell.focus().trigger("dxpointerdown");
+        $cell.focus().trigger(POINTER_EVENT_NAME);
         var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $cell).preventDefault;
         this.clock.tick();
 
@@ -4501,7 +4530,7 @@ QUnit.testInActiveWindow('Tab index is not applied when focus is located inside 
     // act
     var $input = $testElement.find(".dx-texteditor-input").first();
 
-    $($input).trigger("dxpointerdown.dxDataGridKeyboardNavigation");
+    $($input).trigger(`${POINTER_EVENT_NAME}.dxDataGridKeyboardNavigation`);
     this.clock.tick();
 
     this.triggerKeyDown("tab", false, false, $testElement.find(":focus").get(0));
@@ -4532,8 +4561,8 @@ QUnit.testInActiveWindow("Add custom tabIndex to focused element after key press
 
 QUnit.testInActiveWindow("Add custom tabIndex to rowsView on pageDown", function(assert) {
     // arrange
-    var that = this;
-    var done = assert.async();
+    var that = this,
+        done = assert.async();
 
     this.options = {
         height: 200,
@@ -4994,7 +5023,7 @@ QUnit.testInActiveWindow("Focused cell from free space row when view is rendered
     };
 
     // act
-    $($container.find(".dx-freespace-row").find("td").first()).trigger("dxpointerdown");
+    $($container.find(".dx-freespace-row").find("td").first()).trigger(POINTER_EVENT_NAME);
     this.rowsView.renderCompleted.fire();
 });
 
@@ -5203,7 +5232,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         var rowsView = this.gridView.getView("rowsView");
 
         var $expandCell = $(rowsView.element().find("td").first());
-        $expandCell.trigger("dxpointerdown");
+        $expandCell.trigger(POINTER_EVENT_NAME);
         this.clock.tick();
         this.triggerKeyDown("rightArrow");
         this.clock.tick();
@@ -5270,8 +5299,8 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         // act
         var $cell = $(this.getCellElement(0, 1));
-        $cell.trigger("dxpointerdown");
-        $cell.trigger("dxpointerdown");
+        $cell.trigger(POINTER_EVENT_NAME);
+        $cell.trigger(POINTER_EVENT_NAME);
 
         // assert
         assert.equal($(this.getCellElement(0, 1)).attr("tabIndex"), 0, "cell has tab index");
@@ -5613,7 +5642,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         var rowsView = this.gridView.getView("rowsView");
 
         var $expandCell = $(rowsView.element().find("td").first());
-        $expandCell.trigger("dxpointerdown");
+        $expandCell.trigger(POINTER_EVENT_NAME);
 
         this.clock.tick();
 
@@ -5870,7 +5899,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // act
         that.gridView.render($("#container"));
         $("#editButton")
-            .trigger("dxpointerdown.dxDataGridKeyboardNavigation")
+            .trigger(`${POINTER_EVENT_NAME}.dxDataGridKeyboardNavigation`)
             .click();
 
         this.clock.tick();

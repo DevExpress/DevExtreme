@@ -12,6 +12,7 @@ import eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import { noop } from "../../core/utils/common";
 import { selectView } from "../shared/accessibility";
+import devices from "../../core/devices";
 
 var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_CLASS = "edit-form",
@@ -44,7 +45,9 @@ var ROWS_VIEW_CLASS = "rowsview",
     EDIT_MODE_CELL = "cell",
 
     FOCUS_TYPE_ROW = "row",
-    FOCUS_TYPE_CELL = "cell";
+    FOCUS_TYPE_CELL = "cell",
+
+    isDesktopDevice = devices.real().deviceType === "desktop";
 
 function isGroupRow($row) {
     return $row && $row.hasClass(GROUP_ROW_CLASS);
@@ -163,16 +166,22 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var tabIndex = this.option("tabIndex");
         $element.attr("tabIndex", isDefined(tabIndex) ? tabIndex : 0);
     },
+
     _isEventInCurrentGrid: function(event) {
         var $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent();
         return $grid.is(this.component.$element());
     },
+
     _clickHandler: function(e) {
         var event = e.event,
             $target = $(event.currentTarget),
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
             isEditingCell = $target.hasClass(EDITOR_CELL_CLASS);
+
+        if(this._needPreventTouchPointerEvent(event)) {
+            return;
+        }
 
         if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
@@ -194,6 +203,17 @@ var KeyboardNavigationController = core.ViewController.inherit({
         } else if($target.is("td")) {
             this._resetFocusedCell();
         }
+    },
+
+    _needPreventTouchPointerEvent: function(event) {
+        if(!isDesktopDevice && this._touchPointerDownPosition) {
+            let deltaX = Math.abs(event.clientX - this._touchPointerDownPosition.clientX),
+                deltaY = Math.abs(event.clientY - this._touchPointerDownPosition.clientY);
+            if(deltaX > 4 || deltaY > 4) {
+                return true;
+            }
+        }
+        return false;
     },
 
     _allowRowUpdating: function() {
@@ -249,7 +269,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _initFocusedViews: function() {
         var that = this,
-            clickAction = that.createAction(that._clickHandler);
+            clickAction = that.createAction(that._clickHandler),
+            touchDevicePointerDownAction = that.createAction(that._onTouchDevicePointerDown);
 
         that._focusedViews = [];
 
@@ -268,10 +289,16 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         isFocusedViewCorrect = that._focusedView && that._focusedView.name === view.name,
                         needUpdateFocus = false,
                         isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
-                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
+                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
+                        pointerEventName = that._getPointerEventName();
 
-                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
+                    if(!isDesktopDevice) {
+                        eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), touchDevicePointerDownAction);
+                        eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, touchDevicePointerDownAction);
+                    }
+
+                    eventsEngine.off($element, eventUtils.addNamespace(pointerEventName, "dxDataGridKeyboardNavigation"), clickAction);
+                    eventsEngine.on($element, eventUtils.addNamespace(pointerEventName, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
                         viewIndex: index,
                         view: view
                     }, clickAction);
@@ -285,6 +312,19 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 });
             }
         });
+    },
+    _onTouchDevicePointerDown: function(e) {
+        var event = e.event;
+        if(event) {
+            this._touchPointerDownPosition = {
+                clientX: event.clientX,
+                clientY: event.clientY
+            };
+        }
+    },
+
+    _getPointerEventName: function() {
+        return isDesktopDevice ? pointerEvents.down : pointerEvents.up;
     },
 
     _initKeyDownProcessor: function(context, element, handler) {
@@ -1412,6 +1452,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             that._canceledCellPosition = null;
 
+            that._touchPointerDownPosition = null;
+
             that._initFocusedViews();
 
             that._documentClickHandler = that.createAction(function(e) {
@@ -1425,7 +1467,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             that.createAction("onKeyDown");
 
-            eventsEngine.on(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), that._documentClickHandler);
+            eventsEngine.on(domAdapter.getDocument(), eventUtils.addNamespace(that._getPointerEventName(), "dxDataGridKeyboardNavigation"), that._documentClickHandler);
         }
     },
 
