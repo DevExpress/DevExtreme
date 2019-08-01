@@ -1033,6 +1033,22 @@ QUnit.module("popup", moduleConfig, () => {
         assert.ok($('.dx-overlay-content').height() <= Math.ceil($(window).height() * 0.5));
     });
 
+    QUnit.test("popup max height are limited by container bounds", assert => {
+        const items = ["item 1", "item 2", "item 3", "item 1", "item 2", "item 3", "item 1", "item 2", "item 3"];
+        const specificContainer = $("<div>").attr("id", "specific-container").height(80).appendTo("#qunit-fixture");
+
+        const instance = $("#dropDownList").dxDropDownList({
+            items,
+            dropDownOptions: {
+                container: "#specific-container"
+            },
+            opened: true
+        }).dxDropDownList("instance");
+
+        assert.roughEqual($(instance.content(".dx-overlay-content")).parent().height(), 80 / 2, 2, "popup sizes are limited by container bounds");
+        specificContainer.remove();
+    });
+
     QUnit.test("skip gesture event class attach only when popup is opened", assert => {
         const SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event";
         const $dropDownList = $("#dropDownList").dxDropDownList({
