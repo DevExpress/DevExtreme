@@ -20,6 +20,14 @@ export class RowsViewWrapper extends WrapperBase {
     getElement() {
         return this.getContainer().find(".dx-datagrid-rowsview");
     }
+
+    getVirtualRowElement() {
+        return this.getContainer().find(".dx-virtual-row");
+    }
+
+    getVirtualCell(columnIndex) {
+        return this.getVirtualRowElement().find("td").eq(columnIndex);
+    }
 }
 
 export class PagerWrapper extends WrapperBase {

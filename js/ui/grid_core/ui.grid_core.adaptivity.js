@@ -375,7 +375,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isCellValid: function($cell) {
-        return !$cell.hasClass(MASTER_DETAIL_CELL_CLASS);
+        return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS);
     },
 
     _addCssClassToColumn: function(cssClassName, visibleIndex) {

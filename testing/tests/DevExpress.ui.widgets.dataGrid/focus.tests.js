@@ -16,6 +16,7 @@ import $ from "jquery";
 import eventUtils from "events/utils";
 import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
 import ArrayStore from "data/array_store";
+import { RowsViewWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
 
@@ -5233,4 +5234,62 @@ QUnit.testInActiveWindow("DataGrid - onFocusedCellChanging event should execute 
     this.clock.tick();
     // assert
     assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
+});
+
+QUnit.testInActiveWindow("DataGrid - click by cell should not generate exception if rowTemplate is used (T800604)", function(assert) {
+    var d = $.Deferred(),
+        rowsView,
+        keyboardController,
+        items = generateItems(1),
+        rowsViewWrapper = new RowsViewWrapper("#container");
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.columns = ["id", "field1"];
+    this.options = {
+        height: 100,
+        remoteOperations: true,
+        dataSource: {
+            load: () => {
+                if(d.state() === "resolved") {
+                    d = $.Deferred();
+                }
+                return d.promise();
+            }
+        },
+        paging: {
+            pageSize: 1
+        },
+        scrolling: {
+            mode: "virtual"
+        }
+    };
+
+    this.setupModule();
+
+    d.resolve(items, { totalCount: 8 });
+    this.clock.tick();
+    d.resolve(items);
+    this.clock.tick();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    rowsView.resize();
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // act
+    try {
+        rowsViewWrapper.getVirtualCell(0).trigger("dxpointerdown").click();
+        rowsViewWrapper.getVirtualCell(1).trigger("dxpointerdown").click();
+        assert.ok(true, "No Exception");
+    } catch(e) {
+        // assert
+        assert.ok(false, e.message);
+    }
 });
