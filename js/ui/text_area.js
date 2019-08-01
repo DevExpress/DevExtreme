@@ -247,7 +247,7 @@ var TextArea = TextBox.inherit({
         var boundaryValue = this.option(optionName);
 
         if(isDefined(boundaryValue)) {
-            return typeof boundaryValue === "number" ? boundaryValue : sizeUtils.parseHeight(boundaryValue, this._$textEditorContainer.get(0));
+            return typeof boundaryValue === "number" ? boundaryValue : sizeUtils.parseHeight(boundaryValue, this._input().get(0));
         }
     },
 
