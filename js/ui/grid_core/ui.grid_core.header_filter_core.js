@@ -151,7 +151,9 @@ exports.HeaderFilterView = modules.View.inherit({
     _getSearchExpr: function(options) {
         var lookup = options.lookup,
             useDefaultSearchExpr = options.useDefaultSearchExpr,
-            headerFilterDataSource = options.headerFilter && options.headerFilter.dataSource;
+            headerFilterDataSource = options.headerFilter && options.headerFilter.dataSource,
+            dataSource = this.getController("data").dataSource(),
+            remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
 
         if(useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
             return DEFAULT_SEARCH_EXPRESSION;
@@ -165,7 +167,7 @@ exports.HeaderFilterView = modules.View.inherit({
             var group = options.dataSource.group;
             if(Array.isArray(group) && group.length > 0) {
                 return group[0].selector;
-            } else if(isFunction(group)) {
+            } else if(isFunction(group) && !remoteFiltering) {
                 return group;
             }
         }
