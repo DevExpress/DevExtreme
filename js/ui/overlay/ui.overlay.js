@@ -1435,6 +1435,7 @@ var Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
+        this._toggleSafariScrolling(true);
 
         this._actions = null;
 
