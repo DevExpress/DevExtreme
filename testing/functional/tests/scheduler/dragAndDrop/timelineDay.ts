@@ -1,20 +1,25 @@
 import { ClientFunction } from 'testcafe';
 import { getContainerFileUrl } from '../../../helpers/testHelper';
 
+import { dataSource } from './init/widget.data';
 import { createScheduler } from './init/widget.setup';
-import { primaryDataSource } from './init/widget.data';
 
+import { TablePosition, Feature } from './helpers/appointment.helper';
+import { AppointmentModel } from './helpers/appointment.model';
 
-import { appointmentIds, dragAndDropCells } from './init/appointment.map';
-import { dragAndDropTest } from './init/dragAndDrop';
+import { movementMap } from './map/timelineDay.map';
 
-fixture`Behaviour dragging between cells in the timelineDayView-mode`.page(getContainerFileUrl());
+fixture
+    `Rearrange appointments in the Scheduler widget with the drag-and-drop gesture`.page(getContainerFileUrl());
 
-test('Appointments in the timelineDayView-mode should be replaced on the timeline with maintaining their size and duration', async t => {
-    for (let appointmentId of appointmentIds) {
-        for (let cellId of dragAndDropCells) {
-            await dragAndDropTest(t, appointmentId, `Primary #${appointmentId}`, 0, cellId);
+test('Rearrange appointments with the drag-and-drop gesture in timelineDay mode', async t => {
+    for (let item of movementMap) {
+        for (let step of item.features) {
+            let appointment = new AppointmentModel(item.title, step);
+
+            await appointment.dropTo(t, new TablePosition(step.position.row, step.position.cell));
+            await appointment.compare(t, [Feature.height, Feature.width, Feature.startTime, Feature.endTime]);
         }
     }
 
-}).before(async () => { await createScheduler('timelineDay', primaryDataSource) });
+}).before(async () => { await createScheduler('timelineDay', dataSource) });

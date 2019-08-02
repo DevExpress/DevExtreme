@@ -1,26 +1,24 @@
 import { ClientFunction } from 'testcafe';
 import { getContainerFileUrl } from '../../../helpers/testHelper';
 
-import { createScheduler } from './init/widget.setup';
 import { dataSource } from './init/widget.data';
+import { createScheduler } from './init/widget.setup';
 
+import { TablePosition, Feature } from './helpers/appointment.helper';
+import { AppointmentModel } from './helpers/appointment.model';
 
-import { appointmentIds, dragAndDropRows, lastRow } from './init/appointment.map';
-import { dragAndDropTest } from './init/dragAndDrop';
+import { movementMap } from './map/week.map';
 
-fixture`Behaviour dragging between scheduler cells in the weekView-mode`.page(getContainerFileUrl());
+fixture
+    `Rearrange appointments in the Scheduler widget with the drag-and-drop gesture`.page(getContainerFileUrl());
 
-test('Appointments in the weekView-mode should be replaced on the timeline with maintaining their size and duration', async t => {
-    const lastCell = 6;
-    for (let appointmentId of appointmentIds) {
-        for (let rowId of dragAndDropRows) {
-            const inverseRowId = lastRow - rowId;
+test('Rearrange appointments with the drag-and-drop gesture in Week mode', async t => {
+    for (let item of movementMap) {
+        for (let step of item.features) {
+            let appointment = new AppointmentModel(item.title, step);
 
-            await dragAndDropTest(t, appointmentId, `Primary #${appointmentId}`, rowId, lastCell);
-            await dragAndDropTest(t, appointmentId, `Primary #${appointmentId}`, rowId);
-
-            await dragAndDropTest(t, appointmentId, `Secondary #${appointmentId}`, inverseRowId);
-            await dragAndDropTest(t, appointmentId, `Secondary #${appointmentId}`, inverseRowId, lastCell);
+            await appointment.dropTo(t, new TablePosition(step.position.row, step.position.cell));
+            await appointment.compare(t, [Feature.height, Feature.startTime, Feature.endTime]);
         }
     }
 
