@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const path = require('path');
-const rename = require('gulp-rename');
+const fs = require('fs');
 const strip = require('gulp-strip-css-comments');
 const context = require('./context.js');
 const browsersList = require('../../package.json').browserslist;
@@ -41,48 +41,54 @@ gulp.task('style-compiler-themes', function(callback) {
     );
 });
 
-const materialColors = [ 'blue', 'lime', 'orange', 'purple', 'teal' ];
-const materialLights = [ 'light', 'dark' ];
-const sizeSchemes = [ 'default', 'compact' ];
-const materialTasks = [];
-
-materialColors.forEach((color) => {
-    materialLights.forEach((light) => {
-        sizeSchemes.forEach((size) => {
-            materialTasks.push({ color, light, size });
-        });
-    });
-});
-
-gulp.task('style-compiler-themes1', gulp.parallel(materialTasks.map((task) => {
+const compileBundle = (src) => {
     const cssArtifactsPath = path.join(process.cwd(), 'artifacts/css');
-    const lessSrcPath = path.join(process.cwd(), 'styles/bundles');
-    const sizePostfix = task.size === 'default' ? '' : '.' + task.size;
-    const fileName = `dx.material.${task.color}.${task.light}${sizePostfix}.css`;
+    return gulp
+        .src(src)
+        .pipe(less({
+            paths: [ path.join(process.cwd(), 'styles') ],
+            plugins: [ autoPrefix ],
+            useFileCache: true
+        }))
+        .pipe(strip())
+        .pipe(gulp.dest(path.join(cssArtifactsPath, 'new'))); // TODO 'new' path changed
+};
 
-    return function() {
-        return gulp
-            .src(path.join(lessSrcPath, 'material.less'))
-            .pipe(less({
-                paths: [ path.join(process.cwd(), 'styles') ],
-                plugins: [ autoPrefix ],
-                useFileCache: true,
-                modifyVars: task
-            }))
-            .pipe(strip())
-            .pipe(rename(fileName))
-            .pipe(gulp.dest(path.join(cssArtifactsPath, 'new'))); // TODO 'new' path changed
-    };
+const getBundleTasks = (bundleGroup) => {
+    const lessSrcPath = path.join(process.cwd(), 'styles', 'bundles', bundleGroup);
+    const lessBundles = fs.readdirSync(lessSrcPath);
+    return lessBundles.map((bundle) => {
+        return () => compileBundle(path.join(lessSrcPath, bundle));
+    });
+};
+
+gulp.task('style-compiler-material', gulp.parallel(getBundleTasks('material')));
+gulp.task('style-compiler-generic', gulp.parallel(getBundleTasks('generic')));
+gulp.task('style-compiler-ios7', gulp.parallel(getBundleTasks('ios7')));
+
+gulp.task('style-compiler-themes1',
+    gulp.parallel(
+        'style-compiler-generic',
+        'style-compiler-material',
+        'style-compiler-ios7')
     // TODO copy fonts and styles
-})));
+);
 
 gulp.task('style-compiler-themes-dev', function(callback) {
     return gulp.watch("styles/**", gulp.series('style-compiler-themes'));
 });
 
-gulp.task('style-compiler-themes-dev1', function(callback) {
-    return gulp.watch("styles/**", gulp.series('style-compiler-themes1'));
-});
+gulp.task('style-compiler-themes-dev1', gulp.parallel(() => {
+    const commonSources = [
+        "styles/widgets/base/**",
+        "styles/mixins.less",
+        "styles/theme.less"
+    ];
+
+    gulp.watch(["styles/widgets/generic/**", "styles/bundles/generic/**"].concat(commonSources), gulp.series('style-compiler-generic'));
+    gulp.watch(["styles/widgets/material/**", "styles/bundles/material/**"].concat(commonSources), gulp.series('style-compiler-material'));
+    gulp.watch(["styles/widgets/ios7/**", "styles/bundles/ios7/**"].concat(commonSources), gulp.series('style-compiler-ios7'));
+}));
 
 gulp.task('style-compiler-tb-assets', function(callback) {
     var assetsPath = path.join(process.cwd(), 'themebuilder');
