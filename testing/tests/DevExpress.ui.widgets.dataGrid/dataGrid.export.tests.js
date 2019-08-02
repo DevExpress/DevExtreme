@@ -30,11 +30,7 @@ QUnit.test("Empty grid", function(assert) {
 
     helper.runGeneralTest(
         assert,
-        {
-            export: {
-                ignoreExcelErrors: false
-            }
-        },
+        {},
         { styles, worksheet, sharedStrings });
 });
 
@@ -81,8 +77,7 @@ QUnit.test("Columns - number", function(assert) {
                 f4: 1, f5: 2, f6: 2,
                 f7: Number.NaN, f8: Number.POSITIVE_INFINITY, f9: Number.NEGATIVE_INFINITY
             }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -133,14 +128,13 @@ QUnit.test("Columns - number, unbound", function(assert) {
                 { dataType: "number", calculateCellValue: () => Number.NEGATIVE_INFINITY }
             ],
             dataSource: [{ id: 0 }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Columns - number, unbound, export selection", function(assert) {
+QUnit.test("Columns - number, unbound, selectedRowIndexes: [0]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -152,9 +146,10 @@ QUnit.test("Columns - number, unbound, export selection", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols>' +
         '<col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData><row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="n"><v>0</v></c>' +
-        '</row></sheetData></worksheet>';
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>0</v></c></row>' +
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
     helper.runGeneralTest(
@@ -163,9 +158,8 @@ QUnit.test("Columns - number, unbound, export selection", function(assert) {
             columns: [
                 { dataType: "number", calculateCellValue: () => 0 }
             ],
-            dataSource: [{}],
+            dataSource: [{}, {}],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: [0]
         },
         { styles, worksheet, sharedStrings }
@@ -211,7 +205,6 @@ QUnit.test("Columns - number with format as percent", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "percent", precision: 6 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             dataSource: [{ f1: 1 }],
         },
         { styles, worksheet }
@@ -257,7 +250,6 @@ QUnit.test("Columns - number with format as fixedPoint", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "decimal", precision: 7 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             dataSource: [{ f1: 1 }],
         },
         { styles, worksheet }
@@ -303,7 +295,6 @@ QUnit.test("Columns - number with format as exponential", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "exponential", precision: 3 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             dataSource: [{ f1: 1 }],
         },
         { styles, worksheet }
@@ -337,8 +328,7 @@ QUnit.test("Columns - number with format as currency", function(assert) {
         {
             columns: [1, 2, 3, 4, 5, 6].map(i => { return { dataField: 'f' + i.toString(), dataType: "number", format: "currency" }; }),
             dataSource: [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet }
     );
@@ -388,8 +378,7 @@ QUnit.test("Columns - number with format as currency format_en local", function(
                 { dataField: "f1", dataType: "number", format: { type: "currency", precision: 5 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            dataSource: [{ f1: 1 }],
+            dataSource: [{ f1: 1 }]
         },
         { styles, worksheet }
     );
@@ -418,7 +407,6 @@ QUnit.test("Columns - number with format as largeNumber", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "largeNumber", precision: 0 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             dataSource: [{ f1: 1 }],
         },
         { styles, worksheet }
@@ -464,7 +452,6 @@ QUnit.test("Columns - number with format as thousands", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "thousands", precision: 3 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             dataSource: [{ f1: 1 }],
         },
         { styles, worksheet }
@@ -510,8 +497,7 @@ QUnit.test("Columns - number with format as millions", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "millions", precision: 3 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            dataSource: [{ f1: 1 }],
+            dataSource: [{ f1: 1 }]
         },
         { styles, worksheet }
     );
@@ -556,8 +542,7 @@ QUnit.test("Columns - number with format as billions", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "billions", precision: 3 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            dataSource: [{ f1: 1 }],
+            dataSource: [{ f1: 1 }]
         },
         { styles, worksheet }
     );
@@ -602,8 +587,7 @@ QUnit.test("Columns - number with format as trillions", function(assert) {
                 { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 3 } },
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            dataSource: [{ f1: 1 }],
+            dataSource: [{ f1: 1 }]
         },
         { styles, worksheet }
     );
@@ -639,14 +623,13 @@ QUnit.test("Columns - string", function(assert) {
         {
             columns: [1, 2, 3, 4, 5, 6].map(i => { return { dataField: 'f' + i.toString(), dataType: "string" }; }),
             dataSource: [{ f1: undefined, f2: null, f3: '', f4: 'str1', f5: 'str2', f6: 'str2' }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Columns - string, export selection", function(assert) {
+QUnit.test("Columns - string, selectedRowIndexes: [1]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -657,10 +640,10 @@ QUnit.test("Columns - string, export selection", function(assert) {
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData><row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row></sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
-        '<si><t>0</t></si>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
         '<si><t>1</t></si>' +
         '</sst>';
 
@@ -669,8 +652,7 @@ QUnit.test("Columns - string, export selection", function(assert) {
         {
             dataSource: [{ f1: "0" }, { f1: "1" }],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            selectedRowIndexes: [0, 1]
+            selectedRowIndexes: [1]
         },
         { styles, worksheet, sharedStrings }
     );
@@ -713,14 +695,13 @@ QUnit.test("Columns - string, unbound", function(assert) {
                 { dataType: "string", calculateCellValue: () => 'str2' },
             ],
             dataSource: [{ id: 0 }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Columns - string, unbound, export selection", function(assert) {
+QUnit.test("Columns - string, unbound, selectedRowIndexes: [1]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -731,30 +712,32 @@ QUnit.test("Columns - string, unbound, export selection", function(assert) {
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols>' +
-        '<col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData><row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '<col width="13.57" min="1" max="1" />' +
+        '<col width="13.57" min="2" max="2" />' +
+        '</cols>' +
+        '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c><c r="B1" s="3" t="s"><v>0</v></c>' +
         '</row></sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
-        '<si><t>0</t></si>' +
+        '<si><t>1</t></si>' +
         '</sst>';
 
     helper.runGeneralTest(
         assert,
         {
             columns: [
-                { dataType: "string", calculateCellValue: () => "0" }
+                { dataType: "string", calculateCellValue: (rowData) => rowData.id },
+                { dataType: "string", calculateCellValue: (rowData) => rowData.id }
             ],
-            dataSource: [{}],
+            dataSource: [{ id: 0 }, { id: 1 }],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            selectedRowIndexes: [0]
+            selectedRowIndexes: [1]
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Columns - string, unbound, export selection, dataField property not exist in dataSource", function(assert) {
+QUnit.test("Columns - string, unbound, selectedRowIndexes: [0], dataField property not exist in dataSource", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -765,20 +748,16 @@ QUnit.test("Columns - string, unbound, export selection, dataField property not 
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols><col width="13.57" min="1" max="1" />' +
         '<col width="13.57" min="2" max="2" />' +
         '<col width="13.57" min="3" max="3" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>3</v></c><c r="B2" s="3" t="s"><v>4</v></c><c r="C2" s="3" t="s"><v>5</v></c></row>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c><c r="B1" s="3" t="s"><v>1</v></c><c r="C1" s="3" t="s"><v>2</v></c></row>' +
         '</sheetData>' +
         '</worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="6" uniqueCount="6">' +
-        '<si><t>Field 1</t></si>' +
-        '<si><t>Field 2</t></si>' +
-        '<si><t>Field Not Exist</t></si>' +
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
         '<si><t>str1</t></si>' +
         '<si><t>str1_1</t></si>' +
         '<si><t>str1_notExists</t></si>' +
@@ -795,8 +774,8 @@ QUnit.test("Columns - string, unbound, export selection, dataField property not 
             selection: {
                 mode: "multiple"
             },
+            showColumnHeaders: false,
             dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: [0]
         },
         { styles, worksheet, sharedStrings }
@@ -830,8 +809,7 @@ QUnit.test("Columns - date", function(assert) {
         {
             columns: [1, 2, 3, 4, 5].map(i => { return { dataField: 'f' + i.toString(), dataType: "date" }; }),
             dataSource: [{ f1: undefined, f2: null, f3: new Date(2018, 11, 1), f4: new Date(2018, 11, 2), f5: new Date(2018, 11, 2) }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -874,7 +852,6 @@ QUnit.test("Columns - date with format as function", function(assert) { // T5736
                 }
             ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             dataSource: [{ f1: new Date(2018, 11, 1) }],
         },
         { styles, worksheet }
@@ -908,8 +885,7 @@ QUnit.test("Columns - datetime", function(assert) {
         {
             columns: [1, 2, 3, 4, 5].map(i => { return { dataField: 'f' + i.toString(), dataType: "datetime" }; }),
             dataSource: [{ f1: undefined, f2: null, f3: new Date(2018, 11, 1, 16, 10), f4: new Date(2018, 11, 2, 16, 10), f5: new Date(2018, 11, 2, 16, 10) }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -944,8 +920,7 @@ QUnit.test("Columns - boolean", function(assert) {
         {
             columns: [1, 2, 3, 4, 5].map(i => { return { dataField: 'f' + i.toString(), dataType: "boolean" }; }),
             dataSource: [{ f1: undefined, f2: null, f3: true, f4: false, f5: false }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -995,8 +970,7 @@ QUnit.test("Columns - lookup", function(assert) {
                 }
             }],
             dataSource: [{ field1: undefined }, { field1: null }, { field1: 1 }, { field1: 2 }, { field1: 2 }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -1076,8 +1050,7 @@ QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", functi
                 lookup1: 1,
                 datetime1: new Date(2018, 11, 1, 16, 10),
             }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -1111,8 +1084,7 @@ QUnit.test("Columns - command columns are not exported", function(assert) {
             dataSource: [{ field1: 'str1' }],
             selection: { mode: "multiple" },
             editing: { mode: "row", allowUpdating: true, allowDeleting: true, allowAdding: true },
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -1134,8 +1106,7 @@ QUnit.test("Columns - set width in %", function(assert) {
                 { dataField: 'f2', width: '80%' }
             ],
             dataSource: [ { f1: 42, f2: 43 } ],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1159,8 +1130,7 @@ QUnit.test("Columns - show column headers", function(assert) {
                 { dataField: 'f2', width: 200 }
             ],
             dataSource: [],
-            showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: true
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1192,8 +1162,7 @@ QUnit.test("Columns - show column headers & mixed visibleIndex", function(assert
                 { dataField: 'f3', visibleIndex: 1, width: 50 }
             ],
             dataSource: [],
-            showColumnHeaders: true,
-            export: { enabled: true, ignoreExcelErrors: false },
+            showColumnHeaders: true
         },
         { worksheet, sharedStrings, fixedColumnWidth_100: false }
     );
@@ -1217,8 +1186,7 @@ QUnit.test("Columns - show column headers & 'column.visible: false'", function(a
                 { dataField: 'f2', width: 200 }
             ],
             dataSource: [],
-            showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: true
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1243,7 +1211,6 @@ QUnit.test("Columns - show column headers & 'column.visible: false' in onExporti
             ],
             dataSource: [],
             showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
             onExporting: (e) => {
                 e.component.beginUpdate();
                 e.component.columnOption('f1', 'visible', false);
@@ -1276,7 +1243,6 @@ QUnit.test("Columns - show column headers & 'column.visible: false' in onExporti
             ],
             dataSource: [],
             showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
             onExporting: (e) => {
                 e.component.columnOption('f1', 'visible', false);
             },
@@ -1313,7 +1279,6 @@ QUnit.test("Columns - show column headers & 'column.visible: true' in onExportin
             ],
             dataSource: [],
             showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
             onExporting: (e) => {
                 e.component.beginUpdate();
                 e.component.columnOption('f3', 'visible', true);
@@ -1345,8 +1310,7 @@ QUnit.test("Columns - show column headers & 'column.allowExporting: false'", fun
                 { dataField: 'f2', width: 200 }
             ],
             dataSource: [],
-            showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: true
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1370,8 +1334,7 @@ QUnit.test("Columns - hide column headers", function(assert) {
                 { dataField: 'f2', width: 200 }
             ],
             dataSource: [ { f1: 42, f2: 43 } ],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1398,8 +1361,7 @@ QUnit.test("Columns - hide column headers & mixed visibleIndex", function(assert
                 { dataField: 'f3', visibleIndex: 1, width: 50 }
             ],
             dataSource: [ { f1: 42, f2: 43, f3: 44 } ],
-            showColumnHeaders: false,
-            export: { enabled: true, ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1424,7 +1386,6 @@ QUnit.test("Columns - hide column headers & 'column.visible: false' in onExporti
             ],
             dataSource: [ { f1: 1, f2: 2 } ],
             showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
             onExporting: (e) => {
                 e.component.beginUpdate();
                 e.component.columnOption('f1', 'visible', false);
@@ -1456,8 +1417,7 @@ QUnit.test("Columns - hide column headers & 'column.allowExporting: false'", fun
                 { dataField: 'f2', width: 200 }
             ],
             dataSource: [ { f1: 1, f2: 2 } ],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1504,8 +1464,7 @@ QUnit.test("Bands", function(assert) {
                     ]
                 }
             ],
-            dataSource: [{ f1: 42, f2: 43, f3: 44 } ],
-            export: { ignoreExcelErrors: false }
+            dataSource: [{ f1: 42, f2: 43, f3: 44 } ]
         },
         { styles, worksheet, sharedStrings }
     );
@@ -1544,8 +1503,7 @@ QUnit.test("Bands - show column headers", function(assert) {
                 }
             ],
             showColumnHeaders: true,
-            dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
+            dataSource: []
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1583,8 +1541,7 @@ QUnit.test("Bands - show column headers & 'column.visible: false'", function(ass
                 }
             ],
             showColumnHeaders: true,
-            dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
+            dataSource: []
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1623,7 +1580,6 @@ QUnit.test("Bands - show column headers & 'column.visible: false' in onExporting
             ],
             showColumnHeaders: true,
             dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
             onExporting: (e) => {
                 e.component.beginUpdate();
                 e.component.columnOption('f2', 'visible', false);
@@ -1675,7 +1631,6 @@ QUnit.test("Bands - show column headers & 'column.visible: true' in onExporting/
             ],
             showColumnHeaders: true,
             dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
             onExporting: (e) => {
                 e.component.columnOption('f2', 'visible', true);
             },
@@ -1731,8 +1686,7 @@ QUnit.test("Bands - show column headers & two bands", function(assert) {
                 }
             ],
             showColumnHeaders: true,
-            dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
+            dataSource: []
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1784,8 +1738,7 @@ QUnit.test("Bands - show column headers & two bands & 'column.visible: false'", 
                 }
             ],
             showColumnHeaders: true,
-            dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
+            dataSource: []
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1823,8 +1776,7 @@ QUnit.test("Bands - hide column headers", function(assert) {
                 }
             ],
             dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
-            showColumnHeaders: false,
-            export: { enabled: true, ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1862,7 +1814,6 @@ QUnit.test("Bands - hide column headers & 'column.visible: false' in onExporting
             ],
             dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
             showColumnHeaders: false,
-            export: { enabled: true, ignoreExcelErrors: false },
             onExporting: (e) => {
                 e.component.beginUpdate();
                 e.component.columnOption('f2', 'visible', false);
@@ -1907,8 +1858,7 @@ QUnit.test("Bands - hide column headers & 'column.allowExporting: false'", funct
                 }
             ],
             dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
-            showColumnHeaders: false,
-            export: { enabled: true, ignoreExcelErrors: false },
+            showColumnHeaders: false
         },
         { worksheet, fixedColumnWidth_100: false }
     );
@@ -1949,14 +1899,13 @@ QUnit.test("Groupping - 1 level", function(assert) {
                 { dataField: "field1", dataType: "string", groupIndex: 0 },
                 { dataField: "field2", dataType: "string" },
             ],
-            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false }
+            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }]
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: []", function(assert) {
+QUnit.test("Groupping - 1 level, selectedRowIndexes: []", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -1985,14 +1934,13 @@ QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: []", func
                 { dataField: "field2", dataType: "string" },
             ],
             dataSource: [{ field1: 'str1', field2: 'str1_1' }],
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: []
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [1]", function(assert) {
+QUnit.test("Groupping - 1 level, selectedRowIndexes: [1]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2026,14 +1974,13 @@ QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [1]", fun
                 { dataField: "field2", dataType: "string" },
             ],
             dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: [1]
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [2]", function(assert) {
+QUnit.test("Groupping - 1 level, selectedRowIndexes: [2]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2067,14 +2014,13 @@ QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [2]", fun
                 { dataField: "field2", dataType: "string" },
             ],
             dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: [2]
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [1,2]", function(assert) {
+QUnit.test("Groupping - 1 level, selectedRowIndexes: [1,2]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2110,7 +2056,6 @@ QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [1,2]", f
                 { dataField: "field2", dataType: "string" },
             ],
             dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: [1, 2]
         },
         { styles, worksheet, sharedStrings }
@@ -2136,16 +2081,15 @@ QUnit.test("Groupping - 1 level, unbound", function(assert) {
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>2</v></c><c r="B2" s="4" t="s" /></row>' +
         '<row r="3" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>3</v></c><c r="B3" s="3" t="s"><v>4</v></c></row>' +
-        '<row r="4" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>3</v></c><c r="B4" s="3" t="s"><v>5</v></c></row>' +
+        '<row r="4" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>3</v></c><c r="B4" s="3" t="s"><v>4</v></c></row>' +
         '</sheetData>' +
         '</worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="6" uniqueCount="6">' +
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="5" uniqueCount="5">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>Field 2</t></si>' +
         '<si><t>Field 3: str1!</t></si>' +
         '<si><t>str1</t></si>' +
-        '<si><t>str1_1</t></si>' +
-        '<si><t>str_1_2</t></si>' +
+        '<si><t>str1f2</t></si>' +
         '</sst>';
 
     helper.runGeneralTest(
@@ -2153,20 +2097,19 @@ QUnit.test("Groupping - 1 level, unbound", function(assert) {
         {
             columns: [
                 { dataField: "field1", dataType: "string" },
-                { dataField: "field2", dataType: "string" },
+                { dataField: "field2", dataType: "string", calculateCellValue: rowData => rowData.field1 + 'f2' },
                 { caption: "Field 3", calculateCellValue: rowData => rowData.field1 + '!', groupIndex: 0 }
             ],
             selection: {
                 mode: "multiple"
             },
-            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false }
+            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }]
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Groupping - 1 level, unbound, export selection", function(assert) {
+QUnit.test("Groupping - 1 level, unbound, selectedRowIndexes: [1]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2207,7 +2150,6 @@ QUnit.test("Groupping - 1 level, unbound, export selection", function(assert) {
                 mode: "multiple"
             },
             dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: [1]
         },
         { styles, worksheet, sharedStrings }
@@ -2254,8 +2196,7 @@ QUnit.test("Groupping - 2 levels", function(assert) {
                 { dataField: "field2", dataType: "string", groupIndex: 1 },
                 { dataField: "field3", dataType: "string" },
             ],
-            dataSource: [{ field1: 'str1', field2: 'str1_1', field3: 'str1_1_1' }, { field1: 'str1', field2: 'str_1_2', field3: 'str1_2_1' }],
-            export: { ignoreExcelErrors: false }
+            dataSource: [{ field1: 'str1', field2: 'str1_1', field3: 'str1_1_1' }, { field1: 'str1', field2: 'str_1_2', field3: 'str1_2_1' }]
         },
         { styles, worksheet, sharedStrings }
     );
@@ -2296,8 +2237,7 @@ QUnit.test("Group summary", function(assert) {
             dataSource: [{ field1: 'str1', field2: 1 }],
             summary: {
                 groupItems: [{ column: 'field2', summaryType: 'sum', valueFormat: 'currency' }]
-            },
-            export: { ignoreExcelErrors: false }
+            }
         },
         { styles, worksheet, sharedStrings }
     );
@@ -2347,8 +2287,7 @@ QUnit.test("Group summary - alignByColumn: true", function(assert) {
             dataSource: [{ field1: 'str1', field2: 'str2', field3: 'str3', field4: 'str4' }, { field1: 'str1', field2: 'str2', field3: 'str3', field4: 'str4' }],
             summary: {
                 groupItems: [{ column: 'field3', summaryType: 'count' }, { column: 'field4', summaryType: 'count', alignByColumn: true }]
-            },
-            export: { ignoreExcelErrors: false }
+            }
         },
         { styles, worksheet, sharedStrings }
     );
@@ -2408,8 +2347,7 @@ QUnit.test("Group summary - showInGroupFooter: true", function(assert) {
             ],
             summary: {
                 groupItems: [{ column: 'field3', summaryType: 'count', showInGroupFooter: true }, { column: 'field4', summaryType: 'count', showInGroupFooter: true }]
-            },
-            export: { ignoreExcelErrors: false }
+            }
         },
         { styles, worksheet, sharedStrings }
     );
@@ -2471,8 +2409,7 @@ QUnit.test("Group summary - 5 columns, 2 summary - allowExporting: false, showIn
                     { column: 'field4', summaryType: 'min', showInGroupFooter: false, alignByColumn: true },
                     { column: 'field5', summaryType: 'max', showInGroupFooter: false, alignByColumn: true }
                 ]
-            },
-            export: { ignoreExcelErrors: false }
+            }
         },
         { styles, worksheet, sharedStrings }
     );
@@ -2526,8 +2463,7 @@ QUnit.test("Group summary - 4 columns, 1 summary - allowExporting: false, showIn
                 groupItems: [
                     { column: 'field4', summaryType: 'min', showInGroupFooter: false, alignByColumn: true }
                 ]
-            },
-            export: { ignoreExcelErrors: false }
+            }
         },
         { styles, worksheet, sharedStrings }
     );
@@ -2565,14 +2501,13 @@ QUnit.test("Total summary", function(assert) {
             dataSource: [{ field1: 1 }],
             summary: {
                 totalItems: [{ column: 'field1', summaryType: 'sum', valueFormat: 'currency' }]
-            },
-            export: { ignoreExcelErrors: false }
+            }
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Total summary, export selection, selectedRowIndexes: [1]", function(assert) {
+QUnit.test("Total summary, selectedRowIndexes: [1]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -2594,7 +2529,10 @@ QUnit.test("Total summary, export selection, selectedRowIndexes: [1]", function(
         '</worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="5" uniqueCount="5">' +
         '<si><t>Field 1</t></si>' +
-        '<si><t>Field 2</t></si><si><t>1</t></si><si><t>Sum: $2</t></si><si><t>Count: 1</t></si>' +
+        '<si><t>Field 2</t></si>' +
+        '<si><t>1</t></si>' +
+        '<si><t>Sum: $2</t></si>' +
+        '<si><t>Count: 1</t></si>' +
         '</sst>';
 
     helper.runGeneralTest(
@@ -2605,7 +2543,6 @@ QUnit.test("Total summary, export selection, selectedRowIndexes: [1]", function(
             summary: {
                 totalItems: [{ column: 'field1', summaryType: 'sum', valueFormat: 'currency' }, { column: 'field2', summaryType: 'count' }]
             },
-            export: { ignoreExcelErrors: false },
             selectedRowIndexes: [1]
         },
         { styles, worksheet, sharedStrings }
@@ -2636,8 +2573,7 @@ QUnit.test("showColumnHeaders: false", function(assert) {
         {
             columns: [{ dataField: "field1", dataType: "string" }],
             dataSource: [{ field1: 'str1' }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false }
+            showColumnHeaders: false
         },
         { styles, worksheet, sharedStrings }
     );
@@ -2660,7 +2596,6 @@ QUnit.test("excelFilterEnabled - 1 header columns x 0 data rows", function(asser
             dataSource: [],
             showColumnHeaders: true,
             export: {
-                ignoreExcelErrors: false,
                 excelFilterEnabled: true
             },
         },
@@ -2686,7 +2621,6 @@ QUnit.test("excelFilterEnabled - 1 header columns x 1 data row", function(assert
             dataSource: [{ f1: 1 }],
             showColumnHeaders: true,
             export: {
-                ignoreExcelErrors: false,
                 excelFilterEnabled: true
             },
         },
@@ -2712,7 +2646,6 @@ QUnit.test("excelFilterEnabled - 2 header columns x 1 data row", function(assert
             dataSource: [{ f1: 1, f2: 2 }],
             showColumnHeaders: true,
             export: {
-                ignoreExcelErrors: false,
                 excelFilterEnabled: true
             },
         },
@@ -2745,7 +2678,6 @@ QUnit.test("excelFilterEnabled - 4 header columns x 2 data rows", function(asser
             dataSource: [{ f1: 1, f2: 2, f3: 3, f4: 4 }, { f1: 5, f2: 6, f3: 7, f4: 8 }],
             showColumnHeaders: true,
             export: {
-                ignoreExcelErrors: false,
                 excelFilterEnabled: true
             },
         },
@@ -2773,7 +2705,6 @@ QUnit.test("excelFilterEnabled - 2 header columns x 3 data rows", function(asser
             dataSource: [{ f1: 1, f2: 2 }, { f1: 3, f2: 4 }, { f1: 5, f2: 6 }],
             showColumnHeaders: true,
             export: {
-                ignoreExcelErrors: false,
                 excelFilterEnabled: true
             },
         },
@@ -2811,9 +2742,7 @@ QUnit.test("excelFilterEnabled - 1 Band x 1 data rows", function(assert) {
             showColumnHeaders: true,
             dataSource: [{ f1: 11 }],
             export: {
-                enabled: true,
-                excelFilterEnabled: true,
-                ignoreExcelErrors: false
+                excelFilterEnabled: true
             },
         },
         { worksheet }
@@ -2853,9 +2782,7 @@ QUnit.test("excelFilterEnabled - 2 Bands x 1 data rows", function(assert) {
             showColumnHeaders: true,
             dataSource: [{ f1: 1, f2: 2 }],
             export: {
-                enabled: true,
-                excelFilterEnabled: true,
-                ignoreExcelErrors: false
+                excelFilterEnabled: true
             },
         },
         { worksheet }
@@ -2948,8 +2875,7 @@ QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
                         row.values[i] += '_customize';
                     }
                 });
-            },
-            export: { ignoreExcelErrors: false }
+            }
         },
         { styles, worksheet, sharedStrings }
     );
