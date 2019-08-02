@@ -19,7 +19,7 @@ export class Size<T> {
     }
 }
 
-export class Duration<T> {
+export class TimeSpan<T> {
     startTime: T;
     endTime: T;
 
@@ -32,7 +32,7 @@ export class Duration<T> {
 export interface AppointmentFeature {
     position: TablePosition<number>,
     size: Size<string>,
-    duration: Duration<string>
+    duration: TimeSpan<string>
 }
 
 export enum Feature {

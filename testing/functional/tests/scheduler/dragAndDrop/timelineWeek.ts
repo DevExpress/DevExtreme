@@ -18,7 +18,7 @@ test('Rearrange appointments with the drag-and-drop gesture in timelineWeek mode
             let appointment = new AppointmentModel(item.title, step);
 
             await appointment.dropTo(t, new TablePosition(step.position.row, step.position.cell));
-            await appointment.compare(t, [Feature.width, Feature.startTime, Feature.endTime]);
+            await appointment.compare(t, [Feature.width, Feature.height, Feature.startTime, Feature.endTime]);
         }
     }
 
