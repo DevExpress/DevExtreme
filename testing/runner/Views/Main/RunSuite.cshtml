@@ -107,12 +107,6 @@
             });
 
             QUnit.config.urlConfig.push({
-                id: "combinedStyles",
-                label: "Combined Styles",
-                tooltip: "Force using styles combined by packer. Stored as query-strings."
-            });
-
-            QUnit.config.urlConfig.push({
                 id: "jquery",
                 label: "jQuery",
                 tooltip: "Select jQuery version.",
@@ -179,12 +173,12 @@
                     'showdown': '@Url.Content("~/node_modules/showdown/dist/showdown.js")',
 
                     // Global CSS
-                    'style-compiler-test-server': '@Model.StyleCompilerTestServerUrl',
+                    @*'style-compiler-test-server': '@Model.StyleCompilerTestServerUrl',*@ // TODO themes test
 
-                    'common.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&common=true',
+                    'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
 
-                    'generic_light.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=generic&cs=light&ss=default',
-                    'ios7_default.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=ios7&cs=default',
+                    'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
+                    'ios7_default.css': '@Url.Content("~/artifacts/css/dx.ios7.default.css")',
 
                     // SystemJS plugins
                     'css': '@Url.Content("~/node_modules/systemjs-plugin-css/css.js")',
@@ -222,19 +216,6 @@
                     }
                 }
             });
-
-            // Combined css
-            var forceCombinedStyles = @Html.Raw(Json.Serialize(Model.ForceCombinedStyles));
-            if(forceCombinedStyles || farmMode) {
-                SystemJS.config({
-                    map: {
-                        'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
-
-                        'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
-                        'ios7_default.css': '@Url.Content("~/artifacts/css/dx.ios7.default.css")'
-                    }
-                });
-            }
         })();
     </script>
 </head>
