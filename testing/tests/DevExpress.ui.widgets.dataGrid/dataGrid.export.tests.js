@@ -1673,7 +1673,7 @@ QUnit.test("Bands - hide column headers & 'column.allowExporting: false'", funct
     );
 });
 
-QUnit.test("Unbound columns - calculateCellValue, selection.multiple=true, dataField property not exist in dataSource", function(assert) {
+QUnit.test("Unbound columns - calculateCellValue define, selection.multiple=true, dataField property not exist in dataSource", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -1702,7 +1702,6 @@ QUnit.test("Unbound columns - calculateCellValue, selection.multiple=true, dataF
         '<si><t>str1_1</t></si>' +
         '<si><t>str1!</t></si>' +
         '</sst>';
-    const selectedRowIndexes = [0];
 
     helper.runGeneralTest(
         assert,
@@ -1716,14 +1715,14 @@ QUnit.test("Unbound columns - calculateCellValue, selection.multiple=true, dataF
                 mode: "multiple"
             },
             dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false }
+            export: { ignoreExcelErrors: false },
+            selectedRowIndexes: [0]
         },
-        { styles, worksheet, sharedStrings },
-        { selectedRowIndexes }
+        { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Unbound columns - grouping, calculateCellValue, selection.multiple=true, dataField property not declared", function(assert) {
+QUnit.test("Unbound columns - grouping, calculateCellValue define, selection.multiple=true, dataField property not declared", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -1751,7 +1750,6 @@ QUnit.test("Unbound columns - grouping, calculateCellValue, selection.multiple=t
         '<si><t>str1</t></si>' +
         '<si><t>str1_1</t></si>' +
         '</sst>';
-    const selectedRowIndexes = [1];
 
     helper.runGeneralTest(
         assert,
@@ -1765,10 +1763,10 @@ QUnit.test("Unbound columns - grouping, calculateCellValue, selection.multiple=t
                 mode: "multiple"
             },
             dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false }
+            export: { ignoreExcelErrors: false },
+            selectedRowIndexes: [1]
         },
-        { styles, worksheet, sharedStrings },
-        { selectedRowIndexes }
+        { styles, worksheet, sharedStrings }
     );
 });
 

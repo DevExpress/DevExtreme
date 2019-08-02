@@ -21,7 +21,7 @@ function assertStrictEqual(assert, value1, value2, message) {
     }
 }
 
-dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getExpectedArgs = undefined, fixedColumnWidth_100 = true } = {}, { selectedRowIndexes = undefined } = {}) {
+dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getExpectedArgs = undefined, fixedColumnWidth_100 = true } = {}) {
     const that = this;
     const done = assert.async();
     const actualArgs = [];
@@ -131,8 +131,8 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
         };
     }
 
-    if(selectedRowIndexes) {
-        dataGrid.selectRowsByIndexes(selectedRowIndexes);
+    if(options.selectedRowIndexes) {
+        dataGrid.selectRowsByIndexes(options.selectedRowIndexes);
         dataGrid.exportToExcel(true);
     } else {
         dataGrid.exportToExcel();
