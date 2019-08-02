@@ -148,7 +148,6 @@ QUnit.test("Columns - number, unbound, selectedRowIndexes: [0]", function(assert
         '<col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>0</v></c></row>' +
         '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
@@ -156,9 +155,9 @@ QUnit.test("Columns - number, unbound, selectedRowIndexes: [0]", function(assert
         assert,
         {
             columns: [
-                { dataType: "number", calculateCellValue: () => 0 }
+                { dataType: "number", calculateCellValue: rowData => rowData.id }
             ],
-            dataSource: [{}, {}],
+            dataSource: [{ id: 0 }, { id: 1 }],
             showColumnHeaders: false,
             selectedRowIndexes: [0]
         },
