@@ -7,6 +7,7 @@ import { pathCombine } from "./ui.file_manager.utils";
 import whenSome from "./ui.file_manager.common";
 
 import { Deferred, when } from "../../core/utils/deferred";
+import { find } from "../../core/utils/array";
 import { extend } from "../../core/utils/extend";
 
 export default class FileItemsController {
@@ -208,7 +209,7 @@ export default class FileItemsController {
             .then(dirInfos => {
                 const itemDeferreds = [ ];
                 for(let i = 0; i < dirInfos.length; i++) {
-                    const cachedItem = cachedDirectoryInfo.items.find(cache => dirInfos[i].fileItem.key === cache.fileItem.key);
+                    const cachedItem = find(cachedDirectoryInfo.items, cache => dirInfos[i].fileItem.key === cache.fileItem.key);
                     if(!cachedItem) continue;
 
                     dirInfos[i].expanded = cachedItem.expanded;
@@ -239,7 +240,7 @@ export default class FileItemsController {
         let i = 1;
         let newSelectedDir = selectedDirInfo;
         while(newSelectedDir && i < keyParts.length) {
-            newSelectedDir = selectedDirInfo.items.find(info => info.fileItem.key === keyParts[i]);
+            newSelectedDir = find(selectedDirInfo.items, info => info.fileItem.key === keyParts[i]);
             if(newSelectedDir) {
                 selectedDirInfo = newSelectedDir;
             }

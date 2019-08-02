@@ -13,6 +13,8 @@ const TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper";
 const TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes";
 const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
 const SPLITTER_SELECTOR = ".dx-gantt-splitter";
+const TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn";
+const TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut";
 
 const tasks = [
     { "id": 1, "parentId": 0, "title": "Software Development", "start": new Date("2019-02-21T05:00:00.000Z"), "end": new Date("2019-07-04T12:00:00.000Z"), "progress": 31 },
@@ -73,9 +75,6 @@ QUnit.module("Markup", moduleConfig, () => {
         const treeListElements = this.$element.find(TREELIST_SELECTOR);
         assert.ok(treeListElements.length === 1);
     });
-});
-
-QUnit.module("Options", moduleConfig, () => {
     test("should render task wrapper for each task", (assert) => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
@@ -94,7 +93,9 @@ QUnit.module("Options", moduleConfig, () => {
         const element = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(element.length, resourceAssignments.length);
     });
+});
 
+QUnit.module("Options", moduleConfig, () => {
     test("treeListWidth", (assert) => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
@@ -105,5 +106,29 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("treeListWidth", 500);
         assert.equal(treeListElement.offsetWidth, 500);
         assert.equal(splitter.style.left, "500px");
+    });
+    test("showResources", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_RESOURCES_SELECTOR).length, resourceAssignments.length);
+        this.instance.option("showResources", false);
+        assert.equal(this.$element.find(TASK_RESOURCES_SELECTOR).length, 0);
+        this.instance.option("showResources", true);
+        assert.equal(this.$element.find(TASK_RESOURCES_SELECTOR).length, resourceAssignments.length);
+    });
+    test("taskTitlePosition", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        const milestoneCount = tasks.reduce((count, t) => {
+            return t.start.getTime() === t.end.getTime() ? count + 1 : count;
+        }, 0);
+        assert.equal(this.$element.find(TASK_TITLE_IN_SELECTOR).length, tasks.length - milestoneCount);
+        assert.equal(this.$element.find(TASK_TITLE_OUT_SELECTOR).length, 0);
+        this.instance.option("taskTitlePosition", 'none');
+        assert.equal(this.$element.find(TASK_TITLE_IN_SELECTOR).length, 0);
+        assert.equal(this.$element.find(TASK_TITLE_OUT_SELECTOR).length, 0);
+        this.instance.option("taskTitlePosition", 'outside');
+        assert.equal(this.$element.find(TASK_TITLE_IN_SELECTOR).length, 0);
+        assert.equal(this.$element.find(TASK_TITLE_OUT_SELECTOR).length, tasks.length);
     });
 });

@@ -2713,8 +2713,12 @@ declare module DevExpress.ui {
         resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.resources */
         resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
+        /** @name dxGantt.Options.showResources */
+        showResources?: boolean;
+        /** @name dxGantt.Options.taskTitlePosition */
+        taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
-        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
+        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), parentIdExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.treeListWidth */
         treeListWidth?: number;
     }
