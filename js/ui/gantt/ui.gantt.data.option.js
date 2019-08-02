@@ -34,8 +34,14 @@ class DataOption extends Component {
             }
         );
     }
+
     _dataSourceChangedHandler(newItems, e) {
         this._dataSourceChangedCallback(this._optionName, newItems);
+    }
+    _dataSourceOptions() {
+        return {
+            paginate: false
+        };
     }
 }
 DataOption.include(DataHelperMixin);

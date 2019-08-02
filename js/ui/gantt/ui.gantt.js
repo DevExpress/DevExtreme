@@ -29,7 +29,7 @@ const GANTT_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", GANTT_MODULE_NAMES
 class Gantt extends Widget {
     _init() {
         super._init();
-        // this._refreshDataSource("tasks");
+        this._refreshDataSource("tasks");
         this._refreshDataSource("dependencies");
         this._refreshDataSource("resources");
         this._refreshDataSource("resourceAssignments");
@@ -65,11 +65,8 @@ class Gantt extends Widget {
         this._$treeListWrapper.width(this.option("treeListWidth"));
         this._$treeList.width(this.option("treeListWidth"));
 
-        const { keyExpr, dataSource, parentIdExpr } = this.option("tasks");
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
-            dataSource: dataSource,
-            keyExpr: keyExpr,
-            parentIdExpr: parentIdExpr,
+            dataSource: this._tasks,
             columns: this.option("columns"),
             columnResizingMode: "widget",
             height: "100%",
@@ -108,11 +105,10 @@ class Gantt extends Widget {
         if(this._ganttView) {
             return;
         }
-
         this._ganttView = this._createComponent(this._$ganttView, GanttView, {
             height: this._treeList._$element.get(0).offsetHeight,
             rowHeight: this._getTreeListRowHeight(),
-            tasks: this._getTasks(),
+            tasks: this._tasks,
             dependencies: this._dependencies,
             resources: this._resources,
             resourceAssignments: this._resourceAssignments,
@@ -156,7 +152,7 @@ class Gantt extends Widget {
         }
     }
     _onGanttViewSelectionChanged(e) {
-        this._treeList.option("selectedRowKeys", [e.id]);
+        this._setTreeListOption("selectedRowKeys", [e.id]);
     }
     _onGanttViewScroll(e) {
         const treeListScrollable = this._treeList.getScrollable();
@@ -207,6 +203,9 @@ class Gantt extends Widget {
     _setGanttViewOption(optionName, value) {
         this._ganttView && this._ganttView.option(optionName, value);
     }
+    _setTreeListOption(optionName, value) {
+        this._treeList && this._treeList.option(optionName, value);
+    }
 
     _refreshDataSource(name) {
         let dataOption = this[`_${name}Option`];
@@ -243,6 +242,7 @@ class Gantt extends Widget {
         });
 
         this._tasks = tasks;
+        this._setTreeListOption("dataSource", tasks);
         this._setGanttViewOption("tasks", tasks);
     }
     _dependenciesDataSourceChanged(data) {
@@ -298,6 +298,7 @@ class Gantt extends Widget {
     }
 
     _clean() {
+        delete this._ganttView;
         this._detachEventHandlers();
         super._clean();
     }
