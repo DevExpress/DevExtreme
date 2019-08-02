@@ -270,10 +270,13 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 column = options.column;
 
             if(column) {
-                var groupInterval = filterUtils.getGroupInterval(column);
+                var groupInterval = filterUtils.getGroupInterval(column),
+                    dataSource = that._dataController.dataSource(),
+                    remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
 
                 extend(options, column, {
                     type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
+                    remoteFiltering: remoteFiltering,
                     onShowing: function(e) {
                         var dxResizableInstance = e.component.overlayContent().dxResizable("instance");
 
