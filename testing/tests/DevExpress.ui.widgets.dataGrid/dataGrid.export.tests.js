@@ -38,55 +38,6 @@ QUnit.test("Empty grid", function(assert) {
         { styles, worksheet, sharedStrings });
 });
 
-QUnit.test("Unbound columns - dataField property not exist in dataSource", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
-        '<col width="13.57" min="3" max="3" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>3</v></c><c r="B2" s="3" t="s"><v>4</v></c><c r="C2" s="3" t="s"><v>5</v></c></row>' +
-        '</sheetData>' +
-        '</worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="6" uniqueCount="6">' +
-        '<si><t>Field 1</t></si>' +
-        '<si><t>Field 2</t></si>' +
-        '<si><t>Field 3</t></si>' +
-        '<si><t>str1</t></si>' +
-        '<si><t>str1_1</t></si>' +
-        '<si><t>str1!</t></si>' +
-        '</sst>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "field1", dataType: "string" },
-                { dataField: "field2", dataType: "string" },
-                { dataField: "field3", calculateCellValue: rowData => rowData.field1 + '!' }
-            ],
-            selection: {
-                mode: "multiple"
-            },
-            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            export: { ignoreExcelErrors: false },
-            selectedRowIndexes: [0]
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
 QUnit.test("Columns - number", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
@@ -132,57 +83,6 @@ QUnit.test("Columns - number", function(assert) {
             }],
             showColumnHeaders: false,
             export: { ignoreExcelErrors: false },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Columns - number, export selection", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" />' +
-        '<col width="13.57" min="7" max="7" /><col width="13.57" min="8" max="8" /><col width="13.57" min="9" max="9" /></cols>' +
-        '<sheetData><row r="1" spans="1:9" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="s" />' +
-        '<c r="B1" s="3" t="n" />' +
-        '<c r="C1" s="3" t="n"><v>0</v></c>' +
-        '<c r="D1" s="3" t="n"><v>1</v></c>' +
-        '<c r="E1" s="3" t="n"><v>2</v></c>' +
-        '<c r="F1" s="3" t="n"><v>2</v></c>' +
-        '<c r="G1" s="3" t="s"><v>0</v></c>' +
-        '<c r="H1" s="3" t="s"><v>1</v></c>' +
-        '<c r="I1" s="3" t="s"><v>2</v></c>' +
-        '</row></sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
-        '<si><t>NaN</t></si>' +
-        '<si><t>Infinity</t></si>' +
-        '<si><t>-Infinity</t></si>' +
-        '</sst>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "f1", dataType: "number" }, { dataField: "f2", dataType: "number" }, { dataField: "f3", dataType: "number" },
-                { dataField: "f4", dataType: "number" }, { dataField: "f5", dataType: "number" }, { dataField: "f6", dataType: "number" },
-                { dataField: "f7", dataType: "number" }, { dataField: "f8", dataType: "number" }, { dataField: "f9", dataType: "number" }
-            ],
-            dataSource: [{
-                f1: undefined, f2: null, f3: 0,
-                f4: 1, f5: 2, f6: 2,
-                f7: Number.NaN, f8: Number.POSITIVE_INFINITY, f9: Number.NEGATIVE_INFINITY
-            }],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            selectedRowIndexes: [0]
         },
         { styles, worksheet, sharedStrings }
     );
@@ -250,41 +150,20 @@ QUnit.test("Columns - number, unbound, export selection", function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" />' +
-        '<col width="13.57" min="7" max="7" /><col width="13.57" min="8" max="8" /><col width="13.57" min="9" max="9" /></cols>' +
-        '<sheetData><row r="1" spans="1:9" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="s" />' +
-        '<c r="B1" s="3" t="n" />' +
-        '<c r="C1" s="3" t="n"><v>0</v></c>' +
-        '<c r="D1" s="3" t="n"><v>1</v></c>' +
-        '<c r="E1" s="3" t="n"><v>2</v></c>' +
-        '<c r="F1" s="3" t="n"><v>2</v></c>' +
-        '<c r="G1" s="3" t="s"><v>0</v></c>' +
-        '<c r="H1" s="3" t="s"><v>1</v></c>' +
-        '<c r="I1" s="3" t="s"><v>2</v></c>' +
+        '<cols>' +
+        '<col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData><row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>0</v></c>' +
         '</row></sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
-        '<si><t>NaN</t></si>' +
-        '<si><t>Infinity</t></si>' +
-        '<si><t>-Infinity</t></si>' +
-        '</sst>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
     helper.runGeneralTest(
         assert,
         {
             columns: [
-                { dataType: "number", calculateCellValue: () => undefined },
-                { dataType: "number", calculateCellValue: () => null },
-                { dataType: "number", calculateCellValue: () => 0 },
-                { dataType: "number", calculateCellValue: () => 1 },
-                { dataType: "number", calculateCellValue: () => 2 },
-                { dataType: "number", calculateCellValue: () => 2 },
-                { dataType: "number", calculateCellValue: () => Number.NaN },
-                { dataType: "number", calculateCellValue: () => Number.POSITIVE_INFINITY },
-                { dataType: "number", calculateCellValue: () => Number.NEGATIVE_INFINITY }
+                { dataType: "number", calculateCellValue: () => 0 }
             ],
-            dataSource: [{ id: 0 }],
+            dataSource: [{}],
             showColumnHeaders: false,
             export: { ignoreExcelErrors: false },
             selectedRowIndexes: [0]
@@ -777,29 +656,21 @@ QUnit.test("Columns - string, export selection", function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
-        '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="s" />' +
-        '<c r="B1" s="3" t="s" />' +
-        '<c r="C1" s="3" t="s" />' +
-        '<c r="D1" s="3" t="s"><v>0</v></c>' +
-        '<c r="E1" s="3" t="s"><v>1</v></c>' +
-        '<c r="F1" s="3" t="s"><v>1</v></c>' +
-        '</row></sheetData></worksheet>';
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData><row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row></sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
-        '<si><t>str1</t></si>' +
-        '<si><t>str2</t></si>' +
+        '<si><t>0</t></si>' +
+        '<si><t>1</t></si>' +
         '</sst>';
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [1, 2, 3, 4, 5, 6].map(i => { return { dataField: 'f' + i.toString(), dataType: "string" }; }),
-            dataSource: [{ f1: undefined, f2: null, f3: '', f4: 'str1', f5: 'str2', f6: 'str2' }],
+            dataSource: [{ f1: "0" }, { f1: "1" }],
             showColumnHeaders: false,
             export: { ignoreExcelErrors: false },
-            selectedRowIndexes: [0]
+            selectedRowIndexes: [0, 1]
         },
         { styles, worksheet, sharedStrings }
     );
@@ -859,34 +730,72 @@ QUnit.test("Columns - string, unbound, export selection", function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
-        '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="s" />' +
-        '<c r="B1" s="3" t="s" />' +
-        '<c r="C1" s="3" t="s" />' +
-        '<c r="D1" s="3" t="s"><v>0</v></c>' +
-        '<c r="E1" s="3" t="s"><v>1</v></c>' +
-        '<c r="F1" s="3" t="s"><v>1</v></c>' +
+        '<cols>' +
+        '<col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData><row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
         '</row></sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
-        '<si><t>str1</t></si>' +
-        '<si><t>str2</t></si>' +
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>0</t></si>' +
         '</sst>';
 
     helper.runGeneralTest(
         assert,
         {
             columns: [
-                { dataType: "string", calculateCellValue: () => undefined },
-                { dataType: "string", calculateCellValue: () => null },
-                { dataType: "string", calculateCellValue: () => '' },
-                { dataType: "string", calculateCellValue: () => 'str1' },
-                { dataType: "string", calculateCellValue: () => 'str2' },
-                { dataType: "string", calculateCellValue: () => 'str2' },
+                { dataType: "string", calculateCellValue: () => "0" }
             ],
-            dataSource: [{ id: 0 }],
+            dataSource: [{}],
             showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            selectedRowIndexes: [0]
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Columns - string, unbound, export selection, dataField property not exist in dataSource", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" />' +
+        '<col width="13.57" min="2" max="2" />' +
+        '<col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>3</v></c><c r="B2" s="3" t="s"><v>4</v></c><c r="C2" s="3" t="s"><v>5</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="6" uniqueCount="6">' +
+        '<si><t>Field 1</t></si>' +
+        '<si><t>Field 2</t></si>' +
+        '<si><t>Field Not Exist</t></si>' +
+        '<si><t>str1</t></si>' +
+        '<si><t>str1_1</t></si>' +
+        '<si><t>str1_notExists</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string" },
+                { dataField: "field2", dataType: "string" },
+                { dataField: "fieldNotExist", calculateCellValue: rowData => rowData.field1 + '_notExists' }
+            ],
+            selection: {
+                mode: "multiple"
+            },
+            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
             export: { ignoreExcelErrors: false },
             selectedRowIndexes: [0]
         },
@@ -2047,7 +1956,125 @@ QUnit.test("Groupping - 1 level", function(assert) {
     );
 });
 
-QUnit.test("Groupping - 1 level, export selection", function(assert) {
+QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: []", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>Field 2</t></si></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string", groupIndex: 0 },
+                { dataField: "field2", dataType: "string" },
+            ],
+            dataSource: [{ field1: 'str1', field2: 'str1_1' }],
+            export: { ignoreExcelErrors: false },
+            selectedRowIndexes: []
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [1]", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>2</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
+        '<si><t>Field 2</t></si>' +
+        '<si><t>Field 1: str1</t></si>' +
+        '<si><t>str1_1</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string", groupIndex: 0 },
+                { dataField: "field2", dataType: "string" },
+            ],
+            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
+            export: { ignoreExcelErrors: false },
+            selectedRowIndexes: [1]
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [2]", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>2</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
+        '<si><t>Field 2</t></si>' +
+        '<si><t>Field 1: str1</t></si>' +
+        '<si><t>str_1_2</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string", groupIndex: 0 },
+                { dataField: "field2", dataType: "string" },
+            ],
+            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
+            export: { ignoreExcelErrors: false },
+            selectedRowIndexes: [2]
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Groupping - 1 level, export selection, selectedRowIndexes: [1,2]", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2540,6 +2567,46 @@ QUnit.test("Total summary", function(assert) {
                 totalItems: [{ column: 'field1', summaryType: 'sum', valueFormat: 'currency' }]
             },
             export: { ignoreExcelErrors: false }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Total summary, export selection, selectedRowIndexes: [1]", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols><sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="4" t="s"><v>2</v></c></row>' +
+        '<row r="3" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="2" t="s"><v>3</v></c><c r="B3" s="1" t="s"><v>4</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="5" uniqueCount="5">' +
+        '<si><t>Field 1</t></si>' +
+        '<si><t>Field 2</t></si><si><t>1</t></si><si><t>Sum: $2</t></si><si><t>Count: 1</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", dataType: "number" }, { dataField: "field2", dataType: "string" }],
+            dataSource: [{ field1: 1, field2: "1" }, { field1: 2, field2: "1" }],
+            summary: {
+                totalItems: [{ column: 'field1', summaryType: 'sum', valueFormat: 'currency' }, { column: 'field2', summaryType: 'count' }]
+            },
+            export: { ignoreExcelErrors: false },
+            selectedRowIndexes: [1]
         },
         { styles, worksheet, sharedStrings }
     );
