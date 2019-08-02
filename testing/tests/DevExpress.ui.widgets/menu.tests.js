@@ -2,7 +2,6 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     fx = require("animation/fx"),
     renderer = require("core/renderer"),
-    viewPort = require("core/utils/view_port").value,
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config"),
     Submenu = require("ui/menu/ui.submenu"),
@@ -13,9 +12,11 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     ArrayStore = require("data/array_store"),
     eventsEngine = require("events/core/events_engine"),
-    DataSource = require("data/data_source/data_source").DataSource;
+    DataSource = require("data/data_source/data_source").DataSource,
+    checkStyleHelper = require("../../helpers/checkStyleHelper.js");
 
 require("common.css!");
+require("generic_light.css!");
 
 QUnit.testStart(function() {
     var markup =
@@ -33,8 +34,6 @@ QUnit.testStart(function() {
 
     $("#qunit-fixture").html(markup);
 });
-
-viewPort($("#qunit-fixture").addClass("dx-viewport"));
 
 var DX_MENU_CLASS = "dx-menu",
     DX_SUBMENU_CLASS = "dx-submenu",
@@ -382,6 +381,44 @@ QUnit.test("Render vertical menu with leftOrTop submenuDirection", function(asse
     fixtures.simple.drop();
 });
 
+QUnit.module("Menu - templates", {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+});
+
+checkStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when item is not focused", function(assert) {
+    const $template = $("<div>").text("test1");
+    createMenu({
+        items: [{ text: "item1" }],
+        itemTemplate: function() { return $template; }
+    });
+    $("#input1").focus();
+
+    assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+    assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgba(0, 0, 0, 0)", "backgroundColor");
+    assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
+});
+
+checkStyleHelper.testInChromeOnDesktopActiveWindow("Item template styles when item is focused", function(assert) {
+    const $template = $("<div>").text("test1");
+    const menu = createMenu({
+        items: [{ text: "item1" }],
+        itemTemplate: function() { return $template; }
+    });
+    menu.instance.focus();
+
+    assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(255, 255, 255)", "color");
+    assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgb(51, 122, 183)", "backgroundColor");
+    assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+    assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+    assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
+});
 
 QUnit.module("Menu - selection", {
     beforeEach: function() {
