@@ -150,9 +150,9 @@ QUnit.module("All images are defined with data-uri and will be inlined", () => {
                         return;
                     }
                     if(/url\((?!"data:image)/.test(this.cssText) &&
-                       /url\((?!"icons)/.test(this.cssText) &&
-                       /url\((?!"fonts)/.test(this.cssText) &&
-                       /url\((?!"https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
+                       /url\((?!"?icons)/.test(this.cssText) &&
+                       /url\((?!"?fonts)/.test(this.cssText) &&
+                       /url\((?!"?https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
                         rulesWithUrl.push(this.cssText);
                     }
                 });
