@@ -5241,7 +5241,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         this.clock.tick();
 
         // act
-        this.triggerKeyDown("space", false, false, $(this.rowsView.element().find(".dx-data-row")));
+        this.triggerKeyDown("space", false, false, this.getRowElement(0));
         // assert
         assert.equal($(".dx-select-checkbox").length, 0, "checkboxes are not rendered");
     });
