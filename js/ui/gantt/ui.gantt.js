@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
 import domAdapter from "../../core/dom_adapter";
+import dataCoreUtils from '../../core/utils/data';
 import eventsEngine from "../../events/core/events_engine";
 import pointerEvents from "../../events/pointer";
 import { addNamespace } from "../../events/utils";
@@ -9,6 +10,7 @@ import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
 import { getWindow, hasWindow } from "../../core/utils/window";
+import DataOption from "./ui.gantt.data.option";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
@@ -16,8 +18,6 @@ const GANTT_SPLITTER_TRANSPARENT_CLASS = "dx-gantt-splitter-transparent";
 const GANTT_SPLITTER_BORDER_CLASS = "dx-gantt-splitter-border";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 
-const GANTT_KEY_FIELD = "id";
-const GANTT_PARENT_ID_FIELD = "parentId";
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
 const GANTT_MODULE_NAMESPACE = "dxGanttResizing";
@@ -27,6 +27,14 @@ const GANTT_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, GANTT_MODULE_
 const GANTT_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", GANTT_MODULE_NAMESPACE);
 
 class Gantt extends Widget {
+    _init() {
+        super._init();
+        // this._refreshDataSource("tasks");
+        this._refreshDataSource("dependencies");
+        this._refreshDataSource("resources");
+        this._refreshDataSource("resourceAssignments");
+    }
+
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
@@ -72,7 +80,7 @@ class Gantt extends Widget {
             autoExpandAll: true,
             showRowLines: true,
             onContentReady: (e) => { this._onTreeListContentReady(e); },
-            onSelectionChanged: (e) => this._ganttView._selectTask(e.currentSelectedRowKeys[0]),
+            onSelectionChanged: (e) => this._ganttView.selectTask(e.currentSelectedRowKeys[0]),
             onRowCollapsed: () => this._updateGanttView(),
             onRowExpanded: () => this._updateGanttView()
         });
@@ -105,9 +113,9 @@ class Gantt extends Widget {
             height: this._treeList._$element.get(0).offsetHeight,
             rowHeight: this._getTreeListRowHeight(),
             tasks: this._getTasks(),
-            dependencies: this.option("dependencies.dataSource"),
-            resources: this.option("resources.dataSource"),
-            resourceAssignments: this.option("resourceAssignments.dataSource"),
+            dependencies: this._dependencies,
+            resources: this._resources,
+            resourceAssignments: this._resourceAssignments,
             showResources: this.option("showResources"),
             taskTitlePosition: this.option("taskTitlePosition"),
             onSelectionChanged: (e) => { this._onGanttViewSelectionChanged(e); },
@@ -160,7 +168,7 @@ class Gantt extends Widget {
         }
     }
     _onTreeListScroll(treeListScrollView) {
-        const ganttViewTaskAreaContainer = this._ganttView._getTaskAreaContainer();
+        const ganttViewTaskAreaContainer = this._ganttView.getTaskAreaContainer();
         if(ganttViewTaskAreaContainer.scrollTop !== treeListScrollView.component.scrollTop()) {
             ganttViewTaskAreaContainer.scrollTop = treeListScrollView.component.scrollTop();
         }
@@ -168,7 +176,6 @@ class Gantt extends Widget {
 
     _updateGanttView() {
         this._ganttView.option("tasks", this._getTasks());
-        this._ganttView._update();
     }
     _getTasks() {
         return this._treeList.getVisibleRows().map(r => r.data);
@@ -194,11 +201,100 @@ class Gantt extends Widget {
         this._$treeListWrapper.width(treeListWidth);
         this._$treeList.width(treeListWidth);
         this._$splitter.css("left", treeListWidth);
-        this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
+        this._ganttView && this._ganttView.setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
     }
 
     _setGanttViewOption(optionName, value) {
         this._ganttView && this._ganttView.option(optionName, value);
+    }
+
+    _refreshDataSource(name) {
+        let dataOption = this[`_${name}Option`];
+        if(dataOption) {
+            dataOption._disposeDataSource();
+            delete this[`_${name}Option`];
+            delete this[`_${name}`];
+        }
+        if(this.option(`${name}.dataSource`)) {
+            dataOption = new DataOption(name, (name, data) => { this[`_${name}DataSourceChanged`](data); });
+            dataOption.option("dataSource", this.option(`${name}.dataSource`));
+            dataOption._refreshDataSource();
+            this[`_${name}Option`] = dataOption;
+        }
+    }
+    _tasksDataSourceChanged(data) {
+        const { keyExpr, parentIdExpr, startExpr, endExpr, progressExpr, titleExpr } = this.option("tasks"),
+            getId = dataCoreUtils.compileGetter(keyExpr),
+            getParentId = dataCoreUtils.compileGetter(parentIdExpr),
+            getStart = dataCoreUtils.compileGetter(startExpr),
+            getEnd = dataCoreUtils.compileGetter(endExpr),
+            getProgress = dataCoreUtils.compileGetter(progressExpr),
+            getTitle = dataCoreUtils.compileGetter(titleExpr);
+
+        const tasks = data.map((i) => {
+            return {
+                id: getId(i),
+                parentId: getParentId(i),
+                start: getStart(i),
+                end: getEnd(i),
+                progress: getProgress(i),
+                title: getTitle(i)
+            };
+        });
+
+        this._tasks = tasks;
+        this._setGanttViewOption("tasks", tasks);
+    }
+    _dependenciesDataSourceChanged(data) {
+        const { keyExpr, predecessorIdExpr, successorIdExpr, typeExpr } = this.option("dependencies"),
+            getId = dataCoreUtils.compileGetter(keyExpr),
+            getPredecessorId = dataCoreUtils.compileGetter(predecessorIdExpr),
+            getSuccessorId = dataCoreUtils.compileGetter(successorIdExpr),
+            getType = dataCoreUtils.compileGetter(typeExpr);
+
+        const dependencies = data.map((i) => {
+            return {
+                id: getId(i),
+                predecessorId: getPredecessorId(i),
+                successorId: getSuccessorId(i),
+                type: getType(i)
+            };
+        });
+
+        this._dependencies = dependencies;
+        this._setGanttViewOption("dependencies", dependencies);
+    }
+    _resourcesDataSourceChanged(data) {
+        const { keyExpr, textExpr } = this.option("resources"),
+            getId = dataCoreUtils.compileGetter(keyExpr),
+            getText = dataCoreUtils.compileGetter(textExpr);
+
+        const resources = data.map((i) => {
+            return {
+                id: getId(i),
+                text: getText(i)
+            };
+        });
+
+        this._resources = resources;
+        this._setGanttViewOption("resources", resources);
+    }
+    _resourceAssignmentsDataSourceChanged(data) {
+        const { keyExpr, taskIdExpr, resourceIdExpr } = this.option("resourceAssignments"),
+            getId = dataCoreUtils.compileGetter(keyExpr),
+            getTaskId = dataCoreUtils.compileGetter(taskIdExpr),
+            getResourceId = dataCoreUtils.compileGetter(resourceIdExpr);
+
+        const resourceAssignments = data.map((i) => {
+            return {
+                id: getId(i),
+                taskId: getTaskId(i),
+                resourceId: getResourceId(i)
+            };
+        });
+
+        this._resourceAssignments = resourceAssignments;
+        this._setGanttViewOption("resourceAssignments", resourceAssignments);
     }
 
     _clean() {
@@ -226,14 +322,42 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD,
+                keyExpr: "id",
                 /**
                 * @name dxGanttOptions.tasks.parentIdExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default "parentId"
                 */
-                parentIdExpr: GANTT_PARENT_ID_FIELD
+                parentIdExpr: "parentId",
+                /**
+                * @name dxGanttOptions.tasks.startExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "start"
+                */
+                startExpr: "start",
+                /**
+                * @name dxGanttOptions.tasks.endExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "end"
+                */
+                endExpr: "end",
+                /**
+                * @name dxGanttOptions.tasks.progressExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "progress"
+                */
+                progressExpr: "progress",
+                /**
+                * @name dxGanttOptions.tasks.titleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "title"
+                */
+                titleExpr: "title"
             },
             /**
             * @name dxGanttOptions.dependencies
@@ -253,7 +377,28 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: "id",
+                /**
+                * @name dxGanttOptions.dependencies.predecessorIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "predecessorId"
+                */
+                predecessorIdExpr: "predecessorId",
+                /**
+                * @name dxGanttOptions.dependencies.successorIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "successorId"
+                */
+                successorIdExpr: "successorId",
+                /**
+                * @name dxGanttOptions.dependencies.typeExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "type"
+                */
+                typeExpr: "type"
             },
             /**
             * @name dxGanttOptions.resources
@@ -273,7 +418,14 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: "id",
+                /**
+                * @name dxGanttOptions.resources.textExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "text"
+                */
+                textExpr: "text"
             },
             /**
             * @name dxGanttOptions.resourceAssignments
@@ -293,7 +445,21 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: "id",
+                /**
+                * @name dxGanttOptions.resourceAssignments.taskIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "taskId"
+                */
+                taskIdExpr: "taskId",
+                /**
+                * @name dxGanttOptions.resourceAssignments.resourceIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "resourceId"
+                */
+                resourceIdExpr: "resourceId"
             },
             /**
             * @name dxGanttOptions.treeListWidth
@@ -310,25 +476,25 @@ class Gantt extends Widget {
             /**
             * @name dxGanttOptions.taskTitlePosition
             * @type Enums.GanttTaskTitlePosition
-            * @default 'inside'
+            * @default "inside"
             */
-            taskTitlePosition: 'inside'
+            taskTitlePosition: "inside"
         });
     }
 
     _optionChanged(args) {
         switch(args.name) {
             case "tasks":
-                // TODO
+                this._refreshDataSource("tasks");
                 break;
             case "dependencies":
-                // TODO
+                this._refreshDataSource("dependencies");
                 break;
             case "resources":
-                // TODO
+                this._refreshDataSource("resources");
                 break;
             case "resourceAssignments":
-                // TODO
+                this._refreshDataSource("resourceAssignments");
                 break;
             case "treeListWidth":
                 this._updateWidth(args.value);
