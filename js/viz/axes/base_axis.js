@@ -2211,9 +2211,9 @@ Axis.prototype = {
                 maxVisible: previousRange.endValue,
                 categories: previousRange.categories
             };
-            const typeIsChanged = that.getOptions().type !== that._storedZoomEndParams.type;
-            const shift = !typeIsChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange)) : NaN;
-            const zoomFactor = !typeIsChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2") : NaN;
+            const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
+            const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange)) : NaN;
+            const zoomFactor = typeIsNotChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2") : NaN;
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
             zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? "pan" : "zoom", zoomFactor);
