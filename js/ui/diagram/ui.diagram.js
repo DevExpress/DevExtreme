@@ -196,7 +196,6 @@ class Diagram extends Widget {
                 });
             }
         });
-
         if(this._toolbarInstance) {
             this._toolbarInstance.option("onWidgetCommand", (e) => {
                 if(e.name === "options") {
@@ -550,7 +549,7 @@ class Diagram extends Widget {
     _onNativeFullscreenChangeHandler() {
         if(!this._inNativeFullscreen()) {
             this._unsubscribeFullscreenNativeChanged();
-            this._setFullscreen(false);
+            this._onToggleFullscreen(false);
         }
     }
 
