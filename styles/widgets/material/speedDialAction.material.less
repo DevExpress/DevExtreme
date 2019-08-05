@@ -1,3 +1,36 @@
+@MATERIAL_FA_BUTTON_SIZE: 40px;
+@MATERIAL_FA_BUTTON_LABEL_OFFSET: 16px;
 @MATERIAL_FA_BUTTON_BOX_SHADOW: ~"0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12)";
+@MATERIAL_FA_BUTTON_LABEL_HEIGHT: 32px;
+@MATERIAL_FA_BUTTON_LABEL_SHADOW: 0 2px 6px rgba(0, 0, 0, 0.15);
+@MATERIAL_MAIN_FA_BUTTON_LABEL_PADDING: 0 20px 0 12px;
 
-.dx-fa-button-mixin(56px, 40px, @MATERIAL_FA_BUTTON_BOX_SHADOW, @MATERIAL_BASE_ICON_SIZE, 16, 32px, 12px, uppercase);
+.dx-fa-button-mixin(56px, @MATERIAL_FA_BUTTON_SIZE, @MATERIAL_FA_BUTTON_BOX_SHADOW, @MATERIAL_BASE_ICON_SIZE);
+
+.dx-fa-button {
+    &.dx-fa-button-main {
+        .dx-overlay-content {
+            .dx-fa-button-label {
+                padding: @MATERIAL_MAIN_FA_BUTTON_LABEL_PADDING;
+                font-size: @MATERIAL_BASE_FONT_SIZE;
+                text-transform: uppercase;
+                font-weight: 500;
+                letter-spacing: 1.25px;
+            }
+        }
+    }
+
+    .dx-overlay-content {
+        .dx-fa-button-label {
+            padding: 0 12px;
+            right: @MATERIAL_FA_BUTTON_SIZE + @MATERIAL_FA_BUTTON_LABEL_OFFSET;
+            top: 50%;
+            margin-top: -@MATERIAL_FA_BUTTON_LABEL_HEIGHT / 2;
+            line-height: @MATERIAL_FA_BUTTON_LABEL_HEIGHT;
+            white-space: nowrap;
+            border-radius: 4px;
+            box-shadow: @MATERIAL_FA_BUTTON_LABEL_SHADOW;
+            font-size: @MATERIAL_BASE_FONT_SIZE - 2;
+        }
+    }
+}

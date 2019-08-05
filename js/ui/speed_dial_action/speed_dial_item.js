@@ -46,7 +46,7 @@ const SpeedDialItem = Overlay.inherit({
 
     _renderLabel() {
         !!this._$label && this._$label.remove();
-        this.$content().css("max-width", "");
+        this.$content().css("maxWidth", "");
 
         const labelText = this.option("label");
 

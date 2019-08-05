@@ -1,1 +1,33 @@
-.dx-fa-button-mixin(48px, 30px, 0 6px 12px rgba(0, 0, 0, 0.175), @GENERIC_BASE_ICON_SIZE, 10, 26px, 10px, none);
+@GENERIC_FA_BUTTON_SIZE: 30px;
+@GENERIC_FA_BUTTON_SHADOW: 0 6px 12px rgba(0, 0, 0, 0.175);
+@GENERIC_FA_BUTTON_LABEL_HEIGHT: 26px;
+@GENERIC_FA_BUTTON_LABEL_OFFSET: 10px;
+@GENERIC_FA_BUTTON_LABEL_SHADOW: 0 1px 4px rgba(0, 0, 0, 0.15);
+@GENERIC_MAIN_FA_BUTTON_LABEL_PADDING: 0 16px 0 8px;
+
+.dx-fa-button-mixin(48px, @GENERIC_FA_BUTTON_SIZE, @GENERIC_FA_BUTTON_SHADOW, @GENERIC_BASE_ICON_SIZE);
+
+.dx-fa-button {
+    &.dx-fa-button-main {
+        .dx-overlay-content {
+            .dx-fa-button-label {
+                padding: @GENERIC_MAIN_FA_BUTTON_LABEL_PADDING;
+                font-size: @GENERIC_BASE_FONT_SIZE;
+            }
+        }
+    }
+
+    .dx-overlay-content {
+        .dx-fa-button-label {
+            padding: 0 10px;
+            right: @GENERIC_FA_BUTTON_SIZE + @GENERIC_FA_BUTTON_LABEL_OFFSET;
+            top: 50%;
+            margin-top: -@GENERIC_FA_BUTTON_LABEL_HEIGHT / 2;
+            line-height: @GENERIC_FA_BUTTON_LABEL_HEIGHT;
+            white-space: nowrap;
+            border-radius: 4px;
+            box-shadow: @GENERIC_FA_BUTTON_LABEL_SHADOW;
+            font-size: @GENERIC_BASE_FONT_SIZE - 2;
+        }
+    }
+}

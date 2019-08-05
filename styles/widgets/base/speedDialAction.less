@@ -1,4 +1,4 @@
-.dx-fa-button-mixin(@main-action-button-size, @action-button-size, @shadow, @icon-size, @labelOffset, @labelHeight, @labelPadding, @labelTransform) {
+.dx-fa-button-mixin(@main-action-button-size, @action-button-size, @shadow, @icon-size) {
     .dx-fa-button {
         &.dx-fa-button-main {
             .dx-overlay-content {
@@ -18,7 +18,6 @@
 
                 .dx-fa-button-label {
                     position: static;
-                    padding: 0 14px 0 6px;
                     background: none;
                     float: right;
                     line-height: @main-action-button-size;
@@ -26,8 +25,6 @@
                     box-shadow: none;
                     border-radius: 0;
                     margin-top: 0;
-                    font-size: @main-action-button-size / 4;
-                    text-transform: @labelTransform;
                 }
 
                 .dx-inkripple {
@@ -35,10 +32,10 @@
                 }
             }
 
-            &.dx-fa-button-main-has-text {
+            &.dx-fa-button-has-text {
                 .dx-fa-button-icon,
                 .dx-fa-button-icon-close {
-                    padding: (@main-action-button-size - @icon-size) / 2 0 (@main-action-button-size - @icon-size) / 2 10px;
+                    padding: (@main-action-button-size - @icon-size) / 2 0 (@main-action-button-size - @icon-size) / 2 12px;
                 }
             }
         }
@@ -59,21 +56,6 @@
             }
         }
 
-        .dx-fa-button-label {
-            padding: 0 @labelPadding;
-            background-color: @button-normal-bg;
-            color: @button-normal-color;
-            position: absolute;
-            right: @action-button-size + @labelOffset;
-            top: 50%;
-            margin-top: -@labelHeight / 2;
-            line-height: @labelHeight;
-            white-space: nowrap;
-            border-radius: 4px;
-            box-shadow: @shadow;
-            font-size: 12px;
-        }
-
         .dx-overlay-content {
             max-width: @action-button-size;
             max-height: @action-button-size;
@@ -83,6 +65,15 @@
             overflow: visible;
 
             .dx-fa-button-states(@button-normal-bg, @button-normal-color);
+
+            .dx-fa-button-label {
+                background-color: @button-normal-bg;
+                color: @button-normal-color;
+                position: absolute;
+                top: 50%;
+                white-space: nowrap;
+                border-radius: 4px;
+            }
 
             .dx-inkripple {
                 overflow: hidden;

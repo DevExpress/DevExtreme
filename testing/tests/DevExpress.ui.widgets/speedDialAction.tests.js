@@ -19,6 +19,7 @@ QUnit.testStart(() => {
 
 const FAB_SELECTOR = ".dx-fa-button";
 const FAB_MAIN_SELECTOR = ".dx-fa-button-main";
+const FAB_LABEL_SELECTOR = ".dx-fa-button-label";
 
 QUnit.module("create one action", () => {
     test("check rendering", (assert) => {
@@ -385,6 +386,61 @@ QUnit.module("add visible option", (hooks) => {
 
         assert.equal($fabMainContent.offset().top, 0, "correct position top");
         assert.equal($fabMainContent.offset().left, 0, "correct position left");
+    });
+});
+
+QUnit.module("add label option", (hooks) => {
+    let firstSDA;
+    let secondSDA;
+    hooks.afterEach(() => {
+        firstSDA.dispose();
+        secondSDA.dispose();
+    }),
+    test("check rendering", (assert) => {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
+
+        assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "first action", "FAB has label");
+        assert.ok($(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-has-text"), "FAB has class");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top");
+        assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "default position left");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            label: "second action"
+        }).dxSpeedDialAction("instance");
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).length, 0, "FAB has no label if create second SDA");
+        assert.ok(!$(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-has-text"), "FAB has no class if create second SDA");
+        assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(0).text(), "first action", "first SDA has label");
+        assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(1).text(), "second action", "second SDA has label");
+        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top");
+        assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "default position left");
+
+        config({
+            floatingActionButtonConfig: {
+                label: "fab"
+            }
+        });
+
+        firstSDA.repaint();
+
+        assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "fab", "FAB has label if set it in config");
     });
 });
 

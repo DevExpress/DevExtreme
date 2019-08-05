@@ -8,7 +8,7 @@ import SpeedDialItem from "./speed_dial_item";
 import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
-const FAB_MAIN_CLASS_HAS_TEXT = "dx-fa-button-main-has-text";
+const FAB_MAIN_CLASS_HAS_TEXT = "dx-fa-button-has-text";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
 const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
@@ -71,8 +71,12 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
     _renderLabel() {
         this.callBase();
-        this.$element().toggleClass(FAB_MAIN_CLASS_HAS_TEXT, this._$label);
-        this._$label && this.$content().css("max-width", this._$icon.outerWidth() + this._$label.outerWidth());
+        this.$element().toggleClass(FAB_MAIN_CLASS_HAS_TEXT, !!this._$label);
+        if(this._$label) {
+            const contentMaxWidth = Math.ceil(this._$icon.outerWidth() + this._$label.outerWidth());
+            this.$content().css("maxWidth", contentMaxWidth);
+        }
+        this._setPosition();
     },
 
     _renderCloseIcon() {
@@ -236,12 +240,14 @@ exports.initAction = function(newAction) {
             speedDialMainItem.option(extend({}, newAction._options, {
                 actions: savedActions,
                 visible: true,
-                position: speedDialMainItem._getDefaultOptions().position
+                position: speedDialMainItem._getDefaultOptions().position,
+                label: speedDialMainItem._getDefaultOptions().label
             }));
         } else {
             speedDialMainItem.option({
                 actions: savedActions,
-                position: speedDialMainItem._getDefaultOptions().position
+                position: speedDialMainItem._getDefaultOptions().position,
+                label: speedDialMainItem._getDefaultOptions().label
             });
         }
     }
@@ -268,7 +274,8 @@ exports.disposeAction = function(actionId) {
         speedDialMainItem.option(extend({}, savedActions[0]._options, {
             actions: savedActions,
             visible: true,
-            position: speedDialMainItem._getDefaultOptions().position
+            position: speedDialMainItem._getDefaultOptions().position,
+            label: speedDialMainItem._getDefaultOptions().label
         }));
     } else {
         speedDialMainItem.option({
@@ -289,6 +296,7 @@ exports.repaint = function() {
         icon: icon,
         closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
         position: speedDialMainItem._getDefaultOptions().position,
+        label: speedDialMainItem._getDefaultOptions().label,
         maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount
     });
 };
