@@ -848,13 +848,23 @@ var DropDownList = DropDownEditor.inherit({
 
     _getMaxHeight: function() {
         var $element = this.$element(),
-            containerValue = this.option("dropDownOptions.container"),
-            container = containerValue && $(containerValue),
-            offsetTop = $element.offset().top - (container ? $(container).offset().top : 0),
-            containerHeight = $(container || window).outerHeight(),
+            $boundsContainer = this._getPopupBoundsContainer(),
+            offsetTop = $element.offset().top - ($boundsContainer ? $boundsContainer.offset().top : 0),
+            containerHeight = ($boundsContainer || $(window)).outerHeight(),
             maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
         return Math.min(containerHeight * 0.5, maxHeight);
+    },
+
+    _getPopupBoundsContainer: function() {
+        // var containerValue = this.option("dropDownOptions.container"),
+        //     $container = containerValue && $(containerValue);
+
+        // if($container && window.getComputedStyle($container.get(0)).overflow === "hidden") {
+        //     return $container;
+        // }
+
+        return this._popup && this._popup._$boundsContainer;
     },
 
     _clean: function() {

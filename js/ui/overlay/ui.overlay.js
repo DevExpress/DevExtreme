@@ -512,6 +512,29 @@ var Overlay = Widget.inherit({
         }
 
         this._$container = $container.length ? $container : $element.parent();
+
+        this._findBoundLimits();
+    },
+
+    _findBoundLimits: function() {
+        var that = this;
+        this._$boundsContainer = undefined;
+        if(window.getComputedStyle(this._$container.get(0)).overflow === "hidden") {
+            that._$boundsContainer = this._$container;
+            return;
+        }
+
+
+        if(!typeUtils.isWindow(this._$container)) {
+            each(this._$container.parents(), function(i, parent) {
+                if(parent === $("body").get(0)) {
+                    return false;
+                } else if(window.getComputedStyle(parent).overflow === "hidden") {
+                    that._$boundsContainer = $(parent);
+                    return false;
+                }
+            });
+        }
     },
 
     _initHideTopOverlayHandler: function(handler) {

@@ -1060,6 +1060,11 @@ QUnit.module("popup", moduleConfig, () => {
             opened: true
         }).dxDropDownList("instance");
 
+        assert.ok($(instance.content(".dx-overlay-content")).parent().height() > 80, "popup sizes are not limited if container has no overflow: hidden styles");
+
+        specificContainer.css("overflow", "hidden");
+        instance.repaint();
+
         assert.roughEqual($(instance.content(".dx-overlay-content")).parent().height(), 80 / 2, 2, "popup sizes are limited by container bounds");
         specificContainer.remove();
     });
