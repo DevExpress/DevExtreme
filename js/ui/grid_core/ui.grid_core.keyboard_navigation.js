@@ -27,6 +27,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     EDITOR_CELL_CLASS = "dx-editor-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
+    COMMAND_SELECT_CLASS = "dx-command-select",
     COMMAND_CELL_SELECTOR = "[class^=dx-command]",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     DATEBOX_WIDGET_NAME = "dxDateBox",
@@ -832,11 +833,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _spaceKeyHandler: function(eventArgs, isEditing) {
         var rowIndex = this.getVisibleRowIndex(),
             $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target),
-            isFocusedRowElement;
-
+            isFocusedRowElement,
+            isFocusedSelectionCell;
         if(this.option("selection") && this.option("selection").mode !== "none" && !isEditing) {
             isFocusedRowElement = this._getElementType($target) === "row" && this.isRowFocusType() && isDataRow($target);
-            if(isFocusedRowElement) {
+            isFocusedSelectionCell = $target.hasClass(COMMAND_SELECT_CLASS);
+            if(isFocusedSelectionCell && this.option("selection.showCheckBoxesMode") === "onClick") {
                 this._selectionController.startSelectionWithCheckboxes();
             }
             if(isFocusedRowElement || $target.parent().hasClass(DATA_ROW_CLASS) || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
