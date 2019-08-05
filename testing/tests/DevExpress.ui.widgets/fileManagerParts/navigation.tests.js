@@ -112,7 +112,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal("", inst.option("path"));
 
         const that = this;
-        inst.option("onPathChanged", function() {
+        inst.option("onCurrentDirectoryChanged", function() {
             assert.equal("Folder 1/Folder 1.1", inst.option("path"));
 
             const $folder1Node = that.wrapper.getFolderNode(1);

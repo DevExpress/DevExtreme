@@ -38,7 +38,7 @@ class FileManager extends Widget {
     _initMarkup() {
         super._initMarkup();
 
-        this._onPathChangedAction = this._createActionByOption("onPathChanged");
+        this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");
         this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
 
         this._controller = new FileItemsController({
@@ -373,14 +373,14 @@ class FileManager extends Widget {
             customizeDetailColumns: null,
 
             /**
-            * @name dxFileManagerOptions.onPathChanged
+            * @name dxFileManagerOptions.onCurrentDirectoryChanged
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
             * @default null
             * @action
             */
-            onPathChanged: null,
+            onCurrentDirectoryChanged: null,
 
             /**
             * @name dxFileManagerOptions.onSelectedFileOpened
@@ -453,8 +453,8 @@ class FileManager extends Widget {
             case "permissions":
                 this.repaint();
                 break;
-            case "onPathChanged":
-                this._onPathChangedAction = this._createActionByOption("onPathChanged");
+            case "onCurrentDirectoryChanged":
+                this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");
                 break;
             case "onSelectedFileOpened":
                 this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
@@ -481,7 +481,7 @@ class FileManager extends Widget {
         this._itemView.refresh();
         this._breadcrumbs.option("path", this._controller.getCurrentPath());
         this.option("path", this._controller.getCurrentPath());
-        this._onPathChangedAction();
+        this._onCurrentDirectoryChangedAction();
     }
 
     getDirectories(parentDirectoryInfo) {
