@@ -907,8 +907,6 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _renderVisibility: function(showing) {
-            this._cachedJQEvent = undefined;
-
             return showing ? this._show() : this._hide();
         },
 
@@ -1005,6 +1003,12 @@ var ContextMenu = MenuBase.inherit((function() {
             this._cachedJQEvent = undefined;
 
             return promise || new Deferred().reject().promise();
+        },
+
+        repaint: function() {
+            this._cachedJQEvent = undefined;
+
+            this.callBase();
         },
 
         /**
