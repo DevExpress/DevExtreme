@@ -11,17 +11,22 @@ class DiagramContextMenu extends Widget {
         this._createOnVisibleChangedAction();
         this.bar = new ContextMenuBar(this);
         this._tempState = undefined;
+
+        this._commands = [];
         this._commandToIndexMap = {};
     }
     _initMarkup() {
         super._initMarkup();
-        const commands = DiagramCommands.getContextMenuCommands(this.option("commands"));
+
+        this._commands = DiagramCommands.getContextMenuCommands(this.option("commands"));
+        this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
+
         const $contextMenu = $("<div>")
             .appendTo(this.$element());
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             target: this.option("container"),
-            dataSource: commands,
-            displayExpr: "text",
+            items: this._getItems(this._commands),
+
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
                 this._tempState = true;
@@ -29,6 +34,7 @@ class DiagramContextMenu extends Widget {
                     this.clickPosition = { x: e.jQEvent.clientX, y: e.jQEvent.clientY };
                 }
                 this._onVisibleChangedAction({ visible: true, component: this });
+                this._contextMenuInstance.option("items", this._getItems(this._commands));
                 delete this._tempState;
             },
             onHiding: (e) => {
@@ -37,7 +43,24 @@ class DiagramContextMenu extends Widget {
                 delete this._tempState;
             }
         });
-        commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
+    }
+    _getItems(commands) {
+        var items = [];
+        var beginGroup = false;
+        commands.forEach(function(command) {
+            if(command.widget === "separator") {
+                beginGroup = true;
+            } else if(command.visible) {
+                items.push({
+                    command: command.command,
+                    text: command.text,
+                    getParameter: command.getParameter,
+                    beginGroup: beginGroup
+                });
+                beginGroup = false;
+            }
+        });
+        return items;
     }
     _onItemClick(itemData) {
         const parameter = this._getExecCommandParameter(itemData);
@@ -50,8 +73,12 @@ class DiagramContextMenu extends Widget {
         }
     }
     _setItemEnabled(key, enabled) {
+        this._setItemVisible(key, enabled);
+    }
+    _setItemVisible(key, visible) {
         if(key in this._commandToIndexMap) {
-            this._contextMenuInstance.option(`items[${this._commandToIndexMap[key]}].disabled`, !enabled);
+            var command = this._commands[this._commandToIndexMap[key]];
+            command.visible = visible;
         }
     }
     _setEnabled(enabled) {
@@ -86,6 +113,9 @@ class ContextMenuBar extends DiagramBar {
     }
     setItemEnabled(key, enabled) {
         this._owner._setItemEnabled(key, enabled);
+    }
+    setItemVisible(key, visible) {
+        this._owner._setItemVisible(key, visible);
     }
     setEnabled(enabled) {
         this._owner._setEnabled(enabled);

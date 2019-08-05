@@ -16,6 +16,8 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return this.toolbarCommands ||
             (this.toolbarCommands = {
+                separator: SEPARATOR,
+
                 export: {
                     widget: "dxButton",
                     icon: "export",
@@ -44,7 +46,6 @@ const DiagramCommands = {
                         }
                     ]
                 },
-                separator: SEPARATOR,
                 undo: {
                     command: DiagramCommand.Undo,
                     hint: 'Undo',
@@ -59,7 +60,6 @@ const DiagramCommands = {
                 },
                 fontName: {
                     command: DiagramCommand.FontName,
-                    beginGroup: true,
                     widget: "dxSelectBox",
                     items: ["Arial", "Arial Black", "Helvetica", "Times New Roman", "Courier New", "Courier", "Verdana", "Georgia", "Comic Sans MS", "Trebuchet MS"]
                 },
@@ -113,7 +113,6 @@ const DiagramCommands = {
                     hint: "Align Left",
                     text: "Align Left",
                     icon: "alignleft",
-                    beginGroup: true
                 },
                 textAlignCenter: {
                     command: DiagramCommand.TextCenterAlign,
@@ -316,6 +315,8 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return this.contextMenuCommands ||
             (this.contextMenuCommands = {
+                separator: SEPARATOR,
+
                 cut: {
                     command: DiagramCommand.Cut,
                     text: "Cut"
@@ -334,17 +335,14 @@ const DiagramCommands = {
                 selectAll: {
                     command: DiagramCommand.SelectAll,
                     text: "Select All",
-                    beginGroup: true
                 },
                 delete: {
                     command: DiagramCommand.Delete,
                     text: "Delete",
-                    beginGroup: true
                 },
                 bringToFront: {
                     command: DiagramCommand.BringToFront,
                     text: "Bring to Front",
-                    beginGroup: true
                 },
                 sendToBack: {
                     command: DiagramCommand.SendToBack,
@@ -353,7 +351,6 @@ const DiagramCommands = {
                 lock: {
                     command: DiagramCommand.Lock,
                     text: "Lock",
-                    beginGroup: true
                 },
                 unlock: {
                     command: DiagramCommand.Unlock,
@@ -370,10 +367,14 @@ const DiagramCommands = {
             commands["cut"],
             commands["copy"],
             commands["paste"],
+            commands["separator"],
             commands["selectAll"],
+            commands["separator"],
             commands["delete"],
+            commands["separator"],
             commands["bringToFront"],
             commands["sendToBack"],
+            commands["separator"],
             commands["lock"],
             commands["unlock"]
         ];
