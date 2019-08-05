@@ -333,7 +333,7 @@ var baseFixedColumns = {
         var result = this.callBase.apply(this, arguments);
 
         if(this._fixedTableElement) {
-            result = result.add(this._fixedTableElement);
+            result = $([result.get(0), this._fixedTableElement.get(0)]);
         }
 
         return result;

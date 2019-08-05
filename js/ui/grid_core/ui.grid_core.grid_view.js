@@ -22,8 +22,6 @@ var TABLE_CLASS = "table",
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
 
-    POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-
     VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "filterPanelView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView", "filterBuilderView"];
 
 var isPercentWidth = function(width) {
@@ -164,15 +162,13 @@ var ResizingController = modules.ViewController.inherit({
 
         var $rowsTable,
             $viewTable,
-            isFixedTable,
             $rowsTables = this._rowsView.getTableElements(),
             $viewTables = view.getTableElements(),
             $tableBody;
 
-        each($rowsTables, (_, tableElement) => {
+        each($rowsTables, (index, tableElement) => {
             $rowsTable = $(tableElement);
-            isFixedTable = $rowsTable.hasClass(POINTER_EVENTS_NONE_CLASS);
-            $viewTable = $viewTables.filter(isFixedTable ? `.${POINTER_EVENTS_NONE_CLASS}` : `:not(.${POINTER_EVENTS_NONE_CLASS})`);
+            $viewTable = $viewTables.eq(index);
 
             if($viewTable && $viewTable.length) {
                 if(isBestFit) {
