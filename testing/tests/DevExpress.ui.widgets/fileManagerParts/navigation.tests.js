@@ -109,11 +109,11 @@ QUnit.module("Navigation operations", moduleConfig, () => {
     test("change current directory by public API", function(assert) {
         const done = assert.async();
         const inst = this.wrapper.getInstance();
-        assert.equal("", inst.option("path"));
+        assert.equal("", inst.option("currentPath"));
 
         const that = this;
         inst.option("onCurrentDirectoryChanged", function() {
-            assert.equal("Folder 1/Folder 1.1", inst.option("path"));
+            assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"));
 
             const $folder1Node = that.wrapper.getFolderNode(1);
             assert.equal($folder1Node.find("span").text(), "Folder 1");
@@ -124,7 +124,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
             done();
         });
 
-        inst.option("path", "Folder 1/Folder 1.1");
+        inst.option("currentPath", "Folder 1/Folder 1.1");
     });
 
 });

@@ -42,7 +42,7 @@ class FileManager extends Widget {
         this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
 
         this._controller = new FileItemsController({
-            path: this.option("path"),
+            currentPath: this.option("currentPath"),
             rootText: "",
             fileProvider: this.option("fileProvider"),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
@@ -317,11 +317,11 @@ class FileManager extends Widget {
             fileProvider: null,
 
             /**
-            * @name dxFileManagerOptions.path
+            * @name dxFileManagerOptions.currentPath
             * @type string
             * @default ""
             */
-            path: "",
+            currentPath: "",
 
             /**
             * @name dxFileManagerOptions.selectionMode
@@ -442,8 +442,8 @@ class FileManager extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "path":
-                this._controller.setCurrentPath(this.option("path"));
+            case "currentPath":
+                this._controller.setCurrentPath(this.option("currentPath"));
                 break;
             case "fileProvider":
             case "selectionMode":
@@ -480,7 +480,7 @@ class FileManager extends Widget {
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
         this._breadcrumbs.option("path", this._controller.getCurrentPath());
-        this.option("path", this._controller.getCurrentPath());
+        this.option("currentPath", this._controller.getCurrentPath());
         this._onCurrentDirectoryChangedAction();
     }
 

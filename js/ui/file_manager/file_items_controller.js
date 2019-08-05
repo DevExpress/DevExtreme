@@ -23,7 +23,7 @@ export default class FileItemsController {
 
         this._loadedItems = {};
 
-        this.setCurrentPath(options.path);
+        this.setCurrentPath(options.currentPath);
     }
 
     setProvider(fileProvider) {
