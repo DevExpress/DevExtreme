@@ -52,6 +52,7 @@ QUnit.module("Timeline Base", {
 });
 
 QUnit.test("Header scrollable should update position if date scrollable position is changed to right", function(assert) {
+    const done = assert.async();
     var $element = this.instance.$element(),
         headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
@@ -61,7 +62,10 @@ QUnit.test("Header scrollable should update position if date scrollable position
 
     dateTableScrollable.scrollTo({ left: 100 });
 
-    assert.equal(headerScrollable.scrollLeft(), 100, "Scroll position is OK");
+    setTimeout(() => {
+        assert.equal(headerScrollable.scrollLeft(), 100, "Scroll position is OK");
+        done();
+    });
 });
 
 QUnit.test("Header scrollable should have right scrolloByContent (T708008)", function(assert) {
@@ -101,6 +105,8 @@ QUnit.test("Date table should have a correct width if cell is less than 75px", f
 });
 
 QUnit.test("Sidebar scrollable should update position if date scrollable position is changed", function(assert) {
+    const done = assert.async();
+
     this.instance.option({
         crossScrollingEnabled: true,
         width: 400,
@@ -117,7 +123,10 @@ QUnit.test("Sidebar scrollable should update position if date scrollable positio
 
     dateTableScrollable.scrollTo({ top: 200 });
 
-    assert.equal(groupPanelScrollable.scrollTop(), 200, "Scroll position is OK");
+    setTimeout(() => {
+        assert.equal(groupPanelScrollable.scrollTop(), 200, "Scroll position is OK");
+        done();
+    });
 });
 
 QUnit.test("Date table scrollable should update position if sidebar position is changed", function(assert) {
