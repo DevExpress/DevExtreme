@@ -71,6 +71,33 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
 
+    test("rename folder in folders area by Enter in dialog input", function(assert) {
+        let $folderNode = this.wrapper.getFolderNode(1);
+        assert.equal($folderNode.find("span").text(), "Folder 1", "has target folder");
+
+        $folderNode.trigger("dxclick");
+        $folderNode.trigger("click");
+        this.clock.tick(400);
+
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('Rename')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        assert.equal($input.val(), "Folder 1", "input has value");
+
+        $input.val("TestFolder 1");
+        $input.trigger("change");
+
+        $input.trigger($.Event("keyup", { key: "enter" }));
+        this.clock.tick(400);
+
+        $folderNode = this.wrapper.getFolderNode(1);
+        assert.equal($folderNode.find("span").text(), "TestFolder 1", "folder renamed");
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+    });
+
     test("rename file in items area", function(assert) {
         let $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
         assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
@@ -116,6 +143,32 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $input.trigger("change");
         const $okButton = $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Create')`);
         $okButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const $folderNode = this.wrapper.getFolderNode(4);
+        assert.equal($folderNode.find("span").text(), "Test 4", "folder created");
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+    });
+
+    test("create folder in folders area from items area without folders by Enter in dialog input", function(assert) {
+        const $row = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`).eq(1);
+        $row.trigger("dxclick");
+
+        assert.ok($row.hasClass(Consts.SELECTION_CLASS), "file selected");
+
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New folder')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        assert.ok($input.has(":focus"), "dialog's input element should be focused");
+        assert.equal("Untitled folder", $input.val(), "input has default value");
+
+        $input.val("Test 4");
+        $input.trigger("change");
+
+        $input.trigger($.Event("keyup", { key: "enter" }));
         this.clock.tick(400);
 
         const $folderNode = this.wrapper.getFolderNode(4);
