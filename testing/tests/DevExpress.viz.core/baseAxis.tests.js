@@ -735,7 +735,9 @@ QUnit.test("Get visual range after setBusinessRange. Discrete", function(assert)
 });
 
 QUnit.test("Trigger zoom events", function(assert) {
-    this.updateOptions();
+    this.updateOptions({
+        type: "continuous"
+    });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -760,7 +762,8 @@ QUnit.test("Trigger zoom events", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
@@ -824,7 +827,7 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
 });
 
 QUnit.test("Can prevent zoomStart", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -841,12 +844,13 @@ QUnit.test("Can prevent zoomStart", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
 QUnit.test("Can prevent zoomEnd", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -864,7 +868,8 @@ QUnit.test("Can prevent zoomEnd", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 

@@ -1574,6 +1574,88 @@ QUnit.test("reject selection after options updating", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
 });
 
+QUnit.test("T801302. Chart do not throws exceptions when a discrete axis has null values", function(assert) {
+    var chart = this.createChart({
+        dataSource: [
+            { arg: 1, val: null },
+            { arg: null, val: 1 },
+            { arg: 3, val: 100000 }
+        ],
+        series: {},
+        commonAxisSettings: {
+            type: "discrete",
+            argumentType: "string",
+            valueType: "string"
+        }
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("Change series and argumentAxis with visualRange options", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: {}
+    });
+
+    chart.beginUpdate();
+    chart.option({
+        series: {}
+    });
+    chart.option("argumentAxis.tickInterval", 0.2);
+    chart.option("argumentAxis.visualRange", [6, 7]);
+    chart.endUpdate();
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 6, endValue: 7 });
+});
+
+QUnit.test("Change axis type at runtime from continuous to discrete with visual range", function(assert) {
+    const onZoomEnd = sinon.stub();
+    const chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 1 }, { arg: 3, val: 1 }],
+        series: {},
+        onZoomEnd
+    });
+
+    chart.beginUpdate();
+    chart.option("argumentAxis.visualRange", [2, 3]);
+    chart.option("argumentAxis.type", "discrete");
+    chart.endUpdate();
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), {
+        categories: [2, 3],
+        startValue: 2,
+        endValue: 3
+    });
+
+    assert.deepEqual(onZoomEnd.lastCall.args[0].shift, NaN);
+    assert.deepEqual(onZoomEnd.lastCall.args[0].zoomFactor, NaN);
+});
+
+QUnit.test("Change axis type at runtime from discrete to continuous with visual range", function(assert) {
+    const onZoomEnd = sinon.stub();
+    const chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 1 }, { arg: 3, val: 1 }],
+        argumentAxis: {
+            type: "discrete"
+        },
+        series: {},
+        onZoomEnd
+    });
+
+    chart.beginUpdate();
+    chart.option("argumentAxis.type", "continuous");
+    chart.option("argumentAxis.visualRange", [2, 3]);
+    chart.endUpdate();
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), {
+        startValue: 2,
+        endValue: 3
+    });
+    assert.deepEqual(onZoomEnd.lastCall.args[0].shift, NaN);
+    assert.deepEqual(onZoomEnd.lastCall.args[0].zoomFactor, NaN);
+});
+
 QUnit.module("Legend title", $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
@@ -3046,39 +3128,4 @@ QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", functi
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
     translateX.forEach((tX, i) => assert.roughEqual(tX, 44, 2.1));
-});
-
-QUnit.test("T801302. Chart do not throws exceptions when a discrete axis has null values", function(assert) {
-    var chart = this.createChart({
-        dataSource: [
-            { arg: 1, val: null },
-            { arg: null, val: 1 },
-            { arg: 3, val: 100000 }
-        ],
-        series: {},
-        commonAxisSettings: {
-            type: "discrete",
-            argumentType: "string",
-            valueType: "string"
-        }
-    });
-
-    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
-});
-
-QUnit.test("Change series and argumentAxis with visualRange options", function(assert) {
-    var chart = this.createChart({
-        dataSource: [{ arg: 1, val: 1 }],
-        series: {}
-    });
-
-    chart.beginUpdate();
-    chart.option({
-        series: {}
-    });
-    chart.option("argumentAxis.tickInterval", 0.2);
-    chart.option("argumentAxis.visualRange", [6, 7]);
-    chart.endUpdate();
-
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 6, endValue: 7 });
 });
