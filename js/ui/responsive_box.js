@@ -704,13 +704,27 @@ var ResponsiveBox = CollectionWidget.inherit({
     _dimensionChanged: function() {
         const newScreenFactor = this._getCurrentScreenFactor();
 
-        if(newScreenFactor !== this.option("currentScreenFactor")) {
-            this._currentScreen = newScreenFactor;
+        if(this._isScreenFactorChanged(newScreenFactor)) {
+            this._updateScreenFactor(newScreenFactor);
             this._update();
         }
     },
 
+    _isScreenFactorChanged: function(value) {
+        const newScreenFactor = value || this._getCurrentScreenFactor();
+
+        return newScreenFactor !== this.option("currentScreenFactor");
+    },
+
+    _updateScreenFactor: function(value) {
+        this._currentScreen = value || this._getCurrentScreenFactor();
+    },
+
     repaint: function() {
+        if(this._isScreenFactorChanged()) {
+            this._updateScreenFactor();
+        }
+
         this._update();
     }
 
