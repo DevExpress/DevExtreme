@@ -3600,7 +3600,7 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
 // T803784
 QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed", function(assert) {
     // arrange
-    $("#dataGrid").dxDataGrid({
+    var dataGrid = $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
         dataSource: [{ field: "data" }],
         columns: [{
@@ -3620,10 +3620,12 @@ QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed
             allowUpdating: true,
             useIcons: true
         }
-    });
+    }).dxDataGrid("instance");
 
     // assert
-    assert.equal($("td").eq(5).width(), $("td").eq(11).width(), "widths are equal");
+    var rows = dataGrid.getRowElement(0);
+
+    assert.equal($(rows[0]).find("td").eq(0).width(), $(rows[1]).find("td").eq(0).width(), "widths are equal");
     assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
 });
 
