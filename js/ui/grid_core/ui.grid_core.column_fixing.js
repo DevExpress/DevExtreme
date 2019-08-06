@@ -390,8 +390,9 @@ var baseFixedColumns = {
         if(this._fixedTableElement) {
             if(this.option("legacyRendering")) {
                 useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
-            } else if(hasVisibleWidth) {
-                useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length && !this.isScrollbarVisible(true);
+            } else {
+                let hasAutoWidth = widths && widths.some(function(width) { return width === "auto"; });
+                useVisibleColumns = hasAutoWidth && (!hasVisibleWidth || !this.isScrollbarVisible(true));
             }
 
             if(useVisibleColumns) {
