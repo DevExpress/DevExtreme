@@ -239,22 +239,22 @@ class Diagram extends Widget {
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
         if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
-            this._updateDocumentUnitsState();
+            this._updateUnitsState();
         }
-        if(this.option("document.pageSize")) {
-            if(this.option("document.pageSize.items")) {
-                this._updateDocumentPageSizeItemsState();
+        if(this.option("pageSize")) {
+            if(this.option("pageSize.items")) {
+                this._updatePageSizeItemsState();
             }
-            if(this.option("document.pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
-               this.option("document.pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height) {
-                this._updateDocumentPageSizeState();
+            if(this.option("pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
+               this.option("pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height) {
+                this._updatePageSizeState();
             }
         }
-        if(this.option("document.pageOrientation") !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
-            this._updateDocumentPageOrientationState();
+        if(this.option("pageOrientation") !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
+            this._updatePageOrientationState();
         }
-        if(this.option("document.pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
-            this._updateDocumentPageColorState();
+        if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
+            this._updatePageColorState();
         }
 
         this._updateViewUnitsState();
@@ -638,31 +638,31 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.ViewUnits, this._getDiagramUnitValue(this.option("viewUnits")));
     }
 
-    _updateDocumentUnitsState() {
+    _updateUnitsState() {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("units")));
     }
-    _updateDocumentPageSizeState() {
-        var pageSize = this.option("document.pageSize");
+    _updatePageSizeState() {
+        var pageSize = this.option("pageSize");
         if(!pageSize || !pageSize.width || !pageSize.height) return;
 
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.PageSize, pageSize);
     }
-    _updateDocumentPageSizeItemsState() {
-        var pageSizeItems = this.option("document.pageSize.items");
+    _updatePageSizeItemsState() {
+        var pageSizeItems = this.option("pageSize.items");
         if(!Array.isArray(pageSizeItems)) return;
 
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.PageSizeItems, pageSizeItems);
     }
-    _updateDocumentPageOrientationState() {
+    _updatePageOrientationState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.PageLandscape, this.option("document.pageOrientation") === "landscape");
+        this._executeDiagramCommand(DiagramCommand.PageLandscape, this.option("pageOrientation") === "landscape");
     }
-    _updateDocumentPageColorState() {
+    _updatePageColorState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.PageColor, this.option("document.pageColor"));
+        this._executeDiagramCommand(DiagramCommand.PageColor, this.option("pageColor"));
     }
 
 
@@ -770,56 +770,49 @@ class Diagram extends Widget {
             viewUnits: DIAGRAM_DEFAULT_UNIT,
 
             /**
-            * @name dxDiagramOptions.document
+            * @name dxDiagramOptions.pageSize
             * @type Object
-            * @default null
             */
-            document: {
-                /**
-                * @name dxDiagramOptions.document.pageSize
-                * @type Object
-                */
-                /**
-                * @name dxDiagramOptions.document.pageSize.width
-                * @type Number
-                * @default 5.827
-                */
-                /**
-                * @name dxDiagramOptions.document.pageSize.height
-                * @type Number
-                * @default 8.268
-                */
-                /**
-                * @name dxDiagramOptions.document.pageSize.items
-                * @type Array<Object>
-                * @default undefined
-                */
-                /**
-                * @name dxDiagramOptions.document.pageSize.items.width
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.document.pageSize.items.height
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.document.pageSize.items.text
-                * @type String
-                */
-                pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
-                /**
-                * @name dxDiagramOptions.document.pageOrientation
-                * @type Enums.DiagramPageOrientation
-                * @default "portrait"
-                */
-                pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
-                /**
-                * @name dxDiagramOptions.document.pageColor
-                * @type String
-                * @default "white"
-                */
-                pageColor: DIAGRAM_DEFAULT_PAGE_COLOR
-            },
+            /**
+            * @name dxDiagramOptions.pageSize.width
+            * @type Number
+            * @default 5.827
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.height
+            * @type Number
+            * @default 8.268
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items
+            * @type Array<Object>
+            * @default undefined
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items.width
+            * @type Number
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items.height
+            * @type Number
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items.text
+            * @type String
+            */
+            pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
+            /**
+            * @name dxDiagramOptions.pageOrientation
+            * @type Enums.DiagramPageOrientation
+            * @default "portrait"
+            */
+            pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
+            /**
+            * @name dxDiagramOptions.pageColor
+            * @type String
+            * @default "white"
+            */
+            pageColor: DIAGRAM_DEFAULT_PAGE_COLOR,
 
             /**
             * @name dxDiagramOptions.onDataChanged
@@ -1366,23 +1359,17 @@ class Diagram extends Widget {
                 this._updateViewUnitsState();
                 break;
             case "units":
-                this._updateDocumentUnitsState();
+                this._updateUnitsState();
                 break;
-            case "document.pageSize":
-                this._updateDocumentPageSizeItemsState();
-                this._updateDocumentPageSizeState();
+            case "pageSize":
+                this._updatePageSizeItemsState();
+                this._updatePageSizeState();
                 break;
-            case "document.pageOrientation":
-                this._updateDocumentPageOrientationState();
+            case "pageOrientation":
+                this._updatePageOrientationState();
                 break;
-            case "document.pageColor":
-                this._updateDocumentPageColorState();
-                break;
-            case "document":
-                this._updateDocumentPageSizeItemsState();
-                this._updateDocumentPageSizeState();
-                this._updateDocumentPageOrientationState();
-                this._updateDocumentPageColorState();
+            case "pageColor":
+                this._updatePageColorState();
                 break;
             case "nodes.autoLayout":
                 this._refreshDataSources();
