@@ -142,7 +142,7 @@ var Scroller = Class.inherit({
     },
 
     _scrollStep: function(delta) {
-        var prevLocation = this._location;
+        const prevLocation = this._location;
 
         this._location += delta;
         this._suppressBounce();
@@ -479,11 +479,11 @@ var Scroller = Class.inherit({
     },
 
     _contentSize: function() {
-        var isOverflowHidden = this._$content.css("overflow" + this._axis.toUpperCase()) === "hidden",
-            contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
+        const isOverflowHidden = this._$content.css("overflow" + this._axis.toUpperCase()) === "hidden";
+        let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
 
         if(!isOverflowHidden) {
-            var containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)] * this._getScaleRatio();
+            let containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)] * this._getScaleRatio();
 
             contentSize = Math.max(containerScrollSize, contentSize);
         }
@@ -492,7 +492,7 @@ var Scroller = Class.inherit({
     },
 
     _validateEvent: function(e) {
-        var $target = $(e.originalEvent.target);
+        const $target = $(e.originalEvent.target);
 
         return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
     },
@@ -632,7 +632,7 @@ var SimulatedStrategy = Class.inherit({
 
         this._prepareDirections();
         this._eachScroller(function(scroller, direction) {
-            var isValid = scroller._validateEvent(e);
+            const isValid = scroller._validateEvent(e);
             this._validDirections[direction] = isValid;
         });
     },
