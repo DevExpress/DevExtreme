@@ -2315,4 +2315,34 @@ function createGridView(options, userOptions) {
         assert.strictEqual($colElements.get(3).style.width, "auto", "width of the fourth cell");
         assert.strictEqual($colElements.get(4).style.width, "100px", "width of the fifth cell");
     });
+
+    // T800761
+    QUnit.test("The fixed column should have the correct width when it has width is 'auto' and columnAutoWidth is enabled", function(assert) {
+        // arrange
+        var $headerElement,
+            $testElement = $('<div />').width(400).appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                columnAutoWidth: true,
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2" }],
+                columns: [
+                    {
+                        dataField: "field1",
+                        headerCellTemplate: function(container) {
+                            $(container).css("width", "200px");
+                        },
+                        fixed: true,
+                        width: "auto"
+                    }, "field2"
+                ]
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $headerElement = $(gridView.getView("columnHeadersView").getCellElement(0, 0));
+        assert.strictEqual($headerElement.outerWidth(), 215, "width of the first header"); // width = 200(content width) + 14(padding) + 1(border)
+    });
 }());

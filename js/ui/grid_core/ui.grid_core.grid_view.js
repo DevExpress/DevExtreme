@@ -156,19 +156,24 @@ var ResizingController = modules.ViewController.inherit({
     _toggleBestFitModeForView: function(view, className, isBestFit) {
         if(!view || !view.isVisible()) return;
 
-        var $rowsTable = this._rowsView._getTableElement(),
-            $viewTable = view._getTableElement(),
-            $tableBody;
+        var $rowsTables = this._rowsView.getTableElements(),
+            $viewTables = view.getTableElements();
 
-        if($viewTable) {
-            if(isBestFit) {
-                $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
-            } else {
-                $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+        each($rowsTables, (index, tableElement) => {
+            var $tableBody,
+                $rowsTable = $(tableElement),
+                $viewTable = $viewTables.eq(index);
+
+            if($viewTable && $viewTable.length) {
+                if(isBestFit) {
+                    $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
+                } else {
+                    $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+                }
+                $tableBody.toggleClass(className, isBestFit);
+                $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
             }
-            $tableBody.toggleClass(className, isBestFit);
-            $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
-        }
+        });
     },
 
     _toggleBestFitMode: function(isBestFit) {
