@@ -57,6 +57,6 @@ export class AppointmentModel {
     }
 
     notification(propertyName, position) {
-        return `${propertyName} incorrect for the "${this.title}" after drag and drop in the row "${position.row}" and cell "${position.cell}"`
+        return `${propertyName} incorrect for the "${this.title}" after drag-and-drop in the row "${position.row}" and cell "${position.cell}"`
     }
 }

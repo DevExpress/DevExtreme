@@ -9,15 +9,15 @@ import { AppointmentModel } from './helpers/appointment.model';
 
 import { movementMap } from './map/day.map';
 
-fixture
-    `Rearrange appointments in the Scheduler widget with the drag-and-drop gesture`.page(getContainerFileUrl());
+fixture`Rearrange appointments in the Scheduler widget for basic views with the drag-and-drop gesture`
+    .page(getContainerFileUrl());
 
-test('Rearrange appointments with the drag-and-drop gesture in Day mode', async t => {
+test('Drag-and-drop appointments in Day view', async t => {
     for (let item of movementMap) {
-        for (let step of item.features) {
-            let appointment = new AppointmentModel(item.title, step);
+        for (let feature of item.features) {
+            let appointment = new AppointmentModel(item.title, feature);
 
-            await appointment.dropTo(t, new TablePosition(step.position.row, 0));
+            await appointment.dropTo(t, new TablePosition(feature.position.row, 0));
             await appointment.compare(t, [Feature.height, Feature.startTime, Feature.endTime]);
         }
     }
