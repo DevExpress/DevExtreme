@@ -3001,28 +3001,28 @@ const Scheduler = Widget.inherit({
                 getGroups,
                 setResourceCallback;
 
-            if(this._isAgenda()) {
-                getGroups = function() {
-                    var apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
-                    return workSpace._getCellGroups(apptSettings[0].groupIndex);
-                };
+            // if(this._isAgenda()) {
+            //     getGroups = function() {
+            //         var apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
+            //         return workSpace._getCellGroups(apptSettings[0].groupIndex);
+            //     };
 
-                setResourceCallback = function(_, group) {
-                    resourcesSetter[group.name](targetedAppointment, group.id);
-                };
-            } else {
-                getGroups = function() {
-                    var setting = $(appointmentElement).data("dxAppointmentSettings") || {}; // TODO: in the future, necessary refactor the engine of determining groups
-                    return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
-                };
+            //     setResourceCallback = function(_, group) {
+            //         resourcesSetter[group.name](targetedAppointment, group.id);
+            //     };
+            // } else {
+            getGroups = function() {
+                var setting = $(appointmentElement).data("dxAppointmentSettings") || {}; // TODO: in the future, necessary refactor the engine of determining groups
+                return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
+            };
 
-                setResourceCallback = function(field, value) {
-                    resourcesSetter[field](targetedAppointment, value);
-                };
-            }
-
-            each(getGroups.call(this), setResourceCallback);
+            setResourceCallback = function(field, value) {
+                resourcesSetter[field](targetedAppointment, value);
+            };
         }
+
+        each(getGroups.call(this), setResourceCallback);
+        // }
     },
 
     /**
