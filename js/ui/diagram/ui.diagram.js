@@ -85,6 +85,10 @@ class Diagram extends Widget {
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
 
+        this._updateZoomLevelState();
+        this._updateAutoZoomState();
+        this._updateSimpleViewState();
+
         if(this.option("fullscreen")) {
             this._updateFullscreenState();
         }
@@ -234,13 +238,17 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
-        if(this.option("document.units") !== DIAGRAM_DEFAULT_UNIT) {
+        if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
             this._updateDocumentUnitsState();
         }
-        if(this.option("document.pageSize") &&
-            (this.option("document.pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
-            this.option("document.pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height)) {
-            this._updateDocumentPageSizeState();
+        if(this.option("document.pageSize")) {
+            if(this.option("document.pageSize.items")) {
+                this._updateDocumentPageSizeItemsState();
+            }
+            if(this.option("document.pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
+               this.option("document.pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height) {
+                this._updateDocumentPageSizeState();
+            }
         }
         if(this.option("document.pageOrientation") !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
             this._updateDocumentPageOrientationState();
@@ -252,11 +260,10 @@ class Diagram extends Widget {
         this._updateViewUnitsState();
         this._updateShowGridState();
         this._updateSnapToGridState();
+        this._updateGridSizeItemsState();
         this._updateGridSizeState();
         this._updateReadOnlyState();
-        this._updateZoomLevelState();
-        this._updateAutoZoomState();
-        this._updateSimpleViewState();
+        this._updateZoomLevelItemsState();
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -573,8 +580,20 @@ class Diagram extends Widget {
         this._setLeftPanelEnabled(!readOnly);
     }
     _updateZoomLevelState() {
+        var zoomLevel = this.option("zoomLevel.value");
+        if(!zoomLevel) {
+            zoomLevel = this.option("zoomLevel");
+        }
+
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.ZoomLevel, this.option("zoomLevel"));
+        this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
+    }
+    _updateZoomLevelItemsState() {
+        var zoomLevelItems = this.option("zoomLevel.items");
+        if(!Array.isArray(zoomLevelItems)) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ZoomLevelItems, zoomLevelItems);
     }
     _updateAutoZoomState() {
         const { DiagramCommand } = getDiagram();
@@ -599,8 +618,20 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.SnapToGrid, this.option("snapToGrid"));
     }
     _updateGridSizeState() {
+        var gridSize = this.option("gridSize.value");
+        if(!gridSize) {
+            gridSize = this.option("gridSize");
+        }
+
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.GridSize, this.option("gridSize"));
+        this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
+    }
+    _updateGridSizeItemsState() {
+        var gridSizeItems = this.option("gridSize.items");
+        if(!Array.isArray(gridSizeItems)) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
     _updateViewUnitsState() {
         const { DiagramCommand } = getDiagram();
@@ -609,14 +640,21 @@ class Diagram extends Widget {
 
     _updateDocumentUnitsState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("document.units")));
+        this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("units")));
     }
     _updateDocumentPageSizeState() {
-        var size = this.option("document.pageSize");
-        if(!size || !size.width || !size.height) return;
+        var pageSize = this.option("document.pageSize");
+        if(!pageSize || !pageSize.width || !pageSize.height) return;
 
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.PageSize, size);
+        this._executeDiagramCommand(DiagramCommand.PageSize, pageSize);
+    }
+    _updateDocumentPageSizeItemsState() {
+        var pageSizeItems = this.option("document.pageSize.items");
+        if(!Array.isArray(pageSizeItems)) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageSizeItems, pageSizeItems);
     }
     _updateDocumentPageOrientationState() {
         const { DiagramCommand } = getDiagram();
@@ -657,8 +695,18 @@ class Diagram extends Widget {
             readOnly: false,
             /**
             * @name dxDiagramOptions.zoomLevel
-            * @type Number
+            * @type Number|Object
             * @default 1
+            */
+            /**
+            * @name dxDiagramOptions.zoomLevel.value
+            * @type Number
+            * @default undefined
+            */
+            /**
+            * @name dxDiagramOptions.zoomLevel.items
+            * @type Array<Number>
+            * @default undefined
             */
             zoomLevel: 1,
             /**
@@ -693,10 +741,27 @@ class Diagram extends Widget {
             snapToGrid: true,
             /**
             * @name dxDiagramOptions.gridSize
-            * @type Number
+            * @type Number|Object
             * @default 0.125
             */
+            /**
+            * @name dxDiagramOptions.gridSize.value
+            * @type Number
+            * @default undefined
+            */
+            /**
+            * @name dxDiagramOptions.gridSize.items
+            * @type Array<Number>
+            * @default undefined
+            */
             gridSize: 0.125,
+
+            /**
+            * @name dxDiagramOptions.units
+            * @type Enums.DiagramUnits
+            * @default "in"
+            */
+            units: DIAGRAM_DEFAULT_UNIT,
             /**
             * @name dxDiagramOptions.viewUnits
             * @type Enums.DiagramUnits
@@ -711,12 +776,6 @@ class Diagram extends Widget {
             */
             document: {
                 /**
-                * @name dxDiagramOptions.document.units
-                * @type Enums.DiagramUnits
-                * @default "in"
-                */
-                units: DIAGRAM_DEFAULT_UNIT,
-                /**
                 * @name dxDiagramOptions.document.pageSize
                 * @type Object
                 */
@@ -727,8 +786,25 @@ class Diagram extends Widget {
                 */
                 /**
                 * @name dxDiagramOptions.document.pageSize.height
-                * @type Object
+                * @type Number
                 * @default 8.268
+                */
+                /**
+                * @name dxDiagramOptions.document.pageSize.items
+                * @type Array<Object>
+                * @default undefined
+                */
+                /**
+                * @name dxDiagramOptions.document.pageSize.items.width
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.document.pageSize.items.height
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.document.pageSize.items.text
+                * @type String
                 */
                 pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
                 /**
@@ -1264,6 +1340,7 @@ class Diagram extends Widget {
                 this._updateReadOnlyState();
                 break;
             case "zoomLevel":
+                this._updateZoomLevelItemsState();
                 this._updateZoomLevelState();
                 break;
             case "autoZoom":
@@ -1282,15 +1359,17 @@ class Diagram extends Widget {
                 this._updateSnapToGridState();
                 break;
             case "gridSize":
+                this._updateGridSizeItemsState();
                 this._updateGridSizeState();
                 break;
             case "viewUnits":
                 this._updateViewUnitsState();
                 break;
-            case "document.units":
+            case "units":
                 this._updateDocumentUnitsState();
                 break;
             case "document.pageSize":
+                this._updateDocumentPageSizeItemsState();
                 this._updateDocumentPageSizeState();
                 break;
             case "document.pageOrientation":
@@ -1300,7 +1379,7 @@ class Diagram extends Widget {
                 this._updateDocumentPageColorState();
                 break;
             case "document":
-                this._updateDocumentUnitsState();
+                this._updateDocumentPageSizeItemsState();
                 this._updateDocumentPageSizeState();
                 this._updateDocumentPageOrientationState();
                 this._updateDocumentPageColorState();

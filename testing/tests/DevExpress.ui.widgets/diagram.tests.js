@@ -248,6 +248,16 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("zoomLevel", 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
     });
+    test("should change zoomLevel object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 7);
+        this.instance.option("zoomLevel", { value: 1.5, items: [ 1, 1.5 ] });
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1.5);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
+        this.instance.option("zoomLevel", 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
+    });
     test("should change autoZoom property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
         this.instance.option("autoZoom", "fitContent");
@@ -285,6 +295,16 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("gridSize", 0.125);
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
     });
+    test("should change gridSize object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 4);
+        this.instance.option("gridSize", { value: 0.25, items: [0.25, 1] });
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 360);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
+        this.instance.option("gridSize", 0.125);
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
+    });
     test("should change viewUnits property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
         this.instance.option("viewUnits", "cm");
@@ -292,11 +312,11 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("viewUnits", "in");
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
     });
-    test("should change document.units property", (assert) => {
+    test("should change units property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.units, 0);
-        this.instance.option("document.units", "cm");
+        this.instance.option("units", "cm");
         assert.equal(this.instance._diagramInstance.model.units, 1);
-        this.instance.option("document.units", "in");
+        this.instance.option("units", "in");
         assert.equal(this.instance._diagramInstance.model.units, 0);
     });
     test("should change document.pageSize property", (assert) => {
@@ -305,6 +325,15 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("document.pageSize", { width: 3, height: 5 });
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
+    });
+    test("should change document.pageSize object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
+        assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 11);
+        this.instance.option("document.pageSize", { width: 3, height: 5, items: [{ width: 3, height: 5, text: "A10" }] });
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
+        assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 1);
     });
     test("should change document.pageOrientation property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
