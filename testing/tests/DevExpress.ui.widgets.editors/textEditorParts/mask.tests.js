@@ -396,7 +396,7 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", (as
         mask: "000000"
     });
 
-    const $input = $textEditor.find("input");
+    const $input = $textEditor.find(".dx-texteditor-input");
     const keyboard = keyboardMock($input);
 
     caretWorkaround($input);

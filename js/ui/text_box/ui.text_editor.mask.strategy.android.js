@@ -37,7 +37,6 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
             }
 
             this.editor._caret(caret);
-            // this.editor._caret(this._prevCaret);
 
             const length = this._prevCaret.end - this._prevCaret.start;
             const newData = data + (length ? this._getEmptyString(length - data.length) : "");
