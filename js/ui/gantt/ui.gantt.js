@@ -11,12 +11,15 @@ import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
 import { getWindow, hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
+import themes from "../themes";
 
 const GANTT_CLASS = "dx-gantt";
+const GANTT_DARK_CLASS = "dx-gantt-dark";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
 const GANTT_SPLITTER_TRANSPARENT_CLASS = "dx-gantt-splitter-transparent";
 const GANTT_SPLITTER_BORDER_CLASS = "dx-gantt-splitter-border";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
+const GANTT_COLLAPSABLE_ROW = "dx-gantt-collapsable-row";
 
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
@@ -38,6 +41,9 @@ class Gantt extends Widget {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
+        if(themes.current().indexOf("dark") > -1) {
+            this.$element().addClass(GANTT_DARK_CLASS);
+        }
 
         this._$treeListWrapper = $("<div>")
             .appendTo(this.$element());
@@ -79,7 +85,8 @@ class Gantt extends Widget {
             onContentReady: (e) => { this._onTreeListContentReady(e); },
             onSelectionChanged: (e) => this._ganttView.selectTask(e.currentSelectedRowKeys[0]),
             onRowCollapsed: () => this._updateGanttView(),
-            onRowExpanded: () => this._updateGanttView()
+            onRowExpanded: () => this._updateGanttView(),
+            onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
         });
     }
     _renderSplitter() {
@@ -149,6 +156,11 @@ class Gantt extends Widget {
         if(e.component.getDataSource()) {
             this._initGanttView();
             this._initScrollSync(e.component);
+        }
+    }
+    _onTreeListRowPrepared(e) {
+        if(e.rowType === "data" && e.node.children.length > 0) {
+            e.rowElement.addClass(GANTT_COLLAPSABLE_ROW);
         }
     }
     _onGanttViewSelectionChanged(e) {
@@ -221,23 +233,27 @@ class Gantt extends Widget {
             this[`_${name}Option`] = dataOption;
         }
     }
+    _compileGettersByOption(optionName) {
+        const getters = {};
+        const optionValue = this.option(optionName);
+        for(let field in optionValue) {
+            const exprMatches = field.match(/(\w*)Expr/);
+            if(exprMatches) {
+                getters[exprMatches[1]] = dataCoreUtils.compileGetter(optionValue[exprMatches[0]]);
+            }
+        }
+        return getters;
+    }
     _tasksDataSourceChanged(data) {
-        const { keyExpr, parentIdExpr, startExpr, endExpr, progressExpr, titleExpr } = this.option("tasks"),
-            getId = dataCoreUtils.compileGetter(keyExpr),
-            getParentId = dataCoreUtils.compileGetter(parentIdExpr),
-            getStart = dataCoreUtils.compileGetter(startExpr),
-            getEnd = dataCoreUtils.compileGetter(endExpr),
-            getProgress = dataCoreUtils.compileGetter(progressExpr),
-            getTitle = dataCoreUtils.compileGetter(titleExpr);
-
+        const getters = this._compileGettersByOption("tasks");
         const tasks = data.map((i) => {
             return {
-                id: getId(i),
-                parentId: getParentId(i),
-                start: getStart(i),
-                end: getEnd(i),
-                progress: getProgress(i),
-                title: getTitle(i)
+                id: getters.key(i),
+                parentId: getters.parentId(i),
+                start: getters.start(i),
+                end: getters.end(i),
+                progress: getters.progress(i),
+                title: getters.title(i)
             };
         });
 
@@ -246,18 +262,13 @@ class Gantt extends Widget {
         this._setGanttViewOption("tasks", tasks);
     }
     _dependenciesDataSourceChanged(data) {
-        const { keyExpr, predecessorIdExpr, successorIdExpr, typeExpr } = this.option("dependencies"),
-            getId = dataCoreUtils.compileGetter(keyExpr),
-            getPredecessorId = dataCoreUtils.compileGetter(predecessorIdExpr),
-            getSuccessorId = dataCoreUtils.compileGetter(successorIdExpr),
-            getType = dataCoreUtils.compileGetter(typeExpr);
-
+        const getters = this._compileGettersByOption("dependencies");
         const dependencies = data.map((i) => {
             return {
-                id: getId(i),
-                predecessorId: getPredecessorId(i),
-                successorId: getSuccessorId(i),
-                type: getType(i)
+                id: getters.key(i),
+                predecessorId: getters.predecessorId(i),
+                successorId: getters.successorId(i),
+                type: getters.type(i)
             };
         });
 
@@ -265,14 +276,11 @@ class Gantt extends Widget {
         this._setGanttViewOption("dependencies", dependencies);
     }
     _resourcesDataSourceChanged(data) {
-        const { keyExpr, textExpr } = this.option("resources"),
-            getId = dataCoreUtils.compileGetter(keyExpr),
-            getText = dataCoreUtils.compileGetter(textExpr);
-
+        const getters = this._compileGettersByOption("resources");
         const resources = data.map((i) => {
             return {
-                id: getId(i),
-                text: getText(i)
+                id: getters.key(i),
+                text: getters.text(i)
             };
         });
 
@@ -280,16 +288,12 @@ class Gantt extends Widget {
         this._setGanttViewOption("resources", resources);
     }
     _resourceAssignmentsDataSourceChanged(data) {
-        const { keyExpr, taskIdExpr, resourceIdExpr } = this.option("resourceAssignments"),
-            getId = dataCoreUtils.compileGetter(keyExpr),
-            getTaskId = dataCoreUtils.compileGetter(taskIdExpr),
-            getResourceId = dataCoreUtils.compileGetter(resourceIdExpr);
-
+        const getters = this._compileGettersByOption("resourceAssignments");
         const resourceAssignments = data.map((i) => {
             return {
-                id: getId(i),
-                taskId: getTaskId(i),
-                resourceId: getResourceId(i)
+                id: getters.key(i),
+                taskId: getters.taskId(i),
+                resourceId: getters.resourceId(i)
             };
         });
 

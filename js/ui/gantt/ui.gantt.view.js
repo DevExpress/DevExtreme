@@ -13,7 +13,8 @@ export class GanttView extends Widget {
         const { GanttView } = getGanttViewCore();
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option("showResources"),
-            taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition"))
+            taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
+            areAlternateRowsEnabled: false
         });
         this._ganttViewCore.setViewType(3);
     }
