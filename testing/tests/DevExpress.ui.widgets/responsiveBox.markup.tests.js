@@ -26,10 +26,10 @@ const BOX_CLASS = "dx-box",
 
 
 const moduleConfig = {
-    beforeEach: function() {
+    beforeEach: () => {
         this.screenMock = new screenMock();
     },
-    afterEach: function() {
+    afterEach: () => {
         this.screenMock.restore();
     }
 };
