@@ -2537,8 +2537,8 @@ module.exports = {
 
                     filter = extend([], filter);
 
-                    columnIndex = filter.columnIndex || columnIndex;
-                    filterValue = filter.filterValue || filterValue;
+                    columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
+                    filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
 
                     if(isString(filter[0])) {
                         column = that.columnOption(filter[0]);
@@ -2867,7 +2867,8 @@ module.exports = {
                         }
                         if(isFunction(result)) {
                             result = [result, "=", true];
-                        } else if(result) {
+                        }
+                        if(result) {
                             result.columnIndex = this.index;
                             result.filterValue = filterValue;
                         }

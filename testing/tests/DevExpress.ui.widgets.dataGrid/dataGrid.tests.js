@@ -6330,6 +6330,41 @@ QUnit.test("keyOf should not be called too often after push with row updates", f
     assert.equal(keyOfSpy.callCount, 55, "keyOf call count");
 });
 
+// T802967
+QUnit.test("calculateFilterExpression should not be called infinite times if it returns function and scrolling mode is virtual", function(assert) {
+    var data = [];
+    for(let i = 0; i < 25; i++) {
+        data.push({ test: i });
+    }
+    var calculateFilterExpressionCallCount = 0;
+    try {
+        createDataGrid({
+            loadingTimeout: undefined,
+            scrolling: {
+                mode: "virtual"
+            },
+            columns: [{
+                selectedFilterOperation: "=",
+                filterValue: [],
+                dataField: "test",
+                dataType: "number",
+                calculateFilterExpression: function(filterValues) {
+                    calculateFilterExpressionCallCount++;
+                    return function() {
+                        return filterValues.length === 0;
+                    };
+                }
+            }],
+            dataSource: data
+        });
+
+    } catch(err) {
+        assert.ok(false, "the error is thrown");
+    } finally {
+        assert.equal(calculateFilterExpressionCallCount, 2, "calculateFilterExpression call count");
+    }
+});
+
 // T364210
 QUnit.test("Load count on start when EdmLiteral in calculatedFilterExpression is used and scrolling mode is virtual", function(assert) {
     var loadCallCount = 0,
