@@ -2,7 +2,7 @@ import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import consoleUtils from "core/utils/console";
 import windowUtils from "core/utils/window";
-import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import screenMock from "../../helpers/screenMock.js";
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
 import { __internals as internals } from "ui/form/ui.form";
@@ -1292,15 +1292,13 @@ QUnit.module("Grouping", () => {
 
 QUnit.module("Tabs", {
     beforeEach: () => {
-        let that = this;
-        that.clock = sinon.useFakeTimers();
-
-        responsiveBoxScreenMock.setup.call(this, 1200);
+        this.clock = sinon.useFakeTimers();
+        this.screenMock = new screenMock(1200);
     },
 
     afterEach: () => {
         this.clock.restore();
-        responsiveBoxScreenMock.teardown.call(this);
+        this.screenMock.restore();
     }
 }, () => {
     test("Render tabs", (assert) => {

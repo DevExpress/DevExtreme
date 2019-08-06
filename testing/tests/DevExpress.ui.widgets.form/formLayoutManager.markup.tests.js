@@ -1,6 +1,6 @@
 import $ from "jquery";
 import consoleUtils from "core/utils/console";
-import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import screenMock from "../../helpers/screenMock.js";
 import { __internals as internals } from "ui/form/ui.form.layout_manager";
 import config from "core/config";
 import typeUtils from "core/utils/type";
@@ -2961,10 +2961,10 @@ QUnit.module("Accessibility", () => {
 
 QUnit.module("Layout manager responsibility", {
     beforeEach: () => {
-        responsiveBoxScreenMock.setup.call(this);
+        this.screenMock = new screenMock();
     },
     afterEach: () => {
-        responsiveBoxScreenMock.teardown.call(this);
+        this.screenMock.restore();
     }
 }, () => {
     test("Middle screen size", (assert) => {
@@ -2986,7 +2986,6 @@ QUnit.module("Layout manager responsibility", {
     });
 
     test("Small screen size", (assert) => {
-        // arrange
         let $testContainer = $("#container");
 
         $testContainer.dxLayoutManager({
@@ -2999,10 +2998,8 @@ QUnit.module("Layout manager responsibility", {
             onLayoutChanged: () => {}
         });
 
-        // act
-        this.updateScreenSize(600);
+        this.screenMock.updateWindowWidth(600);
 
-        // assert
         assert.ok($testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager has one column mode");
     });
 });

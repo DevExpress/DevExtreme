@@ -3,7 +3,7 @@ import devices from "core/devices";
 import registerComponent from "core/component_registrator";
 import Widget from "ui/widget/ui.widget";
 import ResponsiveBox from "ui/responsive_box";
-import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import screenMock from "../../helpers/screenMock.js";
 
 import "common.css!";
 import "ui/box";
@@ -24,10 +24,10 @@ QUnit.testStart(function() {
 
 const moduleConfig = {
     beforeEach: function() {
-        responsiveBoxScreenMock.setup.call(this);
+        this.screenMock = new screenMock();
     },
     afterEach: function() {
-        responsiveBoxScreenMock.teardown.call(this);
+        this.screenMock.restore();
     }
 };
 
@@ -303,7 +303,7 @@ QUnit.test("minSize and maxSize", function(assert) {
 });
 
 QUnit.test("singleColumnScreen render items with baseSize: auto", function(assert) {
-    this.updateScreenSize(500);
+    this.screenMock.updateWindowWidth(500);
 
     var $responsiveBox = $("#responsiveBox").css("height", "auto").dxResponsiveBox({
         rows: [{}, {}],
@@ -368,10 +368,7 @@ QUnit.test("dxUpdate should not be bubbling to parent container", function(asser
 QUnit.module("template rendering", moduleConfig);
 
 QUnit.test("widget inside item is not disposed", function(assert) {
-    // screen:   xs      sm           md          lg
-    //  width: <768    768-<992    992-<1200    >1200
-
-    this.updateScreenSize(1000);
+    this.screenMock.updateWindowWidth(1000);
 
     registerComponent("dxWidget", Widget.inherit({}));
 
@@ -390,15 +387,15 @@ QUnit.test("widget inside item is not disposed", function(assert) {
     var $widget = $responsiveBox.find(".dx-item .dx-widget");
     var initialWidget = $widget.dxWidget("instance");
 
-    this.updateScreenSize(700);
-    this.updateScreenSize(1000);
+    this.screenMock.updateWindowWidth(700);
+    this.screenMock.updateWindowWidth(1000);
 
     $widget = $responsiveBox.find(".dx-item .dx-widget");
     assert.equal($widget.dxWidget("instance"), initialWidget, "widget was rendered correctly");
 });
 
 QUnit.test("items have no unsafe modifications after dispose", function(assert) {
-    this.updateScreenSize(1000);
+    this.screenMock.updateWindowWidth(1000);
 
     var items = [
         {
@@ -438,10 +435,7 @@ QUnit.test("items have no unsafe modifications after dispose", function(assert) 
 QUnit.module("events", moduleConfig);
 
 QUnit.test("onLayoutChanged", function(assert) {
-    // screen:   xs      sm           md          lg
-    //  width: <768    768-<992    992-<1200    >1200
-
-    this.updateScreenSize(500);
+    this.screenMock.updateWindowWidth(500);
     var onLayoutChangedSpy = sinon.stub();
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
@@ -455,16 +449,16 @@ QUnit.test("onLayoutChanged", function(assert) {
     assert.equal(onLayoutChangedSpy.called, false, "onLayoutChanged not triggered on start");
 
     // sm screen
-    this.updateScreenSize(800);
+    this.screenMock.updateWindowWidth(800);
 
     assert.ok(onLayoutChangedSpy.calledOnce, "onLayoutChanged was triggered");
 
     // md screen
-    this.updateScreenSize(1000);
+    this.screenMock.updateWindowWidth(1000);
 
     assert.ok(onLayoutChangedSpy.calledTwice, "onLayoutChanged was triggered twice");
 
-    this.updateScreenSize(1001);
+    this.screenMock.updateWindowWidth(1001);
 
     assert.ok(onLayoutChangedSpy.calledTwice, "onLayoutChanged was not triggered when screen was not changed");
 
@@ -487,10 +481,7 @@ QUnit.test("onItemClick", function(assert) {
 QUnit.module("option", moduleConfig);
 
 QUnit.test("currentScreenFactor", function(assert) {
-    // screen:   xs      sm           md          lg
-    //  width: <768    768-<992    992-<1200    >1200
-
-    this.updateScreenSize(500);
+    this.screenMock.updateWindowWidth(500);
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
         cols: [{}],
@@ -504,7 +495,7 @@ QUnit.test("currentScreenFactor", function(assert) {
     assert.equal(responsiveBox.option("currentScreenFactor"), "xs", "currentScreenFactor update on start");
 
     // sm screen
-    this.updateScreenSize(800);
+    this.screenMock.updateWindowWidth(800);
 
     assert.equal(responsiveBox.option("currentScreenFactor"), "sm", "currentScreenFactor update after restart");
 });
@@ -541,7 +532,7 @@ QUnit.test("screenByWidth function call count when dimension was changed", funct
     });
 
     screenByWidthHandler.reset();
-    this.updateScreenSize(800);
+    this.screenMock.updateWindowWidth(800);
     assert.strictEqual(screenByWidthHandler.callCount, 1, "screenByWidth.callCount");
 });
 

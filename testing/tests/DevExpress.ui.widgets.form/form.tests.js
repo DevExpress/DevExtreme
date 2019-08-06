@@ -1,6 +1,6 @@
 import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
-import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import screenMock from "../../helpers/screenMock.js";
 import typeUtils from "core/utils/type";
 import browser from "core/utils/browser";
 import domUtils from "core/utils/dom";
@@ -454,15 +454,13 @@ QUnit.test("From renders the right types of editors according to stylingMode opt
 
 QUnit.module("Tabs", {
     beforeEach: function() {
-        var that = this;
-        that.clock = sinon.useFakeTimers();
-
-        responsiveBoxScreenMock.setup.call(this, 1200);
+        this.clock = sinon.useFakeTimers();
+        this.screenMock = new screenMock(1200);
     },
 
     afterEach: function() {
+        this.screenMock.restore();
         this.clock.restore();
-        responsiveBoxScreenMock.teardown.call(this);
     }
 });
 QUnit.test("items aren't tiny", function(assert) {
@@ -654,7 +652,7 @@ QUnit.test("Check align labels", function(assert) {
 
 QUnit.test("Check align labels when layout is changed by default_T306106", function(assert) {
     // arrange, act
-    this.updateScreenSize(500);
+    this.screenMock.updateWindowWidth(767);
 
     var testContainer = $("#form"),
         form = testContainer.dxForm({
@@ -767,8 +765,9 @@ QUnit.test("Check align labels when layout is changed_T306106", function(assert)
         i;
 
     // act
-    this.updateScreenSize(500);
+    this.screenMock.updateWindowWidth(767);
 
+    $layoutManagers = testContainer.find("." + internals.FORM_LAYOUT_MANAGER_CLASS);
     // assert
     $layoutManager = $layoutManagers.eq(1);
     $labelsContent = $layoutManager.find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
@@ -776,7 +775,7 @@ QUnit.test("Check align labels when layout is changed_T306106", function(assert)
     for(i = 0; i < 4; i++) {
         labelContentWidth = $labelsContent.eq(i).width();
 
-        assert.roughEqual(labelContentWidth, labelWidth, 1, "tab 1, item " + i);
+        assert.roughEqual(labelContentWidth, labelWidth, 1, `tab 1, item ${i}, width: ${labelWidth}`);
     }
 
     // act
@@ -866,11 +865,10 @@ QUnit.module("Align labels", {
             "Address": "351 S Hill St.",
             "StateID": 5
         };
-
-        responsiveBoxScreenMock.setup.call(this, 1200);
+        this.screenMock = new screenMock(1200);
     },
     afterEach: function() {
-        responsiveBoxScreenMock.teardown.call(this);
+        this.screenMock.restore();
     }
 });
 
@@ -1241,12 +1239,11 @@ QUnit.test("Change option after group rendered (check for cycling template rende
 });
 
 QUnit.test("Align labels when layout is changed in responsive box_T306106", function(assert) {
-    // arrange
-    var testContainer = $("#form"),
+    const testContainer = $("#form"),
         form = testContainer.dxForm({
             formData: this.testObject,
             colCount: 4,
-            customizeItem: function(item) {
+            customizeItem: (item) => {
                 switch(item.dataField) {
                     case "FirstName":
                     case "LastName":
@@ -1266,28 +1263,24 @@ QUnit.test("Align labels when layout is changed in responsive box_T306106", func
             }
         }).dxForm("instance");
 
-    var $labelsContent = testContainer.find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS),
-        $maxLabelWidth = getLabelWidth(testContainer, form, "First Name:"),
-        i;
+    this.screenMock.updateWindowWidth(500);
+    resizeCallbacks.fire();
 
-    // act
-    this.updateScreenSize(500);
+    let $labelsContent = testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $maxLabelWidth = getLabelWidth(testContainer, form, "First Name:");
 
-    // assert
-    for(i = 0; i < 11; i++) {
-        var labelWidth = $labelsContent.eq(i).width();
+    $labelsContent.map((index) => {
+        const currentLabelWidth = $labelsContent.eq(index).width();
+        assert.roughEqual(currentLabelWidth, $maxLabelWidth, 1, `item ${index}, width: ${currentLabelWidth}`);
+    });
 
-        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "item " + i);
-    }
-
-    assert.equal($("." + internals.HIDDEN_LABEL_CLASS).length, 0, "hidden labels count");
+    assert.equal($(`.${internals.HIDDEN_LABEL_CLASS}`).length, 0, "hidden labels count");
 });
 
 QUnit.test("Align labels when layout is changed when small window size by default_T306106", function(assert) {
-    // arrange
-    this.updateScreenSize(500);
+    this.screenMock.updateWindowWidth(767);
 
-    var testContainer = $("#form"),
+    const testContainer = $("#form"),
         form = testContainer.dxForm({
             formData: this.testObject,
             colCount: 4,
@@ -1311,18 +1304,15 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
             }
         }).dxForm("instance");
 
-    var $labelsContent = testContainer.find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS),
-        $maxLabelWidth = getLabelWidth(testContainer, form, "First Name:"),
-        i;
+    let $labelsContent = testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $maxLabelWidth = getLabelWidth(testContainer, form, "First Name:");
 
-    // assert
-    for(i = 0; i < 11; i++) {
-        var labelWidth = $labelsContent.eq(i).width();
+    $labelsContent.map((index) => {
+        const currentLabelWidth = $labelsContent.eq(index).width();
+        assert.roughEqual(currentLabelWidth, $maxLabelWidth, 1, `item ${index}, width: ${currentLabelWidth}`);
+    });
 
-        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "item " + i);
-    }
-
-    assert.equal($("." + internals.HIDDEN_LABEL_CLASS).length, 0, "hidden labels count");
+    assert.equal($(`.${internals.HIDDEN_LABEL_CLASS}`).length, 0, "hidden labels count");
 });
 
 QUnit.test("required mark aligned", (assert) => {

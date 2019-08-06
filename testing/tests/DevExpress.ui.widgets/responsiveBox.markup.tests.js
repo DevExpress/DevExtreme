@@ -2,7 +2,7 @@ import $ from "jquery";
 import errors from "ui/widget/ui.errors";
 import registerComponent from "core/component_registrator";
 import Widget from "ui/widget/ui.widget";
-import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import screenMock from "../../helpers/screenMock.js";
 
 import "ui/box";
 import "ui/responsive_box";
@@ -26,11 +26,11 @@ const BOX_CLASS = "dx-box",
 
 
 const moduleConfig = {
-    beforeEach: () => {
-        responsiveBoxScreenMock.setup.call(this);
+    beforeEach: function() {
+        this.screenMock = new screenMock();
     },
-    afterEach: () => {
-        responsiveBoxScreenMock.teardown.call(this);
+    afterEach: function() {
+        this.screenMock.restore();
     }
 };
 
@@ -49,7 +49,7 @@ QUnit.module("render", moduleConfig, () => {
         assert.expect(0);
 
         $("#responsiveBox").dxResponsiveBox({});
-        this.updateScreenSize();
+        this.screenMock.updateWindowWidth();
     });
 });
 
@@ -109,10 +109,7 @@ QUnit.module("layouting", moduleConfig, () => {
     });
 
     QUnit.test("grid with factors", (assert) => {
-        // screen:   xs      sm           md          lg
-        //  width: <768    768-<992    992-<1200    >1200
-
-        this.updateScreenSize(500);
+        this.screenMock.updateWindowWidth(500);
 
         let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
             rows: [{}, { screen: "sm md lg" }, { screen: "md lg" }, { screen: "lg" }],
@@ -152,17 +149,17 @@ QUnit.module("layouting", moduleConfig, () => {
         assert.equal($responsiveBox.text(), xsExpectedText);
 
         // sm screen
-        this.updateScreenSize(800);
+        this.screenMock.updateWindowWidth(800);
 
         assert.equal($responsiveBox.text(), smallExpectedText);
 
         // md screen
-        this.updateScreenSize(1000);
+        this.screenMock.updateWindowWidth(1000);
 
         assert.equal($responsiveBox.text(), mediumExpectedText);
 
         // lg screen
-        this.updateScreenSize(1500);
+        this.screenMock.updateWindowWidth(1500);
 
         assert.equal($responsiveBox.text(), lgExpectedText);
     });
@@ -226,11 +223,9 @@ QUnit.module("layouting", moduleConfig, () => {
     });
 
     QUnit.test("recalculation on size changing", (assert) => {
-        // screen:   xs      sm           md          lg
-        //  width: <768    768-<992    992-<1200    >1200
         let $responsiveBox = $("#responsiveBox");
 
-        this.setScreenSize(500);
+        this.screenMock.setWindowWidth(500);
 
         $responsiveBox.dxResponsiveBox({
             rows: [{}],
@@ -243,13 +238,13 @@ QUnit.module("layouting", moduleConfig, () => {
         });
         let responsiveBox = $responsiveBox.dxResponsiveBox("instance");
 
-        this.setScreenSize(1000);
+        this.screenMock.setWindowWidth(1000);
         responsiveBox.repaint();
         assert.equal($.trim($responsiveBox.text()), "md", "md item apply");
     });
 
     QUnit.test("singleColumnScreen render items in one column", (assert) => {
-        this.updateScreenSize(500);
+        this.screenMock.updateWindowWidth(500);
 
         let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
             rows: [{}, {}],
@@ -266,7 +261,7 @@ QUnit.module("layouting", moduleConfig, () => {
         let responsiveBox = $responsiveBox.dxResponsiveBox("instance");
 
         let checkLayoutByScreen = $.proxy(function(screenWidth, expectedText) {
-            this.updateScreenSize(screenWidth);
+            this.screenMock.updateWindowWidth(screenWidth);
 
             let $box = $responsiveBox.find("." + BOX_CLASS);
             assert.equal($box.length, 1, "one box rendered");
@@ -323,7 +318,7 @@ QUnit.module("layouting", moduleConfig, () => {
         try {
             // screen:   xs      sm           md          lg
             //  width: <768    768-<992    992-<1200    >1200
-            this.updateScreenSize(900);
+            this.screenMock.updateWindowWidth(900);
             let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
                 width: "auto",
                 height: "auto",
@@ -344,7 +339,7 @@ QUnit.module("layouting", moduleConfig, () => {
             assert.equal(dxUpdateEventCounter, 1, "dxupdate was fired async after render");
 
             dxUpdateEventCounter = 0;
-            this.updateScreenSize(1000);
+            this.screenMock.updateWindowWidth(1000);
             $box = $responsiveBox.find(".dx-box").eq(0);
             $($box).on("dxupdate", () => {
                 dxUpdateEventCounter++;
@@ -366,25 +361,25 @@ QUnit.module("layouting", moduleConfig, () => {
             height: "auto"
         });
 
-        this.updateScreenSize(600);
+        this.screenMock.updateWindowWidth(600);
         assert.ok($responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "xs"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "sm"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "md"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "lg"));
 
-        this.updateScreenSize(800);
+        this.screenMock.updateWindowWidth(800);
         assert.ok($responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "sm"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "xs"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "md"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "lg"));
 
-        this.updateScreenSize(1000);
+        this.screenMock.updateWindowWidth(1000);
         assert.ok($responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "md"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "xs"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "sm"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "lg"));
 
-        this.updateScreenSize(1300);
+        this.screenMock.updateWindowWidth(1300);
         assert.ok($responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "lg"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "xs"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "sm"));
@@ -429,7 +424,7 @@ QUnit.module("layouting", moduleConfig, () => {
     });
 
     QUnit.test("Set the shrink option of row to box when the singleColumnMode is applied", (assert) => {
-        this.updateScreenSize(500);
+        this.screenMock.updateWindowWidth(500);
 
         const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
             _layoutStrategy: "flex",
@@ -514,10 +509,7 @@ QUnit.module("template rendering", moduleConfig, () => {
     });
 
     QUnit.test("widget rendered correctly after rows option was changed", (assert) => {
-        // screen:   xs      sm           md          lg
-        //  width: <768    768-<992    992-<1200    >1200
-
-        this.updateScreenSize(1000);
+        this.screenMock.updateWindowWidth(1000);
 
         registerComponent("dxWidget", Widget.inherit({}));
 
