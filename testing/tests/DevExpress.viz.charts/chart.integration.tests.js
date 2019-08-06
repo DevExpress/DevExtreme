@@ -646,6 +646,9 @@ QUnit.test("Set argument visual range using option", function(assert) {
 QUnit.test("Set argument visual range using option. endValue was set only", function(assert) {
     var chart = this.createChart({
         series: [{}],
+        argumentAxis: {
+            valueMarginsEnabled: false
+        },
         dataSource: [{
             arg: 1,
             val: 1
@@ -664,6 +667,9 @@ QUnit.test("Set argument visual range using option. endValue was set only", func
 QUnit.test("Set argument visual range using option. startValue was set only", function(assert) {
     var chart = this.createChart({
         series: [{}],
+        argumentAxis: {
+            valueMarginsEnabled: false
+        },
         dataSource: [{
             arg: 1,
             val: 1
