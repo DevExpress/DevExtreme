@@ -2,6 +2,7 @@ import $ from "jquery";
 import fx from "animation/fx";
 import support from "core/utils/support";
 import domUtils from "core/utils/dom";
+import { deferUpdate } from "core/utils/common";
 import devices from "core/devices";
 import TabPanel from "ui/tab_panel";
 import pointerMock from "../../helpers/pointerMock.js";
@@ -110,6 +111,26 @@ QUnit.test("container should consider tabs height when it rendered in hiding are
     assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
+// T803640
+QUnit.test("content should be rendered if create widget inside deferUpdate (React)", (assert) => {
+    var $tabPanel;
+
+    deferUpdate(function() {
+        $tabPanel = $("<div>").appendTo("#qunit-fixture").dxTabPanel({
+            items: ["Test1", "Test2"]
+        });
+    });
+
+    const $tabTexts = $tabPanel.find(".dx-tab-text");
+    const $contents = $tabPanel.find(".dx-multiview-item-content");
+
+    assert.equal($tabTexts.length, 2, "two tabs are rendered");
+    assert.equal($tabTexts.eq(0).text(), "Test1", "first tab text");
+    assert.equal($tabTexts.eq(0).text(), "Test1", "secon tab text");
+
+    assert.equal($contents.length, 1, "one content is rendered");
+    assert.equal($contents.eq(0).text(), "Test1", "first item content is rendered");
+});
 
 QUnit.module("options", {
     beforeEach() {
