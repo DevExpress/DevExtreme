@@ -2296,6 +2296,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManager.Options */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
+        /** @name dxFileManager.Options.currentPath */
+        currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
         customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
@@ -2304,6 +2306,8 @@ declare module DevExpress.ui {
         fileProvider?: any;
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /** @name dxFileManager.Options.onCurrentDirectoryChanged */
+        onCurrentDirectoryChanged?: ((e: any) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
