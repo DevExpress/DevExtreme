@@ -1,7 +1,8 @@
 /* eslint-env node */
 /* eslint-disable no-console */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
+const multiProcess = require('gulp-multi-process');
 
 gulp.task('clean', function(callback) {
     require('del').sync('artifacts');
@@ -20,6 +21,10 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 
+gulp.task('parallel-build', (callback) => {
+    return multiProcess(['js-bundles-debug', 'js-bundles-prod', 'style-compiler-themes'], callback, true);
+});
+
 
 if(process.env['DEVEXTREME_QUNIT_CI']) {
     console.warn("Using QUnit CI mode for gulp default!");
@@ -37,15 +42,13 @@ if(process.env['DEVEXTREME_QUNIT_CI']) {
     gulp.task('default', gulp.series(
         'clean',
         'localization',
+        'parallel-build',
         gulp.parallel([
-            'js-bundles-debug',
-            'js-bundles-prod',
             'vectormap',
             'aspnet',
             'vendor',
             'ts'
         ]),
-        'style-compiler-themes',
         'style-compiler-tb-assets',
         'npm',
         'themebuilder-npm'
