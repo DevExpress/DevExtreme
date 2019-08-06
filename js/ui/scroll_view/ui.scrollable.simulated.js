@@ -597,11 +597,11 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _applyScaleRatio: function(targetLocation) {
-        for(var direction in this._scrollers) {
-            var prop = this._getPropByDirection(direction);
+        for(let direction in this._scrollers) {
+            let prop = this._getPropByDirection(direction);
 
             if(isDefined(targetLocation[prop])) {
-                var scroller = this._scrollers[direction];
+                let scroller = this._scrollers[direction];
 
                 targetLocation[prop] *= scroller._getScaleRatio();
             }
@@ -610,7 +610,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _isAnyThumbScrolling: function($target) {
-        var result = false;
+        let result = false;
+
         this._eventHandler("isThumbScrolling", $target).done(function(isThumbScrollingVertical, isThumbScrollingHorizontal) {
             result = isThumbScrollingVertical || isThumbScrollingHorizontal;
         });
@@ -707,7 +708,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachKeyboardHandler: function() {
-        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
 
         if(!this.option("disabled") && this.option("useKeyboard")) {
             eventsEngine.on(this._$element, addEventNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
@@ -719,7 +720,7 @@ var SimulatedStrategy = Class.inherit({
             return;
         }
 
-        var handled = true;
+        let handled = true;
 
         switch(normalizeKeyName(e)) {
             case KEY_CODES.DOWN:
@@ -765,10 +766,10 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _scrollByPage: function(page) {
-        var prop = this._wheelProp(),
-            dimension = this._dimensionByProp(prop);
+        const prop = this._wheelProp();
+        const dimension = this._dimensionByProp(prop);
 
-        var distance = {};
+        let distance = {};
         distance[prop] = page * -this._$container[dimension]();
         this.scrollBy(distance);
     },
@@ -782,17 +783,18 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _scrollToHome: function() {
-        var prop = this._wheelProp();
-        var distance = {};
+        const prop = this._wheelProp();
+        let distance = {};
+
         distance[prop] = 0;
         this._component.scrollTo(distance);
     },
 
     _scrollToEnd: function() {
-        var prop = this._wheelProp(),
-            dimension = this._dimensionByProp(prop);
+        const prop = this._wheelProp();
+        const dimension = this._dimensionByProp(prop);
 
-        var distance = {};
+        let distance = {};
         distance[prop] = this._$content[dimension]() - this._$container[dimension]();
         this._component.scrollTo(distance);
     },
@@ -837,10 +839,10 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _createActionArgs: function() {
-        var scrollerX = this._scrollers[HORIZONTAL],
-            scrollerY = this._scrollers[VERTICAL];
+        const scrollerX = this._scrollers[HORIZONTAL];
+        const scrollerY = this._scrollers[VERTICAL];
+        const location = this.location();
 
-        var location = this.location();
         this._scrollOffset = {
             top: scrollerY && -location.top,
             left: scrollerX && -location.left
@@ -857,15 +859,17 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _eventHandler: function(eventName) {
-        var args = [].slice.call(arguments).slice(1),
-            deferreds = map(this._scrollers, function(scroller) {
-                return scroller["_" + eventName + "Handler"].apply(scroller, args);
-            });
+        const args = [].slice.call(arguments).slice(1);
+        let deferreds = map(this._scrollers, (scroller) => {
+            return scroller["_" + eventName + "Handler"].apply(scroller, args);
+        });
+
         return when.apply($, deferreds).promise();
     },
 
     location: function() {
-        var location = translator.locate(this._$content);
+        const location = translator.locate(this._$content);
+
         location.top -= this._$container.scrollTop();
         location.left -= this._$container.scrollLeft();
         return location;
@@ -876,7 +880,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachCursorHandlers: function() {
-        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
+        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
 
         if(!this.option("disabled") && this._isHoverMode()) {
             eventsEngine.on(this._$element, addEventNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
@@ -919,9 +923,10 @@ var SimulatedStrategy = Class.inherit({
         if(!this._isHoverMode() && (!target || activeScrollable)) {
             return;
         }
-        var $target = $(target);
-        var $scrollable = $target.closest("." + SCROLLABLE_SIMULATED_CLASS + ":not(.dx-state-disabled)");
-        var targetScrollable = $scrollable.length && $scrollable.data(SCROLLABLE_STRATEGY);
+
+        const $target = $(target);
+        const $scrollable = $target.closest(`.${SCROLLABLE_SIMULATED_CLASS}:not(.dx-state-disabled)`);
+        const targetScrollable = $scrollable.length && $scrollable.data(SCROLLABLE_STRATEGY);
 
         if(hoveredScrollable && hoveredScrollable !== targetScrollable) {
             hoveredScrollable._cursorLeaveHandler();
@@ -933,25 +938,24 @@ var SimulatedStrategy = Class.inherit({
     },
 
     update: function() {
-        var that = this;
-        var result = this._eventHandler("update").done(this._updateAction);
+        const result = this._eventHandler("update").done(this._updateAction);
 
-        return when(result, deferUpdate(function() {
-            var allowedDirections = that._allowedDirections();
-            deferRender(function() {
-                var touchDirection = allowedDirections.vertical ? "pan-x" : "";
+        return when(result, deferUpdate(() => {
+            const allowedDirections = this._allowedDirections();
+            deferRender(() => {
+                let touchDirection = allowedDirections.vertical ? "pan-x" : "";
                 touchDirection = allowedDirections.horizontal ? "pan-y" : touchDirection;
                 touchDirection = allowedDirections.vertical && allowedDirections.horizontal ? "none" : touchDirection;
-                that._$container.css("touchAction", touchDirection);
+                this._$container.css("touchAction", touchDirection);
             });
             return when().promise();
         }));
     },
 
     _allowedDirections: function() {
-        var bounceEnabled = this.option("bounceEnabled"),
-            verticalScroller = this._scrollers[VERTICAL],
-            horizontalScroller = this._scrollers[HORIZONTAL];
+        const bounceEnabled = this.option("bounceEnabled");
+        const verticalScroller = this._scrollers[VERTICAL];
+        const horizontalScroller = this._scrollers[HORIZONTAL];
 
         return {
             vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
@@ -964,8 +968,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
-        var verticalScroller = this._scrollers[VERTICAL],
-            horizontalScroller = this._scrollers[HORIZONTAL];
+        let verticalScroller = this._scrollers[VERTICAL];
+        let horizontalScroller = this._scrollers[HORIZONTAL];
 
         if(verticalScroller) {
             distance.top = verticalScroller._boundLocation(distance.top + verticalScroller._location) - verticalScroller._location;
@@ -993,16 +997,16 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _validateWheel: function(e) {
-        var scroller = this._scrollers[this._wheelDirection(e)];
-        var reachedMin = scroller._reachedMin();
-        var reachedMax = scroller._reachedMax();
+        const scroller = this._scrollers[this._wheelDirection(e)];
+        const reachedMin = scroller._reachedMin();
+        const reachedMax = scroller._reachedMax();
 
-        var contentGreaterThanContainer = !reachedMin || !reachedMax;
-        var locatedNotAtBound = !reachedMin && !reachedMax;
-        var scrollFromMin = (reachedMin && e.delta > 0);
-        var scrollFromMax = (reachedMax && e.delta < 0);
-        var validated = contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+        const contentGreaterThanContainer = !reachedMin || !reachedMax;
+        const locatedNotAtBound = !reachedMin && !reachedMax;
+        const scrollFromMin = (reachedMin && e.delta > 0);
+        const scrollFromMax = (reachedMax && e.delta < 0);
 
+        let validated = contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
         validated = validated || this._validateWheelTimer !== undefined;
 
         if(validated) {
@@ -1016,7 +1020,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _validateMove: function(e) {
-        if(!this.option("scrollByContent") && !$(e.target).closest("." + SCROLLABLE_SCROLLBAR_CLASS).length) {
+        if(!this.option("scrollByContent") && !$(e.target).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
             return false;
         }
 
@@ -1062,8 +1066,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _detachEventHandlers: function() {
-        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
-        eventsEngine.off(this._$container, "." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
+        eventsEngine.off(this._$container, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
     }
 
 });
