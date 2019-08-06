@@ -369,11 +369,32 @@ var DropDownList = DropDownEditor.inherit({
 
     _createPopup: function() {
         this.callBase();
+        this._findBoundsContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
         var $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, "mouseup");
         eventsEngine.on($popupContent, "mouseup", this._saveFocusOnWidget.bind(this));
+    },
+
+    _findBoundsContainer: function() {
+        var that = this;
+        var containerValue = this.option("dropDownOptions.container");
+        var $container = containerValue && $(containerValue);
+
+        if($container && !typeUtils.isWindow($container.get(0))) {
+            var $containerWithParents = [].slice.call($container.parents());
+            $containerWithParents.unshift($container.get(0));
+
+            each($containerWithParents, function(i, parent) {
+                if(parent === $("body").get(0)) {
+                    return false;
+                } else if(window.getComputedStyle(parent).overflowY === "hidden") {
+                    that._$boundsContainer = $(parent);
+                    return false;
+                }
+            });
+        }
     },
 
     _popupWrapperClass: function() {
@@ -848,23 +869,12 @@ var DropDownList = DropDownEditor.inherit({
 
     _getMaxHeight: function() {
         var $element = this.$element(),
-            $boundsContainer = this._getPopupBoundsContainer(),
+            $boundsContainer = this._$boundsContainer,
             offsetTop = $element.offset().top - ($boundsContainer ? $boundsContainer.offset().top : 0),
             containerHeight = ($boundsContainer || $(window)).outerHeight(),
             maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
         return Math.min(containerHeight * 0.5, maxHeight);
-    },
-
-    _getPopupBoundsContainer: function() {
-        // var containerValue = this.option("dropDownOptions.container"),
-        //     $container = containerValue && $(containerValue);
-
-        // if($container && window.getComputedStyle($container.get(0)).overflow === "hidden") {
-        //     return $container;
-        // }
-
-        return this._popup && this._popup._$boundsContainer;
     },
 
     _clean: function() {
