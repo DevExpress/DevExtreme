@@ -70,7 +70,6 @@ namespace Runner
                 using (var host = builder.Build())
                 {
                     host.Start();
-                    StyleCompilerProcessManager.Start(rootPath);
                     Console.WriteLine($"QUnit runner server listens on {url}...");
                     Thread.Sleep(Timeout.Infinite);
                 }

@@ -5,7 +5,7 @@ import themes from "ui/themes";
 import viewPortUtils from "core/utils/view_port";
 
 const viewPortChanged = viewPortUtils.changeCallback;
-import "style-compiler-test-server/known-css-files";
+import knownCssFiles from "/themes-test/get-css-files-list/!json";
 
 const { test, testInActiveWindow } = QUnit;
 
@@ -121,7 +121,7 @@ QUnit.module("Selector check", () => {
         return badSelectors;
     }
 
-    $.each(window.knownCssFiles, function(i, cssFileName) {
+    $.each(knownCssFiles, function(i, cssFileName) {
         test(cssFileName, (assert) => {
             const done = assert.async();
             const frame = $("<iframe/>").appendTo("body");
@@ -138,7 +138,7 @@ QUnit.module("Selector check", () => {
 });
 
 QUnit.module("All images are defined with data-uri and will be inlined", () => {
-    $.each(window.knownCssFiles, function(i, cssFileName) {
+    $.each(knownCssFiles, function(i, cssFileName) {
 
         function hasUrlImageProperty(doc) {
             const rulesWithUrl = [];

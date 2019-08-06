@@ -61,6 +61,7 @@
     "gulp-if": "^2.0.0",
     "gulp-jsbeautifier": "^2.0.3",
     "gulp-json-editor": "^2.5.1",
+    "gulp-less": "^4.0.1",
     "gulp-ll": "^1.0.4",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
