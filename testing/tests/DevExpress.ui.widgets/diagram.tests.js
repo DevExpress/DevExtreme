@@ -319,34 +319,34 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("units", "in");
         assert.equal(this.instance._diagramInstance.model.units, 0);
     });
-    test("should change document.pageSize property", (assert) => {
+    test("should change pageSize property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
-        this.instance.option("document.pageSize", { width: 3, height: 5 });
+        this.instance.option("pageSize", { width: 3, height: 5 });
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
     });
-    test("should change document.pageSize object property", (assert) => {
+    test("should change pageSize object property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
         assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 11);
-        this.instance.option("document.pageSize", { width: 3, height: 5, items: [{ width: 3, height: 5, text: "A10" }] });
+        this.instance.option("pageSize", { width: 3, height: 5, items: [{ width: 3, height: 5, text: "A10" }] });
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
         assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 1);
     });
-    test("should change document.pageOrientation property", (assert) => {
+    test("should change pageOrientation property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
-        this.instance.option("document.pageOrientation", "landscape");
+        this.instance.option("pageOrientation", "landscape");
         assert.equal(this.instance._diagramInstance.model.pageLandscape, true);
-        this.instance.option("document.pageOrientation", "portrait");
+        this.instance.option("pageOrientation", "portrait");
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
     });
-    test("should change document.pageColor property", (assert) => {
+    test("should change pageColor property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageColor, "white");
-        this.instance.option("document.pageColor", "red");
+        this.instance.option("pageColor", "red");
         assert.equal(this.instance._diagramInstance.model.pageColor, "red");
-        this.instance.option("document.pageColor", "white");
+        this.instance.option("pageColor", "white");
         assert.equal(this.instance._diagramInstance.model.pageColor, "white");
     });
     test("should change simpleView property", (assert) => {
