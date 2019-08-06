@@ -380,8 +380,8 @@ class Diagram extends Widget {
 
                 getText: this._createOptionGetter("nodes.textExpr"),
                 setText: this._createOptionSetter("nodes.textExpr"),
-                getLineOption: this._createOptionGetter("nodes.lineOptionExpr"),
-                setLineOption: this._createOptionSetter("nodes.lineOptionExpr"),
+                getLineOption: this._createOptionGetter("nodes.lineTypeExpr"),
+                setLineOption: this._createOptionSetter("nodes.lineTypeExpr"),
                 getStartLineEnding: this._createOptionGetter("nodes.fromLineEndExpr"),
                 setStartLineEnding: this._createOptionSetter("nodes.fromLineEndExpr"),
                 getEndLineEnding: this._createOptionGetter("nodes.toLineEndExpr"),
@@ -926,12 +926,12 @@ class Diagram extends Widget {
                 */
                 textExpr: undefined,
                 /**
-                * @name dxDiagramOptions.edges.lineOptionExpr
+                * @name dxDiagramOptions.edges.lineTypeExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default undefined
                 */
-                lineOptionExpr: undefined,
+                lineTypeExpr: undefined,
                 /**
                 * @name dxDiagramOptions.edges.fromLineEndExpr
                 * @type string|function(data)

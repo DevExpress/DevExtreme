@@ -129,7 +129,7 @@ const DiagramCommands = {
                 connectorLineType: {
                     command: DiagramCommand.ConnectorLineOption,
                     widget: "dxSelectBox",
-                    hint: "Line Type",
+                    hint: "Connector Line Type",
                     items: [
                         { value: 0, icon: "dx-diagram-i-connector-straight dx-diagram-i", hint: "Straight" },
                         { value: 1, icon: "dx-diagram-i-connector-orthogonal dx-diagram-i", hint: "Orthogonal" }
@@ -147,7 +147,7 @@ const DiagramCommands = {
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
-                    hint: "Line Start",
+                    hint: "Connector Line Start",
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
                 connectorLineEnd: {
@@ -159,7 +159,7 @@ const DiagramCommands = {
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
-                    hint: "Line End",
+                    hint: "Connector Line End",
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
                 autoLayout: {
