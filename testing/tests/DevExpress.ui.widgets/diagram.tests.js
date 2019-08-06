@@ -150,10 +150,11 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         assert.ok(button.option("disabled"));
     });
     test("Auto Layout button should be disabled in Read Only mode", (assert) => {
+        this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
-        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick"); // Select All
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick"); // Select All
         const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
         assert.notOk(button.option("disabled"));
         this.instance.option("readOnly", true);
@@ -213,19 +214,21 @@ QUnit.module("Context Menu", moduleConfig, () => {
         assert.equal(contextMenu.option("items").length, 1);
     });
     test("should update items on showing", (assert) => {
+        this.instance.option("contextMenu.commands", ["copy", "selectAll"]);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.notOk(contextMenu.option("visible"));
-        assert.notOk(contextMenu.option("items")[0].disabled);
+        assert.ok(contextMenu.option("items")[0].text.indexOf("Copy") > -1);
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
         assert.ok(contextMenu.option("visible"));
-        assert.ok(contextMenu.option("items")[0].disabled);
+        assert.ok(contextMenu.option("items")[0].text.indexOf("Select All") > -1);
     });
     test("should execute commands on click", (assert) => {
+        this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
-        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick");
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick");
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
 });

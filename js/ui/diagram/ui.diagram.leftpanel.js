@@ -35,6 +35,7 @@ class DiagramLeftPanel extends DiagramPanel {
             var groupObj = {
                 category,
                 title: title || category,
+                expanded: toolboxGroups[i].expanded,
                 style: toolboxGroups[i].style,
                 shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
@@ -65,9 +66,9 @@ class DiagramLeftPanel extends DiagramPanel {
         });
 
         for(var i = 0; i < data.length; i++) {
-            if(data[i] === false) {
+            if(data[i].expanded === false) {
                 this._accordionInstance.collapseItem(i);
-            } else if(data[i] === true) {
+            } else if(data[i].expanded === true) {
                 this._accordionInstance.expandItem(i);
             }
         }
