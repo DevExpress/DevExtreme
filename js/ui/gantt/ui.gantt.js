@@ -227,7 +227,7 @@ class Gantt extends Widget {
             delete this[`_${name}`];
         }
         if(this.option(`${name}.dataSource`)) {
-            dataOption = new DataOption(name, (name, data) => { this[`_${name}DataSourceChanged`](data); });
+            dataOption = new DataOption(name, (name, data) => { this._dataSourceChanged(name, data); });
             dataOption.option("dataSource", this.option(`${name}.dataSource`));
             dataOption._refreshDataSource();
             this[`_${name}Option`] = dataOption;
@@ -244,61 +244,25 @@ class Gantt extends Widget {
         }
         return getters;
     }
-    _tasksDataSourceChanged(data) {
-        const getters = this._compileGettersByOption("tasks");
-        const tasks = data.map((i) => {
-            return {
-                id: getters.key(i),
-                parentId: getters.parentId(i),
-                start: getters.start(i),
-                end: getters.end(i),
-                progress: getters.progress(i),
-                title: getters.title(i)
-            };
-        });
-
-        this._tasks = tasks;
-        this._setTreeListOption("dataSource", tasks);
-        this._setGanttViewOption("tasks", tasks);
+    _prepareMapHandler(getters) {
+        return (data) => {
+            return Object.keys(getters)
+                .reduce((previous, key) => {
+                    const resultKey = key === "key" ? "id" : key;
+                    previous[resultKey] = getters[key](data);
+                    return previous;
+                }, {});
+        };
     }
-    _dependenciesDataSourceChanged(data) {
-        const getters = this._compileGettersByOption("dependencies");
-        const dependencies = data.map((i) => {
-            return {
-                id: getters.key(i),
-                predecessorId: getters.predecessorId(i),
-                successorId: getters.successorId(i),
-                type: getters.type(i)
-            };
-        });
+    _dataSourceChanged(dataSourceName, data) {
+        const getters = this._compileGettersByOption(dataSourceName);
+        const mappedData = data.map(this._prepareMapHandler(getters));
 
-        this._dependencies = dependencies;
-        this._setGanttViewOption("dependencies", dependencies);
-    }
-    _resourcesDataSourceChanged(data) {
-        const getters = this._compileGettersByOption("resources");
-        const resources = data.map((i) => {
-            return {
-                id: getters.key(i),
-                text: getters.text(i)
-            };
-        });
-
-        this._resources = resources;
-        this._setGanttViewOption("resources", resources);
-    }
-    _resourceAssignmentsDataSourceChanged(data) {
-        const getters = this._compileGettersByOption("resourceAssignments");
-        const resourceAssignments = data.map((i) => {
-            return {
-                id: getters.key(i),
-                taskId: getters.taskId(i),
-                resourceId: getters.resourceId(i)
-            };
-        });
-
-        this._resourceAssignments = resourceAssignments;
-        this._setGanttViewOption("resourceAssignments", resourceAssignments);
+        this[`_${dataSourceName}`] = mappedData;
+        this._setGanttViewOption(dataSourceName, mappedData);
+        if(dataSourceName === "tasks") {
+            this._setTreeListOption("dataSource", mappedData);
+        }
     }
 
     _clean() {
