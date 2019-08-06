@@ -160,7 +160,7 @@ class Gantt extends Widget {
     }
     _onTreeListRowPrepared(e) {
         if(e.rowType === "data" && e.node.children.length > 0) {
-            e.rowElement.addClass(GANTT_COLLAPSABLE_ROW);
+            $(e.rowElement).addClass(GANTT_COLLAPSABLE_ROW);
         }
     }
     _onGanttViewSelectionChanged(e) {
