@@ -21,22 +21,22 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
         }
 
         const { inputType, data } = originalEvent;
+        const currentCaret = this.editor._caret();
 
         if(inputType === DELETE_INPUT_TYPE) {
-            const length = this._prevCaret.end - this._prevCaret.start;
+            const length = (this._prevCaret.end - this._prevCaret.start) || 1;
             this.editor.setBackwardDirection();
             this._updateEditorMask({
-                start: this._prevCaret.start,
+                start: currentCaret.start,
                 length,
                 text: this._getEmptyString(length)
             });
         } else {
-            const caret = this.editor._caret();
-            if(!caret.end) {
+            if(!currentCaret.end) {
                 return;
             }
 
-            this.editor._caret(caret);
+            this.editor._caret(currentCaret);
 
             const length = this._prevCaret.end - this._prevCaret.start;
             const newData = data + (length ? this._getEmptyString(length - data.length) : "");

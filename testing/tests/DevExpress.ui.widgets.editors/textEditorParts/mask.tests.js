@@ -383,7 +383,7 @@ QUnit.test("press enter when caret position in the middle of the text", function
 
     var keyboard = keyboardMock($input, true);
 
-    keyboard.caret(1).type("x").caret(1).keyDown("enter");
+    keyboard.caret(1).type("x").caret(1).press("enter");
     assert.equal($input.val(), "_x", "second char is still there");
 });
 
@@ -397,7 +397,7 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", (as
     });
 
     const $input = $textEditor.find(".dx-texteditor-input");
-    const keyboard = keyboardMock($input);
+    const keyboard = keyboardMock($input, true);
 
     caretWorkaround($input);
 
@@ -454,11 +454,11 @@ QUnit.test("backspace should remove last char considering fixed letter", functio
 
     caretWorkaround($input);
 
-    keyboard.type("x").keyDown("backspace");
+    keyboard.type("x").press("backspace");
 
     assert.equal(keyboard.caret().start, 1, "caret moved to fixed char");
 
-    keyboard.keyDown("backspace");
+    keyboard.press("backspace");
     this.clock.tick();
     assert.equal($input.val(), "_-_", "char was removed");
     assert.equal(keyboard.caret().start, 0, "caret moved to start position");
@@ -478,7 +478,7 @@ QUnit.test("backspace should move caret after fixed letters", function(assert) {
     keyboard
         .type("x")
         .type("x")
-        .keyDown("backspace");
+        .press("backspace");
 
     assert.equal(keyboard.caret().start, 2, "cursor moved after fixed letters");
 });
@@ -493,7 +493,7 @@ QUnit.test("backspace at start of input should not change caret position", funct
 
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
-    keyboard.caret(0).keyDown("backspace");
+    keyboard.caret(0).press("backspace");
 
     assert.equal(keyboard.caret().start, 0, "cursor at start position");
 });
@@ -518,9 +518,9 @@ QUnit.test("backspace should remove chars correctly considering fixed letters", 
 
     keyboard.caret(3);
     keyboard
-        .keyDown("backspace")
-        .keyDown("backspace")
-        .keyDown("backspace");
+        .press("backspace")
+        .press("backspace")
+        .press("backspace");
 
     this.clock.tick();
 
@@ -544,6 +544,7 @@ QUnit.test("input event with the 'deleteContentBackward' input type should remov
     caretWorkaround($input);
     keyboard
         .caret(3)
+        .beforeInput(null, BACKSPACE_INPUT_TYPE)
         .input(null, BACKSPACE_INPUT_TYPE);
 
     this.clock.tick();
@@ -568,7 +569,7 @@ QUnit.test("char should be deleted after pressing on delete key", function(asser
     keyboard
         .type("x")
         .caret(0)
-        .keyDown("del");
+        .press("del");
 
     assert.equal($input.val(), "_", "letter deleted");
 });
@@ -588,7 +589,7 @@ QUnit.test("delete should remove only selected valuable chars (T242341)", functi
 
     keyboard.type("xx")
         .caret({ start: 0, end: 3 })
-        .keyDown("del");
+        .press("del");
 
     assert.equal($input.val(), "_- x", "letter deleted");
 });
@@ -638,7 +639,7 @@ QUnit.test("all selected chars should be deleted on backspace", function(assert)
         .type("x")
         .caret({ start: 1, end: 3 });
 
-    keyboard.keyDown("backspace");
+    keyboard.press("backspace");
 
     this.clock.tick();
 
@@ -665,7 +666,7 @@ QUnit.test("all selected chars should be deleted on del key", function(assert) {
         .type("x")
         .caret({ start: 1, end: 3 });
 
-    keyboard.keyDown("del");
+    keyboard.press("del");
 
     assert.equal($input.val(), "x__", "printed only one char");
     assert.equal(keyboard.caret().start, 1, "caret position set to start");
@@ -978,7 +979,7 @@ QUnit.test("option change should be fired during typing", function(assert) {
 });
 
 QUnit.test("valueChangeEvent=change should fire change on blur", function(assert) {
-    var valueChangedFired = 0;
+    var valueChangeStub = sinon.stub();
 
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: "X",
@@ -986,9 +987,7 @@ QUnit.test("valueChangeEvent=change should fire change on blur", function(assert
             "X": "x"
         },
         valueChangeEvent: "change",
-        onValueChanged: function(e) {
-            valueChangedFired++;
-        }
+        onValueChanged: valueChangeStub
     });
 
     var $input = $textEditor.find(".dx-texteditor-input");
@@ -1001,7 +1000,7 @@ QUnit.test("valueChangeEvent=change should fire change on blur", function(assert
     // NOTE: triggerHandler instead of trigger due to IE blur async firing
     $input.triggerHandler("blur");
 
-    assert.equal(valueChangedFired, 1, "change fired once on blur");
+    assert.ok(valueChangeStub.calledOnce, "change fired once on blur");
 });
 
 QUnit.test("valueChangeEvent=change should fire change on beforedeactivate (ie raises blur in wrong time)", function(assert) {
@@ -1050,8 +1049,8 @@ QUnit.test("valueChangeEvent=change should fire change on pressing enter key", f
 
     var keyboard = keyboardMock($input);
     keyboard
-        .press("x")
-        .keyDown("enter");
+        .type("x")
+        .press("enter");
 
     assert.equal(valueChangedFired, 1, "change fired once on pressing enter key");
 });
@@ -1753,17 +1752,14 @@ QUnit.testInActiveWindow("Last char remove correctly when keypress fired after b
     keyboard.type("xx");
     this.clock.tick();
 
-    keyboard.keyDown("backspace");
+    keyboard.press("backspace");
     this.clock.tick();
-    keyboard.keyPress();
 
-    keyboard.keyDown("backspace");
+    keyboard.press("backspace");
     this.clock.tick();
-    keyboard.keyPress();
 
-    keyboard.keyDown("backspace");
+    keyboard.press("backspace");
     this.clock.tick();
-    keyboard.keyPress();
 
     assert.equal(keyboard.caret().start, 0, "caret moved backward");
     assert.equal($input.val(), "_-_", "chars was removed");
