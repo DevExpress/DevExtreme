@@ -18,6 +18,7 @@ import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
+const QUILL_CLIPBOARD_CLASS = "ql-clipboard";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 
@@ -247,16 +248,28 @@ const HtmlEditor = Editor.inherit({
         return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
     },
 
-    _focusInHandler: function() {
+    _focusInHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(true, this.$element());
 
         this.callBase.apply(this, arguments);
     },
 
-    _focusOutHandler: function() {
+    _focusOutHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(false, this.$element());
 
         this.callBase.apply(this, arguments);
+    },
+
+    _shouldSkipFocusEvent: function(relatedTarget) {
+        return $(relatedTarget).hasClass(QUILL_CLIPBOARD_CLASS);
     },
 
     _initMarkup: function() {
