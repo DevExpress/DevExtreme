@@ -41,7 +41,7 @@ class Gantt extends Widget {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
-        if(themes.current().indexOf("dark") > -1) {
+        if(themes.isDark()) {
             this.$element().addClass(GANTT_DARK_CLASS);
         }
 
