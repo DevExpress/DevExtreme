@@ -493,6 +493,14 @@ var TextEditorMask = TextEditorBase.inherit({
         this._typingDirection = direction;
     },
 
+    setForwardDirection: function() {
+        this._direction(FORWARD_DIRECTION);
+    },
+
+    setBackwardDirection: function() {
+        this._direction(BACKWARD_DIRECTION);
+    },
+
     _isForwardDirection: function() {
         return this._direction() === FORWARD_DIRECTION;
     },

@@ -13,9 +13,9 @@ var testMaskRule = function(title, config) {
         });
         var textEditor = $textEditor.dxTextEditor("instance");
         var $input = $textEditor.find(".dx-texteditor-input");
-        var keyboard = keyboardMock($input);
+        var keyboard = keyboardMock($input, true);
 
-        caretWorkaround($input);
+        caretWorkaround($input, true);
 
         keyboard.type(config.text);
 
@@ -204,7 +204,7 @@ QUnit.test("cursor should be set after fixed mask letter during typing at first 
 
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
-    keyboard.caret(0).keyPress("x");
+    keyboard.caret(0).type("x");
 
     assert.equal(keyboard.caret().start, 2, "cursor set after first fixed mask letter");
 });
@@ -278,7 +278,7 @@ QUnit.test("cursor should have correct position when type stub", function(assert
 
     keyboard
         .caret(0)
-        .keyPress("x");
+        .type("x");
 
     assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, "cursor in correct position");
 });
@@ -295,10 +295,10 @@ QUnit.test("caret position is correct after typing stub and non-stub char", func
     var keyboard = keyboardMock($input, true);
 
     keyboard.caret(0)
-        .keyDown("space")
-        .keyPress("1")
-        .keyDown("space")
-        .keyPress("x");
+        .type(" ")
+        .type("1")
+        .type(" ")
+        .type("x");
 
     assert.equal(keyboard.caret().start, 3, "caret in correct position");
 });
@@ -315,7 +315,7 @@ QUnit.test("caret position should be correct after typing", function(assert) {
     var keyboard = keyboardMock($input, true);
 
     keyboard.caret(1)
-        .keyPress("x");
+        .type("x");
 
     assert.equal(keyboard.caret().start, 3, "caret in correct position");
 });
@@ -387,6 +387,39 @@ QUnit.test("press enter when caret position in the middle of the text", function
     assert.equal($input.val(), "_x", "second char is still there");
 });
 
+QUnit.test("TextEditor with mask option should firing the 'onChange' event", (assert) => {
+    const handler = sinon.stub();
+    const clock = sinon.useFakeTimers();
+
+    const $textEditor = $("#texteditor").dxTextEditor({
+        onChange: handler,
+        mask: "000000"
+    });
+
+    const $input = $textEditor.find("input");
+    const keyboard = keyboardMock($input);
+
+    caretWorkaround($input);
+
+    $input.triggerHandler("focus");
+    clock.tick();
+
+    keyboard.type("123").press("enter");
+    assert.equal(handler.callCount, 1, "'change' event is fired on enter after value change");
+
+    keyboard.press("enter");
+    assert.equal(handler.callCount, 1, "'change' event is not fired on enter if value is not changed");
+
+    keyboard.type("456");
+    $input.triggerHandler("blur");
+    assert.equal(handler.callCount, 2, "'change' event is fired after value change and focus out");
+
+    $input.triggerHandler("focus");
+    $input.triggerHandler("blur");
+    assert.equal(handler.callCount, 2, "'change' event is not fired after focus out without value change");
+    clock.restore();
+});
+
 
 QUnit.module("backspace key", moduleConfig);
 
@@ -401,7 +434,7 @@ QUnit.test("backspace should remove last char and move caret backward", function
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    keyboard.type("x").keyDown("backspace");
+    keyboard.type("x").press("backspace");
 
     this.clock.tick();
     assert.equal(keyboard.caret().start, 0, "caret moved backward");
@@ -581,7 +614,7 @@ QUnit.test("all selected chars should be deleted on key press", function(assert)
         .type("x")
         .caret({ start: 0, end: 2 });
 
-    keyboard.keyDown("space").keyPress("x");
+    keyboard.type("x");
 
     assert.equal($input.val(), "x_", "printed only one char");
 });
@@ -1662,8 +1695,11 @@ QUnit.test("mask works when keypress is not fired", function(assert) {
 
     keyboard
         .caret({ start: 0, end: 0 })
-        .keyDown("x");
+        .keyDown("x")
+        .beforeInput("x", "insertText");
+
     $input.val("x" + $input.val());
+
     keyboard
         .caret({ start: 0, end: 1 })
         .input("x");
@@ -1685,8 +1721,11 @@ QUnit.test("mask works when keypress fired after input", function(assert) {
 
     keyboard
         .caret({ start: 0, end: 0 })
-        .keyDown("x");
+        .keyDown("x")
+        .beforeInput("x", "insertText");
+
     $input.val("x" + $input.val());
+
     keyboard
         .caret({ start: 0, end: 1 })
         .input("x");
