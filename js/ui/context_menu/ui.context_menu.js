@@ -987,10 +987,12 @@ var ContextMenu = MenuBase.inherit((function() {
                 this.callBase();
             } else {
                 if(this._overlay) {
-                    var cachedPosition = this._overlay.option("position");
+                    var lastPosition = this._overlay.option("position");
+                    this.callBase();
+                    this._overlay && this._overlay.option("position", lastPosition);
+                } else {
+                    this.callBase();
                 }
-                this.callBase();
-                this._overlay && this._overlay.option("position", cachedPosition);
             }
         },
 
