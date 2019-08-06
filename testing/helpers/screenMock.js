@@ -3,13 +3,14 @@ import WindowUtils from "core/utils/window";
 
 class screenMock {
     constructor(screenWidth) {
-        this.screenSize = screenWidth || 1000;
-        this.originalScreenWidth = WindowUtils.getWindowWidth();
+        this._screenSize = screenWidth || 1000;
+        this._originalScreenWidth = WindowUtils.getWindowWidth();
+        this.setWindowWidth(this._screenSize);
     }
 
     setWindowWidth(width) {
         Object.defineProperty(document.documentElement, "clientWidth", {
-            get: () => width || this.screenSize,
+            get: () => width || this._screenSize,
             configurable: true
         });
     }
@@ -21,7 +22,7 @@ class screenMock {
 
     restore() {
         Object.defineProperty(document.documentElement, "clientWidth", {
-            get: () => this.originalScreenWidth,
+            get: () => this._originalScreenWidth,
             configurable: true
         });
     }
