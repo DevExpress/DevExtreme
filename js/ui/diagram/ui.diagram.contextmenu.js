@@ -23,6 +23,7 @@ class DiagramContextMenu extends Widget {
 
         const $contextMenu = $("<div>")
             .appendTo(this.$element());
+
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             target: this.option("container"),
             items: this._getItems(this._commands),
@@ -34,7 +35,7 @@ class DiagramContextMenu extends Widget {
                     this.clickPosition = { x: e.jQEvent.clientX, y: e.jQEvent.clientY };
                 }
                 this._onVisibleChangedAction({ visible: true, component: this });
-                this._contextMenuInstance.option("items", this._getItems(this._commands));
+                this._contextMenuInstance.option("items", this._getItems(this._commands, true));
                 delete this._tempState;
             },
             onHiding: (e) => {
@@ -44,13 +45,13 @@ class DiagramContextMenu extends Widget {
             }
         });
     }
-    _getItems(commands) {
+    _getItems(commands, onlyVisible) {
         var items = [];
         var beginGroup = false;
         commands.forEach(function(command) {
             if(command.widget === "separator") {
                 beginGroup = true;
-            } else if(command.visible) {
+            } else if(command.visible || !onlyVisible) {
                 items.push({
                     command: command.command,
                     text: command.text,
