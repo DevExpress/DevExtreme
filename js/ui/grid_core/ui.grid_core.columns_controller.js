@@ -1249,9 +1249,14 @@ module.exports = {
                     fullOptionName = options.fullOptionName;
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                    var oldSkipProcessingColumnsChange = that._skipProcessingColumnsChange;
                     that._skipProcessingColumnsChange = true;
+                    var columnOptions = that.component.option(fullOptionName);
+                    if(isPlainObject(columnOptions)) {
+                        columnOptions[optionName] = value;
+                    }
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
-                    that._skipProcessingColumnsChange = false;
+                    that._skipProcessingColumnsChange = oldSkipProcessingColumnsChange;
                 }
             };
 
@@ -1579,16 +1584,15 @@ module.exports = {
                             break;
                         case "columns":
                             args.handled = true;
-                            if(!this._skipProcessingColumnsChange) {
-                                if(args.name === args.fullName) {
-                                    this._columnsUserState = null;
-                                    this._ignoreColumnOptionNames = null;
-                                    this.init();
-                                } else {
-                                    this._columnOptionChanged(args);
-                                }
+                            if(args.name === args.fullName) {
+                                this._columnsUserState = null;
+                                this._ignoreColumnOptionNames = null;
+                                this.init();
                             } else {
-                                this._updateRequireResize(args);
+                                if(this.option(args.fullName) === undefined || this.option(args.fullName) === args.value) {
+                                    this._columnOptionChanged(args);
+                                    this._updateRequireResize(args);
+                                }
                             }
                             break;
                         case "commonColumnSettings":

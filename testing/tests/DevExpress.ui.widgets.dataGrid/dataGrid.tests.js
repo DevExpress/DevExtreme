@@ -2131,6 +2131,49 @@ QUnit.test("Change column width via columnOption method (T628065)", function(ass
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
+QUnit.test("Change column sortOrder via option method with canceling in onOptionChanged handler", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [],
+        columns: [{ dataField: "column1", sortOrder: "asc" }],
+        onOptionChanged: function(args) {
+            if(args.fullName === "columns[0].sortOrder") {
+                dataGrid.option("columns[0].sortOrder", "asc");
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.option("columns[0].sortOrder", "desc");
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
+    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
+});
+
+// T734761
+QUnit.test("Change column sortOrder via columnOption method with canceling in onOptionChanged handler", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [],
+        columns: [{ dataField: "column1", sortOrder: "asc" }],
+        onOptionChanged: function(args) {
+            if(args.fullName === "columns[0].sortOrder") {
+                dataGrid.option("columns[0].sortOrder", "asc");
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.columnOption(0, "sortOrder", "desc");
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
+    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
+});
+
 // T688721, T694661
 QUnit.test("column width as string should works correctly", function(assert) {
     // act
