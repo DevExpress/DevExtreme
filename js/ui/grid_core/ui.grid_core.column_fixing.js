@@ -199,7 +199,8 @@ var baseFixedColumns = {
             alignByFixedColumnCellCount,
             column = options.column,
             isFixedTableRendering = that._isFixedTableRendering,
-            isGroupCell = options.rowType === "group" && isDefined(column.groupIndex);
+            isGroupCell = options.rowType === "group" && isDefined(column.groupIndex),
+            isUnfixedButtonColumn = column.type === "buttons" && !column.fixed;
 
         // T747718
         if(isFixedTableRendering && isGroupCell && !column.command) {
@@ -207,7 +208,7 @@ var baseFixedColumns = {
         }
 
         if(!isFixedTableRendering && that._isFixedColumns) {
-            isEmptyCell = column.fixed || column.command;
+            isEmptyCell = column.fixed || (column.command && !isUnfixedButtonColumn);
 
             if(isGroupCell) {
                 isEmptyCell = false;
