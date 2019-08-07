@@ -10,6 +10,8 @@ import "ui/box";
 
 const BOX_CLASS = "dx-box";
 const BOX_ITEM_CLASS = "dx-box-item";
+const RESPONSIVE_BOX_CLASS = "dx-responsivebox";
+const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + "-screen-";
 
 QUnit.testStart(function() {
     const markup =
@@ -23,17 +25,17 @@ QUnit.testStart(function() {
 });
 
 const moduleConfig = {
-    beforeEach: function() {
+    beforeEach: () => {
         this.screenMock = new screenMock();
     },
-    afterEach: function() {
+    afterEach: () => {
         this.screenMock.restore();
     }
 };
 
 QUnit.module("layouting", moduleConfig);
 
-QUnit.test("check size of grid without items", function(assert) {
+QUnit.test("check size of grid without items", (assert) => {
     var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
     var cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
     var height = 600;
@@ -68,7 +70,7 @@ QUnit.test("check size of grid without items", function(assert) {
     assert.equal($secondRow.eq(1).height(), rows[1].baseSize + heightRatioUnit * rows[1].ratio, "empty item 22 height");
 });
 
-QUnit.test("check size of grid with items", function(assert) {
+QUnit.test("check size of grid with items", (assert) => {
     var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
     var cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
     var height = 600;
@@ -108,7 +110,7 @@ QUnit.test("check size of grid with items", function(assert) {
     assert.equal($secondRow.eq(1).height(), rows[1].baseSize + heightRatioUnit * rows[1].ratio, "item22 height");
 });
 
-QUnit.test("root box and it's items should have correct height (T566515)", function(assert) {
+QUnit.test("root box and it's items should have correct height (T566515)", (assert) => {
     var rows = [{}, {}];
     var cols = [{ ratio: 1 }, { ratio: 1 }];
 
@@ -135,7 +137,7 @@ QUnit.test("root box and it's items should have correct height (T566515)", funct
     assert.roughEqual($rootItems.eq(1).height(), 16, 2.1, "Height of the root item is OK");
 });
 
-QUnit.test("check width of colspan", function(assert) {
+QUnit.test("check width of colspan", (assert) => {
     var cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
     var size = 900;
 
@@ -160,7 +162,7 @@ QUnit.test("check width of colspan", function(assert) {
     assert.equal($boxItems.eq(1).width(), thirdColumnSize, "second item size");
 });
 
-QUnit.test("check height of rowspan", function(assert) {
+QUnit.test("check height of rowspan", (assert) => {
     var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
     var size = 900;
 
@@ -185,7 +187,7 @@ QUnit.test("check height of rowspan", function(assert) {
 });
 
 
-QUnit.test("rowspan and colspan", function(assert) {
+QUnit.test("rowspan and colspan", (assert) => {
     var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
     var cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
     var size = 900;
@@ -215,7 +217,7 @@ QUnit.test("rowspan and colspan", function(assert) {
     assert.equal($rowBox.height(), $colBox.height(), "inner boxes are equal");
 });
 
-QUnit.test("rowspan and colspan simultaneously", function(assert) {
+QUnit.test("rowspan and colspan simultaneously", (assert) => {
     var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
     var cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
     var size = 900;
@@ -243,7 +245,7 @@ QUnit.test("rowspan and colspan simultaneously", function(assert) {
     assert.equal($firstItem.height(), firstItemHeight, "item height");
 });
 
-QUnit.test("overlapping rowspan and colspan", function(assert) {
+QUnit.test("overlapping rowspan and colspan", (assert) => {
     var size = 100;
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}, {}, {}],
@@ -267,7 +269,7 @@ QUnit.test("overlapping rowspan and colspan", function(assert) {
     assert.roughEqual($colBox.width(), 3 * size, 0.1, "second col box width");
 });
 
-QUnit.test("minSize and maxSize", function(assert) {
+QUnit.test("minSize and maxSize", (assert) => {
     var size = 100;
     var minSize = 80;
     var maxSize = 5;
@@ -302,7 +304,7 @@ QUnit.test("minSize and maxSize", function(assert) {
     assert.equal($second.height(), maxSize, "height is max-height");
 });
 
-QUnit.test("singleColumnScreen render items with baseSize: auto", function(assert) {
+QUnit.test("singleColumnScreen render items with baseSize: auto", (assert) => {
     this.screenMock.updateWindowWidth(500);
 
     var $responsiveBox = $("#responsiveBox").css("height", "auto").dxResponsiveBox({
@@ -318,7 +320,7 @@ QUnit.test("singleColumnScreen render items with baseSize: auto", function(asser
     assert.notEqual($responsiveBox.height(), 0, "item has height: auto");
 });
 
-QUnit.test("width and height rendered correctly when dxResponsiveBox has one row and column", function(assert) {
+QUnit.test("width and height rendered correctly when dxResponsiveBox has one row and column", (assert) => {
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         width: "auto",
         height: "auto",
@@ -334,7 +336,7 @@ QUnit.test("width and height rendered correctly when dxResponsiveBox has one row
     assert.equal($item.width(), $responsiveBox.width(), "item width calculated correctly");
 });
 
-QUnit.test("dxUpdate should not be bubbling to parent container", function(assert) {
+QUnit.test("dxUpdate should not be bubbling to parent container", (assert) => {
     var clock = sinon.useFakeTimers();
     var $parentContainer = $("<div>");
 
@@ -364,10 +366,259 @@ QUnit.test("dxUpdate should not be bubbling to parent container", function(asser
     }
 });
 
+QUnit.test("empty widget shouldn't raise exception on resize (T259132)", (assert) => {
+    assert.expect(0);
+
+    $("#responsiveBox").dxResponsiveBox({});
+    this.screenMock.updateWindowWidth();
+});
+
+QUnit.test("grid with factors", (assert) => {
+    this.screenMock.updateWindowWidth(500);
+
+    let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        rows: [{}, { screen: "sm md lg" }, { screen: "md lg" }, { screen: "lg" }],
+        cols: [{}, { screen: "sm md lg" }, { screen: "md lg" }, { screen: "lg" }],
+        items: [
+            { location: { row: 0, col: 0, screen: "lg" }, text: "item(0,0)-lg" },
+            { location: { row: 0, col: 0, screen: "md" }, text: "item(0,0)-md" },
+            { location: { row: 0, col: 0, screen: "sm" }, text: "item(0,0)-sm" },
+            { location: { row: 0, col: 0, screen: "xs" }, text: "item(0,0)-xs" },
+            { location: { row: 0, col: 1 }, text: " item(0,1)" },
+            { location: { row: 0, col: 2 }, text: " item(0,2)" },
+            { location: { row: 0, col: 3 }, text: " item(0,3)" },
+
+            { location: { row: 1, col: 0 }, text: " item(1,0)" },
+            { location: { row: 1, col: 1 }, text: " item(1,1)" },
+            { location: { row: 1, col: 2 }, text: " item(1,2)" },
+            { location: { row: 1, col: 3 }, text: " item(1,3)" },
+
+            { location: { row: 2, col: 0 }, text: " item(2,0)" },
+            { location: { row: 2, col: 1 }, text: " item(2,1)" },
+            { location: { row: 2, col: 2 }, text: " item(2,2)" },
+            { location: { row: 2, col: 3 }, text: " item(2,3)" },
+
+            { location: { row: 3, col: 0 }, text: " item(3,0)" },
+            { location: { row: 3, col: 1 }, text: " item(3,1)" },
+            { location: { row: 3, col: 2 }, text: " item(3,2)" },
+            { location: { row: 3, col: 3 }, text: " item(3,3)" }
+        ]
+    });
+
+    let xsExpectedText = "item(0,0)-xs",
+        smallExpectedText = "item(0,0)-sm item(0,1) item(1,0) item(1,1)",
+        mediumExpectedText = "item(0,0)-md item(0,1) item(0,2) item(1,0) item(1,1) item(1,2) item(2,0) item(2,1) item(2,2)",
+        lgExpectedText = "item(0,0)-lg item(0,1) item(0,2) item(0,3) item(1,0) item(1,1) item(1,2) item(1,3) item(2,0) item(2,1) item(2,2) item(2,3) item(3,0) item(3,1) item(3,2) item(3,3)";
+
+    // xs screen
+    assert.equal($responsiveBox.text(), xsExpectedText);
+
+    // sm screen
+    this.screenMock.updateWindowWidth(800);
+    assert.equal($responsiveBox.text(), smallExpectedText);
+
+    // md screen
+    this.screenMock.updateWindowWidth(1000);
+    assert.equal($responsiveBox.text(), mediumExpectedText);
+
+    // lg screen
+    this.screenMock.updateWindowWidth(1500);
+    assert.equal($responsiveBox.text(), lgExpectedText);
+});
+
+QUnit.test("recalculation on size changing", (assert) => {
+    let $responsiveBox = $("#responsiveBox");
+
+    this.screenMock.setWindowWidth(500);
+
+    $responsiveBox.dxResponsiveBox({
+        rows: [{}],
+        cols: [{}],
+        items: [
+            { location: { screen: "sm", row: 0, col: 0 }, text: "sm" },
+            { location: { screen: "xs", row: 0, col: 0 }, text: "xs" },
+            { location: { screen: "md", row: 0, col: 0 }, text: "md" }
+        ]
+    });
+    let responsiveBox = $responsiveBox.dxResponsiveBox("instance");
+
+    this.screenMock.setWindowWidth(1000);
+    responsiveBox.repaint();
+    assert.equal($.trim($responsiveBox.text()), "md", "md item apply");
+});
+
+QUnit.test("singleColumnScreen render items in one column", (assert) => {
+    this.screenMock.updateWindowWidth(500);
+
+    let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        rows: [{}, {}],
+        cols: [{}, {}],
+        singleColumnScreen: "xs",
+        items: [
+            { location: { row: 0, col: 0, rowspan: 2 }, text: "1" },
+            { location: { row: 1, col: 1, colspan: 2 }, text: "4" },
+            { location: { row: 0, col: 1, screen: 'sm md lg' }, text: "2" },
+            { location: { row: 1, col: 0, screen: 'xs sm' }, text: "3" }
+        ]
+    });
+
+    let responsiveBox = $responsiveBox.dxResponsiveBox("instance");
+
+    let checkLayoutByScreen = $.proxy(function(screenWidth, expectedText) {
+        this.screenMock.updateWindowWidth(screenWidth);
+
+        let $box = $responsiveBox.find("." + BOX_CLASS);
+        assert.equal($box.length, 1, "one box rendered");
+
+        let $items = $box.find("." + BOX_ITEM_CLASS);
+        assert.equal($items.length, expectedText.length, $items.length + " items rendered");
+
+        assert.equal($.trim($responsiveBox.text()), expectedText, "rendered only needed items");
+    }, this);
+
+    // screen:   xs      sm           md          lg
+    //  width: <768    768-<992    992-<1200    >1200
+    checkLayoutByScreen(500, "134");
+
+    responsiveBox.option("singleColumnScreen", "xs sm");
+
+    checkLayoutByScreen(800, "1234");
+});
+
+QUnit.test("dxUpdate trigger async after render and dimension changed", (assert) => {
+    let clock = sinon.useFakeTimers();
+    try {
+        // screen:   xs      sm           md          lg
+        //  width: <768    768-<992    992-<1200    >1200
+        this.screenMock.updateWindowWidth(900);
+        let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            width: "auto",
+            height: "auto",
+            rows: [{ ratio: 1, baseSize: "auto" }],
+            cols: [{ ratio: 1, baseSize: "auto" }],
+            items: [{ location: { row: 0, col: 0 } }]
+        });
+
+        let $box = $responsiveBox.find(".dx-box").eq(0);
+        let dxUpdateEventCounter = 0;
+        $($box).on("dxupdate", () => {
+            dxUpdateEventCounter++;
+        });
+
+        assert.equal(dxUpdateEventCounter, 0, "dxupdate was not fired sync after render");
+
+        clock.tick();
+        assert.equal(dxUpdateEventCounter, 1, "dxupdate was fired async after render");
+
+        dxUpdateEventCounter = 0;
+        this.screenMock.updateWindowWidth(1000);
+        $box = $responsiveBox.find(".dx-box").eq(0);
+        $($box).on("dxupdate", () => {
+            dxUpdateEventCounter++;
+        });
+
+        assert.equal(dxUpdateEventCounter, 0, "dxupdate was not fired sync after dimensionChanged");
+
+        clock.tick();
+        assert.equal(dxUpdateEventCounter, 1, "dxupdate was fired async after dimensionChanged");
+
+    } finally {
+        clock.restore();
+    }
+});
+
+QUnit.test("Box should has a class appropriate a screen resolution", (assert) => {
+    let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        width: "auto",
+        height: "auto"
+    });
+
+    const checkScreenSizeClasses = (expectedPrefix) => {
+        ["xs", "sm", "md", "lg"].forEach((prefix) => {
+            assert.strictEqual($responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + prefix), prefix === expectedPrefix, `prefix ${prefix} - ${prefix === expectedPrefix}`);
+        });
+    };
+
+    this.screenMock.updateWindowWidth(600);
+    checkScreenSizeClasses("xs");
+
+    this.screenMock.updateWindowWidth(800);
+    checkScreenSizeClasses("sm");
+
+    this.screenMock.updateWindowWidth(1000);
+    checkScreenSizeClasses("md");
+
+    this.screenMock.updateWindowWidth(1300);
+    checkScreenSizeClasses("lg");
+});
+
+QUnit.module("template rendering", moduleConfig, () => {
+    QUnit.test("template rendered when it set after creation", (assert) => {
+        let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            rows: [{}],
+            cols: [{}],
+            items: [{
+                location: { row: 0, col: 0, text: "before rendering" }
+            }]
+        });
+
+        $responsiveBox.dxResponsiveBox("option", "itemTemplate", () => {
+            return $("<div>").text("after rendering");
+        });
+
+        assert.equal($.trim($responsiveBox.text()), "after rendering", "item template was rendered");
+    });
+
+    QUnit.test("widget rendered correctly after rows option was changed", (assert) => {
+        this.screenMock.updateWindowWidth(1000);
+
+        registerComponent("dxWidget", Widget.inherit({}));
+
+        let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            rows: [{}],
+            cols: [{}],
+            items: [
+                {
+                    location: { row: 0, col: 0, screen: 'md' }, template: () => {
+                        return $("<div>").dxWidget();
+                    }
+                }
+            ]
+        });
+
+        $responsiveBox.dxResponsiveBox("option", "rows", [{}]);
+        assert.ok($responsiveBox.find(".dx-item .dx-widget").dxWidget("instance"), "widget is created");
+    });
+});
+
+QUnit.test("Set the shrink option of row to box when the singleColumnMode is applied", (assert) => {
+    this.screenMock.updateWindowWidth(500);
+
+    const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        _layoutStrategy: "flex",
+        rows: [{
+            shrink: 0, screen: "xs"
+        }, {
+            screen: "xs"
+        }, {}],
+        cols: [{}, {}],
+        singleColumnScreen: "xs",
+        items: [
+            { location: { row: 0, col: 0 } },
+            { location: { row: 1, col: 0 } },
+            { location: { row: 0, col: 0 } }
+        ]
+    });
+
+    const $items = $responsiveBox.find(`.${BOX_ITEM_CLASS}`);
+    assert.equal($items.eq(0).css("flex-shrink"), 0, "flex-shrink is applied for first row");
+    assert.equal($items.eq(1).css("flex-shrink"), 1, "flex-shrink is applied for second row");
+    assert.equal($items.eq(2).css("flex-shrink"), 1, "flex-shrink is applied for third row");
+});
 
 QUnit.module("template rendering", moduleConfig);
 
-QUnit.test("widget inside item is not disposed", function(assert) {
+QUnit.test("widget inside item is not disposed", (assert) => {
     this.screenMock.updateWindowWidth(1000);
 
     registerComponent("dxWidget", Widget.inherit({}));
@@ -394,7 +645,7 @@ QUnit.test("widget inside item is not disposed", function(assert) {
     assert.equal($widget.dxWidget("instance"), initialWidget, "widget was rendered correctly");
 });
 
-QUnit.test("items have no unsafe modifications after dispose", function(assert) {
+QUnit.test("items have no unsafe modifications after dispose", (assert) => {
     this.screenMock.updateWindowWidth(1000);
 
     var items = [
@@ -434,7 +685,7 @@ QUnit.test("items have no unsafe modifications after dispose", function(assert) 
 
 QUnit.module("events", moduleConfig);
 
-QUnit.test("onLayoutChanged", function(assert) {
+QUnit.test("onLayoutChanged", (assert) => {
     this.screenMock.updateWindowWidth(500);
     var onLayoutChangedSpy = sinon.stub();
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
@@ -466,7 +717,7 @@ QUnit.test("onLayoutChanged", function(assert) {
     assert.ok(onLayoutChangedSpy.calledThrice, "onLayoutChanged was triggered after repaint");
 });
 
-QUnit.test("onItemClick", function(assert) {
+QUnit.test("onItemClick", (assert) => {
     var responsiveBox = new ResponsiveBox($("#responsiveBox"), {
         items: [{ text: 1 }, { text: 2 }]
     });
@@ -480,7 +731,7 @@ QUnit.test("onItemClick", function(assert) {
 
 QUnit.module("option", moduleConfig);
 
-QUnit.test("currentScreenFactor", function(assert) {
+QUnit.test("currentScreenFactor", (assert) => {
     this.screenMock.updateWindowWidth(500);
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
@@ -500,7 +751,7 @@ QUnit.test("currentScreenFactor", function(assert) {
     assert.equal(responsiveBox.option("currentScreenFactor"), "sm", "currentScreenFactor update after restart");
 });
 
-QUnit.test("screenByWidth function call count on initialize", function(assert) {
+QUnit.test("screenByWidth function call count on initialize", (assert) => {
     let screenByWidthHandler = sinon.spy();
     $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
@@ -517,7 +768,7 @@ QUnit.test("screenByWidth function call count on initialize", function(assert) {
     assert.strictEqual(screenByWidthHandler.callCount, 1, "screenByWidth.callCount");
 });
 
-QUnit.test("screenByWidth function call count when dimension was changed", function(assert) {
+QUnit.test("screenByWidth function call count when dimension was changed", (assert) => {
     let screenByWidthHandler = sinon.spy();
     $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
@@ -536,7 +787,7 @@ QUnit.test("screenByWidth function call count when dimension was changed", funct
     assert.strictEqual(screenByWidthHandler.callCount, 1, "screenByWidth.callCount");
 });
 
-QUnit.test("_layoutStrategy pass to internal box", function(assert) {
+QUnit.test("_layoutStrategy pass to internal box", (assert) => {
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
         cols: [{}],
@@ -551,7 +802,7 @@ QUnit.test("_layoutStrategy pass to internal box", function(assert) {
     assert.equal(box.option("_layoutStrategy"), "test", "_layoutStrategy was passed to internal box");
 });
 
-QUnit.test("Changing visibility should update simulated strategy", function(assert) {
+QUnit.test("Changing visibility should update simulated strategy", (assert) => {
     var clock = sinon.useFakeTimers();
     try {
         var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
@@ -581,7 +832,7 @@ QUnit.test("Changing visibility should update simulated strategy", function(asse
     }
 });
 
-QUnit.test("onOptionChanged should not be fired after click on item", function(assert) {
+QUnit.test("onOptionChanged should not be fired after click on item", (assert) => {
     var onOptionChangedStub = sinon.stub();
 
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
@@ -599,7 +850,7 @@ QUnit.test("onOptionChanged should not be fired after click on item", function(a
     assert.equal(onOptionChangedStub.callCount, initCallCount, "onOptionChanged wasn't fired");
 });
 
-QUnit.test("responsive box should work correctly after item option changing", function(assert) {
+QUnit.test("responsive box should work correctly after item option changing", (assert) => {
     var responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
         cols: [{}],
@@ -610,7 +861,7 @@ QUnit.test("responsive box should work correctly after item option changing", fu
     assert.ok($("#responsiveBox").find(".dx-item").eq(0).hasClass("dx-state-invisible"), "responsive box works correctly");
 });
 
-QUnit.test("responsive box should render layout correctly after item option changing", function(assert) {
+QUnit.test("responsive box should render layout correctly after item option changing", (assert) => {
     var responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
         cols: [{}],

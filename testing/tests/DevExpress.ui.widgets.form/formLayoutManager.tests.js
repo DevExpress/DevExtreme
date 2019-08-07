@@ -1,5 +1,6 @@
 import $ from "jquery";
 import { __internals as internals } from "ui/form/ui.form.layout_manager";
+import screenMock from "../../helpers/screenMock.js";
 
 import "ui/switch";
 import "ui/lookup";
@@ -382,4 +383,47 @@ QUnit.test("Change from fixed colCount to auto and vice versa", function(assert)
 
     instance.option("colCount", 3);
     assert.equal(instance._getColCount(), 3, "We have only 3 columns");
+});
+
+QUnit.module("Layout manager responsibility", {
+    beforeEach: () => {
+        this.screenMock = new screenMock();
+    },
+    afterEach: () => {
+        this.screenMock.restore();
+    }
+}, () => {
+    QUnit.test("Middle screen size", (assert) => {
+        let $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                dataField: "test1"
+            }, {
+                dataField: "test2"
+            }],
+            colCount: 2,
+            onLayoutChanged: () => {}
+        });
+
+        assert.ok(!$testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager hasn't one column mode");
+    });
+
+    QUnit.test("Small screen size", (assert) => {
+        let $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                dataField: "test1"
+            }, {
+                dataField: "test2"
+            }],
+            colCount: 2,
+            onLayoutChanged: () => {}
+        });
+
+        this.screenMock.updateWindowWidth(600);
+
+        assert.ok($testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager has one column mode");
+    });
 });

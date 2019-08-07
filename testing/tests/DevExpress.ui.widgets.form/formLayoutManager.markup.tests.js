@@ -1,6 +1,5 @@
 import $ from "jquery";
 import consoleUtils from "core/utils/console";
-import screenMock from "../../helpers/screenMock.js";
 import { __internals as internals } from "ui/form/ui.form.layout_manager";
 import config from "core/config";
 import typeUtils from "core/utils/type";
@@ -2956,51 +2955,6 @@ QUnit.module("Accessibility", () => {
 
         // assert
         assert.equal(itemDescribedBy, helpTextID, "Help text id and input's describedby attributes are equal");
-    });
-});
-
-QUnit.module("Layout manager responsibility", {
-    beforeEach: () => {
-        this.screenMock = new screenMock();
-    },
-    afterEach: () => {
-        this.screenMock.restore();
-    }
-}, () => {
-    test("Middle screen size", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container");
-
-        $testContainer.dxLayoutManager({
-            items: [{
-                dataField: "test1"
-            }, {
-                dataField: "test2"
-            }],
-            colCount: 2,
-            onLayoutChanged: () => {}
-        });
-
-        // assert
-        assert.ok(!$testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager hasn't one column mode");
-    });
-
-    test("Small screen size", (assert) => {
-        let $testContainer = $("#container");
-
-        $testContainer.dxLayoutManager({
-            items: [{
-                dataField: "test1"
-            }, {
-                dataField: "test2"
-            }],
-            colCount: 2,
-            onLayoutChanged: () => {}
-        });
-
-        this.screenMock.updateWindowWidth(600);
-
-        assert.ok($testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager has one column mode");
     });
 });
 
