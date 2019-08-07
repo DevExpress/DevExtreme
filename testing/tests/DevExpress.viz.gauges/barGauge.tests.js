@@ -611,6 +611,19 @@ QUnit.test("Half circle up - leave margin on bottom", function(assert) {
         ['100.0']);
 });
 
+// T803467
+QUnit.test("Update bars on values changing", function(assert) {
+    var gauge = this.$container.dxBarGauge({
+        animation: false,
+        values: [100]
+    }).dxBarGauge("instance");
+
+    gauge.values([1, 2]);
+    gauge.values([3]);
+
+    assert.strictEqual(this.getBarsGroup().children.length, 4);
+});
+
 // T725337
 QUnit.test("Half circle down - leave margin on top", function(assert) {
     this.$container.width(800).height(200).dxBarGauge({

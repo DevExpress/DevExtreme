@@ -2131,6 +2131,49 @@ QUnit.test("Change column width via columnOption method (T628065)", function(ass
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
+QUnit.test("Change column sortOrder via option method with canceling in onOptionChanged handler", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [],
+        columns: [{ dataField: "column1", sortOrder: "asc" }],
+        onOptionChanged: function(args) {
+            if(args.fullName === "columns[0].sortOrder") {
+                dataGrid.option("columns[0].sortOrder", "asc");
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.option("columns[0].sortOrder", "desc");
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
+    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
+});
+
+// T734761
+QUnit.test("Change column sortOrder via columnOption method with canceling in onOptionChanged handler", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [],
+        columns: [{ dataField: "column1", sortOrder: "asc" }],
+        onOptionChanged: function(args) {
+            if(args.fullName === "columns[0].sortOrder") {
+                dataGrid.option("columns[0].sortOrder", "asc");
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.columnOption(0, "sortOrder", "desc");
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
+    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
+});
+
 // T688721, T694661
 QUnit.test("column width as string should works correctly", function(assert) {
     // act
@@ -3595,6 +3638,38 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs.length, 1, "focusedRowChanged event is called once");
     assert.ok($(focusedRowChangedArgs[0].rowElement).hasClass("dx-row-focused"), "focusedRowChanged event has correct rowElement");
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
+});
+
+// T803784
+QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ field: "data" }],
+        columns: [{
+            dataField: "field",
+            caption: "fixed",
+            fixed: true
+        }, {
+            dataField: "field",
+            caption: "not fixed"
+        }, {
+            type: "buttons",
+            fixed: false,
+            buttons: ["edit"]
+        }],
+        editing: {
+            mode: "row",
+            allowUpdating: true,
+            useIcons: true
+        }
+    }).dxDataGrid("instance");
+
+    // assert
+    var rows = dataGrid.getRowElement(0);
+
+    assert.equal($(rows[0]).find("td").eq(0).width(), $(rows[1]).find("td").eq(0).width(), "widths are equal");
+    assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
 });
 
 QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
@@ -6328,6 +6403,41 @@ QUnit.test("keyOf should not be called too often after push with row updates", f
 
     // assert
     assert.equal(keyOfSpy.callCount, 55, "keyOf call count");
+});
+
+// T802967
+QUnit.test("calculateFilterExpression should not be called infinite times if it returns function and scrolling mode is virtual", function(assert) {
+    var data = [];
+    for(let i = 0; i < 25; i++) {
+        data.push({ test: i });
+    }
+    var calculateFilterExpressionCallCount = 0;
+    try {
+        createDataGrid({
+            loadingTimeout: undefined,
+            scrolling: {
+                mode: "virtual"
+            },
+            columns: [{
+                selectedFilterOperation: "=",
+                filterValue: [],
+                dataField: "test",
+                dataType: "number",
+                calculateFilterExpression: function(filterValues) {
+                    calculateFilterExpressionCallCount++;
+                    return function() {
+                        return filterValues.length === 0;
+                    };
+                }
+            }],
+            dataSource: data
+        });
+
+    } catch(err) {
+        assert.ok(false, "the error is thrown");
+    } finally {
+        assert.equal(calculateFilterExpressionCallCount, 2, "calculateFilterExpression call count");
+    }
 });
 
 // T364210
@@ -12827,6 +12937,26 @@ QUnit.test("Reset sorting and grouping state when lookup column exists and remot
     // assert
     assert.strictEqual(dataGrid.columnOption("field1", "sortOrder"), undefined, "sorting is reseted");
     assert.strictEqual(dataGrid.columnOption("field2", "groupIndex"), undefined, "grouping is reseted");
+});
+
+// T800495
+QUnit.test("The calculateCellValue arguments should be correct after resetting the state when there is a grouped column", function(assert) {
+    // arrange
+    var calculateCellValue = sinon.spy(),
+        dataGrid = createDataGrid({
+            columns: [{ dataField: "field1", groupIndex: 0, calculateCellValue: calculateCellValue }, "field2"],
+            dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+        });
+
+    this.clock.tick(0);
+    calculateCellValue.reset();
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.deepEqual(calculateCellValue.getCall(0).args[0], { field1: "test1", field2: "test2" }, "calculateCellValue - first call arguments");
 });
 
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {

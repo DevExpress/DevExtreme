@@ -256,7 +256,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
                 assert.equal(itemInfos.length, 1);
                 assert.equal(itemInfos[0].fileItem.name, "file1");
-                controller.refresh();
+                return controller.refresh();
             })
             .then(() => {
                 const currentDir = controller.getCurrentDirectory();
@@ -308,7 +308,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
                 assert.equal(itemInfos.length, 1);
                 assert.equal(itemInfos[0].fileItem.name, "file1");
-                controller.refresh();
+                return controller.refresh();
             })
             .then(() => {
                 const currentDir = controller.getCurrentDirectory();
@@ -317,6 +317,36 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             })
             .then(itemInfos => {
                 assert.equal(itemInfos.length, 0);
+                done();
+            });
+    });
+
+    test("set current path", function(assert) {
+        const done = assert.async();
+        this.data[1].items = [
+            {
+                name: "F2.1",
+                isDirectory: true,
+                items: [ { name: "file" } ]
+            }
+        ];
+
+        this.controller.setCurrentPath("F2/F2.1")
+            .then(() => {
+                assert.equal("F2/F2.1", this.controller.getCurrentPath());
+
+                const currentDir = this.controller.getCurrentDirectory();
+                assert.equal("F2/F2.1", currentDir.fileItem.key);
+                assert.equal("F2.1", currentDir.fileItem.name);
+
+                assert.notOk(currentDir.expanded);
+
+                const dirF2 = currentDir.parentDirectory;
+                assert.ok(dirF2.expanded);
+
+                const rootDir = dirF2.parentDirectory;
+                assert.ok(rootDir.expanded);
+
                 done();
             });
     });

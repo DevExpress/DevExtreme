@@ -213,6 +213,19 @@ QUnit.test("change width", assert => {
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
 
+QUnit.test("widget renders correctly when minHeight and maxHeight is specified in pixels", assert => {
+    const minHeight = 100;
+    const $element = $("#widget").dxTextArea({
+        minHeight: minHeight + "px",
+        autoResizeEnabled: true
+    });
+
+    const $input = $element.find(".dx-texteditor-input");
+    const inputHeight = $input.outerHeight();
+
+    assert.strictEqual(inputHeight, minHeight, "height is ok");
+});
+
 
 QUnit.module("the 'autoResizeEnabled' option");
 

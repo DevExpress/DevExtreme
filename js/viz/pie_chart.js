@@ -1,13 +1,14 @@
 import { pieSeriesSpacing as seriesSpacing, states } from "./components/consts";
 import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from "./core/utils";
 import { extend as _extend } from "../core/utils/extend";
-import { isNumeric } from "../core/utils/type";
+import { isNumeric, isDefined } from "../core/utils/type";
 import { each as _each } from "../core/utils/iterator";
 import rangeModule from "./translators/range";
 import registerComponent from "../core/component_registrator";
 import { BaseChart, overlapping } from "./chart_components/base_chart";
 import { noop as _noop } from "../core/utils/common";
 import translator1DModule from "./translators/translator1d";
+import { patchFontOptions } from "./core/utils";
 
 const OPTIONS_FOR_REFRESH_SERIES = ["startAngle", "innerRadius", "segmentsDirection", "type"],
     NORMAL_STATE = states.normalMark,
@@ -253,6 +254,51 @@ var dxPieChart = BaseChart.inherit({
         }
 
         this._renderSeriesElements(drawOptions, isRotated, isLegendInside);
+    },
+
+    _renderExtraElements() {
+        let template = this.option("holeTemplate");
+
+        if(this._holeTemplateGroup) {
+            this._holeTemplateGroup.clear();
+        }
+
+        if(!template) {
+            return;
+        }
+
+        if(!this._holeTemplateGroup) {
+            this._holeTemplateGroup = this._renderer.g().attr({ class: "dxc-hole-template" }).css(patchFontOptions(this._themeManager._font));
+        }
+        this._holeTemplateGroup.append(this._renderer.root);
+
+        template = this._getTemplate(template);
+        template.render({ model: this, container: this._holeTemplateGroup.element });
+
+        const bBox = this._holeTemplateGroup.getBBox();
+        this._holeTemplateGroup.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
+    },
+
+    getRadius() {
+        return this.series.reduce((r, series) => {
+
+            if(!series.isVisible()) {
+                return r;
+            }
+            const point = series.getVisiblePoints()[0];
+            if(!point) {
+                return r;
+            }
+
+            if(!isDefined(r.innerRadius)) {
+                r.innerRadius = point.radiusInner;
+                r.outerRadius = point.radiusOuter;
+            } else {
+                r.innerRadius = Math.min(r.innerRadius, point.radiusInner);
+                r.outerRadius = Math.max(r.outerRadius, point.radiusOuter);
+            }
+            return r;
+        }, { });
     },
 
     _getLegendCallBack: function() {

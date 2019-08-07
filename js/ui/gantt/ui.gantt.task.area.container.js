@@ -9,7 +9,7 @@ export class TaskAreaContainer {
             scrollByThumb: true,
             showScrollbar: "onHover",
             direction: "both",
-            onScroll: () => { ganttViewWidget._updateView(); }
+            onScroll: () => { ganttViewWidget.updateView(); }
         });
     }
 
