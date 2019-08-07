@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var babel = require('gulp-babel');
 var watch = require('gulp-watch');
 var replace = require('gulp-replace');
+var plumber = require('gulp-plumber');
 var path = require('path');
 
 var context = require('./context.js');
@@ -27,6 +28,7 @@ gulp.task('version-replace', gulp.series('transpile', function() {
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {
     return watch(SRC)
+        .pipe(plumber())
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));

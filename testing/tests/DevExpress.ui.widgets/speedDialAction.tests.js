@@ -17,8 +17,8 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-const FAB_CLASS = "dx-fa-button";
-const FAB_MAIN_CLASS = "dx-fa-button-main";
+const FAB_SELECTOR = ".dx-fa-button";
+const FAB_MAIN_SELECTOR = ".dx-fa-button-main";
 
 QUnit.module("create one action", () => {
     test("check rendering", (assert) => {
@@ -26,12 +26,12 @@ QUnit.module("create one action", () => {
             .dxSpeedDialAction()
             .dxSpeedDialAction("instance");
 
-        const $fabElement = $("." + FAB_CLASS);
+        const $fabElement = $(FAB_SELECTOR);
         const $fabContent = $fabElement.find(".dx-overlay-content");
         const clickHandler = sinon.spy();
 
         assert.ok($fabElement.length === 1, "one action button created");
-        assert.ok($fabElement.hasClass(FAB_MAIN_CLASS), "it is main action button");
+        assert.ok($fabElement.hasClass(FAB_MAIN_SELECTOR.substr(1)), "it is main action button");
         assert.equal($fabContent.find(".dx-fa-button-icon").length, 1, "icon container created");
         assert.equal($fabContent.find(".dx-icon-close").length, 1, "default close icon created");
 
@@ -64,8 +64,8 @@ QUnit.module("maxSpeedDialActionCount option", () => {
             } catch(error) {}
         }
 
-        assert.equal($("." + FAB_MAIN_CLASS).length, 1, "one main fab is created");
-        assert.equal($("." + FAB_CLASS).length - 1, 5, "five actions is created");
+        assert.equal($(FAB_MAIN_SELECTOR).length, 1, "one main fab is created");
+        assert.equal($(FAB_SELECTOR).length - 1, 5, "five actions is created");
     });
 });
 
@@ -87,9 +87,9 @@ QUnit.module("create multiple actions", (hooks) => {
     }),
 
     test("check rendering", (assert) => {
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-        let $fabElement = $("." + FAB_CLASS);
+        let $fabElement = $(FAB_SELECTOR);
         let $fabContent = $fabElement.find(".dx-overlay-content");
 
         assert.ok($fabMainElement.length === 1, "create one main fab");
@@ -110,7 +110,7 @@ QUnit.module("create multiple actions", (hooks) => {
         firstInstance.option("icon", "find");
         secondInstance.option("icon", "filter");
 
-        $fabElement = $("." + FAB_CLASS);
+        $fabElement = $(FAB_SELECTOR);
         $fabContent = $fabElement.find(".dx-overlay-content");
 
         assert.equal($fabContent.eq(1).find(".dx-icon-find").length, 1, "first action icon changed on icon find");
@@ -151,7 +151,7 @@ QUnit.module("modify global action button config", (hooks) => {
         $("#fab-one").dxSpeedDialAction();
         $("#fab-two").dxSpeedDialAction();
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
 
         assert.equal($fabMainContent.find(".dx-icon-favorites").length, 1, "default icon is changed");
@@ -168,7 +168,7 @@ QUnit.module("modify global action button config", (hooks) => {
         $("#fab-one").dxSpeedDialAction({ icon: "home" });
         $("#fab-two").dxSpeedDialAction({ icon: "square" });
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const $fabMainContentIcons = $fabMainElement.find(".dx-icon");
         assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is 'add'");
@@ -179,7 +179,7 @@ QUnit.module("modify global action button config", (hooks) => {
         var firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
         $("#fab-two").dxSpeedDialAction();
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const fabDimensions = 64;
 
@@ -218,9 +218,9 @@ QUnit.module("add or remove action buttons", (hooks) => {
 
         $("#fab-two").dxSpeedDialAction("instance").dispose();
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-        const $fabElement = $("." + FAB_CLASS);
+        const $fabElement = $(FAB_SELECTOR);
         const fabMainOffsetY = 16;
 
         assert.equal($fabMainContent.parent(".dx-overlay-wrapper").length, 1, "main action button contain overlay wrapper");
@@ -257,10 +257,10 @@ QUnit.module("check action buttons position", (hooks) => {
             icon: "trash"
         });
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainWrapper = $fabMainElement.find(".dx-overlay-wrapper");
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-        const $fabElement = $(`.${FAB_CLASS}:not(.${FAB_MAIN_CLASS})`);
+        const $fabElement = $(`${FAB_SELECTOR}:not(${FAB_MAIN_SELECTOR})`);
 
         $fabMainContent.trigger("dxclick");
 
@@ -289,10 +289,10 @@ QUnit.module("check action buttons position", (hooks) => {
             icon: "trash"
         });
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainWrapper = $fabMainElement.find(".dx-overlay-wrapper");
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-        const $fabElement = $(`.${FAB_CLASS}:not(.${FAB_MAIN_CLASS})`);
+        const $fabElement = $(`${FAB_SELECTOR}:not(${FAB_MAIN_SELECTOR})`);
 
         $fabMainContent.trigger("dxclick");
 
@@ -304,7 +304,6 @@ QUnit.module("check action buttons position", (hooks) => {
         assert.equal($fabWrapper.eq(1).css("position"), expectedPosition, "second action has the same position with main fab");
     });
 });
-
 
 QUnit.module("check action buttons click args", (hooks) => {
     hooks.afterEach(() => {
@@ -319,7 +318,7 @@ QUnit.module("check action buttons click args", (hooks) => {
             }
         }).dxSpeedDialAction("instance");
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
         let $fabMainContent = $fabMainElement.find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
@@ -331,11 +330,61 @@ QUnit.module("check action buttons click args", (hooks) => {
             }
         }).dxSpeedDialAction("instance");
 
-        const $fabElement = $("." + FAB_CLASS);
+        const $fabElement = $(FAB_SELECTOR);
         const $fabContent = $fabElement.find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
         $fabContent.eq(2).trigger("dxclick");
+    });
+});
+
+QUnit.module("add visible option", (hooks) => {
+    let firstSDA;
+    let secondSDA;
+
+    hooks.beforeEach(() => {
+        firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
+        secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
+    }),
+
+    hooks.afterEach(() => {
+        firstSDA.dispose();
+        secondSDA.dispose();
+    }),
+
+    test("check rendering", (assert) => {
+        firstSDA.option("visible", false);
+        secondSDA.option("visible", false);
+        assert.equal($(FAB_SELECTOR).length, 0, "invisible if change visible option to false");
+
+        firstSDA.option("icon", "edit");
+        assert.equal($(FAB_SELECTOR).length, 0, "invisible if change icon option when visible is false");
+
+        firstSDA.option("visible", true);
+        assert.equal($(FAB_SELECTOR).length, 1, "create one action if second is invisible");
+
+        secondSDA.option("visible", true);
+        assert.equal($(FAB_SELECTOR).length, 3, "create two actions if second is visible");
+    });
+
+    test("check position", (assert) => {
+        config({
+            floatingActionButtonConfig: {
+                position: "left top"
+            }
+        });
+
+        firstSDA.option("visible", false);
+        secondSDA.option("visible", false);
+
+        firstSDA.option("visible", true);
+        secondSDA.option("visible", true);
+
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
+        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.offset().top, 0, "correct position top");
+        assert.equal($fabMainContent.offset().left, 0, "correct position left");
     });
 });
 

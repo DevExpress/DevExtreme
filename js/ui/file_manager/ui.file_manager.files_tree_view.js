@@ -201,6 +201,18 @@ class FileManagerFilesTreeView extends Widget {
 
     updateCurrentDirectory() {
         this._updateFocusedElement();
+        this._updateExpandedStateToCurrentDirectory();
+    }
+    _updateExpandedStateToCurrentDirectory() {
+        const dirLine = [ ];
+        for(let dirInfo = this._getCurrentDirectory(); dirInfo; dirInfo = dirInfo.parentDirectory) {
+            dirLine.unshift(dirInfo);
+        }
+        for(let i = 0; i < dirLine.length; i++) {
+            if(dirLine[i].items.length > 0) {
+                this.expandDirectory(dirLine[i]);
+            }
+        }
     }
 
 }

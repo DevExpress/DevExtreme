@@ -37,7 +37,7 @@ class FileManagerDialogBase extends Widget {
                     location: "after",
                     options: {
                         text: options.buttonText,
-                        onClick: this._onButtonClick.bind(this)
+                        onClick: this._applyDialogChanges.bind(this)
                     }
                 }
             ],
@@ -75,7 +75,7 @@ class FileManagerDialogBase extends Widget {
         return null;
     }
 
-    _onButtonClick() {
+    _applyDialogChanges() {
         const result = this._getDialogResult();
         if(result) {
             this._dialogResult = result;
