@@ -2718,17 +2718,17 @@ declare module DevExpress.ui {
     /** @name dxGantt.Options */
     export interface dxGanttOptions extends WidgetOptions<dxGantt> {
         /** @name dxGantt.Options.dependencies */
-        dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
+        dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), predecessorIdExpr?: string | ((data: any) => any), successorIdExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.resourceAssignments */
-        resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
+        resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), resourceIdExpr?: string | ((data: any) => any), taskIdExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.resources */
-        resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any) };
+        resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.showResources */
         showResources?: boolean;
         /** @name dxGantt.Options.taskTitlePosition */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
-        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), parentIdExpr?: string | ((data: any) => any) };
+        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentIdExpr?: string | ((data: any) => any), progressExpr?: string | ((data: any) => any), startExpr?: string | ((data: any) => any), titleExpr?: string | ((data: any) => any) };
         /** @name dxGantt.Options.treeListWidth */
         treeListWidth?: number;
     }
