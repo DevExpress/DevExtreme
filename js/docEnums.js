@@ -1034,7 +1034,7 @@
 
 /**
  * @typedef {string} Enums.DiagramAutoLayout
- * @enum {'tree'|'sugiyama'}
+ * @enum {'off'|'tree'|'sugiyama'}
  */
 
 /**
@@ -1080,4 +1080,9 @@
 /**
  * @typedef {string} Enums.DiagramAutoZoom
  * @enum {'fitContent'|'fitWidth'|'disabled'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttTaskTitlePosition
+ * @enum {'inside'|'outside'|'none'}
  */

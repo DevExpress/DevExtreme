@@ -18,7 +18,7 @@ const getParentPath = path => {
 };
 
 const getPathParts = (path, includeFullPath) => {
-    const result = path.split(PATH_SEPARATOR);
+    const result = (path || "").split(PATH_SEPARATOR);
 
     if(includeFullPath) {
         for(let i = 0; i < result.length; i++) {

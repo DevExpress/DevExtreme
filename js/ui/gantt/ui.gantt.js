@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
 import domAdapter from "../../core/dom_adapter";
+import dataCoreUtils from '../../core/utils/data';
 import eventsEngine from "../../events/core/events_engine";
 import pointerEvents from "../../events/pointer";
 import { addNamespace } from "../../events/utils";
@@ -9,14 +10,17 @@ import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
 import { getWindow, hasWindow } from "../../core/utils/window";
+import DataOption from "./ui.gantt.data.option";
+import themes from "../themes";
 
 const GANTT_CLASS = "dx-gantt";
+const GANTT_DARK_CLASS = "dx-gantt-dark";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
 const GANTT_SPLITTER_TRANSPARENT_CLASS = "dx-gantt-splitter-transparent";
 const GANTT_SPLITTER_BORDER_CLASS = "dx-gantt-splitter-border";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
+const GANTT_COLLAPSABLE_ROW = "dx-gantt-collapsable-row";
 
-const GANTT_KEY_FIELD = "id";
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
 const GANTT_MODULE_NAMESPACE = "dxGanttResizing";
@@ -26,9 +30,20 @@ const GANTT_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, GANTT_MODULE_
 const GANTT_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", GANTT_MODULE_NAMESPACE);
 
 class Gantt extends Widget {
+    _init() {
+        super._init();
+        this._refreshDataSource("tasks");
+        this._refreshDataSource("dependencies");
+        this._refreshDataSource("resources");
+        this._refreshDataSource("resourceAssignments");
+    }
+
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
+        if(themes.isDark()) {
+            this.$element().addClass(GANTT_DARK_CLASS);
+        }
 
         this._$treeListWrapper = $("<div>")
             .appendTo(this.$element());
@@ -57,7 +72,7 @@ class Gantt extends Widget {
         this._$treeList.width(this.option("treeListWidth"));
 
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
-            dataSource: this.option("tasks.dataSource"),
+            dataSource: this._tasks,
             columns: this.option("columns"),
             columnResizingMode: "widget",
             height: "100%",
@@ -68,9 +83,10 @@ class Gantt extends Widget {
             autoExpandAll: true,
             showRowLines: true,
             onContentReady: (e) => { this._onTreeListContentReady(e); },
-            onSelectionChanged: (e) => this._ganttView._selectTask(e.currentSelectedRowKeys[0]),
+            onSelectionChanged: (e) => this._ganttView.selectTask(e.currentSelectedRowKeys[0]),
             onRowCollapsed: () => this._updateGanttView(),
-            onRowExpanded: () => this._updateGanttView()
+            onRowExpanded: () => this._updateGanttView(),
+            onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
         });
     }
     _renderSplitter() {
@@ -96,14 +112,15 @@ class Gantt extends Widget {
         if(this._ganttView) {
             return;
         }
-
         this._ganttView = this._createComponent(this._$ganttView, GanttView, {
             height: this._treeList._$element.get(0).offsetHeight,
             rowHeight: this._getTreeListRowHeight(),
-            tasks: this._getTasks(),
-            dependencies: this.option("dependencies.dataSource"),
-            resources: this.option("resources.dataSource"),
-            resourceAssignments: this.option("resourceAssignments.dataSource"),
+            tasks: this._tasks,
+            dependencies: this._dependencies,
+            resources: this._resources,
+            resourceAssignments: this._resourceAssignments,
+            showResources: this.option("showResources"),
+            taskTitlePosition: this.option("taskTitlePosition"),
             onSelectionChanged: (e) => { this._onGanttViewSelectionChanged(e); },
             onScroll: (e) => { this._onGanttViewScroll(e); }
         });
@@ -141,8 +158,13 @@ class Gantt extends Widget {
             this._initScrollSync(e.component);
         }
     }
+    _onTreeListRowPrepared(e) {
+        if(e.rowType === "data" && e.node.children.length > 0) {
+            $(e.rowElement).addClass(GANTT_COLLAPSABLE_ROW);
+        }
+    }
     _onGanttViewSelectionChanged(e) {
-        this._treeList.option("selectedRowKeys", [e.id]);
+        this._setTreeListOption("selectedRowKeys", [e.id]);
     }
     _onGanttViewScroll(e) {
         const treeListScrollable = this._treeList.getScrollable();
@@ -154,7 +176,7 @@ class Gantt extends Widget {
         }
     }
     _onTreeListScroll(treeListScrollView) {
-        const ganttViewTaskAreaContainer = this._ganttView._getTaskAreaContainer();
+        const ganttViewTaskAreaContainer = this._ganttView.getTaskAreaContainer();
         if(ganttViewTaskAreaContainer.scrollTop !== treeListScrollView.component.scrollTop()) {
             ganttViewTaskAreaContainer.scrollTop = treeListScrollView.component.scrollTop();
         }
@@ -162,7 +184,6 @@ class Gantt extends Widget {
 
     _updateGanttView() {
         this._ganttView.option("tasks", this._getTasks());
-        this._ganttView._update();
     }
     _getTasks() {
         return this._treeList.getVisibleRows().map(r => r.data);
@@ -188,10 +209,64 @@ class Gantt extends Widget {
         this._$treeListWrapper.width(treeListWidth);
         this._$treeList.width(treeListWidth);
         this._$splitter.css("left", treeListWidth);
-        this._ganttView && this._ganttView._setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
+        this._ganttView && this._ganttView.setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
+    }
+
+    _setGanttViewOption(optionName, value) {
+        this._ganttView && this._ganttView.option(optionName, value);
+    }
+    _setTreeListOption(optionName, value) {
+        this._treeList && this._treeList.option(optionName, value);
+    }
+
+    _refreshDataSource(name) {
+        let dataOption = this[`_${name}Option`];
+        if(dataOption) {
+            dataOption._disposeDataSource();
+            delete this[`_${name}Option`];
+            delete this[`_${name}`];
+        }
+        if(this.option(`${name}.dataSource`)) {
+            dataOption = new DataOption(name, (name, data) => { this._dataSourceChanged(name, data); });
+            dataOption.option("dataSource", this.option(`${name}.dataSource`));
+            dataOption._refreshDataSource();
+            this[`_${name}Option`] = dataOption;
+        }
+    }
+    _compileGettersByOption(optionName) {
+        const getters = {};
+        const optionValue = this.option(optionName);
+        for(let field in optionValue) {
+            const exprMatches = field.match(/(\w*)Expr/);
+            if(exprMatches) {
+                getters[exprMatches[1]] = dataCoreUtils.compileGetter(optionValue[exprMatches[0]]);
+            }
+        }
+        return getters;
+    }
+    _prepareMapHandler(getters) {
+        return (data) => {
+            return Object.keys(getters)
+                .reduce((previous, key) => {
+                    const resultKey = key === "key" ? "id" : key;
+                    previous[resultKey] = getters[key](data);
+                    return previous;
+                }, {});
+        };
+    }
+    _dataSourceChanged(dataSourceName, data) {
+        const getters = this._compileGettersByOption(dataSourceName);
+        const mappedData = data.map(this._prepareMapHandler(getters));
+
+        this[`_${dataSourceName}`] = mappedData;
+        this._setGanttViewOption(dataSourceName, mappedData);
+        if(dataSourceName === "tasks") {
+            this._setTreeListOption("dataSource", mappedData);
+        }
     }
 
     _clean() {
+        delete this._ganttView;
         this._detachEventHandlers();
         super._clean();
     }
@@ -216,7 +291,42 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: "id",
+                /**
+                * @name dxGanttOptions.tasks.parentIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "parentId"
+                */
+                parentIdExpr: "parentId",
+                /**
+                * @name dxGanttOptions.tasks.startExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "start"
+                */
+                startExpr: "start",
+                /**
+                * @name dxGanttOptions.tasks.endExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "end"
+                */
+                endExpr: "end",
+                /**
+                * @name dxGanttOptions.tasks.progressExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "progress"
+                */
+                progressExpr: "progress",
+                /**
+                * @name dxGanttOptions.tasks.titleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "title"
+                */
+                titleExpr: "title"
             },
             /**
             * @name dxGanttOptions.dependencies
@@ -236,7 +346,28 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: "id",
+                /**
+                * @name dxGanttOptions.dependencies.predecessorIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "predecessorId"
+                */
+                predecessorIdExpr: "predecessorId",
+                /**
+                * @name dxGanttOptions.dependencies.successorIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "successorId"
+                */
+                successorIdExpr: "successorId",
+                /**
+                * @name dxGanttOptions.dependencies.typeExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "type"
+                */
+                typeExpr: "type"
             },
             /**
             * @name dxGanttOptions.resources
@@ -256,7 +387,14 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: "id",
+                /**
+                * @name dxGanttOptions.resources.textExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "text"
+                */
+                textExpr: "text"
             },
             /**
             * @name dxGanttOptions.resourceAssignments
@@ -276,33 +414,65 @@ class Gantt extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: GANTT_KEY_FIELD
+                keyExpr: "id",
+                /**
+                * @name dxGanttOptions.resourceAssignments.taskIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "taskId"
+                */
+                taskIdExpr: "taskId",
+                /**
+                * @name dxGanttOptions.resourceAssignments.resourceIdExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "resourceId"
+                */
+                resourceIdExpr: "resourceId"
             },
             /**
             * @name dxGanttOptions.treeListWidth
             * @type number
             * @default 300
             */
-            treeListWidth: 300
+            treeListWidth: 300,
+            /**
+            * @name dxGanttOptions.showResources
+            * @type boolean
+            * @default true
+            */
+            showResources: true,
+            /**
+            * @name dxGanttOptions.taskTitlePosition
+            * @type Enums.GanttTaskTitlePosition
+            * @default "inside"
+            */
+            taskTitlePosition: "inside"
         });
     }
 
     _optionChanged(args) {
         switch(args.name) {
             case "tasks":
-                // TODO
+                this._refreshDataSource("tasks");
                 break;
             case "dependencies":
-                // TODO
+                this._refreshDataSource("dependencies");
                 break;
             case "resources":
-                // TODO
+                this._refreshDataSource("resources");
                 break;
             case "resourceAssignments":
-                // TODO
+                this._refreshDataSource("resourceAssignments");
                 break;
             case "treeListWidth":
                 this._updateWidth(args.value);
+                break;
+            case "showResources":
+                this._setGanttViewOption("showResources", args.value);
+                break;
+            case "taskTitlePosition":
+                this._setGanttViewOption("taskTitlePosition", args.value);
                 break;
             default:
                 super._optionChanged(args);

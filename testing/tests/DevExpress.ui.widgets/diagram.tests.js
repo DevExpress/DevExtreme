@@ -150,10 +150,11 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         assert.ok(button.option("disabled"));
     });
     test("Auto Layout button should be disabled in Read Only mode", (assert) => {
+        this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
-        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick"); // Select All
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick"); // Select All
         const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
         assert.notOk(button.option("disabled"));
         this.instance.option("readOnly", true);
@@ -213,19 +214,21 @@ QUnit.module("Context Menu", moduleConfig, () => {
         assert.equal(contextMenu.option("items").length, 1);
     });
     test("should update items on showing", (assert) => {
+        this.instance.option("contextMenu.commands", ["copy", "selectAll"]);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.notOk(contextMenu.option("visible"));
-        assert.notOk(contextMenu.option("items")[0].disabled);
+        assert.ok(contextMenu.option("items")[0].text.indexOf("Copy") > -1);
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
         assert.ok(contextMenu.option("visible"));
-        assert.ok(contextMenu.option("items")[0].disabled);
+        assert.ok(contextMenu.option("items")[0].text.indexOf("Select All") > -1);
     });
     test("should execute commands on click", (assert) => {
+        this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
-        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick");
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick");
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
 });
@@ -244,6 +247,16 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1.5);
         this.instance.option("zoomLevel", 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+    });
+    test("should change zoomLevel object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 7);
+        this.instance.option("zoomLevel", { value: 1.5, items: [ 1, 1.5 ] });
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1.5);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
+        this.instance.option("zoomLevel", 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
     });
     test("should change autoZoom property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
@@ -282,6 +295,16 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("gridSize", 0.125);
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
     });
+    test("should change gridSize object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 4);
+        this.instance.option("gridSize", { value: 0.25, items: [0.25, 1] });
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 360);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
+        this.instance.option("gridSize", 0.125);
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
+    });
     test("should change viewUnits property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
         this.instance.option("viewUnits", "cm");
@@ -289,32 +312,41 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("viewUnits", "in");
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
     });
-    test("should change document.units property", (assert) => {
+    test("should change units property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.units, 0);
-        this.instance.option("document.units", "cm");
+        this.instance.option("units", "cm");
         assert.equal(this.instance._diagramInstance.model.units, 1);
-        this.instance.option("document.units", "in");
+        this.instance.option("units", "in");
         assert.equal(this.instance._diagramInstance.model.units, 0);
     });
-    test("should change document.pageSize property", (assert) => {
+    test("should change pageSize property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
-        this.instance.option("document.pageSize", { width: 3, height: 5 });
+        this.instance.option("pageSize", { width: 3, height: 5 });
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
     });
-    test("should change document.pageOrientation property", (assert) => {
+    test("should change pageSize object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
+        assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 11);
+        this.instance.option("pageSize", { width: 3, height: 5, items: [{ width: 3, height: 5, text: "A10" }] });
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
+        assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 1);
+    });
+    test("should change pageOrientation property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
-        this.instance.option("document.pageOrientation", "landscape");
+        this.instance.option("pageOrientation", "landscape");
         assert.equal(this.instance._diagramInstance.model.pageLandscape, true);
-        this.instance.option("document.pageOrientation", "portrait");
+        this.instance.option("pageOrientation", "portrait");
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
     });
-    test("should change document.pageColor property", (assert) => {
+    test("should change pageColor property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageColor, "white");
-        this.instance.option("document.pageColor", "red");
+        this.instance.option("pageColor", "red");
         assert.equal(this.instance._diagramInstance.model.pageColor, "red");
-        this.instance.option("document.pageColor", "white");
+        this.instance.option("pageColor", "white");
         assert.equal(this.instance._diagramInstance.model.pageColor, "white");
     });
     test("should change simpleView property", (assert) => {
