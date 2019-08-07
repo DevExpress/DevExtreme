@@ -9,6 +9,9 @@ import "ui/responsive_box";
 import "common.css!";
 
 const TREEVIEW_ID = "treeView_id";
+const PLACEMENT_STANDALONE = PLACEMENT_STANDALONE;
+const PLACEMENT_INSIDE_BOX = PLACEMENT_INSIDE_BOX;
+const PLACEMENT_INSIDE_RESPONSIVE_BOX = PLACEMENT_INSIDE_RESPONSIVE_BOX;
 const manyExpandedItems = [{
     text: "1", expanded: true,
     items: [{
@@ -44,12 +47,12 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
     }
 },
 () => {
-    ["standalone", "insedeResponsiveBox", "insideBox"].forEach(appendToType => {
+    [PLACEMENT_STANDALONE, PLACEMENT_INSIDE_RESPONSIVE_BOX, PLACEMENT_INSIDE_BOX].forEach(placement => {
 
-        const testContext = `, appendTo: ${appendToType}`;
+        const testContext = `, placement: ${placement}`;
 
         function appendOneTreeViewTo($appendTo, { id, width, height, items }) {
-            if(appendToType === "insedeResponsiveBox") {
+            if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
                 $appendTo.dxResponsiveBox({
                     width,
                     height,
@@ -60,7 +63,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
                         }
                     }]
                 });
-            } else if(appendToType === "insideBox") {
+            } else if(placement === PLACEMENT_INSIDE_BOX) {
                 $appendTo.dxBox({
                     width,
                     height,
@@ -70,7 +73,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
                         appendTreeViewTo(element, id, items);
                     }
                 });
-            } else if(appendToType === "standalone") {
+            } else if(placement === PLACEMENT_STANDALONE) {
                 appendTreeViewTo($appendTo, id, items, width, height);
             }
         }

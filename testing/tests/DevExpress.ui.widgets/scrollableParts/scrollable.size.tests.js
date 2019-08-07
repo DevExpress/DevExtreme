@@ -9,9 +9,9 @@ import "ui/responsive_box";
 import "common.css!";
 
 const SCROLLABLE_ID = "my_scrollable";
-const APPEND_TO_STANDALONE = "standalone";
-const APPEND_TO_INSIDE_BOX = "insideBox";
-const APPEND_TO_INSIDE_RESPONSIVE_BOX = "insideResponsiveBox";
+const PLACEMENT_STANDALONE = "standalone";
+const PLACEMENT_INSIDE_BOX = "insideBox";
+const PLACEMENT_INSIDE_RESPONSIVE_BOX = "insideResponsiveBox";
 
 function appendScrollableTo(appendTo, id, nestedElementWidth, nestedElementHeight, useNativeScrolling, width, height) {
     const $scrollable = $(`
@@ -40,13 +40,13 @@ QUnit.module("Size of one scrollable standalone/inside Box/inside ResponsiveBox"
 },
 () => {
     [false, true].forEach(useNativeScrolling => {
-        [APPEND_TO_STANDALONE, APPEND_TO_INSIDE_BOX, APPEND_TO_INSIDE_RESPONSIVE_BOX].forEach(appendToType => {
+        [PLACEMENT_STANDALONE, PLACEMENT_INSIDE_BOX, PLACEMENT_INSIDE_RESPONSIVE_BOX].forEach(placement => {
 
-            const testContext = `[useNativeScroller: ${useNativeScrolling}, appendTo: ${appendToType}]`;
+            const testContext = `[useNativeScroller: ${useNativeScrolling}, placement: ${placement}]`;
             const scrollBarWidth = useNativeScrolling ? nativeVScrollBarWidth : 0;
 
             function appendOneScrollable($appendTo, { id, width, height, nestedElementWidth, nestedElementHeight }) {
-                if(appendToType === APPEND_TO_INSIDE_RESPONSIVE_BOX) {
+                if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
                     $appendTo.dxResponsiveBox({
                         width,
                         height,
@@ -57,7 +57,7 @@ QUnit.module("Size of one scrollable standalone/inside Box/inside ResponsiveBox"
                             }
                         }]
                     });
-                } else if(appendToType === APPEND_TO_INSIDE_BOX) {
+                } else if(placement === PLACEMENT_INSIDE_BOX) {
                     $appendTo.dxBox({
                         width,
                         height,
@@ -67,7 +67,7 @@ QUnit.module("Size of one scrollable standalone/inside Box/inside ResponsiveBox"
                             appendScrollableTo(element, id, nestedElementWidth, nestedElementHeight, useNativeScrolling);
                         }
                     });
-                } else if(appendToType === APPEND_TO_STANDALONE) {
+                } else if(placement === PLACEMENT_STANDALONE) {
                     appendScrollableTo($appendTo, id, nestedElementWidth, nestedElementHeight, useNativeScrolling, width, height);
                 }
             }
@@ -174,10 +174,10 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
 },
 () => {
     [false, true].forEach(useNativeScrolling => {
-        [APPEND_TO_INSIDE_BOX, APPEND_TO_INSIDE_RESPONSIVE_BOX].forEach(appendToType => {
-            const TODO_INCORRECT_SIZE_IN_CHROME = (browser.webkit || browser.mozilla) && (appendToType === APPEND_TO_INSIDE_RESPONSIVE_BOX);
+        [PLACEMENT_INSIDE_BOX, PLACEMENT_INSIDE_RESPONSIVE_BOX].forEach(placement => {
+            const TODO_INCORRECT_SIZE_IN_CHROME = (browser.webkit || browser.mozilla) && (placement === PLACEMENT_INSIDE_RESPONSIVE_BOX);
 
-            const testContext = `[useNativeScrolling: ${useNativeScrolling}, appendToType: ${appendToType}]`;
+            const testContext = `[useNativeScrolling: ${useNativeScrolling}, placement: ${placement}]`;
             const scrollBarWidth = useNativeScrolling ? nativeVScrollBarWidth : 0;
 
             function appendToResponsiveBox($responsiveBox, responsiveBoxConfig) {
@@ -198,13 +198,13 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
             }
 
             QUnit.test("no content overflow - 2 scrollable in row, " + testContext, function(assert) {
-                if(appendToType === APPEND_TO_INSIDE_BOX) {
+                if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 300, height: 100,
                         nestedElementWidth: 75, nestedElementHeight: 50,
                         direction: "row"
                     });
-                } else if(appendToType === APPEND_TO_INSIDE_RESPONSIVE_BOX) {
+                } else if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
                     appendToResponsiveBox(this.$container, {
                         width: 300, height: 100,
                         nestedElementWidth: 75, nestedElementHeight: 50,
@@ -231,7 +231,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
             });
 
             QUnit.test("no content overflow - 2 scrollable in col, " + testContext, function(assert) {
-                if(appendToType === APPEND_TO_INSIDE_BOX) {
+                if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 100, height: 300,
                         nestedElementWidth: 50, nestedElementHeight: 75,
@@ -264,7 +264,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
             });
 
             QUnitTestIfSupported("content overflow_x - 2 scrollable in row, " + testContext, !TODO_INCORRECT_SIZE_IN_CHROME, function(assert) {
-                if(appendToType === APPEND_TO_INSIDE_BOX) {
+                if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 150, height: 100,
                         nestedElementWidth: 125, nestedElementHeight: 50,
@@ -290,14 +290,14 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
                     containerWidth: browser.msie ? 75 - scrollBarWidth : 75,
                     containerScrollWidth: 125,
                     containerHeight: 100 - scrollBarWidth,
-                    containerScrollHeight: (!browser.msie || browser.msie && useNativeScrolling && appendToType === APPEND_TO_INSIDE_BOX) ? 100 - scrollBarWidth : 100,
+                    containerScrollHeight: (!browser.msie || browser.msie && useNativeScrolling && placement === PLACEMENT_INSIDE_BOX) ? 100 - scrollBarWidth : 100,
                     nestedElementWidth: 125,
                     nestedElementHeight: 50
                 }));
             });
 
             QUnit.test("content overflow_x - 2 scrollable in col, " + testContext, function(assert) {
-                if(appendToType === APPEND_TO_INSIDE_BOX) {
+                if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 100, height: 150,
                         nestedElementWidth: 125, nestedElementHeight: 50,
@@ -330,7 +330,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
             });
 
             QUnitTestIfSupported("content overflow_y - 2 scrollable in row, " + testContext, !TODO_INCORRECT_SIZE_IN_CHROME, function(assert) {
-                if(appendToType === APPEND_TO_INSIDE_BOX) {
+                if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 200, height: 75,
                         nestedElementWidth: 50, nestedElementHeight: 125,
@@ -363,7 +363,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
             });
 
             QUnitTestIfSupported("content overflow_y - 2 scrollable in col, " + testContext, !TODO_INCORRECT_SIZE_IN_CHROME, function(assert) {
-                if(appendToType === APPEND_TO_INSIDE_BOX) {
+                if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 150, height: 100,
                         nestedElementWidth: 50, nestedElementHeight: 75,

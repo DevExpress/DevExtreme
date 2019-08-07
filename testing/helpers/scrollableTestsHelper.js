@@ -30,7 +30,7 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT}`).children();
     assert.equal($content[0].clientWidth, nestedElementWidth, `${id}: content.clientWidth`);
     if(Array.isArray(nestedElementHeight)) {
-        assert.ok($content[0].clientHeight > nestedElementHeight[0] && $content[0].clientHeight < nestedElementHeight[1], "content.clientHeight(" + $content[0].clientHeight + ")");
+        assert.ok($content[0].clientHeight > nestedElementHeight[0] && $content[0].clientHeight < nestedElementHeight[1], `${id}: content.clientHeight(${$content[0].clientHeight})`);
     } else {
         assert.equal($content[0].clientHeight, nestedElementHeight, `${id}: content.clientHeight`);
     }
