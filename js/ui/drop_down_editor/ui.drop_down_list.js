@@ -369,7 +369,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _createPopup: function() {
         this.callBase();
-        this._findBoundsContainer();
+        this._updateCustomBoundaryContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
         var $popupContent = this._popup.$content();
@@ -377,10 +377,9 @@ var DropDownList = DropDownEditor.inherit({
         eventsEngine.on($popupContent, "mouseup", this._saveFocusOnWidget.bind(this));
     },
 
-    _findBoundsContainer: function() {
-        var that = this;
-        var containerValue = this.option("dropDownOptions.container");
-        var $container = containerValue && $(containerValue);
+    _updateCustomBoundaryContainer: function() {
+        var customContainer = this.option("dropDownOptions.container");
+        var $container = customContainer && $(customContainer);
 
         if($container && !typeUtils.isWindow($container.get(0))) {
             var $containerWithParents = [].slice.call($container.parents());
@@ -390,10 +389,10 @@ var DropDownList = DropDownEditor.inherit({
                 if(parent === $("body").get(0)) {
                     return false;
                 } else if(window.getComputedStyle(parent).overflowY === "hidden") {
-                    that._$boundsContainer = $(parent);
+                    this._$customBoundaryContainer = $(parent);
                     return false;
                 }
-            });
+            }.bind(this));
         }
     },
 
@@ -869,9 +868,9 @@ var DropDownList = DropDownEditor.inherit({
 
     _getMaxHeight: function() {
         var $element = this.$element(),
-            $boundsContainer = this._$boundsContainer,
-            offsetTop = $element.offset().top - ($boundsContainer ? $boundsContainer.offset().top : 0),
-            containerHeight = ($boundsContainer || $(window)).outerHeight(),
+            $customBoundaryContainer = this._$customBoundaryContainer,
+            offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0),
+            containerHeight = ($customBoundaryContainer || $(window)).outerHeight(),
             maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
         return Math.min(containerHeight * 0.5, maxHeight);
