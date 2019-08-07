@@ -67,6 +67,58 @@ QUnit.module("Integration: Appointment tooltip", {
     }
 });
 
+QUnit.test("After change view type, tooltip should be appear after click on appointment, group mode(T802158)", function(assert) {
+    const data = [
+        {
+            text: "Website Re-Design Plan",
+            priorityId: 2,
+            startDate: new Date(2018, 4, 21, 9, 30),
+            endDate: new Date(2018, 4, 21, 11, 30)
+        }
+    ];
+
+    const priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    const defaultViews = ["week", "agenda", "month"];
+
+    this.createInstance({
+        dataSource: data,
+        views: defaultViews,
+        currentView: defaultViews[0],
+        crossScrollingEnabled: true,
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        width: 800,
+        height: 600,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ]
+    });
+
+    defaultViews.forEach(view => {
+        this.scheduler.option("currentView", view);
+        this.scheduler.appointments.click();
+        assert.ok(this.scheduler.tooltip.isVisible(), `tooltip should be visible after click on item in ${view} view`);
+    });
+});
+
 QUnit.test("There is no need to check recurring appointment if editing.allowUpdating is false", function(assert) {
     this.createInstance({
         editing: {

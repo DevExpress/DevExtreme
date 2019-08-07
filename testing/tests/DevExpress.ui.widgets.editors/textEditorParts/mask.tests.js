@@ -1539,12 +1539,20 @@ QUnit.module("custom mask maskRules", moduleConfig, () => {
     });
 
     QUnit.test("fullText updated, if pasted text is accepted", (assert) => {
+        // Fix blinking on blur in MS Edge (https://trello.com/c/HyC0Shoz)
+        assert.expect(1);
+        let firstTimeCall = true;
+
         const $textEditor = $("#texteditor").dxTextEditor({
             mask: "xy",
             maskRules: {
                 "x": "x",
                 "y": (char, index, fullText) => {
-                    assert.equal(fullText, "x_", "x is accepted");
+                    if(firstTimeCall) {
+                        assert.equal(fullText, "x_", "x is accepted");
+                    }
+
+                    firstTimeCall = false;
                     return char === "y";
                 }
             }

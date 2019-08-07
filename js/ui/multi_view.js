@@ -3,7 +3,7 @@ import fx from "../animation/fx";
 import translator from "../animation/translator";
 import mathUtils from "../core/utils/math";
 import { extend } from "../core/utils/extend";
-import { noop } from "../core/utils/common";
+import { noop, deferRender } from "../core/utils/common";
 import { triggerResizeEvent, getPublicElement } from "../core/utils/dom";
 import { isDefined } from "../core/utils/type";
 import devices from "../core/devices";
@@ -259,9 +259,12 @@ const MultiView = CollectionWidget.inherit({
 
     _render: function() {
         this.callBase();
-        var selectedItemIndices = this._getSelectedItemIndices();
-        this._updateItemsPosition(selectedItemIndices[0]);
-        this._updateItemsVisibility(selectedItemIndices[0]);
+
+        deferRender(() => {
+            var selectedItemIndices = this._getSelectedItemIndices();
+            this._updateItemsPosition(selectedItemIndices[0]);
+            this._updateItemsVisibility(selectedItemIndices[0]);
+        });
     },
 
     _renderSelection: function(addedSelection) {

@@ -165,7 +165,7 @@ exports.HeaderFilterView = modules.View.inherit({
             var group = options.dataSource.group;
             if(Array.isArray(group) && group.length > 0) {
                 return group[0].selector;
-            } else if(isFunction(group)) {
+            } else if(isFunction(group) && !options.remoteFiltering) {
                 return group;
             }
         }
