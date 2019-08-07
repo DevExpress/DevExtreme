@@ -185,8 +185,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.appointments.click();
 
         assert.notOk(stub.called, "showAppointmentTooltip doesn't called");
-
-        tooltip.hide();
     });
 
     test("Click on appointment should not call scheduler.showAppointmentTooltip for disabled mode", function(assert) {
@@ -246,8 +244,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.appointments.click(1);
 
         assert.equal(Tooltip.getInstance($(".dx-tooltip")).option("rtlEnabled"), true, "rtlEnabled for tooltip was set to true");
-
-        tooltip.hide();
     });
 
     test("Scheduler appointment tooltip should has right content", function(assert) {
@@ -285,8 +281,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         var $tooltip = $(".new-scheduler-tooltip-template");
 
         assert.equal($tooltip.length, 1, "one tooltip with template was shown");
-
-        tooltip.hide();
     });
 
     test("Scheduler appointment tooltip dates are displayed with right format, date/week views", function(assert) {
@@ -334,7 +328,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.appointments.click();
 
         assert.equal(scheduler.tooltip.getDateText(), "October 5, 11:30 PM - October 6, 1:00 AM", "dates and time were displayed correctly");
-        tooltip.hide();
     });
 
     test("Scheduler appointment tooltip dates should be correct, when custom timeZone is set", function(assert) {
@@ -556,8 +549,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
 
         $arrowIcon.trigger("dxpointerleave");
         assert.equal($(".dx-tooltip").length, 0, "Tooltip has disappeared");
-
-        tooltip.hide();
     });
 
     test("showAppointmentTooltip should be called after click on arrow icon and doesn't hide after pointerleave", function(assert) {
@@ -600,7 +591,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.appointments.click();
 
         assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "monthAndDay") + " - " + dateLocalization.format(endDate, "monthAndDay"), "dates were displayed correctly");
-        tooltip.hide();
     });
 
     test("Tooltip of allDay appointment with startDate = endDate should display right date", function(assert) {
@@ -640,7 +630,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.appointments.click(0);
 
         assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
-        tooltip.hide();
     });
 
     test("Tooltip of multiday appointment should display date & time for month view", function(assert) {
@@ -699,7 +688,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.appointments.click(2);
 
         assert.equal(scheduler.tooltip.getDateText(), "May 30, 11:00 PM - May 31, 1:15 AM", "dates were displayed correctly");
-        tooltip.hide();
     });
 
     test("Tooltip for recurrence appointment should display right dates(T384181)", function(assert) {
@@ -721,7 +709,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.appointments.click(1);
 
         assert.equal(scheduler.tooltip.getDateText(), "February 6, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
-        tooltip.hide();
     });
 
     test("Tooltip should hide when window was resized", function(assert) {
