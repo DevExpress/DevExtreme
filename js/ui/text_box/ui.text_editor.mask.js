@@ -403,7 +403,7 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        this._direction(FORWARD_DIRECTION);
+        this.setForwardDirection();
         e.preventDefault();
 
         this._handleSelection();
@@ -412,7 +412,7 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        this._direction(FORWARD_DIRECTION);
+        this.setForwardDirection();
         this._adjustCaret();
         this._displayMask();
         this._maskRulesChain.reset();
@@ -445,7 +445,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _tryMoveCaretBackward: function() {
-        this._direction(BACKWARD_DIRECTION);
+        this.setBackwardDirection();
         var currentCaret = this._caret().start;
         this._adjustCaret();
         return !currentCaret || currentCaret !== this._caret().start;

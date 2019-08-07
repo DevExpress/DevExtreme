@@ -45,14 +45,14 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
 
         this._keyPressHandled = true;
 
-        var inputValue = this.editorInput().val();
-        var caret = this.editor._caret();
+        const inputValue = this.editorInput().val();
+        const caret = this.editorCaret();
         if(!caret.end) {
             return;
         }
         caret.start = caret.end - 1;
-        var oldValue = inputValue.substring(0, caret.start) + inputValue.substring(caret.end);
-        var char = inputValue[caret.start];
+        const oldValue = inputValue.substring(0, caret.start) + inputValue.substring(caret.end);
+        const char = inputValue[caret.start];
 
         this.editorInput().val(oldValue);
 
@@ -75,7 +75,7 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
                 this.editor._direction(this.DIRECTION.FORWARD);
                 this.editor._adjustCaret();
             }
-            const currentCaret = this.editor._caret();
+            const currentCaret = this.editorCaret();
             clearTimeout(this._backspaceHandlerTimeout);
             this._backspaceHandlerTimeout = setTimeout(function() {
                 callBack(currentCaret);
@@ -93,7 +93,7 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
 
             if(this.editor._tryMoveCaretBackward()) {
                 afterBackspaceHandler(false, (currentCaret) => {
-                    this.editor._caret(currentCaret);
+                    this.editorCaret(currentCaret);
                 });
                 return;
             }
@@ -111,8 +111,8 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
     }
 
     _handleBackspaceInput(e) {
-        var caret = this.editor._caret();
-        this.editor._caret({ start: caret.start + 1, end: caret.end + 1 });
+        const { start, end } = this.editorCaret();
+        this.editorCaret({ start: start + 1, end: end + 1 });
         this._backspaceHandler(e);
     }
 

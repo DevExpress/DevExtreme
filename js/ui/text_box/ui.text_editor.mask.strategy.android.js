@@ -12,7 +12,7 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
     }
 
     _beforeInputHandler(e) {
-        this._prevCaret = this.editor._caret();
+        this._prevCaret = this.editorCaret();
     }
 
     _keyDownHandler() {
@@ -25,7 +25,7 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
         }
 
         const { inputType, data } = originalEvent;
-        const currentCaret = this.editor._caret();
+        const currentCaret = this.editorCaret();
 
         if(inputType === DELETE_INPUT_TYPE) {
             const length = (this._prevCaret.end - this._prevCaret.start) || 1;
@@ -40,7 +40,7 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
                 return;
             }
 
-            this.editor._caret(currentCaret);
+            this.editorCaret(currentCaret);
 
             const length = this._prevCaret.end - this._prevCaret.start;
             const newData = data + (length ? this._getEmptyString(length - data.length) : "");
@@ -53,7 +53,7 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
             });
 
             if(!hasValidChars) {
-                this.editor._caret(this._prevCaret);
+                this.editorCaret(this._prevCaret);
             }
         }
     }
@@ -67,11 +67,11 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
         const updatedCharsCount = this.editor._handleChain(args);
 
         if(this.editor.isForwardDirection()) {
-            const { start, end } = this.editor._caret();
+            const { start, end } = this.editorCaret();
             const correction = updatedCharsCount - textLength;
 
             if(start <= updatedCharsCount && updatedCharsCount > 1) {
-                this.editor._caret({ start: start + correction, end: end + correction });
+                this.editorCaret({ start: start + correction, end: end + correction });
             }
 
             this.editor.isForwardDirection() && this.editor._adjustCaret();

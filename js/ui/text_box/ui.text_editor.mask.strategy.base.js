@@ -29,6 +29,14 @@ export default class BaseMaskStrategy {
         return this.editor._input();
     }
 
+    editorCaret(newCaret) {
+        if(!newCaret) {
+            return this.editor._caret();
+        }
+
+        this.editor._caret(newCaret);
+    }
+
     getHandler(handlerName) {
         const handler = this[`_${handlerName}Handler`] || function() {};
         return handler.bind(this);
@@ -50,15 +58,7 @@ export default class BaseMaskStrategy {
     }
 
     getEventHandler(eventName) {
-        let handler = this[`_${eventName}Handler`];
-
-        // ToDo: remove it
-        if(!handler) {
-            handler = function() {};
-            // console.log(`TODO - refactor, there is no handler for "${eventName}" event`);
-        }
-
-        return handler.bind(this);
+        return this[`_${eventName}Handler`].bind(this);
     }
 
     detachEvents() {
@@ -99,7 +99,7 @@ export default class BaseMaskStrategy {
     }
 
     _cutHandler(event) {
-        var caret = this.editor._caret();
+        var caret = this.editorCaret();
         var selectedText = this.editorInput().val().substring(caret.start, caret.end);
 
         this.editor._maskKeyHandler(event, function() {
@@ -121,7 +121,7 @@ export default class BaseMaskStrategy {
 
     _pasteHandler(e) {
         this._keyPressHandled = true;
-        var caret = this.editor._caret();
+        var caret = this.editorCaret();
 
         this.editor._maskKeyHandler(e, function() {
             var pastingText = getClipboardText(e);
