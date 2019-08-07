@@ -3,7 +3,7 @@ import "common.css!";
 import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
-import typeUtils from "core/utils/type";
+import { isDefined } from "core/utils/type";
 import { excel as excelCreator } from "exporter";
 import exportTestsHelper from "./exportTestsHelper.js";
 
@@ -100,9 +100,9 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
 
                         const actualRow = actualArgsItem.gridCell.row;
                         const expectedRow = expectedArgsItem.gridCell.row;
-                        assert.ok(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow) || !typeUtils.isDefined(actualRow) && !typeUtils.isDefined(expectedRow),
+                        assert.ok(isDefined(actualRow) && isDefined(expectedRow) || !isDefined(actualRow) && !isDefined(expectedRow),
                             `actualRow === expectedRow, ${i}`);
-                        if(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow)) {
+                        if(isDefined(actualRow) && isDefined(expectedRow)) {
                             assert.strictEqual(actualRow.data, expectedRow.data, `row.data, ${i}`);
                             assert.strictEqual(actualRow.rowType, expectedRow.rowType, `row.rowType, ${i}`);
                         }
@@ -114,6 +114,10 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
         done();
         e.cancel = true;
     };
+
+    if(!isDefined(options.export.ignoreExcelErrors)) {
+        options.export.ignoreExcelErrors = false;
+    }
 
     const dataGrid = $("#dataGrid").dxDataGrid(options).dxDataGrid("instance");
 
@@ -130,7 +134,13 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
             return columnWidths.map(() => 100);
         };
     }
-    dataGrid.exportToExcel();
+
+    if(isDefined(options.selectedRowIndexes)) {
+        dataGrid.selectRowsByIndexes(options.selectedRowIndexes);
+        dataGrid.exportToExcel(true);
+    } else {
+        dataGrid.exportToExcel();
+    }
 };
 
 export default dataGridExportTestsHelper;
