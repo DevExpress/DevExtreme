@@ -733,7 +733,7 @@ QUnit.testInActiveWindow("Focus by click is not applied when editing is enabled"
 
     // assert
     assert.deepEqual(navigationController._focusedCellPosition, {}, "focused cell position");
-    assert.ok(!isViewFocused, "view isn't focused");
+    assert.ok(isViewFocused, "view is focused");
 });
 
 QUnit.testInActiveWindow("Next cell is not focused when it is located in a command column", function(assert) {
