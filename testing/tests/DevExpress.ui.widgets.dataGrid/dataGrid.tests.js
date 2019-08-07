@@ -3640,6 +3640,38 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
 });
 
+// T803784
+QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ field: "data" }],
+        columns: [{
+            dataField: "field",
+            caption: "fixed",
+            fixed: true
+        }, {
+            dataField: "field",
+            caption: "not fixed"
+        }, {
+            type: "buttons",
+            fixed: false,
+            buttons: ["edit"]
+        }],
+        editing: {
+            mode: "row",
+            allowUpdating: true,
+            useIcons: true
+        }
+    }).dxDataGrid("instance");
+
+    // assert
+    var rows = dataGrid.getRowElement(0);
+
+    assert.equal($(rows[0]).find("td").eq(0).width(), $(rows[1]).find("td").eq(0).width(), "widths are equal");
+    assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
+});
+
 QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
     // arrange
     var data = [],
