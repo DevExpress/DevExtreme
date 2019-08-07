@@ -131,4 +131,58 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.$element.find(TASK_TITLE_IN_SELECTOR).length, 0);
         assert.equal(this.$element.find(TASK_TITLE_OUT_SELECTOR).length, tasks.length);
     });
+    test("expr", (assert) => {
+        const tasksDS = [
+            { "i": 1, "pid": 0, "t": "Software Development", "s": new Date("2019-02-21T05:00:00.000Z"), "e": new Date("2019-07-04T12:00:00.000Z"), "p": 31 },
+            { "i": 2, "pid": 1, "t": "Scope", "s": new Date("2019-02-21T05:00:00.000Z"), "e": new Date("2019-02-26T09:00:00.000Z"), "p": 60 },
+            { "i": 3, "pid": 2, "t": "Determine project scope", "s": new Date("2019-02-21T05:00:00.000Z"), "e": new Date("2019-02-21T09:00:00.000Z"), "p": 100 }
+        ];
+        const dependenciesDS = [{ "i": 0, "pid": 1, "sid": 2, "t": 0 }];
+        const resourcesDS = [{ "i": 1, "t": "Management" }];
+        const resourceAssignmentsDS = [{ "i": 0, "tid": 3, "rid": 1 }];
+        const options = {
+            tasks: {
+                dataSource: tasksDS,
+                keyExpr: "i",
+                parentIdExpr: "pid",
+                startExpr: "s",
+                endExpr: "e",
+                progressExpr: "p",
+                titleExpr: "t",
+            },
+            dependencies: {
+                dataSource: dependenciesDS,
+                keyExpr: "i",
+                predecessorIdExpr: "pid",
+                successorIdExpr: "sid",
+                typeExpr: "t",
+            },
+            resources: {
+                dataSource: resourcesDS,
+                keyExpr: "i",
+                textExpr: "t"
+            },
+            resourceAssignments: {
+                dataSource: resourceAssignmentsDS,
+                keyExpr: "i",
+                taskIdExpr: "tid",
+                resourceIdExpr: "rid"
+            }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const taskWrapperElements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(taskWrapperElements.length, tasksDS.length);
+        const firstTitle = taskWrapperElements.first().children().children().first().text();
+        assert.equal(firstTitle, tasksDS[0].t);
+        const firstProgressElement = taskWrapperElements.first().children().children().last();
+        assert.ok(firstProgressElement.width() > 0);
+
+        const dependencyElements = this.$element.find(TASK_ARROW_SELECTOR);
+        assert.equal(dependencyElements.length, dependenciesDS.length);
+
+        const resourceElements = this.$element.find(TASK_RESOURCES_SELECTOR);
+        assert.equal(resourceElements.length, resourceAssignmentsDS.length);
+        assert.equal(resourceElements.first().text(), resourcesDS[0].t);
+    });
 });
