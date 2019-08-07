@@ -373,6 +373,22 @@ QUnit.test("Drawn callback", function(assert) {
     assert.strictEqual(onDrawn.callCount, 1);
 });
 
+QUnit.test("Hide loadingIndicator after beginValueChanging - endValueChanging", function(assert) {
+    var onDrawn = sinon.spy();
+    var gauge = this.createGauge({
+        onDrawn: onDrawn
+    });
+
+    gauge.showLoadingIndicator();
+
+    gauge._loadingIndicator.fulfillHiding.reset();
+    gauge._loadingIndicator.scheduleHiding.reset();
+    gauge._beginValueChanging();
+    gauge._endValueChanging();
+    assert.equal(gauge._loadingIndicator.scheduleHiding.callCount, 1);
+    assert.strictEqual(gauge._loadingIndicator.fulfillHiding.callCount, 1);
+});
+
 QUnit.test("Show tooltip", function(assert) {
     this.createGauge();
 

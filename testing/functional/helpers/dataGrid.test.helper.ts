@@ -15,6 +15,10 @@ export default class DataGridTestHelper {
         return this.getDataRow(rowIndex).find(`td:nth-child(${columnIndex + 1})`);
     }
 
+    getFocusedRow() : Selector {
+        return this.dataGrid.find(`.dx-data-row.dx-row-focused`);
+    }
+
     isRowRemoved(rowIndex: number) : Promise<boolean> {
         return this.getDataRow(rowIndex).hasClass("dx-row-removed");
     }

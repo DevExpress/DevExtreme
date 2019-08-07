@@ -10,9 +10,23 @@ export class DataGridWrapper {
     }
 }
 
+export class ColumnWrapper extends WrapperBase {
+    getCommandButtons() {
+        return this.getContainer().find("td[class*='dx-command'] .dx-link");
+    }
+}
+
 export class RowsViewWrapper extends WrapperBase {
     getElement() {
         return this.getContainer().find(".dx-datagrid-rowsview");
+    }
+
+    getVirtualRowElement() {
+        return this.getContainer().find(".dx-virtual-row");
+    }
+
+    getVirtualCell(columnIndex) {
+        return this.getVirtualRowElement().find("td").eq(columnIndex);
     }
 }
 

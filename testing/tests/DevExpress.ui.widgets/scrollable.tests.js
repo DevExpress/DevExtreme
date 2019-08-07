@@ -1906,22 +1906,24 @@ QUnit.module("Hoverable interaction", () => {
                             scrollByThumb: true
                         });
 
-                        const checkAsserts = (isHoverable) => {
-                            assert.strictEqual(scrollBar.option("hoverStateEnabled"), isHoverable, "scrollbar.hoverStateEnabled");
-                            assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
-                            assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
-                        };
-
                         if(!onInitialize) {
                             $scrollable.dxScrollable("instance").option("disabled", disabled);
                         }
 
-                        const scrollBarClass = direction === "vertical" ? SCROLLBAR_VERTICAL_CLASS : SCROLLBAR_HORIZONTAL_CLASS;
-                        const $scrollBar = $scrollable.find(`.${scrollBarClass}`);
+                        const $scrollBar = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
                         const scrollBar = Scrollbar.getInstance($scrollBar);
 
                         const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
-                        checkAsserts(isScrollbarHoverable);
+
+                        assert.strictEqual(scrollBar.option("hoverStateEnabled"), isScrollbarHoverable, "scrollbar.hoverStateEnabled");
+                        assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                        assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, "scrollable-disabled-class");
+
+                        if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
+                            assert.ok(true, "Skip assert for Edge. The pointer-event property processed with a timeout");
+                        } else {
+                            assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                        }
                     });
                 });
             });

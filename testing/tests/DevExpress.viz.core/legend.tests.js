@@ -882,11 +882,12 @@ QUnit.test("item size > legend canvas", function(assert) {
 QUnit.module("Label align", environment);
 
 QUnit.test("text align. right", function(assert) {
+    this.options.cssClass = "legend_class";
     this.createSimpleLegend().draw(200, 200);
     this.checkItems(assert, [
-        { id: 0, label: { align: "left" } },
-        { id: 0, label: { align: "left" } },
-        { id: 0, label: { align: "left" } }
+        { id: 0, label: { align: "left", "class": "legend_class" } },
+        { id: 0, label: { align: "left", "class": "legend_class" } },
+        { id: 0, label: { align: "left", "class": "legend_class" } }
     ]);
 });
 
@@ -1646,6 +1647,13 @@ QUnit.test("layoutOptions", function(assert) {
     assert.equal(options.verticalAlignment, "top");
     assert.equal(options.side, "horizontal");
     assert.equal(options.priority, 1);
+});
+
+QUnit.test("layoutOptions is null if legend is not visible", function(assert) {
+    this.options.visible = false;
+    var options = this.createSimpleLegend().layoutOptions();
+
+    assert.strictEqual(options, null);
 });
 
 QUnit.test("measure", function(assert) {

@@ -362,11 +362,31 @@ var DropDownList = DropDownEditor.inherit({
 
     _createPopup: function() {
         this.callBase();
+        this._updateCustomBoundaryContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
         var $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, "mouseup");
         eventsEngine.on($popupContent, "mouseup", this._saveFocusOnWidget.bind(this));
+    },
+
+    _updateCustomBoundaryContainer: function() {
+        var customContainer = this.option("dropDownOptions.container");
+        var $container = customContainer && $(customContainer);
+
+        if($container && !typeUtils.isWindow($container.get(0))) {
+            var $containerWithParents = [].slice.call($container.parents());
+            $containerWithParents.unshift($container.get(0));
+
+            each($containerWithParents, function(i, parent) {
+                if(parent === $("body").get(0)) {
+                    return false;
+                } else if(window.getComputedStyle(parent).overflowY === "hidden") {
+                    this._$customBoundaryContainer = $(parent);
+                    return false;
+                }
+            }.bind(this));
+        }
     },
 
     _popupWrapperClass: function() {
@@ -538,9 +558,7 @@ var DropDownList = DropDownEditor.inherit({
     _fireContentReadyAction: commonUtils.noop,
 
     _setAriaTargetForList: function() {
-        // TODO: make getAriaTarget option
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
-        this._list.setAria("role", "combobox");
     },
 
     _renderList: function() {
@@ -550,10 +568,10 @@ var DropDownList = DropDownEditor.inherit({
             .appendTo(this._popup.$content());
 
         this._list = this._createComponent($list, List, this._listConfig());
-
         this._refreshList();
 
         this._setAriaTargetForList();
+        this._list.option("_listAttributes", { "role": "combobox" });
 
         this._renderPreventBlur(this._$list);
     },
@@ -842,11 +860,12 @@ var DropDownList = DropDownEditor.inherit({
 
     _getMaxHeight: function() {
         var $element = this.$element(),
-            offset = $element.offset(),
-            windowHeight = $(window).height(),
-            maxHeight = Math.max(offset.top, windowHeight - offset.top - $element.outerHeight());
+            $customBoundaryContainer = this._$customBoundaryContainer,
+            offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0),
+            containerHeight = ($customBoundaryContainer || $(window)).outerHeight(),
+            maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
-        return Math.min(windowHeight * 0.5, maxHeight);
+        return Math.min(containerHeight * 0.5, maxHeight);
     },
 
     _clean: function() {

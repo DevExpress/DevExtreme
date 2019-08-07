@@ -36,6 +36,20 @@ let DropDownButton = Widget.inherit({
         return extend(this.callBase(), {
 
             /**
+             * @name dxDropDownButtonItem
+             * @inherits dxListItem
+             * @type object
+             */
+            /**
+             * @name dxDropDownButtonItem.key
+             * @hidden
+             */
+            /**
+             * @name dxDropDownButtonItem.showChevron
+             * @hidden
+             */
+
+            /**
              * @name dxDropDownButtonOptions.itemTemplate
              * @type template|function
              * @default "item"
@@ -176,7 +190,7 @@ let DropDownButton = Widget.inherit({
 
             /**
              * @name dxDropDownButtonOptions.items
-             * @type Array<CollectionWidgetItem, object>
+             * @type Array<dxDropDownButtonItem, object>
              * @default null
              */
             items: null,
@@ -404,13 +418,9 @@ let DropDownButton = Widget.inherit({
                 return this.$element().outerWidth();
             },
             closeOnOutsideClick: (e) => {
-                const $toggleButton = $(e.target).closest(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
-                if(!$toggleButton.length) {
-                    return true;
-                }
-
-                const $element = $toggleButton.closest(`.${DROP_DOWN_BUTTON_CLASS}`);
-                return $element.get(0) !== this.$element().get(0);
+                const $element = this.$element();
+                const $buttonClicked = $(e.target).closest(`.${DROP_DOWN_BUTTON_CLASS}`);
+                return !$buttonClicked.is($element);
             },
             showTitle: false,
             animation: {
@@ -476,8 +486,18 @@ let DropDownButton = Widget.inherit({
         this.$element().append($popup);
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
         this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
+        this._popup.on("hiding", this._popupHidingHandler.bind(this));
+        this._popup.on("showing", this._popupShowingHandler.bind(this));
         this._renderPopupContent();
         this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
+    },
+
+    _popupHidingHandler() {
+        this.option("opened", false);
+    },
+
+    _popupShowingHandler() {
+        this.option("opened", true);
     },
 
     _renderAdditionalIcon() {

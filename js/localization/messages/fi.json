@@ -13,6 +13,8 @@
 
         "dxCollectionWidget-noDataText": "Ei näytettäviä tietoja",
 
+        "dxDropDownEditor-selectLabel": "Valitse",
+
         "validation-required": "Pakollinen",
         "validation-required-formatted": "{0} on pakollinen",
         "validation-numeric": "Arvon on oltava luku",

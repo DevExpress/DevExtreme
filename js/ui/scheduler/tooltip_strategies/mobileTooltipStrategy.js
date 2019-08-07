@@ -43,7 +43,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
         this.tooltip.option('height', height > MAX_OVERLAY_HEIGHT ? MAX_OVERLAY_HEIGHT : 'auto');
     }
 
-    _createTooltip(target, list) {
+    _createTooltip(target) {
         const $overlay = $("<div>").addClass(SLIDE_PANEL_CLASS_NAME).appendTo(this.scheduler.$element());
         return this.scheduler._createComponent($overlay, Overlay, {
             shading: false,
@@ -54,8 +54,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
             closeOnOutsideClick: true,
             width: "100%",
             height: "auto",
-            onShowing: () => this._onShowing(),
-            contentTemplate: () => list.$element()
+            onShowing: () => this._onShowing()
         });
     }
 }
