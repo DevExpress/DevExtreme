@@ -158,15 +158,15 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
 
         scheduler.appointments.click(1);
 
-        assert.deepEqual(stub.getCall(0).args[0],
+        assert.deepEqual(
+            stub.getCall(0).args[0],
             {
                 startDate: new Date(2015, 1, 9, 11, 0),
                 endDate: new Date(2015, 1, 9, 12, 0),
                 text: "Task 2"
             },
-            "showAppointmentTooltip has a right arguments");
-
-        tooltip.hide();
+            "showAppointmentTooltip has a right arguments"
+        );
     });
 
     test("Click on disabled appointment should not call scheduler.showAppointmentTooltip", function(assert) {
