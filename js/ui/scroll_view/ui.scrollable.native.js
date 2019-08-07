@@ -1,20 +1,21 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    each = require("../../core/utils/iterator").each,
-    devices = require("../../core/devices"),
-    Class = require("../../core/class"),
-    Scrollbar = require("./ui.scrollbar");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import eventUtils from "../../events/utils";
+import { noop } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import devices from "../../core/devices";
+import Class from "../../core/class";
+import Scrollbar from "./ui.scrollbar";
 
-var SCROLLABLE_NATIVE = "dxNativeScrollable",
-    SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native",
-    SCROLLABLE_SCROLLBAR_SIMULATED = "dx-scrollable-scrollbar-simulated",
-    SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden",
+const SCROLLABLE_NATIVE = "dxNativeScrollable";
+const SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native";
+const SCROLLABLE_SCROLLBAR_SIMULATED = "dx-scrollable-scrollbar-simulated";
+const SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden";
 
-    VERTICAL = "vertical",
-    HORIZONTAL = "horizontal",
+const VERTICAL = "vertical";
+const HORIZONTAL = "horizontal";
 
-    HIDE_SCROLLBAR_TIMEOUT = 500;
+const HIDE_SCROLLBAR_TIMEOUT = 500;
 
 
 var NativeStrategy = Class.inherit({
@@ -279,8 +280,35 @@ var NativeStrategy = Class.inherit({
         this._$container.scrollLeft(-location.left - distance.left);
     },
 
-    validate: function() {
-        return !this.option("disabled") && this._allowedDirection();
+    validate: function(e) {
+        if(this.option("disabled")) {
+            return false;
+        }
+
+        if(eventUtils.isDxMouseWheelEvent(e) && this._isScrolledInMaxDirection(e)) {
+            return false;
+        }
+
+        return !!this._allowedDirection();
+    },
+
+    // TODO: rtl
+    // TODO: horizontal scroll when shift is pressed
+    _isScrolledInMaxDirection(e) {
+        let container = this._$container.get(0);
+        let result;
+
+        if(e.delta > 0) {
+            result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
+        } else {
+            if(e.shiftKey) {
+                result = (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
+            } else {
+                result = (container.clientHeight + container.scrollTop) >= container.scrollHeight;
+            }
+        }
+
+        return result;
     },
 
     getDirection: function() {

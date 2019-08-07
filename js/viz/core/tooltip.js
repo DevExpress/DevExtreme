@@ -107,12 +107,15 @@ Tooltip.prototype = {
         }, that, that._renderer.root, (tooltip, group) => {
             const state = tooltip._state;
             if(state.html) {
-                that._text.attr({ text: "" });
-                textGroupHtml.css({ color: state.textColor, width: null });
-                textHtml.html(state.html);
+                if(!state.isRendered) {
+                    that._text.attr({ text: "" });
+                    textGroupHtml.css({ color: state.textColor, width: null });
+                    textHtml.html(state.html);
+                    state.isRendered = true;
+                }
             } else {
                 textHtml.html("");
-                that._text.css({ fill: state.textColor }).attr({ text: state.text }).append(group.attr({ align: options.textAlignment }));
+                that._text.css({ fill: state.textColor }).attr({ text: state.text, "class": options.cssClass }).append(group.attr({ align: options.textAlignment }));
             }
             this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
         }, true, (tooltip, g) => {

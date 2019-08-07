@@ -15,6 +15,8 @@ import "data/odata/store";
 import $ from "jquery";
 import eventUtils from "events/utils";
 import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
+import ArrayStore from "data/array_store";
+import { RowsViewWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
 
@@ -109,6 +111,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
     },
     afterEach: function() {
         this.clock.restore();
+        this.dispose();
     }
 });
 
@@ -1564,6 +1567,82 @@ QUnit.testInActiveWindow("Page with focused row should loads after sorting", fun
     assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Dan", "Focused row key column text");
 });
 
+// T755462
+QUnit.testInActiveWindow("The page with focused row should load without errors after sorting the boolean column", function(assert) {
+    // arrange
+    var focusedRowIndex;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", isRoom: true },
+        { name: "Dan", phone: "2222222", isRoom: true },
+        { name: "Ben", phone: "333333", isRoom: true },
+        { name: "Sean", phone: "4545454", isRoom: true },
+        { name: "Smith", phone: "555555", isRoom: false },
+        { name: "Zeb", phone: "6666666", isRoom: false }
+    ];
+
+    var store = new ArrayStore(this.data),
+        loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+
+    this.options = {
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        paging: {
+            pageSize: 2
+        },
+        sorting: {
+            mode: "single"
+        },
+        columns: [
+            "name", "phone",
+            { dataField: "isRoom", allowSorting: true, dataType: "boolean" }
+        ],
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        remoteOperations: true,
+        dataSource: {
+            load: loadSpy,
+            key: "name",
+            totalCount: function(options) {
+                return store.totalCount(options);
+            }
+        }
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    loadSpy.reset();
+    this.getController("columns").changeSortOrder(2, "asc");
+    this.clock.tick();
+
+    // assert
+    focusedRowIndex = this.option("focusedRowIndex");
+    assert.strictEqual(this.pageIndex(), 1, "pageIndex");
+    assert.strictEqual(this.dataController.getVisibleRows()[focusedRowIndex].data, this.data[0], "Focused row data is on the page");
+
+    // loadSpy.getCall(0) - load first page
+    // loadSpy.getCall(1) - load second page
+    // loadSpy.getCall(2) - load focused row
+    assert.deepEqual(loadSpy.getCall(3).args[0].filter, [
+        ["isRoom", "<>", true], "or", [
+            ["isRoom", "=", true ], "and", [
+                ["name", "<", "Alex"], "or", [
+                    ["name", "=", "Alex"], "and", ["name", "<", "Alex" ]
+                ]
+            ]
+        ]
+    ]); // load data before a focused row
+});
+
 QUnit.testInActiveWindow("DataGrid - Should paginate to the defined focusedRowKey", function(assert) {
     // arrange
     this.$element = function() {
@@ -2557,6 +2636,42 @@ QUnit.testInActiveWindow("onFocusedCellChanged event should not fire if cell pos
     assert.equal(focusedCellChangedCount, 0, "onFocusedCellChanged fires count");
 });
 
+QUnit.testInActiveWindow("onFocusedCellChanged event should not fire if cell position updates for not cell element", function(assert) {
+    var rowsView,
+        focusedCellChangedCount = 0,
+        keyboardController;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._updateFocusedCellPosition(rowsView.getRow(1));
+
+    // assert
+    assert.equal(focusedCellChangedCount, 0, "onFocusedCellChanged fires count");
+});
+
 QUnit.testInActiveWindow("onFocusedCellChanged event the inserted row (T743086)", function(assert) {
     var focusedCellChangedCount = 0;
 
@@ -2596,6 +2711,117 @@ QUnit.testInActiveWindow("onFocusedCellChanged event the inserted row (T743086)"
 
     // act
     this.triggerKeyDown("tab", false, false, $(":focus"));
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+});
+
+QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling mode is virtual", function(assert) {
+    var that = this,
+        focusedCellChangedCount = 0,
+        rowsView,
+        scrollable;
+
+    // arrange
+    that.$element = function() {
+        return $("#container");
+    };
+
+    that.data = generateItems(50);
+
+    that.options = {
+        keyExpr: "id",
+        height: 100,
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        },
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+            assert.ok(e.row, "Row object present");
+            assert.equal(e.row.key, 13, "Key");
+            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
+            assert.equal(e.rowIndex, 12, "Global rowIndex");
+        },
+        columns: ["id", "field1", "field2"]
+    };
+
+    that.setupModule();
+
+    that.gridView.render($("#container"));
+    rowsView = that.gridView.getView("rowsView");
+    rowsView.height(100);
+    rowsView.resize();
+    scrollable = rowsView.getScrollable();
+
+    that.clock.tick();
+
+    // act
+    scrollable.scrollBy({ y: 400 });
+    that.clock.tick();
+    $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
+    // assert
+    assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
+});
+
+QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
+    var that = this,
+        focusedCellChangedCount = 0,
+        rowsView,
+        scrollable;
+
+    // arrange
+    that.$element = function() {
+        return $("#container");
+    };
+
+    that.data = generateItems(50);
+
+    that.options = {
+        keyExpr: "id",
+        height: 100,
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        onFocusedCellChanged: function(e) {
+            ++focusedCellChangedCount;
+            assert.ok(e.row, "Row object present");
+            assert.equal(e.row.key, 13, "Key");
+            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
+            assert.equal(e.rowIndex, 12, "Global rowIndex");
+        },
+        columns: ["id", "field1", "field2"]
+    };
+
+    that.setupModule();
+
+    that.gridView.render($("#container"));
+    rowsView = that.gridView.getView("rowsView");
+    rowsView.height(100);
+    rowsView.resize();
+    scrollable = rowsView.getScrollable();
+
+    that.clock.tick();
+
+    // act
+    scrollable.scrollBy({ y: 400 });
+    that.clock.tick();
+    $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
     // assert
     assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
 });
@@ -5008,4 +5234,62 @@ QUnit.testInActiveWindow("DataGrid - onFocusedCellChanging event should execute 
     this.clock.tick();
     // assert
     assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
+});
+
+QUnit.testInActiveWindow("DataGrid - click by cell should not generate exception if rowTemplate is used (T800604)", function(assert) {
+    var d = $.Deferred(),
+        rowsView,
+        keyboardController,
+        items = generateItems(1),
+        rowsViewWrapper = new RowsViewWrapper("#container");
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.columns = ["id", "field1"];
+    this.options = {
+        height: 100,
+        remoteOperations: true,
+        dataSource: {
+            load: () => {
+                if(d.state() === "resolved") {
+                    d = $.Deferred();
+                }
+                return d.promise();
+            }
+        },
+        paging: {
+            pageSize: 1
+        },
+        scrolling: {
+            mode: "virtual"
+        }
+    };
+
+    this.setupModule();
+
+    d.resolve(items, { totalCount: 8 });
+    this.clock.tick();
+    d.resolve(items);
+    this.clock.tick();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    rowsView.resize();
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // act
+    try {
+        rowsViewWrapper.getVirtualCell(0).trigger("dxpointerdown").click();
+        rowsViewWrapper.getVirtualCell(1).trigger("dxpointerdown").click();
+        assert.ok(true, "No Exception");
+    } catch(e) {
+        // assert
+        assert.ok(false, e.message);
+    }
 });

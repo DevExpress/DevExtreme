@@ -3136,7 +3136,7 @@ testModule("focus policy", {
         assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
     });
 
-    test("tab target inside of wrapper but outside of content should not be outside", (assert) => {
+    QUnit.testInActiveWindow("tab target inside of wrapper but outside of content should not be outside", (assert) => {
         const overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
             visible: true,
             shading: true,
@@ -3209,9 +3209,7 @@ testModule("scrollable interaction", {
             assert.ok(false, "scroll should not be fired");
         });
 
-        pointerMock($shader)
-            .start()
-            .wheel(10);
+        pointerMock($shader).start().wheel(10);
 
         $($shader.parent()).off(".TEST");
     });
@@ -3475,5 +3473,71 @@ testModule("overlay utils", moduleConfig, () => {
         zIndex.remove(9999);
 
         assert.strictEqual(zIndex.create(), index + 1, "the next index has been created");
+    });
+});
+
+testModule("renderGeometry", {
+    beforeEach: () => {
+        fx.off = true;
+        this.overlayInstance = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance");
+        this.renderGeometrySpy = sinon.spy(this.overlayInstance, "_renderGeometry");
+    },
+    afterEach: () => {
+        zIndex.clearStack();
+        Overlay.baseZIndex(1500);
+        fx.off = false;
+    }
+}, () => {
+    test("visibility change", (assert) => {
+        assert.ok(this.renderGeometrySpy.notCalled, "render geometry isn't called yet");
+
+        this.overlayInstance.show();
+        assert.ok(this.renderGeometrySpy.calledOnce, "render geometry called once");
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(0).args[0];
+        assert.notOk(isDimensionChanged);
+    });
+
+    test("dimension change", (assert) => {
+        this.overlayInstance.show();
+        resizeCallbacks.fire();
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.ok(isDimensionChanged);
+    });
+
+    test("repaint", (assert) => {
+        this.overlayInstance.show();
+        this.overlayInstance.repaint();
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.notOk(isDimensionChanged);
+    });
+
+    test("option change", (assert) => {
+        const options = this.overlayInstance.option();
+        const newOptions = {
+            dragEnabled: !options.dragEnabled,
+            resizeEnabled: !options.resizeEnabled,
+            width: 500,
+            height: 500,
+            minWidth: 100,
+            maxWidth: 1000,
+            minHeight: 100,
+            maxHeight: 1000,
+            boundaryOffset: { h: 10, v: 10 },
+            position: { of: this.overlayInstance.element() }
+        };
+        this.overlayInstance.show();
+
+        for(const optionName in newOptions) {
+            const initialCallCount = this.renderGeometrySpy.callCount;
+
+            this.overlayInstance.option(optionName, newOptions[optionName]);
+
+            const isDimensionChanged = !!this.renderGeometrySpy.lastCall.args[0];
+            assert.ok(initialCallCount < this.renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
+            assert.notOk(isDimensionChanged);
+        }
     });
 });

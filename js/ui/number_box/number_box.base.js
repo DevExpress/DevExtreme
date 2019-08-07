@@ -100,50 +100,42 @@ var NumberBoxBase = TextEditor.inherit({
             * @name dxNumberBoxOptions.buttons
             * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
             * @default undefined
-            * @inheritdoc
             */
             buttons: void 0,
 
             /**
              * @name dxNumberBoxOptions.mask
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskChar
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskRules
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskInvalidMessage
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.useMaskedValue
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.showMaskMode
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.spellcheck
              * @hidden
-             * @inheritdoc
              */
         });
     },
@@ -283,8 +275,8 @@ var NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            "valuemin": commonUtils.ensureDefined(this.option("min"), null),
-            "valuemax": commonUtils.ensureDefined(this.option("max"), null)
+            "valuemin": commonUtils.ensureDefined(this.option("min"), ""),
+            "valuemax": commonUtils.ensureDefined(this.option("max"), "")
         });
     },
 

@@ -64,7 +64,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
              * @name HierarchicalCollectionWidgetOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -84,7 +83,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
                     * @name HierarchicalCollectionWidgetOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

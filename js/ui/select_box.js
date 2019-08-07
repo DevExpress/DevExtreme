@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     Deferred = deferredUtils.Deferred,
     errors = require("../core/errors"),
+    domAdapter = require("../core/dom_adapter"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
@@ -224,14 +225,12 @@ var SelectBox = DropDownList.inherit({
 
             /**
              * @name dxSelectBoxOptions.openOnFieldClick
-             * @inheritdoc
              * @default true
              */
             openOnFieldClick: true,
 
             /**
              * @name dxSelectBoxOptions.showDropDownButton
-             * @inheritdoc
              */
             showDropDownButton: true,
 
@@ -589,6 +588,11 @@ var SelectBox = DropDownList.inherit({
 
     _shouldOpenPopup: function() {
         return this._needPassDataSourceToList();
+    },
+
+    _isFocused: function() {
+        var activeElement = domAdapter.getActiveElement();
+        return this.callBase() && $(activeElement).closest(this._input()).length > 0;
     },
 
     _renderValueChangeEvent: function() {

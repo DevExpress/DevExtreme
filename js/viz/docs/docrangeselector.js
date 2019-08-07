@@ -561,7 +561,6 @@ var dxRangeSelector = {
     /**
     * @name dxRangeSelectorOptions.tooltip
     * @hidden
-    * @inheritdoc
     */
     tooltip: undefined,
     /**
@@ -708,14 +707,14 @@ var dxRangeSelector = {
         * @name dxRangeSelectorOptions.chart.barGroupPadding
         * @type number
         * @default 0.3
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
         */
         barGroupPadding: 0.3,
         /**
         * @name dxRangeSelectorOptions.chart.barGroupWidth
         * @type number
         * @default undefined
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
         */
         barGroupWidth: undefined,
         /**

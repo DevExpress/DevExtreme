@@ -41,13 +41,11 @@ var DOMComponent = Component.inherit({
             * @type_function_param1_field6 value:any
             * @action
             * @extends Action
-            * @inheritdoc
             */
             /**
             * @name DOMComponentOptions.onDisposing
             * @action
             * @extends Action
-            * @inheritdoc
             */
 
             /**
@@ -95,6 +93,7 @@ var DOMComponent = Component.inherit({
     ctor: function(element, options) {
         this._$element = $(element);
         publicComponentUtils.attachInstanceToElement(this._$element, this, this._dispose);
+        this._synchronizableOptionsForCreateComponent = ["rtlEnabled", "disabled"];
         this.callBase(options);
     },
 
@@ -277,7 +276,7 @@ var DOMComponent = Component.inherit({
 
         config = config || {};
 
-        var synchronizableOptions = commonUtils.grep(["rtlEnabled", "disabled"], function(value) {
+        var synchronizableOptions = commonUtils.grep(this._synchronizableOptionsForCreateComponent, function(value) {
             return !(value in config);
         });
 
