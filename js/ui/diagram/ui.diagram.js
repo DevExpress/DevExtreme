@@ -88,6 +88,7 @@ class Diagram extends Widget {
         this._updateZoomLevelState();
         this._updateAutoZoomState();
         this._updateSimpleViewState();
+        this._updateReadOnlyState();
 
         if(this.option("fullscreen")) {
             this._updateFullscreenState();
@@ -262,7 +263,6 @@ class Diagram extends Widget {
         this._updateSnapToGridState();
         this._updateGridSizeItemsState();
         this._updateGridSizeState();
-        this._updateReadOnlyState();
         this._updateZoomLevelItemsState();
 
         this._updateCustomShapes(this._getCustomShapes());
@@ -581,7 +581,7 @@ class Diagram extends Widget {
     }
     _updateReadOnlyState() {
         const { DiagramCommand } = getDiagram();
-        var readOnly = this.option("readOnly");
+        var readOnly = this.option("readOnly") || this.option("disabled");
         this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
         this._setLeftPanelEnabled(!readOnly);
     }
@@ -1350,6 +1350,7 @@ class Diagram extends Widget {
     _optionChanged(args) {
         switch(args.name) {
             case "readOnly":
+            case "disabled":
                 this._updateReadOnlyState();
                 break;
             case "zoomLevel":
