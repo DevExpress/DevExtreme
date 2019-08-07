@@ -34,11 +34,12 @@ function run_test {
     export DEVEXTREME_QUNIT_CI=true
 
     local port=`node -e "console.log(require('./ports.json').qunit)"`
-    local url="http://localhost:$port/run?notimers=true&nojquery=true"
+    local url="http://localhost:$port/run?notimers=true"
     local runner_pid
     local runner_result=0
 
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
+    [ -z "$JQUERY"  ] && url="$url&nojquery=true"
 
     if [ "$HEADLESS" != "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
@@ -57,6 +58,8 @@ function run_test {
         sleep 1
     done
 
+    echo "URL: $url"
+
     case "$BROWSER" in
 
         "firefox")
@@ -73,6 +76,7 @@ function run_test {
             if [ "$HEADLESS" == "true" ]; then
                 google-chrome-stable \
                     --no-sandbox \
+                    --disable-dev-shm-usage \
                     --disable-gpu \
                     --user-data-dir=/tmp/chrome \
                     --headless \
@@ -82,6 +86,7 @@ function run_test {
             else
                 dbus-launch --exit-with-session google-chrome-stable \
                     --no-sandbox \
+                    --disable-dev-shm-usage \
                     --disable-gpu \
                     --user-data-dir=/tmp/chrome \
                     --no-first-run \

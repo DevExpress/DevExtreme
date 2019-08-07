@@ -20,7 +20,7 @@ import caret from "./text_box/utils.caret";
 import { normalizeLoadResult } from "../data/data_source/data_source";
 
 import SelectBox from "./select_box";
-import BindableTemplate from "./widget/bindable_template";
+import { BindableTemplate } from "../core/templates/bindable_template";
 
 const TAGBOX_TAG_DATA_KEY = "dxTagData";
 
@@ -812,8 +812,13 @@ const TagBox = SelectBox.inherit({
             dataSource
                 .store()
                 .load({ filter, customQueryParams, expand })
-                .done(function(result) {
-                    const { data: items } = normalizeLoadResult(...arguments);
+                .done((data, extra) => {
+                    if(this._disposed) {
+                        d.reject();
+                        return;
+                    }
+
+                    const { data: items } = normalizeLoadResult(data, extra);
                     const mappedItems = dataSource._applyMapFunction(items);
                     d.resolve(mappedItems.filter(clientFilterFunction));
                 })
@@ -1050,6 +1055,7 @@ const TagBox = SelectBox.inherit({
         const e = args.event;
 
         e.stopPropagation();
+        this._saveValueChangeEvent(e);
 
         const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
         this._removeTagElement($tag);

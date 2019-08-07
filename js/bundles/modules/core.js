@@ -81,4 +81,7 @@ DevExpress.events.GestureEmitter = require("../../events/gesture/emitter.gesture
 
 DevExpress.localization = require("../../localization");
 
+DevExpress.templateRendered = require("../../core/templates/template_base").renderedCallbacks;
+DevExpress.setTemplateEngine = require("../../core/templates/template_engine_registry").setTemplateEngine;
+
 module.exports = DevExpress;

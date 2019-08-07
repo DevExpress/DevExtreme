@@ -59,6 +59,7 @@ const moduleConfig = {
 
     afterEach: () => {
         fx.off = false;
+        this.clock.restore();
     }
 };
 
@@ -560,96 +561,6 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         d = instance.hide();
 
         assert.ok($.isFunction(d.promise), "type object is the Deferred");
-    });
-
-    // T755681
-    QUnit.test("Context menu should shown in the same position when item was added in runtime", (assert) => {
-        const menuTargetSelector = "#menuTarget";
-        let cachedEvent,
-            isItemAdded = false,
-            items = [{ text: "item 1" }];
-
-        const instance = new ContextMenu($("#simpleMenu"), {
-            items: items,
-            target: menuTargetSelector,
-            onShowing: (e) => {
-                if(!isItemAdded) {
-                    setTimeout(() => {
-                        cachedEvent = e.jQEvent;
-                        isItemAdded = true;
-                        items.push({ text: "item 2" });
-                        e.component.option("items", items);
-                    }, 0);
-                } else {
-                    assert.strictEqual(e.component.option("items").length, 2, "items.length");
-                    assert.equal(e, cachedEvent, "cached event");
-                }
-            }
-        });
-
-        var $target = $(menuTargetSelector);
-
-        return new Promise(function(resolve) {
-            instance.option("onShown", function(e) {
-                const position = e.component._overlay.option("position");
-                assert.equal(position.at, "top left", "at of overlay position");
-                assert.equal(position.my, "top left", "my of overlay position");
-                assert.equal(position.of.pageX, 120, "pageX of overlay position");
-                assert.equal(position.of.pageY, 50, "pageX of overlay position");
-                assert.equal(position.of.target, $target.get(0), "target of overlay position");
-
-                resolve();
-            });
-
-            $target.trigger($.Event("dxcontextmenu", {
-                pageX: 120,
-                pageY: 50
-            }));
-        });
-    });
-
-    QUnit.test("Context menu should clear cached event on hide", (assert) => {
-        const menuTargetSelector = "#menuTarget";
-        let onShowingHandler = sinon.spy();
-
-
-        const instance = new ContextMenu($("#simpleMenu"), {
-            items: [{ text: "item 1" }],
-            target: menuTargetSelector,
-            onShowing: onShowingHandler
-        });
-
-        $(menuTargetSelector).trigger($.Event("dxcontextmenu", {
-            pageX: 120,
-            pageY: 50
-        }));
-
-        instance.option("visible", false);
-        onShowingHandler.reset();
-        instance.option("visible", true);
-
-        assert.strictEqual(onShowingHandler.firstCall.args[0].jQEvent, undefined, "cached event was cleared");
-    });
-
-    QUnit.test("Context menu should clear cached event on repaint", (assert) => {
-        const menuTargetSelector = "#menuTarget";
-        let onShowingHandler = sinon.spy();
-
-        const instance = new ContextMenu($("#simpleMenu"), {
-            items: [{ text: "item 1" }],
-            target: menuTargetSelector,
-            onShowing: onShowingHandler
-        });
-
-        $(menuTargetSelector).trigger($.Event("dxcontextmenu", {
-            pageX: 120,
-            pageY: 50
-        }));
-
-        onShowingHandler.reset();
-        instance.repaint();
-
-        assert.strictEqual(onShowingHandler.firstCall.args[0].jQEvent, undefined, "cached event was cleared");
     });
 });
 

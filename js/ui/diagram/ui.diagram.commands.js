@@ -16,6 +16,8 @@ const DiagramCommands = {
         const { DiagramCommand } = getDiagram();
         return this.toolbarCommands ||
             (this.toolbarCommands = {
+                separator: SEPARATOR,
+
                 export: {
                     widget: "dxButton",
                     icon: "export",
@@ -44,7 +46,6 @@ const DiagramCommands = {
                         }
                     ]
                 },
-                separator: SEPARATOR,
                 undo: {
                     command: DiagramCommand.Undo,
                     hint: 'Undo',
@@ -59,7 +60,6 @@ const DiagramCommands = {
                 },
                 fontName: {
                     command: DiagramCommand.FontName,
-                    beginGroup: true,
                     widget: "dxSelectBox",
                     items: ["Arial", "Arial Black", "Helvetica", "Times New Roman", "Courier New", "Courier", "Verdana", "Georgia", "Comic Sans MS", "Trebuchet MS"]
                 },
@@ -113,7 +113,6 @@ const DiagramCommands = {
                     hint: "Align Left",
                     text: "Align Left",
                     icon: "alignleft",
-                    beginGroup: true
                 },
                 textAlignCenter: {
                     command: DiagramCommand.TextCenterAlign,
@@ -130,7 +129,7 @@ const DiagramCommands = {
                 connectorLineType: {
                     command: DiagramCommand.ConnectorLineOption,
                     widget: "dxSelectBox",
-                    hint: "Line Type",
+                    hint: "Connector Line Type",
                     items: [
                         { value: 0, icon: "dx-diagram-i-connector-straight dx-diagram-i", hint: "Straight" },
                         { value: 1, icon: "dx-diagram-i-connector-orthogonal dx-diagram-i", hint: "Orthogonal" }
@@ -148,7 +147,7 @@ const DiagramCommands = {
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
-                    hint: "Line Start",
+                    hint: "Connector Line Start",
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
                 connectorLineEnd: {
@@ -160,7 +159,7 @@ const DiagramCommands = {
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
-                    hint: "Line End",
+                    hint: "Connector Line End",
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
                 autoLayout: {
@@ -228,6 +227,7 @@ const DiagramCommands = {
             commands["fullscreen"]
         ];
     },
+
     getAllPropertyPanelCommands: function() {
         const { DiagramCommand } = getDiagram();
         return this.propertyPanelCommands ||
@@ -279,6 +279,11 @@ const DiagramCommands = {
                     text: "Auto Zoom",
                     widget: "dxCheckBox"
                 },
+                simpleView: {
+                    command: DiagramCommand.ToggleSimpleView,
+                    text: "Simple View",
+                    widget: "dxCheckBox"
+                },
             });
     },
     getDefaultPropertyPanelCommandGroups: function() {
@@ -286,7 +291,7 @@ const DiagramCommands = {
             { commands: ["units"] },
             { commands: ["pageSize", "pageLandscape", "pageColor"] },
             { commands: ["showGrid", "snapToGrid", "gridSize"] },
-            { commands: ["zoomLevel", "autoZoom"] },
+            { commands: ["zoomLevel", "autoZoom", "simpleView"] },
         ];
     },
     getPropertyPanelCommandsByGroups: function(groups) {
@@ -305,10 +310,13 @@ const DiagramCommands = {
         commandGroups = commandGroups || DiagramCommands.getDefaultPropertyPanelCommandGroups();
         return DiagramCommands.getPropertyPanelCommandsByGroups(commandGroups);
     },
+
     getAllContextMenuCommands: function() {
         const { DiagramCommand } = getDiagram();
         return this.contextMenuCommands ||
             (this.contextMenuCommands = {
+                separator: SEPARATOR,
+
                 cut: {
                     command: DiagramCommand.Cut,
                     text: "Cut"
@@ -318,23 +326,23 @@ const DiagramCommands = {
                     text: "Copy"
                 },
                 paste: {
-                    command: DiagramCommand.Paste,
-                    text: "Paste"
+                    command: DiagramCommand.PasteInPosition,
+                    text: "Paste",
+                    getParameter: (diagramContextMenu) => {
+                        return diagramContextMenu.clickPosition;
+                    }
                 },
                 selectAll: {
                     command: DiagramCommand.SelectAll,
                     text: "Select All",
-                    beginGroup: true
                 },
                 delete: {
                     command: DiagramCommand.Delete,
                     text: "Delete",
-                    beginGroup: true
                 },
                 bringToFront: {
                     command: DiagramCommand.BringToFront,
                     text: "Bring to Front",
-                    beginGroup: true
                 },
                 sendToBack: {
                     command: DiagramCommand.SendToBack,
@@ -343,7 +351,6 @@ const DiagramCommands = {
                 lock: {
                     command: DiagramCommand.Lock,
                     text: "Lock",
-                    beginGroup: true
                 },
                 unlock: {
                     command: DiagramCommand.Unlock,
@@ -360,14 +367,19 @@ const DiagramCommands = {
             commands["cut"],
             commands["copy"],
             commands["paste"],
+            commands["separator"],
             commands["selectAll"],
+            commands["separator"],
             commands["delete"],
+            commands["separator"],
             commands["bringToFront"],
             commands["sendToBack"],
+            commands["separator"],
             commands["lock"],
             commands["unlock"]
         ];
     },
+
     _exportTo(widget, dataURI, format, mimeString) {
         const window = getWindow();
         if(window && window.atob && isFunction(window.Blob)) {

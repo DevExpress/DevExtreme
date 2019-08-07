@@ -1354,6 +1354,12 @@ var dxChart = {
         */
         aggregationInterval: undefined,
         /**
+        * @name dxChartOptions.argumentAxis.aggregateByCategory
+        * @type boolean
+        * @default false
+        */
+        aggregateByCategory: false,
+        /**
         * @name dxChartOptions.argumentAxis.label
         * @type object
         */
@@ -3575,7 +3581,7 @@ var dxChartCommonAnnotationConfig = {
         * @name dxChartCommonAnnotationConfig.border.cornerRadius
         * @type number
         * @default 0
-        * @default 4 @for Material 
+        * @default 4 @for Material
         */
         cornerRadius: 0
     },
@@ -3677,6 +3683,15 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     */
     text: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.template
+    * @type template|function
+    * @default undefined
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param2 element:SVGGElement
+    * @type_function_return string|SVGElement|jQuery
+    */
+    template: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.description
     * @type string

@@ -8,7 +8,7 @@ import Tabs from "./tabs";
 import { default as TabPanelItem } from "./tab_panel/item";
 import iconUtils from "../core/utils/icon";
 import { getPublicElement } from "../core/utils/dom";
-import BindableTemplate from "./widget/bindable_template";
+import { BindableTemplate } from "../core/templates/bindable_template";
 import windowUtils from "../core/utils/window";
 
 const TABPANEL_CLASS = "dx-tabpanel";

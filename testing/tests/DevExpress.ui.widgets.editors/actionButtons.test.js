@@ -5,6 +5,7 @@ import 'generic_light.css!';
 import "ui/text_box";
 import "ui/select_box";
 import "ui/number_box";
+import browser from "core/utils/browser";
 import errors from "ui/widget/ui.errors";
 
 const { module, test } = QUnit;
@@ -153,6 +154,30 @@ module("rendering", () => {
             assert.strictEqual($after.length, 1);
             assert.strictEqual($after.text(), "custom");
         });
+
+        test("editor with button should have smaller placeholder than the editor without buttons", (assert) => {
+            const $textBox = $("<div>").appendTo("body").dxTextBox({
+                width: 150,
+                placeholder: "Test long text example",
+                buttons: [{
+                    name: "custom",
+                    location: "after",
+                    options: {
+                        text: "B"
+                    }
+                }]
+            });
+            const beforeStyle = getComputedStyle($textBox.find(".dx-placeholder").get(0), ':before');
+
+            if(browser.msie) {
+                assert.strictEqual(beforeStyle.maxWidth, "100%", "maxWidth of the before element is correct");
+            } else {
+                assert.ok(parseInt(beforeStyle.width) < $textBox.outerWidth(), "placeholder is smaller than the editor");
+            }
+
+            $textBox.remove();
+        });
+
 
         test("should not render 'clear' button if showClearButton is false", (assert) => {
             const $textBox = $("<div>").dxTextBox({

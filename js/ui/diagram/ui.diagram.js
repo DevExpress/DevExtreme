@@ -25,13 +25,10 @@ const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
 const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + "-drawer-wrapper";
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + "-content";
 
-const DIAGRAM_KEY_FIELD = "id";
-const DIAGRAM_TEXT_FIELD = "text";
-const DIAGRAM_TYPE_FIELD = "type";
-const DIAGRAM_PARENT_KEY_FIELD = "parentId";
-const DIAGRAM_ITEMS_FIELD = "items";
-const DIAGRAM_FROM_FIELD = "from";
-const DIAGRAM_TO_FIELD = "to";
+const DIAGRAM_DEFAULT_UNIT = "in";
+const DIAGRAM_DEFAULT_PAGE_SIZE = { width: 5.827, height: 8.268 };
+const DIAGRAM_DEFAULT_PAGE_ORIENTATION = "portrait";
+const DIAGRAM_DEFAULT_PAGE_COLOR = "white";
 
 const DIAGRAM_NAMESPACE = "dxDiagramEvent";
 const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("fullscreenchange", DIAGRAM_NAMESPACE);
@@ -87,6 +84,15 @@ class Diagram extends Widget {
         }
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
+
+        this._updateZoomLevelState();
+        this._updateAutoZoomState();
+        this._updateSimpleViewState();
+        this._updateReadOnlyState();
+
+        if(this.option("fullscreen")) {
+            this._updateFullscreenState();
+        }
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -195,7 +201,6 @@ class Diagram extends Widget {
                 });
             }
         });
-
         if(this._toolbarInstance) {
             this._toolbarInstance.option("onWidgetCommand", (e) => {
                 if(e.name === "options") {
@@ -234,9 +239,37 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
-        this._toggleReadOnlyState();
+        if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
+            this._updateUnitsState();
+        }
+        if(this.option("pageSize")) {
+            if(this.option("pageSize.items")) {
+                this._updatePageSizeItemsState();
+            }
+            if(this.option("pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
+               this.option("pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height) {
+                this._updatePageSizeState();
+            }
+        }
+        if(this.option("pageOrientation") !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
+            this._updatePageOrientationState();
+        }
+        if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
+            this._updatePageColorState();
+        }
+
+        this._updateViewUnitsState();
+        this._updateShowGridState();
+        this._updateSnapToGridState();
+        this._updateGridSizeItemsState();
+        this._updateGridSizeState();
+        this._updateZoomLevelItemsState();
+
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
+    }
+    _executeDiagramCommand(command, parameter) {
+        this._diagramInstance.commandManager.getCommand(command).execute(parameter);
     }
     _refreshDataSources() {
         this._beginUpdateDiagram();
@@ -271,15 +304,12 @@ class Diagram extends Widget {
     _getDiagramData() {
         let value;
         const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.Export).execute(function(data) { value = data; });
+        this._executeDiagramCommand(DiagramCommand.Export, function(data) { value = data; });
         return value;
     }
     _setDiagramData(data, keepExistingItems) {
         const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute({
-            data,
-            keepExistingItems
-        });
+        this._executeDiagramCommand(DiagramCommand.Import, { data, keepExistingItems });
     }
 
     _nodesDataSourceChanged(nodes) {
@@ -290,22 +320,16 @@ class Diagram extends Widget {
         this._edges = edges;
         this._bindDiagramData();
     }
-    _createGetter(expr) {
-        return dataCoreUtils.compileGetter(expr);
-    }
-    _createSetter(expr) {
-        if(typeUtils.isFunction(expr)) {
-            return expr;
-        }
-        return dataCoreUtils.compileSetter(expr);
-    }
     _createOptionGetter(optionName) {
         var expr = this.option(optionName);
-        return this._createGetter(expr);
+        return expr && dataCoreUtils.compileGetter(expr);
     }
     _createOptionSetter(optionName) {
         var expr = this.option(optionName);
-        return this._createSetter(expr);
+        if(typeUtils.isFunction(expr)) {
+            return expr;
+        }
+        return expr && dataCoreUtils.compileSetter(expr);
     }
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
@@ -317,10 +341,32 @@ class Diagram extends Widget {
             nodeDataImporter: {
                 getKey: this._createOptionGetter("nodes.keyExpr"),
                 setKey: this._createOptionSetter("nodes.keyExpr"),
-                getText: this._createOptionGetter("nodes.textExpr"),
-                setText: this._createOptionSetter("nodes.textExpr"),
+
+                getLocked: this._createOptionGetter("nodes.lockedExpr"),
+                setLocked: this._createOptionSetter("nodes.lockedExpr"),
+
+                getStyle: this._createOptionGetter("nodes.styleExpr"),
+                setStyle: this._createOptionSetter("nodes.styleExpr"),
+                getStyleText: this._createOptionGetter("nodes.textStyleExpr"),
+                setStyleText: this._createOptionSetter("nodes.textStyleExpr"),
+                getZIndex: this._createOptionGetter("nodes.zIndexExpr"),
+                setZIndex: this._createOptionSetter("nodes.zIndexExpr"),
+
                 getType: this._createOptionGetter("nodes.typeExpr"),
                 setType: this._createOptionSetter("nodes.typeExpr"),
+                getText: this._createOptionGetter("nodes.textExpr"),
+                setText: this._createOptionSetter("nodes.textExpr"),
+                getImage: this._createOptionGetter("nodes.imageExpr"),
+                setImage: this._createOptionSetter("nodes.imageExpr"),
+
+                getLeft: this._createOptionGetter("nodes.leftExpr"),
+                setLeft: this._createOptionSetter("nodes.leftExpr"),
+                getTop: this._createOptionGetter("nodes.topExpr"),
+                setTop: this._createOptionSetter("nodes.topExpr"),
+                getWidth: this._createOptionGetter("nodes.widthExpr"),
+                setWidth: this._createOptionSetter("nodes.widthExpr"),
+                getHeight: this._createOptionGetter("nodes.heightExpr"),
+                setHeight: this._createOptionSetter("nodes.heightExpr"),
 
                 getParentKey: this._createOptionGetter("nodes.parentKeyExpr"),
                 setParentKey: this._createOptionSetter("nodes.parentKeyExpr"),
@@ -330,22 +376,61 @@ class Diagram extends Widget {
             edgeDataImporter: {
                 getKey: this._createOptionGetter("edges.keyExpr"),
                 setKey: this._createOptionSetter("edges.keyExpr"),
+
+                getLocked: this._createOptionGetter("edges.lockedExpr"),
+                setLocked: this._createOptionSetter("edges.lockedExpr"),
+
+                getStyle: this._createOptionGetter("edges.styleExpr"),
+                setStyle: this._createOptionSetter("edges.styleExpr"),
+                getStyleText: this._createOptionGetter("edges.textStyleExpr"),
+                setStyleText: this._createOptionSetter("edges.textStyleExpr"),
+                getZIndex: this._createOptionGetter("edges.zIndexExpr"),
+                setZIndex: this._createOptionSetter("edges.zIndexExpr"),
+
                 getFrom: this._createOptionGetter("edges.fromExpr"),
                 setFrom: this._createOptionSetter("edges.fromExpr"),
+                getFromPointIndex: this._createOptionGetter("edges.fromPointIndexExpr"),
+                setFromPointIndex: this._createOptionSetter("edges.fromPointIndexExpr"),
                 getTo: this._createOptionGetter("edges.toExpr"),
-                setTo: this._createOptionSetter("edges.toExpr")
+                setTo: this._createOptionSetter("edges.toExpr"),
+                getToPointIndex: this._createOptionGetter("edges.toPointIndexExpr"),
+                setToPointIndex: this._createOptionSetter("edges.toPointIndexExpr"),
+                getPoints: this._createOptionGetter("edges.pointsExpr"),
+                setPoints: this._createOptionSetter("edges.pointsExpr"),
+
+                getText: this._createOptionGetter("edges.textExpr"),
+                setText: this._createOptionSetter("edges.textExpr"),
+                getLineOption: this._createOptionGetter("edges.lineTypeExpr"),
+                setLineOption: this._createOptionSetter("edges.lineTypeExpr"),
+                getStartLineEnding: this._createOptionGetter("edges.fromLineEndExpr"),
+                setStartLineEnding: this._createOptionSetter("edges.fromLineEndExpr"),
+                getEndLineEnding: this._createOptionGetter("edges.toLineEndExpr"),
+                setEndLineEnding: this._createOptionSetter("edges.toLineEndExpr"),
             },
             layoutType: this._getDataBindingLayoutType()
         };
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.BindDocument).execute(data);
+        this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
     _getDataBindingLayoutType() {
         const { DataLayoutType } = getDiagram();
-        switch(this.option("layout")) {
+        switch(this.option("nodes.autoLayout")) {
             case "sugiyama":
                 return DataLayoutType.Sugiyama;
-            default:
+            case "tree":
                 return DataLayoutType.Tree;
+            default:
+                return undefined;
+        }
+    }
+    _getAutoZoomValue(option) {
+        const { AutoZoomMode } = getDiagram();
+        switch(option) {
+            case "fitContent":
+                return AutoZoomMode.FitContent;
+            case "fitWidth":
+                return AutoZoomMode.FitToWidth;
+            default:
+                return AutoZoomMode.Disabled;
         }
     }
     _isBindingMode() {
@@ -477,9 +562,115 @@ class Diagram extends Widget {
     _onNativeFullscreenChangeHandler() {
         if(!this._inNativeFullscreen()) {
             this._unsubscribeFullscreenNativeChanged();
-            this._setFullscreen(false);
+            this._onToggleFullscreen(false);
         }
     }
+
+    _getDiagramUnitValue(value) {
+        const { DiagramUnit } = getDiagram();
+        switch(value) {
+            case "in":
+                return DiagramUnit.In;
+            case "cm":
+                return DiagramUnit.Cm;
+            case "px":
+                return DiagramUnit.Px;
+            default:
+                return DiagramUnit.In;
+        }
+    }
+    _updateReadOnlyState() {
+        const { DiagramCommand } = getDiagram();
+        var readOnly = this.option("readOnly") || this.option("disabled");
+        this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
+        this._setLeftPanelEnabled(!readOnly);
+    }
+    _updateZoomLevelState() {
+        var zoomLevel = this.option("zoomLevel.value");
+        if(!zoomLevel) {
+            zoomLevel = this.option("zoomLevel");
+        }
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
+    }
+    _updateZoomLevelItemsState() {
+        var zoomLevelItems = this.option("zoomLevel.items");
+        if(!Array.isArray(zoomLevelItems)) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ZoomLevelItems, zoomLevelItems);
+    }
+    _updateAutoZoomState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.SwitchAutoZoom, this._getAutoZoomValue(this.option("autoZoom")));
+    }
+    _updateSimpleViewState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ToggleSimpleView, this.option("simpleView"));
+    }
+    _updateFullscreenState() {
+        const { DiagramCommand } = getDiagram();
+        var fullscreen = this.option("fullscreen");
+        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
+        this._onToggleFullscreen(fullscreen);
+    }
+    _updateShowGridState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ShowGrid, this.option("showGrid"));
+    }
+    _updateSnapToGridState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.SnapToGrid, this.option("snapToGrid"));
+    }
+    _updateGridSizeState() {
+        var gridSize = this.option("gridSize.value");
+        if(!gridSize) {
+            gridSize = this.option("gridSize");
+        }
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
+    }
+    _updateGridSizeItemsState() {
+        var gridSizeItems = this.option("gridSize.items");
+        if(!Array.isArray(gridSizeItems)) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
+    }
+    _updateViewUnitsState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.ViewUnits, this._getDiagramUnitValue(this.option("viewUnits")));
+    }
+
+    _updateUnitsState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("units")));
+    }
+    _updatePageSizeState() {
+        var pageSize = this.option("pageSize");
+        if(!pageSize || !pageSize.width || !pageSize.height) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageSize, pageSize);
+    }
+    _updatePageSizeItemsState() {
+        var pageSizeItems = this.option("pageSize.items");
+        if(!Array.isArray(pageSizeItems)) return;
+
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageSizeItems, pageSizeItems);
+    }
+    _updatePageOrientationState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageLandscape, this.option("pageOrientation") === "landscape");
+    }
+    _updatePageColorState() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.PageColor, this.option("pageColor"));
+    }
+
 
     /**
     * @name dxDiagramMethods.getData
@@ -509,6 +700,127 @@ class Diagram extends Widget {
             */
             readOnly: false,
             /**
+            * @name dxDiagramOptions.zoomLevel
+            * @type Number|Object
+            * @default 1
+            */
+            /**
+            * @name dxDiagramOptions.zoomLevel.value
+            * @type Number
+            * @default undefined
+            */
+            /**
+            * @name dxDiagramOptions.zoomLevel.items
+            * @type Array<Number>
+            * @default undefined
+            */
+            zoomLevel: 1,
+            /**
+            * @name dxDiagramOptions.simpleView
+            * @type Boolean
+            * @default false
+            */
+            simpleView: false,
+            /**
+            * @name dxDiagramOptions.autoZoom
+            * @type Enums.DiagramAutoZoom
+            * @default false
+            */
+            autoZoom: false,
+            /**
+            * @name dxDiagramOptions.fullscreen
+            * @type Boolean
+            * @default false
+            */
+            fullscreen: false,
+            /**
+            * @name dxDiagramOptions.showGrid
+            * @type Boolean
+            * @default true
+            */
+            showGrid: true,
+            /**
+            * @name dxDiagramOptions.snapToGrid
+            * @type Boolean
+            * @default true
+            */
+            snapToGrid: true,
+            /**
+            * @name dxDiagramOptions.gridSize
+            * @type Number|Object
+            * @default 0.125
+            */
+            /**
+            * @name dxDiagramOptions.gridSize.value
+            * @type Number
+            * @default undefined
+            */
+            /**
+            * @name dxDiagramOptions.gridSize.items
+            * @type Array<Number>
+            * @default undefined
+            */
+            gridSize: 0.125,
+
+            /**
+            * @name dxDiagramOptions.units
+            * @type Enums.DiagramUnits
+            * @default "in"
+            */
+            units: DIAGRAM_DEFAULT_UNIT,
+            /**
+            * @name dxDiagramOptions.viewUnits
+            * @type Enums.DiagramUnits
+            * @default "in"
+            */
+            viewUnits: DIAGRAM_DEFAULT_UNIT,
+
+            /**
+            * @name dxDiagramOptions.pageSize
+            * @type Object
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.width
+            * @type Number
+            * @default 5.827
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.height
+            * @type Number
+            * @default 8.268
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items
+            * @type Array<Object>
+            * @default undefined
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items.width
+            * @type Number
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items.height
+            * @type Number
+            */
+            /**
+            * @name dxDiagramOptions.pageSize.items.text
+            * @type String
+            */
+            pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
+            /**
+            * @name dxDiagramOptions.pageOrientation
+            * @type Enums.DiagramPageOrientation
+            * @default "portrait"
+            */
+            pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
+            /**
+            * @name dxDiagramOptions.pageColor
+            * @type String
+            * @default "white"
+            */
+            pageColor: DIAGRAM_DEFAULT_PAGE_COLOR,
+
+            /**
             * @name dxDiagramOptions.onDataChanged
             * @extends Action
             * @type function(e)
@@ -535,35 +847,104 @@ class Diagram extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: DIAGRAM_KEY_FIELD,
+                keyExpr: "id",
                 /**
-                * @name dxDiagramOptions.nodes.textExpr
+                * @name dxDiagramOptions.nodes.lockedExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
-                * @default "text"
+                * @default undefined
                 */
-                textExpr: DIAGRAM_TEXT_FIELD,
+                lockedExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.styleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                styleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.textStyleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                textStyleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.zIndexExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                zIndexExpr: undefined,
                 /**
                 * @name dxDiagramOptions.nodes.typeExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default "type"
                 */
-                typeExpr: DIAGRAM_TYPE_FIELD,
+                typeExpr: "type",
+                /**
+                * @name dxDiagramOptions.nodes.textExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "text"
+                */
+                textExpr: "text",
+                /**
+                * @name dxDiagramOptions.nodes.imageExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                imageExpr: undefined,
                 /**
                 * @name dxDiagramOptions.nodes.parentKeyExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
-                * @default "parentId"
+                * @default undefined
                 */
-                parentKeyExpr: DIAGRAM_PARENT_KEY_FIELD,
+                parentKeyExpr: undefined,
                 /**
                 * @name dxDiagramOptions.nodes.itemsExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
-                * @default "items"
+                * @default undefined
                 */
-                itemsExpr: DIAGRAM_ITEMS_FIELD
+                itemsExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.leftExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                leftExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.topExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                topExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.widthExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                widthExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.heightExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                heightExpr: undefined,
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout
+                 * @type Enums.DiagramAutoLayout
+                 * @default "tree"
+                 */
+                autoLayout: "tree"
             },
             /**
             * @name dxDiagramOptions.edges
@@ -583,28 +964,99 @@ class Diagram extends Widget {
                 * @type_function_param1 data:object
                 * @default "id"
                 */
-                keyExpr: DIAGRAM_KEY_FIELD,
+                keyExpr: "id",
+                /**
+                * @name dxDiagramOptions.edges.lockedExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                lockedExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.styleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                styleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.textStyleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                textStyleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.zIndexExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                zIndexExpr: undefined,
                 /**
                 * @name dxDiagramOptions.edges.fromExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default "from"
                 */
-                fromExpr: DIAGRAM_FROM_FIELD,
+                fromExpr: "from",
+                /**
+                * @name dxDiagramOptions.edges.fromPointIndexExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                fromPointIndexExpr: undefined,
                 /**
                 * @name dxDiagramOptions.edges.toExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default "to"
                 */
-                toExpr: DIAGRAM_TO_FIELD
+                toExpr: "to",
+                /**
+                * @name dxDiagramOptions.edges.toPointIndexExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                toPointIndexExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.pointsExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                pointsExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.textExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                textExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.lineTypeExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                lineTypeExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.fromLineEndExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                fromLineEndExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.toLineEndExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                toLineEndExpr: undefined
             },
-            /**
-             * @name dxDiagramOptions.layout
-             * @type Enums.DiagramAutoLayout
-             * @default "tree"
-             */
-            layout: "tree",
 
             /**
             * @name dxDiagramOptions.customShapes
@@ -895,25 +1347,59 @@ class Diagram extends Widget {
         }
     }
 
-    _toggleReadOnlyState() {
-        const { DiagramCommand } = getDiagram();
-        this._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleReadOnly).execute(this.option("readOnly"));
-        this._setLeftPanelEnabled(!this.option("readOnly"));
-    }
-
     _optionChanged(args) {
         switch(args.name) {
             case "readOnly":
-                this._toggleReadOnlyState();
+            case "disabled":
+                this._updateReadOnlyState();
+                break;
+            case "zoomLevel":
+                this._updateZoomLevelItemsState();
+                this._updateZoomLevelState();
+                break;
+            case "autoZoom":
+                this._updateAutoZoomState();
+                break;
+            case "simpleView":
+                this._updateSimpleViewState();
+                break;
+            case "fullscreen":
+                this._updateFullscreenState();
+                break;
+            case "showGrid":
+                this._updateShowGridState();
+                break;
+            case "snapToGrid":
+                this._updateSnapToGridState();
+                break;
+            case "gridSize":
+                this._updateGridSizeItemsState();
+                this._updateGridSizeState();
+                break;
+            case "viewUnits":
+                this._updateViewUnitsState();
+                break;
+            case "units":
+                this._updateUnitsState();
+                break;
+            case "pageSize":
+                this._updatePageSizeItemsState();
+                this._updatePageSizeState();
+                break;
+            case "pageOrientation":
+                this._updatePageOrientationState();
+                break;
+            case "pageColor":
+                this._updatePageColorState();
+                break;
+            case "nodes.autoLayout":
+                this._refreshDataSources();
                 break;
             case "nodes":
                 this._refreshNodesDataSource();
                 break;
             case "edges":
                 this._refreshEdgesDataSource();
-                break;
-            case "layout":
-                this._refreshDataSources();
                 break;
             case "customShapes":
                 this._updateCustomShapes(args.value, args.previousValue);

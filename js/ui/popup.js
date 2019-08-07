@@ -16,7 +16,7 @@ var $ = require("../core/renderer"),
     Button = require("./button"),
     themes = require("./themes"),
     Overlay = require("./overlay"),
-    EmptyTemplate = require("./widget/empty_template"),
+    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate,
     domUtils = require("../core/utils/dom"),
     sizeUtils = require("../core/utils/size"),
     windowUtils = require("../core/utils/window");
@@ -408,8 +408,8 @@ var Popup = Overlay.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["title"] = new EmptyTemplate(this);
-        this._defaultTemplates["bottom"] = new EmptyTemplate(this);
+        this._defaultTemplates["title"] = new EmptyTemplate();
+        this._defaultTemplates["bottom"] = new EmptyTemplate();
     },
 
     _renderContentImpl: function() {
@@ -752,6 +752,10 @@ var Popup = Overlay.inherit({
         };
     },
 
+    _useFixedPosition: function() {
+        return this.callBase() || this.option("fullScreen");
+    },
+
     _renderDimensions: function() {
         if(this.option("fullScreen")) {
             this._$content.css({
@@ -833,6 +837,7 @@ var Popup = Overlay.inherit({
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
+                this._toggleSafariScrolling(!args.value);
                 this._renderGeometry();
                 domUtils.triggerResizeEvent(this._$content);
                 break;

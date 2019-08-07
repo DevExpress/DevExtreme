@@ -208,7 +208,7 @@
 
 /**
  * @typedef {string} Enums.AnnotationType
- * @enum {'text'|'image'}
+ * @enum {'text'|'image'|'custom'}
  */
 
 /**
@@ -772,6 +772,11 @@
  */
 
 /**
+ * @typedef {string} Enums.VectorMapProjection
+ * @enum {'equirectangular'|'lambert'|'mercator'|'miller'}
+ */
+
+/**
  * @typedef {string} Enums.AnimationType
  * @enum {'css'|'fade'|'fadeIn'|'fadeOut'|'pop'|'slide'|'slideIn'|'slideOut'}
  */
@@ -1029,7 +1034,17 @@
 
 /**
  * @typedef {string} Enums.DiagramAutoLayout
- * @enum {'tree'|'sugiyama'}
+ * @enum {'off'|'tree'|'sugiyama'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramUnits
+ * @enum {'in'|'cm'|'px'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPageOrientation
+ * @enum {'portrait'|'landscape'}
  */
 
 /**
@@ -1060,4 +1075,14 @@
 /**
  * @typedef {string} Enums.DiagramPropertiesPanelCommand
  * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageLandscape'|'pageColor'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramAutoZoom
+ * @enum {'fitContent'|'fitWidth'|'disabled'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttTaskTitlePosition
+ * @enum {'inside'|'outside'|'none'}
  */

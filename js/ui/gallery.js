@@ -14,7 +14,7 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     Swipeable = require("../events/gesture/swipeable"),
-    BindableTemplate = require("./widget/bindable_template"),
+    BindableTemplate = require("../core/templates/bindable_template").BindableTemplate,
     Deferred = require("../core/utils/deferred").Deferred;
 
 var GALLERY_CLASS = "dx-gallery",
@@ -392,7 +392,7 @@ var Gallery = CollectionWidget.inherit({
         this._stopItemAnimations();
         this._clearCacheWidth();
 
-        this._renderDuplicateItems();
+        this._cloneDuplicateItems();
 
         this._renderItemSizes();
         this._renderItemPositions();
@@ -437,7 +437,7 @@ var Gallery = CollectionWidget.inherit({
             .appendTo(this._$wrapper);
     },
 
-    _renderDuplicateItems: function() {
+    _cloneDuplicateItems: function() {
         if(!this.option("loop")) {
             return;
         }
@@ -453,13 +453,31 @@ var Gallery = CollectionWidget.inherit({
 
         var duplicateCount = Math.min(this._itemsPerPage(), itemsCount);
 
+        var $items = this._getRealItems();
+        var $container = this._itemContainer();
+
         for(i = 0; i < duplicateCount; i++) {
-            this._renderItem(0, items[i]).addClass(GALLERY_LOOP_ITEM_CLASS);
+            this._cloneItemForDuplicate($items[i], $container);
         }
 
         for(i = 0; i < duplicateCount; i++) {
-            this._renderItem(0, items[lastItemIndex - i]).addClass(GALLERY_LOOP_ITEM_CLASS);
+            this._cloneItemForDuplicate($items[lastItemIndex - i], $container);
         }
+    },
+
+    _cloneItemForDuplicate: function(item, $container) {
+        if(item) {
+            $(item)
+                .clone(true)
+                .addClass(GALLERY_LOOP_ITEM_CLASS)
+                .css("margin", 0)
+                .appendTo($container);
+        }
+    },
+
+    _getRealItems: function() {
+        var selector = "." + GALLERY_ITEM_CLASS + ":not(." + GALLERY_LOOP_ITEM_CLASS + ")";
+        return this.$element().find(selector);
     },
 
     _getLoopedItems: function() {
@@ -1154,7 +1172,7 @@ var Gallery = CollectionWidget.inherit({
                 this.option("loopItemFocus", args.value);
 
                 if(windowUtils.hasWindow()) {
-                    this._renderDuplicateItems();
+                    this._cloneDuplicateItems();
                     this._renderItemPositions();
                     this._renderNavButtonsVisibility();
                 }

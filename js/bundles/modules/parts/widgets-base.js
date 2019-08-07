@@ -9,7 +9,8 @@ var ui = DevExpress.ui = require("../../../bundles/modules/ui");
 
 ui.themes = require("../../../ui/themes");
 
-ui.setTemplateEngine = require("../../../ui/set_template_engine");
+// deprecated
+ui.setTemplateEngine = require("../../../core/templates/template_engine_registry").setTemplateEngine;
 
 ui.dialog = require("../../../ui/dialog");
 ui.notify = require("../../../ui/notify");

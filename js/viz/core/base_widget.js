@@ -12,7 +12,7 @@ var $ = require("../../core/renderer"),
     themeManagerModule = require("../core/base_theme_manager"),
 
     _floor = Math.floor,
-    DOMComponent = require("../../core/dom_component"),
+    DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
     helpers = require("./helpers"),
     _parseScalar = require("./utils").parseScalar,
     errors = require("./errors_warnings"),
@@ -28,7 +28,7 @@ var $ = require("../../core/renderer"),
 
     SIZED_ELEMENT_CLASS = "dx-sized-element",
 
-    _option = DOMComponent.prototype.option;
+    _option = DOMComponentWithTemplate.prototype.option;
 
 function getTrue() {
     return true;
@@ -105,23 +105,24 @@ function pickPositiveValue(values) {
 
 
 var getEmptyComponent = function() {
-    var emptyComponentConfig = {};
+    var emptyComponentConfig = {
+        _initTemplates() {},
+        ctor(element, options) {
+            this.callBase(element, options);
+            var sizedElement = domAdapter.createElement("div");
 
-    emptyComponentConfig.ctor = function(element, options) {
-        this.callBase(element, options);
-        var sizedElement = domAdapter.createElement("div");
+            var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
+            var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : this._getDefaultSize().height + "px";
 
-        var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
-        var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : this._getDefaultSize().height + "px";
+            domAdapter.setStyle(sizedElement, "width", width);
+            domAdapter.setStyle(sizedElement, "height", height);
 
-        domAdapter.setStyle(sizedElement, "width", width);
-        domAdapter.setStyle(sizedElement, "height", height);
-
-        domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
-        domAdapter.insertElement(element, sizedElement);
+            domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
+            domAdapter.insertElement(element, sizedElement);
+        }
     };
 
-    var EmptyComponent = DOMComponent.inherit(emptyComponentConfig);
+    var EmptyComponent = DOMComponentWithTemplate.inherit(emptyComponentConfig);
     var originalInherit = EmptyComponent.inherit;
 
     EmptyComponent.inherit = function(config) {
@@ -143,7 +144,7 @@ function sizeIsValid(value) {
     return typeUtils.isDefined(value) && value > 0;
 }
 
-module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
+module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.inherit({
     _eventsMap: {
         "onIncidentOccurred": { name: "incidentOccurred" },
         "onDrawn": { name: "drawn" }
@@ -154,6 +155,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             onIncidentOccurred: defaultOnIncidentOccurred
         });
     },
+
+    _extractAnonymousTemplate() {},
 
     _useLinks: true,
 

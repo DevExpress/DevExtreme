@@ -18,7 +18,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     TextBox = require("../text_box"),
     clickEvent = require("../../events/click"),
-    FunctionTemplate = require("../widget/function_template"),
+    FunctionTemplate = require("../../core/templates/function_template").FunctionTemplate,
     Popup = require("../popup");
 
 var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
@@ -422,7 +422,7 @@ var DropDownEditor = TextBox.inherit({
         this._defaultTemplates['dropDownButton'] = new FunctionTemplate(function(options) {
             var $icon = $("<div>").addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
             $(options.container).append($icon);
-        }, this);
+        });
     },
 
     _renderOpenHandler: function() {

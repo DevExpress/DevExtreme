@@ -27,7 +27,7 @@ window.Hogan = hogan;
 import $ from "jquery";
 import browser from "core/utils/browser";
 import devices from "core/devices";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import nativePointerMock from "../../helpers/nativePointerMock.js";
 import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
 import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
@@ -216,6 +216,7 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when no scroll"
 
     $.map(that.columns, function(column) {
         column.width = 50;
+        column.visibleWidth = 50;
         return column;
     });
 
@@ -334,6 +335,7 @@ QUnit.test("RowsView - set column width for fixed table when no scroll", functio
 
     $.map(that.columns, function(column) {
         column.width = 50;
+        column.visibleWidth = 50;
         return column;
     });
 
