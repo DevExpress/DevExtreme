@@ -1,10 +1,13 @@
 import resizeCallbacks from "core/utils/resize_callbacks";
-import WindowUtils from "core/utils/window";
+import windowUtils from "core/utils/window";
+
+const HD_SCREEN_WIDTH = 1920;
+const DEFAULT_SCREEN_WIDTH = 1000;
 
 class screenMock {
     constructor(screenWidth) {
-        this._screenSize = screenWidth || 1000;
-        this._originalScreenWidth = WindowUtils.getWindowWidth();
+        this._screenSize = screenWidth || DEFAULT_SCREEN_WIDTH;
+        this._originalScreenWidth = windowUtils.hasWindow() ? windowUtils.getWindowWidth() : HD_SCREEN_WIDTH;
         this.setWindowWidth(this._screenSize);
     }
 
