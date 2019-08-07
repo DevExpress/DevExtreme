@@ -5,6 +5,10 @@ const BACKSPACE_INPUT_TYPE = "deleteContentBackward";
 const EMPTY_CHAR = " ";
 
 class DefaultMaskStrategy extends BaseMaskStrategy {
+    _getStrategyName() {
+        return "default";
+    }
+
     getHandleEventNames() {
         return [...super.getHandleEventNames(), "keyPress"];
     }

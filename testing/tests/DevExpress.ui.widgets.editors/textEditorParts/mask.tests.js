@@ -1,4 +1,5 @@
 import $ from "jquery";
+import devices from "core/devices";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 import caretWorkaround from "./caretWorkaround.js";
 
@@ -627,6 +628,7 @@ QUnit.test("all selected chars should be deleted on backspace", function(assert)
             "X": "x"
         }
     });
+    var instance = $textEditor.dxTextEditor("instance");
 
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
@@ -641,10 +643,12 @@ QUnit.test("all selected chars should be deleted on backspace", function(assert)
 
     keyboard.press("backspace");
 
-    this.clock.tick();
+    if(instance._maskStrategy.NAME === "default") {
+        this.clock.tick();
+    }
 
     assert.equal($input.val(), "x__", "printed only one char");
-    assert.equal(keyboard.caret().start, 1, "caret position set to start");
+    assert.equal($textEditor.dxTextEditor("_caret").start, 1, "caret position set to start");
 });
 
 QUnit.test("all selected chars should be deleted on del key", function(assert) {
@@ -1907,4 +1911,35 @@ QUnit.test("Name attr of hidden input is changed when name option of editor is c
 
     var $hiddenInput = $textEditor.find("input[type=hidden]");
     assert.equal($hiddenInput.attr("name"), "Editor with mask", "name of hidden input");
+});
+
+QUnit.module("Strategies", () => {
+    QUnit.test("default strategy should be used for all devices, except android 5+", (assert) => {
+        const instance = $("#texteditor").dxTextEditor({
+            mask: "0"
+        }).dxTextEditor("instance");
+
+        const { android, version } = devices.real();
+        const isModernAndroidDevice = android && version[0] >= 5;
+        const expectedMaskStrategy = isModernAndroidDevice ? "android" : "default";
+
+        assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, "strategy name is correct");
+    });
+
+    QUnit.test("default strategy should be used for devices with android less than v5", (assert) => {
+        const currentDevice = devices.real();
+
+        devices.real({
+            platform: "android",
+            version: [4, 4, 1]
+        });
+
+        const instance = $("#texteditor").dxTextEditor({
+            mask: "0"
+        }).dxTextEditor("instance");
+
+
+        assert.strictEqual(instance._maskStrategy.NAME, "default", "strategy name is correct");
+        devices.real(currentDevice);
+    });
 });

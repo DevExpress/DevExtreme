@@ -14,6 +14,11 @@ export default class BaseMaskStrategy {
             FORWARD: "forward",
             BACKWARD: "backward"
         };
+        this.NAME = this._getStrategyName();
+    }
+
+    _getStrategyName() {
+        return "base";
     }
 
     editorOption() {

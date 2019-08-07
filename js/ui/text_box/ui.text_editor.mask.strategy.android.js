@@ -3,6 +3,10 @@ import BaseMaskStrategy from "./ui.text_editor.mask.strategy.base";
 const DELETE_INPUT_TYPE = "deleteContentBackward";
 
 class AndroidMaskStrategy extends BaseMaskStrategy {
+    _getStrategyName() {
+        return "android";
+    }
+
     getHandleEventNames() {
         return [...super.getHandleEventNames(), "beforeInput"];
     }
@@ -62,12 +66,16 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
         const textLength = args.text.length;
         const updatedCharsCount = this.editor._handleChain(args);
 
-        const { start, end } = this.editor._caret();
-        if(start <= updatedCharsCount && updatedCharsCount > 1) {
-            this.editor._caret({ start: start + updatedCharsCount - textLength, end: end + updatedCharsCount - textLength });
-        }
+        if(this.editor.isForwardDirection()) {
+            const { start, end } = this.editor._caret();
+            const correction = updatedCharsCount - textLength;
 
-        this.editor._adjustCaret();
+            if(start <= updatedCharsCount && updatedCharsCount > 1) {
+                this.editor._caret({ start: start + correction, end: end + correction });
+            }
+
+            this.editor.isForwardDirection() && this.editor._adjustCaret();
+        }
         this.editor._displayMask();
 
         return !!updatedCharsCount;

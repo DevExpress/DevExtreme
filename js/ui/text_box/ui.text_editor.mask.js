@@ -437,8 +437,8 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _handleKeyChain: function(chars) {
         var caret = this._caret();
-        var start = this._isForwardDirection() ? caret.start : caret.start - 1;
-        var end = this._isForwardDirection() ? caret.end : caret.end - 1;
+        var start = this.isForwardDirection() ? caret.start : caret.start - 1;
+        var end = this.isForwardDirection() ? caret.end : caret.end - 1;
         var length = start === end ? 1 : end - start;
 
         this._handleChain({ text: chars, start: start, length: length });
@@ -452,16 +452,16 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _adjustCaret: function(char) {
-        var caret = this._maskRulesChain.adjustedCaret(this._caret().start, this._isForwardDirection(), char);
+        var caret = this._maskRulesChain.adjustedCaret(this._caret().start, this.isForwardDirection(), char);
         this._caret({ start: caret, end: caret });
     },
 
     _moveCaret: function() {
         var currentCaret = this._caret().start;
-        var maskRuleIndex = currentCaret + (this._isForwardDirection() ? 0 : -1);
+        var maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
 
         var caret = this._maskRulesChain.isAccepted(maskRuleIndex)
-            ? currentCaret + (this._isForwardDirection() ? 1 : -1)
+            ? currentCaret + (this.isForwardDirection() ? 1 : -1)
             : currentCaret;
 
         this._caret({ start: caret, end: caret });
@@ -501,7 +501,7 @@ var TextEditorMask = TextEditorBase.inherit({
         this._direction(BACKWARD_DIRECTION);
     },
 
-    _isForwardDirection: function() {
+    isForwardDirection: function() {
         return this._direction() === FORWARD_DIRECTION;
     },
 
