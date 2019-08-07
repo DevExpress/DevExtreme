@@ -1034,7 +1034,7 @@
 
 /**
  * @typedef {string} Enums.DiagramAutoLayout
- * @enum {'tree'|'sugiyama'}
+ * @enum {'off'|'tree'|'sugiyama'}
  */
 
 /**

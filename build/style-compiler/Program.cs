@@ -19,18 +19,6 @@ namespace StyleCompiler
 
                 var cli = new CommandLineApplication();
 
-                cli.Command("themes", c =>
-                {
-                    var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
-                    var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
-                    c.OnExecute(delegate
-                    {
-                        EnsureRequiredOptions(versionOption, outputPathOption);
-                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value());
-                        return 0;
-                    });
-                });
-
                 cli.Command("tb-assets", c =>
                 {
                     var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
@@ -43,15 +31,6 @@ namespace StyleCompiler
                     });
                 });
 
-                cli.Command("test-server", c =>
-                {
-                    c.OnExecute(delegate
-                    {
-                        RunTestServer();
-                        return 0;
-                    });
-                });
-
                 return cli.Execute(argv);
             }
             catch (Exception error)
@@ -59,88 +38,6 @@ namespace StyleCompiler
                 Console.Error.WriteLine(error.Message);
                 return 1;
             }
-        }
-        static void RunTestServer()
-        {
-            var url = "http://0.0.0.0:" + Ports.Get("style-compiler");
-
-            var builder = new WebHostBuilder()
-                .UseUrls(url)
-                .UseKestrel()
-                .ConfigureServices(services => services.AddMvcCore())
-                .Configure(app => app.UseMvc());
-
-            using (var host = builder.Build())
-            {
-                host.Start();
-                Console.WriteLine($"Style compiler server listens on {url}...");
-                WaitForStdInEof();
-            }
-        }
-
-        static void WaitForStdInEof()
-        {
-            // based on http://stackoverflow.com/a/13614987
-            using (var stdin = Console.OpenStandardInput())
-            {
-                while (true)
-                {
-                    if (stdin.ReadByte() < 0)
-                    {
-                        Console.WriteLine("stdin closed");
-                        break;
-                    }
-                }
-            }
-        }
-
-        static void CreateThemes(string sourcePath, string version, string outputPath)
-        {
-            Directory.CreateDirectory(outputPath);
-
-            var lessCache = new CompiledLessCache(sourcePath);
-            lessCache.Inflate(PersistentCache.Instance);
-
-            foreach (var distributionName in LessRegistry.CssDistributions.Keys)
-            {
-                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName);
-                foreach (var item in aggregate)
-                {
-
-                    using (var stream = File.Create(Path.Combine(outputPath, item.CssFile.GetFileName())))
-                    using (var writer = new StreamWriter(stream))
-                    {
-                        writer.WriteLine(LicenseHeaderHelper.FormatForCssDistribution(distributionName, version));
-
-                        foreach (var segment in item.Segments)
-                        {
-                            writer.WriteLine(lessCache.GetCssForSegment(segment.Key));
-                        }
-                    }
-                }
-            }
-
-            CopyFonts(sourcePath, outputPath, "icons");
-            CopyFonts(sourcePath, outputPath, "fonts");
-        }
-
-        static void CopyFonts(string sourcePath, string outputPath, string folder)
-        {
-            var fontsSrcFolder = Path.Combine(sourcePath, "..", folder);
-            var fontsDestFolder = Path.Combine(outputPath, folder);
-
-            Directory.GetFiles(fontsSrcFolder, "*.*", SearchOption.AllDirectories).ToList()
-                .ForEach(fileName =>
-                {
-                    string relativePath = fileName.Remove(0, fontsSrcFolder.Length);
-                    string destFileName = fontsDestFolder + relativePath;
-                    if (!Directory.Exists(Path.GetDirectoryName(destFileName)))
-                    {
-                        Directory.CreateDirectory(Path.GetDirectoryName(destFileName));
-                    }
-
-                    File.Copy(fileName, destFileName, true);
-                });
         }
 
         static void EnsureRequiredOptions(params CommandOption[] options)
