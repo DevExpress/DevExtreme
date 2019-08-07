@@ -225,6 +225,24 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         instance.delete(0, 4);
         assert.equal(instance.option("value"), "", "value is empty line");
     });
+
+    test("editor should trigger the 'valueChanged' event after formatting a link", (assert) => {
+        assert.expect(1);
+
+        const expectedValue = '<p><a href="www.test.com" style="color: red;">test</a></p>';
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "<a href='www.test.com'>test</a>",
+                onValueChanged: (e) => {
+                    assert.strictEqual(e.value, expectedValue, "link has a color");
+                    done();
+                }
+            }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 4);
+        instance.format("color", "red");
+    });
 });
 
 
