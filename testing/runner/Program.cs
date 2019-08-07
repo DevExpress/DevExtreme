@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json.Serialization;
 using Runner.Tools;
 
@@ -21,7 +20,7 @@ namespace Runner
         {
             try
             {
-                var rootPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "../../..");
+                var rootPath = Path.Combine(AppContext.BaseDirectory, "../../..");
                 Ports.Load(Path.Combine(rootPath, "ports.json"));
 
                 var url = "http://0.0.0.0:" + Ports.Get("qunit");
