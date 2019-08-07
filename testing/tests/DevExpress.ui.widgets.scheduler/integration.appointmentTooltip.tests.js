@@ -17,210 +17,191 @@ import "common.css!";
 import "generic_light.css!";
 import "ui/scheduler/ui.scheduler";
 
-QUnit.testStart(() => initTestMarkup());
+const { testStart, module, test } = QUnit;
 
-const getDeltaTz = (schedulerTz, date) => schedulerTz * 3600000 + date.getTimezoneOffset() * 60000;
+testStart(() => initTestMarkup());
 
-QUnit.module("Integration: Appointment tooltip", {
-    beforeEach: function() {
+const moduleConfig = {
+    beforeEach() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.scheduler = createWrapper($.extend(options, { height: 600 }));
-            this.instance = this.scheduler.instance;
-        };
-
         this.clock = sinon.useFakeTimers();
-        this.tasks = [
-            {
-                text: "Task 1",
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: "Task 2",
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0)
-            }
-        ];
     },
 
-    afterEach: function() {
+    afterEach() {
         fx.off = false;
         tooltip.hide();
         this.clock.restore();
-    },
+    }
+};
 
-    checkAppointmentDataInTooltipTemplate: function(assert, dataSource, currentDate) {
-        this.createInstance({
-            dataSource: dataSource,
-            height: 600,
-            currentDate: currentDate,
-            currentView: "month",
-            views: ["month"],
-            appointmentTooltipTemplate: appointmentData => {
-                assert.equal(dataSource.indexOf(appointmentData), 0, "appointment data contains in the data source");
+module("Integration: Appointment tooltip", moduleConfig, () => {
+    const createScheduler = options => createWrapper($.extend(options, { height: 600 }));
+    const getDeltaTz = (schedulerTz, date) => schedulerTz * 3600000 + date.getTimezoneOffset() * 60000;
+    const getSampleData = () => [
+        {
+            text: "Task 1",
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        },
+        {
+            text: "Task 2",
+            startDate: new Date(2015, 1, 9, 11, 0),
+            endDate: new Date(2015, 1, 9, 12, 0)
+        }
+    ];
+
+    test("After change view type, tooltip should be appear after click on appointment, group mode(T802158)", function(assert) {
+        const data = [
+            {
+                text: "Website Re-Design Plan",
+                priorityId: 2,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
             }
+        ];
+
+        const priorityData = [
+            {
+                text: "Low Priority",
+                id: 1,
+                color: "#1e90ff"
+            }, {
+                text: "High Priority",
+                id: 2,
+                color: "#ff9747"
+            }
+        ];
+
+        const defaultViews = ["week", "agenda", "month"];
+
+        const scheduler = createScheduler({
+            dataSource: data,
+            views: defaultViews,
+            currentView: defaultViews[0],
+            crossScrollingEnabled: true,
+            currentDate: new Date(2018, 4, 21),
+            startDayHour: 9,
+            endDayHour: 16,
+            width: 800,
+            height: 600,
+            groups: ["priorityId"],
+            resources: [
+                {
+                    fieldExpr: "priorityId",
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: "Priority"
+                }
+            ]
         });
 
-        this.scheduler.appointments.click(0);
-        this.clock.tick(300);
-    }
-});
+        defaultViews.forEach(view => {
+            scheduler.option("currentView", view);
+            scheduler.appointments.click();
+            assert.ok(scheduler.tooltip.isVisible(), `tooltip should be visible after click on item in ${view} view`);
+        });
+    });
 
-QUnit.test("After change view type, tooltip should be appear after click on appointment, group mode(T802158)", function(assert) {
-    const data = [
-        {
-            text: "Website Re-Design Plan",
-            priorityId: 2,
-            startDate: new Date(2018, 4, 21, 9, 30),
-            endDate: new Date(2018, 4, 21, 11, 30)
-        }
-    ];
+    test("There is no need to check recurring appointment if editing.allowUpdating is false", function(assert) {
+        const scheduler = createScheduler({
+            editing: {
+                allowUpdating: false
+            },
+            currentDate: new Date(2015, 5, 15),
+            firstDayOfWeek: 1,
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2015, 5, 15, 10),
+                endDate: new Date(2015, 5, 15, 10, 30),
+                recurrenceRule: "FREQ=MONTHLY"
+            }]
+        });
 
-    const priorityData = [
-        {
-            text: "Low Priority",
-            id: 1,
-            color: "#1e90ff"
-        }, {
-            text: "High Priority",
-            id: 2,
-            color: "#ff9747"
-        }
-    ];
 
-    const defaultViews = ["week", "agenda", "month"];
+        const $appointment = scheduler.appointments.getAppointment(0),
+            itemData = dataUtils.data($appointment[0], "dxItemData");
 
-    this.createInstance({
-        dataSource: data,
-        views: defaultViews,
-        currentView: defaultViews[0],
-        crossScrollingEnabled: true,
-        currentDate: new Date(2018, 4, 21),
-        startDayHour: 9,
-        endDayHour: 16,
-        width: 800,
-        height: 600,
-        groups: ["priorityId"],
-        resources: [
+        scheduler.instance.showAppointmentTooltip(itemData, $appointment);
+
+        scheduler.tooltip.clickOnItem();
+        assert.ok(scheduler.appointmentPopup.isVisible(), "Popup is rendered instead of recurrence tooltip");
+    });
+
+    test("Delete button should not exist if editing.allowUpdating is false", function(assert) {
+        const scheduler = createScheduler({
+            editing: {
+                allowDeleting: false
+            },
+            currentDate: new Date(2015, 5, 15),
+            firstDayOfWeek: 1,
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2015, 5, 15, 10),
+                endDate: new Date(2015, 5, 15, 10, 30)
+            }]
+        });
+
+        const $appointment = scheduler.appointments.getAppointment(0),
+            itemData = dataUtils.data($appointment[0], "dxItemData");
+
+        scheduler.instance.showAppointmentTooltip(itemData, $appointment);
+        assert.notOk(scheduler.tooltip.hasDeleteButton(), "Delete button should not exist");
+    });
+
+    test("Click on appointment should call scheduler.showAppointmentTooltip", function(assert) {
+        const data = new DataSource({
+            store: getSampleData()
+        });
+
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        var stub = sinon.stub(scheduler.instance, "showAppointmentTooltip");
+
+        scheduler.appointments.click(1);
+
+        assert.deepEqual(
+            stub.getCall(0).args[0],
             {
-                fieldExpr: "priorityId",
-                allowMultiple: false,
-                dataSource: priorityData,
-                label: "Priority"
-            }
-        ]
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0),
+                text: "Task 2"
+            },
+            "showAppointmentTooltip has a right arguments"
+        );
     });
 
-    defaultViews.forEach(view => {
-        this.scheduler.option("currentView", view);
-        this.scheduler.appointments.click();
-        assert.ok(this.scheduler.tooltip.isVisible(), `tooltip should be visible after click on item in ${view} view`);
-    });
-});
+    test("Click on disabled appointment should not call scheduler.showAppointmentTooltip", function(assert) {
+        var data = new DataSource({
+            store: [{
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0),
+                text: "Task 2",
+                disabled: true
+            }]
+        });
 
-QUnit.test("There is no need to check recurring appointment if editing.allowUpdating is false", function(assert) {
-    this.createInstance({
-        editing: {
-            allowUpdating: false
-        },
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30),
-            recurrenceRule: "FREQ=MONTHLY"
-        }]
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        var stub = sinon.stub(scheduler.instance, "showAppointmentTooltip");
+
+        scheduler.appointments.click();
+
+        assert.notOk(stub.called, "showAppointmentTooltip doesn't called");
     });
 
+    test("Click on appointment should not call scheduler.showAppointmentTooltip for disabled mode", function(assert) {
+        const data = new DataSource({
+            store: getSampleData()
+        });
 
-    const $appointment = this.scheduler.appointments.getAppointment(0),
-        itemData = dataUtils.data($appointment[0], "dxItemData");
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, disabled: true });
+        var stub = sinon.stub(scheduler.instance, "showAppointmentTooltip");
 
-    this.scheduler.instance.showAppointmentTooltip(itemData, $appointment);
+        scheduler.appointments.click(1);
 
-    this.scheduler.tooltip.clickOnItem();
-    assert.ok(this.scheduler.appointmentPopup.isVisible(), "Popup is rendered instead of recurrence tooltip");
-});
-
-QUnit.test("Delete button should not exist if editing.allowUpdating is false", function(assert) {
-    this.createInstance({
-        editing: {
-            allowDeleting: false
-        },
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
+        assert.equal(stub.calledOnce, false, "Observer was not notified");
     });
 
-    const $appointment = this.scheduler.appointments.getAppointment(0),
-        itemData = dataUtils.data($appointment[0], "dxItemData");
-
-    this.scheduler.instance.showAppointmentTooltip(itemData, $appointment);
-    assert.notOk(this.scheduler.tooltip.hasDeleteButton(), "Delete button should not exist");
-});
-
-QUnit.test("Click on appointment should call scheduler.showAppointmentTooltip", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
-    });
-
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
-    var stub = sinon.stub(this.instance, "showAppointmentTooltip");
-
-    this.scheduler.appointments.click(1);
-
-    assert.deepEqual(stub.getCall(0).args[0],
-        {
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 12, 0),
-            text: "Task 2"
-        },
-        "showAppointmentTooltip has a right arguments");
-
-    tooltip.hide();
-});
-
-QUnit.test("Click on disabled appointment should not call scheduler.showAppointmentTooltip", function(assert) {
-    var data = new DataSource({
-        store: [{
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 12, 0),
-            text: "Task 2",
-            disabled: true
-        }]
-    });
-
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
-    var stub = sinon.stub(this.instance, "showAppointmentTooltip");
-
-    this.scheduler.appointments.click();
-
-    assert.notOk(stub.called, "showAppointmentTooltip doesn't called");
-
-    tooltip.hide();
-});
-
-QUnit.test("Click on appointment should not call scheduler.showAppointmentTooltip for disabled mode", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
-    });
-
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, disabled: true });
-    var stub = sinon.stub(this.instance, "showAppointmentTooltip");
-
-    this.scheduler.appointments.click(1);
-
-    assert.equal(stub.calledOnce, false, "Observer was not notified");
-});
-
-QUnit.test("Shown tooltip should have right boundary", function(assert) {
-    var tasks = [
+    test("Shown tooltip should have right boundary", function(assert) {
+        const tasks = [
             {
                 text: "Task 1",
                 startDate: new Date(2015, 1, 9, 1, 0),
@@ -232,668 +213,674 @@ QUnit.test("Shown tooltip should have right boundary", function(assert) {
                 endDate: new Date(2015, 1, 9, 11, 0, 30),
                 allDay: true
             }
-        ],
-        data = new DataSource({
+        ];
+        const data = new DataSource({
             store: tasks
         });
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-    var $firstAppointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1),
-        firstItemData = dataUtils.data($firstAppointment[0], "dxItemData");
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-    this.instance.showAppointmentTooltip(firstItemData, $firstAppointment);
-    assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), this.instance.getWorkSpace().$element().find(".dx-scrollable-container").get(0), "Boundary is correct");
+        const $firstAppointment = $(scheduler.instance.$element()).find(".dx-scheduler-appointment").eq(1),
+            firstItemData = dataUtils.data($firstAppointment[0], "dxItemData");
 
-    var $secondAppointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0),
-        secondItemData = dataUtils.data($secondAppointment[0], "dxItemData");
+        scheduler.instance.showAppointmentTooltip(firstItemData, $firstAppointment);
+        assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), scheduler.instance.getWorkSpace().$element().find(".dx-scrollable-container").get(0), "Boundary is correct");
 
-    this.instance.showAppointmentTooltip(secondItemData, $secondAppointment);
-    assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), $(this.instance.$element()).get(0), "Boundary of allDay appointment is correct");
-});
+        const $secondAppointment = $(scheduler.instance.$element()).find(".dx-scheduler-appointment").eq(0),
+            secondItemData = dataUtils.data($secondAppointment[0], "dxItemData");
 
-QUnit.test("'rtlEnabled' option value should be passed to appointmentTooltip", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
+        scheduler.instance.showAppointmentTooltip(secondItemData, $secondAppointment);
+        assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), $(scheduler.instance.$element()).get(0), "Boundary of allDay appointment is correct");
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true });
-    this.clock.tick();
+    test("'rtlEnabled' option value should be passed to appointmentTooltip", function(assert) {
+        const data = new DataSource({
+            store: getSampleData()
+        });
 
-    this.scheduler.appointments.click(1);
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true });
+        this.clock.tick();
 
-    assert.equal(Tooltip.getInstance($(".dx-tooltip")).option("rtlEnabled"), true, "rtlEnabled for tooltip was set to true");
+        scheduler.appointments.click(1);
 
-    tooltip.hide();
-});
-
-QUnit.test("Scheduler appointment tooltip should has right content", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
+        assert.equal(Tooltip.getInstance($(".dx-tooltip")).option("rtlEnabled"), true, "rtlEnabled for tooltip was set to true");
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+    test("Scheduler appointment tooltip should has right content", function(assert) {
+        const data = new DataSource({
+            store: getSampleData()
+        });
 
-    this.scheduler.appointments.click(1);
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-    assert.ok(this.scheduler.tooltip.getContentElement().length, 1, "one tooltip was shown");
-    assert.equal(this.scheduler.tooltip.getTitleText(), "Task 2", "tooltip title is correct");
-    assert.equal(this.scheduler.tooltip.getDateElement().length, 1, "dates container was rendered");
-    assert.equal(this.scheduler.tooltip.hasDeleteButton(), 1, "buttons container was rendered");
-});
+        scheduler.appointments.click(1);
 
-QUnit.test("Scheduler appointment tooltip should has right content when appointmentTooltipTemplate is used", function(assert) {
-    var tasks = this.tasks;
-    var data = new DataSource({
-        store: tasks
+        assert.ok(scheduler.tooltip.getContentElement().length, 1, "one tooltip was shown");
+        assert.equal(scheduler.tooltip.getTitleText(), "Task 2", "tooltip title is correct");
+        assert.equal(scheduler.tooltip.getDateElement().length, 1, "dates container was rendered");
+        assert.equal(scheduler.tooltip.hasDeleteButton(), 1, "buttons container was rendered");
     });
 
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: data,
-        appointmentTooltipTemplate: function() {
-            assert.deepEqual(arguments[0], tasks[1], "data is right");
-            return $("<div>").addClass("new-scheduler-tooltip-template");
-        }
+    test("Scheduler appointment tooltip should has right content when appointmentTooltipTemplate is used", function(assert) {
+        var tasks = getSampleData();
+        var data = new DataSource({
+            store: tasks
+        });
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data,
+            appointmentTooltipTemplate: function() {
+                assert.deepEqual(arguments[0], tasks[1], "data is right");
+                return $("<div>").addClass("new-scheduler-tooltip-template");
+            }
+        });
+
+        scheduler.appointments.click(1);
+
+        var $tooltip = $(".new-scheduler-tooltip-template");
+
+        assert.equal($tooltip.length, 1, "one tooltip with template was shown");
     });
 
-    this.scheduler.appointments.click(1);
+    test("Scheduler appointment tooltip dates are displayed with right format, date/week views", function(assert) {
+        var data = new DataSource({
+            store: getSampleData()
+        });
 
-    var $tooltip = $(".new-scheduler-tooltip-template");
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
 
-    assert.equal($tooltip.length, 1, "one tooltip with template was shown");
+        scheduler.appointments.click(1);
 
-    tooltip.hide();
-});
-
-QUnit.test("Scheduler appointment tooltip dates are displayed with right format, date/week views", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
+        assert.equal(scheduler.tooltip.getDateText(), "11:00 AM - 12:00 PM", "dates and time were displayed correctly");
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
+    test("Scheduler tooltip should be closed after call hideAppointmentTooltip", function(assert) {
+        var data = new DataSource({
+            store: getSampleData()
+        });
 
-    this.scheduler.appointments.click(1);
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
 
-    assert.equal(this.scheduler.tooltip.getDateText(), "11:00 AM - 12:00 PM", "dates and time were displayed correctly");
-});
+        scheduler.appointments.click(1);
 
-QUnit.test("Scheduler tooltip should be closed after call hideAppointmentTooltip", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
+        assert.ok(scheduler.tooltip.isVisible(), "tooltip is shown");
+
+        scheduler.instance.hideAppointmentTooltip();
+
+        this.clock.tick(300);
+        assert.notOk(scheduler.tooltip.isVisible(), "tooltip is hidden");
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
+    test("Appointment Tooltip on Day view should have a right dates", function(assert) {
+        const scheduler = createScheduler({
+            dataSource: [{
+                startDate: new Date(2016, 9, 5, 23, 30),
+                endDate: new Date(2016, 9, 6, 1),
+                text: "new Date sample"
+            }],
+            currentDate: new Date(2016, 9, 6),
+            views: ["day"],
+            currentView: "day",
+            cellDuration: 60
+        });
 
-    this.scheduler.appointments.click(1);
+        scheduler.appointments.click();
 
-    assert.ok(this.scheduler.tooltip.isVisible(), "tooltip is shown");
-
-    this.instance.hideAppointmentTooltip();
-
-    this.clock.tick(300);
-    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip is hidden");
-});
-
-QUnit.test("Appointment Tooltip on Day view should have a right dates", function(assert) {
-    this.createInstance({
-        dataSource: [{
-            startDate: new Date(2016, 9, 5, 23, 30),
-            endDate: new Date(2016, 9, 6, 1),
-            text: "new Date sample"
-        }],
-        currentDate: new Date(2016, 9, 6),
-        views: ["day"],
-        currentView: "day",
-        cellDuration: 60
+        assert.equal(scheduler.tooltip.getDateText(), "October 5, 11:30 PM - October 6, 1:00 AM", "dates and time were displayed correctly");
     });
 
-    this.scheduler.appointments.click();
+    test("Scheduler appointment tooltip dates should be correct, when custom timeZone is set", function(assert) {
+        var startDate = new Date(2015, 1, 9, 11),
+            endDate = new Date(2015, 1, 9, 12),
+            data = new DataSource({
+                store: [{
+                    text: "Task 2",
+                    startDate: startDate,
+                    endDate: endDate
+                }]
+            });
 
-    assert.equal(this.scheduler.tooltip.getDateText(), "October 5, 11:30 PM - October 6, 1:00 AM", "dates and time were displayed correctly");
-    tooltip.hide();
-});
+        var deltaTz = getDeltaTz(5, startDate);
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: 5 });
 
-QUnit.test("Scheduler appointment tooltip dates should be correct, when custom timeZone is set", function(assert) {
-    var startDate = new Date(2015, 1, 9, 11),
-        endDate = new Date(2015, 1, 9, 12),
-        data = new DataSource({
-            store: [{
+        scheduler.appointments.click();
+
+        const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"),
+            expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime");
+
+        assert.equal(scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    });
+
+    test("Scheduler appointment tooltip dates should be correct, when custom timeZone is set as string", function(assert) {
+        var startDate = new Date(2015, 1, 9, 11),
+            endDate = new Date(2015, 1, 9, 12),
+            appointment = {
                 text: "Task 2",
+                startDate: startDate,
+                endDate: endDate
+            };
+
+        var data = new DataSource({
+            store: [appointment]
+        });
+        var deltaTz = getDeltaTz(5, startDate);
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: "Asia/Ashkhabad" });
+
+        scheduler.instance.showAppointmentTooltip(appointment, ".dx-scheduler-appointment");
+
+        const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"),
+            expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime");
+
+        assert.equal(scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    });
+
+    test("Scheduler appointment tooltip dates should be correct, when appointment timeZone is set", function(assert) {
+        var appointment = {
+            text: "Task",
+            startDate: new Date(2015, 1, 9, 11),
+            endDate: new Date(2015, 1, 9, 12),
+            startDateTimeZone: 'Asia/Ashkhabad', // +5
+            endDateTimeZone: 'Asia/Bishkek', // +6
+        };
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: [appointment],
+            currentView: "week"
+        });
+
+        var $appointment = scheduler.appointments.getAppointment();
+        scheduler.instance.showAppointmentTooltip(appointment, $appointment);
+
+        const expectedStartDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
+            expectedEndDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text();
+
+        assert.equal(scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    });
+
+    test("Scheduler appointment tooltip dates should be correct, when appointment timeZone and scheduler timeZone was set", function(assert) {
+        var appointment = {
+            text: "Task",
+            startDate: new Date(2015, 1, 9, 11),
+            endDate: new Date(2015, 1, 9, 12),
+            Timezone: "Asia/Ashkhabad"
+        };
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: [appointment],
+            currentView: "week",
+            startDateTimezoneExpr: "Timezone",
+            timeZone: "Asia/Qyzylorda"
+        });
+
+        var $appointment = scheduler.appointments.getAppointment();
+        scheduler.instance.showAppointmentTooltip(appointment, $appointment);
+
+        const expectedStartDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
+            expectedEndDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text();
+
+        assert.equal(scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
+    });
+
+    test("Scheduler appointment tooltip dates are displayed with right format, month view", function(assert) {
+        var data = new DataSource({
+            store: getSampleData()
+        });
+
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "month", maxAppointmentsPerCell: null });
+
+        scheduler.appointments.click(1);
+
+        assert.equal(scheduler.tooltip.getDateText(), "February 9, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
+    });
+
+    test("Click on tooltip-edit button should call scheduler.showAppointmentPopup and hide tooltip", function(assert) {
+        var data = new DataSource({
+            store: getSampleData()
+        });
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
+        var stub = sinon.stub(scheduler.instance, "showAppointmentPopup");
+
+        scheduler.appointments.click(1);
+        scheduler.tooltip.clickOnItem();
+
+        var args = stub.getCall(0).args;
+
+        assert.deepEqual(args[0], {
+            startDate: new Date(2015, 1, 9, 11, 0),
+            endDate: new Date(2015, 1, 9, 12, 0),
+            text: "Task 2"
+        },
+        "showAppointmentPopup has a right appointment data arg");
+
+        assert.equal(args[1], false, "showAppointmentPopup has a right 'createNewAppointment' arg");
+
+        assert.notOk(scheduler.tooltip.isVisible(), "tooltip was hidden");
+    });
+
+    test("Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip", function(assert) {
+        var data = new DataSource({
+            store: getSampleData()
+        });
+
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        var stub = sinon.stub(scheduler.instance, "deleteAppointment");
+
+        scheduler.appointments.click(1);
+        scheduler.tooltip.clickOnDeleteButton();
+
+        assert.deepEqual(stub.getCall(0).args[0],
+            {
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0),
+                text: "Task 2"
+            },
+            "deleteAppointment has a right arguments");
+
+        assert.notOk(scheduler.tooltip.isVisible(), "tooltip was hidden");
+    });
+
+    test("Click on tooltip-remove button should call scheduler.updateAppointment and hide tooltip, if recurrenceRuleExpr and recurrenceExceptionExpr is set", function(assert) {
+        const scheduler = createScheduler({
+            currentDate: new Date(2018, 6, 30),
+            currentView: "month",
+            views: ["month"],
+            recurrenceRuleExpr: "SC_RecurrenceRule",
+            recurrenceExceptionExpr: "SC_RecurrenceException",
+            recurrenceEditMode: "occurrence",
+            dataSource: [{
+                text: "Meeting of Instructors",
+                startDate: new Date(2018, 6, 30, 10, 0),
+                endDate: new Date(2018, 6, 30, 11, 0),
+                SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
+                SC_RecurrenceException: "20170626T100000Z"
+            }
+            ]
+        });
+        var stub = sinon.stub(scheduler.instance, "_updateAppointment");
+
+        scheduler.appointments.click(1);
+        scheduler.tooltip.clickOnDeleteButton();
+
+        var exceptionDate = new Date(2018, 6, 31, 10, 0, 0, 0),
+            exceptionString = dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
+
+        assert.deepEqual(stub.getCall(0).args[1],
+            {
+                startDate: new Date(2018, 6, 30, 10, 0),
+                endDate: new Date(2018, 6, 30, 11, 0),
+                text: "Meeting of Instructors",
+                SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
+                SC_RecurrenceException: "20170626T100000Z," + exceptionString
+            },
+            "updateAppointment has a right arguments");
+
+        assert.notOk(scheduler.tooltip.isVisible(), "tooltip was hidden");
+
+    });
+
+    test("Tooltip should appear if mouse is over arrow icon", function(assert) {
+        var endDate = new Date(2015, 9, 12);
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 4, 6),
+            views: ["month"],
+            currentView: "month",
+            firstDayOfWeek: 1,
+            dataSource: [{ startDate: new Date(2015, 4, 10), endDate: endDate }]
+        });
+
+        var $appointment = $(scheduler.instance.$element()).find(".dx-scheduler-appointment"),
+            $arrowIcon = $appointment.find(".dx-scheduler-appointment-reduced-icon");
+
+        $arrowIcon.trigger("dxpointerenter");
+
+        var $tooltip = $(".dx-tooltip");
+
+        assert.equal($tooltip.length, 1, "Tooltip has appeared");
+        assert.equal(Tooltip.getInstance($tooltip).$content().text(), messageLocalization.format("dxScheduler-editorLabelEndDate") + ": October 12, 2015");
+
+        $arrowIcon.trigger("dxpointerleave");
+        assert.equal($(".dx-tooltip").length, 0, "Tooltip has disappeared");
+    });
+
+    test("showAppointmentTooltip should be called after click on arrow icon and doesn't hide after pointerleave", function(assert) {
+        var endDate = new Date(2015, 9, 12);
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 4, 6),
+            views: ["month"],
+            currentView: "month",
+            firstDayOfWeek: 1,
+            dataSource: [{ startDate: new Date(2015, 4, 10), endDate: endDate }]
+        });
+
+        var $appointment = $(scheduler.instance.$element()).find(".dx-scheduler-appointment"),
+            $arrowIcon = $appointment.find(".dx-scheduler-appointment-reduced-icon");
+
+        $arrowIcon.trigger("dxpointerenter");
+        $arrowIcon.eq(0).trigger("dxclick");
+        this.clock.tick(300);
+        $arrowIcon.trigger("dxpointerleave");
+
+        assert.ok(scheduler.tooltip.isVisible(), "Appointment tooltip is shown");
+    });
+
+    test("Tooltip of allDay appointment should display right dates", function(assert) {
+        var startDate = new Date(2015, 2, 5, 6),
+            endDate = new Date(2015, 2, 6, 7);
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            dataSource: [{
+                text: "a",
+                allDay: true,
                 startDate: startDate,
                 endDate: endDate
             }]
         });
 
-    var deltaTz = getDeltaTz(5, startDate);
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: 5 });
+        scheduler.appointments.click();
 
-    this.scheduler.appointments.click();
-
-    const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"),
-        expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime");
-
-    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
-});
-
-QUnit.test("Scheduler appointment tooltip dates should be correct, when custom timeZone is set as string", function(assert) {
-    var startDate = new Date(2015, 1, 9, 11),
-        endDate = new Date(2015, 1, 9, 12),
-        appointment = {
-            text: "Task 2",
-            startDate: startDate,
-            endDate: endDate
-        };
-
-    var data = new DataSource({
-        store: [appointment]
-    });
-    var deltaTz = getDeltaTz(5, startDate);
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: "Asia/Ashkhabad" });
-
-    this.instance.showAppointmentTooltip(appointment, ".dx-scheduler-appointment");
-
-    const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"),
-        expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime");
-
-    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
-});
-
-QUnit.test("Scheduler appointment tooltip dates should be correct, when appointment timeZone is set", function(assert) {
-    var appointment = {
-        text: "Task",
-        startDate: new Date(2015, 1, 9, 11),
-        endDate: new Date(2015, 1, 9, 12),
-        startDateTimeZone: 'Asia/Ashkhabad', // +5
-        endDateTimeZone: 'Asia/Bishkek', // +6
-    };
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: [appointment],
-        currentView: "week"
+        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "monthAndDay") + " - " + dateLocalization.format(endDate, "monthAndDay"), "dates were displayed correctly");
     });
 
-    var $appointment = this.scheduler.appointments.getAppointment();
-    this.instance.showAppointmentTooltip(appointment, $appointment);
+    test("Tooltip of allDay appointment with startDate = endDate should display right date", function(assert) {
+        var startDate = new Date(2015, 2, 5, 6),
+            endDate = new Date(2015, 2, 5, 10);
 
-    const expectedStartDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
-        expectedEndDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text();
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            dataSource: [{
+                text: "a",
+                allDay: true,
+                startDate: startDate,
+                endDate: endDate
+            }]
+        });
 
-    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
-});
+        scheduler.appointments.click();
 
-QUnit.test("Scheduler appointment tooltip dates should be correct, when appointment timeZone and scheduler timeZone was set", function(assert) {
-    var appointment = {
-        text: "Task",
-        startDate: new Date(2015, 1, 9, 11),
-        endDate: new Date(2015, 1, 9, 12),
-        Timezone: "Asia/Ashkhabad"
-    };
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: [appointment],
-        currentView: "week",
-        startDateTimezoneExpr: "Timezone",
-        timeZone: "Asia/Qyzylorda"
+        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "monthAndDay"), "date was displayed correctly");
     });
 
-    var $appointment = this.scheduler.appointments.getAppointment();
-    this.instance.showAppointmentTooltip(appointment, $appointment);
+    test("Tooltip of multiday appointment should display date & time for usual view", function(assert) {
+        var startDate = new Date(2015, 2, 5, 6),
+            endDate = new Date(2015, 2, 6, 8);
 
-    const expectedStartDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
-        expectedEndDate = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text();
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            dataSource: [{
+                text: "a",
+                startDate: startDate,
+                endDate: endDate
+            }]
+        });
 
-    assert.equal(this.scheduler.tooltip.getDateText(), expectedStartDate + " - " + expectedEndDate, "dates and time were displayed correctly");
-});
+        scheduler.appointments.click(0);
 
-QUnit.test("Scheduler appointment tooltip dates are displayed with right format, month view", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
+        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "month", maxAppointmentsPerCell: null });
+    test("Tooltip of multiday appointment should display date & time for month view", function(assert) {
+        var startDate = new Date(2015, 2, 5, 6),
+            endDate = new Date(2015, 2, 6, 8);
 
-    this.scheduler.appointments.click(1);
-    this.clock.tick(300);
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 2, 4),
+            currentView: "month",
+            dataSource: [{
+                text: "a",
+                startDate: startDate,
+                endDate: endDate
+            }]
+        });
 
-    assert.equal(this.scheduler.tooltip.getDateText(), "February 9, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
-});
+        scheduler.appointments.click(0);
 
-QUnit.test("Click on tooltip-edit button should call scheduler.showAppointmentPopup and hide tooltip", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
+        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
     });
 
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: data
+    test("Tooltip of appointment part after midnight should display right date & time", function(assert) {
+        var startDate = new Date(2015, 4, 25, 23, 0),
+            endDate = new Date(2015, 4, 26, 1, 15);
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 4, 25),
+            currentView: "week",
+            dataSource: [{
+                text: "a",
+                startDate: startDate,
+                endDate: endDate
+            }]
+        });
+
+        scheduler.appointments.click(1);
+
+        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
     });
 
-    var stub = sinon.stub(this.instance, "showAppointmentPopup");
+    test("Tooltip of recurrence appointment part after midnight should display right date & time", function(assert) {
+        var startDate = new Date(2015, 4, 25, 23, 0),
+            endDate = new Date(2015, 4, 26, 1, 15);
 
-    this.scheduler.appointments.click(1);
-    this.scheduler.tooltip.clickOnItem();
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 4, 25),
+            currentView: "month",
+            dataSource: [{
+                text: "a",
+                startDate: startDate,
+                endDate: endDate,
+                recurrenceRule: "FREQ=DAILY;INTERVAL=5"
+            }]
+        });
 
-    var args = stub.getCall(0).args;
+        scheduler.appointments.click(2);
 
-    assert.deepEqual(args[0], {
-        startDate: new Date(2015, 1, 9, 11, 0),
-        endDate: new Date(2015, 1, 9, 12, 0),
-        text: "Task 2"
-    },
-    "showAppointmentPopup has a right appointment data arg");
-
-    assert.equal(args[1], false, "showAppointmentPopup has a right 'createNewAppointment' arg");
-
-    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
-});
-
-QUnit.test("Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip", function(assert) {
-    var data = new DataSource({
-        store: this.tasks
+        assert.equal(scheduler.tooltip.getDateText(), "May 30, 11:00 PM - May 31, 1:15 AM", "dates were displayed correctly");
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
-    var stub = sinon.stub(this.instance, "deleteAppointment");
+    test("Tooltip for recurrence appointment should display right dates(T384181)", function(assert) {
+        var startDate = new Date(2015, 1, 5, 11),
+            endDate = new Date(2015, 1, 5, 12);
 
-    this.scheduler.appointments.click(1);
-    this.scheduler.tooltip.clickOnDeleteButton();
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 1, 4),
+            views: ["month"],
+            currentView: "month",
+            dataSource: [{
+                text: "a",
+                startDate: startDate,
+                endDate: endDate,
+                recurrenceRule: "FREQ=DAILY"
+            }]
+        });
 
-    assert.deepEqual(stub.getCall(0).args[0],
-        {
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 12, 0),
-            text: "Task 2"
-        },
-        "deleteAppointment has a right arguments");
+        scheduler.appointments.click(1);
 
-    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
-});
-
-QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointment and hide tooltip, if recurrenceRuleExpr and recurrenceExceptionExpr is set", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2018, 6, 30),
-        currentView: "month",
-        views: ["month"],
-        recurrenceRuleExpr: "SC_RecurrenceRule",
-        recurrenceExceptionExpr: "SC_RecurrenceException",
-        recurrenceEditMode: "occurrence",
-        dataSource: [{
-            text: "Meeting of Instructors",
-            startDate: new Date(2018, 6, 30, 10, 0),
-            endDate: new Date(2018, 6, 30, 11, 0),
-            SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
-            SC_RecurrenceException: "20170626T100000Z"
-        }
-        ]
-    });
-    var stub = sinon.stub(this.instance, "_updateAppointment");
-
-    this.scheduler.appointments.click(1);
-    this.scheduler.tooltip.clickOnDeleteButton();
-
-    var exceptionDate = new Date(2018, 6, 31, 10, 0, 0, 0),
-        exceptionString = dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
-
-    assert.deepEqual(stub.getCall(0).args[1],
-        {
-            startDate: new Date(2018, 6, 30, 10, 0),
-            endDate: new Date(2018, 6, 30, 11, 0),
-            text: "Meeting of Instructors",
-            SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
-            SC_RecurrenceException: "20170626T100000Z," + exceptionString
-        },
-        "updateAppointment has a right arguments");
-
-    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
-
-});
-
-QUnit.test("Tooltip should appear if mouse is over arrow icon", function(assert) {
-    var endDate = new Date(2015, 9, 12);
-
-    this.createInstance({
-        currentDate: new Date(2015, 4, 6),
-        views: ["month"],
-        currentView: "month",
-        firstDayOfWeek: 1,
-        dataSource: [{ startDate: new Date(2015, 4, 10), endDate: endDate }]
+        assert.equal(scheduler.tooltip.getDateText(), "February 6, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
     });
 
-    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment"),
-        $arrowIcon = $appointment.find(".dx-scheduler-appointment-reduced-icon");
+    test("Tooltip should hide when window was resized", function(assert) {
+        const scheduler = createScheduler({
+            currentDate: new Date(2016, 1, 11),
+            currentView: "week",
+            dataSource: [{
+                text: "a",
+                allDay: true,
+                startDate: new Date(2016, 1, 11, 10),
+                endDate: new Date(2016, 1, 11, 15)
+            }]
+        });
 
-    $arrowIcon.trigger("dxpointerenter");
+        scheduler.appointments.click();
 
-    var $tooltip = $(".dx-tooltip");
-
-    assert.equal($tooltip.length, 1, "Tooltip has appeared");
-    assert.equal(Tooltip.getInstance($tooltip).$content().text(), messageLocalization.format("dxScheduler-editorLabelEndDate") + ": October 12, 2015");
-
-    $arrowIcon.trigger("dxpointerleave");
-    assert.equal($(".dx-tooltip").length, 0, "Tooltip has disappeared");
-
-    tooltip.hide();
-});
-
-QUnit.test("showAppointmentTooltip should be called after click on arrow icon and doesn't hide after pointerleave", function(assert) {
-    var endDate = new Date(2015, 9, 12);
-
-    this.createInstance({
-        currentDate: new Date(2015, 4, 6),
-        views: ["month"],
-        currentView: "month",
-        firstDayOfWeek: 1,
-        dataSource: [{ startDate: new Date(2015, 4, 10), endDate: endDate }]
+        assert.ok(scheduler.tooltip.isVisible(), "tooltip was shown");
+        resizeCallbacks.fire();
+        assert.notOk(scheduler.tooltip.isVisible(), "tooltip was hidden");
     });
 
-    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment"),
-        $arrowIcon = $appointment.find(".dx-scheduler-appointment-reduced-icon");
-
-    $arrowIcon.trigger("dxpointerenter");
-    $arrowIcon.eq(0).trigger("dxclick");
-    this.clock.tick(300);
-    $arrowIcon.trigger("dxpointerleave");
-
-    assert.ok(this.scheduler.tooltip.isVisible(), "Appointment tooltip is shown");
-});
-
-QUnit.test("Tooltip of allDay appointment should display right dates", function(assert) {
-    var startDate = new Date(2015, 2, 5, 6),
-        endDate = new Date(2015, 2, 6, 7);
-
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        currentView: "week",
-        dataSource: [{
-            text: "a",
-            allDay: true,
-            startDate: startDate,
-            endDate: endDate
-        }]
-    });
-
-    this.scheduler.appointments.click();
-
-    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "monthAndDay") + " - " + dateLocalization.format(endDate, "monthAndDay"), "dates were displayed correctly");
-    tooltip.hide();
-});
-
-QUnit.test("Tooltip of allDay appointment with startDate = endDate should display right date", function(assert) {
-    var startDate = new Date(2015, 2, 5, 6),
-        endDate = new Date(2015, 2, 5, 10);
-
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        currentView: "week",
-        dataSource: [{
-            text: "a",
-            allDay: true,
-            startDate: startDate,
-            endDate: endDate
-        }]
-    });
-
-    this.scheduler.appointments.click();
-
-    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "monthAndDay"), "date was displayed correctly");
-});
-
-QUnit.test("Tooltip of multiday appointment should display date & time for usual view", function(assert) {
-    var startDate = new Date(2015, 2, 5, 6),
-        endDate = new Date(2015, 2, 6, 8);
-
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        currentView: "week",
-        dataSource: [{
-            text: "a",
-            startDate: startDate,
-            endDate: endDate
-        }]
-    });
-
-    this.scheduler.appointments.click(0);
-    this.clock.tick(300);
-
-    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
-    tooltip.hide();
-});
-
-QUnit.test("Tooltip of multiday appointment should display date & time for month view", function(assert) {
-    var startDate = new Date(2015, 2, 5, 6),
-        endDate = new Date(2015, 2, 6, 8);
-
-    this.createInstance({
-        currentDate: new Date(2015, 2, 4),
-        currentView: "month",
-        dataSource: [{
-            text: "a",
-            startDate: startDate,
-            endDate: endDate
-        }]
-    });
-
-    this.scheduler.appointments.click(0);
-
-    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
-});
-
-QUnit.test("Tooltip of appointment part after midnight should display right date & time", function(assert) {
-    var startDate = new Date(2015, 4, 25, 23, 0),
-        endDate = new Date(2015, 4, 26, 1, 15);
-
-    this.createInstance({
-        currentDate: new Date(2015, 4, 25),
-        currentView: "week",
-        dataSource: [{
-            text: "a",
-            startDate: startDate,
-            endDate: endDate
-        }]
-    });
-
-    this.scheduler.appointments.click(1);
-
-    assert.equal(this.scheduler.tooltip.getDateText(), dateLocalization.format(startDate, "mediumdatemediumtime") + " - " + dateLocalization.format(endDate, "mediumdatemediumtime"), "dates were displayed correctly");
-});
-
-QUnit.test("Tooltip of recurrence appointment part after midnight should display right date & time", function(assert) {
-    var startDate = new Date(2015, 4, 25, 23, 0),
-        endDate = new Date(2015, 4, 26, 1, 15);
-
-    this.createInstance({
-        currentDate: new Date(2015, 4, 25),
-        currentView: "month",
-        dataSource: [{
-            text: "a",
-            startDate: startDate,
-            endDate: endDate,
-            recurrenceRule: "FREQ=DAILY;INTERVAL=5"
-        }]
-    });
-
-    this.scheduler.appointments.click(2);
-
-    assert.equal(this.scheduler.tooltip.getDateText(), "May 30, 11:00 PM - May 31, 1:15 AM", "dates were displayed correctly");
-    tooltip.hide();
-});
-
-QUnit.test("Tooltip for recurrence appointment should display right dates(T384181)", function(assert) {
-    var startDate = new Date(2015, 1, 5, 11),
-        endDate = new Date(2015, 1, 5, 12);
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 4),
-        views: ["month"],
-        currentView: "month",
-        dataSource: [{
-            text: "a",
-            startDate: startDate,
-            endDate: endDate,
-            recurrenceRule: "FREQ=DAILY"
-        }]
-    });
-
-    this.scheduler.appointments.click(1);
-
-    assert.equal(this.scheduler.tooltip.getDateText(), "February 6, 11:00 AM - 12:00 PM", "dates and time were displayed correctly");
-    tooltip.hide();
-});
-
-QUnit.test("Tooltip should hide when window was resized", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2016, 1, 11),
-        currentView: "week",
-        dataSource: [{
+    test("Appointment tooltip should be hidden after immediately delete key pressing", function(assert) {
+        var appt = {
             text: "a",
             allDay: true,
             startDate: new Date(2016, 1, 11, 10),
             endDate: new Date(2016, 1, 11, 15)
-        }]
+        };
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2016, 1, 11),
+            currentView: "week",
+            dataSource: [appt],
+            focusStateEnabled: true
+        });
+
+        var $appt1 = $(scheduler.instance.$element()).find(".dx-scheduler-appointment").eq(0),
+            keyboard = keyboardMock($appt1),
+            notifyStub = sinon.spy(scheduler.instance.getAppointmentsInstance(), "notifyObserver");
+
+        $appt1.trigger("dxclick");
+        keyboard.keyDown("del");
+        this.clock.tick(300);
+
+        assert.ok(notifyStub.called, "notify is called");
+        assert.ok(notifyStub.withArgs("deleteAppointment").called, "deleteAppointment is called");
+        assert.notOk(notifyStub.withArgs("showAppointmentTooltip").called, "showAppointmentTooltip isn't called");
     });
 
-    this.scheduler.appointments.click();
+    test("Tooltip should has right boundary in timeline view if appointment is allDay", function(assert) {
+        const scheduler = createScheduler({
+            dataSource: [{
+                startDate: new Date(2018, 8, 24),
+                endDate: new Date(2018, 8, 25)
+            }],
+            currentView: "timelineDay",
+            currentDate: new Date(2018, 8, 24)
+        });
 
-    assert.ok(this.scheduler.tooltip.isVisible(), "tooltip was shown");
-    resizeCallbacks.fire();
-    assert.notOk(this.scheduler.tooltip.isVisible(), "tooltip was hidden");
-});
+        scheduler.appointments.click(0);
 
-QUnit.test("Appointment tooltip should be hidden after immediately delete key pressing", function(assert) {
-    var appt = {
-        text: "a",
-        allDay: true,
-        startDate: new Date(2016, 1, 11, 10),
-        endDate: new Date(2016, 1, 11, 15)
-    };
+        var tooltip = Tooltip.getInstance($(".dx-tooltip")),
+            tooltipBoundary = tooltip.option("position").boundary.get(0),
+            containerBoundary = scheduler.instance.getWorkSpaceScrollableContainer().get(0);
 
-    this.createInstance({
-        currentDate: new Date(2016, 1, 11),
-        currentView: "week",
-        dataSource: [appt],
-        focusStateEnabled: true
+        assert.deepEqual(tooltipBoundary, containerBoundary, "tooltip has right boundary");
     });
 
-    var $appt1 = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0),
-        keyboard = keyboardMock($appt1),
-        notifyStub = sinon.spy(this.instance.getAppointmentsInstance(), "notifyObserver");
-
-    $appt1.trigger("dxclick");
-    keyboard.keyDown("del");
-    this.clock.tick(300);
-
-    assert.ok(notifyStub.called, "notify is called");
-    assert.ok(notifyStub.withArgs("deleteAppointment").called, "deleteAppointment is called");
-    assert.notOk(notifyStub.withArgs("showAppointmentTooltip").called, "showAppointmentTooltip isn't called");
-});
-
-QUnit.test("Tooltip should has right boundary in timeline view if appointment is allDay", function(assert) {
-    this.createInstance({
-        dataSource: [{
-            startDate: new Date(2018, 8, 24),
-            endDate: new Date(2018, 8, 25)
-        }],
-        currentView: "timelineDay",
-        currentDate: new Date(2018, 8, 24)
-    });
-
-    this.scheduler.appointments.click(0);
-
-    var tooltip = Tooltip.getInstance($(".dx-tooltip")),
-        tooltipBoundary = tooltip.option("position").boundary.get(0),
-        containerBoundary = this.instance.getWorkSpaceScrollableContainer().get(0);
-
-    assert.deepEqual(tooltipBoundary, containerBoundary, "tooltip has right boundary");
-});
-
-QUnit.test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a recurrence rule", function(assert) {
-    this.createInstance({
-        dataSource: [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            allDay: true,
-            recurrenceRule: "FREQ=DAILY;COUNT=3",
-            text: "Task 2"
-        }],
-        height: 600,
-        currentDate: new Date(2015, 4, 24),
-        currentView: "month",
-        views: ["month"],
-        appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
-            assert.deepEqual(targetedAppointmentData, {
+    test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a recurrence rule", function(assert) {
+        const scheduler = createScheduler({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9),
+                endDate: new Date(2015, 4, 24, 11),
                 allDay: true,
-                endDate: new Date(2015, 4, 25, 11),
                 recurrenceRule: "FREQ=DAILY;COUNT=3",
-                startDate: new Date(2015, 4, 25, 9),
                 text: "Task 2"
-            });
-        }
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            currentView: "month",
+            views: ["month"],
+            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
+                assert.deepEqual(targetedAppointmentData, {
+                    allDay: true,
+                    endDate: new Date(2015, 4, 25, 11),
+                    recurrenceRule: "FREQ=DAILY;COUNT=3",
+                    startDate: new Date(2015, 4, 25, 9),
+                    text: "Task 2"
+                });
+            }
+        });
+
+        scheduler.appointments.click(1);
     });
 
-    this.scheduler.appointments.click(1);
-});
-
-QUnit.test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a non-recurrence rule", function(assert) {
-    this.createInstance({
-        dataSource: [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            text: "Task 1"
-        }],
-        height: 600,
-        currentDate: new Date(2015, 4, 24),
-        currentView: "month",
-        views: ["month"],
-        appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
-            assert.deepEqual(targetedAppointmentData, {
+    test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a non-recurrence rule", function(assert) {
+        const scheduler = createScheduler({
+            dataSource: [{
                 startDate: new Date(2015, 4, 24, 9),
                 endDate: new Date(2015, 4, 24, 11),
                 text: "Task 1"
-            });
-        }
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            currentView: "month",
+            views: ["month"],
+            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
+                assert.deepEqual(targetedAppointmentData, {
+                    startDate: new Date(2015, 4, 24, 9),
+                    endDate: new Date(2015, 4, 24, 11),
+                    text: "Task 1"
+                });
+            }
+        });
+
+        scheduler.appointments.click(0);
+    });
+});
+
+
+QUnit.module("Appointment tooltip template", moduleConfig, () => {
+    const checkAppointmentDataInTooltipTemplate = (assert, dataSource, currentDate) => {
+        const scheduler = createWrapper({
+            dataSource: dataSource,
+            height: 600,
+            currentDate: currentDate,
+            currentView: "month",
+            views: ["month"],
+            appointmentTooltipTemplate: appointmentData => {
+                assert.equal(dataSource.indexOf(appointmentData), 0, "appointment data contains in the data source");
+            }
+        });
+
+        scheduler.appointments.click(0);
+    };
+
+    test("The appointmentData argument of the appointment tooltip template is should be instance of the data source", function(assert) {
+        const dataSource = [
+            {
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0)
+            }
+        ];
+        checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 1, 9));
     });
 
-    this.scheduler.appointments.click(0);
+    test("The appointmentData argument of the appointment tooltip template is should be instance of the data source for recurrence rule", function(assert) {
+        const dataSource = [{
+            startDate: new Date(2015, 4, 24, 9),
+            endDate: new Date(2015, 4, 24, 11),
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            allDay: true,
+            text: "Task 1"
+        }, {
+            startDate: new Date(2015, 4, 24, 19),
+            endDate: new Date(2015, 4, 24, 31),
+            allDay: true,
+            recurrenceRule: "FREQ=DAILY;COUNT=2",
+            text: "Task 2"
+        }];
+
+        checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
+    });
 });
 
-QUnit.test("The appointmentData argument of the appointment tooltip template is should be instance of the data source", function(assert) {
-    this.checkAppointmentDataInTooltipTemplate(assert, this.tasks, new Date(2015, 1, 9));
-});
-
-QUnit.test("The appointmentData argument of the appointment tooltip template is should be instance of the data source for recurrence rule", function(assert) {
-    var dataSource = [{
-        startDate: new Date(2015, 4, 24, 9),
-        endDate: new Date(2015, 4, 24, 11),
-        recurrenceRule: "FREQ=DAILY;COUNT=3",
-        allDay: true,
-        text: "Task 1"
-    }, {
-        startDate: new Date(2015, 4, 24, 19),
-        endDate: new Date(2015, 4, 24, 31),
-        allDay: true,
-        recurrenceRule: "FREQ=DAILY;COUNT=2",
-        text: "Task 2"
-    }];
-
-    this.checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
-});
-
-
-const moduleConfig = {
-    beforeEach: function() {
-        fx.off = true;
-        this.clock = sinon.useFakeTimers();
-    },
-
-    afterEach: function() {
-        fx.off = false;
-        this.clock.restore();
-    },
-};
-
-QUnit.module("New common tooltip for compact and cell appointments", moduleConfig, function() {
+QUnit.module("New common tooltip for compact and cell appointments", moduleConfig, () => {
     const createScheduler = (options, data) => {
         const defaultOption = {
             dataSource: data || getSimpleDataArray(),
@@ -906,7 +893,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         return createWrapper($.extend(defaultOption, options));
     };
 
-    QUnit.test("Title in tooltip should equals title of cell appointments in month view", function(assert) {
+    test("Title in tooltip should equals title of cell appointments in month view", function(assert) {
         const scheduler = createScheduler();
         assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
@@ -935,7 +922,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         }
     });
 
-    QUnit.test("Title in tooltip should equals title of cell appointments in other views", function(assert) {
+    test("Title in tooltip should equals title of cell appointments in other views", function(assert) {
         const scheduler = createScheduler();
         assert.notOk(scheduler.tooltip.isVisible(), "On page load tooltip should be invisible");
 
@@ -953,7 +940,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         });
     });
 
-    QUnit.test("Delete button in tooltip shouldn't render if editing = false", function(assert) {
+    test("Delete button in tooltip shouldn't render if editing = false", function(assert) {
         const scheduler = createScheduler({
             editing: false
         });
@@ -976,7 +963,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         }
     });
 
-    QUnit.test("Compact button should hide or show after change in data source", function(assert) {
+    test("Compact button should hide or show after change in data source", function(assert) {
         const dataList = getSimpleDataArray();
         const scheduler = createScheduler({}, dataList);
 
@@ -1003,7 +990,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.equal(scheduler.appointments.compact.getButtonCount(), 5, "Count of compact buttons shouldn't change");
     });
 
-    QUnit.test("Tooltip should hide after perform action", function(assert) {
+    test("Tooltip should hide after perform action", function(assert) {
         const scheduler = createScheduler();
 
         scheduler.appointments.click();
@@ -1035,7 +1022,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.notOk(scheduler.tooltip.isVisible(), "Tooltip shouldn't visible");
     });
 
-    QUnit.test("Tooltip should work correct in week view", function(assert) {
+    test("Tooltip should work correct in week view", function(assert) {
         const DEFAULT_TEXT = "Temp appointment";
         const scheduler = createScheduler({
             currentView: "week",
@@ -1058,7 +1045,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.equal(scheduler.appointments.compact.getButtonCount(), 0, "Compact button shouldn't render after click delete button");
     });
 
-    QUnit.test("Templates should valid markup", function(assert) {
+    test("Templates should valid markup", function(assert) {
         const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = "appointment-tooltip-template-marker";
         const DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME = "drop-down-appointment-template";
 
@@ -1085,7 +1072,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.ok(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), "'dropDownAppointmentTemplate' should render for compact appointment");
     });
 
-    QUnit.test("appointmentTooltipTemplate method should pass valid arguments", function(assert) {
+    test("appointmentTooltipTemplate method should pass valid arguments", function(assert) {
         let templateCallCount = 0;
         const scheduler = createScheduler({
             appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
@@ -1111,7 +1098,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
     });
 
     if(devices.current().deviceType === "desktop") {
-        QUnit.test("Keyboard navigation in tooltip", function(assert) {
+        test("Keyboard navigation in tooltip", function(assert) {
             const scheduler = createScheduler();
             const ITEM_FOCUSED_STATE_CLASS_NAME = "dx-state-focused";
 
@@ -1139,7 +1126,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         });
     }
 
-    QUnit.test("onAppointmentDblClick event should raised after click on tooltip from collector and in adaptivity mode", function(assert) {
+    test("onAppointmentDblClick event should raised after click on tooltip from collector and in adaptivity mode", function(assert) {
         const options = {
             onAppointmentClick: () => {}
         };
@@ -1163,7 +1150,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.equal(stub.callCount, 1, "onAppointmentClick should raised in adaptivity mode");
     });
 
-    QUnit.test("Tooltip should crop list, if list has many items", function(assert) {
+    test("Tooltip should crop list, if list has many items", function(assert) {
         const scheduler = createScheduler({
             dataSource: [
                 {
