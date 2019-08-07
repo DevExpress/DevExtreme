@@ -107,24 +107,26 @@ QUnit.module("Navigation operations", moduleConfig, () => {
     });
 
     test("change current directory by public API", function(assert) {
-        const done = assert.async();
         const inst = this.wrapper.getInstance();
         assert.equal("", inst.option("currentPath"));
 
         const that = this;
+        let onCurrentDirectoryChangedCounter = 0;
         inst.option("onCurrentDirectoryChanged", function() {
-            assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"));
-
-            const $folder1Node = that.wrapper.getFolderNode(1);
-            assert.equal($folder1Node.find("span").text(), "Folder 1");
-
-            const $folder11Node = that.wrapper.getFolderNode(2);
-            assert.equal($folder11Node.find("span").text(), "Folder 1.1");
-
-            done();
+            onCurrentDirectoryChangedCounter++;
+            assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"), "The option 'currentPath' was changed");
         });
 
         inst.option("currentPath", "Folder 1/Folder 1.1");
+        this.clock.tick(800);
+
+        assert.equal(onCurrentDirectoryChangedCounter, 1);
+
+        const $folder1Node = that.wrapper.getFolderNode(1);
+        assert.equal($folder1Node.find("span").text(), "Folder 1");
+
+        const $folder11Node = that.wrapper.getFolderNode(2);
+        assert.equal($folder11Node.find("span").text(), "Folder 1.1");
     });
 
 });
