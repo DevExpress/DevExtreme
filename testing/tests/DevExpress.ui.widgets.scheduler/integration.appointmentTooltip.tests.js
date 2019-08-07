@@ -74,46 +74,6 @@ QUnit.test("After change view type, tooltip should be appear after click on appo
             priorityId: 2,
             startDate: new Date(2018, 4, 21, 9, 30),
             endDate: new Date(2018, 4, 21, 11, 30)
-        }, {
-            text: "Book Flights to San Fran for Sales Trip",
-            priorityId: 1,
-            startDate: new Date(2018, 4, 24, 10, 0),
-            endDate: new Date(2018, 4, 24, 12, 0),
-        }, {
-            text: "Install New Router in Dev Room",
-            priorityId: 1,
-            startDate: new Date(2018, 4, 21, 13),
-            endDate: new Date(2018, 4, 21, 15, 30)
-        }, {
-            text: "Approve Personal Computer Upgrade Plan",
-            priorityId: 2,
-            startDate: new Date(2018, 4, 22, 10, 0),
-            endDate: new Date(2018, 4, 22, 11, 0)
-        }, {
-            text: "Final Budget Review",
-            priorityId: 2,
-            startDate: new Date(2018, 4, 22, 12, 0),
-            endDate: new Date(2018, 4, 22, 13, 35)
-        }, {
-            text: "New Brochures",
-            priorityId: 2,
-            startDate: new Date(2018, 4, 21, 13, 0),
-            endDate: new Date(2018, 4, 21, 15, 15)
-        }, {
-            text: "Install New Database",
-            priorityId: 1,
-            startDate: new Date(2018, 4, 22, 9),
-            endDate: new Date(2018, 4, 22, 12, 15)
-        }, {
-            text: "Approve New Online Marketing Strategy",
-            priorityId: 2,
-            startDate: new Date(2018, 4, 23, 12, 0),
-            endDate: new Date(2018, 4, 23, 14, 0)
-        }, {
-            text: "Upgrade Personal Computers",
-            priorityId: 1,
-            startDate: new Date(2018, 4, 21, 9),
-            endDate: new Date(2018, 4, 21, 11, 30)
         }
     ];
 
