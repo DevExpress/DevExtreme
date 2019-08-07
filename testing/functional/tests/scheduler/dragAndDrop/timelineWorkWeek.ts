@@ -1,107 +1,95 @@
 import { ClientFunction } from 'testcafe';
-
 import { getContainerFileUrl } from '../../../helpers/testHelper';
 
 import { dataSource } from './init/widget.data';
 import { createScheduler } from './init/widget.setup';
 
-import { AppointmentModel, Property } from './helpers/appointment.helper';
+import SchedulerTestHelper from '../../../helpers/scheduler.test.helper';
 
-import { TablePosition } from './helpers/props/tablePosition';
-import { Size } from './helpers/props/size';
-import { TimeSpan } from './helpers/props/timeSpan';
-
-import { dropTo, compare } from './helpers/actions.helper';
+const scheduler = new SchedulerTestHelper("#container");
 
 fixture`Rearrange appointments in the Scheduler widget with the drag-and-drop gesture`
     .page(getContainerFileUrl());
 
 test('Drag-and-drop appointments in timelineWorkWeek', async t => {
     let appointment;
-    const comparsionProperties = [
-        Property.height,
-        Property.startTime,
-        Property.endTime
-    ];
 
-    appointment = new AppointmentModel('Appointment #1',
-        {
-            position: new TablePosition(0, 1),
-            size: new Size('200px', '132px'),
-            duration: new TimeSpan('9:30 AM', '10:00 AM')
-        });
+    appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 1))
 
-    appointment = new AppointmentModel('Appointment #1',
-        {
-            position: new TablePosition(0, 3),
-            size: new Size('200px', '132px'),
-            duration: new TimeSpan('10:30 AM', '11:00 AM')
-        });
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('200px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('10:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 3))
 
-    appointment = new AppointmentModel('Appointment #2',
-        {
-            position: new TablePosition(0, 1),
-            size: new Size('400px', '132px'),
-            duration: new TimeSpan('9:30 AM', '10:30 AM')
-        });
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('200px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('11:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
 
-    appointment = new AppointmentModel('Appointment #2',
-        {
-            position: new TablePosition(0, 3),
-            size: new Size('400px', '132px'),
-            duration: new TimeSpan('10:30 AM', '11:30 AM')
-        });
+    appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 1))
 
-    appointment = new AppointmentModel('Appointment #3',
-        {
-            position: new TablePosition(0, 1),
-            size: new Size('600px', '132px'),
-            duration: new TimeSpan('9:30 AM', '11:00 AM')
-        });
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('400px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 3))
 
-    appointment = new AppointmentModel('Appointment #3',
-        {
-            position: new TablePosition(0, 3),
-            size: new Size('600px', '132px'),
-            duration: new TimeSpan('10:30 AM', '12:00 PM')
-        });
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('400px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('11:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
 
-    appointment = new AppointmentModel('Appointment #2',
-        {
-            position: new TablePosition(0, 1),
-            size: new Size('400px', '132px'),
-            duration: new TimeSpan('9:30 AM', '10:30 AM')
-        });
+    appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 1))
 
-    appointment = new AppointmentModel('Appointment #1',
-        {
-            position: new TablePosition(0, 0),
-            size: new Size('200px', '132px'),
-            duration: new TimeSpan('9:00 AM', '9:30 AM')
-        });
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('600px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('11:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-    await dropTo(t, appointment.title, appointment.properties.position);
-    await compare(t, appointment.title, appointment.properties, comparsionProperties);
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 3))
+
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('600px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('12:00 PM').eql(await scheduler.getAppointmentEndTime(appointment));
+
+
+    appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
+
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 1))
+
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('400px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+
+
+    appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
+
+    await t
+        .dragToElement(appointment, scheduler.getDateTableCell(0, 0))
+
+        .expect('132px').eql(await scheduler.getAppointmentHeight(appointment))
+        .expect('200px').eql(await scheduler.getAppointmentWidth(appointment))
+        .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
+        .expect('9:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
 }).before(async () => { await createScheduler('timelineWorkWeek', dataSource) });
