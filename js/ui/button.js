@@ -382,7 +382,7 @@ var Button = Widget.inherit({
         var ariaLabel = text || icon || "";
         ariaLabel = ariaLabel.toString().trim();
 
-        this.setAria("label", ariaLabel);
+        this.setAria("label", ariaLabel.length ? ariaLabel : null);
     },
 
     _renderType: function() {

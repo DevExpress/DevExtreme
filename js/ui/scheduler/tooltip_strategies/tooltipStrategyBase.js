@@ -40,13 +40,13 @@ export class TooltipStrategyBase {
 
     _showCore(target, dataList, isSingleItemBehavior) {
         if(!this.tooltip) {
-            this.list = this._createList(target, dataList);
-            this.tooltip = this._createTooltip(target, this.list);
+            this.tooltip = this._createTooltip(target);
+            this.list = this._createList(dataList);
+
+            this.tooltip.option("contentTemplate", () => this.list.$element());
         } else {
+            this._shouldUseTarget() && this.tooltip.option("target", target);
             this.list.option("dataSource", dataList);
-            if(this._shouldUseTarget()) {
-                this.tooltip.option("target", target);
-            }
         }
 
         this.tooltip.option("visible", true);
@@ -76,17 +76,17 @@ export class TooltipStrategyBase {
         return true;
     }
 
-    _createListOption(target, dataList) {
+    _createListOption(dataList) {
         return {
             dataSource: dataList,
             onItemRendered: e => this._onListItemRendered(e),
             onItemClick: e => this._onListItemClick(e),
-            itemTemplate: (item, index) => this._renderTemplate(target, item.data, item.currentData || item.data, index, item.color)
+            itemTemplate: (item, index) => this._renderTemplate(this.tooltip.option("target"), item.data, item.currentData || item.data, index, item.color)
         };
     }
 
-    _createList(target, dataList) {
-        return this.scheduler._createComponent($("<div>"), List, this._createListOption(target, dataList));
+    _createList(dataList) {
+        return this.scheduler._createComponent($("<div>"), List, this._createListOption(dataList));
     }
 
     _onListItemRendered(e) {

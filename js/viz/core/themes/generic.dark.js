@@ -262,3 +262,6 @@ registerTheme({
     }
 }, "generic.light");
 
+registerTheme({
+    name: "generic.dark.compact"
+}, "generic.dark");

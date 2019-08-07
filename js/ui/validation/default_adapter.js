@@ -9,8 +9,8 @@ var DefaultAdapter = Class.inherit({
 
         that.validationRequestsCallbacks = Callbacks();
 
-        var handler = function() {
-            that.validationRequestsCallbacks.fire();
+        var handler = function(args) {
+            that.validationRequestsCallbacks.fire(args);
         };
 
         editor.validationRequest.add(handler);

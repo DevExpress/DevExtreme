@@ -13,6 +13,8 @@
 
         "dxCollectionWidget-noDataText": "Δεν υπάρχουν δεδομένα προς εμφάνιση",
 
+        "dxDropDownEditor-selectLabel": "Επιλέξτε",
+
         "validation-required": "Απαιτείται συμπλήρωση",
         "validation-required-formatted": "{0} είναι απαιτούμενο προς συμπλήρωση",
         "validation-numeric": "Η τιμή του πεδίου πρέπει να είναι αριθμητική",

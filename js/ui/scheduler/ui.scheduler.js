@@ -1517,9 +1517,8 @@ const Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _fireContentReadyAction(result) {
+    _fireContentReadyAction: function(result) {
         this.callBase();
-
         result && result.resolve();
     },
 
@@ -1838,6 +1837,7 @@ const Scheduler = Widget.inherit({
         if(this._isLoaded()) {
             this._initMarkupCore(this._loadedResources);
             this._dataSourceChangedHandler(this._dataSource.items());
+            this._fireContentReadyAction();
         } else {
             this._loadResources().done((function(resources) {
                 this._initMarkupCore(resources);
@@ -2901,7 +2901,7 @@ const Scheduler = Widget.inherit({
         return startDate;
     },
 
-    _getEndDate: function(appointment) {
+    _getEndDate: function(appointment, skipNormalize) {
         var endDate = this.fire("getField", "endDate", appointment);
 
         if(endDate) {
@@ -2912,7 +2912,7 @@ const Scheduler = Widget.inherit({
 
             endDate = this.fire("convertDateByTimezone", endDate, endDateTimeZone);
 
-            this.fire("updateAppointmentEndDate", {
+            !skipNormalize && this.fire("updateAppointmentEndDate", {
                 endDate: endDate,
                 callback: function(result) {
                     endDate = result;

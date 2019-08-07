@@ -627,8 +627,10 @@ var Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function() {
-        this._resetContentHeight();
+    _renderGeometryImpl: function(isDimensionChanged) {
+        if(!isDimensionChanged) {
+            this._resetContentHeight();
+        }
         this.callBase.apply(this, arguments);
         this._setContentHeight();
     },
@@ -750,6 +752,10 @@ var Popup = Overlay.inherit({
         };
     },
 
+    _useFixedPosition: function() {
+        return this.callBase() || this.option("fullScreen");
+    },
+
     _renderDimensions: function() {
         if(this.option("fullScreen")) {
             this._$content.css({
@@ -831,6 +837,7 @@ var Popup = Overlay.inherit({
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
+                this._toggleSafariScrolling(!args.value);
                 this._renderGeometry();
                 domUtils.triggerResizeEvent(this._$content);
                 break;
