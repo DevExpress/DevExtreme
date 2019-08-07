@@ -43,7 +43,8 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
         super._createContentTemplate(element);
 
         this._nameTextBox = this._createComponent($("<div>"), TextBox, {
-            value: this._initialNameValue
+            value: this._initialNameValue,
+            onEnterKey: this._applyDialogChanges.bind(this)
         });
 
         this._$contentElement.append(this._nameTextBox.$element());

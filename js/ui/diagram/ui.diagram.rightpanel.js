@@ -5,6 +5,8 @@ import Form from "../form";
 import DiagramCommands from "./ui.diagram.commands";
 import { extend } from "../../core/utils/extend";
 import DiagramBar from "./diagram_bar";
+import ScrollView from "../scroll_view";
+import { Deferred } from "../../core/utils/deferred";
 
 const DIAGRAM_RIGHT_PANEL_CLASS = "dx-diagram-right-panel";
 const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = "dx-diagram-right-panel-begin-group";
@@ -18,8 +20,11 @@ class DiagramRightPanel extends DiagramPanel {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(DIAGRAM_RIGHT_PANEL_CLASS);
-        const $accordion = $("<div>")
+        const $scrollViewWrapper = $("<div>")
             .appendTo(this.$element());
+        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
+        const $accordion = $("<div>")
+            .appendTo(this._scrollView.content());
 
         this._renderAccordion($accordion);
     }
@@ -35,12 +40,23 @@ class DiagramRightPanel extends DiagramPanel {
             collapsible: true,
             displayExpr: "title",
             dataSource: this._getAccordionDataSource(),
-            itemTemplate: (data, index, $element) => data.onTemplate(this, $element)
+            itemTemplate: (data, index, $element) => data.onTemplate(this, $element),
+            onContentReady: (e) => {
+                this._updateScrollAnimateSubscription(e.component);
+            }
+        });
+    }
+    _updateScrollAnimateSubscription(component) {
+        component._deferredAnimate = new Deferred();
+        component._deferredAnimate.done(() => {
+            this._scrollView.update();
+            this._updateScrollAnimateSubscription(component);
         });
     }
     _renderOptions($container) {
+        var commands = DiagramCommands.getPropertyPanelCommands(this.option("propertyGroups"));
         this._formInstance = this._createComponent($container, Form, {
-            items: DiagramCommands.getOptions().map(item => {
+            items: commands.map(item => {
                 return extend(true, {
                     editorType: item.widget,
                     dataField: item.command.toString(),
@@ -94,13 +110,15 @@ class DiagramRightPanel extends DiagramPanel {
     _setItemSubItems(key, items) {
         this._updateLocked = true;
         var editorInstance = this._formInstance.getEditor(key.toString());
-        editorInstance.option('items', items.map(item => {
-            var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
-            return {
-                'value': value,
-                'title': item.text
-            };
-        }));
+        if(editorInstance) {
+            editorInstance.option('items', items.map(item => {
+                var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
+                return {
+                    'value': value,
+                    'title': item.text
+                };
+            }));
+        }
         this._updateLocked = false;
     }
     _setEnabled(enabled) {
@@ -108,7 +126,16 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _setItemEnabled(key, enabled) {
         var editorInstance = this._formInstance.getEditor(key.toString());
-        editorInstance.option('disabled', !enabled);
+        if(editorInstance) editorInstance.option('disabled', !enabled);
+    }
+    _optionChanged(args) {
+        switch(args.name) {
+            case "propertyGroups":
+                this._invalidate();
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
@@ -119,7 +146,7 @@ class DiagramRightPanel extends DiagramPanel {
 
 class OptionsDiagramBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getOptions().map(c => c.command);
+        return DiagramCommands.getPropertyPanelCommands().map(c => c.command);
     }
     setItemValue(key, value) {
         this._owner._setItemValue(key, value);

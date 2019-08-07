@@ -339,6 +339,12 @@ var dxRangeSelector = {
         * @inherits VizTimeInterval
         */
         aggregationInterval: undefined,
+        /**
+        * @name dxRangeSelectorOptions.scale.aggregateByCategory
+        * @type boolean
+        * @default false
+        */
+        aggregateByCategory: false,
     },
     /**
     * @name dxRangeSelectorOptions.sliderMarker

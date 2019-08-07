@@ -220,4 +220,135 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             });
     });
 
+    test("refresh data and restore state", function(assert) {
+        const done = assert.async();
+        let myData = [
+            {
+                name: "D1",
+                isDirectory: true,
+                items: [
+                    {
+                        name: "D1.1",
+                        isDirectory: true,
+                        items: [ { name: "file1" } ]
+                    }
+                ]
+            }
+        ];
+        let controller = new FileItemsController({
+            fileProvider: myData
+        });
+
+        const rootDir = controller.getCurrentDirectory();
+        controller
+            .getDirectoryContents(rootDir)
+            .then(directories => {
+                directories[0].expanded = true;
+                return controller.getDirectories(directories[0]);
+            })
+            .then(directories => {
+                directories[0].expanded = true;
+                controller.setCurrentDirectory(directories[0]);
+                return controller.getDirectoryContents(directories[0]);
+            })
+            .then(itemInfos => {
+                myData[0].items[0].items.push({ name: "file2" });
+
+                assert.equal(itemInfos.length, 1);
+                assert.equal(itemInfos[0].fileItem.name, "file1");
+                return controller.refresh();
+            })
+            .then(() => {
+                const currentDir = controller.getCurrentDirectory();
+                assert.equal(currentDir.fileItem.name, "D1.1");
+                return controller.getDirectoryContents(currentDir);
+            })
+            .then(itemInfos => {
+                assert.equal(itemInfos.length, 2);
+                assert.equal(itemInfos[0].fileItem.name, "file1");
+                assert.equal(itemInfos[1].fileItem.name, "file2");
+                assert.ok(controller.getCurrentDirectory().expanded);
+                done();
+            });
+    });
+
+    test("restore selection after refresh when selected item was removed", function(assert) {
+        const done = assert.async();
+        let myData = [
+            {
+                name: "D1",
+                isDirectory: true,
+                items: [
+                    {
+                        name: "D1.1",
+                        isDirectory: true,
+                        items: [ { name: "file1" } ]
+                    }
+                ]
+            }
+        ];
+        let controller = new FileItemsController({
+            fileProvider: myData
+        });
+
+        const rootDir = controller.getCurrentDirectory();
+        controller
+            .getDirectoryContents(rootDir)
+            .then(directories => {
+                directories[0].expanded = true;
+                return controller.getDirectories(directories[0]);
+            })
+            .then(directories => {
+                directories[0].expanded = true;
+                controller.setCurrentDirectory(directories[0]);
+                return controller.getDirectoryContents(directories[0]);
+            })
+            .then(itemInfos => {
+                myData[0].items = [ ];
+
+                assert.equal(itemInfos.length, 1);
+                assert.equal(itemInfos[0].fileItem.name, "file1");
+                return controller.refresh();
+            })
+            .then(() => {
+                const currentDir = controller.getCurrentDirectory();
+                assert.equal(currentDir.fileItem.name, "D1");
+                return controller.getDirectoryContents(currentDir);
+            })
+            .then(itemInfos => {
+                assert.equal(itemInfos.length, 0);
+                done();
+            });
+    });
+
+    test("set current path", function(assert) {
+        const done = assert.async();
+        this.data[1].items = [
+            {
+                name: "F2.1",
+                isDirectory: true,
+                items: [ { name: "file" } ]
+            }
+        ];
+
+        this.controller.setCurrentPath("F2/F2.1")
+            .then(() => {
+                assert.equal("F2/F2.1", this.controller.getCurrentPath());
+
+                const currentDir = this.controller.getCurrentDirectory();
+                assert.equal("F2/F2.1", currentDir.fileItem.key);
+                assert.equal("F2.1", currentDir.fileItem.name);
+
+                assert.notOk(currentDir.expanded);
+
+                const dirF2 = currentDir.parentDirectory;
+                assert.ok(dirF2.expanded);
+
+                const rootDir = dirF2.parentDirectory;
+                assert.ok(rootDir.expanded);
+
+                done();
+            });
+    });
+
 });

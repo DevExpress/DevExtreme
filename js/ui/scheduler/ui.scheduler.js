@@ -20,7 +20,7 @@ import messageLocalization from "../../localization/message";
 import dateSerialization from "../../core/utils/date_serialization";
 import Widget from "../widget/ui.widget";
 import subscribes from "./ui.scheduler.subscribes";
-import FunctionTemplate from "../widget/function_template";
+import { FunctionTemplate } from "../../core/templates/function_template";
 
 import { DesktopTooltipStrategy } from "./tooltip_strategies/desktopTooltipStrategy";
 import { MobileTooltipStrategy } from "./tooltip_strategies/mobileTooltipStrategy";
@@ -47,8 +47,8 @@ import loading from "./ui.loading";
 import AppointmentForm from "./ui.scheduler.appointment_form";
 import Popup from "../popup";
 import deferredUtils from "../../core/utils/deferred";
-import EmptyTemplate from "../widget/empty_template";
-import BindableTemplate from "../widget/bindable_template";
+import { EmptyTemplate } from "../../core/templates/empty_template";
+import { BindableTemplate } from "../../core/templates/bindable_template";
 import themes from "../themes";
 import browser from "../../core/utils/browser";
 import { touch } from "../../core/utils/support";
@@ -1517,9 +1517,8 @@ const Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _fireContentReadyAction(result) {
+    _fireContentReadyAction: function(result) {
         this.callBase();
-
         result && result.resolve();
     },
 
@@ -1610,9 +1609,9 @@ const Scheduler = Widget.inherit({
         this.callBase();
         this._initAppointmentTemplate();
 
-        this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate(this);
-        this._defaultTemplates["appointmentPopup"] = new EmptyTemplate(this);
-        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate(this);
+        this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate();
+        this._defaultTemplates["appointmentPopup"] = new EmptyTemplate();
+        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate();
     },
 
     _initAppointmentTemplate: function() {
@@ -1838,6 +1837,7 @@ const Scheduler = Widget.inherit({
         if(this._isLoaded()) {
             this._initMarkupCore(this._loadedResources);
             this._dataSourceChangedHandler(this._dataSource.items());
+            this._fireContentReadyAction();
         } else {
             this._loadResources().done((function(resources) {
                 this._initMarkupCore(resources);

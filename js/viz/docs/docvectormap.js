@@ -403,11 +403,11 @@ var dxVectorMap = {
     }],
     /**
     * @name dxVectorMapOptions.projection
-    * @type object
-    * @default undefined
+    * @type Enums.VectorMapProjection|VectorMapProjectionConfig|string|object
+    * @default "mercator"
     * @notUsedInTheme
     */
-    projection: undefined,
+    projection: "mercator",
     /**
     * @name dxVectorMapOptions.bounds
     * @type Array<number>

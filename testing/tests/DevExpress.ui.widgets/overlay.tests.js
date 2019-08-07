@@ -9,7 +9,7 @@ import positionUtils from "animation/position";
 import domUtils from "core/utils/dom";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import devices from "core/devices";
-import Template from "ui/widget/template";
+import { Template } from "core/templates/template";
 import Overlay from "ui/overlay";
 import pointerMock from "../../helpers/pointerMock.js";
 import eventsEngine from "events/core/events_engine";

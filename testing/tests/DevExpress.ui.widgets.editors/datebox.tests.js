@@ -3229,7 +3229,7 @@ QUnit.module("datebox w/ time list", {
         const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
         $item.trigger("dxclick");
 
-        assert.strictEqual(this.dateBox.option("value").getFullYear(), 1970, "year is correct");
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
     });
 
     QUnit.test("selected date should be in value year when value is specified", (assert) => {
@@ -3832,6 +3832,26 @@ QUnit.module("datebox validation", {}, () => {
             .change();
 
         assert.ok(dateBox.option("isValid"), "widget is valid");
+    });
+
+    QUnit.test("required validator should not block valuechange in datetime strategy", (assert) => {
+        const $dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            opened: true,
+            value: null
+        }).dxValidator({
+            validationRules: [{
+                type: "required"
+            }]
+        });
+        const dateBox = $dateBox.dxDateBox("instance");
+        const $done = $(dateBox.content()).parent().find(".dx-popup-done.dx-button");
+
+        $done.trigger("dxclick");
+
+        assert.ok(dateBox.option("isValid"), "widget is valid");
+        assert.ok(dateBox.option("value"), "value is not empty");
     });
 
     QUnit.test("widget is still valid after drop down is opened", assert => {

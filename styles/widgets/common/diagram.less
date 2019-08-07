@@ -15,6 +15,7 @@
         display: flex;
         flex: 1;
         flex-basis: 0;
+        overflow: hidden;
     }
 
     .dx-diagram-left-panel {
@@ -34,6 +35,8 @@
 
     .dx-diagram-drawer-wrapper {
         flex: 1 0;
+        overflow: hidden;
+        flex-basis: 0;
     }
 
     .dx-diagram-content {
@@ -44,8 +47,12 @@
         border-left: @TRANSPARENT_BORDER;
     }
 
-    .dx-diagram-right-panel .dx-accordion {
+    .dx-diagram-right-panel .dx-scrollview {
         width: 280px;
+    }
+
+    .dx-diagram-right-panel .dx-accordion {
+        width: 100%;
     }
 
     .dx-diagram-toolbar-separator {

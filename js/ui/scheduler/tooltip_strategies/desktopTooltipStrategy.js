@@ -4,7 +4,7 @@ import Tooltip from "../../tooltip";
 import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
 import eventsEngine from "../../../events/core/events_engine";
-import FunctionTemplate from "../../widget/function_template";
+import { FunctionTemplate } from "../../../core/templates/function_template";
 import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
@@ -233,7 +233,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return result;
     }
 
-    _createTooltip(target, list) {
+    _createTooltip(target) {
         this.$tooltip = this._createTooltipElement();
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
@@ -241,8 +241,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             onShowing: this._onTooltipShowing.bind(this),
             closeOnTargetScroll: () => this.skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
-            rtlEnabled: this.scheduler.option("rtlEnabled"),
-            contentTemplate: () => list.$element()
+            rtlEnabled: this.scheduler.option("rtlEnabled")
         });
     }
 

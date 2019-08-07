@@ -43,11 +43,6 @@
         </div>
         <div>
             <label>
-                Force combined styles: <input type="checkbox" data-bind="checked: combinedStyles" />
-            </label>
-        </div>
-        <div>
-            <label>
                 IE mode: <select data-bind="options: IE_MODES, value: ieMode"></select>
             </label>
         </div>
@@ -162,7 +157,6 @@
             this.cats = ko.observableArray();
             this.chosenCat = ko.observable();
             this.suites = ko.observableArray();
-            this.combinedStyles = ko.observable(false);
             this.IE_MODES = ["edge", "10", "9"];
             this.ieMode = ko.observable(this.IE_MODES[0]);
             this.noTryCatch = ko.observable(false);
@@ -226,8 +220,6 @@
 
             _runUrlExtraParams: function() {
                 var result = {};
-                if(this.combinedStyles())
-                    result.combinedStyles = "true";
                 if(this.ieMode() !== "edge")
                     result.ieMode = this.ieMode();
                 if(this.noGlobals())

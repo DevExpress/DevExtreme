@@ -22,6 +22,7 @@ var widgets = {
     Form: require("ui/form"),
     Funnel: require("viz/funnel"),
     Gallery: require("ui/gallery"),
+    Gantt: require("ui/gantt"),
     HtmlEditor: require("ui/html_editor"),
     LinearGauge: require("viz/linear_gauge"),
     List: require("ui/list"),

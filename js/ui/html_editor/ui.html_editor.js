@@ -4,7 +4,7 @@ import { isDefined, isFunction } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import { executeAsync } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
-import EmptyTemplate from "../widget/empty_template";
+import { EmptyTemplate } from "../../core/templates/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
 import Callbacks from "../../core/utils/callbacks";
@@ -18,6 +18,7 @@ import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
+const QUILL_CLIPBOARD_CLASS = "ql-clipboard";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 
@@ -240,23 +241,35 @@ const HtmlEditor = Editor.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate(this);
+        this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate();
     },
 
     _focusTarget: function() {
         return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
     },
 
-    _focusInHandler: function() {
+    _focusInHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(true, this.$element());
 
         this.callBase.apply(this, arguments);
     },
 
-    _focusOutHandler: function() {
+    _focusOutHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(false, this.$element());
 
         this.callBase.apply(this, arguments);
+    },
+
+    _shouldSkipFocusEvent: function(relatedTarget) {
+        return $(relatedTarget).hasClass(QUILL_CLIPBOARD_CLASS);
     },
 
     _initMarkup: function() {

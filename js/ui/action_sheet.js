@@ -8,7 +8,7 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     Popup = require("./popup"),
     Popover = require("./popover"),
-    BindableTemplate = require("./widget/bindable_template"),
+    BindableTemplate = require("../core/templates/bindable_template").BindableTemplate,
     Deferred = require("../core/utils/deferred").Deferred;
 
 var ACTION_SHEET_CLASS = "dx-actionsheet",

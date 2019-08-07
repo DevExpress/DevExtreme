@@ -1,7 +1,6 @@
 import $ from "../../core/renderer";
 
 import DiagramPanel from "./diagram.panel";
-import DiagramToolbox from "./ui.diagram.toolbox";
 import Accordion from "../accordion";
 import ScrollView from "../scroll_view";
 import { Deferred } from "../../core/utils/deferred";
@@ -12,8 +11,9 @@ class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._toolboxGroups = this.option("toolboxGroups") || [];
-        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
+        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered", {
+            excludeValidators: ["disabled"]
+        });
     }
     _initMarkup() {
         super._initMarkup();
@@ -30,17 +30,16 @@ class DiagramLeftPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         var result = [];
-        for(var i = 0; i < this._toolboxGroups.length; i++) {
-            var simpleCategory = typeof this._toolboxGroups[i] === "string";
-            var category = simpleCategory ? this._toolboxGroups[i] : this._toolboxGroups[i].category;
-            var title = this._toolboxGroups[i].title;
-            if(!title) title = DiagramToolbox.groups[category] && DiagramToolbox.groups[category].title;
-            if(!title) title = category;
+        var toolboxGroups = this.option("toolboxGroups");
+        for(var i = 0; i < toolboxGroups.length; i++) {
+            var category = toolboxGroups[i].category;
+            var title = toolboxGroups[i].title;
             var groupObj = {
                 category,
                 title: title || category,
-                style: this._toolboxGroups[i].style,
-                shapes: this._toolboxGroups[i].shapes,
+                expanded: toolboxGroups[i].expanded,
+                style: toolboxGroups[i].style,
+                shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
                     this._onShapeCategoryRenderedAction({
                         category: data.category,
@@ -69,9 +68,9 @@ class DiagramLeftPanel extends DiagramPanel {
         });
 
         for(var i = 0; i < data.length; i++) {
-            if(data[i] === false) {
+            if(data[i].expanded === false) {
                 this._accordionInstance.collapseItem(i);
-            } else if(data[i] === true) {
+            } else if(data[i].expanded === true) {
                 this._accordionInstance.expandItem(i);
             }
         }
@@ -91,7 +90,6 @@ class DiagramLeftPanel extends DiagramPanel {
                 this._accordionInstance.option('disabled', args.value);
                 break;
             case "toolboxGroups":
-                this._toolboxGroups = this.option("_toolboxGroups") || [];
                 this._invalidate();
                 break;
             default:

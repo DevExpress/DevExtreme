@@ -564,6 +564,19 @@ QUnit.module("tags", moduleSetup, () => {
         const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
         assert.equal($tag.text(), "", "tag has correct text");
     });
+
+    QUnit.test("onValueChanged has dxclick event on remove button click", assert => {
+        const $element = $("#tagBox").dxTagBox({
+            value: ["123"],
+            onValueChanged: function(e) {
+                assert.equal(e.event.type, "dxclick", "correct event type");
+                assert.deepEqual(e.event.target, $removeButton.get(0), "correct target element");
+            }
+        });
+
+        const $removeButton = $element.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
+        $($removeButton).trigger("dxclick");
+    });
 });
 
 QUnit.module("multi tag support", {
@@ -3193,6 +3206,55 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual(instance.option("value"), ["test1", "test2"], "Correct value");
+    });
+
+    QUnit.test("load tags data should not raise an error after widget has been disposed", (assert) => {
+        assert.expect(1);
+
+        const $container = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: (loadOptions) => {
+                    const d = $.Deferred();
+
+                    setTimeout(function() {
+                        const data = loadOptions && loadOptions.searchValue ?
+                            ["test1"] :
+                            ["test1", "test2", "test3"];
+
+                        d.resolve(data);
+                    }, TIME_TO_WAIT);
+
+                    return d.promise();
+                }
+            },
+            searchEnabled: true,
+            searchTimeout: 0,
+            onValueChanged: function({ component, value }) {
+                if(value.length === 2) {
+                    let isOK = true;
+
+                    try {
+                        component.dispose();
+                    } catch(e) {
+                        isOK = false;
+                    }
+
+                    assert.ok(isOK, "there is no exception");
+                }
+            },
+            value: ["test2"]
+        });
+        const instance = $container.dxTagBox("instance");
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboardMock(instance._input()).type("te");
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+
+        $listItems.first().trigger("dxclick");
+        this.clock.tick(TIME_TO_WAIT);
     });
 });
 
