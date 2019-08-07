@@ -76,6 +76,7 @@ function run_test {
             if [ "$HEADLESS" == "true" ]; then
                 google-chrome-stable \
                     --no-sandbox \
+                    --disable-dev-shm-usage \
                     --disable-gpu \
                     --user-data-dir=/tmp/chrome \
                     --headless \
@@ -85,6 +86,7 @@ function run_test {
             else
                 dbus-launch --exit-with-session google-chrome-stable \
                     --no-sandbox \
+                    --disable-dev-shm-usage \
                     --disable-gpu \
                     --user-data-dir=/tmp/chrome \
                     --no-first-run \
