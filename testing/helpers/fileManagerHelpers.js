@@ -35,6 +35,10 @@ export class FileManagerWrapper {
         this._$element = $element;
     }
 
+    getInstance() {
+        return this._$element.dxFileManager("instance");
+    }
+
     getFolderNodes(inDialog) {
         if(inDialog) {
             return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
