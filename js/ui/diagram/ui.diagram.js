@@ -341,9 +341,19 @@ class Diagram extends Widget {
             nodeDataImporter: {
                 getKey: this._createOptionGetter("nodes.keyExpr"),
                 setKey: this._createOptionSetter("nodes.keyExpr"),
+
+                getLocked: this._createOptionGetter("nodes.lockedExpr"),
+                setLocked: this._createOptionSetter("nodes.lockedExpr"),
+
+                getStyle: this._createOptionGetter("nodes.styleExpr"),
+                setStyle: this._createOptionSetter("nodes.styleExpr"),
+                getStyleText: this._createOptionGetter("nodes.textStyleExpr"),
+                setStyleText: this._createOptionSetter("nodes.textStyleExpr"),
+                getZIndex: this._createOptionGetter("nodes.zIndexExpr"),
+                setZIndex: this._createOptionSetter("nodes.zIndexExpr"),
+
                 getType: this._createOptionGetter("nodes.typeExpr"),
                 setType: this._createOptionSetter("nodes.typeExpr"),
-
                 getText: this._createOptionGetter("nodes.textExpr"),
                 setText: this._createOptionSetter("nodes.textExpr"),
                 getImage: this._createOptionGetter("nodes.imageExpr"),
@@ -358,13 +368,6 @@ class Diagram extends Widget {
                 getHeight: this._createOptionGetter("nodes.heightExpr"),
                 setHeight: this._createOptionSetter("nodes.heightExpr"),
 
-                getStyle: this._createOptionGetter("nodes.styleExpr"),
-                setStyle: this._createOptionSetter("nodes.styleExpr"),
-                getStyleText: this._createOptionGetter("nodes.textStyleExpr"),
-                setStyleText: this._createOptionSetter("nodes.textStyleExpr"),
-                getZIndex: this._createOptionGetter("nodes.zIndexExpr"),
-                setZIndex: this._createOptionSetter("nodes.zIndexExpr"),
-
                 getParentKey: this._createOptionGetter("nodes.parentKeyExpr"),
                 setParentKey: this._createOptionSetter("nodes.parentKeyExpr"),
                 getItems: this._createOptionGetter("nodes.itemsExpr"),
@@ -373,33 +376,36 @@ class Diagram extends Widget {
             edgeDataImporter: {
                 getKey: this._createOptionGetter("edges.keyExpr"),
                 setKey: this._createOptionSetter("edges.keyExpr"),
+
+                getLocked: this._createOptionGetter("edges.lockedExpr"),
+                setLocked: this._createOptionSetter("edges.lockedExpr"),
+
+                getStyle: this._createOptionGetter("edges.styleExpr"),
+                setStyle: this._createOptionSetter("edges.styleExpr"),
+                getStyleText: this._createOptionGetter("edges.textStyleExpr"),
+                setStyleText: this._createOptionSetter("edges.textStyleExpr"),
+                getZIndex: this._createOptionGetter("edges.zIndexExpr"),
+                setZIndex: this._createOptionSetter("edges.zIndexExpr"),
+
                 getFrom: this._createOptionGetter("edges.fromExpr"),
                 setFrom: this._createOptionSetter("edges.fromExpr"),
-                getTo: this._createOptionGetter("edges.toExpr"),
-                setTo: this._createOptionSetter("edges.toExpr"),
-
                 getFromPointIndex: this._createOptionGetter("edges.fromPointIndexExpr"),
                 setFromPointIndex: this._createOptionSetter("edges.fromPointIndexExpr"),
+                getTo: this._createOptionGetter("edges.toExpr"),
+                setTo: this._createOptionSetter("edges.toExpr"),
                 getToPointIndex: this._createOptionGetter("edges.toPointIndexExpr"),
                 setToPointIndex: this._createOptionSetter("edges.toPointIndexExpr"),
                 getPoints: this._createOptionGetter("edges.pointsExpr"),
                 setPoints: this._createOptionSetter("edges.pointsExpr"),
 
-                getText: this._createOptionGetter("nodes.textExpr"),
-                setText: this._createOptionSetter("nodes.textExpr"),
-                getLineOption: this._createOptionGetter("nodes.lineTypeExpr"),
-                setLineOption: this._createOptionSetter("nodes.lineTypeExpr"),
-                getStartLineEnding: this._createOptionGetter("nodes.fromLineEndExpr"),
-                setStartLineEnding: this._createOptionSetter("nodes.fromLineEndExpr"),
-                getEndLineEnding: this._createOptionGetter("nodes.toLineEndExpr"),
-                setEndLineEnding: this._createOptionSetter("nodes.toLineEndExpr"),
-
-                getStyle: this._createOptionGetter("nodes.styleExpr"),
-                setStyle: this._createOptionSetter("nodes.styleExpr"),
-                getStyleText: this._createOptionGetter("nodes.textStyleExpr"),
-                setStyleText: this._createOptionSetter("nodes.textStyleExpr"),
-                getZIndex: this._createOptionGetter("nodes.zIndexExpr"),
-                setZIndex: this._createOptionSetter("nodes.zIndexExpr"),
+                getText: this._createOptionGetter("edges.textExpr"),
+                setText: this._createOptionSetter("edges.textExpr"),
+                getLineOption: this._createOptionGetter("edges.lineTypeExpr"),
+                setLineOption: this._createOptionSetter("edges.lineTypeExpr"),
+                getStartLineEnding: this._createOptionGetter("edges.fromLineEndExpr"),
+                setStartLineEnding: this._createOptionSetter("edges.fromLineEndExpr"),
+                getEndLineEnding: this._createOptionGetter("edges.toLineEndExpr"),
+                setEndLineEnding: this._createOptionSetter("edges.toLineEndExpr"),
             },
             layoutType: this._getDataBindingLayoutType()
         };
@@ -843,6 +849,34 @@ class Diagram extends Widget {
                 */
                 keyExpr: "id",
                 /**
+                * @name dxDiagramOptions.nodes.lockedExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                lockedExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.styleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                styleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.textStyleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                textStyleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.zIndexExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                zIndexExpr: undefined,
+                /**
                 * @name dxDiagramOptions.nodes.typeExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
@@ -906,27 +940,6 @@ class Diagram extends Widget {
                 */
                 heightExpr: undefined,
                 /**
-                * @name dxDiagramOptions.nodes.styleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
-                styleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.textStyleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
-                textStyleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.zIndexExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
-                zIndexExpr: undefined,
-                /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramAutoLayout
                  * @default "tree"
@@ -953,6 +966,34 @@ class Diagram extends Widget {
                 */
                 keyExpr: "id",
                 /**
+                * @name dxDiagramOptions.edges.lockedExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                lockedExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.styleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                styleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.textStyleExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                textStyleExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.zIndexExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                zIndexExpr: undefined,
+                /**
                 * @name dxDiagramOptions.edges.fromExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
@@ -960,19 +1001,19 @@ class Diagram extends Widget {
                 */
                 fromExpr: "from",
                 /**
-                * @name dxDiagramOptions.edges.toExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "to"
-                */
-                toExpr: "to",
-                /**
                 * @name dxDiagramOptions.edges.fromPointIndexExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default undefined
                 */
                 fromPointIndexExpr: undefined,
+                /**
+                * @name dxDiagramOptions.edges.toExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "to"
+                */
+                toExpr: "to",
                 /**
                 * @name dxDiagramOptions.edges.toPointIndexExpr
                 * @type string|function(data)
@@ -1014,28 +1055,7 @@ class Diagram extends Widget {
                 * @type_function_param1 data:object
                 * @default undefined
                 */
-                toLineEndExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.styleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
-                styleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.textStyleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
-                textStyleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.zIndexExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
-                zIndexExpr: undefined
+                toLineEndExpr: undefined
             },
 
             /**
