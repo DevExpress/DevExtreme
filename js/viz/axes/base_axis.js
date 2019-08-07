@@ -397,14 +397,10 @@ Axis.prototype = {
         return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, getConstantLineSharpDirection(value, this._getCanvasStartEnd()));
     },
 
-    _drawConstantLineLabelText: function(text, x, y, constantLineLabelOptions, group) {
-        var that = this,
-            options = that._options,
-            labelOptions = options.label;
-
-        return that._renderer.text(text, x, y)
-            .css(patchFontOptions(extend({}, labelOptions.font, constantLineLabelOptions.font)))
-            .attr({ align: "center" })
+    _drawConstantLineLabelText: function(text, x, y, { font, cssClass }, group) {
+        return this._renderer.text(text, x, y)
+            .css(patchFontOptions(extend({}, this._options.label.font, font)))
+            .attr({ align: "center", "class": cssClass })
             .append(group);
     },
 
@@ -899,7 +895,8 @@ Axis.prototype = {
         that._hasLabelFormat = labelOpt.format !== "" && isDefined(labelOpt.format);
         that._textOptions = {
             opacity: labelOpt.opacity,
-            align: "center"
+            align: "center",
+            "class": labelOpt.cssClass
         };
         that._textFontStyles = vizUtils.patchFontOptions(labelOpt.font);
 
@@ -1058,7 +1055,7 @@ Axis.prototype = {
     _getVisualRangeUpdateMode(viewport, newRange, oppositeValue) {
         let value = this._options.visualRangeUpdateMode;
         const translator = this._translator;
-        const range = translator.getBusinessRange();
+        const range = this._seriesData;
 
         if(this.isArgumentAxis) {
             if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
@@ -1106,7 +1103,7 @@ Axis.prototype = {
         return value;
     },
 
-    _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized) {
+    _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, newRange) {
         const that = this;
         const visualRange = this.visualRange();
 
@@ -1114,7 +1111,7 @@ Axis.prototype = {
             return;
         }
 
-        let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, that._seriesData, oppositeVisualRangeUpdateMode);
+        let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
         if(!that.isArgumentAxis) {
             const viewport = that.getViewport();
             if(!isDefined(viewport.startValue) &&
@@ -1179,9 +1176,9 @@ Axis.prototype = {
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
 
+        that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, range);
         that._seriesData = new Range(range);
         const dataIsEmpty = that._seriesData.isEmpty();
-        that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized);
         that._prevDataWasEmpty = dataIsEmpty;
 
         that._seriesData.addRange({
@@ -2132,8 +2129,10 @@ Axis.prototype = {
                 startValue,
                 endValue
             };
-        } else if(_isArray(args[0]) || isPlainObject(args[0])) {
+        } else if(_isArray(args[0])) {
             visualRange = args[0];
+        } else if(isPlainObject(args[0])) {
+            visualRange = extend({}, args[0]);
         } else {
             visualRange = [args[0], args[1]];
         }
@@ -2167,6 +2166,7 @@ Axis.prototype = {
             if(!isDefined(that._storedZoomEndParams)) {
                 that._storedZoomEndParams = {
                     startRange: previousRange,
+                    type: this.getOptions().type
                 };
             }
             that._storedZoomEndParams.event = domEvent;
@@ -2188,8 +2188,9 @@ Axis.prototype = {
                 maxVisible: previousRange.endValue,
                 categories: previousRange.categories
             };
-            const shift = adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange));
-            const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
+            const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
+            const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange)) : NaN;
+            const zoomFactor = typeIsNotChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2") : NaN;
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
             zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? "pan" : "zoom", zoomFactor);
@@ -2497,6 +2498,7 @@ Axis.prototype = {
         var options = this._options;
         return {
             isHorizontal: this._isHorizontal,
+            shiftZeroValue: !this.isArgumentAxis,
             interval: options.semiDiscreteInterval,
             stick: this._getStick(),
             breaksSize: options.breakStyle ? options.breakStyle.width : 0

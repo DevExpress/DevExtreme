@@ -84,14 +84,14 @@ var dxChart = {
     * @name dxChartOptions.barGroupPadding
     * @type number
     * @default 0.3
-    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
     */
     barGroupPadding: 0.3,
     /**
     * @name dxChartOptions.barGroupWidth
     * @type number
     * @default undefined
-    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
     */
     barGroupWidth: undefined,
     /**
@@ -1580,7 +1580,6 @@ var dxChart = {
         * @name dxChartOptions.argumentAxis.endOnTick
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         endOnTick: false
     },
@@ -1890,14 +1889,12 @@ var dxChart = {
         * @name dxChartOptions.valueAxis.endOnTick
         * @type boolean
         * @default undefined
-        * @inheritdoc
         */
         endOnTick: undefined
     },
     /**
     * @name dxChartOptions.tooltip
     * @type object
-    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -1910,7 +1907,7 @@ var dxChart = {
         * @name dxChartOptions.tooltip.location
         * @type Enums.ChartTooltipLocation
         * @default 'center'
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandlestickSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
         */
         location: 'center'
     },
@@ -2109,7 +2106,6 @@ var dxPieChart = {
        * @type function(items)
        * @type_function_param1 items:Array<PieChartLegendItem>
        * @type_function_return Array<PieChartLegendItem>
-       * @inheritdoc
        */
        customizeItems: undefined
     },
@@ -2174,7 +2170,7 @@ var dxPieChart = {
     * @name dxPieChartOptions.innerRadius
     * @type number
     * @default 0.5
-    * @propertyOf dxChartSeriesTypes.DoughnutSeries
+    * @propertyOf dxPieChartSeriesTypes.DoughnutSeries
     */
     innerRadius: 0.5,
     /**
@@ -2304,7 +2300,7 @@ var dxPolarChart = {
     * @name dxPolarChartOptions.negativesAsZeroes
     * @type boolean
     * @default false
-    * @propertyOf dxChartSeriesTypes.stackedbarpolarseries
+    * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
     */
     negativesAsZeroes: false,
     /**
@@ -2907,7 +2903,6 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.argumentAxis.tick
         * @type object
-        * @inheritdoc
         */
         tick: {
             /**
@@ -2920,7 +2915,6 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.argumentAxis.minorTick
         * @type object
-        * @inheritdoc
         */
         minorTick: {
             /**
@@ -2962,14 +2956,12 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.valueAxis.tick
         * @type object
-        * @inheritdoc
         */
         tick: {
             /**
             * @name dxPolarChartOptions.valueAxis.tick.visible
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             visible: false,
         },
@@ -3130,14 +3122,12 @@ var dxPolarChart = {
         * @name dxPolarChartOptions.valueAxis.endOnTick
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         endOnTick: false
     },
     /**
     * @name dxPolarChartOptions.tooltip
     * @type object
-    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -3418,7 +3408,6 @@ var BaseChart = {
         * @name dxPolarChartOptions.adaptiveLayout.width
         * @type number
         * @default 170
-        * @inheritdoc
         */
         width: 80,
         /**
@@ -3430,7 +3419,6 @@ var BaseChart = {
         * @name dxPolarChartOptions.adaptiveLayout.height
         * @type number
         * @default 170
-        * @inheritdoc
         */
         height: 80,
         /**
@@ -3442,7 +3430,6 @@ var BaseChart = {
         * @name dxPieChartOptions.adaptiveLayout.keepLabels
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         keepLabels: true
     }
@@ -3564,7 +3551,7 @@ var dxChartCommonAnnotationConfig = {
         * @name dxChartCommonAnnotationConfig.border.cornerRadius
         * @type number
         * @default 0
-        * @default 4 @for Material 
+        * @default 4 @for Material
         */
         cornerRadius: 0
     },

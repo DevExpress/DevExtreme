@@ -5153,6 +5153,9 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         ];
 
         this.columns = this.columns || ["name", "phone", "room"];
+        this.$element = function() {
+            return $("#container");
+        };
 
         this.options = $.extend(true, {
             useKeyboard: true,
@@ -5168,7 +5171,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
             }
         }, this.options);
 
-        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail"], {
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail", "selection"], {
             initViews: true
         });
     },
@@ -5218,6 +5221,79 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
         assert.ok($(rowsView.getCellElement(0, 1)).hasClass("dx-focused"), "cell(0, 1) is focused");
         assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
+    });
+
+    // T802790
+    QUnit.testInActiveWindow("After pressing space button checkboxes should not be rendered if showCheckBoxesMode = 'none' and focusedRowEnabled = 'true'", function(assert) {
+        // arrange
+        this.options = {
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "none"
+            },
+            focusedRowEnabled: true,
+            useKeyboard: true
+        };
+
+        this.setupModule();
+
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        this.triggerKeyDown("space", false, false, this.getRowElement(0));
+        // assert
+        assert.equal($(".dx-select-checkbox").length, 0, "checkboxes are not rendered");
+    });
+
+    QUnit.testInActiveWindow("SelectionWithCheckboxes should start if space key was pressed after focusing cell with selection checkbox", function(assert) {
+        // arrange
+        this.options = {
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "onClick"
+            },
+            useKeyboard: true
+        };
+
+        this.setupModule();
+
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        this.focusCell(0, 0);
+
+        this.triggerKeyDown("space", false, false, $(".dx-command-select").eq(1));
+
+        // assert
+        assert.equal($(".dx-select-checkbox").eq(1).attr("aria-checked"), "true");
+        assert.equal(this.selectionController.isSelectionWithCheckboxes(), true);
+    });
+
+    QUnit.testInActiveWindow("SelectionWithCheckboxes should not start if space key was pressed after focusing cell without selection checkbox", function(assert) {
+        // arrange
+        this.options = {
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "onClick"
+            },
+            useKeyboard: true
+        };
+
+        this.setupModule();
+
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        this.focusCell(0, 0);
+
+        this.triggerKeyDown("space", false, false, $(".dx-command-select").eq(1).next());
+
+        // assert
+        assert.equal($(".dx-select-checkbox").eq(1).attr("aria-checked"), "true");
+        assert.equal(this.selectionController.isSelectionWithCheckboxes(), false);
     });
 
     QUnit.testInActiveWindow("Master-detail cell should not has tabindex", function(assert) {
@@ -5427,6 +5503,42 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.equal(this.rowsView.element().find("input").length, 0, "input");
 
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    QUnit.testInActiveWindow("onFocusedRowChanged should fire after refresh() if empty dataSource, focusedRow=0 and row added (T743864)", function(assert) {
+        // arrange
+        var focusedRowChangedFiresCount = 0;
+
+        this.options = {
+            useKeyboard: true,
+            dataSource: [],
+            editing: {
+                mode: 'row',
+                allowAdding: true
+            },
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            onFocusedRowChanged: () => ++focusedRowChangedFiresCount
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        this.addRow();
+        this.cellValue(0, 0, "Test0");
+        this.cellValue(0, 1, "Test1");
+        this.cellValue(0, 2, "5");
+        this.saveEditData();
+        this.refresh();
+        // assert
+        assert.equal(focusedRowChangedFiresCount, 1, "onFocusedRowChanged fires count");
+
+        // act
+        this.refresh();
+        // assert
+        assert.equal(focusedRowChangedFiresCount, 2, "onFocusedRowChanged fires count");
     });
 
     // T684122

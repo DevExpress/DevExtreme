@@ -61,7 +61,6 @@ var Calendar = Editor.inherit({
             * @name dxCalendarOptions.hoverStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             hoverStateEnabled: true,
 
@@ -69,7 +68,6 @@ var Calendar = Editor.inherit({
             * @name dxCalendarOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -181,7 +179,6 @@ var Calendar = Editor.inherit({
             * @name dxCalendarOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
 
             /**
@@ -221,7 +218,6 @@ var Calendar = Editor.inherit({
                     * @name dxCalendarOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

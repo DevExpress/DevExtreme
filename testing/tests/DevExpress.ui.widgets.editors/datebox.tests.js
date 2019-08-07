@@ -1406,6 +1406,32 @@ QUnit.module("widget sizing render", {}, () => {
 
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
     });
+
+    QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            readOnly: true,
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option({
+            readOnly: false,
+            value: new Date()
+        });
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
+    });
 });
 
 QUnit.module("datebox and calendar integration", () => {
@@ -3186,12 +3212,36 @@ QUnit.module("datebox w/ time list", {
 
     QUnit.test("list should have items if the 'min' option is specified (T395529)", (assert) => {
         this.dateBox.option({
-            min: new Date(2016, 5, 20),
+            min: new Date(new Date(null).setHours(15)),
             opened: true
         });
 
         const list = $(".dx-list").dxList("instance");
         assert.ok(list.option("items").length > 0, "list is not empty");
+    });
+
+    QUnit.test("selected date should be in 1970 when it was set from the null value", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: null
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
+    });
+
+    QUnit.test("selected date should be in value year when value is specified", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: new Date(2018, 5, 6, 14, 12)
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), 2018, "year is correct");
     });
 
     QUnit.test("the value's date part should not be changed if editing input's text by keyboard (T395685)", (assert) => {
@@ -3782,6 +3832,26 @@ QUnit.module("datebox validation", {}, () => {
             .change();
 
         assert.ok(dateBox.option("isValid"), "widget is valid");
+    });
+
+    QUnit.test("required validator should not block valuechange in datetime strategy", (assert) => {
+        const $dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            opened: true,
+            value: null
+        }).dxValidator({
+            validationRules: [{
+                type: "required"
+            }]
+        });
+        const dateBox = $dateBox.dxDateBox("instance");
+        const $done = $(dateBox.content()).parent().find(".dx-popup-done.dx-button");
+
+        $done.trigger("dxclick");
+
+        assert.ok(dateBox.option("isValid"), "widget is valid");
+        assert.ok(dateBox.option("value"), "value is not empty");
     });
 
     QUnit.test("widget is still valid after drop down is opened", assert => {

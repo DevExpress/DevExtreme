@@ -92,7 +92,9 @@ var ResizingController = modules.ViewController.inherit({
                 } else if(changeType === "update" && e.changeTypes) {
                     if((items.length > 1 || e.changeTypes[0] !== "insert") &&
                         !(items.length === 0 && e.changeTypes[0] === "remove") && !e.needUpdateDimensions) {
-                        that._rowsView.resize();
+                        commonUtils.deferUpdate(function() {
+                            that._rowsView.resize();
+                        });
                     } else {
                         resizeDeferred = that.resize();
                     }
@@ -154,19 +156,24 @@ var ResizingController = modules.ViewController.inherit({
     _toggleBestFitModeForView: function(view, className, isBestFit) {
         if(!view || !view.isVisible()) return;
 
-        var $rowsTable = this._rowsView._getTableElement(),
-            $viewTable = view._getTableElement(),
-            $tableBody;
+        var $rowsTables = this._rowsView.getTableElements(),
+            $viewTables = view.getTableElements();
 
-        if($viewTable) {
-            if(isBestFit) {
-                $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
-            } else {
-                $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+        each($rowsTables, (index, tableElement) => {
+            var $tableBody,
+                $rowsTable = $(tableElement),
+                $viewTable = $viewTables.eq(index);
+
+            if($viewTable && $viewTable.length) {
+                if(isBestFit) {
+                    $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
+                } else {
+                    $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+                }
+                $tableBody.toggleClass(className, isBestFit);
+                $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
             }
-            $tableBody.toggleClass(className, isBestFit);
-            $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
-        }
+        });
     },
 
     _toggleBestFitMode: function(isBestFit) {
@@ -557,17 +564,15 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
     _setScrollerSpacing: function(hasHeight) {
-        var that = this,
-            scrollable = that._rowsView.getScrollable();
-
-        if(!scrollable && hasHeight) { // T722415
+        if(this.option("scrolling.useNative") === true) {
+            // T722415, T758955
             commonUtils.deferRender(() => {
                 commonUtils.deferUpdate(() => {
-                    that._setScrollerSpacingCore(hasHeight);
+                    this._setScrollerSpacingCore(hasHeight);
                 });
             });
         } else {
-            that._setScrollerSpacingCore(hasHeight);
+            this._setScrollerSpacingCore(hasHeight);
         }
     },
     _updateDimensionsCore: function() {

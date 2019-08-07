@@ -399,7 +399,7 @@ module.exports = {
         _drawTitleText: function(group, coords) {
             var options = this._options,
                 titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment };
+                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment, "class": titleOptions.cssClass };
 
             if(!titleOptions.text || !group) {
                 return;

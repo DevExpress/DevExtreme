@@ -876,6 +876,7 @@ QUnit.test("Show preparations. W/ customize w/ html", function(assert) {
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
+        isRendered: true,
         html: "some-customized-html"
     }, "state");
 
@@ -905,6 +906,7 @@ QUnit.test("Show preparations. W/ customize w/ html/text", function(assert) {
         borderColor: "cColor2",
         textColor: "cColor3",
         text: "some-customized-text",
+        isRendered: true,
         html: "some-customized-html"
     }, "state");
 
@@ -938,6 +940,7 @@ QUnit.test("Show preparations. Certain container", function(assert) {
 
 QUnit.test("Show. W/o params", function(assert) {
     this.options.customizeTooltip = null;
+    this.options.cssClass = "tooltip_class";
     this.tooltip.update(this.options);
 
     this.resetTooltipMocks();
@@ -971,7 +974,7 @@ QUnit.test("Show. W/o params", function(assert) {
     assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: "#939393" }]);
 
     assert.equal(this.tooltip._text.attr.callCount, 1, "text attrs");
-    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: "some-text" }]);
+    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: "some-text", "class": "tooltip_class" }]);
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml styles");
     assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, "textGroupHtml width");
@@ -1010,6 +1013,7 @@ QUnit.test("Show. W/o params. Html", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
+        isRendered: true,
         html: "some-html"
     }, "state");
 
@@ -1546,10 +1550,31 @@ QUnit.test("Orientation is changed. Html", function(assert) {
     this.tooltip.move(800, 300, 30);
 
     // assert
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 702, top: 205 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(0).args, [{ left: 702, top: 205 }]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 2 * 18 + 10 + 20, 40 + 2 * 15 + 9 + 21 + this.options.arrowLength]);
+});
+
+QUnit.test("Do not re-render html markup on tooltip move", function(assert) {
+    this.options.customizeTooltip = function() { return { html: "<div id='my-div'></div>" }; };
+    this.tooltip.update(this.options);
+
+    if(!this.getComputedStyle) {
+        this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
+    }
+
+    this.tooltip.show({ valueText: "some-text" }, { x: 400, y: 300 });
+    this.resetTooltipMocks();
+    this.tooltip._textGroupHtml.css = sinon.spy();
+
+    $("#my-div").html("markup");
+
+    // act
+    this.tooltip.move(800, 300, 30);
+
+    // assert
+    assert.equal($("#my-div").html(), "markup");
 });
 
 QUnit.test("Show after move w/o orientation changing", function(assert) {
@@ -1600,8 +1625,8 @@ QUnit.test("Position when page's body has relative position and margins and page
 
     // assert
     wrapper = $('.test-title-class');
-    assert.strictEqual(wrapper.css("left"), "450px");
-    assert.strictEqual(wrapper.css("top"), "301px");
+    assert.strictEqual(wrapper.css("left"), "340px");
+    assert.strictEqual(wrapper.css("top"), "181px");
 });
 
 QUnit.test("Floor plaque coordinates", function(assert) {
@@ -1616,6 +1641,17 @@ QUnit.test("Floor plaque coordinates", function(assert) {
 
     // assert
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.lastCall.args, [-69, -214]);
+});
+
+QUnit.test("Remove old plaque on update options", function(assert) {
+    this.tooltip.update(this.options);
+    this.tooltip.show({ valueText: "some-text" }, { x: 30, y: 80, offset: 30 });
+    // act
+    this.tooltip.setOptions(this.options);
+
+    // assert
+    assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+    assert.ok(this.renderer.shadowFilter.lastCall.returnValue.remove.called);
 });
 
 QUnit.module("Movements. Out of visible borders", {

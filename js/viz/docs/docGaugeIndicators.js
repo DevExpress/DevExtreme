@@ -185,7 +185,6 @@ var CommonIndicator = {
 * @publicName RectangleNeedle
 * @section circularIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#C2C2C2' @prop color
 */
 var circularRectangleNeedle = {
@@ -196,7 +195,6 @@ var circularRectangleNeedle = {
 * @publicName TriangleNeedle
 * @section circularIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#C2C2C2' @prop color
 */
 var circularTriangleNeedle = {
@@ -207,7 +205,6 @@ var circularTriangleNeedle = {
 * @publicName TwoColorNeedle
 * @section circularIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#C2C2C2' @prop color
 */
 var circularTwoColorNeedle = {
@@ -218,7 +215,6 @@ var circularTwoColorNeedle = {
 * @publicName RangeBar
 * @section circularIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#CBC5CF' @prop color
 * @default 30 @prop offset
 */
@@ -231,7 +227,6 @@ var circularRangeBar = {
 * @publicName TriangleMarker
 * @section circularIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#8798A5' @prop color
 * @default 13 @prop width
 * @default 14 @prop length
@@ -248,7 +243,6 @@ var circularTriangleMarker = {
 * @publicName TextCloud
 * @section circularIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#679EC5' @prop color
 * @default '#FFFFFF' @prop text.font.color
 * @default 18 @prop text.font.size
@@ -270,7 +264,6 @@ var circularTextCloud = {
 * @publicName Rectangle
 * @section linearIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#C2C2C2' @prop color
 * @default 15 @prop width
 * @default 2.5 @prop offset
@@ -285,7 +278,6 @@ var linearRectangle = {
 * @publicName Circle
 * @section linearIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#C2C2C2' @prop color
 * @default 2.5 @prop offset
 */
@@ -298,7 +290,6 @@ var linearCircle = {
 * @publicName Rhombus
 * @section linearIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#C2C2C2' @prop color
 * @default 15 @prop width
 * @default 2.5 @prop offset
@@ -313,7 +304,6 @@ var linearRhombus = {
 * @publicName RangeBar
 * @section linearIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#CBC5CF' @prop color
 * @default 10 @prop offset
 */
@@ -326,7 +316,6 @@ var linearRangeBar = {
 * @publicName TriangleMarker
 * @section linearIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#8798A5' @prop color
 * @default 13 @prop width
 * @default 14 @prop length
@@ -343,7 +332,6 @@ var linearTriangleMarker = {
 * @publicName TextCloud
 * @section linearIndicators
 * @type CommonIndicator
-* @hidePropertyOf
 * @default '#679EC5' @prop color
 * @default '#FFFFFF' @prop text.font.color
 * @default 18 @prop text.font.size

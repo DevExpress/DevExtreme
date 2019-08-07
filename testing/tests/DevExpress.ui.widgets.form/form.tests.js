@@ -1,13 +1,13 @@
 import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
-import keyboardMock from "../../helpers/keyboardMock.js";
 import typeUtils from "core/utils/type";
 import browser from "core/utils/browser";
 import domUtils from "core/utils/dom";
 import { __internals as internals } from "ui/form/ui.form";
 import themes from "ui/themes";
 import device from "core/devices";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from "core/dom_adapter";
 
 import "ui/text_area";
@@ -15,10 +15,13 @@ import "ui/text_area";
 import "common.css!";
 import "generic_light.css!";
 
-var INVALID_CLASS = "dx-invalid";
+const INVALID_CLASS = "dx-invalid";
+const FORM_GROUP_CONTENT_CLASS = "dx-form-group-content";
+const MULTIVIEW_ITEM_CONTENT_CLASS = "dx-multiview-item-content";
+const FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="form"></div>\
         <div id="form2"></div>';
 
@@ -26,37 +29,22 @@ QUnit.testStart(function() {
 });
 
 QUnit.module("Form");
-QUnit.test("Check that registerKeyHandler proxy works well", function(assert) {
-    // arrange, act
-    var $formContainer = $("#form").dxForm({
-            items:
-            [
-                {
-                    dataField: "name",
-                    editorType: "dxTextBox"
-                },
-                {
-                    dataField: "age",
-                    editorType: "dxNumberBox"
-                }
-            ]
-        }),
-        $inputs = $formContainer.find(".dx-texteditor-input"),
-        counter = 0,
-        handler = function() { counter++; };
 
-    $formContainer.dxForm("instance").registerKeyHandler("tab", handler);
+if(device.current().deviceType === "desktop") {
+    const items = [
+        { dataField: "name", editorType: "dxTextBox" },
+        { dataField: "age", editorType: "dxNumberBox" }
+    ];
 
-    keyboardMock($inputs.eq(0)).keyDown("tab");
-
-    // assert
-    assert.equal(counter, 1, "Custom key handler for the first editor");
-
-    keyboardMock($inputs.eq(1)).keyDown("tab");
-
-    // assert
-    assert.equal(counter, 2, "Custom key handler for the second editor");
-});
+    items.forEach((item) => {
+        registerKeyHandlerTestHelper.runTests({
+            createWidget: ($element) => $element.dxForm({ items: items }).dxForm("instance"),
+            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(".dx-texteditor-input"),
+            checkInitialize: false,
+            testNamePrefix: `Form -> ${item.editorType}:`
+        });
+    });
+}
 
 QUnit.testInActiveWindow("Form's inputs saves value on refresh", function(assert) {
     // arrange, act
@@ -254,7 +242,14 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
     assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 
     assert.deepEqual(values[0], { dataField: "name", value: "" }, "value of name dataField");
-    assert.deepEqual(values[3], { dataField: "room", value: null }, "value of room dataField");
+    assert.deepEqual(values[1], { dataField: "room", value: null }, "value of room dataField");
+
+    values = [];
+    form.option("formData", {});
+
+    assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
+    assert.equal(values.length, 0, "onFieldDataChanged event is not called if the empty object is set to formData a second time");
 });
 
 QUnit.test("Reset editor's value when the formData option is null", function(assert) {
@@ -2104,6 +2099,54 @@ QUnit.test("Reset editor's value", function(assert) {
     assert.strictEqual(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
     assert.strictEqual(form.getEditor("room").option("value"), null, "editor for the room dataField");
     assert.strictEqual(form.getEditor("isDeveloper").option("value"), false, "editor for the isDeveloper dataField");
+});
+
+const formatTestValue = value => Array.isArray(value) ? "[]" : value;
+
+[undefined, null, []].forEach(groupItems => {
+    QUnit.test(`Change group items from [1] -> ${formatTestValue(groupItems)}`, function(assert) {
+        const form = $("#form").dxForm({
+            formData: {
+                field: "Test"
+            },
+            items: [{
+                itemType: "group",
+                name: "TestGroup",
+                items: ["field"]
+            }]
+        }).dxForm("instance");
+
+        form.itemOption("TestGroup", "items", groupItems);
+
+        const $layoutManager = $(`.${FORM_GROUP_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+        assert.equal($layoutManager.length, 1, "layout manager is rendered");
+        assert.notOk($layoutManager.children().length, "layout manager content is empty");
+        assert.notOk(form.getEditor("field"), "editor is not created");
+    });
+});
+
+[undefined, null, []].forEach(tabbedItems => {
+    QUnit.test(`Change tabbed items from [1] -> ${formatTestValue(tabbedItems)}`, function(assert) {
+        const form = $("#form").dxForm({
+            formData: {
+                field: "Test"
+            },
+            items: [{
+                itemType: "tabbed",
+                tabs: [{
+                    name: "TestTabbedItem",
+                    items: ["field"]
+                }]
+            }]
+        }).dxForm("instance");
+
+        form.itemOption("TestTabbedItem", "items", tabbedItems);
+
+        const $layoutManager = $(`.${MULTIVIEW_ITEM_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+        assert.equal($layoutManager.length, 1, "layout manager is rendered");
+        assert.notOk($layoutManager.children().length, "layout manager content is empty");
+        assert.notOk(form.getEditor("field"), "editor is not created");
+    });
 });
 
 QUnit.module("Adaptivity");

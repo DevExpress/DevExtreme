@@ -439,7 +439,6 @@ var AdvancedChart = BaseChart.inherit({
             that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._axesReinitialized));
         }
 
-        that._axesReinitialized = false;
         that._populateMarginOptions();
     },
 
@@ -580,6 +579,10 @@ var AdvancedChart = BaseChart.inherit({
 
             drawAxes(needSpace, cleanPanesCanvases);
         }
+    },
+
+    _notify() {
+        this._axesReinitialized = false;
     }
 });
 

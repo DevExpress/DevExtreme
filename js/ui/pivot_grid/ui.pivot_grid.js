@@ -148,32 +148,27 @@ function clickedOnFieldsArea($targetElement) {
 /**
 * @name dxPivotGridOptions.activeStateEnabled
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridOptions.hoverStateEnabled
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridOptions.focusStateEnabled
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridOptions.accessKey
 * @hidden
-* @inheritdoc
 */
 
 /**
 * @name dxPivotGridMethods.registerKeyHandler
 * @publicName registerKeyHandler(key, handler)
 * @hidden
-* @inheritdoc
 */
 
 var PivotGrid = Widget.inherit({
@@ -1092,7 +1087,10 @@ var PivotGrid = Widget.inherit({
                 height: undefined,
                 headerFilter: that.option("headerFilter"),
                 encodeHtml: that.option("encodeHtml"),
-                applyChangesMode: fieldChooserOptions.applyChangesMode
+                applyChangesMode: fieldChooserOptions.applyChangesMode,
+                onContextMenuPreparing: function(e) {
+                    that._trigger("onContextMenuPreparing", e);
+                }
             },
             popupOptions = {
                 shading: false,

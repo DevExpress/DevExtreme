@@ -100,56 +100,58 @@ var NumberBoxBase = TextEditor.inherit({
             * @name dxNumberBoxOptions.buttons
             * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
             * @default undefined
-            * @inheritdoc
             */
             buttons: void 0,
 
             /**
              * @name dxNumberBoxOptions.mask
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskChar
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskRules
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskInvalidMessage
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.useMaskedValue
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.showMaskMode
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.spellcheck
              * @hidden
-             * @inheritdoc
              */
         });
     },
 
     _getDefaultButtons: function() {
         return this.callBase().concat([{ name: "spins", Ctor: SpinButtons }]);
+    },
+
+    _isSupportInputMode: function() {
+        var version = parseFloat(browser.version);
+
+        return (
+            browser.chrome && version >= 66
+            || browser.safari && version >= 12
+            || browser.msie && version >= 75
+        );
     },
 
     _defaultOptionsRules: function() {
@@ -164,14 +166,8 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    var version = parseFloat(browser.version);
-                    return devices.real().platform !== "generic"
-                        && !(
-                            browser.chrome && version >= 66
-                            || browser.safari && version >= 12
-                            || browser.msie && version >= 75
-                        );
-                },
+                    return devices.real().platform !== "generic" && !this._isSupportInputMode();
+                }.bind(this),
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
@@ -191,7 +187,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _applyInputAttributes: function($input, customAttributes) {
-        $input.attr("inputmode", "numeric");
+        $input.attr("inputmode", "decimal");
         this.callBase($input, customAttributes);
     },
 
@@ -279,8 +275,8 @@ var NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            "valuemin": commonUtils.ensureDefined(this.option("min"), null),
-            "valuemax": commonUtils.ensureDefined(this.option("max"), null)
+            "valuemin": commonUtils.ensureDefined(this.option("min"), ""),
+            "valuemax": commonUtils.ensureDefined(this.option("max"), "")
         });
     },
 

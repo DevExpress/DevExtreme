@@ -172,6 +172,12 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 }
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
+
+    constructor(scheduler) {
+        super(scheduler);
+        this.skipHidingOnScroll = false;
+    }
+
     _showCore(target, dataList, isSingleBehavior) {
         this.behavior = this._createBehavior(isSingleBehavior, target);
         super._showCore(target, dataList, isSingleBehavior);
@@ -227,15 +233,30 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return result;
     }
 
-    _createTooltip(target, list) {
+    _createTooltip(target) {
         this.$tooltip = this._createTooltipElement();
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
             target: target,
+            onShowing: this._onTooltipShowing.bind(this),
+            closeOnTargetScroll: () => this.skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
-            rtlEnabled: this.scheduler.option("rtlEnabled"),
-            contentTemplate: () => list.$element()
+            rtlEnabled: this.scheduler.option("rtlEnabled")
         });
+    }
+
+    dispose() {
+        clearTimeout(this.skipHidingOnScrollTimeId);
+    }
+
+    _onTooltipShowing() {
+        clearTimeout(this.skipHidingOnScrollTimeId);
+
+        this.skipHidingOnScroll = true;
+        this.skipHidingOnScrollTimeId = setTimeout(() => {
+            this.skipHidingOnScroll = false;
+            clearTimeout(this.skipHidingOnScrollTimeId);
+        }, 0);
     }
 
     _createTooltipElement() {

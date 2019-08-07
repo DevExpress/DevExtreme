@@ -70,7 +70,6 @@ var Button = Widget.inherit({
              * @name dxButtonOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -177,7 +176,6 @@ var Button = Widget.inherit({
                     * @name dxButtonOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -384,7 +382,7 @@ var Button = Widget.inherit({
         var ariaLabel = text || icon || "";
         ariaLabel = ariaLabel.toString().trim();
 
-        this.setAria("label", ariaLabel);
+        this.setAria("label", ariaLabel.length ? ariaLabel : null);
     },
 
     _renderType: function() {
