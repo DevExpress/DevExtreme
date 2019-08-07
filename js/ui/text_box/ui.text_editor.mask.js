@@ -414,6 +414,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this.setForwardDirection();
         this._adjustCaret();
+        this._changedValue = this._input().val();
         this._displayMask();
         this._maskRulesChain.reset();
     },

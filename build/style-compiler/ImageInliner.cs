@@ -36,7 +36,7 @@ namespace StyleCompiler
                     {
                         imagePath = Path.Combine(sourcePath, "..", imagePath);
                         if (File.Exists(imagePath))
-                            return "url(" + GenerateDataUrl(imagePath) + ")";
+                            return "url(\"" + GenerateDataUrl(imagePath) + "\")";
 
                         Console.WriteLine("Image not found, " + imagePath);
                         return "";
@@ -60,7 +60,7 @@ namespace StyleCompiler
         {
              if (mime == "image/svg+xml") {
                 var content = HttpUtility.UrlEncode(fileContent).Replace("+", "%20");
-                return $@"""data:{mime};charset=UTF-8,{content}""";
+                return $"data:{mime};charset=UTF-8,{content}";
             } else {
                 var content = Convert.ToBase64String(fileContent);
                 return $"data:{mime};base64,{content}";

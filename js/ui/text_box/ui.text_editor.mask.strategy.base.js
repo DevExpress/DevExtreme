@@ -91,7 +91,9 @@ export default class BaseMaskStrategy {
         }
     }
 
-    _focusOutHandler() {
+    _focusOutHandler(event) {
+        this.editor._changeHandler(event);
+
         if(this.editorOption("showMaskMode") === "onFocus" && this.editor._isValueEmpty()) {
             this.editorOption("text", "");
             this.editor._renderDisplayText("");
@@ -119,12 +121,12 @@ export default class BaseMaskStrategy {
         clearTimeout(this._dragTimer);
     }
 
-    _pasteHandler(e) {
+    _pasteHandler(event) {
         this._keyPressHandled = true;
         var caret = this.editorCaret();
 
-        this.editor._maskKeyHandler(e, function() {
-            var pastingText = getClipboardText(e);
+        this.editor._maskKeyHandler(event, function() {
+            var pastingText = getClipboardText(event);
             var restText = this._maskRulesChain.text().substring(caret.end);
 
             var accepted = this._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
@@ -138,11 +140,11 @@ export default class BaseMaskStrategy {
         });
     }
 
-    _backspaceHandler(e) { }
+    _backspaceHandler() { }
 
-    _delHandler(e) {
+    _delHandler(event) {
         this._keyPressHandled = true;
-        this.editor._maskKeyHandler(e, function() {
+        this.editor._maskKeyHandler(event, function() {
             !this._hasSelection() && this._handleKey(EMPTY_CHAR);
             return true;
         });

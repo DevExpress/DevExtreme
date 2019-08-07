@@ -15,7 +15,7 @@ var $ = require("../core/renderer"),
     Scrollable = require("./scroll_view/ui.scrollable"),
     CollectionWidget = require("./collection/ui.collection_widget.live_update").default,
     iconUtils = require("../core/utils/icon"),
-    BindableTemplate = require("./widget/bindable_template");
+    BindableTemplate = require("../core/templates/bindable_template").BindableTemplate;
 
 var TABS_CLASS = "dx-tabs",
     TABS_WRAPPER_CLASS = "dx-tabs-wrapper",

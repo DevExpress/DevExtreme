@@ -17,26 +17,26 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         this._keyPressHandled = false;
     }
 
-    _keyPressHandler(e) {
+    _keyPressHandler(event) {
         if(this._keyPressHandled) {
             return;
         }
 
         this._keyPressHandled = true;
 
-        if(this.editor._isControlKeyFired(e)) {
+        if(this.editor._isControlKeyFired(event)) {
             return;
         }
 
-        this.editor._maskKeyHandler(e, function() {
-            this._handleKey(getChar(e));
+        this.editor._maskKeyHandler(event, function() {
+            this._handleKey(getChar(event));
             return true;
         });
     }
 
-    _inputHandler(e) {
-        if(this._backspaceInputHandled(e.originalEvent && e.originalEvent.inputType)) {
-            this._handleBackspaceInput(e);
+    _inputHandler(event) {
+        if(this._backspaceInputHandled(event.originalEvent && event.originalEvent.inputType)) {
+            this._handleBackspaceInput(event);
         }
 
         if(this._keyPressHandled) {
@@ -60,14 +60,14 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         this._inputHandlerTimer = setTimeout((function() {
             this._caret({ start: caret.start, end: caret.start });
 
-            this._maskKeyHandler(e, function() {
+            this._maskKeyHandler(event, function() {
                 this._handleKey(char);
                 return true;
             });
         }).bind(this.editor));
     }
 
-    _backspaceHandler(e) {
+    _backspaceHandler(event) {
         this._keyPressHandled = true;
 
         const afterBackspaceHandler = (needAdjustCaret, callBack) => {
@@ -82,7 +82,7 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
             });
         };
 
-        this.editor._maskKeyHandler(e, () => {
+        this.editor._maskKeyHandler(event, () => {
             if(this.editor._hasSelection()) {
                 afterBackspaceHandler(true, (currentCaret) => {
                     this.editor._displayMask(currentCaret);
@@ -110,10 +110,10 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         return inputType === BACKSPACE_INPUT_TYPE && !this._keyPressHandled;
     }
 
-    _handleBackspaceInput(e) {
+    _handleBackspaceInput(event) {
         const { start, end } = this.editorCaret();
         this.editorCaret({ start: start + 1, end: end + 1 });
-        this._backspaceHandler(e);
+        this._backspaceHandler(event);
     }
 
     clean() {

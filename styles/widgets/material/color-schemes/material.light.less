@@ -1050,7 +1050,7 @@
 @datagrid-column-separator-bg: fade(@base-accent, 50%);
 @datagrid-filter-row-background-color: darken(@datagrid-base-background-color, 2%);
 @datagrid-active-header-filter-icon-color: @base-accent;
-@datagrid-text-stub-background-image-path: url(images/widgets/material/color-schemes/light/grid/text-stub.png);
+@datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/light/grid/text-stub.png');
 @datagrid-filter-panel-color: @base-accent;
 
 //TreeList
@@ -1117,7 +1117,7 @@
 @treelist-column-separator-bg: fade(@base-accent, 50%);
 @treelist-filter-row-background-color: darken(@treelist-base-background-color, 2%);
 @treelist-active-header-filter-icon-color: @base-accent;
-@treelist-text-stub-background-image-path: url(images/widgets/material/color-schemes/light/grid/text-stub.png);
+@treelist-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/light/grid/text-stub.png');
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
@@ -1156,14 +1156,14 @@
 @PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@base-shadow-color, 10%);
 @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@base-shadow-color, 20%);
 
-@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-all.png);
-@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-filter.png);
-@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-column.png);
-@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-row.png);
-@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-data.png);
+@PIVOTGRID_AREA_ALL_IMAGE: data-uri('images/widgets/material/color-schemes/light/grid/area-all.png');
+@PIVOTGRID_AREA_FILTER_IMAGE: data-uri('images/widgets/material/color-schemes/light/grid/area-filter.png');
+@PIVOTGRID_AREA_COLUMN_IMAGE: data-uri('images/widgets/material/color-schemes/light/grid/area-column.png');
+@PIVOTGRID_AREA_ROW_IMAGE: data-uri('images/widgets/material/color-schemes/light/grid/area-row.png');
+@PIVOTGRID_AREA_DATA_IMAGE: data-uri('images/widgets/material/color-schemes/light/grid/area-data.png');
 
-@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/material/color-schemes/light/grid/dimension.png);
-@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/material/color-schemes/light/grid/hierarchy.png);
+@PIVOTGRID_DIMENSION_IMAGE: data-uri('images/widgets/material/color-schemes/light/grid/dimension.png');
+@PIVOTGRID_HIERARCHY_IMAGE: data-uri('images/widgets/material/color-schemes/light/grid/hierarchy.png');
 
 @PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
 @pivotgrid-chevron-icon-color: @PIVOTGRID_AREA_COLOR;
@@ -1394,9 +1394,9 @@
 @form-field-mark-color: @form-field-item-color;
 
 // Images
-@list-item-icon-toggle-delete-bg: url(images/widgets/material/color-schemes/light/list/delete.png);
-@colorbox-preview-empty-bg: url(images/widgets/material/color-schemes/light/colorbox/nocolor.png);
-@loadindicator-background-image: url(images/widgets/material/color-schemes/light/loader64.gif);
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/light/list/delete.png');
+@colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/light/colorbox/nocolor.png');
+@loadindicator-background-image: data-uri('images/widgets/material/color-schemes/light/loader64.gif');
 
 // Fieldset
 
@@ -1476,5 +1476,5 @@
 @filemanager-breadcrumbs-item-focus-bg: @base-border-color;
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
-@filemanager-file-item-select-color: @base-bg;
-@filemanager-file-item-select-bg: @base-accent;
+@filemanager-file-item-select-color: @base-text-color;
+@filemanager-file-item-select-bg: fade(@base-accent, 4%);

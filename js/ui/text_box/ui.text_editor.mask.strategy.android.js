@@ -11,7 +11,7 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
         return [...super.getHandleEventNames(), "beforeInput"];
     }
 
-    _beforeInputHandler(e) {
+    _beforeInputHandler() {
         this._prevCaret = this.editorCaret();
     }
 

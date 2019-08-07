@@ -5,7 +5,7 @@ import CollectionWidget from "./collection/ui.collection_widget.edit";
 import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
 import { isDefined } from "../core/utils/type";
-import BindableTemplate from "./widget/bindable_template";
+import { BindableTemplate } from "../core/templates/bindable_template";
 
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",

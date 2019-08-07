@@ -15,7 +15,7 @@
 
             module.exports = factory(
                 require("jquery"),
-                require("ui/set_template_engine"),
+                require("core/templates/template_engine_registry").setTemplateEngine,
                 aspnet,
                 function() { return require("ui/widget/ui.errors"); }
             );
@@ -23,7 +23,7 @@
     } else {
         factory(
             window.jQuery,
-            DevExpress.ui.setTemplateEngine,
+            DevExpress.setTemplateEngine,
             DevExpress.aspnet,
             function() { return window.DevExpress_ui_widget_errors; }
         );

@@ -148,7 +148,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
             action._options.actionComponent = action;
 
-            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options, { visible: false })));
         }
     },
 
@@ -181,11 +181,15 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 });
 
 exports.initAction = function(newAction) {
+    if(!newAction._options.visible) return;
+
     // TODO: workaround for Angular/React/Vue
     delete newAction._options.onInitializing;
 
     let isActionExist = false;
     if(!speedDialMainItem) {
+        delete newAction._options.position;
+
         const $fabMainElement = $("<div>")
             .appendTo(getSwatchContainer(newAction.$element()));
 
@@ -195,7 +199,6 @@ exports.initAction = function(newAction) {
                 visible: true
             })
         );
-
     } else {
         const savedActions = speedDialMainItem.option("actions");
 

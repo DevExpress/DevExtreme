@@ -20,7 +20,7 @@ var environment = {
             centerChanged: this.centerChanged,
             zoomChanged: this.zoomChanged
         });
-        this.engine = createStubEngine();
+        this.engine = createTestEngine();
         this.projection.setEngine(this.engine);
         this.projection.setCenter([20, -10]);
         this.projection.setZoom(2);
@@ -54,6 +54,41 @@ QUnit.test("setEngine / center is changed", function(assert) {
                 ];
             }
         });
+    this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
+    this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
+
+    this.projection.setEngine(engine);
+
+    assert.strictEqual(onEngine.callCount, 1, "engine event is triggered");
+    assert.strictEqual(onScreen.callCount, 1, "screen event is triggered");
+    assert.strictEqual(onCenter.callCount, 1, "center event is triggered");
+    assert.strictEqual(onZoom.callCount, 1, "zoom event is triggered");
+    assert.deepEqual(this.centerChanged.lastCall.args, [[-60, 40]], "centerChanged is called");
+    assert.deepEqual(this.zoomChanged.lastCall.args, [1], "zoomChanged is called");
+    assert.deepEqual(this.projection.getCenter(), [-60, 40], "center");
+    assert.strictEqual(this.projection.getZoom(), 1, "zoom");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, "transform");
+});
+
+QUnit.test("setEngine (config) / center is changed", function(assert) {
+    var onEngine = sinon.spy(),
+        onScreen = sinon.spy(),
+        onCenter = sinon.spy(),
+        onZoom = sinon.spy(),
+        engine = {
+            to: function(coords) {
+                return [
+                    (coords[0] + 60) / 20,
+                    (coords[1] - 40) / 10
+                ];
+            },
+            from: function(coords) {
+                return [
+                    (coords[0] - 3) * 20,
+                    (coords[1] + 4) * 10
+                ];
+            }
+        };
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
 
@@ -1235,8 +1270,18 @@ $.each([
     });
 });
 
-QUnit.test("add/get methods", function(assert) {
-    var proj = createStubEngine();
+QUnit.test("add/get methods, engine config", function(assert) {
+    var config = getTestEngineConfig();
+
+    projection.add("tester-0", config);
+
+    const proj = projection.get("tester-0");
+
+    assert.deepEqual(proj.source(), config);
+});
+
+QUnit.test("add/get methods, engine", function(assert) {
+    var proj = projection(getTestEngineConfig());
 
     projection.add("tester-1", proj);
 
@@ -1250,9 +1295,9 @@ QUnit.test("add/get methods / not valid", function(assert) {
 });
 
 QUnit.test("add/get methods / duplication", function(assert) {
-    var proj = createStubEngine();
+    var proj = createTestEngine();
 
-    projection.add("tester-3", proj).add("tester-3", createStubEngine());
+    projection.add("tester-3", proj).add("tester-3", getTestEngineConfig());
 
     assert.strictEqual(projection.get("tester-3"), proj);
 });
@@ -1316,8 +1361,8 @@ QUnit.test("miller", function(assert) {
     ]);
 });
 
-function createStubEngine() {
-    return projection({
+function getTestEngineConfig() {
+    return {
         to: function(coords) {
             return [(coords[0] - 40) / 20, (coords[1] + 20) / 10];
         },
@@ -1325,7 +1370,11 @@ function createStubEngine() {
             return [(coords[0] + 2) * 20, (coords[1] - 2) * 10];
         },
         aspectRatio: 0.8
-    });
+    };
+}
+
+function createTestEngine() {
+    return projection(getTestEngineConfig());
 }
 
 function createInternalMethodTester(methodName) {

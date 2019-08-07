@@ -24,7 +24,7 @@ var $ = require("../../core/renderer"),
     compileGetter = require("../../core/utils/data").compileGetter,
     clickEvent = require("../../events/click"),
     contextMenuEvent = require("../../events/contextmenu"),
-    BindableTemplate = require("../widget/bindable_template");
+    BindableTemplate = require("../../core/templates/bindable_template").BindableTemplate;
 
 var COLLECTION_CLASS = "dx-collection",
     ITEM_CLASS = "dx-item",

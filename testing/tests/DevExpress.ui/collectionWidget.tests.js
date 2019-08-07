@@ -6,7 +6,7 @@ import registerComponent from "core/component_registrator";
 import { DataSource } from "data/data_source/data_source";
 import Store from "data/abstract_store";
 import ArrayStore from "data/array_store";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import support from "core/utils/support";
 import holdEvent from "events/hold";
 import CollectionWidget from "ui/collection/ui.collection_widget.edit";

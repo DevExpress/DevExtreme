@@ -1,7 +1,7 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     ko = require("knockout"),
-    KoTemplate = require("integration/knockout/template");
+    KoTemplate = require("integration/knockout/template").KoTemplate;
 
 QUnit.module("rendering", {
     beforeEach: function() {
