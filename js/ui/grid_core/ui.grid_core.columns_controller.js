@@ -346,7 +346,7 @@ module.exports = {
              * @type_function_param2_field7 columnIndex:number
              * @type_function_param2_field8 rowIndex:number
              * @type_function_param2_field9 column:dxDataGridColumn
-             * @type_function_param2_field10 row:dxDataGridRow
+             * @type_function_param2_field10 row:dxDataGridRowObject
              * @type_function_param2_field11 rowType:string
              * @type_function_param2_field12 watch:function
              */
@@ -365,7 +365,7 @@ module.exports = {
             * @type_function_param2_field7 columnIndex:number
             * @type_function_param2_field8 rowIndex:number
             * @type_function_param2_field9 column:dxTreeListColumn
-            * @type_function_param2_field10 row:dxTreeListRow
+            * @type_function_param2_field10 row:dxTreeListRowObject
             * @type_function_param2_field11 rowType:string
             * @type_function_param2_field12 watch:function
             */
@@ -404,7 +404,7 @@ module.exports = {
              * @type_function_param2_field7 columnIndex:number
              * @type_function_param2_field8 rowIndex:number
              * @type_function_param2_field9 column:dxDataGridColumn
-             * @type_function_param2_field10 row:dxDataGridRow
+             * @type_function_param2_field10 row:dxDataGridRowObject
              * @type_function_param2_field11 rowType:string
              * @type_function_param2_field12 watch:function
              */
@@ -423,7 +423,7 @@ module.exports = {
              * @type_function_param2_field7 columnIndex:number
              * @type_function_param2_field8 rowIndex:number
              * @type_function_param2_field9 column:dxTreeListColumn
-             * @type_function_param2_field10 row:dxTreeListRow
+             * @type_function_param2_field10 row:dxTreeListRowObject
              * @type_function_param2_field11 rowType:string
              * @type_function_param2_field12 watch:function
              */
@@ -440,7 +440,7 @@ module.exports = {
              * @type_function_param2_field5 columnIndex:number
              * @type_function_param2_field6 rowIndex:number
              * @type_function_param2_field7 column:dxDataGridColumn
-             * @type_function_param2_field8 row:dxDataGridRow
+             * @type_function_param2_field8 row:dxDataGridRowObject
              * @type_function_param2_field9 summaryItems:Array<any>
              * @type_function_param2_field10 groupContinuesMessage:string
              * @type_function_param2_field11 groupContinuedMessage:string
