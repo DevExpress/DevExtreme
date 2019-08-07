@@ -1,8 +1,4 @@
-
-import SchedulerTestHelper from '../../../../helpers/scheduler.test.helper';
 import { createWidget } from '../../../../helpers/testHelper';
-
-export const scheduler = new SchedulerTestHelper("#container");
 
 export const widgetHeight = 833;
 export const widgetWidth = 1666;

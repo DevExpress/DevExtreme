@@ -1,40 +1,23 @@
+import { TablePosition } from './props/tablePosition';
+import { Size } from './props/size';
+import { TimeSpan } from './props/timeSpan';
 
-export class TablePosition<T> {
-    row: T;
-    cell: T;
+export class AppointmentModel {
+    title: string;
+    properties: Properties;
 
-    constructor(row: T, cell: T) {
-        this.row = row;
-        this.cell = cell;
+    constructor(title, properties) {
+        this.title = title;
+        this.properties = properties;
     }
 }
 
-export class Size<T> {
-    width: T;
-    height: T;
-
-    constructor(width: T, height: T) {
-        this.width = width;
-        this.height = height;
-    }
-}
-
-export class TimeSpan<T> {
-    startTime: T;
-    endTime: T;
-
-    constructor(startDate: T, endDate: T) {
-        this.startTime = startDate;
-        this.endTime = endDate;
-    }
-}
-
-export interface AppointmentFeature {
+export interface Properties {
     position: TablePosition<number>,
     size: Size<string>,
     duration: TimeSpan<string>
 }
 
-export enum Feature {
+export enum Property {
     width, height, startTime, endTime
 }
