@@ -1141,7 +1141,7 @@
         }
 
         .dx-scheduler-group-row {
-            .flex-container(column, nowrap);
+            .flex-container(column-reverse, nowrap);
 
             flex: 1;
             min-width: 0;
@@ -1150,14 +1150,13 @@
         .dx-scheduler-group-header {
             .flex-container(row, nowrap);
 
-            align-items: center;
             flex: 1 1 100%;
             padding: 0 10px 0 5px;
             height: auto;
             width: 100%;
             justify-content: flex-start;
+            align-items: flex-start;
             text-align: left;
-            white-space: nowrap;
 
             > div {
                 overflow: hidden;
