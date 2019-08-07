@@ -233,7 +233,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return result;
     }
 
-    _createTooltip(target, list) {
+    _createTooltip(target) {
         this.$tooltip = this._createTooltipElement();
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
@@ -241,8 +241,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             onShowing: this._onTooltipShowing.bind(this),
             closeOnTargetScroll: () => this.skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
-            rtlEnabled: this.scheduler.option("rtlEnabled"),
-            contentTemplate: () => list.$element()
+            rtlEnabled: this.scheduler.option("rtlEnabled")
         });
     }
 
